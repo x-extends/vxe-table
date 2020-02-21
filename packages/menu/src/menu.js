@@ -6,8 +6,8 @@ export default {
     ctxMenuStore: Object
   },
   render (h) {
-    let $table = this.$parent
-    let { _e, ctxMenuStore } = this
+    const $table = this.$parent
+    const { _e, ctxMenuStore } = this
     return h('div', {
       class: ['vxe-table--ctxmenu-wrapper', {
         'is--show': ctxMenuStore.visible,
@@ -19,7 +19,7 @@ export default {
         class: ['vxe-ctxmenu--option-wrapper'],
         key: gIndex
       }, options.map((item, index) => {
-        let hasChildMenus = item.children && item.children.length
+        const hasChildMenus = item.children && item.children.length
         return item.visible === false ? _e() : h('li', {
           class: [item.className, {
             'link--disabled': item.disabled,

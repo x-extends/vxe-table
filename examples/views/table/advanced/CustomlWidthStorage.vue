@@ -86,8 +86,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 20)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

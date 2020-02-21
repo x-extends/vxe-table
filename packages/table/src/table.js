@@ -5,16 +5,16 @@ import Cell from '../../cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../../tools'
 
-var rowUniqueId = 0
-var browse = DomTools.browse
-var debounceScrollYDuration = browse.msie ? 40 : 20
+let rowUniqueId = 0
+const browse = DomTools.browse
+const debounceScrollYDuration = browse.msie ? 40 : 20
 
 // 导入
-var fileForm
-var fileInput
+let fileForm
+let fileInput
 
 // 打印
-var printFrame
+let printFrame
 
 function createFrame () {
   const frame = document.createElement('iframe')
@@ -45,6 +45,7 @@ class Rule {
       maxWidth: rule.maxWidth
     })
   }
+
   get message () {
     return UtilTools.getFuncText(this.$options.message)
   }
@@ -54,7 +55,7 @@ class Rule {
  * 渲染浮固定列
  */
 function renderFixed (h, $table, fixedType) {
-  let {
+  const {
     tableData,
     tableColumn,
     visibleColumn,
@@ -75,8 +76,8 @@ function renderFixed (h, $table, fixedType) {
     columnStore,
     footerData
   } = $table
-  let isRightFixed = fixedType === 'right'
-  let fixedColumn = columnStore[`${fixedType}List`]
+  const isRightFixed = fixedType === 'right'
+  const fixedColumn = columnStore[`${fixedType}List`]
   let customHeight = 0
   if (height) {
     customHeight = height === 'auto' ? parentHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height))
@@ -84,7 +85,7 @@ function renderFixed (h, $table, fixedType) {
       customHeight += scrollbarHeight + 1
     }
   }
-  let style = {
+  const style = {
     height: `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`,
     width: `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
   }
@@ -591,7 +592,7 @@ export default {
       return Object.assign({}, GlobalConfig.contextMenu, this.contextMenu)
     },
     ctxMenuList () {
-      let rest = []
+      const rest = []
       this.ctxMenuStore.list.forEach(list => {
         list.forEach(item => {
           rest.push(item)
@@ -631,8 +632,8 @@ export default {
      * 判断列全选的复选框是否禁用
      */
     isAllCheckboxDisabled () {
-      let { tableFullData, treeConfig, checkboxOpts } = this
-      let { strict, checkMethod } = checkboxOpts
+      const { tableFullData, treeConfig, checkboxOpts } = this
+      const { strict, checkMethod } = checkboxOpts
       if (strict) {
         if (tableFullData.length) {
           if (checkMethod) {
@@ -665,7 +666,7 @@ export default {
       this.isUpdateCustoms = false
     },
     collectColumn (value) {
-      let tableFullColumn = UtilTools.getColumnList(value)
+      const tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
       if (this.customs) {
@@ -688,7 +689,7 @@ export default {
       }
       // 在 v3.0 中废弃 prop/label
       if (tableFullColumn.length) {
-        let cIndex = Math.floor((tableFullColumn.length - 1) / 2)
+        const cIndex = Math.floor((tableFullColumn.length - 1) / 2)
         if (tableFullColumn[cIndex].prop) {
           UtilTools.warn('vxe.error.delProp', ['prop', 'field'])
         }
@@ -732,8 +733,8 @@ export default {
     }
   },
   created () {
-    let { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, mouseConfig, mouseOpts, loading, showAllOverflow, showHeaderAllOverflow } = this
-    let { scrollX, scrollY } = optimizeOpts
+    const { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, mouseConfig, mouseOpts, loading, showAllOverflow, showHeaderAllOverflow } = this
+    const { scrollX, scrollY } = optimizeOpts
     if (loading) {
       this.isLoading = true
     }
@@ -852,7 +853,7 @@ export default {
     this.preventEvent(null, 'deactivated', { $table: this })
   },
   beforeDestroy () {
-    let tableWrapper = this.$refs.tableWrapper
+    const tableWrapper = this.$refs.tableWrapper
     if (tableWrapper && tableWrapper.parentNode) {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
@@ -1172,16 +1173,16 @@ export default {
       return this.handleTableData(true).then(this.updateFooter).then(this.recalculate)
     },
     handleTableData (force) {
-      let { scrollYLoad, scrollYStore } = this
-      let fullData = force ? this.updateAfterFullData() : this.afterFullData
+      const { scrollYLoad, scrollYStore } = this
+      const fullData = force ? this.updateAfterFullData() : this.afterFullData
       this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0)
       return this.$nextTick()
     },
     loadTableData (datas) {
-      let { keepSource, height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
-      let { scrollY } = optimizeOpts
-      let tableFullData = datas ? datas.slice(0) : []
-      let scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
+      const { keepSource, height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
+      const { scrollY } = optimizeOpts
+      const tableFullData = datas ? datas.slice(0) : []
+      const scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
       scrollYStore.startIndex = 0
       scrollYStore.visibleIndex = 0
       editStore.insertList = []
@@ -1228,10 +1229,10 @@ export default {
         .then(this.handleDefaults)
     },
     reloadRow (row, record, field) {
-      let { keepSource, tableSourceData, tableData } = this
+      const { keepSource, tableSourceData, tableData } = this
       if (keepSource) {
-        let rowIndex = this.getRowIndex(row)
-        let oRow = tableSourceData[rowIndex]
+        const rowIndex = this.getRowIndex(row)
+        const oRow = tableSourceData[rowIndex]
         if (oRow && row) {
           if (field) {
             XEUtils.set(oRow, field, XEUtils.get(record || row, field))
@@ -1262,10 +1263,11 @@ export default {
     },
     // 更新数据的 Map
     updateCache (source) {
-      let { treeConfig, treeOpts, tableFullData, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
-      let rowkey = UtilTools.getRowkey(this)
-      let isLazy = treeConfig && treeOpts.lazy
-      let handleCache = (row, index) => {
+      const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap } = this
+      let { fullDataRowIdData, fullAllDataRowIdData } = this
+      const rowkey = UtilTools.getRowkey(this)
+      const isLazy = treeConfig && treeOpts.lazy
+      const handleCache = (row, index) => {
         let rowid = UtilTools.getRowid(this, row)
         if (!rowid) {
           rowid = getRowUniqueId()
@@ -1274,7 +1276,7 @@ export default {
         if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
           row[treeOpts.children] = null
         }
-        let rest = { row, rowid, index }
+        const rest = { row, rowid, index }
         if (source) {
           fullDataRowIdData[rowid] = rest
           fullDataRowMap.set(row, rest)
@@ -1295,10 +1297,10 @@ export default {
       }
     },
     appendTreeCache (row, childs) {
-      let { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
-      let { children, hasChild } = treeOpts
-      let rowkey = UtilTools.getRowkey(this)
-      let rowid = UtilTools.getRowid(this, row)
+      const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+      const { children, hasChild } = treeOpts
+      const rowkey = UtilTools.getRowkey(this)
+      const rowid = UtilTools.getRowid(this, row)
       let matchObj
       if (keepSource) {
         matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
@@ -1312,7 +1314,7 @@ export default {
         if (row[hasChild] && XEUtils.isUndefined(row[children])) {
           row[children] = null
         }
-        let rest = { row, rowid, index }
+        const rest = { row, rowid, index }
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(row, rest)
         fullAllDataRowIdData[rowid] = rest
@@ -1324,36 +1326,36 @@ export default {
     },
     // 更新列的 Map
     cacheColumnMap () {
-      let { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
-      let fullColumnIdData = this.fullColumnIdData = {}
+      const { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
+      const fullColumnIdData = this.fullColumnIdData = {}
       fullColumnMap.clear()
       if (isGroup) {
         XEUtils.eachTree(collectColumn, (column, index) => {
           if (column.children && column.children.length) {
-            let rest = { column, colid: column.id, index }
+            const rest = { column, colid: column.id, index }
             fullColumnIdData[column.id] = rest
             fullColumnMap.set(column, rest)
           }
         }, headerProps)
       }
       tableFullColumn.forEach((column, index) => {
-        let rest = { column, colid: column.id, index }
+        const rest = { column, colid: column.id, index }
         fullColumnIdData[column.id] = rest
         fullColumnMap.set(column, rest)
       }, headerProps)
     },
     getRowNode (tr) {
       if (tr) {
-        let { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData } = this
-        let rowid = tr.getAttribute('data-rowid')
+        const { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData } = this
+        const rowid = tr.getAttribute('data-rowid')
         if (treeConfig) {
-          let matchObj = XEUtils.findTree(tableFullData, row => UtilTools.getRowid(this, row) === rowid, treeOpts)
+          const matchObj = XEUtils.findTree(tableFullData, row => UtilTools.getRowid(this, row) === rowid, treeOpts)
           if (matchObj) {
             return matchObj
           }
         } else {
           if (fullAllDataRowIdData[rowid]) {
-            let rest = fullAllDataRowIdData[rowid]
+            const rest = fullAllDataRowIdData[rowid]
             return { item: rest.row, index: rest.index, items: tableFullData }
           }
         }
@@ -1362,9 +1364,9 @@ export default {
     },
     getColumnNode (cell) {
       if (cell) {
-        let { fullColumnIdData, tableFullColumn } = this
-        let colid = cell.getAttribute('data-colid')
-        let { column, index } = fullColumnIdData[colid]
+        const { fullColumnIdData, tableFullColumn } = this
+        const colid = cell.getAttribute('data-colid')
+        const { column, index } = fullColumnIdData[colid]
         return { item: column, index, items: tableFullColumn }
       }
       return null
@@ -1403,32 +1405,32 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      let { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      const { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
       if (treeConfig) {
         throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
       }
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      let nowData = afterFullData
-      let newRecords = records.map(record => this.defineField(Object.assign({}, record)))
+      const nowData = afterFullData
+      const newRecords = records.map(record => this.defineField(Object.assign({}, record)))
       if (!row) {
-        nowData.unshift.apply(nowData, newRecords)
-        tableFullData.unshift.apply(tableFullData, newRecords)
+        nowData.unshift(...newRecords)
+        tableFullData.unshift(...newRecords)
       } else {
         if (row === -1) {
-          nowData.push.apply(nowData, newRecords)
-          tableFullData.push.apply(tableFullData, newRecords)
+          nowData.push(...newRecords)
+          tableFullData.push(...newRecords)
         } else {
-          let targetIndex = nowData.indexOf(row)
+          const targetIndex = nowData.indexOf(row)
           if (targetIndex === -1) {
             throw new Error(UtilTools.error('vxe.error.unableInsert'))
           }
-          nowData.splice.apply(nowData, [targetIndex, 0].concat(newRecords))
-          tableFullData.splice.apply(tableFullData, [tableFullData.indexOf(row), 0].concat(newRecords))
+          nowData.splice(...([targetIndex, 0].concat(newRecords)))
+          tableFullData.splice(...([tableFullData.indexOf(row), 0].concat(newRecords)))
         }
       }
-      [].unshift.apply(editStore.insertList, newRecords)
+      editStore.insertList.unshift(...newRecords)
       this.handleTableData()
       this.updateCache()
       this.checkSelectionStatus()
@@ -1444,8 +1446,8 @@ export default {
       })
     },
     defineField (row) {
-      let { treeConfig, treeOpts } = this
-      let rowkey = UtilTools.getRowkey(this)
+      const { treeConfig, treeOpts } = this
+      const rowkey = UtilTools.getRowkey(this)
       this.visibleColumn.forEach(({ property, editRender }) => {
         if (property && !XEUtils.has(row, property)) {
           XEUtils.set(row, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
@@ -1464,12 +1466,12 @@ export default {
       return this.$nextTick().then(() => records.map(this.defineField))
     },
     createRow (records) {
-      let isArr = XEUtils.isArray(records)
+      const isArr = XEUtils.isArray(records)
       if (!isArr) {
         records = [records]
       }
       return this.$nextTick().then(() => {
-        let rows = records.map(record => this.defineField(Object.assign({}, record)))
+        const rows = records.map(record => this.defineField(Object.assign({}, record)))
         return isArr ? rows : rows[0]
       })
     },
@@ -1479,11 +1481,11 @@ export default {
      * 如果传 rows 则删除多行
      */
     remove (rows) {
-      let { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, hasInsertByRow, scrollYLoad } = this
-      let { removeList, insertList } = editStore
-      let property = checkboxOpts.checkField || checkboxOpts.checkProp
+      const { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, hasInsertByRow, scrollYLoad } = this
+      const { removeList, insertList } = editStore
+      const property = checkboxOpts.checkField || checkboxOpts.checkProp
       let rest = []
-      let nowData = afterFullData
+      const nowData = afterFullData
       if (treeConfig) {
         throw new Error(UtilTools.getLog('vxe.error.noTree', ['remove']))
       }
@@ -1533,9 +1535,9 @@ export default {
         return params
       })
     },
-    revert () {
+    revert (...args) {
       UtilTools.warn('vxe.error.delFunc', ['revert', 'revertData'])
-      return this.revertData.apply(this, arguments)
+      return this.revertData(...args)
     },
     /**
      * 还原数据
@@ -1545,15 +1547,15 @@ export default {
      * 如果还额外传了 field 则还原指定单元格
      */
     revertData (rows, field) {
-      let { keepSource, tableSourceData, tableFullData } = this
+      const { keepSource, tableSourceData, tableFullData } = this
       if (keepSource) {
         if (arguments.length) {
           if (rows && !XEUtils.isArray(rows)) {
             rows = [rows]
           }
           rows.forEach(row => {
-            let rowIndex = tableFullData.indexOf(row)
-            let oRow = tableSourceData[rowIndex]
+            const rowIndex = tableFullData.indexOf(row)
+            const oRow = tableSourceData[rowIndex]
             if (oRow && row) {
               if (field) {
                 XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
@@ -1576,7 +1578,7 @@ export default {
      * 如果还额外传了 field 则清空指定单元格内容
      */
     clearData (rows, field) {
-      let { tableFullData, visibleColumn } = this
+      const { tableFullData, visibleColumn } = this
       if (!arguments.length) {
         rows = tableFullData
       } else if (rows && !XEUtils.isArray(rows)) {
@@ -1608,23 +1610,23 @@ export default {
       return this.isUpdateByRow(row, field)
     },
     isUpdateByRow (row, field) {
-      let { visibleColumn, keepSource, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
+      const { visibleColumn, keepSource, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
       if (keepSource) {
         let oRow, property
-        let rowid = UtilTools.getRowid(this, row)
+        const rowid = UtilTools.getRowid(this, row)
         // 新增的数据不需要检测
         if (!fullDataRowIdData[rowid]) {
           return false
         }
         if (treeConfig) {
-          let children = treeOpts.children
-          let matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
-          row = Object.assign({}, row, { [ children ]: null })
+          const children = treeOpts.children
+          const matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+          row = Object.assign({}, row, { [children]: null })
           if (matchObj) {
-            oRow = Object.assign({}, matchObj.item, { [ children ]: null })
+            oRow = Object.assign({}, matchObj.item, { [children]: null })
           }
         } else {
-          let oRowIndex = fullDataRowIdData[rowid].index
+          const oRowIndex = fullDataRowIdData[rowid].index
           oRow = tableSourceData[oRowIndex]
         }
         if (oRow) {
@@ -1645,15 +1647,15 @@ export default {
      * 获取表格所有列
      */
     getColumns (columnIndex) {
-      let columns = this.visibleColumn
+      const columns = this.visibleColumn
       return arguments.length ? columns[columnIndex] : columns.slice(0)
     },
     getColid (column) {
-      let fullColumnMap = this.fullColumnMap
+      const fullColumnMap = this.fullColumnMap
       return fullColumnMap.has(column) ? fullColumnMap.get(column).colid : null
     },
     getColumnById (colid) {
-      let fullColumnIdData = this.fullColumnIdData
+      const fullColumnIdData = this.fullColumnIdData
       return fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
     },
     getColumnByField (field) {
@@ -1666,15 +1668,15 @@ export default {
       return { fullColumn: this.tableFullColumn.slice(0), visibleColumn: this.visibleColumn.slice(0), tableColumn: this.tableColumn.slice(0) }
     },
     // 在 v3.0 中废弃 getRecords
-    getRecords () {
+    getRecords (...args) {
       UtilTools.warn('vxe.error.delFunc', ['getRecords', 'getData'])
-      return this.getData.apply(this, arguments)
+      return this.getData(...args)
     },
     /**
      * 获取表格所有数据
      */
     getData (rowIndex) {
-      let tableSynchData = this.data || this.tableSynchData
+      const tableSynchData = this.data || this.tableSynchData
       return arguments.length ? tableSynchData[rowIndex] : tableSynchData.slice(0)
     },
     // 在 v3.0 中废弃 getAllRecords
@@ -1722,8 +1724,8 @@ export default {
      * 用于多选行，获取已选中的数据
      */
     getCheckboxRecords () {
-      let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
-      let { checkField: property } = checkboxOpts
+      const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
+      const { checkField: property } = checkboxOpts
       let rowList = []
       if (property) {
         if (treeConfig) {
@@ -1732,7 +1734,7 @@ export default {
           rowList = tableFullData.filter(row => XEUtils.get(row, property))
         }
       } else {
-        let { selection } = this
+        const { selection } = this
         if (treeConfig) {
           rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeOpts)
         } else {
@@ -1747,7 +1749,7 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     getUpdateRecords () {
-      let { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
       if (treeConfig) {
         return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
       }
@@ -1758,14 +1760,14 @@ export default {
      * 如果存在筛选条件，继续处理
      */
     updateAfterFullData () {
-      let { visibleColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
+      const { visibleColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
       let tableData = tableFullData.slice(0)
-      let column = XEUtils.find(visibleColumn, column => column.order)
-      let filterColumns = []
+      const column = XEUtils.find(visibleColumn, column => column.order)
+      const filterColumns = []
       visibleColumn.forEach(column => {
         if (column.filters && column.filters.length) {
-          let valueList = []
-          let itemList = []
+          const valueList = []
+          const itemList = []
           column.filters.forEach(item => {
             if (item.checked) {
               itemList.push(item)
@@ -1779,8 +1781,9 @@ export default {
         tableData = tableData.filter(row => {
           return filterColumns.every(({ column, valueList, itemList }) => {
             if (valueList.length && !(filterOpts.remote || remoteFilter)) {
-              let { filterRender, property, filterMethod } = column
-              let compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+              const { filterRender, property } = column
+              let { filterMethod } = column
+              const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
               if (!filterMethod && compConf && compConf.renderFilter) {
                 filterMethod = compConf.filterMethod
               }
@@ -1791,13 +1794,13 @@ export default {
         })
       }
       if (column && column.order) {
-        let allSortMethod = sortOpts.sortMethod || this.sortMethod
-        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
+        const allSortMethod = sortOpts.sortMethod || this.sortMethod
+        const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
         if (!isRemote) {
           if (allSortMethod) {
             tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
           } else {
-            let rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.property)
+            const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.property)
             tableData = column.order === 'desc' ? rest.reverse() : rest
           }
         }
@@ -1806,11 +1809,11 @@ export default {
       return tableData
     },
     getRowById (rowid) {
-      let fullDataRowIdData = this.fullDataRowIdData
+      const fullDataRowIdData = this.fullDataRowIdData
       return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
     },
     getRowid (row) {
-      let fullAllDataRowMap = this.fullAllDataRowMap
+      const fullAllDataRowMap = this.fullAllDataRowMap
       return fullAllDataRowMap.has(row) ? fullAllDataRowMap.get(row).rowid : null
     },
     /**
@@ -1819,7 +1822,7 @@ export default {
      * 如果存在排序，继续处理
      */
     getTableData () {
-      let { tableFullData, afterFullData, tableData, footerData } = this
+      const { tableFullData, afterFullData, tableData, footerData } = this
       return {
         fullData: tableFullData.slice(0),
         visibleData: afterFullData.slice(0),
@@ -1832,7 +1835,7 @@ export default {
      */
     handleDefaults () {
       // 在 v3.0 中废弃 selectConfig
-      let checkboxConfig = this.checkboxConfig || this.selectConfig
+      const checkboxConfig = this.checkboxConfig || this.selectConfig
       if (checkboxConfig) {
         this.handleDefaultSelectionChecked()
       }
@@ -1857,7 +1860,7 @@ export default {
       this.isUpdateCustoms = true
       this.tableFullColumn.forEach(column => {
         // 在 v3.0 中废弃 prop
-        let item = XEUtils.find(customColumns, item => column.property && (item.field || item.prop) === column.property)
+        const item = XEUtils.find(customColumns, item => column.property && (item.field || item.prop) === column.property)
         if (item) {
           if (XEUtils.isNumber(item.resizeWidth)) {
             column.resizeWidth = item.resizeWidth
@@ -1885,7 +1888,7 @@ export default {
      * 如果已关联工具栏，则会同步更新
      */
     resetColumn (options) {
-      let opts = Object.assign({ visible: true }, options)
+      const opts = Object.assign({ visible: true }, options)
       if (options === true || opts.resizable) {
         this.handleResetResizable()
       }
@@ -1944,13 +1947,13 @@ export default {
     refreshColumn () {
       let isColspan
       let letIndex = 0
-      let leftList = []
+      const leftList = []
       let leftStartIndex = null
       let rightEndIndex = null
-      let centerList = []
-      let rightList = []
-      let { collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
-      let { scrollX } = optimizeOpts
+      const centerList = []
+      const rightList = []
+      const { collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
+      const { scrollX } = optimizeOpts
       // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
       if (isGroup) {
         XEUtils.eachTree(collectColumn, column => {
@@ -1990,7 +1993,7 @@ export default {
         }
       })
       let visibleColumn = leftList.concat(centerList).concat(rightList)
-      let scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
+      const scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (isGroup && (isColspan || leftStartIndex || (rightEndIndex !== null && rightEndIndex !== visibleColumn.length))) {
         UtilTools.error('vxe.error.groupFixed')
@@ -2020,13 +2023,13 @@ export default {
      * 指定列宽的列进行拆分
      */
     analyColumnWidth () {
-      let { columnWidth, columnMinWidth } = this
-      let resizeList = []
-      let pxList = []
-      let pxMinList = []
-      let scaleList = []
-      let scaleMinList = []
-      let autoList = []
+      const { columnWidth, columnMinWidth } = this
+      const resizeList = []
+      const pxList = []
+      const pxMinList = []
+      const scaleList = []
+      const scaleMinList = []
+      const autoList = []
       this.tableFullColumn.forEach(column => {
         if (columnWidth && !column.width) {
           column.width = columnWidth
@@ -2073,10 +2076,10 @@ export default {
      * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
      */
     recalculate (refull) {
-      let { tableBody, tableHeader, tableFooter } = this.$refs
-      let bodyElem = tableBody ? tableBody.$el : null
-      let headerElem = tableHeader ? tableHeader.$el : null
-      let footerElem = tableFooter ? tableFooter.$el : null
+      const { tableBody, tableHeader, tableFooter } = this.$refs
+      const bodyElem = tableBody ? tableBody.$el : null
+      const headerElem = tableHeader ? tableHeader.$el : null
+      const footerElem = tableFooter ? tableFooter.$el : null
       if (bodyElem) {
         let bodyWidth = bodyElem.clientWidth
         this.autoCellWidth(headerElem, bodyElem, footerElem, bodyWidth)
@@ -2102,40 +2105,39 @@ export default {
      * @param {Number} bodyWidth
      */
     autoCellWidth (headerElem, bodyElem, footerElem, bodyWidth) {
-      let meanWidth
       let tableWidth = 0
-      let minCellWidth = 40 // 列宽最少限制 40px
+      const minCellWidth = 40 // 列宽最少限制 40px
       let remainWidth = bodyWidth
-      let { fit, columnStore } = this
-      let { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
+      let meanWidth = remainWidth / 100
+      const { fit, columnStore } = this
+      const { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
       // 最小宽
       pxMinList.forEach(column => {
-        let minWidth = parseInt(column.minWidth)
+        const minWidth = parseInt(column.minWidth)
         tableWidth += minWidth
         column.renderWidth = minWidth
       })
       // 最小百分比
-      meanWidth = remainWidth / 100
       scaleMinList.forEach(column => {
-        let scaleWidth = Math.floor(parseInt(column.minWidth) * meanWidth)
+        const scaleWidth = Math.floor(parseInt(column.minWidth) * meanWidth)
         tableWidth += scaleWidth
         column.renderWidth = scaleWidth
       })
       // 固定百分比
       scaleList.forEach(column => {
-        let scaleWidth = Math.floor(parseInt(column.width) * meanWidth)
+        const scaleWidth = Math.floor(parseInt(column.width) * meanWidth)
         tableWidth += scaleWidth
         column.renderWidth = scaleWidth
       })
       // 固定宽
       pxList.forEach(column => {
-        let width = parseInt(column.width)
+        const width = parseInt(column.width)
         tableWidth += width
         column.renderWidth = width
       })
       // 调整了列宽
       resizeList.forEach(column => {
-        let width = parseInt(column.resizeWidth)
+        const width = parseInt(column.resizeWidth)
         tableWidth += width
         column.renderWidth = width
       })
@@ -2152,8 +2154,8 @@ export default {
         meanWidth = minCellWidth
       }
       // 自适应
-      autoList.forEach((column, index) => {
-        let width = Math.max(meanWidth, minCellWidth)
+      autoList.forEach(column => {
+        const width = Math.max(meanWidth, minCellWidth)
         column.renderWidth = width
         tableWidth += width
       })
@@ -2162,7 +2164,7 @@ export default {
          * 偏移量算法
          * 如果所有列足够放的情况下，从最后动态列开始分配
          */
-        let dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoList)
+        const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoList)
         let dynamicSize = dynamicList.length - 1
         if (dynamicSize > 0) {
           let odiffer = bodyWidth - tableWidth
@@ -2175,8 +2177,8 @@ export default {
           }
         }
       }
-      let tableHeight = bodyElem.offsetHeight
-      let overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
+      const tableHeight = bodyElem.offsetHeight
+      const overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
       this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth : 0
       this.overflowY = overflowY
       this.tableWidth = tableWidth
@@ -2188,7 +2190,7 @@ export default {
         this.headerHeight = 0
       }
       if (footerElem) {
-        let footerHeight = footerElem.offsetHeight
+        const footerHeight = footerElem.offsetHeight
         this.scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
         this.overflowX = tableWidth > footerElem.clientWidth
         this.footerHeight = footerHeight
@@ -2206,8 +2208,8 @@ export default {
      * 处理固定列的显示状态
      */
     checkScrolling () {
-      let { tableBody, leftBody, rightBody } = this.$refs
-      let bodyElem = tableBody ? tableBody.$el : null
+      const { tableBody, leftBody, rightBody } = this.$refs
+      const bodyElem = tableBody ? tableBody.$el : null
       if (bodyElem) {
         if (leftBody) {
           this.scrollLeftToRight = bodyElem.scrollLeft > 0
@@ -2218,7 +2220,7 @@ export default {
       }
     },
     preventEvent (evnt, type, args, next, end) {
-      let evntList = VXETable.interceptor.get(type)
+      const evntList = VXETable.interceptor.get(type)
       let rest
       if (!evntList.some(func => func(Object.assign({ $table: this }, args), evnt, this) === false)) {
         if (next) {
@@ -2234,11 +2236,11 @@ export default {
      * 全局按下事件处理
      */
     handleGlobalMousedownEvent (evnt) {
-      let { $el, $refs, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
-      let { actived } = editStore
-      let { filterWrapper, validTip } = $refs
+      const { $el, $refs, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
+      const { actived } = editStore
+      const { filterWrapper, validTip } = $refs
       // 在 v3.0 中废弃 mouse-config.checked
-      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       if (filterWrapper) {
         if (DomTools.getEventTargetNode(evnt, this.$el, 'vxe-filter-wrapper').flag) {
           // 如果点击了筛选按钮
@@ -2258,7 +2260,7 @@ export default {
             this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
               let isClear
               if (editOpts.mode === 'row') {
-                let rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
+                const rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
                 // row 方式，如果点击了不同行
                 isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : false
               } else {
@@ -2302,14 +2304,14 @@ export default {
     /**
      * 窗口失焦事件处理
      */
-    handleGlobalBlurEvent (evnt) {
+    handleGlobalBlurEvent () {
       this.closeFilter()
       this.closeMenu()
     },
     /**
      * 全局滚动事件
      */
-    handleGlobalMousewheelEvent (evnt) {
+    handleGlobalMousewheelEvent () {
       this.clostTooltip()
       this.closeMenu()
     },
@@ -2321,27 +2323,27 @@ export default {
       if (this.isActivated) {
         this.preventEvent(evnt, 'event.keydown', { $table: this }, () => {
           let params
-          let { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
-          let { selected, actived } = editStore
-          let keyCode = evnt.keyCode
-          let isBack = keyCode === 8
-          let isTab = keyCode === 9
-          let isEnter = keyCode === 13
-          let isEsc = keyCode === 27
-          let isSpacebar = keyCode === 32
-          let isLeftArrow = keyCode === 37
-          let isUpArrow = keyCode === 38
-          let isRightArrow = keyCode === 39
-          let isDwArrow = keyCode === 40
-          let isDel = keyCode === 46
-          let isC = keyCode === 67
-          let isV = keyCode === 86
-          let isX = keyCode === 88
-          let isF2 = keyCode === 113
-          let isCtrlKey = evnt.ctrlKey
-          let isShiftKey = evnt.shiftKey
-          let operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
-          let operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
+          const { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
+          const { selected, actived } = editStore
+          const keyCode = evnt.keyCode
+          const isBack = keyCode === 8
+          const isTab = keyCode === 9
+          const isEnter = keyCode === 13
+          const isEsc = keyCode === 27
+          const isSpacebar = keyCode === 32
+          const isLeftArrow = keyCode === 37
+          const isUpArrow = keyCode === 38
+          const isRightArrow = keyCode === 39
+          const isDwArrow = keyCode === 40
+          const isDel = keyCode === 46
+          const isC = keyCode === 67
+          const isV = keyCode === 86
+          const isX = keyCode === 88
+          const isF2 = keyCode === 113
+          const isCtrlKey = evnt.ctrlKey
+          const isShiftKey = evnt.shiftKey
+          const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
+          const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
           if (isEsc) {
           // 如果按下了 Esc 键，关闭快捷菜单、筛选
             this.closeMenu()
@@ -2371,10 +2373,10 @@ export default {
               this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
             } else if (treeConfig && highlightCurrentRow && currentRow) {
             // 如果是树形表格当前行回车移动到子节点
-              let childrens = currentRow[treeOpts.children]
+              const childrens = currentRow[treeOpts.children]
               if (childrens && childrens.length) {
                 evnt.preventDefault()
-                let targetRow = childrens[0]
+                const targetRow = childrens[0]
                 params = { $table: this, row: targetRow }
                 this.setTreeExpansion(currentRow, true)
                   .then(() => this.scrollToRow(targetRow))
@@ -2419,7 +2421,7 @@ export default {
               }
             } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
             // 如果树形表格回退键关闭当前行返回父节点
-              let { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
+              const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
               if (parentRow) {
                 evnt.preventDefault()
                 params = { $table: this, row: parentRow }
@@ -2449,14 +2451,14 @@ export default {
     },
     // 处理 Tab 键移动
     moveTabSelected (args, isLeft, evnt) {
-      let { afterFullData, visibleColumn, editConfig, editOpts, isSeqColumn } = this
+      const { afterFullData, visibleColumn, editConfig, editOpts, isSeqColumn } = this
       let targetRow
       let targetRowIndex
       let targetColumn
       let targetColumnIndex
-      let params = Object.assign({}, args)
-      let rowIndex = afterFullData.indexOf(params.row)
-      let columnIndex = visibleColumn.indexOf(params.column)
+      const params = Object.assign({}, args)
+      const rowIndex = afterFullData.indexOf(params.row)
+      const columnIndex = visibleColumn.indexOf(params.column)
       evnt.preventDefault()
       if (isLeft) {
         // 向左
@@ -2525,18 +2527,18 @@ export default {
     },
     // 处理当前行方向键移动
     moveCurrentRow (isUpArrow, isDwArrow, evnt) {
-      let { currentRow, treeConfig, treeOpts, afterFullData } = this
+      const { currentRow, treeConfig, treeOpts, afterFullData } = this
       let targetRow
       evnt.preventDefault()
       if (treeConfig) {
-        let { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
+        const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
         if (isUpArrow && index > 0) {
           targetRow = items[index - 1]
         } else if (isDwArrow && index < items.length - 1) {
           targetRow = items[index + 1]
         }
       } else {
-        let rowIndex = afterFullData.indexOf(currentRow)
+        const rowIndex = afterFullData.indexOf(currentRow)
         if (isUpArrow && rowIndex > 0) {
           targetRow = afterFullData[rowIndex - 1]
         } else if (isDwArrow && rowIndex < afterFullData.length - 1) {
@@ -2544,15 +2546,15 @@ export default {
         }
       }
       if (targetRow) {
-        let params = { $table: this, row: targetRow }
+        const params = { $table: this, row: targetRow }
         this.scrollToRow(targetRow)
           .then(() => this.triggerCurrentRowEvent(evnt, params))
       }
     },
     // 处理方向键移动
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-      let { afterFullData, visibleColumn } = this
-      let params = Object.assign({}, args)
+      const { afterFullData, visibleColumn } = this
+      const params = Object.assign({}, args)
       evnt.preventDefault()
       if (isUpArrow && params.rowIndex) {
         params.rowIndex -= 1
@@ -2584,7 +2586,7 @@ export default {
     // 处理菜单的移动
     moveCtxMenu (evnt, keyCode, ctxMenuStore, property, operKey, operRest, menuList) {
       let selectItem
-      let selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
+      const selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
       if (keyCode === operKey) {
         if (operRest && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
           ctxMenuStore.showChild = true
@@ -2620,8 +2622,8 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      let { $refs, id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
-      let layoutList = ['header', 'body', 'footer']
+      const { $refs, id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
+      const layoutList = ['header', 'body', 'footer']
       if (contextMenu && isCtxMenu) {
         if (ctxMenuStore.visible) {
           if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
@@ -2631,19 +2633,19 @@ export default {
         }
         // 分别匹配表尾、内容、表尾的快捷菜单
         for (let index = 0; index < layoutList.length; index++) {
-          let layout = layoutList[index]
-          let columnTargetNode = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`, target => {
+          const layout = layoutList[index]
+          const columnTargetNode = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`, target => {
             // target=td|th，直接向上找 table 去匹配即可
             return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === id
           })
-          let params = { type: layout, $table: this, columns: this.visibleColumn.slice(0) }
+          const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0) }
           if (columnTargetNode.flag) {
-            let cell = columnTargetNode.targetElem
-            let column = this.getColumnNode(cell).item
+            const cell = columnTargetNode.targetElem
+            const column = this.getColumnNode(cell).item
             let typePrefix = `${layout}-`
             Object.assign(params, { column, columnIndex: this.getColumnIndex(column), cell })
             if (layout === 'body') {
-              let row = this.getRowNode(cell.parentNode).item
+              const row = this.getRowNode(cell.parentNode).item
               typePrefix = ''
               params.row = row
               params.rowIndex = this.getRowIndex(row)
@@ -2672,11 +2674,11 @@ export default {
      * 显示快捷菜单
      */
     openContextMenu (evnt, type, params) {
-      let { ctxMenuStore, ctxMenuOpts } = this
-      let config = ctxMenuOpts[type]
-      let visibleMethod = ctxMenuOpts.visibleMethod
+      const { ctxMenuStore, ctxMenuOpts } = this
+      const config = ctxMenuOpts[type]
+      const visibleMethod = ctxMenuOpts.visibleMethod
       if (config) {
-        let { options, disabled } = config
+        const { options, disabled } = config
         if (disabled) {
           evnt.preventDefault()
         } else if (options && options.length) {
@@ -2685,9 +2687,9 @@ export default {
             if (!visibleMethod || visibleMethod(params, evnt)) {
               evnt.preventDefault()
               this.updateZindex()
-              let { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-              let top = evnt.clientY + scrollTop
-              let left = evnt.clientX + scrollLeft
+              const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
+              const top = evnt.clientY + scrollTop
+              const left = evnt.clientX + scrollLeft
               Object.assign(ctxMenuStore, {
                 args: params,
                 visible: true,
@@ -2703,11 +2705,11 @@ export default {
                 }
               })
               this.$nextTick(() => {
-                let ctxElem = this.$refs.ctxWrapper.$el
-                let clientHeight = ctxElem.clientHeight
-                let clientWidth = ctxElem.clientWidth
-                let offsetTop = evnt.clientY + clientHeight - visibleHeight
-                let offsetLeft = evnt.clientX + clientWidth - visibleWidth
+                const ctxElem = this.$refs.ctxWrapper.$el
+                const clientHeight = ctxElem.clientHeight
+                const clientWidth = ctxElem.clientWidth
+                const offsetTop = evnt.clientY + clientHeight - visibleHeight
+                const offsetLeft = evnt.clientX + clientWidth - visibleWidth
                 if (offsetTop > -10) {
                   ctxMenuStore.style.top = `${Math.max(scrollTop + 2, top - clientHeight - 2)}px`
                 }
@@ -2740,7 +2742,7 @@ export default {
       return this.$nextTick()
     },
     ctxMenuMouseoverEvent (evnt, item, child) {
-      let ctxMenuStore = this.ctxMenuStore
+      const ctxMenuStore = this.ctxMenuStore
       evnt.preventDefault()
       evnt.stopPropagation()
       ctxMenuStore.selected = item
@@ -2749,8 +2751,8 @@ export default {
         ctxMenuStore.showChild = UtilTools.hasChildrenList(item)
       }
     },
-    ctxMenuMouseoutEvent (evnt, item, child) {
-      let ctxMenuStore = this.ctxMenuStore
+    ctxMenuMouseoutEvent (evnt, item) {
+      const ctxMenuStore = this.ctxMenuStore
       if (!item.children) {
         ctxMenuStore.selected = null
       }
@@ -2761,8 +2763,8 @@ export default {
      */
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
-        let ctxMenuMethod = VXETable.menus.get(menu.code)
-        let params = Object.assign({ menu, $table: this }, this.ctxMenuStore.args)
+        const ctxMenuMethod = VXETable.menus.get(menu.code)
+        const params = Object.assign({ menu, $table: this }, this.ctxMenuStore.args)
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)
         }
@@ -2770,21 +2772,21 @@ export default {
         this.closeMenu()
       }
     },
-    handleTooltipLeaveEvent (evnt) {
-      let tooltipOpts = this.tooltipOpts
+    handleTooltipLeaveEvent () {
+      const tooltipOpts = this.tooltipOpts
       setTimeout(() => {
         if (!this.tooltipActive) {
           this.clostTooltip()
         }
       }, tooltipOpts.leaveDelay)
     },
-    handleTargetEnterEvent (evnt) {
+    handleTargetEnterEvent () {
       clearTimeout(this.tooltipTimeout)
       this.tooltipActive = true
       this.clostTooltip()
     },
-    handleTargetLeaveEvent (evnt) {
-      let tooltipOpts = this.tooltipOpts
+    handleTargetLeaveEvent () {
+      const tooltipOpts = this.tooltipOpts
       this.tooltipActive = false
       if (tooltipOpts.enterable) {
         this.tooltipTimeout = setTimeout(() => {
@@ -2800,8 +2802,8 @@ export default {
      * 触发表头 tooltip 事件
      */
     triggerHeaderTooltipEvent (evnt, params) {
-      let { tooltipStore } = this
-      let { column } = params
+      const { tooltipStore } = this
+      const { column } = params
       this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         this.handleTooltip(evnt, column)
@@ -2811,8 +2813,8 @@ export default {
      * 触发表尾 tooltip 事件
      */
     triggerFooterTooltipEvent (evnt, params) {
-      let { column } = params
-      let tooltipStore = this.tooltipStore
+      const { column } = params
+      const tooltipStore = this.tooltipStore
       this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         this.handleTooltip(evnt, column)
@@ -2822,9 +2824,9 @@ export default {
      * 触发 tooltip 事件
      */
     triggerTooltipEvent (evnt, params) {
-      let { editConfig, editOpts, editStore, tooltipStore } = this
-      let { actived } = editStore
-      let { row, column } = params
+      const { editConfig, editOpts, editStore, tooltipStore } = this
+      const { actived } = editStore
+      const { row, column } = params
       this.handleTargetEnterEvent()
       if (editConfig) {
         if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
@@ -2837,10 +2839,10 @@ export default {
     },
     // 显示 tooltip
     handleTooltip (evnt, column, row) {
-      let cell = evnt.currentTarget
-      let tooltip = this.$refs.tooltip
-      let wrapperElem = cell.children[0]
-      let content = cell.innerText
+      const cell = evnt.currentTarget
+      const tooltip = this.$refs.tooltip
+      const wrapperElem = cell.children[0]
+      const content = cell.innerText
       if (content && wrapperElem.scrollWidth > wrapperElem.clientWidth) {
         Object.assign(this.tooltipStore, {
           row,
@@ -2855,7 +2857,7 @@ export default {
     },
     // 关闭 tooltip
     clostTooltip () {
-      let tooltip = this.$refs.tooltip
+      const tooltip = this.$refs.tooltip
       Object.assign(this.tooltipStore, {
         row: null,
         column: null,
@@ -2871,12 +2873,12 @@ export default {
      * 处理复选框默认勾选
      */
     handleDefaultSelectionChecked () {
-      let { fullDataRowIdData, checkboxOpts } = this
-      let { checkAll, checkRowKeys } = checkboxOpts
+      const { fullDataRowIdData, checkboxOpts } = this
+      const { checkAll, checkRowKeys } = checkboxOpts
       if (checkAll) {
         this.setAllCheckboxRow(true)
       } else if (checkRowKeys) {
-        let defSelection = []
+        const defSelection = []
         checkRowKeys.forEach(rowid => {
           if (fullDataRowIdData[rowid]) {
             defSelection.push(fullDataRowIdData[rowid].row)
@@ -2907,7 +2909,7 @@ export default {
       return this.isCheckedByCheckboxRow(row)
     },
     isCheckedByCheckboxRow (row) {
-      let { checkField: property } = this.checkboxOpts
+      const { checkField: property } = this.checkboxOpts
       if (property) {
         return XEUtils.get(row, property)
       }
@@ -2918,9 +2920,9 @@ export default {
      * value 选中true 不选false 不确定-1
      */
     handleSelectRow ({ row }, value) {
-      let { selection, tableFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
-      let { checkStrictly, checkMethod } = checkboxOpts
-      let property = checkboxOpts.checkField || checkboxOpts.checkProp
+      const { selection, tableFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
+      const { checkStrictly, checkMethod } = checkboxOpts
+      const property = checkboxOpts.checkField || checkboxOpts.checkProp
       if (property) {
         if (treeConfig && !checkStrictly) {
           if (value === -1) {
@@ -2937,15 +2939,15 @@ export default {
             XEUtils.remove(treeIndeterminates, item => item === row)
           }
           // 如果存在父节点，更新父节点状态
-          let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
+          const matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
           if (matchObj && matchObj.parent) {
             let parentStatus
-            let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-            let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
+            const vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
+            const indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
             if (indeterminatesItem) {
               parentStatus = -1
             } else {
-              let selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
+              const selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
               parentStatus = selectItems.filter(item => vItems.indexOf(item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
             }
             return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
@@ -2974,15 +2976,15 @@ export default {
             XEUtils.remove(treeIndeterminates, item => item === row)
           }
           // 如果存在父节点，更新父节点状态
-          let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
+          const matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
           if (matchObj && matchObj.parent) {
             let parentStatus
-            let vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
-            let indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
+            const vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
+            const indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
             if (indeterminatesItem) {
               parentStatus = -1
             } else {
-              let selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
+              const selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
               parentStatus = selectItems.filter(item => vItems.indexOf(item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
             }
             return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
@@ -3001,10 +3003,10 @@ export default {
       this.checkSelectionStatus()
     },
     handleToggleCheckRowEvent (params, evnt) {
-      let { selection, checkboxOpts } = this
-      let { checkField: property } = checkboxOpts
-      let { row } = params
-      let value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
+      const { selection, checkboxOpts } = this
+      const { checkField: property } = checkboxOpts
+      const { row } = params
+      const value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
       if (evnt) {
         this.triggerCheckRowEvent(evnt, params, value)
       } else {
@@ -3012,7 +3014,7 @@ export default {
       }
     },
     triggerCheckRowEvent (evnt, params, value) {
-      let { checkMethod } = this.checkboxOpts
+      const { checkMethod } = this.checkboxOpts
       if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
         this.handleSelectRow(params, value)
         // 在 v3.0 中废弃 select-change
@@ -3046,20 +3048,20 @@ export default {
      * @param {Boolean} value 是否选中
      */
     setAllCheckboxRow (value) {
-      let { afterFullData, treeConfig, treeOpts, selection, selectReserveRowMap, checkboxOpts } = this
-      let { reserve, checkStrictly, checkMethod } = checkboxOpts
-      let property = checkboxOpts.checkField || checkboxOpts.checkProp
+      const { afterFullData, treeConfig, treeOpts, selection, selectReserveRowMap, checkboxOpts } = this
+      const { reserve, checkStrictly, checkMethod } = checkboxOpts
+      const property = checkboxOpts.checkField || checkboxOpts.checkProp
       let selectRows = []
-      let beforeSelection = treeConfig ? [] : selection.filter(row => afterFullData.indexOf(row) === -1)
+      const beforeSelection = treeConfig ? [] : selection.filter(row => afterFullData.indexOf(row) === -1)
       if (!checkStrictly) {
         if (property) {
-          let indexKey = `${treeConfig ? '$' : ''}rowIndex`
-          let setValFn = (row, rowIndex) => {
+          const indexKey = `${treeConfig ? '$' : ''}rowIndex`
+          const setValFn = (row, rowIndex) => {
             if (!checkMethod || checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex })) {
               XEUtils.set(row, property, value)
             }
           }
-          let clearValFn = (row, rowIndex) => {
+          const clearValFn = (row, rowIndex) => {
             if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)) {
               XEUtils.set(row, property, value)
             }
@@ -3120,9 +3122,9 @@ export default {
       this.checkSelectionStatus()
     },
     checkSelectionStatus () {
-      let { afterFullData, selection, treeIndeterminates, checkboxOpts } = this
-      let { checkStrictly, checkMethod } = checkboxOpts
-      let property = checkboxOpts.checkField || checkboxOpts.checkProp
+      const { afterFullData, selection, treeIndeterminates, checkboxOpts } = this
+      const { checkStrictly, checkMethod } = checkboxOpts
+      const property = checkboxOpts.checkField || checkboxOpts.checkProp
       if (!checkStrictly) {
         if (property) {
           this.isAllSelected = afterFullData.length && afterFullData.every(
@@ -3143,11 +3145,11 @@ export default {
     },
     // 还原展开、选中等相关状态
     handleReserveStatus () {
-      let { rowId, treeConfig, fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
-      let reserveSelection = []
-      let reserveRowExpandeds = []
-      let reserveTreeExpandeds = []
-      let reserveTreeIndeterminates = []
+      const { rowId, treeConfig, fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
+      const reserveSelection = []
+      const reserveRowExpandeds = []
+      const reserveTreeExpandeds = []
+      const reserveTreeIndeterminates = []
       // 复选框
       if (rowId) {
         this.handleReserveByRowid(this.selection, reserveSelection)
@@ -3174,7 +3176,7 @@ export default {
       this.treeIndeterminates = reserveTreeIndeterminates
     },
     handleReserveByRowid (list, rest) {
-      let fullDataRowIdData = this.fullDataRowIdData
+      const fullDataRowIdData = this.fullDataRowIdData
       list.forEach(row => {
         const rowid = UtilTools.getRowid(this, row)
         if (fullDataRowIdData[rowid]) {
@@ -3191,8 +3193,8 @@ export default {
      * 获取保留选中的行
      */
     getCheckboxReserveRecords () {
-      let { fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
-      let reserveSelection = []
+      const { fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
+      const reserveSelection = []
       if (checkboxOpts.reserve) {
         Object.keys(selectReserveRowMap).forEach(rowid => {
           if (!fullDataRowIdData[rowid]) {
@@ -3213,7 +3215,7 @@ export default {
     },
     handleSelectReserveRow (row, checked) {
       const { selectReserveRowMap, checkboxOpts } = this
-      let { reserve } = checkboxOpts
+      const { reserve } = checkboxOpts
       if (reserve) {
         const rowid = UtilTools.getRowid(this, row)
         if (checked) {
@@ -3257,8 +3259,8 @@ export default {
      * 用于多选行，手动清空用户的选择
      */
     clearCheckboxRow () {
-      let { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
-      let property = checkboxOpts.checkField || checkboxOpts.checkProp
+      const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
+      const property = checkboxOpts.checkField || checkboxOpts.checkProp
       if (property) {
         if (treeConfig) {
           XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeOpts)
@@ -3276,8 +3278,8 @@ export default {
      * 处理单选框默认勾选
      */
     handleDefaultRadioChecked () {
-      let { radioOpts, fullDataRowIdData } = this
-      let { checkRowKey: rowid } = radioOpts
+      const { radioOpts, fullDataRowIdData } = this
+      const { checkRowKey: rowid } = radioOpts
       if (rowid && fullDataRowIdData[rowid]) {
         this.setRadioRow(fullDataRowIdData[rowid].row)
       }
@@ -3286,10 +3288,10 @@ export default {
      * 单选，行选中事件
      */
     triggerRadioRowEvent (evnt, params) {
-      let { radioOpts } = this
-      let { checkMethod } = radioOpts
+      const { radioOpts } = this
+      const { checkMethod } = radioOpts
       if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
-        let isChange = this.selectRow !== params.row
+        const isChange = this.selectRow !== params.row
         this.setRadioRow(params.row)
         if (isChange) {
           UtilTools.emitEvent(this, 'radio-change', [params, evnt])
@@ -3297,7 +3299,7 @@ export default {
       }
     },
     triggerCurrentRowEvent (evnt, params) {
-      let isChange = this.currentRow !== params.row
+      const isChange = this.currentRow !== params.row
       this.setCurrentRow(params.row)
       if (isChange) {
         UtilTools.emitEvent(this, 'current-change', [params, evnt])
@@ -3364,14 +3366,14 @@ export default {
      * 选中事件
      */
     triggerCellMousedownEvent (evnt, params) {
-      let { $el, tableData, visibleColumn, editStore, checkboxOpts, mouseConfig, mouseOpts, editConfig, editOpts, handleSelected, handleChecked } = this
-      let { checked, actived } = editStore
-      let { row, column, cell } = params
-      let { button } = evnt
-      let isLeftBtn = button === 0
-      let isRightBtn = button === 2
+      const { $el, tableData, visibleColumn, editStore, checkboxOpts, mouseConfig, mouseOpts, editConfig, editOpts, handleSelected, handleChecked } = this
+      const { checked, actived } = editStore
+      const { row, column, cell } = params
+      const { button } = evnt
+      const isLeftBtn = button === 0
+      const isRightBtn = button === 2
       // 在 v3.0 中废弃 mouse-config.checked
-      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
       if (isLeftBtn || isRightBtn) {
         if (isMouseChecked) {
           if (editConfig && editOpts.trigger === 'dblclick') {
@@ -3380,11 +3382,11 @@ export default {
             } else {
               if (isLeftBtn) {
                 this.handleSelected(params, evnt)
-                let domMousemove = document.onmousemove
-                let domMouseup = document.onmouseup
-                let start = DomTools.getCellIndexs(cell)
-                let updateEvent = XEUtils.throttle(function (evnt) {
-                  let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+                const domMousemove = document.onmousemove
+                const domMouseup = document.onmouseup
+                const start = DomTools.getCellIndexs(cell)
+                const updateEvent = XEUtils.throttle(function (evnt) {
+                  const { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
                   if (flag) {
                     handleChecked(start, DomTools.getCellIndexs(targetElem), evnt)
                   }
@@ -3394,7 +3396,7 @@ export default {
                   evnt.stopPropagation()
                   updateEvent(evnt)
                 }
-                document.onmouseup = function (evnt) {
+                document.onmouseup = function () {
                   document.onmousemove = domMousemove
                   document.onmouseup = domMouseup
                 }
@@ -3402,7 +3404,7 @@ export default {
                 this.closeMenu()
               } else {
                 // 如果不在所有选中的范围之内则重新选中
-                let select = DomTools.getCellIndexs(cell)
+                const select = DomTools.getCellIndexs(cell)
                 if (checked.rows.indexOf(tableData[select.rowIndex]) === -1 || checked.columns.indexOf(visibleColumn[select.columnIndex]) === -1) {
                   handleSelected(params, evnt)
                 }
@@ -3421,21 +3423,21 @@ export default {
     triggerCornerMousedownEvent (params, evnt) {
       evnt.preventDefault()
       evnt.stopPropagation()
-      let { $el, tableData, visibleColumn, editStore, editConfig, editOpts, handleTempChecked } = this
-      let { checked } = editStore
-      let { button } = evnt
-      let isLeftBtn = button === 0
-      let isRightBtn = button === 2
+      const { $el, tableData, visibleColumn, editStore, editConfig, editOpts, handleTempChecked } = this
+      const { checked } = editStore
+      const { button } = evnt
+      const isLeftBtn = button === 0
+      const isRightBtn = button === 2
       if (isLeftBtn || isRightBtn) {
         if (editConfig && checked.rows.length && editOpts.trigger === 'dblclick') {
-          let domMousemove = document.onmousemove
-          let domMouseup = document.onmouseup
-          let start = {
+          const domMousemove = document.onmousemove
+          const domMouseup = document.onmouseup
+          const start = {
             rowIndex: tableData.indexOf(checked.rows[0]),
             columnIndex: visibleColumn.indexOf(checked.columns[0])
           }
-          let updateEvent = XEUtils.throttle(function (evnt) {
-            let { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
+          const updateEvent = XEUtils.throttle(function (evnt) {
+            const { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
             if (flag) {
               handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
             }
@@ -3445,7 +3447,7 @@ export default {
             evnt.stopPropagation()
             updateEvent(evnt)
           }
-          document.onmouseup = function (evnt) {
+          document.onmouseup = function () {
             document.onmousemove = domMousemove
             document.onmouseup = domMouseup
             checked.rows = checked.tRows
@@ -3457,9 +3459,9 @@ export default {
     },
     getCheckboxRangeResult (targetTrElem, moveRange) {
       let countHeight = 0
-      let rangeRows = []
-      let siblingProp = moveRange > 0 ? 'next' : 'previous'
-      let moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
+      const rangeRows = []
+      const siblingProp = moveRange > 0 ? 'next' : 'previous'
+      const moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
       while (targetTrElem && countHeight < moveSize) {
         rangeRows.push(this.getRowNode(targetTrElem).item)
         countHeight += targetTrElem.offsetHeight
@@ -3468,26 +3470,26 @@ export default {
       return rangeRows
     },
     handleCheckboxRangeEvent (evnt, params) {
-      let { column, cell } = params
+      const { column, cell } = params
       // 在 v3.0 中废弃 type=selection
       if (['checkbox', 'selection'].indexOf(column.type) > -1) {
         const disX = evnt.clientX
         const disY = evnt.clientY
         const checkboxRangeElem = this.$refs.checkboxRange
-        let domMousemove = document.onmousemove
-        let domMouseup = document.onmouseup
-        let trEleme = cell.parentNode
-        let absPos = DomTools.getAbsolutePos(trEleme)
-        let selectRecords = this.getCheckboxRecords()
+        const domMousemove = document.onmousemove
+        const domMouseup = document.onmouseup
+        const trEleme = cell.parentNode
+        const absPos = DomTools.getAbsolutePos(trEleme)
+        const selectRecords = this.getCheckboxRecords()
         let lastRangeRows = []
         this.updateZindex()
         document.onmousemove = evnt => {
           evnt.preventDefault()
           evnt.stopPropagation()
-          let offsetLeft = evnt.clientX - disX
-          let offsetTop = evnt.clientY - disY
-          let rangeHeight = Math.abs(offsetTop)
-          let rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.top)
+          const offsetLeft = evnt.clientX - disX
+          const offsetTop = evnt.clientY - disY
+          const rangeHeight = Math.abs(offsetTop)
+          const rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.top)
           checkboxRangeElem.style.display = 'block'
           checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
           checkboxRangeElem.style.height = `${rangeHeight}px`
@@ -3507,7 +3509,7 @@ export default {
             }
           }
         }
-        document.onmouseup = evnt => {
+        document.onmouseup = () => {
           checkboxRangeElem.removeAttribute('style')
           document.onmousemove = domMousemove
           document.onmouseup = domMouseup
@@ -3515,11 +3517,11 @@ export default {
       }
     },
     triggerHeaderCellClickEvent (evnt, params) {
-      let { _lastResizeTime, sortOpts } = this
-      let { column, cell } = params
-      let triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
-      let triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
-      let triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
+      const { _lastResizeTime, sortOpts } = this
+      const { column, cell } = params
+      const triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
+      const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
+      const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
       if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
         this.triggerSortEvent(evnt, column, column.order === 'desc' ? 'asc' : 'desc')
       }
@@ -3542,9 +3544,9 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      let { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts } = this
-      let { actived } = editStore
-      let { column, row } = params
+      const { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts } = this
+      const { actived } = editStore
+      const { column, row } = params
       // 解决 checkbox 重复触发两次问题
       if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
         // 在 v3.0 中废弃 selection
@@ -3613,8 +3615,8 @@ export default {
      * 如果是双击模式，则激活为编辑状态
      */
     triggerCellDBLClickEvent (evnt, params) {
-      let { editStore, editConfig, editOpts } = this
-      let { actived } = editStore
+      const { editStore, editConfig, editOpts } = this
+      const { actived } = editStore
       if (editConfig) {
         if (editOpts.trigger === 'dblclick') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
@@ -3638,11 +3640,11 @@ export default {
      * 处理激活编辑
      */
     handleActived (params, evnt) {
-      let { editStore, editOpts } = this
-      let { mode, activeMethod } = editOpts
-      let { actived } = editStore
-      let { row, column, cell } = params
-      let { editRender } = column
+      const { editStore, editOpts } = this
+      const { mode, activeMethod } = editOpts
+      const { actived } = editStore
+      const { row, column, cell } = params
+      const { editRender } = column
       if (editRender && cell) {
         if (mode === 'row' ? actived.row !== row : (actived.row !== row || actived.column !== column)) {
           // 判断是否禁用编辑
@@ -3680,9 +3682,9 @@ export default {
      * 清除激活的编辑
      */
     clearActived (evnt) {
-      let { editStore } = this
-      let { actived } = editStore
-      let { args, row, column } = actived
+      const { editStore } = this
+      const { actived } = editStore
+      const { args, row, column } = actived
       if (row || column) {
         this.updateFooter()
         UtilTools.emitEvent(this, 'edit-closed', [args, evnt])
@@ -3698,8 +3700,8 @@ export default {
       return this.getActiveRecord()
     },
     getActiveRecord () {
-      let { $el, editStore, afterFullData } = this
-      let { args, row } = editStore.actived
+      const { $el, editStore, afterFullData } = this
+      const { args, row } = editStore.actived
       if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }
@@ -3720,9 +3722,9 @@ export default {
     /**
      * 清除所选中源状态
      */
-    clearSelected (evnt) {
-      let { editStore } = this
-      let { selected } = editStore
+    clearSelected () {
+      const { editStore } = this
+      const { selected } = editStore
       selected.row = null
       selected.column = null
       return this.$nextTick()
@@ -3731,13 +3733,13 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      let { mouseConfig, mouseOpts, editOpts, editStore } = this
-      let { actived, selected } = editStore
-      let { row, column } = params
-      let isMouseSelected = mouseConfig && mouseOpts.selected
+      const { mouseConfig, mouseOpts, editOpts, editStore } = this
+      const { actived, selected } = editStore
+      const { row, column } = params
+      const isMouseSelected = mouseConfig && mouseOpts.selected
       // 在 v3.0 中废弃 mouse-config.checked
-      let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
-      let selectMethod = () => {
+      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const selectMethod = () => {
         if ((isMouseSelected || isMouseChecked) && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
             this.clearChecked(evnt)
@@ -3747,7 +3749,7 @@ export default {
             selected.column = column
             // 如果配置了批量选中功能，则为批量选中状态
             if (isMouseChecked) {
-              let select = DomTools.getCellIndexs(params.cell)
+              const select = DomTools.getCellIndexs(params.cell)
               this.handleChecked(select, select, evnt)
             }
           }
@@ -3760,9 +3762,9 @@ export default {
     /**
      * 清除所有选中状态
      */
-    clearChecked (evnt) {
-      let { editStore } = this
-      let { checked } = editStore
+    clearChecked () {
+      const { editStore } = this
+      const { checked } = editStore
       checked.rows = []
       checked.columns = []
       checked.tRows = []
@@ -3781,7 +3783,7 @@ export default {
      * 获取选中的单元格
      */
     getSelectedCell () {
-      let { args, column } = this.editStore.selected
+      const { args, column } = this.editStore.selected
       if (args && column) {
         return Object.assign({}, args)
       }
@@ -3791,8 +3793,8 @@ export default {
      * 获取所有选中的单元格
      */
     getSelectedRanges () {
-      let { checked } = this.editStore
-      let { rows, columns } = checked
+      const { checked } = this.editStore
+      const { rows, columns } = checked
       return {
         columns,
         rows
@@ -3801,11 +3803,11 @@ export default {
     /**
      * 处理所有选中
      */
-    handleChecked (start, end, evnt) {
-      let { tableData, visibleColumn, editStore } = this
-      let { checked } = editStore
-      let { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
-      let { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
+    handleChecked (start, end) {
+      const { tableData, visibleColumn, editStore } = this
+      const { checked } = editStore
+      const { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
+      const { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
       checked.tRows = []
       checked.tColumns = []
       if (sRowIndex < eRowIndex) {
@@ -3826,10 +3828,10 @@ export default {
     /**
      * 处理所有选中的临时选中
      */
-    handleTempChecked (start, end, evnt) {
-      let { tableData, visibleColumn, editStore } = this
-      let { checked } = editStore
-      let { rows, tRows, columns, tColumns } = checked
+    handleTempChecked (start, end) {
+      const { tableData, visibleColumn, editStore } = this
+      const { checked } = editStore
+      const { rows, tRows, columns, tColumns } = checked
       let { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
       let { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
       if (tRows.length > rows.length) {
@@ -3858,8 +3860,8 @@ export default {
      * 清空已复制的内容
      */
     clearCopyed () {
-      let { editStore } = this
-      let { copyed } = editStore
+      const { editStore } = this
+      const { copyed } = editStore
       copyed.cut = false
       copyed.rows = []
       copyed.columns = []
@@ -3868,9 +3870,9 @@ export default {
     /**
      * 处理复制
      */
-    handleCopyed (cut, evnt) {
-      let { editStore } = this
-      let { copyed, checked } = editStore
+    handleCopyed (cut) {
+      const { editStore } = this
+      const { copyed, checked } = editStore
       copyed.cut = cut
       copyed.rows = checked.rows
       copyed.columns = checked.columns
@@ -3879,21 +3881,21 @@ export default {
      * 处理粘贴
      */
     handlePaste (evnt) {
-      let { tableData, visibleColumn, editStore } = this
-      let { copyed, selected } = editStore
-      let { cut, rows, columns } = copyed
+      const { tableData, visibleColumn, editStore } = this
+      const { copyed, selected } = editStore
+      const { cut, rows, columns } = copyed
       if (rows.length && columns.length && selected.row && selected.column) {
-        let { rowIndex, columnIndex } = selected.args
-        let start = { rowIndex, columnIndex }
-        let end = {
+        const { rowIndex, columnIndex } = selected.args
+        const start = { rowIndex, columnIndex }
+        const end = {
           rowIndex: rowIndex + rows.length - 1,
           columnIndex: columnIndex + columns.length - 1
         }
         rows.forEach((row, rIndex) => {
-          let offsetRow = tableData[rowIndex + rIndex]
+          const offsetRow = tableData[rowIndex + rIndex]
           if (offsetRow) {
             columns.forEach((column, cIndex) => {
-              let offsetColumn = visibleColumn[columnIndex + cIndex]
+              const offsetColumn = visibleColumn[columnIndex + cIndex]
               if (offsetColumn) {
                 UtilTools.setCellValue(offsetRow, offsetColumn, UtilTools.getCellValue(row, column))
               }
@@ -3912,12 +3914,12 @@ export default {
     /**
      * 处理聚焦
      */
-    handleFocus (params, evnt) {
-      let { row, column, cell } = params
-      let { editRender } = column
+    handleFocus (params) {
+      const { row, column, cell } = params
+      const { editRender } = column
       if (editRender) {
-        let compRender = VXETable.renderer.get(editRender.name)
-        let { autofocus, autoselect } = editRender
+        const compRender = VXETable.renderer.get(editRender.name)
+        const { autofocus, autoselect } = editRender
         let inputElem
         // 如果指定了聚焦 class
         if (autofocus) {
@@ -3934,7 +3936,7 @@ export default {
           } else {
             // 保持一致行为，光标移到末端
             if (browse.msie) {
-              let textRange = inputElem.createTextRange()
+              const textRange = inputElem.createTextRange()
               textRange.collapse(false)
               textRange.select()
             }
@@ -3957,9 +3959,9 @@ export default {
     setActiveCell (row, field) {
       return this.scrollToRow(row).then(() => {
         if (row && field) {
-          let column = XEUtils.find(this.visibleColumn, column => column.property === field)
+          const column = XEUtils.find(this.visibleColumn, column => column.property === field)
           if (column && column.editRender) {
-            let cell = DomTools.getCell(this, { row, column })
+            const cell = DomTools.getCell(this, { row, column })
             if (cell) {
               this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
               this.lastCallTime = Date.now()
@@ -3973,24 +3975,24 @@ export default {
      * 只对 trigger=dblclick 有效，选中单元格
      */
     setSelectCell (row, field) {
-      let { tableData, editOpts, visibleColumn } = this
+      const { tableData, editOpts, visibleColumn } = this
       if (row && field && editOpts.trigger !== 'manual') {
-        let column = XEUtils.find(visibleColumn, column => column.property === field)
-        let rowIndex = tableData.indexOf(row)
+        const column = XEUtils.find(visibleColumn, column => column.property === field)
+        const rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
-          let cell = DomTools.getCell(this, { row, rowIndex, column })
-          let params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
+          const cell = DomTools.getCell(this, { row, rowIndex, column })
+          const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
         }
       }
       return this.$nextTick()
     },
     handleDefaultSort () {
-      let defaultSort = this.sortOpts.defaultSort
+      const defaultSort = this.sortOpts.defaultSort
       if (defaultSort) {
-        let { field, order } = defaultSort
+        const { field, order } = defaultSort
         if (field && order) {
-          let column = XEUtils.find(this.visibleColumn, item => item.property === field)
+          const column = XEUtils.find(this.visibleColumn, item => item.property === field)
           if (column && !column.order) {
             this.sort(field, order)
           }
@@ -4001,9 +4003,9 @@ export default {
      * 点击排序事件
      */
     triggerSortEvent (evnt, column, order) {
-      let property = column.property
+      const property = column.property
       if (column.sortable || column.remoteSort) {
-        let evntParams = { column, property, field: property, prop: property, order, $table: this }
+        const evntParams = { column, property, field: property, prop: property, order, $table: this }
         if (column.order === order) {
           evntParams.order = null
           this.clearSort(column.property)
@@ -4014,10 +4016,10 @@ export default {
       }
     },
     sort (field, order) {
-      let { visibleColumn, tableFullColumn, remoteSort, sortOpts } = this
-      let column = XEUtils.find(visibleColumn, item => item.property === field)
+      const { visibleColumn, tableFullColumn, remoteSort, sortOpts } = this
+      const column = XEUtils.find(visibleColumn, item => item.property === field)
       if (column) {
-        let isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
+        const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
         if (column.sortable || column.remoteSort) {
           if (!order) {
             order = column.order === 'desc' ? 'asc' : 'desc'
@@ -4048,11 +4050,11 @@ export default {
     // v3 废弃 filter 方法，被 setFilter 取代
     filter (field, callback) {
       UtilTools.warn('vxe.error.delFunc', ['filter', 'setFilter'])
-      let column = this.getColumnByField(field)
+      const column = this.getColumnByField(field)
       if (column) {
-        let options = column.filters
+        const options = column.filters
         if (options && callback) {
-          let rest = callback(options)
+          const rest = callback(options)
           if (XEUtils.isArray(rest)) {
             column.filters = UtilTools.getFilters(rest)
           }
@@ -4076,14 +4078,14 @@ export default {
      * 点击筛选事件
      */
     triggerFilterEvent (evnt, column, params) {
-      let { $refs, filterStore } = this
+      const { $refs, filterStore } = this
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        let filterWrapper = $refs.filterWrapper
-        let bodyElem = $refs.tableBody.$el
-        let { target: targetElem, pageX } = evnt
-        let { visibleWidth } = DomTools.getDomNode()
+        const filterWrapper = $refs.filterWrapper
+        const bodyElem = $refs.tableBody.$el
+        const { target: targetElem, pageX } = evnt
+        const { visibleWidth } = DomTools.getDomNode()
         Object.assign(filterStore, {
           args: params,
           multiple: column.filterMultiple,
@@ -4095,12 +4097,12 @@ export default {
         filterStore.isAllSelected = filterStore.options.every(item => item.checked)
         filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
         this.$nextTick(() => {
-          let filterWrapperElem = filterWrapper.$el
-          let filterWidth = filterWrapperElem.offsetWidth
-          let centerWidth = filterWidth / 2
-          let minMargin = 32
+          const filterWrapperElem = filterWrapper.$el
+          const filterWidth = filterWrapperElem.offsetWidth
+          const centerWidth = filterWidth / 2
+          const minMargin = 32
           let left, right
-          let style = {
+          const style = {
             top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight + 8}px`
           }
           if (column.fixed === 'left') {
@@ -4111,13 +4113,13 @@ export default {
             left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth - bodyElem.scrollLeft
           }
           if (left) {
-            let overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
+            const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
             if (overflowWidth > 0) {
               left -= overflowWidth
             }
             style.left = `${Math.max(minMargin, left)}px`
           } else if (right) {
-            let overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
+            const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
             if (overflowWidth > 0) {
               right += overflowWidth
             }
@@ -4128,12 +4130,12 @@ export default {
       }
     },
     // 确认筛选
-    confirmFilterEvent (evnt) {
-      let { visibleColumn, filterStore, remoteFilter, filterOpts, scrollXLoad, scrollYLoad } = this
-      let { column } = filterStore
-      let { property } = column
-      let values = []
-      let datas = []
+    confirmFilterEvent () {
+      const { visibleColumn, filterStore, remoteFilter, filterOpts, scrollXLoad, scrollYLoad } = this
+      const { column } = filterStore
+      const { property } = column
+      const values = []
+      const datas = []
       column.filters.forEach(item => {
         if (item.checked) {
           values.push(item.value)
@@ -4146,11 +4148,11 @@ export default {
         this.handleTableData(true)
         this.checkSelectionStatus()
       }
-      let filterList = []
+      const filterList = []
       visibleColumn.filter(column => {
-        let { property, filters } = column
-        let valueList = []
-        let dataList = []
+        const { property, filters } = column
+        const valueList = []
+        const dataList = []
         if (filters && filters.length) {
           filters.forEach(item => {
             if (item.checked) {
@@ -4172,7 +4174,7 @@ export default {
       this.$nextTick(this.recalculate)
     },
     // 关闭筛选
-    closeFilter (evnt) {
+    closeFilter () {
       Object.assign(this.filterStore, {
         isAllSelected: false,
         isIndeterminate: false,
@@ -4201,9 +4203,9 @@ export default {
       this.confirmFilterEvent(evnt)
     },
     clearFilter (field) {
-      let column = arguments.length ? this.getColumnByField(field) : null
-      let filterStore = this.filterStore
-      let handleClear = column => {
+      const column = arguments.length ? this.getColumnByField(field) : null
+      const filterStore = this.filterStore
+      const handleClear = column => {
         if (column.filters) {
           column.filters.forEach(item => {
             item.checked = false
@@ -4234,13 +4236,13 @@ export default {
      * @param {Row} row 行对象
      */
     isRowExpandLoaded (row) {
-      let rest = this.fullAllDataRowMap.get(row)
+      const rest = this.fullAllDataRowMap.get(row)
       return rest && rest.expandLoaded
     },
     clearRowExpandLoaded (row) {
-      let { expandOpts, expandLazyLoadeds, fullAllDataRowMap } = this
-      let { lazy } = expandOpts
-      let rest = fullAllDataRowMap.get(row)
+      const { expandOpts, expandLazyLoadeds, fullAllDataRowMap } = this
+      const { lazy } = expandOpts
+      const rest = fullAllDataRowMap.get(row)
       if (lazy && rest) {
         rest.expandLoaded = false
         XEUtils.remove(expandLazyLoadeds, item => row === item)
@@ -4252,8 +4254,8 @@ export default {
      * @param {Row} row 行对象
      */
     reloadExpandContent (row) {
-      let { expandOpts, expandLazyLoadeds } = this
-      let { lazy } = expandOpts
+      const { expandOpts, expandLazyLoadeds } = this
+      const { lazy } = expandOpts
       if (lazy && expandLazyLoadeds.indexOf(row) === -1) {
         this.clearRowExpandLoaded(row)
           .then(() => this.handleAsyncRowExpand(row))
@@ -4264,11 +4266,11 @@ export default {
      * 展开行事件
      */
     triggerRowExpandEvent (evnt, params) {
-      let { $listeners, expandOpts, expandLazyLoadeds } = this
-      let { row } = params
-      let { lazy } = expandOpts
+      const { $listeners, expandOpts, expandLazyLoadeds } = this
+      const { row } = params
+      const { lazy } = expandOpts
       if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
-        let expanded = !this.isExpandByRow(row)
+        const expanded = !this.isExpandByRow(row)
         this.setRowExpansion(row, expanded)
         // 在 v3.0 中废弃 toggle-expand-change
         if ($listeners['toggle-expand-change']) {
@@ -4289,12 +4291,12 @@ export default {
      * 处理默认展开行
      */
     handleDefaultRowExpand () {
-      let { expandOpts, fullDataRowIdData } = this
-      let { expandAll, expandRowKeys } = expandOpts
+      const { expandOpts, fullDataRowIdData } = this
+      const { expandAll, expandRowKeys } = expandOpts
       if (expandAll) {
         this.setAllRowExpansion(true)
       } else if (expandRowKeys) {
-        let defExpandeds = []
+        const defExpandeds = []
         expandRowKeys.forEach(rowid => {
           if (fullDataRowIdData[rowid]) {
             defExpandeds.push(fullDataRowIdData[rowid].row)
@@ -4315,7 +4317,7 @@ export default {
       return this.$nextTick().then(this.recalculate)
     },
     handleAsyncRowExpand (row) {
-      let rest = this.fullAllDataRowMap.get(row)
+      const rest = this.fullAllDataRowMap.get(row)
       return new Promise(resolve => {
         this.expandLazyLoadeds.push(row)
         this.expandOpts.loadMethod({ $table: this, row }).catch(e => e).then(() => {
@@ -4334,9 +4336,10 @@ export default {
      * @param {Boolean} expanded 是否展开
      */
     setRowExpansion (rows, expanded) {
-      let { fullAllDataRowMap, rowExpandeds, expandLazyLoadeds, expandOpts } = this
-      let { lazy, accordion } = expandOpts
-      let result = []
+      const { fullAllDataRowMap, expandLazyLoadeds, expandOpts } = this
+      let { rowExpandeds } = this
+      const { lazy, accordion } = expandOpts
+      const result = []
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
@@ -4349,8 +4352,8 @@ export default {
         if (expanded) {
           rows.forEach(row => {
             if (rowExpandeds.indexOf(row) === -1) {
-              let rest = fullAllDataRowMap.get(row)
-              let isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
+              const rest = fullAllDataRowMap.get(row)
+              const isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
               if (isLoad) {
                 result.push(this.handleAsyncRowExpand(row))
               } else {
@@ -4405,13 +4408,13 @@ export default {
      * @param {Row} row 行对象
      */
     isTreeExpandLoaded (row) {
-      let rest = this.fullAllDataRowMap.get(row)
+      const rest = this.fullAllDataRowMap.get(row)
       return rest && rest.treeLoaded
     },
     clearTreeExpandLoaded (row) {
-      let { treeOpts, treeExpandeds, fullAllDataRowMap } = this
-      let { lazy } = treeOpts
-      let rest = fullAllDataRowMap.get(row)
+      const { treeOpts, treeExpandeds, fullAllDataRowMap } = this
+      const { lazy } = treeOpts
+      const rest = fullAllDataRowMap.get(row)
       if (lazy && rest) {
         rest.treeLoaded = false
         XEUtils.remove(treeExpandeds, item => row === item)
@@ -4423,8 +4426,8 @@ export default {
      * @param {Row} row 行对象
      */
     reloadTreeChilds (row) {
-      let { treeOpts, treeLazyLoadeds } = this
-      let { lazy, hasChild } = treeOpts
+      const { treeOpts, treeLazyLoadeds } = this
+      const { lazy, hasChild } = treeOpts
       if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
         this.clearTreeExpandLoaded(row)
           .then(() => this.handleAsyncTreeExpandChilds(row))
@@ -4435,11 +4438,11 @@ export default {
      * 展开树节点事件
      */
     triggerTreeExpandEvent (evnt, params) {
-      let { $listeners, treeOpts, treeLazyLoadeds } = this
-      let { row } = params
-      let { lazy } = treeOpts
+      const { $listeners, treeOpts, treeLazyLoadeds } = this
+      const { row } = params
+      const { lazy } = treeOpts
       if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
-        let expanded = !this.isTreeExpandByRow(row)
+        const expanded = !this.isTreeExpandByRow(row)
         this.setTreeExpansion(row, expanded)
         // 在 v3.0 中废弃 toggle-tree-change
         if ($listeners['toggle-tree-change']) {
@@ -4460,16 +4463,16 @@ export default {
      * 处理默认展开树节点
      */
     handleDefaultTreeExpand () {
-      let { treeConfig, treeOpts, tableFullData } = this
+      const { treeConfig, treeOpts, tableFullData } = this
       if (treeConfig) {
-        let { expandAll, expandRowKeys } = treeOpts
+        const { expandAll, expandRowKeys } = treeOpts
         if (expandAll) {
           this.setAllTreeExpansion(true)
         } else if (expandRowKeys) {
-          let defExpandeds = []
-          let rowkey = UtilTools.getRowkey(this)
+          const defExpandeds = []
+          const rowkey = UtilTools.getRowkey(this)
           expandRowKeys.forEach(rowid => {
-            let matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeOpts)
+            const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeOpts)
             if (matchObj) {
               defExpandeds.push(matchObj.item)
             }
@@ -4479,12 +4482,12 @@ export default {
       }
     },
     handleAsyncTreeExpandChilds (row) {
-      let { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds } = this
-      let { loadMethod, children } = treeOpts
-      let rest = fullAllDataRowMap.get(row)
+      const { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds } = this
+      const { loadMethod, children } = treeOpts
+      const rest = fullAllDataRowMap.get(row)
       return new Promise(resolve => {
         treeLazyLoadeds.push(row)
-        loadMethod({ $table: this, row }).catch(e => []).then(childs => {
+        loadMethod({ $table: this, row }).catch(() => []).then(childs => {
           rest.treeLoaded = true
           XEUtils.remove(treeLazyLoadeds, item => item === row)
           if (!XEUtils.isArray(childs)) {
@@ -4510,9 +4513,9 @@ export default {
      * @param {Boolean} expanded 是否展开
      */
     setAllTreeExpansion (expanded) {
-      let { tableFullData, treeOpts } = this
-      let { lazy, children } = treeOpts
-      let expandeds = []
+      const { tableFullData, treeOpts } = this
+      const { lazy, children } = treeOpts
+      const expandeds = []
       if (expanded) {
         if (lazy) {
           XEUtils.eachTree(tableFullData, row => {
@@ -4521,7 +4524,7 @@ export default {
           this.setTreeExpansion(expandeds, true)
         } else {
           XEUtils.eachTree(tableFullData, row => {
-            let rowChildren = row[children]
+            const rowChildren = row[children]
             if (rowChildren && rowChildren.length) {
               expandeds.push(row)
             }
@@ -4541,9 +4544,9 @@ export default {
      * @param {Boolean} expanded 是否展开
      */
     setTreeExpansion (rows, expanded) {
-      let { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds } = this
-      let { lazy, hasChild, children, accordion } = treeOpts
-      let result = []
+      const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds } = this
+      const { lazy, hasChild, children, accordion } = treeOpts
+      const result = []
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
@@ -4552,14 +4555,14 @@ export default {
           if (accordion) {
             rows = rows.slice(rows.length - 1, rows.length)
             // 同一级只能展开一个
-            let matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeOpts)
+            const matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeOpts)
             XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
           }
           if (expanded) {
             rows.forEach(row => {
               if (treeExpandeds.indexOf(row) === -1) {
-                let rest = fullAllDataRowMap.get(row)
-                let isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
+                const rest = fullAllDataRowMap.get(row)
+                const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
                 // 是否使用懒加载
                 if (isLoad) {
                   result.push(this.handleAsyncTreeExpandChilds(row))
@@ -4617,8 +4620,8 @@ export default {
      * 获取表格的滚动状态
      */
     getTableScroll () {
-      let { $refs, scrollXLoad, scrollYLoad } = this
-      let bodyElem = $refs.tableBody.$el
+      const { $refs, scrollXLoad, scrollYLoad } = this
+      const bodyElem = $refs.tableBody.$el
       return {
         // v3 移除 scrollX 属性
         scrollX: scrollXLoad,
@@ -4633,18 +4636,18 @@ export default {
     /**
      * 横向 X 可视渲染事件处理
      */
-    triggerScrollXEvent (evnt) {
+    triggerScrollXEvent () {
       this.loadScrollXData()
     },
     loadScrollXData (force) {
-      let { $refs, visibleColumn, scrollXStore } = this
-      let { startIndex, renderSize, offsetSize, visibleSize } = scrollXStore
-      let scrollBodyElem = $refs.tableBody.$el
-      let scrollLeft = scrollBodyElem.scrollLeft
+      const { $refs, visibleColumn, scrollXStore } = this
+      const { startIndex, renderSize, offsetSize, visibleSize } = scrollXStore
+      const scrollBodyElem = $refs.tableBody.$el
+      const scrollLeft = scrollBodyElem.scrollLeft
       let toVisibleIndex = 0
       let width = 0
       let preload = force || false
-      let colLen = visibleColumn.length
+      const colLen = visibleColumn.length
       for (let colIndex = 0; colIndex < colLen; colIndex++) {
         width += visibleColumn[colIndex].renderWidth
         if (scrollLeft < width) {
@@ -4653,7 +4656,7 @@ export default {
         }
       }
       if (force || scrollXStore.visibleIndex !== toVisibleIndex) {
-        let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
+        const marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
         if (scrollXStore.visibleIndex === toVisibleIndex) {
           scrollXStore.startIndex = toVisibleIndex
         } else if (scrollXStore.visibleIndex > toVisibleIndex) {
@@ -4680,14 +4683,14 @@ export default {
      * 纵向 Y 可视渲染事件处理
      */
     triggerScrollYEvent: XEUtils.debounce(function (evnt) {
-      let { afterFullData, scrollYStore, isLoadData } = this
-      let { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
-      let scrollBodyElem = evnt.target
-      let scrollTop = scrollBodyElem.scrollTop
-      let toVisibleIndex = Math.ceil(scrollTop / rowHeight)
+      const { afterFullData, scrollYStore, isLoadData } = this
+      const { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
+      const scrollBodyElem = evnt.target
+      const scrollTop = scrollBodyElem.scrollTop
+      const toVisibleIndex = Math.ceil(scrollTop / rowHeight)
       let preload = false
       if (isLoadData || scrollYStore.visibleIndex !== toVisibleIndex) {
-        let marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
+        const marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
         if (scrollYStore.visibleIndex > toVisibleIndex) {
           // 向上
           preload = toVisibleIndex - offsetSize <= startIndex
@@ -4709,9 +4712,9 @@ export default {
       }
     }, debounceScrollYDuration, { leading: false, trailing: true }),
     computeRowHeight () {
-      let tableBody = this.$refs.tableBody
-      let tableBodyElem = tableBody ? tableBody.$el : null
-      let tableHeader = this.$refs.tableHeader
+      const tableBody = this.$refs.tableBody
+      const tableBodyElem = tableBody ? tableBody.$el : null
+      const tableHeader = this.$refs.tableHeader
       let rowHeight
       if (tableBodyElem) {
         let firstTrElem = tableBodyElem.querySelector('tbody>tr')
@@ -4731,17 +4734,17 @@ export default {
     // 计算可视渲染相关数据
     computeScrollLoad () {
       return this.$nextTick().then(() => {
-        let { vSize, scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts, rowHeightMaps } = this
-        let { scrollX, scrollY } = optimizeOpts
-        let tableBody = this.$refs.tableBody
-        let tableBodyElem = tableBody ? tableBody.$el : null
-        let tableHeader = this.$refs.tableHeader
+        const { vSize, scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts, rowHeightMaps } = this
+        const { scrollX, scrollY } = optimizeOpts
+        const tableBody = this.$refs.tableBody
+        const tableBodyElem = tableBody ? tableBody.$el : null
+        const tableHeader = this.$refs.tableHeader
         if (tableBodyElem) {
           // 计算 X 逻辑
           if (scrollXLoad) {
-            let firstColumn = visibleColumn[0]
-            let cWidth = firstColumn ? firstColumn.renderWidth : 40
-            let visibleXSize = XEUtils.toNumber(scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / cWidth))
+            const firstColumn = visibleColumn[0]
+            const cWidth = firstColumn ? firstColumn.renderWidth : 40
+            const visibleXSize = XEUtils.toNumber(scrollX.vSize || Math.ceil(tableBodyElem.clientWidth / cWidth))
             scrollXStore.visibleSize = visibleXSize
             // 自动优化
             if (!scrollX.oSize) {
@@ -4772,7 +4775,7 @@ export default {
             if (!rHeight) {
               rHeight = rowHeightMaps[vSize || 'default']
             }
-            let visibleYSize = XEUtils.toNumber(scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / rHeight))
+            const visibleYSize = XEUtils.toNumber(scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / rHeight))
             scrollYStore.visibleSize = visibleYSize
             scrollYStore.rowHeight = rHeight
             // 自动优化
@@ -4791,13 +4794,13 @@ export default {
       })
     },
     updateScrollXData () {
-      let { visibleColumn, scrollXStore } = this
+      const { visibleColumn, scrollXStore } = this
       this.tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
       this.updateScrollXSpace()
     },
     // 更新横向 X 可视渲染上下剩余空间大小
     updateScrollXSpace () {
-      let { visibleColumn, scrollXStore } = this
+      const { visibleColumn, scrollXStore } = this
       scrollXStore.leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
       scrollXStore.rightSpaceWidth = visibleColumn.slice(scrollXStore.startIndex + scrollXStore.renderSize, visibleColumn.length).reduce((previous, column) => previous + column.renderWidth, 0)
     },
@@ -4807,16 +4810,16 @@ export default {
     },
     // 更新纵向 Y 可视渲染上下剩余空间大小
     updateScrollYSpace () {
-      let { scrollYStore, afterFullData } = this
-      let bodyHeight = afterFullData.length * scrollYStore.rowHeight
+      const { scrollYStore, afterFullData } = this
+      const bodyHeight = afterFullData.length * scrollYStore.rowHeight
       scrollYStore.ySpaceHeight = bodyHeight
       scrollYStore.topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
       scrollYStore.bottomSpaceHeight = Math.max((afterFullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
     },
     scrollTo (scrollLeft, scrollTop) {
-      let bodyElem = this.$refs.tableBody.$el
+      const bodyElem = this.$refs.tableBody.$el
       if (XEUtils.isNumber(scrollLeft)) {
-        let tableFooter = this.$refs.tableFooter
+        const tableFooter = this.$refs.tableFooter
         if (tableFooter) {
           tableFooter.$el.scrollLeft = scrollLeft
         } else {
@@ -4824,7 +4827,7 @@ export default {
         }
       }
       if (XEUtils.isNumber(scrollTop)) {
-        let rightBody = this.$refs.rightBody
+        const rightBody = this.$refs.rightBody
         if (rightBody) {
           rightBody.$el.scrollTop = scrollTop
         }
@@ -4836,7 +4839,7 @@ export default {
       return this.$nextTick()
     },
     scrollToRow (row, column) {
-      let rest = []
+      const rest = []
       if (row) {
         if (this.treeConfig) {
           rest.push(this.scrollToTreeRow(row))
@@ -4854,11 +4857,11 @@ export default {
       return this.$nextTick()
     },
     scrollToTreeRow (row) {
-      let { tableFullData, treeConfig, treeOpts } = this
+      const { tableFullData, treeConfig, treeOpts } = this
       if (treeConfig) {
-        let matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
+        const matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
         if (matchObj) {
-          let nodes = matchObj.nodes
+          const nodes = matchObj.nodes
           nodes.forEach((row, index) => {
             if (index < nodes.length - 1 && !this.hasTreeExpand(row)) {
               this.setTreeExpansion(row, true)
@@ -4872,12 +4875,12 @@ export default {
       this.updateScrollXSpace()
       this.updateScrollYSpace()
       return this.$nextTick().then(() => {
-        let $refs = this.$refs
-        let tableBody = $refs.tableBody
-        let tableBodyElem = tableBody ? tableBody.$el : null
-        let tableFooter = $refs.tableFooter
-        let tableFooterElem = tableFooter ? tableFooter.$el : null
-        let footerTargetElem = tableFooterElem || tableBodyElem
+        const $refs = this.$refs
+        const tableBody = $refs.tableBody
+        const tableBodyElem = tableBody ? tableBody.$el : null
+        const tableFooter = $refs.tableFooter
+        const tableFooterElem = tableFooter ? tableFooter.$el : null
+        const footerTargetElem = tableFooterElem || tableBodyElem
         if (tableBodyElem) {
           tableBodyElem.scrollTop = 0
         }
@@ -4891,7 +4894,7 @@ export default {
      * 更新表尾合计
      */
     updateFooter () {
-      let { showFooter, tableColumn, footerMethod } = this
+      const { showFooter, tableColumn, footerMethod } = this
       if (showFooter && footerMethod) {
         this.footerData = tableColumn.length ? footerMethod({ columns: tableColumn, data: this.afterFullData }) : []
       }
@@ -4903,15 +4906,15 @@ export default {
      * 如果单元格配置了校验规则，则会进行校验
      */
     updateStatus (scope, cellValue) {
-      let customVal = !XEUtils.isUndefined(cellValue)
+      const customVal = !XEUtils.isUndefined(cellValue)
       return this.$nextTick().then(() => {
-        let { $refs, tableData, editRules, validStore } = this
+        const { $refs, tableData, editRules, validStore } = this
         if (scope && $refs.tableBody && editRules) {
-          let { row, column } = scope
-          let type = 'change'
+          const { row, column } = scope
+          const type = 'change'
           if (this.hasCellRules(type, row, column)) {
-            let rowIndex = tableData.indexOf(row)
-            let cell = DomTools.getCell(this, { row, rowIndex, column })
+            const rowIndex = tableData.indexOf(row)
+            const cell = DomTools.getCell(this, { row, rowIndex, column })
             if (cell) {
               return this.validCellRules(type, row, column, cellValue)
                 .then(() => {
@@ -4932,12 +4935,12 @@ export default {
       })
     },
     triggerValidate (type) {
-      let { editOpts, editStore, editRules, validStore } = this
-      let { actived } = editStore
-      // let type = validStore.visible ? 'all' : 'blur'
+      const { editOpts, editStore, editRules, validStore } = this
+      const { actived } = editStore
+      // const type = validStore.visible ? 'all' : 'blur'
       // this.clearValidate()
       if (actived.row && editRules) {
-        let { row, column, cell } = actived.args
+        const { row, column, cell } = actived.args
         // if (editOpts.mode === 'row') {
         //   return this.validRowRules(type, row)
         //     .catch(params => {
@@ -4955,7 +4958,7 @@ export default {
           }).catch(({ rule }) => {
             // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
             if (!rule.trigger || type === rule.trigger) {
-              let rest = { rule, row, column, cell }
+              const rest = { rule, row, column, cell }
               this.showValidTooltip(rest)
               return Promise.reject(rest)
             }
@@ -4988,9 +4991,9 @@ export default {
      * 返回 Promise 对象，或者使用回调方式
      */
     beginValidate (rows, cb, isAll) {
-      let validRest = {}
+      const validRest = {}
       let status = true
-      let { editRules, afterFullData, treeConfig, treeOpts } = this
+      const { editRules, afterFullData, treeConfig, treeOpts } = this
       let vaildDatas = afterFullData
       if (rows) {
         if (XEUtils.isFunction(rows)) {
@@ -4999,13 +5002,13 @@ export default {
           vaildDatas = XEUtils.isArray(rows) ? rows : [rows]
         }
       }
-      let rowValids = []
+      const rowValids = []
       this.lastCallTime = Date.now()
       this.clearValidate()
       if (editRules) {
-        let columns = this.getColumns()
-        let handleVaild = row => {
-          let colVailds = []
+        const columns = this.getColumns()
+        const handleVaild = row => {
+          const colVailds = []
           columns.forEach((column, columnIndex) => {
             if (XEUtils.has(editRules, column.property)) {
               colVailds.push(
@@ -5013,7 +5016,7 @@ export default {
                   this.validCellRules('all', row, column)
                     .then(resolve)
                     .catch(({ rule, rules }) => {
-                      let rest = { rule, rules, rowIndex: this.getRowIndex(row), row, columnIndex, column, $table: this }
+                      const rest = { rule, rules, rowIndex: this.getRowIndex(row), row, columnIndex, column, $table: this }
                       if (isAll) {
                         if (!validRest[column.property]) {
                           validRest[column.property] = []
@@ -5035,7 +5038,7 @@ export default {
           vaildDatas.forEach(handleVaild)
         }
         return Promise.all(rowValids).then(() => {
-          let ruleProps = Object.keys(validRest)
+          const ruleProps = Object.keys(validRest)
           if (ruleProps.length) {
             return Promise.reject(validRest[ruleProps[0]][0])
           }
@@ -5086,9 +5089,9 @@ export default {
       return Promise.resolve()
     },
     // validRowRules (type, row) {
-    //   let { tableData, editRules } = this
-    //   let rowIndex = tableData.indexOf(row)
-    //   let validPromise = Promise.resolve()
+    //   const { tableData, editRules } = this
+    //   const rowIndex = tableData.indexOf(row)
+    //   const validPromise = Promise.resolve()
     //   if (editRules) {
     //     this.getColumns().forEach(column => {
     //       if (XEUtils.has(editRules, column.property)) {
@@ -5096,7 +5099,7 @@ export default {
     //           this.validCellRules('all', row, column)
     //             .then(resolve)
     //             .catch(rule => {
-    //               let rest = { rule, row, column, cell: DomTools.getCell(this, { row, rowIndex, column }) }
+    //               const rest = { rule, row, column, cell: DomTools.getCell(this, { row, rowIndex, column }) }
     //               return reject(rest)
     //             })
     //         }))
@@ -5106,10 +5109,10 @@ export default {
     //   return validPromise
     // },
     hasCellRules (type, row, column) {
-      let { editRules } = this
-      let { property } = column
+      const { editRules } = this
+      const { property } = column
       if (property && editRules) {
-        let rules = XEUtils.get(editRules, property)
+        const rules = XEUtils.get(editRules, property)
         return rules && XEUtils.find(rules, rule => type === 'all' || !rule.trigger || type === rule.trigger)
       }
       return false
@@ -5129,14 +5132,14 @@ export default {
      *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
     validCellRules (type, row, column, val) {
-      let { editRules, treeConfig } = this
-      let { property } = column
-      let errorRules = []
-      let cellVailds = []
+      const { editRules, treeConfig } = this
+      const { property } = column
+      const errorRules = []
+      const cellVailds = []
       if (property && editRules) {
-        let rules = XEUtils.get(editRules, property)
+        const rules = XEUtils.get(editRules, property)
         if (rules) {
-          let cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
+          const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
           rules.forEach(rule => {
             cellVailds.push(
               new Promise(resolve => {
@@ -5144,14 +5147,14 @@ export default {
                   if (XEUtils.isFunction(rule.validator)) {
                     rule.validator(rule, cellValue, e => {
                       if (XEUtils.isError(e)) {
-                        let cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
+                        const cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
                         errorRules.push(new Rule(cusRule))
                       }
                       return resolve()
                     }, { rules, row, column, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
                   } else {
-                    let isNumber = rule.type === 'number'
-                    let numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+                    const isNumber = rule.type === 'number'
+                    const numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
                     if (cellValue === null || cellValue === undefined || cellValue === '') {
                       if (rule.required) {
                         errorRules.push(new Rule(rule))
@@ -5176,13 +5179,13 @@ export default {
       }
       return Promise.all(cellVailds).then(() => {
         if (errorRules.length) {
-          let rest = { rules: errorRules, rule: errorRules[0] }
+          const rest = { rules: errorRules, rule: errorRules[0] }
           return Promise.reject(rest)
         }
       })
     },
     clearValidate () {
-      let validTip = this.$refs.validTip
+      const validTip = this.$refs.validTip
       Object.assign(this.validStore, {
         visible: false,
         row: null,
@@ -5210,10 +5213,10 @@ export default {
      * 弹出校验错误提示
      */
     showValidTooltip (params) {
-      let { $refs, height, tableData, validOpts } = this
-      let { rule, row, column, cell } = params
-      let validTip = $refs.validTip
-      let content = rule.message
+      const { $refs, height, tableData, validOpts } = this
+      const { rule, row, column, cell } = params
+      const validTip = $refs.validTip
+      const content = rule.message
       this.$nextTick(() => {
         Object.assign(this.validStore, {
           row,
@@ -5239,8 +5242,8 @@ export default {
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
     exportData (options) {
-      let { visibleColumn, tableFullData } = this
-      let opts = Object.assign({
+      const { visibleColumn, tableFullData } = this
+      const opts = Object.assign({
         filename: '',
         sheetName: '',
         original: false,
@@ -5275,7 +5278,7 @@ export default {
         if (types.indexOf(type) > -1) {
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
-            reader.onerror = e => {
+            reader.onerror = () => {
               UtilTools.error('vxe.error.notType', [type])
             }
             reader.onload = e => {
@@ -5291,8 +5294,8 @@ export default {
       }
     },
     importData (options) {
-      let opts = Object.assign({}, GlobalConfig.import, options)
-      let rest = new Promise((resolve, reject) => {
+      const opts = Object.assign({}, GlobalConfig.import, options)
+      const rest = new Promise((resolve, reject) => {
         this._importResolve = resolve
         this._importReject = reject
       })
@@ -5339,7 +5342,7 @@ export default {
       })
     },
     print (options) {
-      let opts = Object.assign({
+      const opts = Object.assign({
         original: false
       }, options, {
         type: 'html',

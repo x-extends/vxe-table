@@ -22,8 +22,8 @@ export default {
     }
   },
   render (h) {
-    let { $slots, $xegroup, isGroup, disabled, title, vSize, value, label, name } = this
-    let attrs = {}
+    const { $slots, $xegroup, isGroup, disabled, title, vSize, value, label, name } = this
+    const attrs = {}
     if (title) {
       attrs.title = title
     }

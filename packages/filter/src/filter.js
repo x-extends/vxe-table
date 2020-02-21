@@ -9,10 +9,10 @@ export default {
     optimizeOpts: Object
   },
   render (h) {
-    let { filterStore, optimizeOpts } = this
-    let { column } = filterStore
-    let filterRender = column ? column.own.filterRender : null
-    let compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+    const { filterStore, optimizeOpts } = this
+    const { column } = filterStore
+    const filterRender = column ? column.own.filterRender : null
+    const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
     return h('div', {
       class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
         't--animat': optimizeOpts.animat,
@@ -24,9 +24,9 @@ export default {
   },
   methods: {
     renderOptions (h, filterRender, compConf) {
-      let { $parent: $xetable, filterStore } = this
-      let { args, column, multiple } = filterStore
-      let { slots } = column
+      const { $parent: $xetable, filterStore } = this
+      const { args, column, multiple } = filterStore
+      const { slots } = column
       if (slots && slots.filter) {
         return [
           h('div', {
@@ -89,10 +89,10 @@ export default {
       ]
     },
     renderFooter (h) {
-      let { filterStore } = this
-      let { column, multiple } = filterStore
-      let filterRender = column.own.filterRender
-      let compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+      const { filterStore } = this
+      const { column, multiple } = filterStore
+      const filterRender = column.own.filterRender
+      const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
       return multiple && (!compConf || compConf.isFooter !== false) ? [
         h('div', {
           class: 'vxe-table--filter-footer'
@@ -118,7 +118,7 @@ export default {
     },
     // 全部筛选事件
     filterCheckAllEvent (evnt, value) {
-      let filterStore = this.filterStore
+      const filterStore = this.filterStore
       filterStore.options.forEach(option => {
         option.checked = value
       })
@@ -126,7 +126,7 @@ export default {
       filterStore.isIndeterminate = false
     },
     checkOptions () {
-      let { filterStore } = this
+      const { filterStore } = this
       filterStore.isAllSelected = filterStore.options.every(option => option.checked)
       filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(option => option.checked)
     },

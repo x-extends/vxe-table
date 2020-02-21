@@ -7,21 +7,16 @@ import GlobalConfig from '../../conf'
  */
 const eventStore = []
 const defaultInterval = 250
-var resizeTimeout = null
-
-function eventListener () {
-  clearTimeout(resizeTimeout)
-  resizeTimeout = setTimeout(eventHandle, GlobalConfig.resizeInterval || defaultInterval)
-}
+let resizeTimeout = null
 
 function eventHandle () {
   if (eventStore.length) {
     eventStore.forEach(item => {
-      let { comp, target, cb, width, heighe } = item
-      let clientWidth = target.clientWidth
-      let clientHeight = target.clientHeight
-      let rWidth = clientWidth && width !== clientWidth
-      let rHeight = clientHeight && heighe !== clientHeight
+      const { comp, target, cb, width, heighe } = item
+      const clientWidth = target.clientWidth
+      const clientHeight = target.clientHeight
+      const rWidth = clientWidth && width !== clientWidth
+      const rHeight = clientHeight && heighe !== clientHeight
       if (rWidth || rHeight) {
         item.width = clientWidth
         item.heighe = clientHeight
@@ -30,6 +25,11 @@ function eventHandle () {
     })
     resizeTimeout = setTimeout(eventHandle, GlobalConfig.resizeInterval || defaultInterval)
   }
+}
+
+function eventListener () {
+  clearTimeout(resizeTimeout)
+  resizeTimeout = setTimeout(eventHandle, GlobalConfig.resizeInterval || defaultInterval)
 }
 
 export default {

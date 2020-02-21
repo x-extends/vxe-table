@@ -5,8 +5,8 @@ import { UtilTools, DomTools } from '../../tools'
 
 // 处理选中位置
 function handleLocation (obj, rows, columns, row, column) {
-  let rowIndex = rows.indexOf(row)
-  let columnIndex = columns.indexOf(column)
+  const rowIndex = rows.indexOf(row)
+  const columnIndex = columns.indexOf(column)
   obj.active = rowIndex > -1 && columnIndex > -1
   obj.top = rowIndex === 0 && columnIndex > -1
   obj.bottom = rowIndex === rows.length - 1 && columnIndex > -1
@@ -47,6 +47,26 @@ function calcTreeLine (params, items) {
   return $table.rowHeight * expandSize - ($rowIndex ? 1 : (12 - getOffsetSize($table)))
 }
 
+function renderLine (h, _vm, $table, rowLevel, items, params) {
+  const column = params.column
+  const { treeConfig, treeOpts } = $table
+  return column.slots && column.slots.line
+    ? column.slots.line.call($table, params, h)
+    : column.treeNode && treeConfig && treeOpts.line ? [
+      h('div', {
+        class: 'vxe-tree--line-wrapper'
+      }, [
+        h('div', {
+          class: 'vxe-tree--line',
+          style: {
+            height: `${calcTreeLine(params, items)}px`,
+            left: `${(rowLevel * treeOpts.indent) + (rowLevel ? 2 - getOffsetSize($table) : 0) + 16}px`
+          }
+        })
+      ])
+    ] : []
+}
+
 // 滚动、拖动过程中不需要触发
 function isOperateMouse ($table) {
   return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + $table.optimizeOpts.delayHover)
@@ -56,7 +76,7 @@ function isOperateMouse ($table) {
  * 渲染列
  */
 function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, columns, items) {
-  let {
+  const {
     _e,
     $listeners: tableListeners,
     tableData,
@@ -88,30 +108,30 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     validStore
   } = $table
   // v2.0 废弃属性，保留兼容
-  let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-  let { editRender, align, showOverflow, renderWidth, columnKey, className, treeNode } = column
-  let { checked, selected, actived, copyed } = editStore
-  let isMouseSelected = mouseConfig && mouseOpts.selected
+  const allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
+  const { editRender, align, showOverflow, renderWidth, columnKey, className, treeNode } = column
+  const { checked, selected, actived, copyed } = editStore
+  const isMouseSelected = mouseConfig && mouseOpts.selected
   // 在 v3.0 中废弃 mouse-config.checked
-  let isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
-  let isKeyboardCut = keyboardConfig && keyboardConfig.isCut
-  let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
-  let cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-  let cellAlign = align || allAlign
+  const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+  const isKeyboardCut = keyboardConfig && keyboardConfig.isCut
+  const fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
+  const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+  const cellAlign = align || allAlign
   let showEllipsis = cellOverflow === 'ellipsis'
-  let showTitle = cellOverflow === 'title'
-  let showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+  const showTitle = cellOverflow === 'title'
+  const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
   let hasEllipsis = showTitle || showTooltip || showEllipsis
   let isDirty
-  let tdOns = {}
-  let checkedLocat = {}
-  let checkedTLocat = {}
-  let copyedLocat = {}
-  let validError = validStore.row === row && validStore.column === column
-  let hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
-  let attrs = { 'data-colid': column.id }
-  let triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  let params = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData, items }
+  const tdOns = {}
+  const checkedLocat = {}
+  const checkedTLocat = {}
+  const copyedLocat = {}
+  const validError = validStore.row === row && validStore.column === column
+  const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
+  const attrs = { 'data-colid': column.id }
+  const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
+  const params = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -122,7 +142,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       if (isOperateMouse($table)) {
         return
       }
-      let evntParams = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
+      const evntParams = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
       if (showTitle) {
         DomTools.updateCellTitle(evnt)
       } else if (showTooltip) {
@@ -171,7 +191,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   }
   // 合并行或列
   if (spanMethod) {
-    let { rowspan = 1, colspan = 1 } = spanMethod(params) || {}
+    const { rowspan = 1, colspan = 1 } = spanMethod(params) || {}
     if (!rowspan || !colspan) {
       return null
     }
@@ -192,7 +212,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       handleLocation(copyedLocat, copyed.rows, copyed.columns, row, column)
     }
   }
-  let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
+  const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${cellAlign}`]: cellAlign,
@@ -282,28 +302,8 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     ]))
 }
 
-function renderLine (h, _vm, $table, rowLevel, items, params) {
-  const column = params.column
-  const { treeConfig, treeOpts } = $table
-  return column.slots && column.slots.line
-    ? column.slots.line.call($table, params, h)
-    : column.treeNode && treeConfig && treeOpts.line ? [
-      h('div', {
-        class: 'vxe-tree--line-wrapper'
-      }, [
-        h('div', {
-          class: 'vxe-tree--line',
-          style: {
-            height: `${calcTreeLine(params, items)}px`,
-            left: `${(rowLevel * treeOpts.indent) + (rowLevel ? 2 - getOffsetSize($table) : 0) + 16}px`
-          }
-        })
-      ])
-    ] : []
-}
-
 function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, tableColumn) {
-  let {
+  const {
     stripe,
     rowKey,
     highlightHoverRow,
@@ -324,9 +324,9 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     expandColumn,
     getColumnIndex
   } = $table
-  let rows = []
+  const rows = []
   tableData.forEach((row, $rowIndex) => {
-    let trOn = {}
+    const trOn = {}
     let rowIndex = $rowIndex
     let seq = rowIndex + 1
     if (scrollYLoad) {
@@ -344,14 +344,14 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           $table.triggerHoverEvent(evnt, { row, rowIndex })
         }
       }
-      trOn.mouseleave = evnt => {
+      trOn.mouseleave = () => {
         if (isOperateMouse($table)) {
           return
         }
         $table.hoverRow = null
       }
     }
-    let rowid = UtilTools.getRowid($table, row, rowIndex)
+    const rowid = UtilTools.getRowid($table, row, rowIndex)
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
@@ -369,13 +369,13 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
-        let columnIndex = getColumnIndex(column)
+        const columnIndex = getColumnIndex(column)
         return renderColumn(h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableColumn, tableData)
       }))
     )
     // 如果行被展开了
     if (rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
-      let expandColumnIndex = getColumnIndex(expandColumn)
+      const expandColumnIndex = getColumnIndex(expandColumn)
       let cellStyle
       if (treeConfig) {
         cellStyle = {
@@ -411,9 +411,9 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     }
     // 如果是树形表格
     if (treeConfig && treeExpandeds.length) {
-      let rowChildren = row[treeOpts.children]
+      const rowChildren = row[treeOpts.children]
       if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
-        rows.push.apply(rows, renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
+        rows.push(...renderRows(h, _vm, $table, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
       }
     }
   })
@@ -426,8 +426,8 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
  * mousewheel 方式：对于同步滚动效果就略差了，左右滚动，内容跟随即可
  * css3 translate 方式：对于同步滚动效果会有产生卡顿感觉，虽然可以利用硬件加速，渲染性能略优，但失去table布局能力
  */
-var scrollProcessTimeout
-var updateLeftScrollingTimeput
+let scrollProcessTimeout
+let updateLeftScrollingTimeput
 function syncBodyScroll (scrollTop, elem1, elem2) {
   if (elem1 || elem2) {
     if (elem1) {
@@ -471,7 +471,7 @@ export default {
     this.$el.onscroll = null
   },
   render (h) {
-    let { _e, $parent: $table, fixedColumn, fixedType } = this
+    const { _e, $parent: $table, fixedColumn, fixedType } = this
     let {
       $scopedSlots,
       id,
@@ -499,9 +499,9 @@ export default {
       emptyOpts
     } = $table
     // v2.0 废弃属性，保留兼容
-    let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
+    const allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
     let customHeight = 0
-    let style = {}
+    const style = {}
     if (height) {
       customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - $table.getExcludeHeight())
       if (showFooter) {
@@ -526,13 +526,13 @@ export default {
       }
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
-    let tableStyle = {
+    const tableStyle = {
       width: tableWidth ? `${tableWidth}px` : tableWidth,
       marginTop: scrollYStore.topSpaceHeight ? `${scrollYStore.topSpaceHeight}px` : null,
       marginLeft: fixedType ? null : (scrollXStore.leftSpaceWidth ? `${scrollXStore.leftSpaceWidth}px` : null)
     }
     // 兼容火狐滚动条
-    if (overflowY && fixedType && (DomTools.browse['-moz'] || DomTools.browse['safari'])) {
+    if (overflowY && fixedType && (DomTools.browse['-moz'] || DomTools.browse.safari)) {
       tableStyle.paddingRight = `${scrollbarWidth}px`
     }
     let emptyContent
@@ -613,18 +613,18 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt) {
-      let { $parent: $table, fixedType, lastScrollTop, lastScrollLeft } = this
-      let { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
-      let { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $refs
-      let headerElem = tableHeader ? tableHeader.$el : null
-      let footerElem = tableFooter ? tableFooter.$el : null
-      let bodyElem = tableBody.$el
-      let leftElem = leftBody ? leftBody.$el : null
-      let rightElem = rightBody ? rightBody.$el : null
+      const { $parent: $table, fixedType, lastScrollTop, lastScrollLeft } = this
+      const { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
+      const { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $refs
+      const headerElem = tableHeader ? tableHeader.$el : null
+      const footerElem = tableFooter ? tableFooter.$el : null
+      const bodyElem = tableBody.$el
+      const leftElem = leftBody ? leftBody.$el : null
+      const rightElem = rightBody ? rightBody.$el : null
       let scrollTop = bodyElem.scrollTop
-      let scrollLeft = bodyElem.scrollLeft
-      let isX = lastScrollLeft !== scrollLeft
-      let isY = lastScrollTop !== scrollTop
+      const scrollLeft = bodyElem.scrollLeft
+      const isX = lastScrollLeft !== scrollLeft
+      const isY = lastScrollTop !== scrollTop
       if (highlightHoverRow) {
         $table.clearHoverRow()
       }

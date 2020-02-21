@@ -148,7 +148,7 @@ export default {
         this.$refs.xTable.sort(column.property)
       }
     },
-    filterNameMethod ({ value, row, column }) {
+    filterNameMethod ({ value, row }) {
       return row.id >= value
     }
   }

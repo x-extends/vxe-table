@@ -13,15 +13,15 @@ Vue.component(FilterExcel.name, FilterExcel)
 // 创建一个支持输入的筛选器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
 VXETable.renderer.add('FilterInput', {
   // 筛选模板
-  renderFilter (h, renderOpts, params, context) {
+  renderFilter (h, renderOpts, params) {
     return [
-      <filter-input params={ params } context={ context }></filter-input>
+      <filter-input params={ params }></filter-input>
     ]
   },
   // 筛选方法
   filterMethod ({ option, row, column }) {
-    let { data } = option
-    let cellValue = XEUtils.get(row, column.property)
+    const { data } = option
+    const cellValue = XEUtils.get(row, column.property)
     /* eslint-disable eqeqeq */
     return cellValue == data
   }
@@ -32,15 +32,16 @@ VXETable.renderer.add('FilterComplex', {
   // 不显示底部按钮，使用自定义的按钮
   isFooter: false,
   // 筛选模板
-  renderFilter (h, renderOpts, params, context) {
+  renderFilter (h, renderOpts, params) {
     return [
-      <filter-complex params={ params } context={ context }></filter-complex>
+      <filter-complex params={ params }></filter-complex>
     ]
   },
   // 筛选方法
   filterMethod ({ option, row, column }) {
     let cellValue = XEUtils.get(row, column.property)
-    let { type, name, isCase } = option.data
+    const { type, isCase } = option.data
+    let { name } = option.data
     if (cellValue) {
       if (isCase) {
         cellValue = cellValue.toLowerCase()
@@ -68,19 +69,19 @@ VXETable.renderer.add('FilterExcel', {
   // 不显示底部按钮，使用自定义的按钮
   isFooter: false,
   // 筛选模板
-  renderFilter (h, renderOpts, params, context) {
+  renderFilter (h, renderOpts, params) {
     return [
-      <filter-excel params={ params } context={ context }></filter-excel>
+      <filter-excel params={ params }></filter-excel>
     ]
   },
   // 筛选方法
   filterMethod ({ option, row, column }) {
-    let cellValue = XEUtils.get(row, column.property)
-    let { vals, f1Type, f1Val, fMode, f2Type, f2Val } = option.data
+    const cellValue = XEUtils.get(row, column.property)
+    const { vals, f1Type, f1Val, fMode, f2Type, f2Val } = option.data
     if (cellValue) {
       if (f1Type || f2Type) {
         // 通过筛选条件
-        let calculate = (type, val) => {
+        const calculate = (type, val) => {
           switch (type) {
             case '1':
               return cellValue == val
@@ -109,8 +110,8 @@ VXETable.renderer.add('FilterExcel', {
           }
           return true
         }
-        let f1Rest = calculate(f1Type, f1Val)
-        let f2Rest = calculate(f2Type, f2Val)
+        const f1Rest = calculate(f1Type, f1Val)
+        const f2Rest = calculate(f2Type, f2Val)
         if (fMode === 'and') {
           return f1Rest && f2Rest
         }

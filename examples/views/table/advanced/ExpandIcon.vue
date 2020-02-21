@@ -21,7 +21,7 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" title="Name">
-        <template v-slot="{ row, rowIndex }">
+        <template v-slot="{ row }">
           <span>{{ row.name }}</span>
         </template>
         <template v-slot:content="{ row, rowIndex }">

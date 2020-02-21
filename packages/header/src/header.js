@@ -7,7 +7,7 @@ const getAllColumns = (columns) => {
     if (column.visible) {
       if (column.children && column.children.length && column.children.some(column => column.visible)) {
         result.push(column)
-        result.push.apply(result, getAllColumns(column.children))
+        result.push(...getAllColumns(column.children))
       } else {
         result.push(column)
       }
@@ -89,8 +89,9 @@ export default {
     this.uploadColumn()
   },
   render (h) {
-    let { $parent: $table, fixedType, headerColumn, tableColumn, fixedColumn } = this
-    let {
+    const { $parent: $table, fixedType, headerColumn, fixedColumn } = this
+    let { tableColumn } = this
+    const {
       $listeners: tableListeners,
       id,
       resizable, border,
@@ -106,7 +107,6 @@ export default {
       align: allAlign,
       highlightCurrentColumn,
       currentColumn,
-      tableWidth,
       scrollXLoad,
       scrollXStore,
       scrollbarWidth,
@@ -114,8 +114,9 @@ export default {
       getColumnIndex,
       sortOpts
     } = $table
+    let { tableWidth } = $table
     // v2.0 废弃属性，保留兼容
-    let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
+    const allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {
@@ -152,7 +153,7 @@ export default {
          * 列宽
          */
         h('colgroup', tableColumn.map((column, columnIndex) => {
-          let isColGroup = column.children && column.children.length
+          const isColGroup = column.children && column.children.length
           return h('col', {
             attrs: {
               name: column.id
@@ -177,20 +178,21 @@ export default {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
             style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
-            let { showHeaderOverflow, headerAlign, align, renderWidth, headerClassName } = column
-            let isColGroup = column.children && column.children.length
-            let fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
-            let headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-            let headAlign = headerAlign || align || allHeaderAlign || allAlign
+            const { showHeaderOverflow, headerAlign, align, headerClassName } = column
+            let { renderWidth } = column
+            const isColGroup = column.children && column.children.length
+            const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+            const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+            const headAlign = headerAlign || align || allHeaderAlign || allAlign
             let showEllipsis = headOverflow === 'ellipsis'
-            let showTitle = headOverflow === 'title'
-            let showTooltip = headOverflow === true || headOverflow === 'tooltip'
+            const showTitle = headOverflow === 'title'
+            const showTooltip = headOverflow === true || headOverflow === 'tooltip'
             let hasEllipsis = showTitle || showTooltip || showEllipsis
-            let thOns = {}
-            let hasFilter = column.filters && column.filters.some(item => item.checked)
+            const thOns = {}
+            const hasFilter = column.filters && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            let columnIndex = getColumnIndex(column)
-            let params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
+            const columnIndex = getColumnIndex(column)
+            const params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
@@ -228,7 +230,7 @@ export default {
             if (tableListeners['header-cell-dblclick']) {
               thOns.dblclick = evnt => UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
             }
-            let type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
+            const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
@@ -301,27 +303,27 @@ export default {
       this.headerColumn = this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
     },
     resizeMousedown (evnt, params) {
-      let { column } = params
-      let { $parent: $table, $el, fixedType } = this
-      let { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $table.$refs
-      let { target: dragBtnElem, clientX: dragClientX } = evnt
-      let cell = dragBtnElem.parentNode
+      const { column } = params
+      const { $parent: $table, $el, fixedType } = this
+      const { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $table.$refs
+      const { target: dragBtnElem, clientX: dragClientX } = evnt
+      const cell = dragBtnElem.parentNode
       let dragLeft = 0
-      let minInterval = 36 // 列之间的最小间距
-      let tableBodyElem = tableBody.$el
-      let pos = DomTools.getOffsetPos(dragBtnElem, $el)
-      let dragBtnWidth = dragBtnElem.clientWidth
+      const minInterval = 36 // 列之间的最小间距
+      const tableBodyElem = tableBody.$el
+      const pos = DomTools.getOffsetPos(dragBtnElem, $el)
+      const dragBtnWidth = dragBtnElem.clientWidth
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
       let dragPosLeft = pos.left + Math.floor(dragBtnWidth / 2)
-      let domMousemove = document.onmousemove
-      let domMouseup = document.onmouseup
-      let isLeftFixed = fixedType === 'left'
-      let isRightFixed = fixedType === 'right'
+      const domMousemove = document.onmousemove
+      const domMouseup = document.onmouseup
+      const isLeftFixed = fixedType === 'left'
+      const isRightFixed = fixedType === 'right'
 
       // 计算左右侧固定列偏移量
       let fixedOffsetWidth = 0
       if (isLeftFixed || isRightFixed) {
-        let siblingProp = isLeftFixed ? 'nextElementSibling' : 'previousElementSibling'
+        const siblingProp = isLeftFixed ? 'nextElementSibling' : 'previousElementSibling'
         let tempCellElem = cell[siblingProp]
         while (tempCellElem) {
           if (DomTools.hasClass(tempCellElem, 'fixed--hidden')) {
@@ -337,12 +339,12 @@ export default {
       }
 
       // 处理拖动事件
-      let updateEvent = function (evnt) {
+      const updateEvent = function (evnt) {
         evnt.stopPropagation()
         evnt.preventDefault()
-        let offsetX = evnt.clientX - dragClientX
+        const offsetX = evnt.clientX - dragClientX
         let left = dragPosLeft + offsetX
-        let scrollLeft = fixedType ? 0 : tableBodyElem.scrollLeft
+        const scrollLeft = fixedType ? 0 : tableBodyElem.scrollLeft
         if (isLeftFixed) {
           // 左固定列（不允许超过右侧固定列、不允许超过右边距）
           left = Math.min(left, (rightContainer ? rightContainer.offsetLeft : tableBodyElem.clientWidth) - fixedOffsetWidth - minInterval)
@@ -356,7 +358,7 @@ export default {
       }
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
-      document.onmouseup = function (evnt) {
+      document.onmouseup = function () {
         document.onmousemove = domMousemove
         document.onmouseup = domMouseup
         column.resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)

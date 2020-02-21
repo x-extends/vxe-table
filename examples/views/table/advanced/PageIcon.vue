@@ -104,7 +104,7 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData).then(({ page, result }) => {
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData)then(({ page, result }) => {
                 this.tableData = result
                 this.tablePage.totalResult = page.totalResult
                 this.loading = false
@@ -138,7 +138,7 @@ export default {
         this.tableData = result
         this.tablePage.totalResult = page.totalResult
         this.loading = false
-      }).catch(e => {
+      }).catch(() => {
         this.loading = false
       })
     },

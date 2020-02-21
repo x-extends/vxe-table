@@ -146,10 +146,10 @@ export default {
           methods: {
             // 通用行合并函数（将相同多列数据合并为一行）
             rowspanMethod ({ row, $rowIndex, column, data }) {
-              let fields = ['key']
-              let cellValue = XEUtils.get(row, column.property)
+              const fields = ['key']
+              const cellValue = XEUtils.get(row, column.property)
               if (cellValue && fields.includes(column.property)) {
-                let prevRow = data[$rowIndex - 1]
+                const prevRow = data[$rowIndex - 1]
                 let nextRow = data[$rowIndex + 1]
                 if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
                   return { rowspan: 0, colspan: 0 }
@@ -171,7 +171,7 @@ export default {
     }
   },
   created () {
-    let list = window.MOCK_DATA_LIST.slice(0, 20)
+    const list = window.MOCK_DATA_LIST.slice(0, 20)
     this.tableData = list
   },
   mounted () {
@@ -180,7 +180,7 @@ export default {
     })
   },
   methods: {
-    colspanMethod ({ row, rowIndex, column, columnIndex, data }) {
+    colspanMethod ({ rowIndex, columnIndex }) {
       if (rowIndex % 2 === 0) {
         if (columnIndex === 2) {
           return {
@@ -197,10 +197,10 @@ export default {
     },
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {
-      let fields = ['key']
-      let cellValue = XEUtils.get(row, column.property)
+      const fields = ['key']
+      const cellValue = XEUtils.get(row, column.property)
       if (cellValue && fields.includes(column.property)) {
-        let prevRow = data[$rowIndex - 1]
+        const prevRow = data[$rowIndex - 1]
         let nextRow = data[$rowIndex + 1]
         if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
           return { rowspan: 0, colspan: 0 }

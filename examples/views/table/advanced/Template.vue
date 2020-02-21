@@ -254,7 +254,7 @@ export default {
             },
             footerMethod ({ columns, data }) {
               return [
-                columns.map((column, columnIndex) => {
+                columns.map(column => {
                   if (['sex', 'num'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
@@ -318,7 +318,7 @@ export default {
     },
     footerMethod ({ columns, data }) {
       return [
-        columns.map((column, columnIndex) => {
+        columns.map(column => {
           if (['sex', 'num'].includes(column.property)) {
             return XEUtils.sum(data, column.property)
           }

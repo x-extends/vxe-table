@@ -87,7 +87,7 @@ export default {
           },
           methods: {
             formatterSex ({ cellValue }) {
-              let item = this.sexList.find(item => item.value === cellValue)
+              const item = this.sexList.find(item => item.value === cellValue)
               return item ? item.label : ''
             },
             clearDataEvent () {
@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     formatterSex ({ cellValue }) {
-      let item = this.sexList.find(item => item.value === cellValue)
+      const item = this.sexList.find(item => item.value === cellValue)
       return item ? item.label : ''
     },
     clearDataEvent () {

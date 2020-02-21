@@ -5,10 +5,10 @@
       默认支持原生的：input、textarea、select<br>
       配置参数：<br>
       autofocus 自动聚焦的类名<br>
-      renderHeader (h, renderOpts, <vxe-tooltip content="{ column, columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 表头<br>
-      renderEdit (h, renderOpts, <vxe-tooltip content="{ row, rowIndex, column, columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 表内容-编辑<br>
-      renderCell (h, renderOpts, <vxe-tooltip content="{ row, rowIndex, column, columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 表内容-显示<br>
-      renderFooter (h, renderOpts, <vxe-tooltip content="{ column, columnIndex, items, itemIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params, context) 表尾<br>
+      renderHeader (h, renderOpts, <vxe-tooltip content="{ column, columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表头<br>
+      renderEdit (h, renderOpts, <vxe-tooltip content="{ row, rowIndex, column, columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表内容-编辑<br>
+      renderCell (h, renderOpts, <vxe-tooltip content="{ row, rowIndex, column, columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表内容-显示<br>
+      renderFooter (h, renderOpts, <vxe-tooltip content="{ column, columnIndex, items, itemIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表尾<br>
       editCellExportMethod (<vxe-tooltip content="{ row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 单元格导出函数<br>
       footerCellExportMethod (<vxe-tooltip content="{ items, itemIndex }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表尾单元格导出函数<br>
     </p>

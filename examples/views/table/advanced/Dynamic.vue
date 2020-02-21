@@ -106,8 +106,8 @@ export default {
               this.tableColumn.pop()
             },
             updateSexFilter () {
-              let xTable = this.$refs.xTable
-              let column = xTable.getColumnByField('sex')
+              const xTable = this.$refs.xTable
+              const column = xTable.getColumnByField('sex')
               // 修改筛选列表，并默认设置为选中状态
               xTable.setFilter(column, [
                 { value: '1', label: '男' },
@@ -159,8 +159,8 @@ export default {
       this.tableColumn.pop()
     },
     updateSexFilter () {
-      let xTable = this.$refs.xTable
-      let column = xTable.getColumnByField('sex')
+      const xTable = this.$refs.xTable
+      const column = xTable.getColumnByField('sex')
       // 修改筛选列表，并默认设置为选中状态
       xTable.setFilter(column, [
         { value: '1', label: '男' },

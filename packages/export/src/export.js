@@ -6,38 +6,128 @@ import VXETable from '../../v-x-e-table'
 // 默认导出或打印的 HTML 样式
 const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;table-layout:fixed;text-align:left;font-size:14px;border-spacing:0}.vxe-table.is--print{width:100%}td,thead tr:last-child th{border-bottom:1px solid #e8eaec}.vxe-table:not(.b--style-none) thead tr:first-child th,.vxe-table:not(.show--head):not(.b--style-none) tbody tr:first-child td{border-top:1px solid #e8eaec}.vxe-table:not(.b--style-none) tr td:first-child,.vxe-table:not(.b--style-none) tr th:first-child{border-left:1px solid #e8eaec}.vxe-table:not(.t--border){border-width:1px}.vxe-table.t--border:not(.b--style-none) td,table.t--border:not(.b--style-none) th{border-right:1px solid #e8eaec}.vxe-table:not(.b--style-none) thead{background-color:#f8f8f9}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}'
 
-// 导入
-const fileForm = document.createElement('form')
-const fileInput = document.createElement('input')
-fileForm.className = 'vxe-table--file-form'
-fileInput.name = 'file'
-fileInput.type = 'file'
-fileForm.appendChild(fileInput)
-
 function hasTreeChildren ($xetable, row) {
   const treeOpts = $xetable.treeOpts
   return row[treeOpts.children] && row[treeOpts.children].length
 }
 
-function getContent ($xetable, opts, columns, datas) {
-  switch (opts.type) {
-    case 'csv':
-      return toCsv($xetable, opts, columns, datas)
-    case 'txt':
-      return toTxt($xetable, opts, columns, datas)
-    case 'html':
-      return toHtml($xetable, opts, columns, datas)
-    case 'xml':
-      return toXML($xetable, opts, columns, datas)
-  }
-  return ''
-}
-
 function getSeq ($xetable, row, rowIndex, column, columnIndex) {
   // 在 v3.0 中废弃 startIndex、indexMethod
-  let seqOpts = $xetable.seqOpts
-  let seqMethod = seqOpts.seqMethod || column.indexMethod
+  const seqOpts = $xetable.seqOpts
+  const seqMethod = seqOpts.seqMethod || column.indexMethod
   return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : ((seqOpts.startIndex || $xetable.startIndex) + rowIndex + 1)
+}
+
+function getLabelData ($xetable, opts, columns, datas) {
+  const { treeConfig, treeOpts, scrollXLoad, scrollYLoad } = $xetable
+  if (treeConfig) {
+    // 如果是树表格只允许导出数据源
+    const rest = []
+    XEUtils.eachTree(datas, (row, rowIndex, items, path, parent, nodes) => {
+      const item = {
+        _level: nodes.length - 1,
+        _hasChild: hasTreeChildren($xetable, row)
+      }
+      columns.forEach((column, columnIndex) => {
+        let cellValue = ''
+        switch (column.type) {
+          // v3.0 废弃 type=index
+          case 'seq':
+          case 'index':
+            cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
+            break
+          // v3.0 废弃 type=selection
+          case 'selection':
+          case 'checkbox':
+            cellValue = $xetable.isCheckedByCheckboxRow(row)
+            break
+          case 'radio':
+            cellValue = $xetable.isCheckedByRadioRow(row)
+            break
+          default:
+            if (opts.original) {
+              cellValue = UtilTools.getCellValue(row, column)
+            } else {
+              const { cellRender, editRender } = column
+              let exportMethod
+              if (editRender && editRender.name) {
+                const compConf = VXETable.renderer.get(editRender.name)
+                if (compConf) {
+                  exportMethod = compConf.editCellExportMethod
+                }
+              } else if (cellRender && cellRender.name) {
+                const compConf = VXETable.renderer.get(cellRender.name)
+                if (compConf) {
+                  exportMethod = compConf.cellExportMethod
+                }
+              }
+              cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+            }
+        }
+        item[column.id] = XEUtils.toString(cellValue)
+      })
+      rest.push(Object.assign(item, row))
+    }, treeOpts)
+    return rest
+  }
+  return datas.map((row, rowIndex) => {
+    const item = {}
+    columns.forEach((column, columnIndex) => {
+      let cellValue = ''
+      switch (column.type) {
+        // v3.0 废弃 type=index
+        case 'seq':
+        case 'index':
+          cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
+          break
+        // v3.0 废弃 type=selection
+        case 'selection':
+        case 'checkbox':
+          cellValue = $xetable.isCheckedByCheckboxRow(row)
+          break
+        case 'radio':
+          cellValue = $xetable.isCheckedByRadioRow(row)
+          break
+        default:
+          if (opts.original) {
+            cellValue = UtilTools.getCellValue(row, column)
+          } else if (scrollXLoad || scrollYLoad) {
+            // 如果是虚拟滚动
+            const { cellRender, editRender } = column
+            let exportMethod
+            if (editRender && editRender.name) {
+              const compConf = VXETable.renderer.get(editRender.name)
+              if (compConf) {
+                exportMethod = compConf.editCellExportMethod
+              }
+            } else if (cellRender && cellRender.name) {
+              const compConf = VXETable.renderer.get(cellRender.name)
+              if (compConf) {
+                exportMethod = compConf.cellExportMethod
+              }
+            }
+            cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+          } else {
+            const cell = DomTools.getCell($xetable, { row, column })
+            cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
+          }
+      }
+      item[column.id] = XEUtils.toString(cellValue)
+    })
+    return item
+  })
+}
+
+function getExportData ($xetable, opts, fullData, oColumns) {
+  let columns = opts.columns ? opts.columns : oColumns
+  let datas = opts.data || fullData
+  if (opts.columnFilterMethod) {
+    columns = columns.filter(opts.columnFilterMethod)
+  }
+  if (opts.dataFilterMethod) {
+    datas = datas.filter(opts.dataFilterMethod)
+  }
+  return { columns, datas: getLabelData($xetable, opts, columns, datas) }
 }
 
 function getHeaderTitle (opts, column) {
@@ -45,21 +135,21 @@ function getHeaderTitle (opts, column) {
 }
 
 function getFooterCellValue ($xetable, opts, items, column) {
-  let { cellRender, editRender } = column
+  const { cellRender, editRender } = column
   let exportMethod
   if (editRender && editRender.name) {
-    let compConf = VXETable.renderer.get(editRender.name)
+    const compConf = VXETable.renderer.get(editRender.name)
     if (compConf) {
       exportMethod = compConf.footerCellExportMethod
     }
   } else if (cellRender && cellRender.name) {
-    let compConf = VXETable.renderer.get(cellRender.name)
+    const compConf = VXETable.renderer.get(cellRender.name)
     if (compConf) {
       exportMethod = compConf.footerCellExportMethod
     }
   }
-  let itemIndex = $xetable.$getColumnIndex(column)
-  let cellValue = exportMethod ? exportMethod({ $table: $xetable, items, itemIndex, column }) : XEUtils.toString(items[itemIndex])
+  const itemIndex = $xetable.$getColumnIndex(column)
+  const cellValue = exportMethod ? exportMethod({ $table: $xetable, items, itemIndex, column }) : XEUtils.toString(items[itemIndex])
   return cellValue
 }
 
@@ -68,7 +158,7 @@ function toCsv ($xetable, opts, columns, datas) {
   if (opts.isHeader) {
     content += columns.map(column => `"${getHeaderTitle(opts, column)}"`).join(',') + '\n'
   }
-  datas.forEach((row, rowIndex) => {
+  datas.forEach(row => {
     content += columns.map(column => `"${row[column.id]}"`).join(',') + '\n'
   })
   if (opts.isFooter) {
@@ -86,7 +176,7 @@ function toTxt ($xetable, opts, columns, datas) {
   if (opts.isHeader) {
     content += columns.map(column => `${getHeaderTitle(opts, column)}`).join('\t') + '\n'
   }
-  datas.forEach((row, rowIndex) => {
+  datas.forEach(row => {
     content += columns.map(column => `${row[column.id]}`).join('\t') + '\n'
   })
   if (opts.isFooter) {
@@ -100,11 +190,11 @@ function toTxt ($xetable, opts, columns, datas) {
 }
 
 function hasEllipsis ($xetable, column, property, allColumnOverflow) {
-  let columnOverflow = column[property]
-  let headOverflow = XEUtils.isUndefined(columnOverflow) || XEUtils.isNull(columnOverflow) ? allColumnOverflow : columnOverflow
-  let showEllipsis = headOverflow === 'ellipsis'
-  let showTitle = headOverflow === 'title'
-  let showTooltip = headOverflow === true || headOverflow === 'tooltip'
+  const columnOverflow = column[property]
+  const headOverflow = XEUtils.isUndefined(columnOverflow) || XEUtils.isNull(columnOverflow) ? allColumnOverflow : columnOverflow
+  const showEllipsis = headOverflow === 'ellipsis'
+  const showTitle = headOverflow === 'title'
+  const showTooltip = headOverflow === true || headOverflow === 'tooltip'
   let isEllipsis = showTitle || showTooltip || showEllipsis
   // 虚拟滚动不支持动态高度
   if (($xetable.scrollXLoad || $xetable.scrollYLoad) && !isEllipsis) {
@@ -116,9 +206,9 @@ function hasEllipsis ($xetable, column, property, allColumnOverflow) {
 function toHtml ($xetable, opts, columns, datas) {
   const { id, border, treeConfig, treeOpts, isAllSelected, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow } = $xetable
   // v2.0 废弃属性，保留兼容
-  let allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-  let allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
-  let clss = [
+  const allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
+  const allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
+  const clss = [
     'vxe-table',
     border ? 't--border' : '',
     border === 'none' ? 'b--style-none' : '',
@@ -127,7 +217,7 @@ function toHtml ($xetable, opts, columns, datas) {
   ].filter(cls => cls)
   let html = [
     '<html>',
-    `<head>`,
+    '<head>',
     `<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"><title>${opts.sheetName}</title>`,
     `<style>${opts.style || defaultHtmlStyle}</style>`,
     '</head>',
@@ -137,9 +227,9 @@ function toHtml ($xetable, opts, columns, datas) {
   ].join('')
   if (opts.isHeader) {
     html += `<thead><tr>${columns.map(column => {
-      let headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
-      let classNames = hasEllipsis($xetable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
-      let cellTitle = getHeaderTitle(opts, column)
+      const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
+      const classNames = hasEllipsis($xetable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
+      const cellTitle = getHeaderTitle(opts, column)
       if (headAlign) {
         classNames.push(`col--${headAlign}`)
       }
@@ -154,16 +244,16 @@ function toHtml ($xetable, opts, columns, datas) {
     if (treeConfig) {
       datas.forEach(row => {
         html += '<tr>' + columns.map(column => {
-          let cellAlign = column.align || allAlign
-          let classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-          let cellValue = row[column.id]
+          const cellAlign = column.align || allAlign
+          const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+          const cellValue = row[column.id]
           if (cellAlign) {
             classNames.push(`col--${cellAlign}`)
           }
           if (column.treeNode) {
             let treeIcon = ''
             if (row._hasChild) {
-              treeIcon = `<i class="vxe-table--tree-icon"></i>`
+              treeIcon = '<i class="vxe-table--tree-icon"></i>'
             }
             classNames.push('vxe-table--tree-node')
             if (column.type === 'radio') {
@@ -184,9 +274,9 @@ function toHtml ($xetable, opts, columns, datas) {
     } else {
       datas.forEach(row => {
         html += '<tr>' + columns.map(column => {
-          let cellAlign = column.align || allAlign
-          let classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-          let cellValue = row[column.id]
+          const cellAlign = column.align || allAlign
+          const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+          const cellValue = row[column.id]
           if (cellAlign) {
             classNames.push(`col--${cellAlign}`)
           }
@@ -208,9 +298,9 @@ function toHtml ($xetable, opts, columns, datas) {
       html += '<tfoot>'
       footers.forEach(rows => {
         html += `<tr>${columns.map(column => {
-          let footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
-          let classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-          let cellValue = getFooterCellValue($xetable, opts, rows, column)
+          const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
+          const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
+          const cellValue = getFooterCellValue($xetable, opts, rows, column)
           if (footAlign) {
             classNames.push(`col--${footAlign}`)
           }
@@ -246,7 +336,7 @@ function toXML ($xetable, opts, columns, datas) {
   if (opts.isHeader) {
     xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getHeaderTitle(opts, column)}</Data></Cell>`).join('')}</Row>`
   }
-  datas.forEach((row, rowIndex) => {
+  datas.forEach(row => {
     xml += '<Row>' + columns.map(column => `<Cell><Data ss:Type="String">${row[column.id]}</Data></Cell>`).join('') + '</Row>'
   })
   if (opts.isFooter) {
@@ -257,6 +347,20 @@ function toXML ($xetable, opts, columns, datas) {
     })
   }
   return `${xml}</Table></Worksheet></Workbook>`
+}
+
+function getContent ($xetable, opts, columns, datas) {
+  switch (opts.type) {
+    case 'csv':
+      return toCsv($xetable, opts, columns, datas)
+    case 'txt':
+      return toTxt($xetable, opts, columns, datas)
+    case 'html':
+      return toHtml($xetable, opts, columns, datas)
+    case 'xml':
+      return toXML($xetable, opts, columns, datas)
+  }
+  return ''
 }
 
 function downloadFile ($xetable, opts, content) {
@@ -286,116 +390,8 @@ function downloadFile ($xetable, opts, content) {
   }
 }
 
-function getLabelData ($xetable, opts, columns, datas) {
-  const { treeConfig, treeOpts, scrollXLoad, scrollYLoad } = $xetable
-  if (treeConfig) {
-    // 如果是树表格只允许导出数据源
-    const rest = []
-    XEUtils.eachTree(datas, (row, rowIndex, items, path, parent, nodes) => {
-      let item = {
-        _level: nodes.length - 1,
-        _hasChild: hasTreeChildren($xetable, row)
-      }
-      columns.forEach((column, columnIndex) => {
-        let cellValue = ''
-        switch (column.type) {
-          // v3.0 废弃 type=index
-          case 'seq':
-          case 'index':
-            cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
-            break
-          // v3.0 废弃 type=selection
-          case 'selection':
-          case 'checkbox':
-            cellValue = $xetable.isCheckedByCheckboxRow(row)
-            break
-          case 'radio':
-            cellValue = $xetable.isCheckedByRadioRow(row)
-            break
-          default:
-            if (opts.original) {
-              cellValue = UtilTools.getCellValue(row, column)
-            } else {
-              let { cellRender, editRender } = column
-              let exportMethod
-              if (editRender && editRender.name) {
-                let compConf = VXETable.renderer.get(editRender.name)
-                if (compConf) {
-                  exportMethod = compConf.editCellExportMethod
-                }
-              } else if (cellRender && cellRender.name) {
-                let compConf = VXETable.renderer.get(cellRender.name)
-                if (compConf) {
-                  exportMethod = compConf.cellExportMethod
-                }
-              }
-              cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
-            }
-        }
-        item[column.id] = XEUtils.toString(cellValue)
-      })
-      rest.push(Object.assign(item, row))
-    }, treeOpts)
-    return rest
-  }
-  return datas.map((row, rowIndex) => {
-    let item = {}
-    columns.forEach((column, columnIndex) => {
-      let cellValue = ''
-      switch (column.type) {
-        // v3.0 废弃 type=index
-        case 'seq':
-        case 'index':
-          cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
-          break
-        // v3.0 废弃 type=selection
-        case 'selection':
-        case 'checkbox':
-          cellValue = $xetable.isCheckedByCheckboxRow(row)
-          break
-        case 'radio':
-          cellValue = $xetable.isCheckedByRadioRow(row)
-          break
-        default:
-          if (opts.original) {
-            cellValue = UtilTools.getCellValue(row, column)
-          } else if (scrollXLoad || scrollYLoad) {
-            // 如果是虚拟滚动
-            let { cellRender, editRender } = column
-            let exportMethod
-            if (editRender && editRender.name) {
-              let compConf = VXETable.renderer.get(editRender.name)
-              if (compConf) {
-                exportMethod = compConf.editCellExportMethod
-              }
-            } else if (cellRender && cellRender.name) {
-              let compConf = VXETable.renderer.get(cellRender.name)
-              if (compConf) {
-                exportMethod = compConf.cellExportMethod
-              }
-            }
-            cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
-          } else {
-            let cell = DomTools.getCell($xetable, { row, column })
-            cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
-          }
-      }
-      item[column.id] = XEUtils.toString(cellValue)
-    })
-    return item
-  })
-}
-
-function getExportData ($xetable, opts, fullData, oColumns) {
-  let columns = opts.columns ? opts.columns : oColumns
-  let datas = opts.data || fullData
-  if (opts.columnFilterMethod) {
-    columns = columns.filter(opts.columnFilterMethod)
-  }
-  if (opts.dataFilterMethod) {
-    datas = datas.filter(opts.dataFilterMethod)
-  }
-  return { columns, datas: getLabelData($xetable, opts, columns, datas) }
+function getElementsByTagName (elem, qualifiedName) {
+  return elem.getElementsByTagName(qualifiedName)
 }
 
 function replaceDoubleQuotation (val) {
@@ -451,7 +447,7 @@ function parseHTML (columns, content) {
   const xmlDoc = domParser.parseFromString(content, 'text/html')
   const bodyNodes = getElementsByTagName(xmlDoc, 'body')
   const rows = []
-  let fields = []
+  const fields = []
   if (bodyNodes.length) {
     const tableNodes = getElementsByTagName(bodyNodes[0], 'table')
     if (tableNodes.length) {
@@ -485,7 +481,7 @@ function parseXML (columns, content) {
   const xmlDoc = domParser.parseFromString(content, 'application/xml')
   const sheetNodes = getElementsByTagName(xmlDoc, 'Worksheet')
   const rows = []
-  let fields = []
+  const fields = []
   if (sheetNodes.length) {
     const tableNodes = getElementsByTagName(sheetNodes[0], 'Table')
     if (tableNodes.length) {
@@ -512,19 +508,15 @@ function parseXML (columns, content) {
   return { fields, rows }
 }
 
-function getElementsByTagName (elem, qualifiedName) {
-  return elem.getElementsByTagName(qualifiedName)
-}
-
 /**
  * 检查导入的列是否完整
  * @param {Array} fields 字段名列表
  * @param {Array} rows 数据列表
  */
-function checkImportData (columns, fields, rows) {
-  let tableFields = []
+function checkImportData (columns, fields) {
+  const tableFields = []
   columns.forEach(column => {
-    let field = column.property
+    const field = column.property
     if (field) {
       tableFields.push(field)
     }

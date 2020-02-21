@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import { template } from 'xe-ajax-mock'
 
-var idIndex = 100000
+let idIndex = 100000
 
 // Mock 辅助函数
 class Helper {
@@ -9,17 +9,18 @@ class Helper {
     this.list = template(data)
     this.ModelVO = ModelVO
   }
+
   // 获取最新数据、支持排序
   findList (options) {
-    let { list } = this
-    let { sort = ['updateTime'], order = 'desc', max } = options || {}
+    const { list } = this
+    const { sort = ['updateTime'], order = 'desc', max } = options || {}
     return function (request) {
       let rest = list
-      let params = request.params
+      const params = request.params
       let sortProp = sort
       let orderPrpo = order
       if (params) {
-        let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
+        const filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
         if (filterProps) {
           rest = rest.filter(data => filterProps.every(key => XEUtils.toString(data[key]).indexOf(params[key]) > -1))
         }
@@ -37,16 +38,17 @@ class Helper {
       return max ? rest.slice(0, max) : rest
     }
   }
+
   findAllList (options) {
-    let { list } = this
-    let { sort = ['updateTime'], order = 'desc' } = options || {}
+    const { list } = this
+    const { sort = ['updateTime'], order = 'desc' } = options || {}
     return function (request) {
       let rest = list
-      let params = request.params
+      const params = request.params
       let sortProp = sort
       let orderPrpo = order
       if (params) {
-        let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
+        const filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
         if (filterProps) {
           rest = rest.filter(data => filterProps.every(key => XEUtils.toString(data[key]).indexOf(params[key]) > -1))
         }
@@ -64,17 +66,18 @@ class Helper {
       return rest
     }
   }
+
   // 树形结构 获取节点数据、支持排序
   findTreeNodeList (options) {
-    let { list } = this
-    let { sort = ['updateTime'], order = 'desc', key = 'id', parentKey = 'parentId', max } = options || {}
+    const { list } = this
+    const { sort = ['updateTime'], order = 'desc', key = 'id', parentKey = 'parentId', max } = options || {}
     return function (request) {
       let rest = list
-      let params = request.params
+      const params = request.params
       let sortProp = sort
       let orderPrpo = order
       if (params) {
-        let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order', parentKey, key].includes(key) && params[key])
+        const filterProps = XEUtils.keys(params).filter(key => !['sort', 'order', parentKey, key].includes(key) && params[key])
         if (filterProps) {
           rest = rest.filter(data => filterProps.every(key => XEUtils.toString(data[key]).indexOf(params[key]) > -1))
         }
@@ -88,11 +91,11 @@ class Helper {
       rest = XEUtils.toArrayTree(rest, { key, parentKey, sortKey: sortProp })
       if (params) {
         if (params[key]) {
-          let matchObj = XEUtils.findTree(rest, item => '' + item[key] === '' + params[key], { key, parentKey })
+          const matchObj = XEUtils.findTree(rest, item => '' + item[key] === '' + params[key], { key, parentKey })
           rest = matchObj ? matchObj.item.children : []
         }
         if (params[parentKey]) {
-          let matchObj = XEUtils.findTree(rest, item => '' + item[key] === '' + params[parentKey], { key, parentKey })
+          const matchObj = XEUtils.findTree(rest, item => '' + item[key] === '' + params[parentKey], { key, parentKey })
           rest = matchObj ? matchObj.item.children : []
         }
       }
@@ -109,19 +112,20 @@ class Helper {
       return max ? rest.slice(0, max) : rest
     }
   }
+
   // 分页、支持排序
   findPageList (options) {
-    let { list } = this
-    let { sort = ['updateTime'], order = 'desc', page } = options || {}
+    const { list } = this
+    const { sort = ['updateTime'], order = 'desc', page } = options || {}
     return function (request, response, { pathVariable }) {
       let pageSize = 10
       let currentPage = 1
       let rest = list
-      let params = request.params
+      const params = request.params
       let sortProp = sort
       let orderPrpo = order
       if (params) {
-        let filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
+        const filterProps = XEUtils.keys(params).filter(key => !['sort', 'order'].includes(key) && params[key])
         if (filterProps) {
           rest = rest.filter(data => filterProps.every(key => XEUtils.toString(data[key]).indexOf(params[key]) > -1))
         }
@@ -136,7 +140,7 @@ class Helper {
         pageSize = XEUtils.toNumber(pathVariable[page && page.size ? page.size : 'pageSize']) || pageSize
         currentPage = XEUtils.toNumber(pathVariable[page && page.current ? page.current : 'currentPage']) || currentPage
       }
-      let totalResult = rest.length
+      const totalResult = rest.length
       rest = XEUtils.sortBy(rest, sortProp)
       if (orderPrpo === 'desc') {
         rest = rest.reverse()
@@ -148,10 +152,11 @@ class Helper {
       return response
     }
   }
+
   // 删除单条
   deleteByPathVariable (options) {
-    let { list } = this
-    let { key = 'id' } = options || {}
+    const { list } = this
+    const { key = 'id' } = options || {}
     return function (request, response, { pathVariable }) {
       let rest = []
       if (pathVariable) {
@@ -161,10 +166,11 @@ class Helper {
       return response
     }
   }
+
   // 树结构 删除单条
   deleteTreeByPathVariable (options) {
-    let { list } = this
-    let { key = 'id', parentKey = 'parentId' } = options || {}
+    const { list } = this
+    const { key = 'id', parentKey = 'parentId' } = options || {}
     return function (request, response, { pathVariable }) {
       let rest = []
       if (pathVariable) {
@@ -179,17 +185,18 @@ class Helper {
       return response
     }
   }
+
   // 插入单条
   insertByBody (options) {
-    let { list, ModelVO } = this
-    let { key = 'id' } = options || {}
-    return function (request, response) {
-      let result = []
+    const { list, ModelVO } = this
+    const { key = 'id' } = options || {}
+    return function (request) {
+      const result = []
       if (request.body) {
-        let updateTime = Date.now()
-        let insertRecords = [request.body]
+        const updateTime = Date.now()
+        const insertRecords = [request.body]
         insertRecords.forEach(data => {
-          let rest = Object.assign(new ModelVO(data), { [key]: idIndex++, updateTime, createTime: updateTime })
+          const rest = Object.assign(new ModelVO(data), { [key]: idIndex++, updateTime, createTime: updateTime })
           result.push(rest)
           list.push(rest)
         })
@@ -197,18 +204,19 @@ class Helper {
       return result
     }
   }
+
   // 树结构 插入单条
   insertTreeByBody (options) {
-    let { list, ModelVO } = this
-    let { key = 'id', parentKey = 'parentId' } = options || {}
-    return function (request, response) {
-      let result = []
+    const { list, ModelVO } = this
+    const { key = 'id', parentKey = 'parentId' } = options || {}
+    return function (request) {
+      const result = []
       if (request.body) {
-        let updateTime = Date.now()
-        let insertRecords = [request.body]
-        let insertTree = (records, parentObj) => {
+        const updateTime = Date.now()
+        const insertRecords = [request.body]
+        const insertTree = (records, parentObj) => {
           records.forEach(item => {
-            let rest = Object.assign(new ModelVO(item), { [key]: idIndex++, updateTime, createTime: updateTime })
+            const rest = Object.assign(new ModelVO(item), { [key]: idIndex++, updateTime, createTime: updateTime })
             if (parentObj) {
               rest[parentKey] = parentObj[key]
             }
@@ -222,17 +230,18 @@ class Helper {
       return result
     }
   }
+
   // 更新单条
   updateByBody (options) {
-    let { list } = this
-    let { key = 'id' } = options || {}
-    return function (request, response) {
-      let result = []
+    const { list } = this
+    const { key = 'id' } = options || {}
+    return function (request) {
+      const result = []
       if (request.body) {
-        let updateTime = Date.now()
-        let updateRecords = [request.body]
+        const updateTime = Date.now()
+        const updateRecords = [request.body]
         updateRecords.forEach(data => {
-          let item = list.find(item => item[key] === data[key])
+          const item = list.find(item => item[key] === data[key])
           if (item) {
             XEUtils.destructuring(item, data, { updateTime })
             result.push(item)
@@ -242,29 +251,30 @@ class Helper {
       return result
     }
   }
+
   // 批量保存
   saveListByBody (options) {
-    let { list, ModelVO } = this
-    let { key = 'id', page } = options || {}
+    const { list, ModelVO } = this
+    const { key = 'id', page } = options || {}
     return function (request, response) {
-      let insertRest = []
-      let updateRest = []
+      const insertRest = []
+      const updateRest = []
       let removeRest = []
       if (request.body) {
-        let updateTime = Date.now()
-        let updateRecords = request.body[page && page.update ? page.update : 'updateRecords'] || []
+        const updateTime = Date.now()
+        const updateRecords = request.body[page && page.update ? page.update : 'updateRecords'] || []
         let removeRecords = request.body[page && page.remove ? page.remove : 'removeRecords'] || []
-        let pendingRecords = request.body[page && page.remove ? page.remove : 'pendingRecords'] || []
-        let insertRecords = request.body[page && page.insert ? page.insert : 'insertRecords'] || []
+        const pendingRecords = request.body[page && page.remove ? page.remove : 'pendingRecords'] || []
+        const insertRecords = request.body[page && page.insert ? page.insert : 'insertRecords'] || []
         updateRecords.forEach(data => {
-          let item = list.find(item => item[key] === data[key])
+          const item = list.find(item => item[key] === data[key])
           if (item) {
             XEUtils.destructuring(item, data, { updateTime })
             updateRest.push(item)
           }
         })
         insertRecords.forEach(data => {
-          let rest = Object.assign(new ModelVO(data), { [key]: idIndex++, updateTime, createTime: updateTime })
+          const rest = Object.assign(new ModelVO(data), { [key]: idIndex++, updateTime, createTime: updateTime })
           insertRest.push(rest)
           list.push(rest)
         })
@@ -275,32 +285,33 @@ class Helper {
       return response
     }
   }
+
   // 树结构 批量保存
   saveTreeListByBody (options) {
-    let { list, ModelVO } = this
-    let { key = 'id', parentKey = 'parentId', page } = options || {}
+    const { list, ModelVO } = this
+    const { key = 'id', parentKey = 'parentId', page } = options || {}
     return function (request, response) {
-      let insertRest = []
-      let updateRest = []
+      const insertRest = []
+      const updateRest = []
       let removeRest = []
       if (request.body) {
-        let updateTime = Date.now()
-        let updateRecords = request.body[page && page.update ? page.update : 'updateRecords'] || []
+        const updateTime = Date.now()
+        const updateRecords = request.body[page && page.update ? page.update : 'updateRecords'] || []
         let removeRecords = request.body[page && page.remove ? page.remove : 'removeRecords'] || []
-        let pendingRecords = request.body[page && page.remove ? page.remove : 'pendingRecords'] || []
-        let insertRecords = request.body[page && page.insert ? page.insert : 'insertRecords'] || []
+        const pendingRecords = request.body[page && page.remove ? page.remove : 'pendingRecords'] || []
+        const insertRecords = request.body[page && page.insert ? page.insert : 'insertRecords'] || []
         // 更新树
         updateRecords.forEach(data => {
-          let item = list.find(item => item[key] === data[key])
+          const item = list.find(item => item[key] === data[key])
           if (item) {
             XEUtils.destructuring(item, data, { updateTime })
             updateRest.push(item)
           }
         })
         // 插入树
-        let insertTree = (records, parentObj) => {
+        const insertTree = (records, parentObj) => {
           records.forEach(item => {
-            let rest = Object.assign(new ModelVO(item), { [key]: idIndex++, updateTime, createTime: updateTime })
+            const rest = Object.assign(new ModelVO(item), { [key]: idIndex++, updateTime, createTime: updateTime })
             if (parentObj) {
               rest[parentKey] = parentObj[key]
             }

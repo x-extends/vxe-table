@@ -58,8 +58,8 @@ export default {
       return this.getPageCount(this.total, this.pageSize)
     },
     numList () {
-      let len = this.pageCount > this.pagerCount ? this.pagerCount - 2 : this.pagerCount
-      let rest = []
+      const len = this.pageCount > this.pagerCount ? this.pagerCount - 2 : this.pagerCount
+      const rest = []
       for (let index = 0; index < len; index++) {
         rest.push(index)
       }
@@ -79,7 +79,7 @@ export default {
     GlobalEvent.off(this, 'keydown')
   },
   render (h) {
-    let { vSize, align } = this
+    const { vSize, align } = this
     return h('div', {
       class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
@@ -277,11 +277,11 @@ export default {
     },
     // number
     renderPageBtn (h, showJump) {
-      let { numList, currentPage, pageCount, pagerCount, offsetNumber } = this
-      let nums = []
-      let isOv = pageCount > pagerCount
-      let isLt = isOv && currentPage > offsetNumber + 1
-      let isGt = isOv && currentPage < pageCount - offsetNumber
+      const { numList, currentPage, pageCount, pagerCount, offsetNumber } = this
+      const nums = []
+      const isOv = pageCount > pagerCount
+      const isLt = isOv && currentPage > offsetNumber + 1
+      const isGt = isOv && currentPage < pageCount - offsetNumber
       let startNumber = 1
       if (isOv) {
         if (currentPage >= pageCount - offsetNumber) {
@@ -302,7 +302,7 @@ export default {
         )
       }
       numList.forEach((item, index) => {
-        let number = startNumber + index
+        const number = startNumber + index
         if (number <= pageCount) {
           nums.push(
             h('li', {
@@ -334,18 +334,18 @@ export default {
       return Math.max(Math.ceil(total / size), 1)
     },
     handleGlobalMousedownEvent (evnt) {
-      let $refs = this.$refs
+      const $refs = this.$refs
       if (this.showSizes && !(DomTools.getEventTargetNode(evnt, $refs.sizeBtn).flag || DomTools.getEventTargetNode(evnt, $refs.sizePanel).flag)) {
         this.hideSizePanel()
       }
     },
     handleGlobalKeydownEvent (evnt) {
-      let keyCode = evnt.keyCode
-      let isUpArrow = keyCode === 38
-      let isDwArrow = keyCode === 40
+      const keyCode = evnt.keyCode
+      const isUpArrow = keyCode === 38
+      const isDwArrow = keyCode === 40
       if ((isUpArrow || isDwArrow) && this.showSizes) {
         evnt.preventDefault()
-        let { pageSizes, pageSize } = this
+        const { pageSizes, pageSize } = this
         let sizeIndex = XEUtils.findIndexOf(pageSizes, num => num === pageSize)
         if (isUpArrow && sizeIndex > 0) {
           sizeIndex--
@@ -356,13 +356,13 @@ export default {
       }
     },
     prevPage () {
-      let currentPage = this.currentPage
+      const currentPage = this.currentPage
       if (currentPage > 1) {
         this.jumpPage(Math.max(currentPage - 1, 1))
       }
     },
     nextPage () {
-      let { currentPage, pageCount } = this
+      const { currentPage, pageCount } = this
       if (currentPage < pageCount) {
         this.jumpPage(Math.min(currentPage + 1, pageCount))
       }
@@ -374,7 +374,7 @@ export default {
       this.jumpPage(Math.min(this.currentPage + this.numList.length, this.pageCount))
     },
     jumpPage (currentPage) {
-      let type = 'current-change'
+      const type = 'current-change'
       if (currentPage !== this.currentPage) {
         this.$emit('update:currentPage', currentPage)
         UtilTools.emitEvent(this, type, [currentPage])
@@ -386,7 +386,7 @@ export default {
       this.hideSizePanel()
     },
     changePageSize (pageSize) {
-      let type = 'size-change'
+      const type = 'size-change'
       if (pageSize !== this.pageSize) {
         this.$emit('update:pageSize', pageSize)
         UtilTools.emitEvent(this, type, [pageSize])
@@ -405,8 +405,8 @@ export default {
       }
     },
     triggerJumpEvent (evnt) {
-      let value = XEUtils.toNumber(evnt.target.value)
-      let current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value
+      const value = XEUtils.toNumber(evnt.target.value)
+      const current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value
       evnt.target.value = current
       this.jumpPage(current)
     },
@@ -425,7 +425,7 @@ export default {
       this.showSizes = true
       this.updateZindex()
       this.$nextTick(() => {
-        let { sizeBtn, sizePanel } = this.$refs
+        const { sizeBtn, sizePanel } = this.$refs
         this.panelStyle = {
           zIndex: this.panelIndex,
           bottom: `${sizeBtn.clientHeight + 6}px`,

@@ -213,7 +213,7 @@ export default {
           }
           // 生成唯一 id
           let index = 1
-          let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
+          const searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
           this.tableData = XEUtils.clone(apis, true)
           XEUtils.eachTree(this.tableData, item => {
             item.id = index++
@@ -251,7 +251,7 @@ export default {
       this.$refs.xTable.setCurrentRow(row)
     },
     contextMenuClickEvent ({ menu, row, column }) {
-      let xTable = this.$refs.xTable
+      const xTable = this.$refs.xTable
       switch (menu.code) {
         case 'hideColumn':
           xTable.hideColumn(column)
@@ -305,12 +305,12 @@ export default {
       }
     },
     handleSearch () {
-      let filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
       if (filterName) {
-        let filterRE = new RegExp(filterName, 'gi')
-        let options = { children: 'list' }
-        let searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-        let rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
+        const filterRE = new RegExp(filterName, 'gi')
+        const options = { children: 'list' }
+        const searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
+        const rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
         XEUtils.eachTree(rest, item => {
           searchProps.forEach(key => {
             item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)

@@ -4,6 +4,7 @@ import UtilTools from './utils'
 const browse = XEUtils.browse()
 const htmlElem = browse.isDoc ? document.querySelector('html') : 0
 const bodyElem = browse.isDoc ? document.body : 0
+const reClsMap = {}
 
 function getClsRE (cls) {
   if (!reClsMap[cls]) {
@@ -12,7 +13,21 @@ function getClsRE (cls) {
   return reClsMap[cls]
 }
 
-const reClsMap = {}
+function getNodeOffset (elem, container, rest) {
+  if (elem) {
+    const parentElem = elem.parentNode
+    rest.top += elem.offsetTop
+    rest.left += elem.offsetLeft
+    if (parentElem && parentElem !== htmlElem && parentElem !== bodyElem) {
+      rest.top -= parentElem.scrollTop
+      rest.left -= parentElem.scrollLeft
+    }
+    if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
+      return getNodeOffset(elem.offsetParent, container, rest)
+    }
+  }
+  return rest
+}
 
 export const DomTools = {
   browse,
@@ -37,20 +52,20 @@ export const DomTools = {
     }
   },
   updateCellTitle (evnt) {
-    let cellElem = evnt.currentTarget.querySelector('.vxe-cell')
-    let content = cellElem.innerText
+    const cellElem = evnt.currentTarget.querySelector('.vxe-cell')
+    const content = cellElem.innerText
     if (cellElem.getAttribute('title') !== content) {
       cellElem.setAttribute('title', content)
     }
   },
   rowToVisible ($table, row) {
-    let bodyElem = $table.$refs.tableBody.$el
-    let trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($table, row)}"]`)
+    const bodyElem = $table.$refs.tableBody.$el
+    const trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($table, row)}"]`)
     if (trElem) {
-      let bodyHeight = bodyElem.clientHeight
-      let bodySrcollTop = bodyElem.scrollTop
-      let trOffsetTop = trElem.offsetTop + (trElem.offsetParent ? trElem.offsetParent.offsetTop : 0)
-      let trHeight = trElem.clientHeight
+      const bodyHeight = bodyElem.clientHeight
+      const bodySrcollTop = bodyElem.scrollTop
+      const trOffsetTop = trElem.offsetTop + (trElem.offsetParent ? trElem.offsetParent.offsetTop : 0)
+      const trHeight = trElem.clientHeight
       // 检测行是否在可视区中
       if (trOffsetTop < bodySrcollTop || trOffsetTop > bodySrcollTop + bodyHeight) {
         // 向上定位
@@ -68,13 +83,13 @@ export const DomTools = {
     return Promise.resolve()
   },
   colToVisible ($table, column) {
-    let bodyElem = $table.$refs.tableBody.$el
-    let tdElem = bodyElem.querySelector(`.${column.id}`)
+    const bodyElem = $table.$refs.tableBody.$el
+    const tdElem = bodyElem.querySelector(`.${column.id}`)
     if (tdElem) {
-      let bodyWidth = bodyElem.clientWidth
-      let bodySrcollLeft = bodyElem.scrollLeft
-      let tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
-      let tdWidth = tdElem.clientWidth
+      const bodyWidth = bodyElem.clientWidth
+      const bodySrcollLeft = bodyElem.scrollLeft
+      const tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
+      const tdWidth = tdElem.clientWidth
       // 检测行是否在可视区中
       if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
         // 向左定位
@@ -86,7 +101,7 @@ export const DomTools = {
     } else {
       // 如果是虚拟渲染跨行滚动
       if ($table.scrollXLoad) {
-        let visibleColumn = $table.visibleColumn
+        const visibleColumn = $table.visibleColumn
         let scrollLeft = 0
         for (let index = 0; index < visibleColumn.length; index++) {
           if (visibleColumn[index] === column) {
@@ -100,8 +115,8 @@ export const DomTools = {
     return Promise.resolve()
   },
   getDomNode () {
-    let documentElement = document.documentElement
-    let bodyElem = document.body
+    const documentElement = document.documentElement
+    const bodyElem = document.body
     return {
       scrollTop: documentElement.scrollTop || bodyElem.scrollTop,
       scrollLeft: documentElement.scrollLeft || bodyElem.scrollLeft,
@@ -132,32 +147,32 @@ export const DomTools = {
     return getNodeOffset(elem, container, { left: 0, top: 0 })
   },
   getAbsolutePos (elem) {
-    let bounding = elem.getBoundingClientRect()
-    let { scrollTop, scrollLeft } = DomTools.getDomNode()
+    const bounding = elem.getBoundingClientRect()
+    const { scrollTop, scrollLeft } = DomTools.getDomNode()
     return { top: scrollTop + bounding.top, left: scrollLeft + bounding.left }
   },
   getCellIndexs (cell) {
-    let trElem = cell.parentNode
-    let rowid = trElem.getAttribute('data-rowid')
-    let columnIndex = [].indexOf.call(trElem.children, cell)
-    let rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
+    const trElem = cell.parentNode
+    const rowid = trElem.getAttribute('data-rowid')
+    const columnIndex = [].indexOf.call(trElem.children, cell)
+    const rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
     return { rowid, rowIndex, columnIndex }
   },
-  getCell ($table, { row, rowIndex, column }) {
-    let rowid = UtilTools.getRowid($table, row)
-    let bodyElem = $table.$refs[`${column.fixed || 'table'}Body`]
+  getCell ($table, { row, column }) {
+    const rowid = UtilTools.getRowid($table, row)
+    const bodyElem = $table.$refs[`${column.fixed || 'table'}Body`]
     return (bodyElem || $table.$refs.tableBody).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
   },
   getCursorPosition (textarea) {
-    let rangeData = { text: '', start: 0, end: 0 }
+    const rangeData = { text: '', start: 0, end: 0 }
     if (textarea.setSelectionRange) {
       rangeData.start = textarea.selectionStart
       rangeData.end = textarea.selectionEnd
       rangeData.text = (rangeData.start !== rangeData.end) ? textarea.value.substring(rangeData.start, rangeData.end) : ''
     } else if (document.selection) {
       let index = 0
-      let range = document.selection.createRange()
-      let textRange = document.body.createTextRange()
+      const range = document.selection.createRange()
+      const textRange = document.body.createTextRange()
       textRange.moveToElementText(textarea)
       rangeData.text = range.text
       rangeData.bookmark = range.getBookmark()
@@ -176,7 +191,7 @@ export const DomTools = {
       textarea.focus()
       textarea.setSelectionRange(rangeData.start, rangeData.end)
     } else if (textarea.createTextRange) {
-      let textRange = textarea.createTextRange()
+      const textRange = textarea.createTextRange()
       if (textarea.value.length === rangeData.start) {
         textRange.collapse(false)
         textRange.select()
@@ -187,8 +202,8 @@ export const DomTools = {
     }
   },
   toView (elem) {
-    let scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
-    let scrollIntoView = 'scrollIntoView'
+    const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
+    const scrollIntoView = 'scrollIntoView'
     if (elem) {
       if (elem[scrollIntoViewIfNeeded]) {
         elem[scrollIntoViewIfNeeded]()
@@ -197,22 +212,6 @@ export const DomTools = {
       }
     }
   }
-}
-
-function getNodeOffset (elem, container, rest) {
-  if (elem) {
-    let parentElem = elem.parentNode
-    rest.top += elem.offsetTop
-    rest.left += elem.offsetLeft
-    if (parentElem && parentElem !== htmlElem && parentElem !== bodyElem) {
-      rest.top -= parentElem.scrollTop
-      rest.left -= parentElem.scrollLeft
-    }
-    if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
-      return getNodeOffset(elem.offsetParent, container, rest)
-    }
-  }
-  return rest
 }
 
 export default DomTools

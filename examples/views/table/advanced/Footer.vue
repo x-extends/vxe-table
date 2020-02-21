@@ -252,7 +252,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            footerCellClassName ({ $rowIndex, column, columnIndex }) {
+            footerCellClassName ({ $rowIndex, columnIndex }) {
               if (columnIndex === 0) {
                 if ($rowIndex === 0) {
                   return 'col-blue'
@@ -290,7 +290,7 @@ export default {
                 }
               })
               // 返回一个二维数组的表尾合计
-              return [ means, sums, others ]
+              return [means, sums, others]
             }
           }
         }
@@ -308,7 +308,7 @@ export default {
     })
   },
   methods: {
-    footerCellClassName ({ $rowIndex, column, columnIndex }) {
+    footerCellClassName ({ $rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         if ($rowIndex === 0) {
           return 'col-blue'
@@ -346,7 +346,7 @@ export default {
         }
       })
       // 返回一个二维数组的表尾合计
-      return [ means, sums, others ]
+      return [means, sums, others]
     }
   }
 }

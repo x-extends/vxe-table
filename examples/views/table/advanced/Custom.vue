@@ -117,7 +117,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           }
         }
         `,
@@ -155,9 +155,9 @@ export default {
               this.columns = this.$refs.xTable.getColumns()
             })
             this.loading = true
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
             setTimeout(() => {
-              // 异步将指定列设置为隐藏状态
+              // 将指定列设置为隐藏状态
               this.columns.forEach(column => {
                 if (['name'].includes(column.property)) {
                   column.visible = false
@@ -209,7 +209,7 @@ export default {
             this.$nextTick(() => {
               this.columns = this.$refs.xTable.getColumns()
             })
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           }
         }
         `
@@ -223,9 +223,9 @@ export default {
       this.columns3 = this.$refs.xTable3.getColumns()
     })
     this.loading = true
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
     setTimeout(() => {
-      // 异步将指定列设置为隐藏状态
+      // 将指定列设置为隐藏状态
       this.columns2.forEach(column => {
         if (['name'].includes(column.property)) {
           column.visible = false

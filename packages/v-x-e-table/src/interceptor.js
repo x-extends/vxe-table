@@ -9,27 +9,27 @@ const storeMap = {}
 
 export const interceptorStore = {
   mixin (map) {
-    XEUtils.each(map, (callback, type) => interceptorStore.add(type, callback))
+    XEUtils.each(map, (evntFn, type) => interceptorStore.add(type, evntFn))
     return interceptorStore
   },
   get (type) {
     return storeMap[toType(type)] || []
   },
-  add (type, callback) {
+  add (type, evntFn) {
     type = toType(type)
-    if (callback && eventTypes.indexOf(type) > -1) {
+    if (evntFn && eventTypes.indexOf(type) > -1) {
       let eList = storeMap[type]
       if (!eList) {
         eList = storeMap[type] = []
       }
-      eList.push(callback)
+      eList.push(evntFn)
     }
     return interceptorStore
   },
-  delete (type, callback) {
-    let eList = storeMap[toType(type)]
+  delete (type, evntFn) {
+    const eList = storeMap[toType(type)]
     if (eList) {
-      XEUtils.remove(eList, cb => cb === callback)
+      XEUtils.remove(eList, fn => fn === evntFn)
     }
     return interceptorStore
   }

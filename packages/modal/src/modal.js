@@ -89,7 +89,7 @@ export default {
     }
   },
   mounted () {
-    let { $listeners, events = {} } = this
+    const { $listeners, events = {} } = this
     if (this.value) {
       this.open()
     }
@@ -112,7 +112,7 @@ export default {
     this.$el.parentNode.removeChild(this.$el)
   },
   render (h) {
-    let {
+    const {
       $scopedSlots,
       slots = {},
       vSize,
@@ -139,11 +139,11 @@ export default {
       showTitleOverflow,
       destroyOnClose
     } = this
-    let defaultSlot = $scopedSlots.default || slots.default
-    let footerSlot = $scopedSlots.footer || slots.footer
-    let headerSlot = $scopedSlots.header || slots.header
-    let titleSlot = $scopedSlots.title || slots.title
-    let headerOns = {
+    const defaultSlot = $scopedSlots.default || slots.default
+    const footerSlot = $scopedSlots.footer || slots.footer
+    const headerSlot = $scopedSlots.header || slots.header
+    const titleSlot = $scopedSlots.title || slots.title
+    const headerOns = {
       mousedown: this.mousedownEvent
     }
     if (resize && dblclickZoom && type === 'modal') {
@@ -257,15 +257,15 @@ export default {
   },
   methods: {
     recalculate () {
-      let { width, height } = this
-      let modalBoxElem = this.getBox()
+      const { width, height } = this
+      const modalBoxElem = this.getBox()
       modalBoxElem.style.width = width ? (isNaN(width) ? width : `${width}px`) : null
       modalBoxElem.style.height = height ? (isNaN(height) ? height : `${height}px`) : null
       return this.$nextTick()
     },
     selfClickEvent (evnt) {
       if (this.maskClosable && evnt.target === this.$el) {
-        let type = 'mask'
+        const type = 'mask'
         this.close(type)
       }
     },
@@ -275,24 +275,24 @@ export default {
       }
     },
     closeEvent (evnt) {
-      let type = 'close'
+      const type = 'close'
       this.$emit(type, { type, $modal: this }, evnt)
       this.close(type)
     },
     confirmEvent (evnt) {
-      let type = 'confirm'
+      const type = 'confirm'
       this.$emit(type, { type, $modal: this }, evnt)
       this.close(type)
     },
     cancelEvent (evnt) {
-      let type = 'cancel'
+      const type = 'cancel'
       this.$emit(type, { type, $modal: this }, evnt)
       this.close(type)
     },
     open () {
-      let { $listeners, events = {}, duration, visible, isMsg, remember } = this
+      const { $listeners, events = {}, duration, visible, isMsg, remember } = this
       if (!visible) {
-        let params = { type: 'show', $modal: this }
+        const params = { type: 'show', $modal: this }
         if (!remember) {
           this.recalculate()
         }
@@ -317,11 +317,11 @@ export default {
           setTimeout(this.close, XEUtils.toNumber(duration))
         } else {
           this.$nextTick(() => {
-            let { inited, marginSize, fullscreen } = this
+            const { inited, marginSize, fullscreen } = this
             if (!remember || !inited) {
-              let modalBoxElem = this.getBox()
-              let clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
-              let clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
+              const modalBoxElem = this.getBox()
+              const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
+              const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
               modalBoxElem.style.top = ''
               modalBoxElem.style.left = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
               if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
@@ -363,8 +363,8 @@ export default {
       })
     },
     close (type) {
-      let { events = {}, visible, isMsg } = this
-      let params = { type, $modal: this }
+      const { events = {}, visible, isMsg } = this
+      const params = { type, $modal: this }
       if (visible) {
         if (isMsg) {
           this.removeMsgQueue()
@@ -395,9 +395,9 @@ export default {
     maximize () {
       return this.$nextTick().then(() => {
         if (!this.zoomLocat) {
-          let marginSize = this.marginSize
-          let modalBoxElem = this.getBox()
-          let { visibleHeight, visibleWidth } = DomTools.getDomNode()
+          const marginSize = this.marginSize
+          const modalBoxElem = this.getBox()
+          const { visibleHeight, visibleWidth } = DomTools.getDomNode()
           this.zoomLocat = {
             top: modalBoxElem.offsetTop,
             left: modalBoxElem.offsetLeft,
@@ -416,9 +416,9 @@ export default {
     },
     revert () {
       return this.$nextTick().then(() => {
-        let zoomLocat = this.zoomLocat
+        const zoomLocat = this.zoomLocat
         if (zoomLocat) {
-          let modalBoxElem = this.getBox()
+          const modalBoxElem = this.getBox()
           this.zoomLocat = null
           Object.assign(modalBoxElem.style, {
             top: `${zoomLocat.top}px`,
@@ -431,8 +431,8 @@ export default {
       })
     },
     toggleZoomEvent (evnt) {
-      let { $listeners, zoomLocat, events = {} } = this
-      let params = { type: zoomLocat ? 'min' : 'max', $modal: this }
+      const { $listeners, zoomLocat, events = {} } = this
+      const params = { type: zoomLocat ? 'min' : 'max', $modal: this }
       return this[zoomLocat ? 'revert' : 'maximize']().then(() => {
         if ($listeners.zoom) {
           this.$emit('zoom', params, evnt)
@@ -442,23 +442,23 @@ export default {
       })
     },
     mousedownEvent (evnt) {
-      let { remember, storage, marginSize, zoomLocat } = this
-      let modalBoxElem = this.getBox()
+      const { remember, storage, marginSize, zoomLocat } = this
+      const modalBoxElem = this.getBox()
       if (!zoomLocat && evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
         evnt.preventDefault()
-        let demMousemove = document.onmousemove
-        let demMouseup = document.onmouseup
-        let disX = evnt.clientX - modalBoxElem.offsetLeft
-        let disY = evnt.clientY - modalBoxElem.offsetTop
-        let { visibleHeight, visibleWidth } = DomTools.getDomNode()
+        const demMousemove = document.onmousemove
+        const demMouseup = document.onmouseup
+        const disX = evnt.clientX - modalBoxElem.offsetLeft
+        const disY = evnt.clientY - modalBoxElem.offsetTop
+        const { visibleHeight, visibleWidth } = DomTools.getDomNode()
         document.onmousemove = evnt => {
           evnt.preventDefault()
-          let offsetWidth = modalBoxElem.offsetWidth
-          let offsetHeight = modalBoxElem.offsetHeight
-          let minX = marginSize
-          let maxX = visibleWidth - offsetWidth - marginSize
-          let minY = marginSize
-          let maxY = visibleHeight - offsetHeight - marginSize
+          const offsetWidth = modalBoxElem.offsetWidth
+          const offsetHeight = modalBoxElem.offsetHeight
+          const minX = marginSize
+          const maxX = visibleWidth - offsetWidth - marginSize
+          const minY = marginSize
+          const maxY = visibleHeight - offsetHeight - marginSize
           let left = evnt.clientX - disX
           let top = evnt.clientY - disY
           if (left > maxX) {
@@ -475,9 +475,9 @@ export default {
           }
           modalBoxElem.style.left = `${left}px`
           modalBoxElem.style.top = `${top}px`
-          modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ` is--drag`
+          modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
         }
-        document.onmouseup = evnt => {
+        document.onmouseup = () => {
           document.onmousemove = demMousemove
           document.onmouseup = demMouseup
           this.$nextTick(() => {
@@ -622,7 +622,7 @@ export default {
             }
             break
         }
-        modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ` is--drag`
+        modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
         if (remember && storage) {
           this.savePosStorage()
         }
@@ -632,7 +632,7 @@ export default {
           events.zoom.call(this, params, evnt)
         }
       }
-      document.onmouseup = evnt => {
+      document.onmouseup = () => {
         this.zoomLocat = null
         document.onmousemove = demMousemove
         document.onmouseup = demMouseup
@@ -642,8 +642,8 @@ export default {
       }
     },
     getStorageMap (key) {
-      let version = GlobalConfig.version
-      let rest = XEUtils.toStringJSON(localStorage.getItem(key))
+      const version = GlobalConfig.version
+      const rest = XEUtils.toStringJSON(localStorage.getItem(key))
       return rest && rest._v === version ? rest : { _v: version }
     },
     hasPosStorage () {
@@ -653,10 +653,10 @@ export default {
     restorePosStorage () {
       const { id, remember, storage, storageKey } = this
       if (remember && storage) {
-        let posStorage = this.getStorageMap(storageKey)[id]
+        const posStorage = this.getStorageMap(storageKey)[id]
         if (posStorage) {
-          let modalBoxElem = this.getBox()
-          let [left, top, width, height, zoomLeft, zoomTop, zoomWidth, zoomHeight] = posStorage.split(',')
+          const modalBoxElem = this.getBox()
+          const [left, top, width, height, zoomLeft, zoomTop, zoomWidth, zoomHeight] = posStorage.split(',')
           if (left) {
             modalBoxElem.style.left = `${left}px`
           }
@@ -683,8 +683,8 @@ export default {
     savePosStorage () {
       const { id, remember, storage, storageKey, zoomLocat } = this
       if (remember && storage) {
-        let modalBoxElem = this.getBox()
-        let posStorageMap = this.getStorageMap(storageKey)
+        const modalBoxElem = this.getBox()
+        const posStorageMap = this.getStorageMap(storageKey)
         posStorageMap[id] = [
           modalBoxElem.style.left,
           modalBoxElem.style.top,

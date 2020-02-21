@@ -1,11 +1,12 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 
-var zindexIndex = 0
-var lastZindex = 0
-var columnUniqueId = 0
+let zindexIndex = 0
+let lastZindex = 0
+let columnUniqueId = 0
 
 class ColumnConfig {
+  /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($table, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
     const $grid = $table.$grid
     const proxyOpts = $grid ? $grid.proxyOpts : null
@@ -98,16 +99,19 @@ class ColumnConfig {
       own: _vm
     })
     if (proxyOpts && proxyOpts.beforeColumn) {
-      proxyOpts.beforeColumn.apply($table, [{ $grid, column: this }])
+      proxyOpts.beforeColumn({ $grid, column: this })
     }
   }
+
   getTitle () {
     // 在 v3.0 中废弃 label、type=index
     return UtilTools.getFuncText(this.own.title || this.own.label || (this.type === 'seq' || this.type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
   }
+
   getKey () {
     return this.property || (this.type ? `type=${this.type}` : null)
   }
+
   update (name, value) {
     // 不支持双向的属性
     if (name !== 'filters') {
@@ -118,7 +122,7 @@ class ColumnConfig {
 
 function outLog (type) {
   return function (message, params) {
-    let msg = UtilTools.getLog(message, params)
+    const msg = UtilTools.getLog(message, params)
     console[type](msg)
     return msg
   }
@@ -148,7 +152,8 @@ export const UtilTools = {
   },
   // 行主键 key
   getRowkey ($table) {
-    let { rowKey, rowId, treeOpts, expandOpts, checkboxOpts, editConfig = {} } = $table
+    const { rowId, treeOpts, expandOpts, checkboxOpts, editConfig = {} } = $table
+    let { rowKey } = $table
     if (!rowKey || !XEUtils.isString(rowKey)) {
       // 在 v2.0 中废弃 key
       rowKey = rowId || checkboxOpts.key || treeOpts.key || expandOpts.key || editConfig.key || GlobalConfig.rowId
@@ -157,20 +162,20 @@ export const UtilTools = {
   },
   // 行主键 value
   getRowid ($table, row, rowIndex) {
-    let rowkey = UtilTools.getRowkey($table)
+    const rowkey = UtilTools.getRowkey($table)
     return `${rowkey ? encodeURIComponent(XEUtils.get(row, rowkey) || '') : rowIndex}`
   },
   // 触发事件
   emitEvent (_vm, type, args) {
     if (_vm.$listeners[type]) {
-      _vm.$emit.apply(_vm, [type].concat(args))
+      _vm.$emit(...([type].concat(args)))
     }
   },
   // 获取所有的列，排除分组
   getColumnList (columns) {
-    let result = []
+    const result = []
     columns.forEach(column => {
-      result.push.apply(result, column.children && column.children.length ? UtilTools.getColumnList(column.children) : [column])
+      result.push(...(column.children && column.children.length ? UtilTools.getColumnList(column.children) : [column]))
     })
     return result
   },
@@ -190,15 +195,15 @@ export const UtilTools = {
     return XEUtils.get(row, column.property)
   },
   getCellLabel (row, column, params) {
-    let { formatter } = column
-    let cellValue = UtilTools.getCellValue(row, column)
+    const { formatter } = column
+    const cellValue = UtilTools.getCellValue(row, column)
     let cellLabel = cellValue
     if (params && formatter) {
       let rest, formatData
-      let { $table } = params
-      let colid = column.id
-      let fullAllDataRowMap = $table.fullAllDataRowMap
-      let cacheFormat = fullAllDataRowMap.has(row)
+      const { $table } = params
+      const colid = column.id
+      const fullAllDataRowMap = $table.fullAllDataRowMap
+      const cacheFormat = fullAllDataRowMap.has(row)
       if (cacheFormat) {
         rest = fullAllDataRowMap.get(row)
         formatData = rest.formatData
@@ -214,7 +219,7 @@ export const UtilTools = {
       if (XEUtils.isString(formatter)) {
         cellLabel = XEUtils[formatter] ? XEUtils[formatter](cellValue) : ''
       } else if (XEUtils.isArray(formatter)) {
-        cellLabel = XEUtils[formatter[0]] ? XEUtils[formatter[0]].apply(XEUtils, [cellValue].concat(formatter.slice(1))) : ''
+        cellLabel = XEUtils[formatter[0]] ? XEUtils[formatter[0]](...([cellValue].concat(formatter.slice(1)))) : ''
       } else {
         cellLabel = formatter(Object.assign({ cellValue }, params))
       }
@@ -238,8 +243,8 @@ export const UtilTools = {
   },
   // 组装列配置
   assemColumn (_vm) {
-    let { $el, $table, $xecolumn, columnConfig } = _vm
-    let groupConfig = $xecolumn ? $xecolumn.columnConfig : null
+    const { $el, $table, $xecolumn, columnConfig } = _vm
+    const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
     if (groupConfig && $xecolumn.$children.length > 0) {
       if (!groupConfig.children) {
@@ -252,8 +257,8 @@ export const UtilTools = {
   },
   // 销毁列
   destroyColumn (_vm) {
-    let { $table, columnConfig } = _vm
-    let matchObj = XEUtils.findTree($table.collectColumn, column => column === columnConfig)
+    const { $table, columnConfig } = _vm
+    const matchObj = XEUtils.findTree($table.collectColumn, column => column === columnConfig)
     if (matchObj) {
       matchObj.items.splice(matchObj.index, 1)
     }

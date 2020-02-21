@@ -348,7 +348,7 @@ export default {
     })
   },
   methods: {
-    toggleExpandChangeEvent ({ row, expanded }) {
+    toggleExpandChangeEvent ({ expanded }) {
       console.log('行展开事件' + expanded)
     }
   }
