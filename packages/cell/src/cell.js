@@ -72,7 +72,7 @@ export const Cell = {
         return compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
       }
     }
-    return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
+    return [UtilTools.formatText(column.getTitle(), 1)]
   },
   renderDefaultCell (h, params) {
     const { $table, row, column } = params

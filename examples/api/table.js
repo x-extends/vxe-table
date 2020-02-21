@@ -654,6 +654,15 @@ const apis = [
         list: []
       },
       {
+        name: 'show-footer-overflow',
+        descKey: 'app.api.table.desc.showFooterOverflow',
+        version: '1.15.21',
+        type: 'Boolean, String',
+        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'sort-method',
         descKey: 'app.api.table.desc.sortMethod',
         disabled: true,

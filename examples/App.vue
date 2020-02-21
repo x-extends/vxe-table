@@ -1912,25 +1912,29 @@ export default {
     },
     showBetaVetsion () {
       const { betaVersionList, stableVersionList } = this
-      if (betaVersionList.length && stableVersionList.length) {
-        const stableNums = stableVersionList[0].version.split('-')[0].split('.')
-        const stable1 = XEUtils.toNumber(stableNums[0])
-        const stable2 = XEUtils.toNumber(stableNums[1])
-        const stable3 = XEUtils.toNumber(stableNums[2])
-        const betaNums = betaVersionList[0].version.split('-')[0].split('.')
-        const beta1 = XEUtils.toNumber(betaNums[0])
-        const beta2 = XEUtils.toNumber(betaNums[1])
-        const beta3 = XEUtils.toNumber(betaNums[2])
-        if (beta1 > stable1) {
-          return true
-        } else if (beta1 === stable1) {
-          if (beta2 > stable2) {
+      if (stableVersionList.length) {
+        if (betaVersionList.length) {
+          const stableNums = stableVersionList[0].version.split('-')[0].split('.')
+          const stable1 = XEUtils.toNumber(stableNums[0])
+          const stable2 = XEUtils.toNumber(stableNums[1])
+          const stable3 = XEUtils.toNumber(stableNums[2])
+          const betaNums = betaVersionList[0].version.split('-')[0].split('.')
+          const beta1 = XEUtils.toNumber(betaNums[0])
+          const beta2 = XEUtils.toNumber(betaNums[1])
+          const beta3 = XEUtils.toNumber(betaNums[2])
+          if (beta1 > stable1) {
             return true
-          } else if (beta2 === stable2) {
-            if (beta3 > stable3) {
+          } else if (beta1 === stable1) {
+            if (beta2 > stable2) {
               return true
+            } else if (beta2 === stable2) {
+              if (beta3 > stable3) {
+                return true
+              }
             }
           }
+        } else {
+          return true
         }
       }
       return false
@@ -1961,7 +1965,7 @@ export default {
           return false
         })
       }
-      return []
+      return stableVersionList
     },
     pageKey () {
       return this.$route.path.split('/')[2]

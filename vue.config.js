@@ -6,7 +6,7 @@ function resolve (dir) {
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '/vxe-table/v1' : '/',
-  outputDir: '../../vxe-table/docs/v1',
+  outputDir: '../../../vxe-table/public/v1',
   assetsDir: 'static',
   productionSourceMap: false,
   configureWebpack: {

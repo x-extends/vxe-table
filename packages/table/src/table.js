@@ -229,6 +229,8 @@ export default {
     showOverflow: { type: [Boolean, String], default: () => GlobalConfig.showOverflow },
     // 设置表头所有内容过长时显示为省略号
     showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderOverflow },
+    // 设置表尾所有内容过长时显示为省略号
+    showFooterOverflow: { type: [Boolean, String], default: () => GlobalConfig.showFooterOverflow },
     // 是否所有服务端筛选
     remoteFilter: Boolean,
     // 是否所有服务端排序
@@ -2004,6 +2006,9 @@ export default {
         }
         if (this.showHeader && !this.showHeaderOverflow) {
           UtilTools.warn('vxe.error.reqProp', ['show-header-overflow'])
+        }
+        if (this.showFooter && !this.showFooterOverflow) {
+          UtilTools.warn('vxe.error.reqProp', ['show-footer-overflow'])
         }
         // if (this.resizable || visibleColumn.some(column => column.resizable)) {
         //   UtilTools.warn('vxe.error.scrollXNotResizable')
