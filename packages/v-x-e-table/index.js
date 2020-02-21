@@ -73,14 +73,6 @@ export const VXETable = {
   menus
 }
 
-// v3.0 中废弃 buttons
-Object.defineProperty(VXETable, 'buttons', {
-  get () {
-    UtilTools.warn('vxe.error.delProp', ['buttons', 'commands'])
-    return commands
-  }
-})
-
 /**
  * 获取当前的 zIndex
  */

@@ -256,11 +256,6 @@ export default {
       actived.column = null
       return (VXETable._valid ? this.clearValidate() : this.$nextTick()).then(this.recalculate)
     },
-    // 在 v3.0 中废弃 getActiveRow
-    _getActiveRow () {
-      // UtilTools.warn('vxe.error.delFunc', ['getActiveRow', 'getActiveRecord'])
-      return this.getActiveRecord()
-    },
     _getActiveRecord () {
       const { $el, editStore, afterFullData } = this
       const { args, row } = editStore.actived
@@ -268,11 +263,6 @@ export default {
         return Object.assign({}, args)
       }
       return null
-    },
-    // 在 v3.0 中废弃 hasActiveRow
-    _hasActiveRow (row) {
-      UtilTools.warn('vxe.error.delFunc', ['hasActiveRow', 'isActiveByRow'])
-      return this.isActiveByRow(row)
     },
     /**
      * 判断行是否为激活编辑状态
@@ -365,8 +355,7 @@ export default {
       const { actived, selected } = editStore
       const { row, column, cell } = params
       const isMouseSelected = mouseConfig && mouseOpts.selected
-      // 在 v3.0 中废弃 mouse-config.checked
-      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && mouseOpts.range
       const selectMethod = () => {
         if ((isMouseSelected || isMouseChecked) && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {

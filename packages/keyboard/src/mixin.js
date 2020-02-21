@@ -146,10 +146,8 @@ export default {
       const { button } = evnt
       const { column, cell } = params
       const isLeftBtn = button === 0
-      // v3.0 废弃 type=index
-      const isIndex = column.type === 'seq' || column.type === 'index'
-      // 在 v3.0 中废弃 mouse-config.checked
-      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isIndex = column.type === 'seq'
+      const isMouseChecked = mouseConfig && mouseOpts.range
       if (mouseConfig) {
         if (isMouseChecked) {
           const headerList = elemStore['main-header-list'].children
@@ -233,10 +231,8 @@ export default {
       const { column, cell } = params
       const { button } = evnt
       const isLeftBtn = button === 0
-      // v3.0 废弃 type=index
-      const isIndex = column.type === 'seq' || column.type === 'index'
-      // 在 v3.0 中废弃 mouse-config.checked
-      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isIndex = column.type === 'seq'
+      const isMouseChecked = mouseConfig && mouseOpts.range
       if (isMouseChecked) {
         this.clearHeaderChecked()
         this.clearIndexChecked()
@@ -367,8 +363,7 @@ export default {
     },
     handleCheckboxRangeEvent (evnt, params) {
       const { column, cell } = params
-      // 在 v3.0 中废弃 type=selection
-      if (['checkbox', 'selection'].indexOf(column.type) > -1) {
+      if (['checkbox'].indexOf(column.type) > -1) {
         const disX = evnt.clientX
         const disY = evnt.clientY
         const checkboxRangeElem = this.$refs.checkboxRange
@@ -418,8 +413,7 @@ export default {
     _clearChecked () {
       const { $refs, editStore, mouseConfig, mouseOpts } = this
       const { checked } = editStore
-      // 在 v3.0 中废弃 mouse-config.checked
-      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && mouseOpts.range
       if (isMouseChecked) {
         const tableBody = $refs.tableBody
         checked.rows = []
@@ -521,15 +515,13 @@ export default {
     },
     handleAllChecked (evnt) {
       const { tableData, visibleColumn, mouseConfig, mouseOpts, elemStore } = this
-      // 在 v3.0 中废弃 mouse-config.checked
-      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && mouseOpts.range
       if (isMouseChecked) {
         evnt.preventDefault()
         const headerListElem = elemStore['main-header-list']
         const headerList = headerListElem.children
         const bodyList = elemStore['main-body-list'].children
-        // v3.0 废弃 type=index
-        const column = XEUtils.find(visibleColumn, column => column.type === 'seq' || column.type === 'index') || visibleColumn[0]
+        const column = XEUtils.find(visibleColumn, column => column.type === 'seq') || visibleColumn[0]
         const cell = headerListElem.querySelector(`.${column.id}`)
         const firstTrElem = bodyList[0]
         const lastTrElem = bodyList[bodyList.length - 1]

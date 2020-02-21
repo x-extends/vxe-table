@@ -22,9 +22,7 @@ export const Cell = {
         renMaps.renderHeader = this.renderRadioHeader
         renMaps.renderCell = treeNode ? this.renderTreeRadioCell : this.renderRadioCell
         break
-      // 在 v3.0 中废弃 type=selection
       case 'checkbox':
-      case 'selection':
         renMaps.renderHeader = this.renderSelectionHeader
         renMaps.renderCell = checkboxOpts.checkField ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
         break
@@ -175,15 +173,14 @@ export const Cell = {
   },
   renderIndexCell (h, params) {
     const { $table, column } = params
-    const { seqOpts, startIndex } = $table
-    const { slots, indexMethod } = column
+    const { seqOpts } = $table
+    const { slots } = column
     if (slots && slots.default) {
       return slots.default.call($table, params, h)
     }
     const { $seq, seq, level } = params
-    // 在 v3.0 中废弃 startIndex、indexMethod
-    const seqMethod = seqOpts.seqMethod || indexMethod
-    return [UtilTools.formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex || startIndex) + seq, 1)]
+    const seqMethod = seqOpts.seqMethod
+    return [UtilTools.formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex) + seq, 1)]
   },
   renderTreeIndexCell (h, params) {
     return Cell.renderTreeIcon(h, params, Cell.renderIndexCell(h, params))
@@ -194,12 +191,11 @@ export const Cell = {
    */
   renderRadioHeader (h, params) {
     const { $table, column } = params
-    const { slots, own } = column
+    const { slots } = column
     if (slots && slots.header) {
       return slots.header.call($table, params, h)
     }
-    // 在 v3.0 中废弃 label
-    return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
+    return [UtilTools.formatText(column.getTitle(), 1)]
   },
   renderRadioCell (h, params) {
     const { $table, column, isHidden } = params
@@ -246,10 +242,9 @@ export const Cell = {
   renderSelectionHeader (h, params) {
     const { $table, column, isHidden } = params
     const { isIndeterminate, isAllCheckboxDisabled } = $table
-    const { slots, own } = column
+    const { slots } = column
     const checkboxOpts = $table.checkboxOpts
-    // 在 v3.0 中废弃 label
-    const headerTitle = own.title || own.label
+    const headerTitle = column.getTitle()
     let isChecked = false
     let on
     if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
@@ -404,20 +399,14 @@ export const Cell = {
           class: ['vxe-table--expand-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.treeLoaded) : (isAceived ? (iconOpen || GlobalConfig.icon.expandOpen) : (iconClose || GlobalConfig.icon.expandClose))]
         })
       ]),
-      slots.content && slots.default ? slots.default.call($table, params, h) : (labelField ? XEUtils.get(row, labelField) : null)
+      slots && slots.default ? slots.default.call($table, params, h) : (labelField ? XEUtils.get(row, labelField) : null)
     ]
   },
   renderExpandData (h, params) {
     const { $table, column } = params
     const { slots } = column
-    if (slots) {
-      if (slots.content) {
-        return slots.content.call($table, params, h)
-      }
-      // 在 v3.0 中严格支持 content
-      if (slots.default) {
-        return slots.default.call($table, params, h)
-      }
+    if (slots && slots.content) {
+      return slots.content.call($table, params, h)
     }
     return []
   },

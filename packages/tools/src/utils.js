@@ -42,12 +42,8 @@ class ColumnConfig {
       // 基本属性
       id: `col_${++columnUniqueId}`,
       type: _vm.type,
-      // 在 v3.0 中废弃 prop
-      prop: _vm.prop,
-      property: _vm.field || _vm.prop,
+      property: _vm.field,
       title: _vm.title,
-      // 在 v3.0 中废弃 label
-      label: _vm.label,
       width: _vm.width,
       minWidth: _vm.minWidth,
       resizable: _vm.resizable,
@@ -105,8 +101,7 @@ class ColumnConfig {
   }
 
   getTitle () {
-    // 在 v3.0 中废弃 label、type=index
-    return UtilTools.getFuncText(this.own.title || this.own.label || (this.type === 'seq' || this.type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
+    return UtilTools.getFuncText(this.own.title || (this.type === 'seq' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
   }
 
   getKey () {

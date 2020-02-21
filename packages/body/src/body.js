@@ -121,8 +121,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
   const isMouseSelected = mouseConfig && mouseOpts.selected
-  // 在 v3.0 中废弃 mouse-config.checked
-  const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+  const isMouseChecked = mouseConfig && mouseOpts.range
   const fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -182,8 +181,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     (editRender && editConfig) ||
     (expandOpts.trigger === 'row' || (expandOpts.trigger === 'cell')) ||
     (radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) ||
-    // 在 v3.0 中废弃 type=selection
-    (checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxOpts.trigger === 'cell')) ||
+    (checkboxOpts.trigger === 'row' || (column.type === 'checkbox' && checkboxOpts.trigger === 'cell')) ||
     (treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
     tdOns.click = evnt => {
       $xetable.triggerCellClickEvent(evnt, { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
@@ -448,8 +446,7 @@ export default {
       emptyOpts,
       keyboardConfig = {}
     } = $xetable
-    // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.range
     // 如果是固定列与设置了超出隐藏
     if (!spanMethod) {
       if (fixedType && allColumnOverflow) {

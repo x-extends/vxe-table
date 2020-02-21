@@ -25,10 +25,9 @@ function hasTreeChildren ($xetable, row) {
 }
 
 function getSeq ($xetable, row, rowIndex, column, columnIndex) {
-  // 在 v3.0 中废弃 startIndex、indexMethod
   const seqOpts = $xetable.seqOpts
-  const seqMethod = seqOpts.seqMethod || column.indexMethod
-  return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : ((seqOpts.startIndex || $xetable.startIndex) + rowIndex + 1)
+  const seqMethod = seqOpts.seqMethod
+  return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : (seqOpts.startIndex + rowIndex + 1)
 }
 
 function getLabelData ($xetable, opts, columns, datas) {
@@ -44,13 +43,9 @@ function getLabelData ($xetable, opts, columns, datas) {
       columns.forEach((column, columnIndex) => {
         let cellValue = ''
         switch (column.type) {
-          // v3.0 废弃 type=index
           case 'seq':
-          case 'index':
             cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
             break
-          // v3.0 废弃 type=selection
-          case 'selection':
           case 'checkbox':
             cellValue = $xetable.isCheckedByCheckboxRow(row)
             break
@@ -88,13 +83,9 @@ function getLabelData ($xetable, opts, columns, datas) {
     columns.forEach((column, columnIndex) => {
       let cellValue = ''
       switch (column.type) {
-        // v3.0 废弃 type=index
         case 'seq':
-        case 'index':
           cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
           break
-        // v3.0 废弃 type=selection
-        case 'selection':
         case 'checkbox':
           cellValue = $xetable.isCheckedByCheckboxRow(row)
           break
@@ -217,10 +208,7 @@ function hasEllipsis ($xetable, column, property, allColumnOverflow) {
 }
 
 function toHtml ($xetable, opts, columns, datas) {
-  const { id, border, treeConfig, treeOpts, isAllSelected, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allShowOverflow, showAllOverflow: oldShowAllOverflow, showHeaderOverflow: allHeaderOverflow, showHeaderAllOverflow: oldHeaderOverflow } = $xetable
-  // v2.0 废弃属性，保留兼容
-  const allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-  const allColumnHeaderOverflow = XEUtils.isBoolean(oldHeaderOverflow) ? oldHeaderOverflow : allHeaderOverflow
+  const { id, border, treeConfig, treeOpts, isAllSelected, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow } = $xetable
   const clss = [
     'vxe-table',
     border ? 't--border' : '',
@@ -586,11 +574,6 @@ function handleImport ($xetable, content, opts) {
 
 export default {
   methods: {
-    // 在 v3.0 中废弃 exportCsv 方法
-    _exportCsv (options) {
-      UtilTools.warn('vxe.error.delFunc', ['exportCsv', 'exportData'])
-      return this.exportData(options)
-    },
     /**
      * 导出文件，支持 csv/html/xml/txt
      * 如果是树表格，则默认是导出所有节点
@@ -610,8 +593,7 @@ export default {
         type: 'csv',
         data: null,
         columns: null,
-        // 在 v3.0 中废弃 type=selection
-        columnFilterMethod: options && options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property,
+        columnFilterMethod: options && options.columns ? null : column => ['seq'].indexOf(column.type) > -1 || column.property,
         dataFilterMethod: null,
         footerFilterMethod: null
       }, GlobalConfig.export, options)
@@ -758,8 +740,7 @@ export default {
     _openExport (options) {
       const { $toolbar, exportConfig, exportOpts, treeConfig, tableFullColumn, footerData } = this
       const selectRecords = this.getCheckboxRecords()
-      // v3.0 废弃 type=index
-      const exportColumns = tableFullColumn.filter(column => ['seq', 'index'].indexOf(column.type) > -1 || column.property)
+      const exportColumns = tableFullColumn.filter(column => ['seq'].indexOf(column.type) > -1 || column.property)
       const isTree = !!treeConfig
       const hasFooter = !!footerData.length
       const defOpts = Object.assign({ message: true, isHeader: true }, exportOpts, options)

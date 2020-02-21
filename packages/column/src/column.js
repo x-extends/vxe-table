@@ -4,10 +4,6 @@ import { UtilTools } from '../../tools'
 const props = {
   // 渲染类型 index,radio,checkbox,expand
   type: String,
-  // 在 v3.0 中废弃 prop
-  prop: String,
-  // 在 v3.0 中废弃 label
-  label: String,
   // 列字段名
   field: String,
   // 列标题

@@ -66,8 +66,6 @@ export default {
     /** 基本属性 */
     // 数据
     data: Array,
-    // （v3.0 废弃）
-    customs: Array,
     // 表格的高度
     height: [Number, String],
     // 表格的最大高度
@@ -92,8 +90,6 @@ export default {
     footerAlign: { type: String, default: () => GlobalConfig.footerAlign },
     // 是否显示表头
     showHeader: { type: Boolean, default: () => GlobalConfig.showHeader },
-    // （v3.0 废弃）
-    startIndex: { type: Number, default: 0 },
     // 是否要高亮当前选中行
     highlightCurrentRow: { type: Boolean, default: () => GlobalConfig.highlightCurrentRow },
     // 鼠标移到行是否要高亮显示
@@ -172,8 +168,6 @@ export default {
     filterConfig: Object,
     // 单选框配置
     radioConfig: Object,
-    // （v3.0 废弃）
-    selectConfig: Object,
     // 复选框配置项
     checkboxConfig: Object,
     // tooltip 配置项
@@ -406,7 +400,7 @@ export default {
       return Object.assign({}, GlobalConfig.radioConfig, this.radioConfig)
     },
     checkboxOpts () {
-      return Object.assign({}, GlobalConfig.checkboxConfig, this.checkboxConfig || this.selectConfig)
+      return Object.assign({}, GlobalConfig.checkboxConfig, this.checkboxConfig)
     },
     tooltipOpts () {
       return Object.assign({ size: this.vSize, leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
@@ -522,19 +516,10 @@ export default {
         }
       })
     },
-    customs (value) {
-      if (!this.isUpdateCustoms) {
-        this.mergeCustomColumn(value)
-      }
-      this.isUpdateCustoms = false
-    },
     collectColumn (value) {
       const tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
-      if (this.customs) {
-        this.mergeCustomColumn(this.customs)
-      }
       this.refreshColumn().then(() => {
         if (this.scrollXLoad) {
           this.loadScrollXData(true)
@@ -543,16 +528,6 @@ export default {
       this.handleTableData(true)
       if (this.$toolbar) {
         this.$toolbar.updateColumns(tableFullColumn)
-      }
-      // 在 v3.0 中废弃 prop、label
-      if (tableFullColumn.length) {
-        const cIndex = Math.floor((tableFullColumn.length - 1) / 2)
-        if (tableFullColumn[cIndex].prop) {
-          UtilTools.warn('vxe.error.delProp', ['prop', 'field'])
-        }
-        if (tableFullColumn[cIndex].label) {
-          UtilTools.warn('vxe.error.delProp', ['label', 'title'])
-        }
       }
       if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
         UtilTools.warn('vxe.error.treeFixedExpand')
@@ -635,9 +610,6 @@ export default {
     }
     if (this.startIndex) {
       UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
-    }
-    if (this.selectConfig) {
-      UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
     if (editOpts.showStatus && !this.keepSource) {
       UtilTools.warn('vxe.error.reqProp', ['keep-source'])
@@ -797,8 +769,7 @@ export default {
       emptyOpts
     } = this
     const { leftList, rightList } = columnStore
-    // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.range
     let emptyContent
     if ($scopedSlots.empty) {
       emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)

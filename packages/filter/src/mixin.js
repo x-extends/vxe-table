@@ -133,12 +133,10 @@ export default {
               dataList.push(item.data)
             }
           })
-          // 在 v3.0 中废弃 prop
-          filterList.push({ column, property, field: property, prop: property, values: valueList, datas: dataList })
+          filterList.push({ column, property, values: valueList, datas: dataList })
         }
       })
-      // 在 v3.0 中废弃 prop
-      UtilTools.emitEvent(this, 'filter-change', [{ column, property, field: property, prop: property, values, datas, filters: filterList, $table: this }])
+      UtilTools.emitEvent(this, 'filter-change', [{ column, property, values, datas, filters: filterList, $table: this }])
       this.updateFooter()
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()

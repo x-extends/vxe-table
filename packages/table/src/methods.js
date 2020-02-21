@@ -20,9 +20,9 @@ function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
 
-function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
+function isTargetRadioOrCheckbox (evnt, column, colType) {
   const target = evnt.target
-  return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === (targetType || colType)
+  return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === colType
 }
 
 const Methods = {
@@ -483,11 +483,6 @@ const Methods = {
   isInsertByRow (row) {
     return this.editStore.insertList.indexOf(row) > -1
   },
-  // 在 v3.0 中废弃 hasRowChange
-  hasRowChange (row, field) {
-    UtilTools.warn('vxe.error.delFunc', ['hasRowChange', 'isUpdateByRow'])
-    return this.isUpdateByRow(row, field)
-  },
   /**
    * 检查行或列数据是否发生改变
    * @param {Row} row 行对象
@@ -557,27 +552,12 @@ const Methods = {
   getTableColumn () {
     return { fullColumn: this.tableFullColumn.slice(0), visibleColumn: this.visibleColumn.slice(0), tableColumn: this.tableColumn.slice(0) }
   },
-  // 在 v3.0 中废弃 getRecords
-  getRecords (...args) {
-    UtilTools.warn('vxe.error.delFunc', ['getRecords', 'getData'])
-    return this.getData(...args)
-  },
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
   getData (rowIndex) {
     const tableSynchData = this.data || this.tableSynchData
     return arguments.length ? tableSynchData[rowIndex] : tableSynchData.slice(0)
-  },
-  // 在 v3.0 中废弃 getAllRecords
-  getAllRecords () {
-    UtilTools.warn('vxe.error.delFunc', ['getAllRecords', 'getRecordset'])
-    return this.getRecordset()
-  },
-  // 在 v3.0 中废弃 getSelectRecords
-  getSelectRecords () {
-    UtilTools.warn('vxe.error.delFunc', ['getSelectRecords', 'getCheckboxRecords'])
-    return this.getCheckboxRecords()
   },
   /**
    * 用于多选行，获取已选中的数据
@@ -689,8 +669,7 @@ const Methods = {
    * 默认行为只允许执行一次
    */
   handleDefaults () {
-    // 在 v3.0 中废弃 selectConfig
-    const checkboxConfig = this.checkboxConfig || this.selectConfig
+    const checkboxConfig = this.checkboxConfig
     if (checkboxConfig) {
       this.handleDefaultSelectionChecked()
     }
@@ -707,28 +686,6 @@ const Methods = {
       this.handleDefaultTreeExpand()
     }
     this.$nextTick(() => setTimeout(this.recalculate))
-  },
-  /**
-   * 动态列处理
-   */
-  mergeCustomColumn (customColumns) {
-    const { tableFullColumn } = this
-    this.isUpdateCustoms = true
-    if (customColumns.length) {
-      tableFullColumn.forEach(column => {
-        // 在 v3.0 中废弃 prop
-        const item = XEUtils.find(customColumns, item => column.property && (item.field || item.prop) === column.property)
-        if (item) {
-          if (XEUtils.isNumber(item.resizeWidth)) {
-            column.resizeWidth = item.resizeWidth
-          }
-          if (XEUtils.isBoolean(item.visible)) {
-            column.visible = item.visible
-          }
-        }
-      })
-    }
-    this.$emit('update:customs', tableFullColumn)
   },
   /**
    * 手动重置列的所有操作，还原到初始状态
@@ -801,16 +758,6 @@ const Methods = {
   resetResizable () {
     UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
     return this.handleResetResizable()
-  },
-  /**
-   * 已废弃的方法
-   */
-  reloadCustoms (customColumns) {
-    UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
-    return this.$nextTick().then(() => {
-      this.mergeCustomColumn(customColumns)
-      return this.refreshColumn().then(() => this.tableFullColumn)
-    })
   },
   /**
    * 刷新列信息
@@ -1357,8 +1304,7 @@ const Methods = {
     const { $el, $refs, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
     const { actived } = editStore
     const { filterWrapper, validTip } = $refs
-    // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.range
     if (filterWrapper) {
       if (DomTools.getEventTargetNode(evnt, $el, 'vxe-filter-wrapper').flag) {
         // 如果点击了筛选按钮
@@ -1475,12 +1421,10 @@ const Methods = {
               this.$nextTick(() => this.handleSelected(params, evnt))
             }
           }
-        } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
-          // 在 v3.0 中废弃 type=selection
+        } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
           // 空格键支持选中复选列
           evnt.preventDefault()
-          // 在 v3.0 中废弃 type=selection
-          if (selected.column.type === 'checkbox' || selected.column.type === 'selection') {
+          if (selected.column.type === 'checkbox') {
             this.handleToggleCheckRowEvent(selected.args, evnt)
           } else {
             this.triggerRadioRowEvent(evnt, selected.args)
@@ -1607,7 +1551,6 @@ const Methods = {
     const { column } = params
     this.handleTargetEnterEvent()
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      // 在 v3.0 中废弃 label
       this.handleTooltip(evnt, column)
     }
   },
@@ -1695,11 +1638,6 @@ const Methods = {
       })
       this.setCheckboxRow(defSelection, true)
     }
-  },
-  // 在 v3.0 中废弃 setSelection
-  setSelection (rows, value) {
-    UtilTools.warn('vxe.error.delFunc', ['setSelection', 'setCheckboxRow'])
-    return this.setCheckboxRow(rows, value)
   },
   /**
    * 用于多选行，设置行为选中状态，第二个参数为选中与否
@@ -1825,19 +1763,8 @@ const Methods = {
     const { checkMethod } = this.checkboxOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
       this.handleSelectRow(params, value)
-      // 在 v3.0 中废弃 select-change
-      if (this.$listeners['select-change']) {
-        UtilTools.warn('vxe.error.delEvent', ['select-change', 'checkbox-change'])
-        UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
-      } else {
-        UtilTools.emitEvent(this, 'checkbox-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
-      }
+      UtilTools.emitEvent(this, 'checkbox-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
     }
-  },
-  // 在 v3.0 中废弃 toggleRowSelection
-  toggleRowSelection (row) {
-    UtilTools.warn('vxe.error.delFunc', ['toggleRowSelection', 'toggleCheckboxRow'])
-    return this.toggleCheckboxRow(row)
   },
   /**
    * 多选，切换某一行的选中状态
@@ -1845,11 +1772,6 @@ const Methods = {
   toggleCheckboxRow (row) {
     this.handleToggleCheckRowEvent({ row })
     return this.$nextTick()
-  },
-  // 在 v3.0 中废弃 setAllSelection
-  setAllSelection (value) {
-    UtilTools.warn('vxe.error.delFunc', ['setAllSelection', 'setAllCheckboxRow'])
-    return this.setAllCheckboxRow(value)
   },
   /**
    * 用于多选行，设置所有行的选中状态
@@ -1990,11 +1912,6 @@ const Methods = {
       }
     })
   },
-  // 在 v3.0 中废弃 getSelectReserveRecords
-  getSelectReserveRecords () {
-    UtilTools.warn('vxe.error.delFunc', ['getSelectReserveRecords', 'getCheckboxReserveRecords'])
-    return this.getCheckboxReserveRecords()
-  },
   /**
    * 获取保留选中的行
    */
@@ -2009,11 +1926,6 @@ const Methods = {
       })
     }
     return reserveSelection
-  },
-  // 在 v3.0 中废弃 clearSelectReserve
-  clearSelectReserve () {
-    UtilTools.warn('vxe.error.delFunc', ['clearSelectReserve', 'clearCheckboxReserve'])
-    return this.clearCheckboxReserve()
   },
   clearCheckboxReserve () {
     this.selectReserveRowMap = {}
@@ -2036,18 +1948,7 @@ const Methods = {
    */
   triggerCheckAllEvent (evnt, value) {
     this.setAllCheckboxRow(value)
-    // 在 v3.0 中废弃 select-all
-    if (this.$listeners['select-all']) {
-      UtilTools.warn('vxe.error.delEvent', ['select-all', 'checkbox-all'])
-      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
-    } else {
-      UtilTools.emitEvent(this, 'checkbox-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
-    }
-  },
-  // 在 v3.0 中废弃 toggleAllSelection
-  toggleAllSelection () {
-    UtilTools.warn('vxe.error.delFunc', ['toggleAllSelection', 'toggleAllCheckboxRow'])
-    return this.toggleAllCheckboxRow()
+    UtilTools.emitEvent(this, 'checkbox-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
   },
   /**
    * 多选，切换所有行的选中状态
@@ -2055,11 +1956,6 @@ const Methods = {
   toggleAllCheckboxRow () {
     this.triggerCheckAllEvent(null, !this.isAllSelected)
     return this.$nextTick()
-  },
-  // 在 v3.0 中废弃 clearSelection
-  clearSelection () {
-    UtilTools.warn('vxe.error.delFunc', ['clearSelection', 'clearCheckboxRow'])
-    return this.clearCheckboxRow()
   },
   /**
    * 用于多选行，手动清空用户的选择
@@ -2154,21 +2050,11 @@ const Methods = {
     this.selectRow = null
     return this.$nextTick()
   },
-  // 在 v3.0 中废弃 getCurrentRow
-  getCurrentRow () {
-    UtilTools.warn('vxe.error.delFunc', ['getCurrentRow', 'getCurrentRecord'])
-    return this.getCurrentRecord()
-  },
   /**
    * 用于当前行，获取当前行的数据
    */
   getCurrentRecord () {
     return this.currentRow
-  },
-  // 在 v3.0 中废弃 getRadioRow
-  getRadioRow () {
-    UtilTools.warn('vxe.error.delFunc', ['getRadioRow', 'getRadioRecord'])
-    return this.getRadioRecord()
   },
   /**
    * 用于单选行，获取当已选中的数据
@@ -2252,11 +2138,9 @@ const Methods = {
     const { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts, mouseConfig, mouseOpts } = this
     const { actived } = editStore
     const { row, column } = params
-    // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.range
     // 解决 checkbox 重复触发两次问题
-    if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
-      // 在 v3.0 中废弃 type=selection
+    if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox')) {
       return
     }
     // 如果是展开行
@@ -2279,8 +2163,7 @@ const Methods = {
         this.triggerRadioRowEvent(evnt, params)
       }
       // 如果是复选框
-      if ((checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-cell--checkbox').flag) {
-        // 在 v3.0 中废弃 type=selection
+      if ((checkboxOpts.trigger === 'row' || (column.type === 'checkbox' && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-cell--checkbox').flag) {
         this.handleToggleCheckRowEvent(params, evnt)
       }
       // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
@@ -2453,19 +2336,13 @@ const Methods = {
    * 展开行事件
    */
   triggerRowExpandEvent (evnt, params) {
-    const { $listeners, expandOpts, expandLazyLoadeds } = this
+    const { expandOpts, expandLazyLoadeds } = this
     const { row } = params
     const { lazy } = expandOpts
     if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
       const expanded = !this.isExpandByRow(row)
       this.setRowExpansion(row, expanded)
-      // 在 v3.0 中废弃 toggle-expand-change
-      if ($listeners['toggle-expand-change']) {
-        UtilTools.warn('vxe.error.delEvent', ['toggle-expand-change', 'toggle-row-expand'])
-        UtilTools.emitEvent(this, 'toggle-expand-change', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
-      } else {
-        UtilTools.emitEvent(this, 'toggle-row-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
-      }
+      UtilTools.emitEvent(this, 'toggle-row-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
     }
   },
   /**
@@ -2555,11 +2432,6 @@ const Methods = {
     this.rowExpandeds = rowExpandeds
     return Promise.all(result).then(this.recalculate)
   },
-  // 在 v3.0 中废弃 getRecords
-  hasRowExpand (row) {
-    UtilTools.warn('vxe.error.delFunc', ['hasRowExpand', 'isExpandByRow'])
-    return this.isExpandByRow(row)
-  },
   /**
    * 判断行是否为展开状态
    * @param {Row} row 行对象
@@ -2628,19 +2500,13 @@ const Methods = {
    * 展开树节点事件
    */
   triggerTreeExpandEvent (evnt, params) {
-    const { $listeners, treeOpts, treeLazyLoadeds } = this
+    const { treeOpts, treeLazyLoadeds } = this
     const { row } = params
     const { lazy } = treeOpts
     if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
       const expanded = !this.isTreeExpandByRow(row)
       this.setTreeExpansion(row, expanded)
-      // 在 v3.0 中废弃 toggle-tree-change
-      if ($listeners['toggle-tree-change']) {
-        UtilTools.warn('vxe.error.delEvent', ['toggle-tree-change', 'toggle-tree-expand'])
-        UtilTools.emitEvent(this, 'toggle-tree-change', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
-      } else {
-        UtilTools.emitEvent(this, 'toggle-tree-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
-      }
+      UtilTools.emitEvent(this, 'toggle-tree-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
     }
   },
   /**
@@ -2770,11 +2636,6 @@ const Methods = {
       }
     }
     return Promise.resolve()
-  },
-  // 在 v3.0 中废弃 hasTreeExpand
-  hasTreeExpand (row) {
-    UtilTools.warn('vxe.error.delFunc', ['hasTreeExpand', 'isTreeExpandByRow'])
-    return this.isTreeExpandByRow(row)
   },
   /**
    * 判断行是否为树形节点展开状态
@@ -3222,7 +3083,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

@@ -202,21 +202,12 @@ export default {
     }
   },
   created () {
-    const { customs, data, proxyConfig, proxyOpts } = this
-    const { props } = proxyOpts
+    const { customs, data, proxyConfig } = this
     if (customs) {
       UtilTools.warn('vxe.error.removeProp', ['customs'])
     }
     if (data && proxyConfig) {
       console.warn('[vxe-grid] There is a conflict between the props proxy-config and data.')
-    }
-    // v3.0 中废弃 proxy-config.index
-    if (proxyOpts.index) {
-      UtilTools.warn('vxe.error.delProp', ['proxy-config.index', 'proxy-config.seq'])
-    }
-    // （v3.0 中废弃 proxyConfig.props.data）
-    if (props && props.data) {
-      UtilTools.warn('vxe.error.delProp', ['proxy-config.props.data', 'proxy-config.props.result'])
     }
   },
   mounted () {

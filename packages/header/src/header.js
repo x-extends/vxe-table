@@ -126,8 +126,7 @@ export default {
       sortOpts
     } = $xetable
     const isMouseSelected = mouseConfig && mouseOpts.selected
-    // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.range
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {
