@@ -57,6 +57,7 @@ class ColumnConfig {
       footerAlign: _vm.footerAlign,
       showOverflow: _vm.showOverflow,
       showHeaderOverflow: _vm.showHeaderOverflow,
+      showFooterOverflow: _vm.showFooterOverflow,
       className: _vm.class || _vm.className,
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,

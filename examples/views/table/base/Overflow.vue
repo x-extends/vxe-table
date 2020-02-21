@@ -9,7 +9,9 @@
     </p>
 
     <vxe-table
+      show-footer
       highlight-hover-row
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
@@ -18,7 +20,7 @@
           <span>111111111111 111111111111111111 22222222222222222222222222222222222</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="age" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
+      <vxe-table-column field="rate" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
         <template v-slot:header>
           <span>33333333333333333333333333 5555555555555555555555555555555555555555555555</span>
         </template>
@@ -37,19 +39,21 @@
 
     <vxe-table
       border
+      show-footer
       show-header-overflow
       highlight-hover-row
+      :footer-method="footerMethod"
       :data="tableData"
       :tooltip-config="{theme: 'light'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-overflow></vxe-table-column>
-      <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title">
+      <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title" show-footer-overflow>
         <template>
           <span>111111111111 111111111111111111 22222222222222222222222222222222222</span>
         </template>
       </vxe-table-column>
       <vxe-table-column title="基本信息">
-        <vxe-table-column field="age" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
+        <vxe-table-column field="rate" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
           <template v-slot:header>
             <span>33333333333333333333333333 5555555555555555555555555555555555555555555555</span>
           </template>
@@ -70,6 +74,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -79,7 +84,9 @@ export default {
       demoCodes: [
         `
         <vxe-table
+          show-footer
           highlight-hover-row
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
@@ -88,7 +95,7 @@ export default {
               <span>111111111111 111111111111111111 22222222222222222222222222222222222</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="age" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
+          <vxe-table-column field="rate" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
             <template v-slot:header>
               <span>33333333333333333333333333 5555555555555555555555555555555555555555555555</span>
             </template>
@@ -105,14 +112,35 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods:{
+            footerMethod ({ columns, data }) {
+              const footerData = [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '合计'
+                  }
+                  if (['date'].includes(column.property)) {
+                    return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+                  }
+                  if (['rate'].includes(column.property)) {
+                    return XEUtils.sum(data, column.property)
+                  }
+                  return null
+                })
+              ]
+              return footerData
+            }
           }
         }
         `,
         `
         <vxe-table
           border
+          show-footer
           show-header-overflow
           highlight-hover-row
+          :footer-method="footerMethod"
           :data="tableData"
           :tooltip-config="{theme: 'light'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -123,7 +151,7 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column title="基本信息">
-            <vxe-table-column field="age" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
+            <vxe-table-column field="rate" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title" show-footer-overflow>
               <template v-slot:header>
                 <span>33333333333333333333333333 5555555555555555555555555555555555555555555555</span>
               </template>
@@ -143,6 +171,25 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods:{
+            footerMethod ({ columns, data }) {
+              const footerData = [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '合计'
+                  }
+                  if (['date'].includes(column.property)) {
+                    return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+                  }
+                  if (['rate'].includes(column.property)) {
+                    return XEUtils.sum(data, column.property)
+                  }
+                  return null
+                })
+              ]
+              return footerData
+            }
           }
         }
         `
@@ -156,6 +203,25 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    footerMethod ({ columns, data }) {
+      const footerData = [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '合计'
+          }
+          if (['date'].includes(column.property)) {
+            return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+          }
+          if (['rate'].includes(column.property)) {
+            return XEUtils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
+      return footerData
+    }
   }
 }
 </script>

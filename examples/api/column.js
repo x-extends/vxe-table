@@ -191,6 +191,15 @@ const apis = [
         list: []
       },
       {
+        name: 'show-footer-overflow',
+        descKey: 'app.api.tableColumn.desc.showFooterOverflow',
+        version: '2.8.2',
+        type: 'Boolean, String',
+        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
+        defVal: '继承 table.show-footer-overflow',
+        list: []
+      },
+      {
         name: 'class-name',
         descKey: 'app.api.tableColumn.desc.className',
         version: '2.6',
