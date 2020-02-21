@@ -82,7 +82,7 @@ const apis = [
       {
         name: 'align',
         descKey: 'app.api.pager.desc.align',
-        version: '2.2.4',
+        version: '',
         type: 'String',
         enum: 'left（左对其）, center（居中对其）, right（右对齐）',
         defVal: '默认 right，继承 setup.pager.align',
@@ -91,7 +91,7 @@ const apis = [
       {
         name: 'border',
         descKey: 'app.api.pager.desc.border',
-        version: '2.6.14',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: '默认 false，继承 setup.pager.border',
@@ -109,7 +109,7 @@ const apis = [
       {
         name: 'perfect',
         descKey: 'app.api.pager.desc.perfect',
-        version: '2.6.14',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: '默认 false，继承 setup.pager.perfect',
@@ -118,7 +118,7 @@ const apis = [
       {
         name: 'icon-prev-page',
         descKey: 'app.api.pager.desc.iconPrevPage',
-        version: '2.7.0',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -127,7 +127,7 @@ const apis = [
       {
         name: 'icon-jump-prev',
         descKey: 'app.api.pager.desc.iconJumpPrev',
-        version: '2.7.0',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -136,7 +136,7 @@ const apis = [
       {
         name: 'icon-jump-next',
         descKey: 'app.api.pager.desc.iconJumpNext',
-        version: '2.7.0',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -145,7 +145,7 @@ const apis = [
       {
         name: 'iconnext-page',
         descKey: 'app.api.pager.desc.iconNextPage',
-        version: '2.7.0',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -154,7 +154,7 @@ const apis = [
       {
         name: 'icon-jump-more',
         descKey: 'app.api.pager.desc.iconJumpMore',
-        version: '2.7.0',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',

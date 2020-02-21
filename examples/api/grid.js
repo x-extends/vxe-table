@@ -21,7 +21,7 @@ const apis = [
       {
         name: 'form-config',
         descKey: 'app.api.grid.desc.formConfig',
-        version: '2.8',
+        version: '',
         type: 'Boolean, Object',
         enum: '',
         defVal: '',
@@ -47,7 +47,7 @@ const apis = [
         list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
           name: 'zoom',
           desc: '是否允许最大化显示',
-          version: '2.7.0',
+          version: '',
           type: 'Boolean, Object',
           enum: '',
           defVal: '',
@@ -118,19 +118,9 @@ const apis = [
             list: []
           },
           {
-            name: 'index',
-            disabled: true,
-            desc: '即将废弃，请使用 seq',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
             name: 'seq',
             desc: '存在 type=index 列时有效，是否代理动态序号（根据分页动态变化）',
-            version: '2.7.12',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -157,7 +147,7 @@ const apis = [
           {
             name: 'form',
             desc: '是否代理表单',
-            version: '2.8',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -252,7 +242,7 @@ const apis = [
       {
         name: 'form',
         desc: '只对 form-config 配置时有效，表单模板',
-        version: '2.7.19',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -261,7 +251,7 @@ const apis = [
       {
         name: 'top',
         desc: '表格顶部模板',
-        version: '2.8',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -270,7 +260,7 @@ const apis = [
       {
         name: 'bottom',
         desc: '表格底部模板',
-        version: '2.8',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -279,7 +269,7 @@ const apis = [
       {
         name: 'pager',
         desc: '只对 pager-config 配置时有效，分页模板',
-        version: '2.7.19',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -288,7 +278,7 @@ const apis = [
       {
         name: 'buttons',
         desc: '只对 toolbar 配置时有效，工具栏按钮列表模板',
-        version: '2.7.15',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -297,7 +287,7 @@ const apis = [
       {
         name: 'tools',
         desc: '只对 toolbar 配置时有效，工具栏右侧按钮列表',
-        version: '2.7.15',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -352,7 +342,7 @@ const apis = [
       {
         name: 'form-submit',
         desc: '只对 form-config 配置时有效，表单提交时会触发该事件',
-        version: '2.8',
+        version: '',
         type: '',
         enum: '',
         defVal: '{data}, event',
@@ -361,7 +351,7 @@ const apis = [
       {
         name: 'form-submit-invalid',
         desc: '只对 form-config 配置时有效，表单提交时如果校验不通过会触发该事件',
-        version: '2.8',
+        version: '',
         type: '',
         enum: '',
         defVal: '{data, errMap}, event',
@@ -370,7 +360,7 @@ const apis = [
       {
         name: 'form-reset',
         desc: '只对 form-config 配置时有效，表单重置时会触发该事件',
-        version: '2.8',
+        version: '',
         type: '',
         enum: '',
         defVal: '{data}, event',
@@ -379,7 +369,7 @@ const apis = [
       {
         name: 'form-toggle-collapse',
         desc: '只对 form-config 配置时有效，当折叠按钮被手动点击时会触发该事件',
-        version: '2.8',
+        version: '',
         type: '',
         enum: '',
         defVal: '{collapse, data}, event',
@@ -416,7 +406,7 @@ const apis = [
       {
         name: 'zoom()',
         desc: '切换表格最大化/还原',
-        version: '2.7.0',
+        version: '',
         type: 'Promise<status>',
         enum: '',
         defVal: '',
@@ -425,7 +415,7 @@ const apis = [
       {
         name: 'isMaximized()',
         desc: '判断是否最大化显示',
-        version: '2.7.0',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: '',

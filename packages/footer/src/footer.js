@@ -35,7 +35,7 @@ export default {
       align: allAlign,
       scrollXLoad,
       columnKey,
-      showOverflow: allColumnOverflow,
+      showFooterOverflow: allColumnFooterOverflow,
       currentColumn,
       overflowX,
       scrollbarWidth,
@@ -43,7 +43,7 @@ export default {
     } = $xetable
     // 如果是使用优化模式
     if (!footerSpanMethod) {
-      if (fixedType && allColumnOverflow) {
+      if (fixedType && allColumnFooterOverflow) {
         tableColumn = fixedColumn
       } else if (scrollXLoad) {
         if (fixedType) {
@@ -103,14 +103,14 @@ export default {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowClassName : ''],
             style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowStyle) : null
           }, tableColumn.map((column, $columnIndex) => {
-            const { showOverflow, footerAlign, align, footerClassName } = column
+            const { showFooterOverflow, footerAlign, align, footerClassName } = column
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
-            const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+            const footOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
             const footAlign = footerAlign || align || allFooterAlign || allAlign
-            const showEllipsis = cellOverflow === 'ellipsis'
-            const showTitle = cellOverflow === 'title'
-            const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+            const showEllipsis = footOverflow === 'ellipsis'
+            const showTitle = footOverflow === 'title'
+            const showTooltip = footOverflow === true || footOverflow === 'tooltip'
             const hasEllipsis = showTitle || showTooltip || showEllipsis
             const attrs = { 'data-colid': column.id }
             const tfOns = {}

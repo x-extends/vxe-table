@@ -28,7 +28,7 @@ const apis = [
       {
         name: 'trigger',
         descKey: 'app.api.tooltip.desc.trigger',
-        version: '2.1.4',
+        version: '',
         type: 'String',
         enum: 'manual, hover, click',
         defVal: 'hover',
@@ -64,7 +64,7 @@ const apis = [
       {
         name: 'enterable',
         descKey: 'app.api.tooltip.desc.enterable',
-        version: '2.6.7',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -73,7 +73,7 @@ const apis = [
       {
         name: 'leaveDelay',
         descKey: 'app.api.tooltip.desc.leaveDelay',
-        version: '2.6.7',
+        version: '',
         type: 'Number',
         enum: '',
         defVal: '300',

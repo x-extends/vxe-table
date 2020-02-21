@@ -19,7 +19,7 @@ const apis = [
       {
         name: 'label',
         descKey: 'app.api.checkbox.desc.label',
-        version: '2.8',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',

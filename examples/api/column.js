@@ -16,28 +16,8 @@ const apis = [
         defVal: '',
         list: [
           {
-            name: 'index',
-            disabled: true,
-            descKey: 'app.api.tableColumn.desc.index',
-            version: '',
-            type: '',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
             name: 'seq',
             descKey: 'app.api.tableColumn.desc.seq',
-            version: '2.7',
-            type: '',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'selection',
-            descKey: 'app.api.tableColumn.desc.selection',
-            disabled: true,
             version: '',
             type: '',
             enum: '',
@@ -47,7 +27,7 @@ const apis = [
           {
             name: 'checkbox',
             descKey: 'app.api.tableColumn.desc.checkbox',
-            version: '2.6',
+            version: '',
             type: '',
             enum: '',
             defVal: '',
@@ -74,7 +54,7 @@ const apis = [
           {
             name: 'html',
             descKey: 'app.api.tableColumn.desc.html',
-            version: '2.7.6',
+            version: '',
             type: '',
             enum: '',
             defVal: '',
@@ -130,7 +110,7 @@ const apis = [
       {
         name: 'visible',
         descKey: 'app.api.tableColumn.desc.visible',
-        version: '2.7',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: '',
@@ -191,9 +171,18 @@ const apis = [
         list: []
       },
       {
+        name: 'show-footer-overflow',
+        descKey: 'app.api.tableColumn.desc.showFooterOverflow',
+        version: '',
+        type: 'Boolean, String',
+        enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
+        defVal: '继承 table.show-footer-overflow',
+        list: []
+      },
+      {
         name: 'class-name',
         descKey: 'app.api.tableColumn.desc.className',
-        version: '2.6',
+        version: '',
         type: 'String, Function',
         enum: '',
         defVal: '',
@@ -202,7 +191,7 @@ const apis = [
       {
         name: 'header-class-name',
         descKey: 'app.api.tableColumn.desc.headerClassName',
-        version: '2.6',
+        version: '',
         type: 'String, Function',
         enum: '',
         defVal: '',
@@ -211,7 +200,7 @@ const apis = [
       {
         name: 'footer-class-name',
         descKey: 'app.api.tableColumn.desc.footerClassName',
-        version: '2.6',
+        version: '',
         type: 'String, Function',
         enum: '',
         defVal: '',
@@ -256,7 +245,7 @@ const apis = [
       {
         name: 'sort-method',
         descKey: 'app.api.tableColumn.desc.sortMethod',
-        version: '2.3.3',
+        version: '',
         type: 'Function',
         enum: '',
         defVal: '',
@@ -573,7 +562,7 @@ const apis = [
           {
             name: 'defaultValue',
             desc: '默认值（插入数据时列的默认值）',
-            version: '2.3.3',
+            version: '',
             type: 'Any',
             enum: '',
             defVal: 'null',
@@ -582,7 +571,7 @@ const apis = [
           {
             name: 'immediate',
             desc: '输入值实时同步更新（如果设置为 true，但可编辑时性能将会直线下降）',
-            version: '2.6.2',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -639,7 +628,7 @@ const apis = [
       {
         name: 'footer',
         desc: '自定义表尾内容的模板',
-        version: '2.8.0',
+        version: '',
         type: '',
         enum: '',
         defVal: '{column,columnIndex,$columnIndex,cells,cellIndex}, h',
@@ -648,7 +637,7 @@ const apis = [
       {
         name: 'content',
         desc: '只对 type=expand 有效，自定义展开后的内容模板',
-        version: '2.7.0',
+        version: '',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
@@ -675,7 +664,7 @@ const apis = [
       {
         name: 'icon',
         desc: '只对 type=expand 或 tree-node 有效，自定义图标模板',
-        version: '2.7.0',
+        version: '',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',

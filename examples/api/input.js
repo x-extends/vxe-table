@@ -137,7 +137,7 @@ const apis = [
       {
         name: 'clear',
         desc: '在点击右侧清除按钮时触发该事件',
-        version: '2.8',
+        version: '',
         type: '',
         enum: '',
         defVal: '{}, event',

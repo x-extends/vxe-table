@@ -10,7 +10,7 @@ const apis = [
       {
         name: 'type',
         descKey: 'app.api.button.desc.type',
-        version: '2 | 2.8',
+        version: '',
         type: '',
         enum: 'text,submit,reset,button',
         defVal: 'button',
@@ -37,7 +37,7 @@ const apis = [
       {
         name: 'status',
         descKey: 'app.api.button.desc.status',
-        version: '2.8',
+        version: '',
         type: 'String',
         enum: 'primary',
         defVal: '',
@@ -55,7 +55,7 @@ const apis = [
       {
         name: 'loading',
         descKey: 'app.api.button.desc.loading',
-        version: '2.5.18',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',

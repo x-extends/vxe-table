@@ -19,7 +19,7 @@ const apis = [
       {
         name: 'loading',
         descKey: 'app.api.form.desc.loading',
-        version: '2.8',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',

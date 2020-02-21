@@ -37,7 +37,7 @@ const apis = [
       {
         name: 'import',
         descKey: 'app.api.toolbar.desc.import',
-        version: '2.6.14',
+        version: '',
         type: 'Boolean, Object',
         enum: '',
         defVal: '默认继承 setup.toolbar.import',
@@ -72,7 +72,7 @@ const apis = [
           {
             name: 'icon',
             desc: '自定义图标',
-            version: '2.7.0',
+            version: '',
             type: 'String',
             enum: '',
             defVal: '',
@@ -83,7 +83,7 @@ const apis = [
       {
         name: 'export',
         descKey: 'app.api.toolbar.desc.export',
-        version: '2.6.14',
+        version: '',
         type: 'Boolean, Object',
         enum: '',
         defVal: '默认继承 setup.toolbar.export',
@@ -145,7 +145,7 @@ const apis = [
           {
             name: 'icon',
             desc: '自定义图标',
-            version: '2.7.0',
+            version: '',
             type: 'String',
             enum: '',
             defVal: '',
@@ -173,7 +173,7 @@ const apis = [
           {
             name: 'icon',
             desc: '自定义图标',
-            version: '2.7.0',
+            version: '',
             type: 'String',
             enum: '',
             defVal: '',
@@ -182,7 +182,7 @@ const apis = [
           {
             name: 'iconLoading',
             desc: '自定义加载中图标',
-            version: '2.7.0',
+            version: '',
             type: 'String',
             enum: '',
             defVal: '',
@@ -210,19 +210,9 @@ const apis = [
         ]
       },
       {
-        name: 'setting',
-        disabled: true,
-        descKey: 'app.api.toolbar.desc.setting',
-        version: '',
-        type: 'Boolean, Object',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'custom',
         descKey: 'app.api.toolbar.desc.custom',
-        version: '2.7.0',
+        version: '',
         type: 'Boolean, Object',
         enum: '',
         defVal: '默认继承 setup.toolbar.custom',
@@ -257,7 +247,7 @@ const apis = [
           {
             name: 'checkMethod',
             desc: '是否允许选中的方法，该方法 Function({column}) 的返回值用来决定这一列的 checkbox 是否可以选中',
-            version: '2.6.19',
+            version: '',
             type: 'Function',
             enum: '',
             defVal: '',
@@ -266,7 +256,7 @@ const apis = [
           {
             name: 'isFooter',
             desc: '是否显示底部操作按钮',
-            version: '2.7.0',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'true',
@@ -275,7 +265,7 @@ const apis = [
           {
             name: 'icon',
             desc: '自定义图标',
-            version: '2.7.0',
+            version: '',
             type: 'String',
             enum: '',
             defVal: '',
@@ -330,7 +320,7 @@ const apis = [
           {
             name: 'icon ',
             desc: '按钮图标',
-            version: '2.7.0',
+            version: '',
             type: 'String',
             enum: '',
             defVal: '',
@@ -383,7 +373,7 @@ const apis = [
               {
                 name: 'icon ',
                 desc: '按钮图标',
-                version: '2.7.0',
+                version: '',
                 type: 'String',
                 enum: '',
                 defVal: '',
@@ -394,7 +384,7 @@ const apis = [
           {
             name: 'buttonRender ',
             desc: '按钮渲染器配置项',
-            version: '2.8',
+            version: '',
             type: 'Object',
             enum: '',
             defVal: '',

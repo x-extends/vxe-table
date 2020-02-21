@@ -28,7 +28,7 @@ const apis = [
       {
         name: 'loading',
         descKey: 'app.api.modal.desc.loading',
-        version: '2.8',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -73,7 +73,7 @@ const apis = [
       {
         name: 'iconStatus',
         descKey: 'app.api.modal.desc.iconStatus',
-        version: '2.7.0',
+        version: '',
         type: 'String',
         enum: '',
         defVal: '',
@@ -154,7 +154,7 @@ const apis = [
       {
         name: 'resize',
         descKey: 'app.api.modal.desc.resize',
-        version: '2.4.3',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -190,7 +190,7 @@ const apis = [
       {
         name: 'min-width',
         descKey: 'app.api.modal.desc.minWidth',
-        version: '2.5.15',
+        version: '',
         type: 'Number, String',
         enum: '',
         defVal: '',
@@ -199,7 +199,7 @@ const apis = [
       {
         name: 'min-height',
         descKey: 'app.api.modal.desc.minHeight',
-        version: '2.5.15',
+        version: '',
         type: 'Number, String',
         enum: '',
         defVal: '',
@@ -226,7 +226,7 @@ const apis = [
       {
         name: 'show-title-overflow',
         descKey: 'app.api.modal.desc.showTitleOverflow',
-        version: '2.8',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -235,7 +235,7 @@ const apis = [
       {
         name: 'fullscreen',
         descKey: 'app.api.modal.desc.fullscreen',
-        version: '2.5.18',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -244,7 +244,7 @@ const apis = [
       {
         name: 'dblclickZoom',
         descKey: 'app.api.modal.desc.dblclickZoom',
-        version: '2.6.0',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'true',
@@ -253,7 +253,7 @@ const apis = [
       {
         name: 'remember',
         descKey: 'app.api.modal.desc.remember',
-        version: '2.7.0',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -262,7 +262,7 @@ const apis = [
       {
         name: 'destroy-on-close',
         descKey: 'app.api.modal.desc.destroyOnClose',
-        version: '2.7.21',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -271,7 +271,7 @@ const apis = [
       {
         name: 'storage',
         descKey: 'app.api.modal.desc.storage',
-        version: '2.8',
+        version: '',
         type: 'Boolean',
         enum: '',
         defVal: 'false',
@@ -299,7 +299,7 @@ const apis = [
       {
         name: 'header',
         desc: '窗口头部的模板（如果使用了，则 solt title 无效）',
-        version: '2.6.1',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -308,7 +308,7 @@ const apis = [
       {
         name: 'title',
         desc: '窗口标题的模板',
-        version: '2.6.1',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -336,7 +336,7 @@ const apis = [
       {
         name: 'inserted',
         desc: '在窗口元素插入父节点时会触发该事件（只会执行一次）',
-        version: '2.6.6',
+        version: '',
         type: '{type}',
         enum: '',
         defVal: '',
@@ -418,7 +418,7 @@ const apis = [
       {
         name: 'getBox()',
         desc: '获取当前窗口元素',
-        version: '2.5.11',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -427,7 +427,7 @@ const apis = [
       {
         name: 'maximize()',
         desc: '如果窗口处于常规状态，则最大化窗口',
-        version: '2.5.16',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -436,7 +436,7 @@ const apis = [
       {
         name: 'revert()',
         desc: '如果窗口处于最大化状态，则还原窗口',
-        version: '2.5.16',
+        version: '',
         type: '',
         enum: '',
         defVal: '',

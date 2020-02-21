@@ -104,7 +104,7 @@ export default {
       tableData: [],
       betaVersionList: [],
       stableVersionList: [],
-      version: '2',
+      version: '3',
       usedJSHeapSize: 0,
       tableList: [
         {
@@ -1913,25 +1913,29 @@ export default {
     },
     showBetaVetsion () {
       const { betaVersionList, stableVersionList } = this
-      if (betaVersionList.length && stableVersionList.length) {
-        const stableNums = stableVersionList[0].version.split('-')[0].split('.')
-        const stable1 = XEUtils.toNumber(stableNums[0])
-        const stable2 = XEUtils.toNumber(stableNums[1])
-        const stable3 = XEUtils.toNumber(stableNums[2])
-        const betaNums = betaVersionList[0].version.split('-')[0].split('.')
-        const beta1 = XEUtils.toNumber(betaNums[0])
-        const beta2 = XEUtils.toNumber(betaNums[1])
-        const beta3 = XEUtils.toNumber(betaNums[2])
-        if (beta1 > stable1) {
-          return true
-        } else if (beta1 === stable1) {
-          if (beta2 > stable2) {
+      if (stableVersionList.length) {
+        if (betaVersionList.length) {
+          const stableNums = stableVersionList[0].version.split('-')[0].split('.')
+          const stable1 = XEUtils.toNumber(stableNums[0])
+          const stable2 = XEUtils.toNumber(stableNums[1])
+          const stable3 = XEUtils.toNumber(stableNums[2])
+          const betaNums = betaVersionList[0].version.split('-')[0].split('.')
+          const beta1 = XEUtils.toNumber(betaNums[0])
+          const beta2 = XEUtils.toNumber(betaNums[1])
+          const beta3 = XEUtils.toNumber(betaNums[2])
+          if (beta1 > stable1) {
             return true
-          } else if (beta2 === stable2) {
-            if (beta3 > stable3) {
+          } else if (beta1 === stable1) {
+            if (beta2 > stable2) {
               return true
+            } else if (beta2 === stable2) {
+              if (beta3 > stable3) {
+                return true
+              }
             }
           }
+        } else {
+          return true
         }
       }
       return false
@@ -1962,7 +1966,7 @@ export default {
           return false
         })
       }
-      return []
+      return stableVersionList
     },
     pageKey () {
       return this.$route.path.split('/')[2]
@@ -2022,11 +2026,11 @@ export default {
         const stableVersionList = []
         const betaVersionList = []
         Object.values(data.versions).forEach(pack => {
-          if (/^2.\d{1,3}.\d{1,3}$/.test(pack.version)) {
+          if (/^3.\d{1,3}.\d{1,3}$/.test(pack.version)) {
             stableVersionList.push({
               version: pack.version
             })
-          } else if (/^2.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(pack.version)) {
+          } else if (/^3.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(pack.version)) {
             betaVersionList.push({
               version: pack.version
             })
@@ -2080,9 +2084,11 @@ export default {
           location.href = '/vxe-table/v1/index.html'
           break
         case '2':
-          location.href = '/vxe-table'
+          location.href = '/vxe-table/v2/index.html'
           break
         case '3':
+          location.href = '/vxe-table'
+          break
         case '4':
           this.version = '2'
           this.$XModal.message({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })

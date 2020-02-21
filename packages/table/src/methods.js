@@ -878,6 +878,9 @@ const Methods = {
       if (this.showHeader && !this.showHeaderOverflow) {
         UtilTools.warn('vxe.error.reqProp', ['show-header-overflow'])
       }
+      if (this.showFooter && !this.showFooterOverflow) {
+        UtilTools.warn('vxe.error.reqProp', ['show-footer-overflow'])
+      }
       // if (this.resizable || visibleColumn.some(column => column.resizable)) {
       //   UtilTools.warn('vxe.error.scrollXNotResizable')
       // }
@@ -1094,9 +1097,10 @@ const Methods = {
       parentHeight,
       border,
       headerHeight,
-      showHeaderOverflow: allColumnHeaderOverflow,
       showFooter,
       showOverflow: allColumnOverflow,
+      showHeaderOverflow: allColumnHeaderOverflow,
+      showFooterOverflow: allColumnFooterOverflow,
       footerHeight,
       tableHeight,
       tableWidth,
@@ -1267,11 +1271,13 @@ const Methods = {
             }
             if (fullColumnIdData[colid]) {
               const column = fullColumnIdData[colid].column
-              const { showHeaderOverflow, showOverflow } = column
+              const { showHeaderOverflow, showFooterOverflow, showOverflow } = column
               let cellOverflow
               colElem.style.width = `${column.renderWidth}px`
               if (layout === 'header') {
                 cellOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+              } else if (layout === 'footer') {
+                cellOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
               } else {
                 cellOverflow = XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow) ? allColumnOverflow : showOverflow
               }

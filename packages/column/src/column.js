@@ -30,6 +30,8 @@ const props = {
   showOverflow: { type: [Boolean, String], default: null },
   // 当表头内容过长时显示为省略号
   showHeaderOverflow: { type: [Boolean, String], default: null },
+  // 当表尾内容过长时显示为省略号
+  showFooterOverflow: { type: [Boolean, String], default: null },
   // 给单元格附加 className
   className: [String, Function],
   // 给表头单元格附加 className
