@@ -1,5 +1,5 @@
 module.exports = {
-  presets: process.env.npm_lifecycle_event.indexOf('lib:module') === 0 ? [] : [
+  presets: !process || !process.env || !process.env.npm_lifecycle_event || process.env.npm_lifecycle_event.indexOf('lib:module') === 0 ? [] : [
     '@vue/app'
   ]
 }

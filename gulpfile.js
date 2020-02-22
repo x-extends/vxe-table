@@ -1,4 +1,5 @@
 const gulp = require('gulp')
+const XEUtils = require('xe-utils')
 const babel = require('gulp-babel')
 const uglify = require('gulp-uglify')
 const rename = require('gulp-rename')
@@ -38,6 +39,13 @@ const components = [
   'v-x-e-table'
 ]
 
+const languages = [
+  'zh-CN',
+  'zh-TW',
+  'en-US',
+  'ja-JP'
+]
+
 gulp.task('build_modules', () => {
   return gulp.src('packages/**/*.js')
     .pipe(babel({
@@ -50,6 +58,30 @@ gulp.task('build_modules', () => {
       extname: '.js'
     }))
     .pipe(gulp.dest('lib'))
+})
+
+gulp.task('build_i18n', () => {
+  return Promise.all(languages.map(code => {
+    const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
+    return gulp.src(`packages/locale/lang/${code}.js`)
+      .pipe(babel({
+        moduleId: name,
+        presets: ['@babel/env'],
+        plugins: ['@babel/transform-modules-umd']
+      }))
+      .pipe(replace(`global.${name} = mod.exports;`, `global.VXETableLang${name} = mod.exports.default;`))
+      .pipe(rename({
+        suffix: '.umd',
+        extname: '.js'
+      }))
+      .pipe(gulp.dest('lib/locale/lang'))
+      .pipe(uglify())
+      .pipe(rename({
+        suffix: '.min',
+        extname: '.js'
+      }))
+      .pipe(gulp.dest('lib/locale/lang'))
+  }))
 })
 
 gulp.task('copy_ts', () => {
@@ -75,7 +107,7 @@ gulp.task('lib_rename', () => {
   ])
 })
 
-gulp.task('build_style', gulp.series('build_modules', 'copy_ts', () => {
+gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {
   return Promise.all(components.map(name => {
     Promise.all([
       gulp.src('styles/index.js')
