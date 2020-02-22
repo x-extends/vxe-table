@@ -50,8 +50,12 @@
 .vxe-header--column {
   position: relative;
   user-select: none;
-  &.col--title-checked {
-    background-color: $vxe-table-column-header-checked-background-color;
+  .vxe-edit-icon {
+    &.vxe-icon--edit-outline {
+      &:before {
+        background-color: $vxe-table-header-background-color;
+      }
+    }
   }
   .vxe-required-icon {
     display: inline-block;
