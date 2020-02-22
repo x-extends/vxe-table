@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-excel" target="_blank">vxe-table-plugin-excel</a> 插件的 API<br>
-      <span class="red">（注：重构中）</span>
+      <span class="red">（注：实验功能，重构中）</span>
     </p>
 
     <vxe-toolbar>

@@ -15,17 +15,43 @@
       background-color: $vxe-table-header-background-color;
     }
   }
+  /*排序*/
+  .vxe-sort-wrapper {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    .vxe-sort--asc-btn,
+    .vxe-sort--desc-btn {
+      position: absolute;
+      left: 0.35em;
+      color: $vxe-table-column-icon-border-color;
+      width: 1em;
+      text-align: center;
+      cursor: pointer;
+      &:hover {
+        color: $vxe-font-color;
+      }
+      &.sort--active {
+        color: $vxe-primary-color;
+      }
+    }
+    .vxe-sort--asc-btn {
+      top: -0.04em;
+    }
+    .vxe-sort--desc-btn {
+      bottom: -0.04em;
+    }
+  }
 }
 
 .vxe-header--column {
   position: relative;
   user-select: none;
-  .vxe-edit-icon {
-    &.vxe-icon--edit-outline {
-      &:before {
-        background-color: $vxe-table-header-background-color;
-      }
-    }
+  &.col--title-checked {
+    background-color: $vxe-table-column-header-checked-background-color;
   }
   .vxe-required-icon {
     display: inline-block;

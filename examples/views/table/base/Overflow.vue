@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      当内容或表头超过隐藏时显示为省略号，<table-column-api-link prop="show-overflow"/> 和 <table-api-link prop="show-header-overflow"/><br>
+      当内容或表头超过隐藏时显示为省略号，<table-column-api-link prop="show-overflow"/> 和 <table-api-link prop="show-header-overflow"/> 和 <table-api-link prop="show-footer-overflow"/><br>
       <table-column-api-link prop="ellipsis"/> 当内容超过时显示为省略号<br>
       <table-column-api-link prop="title"/> 当内容超过时显示为省略号并用原生 title 显示<br>
       <table-column-api-link prop="tooltip"/> 当内容超过隐藏时显示为省略号并用 tooltip 显示<br>
