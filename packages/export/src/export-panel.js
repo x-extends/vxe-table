@@ -11,6 +11,7 @@ export default {
     return {
       isAll: false,
       isIndeterminate: false,
+      loading: false,
       modeList: [
         {
           value: 'all',
@@ -48,7 +49,8 @@ export default {
         lockView: true,
         showFooter: false,
         escClosable: true,
-        maskClosable: true
+        maskClosable: true,
+        loading: this.loading
       },
       on: {
         show: this.showEvent
@@ -290,15 +292,14 @@ export default {
     },
     getExportOption () {
       const { storeData, defaultOptions } = this
-      const { $xegrid, $xetable } = this.$parent
-      const comp = $xegrid || $xetable
+      const $xetable = this.$parent
       const selectRecords = storeData.selectRecords
       const opts = Object.assign({
         columns: storeData.columns.filter(column => column.checked)
       }, defaultOptions)
       if (storeData.mode === 'selected') {
-        if (['html', 'pdf'].indexOf(defaultOptions.type) > -1 && comp.treeConfig) {
-          opts.data = XEUtils.searchTree(comp.getTableData().fullData, item => selectRecords.indexOf(item) > -1, comp.getTreeStatus().config)
+        if (['html', 'pdf'].indexOf(defaultOptions.type) > -1 && $xetable.treeConfig) {
+          opts.data = XEUtils.searchTree($xetable.getTableData().fullData, item => selectRecords.indexOf(item) > -1, $xetable.getTreeStatus().config)
         } else {
           opts.data = selectRecords
         }
@@ -306,12 +307,17 @@ export default {
       return opts
     },
     printEvent () {
+      const $xetable = this.$parent
       this.storeData.visible = false
-      this.$emit('print', this.getExportOption())
+      $xetable.print(Object.assign({}, $xetable.printOpts, this.getExportOption()))
     },
     exportEvent () {
-      this.storeData.visible = false
-      this.$emit('export', this.getExportOption())
+      const $xetable = this.$parent
+      this.loading = true
+      $xetable.exportData(Object.assign({}, $xetable.exportOpts, this.getExportOption())).then(() => {
+        this.loading = false
+        this.storeData.visible = false
+      })
     }
   }
 }

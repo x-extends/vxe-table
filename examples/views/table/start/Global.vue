@@ -45,10 +45,14 @@
             remote: false
           },
           importConfig: {
-            mode: 'covering'
+            mode: 'covering',
+            // remote: false,
+            // importMethod () {}
           },
           exportConfig: {
-            types: ['csv', 'html', 'xml', 'txt']
+            types: ['csv', 'html', 'xml', 'txt'],
+            // remote: false,
+            // exportMethod () {}
           },
           expandConfig: {
             trigger: 'default'
