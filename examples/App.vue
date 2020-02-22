@@ -144,6 +144,7 @@ export default {
             },
             {
               label: 'app.aside.nav.i18n',
+              demoUrl: 'https://jsrun.pro/SbfKp/edit',
               locat: {
                 name: 'StartI18n'
               }
@@ -1902,11 +1903,16 @@ export default {
   },
   computed: {
     demoLink () {
-      const group = this.tableList.find(item => item.expand)
-      if (group && group.children) {
-        const selected = group.children.find(item => item.locat && item.locat.name === this.$route.name)
-        if (selected) {
-          return selected.demoUrl
+      const { $route, apiList } = this
+      for (let gIndex = 0; gIndex < apiList.length; gIndex++) {
+        const group = apiList[gIndex]
+        if (group.children) {
+          for (let cIndex = 0; cIndex < group.children.length; cIndex++) {
+            const item = group.children[cIndex]
+            if (item.locat && item.locat.name === $route.name) {
+              return item.demoUrl
+            }
+          }
         }
       }
       return null
