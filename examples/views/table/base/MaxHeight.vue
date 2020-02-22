@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">当一个表格高度需要自适应的时候可以设置为最大高度</p>
+    <p class="tip">当一个表格高度需要自适应的时候可以设置为最大高度，通过设置 <table-api-link prop="max-height"/> 参数</p>
 
     <vxe-table
       border

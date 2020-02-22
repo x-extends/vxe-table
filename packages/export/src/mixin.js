@@ -131,9 +131,9 @@ function getLabelData ($xetable, opts, columns, datas) {
   })
 }
 
-function getExportData ($xetable, opts, fullData, oColumns) {
-  let columns = opts.columns ? opts.columns : oColumns
-  let datas = opts.data || fullData
+function getExportData ($xetable, opts) {
+  let columns = opts.columns
+  let datas = opts.data
   if (opts.columnFilterMethod) {
     columns = columns.filter(opts.columnFilterMethod)
   }
@@ -400,11 +400,13 @@ function downloadFile ($xetable, opts, content) {
   }
 }
 
-function handleExport ($xetable, opts, oColumns, fullData) {
-  const { columns, datas } = getExportData($xetable, opts, fullData, oColumns)
-  return $xetable.preventEvent(null, 'event.export', { $table: $xetable, options: opts, columns, datas }, () => {
-    return downloadFile($xetable, opts, getContent($xetable, opts, columns, datas))
-  })
+function handleExport ($xetable, opts) {
+  const { columns, datas } = getExportData($xetable, opts)
+  return Promise.resolve(
+    $xetable.preventEvent(null, 'event.export', { $table: $xetable, options: opts, columns, datas }, () => {
+      return downloadFile($xetable, opts, getContent($xetable, opts, columns, datas))
+    })
+  )
 }
 
 function getElementsByTagName (elem, qualifiedName) {
@@ -597,20 +599,22 @@ export default {
     _exportData (options) {
       const { visibleColumn, tableFullData } = this
       const opts = Object.assign({
-        filename: '',
-        sheetName: '',
-        original: false,
-        message: false,
+        // filename: '',
+        // sheetName: '',
+        // original: false,
+        // message: false,
         isHeader: true,
         isFooter: true,
         download: true,
         type: 'csv',
-        data: null,
-        columns: null,
+        data: tableFullData,
+        // remote: false,
+        columns: visibleColumn,
+        // dataFilterMethod: null,
+        // footerFilterMethod: null,
+        // exportMethod: null,
         // 在 v3.0 中废弃 type=selection
-        columnFilterMethod: options && options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property,
-        dataFilterMethod: null,
-        footerFilterMethod: null
+        columnFilterMethod: options && options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property
       }, GlobalConfig.export, options)
       if (!opts.filename) {
         opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
@@ -621,7 +625,14 @@ export default {
       if (VXETable.exportTypes.indexOf(opts.type) === -1) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
-      return handleExport(this, opts, visibleColumn, tableFullData)
+      if (opts.remote) {
+        const params = { options: opts, $table: this }
+        if (opts.exportMethod) {
+          return opts.exportMethod(params)
+        }
+        return Promise.resolve(params)
+      }
+      return handleExport(this, opts)
     },
     _importByFile (file, opts) {
       if (window.FileReader) {
@@ -629,6 +640,13 @@ export default {
         const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
         const types = options.types || VXETable.importTypes
         if (types.indexOf(type) > -1) {
+          if (options.remote) {
+            const params = { file, options, $table: this }
+            if (options.importMethod) {
+              return options.importMethod(params)
+            }
+            return Promise.resolve(params)
+          }
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = () => {
@@ -645,6 +663,7 @@ export default {
       } else {
         UtilTools.error('vxe.error.notExp')
       }
+      return Promise.resolve()
     },
     _importData (options) {
       const opts = Object.assign({}, GlobalConfig.import, options)
@@ -700,6 +719,7 @@ export default {
       }, options, {
         type: 'html',
         download: false,
+        remote: false,
         print: true
       })
       if (!opts.sheetName) {
@@ -798,15 +818,6 @@ export default {
         isFooter: hasFooter
       })
       return this.$nextTick()
-    },
-    confirmExportEvent (options) {
-      this.exportData(Object.assign({}, this.exportOpts, options))
-    },
-    confirmImportEvent (options) {
-      this.importByFile(this.importStore.file, Object.assign({}, this.importOpts, options))
-    },
-    confirmPrintEvent (options) {
-      this.print(Object.assign({}, this.printOpts, options))
     }
   }
 }

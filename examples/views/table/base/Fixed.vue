@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      固定列，通过设置 <table-column-api-link prop="fixed"/> 参数<br>
+      固定列，通过设置 <table-column-api-link prop="fixed"/>=left 参数<br>
       当横向内容过多时，将列固定在左右两侧
     </p>
 

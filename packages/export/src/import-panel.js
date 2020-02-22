@@ -8,6 +8,11 @@ export default {
     defaultOptions: Object,
     storeData: Object
   },
+  data () {
+    return {
+      loading: false
+    }
+  },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
@@ -43,7 +48,8 @@ export default {
         lockView: true,
         showFooter: false,
         escClosable: true,
-        maskClosable: true
+        maskClosable: true,
+        loading: this.loading
       }
     }, [
       h('div', {
@@ -140,20 +146,19 @@ export default {
       })
     },
     selectFileEvent () {
-      const { $xegrid, $xetable } = this.$parent
-      const comp = $xegrid || $xetable
-      if (comp) {
-        comp.readFile(this.defaultOptions).then(evnt => {
-          const file = evnt.target.files[0]
-          Object.assign(this.storeData, UtilTools.parseFile(file), { file })
-        }).catch(e => e)
-      }
+      const $xetable = this.$parent
+      $xetable.readFile(this.defaultOptions).then(evnt => {
+        const file = evnt.target.files[0]
+        Object.assign(this.storeData, UtilTools.parseFile(file), { file })
+      }).catch(e => e)
     },
     importEvent () {
-      const { storeData, defaultOptions } = this
-      const opts = Object.assign({}, defaultOptions)
-      storeData.visible = false
-      this.$emit('import', opts)
+      const $xetable = this.$parent
+      this.loading = true
+      $xetable.importByFile(this.storeData.file, Object.assign({}, $xetable.importOpts, this.defaultOptions)).then(() => {
+        this.loading = false
+        this.storeData.visible = false
+      })
     }
   }
 }

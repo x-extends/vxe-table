@@ -948,9 +948,6 @@ export default {
         props: {
           defaultOptions: this.importParams,
           storeData: this.importStore
-        },
-        on: {
-          import: this.confirmImportEvent
         }
       }) : _e(),
       /**
@@ -960,10 +957,6 @@ export default {
         props: {
           defaultOptions: this.exportParams,
           storeData: this.exportStore
-        },
-        on: {
-          print: this.confirmPrintEvent,
-          export: this.confirmExportEvent
         }
       }) : _e(),
       h('div', {
