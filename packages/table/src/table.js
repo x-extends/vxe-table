@@ -1078,9 +1078,6 @@ export default {
         props: {
           defaultOptions: this.importParams,
           storeData: this.importStore
-        },
-        on: {
-          import: this.confirmImportEvent
         }
       }) : _e(),
       /**
@@ -1090,10 +1087,6 @@ export default {
         props: {
           defaultOptions: this.exportParams,
           storeData: this.exportStore
-        },
-        on: {
-          print: this.confirmPrintEvent,
-          export: this.confirmExportEvent
         }
       }) : _e(),
       h('div', {
@@ -5249,20 +5242,22 @@ export default {
     exportData (options) {
       const { visibleColumn, tableFullData } = this
       const opts = Object.assign({
-        filename: '',
-        sheetName: '',
-        original: false,
-        message: false,
+        // filename: '',
+        // sheetName: '',
+        // original: false,
+        // message: false,
         isHeader: true,
         isFooter: true,
         download: true,
         type: 'csv',
-        data: null,
-        columns: null,
+        data: tableFullData,
+        // remote: false,
+        columns: visibleColumn,
+        // dataFilterMethod: null,
+        // footerFilterMethod: null,
+        // exportMethod: null,
         // 在 v3.0 中废弃 type=selection
-        columnFilterMethod: options && options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property,
-        dataFilterMethod: null,
-        footerFilterMethod: null
+        columnFilterMethod: options && options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property
       }, GlobalConfig.export, options)
       if (!opts.filename) {
         opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
@@ -5273,7 +5268,14 @@ export default {
       if (VXETable.exportTypes.indexOf(opts.type) === -1) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
-      return ExportTools.handleExport(this, opts, visibleColumn, tableFullData)
+      if (opts.remote) {
+        const params = { options: opts, $table: this }
+        if (opts.exportMethod) {
+          return opts.exportMethod(params)
+        }
+        return Promise.resolve(params)
+      }
+      return ExportTools.handleExport(this, opts)
     },
     importByFile (file, opts) {
       if (window.FileReader) {
@@ -5281,6 +5283,13 @@ export default {
         const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
         const types = options.types || VXETable.importTypes
         if (types.indexOf(type) > -1) {
+          if (options.remote) {
+            const params = { file, options, $table: this }
+            if (options.importMethod) {
+              return options.importMethod(params)
+            }
+            return Promise.resolve(params)
+          }
           this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = () => {
@@ -5297,6 +5306,7 @@ export default {
       } else {
         UtilTools.error('vxe.error.notExp')
       }
+      return Promise.resolve()
     },
     importData (options) {
       const opts = Object.assign({}, GlobalConfig.import, options)
@@ -5352,6 +5362,7 @@ export default {
       }, options, {
         type: 'html',
         download: false,
+        remote: false,
         print: true
       })
       if (!opts.sheetName) {
@@ -5450,15 +5461,6 @@ export default {
         isFooter: hasFooter
       })
       return this.$nextTick()
-    },
-    confirmExportEvent (options) {
-      this.exportData(Object.assign({}, this.exportOpts, options))
-    },
-    confirmImportEvent (options) {
-      this.importByFile(this.importStore.file, Object.assign({}, this.importOpts, options))
-    },
-    confirmPrintEvent (options) {
-      this.print(Object.assign({}, this.printOpts, options))
     },
     updateZindex () {
       if (this.tZindex < UtilTools.getLastZIndex()) {

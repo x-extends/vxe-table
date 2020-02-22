@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      增删改查代理<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">（配置式代理项目示例）</a>、服务端排序代理、服务端筛选代理、分页代理、增删改查<br>
+      完整功能<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">（配置式代理项目示例）</a>：服务端排序代理、服务端筛选代理、服务端分页代理、服务端增删改查、服务端导入导出<br>
       还可以通过配置 <grid-api-link prop="form-config"/> 实现动态表单，还可以通过 <grid-api-link prop="titlePrefix"/> 或 <grid-api-link prop="titleSuffix"/> 设置标题提示信息<br>
       对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
       还可以通过 <toolbar-api-link prop="checkMethod"/> 设置个性化列禁止勾选<br>
@@ -13,8 +13,6 @@
       resizable
       show-overflow
       highlight-hover-row
-      import-config
-      export-config
       keep-source
       ref="xGrid"
       height="600"
@@ -26,6 +24,8 @@
       :toolbar="tableToolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn"
+      :import-config="{remote: true, importMethod, types: ['xlsx']}"
+      :export-config="{remote: true, exportMethod, types: ['xlsx']}"
       :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
@@ -158,8 +158,6 @@ export default {
           resizable
           show-overflow
           highlight-hover-row
-          import-config
-          export-config
           keep-source
           ref="xGrid"
           height="600"
@@ -171,6 +169,8 @@ export default {
           :toolbar="tableToolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"
+          :import-config="{remote: true, importMethod, types: ['xlsx']}"
+          :export-config="{remote: true, exportMethod, types: ['xlsx']}"
           :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
@@ -291,6 +291,35 @@ export default {
                 return false
               }
               return true
+            },
+            importMethod ({ file }) {
+              const formBody = new FormData()
+              formBody.append('file', file)
+              return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/import', formBody).then(data => {
+                this.$XModal.message({ message: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
+                // 导入完成，刷新表格
+                this.$refs.xGrid.commitProxy('query')
+              }).catch(() => {
+                this.$XModal.message({ message: '导入失败，请检查数据是否正确！', status: 'error' })
+              })
+            },
+            exportMethod ({ options }) {
+              const { columns } = options
+              const body = {
+                filename: options.filename,
+                sheetName: options.sheetName,
+                fields: columns.map(column => column.property)
+              }
+              // 开始服务端导出
+              return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/export', body).then(data => {
+                if (data.id) {
+                  this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
+                  // 读取路径，开始下载
+                  location.href = \`https://api.xuliangzhan.com:10443/api/download/\${data.id}\`
+                }
+              }).catch(() => {
+                this.$XModal.message({ message: '导出失败！', status: 'error' })
+              })
             }
           }
         }
@@ -322,6 +351,35 @@ export default {
         return false
       }
       return true
+    },
+    importMethod ({ file }) {
+      const formBody = new FormData()
+      formBody.append('file', file)
+      return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/import', formBody).then(data => {
+        this.$XModal.message({ message: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
+        // 导入完成，刷新表格
+        this.$refs.xGrid.commitProxy('query')
+      }).catch(() => {
+        this.$XModal.message({ message: '导入失败，请检查数据是否正确！', status: 'error' })
+      })
+    },
+    exportMethod ({ options }) {
+      const { columns } = options
+      const body = {
+        filename: options.filename,
+        sheetName: options.sheetName,
+        fields: columns.map(column => column.property)
+      }
+      // 开始服务端导出
+      return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/export', body).then(data => {
+        if (data.id) {
+          this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
+          // 读取路径，开始下载
+          location.href = `https://api.xuliangzhan.com:10443/api/download/${data.id}`
+        }
+      }).catch(() => {
+        this.$XModal.message({ message: '导出失败！', status: 'error' })
+      })
     }
   }
 }

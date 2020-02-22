@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">事件绑定</p>
+    <p class="tip">事件绑定，通过设置 <table-api-link prop="cell-click"/>、<table-api-link prop="cell-dblclick"/> ...等常用事件</p>
 
     <vxe-table
       border
@@ -15,7 +15,7 @@
       @cell-dblclick="cellDBLClickEvent"
       @cell-mouseenter="cellMouseenterEvent"
       @cell-mouseleave="cellMouseleaveEvent"
-      @body-scroll="bodyScrollEvent">
+      @scroll="scrollEvent">
       <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
@@ -55,7 +55,7 @@ export default {
           @cell-dblclick="cellDBLClickEvent"
           @cell-mouseenter="cellMouseenterEvent"
           @cell-mouseleave="cellMouseleaveEvent"
-          @body-scroll="bodyScrollEvent">
+          @scroll="scrollEvent">
           <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
@@ -93,7 +93,7 @@ export default {
             cellMouseleaveEvent ({ column }) {
               console.log(\`鼠标离开单元格\${column.title}\`)
             },
-            bodyScrollEvent ({ scrollTop, scrollLeft }) {
+            scrollEvent ({ scrollTop, scrollLeft }) {
               console.log(\`滚动事件scrollTop=\${scrollTop} scrollLeft=\${scrollLeft}\`)
             }
           }
@@ -129,7 +129,7 @@ export default {
     cellMouseleaveEvent ({ column }) {
       console.log(`鼠标离开单元格${column.title}`)
     },
-    bodyScrollEvent ({ scrollTop, scrollLeft }) {
+    scrollEvent ({ scrollTop, scrollLeft }) {
       console.log(`滚动事件scrollTop=${scrollTop} scrollLeft=${scrollLeft}`)
     }
   }

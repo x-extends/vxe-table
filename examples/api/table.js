@@ -1,5 +1,4 @@
 import XEUtils from 'xe-utils'
-import toolbarAPI from './toolbar'
 
 const contextMenuAPI = [
   {
@@ -262,14 +261,82 @@ const exportDataAPI = [
   },
   {
     name: 'footerFilterMethod',
-    desc: '表尾过滤方法，该函数 Function(cells,$rowIndex) 的返回值用来决定是否过滤掉表尾行',
+    desc: '表尾过滤方法，该函数 Function(data,$rowIndex) 的返回值用来决定是否过滤掉表尾行',
     version: '',
+    type: 'Function',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'remote',
+    desc: '是否服务端导出',
+    version: '1.15.22',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'false',
+    list: []
+  },
+  {
+    name: 'exportMethod',
+    desc: '只对 remote=true 有效，该函数 Function({ options }) 用于自定义导出逻辑，返回 Promise',
+    version: '1.15.22',
     type: 'Function',
     enum: '',
     defVal: '',
     list: []
   }
 ]
+
+const importDataAPI = [
+  {
+    name: 'mode',
+    desc: '导入数据的方式（默认是覆盖式操作，需要注意的是任何动态数据都属于临时数据，不会同步 data）',
+    version: '',
+    type: 'String',
+    enum: 'covering, append',
+    defVal: 'covering',
+    list: []
+  },
+  {
+    name: 'message',
+    desc: '是否显示内置的消息提示',
+    version: '',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'false',
+    list: []
+  },
+  {
+    name: 'types',
+    desc: '导入的文件类型列表',
+    version: '1.15.13',
+    type: 'Array',
+    enum: 'csv, html, xml, txt',
+    defVal: '[\'csv\', \'html\', \'xml\', \'txt\']',
+    list: []
+  },
+  {
+    name: 'remote',
+    desc: '是否服务端导入',
+    version: '1.15.21',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'false',
+    list: []
+  },
+  {
+    name: 'importMethod',
+    desc: '只对 remote=true 有效，该函数 Function({ file, options }) 用于自定义导入逻辑，返回 Promise',
+    version: '1.15.21',
+    type: 'Function',
+    enum: '',
+    defVal: '',
+    list: []
+  }
+]
+
+const printAPI = exportDataAPI.filter(item => !['filename', 'sheetName', 'type', 'download', 'message'].includes(item.name))
 
 const apis = [
   {
@@ -993,7 +1060,7 @@ const apis = [
         type: 'Boolean, Object',
         enum: '',
         defVal: '继承 setup.exportConfig',
-        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.find(item => item.name === 'export').list, true)
+        list: XEUtils.clone(exportDataAPI, true)
       },
       {
         name: 'import-config',
@@ -1002,7 +1069,7 @@ const apis = [
         type: 'Boolean, Object',
         enum: '',
         defVal: '继承 setup.importConfig',
-        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.find(item => item.name === 'import').list, true)
+        list: XEUtils.clone(importDataAPI, true)
       },
       {
         name: 'print-config',
@@ -1011,7 +1078,7 @@ const apis = [
         type: 'Object',
         enum: '',
         defVal: '继承 setup.printConfig',
-        list: XEUtils.clone(exportDataAPI.filter(item => !['filename', 'sheetName', 'type', 'download', 'message'].includes(item.name)), true)
+        list: XEUtils.clone(printAPI, true)
       },
       {
         name: 'select-config',
@@ -3657,7 +3724,7 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options',
-        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.find(item => item.name === 'export').list, true)
+        list: XEUtils.clone(exportDataAPI, true)
       },
       {
         name: 'importData(options)',
@@ -3666,35 +3733,7 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options',
-        list: [
-          {
-            name: 'mode',
-            desc: '导入数据的方式（默认是覆盖式操作，需要注意的是任何动态数据都属于临时数据，不会同步 data）',
-            version: '',
-            type: 'String',
-            enum: 'covering, append',
-            defVal: 'covering',
-            list: []
-          },
-          {
-            name: 'message',
-            desc: '是否显示内置的消息提示',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
-            name: 'types',
-            desc: '导入的文件类型列表',
-            version: '1.15.13',
-            type: 'Array',
-            enum: 'csv, html, xml, txt',
-            defVal: '[\'csv\', \'html\', \'xml\', \'txt\']',
-            list: []
-          }
-        ]
+        list: XEUtils.clone(importDataAPI, true)
       },
       {
         name: 'openImport(options)',
@@ -3703,7 +3742,7 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
-        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.find(item => item.name === 'import').list, true)
+        list: XEUtils.clone(importDataAPI, true)
       },
       {
         name: 'print(options)',
@@ -3712,7 +3751,7 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
-        list: XEUtils.clone(exportDataAPI.filter(item => !['filename', 'sheetName', 'type', 'download', 'message'].includes(item.name)), true)
+        list: XEUtils.clone(printAPI, true)
       },
       {
         name: 'readFile(options)',

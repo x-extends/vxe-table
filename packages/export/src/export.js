@@ -118,9 +118,9 @@ function getLabelData ($xetable, opts, columns, datas) {
   })
 }
 
-function getExportData ($xetable, opts, fullData, oColumns) {
-  let columns = opts.columns ? opts.columns : oColumns
-  let datas = opts.data || fullData
+function getExportData ($xetable, opts) {
+  let columns = opts.columns
+  let datas = opts.data
   if (opts.columnFilterMethod) {
     columns = columns.filter(opts.columnFilterMethod)
   }
@@ -525,11 +525,13 @@ function checkImportData (columns, fields) {
 }
 
 export default {
-  handleExport ($xetable, opts, oColumns, fullData) {
-    const { columns, datas } = getExportData($xetable, opts, fullData, oColumns)
-    return $xetable.preventEvent(null, 'event.export', { $table: $xetable, options: opts, columns, datas }, () => {
-      return downloadFile($xetable, opts, getContent($xetable, opts, columns, datas))
-    })
+  handleExport ($xetable, opts) {
+    const { columns, datas } = getExportData($xetable, opts)
+    return Promise.resolve(
+      $xetable.preventEvent(null, 'event.export', { $table: $xetable, options: opts, columns, datas }, () => {
+        return downloadFile($xetable, opts, getContent($xetable, opts, columns, datas))
+      })
+    )
   },
   handleImport ($xetable, content, opts) {
     const { tableFullColumn, _importResolve } = $xetable

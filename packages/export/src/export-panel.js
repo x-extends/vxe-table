@@ -11,6 +11,7 @@ export default {
     return {
       isAll: false,
       isIndeterminate: false,
+      loading: false,
       modeList: [
         {
           value: 'all',
@@ -48,7 +49,8 @@ export default {
         lockView: true,
         showFooter: false,
         escClosable: true,
-        maskClosable: true
+        maskClosable: true,
+        loading: this.loading
       },
       on: {
         show: this.showEvent
@@ -63,187 +65,189 @@ export default {
             cellpadding: 0,
             border: 0
           }
-        }, h('tbody', [
-          [
-            h('tr', [
-              h('td', GlobalConfig.i18n('vxe.toolbar.expName')),
-              h('td', [
-                h('input', {
-                  ref: 'filename',
-                  attrs: {
-                    type: 'text',
-                    placeholder: GlobalConfig.i18n('vxe.toolbar.expNamePlaceholder')
-                  },
-                  domProps: {
-                    value: defaultOptions.filename
-                  },
-                  on: {
-                    input (evnt) {
-                      defaultOptions.filename = evnt.target.value
-                    }
-                  }
-                })
-              ])
-            ]),
-            h('tr', [
-              h('td', GlobalConfig.i18n('vxe.toolbar.expType')),
-              h('td', [
-                h('select', {
-                  on: {
-                    change (evnt) {
-                      defaultOptions.type = evnt.target.value
-                    }
-                  }
-                }, defaultOptions.types.map(item => {
-                  return h('option', {
+        }, [
+          h('tbody', [
+            [
+              h('tr', [
+                h('td', GlobalConfig.i18n('vxe.toolbar.expName')),
+                h('td', [
+                  h('input', {
+                    ref: 'filename',
                     attrs: {
-                      value: item.value
+                      type: 'text',
+                      placeholder: GlobalConfig.i18n('vxe.toolbar.expNamePlaceholder')
                     },
                     domProps: {
-                      selected: defaultOptions.type === item.value
-                    }
-                  }, GlobalConfig.i18n(item.label))
-                }))
-              ])
-            ]),
-            showSheet ? h('tr', [
-              h('td', GlobalConfig.i18n('vxe.toolbar.expSheetName')),
-              h('td', [
-                h('input', {
-                  attrs: {
-                    type: 'text',
-                    placeholder: GlobalConfig.i18n('vxe.toolbar.expSheetNamePlaceholder')
-                  },
-                  domProps: {
-                    value: defaultOptions.sheetName
-                  },
-                  on: {
-                    input (evnt) {
-                      defaultOptions.sheetName = evnt.target.value
-                    }
-                  }
-                })
-              ])
-            ]) : _e(),
-            h('tr', [
-              h('td', GlobalConfig.i18n('vxe.toolbar.expMode')),
-              h('td', [
-                h('select', {
-                  on: {
-                    change (evnt) {
-                      storeData.mode = evnt.target.value
-                    }
-                  }
-                }, modeList.map(item => {
-                  return h('option', {
-                    attrs: {
-                      value: item.value
+                      value: defaultOptions.filename
                     },
-                    domProps: {
-                      selected: storeData.mode === item.value
+                    on: {
+                      input (evnt) {
+                        defaultOptions.filename = evnt.target.value
+                      }
                     }
-                  }, GlobalConfig.i18n(item.label))
-                }))
-              ])
-            ]),
-            h('tr', [
-              h('td', [GlobalConfig.i18n('vxe.toolbar.expColumn')]),
-              h('td', [
-                h('div', {
-                  class: 'vxe-export--panel-column'
-                }, [
-                  h('ul', {
-                    class: 'vxe-export--panel-column-header'
-                  }, [
-                    h('li', {
-                      class: ['vxe-export--panel-column-option', {
-                        'is--checked': isAll,
-                        'is--indeterminate': isIndeterminate
-                      }],
-                      attrs: {
-                        title: GlobalConfig.i18n('vxe.table.allTitle')
-                      },
-                      on: {
-                        click: this.allColumnEvent
+                  })
+                ])
+              ]),
+              h('tr', [
+                h('td', GlobalConfig.i18n('vxe.toolbar.expType')),
+                h('td', [
+                  h('select', {
+                    on: {
+                      change (evnt) {
+                        defaultOptions.type = evnt.target.value
                       }
-                    }, [
-                      h('i', {
-                        class: 'vxe-checkbox--icon'
-                      }),
-                      GlobalConfig.i18n('vxe.toolbar.expAllColumn')
-                    ])
-                  ]),
-                  h('ul', {
-                    class: 'vxe-export--panel-column-body'
-                  }, storeData.columns.map(column => {
-                    const headerTitle = column.getTitle()
-                    return h('li', {
-                      class: ['vxe-export--panel-column-option', {
-                        'is--checked': column.checked,
-                        'is--disabled': column.disabled
-                      }],
+                    }
+                  }, defaultOptions.types.map(item => {
+                    return h('option', {
                       attrs: {
-                        title: headerTitle
+                        value: item.value
                       },
-                      on: {
-                        click: () => {
-                          if (!column.disabled) {
-                            column.checked = !column.checked
-                            this.checkStatus()
-                          }
-                        }
+                      domProps: {
+                        selected: defaultOptions.type === item.value
                       }
-                    }, [
-                      h('i', {
-                        class: 'vxe-checkbox--icon'
-                      }),
-                      headerTitle
-                    ])
+                    }, GlobalConfig.i18n(item.label))
                   }))
                 ])
+              ]),
+              showSheet ? h('tr', [
+                h('td', GlobalConfig.i18n('vxe.toolbar.expSheetName')),
+                h('td', [
+                  h('input', {
+                    attrs: {
+                      type: 'text',
+                      placeholder: GlobalConfig.i18n('vxe.toolbar.expSheetNamePlaceholder')
+                    },
+                    domProps: {
+                      value: defaultOptions.sheetName
+                    },
+                    on: {
+                      input (evnt) {
+                        defaultOptions.sheetName = evnt.target.value
+                      }
+                    }
+                  })
+                ])
+              ]) : _e(),
+              h('tr', [
+                h('td', GlobalConfig.i18n('vxe.toolbar.expMode')),
+                h('td', [
+                  h('select', {
+                    on: {
+                      change (evnt) {
+                        storeData.mode = evnt.target.value
+                      }
+                    }
+                  }, modeList.map(item => {
+                    return h('option', {
+                      attrs: {
+                        value: item.value
+                      },
+                      domProps: {
+                        selected: storeData.mode === item.value
+                      }
+                    }, GlobalConfig.i18n(item.label))
+                  }))
+                ])
+              ]),
+              h('tr', [
+                h('td', [GlobalConfig.i18n('vxe.toolbar.expColumn')]),
+                h('td', [
+                  h('div', {
+                    class: 'vxe-export--panel-column'
+                  }, [
+                    h('ul', {
+                      class: 'vxe-export--panel-column-header'
+                    }, [
+                      h('li', {
+                        class: ['vxe-export--panel-column-option', {
+                          'is--checked': isAll,
+                          'is--indeterminate': isIndeterminate
+                        }],
+                        attrs: {
+                          title: GlobalConfig.i18n('vxe.table.allTitle')
+                        },
+                        on: {
+                          click: this.allColumnEvent
+                        }
+                      }, [
+                        h('i', {
+                          class: 'vxe-checkbox--icon'
+                        }),
+                        GlobalConfig.i18n('vxe.toolbar.expAllColumn')
+                      ])
+                    ]),
+                    h('ul', {
+                      class: 'vxe-export--panel-column-body'
+                    }, storeData.columns.map(column => {
+                      const headerTitle = column.getTitle()
+                      return h('li', {
+                        class: ['vxe-export--panel-column-option', {
+                          'is--checked': column.checked,
+                          'is--disabled': column.disabled
+                        }],
+                        attrs: {
+                          title: headerTitle
+                        },
+                        on: {
+                          click: () => {
+                            if (!column.disabled) {
+                              column.checked = !column.checked
+                              this.checkStatus()
+                            }
+                          }
+                        }
+                      }, [
+                        h('i', {
+                          class: 'vxe-checkbox--icon'
+                        }),
+                        headerTitle
+                      ])
+                    }))
+                  ])
+                ])
+              ]),
+              h('tr', [
+                h('td', GlobalConfig.i18n('vxe.toolbar.expOpts')),
+                h('td', [
+                  h('vxe-checkbox', {
+                    props: {
+                      title: GlobalConfig.i18n('vxe.toolbar.expHeaderTitle')
+                    },
+                    model: {
+                      value: defaultOptions.isHeader,
+                      callback (value) {
+                        defaultOptions.isHeader = value
+                      }
+                    }
+                  }, GlobalConfig.i18n('vxe.toolbar.expOptHeader')),
+                  h('vxe-checkbox', {
+                    props: {
+                      disabled: !storeData.hasFooter,
+                      title: GlobalConfig.i18n('vxe.toolbar.expFooterTitle')
+                    },
+                    model: {
+                      value: defaultOptions.isFooter,
+                      callback (value) {
+                        defaultOptions.isFooter = value
+                      }
+                    }
+                  }, GlobalConfig.i18n('vxe.toolbar.expOptFooter')),
+                  h('vxe-checkbox', {
+                    props: {
+                      title: GlobalConfig.i18n('vxe.toolbar.expOriginalTitle')
+                    },
+                    model: {
+                      value: defaultOptions.original,
+                      callback (value) {
+                        defaultOptions.original = value
+                      }
+                    }
+                  }, GlobalConfig.i18n('vxe.toolbar.expOptOriginal'))
+                ])
               ])
-            ]),
-            h('tr', [
-              h('td', GlobalConfig.i18n('vxe.toolbar.expOpts')),
-              h('td', [
-                h('vxe-checkbox', {
-                  props: {
-                    title: GlobalConfig.i18n('vxe.toolbar.expHeaderTitle')
-                  },
-                  model: {
-                    value: defaultOptions.isHeader,
-                    callback (value) {
-                      defaultOptions.isHeader = value
-                    }
-                  }
-                }, GlobalConfig.i18n('vxe.toolbar.expOptHeader')),
-                h('vxe-checkbox', {
-                  props: {
-                    disabled: !storeData.hasFooter,
-                    title: GlobalConfig.i18n('vxe.toolbar.expFooterTitle')
-                  },
-                  model: {
-                    value: defaultOptions.isFooter,
-                    callback (value) {
-                      defaultOptions.isFooter = value
-                    }
-                  }
-                }, GlobalConfig.i18n('vxe.toolbar.expOptFooter')),
-                h('vxe-checkbox', {
-                  props: {
-                    title: GlobalConfig.i18n('vxe.toolbar.expOriginalTitle')
-                  },
-                  model: {
-                    value: defaultOptions.original,
-                    callback (value) {
-                      defaultOptions.original = value
-                    }
-                  }
-                }, GlobalConfig.i18n('vxe.toolbar.expOptOriginal'))
-              ])
-            ])
-          ]
-        ])),
+            ]
+          ])
+        ]),
         h('div', {
           class: 'vxe-export--panel-btns'
         }, [
@@ -288,15 +292,14 @@ export default {
     },
     getExportOption () {
       const { storeData, defaultOptions } = this
-      const { $xegrid, $xetable } = this.$parent
-      const comp = $xegrid || $xetable
+      const $xetable = this.$parent
       const selectRecords = storeData.selectRecords
       const opts = Object.assign({
         columns: storeData.columns.filter(column => column.checked)
       }, defaultOptions)
       if (storeData.mode === 'selected') {
-        if (['html', 'pdf'].indexOf(defaultOptions.type) > -1 && comp.treeConfig) {
-          opts.data = XEUtils.searchTree(comp.getTableData().fullData, item => selectRecords.indexOf(item) > -1, comp.getTreeStatus().config)
+        if (['html', 'pdf'].indexOf(defaultOptions.type) > -1 && $xetable.treeConfig) {
+          opts.data = XEUtils.searchTree($xetable.getTableData().fullData, item => selectRecords.indexOf(item) > -1, $xetable.getTreeStatus().config)
         } else {
           opts.data = selectRecords
         }
@@ -304,12 +307,17 @@ export default {
       return opts
     },
     printEvent () {
+      const $xetable = this.$parent
       this.storeData.visible = false
-      this.$emit('print', this.getExportOption())
+      $xetable.print(Object.assign({}, $xetable.printOpts, this.getExportOption()))
     },
     exportEvent () {
-      this.storeData.visible = false
-      this.$emit('export', this.getExportOption())
+      const $xetable = this.$parent
+      this.loading = true
+      $xetable.exportData(Object.assign({}, $xetable.exportOpts, this.getExportOption())).then(() => {
+        this.loading = false
+        this.storeData.visible = false
+      })
     }
   }
 }
