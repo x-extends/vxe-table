@@ -1,0 +1,111 @@
+/**Variable**/
+
+.vxe-select {
+  position: relative;
+  display: inline-block;
+  width: 180px;
+  font-size: $vxe-font-size;
+  & > .vxe-input {
+    width: 100%;
+    .vxe-input--inner {
+      cursor: pointer;
+    }
+    .vxe-input--suffix-icon {
+      @include animatTransition(transform, .2s);
+    }
+  }
+  &.is--visivle {
+    & > .vxe-input {
+      .vxe-input--inner {
+        border: 1px solid $vxe-primary-color;
+      }
+    }
+  }
+}
+
+.vxe-select-option--panel {
+  display: none;
+  position: absolute;
+  left: 0;
+  min-width: 100%;
+  padding: 0.2em 0;
+  &.is--visivle {
+    display: block;
+  }
+}
+
+.vxe-select-option--wrapper {
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0.2em 0;
+  max-height: 220px;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid $vxe-table-popup-border-color;
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.vxe-select-option-group {
+  .vxe-select-option-group--title {
+    padding: 0 0.6em;
+    color: $vxe-select-option-group-title-color;
+    font-size: 0.8em;
+  }
+}
+
+.vxe-select-option-group--wrapper {
+  .vxe-select-option {
+    padding: 0 1.6em;
+  }
+}
+
+.vxe-select-option {
+  padding: 0 0.8em;
+  max-width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  &.is--hover {
+    background-color: $vxe-select-option-hover-background-color;
+  }
+  &.is--active {
+    font-weight: 700;
+    color: $vxe-primary-color;
+    background-color: $vxe-select-option-active-background-color;
+    &.is--hover {
+      background-color: $vxe-select-option-hover-active-background-color;
+    }
+  }
+}
+
+.vxe-select-option--panel {
+  .vxe-select-option-group--title,
+  .vxe-select-option {
+    height: $vxe-select-option-height-default;
+    line-height: $vxe-select-option-height-default;
+  }
+  &.size--medium {
+    .vxe-select-option-group--title,
+    .vxe-select-option {
+      height: $vxe-select-option-height-medium;
+      line-height: $vxe-select-option-height-medium;
+    }
+  }
+  &.size--small {
+    .vxe-select-option-group--title,
+    .vxe-select-option {
+      height: $vxe-select-option-height-small;
+      line-height: $vxe-select-option-height-small;
+    }
+  }
+  &.size--mini {
+    .vxe-select-option-group--title,
+    .vxe-select-option {
+      height: $vxe-select-option-height-mini;
+      line-height: $vxe-select-option-height-mini;
+    }
+  }
+}

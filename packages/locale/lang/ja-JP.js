@@ -39,7 +39,7 @@ export default {
       sortAsc: '升序：最低到最高',
       sortDesc: '降序：最高到最低',
       filter: '对所选的列启用筛选',
-      impSuccess: '导入成功',
+      impSuccess: '成功导入 {{0}} 条记录',
       expSuccess: '导出成功',
       expOriginFilename: '导出_{{0}}',
       expSrcFilename: '导出_源_{{0}}',
@@ -69,13 +69,50 @@ export default {
       confirm: '完了',
       cancel: 'キャンセル'
     },
-    types: {
-      csv: 'CSV (逗号分隔)(*.csv)',
-      html: '网页(*.html)',
-      xml: 'XML 数据(*.xml)',
-      txt: '文本文件(制表符分隔)(*.txt)',
-      xlsx: 'Excel 工作簿(*.xlsx)',
-      pdf: 'PDF (*.pdf)'
+    import: {
+      modes: {
+        covering: '覆盖',
+        insert: '新增'
+      },
+      impTitle: '导入参数设置',
+      impFile: '文件名',
+      impSelect: '选择文件',
+      impType: '文件类型',
+      impOpts: '导入选项',
+      impConfirm: '导入'
+    },
+    export: {
+      types: {
+        csv: 'CSV (逗号分隔)(*.csv)',
+        html: '网页(*.html)',
+        xml: 'XML 数据(*.xml)',
+        txt: '文本文件(制表符分隔)(*.txt)',
+        xlsx: 'Excel 工作簿(*.xlsx)',
+        pdf: 'PDF (*.pdf)'
+      },
+      modes: {
+        current: '当前数据',
+        selected: '选中数据',
+        all: '全部数据'
+      },
+      expTitle: '导出参数设置',
+      expName: '文件名',
+      expNamePlaceholder: '请输入文件名',
+      expSheetName: '工作表名称',
+      expSheetNamePlaceholder: '请输入工作表名称',
+      expType: '保存类型',
+      expMode: '要导出的数据',
+      expCurrentColumn: '全部字段',
+      expColumn: '要导出的字段',
+      expOpts: '导出选项',
+      expOptHeader: '表头',
+      expHeaderTitle: '是否需要导出表头',
+      expOptFooter: '表尾',
+      expFooterTitle: '是否需要导出表尾',
+      expOptOriginal: '源数据',
+      expOriginalTitle: '是否需要导出源数据，如果勾上则支持导入到表格中',
+      expPrint: '打印',
+      expConfirm: '导出'
     },
     modal: {
       zoomIn: '最大化',
@@ -95,37 +132,7 @@ export default {
       custom: '列设置',
       customAll: '全部',
       customConfirm: '确认',
-      customRestore: '还原',
-      impTitle: '导入参数设置',
-      impFile: '文件名',
-      impSelect: '选择文件',
-      impType: '文件类型',
-      impOpts: '导入选项',
-      impConfirm: '导入',
-      impModeCovering: '覆盖',
-      impCoveringTitle: '使用覆盖的方式将数据导入到表格中',
-      impModeAppend: '追加',
-      impAppendTitle: '使用追加的方式将数据导入到表格中',
-      expTitle: '导出参数设置',
-      expName: '文件名',
-      expNamePlaceholder: '请输入文件名',
-      expSheetName: '工作表名称',
-      expSheetNamePlaceholder: '请输入工作表名称',
-      expType: '保存类型',
-      expMode: '要导出的数据',
-      expAll: '全部数据',
-      expSelected: '选中数据',
-      expAllColumn: '全部字段',
-      expColumn: '要导出的字段',
-      expOpts: '导出选项',
-      expOptHeader: '表头',
-      expHeaderTitle: '是否需要导出表头',
-      expOptFooter: '表尾',
-      expFooterTitle: '是否需要导出表尾',
-      expOptOriginal: '源数据',
-      expOriginalTitle: '是否需要导出源数据，如果勾上则支持导入到表格中',
-      expPrint: '打印',
-      expConfirm: '导出'
+      customRestore: '还原'
     }
   }
 }

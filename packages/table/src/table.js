@@ -351,6 +351,8 @@ export default {
       importStore: {
         file: null,
         type: '',
+        modeList: [],
+        typeList: [],
         filename: '',
         visible: false
       },
@@ -362,9 +364,9 @@ export default {
       // 导出相关信息
       exportStore: {
         name: '',
-        mode: '',
+        modeList: [],
+        typeList: [],
         columns: [],
-        selectRecords: [],
         hasFooter: false,
         visible: false,
         isTree: false
@@ -372,8 +374,8 @@ export default {
       exportParams: {
         filename: '',
         sheetName: '',
+        mode: '',
         type: '',
-        types: [],
         original: false,
         message: true,
         isHeader: false,

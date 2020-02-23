@@ -131,7 +131,7 @@ module.exports = {
         manual: '手动触发',
         click: '点击触发',
         dblclick: '双击触发',
-        select: '选中内容',
+        selectContent: '选中内容',
         autoClear: '关闭自动清除',
         insert: '插入数据',
         delete: '删除数据',
@@ -160,6 +160,7 @@ module.exports = {
         module: '功能模块',
         button: '按钮',
         input: '输入框',
+        select: '下拉框',
         modal: '模态窗口',
         tooltip: '文字提示',
         form: '表单',
@@ -528,7 +529,9 @@ module.exports = {
         desc: {
           value: '绑定值',
           size: '尺寸',
-          disabled: '是否禁用'
+          disabled: '是否禁用',
+          prefixIcon: '头部图标',
+          suffixIcon: '尾部图标'
         }
       },
       button: {

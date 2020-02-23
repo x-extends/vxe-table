@@ -58,6 +58,8 @@ import pagerAPI from '../../api/pager'
 import radioAPI from '../../api/radio'
 import checkboxAPI from '../../api/checkbox'
 import inputAPI from '../../api/input'
+import selectAPI from '../../api/select'
+import optionAPI from '../../api/option'
 import textareaAPI from '../../api/textarea'
 import buttonAPI from '../../api/button'
 import tooltipAPI from '../../api/tooltip'
@@ -194,6 +196,12 @@ export default {
               break
             case 'textarea':
               apis = textareaAPI
+              break
+            case 'select':
+              apis = selectAPI
+              break
+            case 'option':
+              apis = optionAPI
               break
             case 'button':
               apis = buttonAPI

@@ -705,6 +705,16 @@ export default {
     },
     isMaximized () {
       return this.maximize
+    },
+    getProxyInfo () {
+      return this.proxyConfig ? {
+        data: this.tableData,
+        filter: this.filterData,
+        form: this.formData,
+        sort: this.sortData,
+        pager: this.tablePage,
+        pendingRecords: this.pendingRecords
+      } : null
     }
   }
 }

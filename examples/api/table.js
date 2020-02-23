@@ -169,6 +169,33 @@ const exportDataAPI = [
     list: []
   },
   {
+    name: 'types',
+    desc: '可选文件类型列表',
+    version: '',
+    type: 'Array',
+    enum: 'csv, html, xml, txt',
+    defVal: '[\'csv\', \'html\', \'xml\', \'txt\']',
+    list: []
+  },
+  {
+    name: 'mode',
+    desc: '导出数据的方式',
+    version: '2.8.4',
+    type: 'String',
+    enum: 'current, selected, all',
+    defVal: 'current',
+    list: []
+  },
+  {
+    name: 'modes',
+    desc: '导出数据的方式列表',
+    version: '2.8.4',
+    type: 'Array',
+    enum: 'current, selected, all',
+    defVal: '[\'current\', \'selected\', \'all\']',
+    list: []
+  },
+  {
     name: 'original',
     desc: '是否为源数据（某些场景下支持 true， 比如虚拟滚动、优化的固定列..，如果需要支持导入，则必须设置为 true）',
     version: '',
@@ -281,10 +308,10 @@ const exportDataAPI = [
 const importDataAPI = [
   {
     name: 'mode',
-    desc: '导入数据的方式（默认是覆盖式操作，需要注意的是任何动态数据都属于临时数据，不会同步 data）',
+    desc: '导入数据的方式',
     version: '',
     type: 'String',
-    enum: 'covering, append',
+    enum: 'covering, insert',
     defVal: 'covering',
     list: []
   },

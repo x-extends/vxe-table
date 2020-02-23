@@ -46,6 +46,12 @@ const GlobalConfig = {
   zIndex: 100,
   rowId: '_XID', // 行数据的唯一主键字段名
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
+  importConfig: {
+    modes: ['insert', 'covering']
+  },
+  exportConfig: {
+    modes: ['current', 'selected']
+  },
   optimization: {
     animat: true,
     delayHover: 250,
@@ -93,6 +99,7 @@ const GlobalConfig = {
     zoomIn: 'vxe-icon--zoomin',
     zoomOut: 'vxe-icon--zoomout',
     custom: 'vxe-icon--menu',
+    inputClear: 'vxe-icon--close',
     jumpPrev: 'vxe-icon--d-arrow-left',
     jumpNext: 'vxe-icon--d-arrow-right',
     prevPage: 'vxe-icon--arrow-left',

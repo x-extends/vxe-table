@@ -17,6 +17,7 @@ import Button from './button'
 import Modal from './modal'
 import Tooltip from './tooltip'
 import Form from './form'
+import Select from './select'
 
 import Edit from './edit'
 import Export from './export'
@@ -44,6 +45,8 @@ const components = [
   Modal,
   Tooltip,
   Form,
+  Select,
+
   Edit,
   Export,
   Keyboard,
@@ -90,6 +93,7 @@ export * from './button'
 export * from './modal'
 export * from './tooltip'
 export * from './form'
+export * from './select'
 export * from './edit'
 export * from './export'
 export * from './keyboard'

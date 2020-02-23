@@ -1,5 +1,4 @@
 import GlobalConfig from '../../conf'
-import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
 export default {
@@ -25,10 +24,12 @@ export default {
     },
     parseTypeLabel () {
       const { storeData } = this
-      if (storeData.type) {
-        return GlobalConfig.i18n(`vxe.types.${storeData.type}`)
+      const { type, typeList } = storeData
+      if (type) {
+        const selectItem = typeList.find(item => type === item.value)
+        return selectItem ? GlobalConfig.i18n(selectItem.label) : '*.*'
       }
-      return `*.${(this.defaultOptions.types || VXETable.importTypes).join(', *.')}`
+      return `*.${typeList.map(item => item.value).join(', *.')}`
     }
   },
   render (h) {
@@ -42,7 +43,7 @@ export default {
         }
       },
       props: {
-        title: GlobalConfig.i18n('vxe.toolbar.impTitle'),
+        title: GlobalConfig.i18n('vxe.import.impTitle'),
         width: 440,
         mask: true,
         lockView: true,
@@ -65,7 +66,7 @@ export default {
           h('tbody', [
             [
               h('tr', [
-                h('td', GlobalConfig.i18n('vxe.toolbar.impFile')),
+                h('td', GlobalConfig.i18n('vxe.import.impFile')),
                 h('td', [
                   hasFile ? h('div', {
                     class: 'vxe-import-selected--file',
@@ -85,15 +86,15 @@ export default {
                     on: {
                       click: this.selectFileEvent
                     }
-                  }, GlobalConfig.i18n('vxe.toolbar.impSelect'))
+                  }, GlobalConfig.i18n('vxe.import.impSelect'))
                 ])
               ]),
               h('tr', [
-                h('td', GlobalConfig.i18n('vxe.toolbar.impType')),
+                h('td', GlobalConfig.i18n('vxe.import.impType')),
                 h('td', parseTypeLabel)
               ]),
               h('tr', [
-                h('td', GlobalConfig.i18n('vxe.toolbar.impOpts')),
+                h('td', GlobalConfig.i18n('vxe.import.impOpts')),
                 h('td', [
                   h('vxe-radio-group', {
                     model: {
@@ -102,20 +103,13 @@ export default {
                         defaultOptions.mode = value
                       }
                     }
-                  }, [
-                    h('vxe-radio', {
+                  }, storeData.modeList.map(item => {
+                    return h('vxe-radio', {
                       props: {
-                        label: 'covering',
-                        title: GlobalConfig.i18n('vxe.toolbar.impCoveringTitle')
+                        label: item.value
                       }
-                    }, GlobalConfig.i18n('vxe.toolbar.impModeCovering')),
-                    h('vxe-radio', {
-                      props: {
-                        label: 'append',
-                        title: GlobalConfig.i18n('vxe.toolbar.impAppendTitle')
-                      }
-                    }, GlobalConfig.i18n('vxe.toolbar.impModeAppend'))
-                  ])
+                    }, GlobalConfig.i18n(item.label))
+                  }))
                 ])
               ])
             ]
@@ -132,7 +126,7 @@ export default {
             on: {
               click: this.importEvent
             }
-          }, GlobalConfig.i18n('vxe.toolbar.impConfirm'))
+          }, GlobalConfig.i18n('vxe.import.impConfirm'))
         ])
       ])
     ])
