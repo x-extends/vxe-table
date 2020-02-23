@@ -148,8 +148,10 @@ export const DomTools = {
   },
   getAbsolutePos (elem) {
     const bounding = elem.getBoundingClientRect()
-    const { scrollTop, scrollLeft } = DomTools.getDomNode()
-    return { top: scrollTop + bounding.top, left: scrollLeft + bounding.left }
+    const boundingTop = bounding.top
+    const boundingLeft = bounding.left
+    const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
+    return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
   },
   getCellIndexs (cell) {
     const trElem = cell.parentNode

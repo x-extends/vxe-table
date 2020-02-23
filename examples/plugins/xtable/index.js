@@ -19,6 +19,7 @@ import Button from '../../../packages/button'
 import Modal from '../../../packages/modal'
 import Tooltip from '../../../packages/tooltip'
 import Form from '../../../packages/form'
+import Select from '../../../packages/select'
 import Export from '../../../packages/export'
 import Resize from '../../../packages/resize'
 import Table from '../../../packages/table'
@@ -67,6 +68,7 @@ Vue.use(Button)
 Vue.use(Modal)
 Vue.use(Tooltip)
 Vue.use(Form)
+Vue.use(Select)
 Vue.use(Export)
 Vue.use(Resize)
 Vue.use(Table)

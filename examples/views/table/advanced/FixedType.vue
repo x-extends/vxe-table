@@ -15,6 +15,8 @@
     <vxe-table
       border
       highlight-hover-row
+      import-config
+      export-config
       ref="xTable"
       height="400"
       :data="tableData">
@@ -54,6 +56,8 @@ export default {
         <vxe-table
           border
           highlight-hover-row
+          import-config
+          export-config
           ref="xTable"
           height="400"
           :data="tableData">

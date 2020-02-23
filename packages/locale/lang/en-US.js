@@ -39,7 +39,7 @@ export default {
       sortAsc: 'Ascending: lowest to highest',
       sortDesc: 'Descending: highest to lowest',
       filter: 'Enable filtering on selected columns',
-      impSuccess: 'Import success',
+      impSuccess: 'Successfully imported {{0}} records',
       expSuccess: 'Export success',
       expFilename: 'Export_{{0}}',
       expOriginFilename: 'Export_original_{{0}}',
@@ -69,13 +69,50 @@ export default {
       confirm: 'Confirm',
       cancel: 'Cancel'
     },
-    types: {
-      csv: 'CSV (Comma separated) (*.csv)',
-      html: 'Web Page (*.html)',
-      xml: 'XML Data(*.xml)',
-      txt: 'Text (Tab delimited) (*.txt)',
-      xlsx: 'Excel Workbook (*.xlsx)',
-      pdf: 'PDF (*.pdf)'
+    import: {
+      modes: {
+        covering: '覆盖',
+        insert: '新增'
+      },
+      impTitle: 'Import parameter settings',
+      impFile: 'Filename',
+      impSelect: 'Select file',
+      impType: 'File type',
+      impOpts: 'Import option',
+      impConfirm: 'Import'
+    },
+    export: {
+      types: {
+        csv: 'CSV (Comma separated) (*.csv)',
+        html: 'Web Page (*.html)',
+        xml: 'XML Data(*.xml)',
+        txt: 'Text (Tab delimited) (*.txt)',
+        xlsx: 'Excel Workbook (*.xlsx)',
+        pdf: 'PDF (*.pdf)'
+      },
+      modes: {
+        current: 'Current data',
+        selected: 'Selected Data',
+        all: 'All data'
+      },
+      expTitle: 'Export parameter settings',
+      expName: 'Filename',
+      expNamePlaceholder: 'Please enter filename',
+      expSheetName: 'Sheet name',
+      expSheetNamePlaceholder: 'Please enter a sheet name',
+      expType: 'Save the type',
+      expMode: 'Data to export',
+      expCurrentColumn: 'All the field',
+      expColumn: 'The field to export',
+      expOpts: 'Export option',
+      expOptHeader: 'Header',
+      expHeaderTitle: 'Need to export header',
+      expOptFooter: 'Footer',
+      expFooterTitle: 'Need to export footer',
+      expOptOriginal: 'Original data',
+      expOriginalTitle: 'Need to export original data? If it is checked, import to table is supported',
+      expPrint: 'Print',
+      expConfirm: 'Export'
     },
     modal: {
       zoomIn: 'Maximization',
@@ -95,37 +132,7 @@ export default {
       custom: 'Column settings',
       customAll: 'All',
       customConfirm: 'Confirm',
-      customRestore: 'Restore',
-      impTitle: 'Import parameter settings',
-      impFile: 'Filename',
-      impSelect: 'Select file',
-      impType: 'File type',
-      impOpts: 'Import option',
-      impConfirm: 'Import',
-      impModeCovering: 'Covering',
-      impCoveringTitle: 'Importing data into a table using overrides',
-      impModeAppend: 'Append',
-      impAppendTitle: 'Importing data into a table by appending',
-      expTitle: 'Export parameter settings',
-      expName: 'Filename',
-      expNamePlaceholder: 'Please enter filename',
-      expSheetName: 'Sheet name',
-      expSheetNamePlaceholder: 'Please enter a sheet name',
-      expType: 'Save the type',
-      expMode: 'Data to export',
-      expAll: 'All data',
-      expSelected: 'Selected data',
-      expAllColumn: 'All the field',
-      expColumn: 'The field to export',
-      expOpts: 'Export option',
-      expOptHeader: 'Header',
-      expHeaderTitle: 'Need to export header',
-      expOptFooter: 'Footer',
-      expFooterTitle: 'Need to export footer',
-      expOptOriginal: 'Original data',
-      expOriginalTitle: 'Need to export original data? If it is checked, import to table is supported',
-      expPrint: 'Print',
-      expConfirm: 'Export'
+      customRestore: 'Restore'
     }
   }
 }

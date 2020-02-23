@@ -13,63 +13,63 @@
 
         VXETable.setup({
           // 表格的全局参数
-          size: 'small',
-          showOverflow: null,
-          showHeaderOverflow: null,
-          align: null,
-          headerAlign: null,
-          stripe: false,
-          border: false,
-          resizable: false,
-          showHeader: true,
-          highlightCurrentRow: false,
-          highlightHoverRow: false,
-          highlightCurrentColumn: false,
-          highlightHoverColumn: false,
-          export: {}, // 导出默认参数
-          import: {}, // 导入默认参数
-          zIndex: 100, // 全局 zIndex 起始值
-          keepSource: false,
-          rowId: '_XID',
+          // size: 'small',
+          // showOverflow: null,
+          // showHeaderOverflow: null,
+          // align: null,
+          // headerAlign: null,
+          // stripe: false,
+          // border: false,
+          // resizable: false,
+          // showHeader: true,
+          // highlightCurrentRow: false,
+          // highlightHoverRow: false,
+          // highlightCurrentColumn: false,
+          // highlightHoverColumn: false,
+          // zIndex: 100, // 全局 zIndex 起始值
+          // keepSource: false,
+          // rowId: '_XID',
           radioConfig: {
-            trigger: 'default'
+            // trigger: 'default'
           },
           checkboxConfig: {
-            trigger: 'default'
+            // trigger: 'default'
           },
           sortConfig: {
-            remote: false,
-            trigger: 'default'
+            // remote: false,
+            // trigger: 'default'
           },
           filterConfig: {
-            remote: false
+            // remote: false
           },
           importConfig: {
-            mode: 'covering',
+            // mode: 'covering',
+            // modes: ['insert', 'covering'],
             // remote: false,
             // importMethod () {}
           },
           exportConfig: {
-            types: ['csv', 'html', 'xml', 'txt'],
+            // modes: ['current', 'selected'],
+            // types: ['csv', 'html', 'xml', 'txt'],
             // remote: false,
             // exportMethod () {}
           },
           expandConfig: {
-            trigger: 'default'
+            // trigger: 'default'
           },
           treeConfig: {
-            children: 'children',
-            hasChild: 'hasChild',
-            indent: 20
+            // children: 'children',
+            // hasChild: 'hasChild',
+            // indent: 20
           },
           tooltipConfig: {
-            theme: 'dark'
+            // theme: 'dark'
           },
           validConfig: {
-            message: 'default'
+            // message: 'default'
           },
           editConfig: {
-            mode: 'cell'
+            // mode: 'cell'
           },
           contextMenu: {
             // header: {
@@ -81,111 +81,109 @@
             // footer: {
             //   options: []
             // },
-            visibleMethod ({ type, options, column }) {
-              return true
-            }
+            // visibleMethod () {}
           },
           // 版本号（对于某些带 Storage 数据储存的功能有用到，上升版本号可以用于重置 Storage 数据）
-          version: 0,
+          // version: 0,
           // 高级表格的全局参数
           grid: {
             proxyConfig: {
-              autoLoad: true,
-              message: true,
-              props: {
-                list: null,
-                result: 'result',
-                total: 'page.total'
-              },
+              // autoLoad: true,
+              // message: true,
+              // props: {
+              //   list: null,
+              //   result: 'result',
+              //   total: 'page.total'
+              // },
               // 列初始化之前
-              beforeColumn ({ column }) {},
+              // beforeColumn ({ column }) {},
               // 查询触发之前
-              beforeQuery ({ options, page, sort, filters }) {
-                // page 如果有，读取当前分页的对象
-                // sort 如果有，读取当前排序的条件
-                // filters 如果有，读取当前筛选的条件
-                return fetch('url', { method: 'GET' }).then(response => response.json())
-              },
+              // beforeQuery ({ options, page, sort, filters }) {
+              //   page 如果有，读取当前分页的对象
+              //   sort 如果有，读取当前排序的条件
+              //   filters 如果有，读取当前筛选的条件
+              //   return fetch('url', { method: 'GET' }).then(response => response.json())
+              // },
               // 删除触发之前
-              beforeDelete ({ options, body }) {
-                // body.removeRecords 移除的数据列表
-                return fetch('url', { method: 'DELETE' }).then(response => response.json())
-              },
+              // beforeDelete ({ options, body }) {
+              //   body.removeRecords 移除的数据列表
+              //   return fetch('url', { method: 'DELETE' }).then(response => response.json())
+              // },
               // 删除完成之后
-              afterDelete ({ $grid }) {
-                $grid.commitProxy('reload')
-              },
+              // afterDelete ({ $grid }) {
+              //   $grid.commitProxy('reload')
+              // },
               // 保存触发之前
-              beforeSave ({ options, body }) {
-                // body.pendingRecords 标记删除的数据列表
-                // body.insertRecords 插入的数据列表
-                // body.removeRecords 移除的数据列表
-                // body.updateRecords 改变的数据列表
-                return fetch('url', { method: 'POST', body }).then(response => response.json())
-              },
+              // beforeSave ({ options, body }) {
+              //   body.pendingRecords 标记删除的数据列表
+              //   body.insertRecords 插入的数据列表
+              //   body.removeRecords 移除的数据列表
+              //   body.updateRecords 改变的数据列表
+              //   return fetch('url', { method: 'POST', body }).then(response => response.json())
+              // },
               // 保存完成之后
-              afterSave ({ $grid }) {
-                $grid.commitProxy('reload')
-              }
+              // afterSave ({ $grid }) {
+              //   $grid.commitProxy('reload')
+              // }
             }
           },
           // 默认 tooltip 主题样式
           tooltip: {
-            trigger: 'hover',
-            theme: 'dark'
+            // trigger: 'hover',
+            // theme: 'dark'
           },
           // 分页的全局参数
           pager: {
-            perfect: true,
-            pageSize: 10,
-            pagerCount: 7,
-            pageSizes: [10, 15, 20, 50, 100],
-            layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] // 非常灵活的分页布局，支持任意位置随意换
+            // perfect: true,
+            // pageSize: 10,
+            // pagerCount: 7,
+            // pageSizes: [10, 15, 20, 50, 100],
+            // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] // 非常灵活的分页布局，支持任意位置随意换
           },
           // 表单的全局参数
           form: {
-            colon: false
+            // colon: false
           },
           // 工具栏的全局参数
           toolbar: {
-            refresh: false,
-            resizable: {
-              storage: false
-            },
-            custom: {
-              storage: false,
-              isFooter: true
-            },
-            buttons: []
+            // refresh: false,
+            // resizable: {
+            //   storage: false
+            // },
+            // custom: {
+            //   storage: false,
+            //   isFooter: true
+            // },
+            // buttons: []
           },
           // 模态窗口的全局参数
           modal: {
-            minWidth: 340,
-            minHeight: 200,
-            lockView: true,
-            mask: true,
-            duration: 3000,
-            marginSize: 8,
-            dblclickZoom: true,
-            showTitleOverflow: true,
-            remember: false,
-            animat: true,
-            storage: false,
-            storageKey: 'VXE_MODAL_POSITION'
+            // minWidth: 340,
+            // minHeight: 200,
+            // lockView: true,
+            // mask: true,
+            // duration: 3000,
+            // marginSize: 8,
+            // dblclickZoom: true,
+            // showTitleOverflow: true,
+            // remember: false,
+            // animat: true,
+            // storage: false,
+            // storageKey: 'VXE_MODAL_POSITION'
           },
           // 优化的全局参数
           optimization : {
-            animat: true,
-            delayHover: 250,
-            scrollX: {
-              gt: 40
-            },
-            scrollY: {
-              gt: 100
-            }
+            // animat: true,
+            // delayHover: 250,
+            // scrollX: {
+            //   gt: 40
+            // },
+            // scrollY: {
+            //   gt: 100
+            // }
           },
           // 集成国际化（将对列头、校验提示..进行自动翻译）
-          translate: : key => i18n.t(key)
+          // translate: : key => i18n.t(key)
         })
       </code>
     </pre>

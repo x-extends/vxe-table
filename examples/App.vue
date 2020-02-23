@@ -1224,7 +1224,7 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.select',
+              label: 'app.aside.nav.selectContent',
               demoUrl: 'https://jsrun.pro/pfWKp/edit',
               locat: {
                 name: 'TableEditSelect'
@@ -1464,6 +1464,12 @@ export default {
               label: 'app.aside.nav.input',
               locat: {
                 name: 'ModuleInput'
+              }
+            },
+            {
+              label: 'app.aside.nav.select',
+              locat: {
+                name: 'ModuleSelect'
               }
             },
             {

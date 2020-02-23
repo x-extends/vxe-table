@@ -39,7 +39,7 @@ export default {
       sortAsc: '昇冪：最低到最高',
       sortDesc: '按高到低進行排序',
       filter: '對所選的列啟用篩選',
-      impSuccess: '導入成功',
+      impSuccess: '成功導入 {{0}} 條記錄',
       expSuccess: '匯出成功',
       expOriginFilename: '匯出_{{0}}',
       expSrcFilename: '匯出_據_{{0}}',
@@ -69,13 +69,50 @@ export default {
       confirm: '確認',
       cancel: '取消'
     },
-    types: {
-      csv: 'CSV (逗号分隔)(*.csv)',
-      html: '网页(*.html)',
-      xml: 'XML 数据(*.xml)',
-      txt: '文本文件(制表符分隔)(*.txt)',
-      xlsx: 'Excel 工作簿(*.xlsx)',
-      pdf: 'PDF (*.pdf)'
+    import: {
+      modes: {
+        covering: '覆盖',
+        insert: '新增'
+      },
+      impTitle: '導入參數設置',
+      impFile: '檔名',
+      impSelect: '選擇檔案',
+      impType: '檔案類型',
+      impOpts: '導入選項',
+      impConfirm: '導入'
+    },
+    export: {
+      types: {
+        csv: 'CSV (逗号分隔)(*.csv)',
+        html: '网页(*.html)',
+        xml: 'XML 数据(*.xml)',
+        txt: '文本文件(制表符分隔)(*.txt)',
+        xlsx: 'Excel 工作簿(*.xlsx)',
+        pdf: 'PDF (*.pdf)'
+      },
+      modes: {
+        current: '當前數據',
+        selected: '選中數據',
+        all: '全部數據'
+      },
+      expTitle: '匯出參數設置',
+      expName: '檔名',
+      expNamePlaceholder: '請輸入檔名',
+      expSheetName: '工作表名稱',
+      expSheetNamePlaceholder: '請輸入工作表名稱',
+      expType: '保存類型',
+      expMode: '要匯出的數據',
+      expCurrentColumn: '全部欄位',
+      expColumn: '要匯出的欄位',
+      expOpts: '匯出選項',
+      expOptHeader: '錶頭',
+      expHeaderTitle: '是否需要匯出表頭',
+      expOptFooter: '錶尾',
+      expFooterTitle: '是否需要匯出錶尾',
+      expOptOriginal: '源數據',
+      expOriginalTitle: '是否需要匯出源數據，如果勾上則支持導入到表格中',
+      expPrint: '列印',
+      expConfirm: '匯出'
     },
     modal: {
       zoomIn: '最大化',
@@ -95,37 +132,7 @@ export default {
       custom: '列設定',
       customAll: '全部',
       customConfirm: '确认',
-      customRestore: '還原',
-      impTitle: '導入參數設置',
-      impFile: '檔名',
-      impSelect: '選擇檔案',
-      impType: '檔案類型',
-      impOpts: '導入選項',
-      impConfirm: '導入',
-      impModeCovering: '覆蓋',
-      impCoveringTitle: '使用覆蓋的管道將數據導入到表格中',
-      impModeAppend: '追加',
-      impAppendTitle: '使用追加的管道將數據導入到表格中',
-      expTitle: '匯出參數設置',
-      expName: '檔名',
-      expNamePlaceholder: '請輸入檔名',
-      expSheetName: '工作表名稱',
-      expSheetNamePlaceholder: '請輸入工作表名稱',
-      expType: '保存類型',
-      expMode: '要匯出的數據',
-      expAll: '全部數據',
-      expSelected: '選中數據',
-      expAllColumn: '全部欄位',
-      expColumn: '要匯出的欄位',
-      expOpts: '匯出選項',
-      expOptHeader: '錶頭',
-      expHeaderTitle: '是否需要匯出表頭',
-      expOptFooter: '錶尾',
-      expFooterTitle: '是否需要匯出錶尾',
-      expOptOriginal: '源數據',
-      expOriginalTitle: '是否需要匯出源數據，如果勾上則支持導入到表格中',
-      expPrint: '列印',
-      expConfirm: '匯出'
+      customRestore: '還原'
     }
   }
 }

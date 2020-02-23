@@ -49,19 +49,19 @@ function getLabelData ($xetable, opts, columns, datas) {
               cellValue = UtilTools.getCellValue(row, column)
             } else {
               const { cellRender, editRender } = column
-              let exportMethod
+              let exportLabelMethod
               if (editRender && editRender.name) {
                 const compConf = VXETable.renderer.get(editRender.name)
                 if (compConf) {
-                  exportMethod = compConf.editCellExportMethod
+                  exportLabelMethod = compConf.editCellExportMethod
                 }
               } else if (cellRender && cellRender.name) {
                 const compConf = VXETable.renderer.get(cellRender.name)
                 if (compConf) {
-                  exportMethod = compConf.cellExportMethod
+                  exportLabelMethod = compConf.cellExportMethod
                 }
               }
-              cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+              cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
             }
         }
         item[column.id] = XEUtils.toString(cellValue)
@@ -94,19 +94,19 @@ function getLabelData ($xetable, opts, columns, datas) {
           } else if (scrollXLoad || scrollYLoad) {
             // 如果是虚拟滚动
             const { cellRender, editRender } = column
-            let exportMethod
+            let exportLabelMethod
             if (editRender && editRender.name) {
               const compConf = VXETable.renderer.get(editRender.name)
               if (compConf) {
-                exportMethod = compConf.editCellExportMethod
+                exportLabelMethod = compConf.editCellExportMethod
               }
             } else if (cellRender && cellRender.name) {
               const compConf = VXETable.renderer.get(cellRender.name)
               if (compConf) {
-                exportMethod = compConf.cellExportMethod
+                exportLabelMethod = compConf.cellExportMethod
               }
             }
-            cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+            cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
           } else {
             const cell = DomTools.getCell($xetable, { row, column })
             cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
@@ -136,20 +136,20 @@ function getHeaderTitle (opts, column) {
 
 function getFooterCellValue ($xetable, opts, items, column) {
   const { cellRender, editRender } = column
-  let exportMethod
+  let exportLabelMethod
   if (editRender && editRender.name) {
     const compConf = VXETable.renderer.get(editRender.name)
     if (compConf) {
-      exportMethod = compConf.footerCellExportMethod
+      exportLabelMethod = compConf.footerCellExportMethod
     }
   } else if (cellRender && cellRender.name) {
     const compConf = VXETable.renderer.get(cellRender.name)
     if (compConf) {
-      exportMethod = compConf.footerCellExportMethod
+      exportLabelMethod = compConf.footerCellExportMethod
     }
   }
   const itemIndex = $xetable.$getColumnIndex(column)
-  const cellValue = exportMethod ? exportMethod({ $table: $xetable, items, itemIndex, column }) : XEUtils.toString(items[itemIndex])
+  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex, column }) : XEUtils.toString(items[itemIndex])
   return cellValue
 }
 
@@ -555,14 +555,14 @@ export default {
     if (status) {
       $xetable.createData(rows)
         .then(data => {
-          if (opts.mode === 'append') {
-            $xetable.insertAt(data, -1)
+          if (opts.mode === 'insert') {
+            $xetable.insert(data)
           } else {
             $xetable.reloadData(data)
           }
         })
       if (opts.message !== false) {
-        VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess'), status: 'success' })
+        VXETable.$modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.table.impSuccess'), [rows.length]), status: 'success' })
       }
     } else if (opts.message !== false) {
       VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })

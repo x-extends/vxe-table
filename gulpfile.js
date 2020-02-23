@@ -32,6 +32,7 @@ const components = [
   'modal',
   'tooltip',
   'form',
+  'select',
 
   'keyboard',
   'resize',

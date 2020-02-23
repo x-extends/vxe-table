@@ -132,7 +132,7 @@ module.exports = {
         manual: 'Manual trigger',
         click: 'Click trigger',
         dblclick: 'dblclick trigger',
-        select: 'Select the content',
+        selectContent: 'Select the content',
         autoClear: 'Auto clear',
         insert: 'Insert',
         delete: 'Delete',
@@ -161,6 +161,7 @@ module.exports = {
         module: 'Modules',
         button: 'Button',
         input: 'Input',
+        select: 'Select',
         modal: 'Modal',
         tooltip: 'Tooltip',
         form: 'Form',
@@ -529,7 +530,9 @@ module.exports = {
         desc: {
           value: 'Binding values',
           size: 'Size',
-          disabled: 'Whether to disable'
+          disabled: 'Whether to disable',
+          prefixIcon: 'Prefix icon',
+          suffixIcon: 'Suffix icon'
         }
       },
       button: {

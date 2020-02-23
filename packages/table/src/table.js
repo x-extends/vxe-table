@@ -487,6 +487,8 @@ export default {
       importStore: {
         file: null,
         type: '',
+        modeList: [],
+        typeList: [],
         filename: '',
         visible: false
       },
@@ -498,9 +500,9 @@ export default {
       // 导出相关信息
       exportStore: {
         name: '',
-        mode: '',
+        modeList: [],
+        typeList: [],
         columns: [],
-        selectRecords: [],
         hasFooter: false,
         visible: false,
         isTree: false
@@ -508,8 +510,8 @@ export default {
       exportParams: {
         filename: '',
         sheetName: '',
+        mode: '',
         type: '',
-        types: [],
         original: false,
         message: true,
         isHeader: false,
@@ -5240,7 +5242,7 @@ export default {
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
     exportData (options) {
-      const { visibleColumn, tableFullData } = this
+      const { visibleColumn, tableFullData, treeConfig, treeOpts } = this
       const opts = Object.assign({
         // filename: '',
         // sheetName: '',
@@ -5250,7 +5252,8 @@ export default {
         isFooter: true,
         download: true,
         type: 'csv',
-        data: tableFullData,
+        mode: 'current',
+        // data: null,
         // remote: false,
         columns: visibleColumn,
         // dataFilterMethod: null,
@@ -5268,8 +5271,19 @@ export default {
       if (VXETable.exportTypes.indexOf(opts.type) === -1) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
+      if (!opts.data) {
+        opts.data = tableFullData
+        if (opts.mode === 'selected') {
+          const selectRecords = this.getCheckboxRecords()
+          if (['html', 'pdf'].indexOf(opts.type) > -1 && treeConfig) {
+            opts.data = XEUtils.searchTree(this.getTableData().fullData, item => selectRecords.indexOf(item) > -1, treeOpts)
+          } else {
+            opts.data = selectRecords
+          }
+        }
+      }
       if (opts.remote) {
-        const params = { options: opts, $table: this }
+        const params = { options: opts, $table: this, $grid: this.$xegrid }
         if (opts.exportMethod) {
           return opts.exportMethod(params)
         }
@@ -5280,7 +5294,7 @@ export default {
     importByFile (file, opts) {
       if (window.FileReader) {
         const { type, filename } = UtilTools.parseFile(file)
-        const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
+        const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
         const types = options.types || VXETable.importTypes
         if (types.indexOf(type) > -1) {
           if (options.remote) {
@@ -5396,7 +5410,8 @@ export default {
       })
     },
     openImport (options) {
-      const defOpts = Object.assign({ mode: 'covering', message: true }, options, this.importOpts)
+      const defOpts = Object.assign({ mode: 'insert', message: true }, options, this.importOpts)
+      const types = defOpts.types || VXETable.exportTypes
       const isTree = !!this.getTreeStatus()
       if (isTree) {
         if (defOpts.message) {
@@ -5407,10 +5422,25 @@ export default {
       if (!this.importConfig) {
         UtilTools.warn('vxe.error.reqProp', ['import-config'])
       }
+      // 处理类型
+      const typeList = types.map(value => {
+        return {
+          value,
+          label: `vxe.export.types.${value}`
+        }
+      })
+      const modeList = defOpts.modes.map(value => {
+        return {
+          value,
+          label: `vxe.import.modes.${value}`
+        }
+      })
       Object.assign(this.importStore, {
         file: null,
         type: '',
         filename: '',
+        modeList,
+        typeList,
         visible: true
       })
       Object.assign(this.importParams, defOpts)
@@ -5429,10 +5459,16 @@ export default {
         UtilTools.warn('vxe.error.reqProp', ['export-config'])
       }
       // 处理类型
-      defOpts.types = types.map(value => {
+      const typeList = types.map(value => {
         return {
           value,
-          label: `vxe.types.${value}`
+          label: `vxe.export.types.${value}`
+        }
+      })
+      const modeList = defOpts.modes.map(value => {
+        return {
+          value,
+          label: `vxe.export.modes.${value}`
         }
       })
       // 默认全部选中
@@ -5443,8 +5479,8 @@ export default {
       // 更新条件
       Object.assign(this.exportStore, {
         columns: exportColumns,
-        selectRecords: selectRecords,
-        mode: selectRecords.length ? 'selected' : 'all',
+        typeList,
+        modeList,
         hasFooter: hasFooter,
         visible: true,
         isTree
@@ -5453,8 +5489,8 @@ export default {
       Object.assign(this.exportParams, {
         filename: defOpts.filename || '',
         sheetName: defOpts.sheetName || '',
-        type: defOpts.type || defOpts.types[0].value,
-        types: defOpts.types,
+        type: defOpts.type || typeList[0].value,
+        mode: selectRecords.length ? 'selected' : 'current',
         original: defOpts.original,
         message: defOpts.message,
         isHeader: defOpts.isHeader,
