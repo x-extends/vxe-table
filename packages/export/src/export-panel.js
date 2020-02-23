@@ -1,5 +1,4 @@
 import GlobalConfig from '../../conf'
-import XEUtils from 'xe-utils/methods/xe-utils'
 
 export default {
   name: 'VxeExportPanel',
@@ -11,17 +10,7 @@ export default {
     return {
       isAll: false,
       isIndeterminate: false,
-      loading: false,
-      modeList: [
-        {
-          value: 'all',
-          label: 'vxe.toolbar.expAll'
-        },
-        {
-          value: 'selected',
-          label: 'vxe.toolbar.expSelected'
-        }
-      ]
+      loading: false
     }
   },
   computed: {
@@ -33,7 +22,7 @@ export default {
     }
   },
   render (h) {
-    const { _e, isAll, isIndeterminate, showSheet, defaultOptions, storeData, modeList } = this
+    const { _e, isAll, isIndeterminate, showSheet, defaultOptions, storeData } = this
     return h('vxe-modal', {
       res: 'modal',
       model: {
@@ -43,7 +32,7 @@ export default {
         }
       },
       props: {
-        title: GlobalConfig.i18n('vxe.toolbar.expTitle'),
+        title: GlobalConfig.i18n('vxe.export.expTitle'),
         width: 660,
         mask: true,
         lockView: true,
@@ -69,13 +58,13 @@ export default {
           h('tbody', [
             [
               h('tr', [
-                h('td', GlobalConfig.i18n('vxe.toolbar.expName')),
+                h('td', GlobalConfig.i18n('vxe.export.expName')),
                 h('td', [
                   h('input', {
                     ref: 'filename',
                     attrs: {
                       type: 'text',
-                      placeholder: GlobalConfig.i18n('vxe.toolbar.expNamePlaceholder')
+                      placeholder: GlobalConfig.i18n('vxe.export.expNamePlaceholder')
                     },
                     domProps: {
                       value: defaultOptions.filename
@@ -89,7 +78,7 @@ export default {
                 ])
               ]),
               h('tr', [
-                h('td', GlobalConfig.i18n('vxe.toolbar.expType')),
+                h('td', GlobalConfig.i18n('vxe.export.expType')),
                 h('td', [
                   h('select', {
                     on: {
@@ -97,7 +86,7 @@ export default {
                         defaultOptions.type = evnt.target.value
                       }
                     }
-                  }, defaultOptions.types.map(item => {
+                  }, storeData.typeList.map(item => {
                     return h('option', {
                       attrs: {
                         value: item.value
@@ -110,12 +99,12 @@ export default {
                 ])
               ]),
               showSheet ? h('tr', [
-                h('td', GlobalConfig.i18n('vxe.toolbar.expSheetName')),
+                h('td', GlobalConfig.i18n('vxe.export.expSheetName')),
                 h('td', [
                   h('input', {
                     attrs: {
                       type: 'text',
-                      placeholder: GlobalConfig.i18n('vxe.toolbar.expSheetNamePlaceholder')
+                      placeholder: GlobalConfig.i18n('vxe.export.expSheetNamePlaceholder')
                     },
                     domProps: {
                       value: defaultOptions.sheetName
@@ -129,28 +118,28 @@ export default {
                 ])
               ]) : _e(),
               h('tr', [
-                h('td', GlobalConfig.i18n('vxe.toolbar.expMode')),
+                h('td', GlobalConfig.i18n('vxe.export.expMode')),
                 h('td', [
                   h('select', {
                     on: {
                       change (evnt) {
-                        storeData.mode = evnt.target.value
+                        defaultOptions.mode = evnt.target.value
                       }
                     }
-                  }, modeList.map(item => {
+                  }, storeData.modeList.map(item => {
                     return h('option', {
                       attrs: {
                         value: item.value
                       },
                       domProps: {
-                        selected: storeData.mode === item.value
+                        selected: defaultOptions.mode === item.value
                       }
                     }, GlobalConfig.i18n(item.label))
                   }))
                 ])
               ]),
               h('tr', [
-                h('td', [GlobalConfig.i18n('vxe.toolbar.expColumn')]),
+                h('td', [GlobalConfig.i18n('vxe.export.expColumn')]),
                 h('td', [
                   h('div', {
                     class: 'vxe-export--panel-column'
@@ -173,7 +162,7 @@ export default {
                         h('i', {
                           class: 'vxe-checkbox--icon'
                         }),
-                        GlobalConfig.i18n('vxe.toolbar.expAllColumn')
+                        GlobalConfig.i18n('vxe.export.expCurrentColumn')
                       ])
                     ]),
                     h('ul', {
@@ -207,11 +196,11 @@ export default {
                 ])
               ]),
               h('tr', [
-                h('td', GlobalConfig.i18n('vxe.toolbar.expOpts')),
+                h('td', GlobalConfig.i18n('vxe.export.expOpts')),
                 h('td', [
                   h('vxe-checkbox', {
                     props: {
-                      title: GlobalConfig.i18n('vxe.toolbar.expHeaderTitle')
+                      title: GlobalConfig.i18n('vxe.export.expHeaderTitle')
                     },
                     model: {
                       value: defaultOptions.isHeader,
@@ -219,11 +208,11 @@ export default {
                         defaultOptions.isHeader = value
                       }
                     }
-                  }, GlobalConfig.i18n('vxe.toolbar.expOptHeader')),
+                  }, GlobalConfig.i18n('vxe.export.expOptHeader')),
                   h('vxe-checkbox', {
                     props: {
                       disabled: !storeData.hasFooter,
-                      title: GlobalConfig.i18n('vxe.toolbar.expFooterTitle')
+                      title: GlobalConfig.i18n('vxe.export.expFooterTitle')
                     },
                     model: {
                       value: defaultOptions.isFooter,
@@ -231,10 +220,10 @@ export default {
                         defaultOptions.isFooter = value
                       }
                     }
-                  }, GlobalConfig.i18n('vxe.toolbar.expOptFooter')),
+                  }, GlobalConfig.i18n('vxe.export.expOptFooter')),
                   h('vxe-checkbox', {
                     props: {
-                      title: GlobalConfig.i18n('vxe.toolbar.expOriginalTitle')
+                      title: GlobalConfig.i18n('vxe.export.expOriginalTitle')
                     },
                     model: {
                       value: defaultOptions.original,
@@ -242,7 +231,7 @@ export default {
                         defaultOptions.original = value
                       }
                     }
-                  }, GlobalConfig.i18n('vxe.toolbar.expOptOriginal'))
+                  }, GlobalConfig.i18n('vxe.export.expOptOriginal'))
                 ])
               ])
             ]
@@ -255,7 +244,7 @@ export default {
             on: {
               click: this.printEvent
             }
-          }, GlobalConfig.i18n('vxe.toolbar.expPrint')),
+          }, GlobalConfig.i18n('vxe.export.expPrint')),
           h('vxe-button', {
             props: {
               status: 'primary'
@@ -263,7 +252,7 @@ export default {
             on: {
               click: this.exportEvent
             }
-          }, GlobalConfig.i18n('vxe.toolbar.expConfirm'))
+          }, GlobalConfig.i18n('vxe.export.expConfirm'))
         ])
       ])
     ])
@@ -271,7 +260,7 @@ export default {
   methods: {
     checkStatus () {
       const columns = this.storeData.columns
-      this.isAll = this.storeData.columns.every(column => column.disabled || column.checked)
+      this.isAll = columns.every(column => column.disabled || column.checked)
       this.isIndeterminate = !this.isAll && columns.some(column => !column.disabled && column.checked)
     },
     allColumnEvent () {
@@ -292,19 +281,9 @@ export default {
     },
     getExportOption () {
       const { storeData, defaultOptions } = this
-      const $xetable = this.$parent
-      const selectRecords = storeData.selectRecords
-      const opts = Object.assign({
+      return Object.assign({
         columns: storeData.columns.filter(column => column.checked)
       }, defaultOptions)
-      if (storeData.mode === 'selected') {
-        if (['html', 'pdf'].indexOf(defaultOptions.type) > -1 && $xetable.treeConfig) {
-          opts.data = XEUtils.searchTree($xetable.getTableData().fullData, item => selectRecords.indexOf(item) > -1, $xetable.getTreeStatus().config)
-        } else {
-          opts.data = selectRecords
-        }
-      }
-      return opts
     },
     printEvent () {
       const $xetable = this.$parent

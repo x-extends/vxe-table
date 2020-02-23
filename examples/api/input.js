@@ -105,6 +105,24 @@ const apis = [
         enum: '',
         defVal: 'false',
         list: []
+      },
+      {
+        name: 'prefix-icon',
+        descKey: 'app.api.input.desc.prefixIcon',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'suffix-icon',
+        descKey: 'app.api.input.desc.suffixIcon',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },

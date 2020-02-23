@@ -24,8 +24,8 @@
       :toolbar="tableToolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :import-config="{remote: true, importMethod, types: ['xlsx']}"
-      :export-config="{remote: true, exportMethod, types: ['xlsx']}"
+      :import-config="{remote: true, importMethod, types: ['xlsx'], modes: ['insert']}"
+      :export-config="{remote: true, exportMethod, types: ['xlsx'], modes: ['current', 'selected', 'all']}"
       :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
@@ -169,8 +169,8 @@ export default {
           :toolbar="tableToolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :import-config="{remote: true, importMethod, types: ['xlsx']}"
-          :export-config="{remote: true, exportMethod, types: ['xlsx']}"
+          :import-config="{remote: true, importMethod, types: ['xlsx'], modes: ['insert']}"
+          :export-config="{remote: true, exportMethod, types: ['xlsx'], modes: ['current', 'selected', 'all']}"
           :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
@@ -304,11 +304,21 @@ export default {
               })
             },
             exportMethod ({ options }) {
-              const { columns } = options
+              const proxyInfo = this.$refs.xGrid.getProxyInfo()
               const body = {
                 filename: options.filename,
                 sheetName: options.sheetName,
-                fields: columns.map(column => column.property)
+                isHeader: options.isHeader,
+                original: options.original,
+                mode: options.mode,
+                pager: proxyInfo.pager,
+                ids: options.mode === 'selected' ? options.data.map(item => item.id) : [],
+                fields: options.columns.map(column => {
+                  return {
+                    field: column.property,
+                    title: column.title
+                  }
+                })
               }
               // 开始服务端导出
               return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/export', body).then(data => {
@@ -364,11 +374,21 @@ export default {
       })
     },
     exportMethod ({ options }) {
-      const { columns } = options
+      const proxyInfo = this.$refs.xGrid.getProxyInfo()
       const body = {
         filename: options.filename,
         sheetName: options.sheetName,
-        fields: columns.map(column => column.property)
+        isHeader: options.isHeader,
+        original: options.original,
+        mode: options.mode,
+        pager: proxyInfo.pager,
+        ids: options.mode === 'selected' ? options.data.map(item => item.id) : [],
+        fields: options.columns.map(column => {
+          return {
+            field: column.property,
+            title: column.title
+          }
+        })
       }
       // 开始服务端导出
       return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/export', body).then(data => {

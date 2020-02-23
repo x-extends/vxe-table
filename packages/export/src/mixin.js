@@ -57,19 +57,19 @@ function getLabelData ($xetable, opts, columns, datas) {
               cellValue = UtilTools.getCellValue(row, column)
             } else {
               const { cellRender, editRender } = column
-              let exportMethod
+              let exportLabelMethod
               if (editRender && editRender.name) {
                 const compConf = VXETable.renderer.get(editRender.name)
                 if (compConf) {
-                  exportMethod = compConf.editCellExportMethod
+                  exportLabelMethod = compConf.editCellExportMethod
                 }
               } else if (cellRender && cellRender.name) {
                 const compConf = VXETable.renderer.get(cellRender.name)
                 if (compConf) {
-                  exportMethod = compConf.cellExportMethod
+                  exportLabelMethod = compConf.cellExportMethod
                 }
               }
-              cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+              cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
             }
         }
         item[column.id] = XEUtils.toString(cellValue)
@@ -98,19 +98,19 @@ function getLabelData ($xetable, opts, columns, datas) {
           } else if (scrollXLoad || scrollYLoad) {
             // 如果是虚拟滚动
             const { cellRender, editRender } = column
-            let exportMethod
+            let exportLabelMethod
             if (editRender && editRender.name) {
               const compConf = VXETable.renderer.get(editRender.name)
               if (compConf) {
-                exportMethod = compConf.editCellExportMethod
+                exportLabelMethod = compConf.editCellExportMethod
               }
             } else if (cellRender && cellRender.name) {
               const compConf = VXETable.renderer.get(cellRender.name)
               if (compConf) {
-                exportMethod = compConf.cellExportMethod
+                exportLabelMethod = compConf.cellExportMethod
               }
             }
-            cellValue = exportMethod ? exportMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+            cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
           } else {
             const cell = DomTools.getCell($xetable, { row, column })
             cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
@@ -140,20 +140,20 @@ function getHeaderTitle (opts, column) {
 
 function getFooterCellValue ($xetable, opts, items, column) {
   const { cellRender, editRender } = column
-  let exportMethod
+  let exportLabelMethod
   if (editRender && editRender.name) {
     const compConf = VXETable.renderer.get(editRender.name)
     if (compConf) {
-      exportMethod = compConf.footerCellExportMethod
+      exportLabelMethod = compConf.footerCellExportMethod
     }
   } else if (cellRender && cellRender.name) {
     const compConf = VXETable.renderer.get(cellRender.name)
     if (compConf) {
-      exportMethod = compConf.footerCellExportMethod
+      exportLabelMethod = compConf.footerCellExportMethod
     }
   }
   const itemIndex = $xetable.$getColumnIndex(column)
-  const cellValue = exportMethod ? exportMethod({ $table: $xetable, items, itemIndex, column }) : XEUtils.toString(items[itemIndex])
+  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex, column }) : XEUtils.toString(items[itemIndex])
   return cellValue
 }
 
@@ -556,14 +556,14 @@ function handleImport ($xetable, content, opts) {
   if (status) {
     $xetable.createData(rows)
       .then(data => {
-        if (opts.mode === 'append') {
-          $xetable.insertAt(data, -1)
+        if (opts.mode === 'insert') {
+          $xetable.insert(data)
         } else {
           $xetable.reloadData(data)
         }
       })
     if (opts.message !== false) {
-      VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess'), status: 'success' })
+      VXETable.$modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.table.impSuccess'), [rows.length]), status: 'success' })
     }
   } else if (opts.message !== false) {
     VXETable.$modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
@@ -583,7 +583,7 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      const { visibleColumn, tableFullData } = this
+      const { visibleColumn, tableFullData, treeConfig, treeOpts } = this
       const opts = Object.assign({
         // filename: '',
         // sheetName: '',
@@ -593,7 +593,8 @@ export default {
         isFooter: true,
         download: true,
         type: 'csv',
-        data: tableFullData,
+        mode: 'current',
+        // data: null,
         // remote: false,
         columns: visibleColumn,
         // dataFilterMethod: null,
@@ -610,8 +611,19 @@ export default {
       if (VXETable.exportTypes.indexOf(opts.type) === -1) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
+      if (!opts.data) {
+        opts.data = tableFullData
+        if (opts.mode === 'selected') {
+          const selectRecords = this.getCheckboxRecords()
+          if (['html', 'pdf'].indexOf(opts.type) > -1 && treeConfig) {
+            opts.data = XEUtils.searchTree(this.getTableData().fullData, item => selectRecords.indexOf(item) > -1, treeOpts)
+          } else {
+            opts.data = selectRecords
+          }
+        }
+      }
       if (opts.remote) {
-        const params = { options: opts, $table: this }
+        const params = { options: opts, $table: this, $grid: this.$xegrid }
         if (opts.exportMethod) {
           return opts.exportMethod(params)
         }
@@ -622,7 +634,7 @@ export default {
     _importByFile (file, opts) {
       if (window.FileReader) {
         const { type, filename } = UtilTools.parseFile(file)
-        const options = Object.assign({ mode: 'covering' }, opts, { type, filename })
+        const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
         const types = options.types || VXETable.importTypes
         if (types.indexOf(type) > -1) {
           if (options.remote) {
@@ -738,7 +750,8 @@ export default {
       })
     },
     _openImport (options) {
-      const defOpts = Object.assign({ mode: 'covering', message: true }, options, this.importOpts)
+      const defOpts = Object.assign({ mode: 'insert', message: true }, options, this.importOpts)
+      const types = defOpts.types || VXETable.exportTypes
       const isTree = !!this.getTreeStatus()
       if (isTree) {
         if (defOpts.message) {
@@ -749,10 +762,25 @@ export default {
       if (!this.importConfig) {
         UtilTools.warn('vxe.error.reqProp', ['import-config'])
       }
+      // 处理类型
+      const typeList = types.map(value => {
+        return {
+          value,
+          label: `vxe.export.types.${value}`
+        }
+      })
+      const modeList = defOpts.modes.map(value => {
+        return {
+          value,
+          label: `vxe.import.modes.${value}`
+        }
+      })
       Object.assign(this.importStore, {
         file: null,
         type: '',
         filename: '',
+        modeList,
+        typeList,
         visible: true
       })
       Object.assign(this.importParams, defOpts)
@@ -770,10 +798,16 @@ export default {
         UtilTools.warn('vxe.error.reqProp', ['export-config'])
       }
       // 处理类型
-      defOpts.types = types.map(value => {
+      const typeList = types.map(value => {
         return {
           value,
-          label: `vxe.types.${value}`
+          label: `vxe.export.types.${value}`
+        }
+      })
+      const modeList = defOpts.modes.map(value => {
+        return {
+          value,
+          label: `vxe.export.modes.${value}`
         }
       })
       // 默认全部选中
@@ -784,8 +818,8 @@ export default {
       // 更新条件
       Object.assign(this.exportStore, {
         columns: exportColumns,
-        selectRecords: selectRecords,
-        mode: selectRecords.length ? 'selected' : 'all',
+        typeList,
+        modeList,
         hasFooter: hasFooter,
         visible: true,
         isTree
@@ -794,8 +828,8 @@ export default {
       Object.assign(this.exportParams, {
         filename: defOpts.filename || '',
         sheetName: defOpts.sheetName || '',
-        type: defOpts.type || defOpts.types[0].value,
-        types: defOpts.types,
+        type: defOpts.type || typeList[0].value,
+        mode: selectRecords.length ? 'selected' : 'current',
         original: defOpts.original,
         message: defOpts.message,
         isHeader: defOpts.isHeader,
