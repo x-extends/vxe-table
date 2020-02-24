@@ -14,10 +14,7 @@
       <vxe-form-item field="rate" title="Rate" span="8" folding :item-render="{name: 'Rate'}"></vxe-form-item>
       <vxe-form-item field="flag1" title="Radio" span="8" folding :item-render="{name: 'Radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
       <vxe-form-item field="checkedList" title="Checkbox" span="8" folding :item-render="{name: 'Checkbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
-      <vxe-form-item span="24" align="center" collapse-node>
-        <Button type="primary" html-type="submit">查询</Button>
-        <Button html-type="reset">重置</Button>
-      </vxe-form-item>
+      <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ props: {type: 'primary', htmlType: 'submit', content: '查询'} }, { props: {htmlType: 'reset', content: '重置'} }]}"></vxe-form-item>
     </vxe-form>
 
     <vxe-toolbar export custom>
@@ -162,10 +159,7 @@ export default {
           <vxe-form-item field="rate" title="Rate" span="8" folding :item-render="{name: 'Rate'}"></vxe-form-item>
           <vxe-form-item field="flag1" title="Radio" span="8" folding :item-render="{name: 'Radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
           <vxe-form-item field="checkedList" title="Checkbox" span="8" folding :item-render="{name: 'Checkbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
-          <vxe-form-item span="24" align="center" collapse-node>
-            <Button type="primary" html-type="submit">查询</Button>
-            <Button html-type="reset">重置</Button>
-          </vxe-form-item>
+          <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ props: {type: 'primary', htmlType: 'submit', content: '查询'} }, { props: {htmlType: 'reset', content: '重置'} }]}"></vxe-form-item>
         </vxe-form>
 
         <vxe-toolbar export custom>

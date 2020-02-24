@@ -102,8 +102,18 @@ function defaultEditRender (h, renderOpts, params) {
   ]
 }
 
+function defaultButtonEditRender (h, renderOpts, params) {
+  const props = getDefaultProps(params, renderOpts)
+  return [
+    h('vxe-button', {
+      props,
+      on: getDefaultEvents(renderOpts, params)
+    })
+  ]
+}
+
 function defaultButtonsEditRender (h, renderOpts, params) {
-  return renderOpts.children.map(child => defaultEditRender(h, Object.assign({ name: 'button' }, child), params)[0])
+  return renderOpts.children.map(childRenderOpts => defaultButtonEditRender(h, childRenderOpts, params)[0])
 }
 
 function renderNativeOptions (h, options, renderOpts, params) {
@@ -402,8 +412,18 @@ function defaultItemRender (h, renderOpts, params) {
   ]
 }
 
+function defaultButtonItemRender (h, renderOpts, params) {
+  const props = getDefaultFormItemProps(params, renderOpts)
+  return [
+    h('vxe-button', {
+      props,
+      on: getDefaultFormEvents(renderOpts, params)
+    })
+  ]
+}
+
 function defaultButtonsItemRender (h, renderOpts, params) {
-  return renderOpts.children.map(child => defaultItemRender(h, Object.assign({ name: 'button' }, child), params)[0])
+  return renderOpts.children.map(childRenderOpts => defaultButtonItemRender(h, childRenderOpts, params)[0])
 }
 
 function renderNativeFormOptions (h, options, renderOpts, params) {
@@ -492,9 +512,9 @@ const renderMap = {
     renderItem: defaultItemRender
   },
   $button: {
-    renderEdit: defaultEditRender,
-    renderDefault: defaultEditRender,
-    renderItem: defaultItemRender
+    renderEdit: defaultButtonEditRender,
+    renderDefault: defaultButtonEditRender,
+    renderItem: defaultButtonItemRender
   },
   $buttons: {
     renderEdit: defaultButtonsEditRender,
