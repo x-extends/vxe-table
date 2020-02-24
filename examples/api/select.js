@@ -70,7 +70,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'change',
+        desc: '在点击右侧清除按钮时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
+        name: 'clear',
+        desc: '在点击右侧清除按钮时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      }
+    ]
   },
   {
     name: 'Methods',
@@ -79,7 +98,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'blur()',
+        desc: '取消焦点',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'focus()',
+        desc: '获取焦点并显示下拉列表',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   }
 ]
 

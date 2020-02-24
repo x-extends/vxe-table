@@ -1843,6 +1843,15 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.vxeSelect',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'select'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeTextarea',
               locat: {
                 name: 'VXEAPI',
