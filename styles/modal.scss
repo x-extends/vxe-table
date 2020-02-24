@@ -8,19 +8,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   transition: top .4s ease-in-out;
-  &.size--medium {
-    font-size: $vxe-font-size-medium;
-  }
-  &.size--small {
-    font-size: $vxe-font-size-small;
-  }
-  &.size--mini {
-    font-size: $vxe-font-size-mini;
-  }
   &.is--active {
     display: block;
   }
@@ -372,5 +362,18 @@
     .sb-resize {
       bottom: -#{$SpaceSize / 2 + 1}px;
     }
+  }
+}
+
+.vxe-modal--wrapper {
+  font-size: $vxe-font-size;
+  &.size--medium {
+    font-size: $vxe-font-size-medium;
+  }
+  &.size--small {
+    font-size: $vxe-font-size-small;
+  }
+  &.size--mini {
+    font-size: $vxe-font-size-mini;
   }
 }

@@ -607,6 +607,26 @@ module.exports = {
           resetValue: '重置时的默认值',
           itemRender: '项渲染器配置项'
         }
+      },
+      select: {
+        desc: {
+          value: '绑定值',
+          size: '尺寸',
+          placeholder: '空值显示的占位符',
+          clearable: '当有值时，是否在右侧显示清除按钮',
+          disabled: '是否禁用',
+          placement: '默认显示下拉列表的方向'
+        }
+      },
+      selectGroup: {
+        desc: {
+          disabled: '是否禁用'
+        }
+      },
+      selectOption: {
+        desc: {
+          disabled: '是否禁用'
+        }
       }
     }
   }

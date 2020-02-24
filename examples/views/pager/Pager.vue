@@ -3,44 +3,53 @@
     <h2>{{ $t('app.aside.nav.pager') }}</h2>
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'pager'}}">API</router-link>，建议通过 <router-link :to="{name: 'StartGlobal'}">setup</router-link> 设置全局样式</p>
 
-    <vxe-pager
-      align="left"
-      :current-page.sync="page1.currentPage"
-      :page-size.sync="page1.pageSize"
-      :total="page1.totalResult"
-      :layouts="['JumpNumber']">
-    </vxe-pager>
+    <p>
+      <vxe-pager
+        align="left"
+        :current-page.sync="page1.currentPage"
+        :page-size.sync="page1.pageSize"
+        :total="page1.totalResult">
+      </vxe-pager>
+      <vxe-pager
+        align="left"
+        size="medium"
+        :current-page.sync="page2.currentPage"
+        :page-size.sync="page2.pageSize"
+        :total="page2.totalResult">
+      </vxe-pager>
+      <vxe-pager
+        align="left"
+        size="small"
+        :current-page.sync="page2.currentPage"
+        :page-size.sync="page2.pageSize"
+        :total="page2.totalResult">
+      </vxe-pager>
+      <vxe-pager
+        align="left"
+        size="mini"
+        :current-page.sync="page2.currentPage"
+        :page-size.sync="page2.pageSize"
+        :total="page2.totalResult">
+      </vxe-pager>
+    </p>
 
-    <vxe-pager
-      align="left"
-      :current-page.sync="page2.currentPage"
-      :page-size.sync="page2.pageSize"
-      :total="page2.totalResult"
-      :layouts="['Sizes', 'PrevPage', 'JumpNumber', 'NextPage']">
-    </vxe-pager>
+    <p>
+      <vxe-pager
+        border
+        :current-page.sync="page4.currentPage"
+        :page-size.sync="page4.pageSize"
+        :total="page4.totalResult"
+        :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+      </vxe-pager>
 
-    <vxe-pager
-      :current-page.sync="page3.currentPage"
-      :page-size.sync="page3.pageSize"
-      :total="page3.totalResult"
-      :layouts="['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']">
-    </vxe-pager>
-
-    <vxe-pager
-      border
-      :current-page.sync="page4.currentPage"
-      :page-size.sync="page4.pageSize"
-      :total="page4.totalResult"
-      :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-    </vxe-pager>
-
-    <vxe-pager
-      background
-      :current-page.sync="page5.currentPage"
-      :page-size.sync="page5.pageSize"
-      :total="page5.totalResult"
-      :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-    </vxe-pager>
+      <vxe-pager
+        background
+        :current-page.sync="page5.currentPage"
+        :page-size.sync="page5.pageSize"
+        :total="page5.totalResult"
+        :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+      </vxe-pager>
+    </p>
 
     <p>
       <vxe-tooltip ref="xTip"></vxe-tooltip>
@@ -110,44 +119,53 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-pager
-          align="left"
-          :current-page.sync="page1.currentPage"
-          :page-size.sync="page1.pageSize"
-          :total="page1.totalResult"
-          :layouts="['JumpNumber']">
-        </vxe-pager>
+        <p>
+          <vxe-pager
+            align="left"
+            :current-page.sync="page1.currentPage"
+            :page-size.sync="page1.pageSize"
+            :total="page1.totalResult">
+          </vxe-pager>
+          <vxe-pager
+            align="left"
+            size="medium"
+            :current-page.sync="page2.currentPage"
+            :page-size.sync="page2.pageSize"
+            :total="page2.totalResult">
+          </vxe-pager>
+          <vxe-pager
+            align="left"
+            size="small"
+            :current-page.sync="page2.currentPage"
+            :page-size.sync="page2.pageSize"
+            :total="page2.totalResult">
+          </vxe-pager>
+          <vxe-pager
+            align="left"
+            size="mini"
+            :current-page.sync="page2.currentPage"
+            :page-size.sync="page2.pageSize"
+            :total="page2.totalResult">
+          </vxe-pager>
+        </p>
 
-        <vxe-pager
-          align="left"
-          :current-page.sync="page2.currentPage"
-          :page-size.sync="page2.pageSize"
-          :total="page2.totalResult"
-          :layouts="['Sizes', 'PrevPage', 'JumpNumber', 'NextPage']">
-        </vxe-pager>
+        <p>
+          <vxe-pager
+            border
+            :current-page.sync="page4.currentPage"
+            :page-size.sync="page4.pageSize"
+            :total="page4.totalResult"
+            :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+          </vxe-pager>
 
-        <vxe-pager
-          :current-page.sync="page3.currentPage"
-          :page-size.sync="page3.pageSize"
-          :total="page3.totalResult"
-          :layouts="['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']">
-        </vxe-pager>
-
-        <vxe-pager
-          border
-          :current-page.sync="page4.currentPage"
-          :page-size.sync="page4.pageSize"
-          :total="page4.totalResult"
-          :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-        </vxe-pager>
-
-        <vxe-pager
-          background
-          :current-page.sync="page5.currentPage"
-          :page-size.sync="page5.pageSize"
-          :total="page5.totalResult"
-          :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-        </vxe-pager>
+          <vxe-pager
+            background
+            :current-page.sync="page5.currentPage"
+            :page-size.sync="page5.pageSize"
+            :total="page5.totalResult"
+            :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+          </vxe-pager>
+        </p>
 
         <p>
           <vxe-tooltip ref="xTip"></vxe-tooltip>

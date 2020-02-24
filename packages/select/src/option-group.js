@@ -4,7 +4,13 @@ export default {
   name: 'VxeOptionGroup',
   props: {
     label: [String, Number],
+    disabled: Boolean,
     size: String
+  },
+  provide () {
+    return {
+      $xegroup: this
+    }
   },
   inject: {
     $xeselect: {

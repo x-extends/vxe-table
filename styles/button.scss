@@ -151,7 +151,7 @@
         }
       }
     }
-    .vxe-button--dropdown-wrapper {
+    .vxe-button--dropdown-panel {
       display: block;
     }
     .vxe-button--dropdown-arrow {
@@ -163,13 +163,15 @@
     margin: -0.18em 0 0 0.3em;
     @include animatTransition(transform, .2s);
   }
-  .vxe-button--dropdown-wrapper {
+  .vxe-button--dropdown-panel {
     display: none;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    margin-top: 5px;
-    z-index: 100;
+    padding: 0.2em 0;
+    min-width: 100%;
+  }
+  .vxe-button--dropdown-wrapper {
     padding: 5px;
     background-color: #fff;
     border-radius: 4px;

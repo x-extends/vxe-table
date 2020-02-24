@@ -69,9 +69,6 @@
       }
     }
   }
-  .vxe-radio--icon {
-    font-size: $vxe-radio-font-size-default;
-  }
   .vxe-radio--label {
     padding-left: 0.5em;
     vertical-align: middle;
@@ -80,17 +77,27 @@
   &+.vxe-radio {
     margin-left: 10px;
   }
+}
+
+.vxe-radio {
+  font-size: $vxe-font-size;
+  .vxe-radio--icon {
+    font-size: $vxe-radio-font-size-default;
+  }
   &.size--medium {
+    font-size: $vxe-font-size-medium;
     .vxe-radio--icon {
       font-size: $vxe-radio-font-size-medium;
     }
   }
   &.size--small {
+    font-size: $vxe-font-size-small;
     .vxe-radio--icon {
       font-size: $vxe-radio-font-size-small;
     }
   }
   &.size--mini {
+    font-size: $vxe-font-size-mini;
     .vxe-radio--icon {
       font-size: $vxe-radio-font-size-mini;
     }

@@ -13,6 +13,12 @@ export default {
     disabled: Boolean,
     loading: Boolean
   },
+  data () {
+    return {
+      panelIndex: 0,
+      panelStyle: null
+    }
+  },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
@@ -64,13 +70,18 @@ export default {
         })
       ])),
       h('div', {
-        class: 'vxe-button--dropdown-wrapper',
-        on: {
-          click: this.clickDropdownEvent,
-          mouseenter: this.mouseenterEvent,
-          mouseleave: this.mouseleaveEvent
-        }
-      }, $scopedSlots.dropdowns.call(this))
+        class: 'vxe-button--dropdown-panel',
+        style: this.panelStyle
+      }, [
+        h('div', {
+          class: 'vxe-button--dropdown-wrapper',
+          on: {
+            click: this.clickDropdownEvent,
+            mouseenter: this.mouseenterEvent,
+            mouseleave: this.mouseleaveEvent
+          }
+        }, $scopedSlots.dropdowns.call(this))
+      ])
     ]) : h('button', {
       class: ['vxe-button', `type--${btnType}`, {
         [`size--${vSize}`]: vSize,
@@ -110,6 +121,11 @@ export default {
       }
       return contents
     },
+    updateZindex () {
+      if (this.panelIndex < UtilTools.getLastZIndex()) {
+        this.panelIndex = UtilTools.nextZIndex()
+      }
+    },
     clickDropdownEvent (evnt) {
       const dropdownElem = evnt.currentTarget
       const wrapperElem = dropdownElem.parentNode
@@ -123,6 +139,10 @@ export default {
     mouseenterEvent (evnt) {
       const dropdownElem = evnt.currentTarget
       const wrapperElem = dropdownElem.parentNode
+      this.updateZindex()
+      this.panelStyle = {
+        zIndex: this.panelIndex
+      }
       wrapperElem.dataset.active = 'Y'
       DomTools.addClass(wrapperElem, 'is--active')
     },
