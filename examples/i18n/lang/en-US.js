@@ -608,6 +608,26 @@ module.exports = {
           resetValue: 'The default value when reset',
           itemRender: 'Form item renderer config'
         }
+      },
+      select: {
+        desc: {
+          value: 'Binding values',
+          size: 'Size',
+          placeholder: 'Placeholder for null value empty',
+          clearable: 'Whether to display the clear button on the right when there is a value',
+          disabled: 'Whether to disable',
+          placement: 'Displays the placement of the drop-down list by default'
+        }
+      },
+      selectGroup: {
+        desc: {
+          disabled: 'Whether to disable'
+        }
+      },
+      selectOption: {
+        desc: {
+          disabled: 'Whether to disable'
+        }
       }
     }
   }

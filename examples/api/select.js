@@ -6,7 +6,53 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'value,v-model',
+        descKey: 'app.api.select.desc.value',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearable',
+        descKey: 'app.api.select.desc.clearable',
+        version: '',
+        type: 'Boolean',
+        enum: 'false',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'placeholder',
+        descKey: 'app.api.select.desc.placeholder',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'disabled',
+        descKey: 'app.api.select.desc.disabled',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'placement',
+        descKey: 'app.api.select.desc.placement',
+        version: '',
+        type: 'String',
+        enum: 'top, bottom',
+        defVal: 'bottom',
+        list: []
+      }
+    ]
   },
   {
     name: 'Slots',

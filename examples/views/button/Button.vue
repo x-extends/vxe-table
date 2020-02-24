@@ -4,10 +4,10 @@
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'button'}}">API</router-link></p>
 
     <p>
-      <vxe-button>默认按钮</vxe-button>
-      <vxe-button size="medium">中等按钮</vxe-button>
-      <vxe-button size="small">小型按钮</vxe-button>
-      <vxe-button size="mini">超小按钮</vxe-button>
+      <vxe-button>默认尺寸</vxe-button>
+      <vxe-button size="medium">中等尺寸</vxe-button>
+      <vxe-button size="small">小型尺寸</vxe-button>
+      <vxe-button size="mini">超小尺寸</vxe-button>
     </p>
 
     <p>
