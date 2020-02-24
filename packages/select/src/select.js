@@ -115,10 +115,12 @@ export default {
     this.panelIndex = UtilTools.nextZIndex()
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
+    GlobalEvent.on(this, 'resize', this.handleGlobalResizeEvent)
   },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'keydown')
+    GlobalEvent.off(this, 'resize')
   },
   render (h) {
     const { vSize, isActivated, disabled, clearable, placeholder, selectLabel, showPanel, panelStyle } = this
@@ -256,6 +258,9 @@ export default {
         }
       }
     },
+    handleGlobalResizeEvent () {
+      this.updatePlacement()
+    },
     updateZindex () {
       if (this.panelIndex < UtilTools.getLastZIndex()) {
         this.panelIndex = UtilTools.nextZIndex()
@@ -310,6 +315,14 @@ export default {
         }
         this.panelStyle = panelStyle
       })
+    },
+    focus () {
+      this.showOptionPanel()
+      return this.$nextTick()
+    },
+    blur () {
+      this.hideOptionPanel()
+      return this.$nextTick()
     }
   }
 }
