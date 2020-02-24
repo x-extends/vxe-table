@@ -54,8 +54,8 @@ export default {
     },
     pager: {
       goto: '前往',
-      pagesize: '項/頁',
-      total: '共 {{total}} 項記錄',
+      pagesize: '{{0}}項/頁',
+      total: '共 {{0}} 項記錄',
       pageClassifier: '頁',
       prevPage: '上一頁',
       nextPage: '下一頁',

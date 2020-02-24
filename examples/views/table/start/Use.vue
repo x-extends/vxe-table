@@ -42,7 +42,7 @@
         import {
           // 实例
           VXETable,
-          // 依赖
+          // 模块
           Icon,
           Column,
           Header,
@@ -51,19 +51,17 @@
           Loading,
           Tooltip,
           Grid,
+          Excel,
           Menu,
           Toolbar,
           Pager,
-          Form,
           Checkbox,
           Radio,
           Input,
           Button,
           Modal,
-          Edit,
           Export,
           Keyboard,
-          Validator,
           Resize,
           // 核心
           Table

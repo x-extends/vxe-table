@@ -54,8 +54,8 @@ export default {
     },
     pager: {
       goto: '移動',
-      pagesize: '件/ページ',
-      total: '全 {{total}} 件',
+      pagesize: '{{0}}件/ページ',
+      total: '全 {{0}} 件',
       pageClassifier: '',
       prevPage: '上一页',
       nextPage: '下一页',

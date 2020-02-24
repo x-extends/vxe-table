@@ -19,7 +19,7 @@
     </p>
 
     <p>
-      <vxe-select v-model="value5" placeholder="请选择">
+      <vxe-select v-model="value5" placeholder="请选择" prefix-icon="fa fa-user-o">
         <vxe-option v-for="num in 3" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
       <vxe-select v-model="value6" placeholder="可清除" clearable>
@@ -29,15 +29,15 @@
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
       <vxe-select v-model="value8" placeholder="分组" clearable>
-        <vxe-option-group label="选项2">
+        <vxe-optgroup label="选项2">
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
           <vxe-option value="2-3" label="选项2-3"></vxe-option>
-        </vxe-option-group>
-        <vxe-option-group label="选项3">
+        </vxe-optgroup>
+        <vxe-optgroup label="选项3">
           <vxe-option value="3-1" label="选项3-1"></vxe-option>
           <vxe-option value="3-2" label="选项3-2"></vxe-option>
-        </vxe-option-group>
+        </vxe-optgroup>
       </vxe-select>
     </p>
 
@@ -53,27 +53,27 @@
         <vxe-option value="3" label="选项3"></vxe-option>
       </vxe-select>
       <vxe-select v-model="value11" placeholder="禁用分组" clearable>
-        <vxe-option-group label="选项2" disabled>
+        <vxe-optgroup label="选项2" disabled>
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
           <vxe-option value="2-3" label="选项2-3"></vxe-option>
-        </vxe-option-group>
-        <vxe-option-group label="选项3">
+        </vxe-optgroup>
+        <vxe-optgroup label="选项3">
           <vxe-option value="3-1" label="选项3-1" disabled></vxe-option>
           <vxe-option value="3-2" label="选项3-2"></vxe-option>
-        </vxe-option-group>
-        <vxe-option-group label="选项4">
+        </vxe-optgroup>
+        <vxe-optgroup label="选项4">
           <vxe-option value="4-1" label="选项4-1"></vxe-option>
           <vxe-option value="4-2" label="选项4-2"></vxe-option>
           <vxe-option value="4-3" label="选项4-3"></vxe-option>
           <vxe-option value="4-4" label="选项4-4"></vxe-option>
-        </vxe-option-group>
-        <vxe-option-group label="选项5">
+        </vxe-optgroup>
+        <vxe-optgroup label="选项5">
           <vxe-option value="5-1" label="选项5-1"></vxe-option>
           <vxe-option value="5-2" label="选项5-2"></vxe-option>
           <vxe-option value="5-3" label="选项5-3"></vxe-option>
           <vxe-option value="5-4" label="选项5-4"></vxe-option>
-        </vxe-option-group>
+        </vxe-optgroup>
       </vxe-select>
     </p>
 
@@ -121,7 +121,7 @@ export default {
         </p>
 
         <p>
-          <vxe-select v-model="value5" placeholder="请选择">
+          <vxe-select v-model="value5" placeholder="请选择" prefix-icon="fa fa-user-o">
             <vxe-option v-for="num in 3" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
           <vxe-select v-model="value6" placeholder="可清除" clearable>
@@ -131,15 +131,15 @@ export default {
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
           <vxe-select v-model="value8" placeholder="分组" clearable>
-            <vxe-option-group label="选项2">
+            <vxe-optgroup label="选项2">
               <vxe-option value="2-1" label="选项2-1"></vxe-option>
               <vxe-option value="2-2" label="选项2-2"></vxe-option>
               <vxe-option value="2-3" label="选项2-3"></vxe-option>
-            </vxe-option-group>
-            <vxe-option-group label="选项3">
+            </vxe-optgroup>
+            <vxe-optgroup label="选项3">
               <vxe-option value="3-1" label="选项3-1"></vxe-option>
               <vxe-option value="3-2" label="选项3-2"></vxe-option>
-            </vxe-option-group>
+            </vxe-optgroup>
           </vxe-select>
         </p>
 
@@ -155,27 +155,27 @@ export default {
             <vxe-option value="3" label="选项3"></vxe-option>
           </vxe-select>
           <vxe-select v-model="value11" placeholder="禁用分组" clearable>
-            <vxe-option-group label="选项2" disabled>
+            <vxe-optgroup label="选项2" disabled>
               <vxe-option value="2-1" label="选项2-1"></vxe-option>
               <vxe-option value="2-2" label="选项2-2"></vxe-option>
               <vxe-option value="2-3" label="选项2-3"></vxe-option>
-            </vxe-option-group>
-            <vxe-option-group label="选项3">
+            </vxe-optgroup>
+            <vxe-optgroup label="选项3">
               <vxe-option value="3-1" label="选项3-1" disabled></vxe-option>
               <vxe-option value="3-2" label="选项3-2"></vxe-option>
-            </vxe-option-group>
-            <vxe-option-group label="选项4">
+            </vxe-optgroup>
+            <vxe-optgroup label="选项4">
               <vxe-option value="4-1" label="选项4-1"></vxe-option>
               <vxe-option value="4-2" label="选项4-2"></vxe-option>
               <vxe-option value="4-3" label="选项4-3"></vxe-option>
               <vxe-option value="4-4" label="选项4-4"></vxe-option>
-            </vxe-option-group>
-            <vxe-option-group label="选项5">
+            </vxe-optgroup>
+            <vxe-optgroup label="选项5">
               <vxe-option value="5-1" label="选项5-1"></vxe-option>
               <vxe-option value="5-2" label="选项5-2"></vxe-option>
               <vxe-option value="5-3" label="选项5-3"></vxe-option>
               <vxe-option value="5-4" label="选项5-4"></vxe-option>
-            </vxe-option-group>
+            </vxe-optgroup>
           </vxe-select>
         </p>
         `,

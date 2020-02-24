@@ -1,7 +1,7 @@
 import { UtilTools } from '../../tools'
 
 export default {
-  name: 'VxeOptionGroup',
+  name: 'VxeOptgroup',
   props: {
     label: [String, Number],
     disabled: Boolean,
@@ -9,7 +9,7 @@ export default {
   },
   provide () {
     return {
-      $xegroup: this
+      $xeoptgroup: this
     }
   },
   inject: {
@@ -30,13 +30,13 @@ export default {
   },
   render (h) {
     return h('div', {
-      class: 'vxe-select-option-group'
+      class: 'vxe-optgroup'
     }, [
       h('div', {
-        class: 'vxe-select-option-group--title'
+        class: 'vxe-optgroup--title'
       }, UtilTools.getFuncText(this.label)),
       h('div', {
-        class: 'vxe-select-option-group--wrapper'
+        class: 'vxe-optgroup--wrapper'
       }, this.$slots.default)
     ])
   }

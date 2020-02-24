@@ -51,6 +51,15 @@ const apis = [
         enum: 'top, bottom',
         defVal: 'bottom',
         list: []
+      },
+      {
+        name: 'transfer',
+        descKey: 'app.api.select.desc.transfer',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
       }
     ]
   },

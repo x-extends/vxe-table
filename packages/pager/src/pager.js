@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import { UtilTools } from '../../tools'
 
 export default {
   name: 'VxePager',
@@ -40,13 +40,6 @@ export default {
       default: null
     }
   },
-  data () {
-    return {
-      showSizes: false,
-      panelStyle: null,
-      panelIndex: 0
-    }
-  },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
@@ -68,15 +61,6 @@ export default {
     offsetNumber () {
       return Math.floor((this.pagerCount - 2) / 2)
     }
-  },
-  created () {
-    this.panelIndex = UtilTools.nextZIndex()
-    GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
-    GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
-  },
-  destroyed () {
-    GlobalEvent.off(this, 'mousedown')
-    GlobalEvent.off(this, 'keydown')
   },
   render (h) {
     const { vSize, align } = this
@@ -190,42 +174,23 @@ export default {
     },
     // sizes
     renderSizes (h) {
-      return h('span', {
-        class: ['vxe-pager--sizes', {
-          'is--active': this.showSizes
-        }],
-        ref: 'sizeBtn'
-      }, [
-        h('span', {
-          class: 'size--content',
-          on: {
-            click: this.toggleSizePanel
+      return h('vxe-select', {
+        class: 'vxe-pager--sizes',
+        props: {
+          placement: 'top'
+        },
+        model: {
+          value: this.pageSize,
+          callback: num => this.pageSizeEvent(num)
+        }
+      }, this.pageSizes.map(num => {
+        return h('vxe-option', {
+          props: {
+            value: num,
+            label: `${XEUtils.template(GlobalConfig.i18n('vxe.pager.pagesize'), [num])}`
           }
-        }, [
-          h('span', `${this.pageSize}${GlobalConfig.i18n('vxe.pager.pagesize')}`),
-          h('i', {
-            class: `vxe-pager--sizes-arrow ${GlobalConfig.icon.caretBottom}`
-          })
-        ]),
-        h('div', {
-          class: 'vxe-pager-size--select-wrapper',
-          style: this.panelStyle,
-          ref: 'sizePanel'
-        }, [
-          h('ul', {
-            class: 'vxe-pager-size--select'
-          }, this.pageSizes.map(num => {
-            return h('li', {
-              class: ['size--option', {
-                'is--active': num === this.pageSize
-              }],
-              on: {
-                click: () => this.pageSizeEvent(num)
-              }
-            }, `${num}${GlobalConfig.i18n('vxe.pager.pagesize')}`)
-          }))
-        ])
-      ])
+        })
+      }))
     },
     // FullJump
     renderFullJump (h) {
@@ -265,7 +230,7 @@ export default {
       }, [
         h('span', {
           class: 'vxe-pager--separator'
-        }, '/'),
+        }),
         h('span', this.pageCount)
       ])
     },
@@ -273,7 +238,7 @@ export default {
     renderTotal (h) {
       return h('span', {
         class: 'vxe-pager--total'
-      }, XEUtils.template(GlobalConfig.i18n('vxe.pager.total'), { total: this.total }))
+      }, XEUtils.template(GlobalConfig.i18n('vxe.pager.total'), [this.total]))
     },
     // number
     renderPageBtn (h, showJump) {
@@ -333,28 +298,6 @@ export default {
     getPageCount (total, size) {
       return Math.max(Math.ceil(total / size), 1)
     },
-    handleGlobalMousedownEvent (evnt) {
-      const $refs = this.$refs
-      if (this.showSizes && !(DomTools.getEventTargetNode(evnt, $refs.sizeBtn).flag || DomTools.getEventTargetNode(evnt, $refs.sizePanel).flag)) {
-        this.hideSizePanel()
-      }
-    },
-    handleGlobalKeydownEvent (evnt) {
-      const keyCode = evnt.keyCode
-      const isUpArrow = keyCode === 38
-      const isDwArrow = keyCode === 40
-      if ((isUpArrow || isDwArrow) && this.showSizes) {
-        evnt.preventDefault()
-        const { pageSizes, pageSize } = this
-        let sizeIndex = XEUtils.findIndexOf(pageSizes, num => num === pageSize)
-        if (isUpArrow && sizeIndex > 0) {
-          sizeIndex--
-        } else if (isDwArrow && sizeIndex < pageSizes.length - 1) {
-          sizeIndex++
-        }
-        this.changePageSize(pageSizes[sizeIndex])
-      }
-    },
     prevPage () {
       const currentPage = this.currentPage
       if (currentPage > 1) {
@@ -383,7 +326,6 @@ export default {
     },
     pageSizeEvent (pageSize) {
       this.changePageSize(pageSize)
-      this.hideSizePanel()
     },
     changePageSize (pageSize) {
       const type = 'size-change'
@@ -412,29 +354,6 @@ export default {
     },
     emitPageChange (type, pageSize, currentPage) {
       UtilTools.emitEvent(this, 'page-change', [{ type, pageSize, currentPage }])
-    },
-    toggleSizePanel () {
-      this[this.showSizes ? 'hideSizePanel' : 'showSizePanel']()
-    },
-    updateZindex () {
-      if (this.panelIndex < UtilTools.getLastZIndex()) {
-        this.panelIndex = UtilTools.nextZIndex()
-      }
-    },
-    showSizePanel () {
-      this.showSizes = true
-      this.updateZindex()
-      this.$nextTick(() => {
-        const { sizeBtn, sizePanel } = this.$refs
-        this.panelStyle = {
-          zIndex: this.panelIndex,
-          bottom: `${sizeBtn.clientHeight + 6}px`,
-          left: `-${sizePanel.clientWidth / 2 - sizeBtn.clientWidth / 2}px`
-        }
-      })
-    },
-    hideSizePanel () {
-      this.showSizes = false
     }
   }
 }

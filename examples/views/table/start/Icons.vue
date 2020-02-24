@@ -31,11 +31,13 @@
             zoomIn: 'vxe-icon--zoomin',
             zoomOut: 'vxe-icon--zoomout',
             custom: 'vxe-icon--menu',
+            inputClear: 'vxe-icon--close',
             jumpPrev: 'vxe-icon--d-arrow-left',
             jumpNext: 'vxe-icon--d-arrow-right',
             prevPage: 'vxe-icon--arrow-left',
             nextPage: 'vxe-icon--arrow-right',
             jumpMore: 'vxe-icon--more',
+            pageSize: 'vxe-icon--caret-bottom',
             modalZoomIn: 'vxe-icon--square',
             modalZoomOut: 'vxe-icon--zoomout',
             modalClose: 'vxe-icon--close',
@@ -45,8 +47,7 @@
             modalError: 'vxe-icon--error',
             modalQuestion: 'vxe-icon--question',
             modalLoading: 'vxe-icon--refresh roll',
-            caretBottom: 'vxe-icon--caret-bottom',
-            dropdownBottom: 'vxe-icon--arrow-bottom',
+            dropdownBtn: 'vxe-icon--arrow-bottom',
             btnLoading: 'vxe-icon--refresh roll'
           }
         })

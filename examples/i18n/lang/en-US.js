@@ -224,8 +224,8 @@ module.exports = {
         vxeInput: 'vxe-input',
         vxeTextarea: 'vxe-textarea',
         vxeSelect: 'vxe-select',
+        vxeOptgroup: 'vxe-optgroup',
         vxeOption: 'vxe-option',
-        vxeOptionGroup: 'vxe-option-group',
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
         vxeModal: 'vxe-modal',
@@ -540,6 +540,7 @@ module.exports = {
       },
       button: {
         desc: {
+          content: 'Content (support internationalization)',
           type: 'Type',
           size: 'Size',
           name: 'To identify this item',
@@ -619,7 +620,9 @@ module.exports = {
           placeholder: 'Placeholder for null value empty',
           clearable: 'Whether to display the clear button on the right when there is a value',
           disabled: 'Whether to disable',
-          placement: 'Displays the placement of the drop-down list by default'
+          prefixIcon: 'Prefix icon',
+          placement: 'Displays the placement of the drop-down list by default',
+          transfer: 'Whether to insert the popup container into the body'
         }
       },
       selectGroup: {
