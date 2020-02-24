@@ -10,7 +10,7 @@ const apis = [
       {
         name: 'content',
         descKey: 'app.api.button.desc.content',
-        version: '1.15.21',
+        version: '1.15.22',
         type: 'String',
         enum: '',
         defVal: '',

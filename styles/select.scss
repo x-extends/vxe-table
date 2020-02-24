@@ -1,4 +1,5 @@
 /**Variable**/
+@import './helpers/mixin.scss';
 
 .vxe-select {
   position: relative;
@@ -55,15 +56,15 @@
   background-color: #fff;
 }
 
-.vxe-select-option-group {
-  .vxe-select-option-group--title {
+.vxe-optgroup {
+  .vxe-optgroup--title {
     padding: 0 0.6em;
-    color: $vxe-select-option-group-title-color;
+    color: $vxe-optgroup-title-color;
     font-size: 0.8em;
   }
 }
 
-.vxe-select-option-group--wrapper {
+.vxe-optgroup--wrapper {
   .vxe-select-option {
     padding: 0 1.6em;
   }
@@ -100,27 +101,27 @@
 }
 
 .vxe-select-option--panel {
-  .vxe-select-option-group--title,
+  .vxe-optgroup--title,
   .vxe-select-option {
     height: $vxe-select-option-height-default;
     line-height: $vxe-select-option-height-default;
   }
   &.size--medium {
-    .vxe-select-option-group--title,
+    .vxe-optgroup--title,
     .vxe-select-option {
       height: $vxe-select-option-height-medium;
       line-height: $vxe-select-option-height-medium;
     }
   }
   &.size--small {
-    .vxe-select-option-group--title,
+    .vxe-optgroup--title,
     .vxe-select-option {
       height: $vxe-select-option-height-small;
       line-height: $vxe-select-option-height-small;
     }
   }
   &.size--mini {
-    .vxe-select-option-group--title,
+    .vxe-optgroup--title,
     .vxe-select-option {
       height: $vxe-select-option-height-mini;
       line-height: $vxe-select-option-height-mini;
