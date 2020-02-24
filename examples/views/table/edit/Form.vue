@@ -7,9 +7,9 @@
         <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
       </vxe-form-item>
       <vxe-form-item title="性别" field="sex">
-        <select v-model="formData.sex" class="vxe-select">
-          <option v-for="(item, index) in sexList" :key="index" :value="item.value">{{ item.label }}</option>
-        </select>
+        <vxe-select v-model="formData.sex" placeholder="请选择性别">
+          <vxe-option v-for="(item, index) in sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
+        </vxe-select>
       </vxe-form-item>
       <vxe-form-item>
         <vxe-button type="submit" status="primary">查询</vxe-button>
@@ -61,9 +61,9 @@ export default {
             <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex">
-            <select v-model="formData.sex" class="vxe-select">
-              <option v-for="(item, index) in sexList" :key="index" :value="item.value">{{ item.label }}</option>
-            </select>
+            <vxe-select v-model="formData.sex" placeholder="请选择性别">
+              <vxe-option v-for="(item, index) in sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
+            </vxe-select>
           </vxe-form-item>
           <vxe-form-item>
             <vxe-button type="submit" status="primary">查询</vxe-button>

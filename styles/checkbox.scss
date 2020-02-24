@@ -105,20 +105,24 @@
 }
 
 .vxe-checkbox {
+  font-size: $vxe-font-size;
   .vxe-checkbox--icon {
     font-size: $vxe-checkbox-font-size-default;
   }
   &.size--medium {
+    font-size: $vxe-font-size-medium;
     .vxe-checkbox--icon {
       font-size: $vxe-checkbox-font-size-medium;
     }
   }
   &.size--small {
+    font-size: $vxe-font-size-small;
     .vxe-checkbox--icon {
       font-size: $vxe-checkbox-font-size-small;
     }
   }
   &.size--mini {
+    font-size: $vxe-font-size-mini;
     .vxe-checkbox--icon {
       font-size: $vxe-checkbox-font-size-mini;
     }

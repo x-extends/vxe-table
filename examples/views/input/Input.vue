@@ -4,12 +4,15 @@
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link></p>
 
     <p>
-      <vxe-input v-model="value1" placeholder="请输入内容" clearable></vxe-input>
-      <vxe-input v-model="value2" placeholder="请输入内容" disabled></vxe-input>
-      <vxe-input v-model="value3" placeholder="请输入内容" prefix-icon="fa fa-user"></vxe-input>
-      <vxe-input v-model="value4" placeholder="请输入内容" suffix-icon="fa fa-search"></vxe-input>
-      <vxe-input v-model="value5" placeholder="请输入内容" prefix-icon="fa fa-user-o" suffix-icon="fa fa-eye"></vxe-input>
-      <vxe-input v-model="value6" placeholder="请输入内容" prefix-icon="fa fa-user" suffix-icon="fa fa-eye-slash" clearable></vxe-input>
+      <vxe-input v-model="value1" placeholder="默认尺寸"></vxe-input>
+      <vxe-input v-model="value2" placeholder="中等尺寸" size="medium"></vxe-input>
+      <vxe-input v-model="value3" placeholder="小型尺寸" size="small"></vxe-input>
+      <vxe-input v-model="value4" placeholder="超小尺寸" size="mini"></vxe-input>
+    </p>
+
+    <p>
+      <vxe-input v-model="value5" placeholder="请输入内容" prefix-icon="fa fa-user-o"></vxe-input>
+      <vxe-input v-model="value6" placeholder="请输入内容" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
     </p>
 
     <p>
@@ -43,17 +46,20 @@ export default {
       demoCodes: [
         `
         <p>
-          <vxe-input v-model="value1" placeholder="请输入内容" clearable></vxe-input>
-          <vxe-input v-model="value2" placeholder="请输入内容" disabled></vxe-input>
-          <vxe-input v-model="value3" placeholder="请输入内容" prefix-icon="fa fa-user"></vxe-input>
-          <vxe-input v-model="value4" placeholder="请输入内容" suffix-icon="fa fa-search"></vxe-input>
-          <vxe-input v-model="value5" placeholder="请输入内容" prefix-icon="fa fa-user-o" suffix-icon="fa fa-eye"></vxe-input>
-          <vxe-input v-model="value6" placeholder="请输入内容" prefix-icon="fa fa-user" suffix-icon="fa fa-eye-slash" clearable></vxe-input>
+          <vxe-input v-model="value1" placeholder="默认尺寸"></vxe-input>
+          <vxe-input v-model="value2" placeholder="中等尺寸" size="medium"></vxe-input>
+          <vxe-input v-model="value3" placeholder="小型尺寸" size="small"></vxe-input>
+          <vxe-input v-model="value4" placeholder="超小尺寸" size="mini"></vxe-input>
         </p>
 
         <p>
-          <vxe-textarea v-model="value6" placeholder="请输入内容"></vxe-textarea>
-          <vxe-textarea v-model="value7" placeholder="请输入内容" disabled></vxe-textarea>
+          <vxe-input v-model="value5" placeholder="请输入内容" prefix-icon="fa fa-user-o"></vxe-input>
+          <vxe-input v-model="value6" placeholder="请输入内容" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
+        </p>
+
+        <p>
+          <vxe-textarea v-model="value7" placeholder="请输入内容"></vxe-textarea>
+          <vxe-textarea v-model="value8" placeholder="请输入内容" disabled></vxe-textarea>
         </p>
         `,
         `

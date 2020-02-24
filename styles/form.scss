@@ -106,9 +106,10 @@
     }
   }
   &.is--error {
-    .vxe-input>.vxe-input--inner,
-    .vxe-textarea>.vxe-input--textarea,
+    .vxe-input > .vxe-input--inner,
+    .vxe-textarea > .vxe-input--textarea,
     .vxe-select,
+    .vxe-select.is--active > .vxe-input .vxe-input--inner,
     .vxe-default-input,
     .vxe-default-textarea,
     .vxe-default-select {

@@ -7,10 +7,14 @@ export default {
   props: {
     value: [String, Number],
     label: [String, Number],
+    disabled: Boolean,
     size: String
   },
   inject: {
     $xeselect: {
+      default: null
+    },
+    $xegroup: {
       default: null
     }
   },
@@ -22,19 +26,29 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isDisabled () {
+      const { $xegroup, disabled } = this
+      return ($xegroup && $xegroup.disabled) || disabled
+    }
+  },
+  warch: {
+    value () {
+      this.updateView()
     }
   },
   mounted () {
-    this.$xeselect.updateStatus()
+    this.updateView()
   },
   destroyed () {
-    this.$xeselect.updateStatus()
+    this.updateView()
   },
   render (h) {
-    const { $xeselect, id, value } = this
+    const { $xeselect, id, isDisabled, value } = this
     return h('div', {
       class: ['vxe-select-option', {
-        'is--active': $xeselect.value === value,
+        'is--disabled': isDisabled,
+        'is--checked': $xeselect.value === value,
         'is--hover': $xeselect.currentValue === value
       }],
       attrs: {
@@ -48,6 +62,9 @@ export default {
     }, UtilTools.getFuncText(this.label))
   },
   methods: {
+    updateView () {
+      this.$xeselect.updateStatus()
+    },
     optionEvent (evnt) {
       this.$xeselect.changeOptionEvent(evnt, this.value)
     },

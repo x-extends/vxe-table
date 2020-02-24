@@ -4,7 +4,14 @@
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'checkbox'}}">API</router-link></p>
 
     <p>
-      <vxe-checkbox indeterminate>不确定选项</vxe-checkbox>
+      <vxe-checkbox>默认尺寸</vxe-checkbox>
+      <vxe-checkbox size="medium">中等尺寸</vxe-checkbox>
+      <vxe-checkbox size="small">小型尺寸</vxe-checkbox>
+      <vxe-checkbox size="mini">超小尺寸</vxe-checkbox>
+      <vxe-checkbox indeterminate>默认尺寸</vxe-checkbox>
+      <vxe-checkbox size="medium" indeterminate>中等尺寸</vxe-checkbox>
+      <vxe-checkbox size="small" indeterminate>小型尺寸</vxe-checkbox>
+      <vxe-checkbox size="mini" indeterminate>超小尺寸</vxe-checkbox>
     </p>
 
     <p>
@@ -44,7 +51,14 @@ export default {
       demoCodes: [
         `
         <p>
-          <vxe-checkbox indeterminate>不确定选项</vxe-checkbox>
+          <vxe-checkbox>默认尺寸</vxe-checkbox>
+          <vxe-checkbox size="medium">中等尺寸</vxe-checkbox>
+          <vxe-checkbox size="small">小型尺寸</vxe-checkbox>
+          <vxe-checkbox size="mini">超小尺寸</vxe-checkbox>
+          <vxe-checkbox indeterminate>默认尺寸</vxe-checkbox>
+          <vxe-checkbox size="medium" indeterminate>中等尺寸</vxe-checkbox>
+          <vxe-checkbox size="small" indeterminate>小型尺寸</vxe-checkbox>
+          <vxe-checkbox size="mini" indeterminate>超小尺寸</vxe-checkbox>
         </p>
 
         <p>
