@@ -223,8 +223,8 @@ module.exports = {
         vxeInput: 'vxe-input',
         vxeTextarea: 'vxe-textarea',
         vxeSelect: 'vxe-select',
+        vxeOptgroup: 'vxe-optgroup',
         vxeOption: 'vxe-option',
-        vxeOptionGroup: 'vxe-option-group',
         vxeButton: 'vxe-button',
         vxeTooltip: 'vxe-tooltip',
         vxeModal: 'vxe-modal',
@@ -539,6 +539,7 @@ module.exports = {
       },
       button: {
         desc: {
+          content: '内容（支持开启国际化）',
           type: '类型',
           size: '尺寸',
           name: '用来标识这一项',
@@ -618,7 +619,9 @@ module.exports = {
           placeholder: '空值显示的占位符',
           clearable: '当有值时，是否在右侧显示清除按钮',
           disabled: '是否禁用',
-          placement: '默认显示下拉列表的方向'
+          prefixIcon: '头部图标',
+          placement: '默认显示下拉列表的方向',
+          transfer: '是否将弹框容器插入于 body 内'
         }
       },
       selectGroup: {

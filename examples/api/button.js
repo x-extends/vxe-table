@@ -8,6 +8,15 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'content',
+        descKey: 'app.api.button.desc.content',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'type',
         descKey: 'app.api.button.desc.type',
         version: '',

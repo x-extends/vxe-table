@@ -42,7 +42,7 @@
         import {
           // 实例
           VXETable,
-          // 依赖
+          // 模块
           Icon,
           Column,
           Header,
@@ -58,6 +58,7 @@
           Checkbox,
           Radio,
           Input,
+          Select,
           Button,
           Modal,
           Edit,
@@ -91,6 +92,7 @@
         Vue.use(Checkbox)
         Vue.use(Radio)
         Vue.use(Input)
+        Vue.use(Select)
         Vue.use(Button)
         Vue.use(Modal)
         Vue.use(Edit)

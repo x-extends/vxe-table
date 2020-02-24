@@ -44,12 +44,30 @@ const apis = [
         list: []
       },
       {
+        name: 'prefix-icon',
+        descKey: 'app.api.select.desc.prefixIcon',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'placement',
         descKey: 'app.api.select.desc.placement',
         version: '',
         type: 'String',
         enum: 'top, bottom',
         defVal: 'bottom',
+        list: []
+      },
+      {
+        name: 'transfer',
+        descKey: 'app.api.select.desc.transfer',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
         list: []
       }
     ]

@@ -1320,31 +1320,34 @@ const Methods = {
         if (validTip && DomTools.getEventTargetNode(evnt, validTip.$el).flag) {
           // 如果是激活状态，且点击了校验提示框
         } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
-          // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
-          this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
-            let isClear
-            if (editOpts.mode === 'row') {
-              const rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
-              // row 方式，如果点击了不同行
-              isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : false
-            } else {
-              // cell 方式，如果是非编辑列
-              isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag
-            }
-            if (!isClear) {
-              isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--row').flag
-            }
-            if (!isClear) {
-              isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
-            }
-            if (
-              isClear ||
-                // 如果点击了当前表格之外
-                !DomTools.getEventTargetNode(evnt, $el).flag
-            ) {
-              setTimeout(() => this.clearActived(evnt))
-            }
-          })
+          // 如果是激活状态，且点击了下拉选项
+          if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-select-option--panel').flag) {
+            // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
+            this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
+              let isClear
+              if (editOpts.mode === 'row') {
+                const rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
+                // row 方式，如果点击了不同行
+                isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : false
+              } else {
+                // cell 方式，如果是非编辑列
+                isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag
+              }
+              if (!isClear) {
+                isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--row').flag
+              }
+              if (!isClear) {
+                isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
+              }
+              if (
+                isClear ||
+                  // 如果点击了当前表格之外
+                  !DomTools.getEventTargetNode(evnt, $el).flag
+              ) {
+                setTimeout(() => this.clearActived(evnt))
+              }
+            })
+          }
         }
       }
     } else if (mouseConfig) {
