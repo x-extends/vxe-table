@@ -15,8 +15,8 @@
       show-footer
       keep-source
       ref="xTable"
-      class="vxe-table-iview"
       height="600"
+      class="my-xtable-iview"
       :loading="loading"
       :data="tableData"
       :footer-method="footerMethod"
@@ -89,6 +89,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -114,8 +115,8 @@ export default {
           show-footer
           keep-source
           ref="xTable"
-          class="vxe-table-iview"
           height="600"
+          class="my-xtable-iview"
           :loading="loading"
           :data="tableData"
           :footer-method="footerMethod"
@@ -248,6 +249,18 @@ export default {
             }
           }
         }
+        `,
+        `
+        /*注意：如果是自行实现，需要自行处理好兼容样式，否则可能会显示错乱，例如：*/
+        /*
+        .my-xtable-iview .vxe-cell > .ivu-input-wrapper,
+        .my-xtable-iview .vxe-cell > .ivu-input-number,
+        .my-xtable-iview .vxe-cell > .ivu-select,
+        .my-xtable-iview .vxe-cell > .ivu-cascader,
+        .my-xtable-iview .vxe-cell > .ivu-date-picker-editor {
+          width: 100%;
+        }
+        */
         `
       ]
     }
@@ -331,14 +344,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/*注意：需要自行实现 iview 需要覆盖以下样式*/
-/* .vxe-table-iview .vxe-cell > .ivu-input-wrapper,
-.vxe-table-iview .vxe-cell > .ivu-input-number,
-.vxe-table-iview .vxe-cell > .ivu-select,
-.vxe-table-iview .vxe-cell > .ivu-cascader,
-.vxe-table-iview .vxe-cell > .ivu-date-picker-editor {
-  width: 100%;
-} */
-</style>

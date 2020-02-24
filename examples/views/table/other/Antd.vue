@@ -15,8 +15,8 @@
       show-footer
       keep-source
       ref="xTable"
-      class="vxe-table-antd"
       height="600"
+      class="my-xtable-antd"
       :loading="loading"
       :data="tableData"
       :footer-method="footerMethod"
@@ -84,6 +84,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -113,8 +114,8 @@ export default {
           show-footer
           keep-source
           ref="xTable"
-          class="vxe-table-antd"
           height="600"
+          class="my-xtable-antd"
           :loading="loading"
           :data="tableData"
           :footer-method="footerMethod"
@@ -277,6 +278,18 @@ export default {
             }
           }
         }
+        `,
+        `
+        /*注意：如果是自行实现，需要自行处理好兼容样式，否则可能会显示错乱，例如：*/
+        /*
+        .my-xtable-antd .vxe-cell > .ant-input,
+        .my-xtable-antd .vxe-cell > .ant-input-number,
+        .my-xtable-antd .vxe-cell > .ant-select,
+        .my-xtable-antd .vxe-cell > .ant-cascader-picker,
+        .my-xtable-antd .vxe-cell > .ant-calendar-picker {
+          width: 100%;
+        }
+        */
         `
       ]
     }
@@ -372,14 +385,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/*注意：需要自行实现 ant-design-vue 需要覆盖以下样式*/
-/* .vxe-table-antd .vxe-cell > .ant-input,
-.vxe-table-antd .vxe-cell > .ant-input-number,
-.vxe-table-antd .vxe-cell > .ant-select,
-.vxe-table-antd .vxe-cell > .ant-cascader-picker,
-.vxe-table-antd .vxe-cell > .ant-calendar-picker {
-  width: 100%;
-} */
-</style>
