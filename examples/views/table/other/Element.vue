@@ -15,8 +15,8 @@
       show-footer
       keep-source
       ref="xTable"
-      class="vxe-table-element"
       height="600"
+      class="my-xtable-element"
       :loading="loading"
       :data="tableData"
       :footer-method="footerMethod"
@@ -96,6 +96,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -124,8 +125,8 @@ export default {
           show-footer
           keep-source
           ref="xTable"
-          class="vxe-table-element"
           height="600"
+          class="my-xtable-element"
           :loading="loading"
           :data="tableData"
           :footer-method="footerMethod"
@@ -283,6 +284,18 @@ export default {
             }
           }
         }
+        `,
+        `
+        /*注意：如果是自行实现，需要自行处理好兼容样式，否则可能会显示错乱，例如：*/
+        /*
+        .my-xtable-element .vxe-cell > .el-input,
+        .my-xtable-element .vxe-cell > .el-input-number,
+        .my-xtable-element .vxe-cell > .el-select,
+        .my-xtable-element .vxe-cell > .el-cascader,
+        .my-xtable-element .vxe-cell > .el-date-editor {
+          width: 100%;
+        }
+        */
         `
       ]
     }
@@ -376,14 +389,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/*注意：需要自行实现 element-ui 需要覆盖以下样式*/
-/* .vxe-table-element .vxe-cell > .el-input,
-.vxe-table-element .vxe-cell > .el-input-number,
-.vxe-table-element .vxe-cell > .el-select,
-.vxe-table-element .vxe-cell > .el-cascader,
-.vxe-table-element .vxe-cell > .el-date-editor {
-  width: 100%;
-} */
-</style>

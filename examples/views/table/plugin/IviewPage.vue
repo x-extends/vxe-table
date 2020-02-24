@@ -41,7 +41,6 @@
       highlight-hover-row
       export-config
       ref="xTable"
-      class="vxe-table-iview"
       height="460"
       :loading="loading"
       :data="tableData"
@@ -186,7 +185,6 @@ export default {
           highlight-hover-row
           export-config
           ref="xTable"
-          class="vxe-table-iview"
           height="460"
           :loading="loading"
           :data="tableData"
