@@ -120,11 +120,6 @@
   }
 }
 
-select.vxe-select, 
-.vxe-input{
-  width: 180px;
-}
-
 /*默认的渲染*/
 .vxe-table,
 .vxe-table--filter-wrapper {
@@ -163,7 +158,8 @@ select.vxe-select,
     vertical-align: middle;
   }
   .vxe-input,
-  .vxe-textarea {
+  .vxe-textarea,
+  .vxe-select {
     width: 100%;
     display: block;
   }

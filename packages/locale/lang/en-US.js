@@ -54,8 +54,8 @@ export default {
     },
     pager: {
       goto: 'Go to',
-      pagesize: '/page',
-      total: 'Total {{total}} record',
+      pagesize: '{{0}}/page',
+      total: 'Total {{0}} record',
       pageClassifier: '',
       prevPage: 'Previous page',
       nextPage: 'next page',

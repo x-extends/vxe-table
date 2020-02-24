@@ -31,8 +31,13 @@
   display: none;
   position: absolute;
   left: 0;
-  min-width: 100%;
   padding: 0.2em 0;
+  &:not(.is--transfer) {
+    min-width: 100%;
+  }
+  .is--transfer {
+    position: fixed;
+  }
   &.is--visivle {
     display: block;
   }
@@ -42,7 +47,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding: 0.2em 0;
-  max-height: 220px;
+  max-height: 15em;
   border-radius: 4px;
   background-color: #fff;
   border: 1px solid $vxe-table-popup-border-color;
@@ -79,6 +84,7 @@
   &:not(.is--disabled) {
     cursor: pointer;
     &.is--hover {
+      color: $vxe-primary-color;
       background-color: $vxe-select-option-hover-background-color;
     }
     &.is--checked {

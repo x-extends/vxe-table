@@ -34,9 +34,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="javascript">{{ demoCodes[0] }}</code>
-      <code class="xml">{{ demoCodes[1] }}</code>
-      <code class="javascript">{{ demoCodes[2] }}</code>
+      <code class="xml">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
   </div>
 </template>
@@ -67,12 +66,12 @@ export default {
         titleWidth: 100,
         titleAlign: 'right',
         items: [
-          { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-          { field: 'role', title: '角色', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
-          { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-          { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
-          { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
-          { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
+          { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+          { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
+          { field: 'nickname', title: '昵称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
+          { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
+          { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
+          { span: 24, align: 'center', collapseNode: true, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] } }
         ]
       },
       tableProxy: {
@@ -119,7 +118,7 @@ export default {
       },
       tableColumn: [
         { type: 'checkbox', title: 'ID', width: 120 },
-        { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
+        { field: 'name', title: 'Name', remoteSort: true, editRender: { name: '$input' } },
         {
           field: 'role',
           title: 'Role',
@@ -131,27 +130,15 @@ export default {
             { label: '程序员鼓励师', value: '程序员鼓励师' }
           ],
           filterMultiple: false,
-          editRender: { name: 'input' }
+          editRender: { name: '$input' }
         },
-        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-        { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
-        { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input', attrs: { type: 'number' } } },
+        { field: 'nickname', title: 'Nickname', editRender: { name: '$input' } },
+        { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
+        { field: 'age', title: 'Age', remoteSort: true, editRender: { name: '$input', props: { type: 'number' } } },
         { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
         { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
       ],
       demoCodes: [
-        `
-        // 创建一个表单-按钮组渲染器
-        VXETable.renderer.add('FormItemButtonGroup', {
-          // 项显示模板
-          renderItem (h, renderOpts, params, context) {
-            return [
-              <vxe-button type="submit" status="primary">查询</vxe-button>,
-              <vxe-button type="reset">重置</vxe-button>
-            ]
-          }
-        })
-        `,
         `
         <vxe-grid
           border
@@ -198,12 +185,12 @@ export default {
                 titleWidth: 100,
                 titleAlign: 'right',
                 items: [
-                  { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-                  { field: 'role', title: '角色', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入角色' } } },
-                  { field: 'nickname', title: '昵称', span: 8, itemRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-                  { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
-                  { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
-                  { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
+                  { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+                  { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
+                  { field: 'nickname', title: '昵称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
+                  { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
+                  { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
+                  { span: 24, align: 'center', collapseNode: true, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] } }
                 ]
               },
               tableProxy: {
@@ -215,12 +202,12 @@ export default {
                   // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
                   query: ({ page, sort, filters, form }) => {
                     // 处理排序条件
-                    let queryParams = Object.assign({
+                    const queryParams = Object.assign({
                       sort: sort.property,
                       order: sort.order
                     }, form)
                     // 处理筛选条件
-                    filters.forEach(({ column, property, values }) => {
+                    filters.forEach(({ property, values }) => {
                       queryParams[property] = values.join(',')
                     })
                     return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
@@ -250,7 +237,7 @@ export default {
               },
               tableColumn: [
                 { type: 'checkbox', title: 'ID', width: 120 },
-                { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
+                { field: 'name', title: 'Name', remoteSort: true, editRender: { name: '$input' } },
                 {
                   field: 'role',
                   title: 'Role',
@@ -262,11 +249,11 @@ export default {
                     { label: '程序员鼓励师', value: '程序员鼓励师' }
                   ],
                   filterMultiple: false,
-                  editRender: { name: 'input' }
+                  editRender: { name: '$input' }
                 },
-                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
-                { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input', attrs: { type: 'number' } } },
+                { field: 'nickname', title: 'Nickname', editRender: { name: '$input' } },
+                { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
+                { field: 'age', title: 'Age', remoteSort: true, editRender: { name: '$input', props: { type: 'number' } } },
                 { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
                 { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
               ]

@@ -83,9 +83,13 @@ export default function (compName) {
           },
           attrs,
           on: XEUtils.objectMap($listeners, (cb, type) => evnt => {
+            const typeInput = type === 'input'
             const value = evnt.target.value
-            const params = type === 'input' ? value : { value }
-            this.$emit(type, params, evnt)
+            const params = { value }
+            this.$emit(type, typeInput ? value : params, evnt)
+            if (typeInput) {
+              this.$emit('change', params, evnt)
+            }
           })
         }),
         isClearable || suffixIcon ? h('span', {
@@ -108,16 +112,16 @@ export default function (compName) {
     methods: {
       clickPrefixEvent (evnt) {
         if (!this.disabled) {
-          this.$emit('prefix-click', {}, evnt)
+          this.$emit('prefix-click', { value: this.value }, evnt)
         }
       },
       clickSuffixEvent (evnt) {
         if (!this.disabled) {
           if (DomTools.hasClass(evnt.currentTarget, 'is--clear')) {
             this.$emit('input', '')
-            this.$emit('clear', {}, evnt)
+            this.$emit('clear', { value: '' }, evnt)
           } else {
-            this.$emit('suffix-click', {}, evnt)
+            this.$emit('suffix-click', { value: this.value }, evnt)
           }
         }
       }

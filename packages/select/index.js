@@ -1,11 +1,11 @@
 import VxeSelect from './src/select'
 import VxeOption from './src/option'
-import VxeOptionGroup from './src/option-group'
+import VxeOptgroup from './src/optgroup'
 
 VxeSelect.install = function (Vue) {
   Vue.component(VxeSelect.name, VxeSelect)
   Vue.component(VxeOption.name, VxeOption)
-  Vue.component(VxeOptionGroup.name, VxeOptionGroup)
+  Vue.component(VxeOptgroup.name, VxeOptgroup)
 }
 
 export const Pager = VxeSelect

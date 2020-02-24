@@ -14,7 +14,7 @@ export default {
     $xeselect: {
       default: null
     },
-    $xegroup: {
+    $xeoptgroup: {
       default: null
     }
   },
@@ -28,8 +28,8 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     isDisabled () {
-      const { $xegroup, disabled } = this
-      return ($xegroup && $xegroup.disabled) || disabled
+      const { $xeoptgroup, disabled } = this
+      return ($xeoptgroup && $xeoptgroup.disabled) || disabled
     }
   },
   warch: {

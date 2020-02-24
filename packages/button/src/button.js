@@ -8,6 +8,7 @@ export default {
     type: String,
     size: String,
     name: [String, Number],
+    content: String,
     status: String,
     icon: String,
     disabled: Boolean,
@@ -66,7 +67,7 @@ export default {
         }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt)))
       }, this.renderContent(h).concat([
         h('i', {
-          class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.dropdownBottom}`
+          class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.dropdownBtn}`
         })
       ])),
       h('div', {
@@ -99,7 +100,7 @@ export default {
   },
   methods: {
     renderContent (h) {
-      const { $scopedSlots, icon, loading } = this
+      const { $scopedSlots, content, icon, loading } = this
       const contents = []
       if (loading) {
         contents.push(
@@ -115,9 +116,9 @@ export default {
         )
       }
       if ($scopedSlots.default) {
-        contents.push(
-          $scopedSlots.default.call(this)
-        )
+        contents.push($scopedSlots.default.call(this))
+      } else if (content) {
+        contents.push(UtilTools.getFuncText(content))
       }
       return contents
     },

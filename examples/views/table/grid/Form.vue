@@ -39,10 +39,9 @@ export default {
           sex: ''
         },
         items: [
-          { field: 'name', title: 'app.body.label.name', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-          { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
-          { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-          { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+          { field: 'name', title: 'app.body.label.name', itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+          { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
+          { itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '查询', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
         ]
       },
       tableToolbar: {
@@ -85,10 +84,9 @@ export default {
                   sex: ''
                 },
                 items: [
-                  { field: 'name', title: 'app.body.label.name', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-                  { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'fa fa-info-circle' }, itemRender: { name: 'select', options: [] } },
-                  { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-                  { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+                  { field: 'name', title: 'app.body.label.name', itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+                  { field: 'sex', title: '性别', titlePrefix: { message: '帮助信息！！！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
+                  { itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '查询', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
                 ]
               },
               tableToolbar: {

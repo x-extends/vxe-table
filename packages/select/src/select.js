@@ -75,8 +75,10 @@ export default {
     clearable: Boolean,
     placeholder: String,
     disabled: Boolean,
+    prefixIcon: String,
     placement: String,
-    size: String
+    size: String,
+    transfer: Boolean
   },
   components: {
     VxeInput
@@ -115,19 +117,32 @@ export default {
     this.panelIndex = UtilTools.nextZIndex()
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
-    GlobalEvent.on(this, 'resize', this.handleGlobalResizeEvent)
+    GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
+    GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
+  },
+  mounted () {
+    if (this.transfer) {
+      document.body.appendChild(this.$refs.panel)
+    }
+  },
+  beforeDestroy () {
+    const panelElem = this.$refs.panel
+    if (panelElem && panelElem.parentNode) {
+      panelElem.parentNode.removeChild(panelElem)
+    }
   },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'keydown')
-    GlobalEvent.off(this, 'resize')
+    GlobalEvent.off(this, 'mousewheel')
+    GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, isActivated, disabled, clearable, placeholder, selectLabel, showPanel, panelStyle } = this
+    const { vSize, transfer, isActivated, disabled, clearable, placeholder, selectLabel, showPanel, panelStyle, prefixIcon } = this
     return h('div', {
       class: ['vxe-select', {
-        'is--visivle': showPanel,
         [`size--${vSize}`]: vSize,
+        'is--visivle': showPanel,
         'is--disabled': disabled,
         'is--active': isActivated
       }]
@@ -140,6 +155,7 @@ export default {
           readonly: true,
           disabled: disabled,
           type: 'text',
+          prefixIcon: prefixIcon,
           suffixIcon: `vxe-icon--caret-bottom${showPanel ? ' rotate180' : ''}`,
           value: selectLabel
         },
@@ -154,6 +170,7 @@ export default {
         ref: 'panel',
         class: ['vxe-select-option--panel', {
           [`size--${vSize}`]: vSize,
+          'is--transfer': transfer,
           'is--visivle': showPanel
         }],
         style: panelStyle
@@ -172,7 +189,7 @@ export default {
           if (!option.isDisabled && option.$xeselect) {
             let children = option.$children
             if (children.length) {
-              children = children.filter(option => !option.isDisabled && option.$xeselect && option.$xegroup)
+              children = children.filter(option => !option.isDisabled && option.$xeselect && option.$xeoptgroup)
               if (children.length) {
                 options.push({ comp: option, children })
               }
@@ -258,8 +275,13 @@ export default {
         }
       }
     },
-    handleGlobalResizeEvent () {
-      this.updatePlacement()
+    handleGlobalMousewheelEvent (evnt) {
+      if (!DomTools.getEventTargetNode(evnt, this.$el).flag && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
+        this.hideOptionPanel()
+      }
+    },
+    handleGlobalBlurEvent () {
+      this.hideOptionPanel()
     },
     updateZindex () {
       if (this.panelIndex < UtilTools.getLastZIndex()) {
@@ -293,24 +315,42 @@ export default {
     },
     updatePlacement () {
       this.$nextTick(() => {
-        const { $refs, placement, panelIndex } = this
+        const { $refs, transfer, placement, panelIndex } = this
         const inputElem = $refs.input.$el
         const panelElem = $refs.panel
         const inputHeight = inputElem.offsetHeight
+        const inputWidth = inputElem.offsetWidth
         const panelHeight = panelElem.offsetHeight
         const panelStyle = {
           zIndex: panelIndex
         }
-        const { boundingTop, visibleHeight } = DomTools.getAbsolutePos(inputElem)
-        if (placement) {
-          if (placement === 'top') {
-            if (boundingTop > panelHeight) {
-              panelStyle.bottom = `${inputHeight}px`
+        const { boundingTop, boundingLeft, visibleHeight } = DomTools.getAbsolutePos(inputElem)
+        if (transfer) {
+          const left = boundingLeft
+          let top = boundingTop + inputHeight
+          if (placement !== 'top') {
+            // 如果下面不够放，则向上
+            if (top + panelHeight > visibleHeight) {
+              top = boundingTop - panelHeight
+            }
+            // 如果上面不够放，则向下（优先）
+            if (top < 0) {
+              top = boundingTop + inputHeight
             }
           }
+          Object.assign(panelStyle, {
+            left: `${left}px`,
+            top: `${top}px`,
+            minWidth: `${inputWidth}px`
+          })
         } else {
-          if (boundingTop + inputHeight + panelHeight > visibleHeight) {
+          if (placement === 'top') {
             panelStyle.bottom = `${inputHeight}px`
+          } else {
+            // 如果下面不够放，则向上
+            if (boundingTop + inputHeight + panelHeight > visibleHeight) {
+              panelStyle.bottom = `${inputHeight}px`
+            }
           }
         }
         this.panelStyle = panelStyle
