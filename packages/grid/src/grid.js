@@ -651,13 +651,14 @@ export default {
       const { proxyConfig, remoteSort } = this
       const { $table, column } = params
       const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : ($table.sortOpts.remote || remoteSort)
+      const property = params.order ? params.property : null
       // 如果是服务端排序
       if (isRemote) {
         this.sortData = {
-          property: params.property,
-          field: params.property,
+          property,
+          field: property,
           // v3 废弃 prop
-          prop: params.property,
+          prop: property,
           order: params.order
         }
         if (proxyConfig) {
