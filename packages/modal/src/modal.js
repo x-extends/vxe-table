@@ -363,13 +363,16 @@ export default {
       })
     },
     close (type) {
-      const { events = {}, visible, isMsg } = this
+      const { events = {}, remember, visible, isMsg } = this
       const params = { type, $modal: this }
       if (visible) {
         if (isMsg) {
           this.removeMsgQueue()
         }
         this.contentVisible = false
+        if (!remember) {
+          this.zoomLocat = null
+        }
         if (events.hide) {
           events.hide.call(this, params)
         } else {

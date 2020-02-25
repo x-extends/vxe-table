@@ -1,4 +1,5 @@
 import VxeInput from '../../input'
+import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 function findOffsetOption (groupList, optionValue, isUpArrow) {
@@ -78,7 +79,7 @@ export default {
     prefixIcon: String,
     placement: String,
     size: String,
-    transfer: Boolean
+    transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
   },
   components: {
     VxeInput
@@ -310,8 +311,8 @@ export default {
         this.animatVisible = true
         setTimeout(() => {
           this.showPanel = true
+          this.setCurrentOption(findOption(this.getOptions(), this.value))
         }, 10)
-        this.setCurrentOption(findOption(this.getOptions(), this.value))
         this.updateZindex()
         this.updatePlacement()
       }
