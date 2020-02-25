@@ -151,6 +151,9 @@ const GlobalConfig = {
   form: {
     // colon: false
   },
+  select: {
+    // transfer: false
+  },
   toolbar: {
     // import: {
     //   mode: 'covering'

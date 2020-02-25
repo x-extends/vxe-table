@@ -1,7 +1,7 @@
 /**Variable**/
 
 /*筛选*/
-.vxe-filter-wrapper {
+.vxe-cell--filter {
   padding: 0 0.1em 0 0.25em;
   text-align: center;
   vertical-align: middle;
@@ -21,7 +21,7 @@
   }
 }
 .filter--active {
-  .vxe-filter-wrapper {
+  .vxe-cell--filter {
     .vxe-filter--btn {
       color: $vxe-primary-color;
     }

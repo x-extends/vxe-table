@@ -144,6 +144,10 @@
           form: {
             // colon: false
           },
+          // 下拉框的全局参数
+          select: {
+            // transfer: false
+          },
           // 工具栏的全局参数
           toolbar: {
             // refresh: false,
