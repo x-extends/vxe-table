@@ -182,7 +182,7 @@ const apis = [
       {
         name: 'current-change',
         disabled: true,
-        desc: '当前页发生改变时会触发该事件',
+        desc: '即将废弃，请使用 page-change',
         version: '',
         type: '',
         enum: '',
@@ -192,7 +192,7 @@ const apis = [
       {
         name: 'size-change',
         disabled: true,
-        desc: '每页大小发生改变时会触发该事件',
+        desc: '即将废弃，请使用 page-change',
         version: '',
         type: '',
         enum: '',

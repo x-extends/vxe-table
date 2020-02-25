@@ -5,7 +5,7 @@
 
     <p>
       <vxe-select v-model="value1" placeholder="默认尺寸">
-        <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
+        <vxe-option v-for="num in 15" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
       <vxe-select v-model="value2" placeholder="中等尺寸" size="medium">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
@@ -92,7 +92,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      value1: null,
+      value1: 12,
       value2: null,
       value3: null,
       value4: null,
@@ -107,7 +107,7 @@ export default {
         `
         <p>
           <vxe-select v-model="value1" placeholder="默认尺寸">
-            <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
+            <vxe-option v-for="num in 15" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
           <vxe-select v-model="value2" placeholder="中等尺寸" size="medium">
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
@@ -183,7 +183,7 @@ export default {
         export default {
           data () {
             return {
-              value1: null,
+              value1: 12,
               value2: null,
               value3: null,
               value4: null,

@@ -91,18 +91,11 @@
   &.is--checked {
     font-weight: 700;
     color: $vxe-primary-color;
-    background-color: $vxe-select-option-checked-background-color;
   }
   &:not(.is--disabled) {
     cursor: pointer;
     &.is--hover {
-      color: $vxe-primary-color;
       background-color: $vxe-select-option-hover-background-color;
-    }
-    &.is--checked {
-      &.is--hover {
-        background-color: $vxe-select-option-hover-checked-background-color;
-      }
     }
   }
   &.is--disabled {
