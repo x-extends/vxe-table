@@ -74,6 +74,14 @@ export default {
         {
           name: '$select',
           desc: '模块-下拉框'
+        },
+        {
+          name: '$radio',
+          desc: '模块-单选列表'
+        },
+        {
+          name: '$checkbox',
+          desc: '模块-复选列表'
         }
       ],
       tableData: [

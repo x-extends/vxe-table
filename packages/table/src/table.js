@@ -3523,7 +3523,7 @@ export default {
       const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
       const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
       if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
-        this.triggerSortEvent(evnt, column, column.order === 'desc' ? 'asc' : 'desc')
+        this.triggerSortEvent(evnt, column, column.order ? (column.order === 'desc' ? '' : 'desc') : 'asc')
       }
       UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
       return this.setCurrentColumn(column)
@@ -4006,9 +4006,9 @@ export default {
       const property = column.property
       if (column.sortable || column.remoteSort) {
         const evntParams = { column, property, field: property, prop: property, order, $table: this }
-        if (column.order === order) {
+        if (!order || column.order === order) {
           evntParams.order = null
-          this.clearSort(column.property)
+          this.clearSort()
         } else {
           this.sort(property, order)
         }

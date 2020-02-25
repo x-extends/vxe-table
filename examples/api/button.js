@@ -110,11 +110,11 @@ const apis = [
     list: [
       {
         name: '*',
-        desc: '原生事件',
+        desc: '在需要时触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: 'event',
+        defVal: '{}, event',
         list: []
       },
       {

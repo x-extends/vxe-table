@@ -349,12 +349,11 @@ function getNativeFormEvents (renderOpts, params) {
 }
 
 function getDefaultFormEvents (renderOpts, params) {
-  const { $form, data, property } = params
+  const { $form } = params
   const { events } = renderOpts
   const type = 'change'
   const on = {
     [type] ({ value: itemValue }, evnt) {
-      XEUtils.set(data, property, itemValue)
       $form.updateStatus(params, itemValue)
       if (events && events[type]) {
         events[type](params, evnt)
@@ -453,6 +452,37 @@ function createExportMethod (valueMethod, isEdit) {
   return function (params) {
     return valueMethod(params.column[renderProperty], params)
   }
+}
+
+function defaultFormItemRadioAndCheckboxRender (h, renderOpts, params) {
+  const { options, optionProps = {} } = renderOpts
+  const { data, property } = params
+  const labelProp = optionProps.label || 'label'
+  const valueProp = optionProps.value || 'value'
+  const disabledProp = optionProps.disabled || 'disabled'
+  const itemValue = XEUtils.get(data, property)
+  const props = getDefaultFormItemProps(params, renderOpts)
+  const name = getDefaultComponentName(renderOpts)
+  return [
+    h(`${name}-group`, {
+      props,
+      model: {
+        value: itemValue,
+        callback (value) {
+          XEUtils.set(data, property, value)
+        }
+      },
+      on: getDefaultFormEvents(renderOpts, params)
+    }, options.map(option => {
+      return h(name, {
+        props: {
+          label: option[valueProp],
+          content: option[labelProp],
+          disabled: option[disabledProp]
+        }
+      })
+    }))
+  ]
 }
 
 const renderMap = {
@@ -554,7 +584,7 @@ const renderMap = {
           model: {
             value: itemValue,
             callback (value) {
-              UtilTools.setCellValue(data, property, value)
+              XEUtils.set(data, property, value)
             }
           },
           props,
@@ -565,6 +595,12 @@ const renderMap = {
     },
     editCellExportMethod: createExportMethod(getSelectCellValue, true),
     cellExportMethod: createExportMethod(getSelectCellValue)
+  },
+  $radio: {
+    renderItem: defaultFormItemRadioAndCheckboxRender
+  },
+  $checkbox: {
+    renderItem: defaultFormItemRadioAndCheckboxRender
   }
 }
 

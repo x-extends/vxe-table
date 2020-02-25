@@ -27,20 +27,22 @@ export default function (compName) {
   const props = {
     value: [String, Number],
     name: String,
-    type: { type: String, default: 'text' },
     readonly: Boolean,
     disabled: Boolean,
     placeholder: String,
     maxlength: [String, Number],
+    autocomplete: { type: String, default: 'off' },
+    form: String,
     size: String
   }
   if (isInput) {
-    props.clearable = Boolean
-    props.prefixIcon = String
-    props.suffixIcon = String
-    props.form = String
+    Object.assign(props, {
+      type: { type: String, default: 'text' },
+      clearable: Boolean,
+      prefixIcon: String,
+      suffixIcon: String
+    })
   } else {
-    props.autocomplete = String
     props.rows = { type: [String, Number], default: 2 }
   }
   return {

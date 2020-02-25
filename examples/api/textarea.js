@@ -9,21 +9,12 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: XEUtils.clone(inputAPI.find(item => item.name === 'Props').list.filter(obj => !['type'].includes(obj.name)), true).concat([
+    list: XEUtils.clone(inputAPI.find(item => item.name === 'Props').list.filter(obj => !['type', 'clearable', 'prefix-icon', 'suffix-icon'].includes(obj.name)), true).concat([
       {
         name: 'rows',
         desc: '原生 rows 属性',
         version: '',
         type: 'String, Number',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'form',
-        desc: '原生 form 属性',
-        version: '',
-        type: 'String',
         enum: '',
         defVal: '',
         list: []
@@ -49,6 +40,15 @@ const apis = [
     list: [
       {
         name: '*',
+        desc: '在需要时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
+        name: 'change',
         desc: '在值发生改变时触发该事件',
         version: '',
         type: '',

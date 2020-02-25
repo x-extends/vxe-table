@@ -107,17 +107,7 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: [
-      {
-        name: 'mouseenter',
-        desc: '重写默认的移开 tooltip 处理函数',
-        version: '',
-        type: 'Promise',
-        enum: '',
-        defVal: 'Event.target, message',
-        list: []
-      }
-    ]
+    list: []
   },
   {
     name: 'Methods',

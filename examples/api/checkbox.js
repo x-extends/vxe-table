@@ -19,7 +19,16 @@ const apis = [
       {
         name: 'label',
         descKey: 'app.api.checkbox.desc.label',
-        version: '2.8',
+        version: '1.15.21',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'content',
+        desc: '内容（支持开启国际化）',
+        version: '1.15.23',
         type: 'String',
         enum: '',
         defVal: '',
@@ -86,7 +95,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: 'value',
+        defVal: '{ checked }, event',
         list: []
       }
     ]
