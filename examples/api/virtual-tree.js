@@ -239,7 +239,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: 'currentPage',
+        defVal: '{currentPage}',
         list: []
       },
       {
@@ -248,7 +248,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: 'pageSize',
+        defVal: '{pageSize}',
         list: []
       },
       {

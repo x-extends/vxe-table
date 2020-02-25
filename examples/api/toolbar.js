@@ -511,6 +511,24 @@ const apis = [
         enum: '',
         defVal: '{code}, event',
         list: []
+      },
+      {
+        name: 'zoom',
+        desc: '当工具栏的缩放按钮被点击时会后触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{maximize}, event',
+        list: []
+      },
+      {
+        name: 'custom',
+        desc: '当工具栏的自定义列按钮被点击时会后触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{type}, event',
+        list: []
       }
     ]
   },

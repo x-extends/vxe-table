@@ -1,31 +1,7 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 
 export default {
   methods: {
-    /**
-     * v3 废弃 filter 方法，被 setFilter 取代
-     * 手动调用筛选的方法
-     * 如果不传回调则返回一个选项列表的 Promise 对象
-     * 如果传回调则通过回调返回的值更新选项列表，并返回一个新选项列表的 Promise 对象
-     * @param {String} field 字段名
-     * @param {Function} callback 重置列表的回调函数，返回新的选项列表
-     */
-    _filter (field, callback) {
-      UtilTools.warn('vxe.error.delFunc', ['filter', 'setFilter'])
-      const column = this.getColumnByField(field)
-      if (column) {
-        const options = column.filters
-        if (options && callback) {
-          const rest = callback(options)
-          if (XEUtils.isArray(rest)) {
-            column.filters = UtilTools.getFilters(rest)
-          }
-          return this.$nextTick().then(() => options)
-        }
-      }
-      return this.$nextTick()
-    },
     /**
      * 修改筛选条件列表
      * @param {ColumnConfig} column 列

@@ -180,24 +180,6 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'current-change',
-        desc: '当前页发生改变时会触发该事件',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: 'currentPage',
-        list: []
-      },
-      {
-        name: 'size-change',
-        desc: '每页大小发生改变时会触发该事件',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: 'pageSize',
-        list: []
-      },
-      {
         name: 'page-change',
         desc: '分页发生改变时会触发该事件',
         version: '',

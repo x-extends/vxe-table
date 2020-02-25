@@ -124,10 +124,6 @@ export default {
     if (customOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
     }
-    // 在 v3 中废弃 setting
-    if (setting) {
-      UtilTools.warn('vxe.error.delProp', ['setting', 'custom'])
-    }
     if (!VXETable._export && (this.export || this.import)) {
       UtilTools.error('vxe.error.reqModule', ['Export'])
     }
@@ -233,7 +229,7 @@ export default {
             title: GlobalConfig.i18n(`vxe.toolbar.zoom${$xegrid.isMaximized() ? 'Out' : 'In'}`)
           },
           on: {
-            click: () => $xegrid.zoom()
+            click: this.triggerZoomEvent
           }
         }, [
           h('i', {
@@ -488,11 +484,27 @@ export default {
     resetResizable () {
       this.updateResizable(this)
     },
-    confirmCustomEvent () {
+    confirmCustomEvent (evnt) {
       this.closeCustom()
+      this.emitCustomEvent('confirm', evnt)
     },
-    resetCustomEvent () {
-      const { checkMethod } = this.customOpts
+    customOpenEvent (evnt) {
+      const { customStore } = this
+      if (!customStore.visible) {
+        this.openCustom()
+        this.emitCustomEvent('open', evnt)
+      }
+    },
+    customColseEvent (evnt) {
+      const { customStore } = this
+      if (customStore.visible) {
+        this.closeCustom()
+        this.emitCustomEvent('close', evnt)
+      }
+    },
+    resetCustomEvent (evnt) {
+      const { customOpts } = this
+      const { checkMethod } = customOpts
       this.tableFullColumn.forEach(column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = column.defaultVisible
@@ -502,6 +514,15 @@ export default {
       this.resetCustoms()
       this.resetResizable()
       this.closeCustom()
+      this.emitCustomEvent('reset', evnt)
+    },
+    emitCustomEvent (type, evnt) {
+      const { $xetable, $xegrid } = this
+      if ($xegrid) {
+        $xegrid.$emit('custom', { type, $grid: $xegrid }, evnt)
+      } else {
+        $xetable.$emit('custom', { type, $table: $xetable }, evnt)
+      }
     },
     updateResizable (isReset) {
       const comp = this.$xegrid || this.$xetable
@@ -534,44 +555,47 @@ export default {
     handleGlobalKeydownEvent (evnt) {
       const isEsc = evnt.keyCode === 27
       if (isEsc && this.$xegrid && this.$xegrid.isMaximized() && this.zoomOpts && this.zoomOpts.escRestore !== false) {
-        this.$xegrid.zoom()
+        this.triggerZoomEvent(evnt)
       }
     },
     handleGlobalMousedownEvent (evnt) {
       if (!DomTools.getEventTargetNode(evnt, this.$refs.customWrapper).flag) {
-        this.closeCustom()
+        this.customColseEvent(evnt)
       }
     },
-    handleGlobalBlurEvent () {
-      this.closeCustom()
+    handleGlobalBlurEvent (evnt) {
+      this.customColseEvent(evnt)
     },
-    handleClickSettingEvent () {
-      this.customStore.visible = !this.customStore.visible
-      this.checkCustomStatus()
+    handleClickSettingEvent (evnt) {
+      if (this.customStore.visible) {
+        this.customColseEvent(evnt)
+      } else {
+        this.customOpenEvent(evnt)
+      }
     },
-    handleMouseenterSettingEvent () {
+    handleMouseenterSettingEvent (evnt) {
       this.customStore.activeBtn = true
-      this.openCustom()
+      this.customOpenEvent(evnt)
     },
-    handleMouseleaveSettingEvent () {
+    handleMouseleaveSettingEvent (evnt) {
       const { customStore } = this
       customStore.activeBtn = false
       setTimeout(() => {
         if (!customStore.activeBtn && !customStore.activeWrapper) {
-          this.closeCustom()
+          this.customColseEvent(evnt)
         }
       }, 300)
     },
-    handleWrapperMouseenterEvent () {
+    handleWrapperMouseenterEvent (evnt) {
       this.customStore.activeWrapper = true
-      this.openCustom()
+      this.customOpenEvent(evnt)
     },
-    handleWrapperMouseleaveEvent () {
+    handleWrapperMouseleaveEvent (evnt) {
       const { customStore } = this
       customStore.activeWrapper = false
       setTimeout(() => {
         if (!customStore.activeBtn && !customStore.activeWrapper) {
-          this.closeCustom()
+          this.customColseEvent(evnt)
         }
       }, 300)
     },
@@ -627,6 +651,11 @@ export default {
       } else {
         throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
       }
+    },
+    triggerZoomEvent (evnt) {
+      const { $xegrid } = this
+      $xegrid.zoom()
+      $xegrid.$emit('zoom', { $grid: $xegrid, maximize: $xegrid.maximize }, evnt)
     }
   }
 }

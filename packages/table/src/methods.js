@@ -2088,7 +2088,7 @@ const Methods = {
     const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
     const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
-      this.triggerSortEvent(evnt, column, column.order === 'desc' ? 'asc' : 'desc')
+      this.triggerSortEvent(evnt, column, column.order ? (column.order === 'desc' ? '' : 'desc') : 'asc')
     }
     UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
     if (this.highlightCurrentColumn) {
@@ -2235,9 +2235,9 @@ const Methods = {
     const property = column.property
     if (column.sortable || column.remoteSort) {
       const evntParams = { column, property, field: property, prop: property, order, $table: this }
-      if (column.order === order) {
+      if (!order || column.order === order) {
         evntParams.order = null
-        this.clearSort(column.property)
+        this.clearSort()
       } else {
         this.sort(property, order)
       }
@@ -2666,11 +2666,7 @@ const Methods = {
     const { $refs, scrollXLoad, scrollYLoad } = this
     const bodyElem = $refs.tableBody.$el
     return {
-      // v3 移除 scrollX 属性
-      scrollX: scrollXLoad,
       virtualX: scrollXLoad,
-      // v3 移除 scrollY 属性
-      scrollY: scrollYLoad,
       virtualY: scrollYLoad,
       scrollTop: bodyElem.scrollTop,
       scrollLeft: bodyElem.scrollLeft
@@ -3086,7 +3082,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

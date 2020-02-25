@@ -16,6 +16,8 @@ export default {
   },
   data () {
     return {
+      showPanel: false,
+      animatVisible: false,
       panelIndex: 0,
       panelStyle: null
     }
@@ -43,10 +45,11 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, $listeners, type, isText, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading } = this
+    const { $scopedSlots, $listeners, type, isText, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible } = this
     return $scopedSlots.dropdowns ? h('div', {
       class: ['vxe-button--dropdown', {
-        [`size--${vSize}`]: vSize
+        [`size--${vSize}`]: vSize,
+        'is--active': showPanel
       }]
     }, [
       h('button', {
@@ -64,14 +67,18 @@ export default {
         on: Object.assign({
           mouseenter: this.mouseenterEvent,
           mouseleave: this.mouseleaveEvent
-        }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt)))
+        }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, {}, evnt)))
       }, this.renderContent(h).concat([
         h('i', {
           class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.dropdownBtn}`
         })
       ])),
       h('div', {
-        class: 'vxe-button--dropdown-panel',
+        ref: 'panel',
+        class: ['vxe-button--dropdown-panel', {
+          'animat--leave': animatVisible,
+          'animat--enter': showPanel
+        }],
         style: this.panelStyle
       }, [
         h('div', {
@@ -95,7 +102,7 @@ export default {
         type: isFormBtn ? type : 'button',
         disabled: disabled || loading
       },
-      on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, evnt))
+      on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, {}, evnt))
     }, this.renderContent(h))
   },
   methods: {
@@ -129,33 +136,46 @@ export default {
     },
     clickDropdownEvent (evnt) {
       const dropdownElem = evnt.currentTarget
-      const wrapperElem = dropdownElem.parentNode
+      const wrapperElem = this.$refs.panel
       const { flag, targetElem } = DomTools.getEventTargetNode(evnt, dropdownElem, 'vxe-button')
       if (flag) {
         wrapperElem.dataset.active = 'N'
-        DomTools.removeClass(wrapperElem, 'is--active')
+        this.showPanel = false
+        setTimeout(() => {
+          if (wrapperElem.dataset.active !== 'Y') {
+            this.animatVisible = false
+          }
+        }, 200)
         UtilTools.emitEvent(this, 'dropdown-click', [{ name: targetElem.getAttribute('name') }, evnt])
       }
     },
-    mouseenterEvent (evnt) {
-      const dropdownElem = evnt.currentTarget
-      const wrapperElem = dropdownElem.parentNode
+    mouseenterEvent () {
+      const wrapperElem = this.$refs.panel
       this.updateZindex()
       this.panelStyle = {
         zIndex: this.panelIndex
       }
       wrapperElem.dataset.active = 'Y'
-      DomTools.addClass(wrapperElem, 'is--active')
+      this.animatVisible = true
+      setTimeout(() => {
+        if (wrapperElem.dataset.active === 'Y') {
+          this.showPanel = true
+        }
+      }, 10)
     },
-    mouseleaveEvent (evnt) {
-      const dropdownElem = evnt.currentTarget
-      const wrapperElem = dropdownElem.parentNode
+    mouseleaveEvent () {
+      const wrapperElem = this.$refs.panel
       wrapperElem.dataset.active = 'N'
       setTimeout(() => {
         if (wrapperElem.dataset.active !== 'Y') {
-          DomTools.removeClass(wrapperElem, 'is--active')
+          this.showPanel = false
+          setTimeout(() => {
+            if (wrapperElem.dataset.active !== 'Y') {
+              this.animatVisible = false
+            }
+          }, 200)
         }
-      }, 300)
+      }, 200)
     }
   }
 }

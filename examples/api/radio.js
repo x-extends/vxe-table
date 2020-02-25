@@ -26,6 +26,15 @@ const apis = [
         list: []
       },
       {
+        name: 'content',
+        desc: '内容（支持开启国际化）',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'size',
         descKey: 'app.api.radio.desc.size',
         version: '',
@@ -77,7 +86,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: 'value',
+        defVal: '{ label }, event',
         list: []
       }
     ]

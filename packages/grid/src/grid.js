@@ -425,9 +425,6 @@ export default {
               if (defaultSort) {
                 sortParams = {
                   property: defaultSort.field,
-                  field: defaultSort.field,
-                  // v3 废弃 prop
-                  prop: defaultSort.field,
                   order: defaultSort.order
                 }
               }
@@ -625,12 +622,7 @@ export default {
       const { currentPage, pageSize } = params
       tablePage.currentPage = currentPage
       tablePage.pageSize = pageSize
-      if (params.type === 'current-change') {
-        UtilTools.emitEvent(this, 'current-page-change', [currentPage])
-      } else {
-        UtilTools.emitEvent(this, 'page-size-change', [pageSize])
-      }
-      UtilTools.emitEvent(this, 'page-change', [Object.assign({ $grid: this }, params)])
+      this.$emit('page-change', Object.assign({ $grid: this }, params))
       if (proxyConfig) {
         this.commitProxy('query')
       }
@@ -643,9 +635,6 @@ export default {
       if (isRemote) {
         this.sortData = {
           property: params.property,
-          field: params.property,
-          // v3 废弃 prop
-          prop: params.property,
           order: params.order
         }
         if (proxyConfig) {

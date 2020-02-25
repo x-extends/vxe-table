@@ -1,3 +1,5 @@
+import { UtilTools } from '../../tools'
+
 export default {
   name: 'VxeCheckbox',
   props: {
@@ -5,6 +7,7 @@ export default {
     label: [String, Number],
     indeterminate: Boolean,
     title: [String, Number],
+    content: [String, Number],
     disabled: Boolean,
     size: String
   },
@@ -22,7 +25,7 @@ export default {
     }
   },
   render (h) {
-    const { $xegroup, isGroup, disabled, title, vSize, indeterminate, value, label } = this
+    const { $slots, $xegroup, isGroup, disabled, title, vSize, indeterminate, value, label, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -47,11 +50,12 @@ export default {
           change: evnt => {
             if (!this.disabled) {
               const checked = evnt.target.checked
+              const params = { checked, label }
               if (isGroup) {
-                $xegroup.handleChecked({ checked, label }, evnt)
+                $xegroup.handleChecked(params, evnt)
               } else {
                 this.$emit('input', checked)
-                this.$emit('change', checked, evnt)
+                this.$emit('change', params, evnt)
               }
             }
           }
@@ -60,9 +64,9 @@ export default {
       h('span', {
         class: 'vxe-checkbox--icon'
       }),
-      this.$slots.default ? h('span', {
+      h('span', {
         class: 'vxe-checkbox--label'
-      }, this.$slots.default) : null
+      }, $slots.default || [UtilTools.getFuncText(content)])
     ])
   }
 }
