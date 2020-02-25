@@ -16,7 +16,7 @@
     }
   }
   /*排序*/
-  .vxe-sort-wrapper {
+  .vxe-cell--sort {
     width: 1.5em;
     height: 1.5em;
     vertical-align: middle;
@@ -54,6 +54,21 @@
     &.vxe-icon--edit-outline {
       &:before {
         background-color: $vxe-table-header-background-color;
+      }
+    }
+  }
+  &.col--ellipsis {
+    & > .vxe-cell {
+      display: flex;
+      align-items: center;
+      .vxe-cell--title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .vxe-cell--sort,
+      .vxe-cell--filter {
+        flex-shrink: 0;
       }
     }
   }

@@ -64,15 +64,27 @@ export const Cell = {
     const { slots, own } = column
     const renderOpts = own.editRender || own.cellRender
     if (slots && slots.header) {
-      return slots.header.call($table, params, h)
+      return [
+        h('span', {
+          class: 'vxe-cell--title'
+        }, slots.header.call($table, params, h))
+      ]
     }
     if (renderOpts) {
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf.renderHeader) {
-        return compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
+        return [
+          h('span', {
+            class: 'vxe-cell--title'
+          }, compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table }))
+        ]
       }
     }
-    return [UtilTools.formatText(column.getTitle(), 1)]
+    return [
+      h('span', {
+        class: 'vxe-cell--title'
+      }, UtilTools.formatText(column.getTitle(), 1))
+    ]
   },
   renderDefaultCell (h, params) {
     const { $table, row, column } = params
@@ -168,10 +180,11 @@ export const Cell = {
   renderIndexHeader (h, params) {
     const { $table, column } = params
     const { slots } = column
-    if (slots && slots.header) {
-      return slots.header.call($table, params, h)
-    }
-    return [UtilTools.formatText(column.getTitle(), 1)]
+    return [
+      h('span', {
+        class: 'vxe-cell--title'
+      }, slots && slots.header ? slots.header.call($table, params, h) : UtilTools.formatText(column.getTitle(), 1))
+    ]
   },
   renderIndexCell (h, params) {
     const { $table, column } = params
@@ -195,11 +208,12 @@ export const Cell = {
   renderRadioHeader (h, params) {
     const { $table, column } = params
     const { slots, own } = column
-    if (slots && slots.header) {
-      return slots.header.call($table, params, h)
-    }
     // 在 v3.0 中废弃 label
-    return [UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1)]
+    return [
+      h('span', {
+        class: 'vxe-cell--title'
+      }, slots && slots.header ? slots.header.call($table, params, h) : UtilTools.formatText(UtilTools.getFuncText(own.title || own.label), 1))
+    ]
   },
   renderRadioCell (h, params) {
     const { $table, column, isHidden } = params
@@ -253,7 +267,11 @@ export const Cell = {
     let isChecked = false
     let on
     if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
-      return slots && slots.header ? slots.header.call($table, params, h) : [UtilTools.getFuncText(headerTitle)]
+      return [
+        h('span', {
+          class: 'vxe-cell--title'
+        }, slots && slots.header ? slots.header.call($table, params, h) : UtilTools.getFuncText(headerTitle))
+      ]
     }
     if (!isHidden) {
       isChecked = isAllCheckboxDisabled ? false : $table.isAllSelected
@@ -267,20 +285,24 @@ export const Cell = {
     }
     return [
       h('span', {
-        class: ['vxe-cell--checkbox', {
-          'is--checked': isChecked,
-          'is--disabled': isAllCheckboxDisabled,
-          'is--indeterminate': isIndeterminate
-        }],
-        attrs: {
-          title: GlobalConfig.i18n('vxe.table.allTitle')
-        },
-        on
+        class: 'vxe-cell--title'
       }, [
-        h('i', {
-          class: 'vxe-checkbox--icon'
-        })
-      ].concat(headerTitle ? (slots && slots.header ? slots.header.call($table, params, h) : [UtilTools.getFuncText(headerTitle)]) : []))
+        h('span', {
+          class: ['vxe-cell--checkbox', {
+            'is--checked': isChecked,
+            'is--disabled': isAllCheckboxDisabled,
+            'is--indeterminate': isIndeterminate
+          }],
+          attrs: {
+            title: GlobalConfig.i18n('vxe.table.allTitle')
+          },
+          on
+        }, [
+          h('i', {
+            class: 'vxe-checkbox--icon'
+          })
+        ].concat(headerTitle ? (slots && slots.header ? slots.header.call($table, params, h) : [UtilTools.getFuncText(headerTitle)]) : []))
+      ])
     ]
   },
   renderSelectionCell (h, params) {
@@ -470,7 +492,7 @@ export const Cell = {
     const { showIcon, iconAsc, iconDesc } = $table.sortOpts
     return showIcon === false ? [] : [
       h('span', {
-        class: 'vxe-sort-wrapper'
+        class: 'vxe-cell--sort'
       }, [
         h('i', {
           class: ['vxe-sort--asc-btn', iconAsc || GlobalConfig.icon.sortAsc, {
@@ -514,7 +536,7 @@ export const Cell = {
     const { showIcon, iconNone, iconMatch } = filterOpts
     return showIcon === false ? [] : [
       h('span', {
-        class: ['vxe-filter-wrapper', {
+        class: ['vxe-cell--filter', {
           'is--active': filterStore.visible && filterStore.column === column
         }]
       }, [

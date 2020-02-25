@@ -1,28 +1,30 @@
 import Vue from 'vue'
 import i18n from '@/i18n'
 
-import VXETable from '../../../packages/v-x-e-table'
-import Column from '../../../packages/column'
-import Header from '../../../packages/header'
-import Footer from '../../../packages/footer'
-import Filter from '../../../packages/filter'
-import Loading from '../../../packages/loading'
-import Grid from '../../../packages/grid'
-import Excel from '../../../packages/excel'
-import Menu from '../../../packages/menu'
-import Toolbar from '../../../packages/toolbar'
-import Pager from '../../../packages/pager'
-import Checkbox from '../../../packages/checkbox'
-import Radio from '../../../packages/radio'
-import Input from '../../../packages/input'
-import Button from '../../../packages/button'
-import Modal from '../../../packages/modal'
-import Tooltip from '../../../packages/tooltip'
-import Form from '../../../packages/form'
-import Select from '../../../packages/select'
-import Export from '../../../packages/export'
-import Resize from '../../../packages/resize'
-import Table from '../../../packages/table'
+import {
+  VXETable,
+  Table,
+  Column,
+  Header,
+  Footer,
+  Filter,
+  Loading,
+  Grid,
+  Excel,
+  Menu,
+  Toolbar,
+  Pager,
+  Checkbox,
+  Radio,
+  Input,
+  Button,
+  Modal,
+  Tooltip,
+  Form,
+  Select,
+  Export,
+  Resize
+} from '../../../packages/vxe-table'
 import '../../../styles/index.scss'
 
 // import VXETablePluginElement from '../../../../vxe-table-plugin-element/index.js'

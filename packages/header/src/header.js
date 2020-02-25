@@ -202,7 +202,7 @@ export default {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType })
+                  $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
                 }
               }
             }
@@ -270,7 +270,7 @@ export default {
                */
               !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) ? h('div', {
                 class: ['vxe-resizable', {
-                  'is--line': !border
+                  'is--line': !border || border === 'none'
                 }],
                 on: {
                   mousedown: evnt => this.resizeMousedown(evnt, params)
@@ -304,17 +304,20 @@ export default {
     },
     resizeMousedown (evnt, params) {
       const { column } = params
-      const { $parent: $table, $el, fixedType } = this
-      const { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $table.$refs
+      const { type, sortable, remoteSort, filters } = column
+      const { $parent: $xetable, $el, fixedType } = this
+      const { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $xetable.$refs
       const { target: dragBtnElem, clientX: dragClientX } = evnt
       const cell = dragBtnElem.parentNode
       let dragLeft = 0
-      const minInterval = 36 // 列之间的最小间距
       const tableBodyElem = tableBody.$el
       const pos = DomTools.getOffsetPos(dragBtnElem, $el)
       const dragBtnWidth = dragBtnElem.clientWidth
+      const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
+      const extraElemWidth = (type === 'checkbox' || type === 'radio' ? 18 : 0) + (sortable || remoteSort ? 16 : 0) + (filters ? 16 : 0)
+      const minInterval = 40 + extraElemWidth - dragBtnOffsetWidth // 列之间的最小间距
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
-      let dragPosLeft = pos.left + Math.floor(dragBtnWidth / 2)
+      let dragPosLeft = pos.left + dragBtnOffsetWidth
       const domMousemove = document.onmousemove
       const domMouseup = document.onmouseup
       const isLeftFixed = fixedType === 'left'
@@ -363,13 +366,13 @@ export default {
         document.onmouseup = domMouseup
         column.resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
         resizeBarElem.style.display = 'none'
-        $table._lastResizeTime = Date.now()
-        $table.analyColumnWidth()
-        $table.recalculate(true)
-        if ($table.$toolbar) {
-          $table.$toolbar.updateResizable()
+        $xetable._lastResizeTime = Date.now()
+        $xetable.analyColumnWidth()
+        $xetable.recalculate(true)
+        if ($xetable.$toolbar) {
+          $xetable.$toolbar.updateResizable()
         }
-        UtilTools.emitEvent($table, 'resizable-change', [params])
+        UtilTools.emitEvent($xetable, 'resizable-change', [params])
       }
       updateEvent(evnt)
     }

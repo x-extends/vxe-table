@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">使用自定义模板渲染</p>
+    <p class="tip">使用自定义模板渲染<br><span class="red">(注：树结构不支持大量数据)</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

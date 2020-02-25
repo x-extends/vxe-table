@@ -421,6 +421,8 @@ select.vxe-select,
     position: absolute;
     left: 0;
     top: 0.1em;
+    height: 1em;
+    width: 1em;
   }
   .vxe-cell--radio {
     .vxe-radio--icon {
@@ -746,6 +748,17 @@ select.vxe-select,
   .vxe-tree-cell {
     display: block;
     padding-left: 1.5em;
+  }
+  .vxe-body--column {
+    &.col--ellipsis {
+      & > .vxe-cell {
+        .vxe-tree-cell {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
   }
 
   /*展开行*/

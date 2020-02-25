@@ -1,8 +1,8 @@
-import VxeTableContextMenu from './src/menu'
+import VxeTableMenu from './src/menu'
 
-VxeTableContextMenu.install = function (Vue) {
-  Vue.component(VxeTableContextMenu.name, VxeTableContextMenu)
+VxeTableMenu.install = function (Vue) {
+  Vue.component(VxeTableMenu.name, VxeTableMenu)
 }
 
-export const TableContextMenu = VxeTableContextMenu
-export default VxeTableContextMenu
+export const Menu = VxeTableMenu
+export default VxeTableMenu

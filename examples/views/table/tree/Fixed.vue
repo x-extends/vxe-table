@@ -14,6 +14,8 @@
     <vxe-table
       border
       resizable
+      show-overflow
+      show-header-overflow
       ref="xTree"
       :tree-config="{children: 'children'}"
       :checkbox-config="{labelField: 'id'}"
@@ -56,6 +58,8 @@ export default {
         <vxe-table
           border
           resizable
+          show-overflow
+          show-header-overflow
           ref="xTree"
           :tree-config="{children: 'children'}"
           :checkbox-config="{labelField: 'id'}"

@@ -2803,21 +2803,21 @@ export default {
      */
     triggerHeaderTooltipEvent (evnt, params) {
       const { tooltipStore } = this
-      const { column } = params
+      const { cell, column } = params
       this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.handleTooltip(evnt, column)
+        this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--title'), column)
       }
     },
     /**
      * 触发表尾 tooltip 事件
      */
     triggerFooterTooltipEvent (evnt, params) {
-      const { column } = params
+      const { cell, column } = params
       const tooltipStore = this.tooltipStore
       this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.handleTooltip(evnt, column)
+        this.handleTooltip(evnt, cell, cell.children[0], column)
       }
     },
     /**
@@ -2826,7 +2826,7 @@ export default {
     triggerTooltipEvent (evnt, params) {
       const { editConfig, editOpts, editStore, tooltipStore } = this
       const { actived } = editStore
-      const { row, column } = params
+      const { cell, row, column } = params
       this.handleTargetEnterEvent()
       if (editConfig) {
         if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
@@ -2834,23 +2834,26 @@ export default {
         }
       }
       if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-        this.handleTooltip(evnt, column, row)
+        this.handleTooltip(evnt, cell, column.treeNode ? cell.querySelector('.vxe-tree-cell') : cell.children[0], column, row)
       }
     },
-    // 显示 tooltip
-    handleTooltip (evnt, column, row) {
-      const cell = evnt.currentTarget
+    /**
+     * 处理显示 tooltip
+     * @param {Event} evnt 事件
+     * @param {ColumnConfig} column 列配置
+     * @param {Row} row 行对象
+     */
+    handleTooltip (evnt, cell, overflowElem, column, row) {
       const tooltip = this.$refs.tooltip
-      const wrapperElem = cell.children[0]
-      const content = cell.innerText
-      if (content && wrapperElem.scrollWidth > wrapperElem.clientWidth) {
+      const content = overflowElem.innerText
+      if (content && overflowElem.scrollWidth > overflowElem.clientWidth) {
         Object.assign(this.tooltipStore, {
           row,
           column,
           visible: true
         })
         if (tooltip) {
-          tooltip.toVisible(cell, content)
+          tooltip.toVisible(cell, UtilTools.formatText(content))
         }
       }
       return this.$nextTick()
