@@ -165,7 +165,7 @@ module.exports = {
         tooltip: '文字提示',
         form: '表单',
 
-        other: '集成第三方库',
+        other: '使用第三方库',
         elementRender: 'element-ui -> 自定义渲染',
         iviewRender: 'iview -> 自定义渲染',
         antd: 'ant-design-vue -> 自定义渲染',
@@ -174,7 +174,7 @@ module.exports = {
         sortablejsColumn: 'sortablejs -> 列拖拽',
         xlsxRender: 'xlsx -> 导入与导出',
 
-        plugin: '插件库',
+        plugin: '扩展插件库',
         elementPlugin: 'plugin-element 基本配置',
         elementFilterPlugin: 'plugin-element 筛选配置',
         elementPluginMore: 'plugin-element 更多配置',

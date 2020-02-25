@@ -166,7 +166,7 @@ module.exports = {
         tooltip: 'Tooltip',
         form: 'Form',
 
-        other: 'Integrating third-party libraries',
+        other: 'Using third-party libraries',
         elementRender: 'element-ui -> Custom Templates',
         iviewRender: 'iview -> Custom Templates',
         antd: 'ant-design-vue -> Custom Templates',
@@ -175,7 +175,7 @@ module.exports = {
         sortablejsColumn: 'sortablejs -> column moving',
         xlsxRender: 'xlsx -> Import and export',
 
-        plugin: 'Plugins',
+        plugin: 'Extension plug-in library',
         elementPlugin: 'plugin-element Basic config',
         elementFilterPlugin: 'plugin-element Filter config',
         elementPluginMore: 'plugin-element More config',
