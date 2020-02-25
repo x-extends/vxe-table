@@ -15,6 +15,7 @@ import { Checkbox } from './checkbox';
 import { Radio } from './radio';
 import { Input } from './input';
 import { Button } from './button';
+import { Select } from './select';
 import { Modal, XModal } from './modal';
 import { Tooltip } from './tooltip';
 import { Form } from './form';
@@ -217,6 +218,7 @@ export {
   Radio,
   Input,
   Button,
+  Select,
   Modal,
   Tooltip,
   Form,
