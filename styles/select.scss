@@ -39,8 +39,19 @@
   .is--transfer {
     position: fixed;
   }
-  &.is--visivle {
+  &.animat--leave {
     display: block;
+    opacity: 0;
+    transform: scaleY(0.5);
+    transition: transform 0.2s;
+    transform-origin: 0% 0%;
+    &[data-placement="top"] {
+      transform-origin: 0% 100%;
+    }
+  }
+  &.animat--enter {
+    opacity: 1;
+    transform: scaleY(1);
   }
 }
 

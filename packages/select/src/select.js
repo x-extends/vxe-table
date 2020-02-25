@@ -94,8 +94,10 @@ export default {
       updateFlag: 0,
       panelIndex: 0,
       panelStyle: null,
+      panelPlacement: null,
       currentValue: null,
       showPanel: false,
+      animatVisible: false,
       isActivated: false
     }
   },
@@ -138,7 +140,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, transfer, isActivated, disabled, clearable, placeholder, selectLabel, showPanel, panelStyle, prefixIcon } = this
+    const { vSize, transfer, isActivated, disabled, clearable, placeholder, selectLabel, animatVisible, showPanel, panelStyle, prefixIcon, panelPlacement } = this
     return h('div', {
       class: ['vxe-select', {
         [`size--${vSize}`]: vSize,
@@ -171,8 +173,12 @@ export default {
         class: ['vxe-select-option--panel', {
           [`size--${vSize}`]: vSize,
           'is--transfer': transfer,
-          'is--visivle': showPanel
+          'animat--leave': animatVisible,
+          'animat--enter': showPanel
         }],
+        attrs: {
+          'data-placement': panelPlacement
+        },
         style: panelStyle
       }, [
         h('div', {
@@ -303,8 +309,11 @@ export default {
     },
     showOptionPanel () {
       if (!this.disabled) {
-        this.showPanel = true
         this.isActivated = true
+        this.animatVisible = true
+        setTimeout(() => {
+          this.showPanel = true
+        }, 10)
         this.updateCurrentOption(this.value)
         this.updateZindex()
         this.updatePlacement()
@@ -312,6 +321,9 @@ export default {
     },
     hideOptionPanel () {
       this.showPanel = false
+      setTimeout(() => {
+        this.animatVisible = false
+      }, 200)
     },
     updatePlacement () {
       this.$nextTick(() => {
@@ -325,16 +337,22 @@ export default {
           zIndex: panelIndex
         }
         const { boundingTop, boundingLeft, visibleHeight } = DomTools.getAbsolutePos(inputElem)
+        let panelPlacement = 'bottom'
         if (transfer) {
           const left = boundingLeft
           let top = boundingTop + inputHeight
-          if (placement !== 'top') {
+          if (placement === 'top') {
+            panelPlacement = 'top'
+            top = boundingTop - panelHeight
+          } else {
             // 如果下面不够放，则向上
             if (top + panelHeight > visibleHeight) {
+              panelPlacement = 'top'
               top = boundingTop - panelHeight
             }
             // 如果上面不够放，则向下（优先）
             if (top < 0) {
+              panelPlacement = 'bottom'
               top = boundingTop + inputHeight
             }
           }
@@ -345,15 +363,18 @@ export default {
           })
         } else {
           if (placement === 'top') {
+            panelPlacement = 'top'
             panelStyle.bottom = `${inputHeight}px`
           } else {
             // 如果下面不够放，则向上
             if (boundingTop + inputHeight + panelHeight > visibleHeight) {
+              panelPlacement = 'top'
               panelStyle.bottom = `${inputHeight}px`
             }
           }
         }
         this.panelStyle = panelStyle
+        this.panelPlacement = panelPlacement
       })
     },
     focus () {
