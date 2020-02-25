@@ -2234,7 +2234,7 @@ const Methods = {
   triggerSortEvent (evnt, column, order) {
     const property = column.property
     if (column.sortable || column.remoteSort) {
-      const evntParams = { column, property, field: property, prop: property, order, $table: this }
+      const evntParams = { column, property, order, $table: this }
       if (!order || column.order === order) {
         evntParams.order = null
         this.clearSort()
