@@ -15,16 +15,9 @@ class ColumnConfig {
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.cellEditRender')
     }
-    if (_vm.type === 'index') {
-      UtilTools.warn('vxe.error.delProp', ['index', 'seq'])
-    } else if (_vm.type === 'selection') {
-      UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
-    } else if (_vm.type === 'expand') {
+    if (_vm.type === 'expand') {
       if ($xetable.treeConfig && $xetable.treeOpts.line) {
         UtilTools.error('vxe.error.treeLineExpand')
-      }
-      if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
-        UtilTools.warn('vxe.error.expandContent')
       }
     }
     if (formatter) {
