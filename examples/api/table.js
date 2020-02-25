@@ -3681,8 +3681,8 @@ const apis = [
       },
       {
         name: 'filter(field, callback)',
-        abandoned: true,
-        desc: '手动对表格进行筛选，还可以通过 callback 返回新的选项列表（废弃的 API 不建议使用，被 setFilter 方法取代）',
+        disabled: true,
+        desc: '即将废弃，请使用 setFilter',
         version: '1.12.5',
         type: 'Promise<options>',
         enum: '',

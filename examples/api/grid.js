@@ -335,7 +335,7 @@ const apis = [
       {
         name: 'current-page-change',
         disabled: true,
-        desc: '只对 pager-config 配置时有效，当前页发生改变时会触发该事件',
+        desc: '即将废弃，请使用 page-change',
         version: '',
         type: '',
         enum: '',
@@ -345,7 +345,7 @@ const apis = [
       {
         name: 'page-size-change',
         disabled: true,
-        desc: '只对 pager-config 配置时有效，每页大小发生改变时会触发该事件',
+        desc: '即将废弃，请使用 page-change',
         version: '',
         type: '',
         enum: '',

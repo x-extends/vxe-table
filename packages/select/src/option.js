@@ -56,8 +56,7 @@ export default {
       },
       on: {
         click: this.optionEvent,
-        mouseenter: this.mouseenterEvent,
-        mouseleave: this.mouseleaveEvent
+        mouseenter: this.mouseenterEvent
       }
     }, UtilTools.getFuncText(this.label))
   },
@@ -68,11 +67,8 @@ export default {
     optionEvent (evnt) {
       this.$xeselect.changeOptionEvent(evnt, this.value)
     },
-    mouseenterEvent (evnt) {
-      this.$xeselect.currentOptionEvent(evnt, this.value)
-    },
-    mouseleaveEvent () {
-      this.$xeselect.updateCurrentOption(this.value)
+    mouseenterEvent () {
+      this.$xeselect.setCurrentOption(this)
     }
   }
 }

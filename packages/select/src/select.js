@@ -210,8 +210,13 @@ export default {
     updateStatus () {
       this.updateFlag++
     },
-    updateCurrentOption (currentValue) {
-      this.currentValue = currentValue
+    setCurrentOption (option) {
+      if (option) {
+        this.currentValue = option.value
+        this.$nextTick(() => {
+          DomTools.toView(this.$refs.panel.querySelector(`[data-option-id='${option.id}']`))
+        })
+      }
     },
     clearEvent (params, evnt) {
       this.clearValueEvent(evnt, null)
@@ -227,9 +232,6 @@ export default {
         this.$emit('change', { value: selectValue }, evnt)
       }
     },
-    currentOptionEvent (evnt, currentValue) {
-      this.currentValue = currentValue
-    },
     changeOptionEvent (evnt, selectValue) {
       this.changeEvent(evnt, selectValue)
       this.hideOptionPanel()
@@ -243,7 +245,7 @@ export default {
       }
     },
     handleGlobalKeydownEvent (evnt) {
-      const { $refs, showPanel, currentValue, clearable, disabled } = this
+      const { showPanel, currentValue, clearable, disabled } = this
       if (!disabled) {
         const keyCode = evnt.keyCode
         const isTab = keyCode === 9
@@ -266,12 +268,7 @@ export default {
             if (!offsetOption && !findOption(groupList, currentValue)) {
               offsetOption = firstOption
             }
-            if (offsetOption) {
-              this.currentOptionEvent(evnt, offsetOption.value)
-              this.$nextTick(() => {
-                DomTools.toView($refs.panel.querySelector(`[data-option-id='${offsetOption.id}']`))
-              })
-            }
+            this.setCurrentOption(offsetOption)
           }
         } else if (isEnter && this.isActivated) {
           this.showOptionPanel()
@@ -314,7 +311,7 @@ export default {
         setTimeout(() => {
           this.showPanel = true
         }, 10)
-        this.updateCurrentOption(this.value)
+        this.setCurrentOption(findOption(this.getOptions(), this.value))
         this.updateZindex()
         this.updatePlacement()
       }
