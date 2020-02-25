@@ -317,22 +317,26 @@ export default {
       this.jumpPage(Math.min(this.currentPage + this.numList.length, this.pageCount))
     },
     jumpPage (currentPage) {
-      const type = 'current-change'
       if (currentPage !== this.currentPage) {
         this.$emit('update:currentPage', currentPage)
-        UtilTools.emitEvent(this, type, [currentPage])
-        this.emitPageChange(type, this.pageSize, currentPage)
+        if (this.$listeners['current-change']) {
+          UtilTools.warn('vxe.error.delEvent', ['current-change', 'page-change'])
+          this.$emit('current-change', currentPage)
+        }
+        this.$emit('page-change', [{ type: 'current-change', pageSize: this.pageSize, currentPage }])
       }
     },
     pageSizeEvent (pageSize) {
       this.changePageSize(pageSize)
     },
     changePageSize (pageSize) {
-      const type = 'size-change'
       if (pageSize !== this.pageSize) {
         this.$emit('update:pageSize', pageSize)
-        UtilTools.emitEvent(this, type, [pageSize])
-        this.emitPageChange(type, pageSize, Math.min(this.currentPage, this.getPageCount(this.total, pageSize)))
+        if (this.$listeners['size-change']) {
+          UtilTools.warn('vxe.error.delEvent', ['size-change', 'page-change'])
+          this.$emit('size-change', pageSize)
+        }
+        this.$emit('page-change', [{ type: 'size-change', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) }])
       }
     },
     jumpKeydownEvent (evnt) {
@@ -351,9 +355,6 @@ export default {
       const current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value
       evnt.target.value = current
       this.jumpPage(current)
-    },
-    emitPageChange (type, pageSize, currentPage) {
-      UtilTools.emitEvent(this, 'page-change', [{ type, pageSize, currentPage }])
     }
   }
 }

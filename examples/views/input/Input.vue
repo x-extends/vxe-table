@@ -11,13 +11,15 @@
     </p>
 
     <p>
-      <vxe-input v-model="value5" placeholder="请输入内容" prefix-icon="fa fa-user-o"></vxe-input>
-      <vxe-input v-model="value6" placeholder="请输入内容" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
+      <vxe-input v-model="value5" placeholder="可清除" clearable></vxe-input>
+      <vxe-input v-model="value6" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
+      <vxe-input v-model="value7" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
+      <vxe-input v-model="value8" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
     </p>
 
     <p>
-      <vxe-textarea v-model="value7" placeholder="请输入内容"></vxe-textarea>
-      <vxe-textarea v-model="value8" placeholder="请输入内容" disabled></vxe-textarea>
+      <vxe-textarea v-model="value9" placeholder="多行文本域"></vxe-textarea>
+      <vxe-textarea v-model="value10" placeholder="禁用的" disabled></vxe-textarea>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -43,6 +45,8 @@ export default {
       value6: '',
       value7: '',
       value8: '',
+      value9: '',
+      value10: '',
       demoCodes: [
         `
         <p>
@@ -53,13 +57,15 @@ export default {
         </p>
 
         <p>
-          <vxe-input v-model="value5" placeholder="请输入内容" prefix-icon="fa fa-user-o"></vxe-input>
-          <vxe-input v-model="value6" placeholder="请输入内容" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
+          <vxe-input v-model="value5" placeholder="可清除" clearable></vxe-input>
+          <vxe-input v-model="value6" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
+          <vxe-input v-model="value7" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
+          <vxe-input v-model="value8" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
         </p>
 
         <p>
-          <vxe-textarea v-model="value7" placeholder="请输入内容"></vxe-textarea>
-          <vxe-textarea v-model="value8" placeholder="请输入内容" disabled></vxe-textarea>
+          <vxe-textarea v-model="value9" placeholder="多行文本域"></vxe-textarea>
+          <vxe-textarea v-model="value10" placeholder="禁用的" disabled></vxe-textarea>
         </p>
         `,
         `
@@ -73,7 +79,9 @@ export default {
               value5: '',
               value6: '',
               value7: '',
-              value8: ''
+              value8: '',
+              value9: '',
+              value10: ''
             }
           }
         }

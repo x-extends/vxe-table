@@ -635,11 +635,17 @@ export default {
       tablePage.currentPage = currentPage
       tablePage.pageSize = pageSize
       if (params.type === 'current-change') {
-        UtilTools.emitEvent(this, 'current-page-change', [currentPage])
+        if (this.$listeners['current-page-change']) {
+          UtilTools.warn('vxe.error.delEvent', ['current-page-change', 'page-change'])
+          this.$emit('current-page-change', currentPage)
+        }
       } else {
-        UtilTools.emitEvent(this, 'page-size-change', [pageSize])
+        if (this.$listeners['page-size-change']) {
+          UtilTools.warn('vxe.error.delEvent', ['page-size-change', 'page-change'])
+          this.$emit('page-size-change', pageSize)
+        }
       }
-      UtilTools.emitEvent(this, 'page-change', [Object.assign({ $grid: this }, params)])
+      this.$emit('page-change', Object.assign({ $grid: this }, params))
       if (proxyConfig) {
         this.commitProxy('query')
       }

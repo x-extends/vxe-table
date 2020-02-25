@@ -324,20 +324,22 @@ const apis = [
     list: [
       {
         name: 'current-page-change',
+        disabled: true,
         desc: '只对 pager-config 配置时有效，当前页发生改变时会触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: 'currentPage',
+        defVal: '{currentPage}',
         list: []
       },
       {
         name: 'page-size-change',
+        disabled: true,
         desc: '只对 pager-config 配置时有效，每页大小发生改变时会触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: 'pageSize',
+        defVal: '{pageSize}',
         list: []
       },
       {
@@ -392,6 +394,24 @@ const apis = [
         type: '',
         enum: '',
         defVal: '{code}, event',
+        list: []
+      },
+      {
+        name: 'zoom',
+        desc: '只对 toolbar.zoom 配置时有效，当工具栏的缩放按钮被点击时会后触发该事件',
+        version: '2.8.5',
+        type: '',
+        enum: '',
+        defVal: '{maximize}, event',
+        list: []
+      },
+      {
+        name: 'custom',
+        desc: '只对 toolbar.custom 配置时有效，当工具栏的自定义列按钮被点击时会后触发该事件',
+        version: '2.8.5',
+        type: '',
+        enum: '',
+        defVal: '{type}, event',
         list: []
       }
     ]

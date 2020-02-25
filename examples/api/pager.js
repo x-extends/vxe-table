@@ -181,20 +181,22 @@ const apis = [
     list: [
       {
         name: 'current-change',
+        disabled: true,
         desc: '当前页发生改变时会触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: 'currentPage',
+        defVal: '{currentPage}',
         list: []
       },
       {
         name: 'size-change',
+        disabled: true,
         desc: '每页大小发生改变时会触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: 'pageSize',
+        defVal: '{pageSize}',
         list: []
       },
       {

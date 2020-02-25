@@ -7,7 +7,7 @@
       <vxe-radio name="n1" v-model="value1" label="1">默认尺寸</vxe-radio>
       <vxe-radio name="n1" v-model="value1" label="2" size="medium">中等尺寸</vxe-radio>
       <vxe-radio name="n1" v-model="value1" label="3" size="small">小型尺寸</vxe-radio>
-      <vxe-radio name="n1" v-model="value1" label="3" size="mini">超小尺寸</vxe-radio>
+      <vxe-radio name="n1" v-model="value1" label="4" size="mini">超小尺寸</vxe-radio>
     </p>
 
     <p>
@@ -50,7 +50,7 @@ export default {
           <vxe-radio name="n1" v-model="value1" label="1">默认尺寸</vxe-radio>
           <vxe-radio name="n1" v-model="value1" label="2" size="medium">中等尺寸</vxe-radio>
           <vxe-radio name="n1" v-model="value1" label="3" size="small">小型尺寸</vxe-radio>
-          <vxe-radio name="n1" v-model="value1" label="3" size="mini">超小尺寸</vxe-radio>
+          <vxe-radio name="n1" v-model="value1" label="4" size="mini">超小尺寸</vxe-radio>
         </p>
 
         <p>

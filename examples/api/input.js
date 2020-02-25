@@ -76,7 +76,7 @@ const apis = [
         version: '',
         type: 'String',
         enum: '',
-        defVal: '',
+        defVal: 'off',
         list: []
       },
       {
@@ -145,6 +145,15 @@ const apis = [
     list: [
       {
         name: '*',
+        desc: '在需要时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
+        name: 'change',
         desc: '在值发生改变时触发该事件',
         version: '',
         type: '',
@@ -156,6 +165,24 @@ const apis = [
         name: 'clear',
         desc: '在点击右侧清除按钮时触发该事件',
         version: '2.8',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
+        name: 'prefix-click',
+        desc: '在点击头部图标时触发该事件',
+        version: '2.8.4',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
+        name: 'suffix-click',
+        desc: '在点击尾部图标时触发该事件',
+        version: '2.8.4',
         type: '',
         enum: '',
         defVal: '{}, event',
