@@ -15,6 +15,7 @@ import './antd'
 import './echarts'
 import './xtable'
 import './xtable/renderer'
+import './xtable/formatter'
 
 Vue.component(TableAPILink.name, TableAPILink)
 Vue.component(TableColumnAPILink.name, TableColumnAPILink)

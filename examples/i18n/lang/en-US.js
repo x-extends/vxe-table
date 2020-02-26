@@ -194,6 +194,7 @@ module.exports = {
         menusPlugin: 'plugin-menus Context menus',
         excelPlugin: 'plugin-excel A simple excel',
 
+        formats: '(Global) Formatter',
         commands: '(Global) Command register',
         menus: '(Global) Context menu',
 

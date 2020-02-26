@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import formats from '../../v-x-e-table/src/formats'
 
 let zindexIndex = 0
 let lastZindex = 0
@@ -29,12 +30,14 @@ class ColumnConfig {
     }
     if (formatter) {
       if (XEUtils.isString(formatter)) {
-        if (!XEUtils.isFunction(XEUtils[formatter])) {
-          UtilTools.error('vxe.error.notFunc', [formatter])
+        const globalFunc = formats.get(formatter) || XEUtils[formatter]
+        if (!XEUtils.isFunction(globalFunc)) {
+          UtilTools.error('vxe.error.notFunc', [globalFunc])
         }
       } else if (XEUtils.isArray(formatter)) {
-        if (!XEUtils.isFunction(XEUtils[formatter[0]])) {
-          UtilTools.error('vxe.error.notFunc', [formatter[0]])
+        const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
+        if (!XEUtils.isFunction(globalFunc)) {
+          UtilTools.error('vxe.error.notFunc', [globalFunc])
         }
       }
     }
@@ -212,9 +215,11 @@ export const UtilTools = {
         }
       }
       if (XEUtils.isString(formatter)) {
-        cellLabel = XEUtils[formatter] ? XEUtils[formatter](cellValue) : ''
+        const globalFunc = formats.get(formatter) || XEUtils[formatter]
+        cellLabel = globalFunc ? globalFunc(cellValue) : ''
       } else if (XEUtils.isArray(formatter)) {
-        cellLabel = XEUtils[formatter[0]] ? XEUtils[formatter[0]](...([cellValue].concat(formatter.slice(1)))) : ''
+        const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
+        cellLabel = globalFunc ? globalFunc(...([cellValue].concat(formatter.slice(1)))) : ''
       } else {
         cellLabel = formatter(Object.assign({ cellValue }, params))
       }

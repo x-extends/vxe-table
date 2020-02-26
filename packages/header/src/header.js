@@ -299,7 +299,6 @@ export default {
     },
     resizeMousedown (evnt, params) {
       const { column } = params
-      const { type, sortable, remoteSort, filters } = column
       const { $parent: $xetable, $el, fixedType } = this
       const { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $xetable.$refs
       const { target: dragBtnElem, clientX: dragClientX } = evnt

@@ -1669,6 +1669,19 @@ export default {
           ]
         },
         {
+          label: 'app.aside.nav.formats',
+          value: 'formats',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.api',
+              locat: {
+                name: 'FormatsAPI'
+              }
+            }
+          ]
+        },
+        {
           label: 'app.aside.nav.commands',
           value: 'commands',
           expand: false,
