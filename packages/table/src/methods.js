@@ -1306,7 +1306,7 @@ const Methods = {
     const { filterWrapper, validTip } = $refs
     const isMouseChecked = mouseConfig && mouseOpts.range
     if (filterWrapper) {
-      if (DomTools.getEventTargetNode(evnt, $el, 'vxe-filter-wrapper').flag) {
+      if (DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
         // 如果点击了筛选按钮
       } else if (DomTools.getEventTargetNode(evnt, filterWrapper.$el).flag) {
         // 如果点击筛选容器
@@ -2083,8 +2083,8 @@ const Methods = {
     const { _lastResizeTime, sortOpts } = this
     const { column, cell } = params
     const triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
-    const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-sort-wrapper').flag
-    const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-filter-wrapper').flag
+    const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
+    const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
       this.triggerSortEvent(evnt, column, column.order ? (column.order === 'desc' ? '' : 'desc') : 'asc')
     }

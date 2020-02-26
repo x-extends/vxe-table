@@ -298,7 +298,6 @@ export default {
     },
     resizeMousedown (evnt, params) {
       const { column } = params
-      const { type, sortable, remoteSort, filters } = column
       const { $parent: $xetable, $el, fixedType } = this
       const { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $xetable.$refs
       const { target: dragBtnElem, clientX: dragClientX } = evnt
@@ -308,7 +307,7 @@ export default {
       const pos = DomTools.getOffsetPos(dragBtnElem, $el)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
-      const extraElemWidth = (type === 'checkbox' || type === 'radio' ? 18 : 0) + (sortable || remoteSort ? 16 : 0) + (filters ? 16 : 0)
+      const extraElemWidth = (column.type === 'checkbox' ? 18 : 0) + (dragBtnElem.previousElementSibling.children.length - 1) * 16
       const minInterval = 40 + extraElemWidth - dragBtnOffsetWidth // 列之间的最小间距
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
       let dragPosLeft = pos.left + dragBtnOffsetWidth

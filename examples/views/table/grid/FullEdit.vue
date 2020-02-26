@@ -11,6 +11,7 @@
     <vxe-grid
       border
       resizable
+      show-header-overflow
       show-overflow
       highlight-hover-row
       keep-source
