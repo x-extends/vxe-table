@@ -3645,7 +3645,7 @@ const apis = [
       },
       {
         name: 'scrollToRow(row)',
-        desc: '如果有滚动条，则滚动到对应的行',
+        desc: '如果有滚动条，则滚动到对应的行（对于某些特定的场景可能会用到，比如定位到某一行）',
         version: '1.10.1',
         type: 'Promise',
         enum: '',
@@ -3654,7 +3654,7 @@ const apis = [
       },
       {
         name: 'scrollToColumn(column)',
-        desc: '如果有滚动条，则滚动到对应的列',
+        desc: '如果有滚动条，则滚动到对应的列（对于某些特定的场景可能会用到，比如定位到某一列）',
         version: '1.10.1',
         type: 'Promise',
         enum: '',

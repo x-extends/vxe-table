@@ -10,7 +10,7 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
-      <vxe-table-column field="sex5" title="Sex" :edit-render="{name: 'select', optionGroups: sexGriupList}"></vxe-table-column>
+      <vxe-table-column field="sex5" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-table-column>
       <vxe-table-column field="date13" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}, autoselect: true}"></vxe-table-column>
     </vxe-table>
 
@@ -69,7 +69,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
-          <vxe-table-column field="sex5" title="Sex" :edit-render="{name: 'select', optionGroups: sexGriupList}"></vxe-table-column>
+          <vxe-table-column field="sex5" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-table-column>
           <vxe-table-column field="date13" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}, autoselect: true}"></vxe-table-column>
         </vxe-table>
         `,

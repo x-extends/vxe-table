@@ -31,14 +31,14 @@
       border
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="date" title="转日期" width="180" formatter="date"></vxe-table-column>
-      <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['date', 'yyyy-MM-dd']"></vxe-table-column>
-      <vxe-table-column field="amount" title="格式化金额" formatter="amount"></vxe-table-column>
-      <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="bankcard"></vxe-table-column>
+      <vxe-table-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-table-column>
+      <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-table-column>
+      <vxe-table-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-table-column>
+      <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-table-column>
       <vxe-table-column field="num7" title="数值"></vxe-table-column>
-      <vxe-table-column field="num7" title="截取2位数" formatter="cutNumber"></vxe-table-column>
-      <vxe-table-column field="num7" title="四舍五入2位数" formatter="fixedNumber"></vxe-table-column>
-      <vxe-table-column field="sex" title="格式化性别" :formatter="['select', sexList]"></vxe-table-column>
+      <vxe-table-column field="num7" title="截取2位数" formatter="formatCutNumber"></vxe-table-column>
+      <vxe-table-column field="num7" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-table-column>
+      <vxe-table-column field="sex" title="格式化性别" formatter="formatSex"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -115,29 +115,33 @@ export default {
         `
         // 自定义全局的格式化处理函数
         VXETable.formats.mixin({
+          // 格式化性别
+          formatSex (cellValue) {
+            return cellValue ? (cellValue === '1' ? '男' : '女') : ''
+          },
           // 格式化下拉选项
-          select (cellValue, list) {
+          formatSelect (cellValue, list) {
             const item = list.find(item => item.value === cellValue)
             return item ? item.label : ''
           },
           // 格式化日期，默认 yyyy-MM-dd HH:mm:ss
-          date (cellValue, format) {
+          formatDate (cellValue, format) {
             return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd HH:mm:ss')
           },
           // 格式金额，默认2位数
-          amount (cellValue, digits) {
+          formatAmount (cellValue, digits) {
             return XEUtils.commafy(cellValue, { digits: digits || 2 })
           },
           // 格式化银行卡，默认每4位隔开
-          bankcard (cellValue) {
+          formatBankcard (cellValue) {
             return XEUtils.commafy(cellValue, { spaceNumber: 4, separator: ' ' })
           },
           // 四舍五入,默认两位数
-          fixedNumber (cellValue, digits) {
+          formatFixedNumber (cellValue, digits) {
             return XEUtils.toNumber(cellValue).toFixed(digits || 2)
           },
           // 截取小数,默认两位数
-          cutNumber (cellValue, digits) {
+          formatCutNumber (cellValue, digits) {
             return XEUtils.toFixedString(cellValue, digits || 2)
           }
         })
@@ -147,31 +151,21 @@ export default {
           border
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="date" title="转日期" width="180" formatter="date"></vxe-table-column>
-          <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['date', 'yyyy-MM-dd']"></vxe-table-column>
-          <vxe-table-column field="amount" title="格式化金额" formatter="amount"></vxe-table-column>
-          <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="bankcard"></vxe-table-column>
+          <vxe-table-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-table-column>
+          <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-table-column>
+          <vxe-table-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-table-column>
+          <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-table-column>
           <vxe-table-column field="num7" title="数值"></vxe-table-column>
-          <vxe-table-column field="num7" title="截取2位数" formatter="cutNumber"></vxe-table-column>
-          <vxe-table-column field="num7" title="四舍五入2位数" formatter="fixedNumber"></vxe-table-column>
-          <vxe-table-column field="sex" title="格式化性别" :formatter="['select', sexList]"></vxe-table-column>
+          <vxe-table-column field="num7" title="截取2位数" formatter="formatCutNumber"></vxe-table-column>
+          <vxe-table-column field="num7" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-table-column>
+          <vxe-table-column field="sex" title="格式化性别" formatter="formatSex"></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
-              tableData: [],
-              sexList: [
-                {
-                  label: '女',
-                  value: '0'
-                },
-                {
-                  label: '男',
-                  value: '1'
-                }
-              ]
+              tableData: []
             }
           },
           created () {
