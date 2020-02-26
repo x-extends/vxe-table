@@ -58,7 +58,7 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.select.transfer',
         list: []
       }
     ]

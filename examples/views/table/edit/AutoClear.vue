@@ -10,7 +10,7 @@
       :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column title="操作">
@@ -54,7 +54,7 @@ export default {
           :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column title="操作">

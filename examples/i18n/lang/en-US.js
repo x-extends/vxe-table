@@ -622,7 +622,7 @@ module.exports = {
           clearable: 'Whether to display the clear button on the right when there is a value',
           disabled: 'Whether to disable',
           prefixIcon: 'Prefix icon',
-          placement: 'Displays the placement of the drop-down list by default',
+          placement: 'Fix the direction of the display drop - down panel',
           transfer: 'Whether to insert the popup container into the body'
         }
       },

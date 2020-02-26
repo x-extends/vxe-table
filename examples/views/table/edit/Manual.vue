@@ -12,7 +12,7 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
       <vxe-table-column field="num6" title="Number" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
@@ -59,7 +59,7 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
           <vxe-table-column field="num6" title="Number" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
