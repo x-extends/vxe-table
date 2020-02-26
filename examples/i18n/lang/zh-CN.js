@@ -621,7 +621,7 @@ module.exports = {
           clearable: '当有值时，是否在右侧显示清除按钮',
           disabled: '是否禁用',
           prefixIcon: '头部图标',
-          placement: '默认显示下拉列表的方向',
+          placement: '固定显示下拉面板的方向',
           transfer: '是否将弹框容器插入于 body 内'
         }
       },

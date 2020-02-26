@@ -307,6 +307,7 @@ export default {
     },
     showOptionPanel () {
       if (!this.disabled) {
+        clearTimeout(this.clearHidePanelTimeout)
         this.isActivated = true
         this.animatVisible = true
         setTimeout(() => {
@@ -319,7 +320,7 @@ export default {
     },
     hideOptionPanel () {
       this.showPanel = false
-      setTimeout(() => {
+      this.clearHidePanelTimeout = setTimeout(() => {
         this.animatVisible = false
       }, 200)
     },
