@@ -1,10 +1,22 @@
 import GlobalConfig from '../../conf'
+import VxeModal from '../../modal/src/modal'
+import VxeInput from '../../input/src/input'
+import VxeCheckbox from '../../checkbox/src/checkbox'
+import VxeSelect from '../../select/src/select'
+import VxeOption from '../../select/src/option'
 
 export default {
   name: 'VxeExportPanel',
   props: {
     defaultOptions: Object,
     storeData: Object
+  },
+  components: {
+    VxeModal,
+    VxeInput,
+    VxeCheckbox,
+    VxeSelect,
+    VxeOption
   },
   data () {
     return {
@@ -60,19 +72,18 @@ export default {
               h('tr', [
                 h('td', GlobalConfig.i18n('vxe.export.expName')),
                 h('td', [
-                  h('input', {
+                  h('vxe-input', {
                     ref: 'filename',
-                    attrs: {
-                      type: 'text',
-                      placeholder: GlobalConfig.i18n('vxe.export.expNamePlaceholder')
-                    },
-                    domProps: {
-                      value: defaultOptions.filename
-                    },
-                    on: {
-                      input (evnt) {
-                        defaultOptions.filename = evnt.target.value
+                    model: {
+                      value: defaultOptions.filename,
+                      callback (value) {
+                        defaultOptions.filename = value
                       }
+                    },
+                    props: {
+                      type: 'text',
+                      clearable: true,
+                      placeholder: GlobalConfig.i18n('vxe.export.expNamePlaceholder')
                     }
                   })
                 ])
@@ -80,39 +91,37 @@ export default {
               h('tr', [
                 h('td', GlobalConfig.i18n('vxe.export.expType')),
                 h('td', [
-                  h('select', {
-                    on: {
-                      change (evnt) {
-                        defaultOptions.type = evnt.target.value
+                  h('vxe-select', {
+                    model: {
+                      value: defaultOptions.type,
+                      callback (value) {
+                        defaultOptions.type = value
                       }
                     }
                   }, storeData.typeList.map(item => {
-                    return h('option', {
-                      attrs: {
-                        value: item.value
-                      },
-                      domProps: {
-                        selected: defaultOptions.type === item.value
+                    return h('vxe-option', {
+                      props: {
+                        value: item.value,
+                        label: GlobalConfig.i18n(item.label)
                       }
-                    }, GlobalConfig.i18n(item.label))
+                    })
                   }))
                 ])
               ]),
               showSheet ? h('tr', [
                 h('td', GlobalConfig.i18n('vxe.export.expSheetName')),
                 h('td', [
-                  h('input', {
-                    attrs: {
-                      type: 'text',
-                      placeholder: GlobalConfig.i18n('vxe.export.expSheetNamePlaceholder')
-                    },
-                    domProps: {
-                      value: defaultOptions.sheetName
-                    },
-                    on: {
-                      input (evnt) {
-                        defaultOptions.sheetName = evnt.target.value
+                  h('vxe-input', {
+                    model: {
+                      value: defaultOptions.sheetName,
+                      callback (value) {
+                        defaultOptions.sheetName = value
                       }
+                    },
+                    props: {
+                      type: 'text',
+                      clearable: true,
+                      placeholder: GlobalConfig.i18n('vxe.export.expSheetNamePlaceholder')
                     }
                   })
                 ])
@@ -120,21 +129,20 @@ export default {
               h('tr', [
                 h('td', GlobalConfig.i18n('vxe.export.expMode')),
                 h('td', [
-                  h('select', {
-                    on: {
-                      change (evnt) {
-                        defaultOptions.mode = evnt.target.value
+                  h('vxe-select', {
+                    model: {
+                      value: defaultOptions.mode,
+                      callback (value) {
+                        defaultOptions.mode = value
                       }
                     }
                   }, storeData.modeList.map(item => {
-                    return h('option', {
-                      attrs: {
-                        value: item.value
-                      },
-                      domProps: {
-                        selected: defaultOptions.mode === item.value
+                    return h('vxe-option', {
+                      props: {
+                        value: item.value,
+                        label: GlobalConfig.i18n(item.label)
                       }
-                    }, GlobalConfig.i18n(item.label))
+                    })
                   }))
                 ])
               ]),
@@ -199,37 +207,37 @@ export default {
                 h('td', GlobalConfig.i18n('vxe.export.expOpts')),
                 h('td', [
                   h('vxe-checkbox', {
-                    props: {
-                      title: GlobalConfig.i18n('vxe.export.expHeaderTitle')
-                    },
                     model: {
                       value: defaultOptions.isHeader,
                       callback (value) {
                         defaultOptions.isHeader = value
                       }
+                    },
+                    props: {
+                      title: GlobalConfig.i18n('vxe.export.expHeaderTitle')
                     }
                   }, GlobalConfig.i18n('vxe.export.expOptHeader')),
                   h('vxe-checkbox', {
-                    props: {
-                      disabled: !storeData.hasFooter,
-                      title: GlobalConfig.i18n('vxe.export.expFooterTitle')
-                    },
                     model: {
                       value: defaultOptions.isFooter,
                       callback (value) {
                         defaultOptions.isFooter = value
                       }
+                    },
+                    props: {
+                      disabled: !storeData.hasFooter,
+                      title: GlobalConfig.i18n('vxe.export.expFooterTitle')
                     }
                   }, GlobalConfig.i18n('vxe.export.expOptFooter')),
                   h('vxe-checkbox', {
-                    props: {
-                      title: GlobalConfig.i18n('vxe.export.expOriginalTitle')
-                    },
                     model: {
                       value: defaultOptions.original,
                       callback (value) {
                         defaultOptions.original = value
                       }
+                    },
+                    props: {
+                      title: GlobalConfig.i18n('vxe.export.expOriginalTitle')
                     }
                   }, GlobalConfig.i18n('vxe.export.expOptOriginal'))
                 ])
@@ -275,7 +283,7 @@ export default {
     },
     showEvent () {
       this.$nextTick(() => {
-        this.$refs.filename.focus()
+        this.$refs.filename.$el.focus()
       })
       this.checkStatus()
     },

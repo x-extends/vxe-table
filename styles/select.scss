@@ -5,6 +5,7 @@
   position: relative;
   display: inline-block;
   width: 180px;
+  color: $vxe-font-color;
   font-size: $vxe-font-size;
   &:not(.is--disabled) {
     & > .vxe-input {
@@ -33,10 +34,12 @@
   position: absolute;
   left: 0;
   padding: 0.2em 0;
+  color: $vxe-font-color;
+  font-size: $vxe-font-size;
   &:not(.is--transfer) {
     min-width: 100%;
   }
-  .is--transfer {
+  &.is--transfer {
     position: fixed;
   }
   &.animat--leave {
