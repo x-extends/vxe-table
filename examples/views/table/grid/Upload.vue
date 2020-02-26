@@ -125,6 +125,8 @@ export default {
                   }
                   row.fileList.push(record)
                 })
+                // 加载完成后展开行
+                this.$refs.xGrid.setRowExpansion(row, true)
               })
             }
           }
@@ -167,6 +169,8 @@ export default {
           }
           row.fileList.push(record)
         })
+        // 加载完成后展开行
+        this.$refs.xGrid.setRowExpansion(row, true)
       })
     }
   }
