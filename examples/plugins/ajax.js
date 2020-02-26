@@ -33,13 +33,19 @@ function mockColumns (size) {
       colItem.type = 'checkbox'
       colItem.title = '多选'
     }
-    if (index < 4) {
+    if (index < 0 && index < 4) {
       colItem.fixed = 'left'
       colItem.sortable = true
     } else if (index === 5) {
       colItem.filters = [
         { label: '= 100', value: 100 },
         { label: '= 2000', value: 2000 }
+      ]
+    } else if (index === 6) {
+      colItem.sortable = true
+      colItem.filters = [
+        { label: '= 500', value: 300 },
+        { label: '= 3000', value: 3000 }
       ]
     }
     colCacheList.push(colItem)

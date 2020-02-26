@@ -66,9 +66,11 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      .vxe-cell--sort,
-      .vxe-cell--filter {
-        flex-shrink: 0;
+      & > i,
+      & > span {
+        &:not(.vxe-cell--title) {
+          flex-shrink: 0;
+        }
       }
     }
   }
@@ -86,6 +88,7 @@
       content: "*";
       position: absolute;
       left: 0;
+      top: 0.05em;
     }
   }
   .vxe-edit-icon {
