@@ -65,10 +65,8 @@ Modal.closeAll = function () {
 
 Modal.install = function (Vue) {
   VXETable._modal = 1
-  Vue.component('vxe-message', VXEModal)
   Vue.component(VXEModal.name, VXEModal)
   AlertController = Vue.extend(VXEModal)
-  Vue.prototype.$XMsg = Modal
   Vue.prototype.$XModal = Modal
   VXETable.$modal = Modal
 }
