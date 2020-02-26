@@ -8,5 +8,7 @@ VxeSelect.install = function (Vue) {
   Vue.component(VxeOptgroup.name, VxeOptgroup)
 }
 
+error error  error error error error
+
 export const Select111 = VxeSelect
 export default VxeSelect
