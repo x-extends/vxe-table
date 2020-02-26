@@ -1,4 +1,4 @@
-import VxeInput from '../../input'
+import VxeInput from '../../input/src/input'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 

@@ -1,4 +1,6 @@
 import GlobalConfig from '../../conf'
+import VxeModal from '../../modal/src/modal'
+import VxeRadio from '../../radio/src/radio'
 import { UtilTools } from '../../tools'
 
 export default {
@@ -6,6 +8,10 @@ export default {
   props: {
     defaultOptions: Object,
     storeData: Object
+  },
+  components: {
+    VxeModal,
+    VxeRadio
   },
   data () {
     return {
