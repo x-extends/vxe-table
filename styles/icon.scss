@@ -279,32 +279,29 @@
 }
 
 .vxe-icon--edit-outline {
-  height: 0.84em;
-  width: 0.84em;
-  margin: 0 0.08em 0.16em 0.08em;
-  border-radius: 0.2em;
-  border-width: 0.1em;
-  border-style: solid;
-  border-color: inherit;
+  @extend %DefaultWidthHeight;
   &:before {
     @extend %PseudoClass;
-    top: -0.1em;
-    right: -0.2em;
-    width: 0.35em;
-    height: 0.35em;
-    background-color: #fff;
+    height: 0.84em;
+    width: 0.86em;
+    top: 0.06em;
+    left: 0.02em;
+    border-radius: 0.2em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
   }
   &:after {
     @extend %PseudoClass;
-    left: 0.12em;
-    top: 0.12em;
-    width: 0.8em;
-    height: 0;
-    border-radius: 0.2em;
-    border-width: 0 0 0.15em 0;
+    left: 0.6em;
+    bottom: 0.22em;
+    width: 0;
+    height: 0.8em;
+    border-radius: 0 0 80% 80%;
+    border-width: 0 0 0 0.22em;
     border-style: solid;
     border-color: inherit;
-    transform: rotate(-45deg);
+    transform: rotate(45deg);
   }
 }
 
