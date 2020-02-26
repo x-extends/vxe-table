@@ -1,8 +1,11 @@
-import XEUtils from 'xe-utils'
-import Interceptor from './src/interceptor'
-import Renderer from './src/renderer'
-import Setup from './src/setup'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../conf'
+import interceptor from './src/interceptor'
+import renderer from './src/renderer'
+import commands from './src/commands'
+import menus from './src/menus'
+import formats from './src/formats'
+import setup from './src/setup'
 import { UtilTools } from '../tools'
 
 const installedPlugins = []
@@ -18,46 +21,16 @@ function use (Plugin, options) {
   return VXETable
 }
 
-/**
- * 创建数据仓库
- */
-class VXEStore {
-  constructor () {
-    this.store = {}
-  }
-
-  mixin (map) {
-    Object.assign(this.store, map)
-    return VXEStore
-  }
-
-  get (type) {
-    return this.store[type]
-  }
-
-  add (type, callback) {
-    this.store[type] = callback
-    return VXEStore
-  }
-
-  delete (type) {
-    delete this.store[type]
-    return VXEStore
-  }
-}
-
-const commands = new VXEStore()
-const menus = new VXEStore()
-
 export const VXETable = {
   t: key => GlobalConfig.i18n(key),
   v: 'v1',
   use,
   types: {},
-  setup: Setup,
-  interceptor: Interceptor,
-  renderer: Renderer,
+  setup,
+  interceptor,
+  renderer,
   commands,
+  formats,
   menus
 }
 

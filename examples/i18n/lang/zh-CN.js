@@ -193,6 +193,7 @@ module.exports = {
         menusPlugin: 'plugin-menus 快捷菜单集',
         excelPlugin: 'plugin-excel 简单的 Excel',
 
+        formats: '(全局) 格式化',
         commands: '(全局) 指令注册',
         menus: '(全局) 快捷菜单',
 

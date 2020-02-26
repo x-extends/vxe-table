@@ -23,7 +23,7 @@
     </pre>
 
     <p class="tip">
-      全局格式化内容，基于 <a class="link" href="https://xuliangzhan.github.io/xe-utils/#/" target="_blank">xe-utils</a> 函数库挂载方法进行数据处理，会在渲染的时候自动调用<br>
+      全局格式化内容，使用 <router-link class="link" :to="{name: 'FormatsAPI'}">formats</router-link> 添加格式函数，单元格会在渲染的时候自动调用<br>
       <span class="green">（用于实现业务中统一的格式化处理，这对于很多场景非常有用，减少很多不必要的重复代码）</span>
     </p>
 
@@ -53,35 +53,6 @@
 <script>
 import hljs from 'highlight.js'
 import XEUtils from 'xe-utils'
-
-// 自定义全局的格式化处理函数
-XEUtils.mixin({
-  // 格式化下拉选项
-  formatSelect (cellValue, list) {
-    const item = list.find(item => item.value === cellValue)
-    return item ? item.label : ''
-  },
-  // 格式化日期，默认 yyyy-MM-dd HH:mm:ss
-  formatDate (cellValue, format) {
-    return XEUtils.toDateString(cellValue, format || 'yyyy-MM-dd HH:mm:ss')
-  },
-  // 格式金额，默认2位数
-  formatAmount (cellValue, digits) {
-    return XEUtils.commafy(cellValue, { digits: digits || 2 })
-  },
-  // 格式化银行卡，默认每4位隔开
-  formatBankcard (cellValue) {
-    return XEUtils.commafy(cellValue, { spaceNumber: 4, separator: ' ' })
-  },
-  // 四舍五入,默认两位数
-  formatFixed (cellValue, digits) {
-    return XEUtils.toNumber(cellValue).toFixed(digits || 2)
-  },
-  // 截取小数,默认两位数
-  formatCutFixed (cellValue, digits) {
-    return XEUtils.toFixedString(cellValue, digits || 2)
-  }
-})
 
 export default {
   data () {
@@ -160,7 +131,7 @@ export default {
         `,
         `
         // 自定义全局的格式化处理函数
-        XEUtils.mixin({
+        VXETable.formats.mixin({
           // 格式化下拉选项
           formatSelect (cellValue, list) {
             let item = list.find(item => item.value === cellValue)

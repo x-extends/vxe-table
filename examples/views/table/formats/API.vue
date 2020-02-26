@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>全局指令注册器</h1>
-    <p class="tip">你可以很简单的将工具栏按钮或数据代理中常用的指令注册成全局可复用</p>
+    <h1>全局格式化</h1>
+    <p class="tip">你可以很简单的将单元格的格式化函数注册成全局可复用，通过 <table-column-api-link prop="formatter"/> 调用</p>
     <vxe-table
       resizable
       highlight-current-row
@@ -18,8 +18,6 @@
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
       <code class="html">{{ demoCodes[1] }}</code>
-      <code class="javascript">{{ demoCodes[2] }}</code>
-      <code class="html">{{ demoCodes[3] }}</code>
     </pre>
   </div>
 </template>
@@ -61,76 +59,29 @@ export default {
       ],
       demoCodes: [
         `
-        <vxe-toolbar :buttons="toolbarButtons"></vxe-toolbar>
-
         <vxe-table
           border
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="num" title="默认两位小数" formatter="myAmount"></vxe-table-column>
+          <vxe-table-column field="num" title="保留3位小数" :formatter="['myAmount', 3]"></vxe-table-column>
         </vxe-table>
         `,
         `
-        VXETable.commands.add('exportBtn', (params, event) => {
-          let { $table, code, button } = params
-          $table.exportData()
+        // 格式金额，默认2位数
+        VXETable.formats.add('myAmount', (cellValue, digits) => {
+          return XEUtils.commafy(cellValue, { digits: digits || 2 })
         })
 
         export default {
           data () {
             return {
-              tableData: [],
-              toolbarButtons: [
-                {
-                  code: 'exportBtn',
-                  name: '导出.csv'
-                }
-              ]
+              tableData: []
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-          }
-        }
-        `,
-        `
-        <button @click="printEvent">打印</button>
-        <vxe-grid
-          border
-          resizable
-          ref="xGrid"
-          height="300"
-          :columns="tableColumn"
-          :data="tableData">
-        </vxe-grid>
-        `,
-        `
-        VXETable.commands.add('myPrint', (params, event) => {
-          let { $table, code, button } = params
-          $table.print()
-        })
-
-        export default {
-          data () {
-            return {
-              tableData: [],
-              tableColumn: [
-                { type: 'seq', width: 50 },
-                { field: 'name', title: 'Name' },
-                { field: 'sex', title: 'Sex' },
-                { field: 'address', title: 'Address' }
-              ]
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-          },
-          methods: {
-            printEvent () {
-              this.$refs.xGrid.commitProxy('myPrint')
-            }
           }
         }
         `
