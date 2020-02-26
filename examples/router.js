@@ -19,6 +19,7 @@ const RendererEmpty = () => import(/* webpackChunkName: "start" */ './views/tabl
 const CommandsAPI = () => import(/* webpackChunkName: "start" */ './views/table/commands/API.vue')
 const MenusAPI = () => import(/* webpackChunkName: "start" */ './views/table/menus/API.vue')
 const InterceptorAPI = () => import(/* webpackChunkName: "start" */ './views/table/interceptor/API.vue')
+const FormatsAPI = () => import(/* webpackChunkName: "start" */ './views/table/formats/API.vue')
 
 const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/base/Basic.vue')
 const TableSize = () => import(/* webpackChunkName: "base" */ './views/table/base/Size.vue')
@@ -344,6 +345,11 @@ export default new Router({
       path: '/table/renderer/empty',
       name: 'RendererEmpty',
       component: RendererEmpty
+    },
+    {
+      path: '/table/formats/api',
+      name: 'FormatsAPI',
+      component: FormatsAPI
     },
     {
       path: '/table/commands/api',

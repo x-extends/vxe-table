@@ -78,6 +78,13 @@ export interface Commands {
   delete(type: object): Commands;
 }
 
+export interface Formats {
+  mixin(map: object): Formats;
+  get(type: string): Function;
+  add(type: string, callback: Function): Formats;
+  delete(type: object): Formats;
+}
+
 export interface PluginObject<T> {
   install(xTable: typeof VXETable): any;
 }
@@ -90,8 +97,8 @@ export function use(plugin: PluginObject<any>, ...options: any[]): VXETableStati
 export const interceptor: Interceptor;
 export const renderer: Renderer;
 export const menus: Menus;
-export const buttons: Commands;
 export const commands: Commands;
+export const formats: Formats;
 
 export interface VXETableStatic {
   install(vue: typeof Vue): void;
@@ -178,11 +185,14 @@ export interface VXETableStatic {
    * 渲染器
    */
   renderer: Renderer;
-  buttons: Commands;
   /**
    * 全局指令
    */
   commands: Commands;
+  /**
+   * 全局格式化
+   */
+  formats: Formats;
   /**
    * 全局快捷菜单
    */
