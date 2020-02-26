@@ -7,7 +7,7 @@
     "checked": false,
     "sex|random(1)": ["", "0", "1"],
     "role|random(1)": ["前端", "后端", "测试", "设计", "项目经理"],
-    "region|random(1)": [[1, 1, 5], [19, 199, 1773], [9, 73, 719]],
+    "region|random(1)": [[42, 67, 72], [1, 2, 7], [21, 22, 23]],
     "email": "{{ random.repeat('abcdefg',5,20) }}@{{ random.repeat(['qq','163'],1) }}.{{ random.repeat(['com','net'],1) }}",
     "age|number": "{{ random.num(18,30) }}",
     "rate|number": "{{ random.num(0,5) }}",
