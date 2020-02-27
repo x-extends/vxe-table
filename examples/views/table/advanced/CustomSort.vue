@@ -111,9 +111,15 @@ export default {
           },
           methods: {
             headerCellClickEvent ({ column, triggerResizable, triggerSort, triggerFilter }) {
-              // 如果点击了列并且没触发对应的按钮、则手动排序、列宽拖动
+              // 如果触发了列的其他功能按钮
               if (column.sortable && !(triggerResizable || triggerSort || triggerFilter)) {
-                this.$refs.xTable.sort(column.property)
+                if (column.order === 'desc') {
+                  this.$refs.xTable.clearSort()
+                } else if (column.order === 'asc') {
+                  this.$refs.xTable.sort(column.property, 'desc')
+                } else {
+                  this.$refs.xTable.sort(column.property, 'asc')
+                }
               }
             },
             filterNameMethod ({ value, row, column }) {
@@ -143,9 +149,15 @@ export default {
   },
   methods: {
     headerCellClickEvent ({ column, triggerResizable, triggerSort, triggerFilter }) {
-      // 如果点击了列并且没触发对应的按钮、则手动排序、列宽拖动
+      // 如果触发了列的其他功能按钮
       if (column.sortable && !(triggerResizable || triggerSort || triggerFilter)) {
-        this.$refs.xTable.sort(column.property)
+        if (column.order === 'desc') {
+          this.$refs.xTable.clearSort()
+        } else if (column.order === 'asc') {
+          this.$refs.xTable.sort(column.property, 'desc')
+        } else {
+          this.$refs.xTable.sort(column.property, 'asc')
+        }
       }
     },
     filterNameMethod ({ value, row }) {

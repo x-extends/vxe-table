@@ -63,7 +63,7 @@ const apis = [
       },
       {
         name: 'placeholder',
-        desc: '原生 placeholder 属性',
+        desc: '当值为空时，显示的占位符',
         version: '',
         type: 'String',
         enum: '',
@@ -122,6 +122,15 @@ const apis = [
         type: 'String',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'step',
+        desc: '只对 type=number 有效，数字间隔',
+        version: '1.15.24',
+        type: 'Number, String',
+        enum: '',
+        defVal: '1',
         list: []
       }
     ]
@@ -190,21 +199,21 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'focus',
+        name: 'focus()',
         desc: '使输入框获取焦点',
         version: '1.15.24',
-        type: '',
+        type: 'Promise',
         enum: '',
-        defVal: '{}, event',
+        defVal: '',
         list: []
       },
       {
-        name: 'blur',
+        name: 'blur()',
         desc: '使输入框失去焦点',
         version: '1.15.24',
-        type: '',
+        type: 'Promise',
         enum: '',
-        defVal: '{}, event',
+        defVal: '',
         list: []
       }
     ]
