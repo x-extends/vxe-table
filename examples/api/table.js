@@ -2705,9 +2705,9 @@ const apis = [
       },
       {
         name: 'getTableColumn()',
-        desc: '获取当前表格的列（完整的全量表头列、处理条件之后的全量表头列、当前渲染中的表头列）',
-        version: '',
-        type: '{fullColumn, visibleColumn, tableColumn}',
+        desc: '获取当前表格的列（收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列）',
+        version: '1 | 1.15.24',
+        type: '{collectColumn, fullColumn, visibleColumn, tableColumn}',
         enum: '',
         defVal: '',
         list: []

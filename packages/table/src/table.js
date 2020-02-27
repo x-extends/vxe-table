@@ -1659,10 +1659,16 @@ export default {
       return XEUtils.find(this.tableFullColumn, column => column.property === field)
     },
     /**
-     * 获取表格可视列
+     * 获取当前表格的列
+     * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
      */
     getTableColumn () {
-      return { fullColumn: this.tableFullColumn.slice(0), visibleColumn: this.visibleColumn.slice(0), tableColumn: this.tableColumn.slice(0) }
+      return {
+        collectColumn: this.collectColumn.slice(0),
+        fullColumn: this.tableFullColumn.slice(0),
+        visibleColumn: this.visibleColumn.slice(0),
+        tableColumn: this.tableColumn.slice(0)
+      }
     },
     // 在 v3.0 中废弃 getRecords
     getRecords (...args) {
@@ -1746,7 +1752,10 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     getUpdateRecords () {
-      const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      const { keepSource, tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      if (!keepSource) {
+        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+      }
       if (treeConfig) {
         return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
       }

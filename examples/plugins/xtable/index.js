@@ -17,6 +17,7 @@ import {
   Checkbox,
   Radio,
   Input,
+  Textarea,
   Button,
   Modal,
   Tooltip,
@@ -66,6 +67,7 @@ Vue.use(Pager)
 Vue.use(Checkbox)
 Vue.use(Radio)
 Vue.use(Input)
+Vue.use(Textarea)
 Vue.use(Button)
 Vue.use(Modal)
 Vue.use(Tooltip)

@@ -575,3 +575,38 @@
     transform: rotate(180deg);
   }
 }
+
+.vxe-icon--eye,
+.vxe-icon--eye-slash {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    content: "\25CF";
+    top: 0.16em;
+    left: 0;
+    width: 1em;
+    height: 0.68em;
+    line-height: 0.25em;
+    border-radius: 50%;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+    text-align: center;
+  }
+}
+
+.vxe-icon--eye-slash {
+  &:after {
+    @extend %PseudoClass;
+    top: -0.1em;
+    left: 0.45em;
+    width: 0;
+    height: 1.2em;
+    border-width: 0;
+    border-style: solid;
+    border-color: inherit;
+    border-left-width: 0.1em;
+    transform: rotate(45deg);
+  }
+}
+

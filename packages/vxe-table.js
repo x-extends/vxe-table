@@ -13,6 +13,7 @@ import Pager from './pager'
 import Checkbox from './checkbox'
 import Radio from './radio'
 import Input from './input'
+import Textarea from './textarea'
 import Button from './button'
 import Modal from './modal'
 import Tooltip from './tooltip'
@@ -40,6 +41,7 @@ const components = [
   Checkbox,
   Radio,
   Input,
+  Textarea,
   Button,
   Modal,
   Tooltip,
@@ -84,6 +86,7 @@ export * from './pager'
 export * from './checkbox'
 export * from './radio'
 export * from './input'
+export * from './textarea'
 export * from './button'
 export * from './modal'
 export * from './tooltip'

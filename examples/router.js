@@ -229,6 +229,7 @@ const ModuleButton = () => import(/* webpackChunkName: "module" */ './views/butt
 const ModuleRadio = () => import(/* webpackChunkName: "module" */ './views/radio/Radio.vue')
 const ModuleCheckbox = () => import(/* webpackChunkName: "module" */ './views/checkbox/Checkbox.vue')
 const ModuleInput = () => import(/* webpackChunkName: "module" */ './views/input/Input.vue')
+const ModuleTextarea = () => import(/* webpackChunkName: "module" */ './views/textarea/Textarea.vue')
 const ModuleSelect = () => import(/* webpackChunkName: "module" */ './views/select/Select.vue')
 const ModulePager = () => import(/* webpackChunkName: "module" */ './views/pager/Pager.vue')
 const ModuleModal = () => import(/* webpackChunkName: "module" */ './views/modal/Modal.vue')
@@ -1361,6 +1362,11 @@ export default new Router({
       path: '/table/module/input',
       name: 'ModuleInput',
       component: ModuleInput
+    },
+    {
+      path: '/table/module/textarea',
+      name: 'ModuleTextarea',
+      component: ModuleTextarea
     },
     {
       path: '/table/module/select',

@@ -115,6 +115,12 @@ export default {
         },
         {
           icon: 'vxe-icon--download'
+        },
+        {
+          icon: 'vxe-icon--eye'
+        },
+        {
+          icon: 'vxe-icon--eye-slash'
         }
       ],
       demoCodes: [
