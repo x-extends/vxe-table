@@ -136,7 +136,7 @@ export default {
             class: 'vxe-input--number-prev'
           }, [
             h('i', {
-              class: ['vxe-input--number-prev-icon', 'vxe-icon--caret-top'],
+              class: ['vxe-input--number-prev-icon', GlobalConfig.icon.inputPrevNum],
               on: {
                 click: this.prevNumEvent
               }
@@ -146,7 +146,7 @@ export default {
             class: 'vxe-input--number-next'
           }, [
             h('i', {
-              class: ['vxe-input--number-next-icon', 'vxe-icon--caret-bottom'],
+              class: ['vxe-input--number-next-icon', GlobalConfig.icon.inputNextNum],
               on: {
                 click: this.nextNumEvent
               }
@@ -198,14 +198,14 @@ export default {
       this.triggerEvent(evnt)
     },
     clickPrefixEvent (evnt) {
-      const { disabled, readonly } = this
-      if (!disabled && !readonly) {
+      const { disabled } = this
+      if (!disabled) {
         this.$emit('prefix-click', { value: this.value }, evnt)
       }
     },
     clickSuffixEvent (evnt) {
-      const { disabled, readonly } = this
-      if (!disabled && !readonly) {
+      const { disabled } = this
+      if (!disabled) {
         if (DomTools.hasClass(evnt.currentTarget, 'is--clear')) {
           this.emitUpdate('')
           this.$emit('clear', { value: '' }, evnt)

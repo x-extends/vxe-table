@@ -13,7 +13,7 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :cell-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :cell-render="{name: 'select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :cell-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" :cell-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="role" title="Role">
         <template v-slot="{ row }">
           <input type="text" v-model="row.role">
@@ -92,7 +92,7 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :cell-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :cell-render="{name: 'select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :cell-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :cell-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="role" title="Role">
             <template v-slot="{ row }">
               <input type="text" v-model="row.role">

@@ -102,6 +102,8 @@ const GlobalConfig = {
     inputClear: 'vxe-icon--close',
     inputPwd: 'vxe-icon--eye-slash',
     inputShowPwd: 'vxe-icon--eye',
+    inputPrevNum: 'vxe-icon--caret-top',
+    inputNextNum: 'vxe-icon--caret-bottom',
     jumpPrev: 'vxe-icon--d-arrow-left',
     jumpNext: 'vxe-icon--d-arrow-right',
     prevPage: 'vxe-icon--arrow-left',
