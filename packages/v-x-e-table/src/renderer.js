@@ -22,8 +22,8 @@ function getDefaultProps ({ $table }, { props }, defaultProps) {
   return XEUtils.assign($table.vSize ? { size: $table.vSize } : {}, defaultProps, props)
 }
 
-function isSyncCell (renderOpts) {
-  return renderOpts.immediate || renderOpts.type === 'visible'
+function isSyncCell (renderOpts, params) {
+  return renderOpts.immediate || renderOpts.type === 'visible' || params.$type === 'cell'
 }
 
 function getNativeEvents (renderOpts, params) {

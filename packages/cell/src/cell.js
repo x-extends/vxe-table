@@ -74,7 +74,7 @@ export const Cell = {
         return [
           h('span', {
             class: 'vxe-cell--title'
-          }, compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table }))
+          }, compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $table }))
         ]
       }
     }
@@ -95,7 +95,7 @@ export const Cell = {
       const funName = own.editRender ? 'renderCell' : 'renderDefault'
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf[funName]) {
-        return compConf[funName].call($table, h, renderOpts, Object.assign({ isEdit: !!own.editRender }, params), { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$xegrid, $excel: $table.$parent, $table })
+        return compConf[funName].call($table, h, renderOpts, Object.assign({ $type: own.editRender ? 'edit' : 'cell' }, params), { $grid: $table.$xegrid, $table })
       }
     }
     return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
@@ -113,7 +113,7 @@ export const Cell = {
     if (renderOpts) {
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf.renderFooter) {
-        return compConf.renderFooter.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
+        return compConf.renderFooter.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $table })
       }
     }
     return [UtilTools.formatText(items[itemIndex], 1)]
@@ -590,7 +590,7 @@ export const Cell = {
       if (slots && slots.edit) {
         return slots.edit.call($table, params, h)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, Object.assign({ isEdit: true }, params), { $type: 'edit', $grid: $table.$xegrid, $excel: $table.$parent, $table }) : []
+      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, Object.assign({ $type: 'edit' }, params), { $grid: $table.$xegrid, $table }) : []
     }
     if (slots && slots.default) {
       return slots.default.call($table, params, h)
