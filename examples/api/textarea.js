@@ -46,15 +46,6 @@ const apis = [
         enum: '',
         defVal: '{}, event',
         list: []
-      },
-      {
-        name: 'change',
-        desc: '在值发生改变时触发该事件',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '{ value }, event',
-        list: []
       }
     ]
   },
@@ -65,7 +56,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'focus',
+        desc: '使输入框获取焦点',
+        version: '2.8',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
+        name: 'blur',
+        desc: '使输入框失去焦点',
+        version: '2.8',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      }
+    ]
   }
 ]
 
