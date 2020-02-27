@@ -22,17 +22,17 @@
         <div class="content">
           <span v-if="usedJSHeapSize" class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
           <span>{{ $t('app.body.label.translations') }}:</span>
-          <select class="locale-switch" v-model="$i18n.locale">
-            <option value="zh_CN">中文</option>
-            <option value="en_US">English</option>
-          </select>
+          <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
+            <vxe-option value="zh_CN" label="中文"></vxe-option>
+            <vxe-option value="en_US" label="English"></vxe-option>
+          </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
-          <select class="version-switch" v-model="version" @change="vChangeEvent">
-            <option value="1">1.x</option>
-            <option value="2">2.x</option>
-            <option value="3">3.x</option>
-            <option value="4">4.x</option>
-          </select>
+          <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
+            <vxe-option value="1" label="1.x"></vxe-option>
+            <vxe-option value="2" label="2.x"></vxe-option>
+            <vxe-option value="3" label="3.x"></vxe-option>
+            <vxe-option value="4" label="4.x"></vxe-option>
+          </vxe-select>
           <vxe-tooltip :content="$t('app.footer.donationDesc')" enterable>
             <router-link class="donation" :to="{name: 'Donation'}">{{ $t('app.footer.donation') }}☕</router-link>
           </vxe-tooltip>
@@ -1469,6 +1469,12 @@ export default {
               label: 'app.aside.nav.input',
               locat: {
                 name: 'ModuleInput'
+              }
+            },
+            {
+              label: 'app.aside.nav.textarea',
+              locat: {
+                name: 'ModuleTextarea'
               }
             },
             {

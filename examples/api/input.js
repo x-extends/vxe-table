@@ -30,7 +30,7 @@ const apis = [
         desc: '原生 type 属性',
         version: '',
         type: 'String',
-        enum: '',
+        enum: 'text, number, password, submit, reset',
         defVal: '',
         list: []
       },

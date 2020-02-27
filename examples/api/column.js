@@ -563,7 +563,7 @@ const apis = [
           },
           {
             name: 'autofocus',
-            desc: '如果是自定义渲染可以指定聚焦的 class',
+            desc: '如果是自定义渲染可以指定聚焦的选择器，例如 .my-input',
             version: '',
             type: 'String',
             enum: '',

@@ -323,7 +323,7 @@ export default {
           UtilTools.warn('vxe.error.delEvent', ['current-change', 'page-change'])
           this.$emit('current-change', currentPage)
         }
-        this.$emit('page-change', [{ type: 'current-change', pageSize: this.pageSize, currentPage }])
+        this.$emit('page-change', { type: 'current-change', pageSize: this.pageSize, currentPage })
       }
     },
     pageSizeEvent (pageSize) {
@@ -336,7 +336,7 @@ export default {
           UtilTools.warn('vxe.error.delEvent', ['size-change', 'page-change'])
           this.$emit('size-change', pageSize)
         }
-        this.$emit('page-change', [{ type: 'size-change', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) }])
+        this.$emit('page-change', { type: 'size-change', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) })
       }
     },
     jumpKeydownEvent (evnt) {
