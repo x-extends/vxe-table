@@ -106,28 +106,49 @@
       }
     }
   }
-}
-
-.vxe-input--suffix {
-  &:hover {
-    .vxe-input--clear-icon {
-      color: $vxe-primary-color;
+  &:not(.is--disabled) {
+    &:not(.is--readonly) {
+      .vxe-input--suffix {
+        &:hover {
+          .vxe-input--clear-icon {
+            color: $vxe-primary-color;
+          }
+        }
+      }
+      .vxe-input--extra {
+        &:hover {
+          .vxe-input--pwd-icon {
+            color: $vxe-primary-color;
+          }
+        }
+      }
+      .vxe-input--number-prev,
+      .vxe-input--number-next {
+        &:hover {
+          color: $vxe-primary-color;
+        }
+      }
     }
   }
 }
 
-.vxe-input--extra {
-  &:hover {
-    .vxe-input--pwd-icon {
-      color: $vxe-primary-color;
-    }
-  }
-}
-
+.vxe-input--pwd,
 .vxe-input--number {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.vxe-input--pwd {
+  .vxe-input--pwd-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.vxe-input--number {
   .vxe-input--number-prev,
   .vxe-input--number-next {
     position: absolute;
@@ -135,9 +156,6 @@
     height: 50%;
     width: 100%;
     text-align: center;
-    &:hover {
-      color: $vxe-primary-color;
-    }
   }
   .vxe-input--number-prev {
     top: 0;
@@ -149,8 +167,13 @@
   .vxe-input--number-next-icon {
     position: absolute;
     left: 50%;
-    top: 55%;
     transform: translate(-50%, -50%);
+  }
+  .vxe-input--number-prev-icon {
+    top: 65%;
+  }
+  .vxe-input--number-next-icon {
+    top: 35%;
   }
 }
 

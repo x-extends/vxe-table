@@ -16,6 +16,7 @@ export default {
     autocomplete: { type: String, default: 'off' },
     form: String,
     size: String,
+    step: [String, Number],
     prefixIcon: String,
     suffixIcon: String
   },
@@ -27,12 +28,33 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isNumber () {
+      return this.type === 'number'
+    },
+    isPwd () {
+      return this.type === 'password'
+    },
+    stepNum () {
+      return XEUtils.toNumber(this.step) || 1
+    },
+    defaultEvents () {
+      const evnts = {}
+      XEUtils.each(this.$listeners, (cb, name) => {
+        if (['clear', 'prefix-click', 'suffix-click'].indexOf(name) === -1) {
+          evnts[name] = this.triggerEvent
+        }
+      })
+      if (this.isNumber) {
+        evnts.keydown = this.keydownEvent
+        evnts.blur = this.blurEvent
+      }
+      evnts.input = this.inputEvent
+      return evnts
     }
   },
   render (h) {
-    const { $listeners, vSize, value, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, clearable, prefixIcon, suffixIcon, showPwd } = this
-    const isPwd = type === 'password'
-    const isNumber = type === 'number'
+    const { defaultEvents, isPwd, isNumber, vSize, value, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, clearable, prefixIcon, suffixIcon, showPwd } = this
     const isClearable = clearable && (isPwd || isNumber || type === 'text' || type === 'search')
     const attrs = {
       name,
@@ -56,6 +78,7 @@ export default {
         'is--prefix': prefixIcon,
         'is--suffix': isClearable || suffixIcon,
         'is--extra': isPwd,
+        'is--readonly': readonly,
         'is--disabled': disabled
       }]
     }, [
@@ -70,20 +93,13 @@ export default {
         })
       ]) : null,
       h('input', {
+        ref: 'input',
         class: 'vxe-input--inner',
         domProps: {
           value
         },
         attrs,
-        on: XEUtils.objectMap($listeners, (cb, type) => evnt => {
-          const typeInput = type === 'input'
-          const value = evnt.target.value
-          const params = { value }
-          this.$emit(type, typeInput ? value : params, evnt)
-          if (typeInput) {
-            this.$emit('change', params, evnt)
-          }
-        })
+        on: defaultEvents
       }),
       isClearable || suffixIcon ? h('span', {
         class: ['vxe-input--suffix', {
@@ -103,12 +119,16 @@ export default {
       isPwd || isNumber ? h('span', {
         class: 'vxe-input--extra'
       }, [
-        isPwd ? h('i', {
-          class: ['vxe-input--pwd-icon', showPwd ? GlobalConfig.icon.inputShowPwd : GlobalConfig.icon.inputPwd],
+        isPwd ? h('span', {
+          class: 'vxe-input--pwd',
           on: {
             click: this.togglePwdEvent
           }
-        }) : null,
+        }, [
+          h('i', {
+            class: ['vxe-input--pwd-icon', showPwd ? GlobalConfig.icon.inputShowPwd : GlobalConfig.icon.inputPwd]
+          })
+        ]) : null,
         isNumber ? h('span', {
           class: 'vxe-input--number'
         }, [
@@ -137,15 +157,55 @@ export default {
     ])
   },
   methods: {
+    focus () {
+      this.$refs.input.focus()
+    },
+    blur () {
+      this.$refs.input.blur()
+    },
+    triggerEvent (evnt) {
+      this.$emit(evnt.type, {}, evnt)
+    },
+    emitUpdate (value) {
+      this.$emit('input', value)
+    },
+    inputEvent (evnt) {
+      this.emitUpdate(evnt.target.value)
+    },
+    keydownEvent (evnt) {
+      const { keyCode } = evnt
+      const isUpArrow = keyCode === 38
+      const isDwArrow = keyCode === 40
+      if (isUpArrow || isDwArrow) {
+        evnt.preventDefault()
+        if (isUpArrow) {
+          this.prevNumEvent(evnt)
+        } else {
+          this.nextNumEvent(evnt)
+        }
+      }
+      this.triggerEvent(evnt)
+    },
+    blurEvent (evnt) {
+      let value = evnt.target.value
+      if (value && isNaN(value)) {
+        value = XEUtils.toNumber(value)
+        evnt.target.value = value
+        this.emitUpdate(value)
+      }
+      this.triggerEvent(evnt)
+    },
     clickPrefixEvent (evnt) {
-      if (!this.disabled) {
+      const { disabled, readonly } = this
+      if (!disabled && !readonly) {
         this.$emit('prefix-click', { value: this.value }, evnt)
       }
     },
     clickSuffixEvent (evnt) {
-      if (!this.disabled) {
+      const { disabled, readonly } = this
+      if (!disabled && !readonly) {
         if (DomTools.hasClass(evnt.currentTarget, 'is--clear')) {
-          this.$emit('input', '')
+          this.emitUpdate('')
           this.$emit('clear', { value: '' }, evnt)
         } else {
           this.$emit('suffix-click', { value: this.value }, evnt)
@@ -153,25 +213,27 @@ export default {
       }
     },
     togglePwdEvent () {
-      const { disabled, showPwd } = this
-      if (!disabled) {
+      const { disabled, readonly, showPwd } = this
+      if (!disabled && !readonly) {
         this.showPwd = !showPwd
       }
     },
     prevNumEvent () {
-      const { disabled } = this
-      if (!disabled) {
-        this.updateNum(1)
+      const { disabled, readonly } = this
+      if (!disabled && !readonly) {
+        this.updateNum(true)
       }
     },
     nextNumEvent () {
-      const { disabled } = this
-      if (!disabled) {
-        this.updateNum(-1)
+      const { disabled, readonly } = this
+      if (!disabled && !readonly) {
+        this.updateNum(false)
       }
     },
-    updateNum (offsetNumber) {
-      this.$emit('input', XEUtils.toNumber(this.value) + offsetNumber)
+    updateNum (isPlus) {
+      const { value, stepNum } = this
+      const offsetNumber = isPlus ? stepNum : -stepNum
+      this.emitUpdate(XEUtils.toNumber(value) + offsetNumber)
     }
   }
 }

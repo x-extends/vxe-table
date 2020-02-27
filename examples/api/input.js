@@ -153,15 +153,6 @@ const apis = [
         list: []
       },
       {
-        name: 'change',
-        desc: '在值发生改变时触发该事件',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '{ value }, event',
-        list: []
-      },
-      {
         name: 'clear',
         desc: '在点击右侧清除按钮时触发该事件',
         version: '1.15.20',
@@ -197,7 +188,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'focus',
+        desc: '使输入框获取焦点',
+        version: '1.15.24',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      },
+      {
+        name: 'blur',
+        desc: '使输入框失去焦点',
+        version: '1.15.24',
+        type: '',
+        enum: '',
+        defVal: '{}, event',
+        list: []
+      }
+    ]
   }
 ]
 

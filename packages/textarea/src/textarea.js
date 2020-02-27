@@ -17,10 +17,18 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    defaultEvents () {
+      const evnts = {}
+      XEUtils.each(this.$listeners, (cb, name) => {
+        evnts[name] = this.triggerEvent
+      })
+      evnts.input = this.inputEvent
+      return evnts
     }
   },
   render (h) {
-    const { $listeners, value, vSize, name, form, placeholder, readonly, disabled, maxlength } = this
+    const { defaultEvents, value, vSize, name, form, placeholder, readonly, disabled, maxlength } = this
     const attrs = {
       name,
       form,
@@ -39,21 +47,28 @@ export default {
       }]
     }, [
       h('textarea', {
+        ref: 'textarea',
         class: 'vxe-textarea--inner',
         domProps: {
           value
         },
         attrs,
-        on: XEUtils.objectMap($listeners, (cb, type) => evnt => {
-          const typeInput = type === 'input'
-          const value = evnt.target.value
-          const params = { value }
-          this.$emit(type, typeInput ? value : params, evnt)
-          if (typeInput) {
-            this.$emit('change', params, evnt)
-          }
-        })
+        on: defaultEvents
       })
     ])
+  },
+  methods: {
+    focus () {
+      this.$refs.textarea.focus()
+    },
+    blur () {
+      this.$refs.textarea.blur()
+    },
+    emitUpdate (value) {
+      this.$emit('input', value)
+    },
+    inputEvent (evnt) {
+      this.emitUpdate(evnt.target.value)
+    }
   }
 }
