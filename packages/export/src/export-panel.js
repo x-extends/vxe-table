@@ -283,7 +283,10 @@ export default {
     },
     showEvent () {
       this.$nextTick(() => {
-        this.$refs.filename.$el.focus()
+        const inputElem = this.$refs.filename.$el.querySelector('input')
+        if (inputElem) {
+          inputElem.focus()
+        }
       })
       this.checkStatus()
     },

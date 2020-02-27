@@ -1,18 +1,6 @@
 /**Variable**/
 
-/*input*/
-.vxe-input,
-.vxe-textarea {
-  font-size: $vxe-font-size;
-  display: inline-block;
-}
-
-.vxe-textarea {
-  width: 100%;
-}
-
-.vxe-input--inner,
-.vxe-textarea--inner {
+.vxe-input--inner {
   border-radius: 0.25em;
   outline: 0;
   padding: 0 0.6em;
@@ -28,8 +16,7 @@
   }
 }
 
-.vxe-input--inner,
-.vxe-textarea--inner {
+.vxe-input--inner {
   width: 100%;
   height: 100%;
   &::placeholder {
@@ -37,32 +24,32 @@
   }
 }
 
-.vxe-textarea--inner {
-  display: block;
-  padding: 0.3em 0.6em;
-}
-
 .vxe-input {
+  display: inline-block;
   position: relative;
   &.is--disabled {
     .vxe-input--prefix,
-    .vxe-input--suffix {
+    .vxe-input--suffix,
+    .vxe-input--extra {
       cursor: no-drop;
     }
   }
   &:not(.is--disabled) {
     .vxe-input--prefix,
-    .vxe-input--suffix {
+    .vxe-input--suffix,
+    .vxe-input--extra {
       cursor: pointer;
     }
   }
   .vxe-input--prefix,
-  .vxe-input--suffix {
+  .vxe-input--suffix,
+  .vxe-input--extra {
     display: flex;
     position: absolute;
     top: 0;
     width: 1.8em;
     height: 100%;
+    user-select: none;
     align-items: center;
     justify-content: center;
     color: $vxe-table-column-icon-border-color;
@@ -73,6 +60,9 @@
   .vxe-input--suffix {
     right: 0.2em;
   }
+  .vxe-input--extra {
+    right: 0.2em;
+  }
   .vxe-input--clear-icon {
     display: none;
   }
@@ -81,10 +71,28 @@
       padding-left: 2em;
     }
   }
-  &.is--suffix {
+  &.is--suffix,
+  &.type--password,
+  &.type--number {
     .vxe-input--inner {
       padding-right: 2em;
     }
+  }
+  &.type--password,
+  &.type--number  {
+    .vxe-input--suffix {
+      right: 2em;
+    }
+  }
+  &.is--suffix {
+    &.type--password,
+    &.type--number  {
+      .vxe-input--inner {
+        padding-right: 4em;
+      }
+    }
+  }
+  &.is--suffix {
     &:hover {
       .vxe-input--suffix {
         &.is--clear {
@@ -100,7 +108,54 @@
   }
 }
 
+.vxe-input--suffix {
+  &:hover {
+    .vxe-input--clear-icon {
+      color: $vxe-primary-color;
+    }
+  }
+}
+
+.vxe-input--extra {
+  &:hover {
+    .vxe-input--pwd-icon {
+      color: $vxe-primary-color;
+    }
+  }
+}
+
+.vxe-input--number {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  .vxe-input--number-prev,
+  .vxe-input--number-next {
+    position: absolute;
+    left: 0;
+    height: 50%;
+    width: 100%;
+    text-align: center;
+    &:hover {
+      color: $vxe-primary-color;
+    }
+  }
+  .vxe-input--number-prev {
+    top: 0;
+  }
+  .vxe-input--number-next {
+    bottom: 0;
+  }
+  .vxe-input--number-prev-icon,
+  .vxe-input--number-next-icon {
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%);
+  }
+}
+
 .vxe-input {
+  font-size: $vxe-font-size;
   height: $vxe-input-height-default;
   .vxe-input--inner {
     &[type="date"]::-webkit-inner-spin-button {
@@ -137,18 +192,5 @@
         margin-top: 0;
       }
     }
-  }
-}
-
-.vxe-textarea {
-  min-height: $vxe-input-height-default;
-  &.size--medium {
-    min-height: $vxe-input-height-medium;
-  }
-  &.size--small {
-    min-height: $vxe-input-height-small;
-  }
-  &.size--mini {
-    min-height: $vxe-input-height-mini;
   }
 }

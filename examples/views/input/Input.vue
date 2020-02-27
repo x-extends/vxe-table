@@ -18,8 +18,8 @@
     </p>
 
     <p>
-      <vxe-textarea v-model="value9" placeholder="多行文本域"></vxe-textarea>
-      <vxe-textarea v-model="value10" placeholder="禁用的" disabled></vxe-textarea>
+      <vxe-input v-model="value10" placeholder="密码类型" type="password"></vxe-input>
+      <vxe-input v-model="value9" placeholder="数字类型" type="number"></vxe-input>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -64,8 +64,8 @@ export default {
         </p>
 
         <p>
-          <vxe-textarea v-model="value9" placeholder="多行文本域"></vxe-textarea>
-          <vxe-textarea v-model="value10" placeholder="禁用的" disabled></vxe-textarea>
+          <vxe-input v-model="value10" placeholder="密码类型" type="password"></vxe-input>
+          <vxe-input v-model="value9" placeholder="数字类型" type="number"></vxe-input>
         </p>
         `,
         `

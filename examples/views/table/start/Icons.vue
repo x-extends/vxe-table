@@ -32,6 +32,8 @@
             zoomOut: 'vxe-icon--zoomout',
             custom: 'vxe-icon--menu',
             inputClear: 'vxe-icon--close',
+            inputPwd: 'vxe-icon--eye-slash',
+            inputShowPwd: 'vxe-icon--eye',
             jumpPrev: 'vxe-icon--d-arrow-left',
             jumpNext: 'vxe-icon--d-arrow-right',
             prevPage: 'vxe-icon--arrow-left',

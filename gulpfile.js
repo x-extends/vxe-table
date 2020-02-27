@@ -27,6 +27,7 @@ const components = [
   'checkbox',
   'radio',
   'input',
+  'textarea',
   'button',
   'modal',
   'tooltip',

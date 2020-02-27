@@ -547,10 +547,15 @@ const Methods = {
   },
   /**
    * 获取当前表格的列
-   * 完整的全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
+   * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
    */
   getTableColumn () {
-    return { fullColumn: this.tableFullColumn.slice(0), visibleColumn: this.visibleColumn.slice(0), tableColumn: this.tableColumn.slice(0) }
+    return {
+      collectColumn: this.collectColumn.slice(0),
+      fullColumn: this.tableFullColumn.slice(0),
+      visibleColumn: this.visibleColumn.slice(0),
+      tableColumn: this.tableColumn.slice(0)
+    }
   },
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据

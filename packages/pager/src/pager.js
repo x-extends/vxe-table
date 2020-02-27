@@ -317,7 +317,7 @@ export default {
     jumpPage (currentPage) {
       if (currentPage !== this.currentPage) {
         this.$emit('update:currentPage', currentPage)
-        this.$emit('page-change', [{ type: 'current-change', pageSize: this.pageSize, currentPage }])
+        this.$emit('page-change', { type: 'current-change', pageSize: this.pageSize, currentPage })
       }
     },
     pageSizeEvent (pageSize) {
@@ -326,7 +326,7 @@ export default {
     changePageSize (pageSize) {
       if (pageSize !== this.pageSize) {
         this.$emit('update:pageSize', pageSize)
-        this.$emit('page-change', [{ type: 'size-change', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) }])
+        this.$emit('page-change', { type: 'size-change', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) })
       }
     },
     jumpKeydownEvent (evnt) {
