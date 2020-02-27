@@ -44,7 +44,7 @@
             </vxe-select>
           </vxe-form-item>
           <vxe-form-item>
-            <vxe-button>查询</vxe-button>
+            <vxe-button status="primary">查询</vxe-button>
           </vxe-form-item>
         </vxe-form>
       </template>
@@ -59,10 +59,14 @@
 
       <!--使用 buttons 插槽-->
       <template v-slot:buttons>
-        <span>
-          <vxe-input placeholder="搜索"></vxe-input>
-          <vxe-button>搜索</vxe-button>
-        </span>
+        <vxe-form>
+          <vxe-form-item>
+            <vxe-input placeholder="搜索"></vxe-input>
+          </vxe-form-item>
+          <vxe-form-item>
+            <vxe-button status="primary">查询</vxe-button>
+          </vxe-form-item>
+        </vxe-form>
       </template>
 
       <!--自定义插槽 seq_header-->
@@ -267,7 +271,7 @@ export default {
                 </vxe-select>
               </vxe-form-item>
               <vxe-form-item>
-                <vxe-button>查询</vxe-button>
+                <vxe-button status="primary">查询</vxe-button>
               </vxe-form-item>
             </vxe-form>
           </template>
@@ -282,10 +286,14 @@ export default {
 
           <!--使用 buttons 插槽-->
           <template v-slot:buttons>
-            <span>
-              <vxe-input placeholder="搜索"></vxe-input>
-              <vxe-button>搜索</vxe-button>
-            </span>
+            <vxe-form>
+              <vxe-form-item>
+                <vxe-input placeholder="搜索"></vxe-input>
+              </vxe-form-item>
+              <vxe-form-item>
+                <vxe-button status="primary">查询</vxe-button>
+              </vxe-form-item>
+            </vxe-form>
           </template>
 
           <!--自定义插槽 seq_header-->
