@@ -159,9 +159,11 @@ export default {
   methods: {
     focus () {
       this.$refs.input.focus()
+      return this.$nextTick()
     },
     blur () {
       this.$refs.input.blur()
+      return this.$nextTick()
     },
     triggerEvent (evnt) {
       this.$emit(evnt.type, {}, evnt)
