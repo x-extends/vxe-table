@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.select') }}</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'select'}}">API</router-link></p>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: '$select'}}">API</router-link></p>
 
     <p>
       <vxe-select v-model="value1" placeholder="默认尺寸">
