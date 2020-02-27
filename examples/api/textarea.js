@@ -1,6 +1,3 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
-import inputAPI from './input'
-
 const apis = [
   {
     name: 'Props',
@@ -9,7 +6,52 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: XEUtils.clone(inputAPI.find(item => item.name === 'Props').list.filter(obj => !['type', 'clearable', 'prefix-icon', 'suffix-icon'].includes(obj.name)), true).concat([
+    list: [
+      {
+        name: 'value,v-model',
+        descKey: 'app.api.input.desc.value',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'size',
+        descKey: 'app.api.input.desc.size',
+        version: '',
+        type: 'String',
+        enum: 'medium,small,mini',
+        defVal: '继承上下文',
+        list: []
+      },
+      {
+        name: 'name',
+        desc: '原生 name 属性',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'form',
+        desc: '原生 form 属性',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'placeholder',
+        desc: '当值为空时，显示的占位符',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
       {
         name: 'rows',
         desc: '原生 rows 属性',
@@ -18,8 +60,35 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'maxlength',
+        desc: '最大长度',
+        version: '',
+        type: 'String, Number',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'readonly',
+        desc: '是否只读',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'disabled',
+        descKey: 'app.api.input.desc.disabled',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
       }
-    ])
+    ]
   },
   {
     name: 'Slots',
@@ -58,21 +127,21 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'focus',
+        name: 'focus()',
         desc: '使输入框获取焦点',
         version: '',
-        type: '',
+        type: 'Promise',
         enum: '',
-        defVal: '{}, event',
+        defVal: '',
         list: []
       },
       {
-        name: 'blur',
+        name: 'blur()',
         desc: '使输入框失去焦点',
         version: '',
-        type: '',
+        type: 'Promise',
         enum: '',
-        defVal: '{}, event',
+        defVal: '',
         list: []
       }
     ]

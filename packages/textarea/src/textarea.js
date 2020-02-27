@@ -60,9 +60,11 @@ export default {
   methods: {
     focus () {
       this.$refs.textarea.focus()
+      return this.$nextTick()
     },
     blur () {
       this.$refs.textarea.blur()
+      return this.$nextTick()
     },
     emitUpdate (value) {
       this.$emit('input', value)

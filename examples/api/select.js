@@ -118,8 +118,8 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'blur()',
-        desc: '取消焦点',
+        name: 'focus()',
+        desc: '使下拉框获取焦点',
         version: '',
         type: 'Promise',
         enum: '',
@@ -127,8 +127,8 @@ const apis = [
         list: []
       },
       {
-        name: 'focus()',
-        desc: '获取焦点并显示下拉列表',
+        name: 'blur()',
+        desc: '使下拉框失去焦点',
         version: '',
         type: 'Promise',
         enum: '',
