@@ -1,6 +1,12 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools } from '../../tools'
 
+const inputEventTypes = ['input', 'textarea', '$input', '$textarea']
+
+function getEventUpdateType (renderOpts) {
+  return inputEventTypes.indexOf(renderOpts.name) > -1 ? 'input' : 'change'
+}
+
 function getDefaultComponentName ({ name }) {
   return `vxe-${name.replace('$', '')}`
 }
@@ -21,11 +27,10 @@ function isSyncCell (renderOpts) {
 }
 
 function getNativeEvents (renderOpts, params) {
-  const { name, events } = renderOpts
+  const { events } = renderOpts
   const { $table, row, column } = params
   const { model } = column
-  const isSelect = name === 'select'
-  const type = isSelect ? 'change' : 'input'
+  const type = getEventUpdateType(renderOpts)
   const on = {
     [type] (evnt) {
       const cellValue = evnt.target.value
@@ -53,7 +58,7 @@ function getNativeEvents (renderOpts, params) {
 function getDefaultEvents (renderOpts, params) {
   const { events } = renderOpts
   const { $table } = params
-  const type = 'change'
+  const type = getEventUpdateType(renderOpts)
   const on = {
     [type] (obj, evnt) {
       $table.updateStatus(params)
@@ -194,7 +199,7 @@ function handleConfirmFilter (params, column, checked, item) {
 function getNativeFilterEvents (item, renderOpts, params) {
   const { column } = params
   const { events } = renderOpts
-  const type = name === 'select' ? 'change' : 'input'
+  const type = getEventUpdateType(renderOpts)
   const on = {
     [type] (evnt) {
       item.data = evnt.target.value
@@ -216,7 +221,7 @@ function getNativeFilterEvents (item, renderOpts, params) {
 function getDefaultFilterEvents (item, renderOpts, params) {
   const { column } = params
   const { events } = renderOpts
-  const type = 'change'
+  const type = getEventUpdateType(renderOpts)
   const on = {
     [type] (evnt) {
       item.data = evnt.target.value
@@ -330,7 +335,7 @@ function getSelectCellValue (renderOpts, { row, column }) {
 function getNativeFormEvents (renderOpts, params) {
   const { $form, data, property } = params
   const { events } = renderOpts
-  const type = name === 'select' ? 'change' : 'input'
+  const type = getEventUpdateType(renderOpts)
   const on = {
     [type] (evnt) {
       const itemValue = evnt.target.value
@@ -353,7 +358,7 @@ function getNativeFormEvents (renderOpts, params) {
 function getDefaultFormEvents (renderOpts, params) {
   const { $form } = params
   const { events } = renderOpts
-  const type = 'change'
+  const type = getEventUpdateType(renderOpts)
   const on = {
     [type] ({ value: itemValue }, evnt) {
       $form.updateStatus(params, itemValue)
