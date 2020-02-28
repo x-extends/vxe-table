@@ -307,8 +307,7 @@ export default {
       const pos = DomTools.getOffsetPos(dragBtnElem, $el)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
-      const extraElemWidth = DomTools.hasClass(cell, 'col--ellipsis') ? (column.type === 'checkbox' ? 18 : 0) + (dragBtnElem.previousElementSibling.children.length - 1) * 16 : 0
-      const minInterval = 40 + extraElemWidth - dragBtnOffsetWidth // 列之间的最小间距
+      const minInterval = column.getMinWidth() - dragBtnOffsetWidth // 列之间的最小间距
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
       let dragPosLeft = pos.left + dragBtnOffsetWidth
       const domMousemove = document.onmousemove

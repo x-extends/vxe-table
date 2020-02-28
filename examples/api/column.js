@@ -85,7 +85,7 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.width',
         version: '',
         type: 'Number, String',
-        enum: 'auto, px, %',
+        enum: 'px, %',
         defVal: '继承 table.column-width',
         list: []
       },

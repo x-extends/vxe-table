@@ -426,7 +426,7 @@ module.exports = {
           field: 'Column field',
           label: 'Obsolete, please use "title"',
           title: 'Column title (support internationalization)',
-          width: 'Column width (adaptive if empty, if all columns are fixed, there may be a wide screen and not full, can match "%" or "min-width" layout)',
+          width: 'Column width (if empty, distribute the remaining widths evenly; if all columns are fixed, there may be a widescreen that does not fill up, either with "%" or "min-width" layout)',
           minWidth: 'Minimum height of the column,The remaining space is automatically allocated proportionally',
           resizable: 'Whether column resizing allows dragging column widths',
           fixed: 'Fix the column to the left or right (note: fixed columns should be left and right)',
