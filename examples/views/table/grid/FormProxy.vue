@@ -34,7 +34,7 @@ export default {
       tableForm: {
         items: [
           { field: 'name', title: '名称', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-          { field: 'sex', title: '性别', itemRender: { name: 'select', options: [] } },
+          { field: 'sex', title: '性别', itemRender: { name: '$select', options: [] } },
           { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
           { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
         ]
@@ -90,7 +90,7 @@ export default {
                 },
                 items: [
                   { field: 'name', title: '名称', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
-                  { field: 'sex', title: '性别', itemRender: { name: 'select', options: [] } },
+                  { field: 'sex', title: '性别', itemRender: { name: '$select', options: [] } },
                   { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
                   { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
                 ]

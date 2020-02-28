@@ -54,7 +54,7 @@ export default {
           desc: '原生-文本域'
         },
         {
-          name: 'select',
+          name: '$select',
           desc: '原生-下拉框'
         }
       ],

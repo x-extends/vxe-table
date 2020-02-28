@@ -167,12 +167,12 @@ export default {
             },
             filter: ({ column, $panel }) => {
               return column.filters.map(option => {
-                return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
+                return <input type="type" v-model={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
               })
             },
             edit: ({ row }) => {
               return [
-                <input type="text" value={ row.sex } onInput={ evnt => { row.sex = evnt.target.value } }/>
+                <input type="text" v-model={ row.sex } />
               ]
             }
           }
@@ -381,12 +381,12 @@ export default {
                     },
                     filter: ({ column, $panel }) => {
                       return column.filters.map(option => {
-                        return <input type="type" value={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
+                        return <input type="type" v-model={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
                       })
                     },
                     edit: ({ row }) => {
                       return [
-                        <input type="text" value={ row.sex } onInput={ evnt => { row.sex = evnt.target.value } }/>
+                        <input type="text" v-model={ row.sex } />
                       ]
                     }
                   }
@@ -479,8 +479,7 @@ export default {
               return row.sex === option.data
             },
             changeFilterEvent (evnt, option, $panel) {
-              option.data = evnt.target.value
-              $panel.changeMultipleOption(evnt, !!option.data, option)
+              $panel.changeOption(evnt, !!option.data, option)
             },
             footerMethod ({ columns, data }) {
               return [
@@ -560,8 +559,7 @@ export default {
       return row.sex === option.data
     },
     changeFilterEvent (evnt, option, $panel) {
-      option.data = evnt.target.value
-      $panel.changeMultipleOption(evnt, !!option.data, option)
+      $panel.changeOption(evnt, !!option.data, option)
     },
     footerMethod ({ columns, data }) {
       return [

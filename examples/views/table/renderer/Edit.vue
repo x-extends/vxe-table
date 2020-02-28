@@ -46,7 +46,7 @@ export default {
           // 可编辑激活模板
           renderEdit (h, renderOpts, { row, column }) {
             return [
-              <input class="my-cell" text="text" value={ row[column.property] } onInput={ evnt => { row[column.property] = evnt.target.value }}/>
+              <input class="my-cell" text="text" v-model={ row[column.property] } />
             ]
           },
           // 可编辑显示模板

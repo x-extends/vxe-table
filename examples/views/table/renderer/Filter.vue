@@ -20,7 +20,7 @@
         field="sex"
         title="sex"
         :filters="[{data: null}]"
-        :filter-render="{name: 'select', options: sexList}"></vxe-table-column>
+        :filter-render="{name: '$select', options: sexList}"></vxe-table-column>
       <vxe-table-column
         field="age"
         title="Age"
@@ -189,7 +189,7 @@ export default {
             field="sex"
             title="sex"
             :filters="[{data: null}]"
-            :filter-render="{name: 'select', options: sexList}"></vxe-table-column>
+            :filter-render="{name: '$select', options: sexList}"></vxe-table-column>
           <vxe-table-column
             field="age"
             title="Age"

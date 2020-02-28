@@ -2,9 +2,10 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import VXEModal from './src/modal'
 import queue from './src/queue'
 import VXETable from '../v-x-e-table'
+import { UtilTools } from '../tools'
 
 let AlertController = null
-const AllActivedModal = []
+const allActivedModals = []
 
 export function Modal (options) {
   return new Promise(resolve => {
@@ -19,7 +20,7 @@ export function Modal (options) {
           }
           /* eslint-disable @typescript-eslint/no-use-before-define */
           setTimeout(() => $modal.$destroy(), $modal.isMsg ? 500 : 100)
-          XEUtils.remove(AllActivedModal, item => item === $modal)
+          XEUtils.remove(allActivedModals, item => item === $modal)
           resolve(params.type)
         }
       })
@@ -28,7 +29,7 @@ export function Modal (options) {
         propsData: options
       })
       setTimeout(() => $modal.open())
-      AllActivedModal.push($modal)
+      allActivedModals.push($modal)
     }
   })
 }
@@ -59,9 +60,33 @@ export function Modal (options) {
   }
 })
 
-Modal.closeAll = function () {
-  AllActivedModal.forEach($modal => $modal.close('close'))
+/**
+ * 全局关闭动态的活动窗口（只能用于关闭动态的创建的活动窗口）
+ * 如果传 id 则关闭指定的窗口
+ * 如果不传则关闭所有窗口
+ */
+function closeModal (id) {
+  if (arguments.length) {
+    const modal = getModal(id)
+    if (modal) {
+      modal.close('close')
+    }
+  } else {
+    allActivedModals.forEach($modal => $modal.close('close'))
+  }
 }
+
+function getModal (id) {
+  return allActivedModals.find($modal => $modal.id === id)
+}
+
+Modal.closeAll = function () {
+  UtilTools.warn('vxe.error.delFunc', ['closeAll', 'close'])
+  closeModal()
+}
+
+Modal.get = getModal
+Modal.close = closeModal
 
 Modal.install = function (Vue) {
   VXETable._modal = 1

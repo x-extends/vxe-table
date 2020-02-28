@@ -2,7 +2,7 @@
   <div>
     <h2>{{ $t('app.aside.nav.modal') }}</h2>
 
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，对于某些场景如果需要关闭所有动态的窗口，可以通过 Modal.closeAll()</p>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，对于某些场景如果需要关闭所有动态的窗口，可以通过 Modal.close(id?: String)</p>
 
     <p>
       <vxe-button @click="$XModal.message({ message: '消息提示' })">默认消息框</vxe-button>
