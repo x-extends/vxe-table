@@ -6,6 +6,10 @@ let zindexIndex = 0
 let lastZindex = 0
 let columnUniqueId = 0
 
+function getColFuncWidth (isExists, defaultWidth = 16) {
+  return isExists ? defaultWidth : 0
+}
+
 class ColumnConfig {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($table, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
@@ -114,6 +118,11 @@ class ColumnConfig {
 
   getKey () {
     return this.property || (this.type ? `type=${this.type}` : null)
+  }
+
+  getMinWidth () {
+    const { type, filters, sortable, remoteSort, editRender } = this
+    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(filters) + getColFuncWidth(sortable || remoteSort) + getColFuncWidth(editRender)
   }
 
   update (name, value) {

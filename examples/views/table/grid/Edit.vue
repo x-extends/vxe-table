@@ -43,7 +43,7 @@ export default {
         { type: 'checkbox', width: 50 },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-        { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
+        { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
         { field: 'role', title: 'Role', editRender: { name: 'input' } },
         { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
       ],
@@ -78,7 +78,7 @@ export default {
                 { type: 'checkbox', width: 50 },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                { field: 'sex', title: 'Sex', editRender: { name: 'select', options: [] } },
+                { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
                 { field: 'role', title: 'Role', editRender: { name: 'input' } },
                 { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
               ],

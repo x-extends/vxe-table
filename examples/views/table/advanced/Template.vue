@@ -246,7 +246,7 @@ export default {
               return row.sex === option.data
             },
             changeFilterEvent (evnt, option, $panel) {
-              $panel.changeMultipleOption(evnt, !!option.data, option)
+              $panel.changeOption(evnt, !!option.data, option)
             },
             showDetailEvent (row) {
               this.selectRow = row
@@ -310,7 +310,7 @@ export default {
       return row.sex === option.data
     },
     changeFilterEvent (evnt, option, $panel) {
-      $panel.changeMultipleOption(evnt, !!option.data, option)
+      $panel.changeOption(evnt, !!option.data, option)
     },
     showDetailEvent (row) {
       this.selectRow = row
