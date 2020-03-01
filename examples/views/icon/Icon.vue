@@ -121,6 +121,12 @@ export default {
         },
         {
           icon: 'vxe-icon--eye-slash'
+        },
+        {
+          icon: 'vxe-icon--calendar'
+        },
+        {
+          icon: 'vxe-icon--dot'
         }
       ],
       demoCodes: [

@@ -6,7 +6,7 @@ import VXETable from '../v-x-e-table'
 let AlertController = null
 const allActivedModals = []
 
-export function Modal (options) {
+function openModal (options) {
   return new Promise(resolve => {
     if (options && options.id && queue.some(comp => comp.id === options.id)) {
       resolve('exist')
@@ -33,6 +33,10 @@ export function Modal (options) {
   })
 }
 
+export function Modal (options) {
+  return openModal(options)
+}
+
 ['alert', 'confirm', 'message'].forEach((type, index) => {
   const defOpts = index === 2 ? {
     mask: false,
@@ -55,7 +59,7 @@ export function Modal (options) {
         opts = { title }
       }
     }
-    return Modal(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
+    return openModal(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
   }
 })
 
@@ -85,6 +89,7 @@ Modal.closeAll = function () {
 
 Modal.get = getModal
 Modal.close = closeModal
+Modal.open = openModal
 
 Modal.install = function (Vue) {
   VXETable._modal = 1

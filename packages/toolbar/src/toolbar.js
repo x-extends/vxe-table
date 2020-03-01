@@ -184,7 +184,7 @@ export default {
         class: 'vxe-tools--operate'
       }, [
         this.import ? h('div', {
-          class: 'vxe-tools--operate-btn',
+          class: 'vxe-tools--operate-btn vxe-tools--operate-import-btn',
           attrs: {
             title: GlobalConfig.i18n('vxe.toolbar.import')
           },
@@ -197,7 +197,7 @@ export default {
           })
         ]) : null,
         this.export ? h('div', {
-          class: 'vxe-tools--operate-btn',
+          class: 'vxe-tools--operate-btn vxe-tools--operate-export-btn',
           attrs: {
             title: GlobalConfig.i18n('vxe.toolbar.export')
           },
@@ -210,7 +210,7 @@ export default {
           })
         ]) : null,
         refresh ? h('div', {
-          class: 'vxe-tools--operate-btn',
+          class: 'vxe-tools--operate-btn vxe-tools--operate-refresh-btn',
           attrs: {
             title: GlobalConfig.i18n('vxe.toolbar.refresh')
           },
@@ -223,7 +223,7 @@ export default {
           })
         ]) : null,
         zoom && $xegrid ? h('div', {
-          class: 'vxe-tools--operate-btn',
+          class: 'vxe-tools--operate-btn vxe-tools--operate-zoom-btn',
           attrs: {
             title: GlobalConfig.i18n(`vxe.toolbar.zoom${$xegrid.isMaximized() ? 'Out' : 'In'}`)
           },
@@ -242,7 +242,7 @@ export default {
           ref: 'customWrapper'
         }, [
           h('div', {
-            class: 'vxe-tools--operate-btn',
+            class: 'vxe-tools--operate-btn vxe-tools--operate-custom-btn',
             attrs: {
               title: GlobalConfig.i18n('vxe.toolbar.custom')
             },

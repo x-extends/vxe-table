@@ -15,7 +15,7 @@
 .vxe-button {
   position: relative;
   text-align: center;
-  background-color: #fff;
+  background-color: $vxe-button-default-background-color;
   outline: 0;
   font-size: $vxe-font-size;
   white-space: nowrap;
@@ -60,6 +60,11 @@
     line-height: $vxe-button-height-default - 2px;
     border: 1px solid $vxe-input-border-color;
     border-radius: 0.2em;
+    &:not(.is--disabled) {
+      &:active {
+        background-color: darken($vxe-button-default-background-color, 3%);
+      }
+    }
     &.theme--primary {
       color: #fff;
       .vxe-button--icon {
@@ -73,8 +78,8 @@
         }
         &:active {
           color: #fff;
-          background-color: darken($vxe-primary-color, 2%);
-          border-color: darken($vxe-primary-color, 2%);
+          background-color: darken($vxe-primary-color, 3%);
+          border-color: darken($vxe-primary-color, 3%);
         }
       }
       &.is--disabled {
@@ -92,8 +97,8 @@
           @extend %ButtonHover;
         }
         &:active {
-          color: darken($vxe-primary-color, 2%);
-          border-color: darken($vxe-primary-color, 2%);
+          color: darken($vxe-primary-color, 3%);
+          border-color: darken($vxe-primary-color, 3%);
         }
       }
     }

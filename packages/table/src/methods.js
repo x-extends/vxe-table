@@ -1326,7 +1326,7 @@ const Methods = {
           // 如果是激活状态，且点击了校验提示框
         } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
           // 如果是激活状态，且点击了下拉选项
-          if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-select-option--panel').flag) {
+          if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-dropdown--panel').flag) {
             // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
             this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
               let isClear

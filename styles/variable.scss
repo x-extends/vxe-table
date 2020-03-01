@@ -9,15 +9,18 @@ $vxe-font-size-mini: 12px;
 /*icon*/
 $vxe-icon-font-family: Verdana,Arial,Tahoma;
 
-/*primary color*/
+/*primary*/
 $vxe-primary-color: #409eff;
 $vxe-disabled-color: #B1B1B1;
 
-/*input/radio/checkbox color*/
+/*input/radio/checkbox*/
 $vxe-input-border-color: #dcdfe6;
 $vxe-input-disabled-color: #dcdfe6;
 $vxe-input-disabled-background-color: #f3f3f3;
 $vxe-input-placeholder-color: #C0C4CC;
+$vxe-input-date-header-background-color: #f8f8f9;
+$vxe-input-date-picker-selected-background-color: #d7effb;
+$vxe-input-date-picker-hover-background-color: #e6f7ff;
 
 /*popup*/
 $vxe-table-popup-border-color: #DADCE0;
@@ -109,6 +112,7 @@ $vxe-radio-font-size-small: $vxe-checkbox-font-size-small;
 $vxe-radio-font-size-mini: $vxe-checkbox-font-size-mini;
 
 /*button*/
+$vxe-button-default-background-color: #fff;
 $vxe-button-height-default: 34px;
 $vxe-button-height-medium: 32px;
 $vxe-button-height-small: 30px;

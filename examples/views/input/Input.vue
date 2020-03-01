@@ -18,8 +18,20 @@
     </p>
 
     <p>
-      <vxe-input v-model="value10" placeholder="密码类型" type="password"></vxe-input>
-      <vxe-input v-model="value9" placeholder="数字类型" type="number"></vxe-input>
+      <vxe-input v-model="value9" placeholder="密码类型" type="password"></vxe-input>
+    </p>
+
+    <p>
+      <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
+      <vxe-input v-model="value11" placeholder="月份" type="month"></vxe-input>
+      <vxe-input v-model="value12" placeholder="年份" type="year"></vxe-input>
+    </p>
+
+    <p>
+      <vxe-input v-model="value13" placeholder="数值类型" type="number"></vxe-input>
+      <vxe-input v-model="value14" placeholder="步数控制" type="number" step="1.4"></vxe-input>
+      <vxe-input v-model="value15" placeholder="整数类型" type="integer"></vxe-input>
+      <vxe-input v-model="value16" placeholder="步数控制" type="integer" step="5"></vxe-input>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -46,7 +58,13 @@ export default {
       value7: '',
       value8: '',
       value9: '',
-      value10: '',
+      value10: '2018-01-09',
+      value11: '',
+      value12: '',
+      value13: '',
+      value14: '',
+      value15: '',
+      value16: '',
       demoCodes: [
         `
         <p>
@@ -66,6 +84,8 @@ export default {
         <p>
           <vxe-input v-model="value10" placeholder="密码类型" type="password"></vxe-input>
           <vxe-input v-model="value9" placeholder="数字类型" type="number"></vxe-input>
+          <vxe-input v-model="value11" placeholder="日期类型" type="date"></vxe-input>
+          <input v-model="value11" placeholder="日期类型" type="date">
         </p>
         `,
         `
@@ -81,7 +101,8 @@ export default {
               value7: '',
               value8: '',
               value9: '',
-              value10: ''
+              value10: '',
+              value11: ''
             }
           }
         }

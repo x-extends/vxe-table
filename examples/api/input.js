@@ -27,10 +27,10 @@ const apis = [
       },
       {
         name: 'type',
-        desc: '原生 type 属性',
+        desc: '渲染类型',
         version: '',
         type: 'String',
-        enum: 'text, number, password, submit, reset',
+        enum: 'text, number, integer, password, date, month, year',
         defVal: 'text',
         list: []
       },
@@ -57,8 +57,8 @@ const apis = [
         desc: '当有值时，是否在右侧显示清除按钮',
         version: '',
         type: 'Boolean',
-        enum: 'false',
-        defVal: '',
+        enum: '',
+        defVal: '默认 false，继承 setup.input.clearable',
         list: []
       },
       {
@@ -126,11 +126,56 @@ const apis = [
       },
       {
         name: 'step',
-        desc: '只对 type=number 有效，数字间隔',
+        desc: '只对 type=number|integer 有效，数字间隔',
         version: '',
         type: 'Number, String',
         enum: '',
         defVal: '1',
+        list: []
+      },
+      {
+        name: 'startWeek',
+        desc: '只对 type=date 有效，设置起始周',
+        version: '',
+        type: 'Number, String',
+        enum: '0, 1, 2, 3, 4, 5, 6',
+        defVal: '默认 1，继承 setup.input.startWeek',
+        list: []
+      },
+      {
+        name: 'labelFormat',
+        desc: '只对 type=date|month|year 有效，输入框中显示的日期格式',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '继承 setup.input.labelFormat',
+        list: []
+      },
+      {
+        name: 'parseFormat',
+        desc: '只对 type=date|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '继承 setup.input.parseFormat',
+        list: []
+      },
+      {
+        name: 'valueFormat',
+        desc: '只对 type=date|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '继承 setup.input.valueFormat',
+        list: []
+      },
+      {
+        name: 'transfer',
+        desc: '只对 type=date|month|year 有效，是否将弹框容器插入于 body 内',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.input.transfer',
         list: []
       }
     ]

@@ -1,6 +1,7 @@
 /**Variable**/
 
 .vxe-grid {
+  color: $vxe-font-color;
   &.is--loading {
     &:before {
       content: "";
@@ -58,5 +59,18 @@
   }
   .vxe-bottom--wrapper {
     padding-top: 0.8em;
+  }
+}
+
+.vxe-grid {
+  font-size: $vxe-font-size;
+  &.size--medium {
+    font-size: $vxe-font-size-medium;
+  }
+  &.size--small {
+    font-size: $vxe-font-size-small;
+  }
+  &.size--mini {
+    font-size: $vxe-font-size-mini;
   }
 }

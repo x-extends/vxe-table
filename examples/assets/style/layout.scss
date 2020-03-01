@@ -159,6 +159,10 @@ body,
     user-select: none;
     padding-top: 10px;
     border-right: 1px solid #dcdfe6;
+    ul {
+      padding: 0;
+      margin: 0;
+    }
     & > .header {
       flex-shrink: 0;
       text-align: center;
