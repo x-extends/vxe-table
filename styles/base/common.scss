@@ -4,6 +4,7 @@
 
 [class*="vxe-"] {
   @extend %boxSizing;
+  &:after, &:before,
   *:after, *:before {
     @extend %boxSizing;
   }

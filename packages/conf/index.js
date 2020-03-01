@@ -104,12 +104,16 @@ const GlobalConfig = {
     inputShowPwd: 'vxe-icon--eye',
     inputPrevNum: 'vxe-icon--caret-top',
     inputNextNum: 'vxe-icon--caret-bottom',
+    inputDate: 'vxe-icon--calendar',
+    inputDateOpen: 'vxe-icon--caret-bottom rotate180',
+    inputDateClose: 'vxe-icon--caret-bottom',
+    selectOpen: 'vxe-icon--caret-bottom rotate180',
+    selectClose: 'vxe-icon--caret-bottom',
     jumpPrev: 'vxe-icon--d-arrow-left',
     jumpNext: 'vxe-icon--d-arrow-right',
     prevPage: 'vxe-icon--arrow-left',
     nextPage: 'vxe-icon--arrow-right',
     jumpMore: 'vxe-icon--more',
-    pageSize: 'vxe-icon--caret-bottom',
     modalZoomIn: 'vxe-icon--square',
     modalZoomOut: 'vxe-icon--zoomout',
     modalClose: 'vxe-icon--close',
@@ -153,6 +157,14 @@ const GlobalConfig = {
   },
   form: {
     // colon: false
+  },
+  input: {
+    startWeek: 1
+    // transfer: false,
+    // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
+    // labelFormat: '',
+    // valueFormat: '',
+    // format: ''
   },
   select: {
     // transfer: false

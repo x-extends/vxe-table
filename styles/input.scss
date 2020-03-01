@@ -1,4 +1,7 @@
 /**Variable**/
+@import './helpers/mixin.scss';
+
+$iconWidth: 1.6em;
 
 .vxe-input--inner {
   border-radius: 0.25em;
@@ -7,9 +10,6 @@
   color: $vxe-font-color;
   border: 1px solid $vxe-input-border-color;
   background-color: #FFF;
-  &:focus {
-    border: 1px solid $vxe-primary-color;
-  }
   &[disabled] {
     cursor: not-allowed;
     background-color: $vxe-input-disabled-background-color;
@@ -22,73 +22,114 @@
   &::placeholder {
     color: $vxe-input-placeholder-color;
   }
+  &[type="number"]::-webkit-outer-spin-button,
+  &[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+  }
+  &[type="number"] {
+    appearance: textfield;
+  }
 }
 
 .vxe-input {
   display: inline-block;
   position: relative;
   &.is--disabled {
-    .vxe-input--prefix,
-    .vxe-input--suffix,
-    .vxe-input--extra {
+    .vxe-input--date-picker,
+    .vxe-input--clear-icon,
+    .vxe-input--number-prev,
+    .vxe-input--number-next {
       cursor: no-drop;
     }
   }
   &:not(.is--disabled) {
-    .vxe-input--prefix,
-    .vxe-input--suffix,
-    .vxe-input--extra {
+    .vxe-input--date-picker,
+    .vxe-input--clear-icon,
+    .vxe-input--number-prev,
+    .vxe-input--number-next {
       cursor: pointer;
+    }
+    &.is--active {
+      .vxe-input--inner {
+        border: 1px solid $vxe-primary-color;
+      }
     }
   }
   .vxe-input--prefix,
   .vxe-input--suffix,
-  .vxe-input--extra {
+  .vxe-input--extra-prefix,
+  .vxe-input--extra-suffix {
     display: flex;
     position: absolute;
     top: 0;
-    width: 1.8em;
+    width: $iconWidth;
     height: 100%;
     user-select: none;
     align-items: center;
     justify-content: center;
     color: $vxe-table-column-icon-border-color;
   }
-  .vxe-input--prefix {
+}
+
+// 前缀图标
+.vxe-input {
+  .vxe-input--prefix,
+  .vxe-input--extra-prefix {
     left: 0.2em;
   }
-  .vxe-input--suffix {
-    right: 0.2em;
+  &.is--prefix,
+  &.type--date,
+  &.type--month,
+  &.type--year {
+    .vxe-input--inner {
+      padding-left: #{$iconWidth + 0.2em};
+    }
   }
-  .vxe-input--extra {
-    right: 0.2em;
+  &.type--date,
+  &.type--month,
+  &.type--year {
+    .vxe-input--suffix {
+      left: $iconWidth;
+    }
   }
+  &.is--prefix {
+    &.type--date,
+    &.type--month,
+    &.type--year {
+      .vxe-input--inner {
+        padding-left: #{$iconWidth * 2};
+      }
+    }
+  }
+}
+
+// 后缀图标
+.vxe-input {
   .vxe-input--clear-icon {
     display: none;
   }
-  &.is--prefix {
-    .vxe-input--inner {
-      padding-left: 2em;
-    }
+  .vxe-input--suffix,
+  .vxe-input--extra-suffix {
+    right: 0.2em;
   }
   &.is--suffix,
   &.type--password,
   &.type--number {
     .vxe-input--inner {
-      padding-right: 2em;
+      padding-right: #{$iconWidth + 0.2em};
     }
   }
   &.type--password,
   &.type--number  {
     .vxe-input--suffix {
-      right: 2em;
+      right: $iconWidth;
     }
   }
   &.is--suffix {
     &.type--password,
     &.type--number  {
       .vxe-input--inner {
-        padding-right: 4em;
+        padding-right: #{$iconWidth * 2};
       }
     }
   }
@@ -115,7 +156,7 @@
           }
         }
       }
-      .vxe-input--extra {
+      .vxe-input--extra-suffix {
         &:hover {
           .vxe-input--pwd-icon {
             color: $vxe-primary-color;
@@ -132,19 +173,28 @@
   }
 }
 
-.vxe-input--pwd,
-.vxe-input--number {
+.vxe-input--password,
+.vxe-input--number,
+.vxe-input--date-picker {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.vxe-input--pwd {
-  .vxe-input--pwd-icon {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+.vxe-input--date-picker-icon,
+.vxe-input--pwd-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.vxe-input--date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .vxe-input--panel-icon {
+    @include animatTransition(transform, .2s);
   }
 }
 
@@ -174,6 +224,148 @@
   }
   .vxe-input--number-next-icon {
     top: 35%;
+  }
+}
+
+.vxe-input--panel {
+  display: none;
+  position: absolute;
+  left: 0;
+  padding: 0.2em 0;
+  color: $vxe-font-color;
+  font-size: $vxe-font-size;
+  text-align: left;
+  &:not(.is--transfer) {
+    min-width: 100%;
+  }
+  &.is--transfer {
+    position: fixed;
+  }
+  &.animat--leave {
+    display: block;
+    opacity: 0;
+    transform: scaleY(0.5);
+    transition: transform 0.2s, opacity 0.2s;
+    transform-origin: 0% 0%;
+    &[data-placement="top"] {
+      transform-origin: 0% 100%;
+    }
+  }
+  &.animat--enter {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.vxe-input--panel-wrapper {
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0.2em 0;
+  max-height: 22em;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid $vxe-table-popup-border-color;
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.vxe-input--panel {
+  &.type--date,
+  &.type--month,
+  &.type--year {
+    user-select: none;
+    .vxe-input--panel-wrapper {
+      padding: 0.8em;
+      width: 22em;
+    }
+  }
+}
+
+.vxe-input--date-picker-header {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 0.8em;
+  .vxe-input--date-picker-type-wrapper {
+    flex-grow: 1;
+  }
+  .vxe-input--date-picker-btn-wrapper {
+    flex-shrink: 0;
+    text-align: center;
+  }
+}
+.vxe-input--date-picker-type-wrapper {
+  .vxe-input--date-picker-label,
+  .vxe-input--date-picker-btn {
+    padding: 0 0.6em;
+    display: inline-block;
+  }
+}
+.vxe-input--date-picker-btn-wrapper {
+  display: flex;
+  flex-direction: row;
+  .vxe-input--date-picker-btn {
+    width: 2em;
+    margin-left: 0.5em;
+  }
+}
+.vxe-input--date-picker-label,
+.vxe-input--date-picker-btn {
+  display: inline-block;
+  height: 2em;
+  line-height: 2em;
+  display: flex;
+  border-radius: 0.2em;
+  border: 1px solid $vxe-input-border-color;
+  align-items: center;
+  justify-content: center;
+  background-color: $vxe-button-default-background-color;
+}
+.vxe-input--date-picker-btn {
+  cursor: pointer;
+  &:active {
+    background-color: darken($vxe-button-default-background-color, 3%);
+  }
+}
+.vxe-input--date-picker-body {
+  border-radius: 0.2em;
+  border: 1px solid $vxe-table-popup-border-color;
+  table {
+    border: 0;
+    width: 100%;
+    height: 14em;
+    border-spacing: 0;
+    border-collapse: separate;
+    text-align: center;
+    th {
+      height: 2.2em;
+    }
+    th,
+    td {
+      font-size: 0.9em;
+      font-weight: normal;
+    }
+    th {
+      box-shadow: inset 0 -1px 0 0 $vxe-table-popup-border-color;
+    }
+    td {
+      cursor: pointer;
+      &.is--prev,
+      &.is--next {
+        color: $vxe-disabled-color;
+      }
+      &.is--today {
+        box-shadow: inset 0 0 0 1px $vxe-table-popup-border-color;
+        &.is--current {
+          color: $vxe-primary-color;
+        }
+      }
+      &.is--hover {
+        background-color: $vxe-input-date-picker-hover-background-color;
+      }
+      &.is--selected {
+        background-color: $vxe-input-date-picker-selected-background-color;
+      }
+    }
   }
 }
 

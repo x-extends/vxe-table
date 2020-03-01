@@ -30,7 +30,7 @@
   }
 }
 
-.vxe-select-option--panel {
+.vxe-select--panel {
   display: none;
   position: absolute;
   left: 0;
@@ -48,7 +48,7 @@
     display: block;
     opacity: 0;
     transform: scaleY(0.5);
-    transition: transform 0.2s;
+    transition: transform 0.2s, opacity 0.2s;
     transform-origin: 0% 0%;
     &[data-placement="top"] {
       transform-origin: 0% 100%;
@@ -109,7 +109,7 @@
   }
 }
 
-.vxe-select-option--panel {
+.vxe-select--panel {
   .vxe-optgroup--title,
   .vxe-select-option {
     height: $vxe-select-option-height-default;

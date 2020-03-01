@@ -133,6 +133,50 @@ export default {
       customAll: 'All',
       customConfirm: 'Confirm',
       customRestore: 'Restore'
+    },
+    input: {
+      date: {
+        m1: 'January',
+        m2: 'February',
+        m3: 'March',
+        m4: 'April',
+        m5: 'May',
+        m6: 'June',
+        m7: 'July',
+        m8: 'August',
+        m9: 'September',
+        m10: 'October',
+        m11: 'November',
+        m12: 'December',
+        today: 'Today',
+        prevMonth: 'Previous Month',
+        nextMonth: 'Next Month',
+        monthLabel: '{{0}}',
+        dayLabel: '{{1}} {{0}}',
+        weeks: {
+          w0: 'Sun',
+          w1: 'Mon',
+          w2: 'Tue',
+          w3: 'Wed',
+          w4: 'Thu',
+          w5: 'Fri',
+          w6: 'Sat'
+        },
+        months: {
+          m0: 'Jan',
+          m1: 'Feb',
+          m2: 'Mar',
+          m3: 'Apr',
+          m4: 'May',
+          m5: 'Jun',
+          m6: 'Jul',
+          m7: 'Aug',
+          m8: 'Sep',
+          m9: 'Oct',
+          m10: 'Nov',
+          m11: 'Dec'
+        }
+      }
     }
   }
 }

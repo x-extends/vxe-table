@@ -2,6 +2,15 @@ import XEUtils from 'xe-utils'
 import { UtilTools } from '../../tools'
 
 const inputEventTypes = ['input', 'textarea', '$input', '$textarea']
+const defaultCompProps = { transfer: true }
+
+function parseDate (value, props) {
+  return value && props.valueFormat ? XEUtils.toStringDate(value, props.valueFormat) : value
+}
+
+function getFormatDate (value, props, defaultFormat) {
+  return XEUtils.toDateString(parseDate(value, props), props.labelFormat || defaultFormat)
+}
 
 function getEventUpdateType (renderOpts) {
   return inputEventTypes.indexOf(renderOpts.name) > -1 ? 'input' : 'change'
@@ -19,7 +28,7 @@ function getNativeAttrs ({ name, attrs }) {
 }
 
 function getDefaultProps ({ $table }, { props }, defaultProps) {
-  return XEUtils.assign($table.vSize ? { size: $table.vSize } : {}, defaultProps, props)
+  return XEUtils.assign($table.vSize ? { size: $table.vSize } : {}, defaultCompProps, defaultProps, props)
 }
 
 function getEvents (renderOpts, params) {
@@ -293,7 +302,7 @@ function nativeSelectEditRender (h, renderOpts, params) {
 function defaultSelectEditRender (h, renderOpts, params) {
   const { row, column } = params
   const cellValue = UtilTools.getCellValue(row, column)
-  const props = getDefaultProps(params, renderOpts, { transfer: true })
+  const props = getDefaultProps(params, renderOpts)
   return [
     h(getDefaultComponentName(renderOpts), {
       model: {
@@ -376,7 +385,7 @@ function getDefaultFormEvents (renderOpts, params) {
 }
 
 function getDefaultFormItemProps ({ $form }, { props }, defaultProps) {
-  return XEUtils.assign($form.vSize ? { size: $form.vSize } : {}, defaultProps, props)
+  return XEUtils.assign($form.vSize ? { size: $form.vSize } : {}, defaultCompProps, defaultProps, props)
 }
 
 /**
@@ -542,6 +551,23 @@ const renderMap = {
   $input: {
     autofocus: '.vxe-input--inner',
     renderEdit: defaultEditRender,
+    renderCell (h, renderOpts, params) {
+      const { props = {} } = renderOpts
+      const { row, column } = params
+      let cellValue = XEUtils.get(row, column.property)
+      switch (props.type) {
+        case 'date':
+          cellValue = getFormatDate(cellValue, props, 'yyyy-MM-dd')
+          break
+        case 'month':
+          cellValue = getFormatDate(cellValue, props, 'yyyy-MM')
+          break
+        case 'year':
+          cellValue = getFormatDate(cellValue, props, 'yyyy')
+          break
+      }
+      return cellValue
+    },
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
     filterMethod: handleFilterMethod,
@@ -565,7 +591,7 @@ const renderMap = {
     },
     renderFilter (h, renderOpts, params) {
       const { column } = params
-      const props = getDefaultProps(params, renderOpts, { transfer: true })
+      const props = getDefaultProps(params, renderOpts)
       return column.filters.map(item => {
         return h(getDefaultComponentName(renderOpts), {
           model: {
@@ -584,7 +610,7 @@ const renderMap = {
     renderItem (h, renderOpts, params) {
       const { data, property } = params
       const itemValue = XEUtils.get(data, property)
-      const props = getDefaultFormItemProps(params, renderOpts, { transfer: true })
+      const props = getDefaultFormItemProps(params, renderOpts)
       return [
         h(getDefaultComponentName(renderOpts), {
           model: {
