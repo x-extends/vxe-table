@@ -46,9 +46,9 @@
     </p>
 
     <p>
-      <vxe-button type="text" icon="vxe-icon--menu"></vxe-button>
+      <vxe-button type="text" icon="vxe-icon--plus"></vxe-button>
+      <vxe-button type="text" icon="vxe-icon--refresh" loading></vxe-button>
       <vxe-button type="text" icon="vxe-icon--download">图标按钮</vxe-button>
-      <vxe-button icon="vxe-icon--refresh"></vxe-button>
       <vxe-button status="primary" icon="vxe-icon--download">图标按钮</vxe-button>
     </p>
 

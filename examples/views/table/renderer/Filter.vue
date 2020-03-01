@@ -9,7 +9,7 @@
       filterMethod (<vxe-tooltip content="{ option, row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选函数<br>
     </p>
 
-    <vxe-table border :data="tableData">
+    <vxe-table border height="400" :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column
         field="nickname"
@@ -21,16 +21,16 @@
         title="sex"
         :filters="[{data: null}]"
         :filter-render="{name: '$select', options: sexList}"></vxe-table-column>
-      <vxe-table-column
-        field="age"
-        title="Age"
-        :filters="[{data: null}]"
-        :filter-render="{name: 'FilterInput'}"></vxe-table-column>
-      <vxe-table-column
+        <vxe-table-column
         field="name"
-        title="实现复杂的筛选"
+        title="实现条件的筛选"
         :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
         :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
+      <vxe-table-column
+        field="age"
+        title="实现内容的筛选"
+        :filters="[{data: {vals: [], sVal: ''}}]"
+        :filter-render="{name: 'FilterContent'}"></vxe-table-column>
       <vxe-table-column
         field="role"
         title="实现Excel复杂的筛选"
@@ -178,7 +178,7 @@ export default {
         }
         `,
         `
-        <vxe-table border :data="tableData">
+        <vxe-table border height="400" :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column
             field="nickname"
@@ -230,7 +230,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
           }
         }
         `
@@ -238,7 +238,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
