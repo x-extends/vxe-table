@@ -1097,11 +1097,23 @@
               height: $vxe-table-row-line-height;
             }
             .vxe-input {
-              .vxe-input--inner,
-              .vxe-textarea--inner {
+              height: $vxe-table-row-line-height - 1;
+              &.type--text,
+              &.type--number,
+              &.type--integer {
+                .vxe-input--inner {
+                  padding: 0;
+                }
+              }
+              &.type--date,
+              &.type--month,
+              &.type--year {
+                .vxe-input--inner {
+                  padding-left: 0;
+                }
+              }
+              .vxe-input--inner {
                 border: 0;
-                padding: 0;
-                height: $vxe-table-row-line-height;
               }
             }
           }

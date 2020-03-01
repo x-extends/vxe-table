@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.input') }}</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link></p>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link>，支持：text 文本、number 数值、integer 整数、date 日期、month 月份、year 年份、password 密码</p>
 
     <p>
       <vxe-input v-model="value1" placeholder="默认尺寸"></vxe-input>
@@ -23,15 +23,15 @@
 
     <p>
       <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
-      <vxe-input v-model="value11" placeholder="月份" type="month"></vxe-input>
-      <vxe-input v-model="value12" placeholder="年份" type="year"></vxe-input>
+      <vxe-input v-model="value11" placeholder="月份" type="month" value-format="yyyy-MM-dd"></vxe-input>
+      <vxe-input v-model="value12" placeholder="年份" type="year" clearable></vxe-input>
     </p>
 
     <p>
       <vxe-input v-model="value13" placeholder="数值类型" type="number"></vxe-input>
-      <vxe-input v-model="value14" placeholder="步数控制" type="number" step="1.4"></vxe-input>
+      <vxe-input v-model="value14" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
       <vxe-input v-model="value15" placeholder="整数类型" type="integer"></vxe-input>
-      <vxe-input v-model="value16" placeholder="步数控制" type="integer" step="5"></vxe-input>
+      <vxe-input v-model="value16" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -82,10 +82,20 @@ export default {
         </p>
 
         <p>
-          <vxe-input v-model="value10" placeholder="密码类型" type="password"></vxe-input>
-          <vxe-input v-model="value9" placeholder="数字类型" type="number"></vxe-input>
-          <vxe-input v-model="value11" placeholder="日期类型" type="date"></vxe-input>
-          <input v-model="value11" placeholder="日期类型" type="date">
+          <vxe-input v-model="value9" placeholder="密码类型" type="password"></vxe-input>
+        </p>
+
+        <p>
+          <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
+          <vxe-input v-model="value11" placeholder="月份" type="month" value-format="yyyy-MM-dd"></vxe-input>
+          <vxe-input v-model="value12" placeholder="年份" type="year" clearable></vxe-input>
+        </p>
+
+        <p>
+          <vxe-input v-model="value13" placeholder="数值类型" type="number"></vxe-input>
+          <vxe-input v-model="value14" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
+          <vxe-input v-model="value15" placeholder="整数类型" type="integer"></vxe-input>
+          <vxe-input v-model="value16" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
         </p>
         `,
         `

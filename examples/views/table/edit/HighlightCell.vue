@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">高亮单元格编辑，通过 <table-api-link prop="highlight-cell"/> 属性设置，只有所有单元格都是输入框时可以启用</p>
+    <p class="tip">高亮单元格编辑，通过 <table-api-link prop="highlight-cell"/> 属性设置<span class="red">（注：仅支持部分组件）</span></p>
 
     <vxe-table
       border
@@ -14,10 +14,10 @@
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="attr1" title="Attr1" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -36,7 +36,10 @@ export default {
   data () {
     return {
       tableData: [],
-      sexList: [],
+      sexList: [
+        { label: '女', value: '0' },
+        { label: '男', value: '1' }
+      ],
       demoCodes: [
         `
         <vxe-table
@@ -51,17 +54,21 @@ export default {
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="attr1" title="Attr1" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              sexList: [
+                { label: '女', value: '0' },
+                { label: '男', value: '1' }
+              ]
             }
           },
           created () {
