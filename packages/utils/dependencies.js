@@ -28,7 +28,7 @@ import find from 'xe-utils/methods/array/find'
 // import mean from 'xe-utils/methods/array/mean'
 // import reduce from 'xe-utils/methods/array/reduce'
 // import copyWithin from 'xe-utils/methods/array/copyWithin'
-// import chunk from 'xe-utils/methods/array/chunk'
+import chunk from 'xe-utils/methods/array/chunk'
 // import zip from 'xe-utils/methods/array/zip'
 // import unzip from 'xe-utils/methods/array/unzip'
 // import zipObject from 'xe-utils/methods/array/zipObject'
@@ -117,19 +117,19 @@ import destructuring from 'xe-utils/methods/base/destructuring'
 // import commafy from 'xe-utils/methods/number/commafy'
 // import toFixedString from 'xe-utils/methods/number/toFixedString'
 // import toFixedNumber from 'xe-utils/methods/number/toFixedNumber'
-// import toInteger from 'xe-utils/methods/number/toInteger'
+import toInteger from 'xe-utils/methods/number/toInteger'
 import toNumber from 'xe-utils/methods/number/toNumber'
 
 // date
-// import getWhatYear from 'xe-utils/methods/date/getWhatYear'
-// import getWhatMonth from 'xe-utils/methods/date/getWhatMonth'
-// import getWhatDay from 'xe-utils/methods/date/getWhatDay'
+import getWhatYear from 'xe-utils/methods/date/getWhatYear'
+import getWhatMonth from 'xe-utils/methods/date/getWhatMonth'
+import getWhatDay from 'xe-utils/methods/date/getWhatDay'
 import toStringDate from 'xe-utils/methods/date/toStringDate'
 import toDateString from 'xe-utils/methods/date/toDateString'
 // import now from 'xe-utils/methods/date/now'
 // import timestamp from 'xe-utils/methods/date/timestamp'
 // import isDateSame from 'xe-utils/methods/date/isDateSame'
-// import getWhatWeek from 'xe-utils/methods/date/getWhatWeek'
+import getWhatWeek from 'xe-utils/methods/date/getWhatWeek'
 // import getYearDay from 'xe-utils/methods/date/getYearDay'
 // import getYearWeek from 'xe-utils/methods/date/getYearWeek'
 // import getMonthWeek from 'xe-utils/methods/date/getMonthWeek'
@@ -203,7 +203,7 @@ export default {
   // mean,
   // reduce,
   // copyWithin,
-  // chunk,
+  chunk,
   // zip,
   // unzip,
   // zipObject,
@@ -292,19 +292,19 @@ export default {
   // commafy,
   // toFixedString,
   // toFixedNumber,
-  // toInteger,
+  toInteger,
   toNumber,
 
   // date
-  // getWhatYear,
-  // getWhatMonth,
-  // getWhatDay,
+  getWhatYear,
+  getWhatMonth,
+  getWhatDay,
   toStringDate,
   toDateString,
   // now,
   // timestamp,
   // isDateSame,
-  // getWhatWeek,
+  getWhatWeek,
   // getYearDay,
   // getYearWeek,
   // getMonthWeek,

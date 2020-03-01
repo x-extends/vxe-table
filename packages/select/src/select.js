@@ -97,7 +97,7 @@ export default {
       panelStyle: null,
       panelPlacement: null,
       currentValue: null,
-      showPanel: false,
+      visiblePanel: false,
       animatVisible: false,
       isActivated: false
     }
@@ -117,7 +117,6 @@ export default {
     }
   },
   created () {
-    this.panelIndex = UtilTools.nextZIndex()
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
@@ -141,11 +140,11 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, transfer, isActivated, disabled, clearable, placeholder, selectLabel, animatVisible, showPanel, panelStyle, prefixIcon, panelPlacement } = this
+    const { vSize, transfer, isActivated, disabled, clearable, placeholder, selectLabel, animatVisible, visiblePanel, panelStyle, prefixIcon, panelPlacement } = this
     return h('div', {
       class: ['vxe-select', {
         [`size--${vSize}`]: vSize,
-        'is--visivle': showPanel,
+        'is--visivle': visiblePanel,
         'is--disabled': disabled,
         'is--active': isActivated
       }]
@@ -159,7 +158,7 @@ export default {
           disabled: disabled,
           type: 'text',
           prefixIcon: prefixIcon,
-          suffixIcon: `vxe-icon--caret-bottom${showPanel ? ' rotate180' : ''}`,
+          suffixIcon: visiblePanel ? GlobalConfig.icon.selectOpen : GlobalConfig.icon.selectClose,
           value: selectLabel
         },
         on: {
@@ -171,11 +170,11 @@ export default {
       }),
       h('div', {
         ref: 'panel',
-        class: ['vxe-select-option--panel', {
+        class: ['vxe-dropdown--panel vxe-select--panel', {
           [`size--${vSize}`]: vSize,
           'is--transfer': transfer,
           'animat--leave': animatVisible,
-          'animat--enter': showPanel
+          'animat--enter': visiblePanel
         }],
         attrs: {
           'data-placement': panelPlacement
@@ -238,15 +237,16 @@ export default {
       this.hideOptionPanel()
     },
     handleGlobalMousedownEvent (evnt) {
-      if (!this.disabled) {
-        if (this.showPanel && !(DomTools.getEventTargetNode(evnt, this.$el).flag || DomTools.getEventTargetNode(evnt, this.$refs.panel).flag)) {
+      const { $refs, $el, disabled, visiblePanel } = this
+      if (!disabled) {
+        this.isActivated = DomTools.getEventTargetNode(evnt, $el).flag || DomTools.getEventTargetNode(evnt, $refs.panel).flag
+        if (visiblePanel && !this.isActivated) {
           this.hideOptionPanel()
         }
-        this.isActivated = DomTools.getEventTargetNode(evnt, this.$el).flag || DomTools.getEventTargetNode(evnt, this.$refs.panel).flag
       }
     },
     handleGlobalKeydownEvent (evnt) {
-      const { showPanel, currentValue, clearable, disabled } = this
+      const { visiblePanel, currentValue, clearable, disabled } = this
       if (!disabled) {
         const keyCode = evnt.keyCode
         const isTab = keyCode === 9
@@ -257,7 +257,7 @@ export default {
         if (isTab) {
           this.isActivated = false
         }
-        if (showPanel) {
+        if (visiblePanel) {
           if (isTab) {
             this.hideOptionPanel()
           } else if (isEnter) {
@@ -299,7 +299,7 @@ export default {
     },
     togglePanelEvent (params, evnt) {
       evnt.preventDefault()
-      if (this.showPanel) {
+      if (this.visiblePanel) {
         this.hideOptionPanel()
       } else {
         this.showOptionPanel()
@@ -307,11 +307,11 @@ export default {
     },
     showOptionPanel () {
       if (!this.disabled) {
-        clearTimeout(this.clearHidePanelTimeout)
+        clearTimeout(this.hidePanelTimeout)
         this.isActivated = true
         this.animatVisible = true
         setTimeout(() => {
-          this.showPanel = true
+          this.visiblePanel = true
           this.setCurrentOption(findOption(this.getOptions(), this.value))
         }, 10)
         this.updateZindex()
@@ -319,8 +319,8 @@ export default {
       }
     },
     hideOptionPanel () {
-      this.showPanel = false
-      this.clearHidePanelTimeout = setTimeout(() => {
+      this.visiblePanel = false
+      this.hidePanelTimeout = setTimeout(() => {
         this.animatVisible = false
       }, 200)
     },

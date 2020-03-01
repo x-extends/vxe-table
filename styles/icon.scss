@@ -97,13 +97,14 @@
 }
 
 .vxe-icon--menu {
+  $yOffset: 0.38em;
   @extend %DefaultWidthHeight;
   &:before {
     content: "";
     display: inline-block;
     width: 0.24em;
     height: 0.24em;
-    box-shadow: 0 -0.38em 0, -0.38em -0.38em 0, 0.38em -0.38em 0, 0 0 0 1em inset, -0.38em 0 0, 0.38em 0 0, 0 0.38em 0, -0.38em 0.38em 0, 0.38em 0.38em 0;
+    box-shadow: 0 -#{$yOffset} 0, -#{$yOffset} -#{$yOffset} 0, #{$yOffset} -#{$yOffset} 0, 0 0 0 1em inset, -#{$yOffset} 0 0, #{$yOffset} 0 0, 0 #{$yOffset} 0, -#{$yOffset} #{$yOffset} 0, #{$yOffset} #{$yOffset} 0;
     margin: 0.24em;
   }
 }
@@ -610,3 +611,40 @@
   }
 }
 
+.vxe-icon--calendar {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0.15em;
+    left: 0;
+    width: 1em;
+    height: 0.8em;
+    border-width: 0.2em 0.1em 0.1em 0.1em;
+    border-radius: 0.1em 0.1em 0 0;
+    border-style: solid;
+    border-color: inherit;
+  }
+  &:after {
+    @extend %PseudoClass;
+    left: 0.2em;
+    top: 0;
+    width: 0.6em;
+    height: 0.3em;
+    border-width: 0 0.1em;
+    border-style: solid;
+    border-color: inherit;
+  }
+}
+
+.vxe-icon--dot {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0.25em;
+    left: 0.25em;
+    border-radius: 50%;
+    border-width: 0.25em;
+    border-style: solid;
+    border-color: inherit;
+  }
+}

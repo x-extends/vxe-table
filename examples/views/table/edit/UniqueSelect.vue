@@ -18,7 +18,7 @@
       @edit-actived="editActivedEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="role1" title="Role" :edit-render="{name: 'select', options: roleList, events: {change: roleChangeEvent}}"></vxe-table-column>
+      <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: roleList, events: {change: roleChangeEvent}}"></vxe-table-column>
       <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
@@ -89,7 +89,7 @@ export default {
           @edit-actived="editActivedEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="role1" title="Role" :edit-render="{name: 'select', options: roleList, events: {change: roleChangeEvent}}"></vxe-table-column>
+          <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: roleList, events: {change: roleChangeEvent}}"></vxe-table-column>
           <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,

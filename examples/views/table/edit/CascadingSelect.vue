@@ -18,7 +18,7 @@
       @edit-actived="editActivedEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="attr3" title="Project type" :edit-render="{name: 'select', options: ptypeList, events: {change: ptypeChangeEvent}}"></vxe-table-column>
+      <vxe-table-column field="attr3" title="Project type" :edit-render="{name: '$select', options: ptypeList, events: {change: ptypeChangeEvent}}"></vxe-table-column>
       <vxe-table-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <select class="vxe-default-select" v-model="row.attr4">
@@ -85,7 +85,7 @@ export default {
           @edit-actived="editActivedEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="attr3" title="Project type" :edit-render="{name: 'select', options: ptypeList, events: {change: ptypeChangeEvent}}"></vxe-table-column>
+          <vxe-table-column field="attr3" title="Project type" :edit-render="{name: '$select', options: ptypeList, events: {change: ptypeChangeEvent}}"></vxe-table-column>
           <vxe-table-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <select class="vxe-default-select" v-model="row.attr4">

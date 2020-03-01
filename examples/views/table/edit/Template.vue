@@ -22,14 +22,14 @@
           <input type="text" v-model="row.name" class="custom-input">
         </template>
       </vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.custom-input'}">
+      <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
         <template v-slot:edit="{ row }">
           <vxe-input type="number" v-model="row.age"></vxe-input>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="date3" title="Date" :edit-render="{autofocus: '.custom-input'}">
+      <vxe-table-column field="date3" title="Date" :edit-render="{autofocus: '.vxe-input--inner'}">
         <template v-slot:edit="{ row }">
-          <input type="date" v-model="row.date3" class="custom-input">
+          <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
         </template>
         <template v-slot="{ row }">选中日期：{{ row.date3 }}</template>
       </vxe-table-column>
@@ -69,14 +69,14 @@ export default {
               <input type="text" v-model="row.name" class="custom-input">
             </template>
           </vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.custom-input'}">
+          <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
             <template v-slot:edit="{ row }">
               <vxe-input type="number" v-model="row.age"></vxe-input>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="date3" title="Date" :edit-render="{autofocus: '.custom-input'}">
+          <vxe-table-column field="date3" title="Date" :edit-render="{autofocus: '.vxe-input--inner'}">
             <template v-slot:edit="{ row }">
-              <input type="date" v-model="row.date3" class="custom-input">
+              <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
             </template>
             <template v-slot="{ row }">选中日期：{{ row.date3 }}</template>
           </vxe-table-column>
