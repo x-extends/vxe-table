@@ -7,14 +7,20 @@
 
 /*radio*/
 .vxe-radio {
-  display: inline;
+  display: inline-block;
+  white-space: nowrap;
   user-select: none;
   cursor: pointer;
   &+.vxe-radio {
     margin-left: 10px;
   }
   > input {
-    display: none;
+    &[type="radio"] {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 0;
+    }
     &+.vxe-radio--icon {
       position: relative;
       display: inline-block;
@@ -45,6 +51,14 @@
     }
   }
   &:not(.is--disabled) {
+    & > input {
+      &:focus {
+        &+.vxe-radio--icon {
+          border-color: $vxe-primary-color;
+          box-shadow: 0 0 0.2em 0 $vxe-primary-color;
+        }
+      }
+    }
     &:hover {
       > input {
         &+.vxe-radio--icon {

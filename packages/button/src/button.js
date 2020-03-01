@@ -123,9 +123,17 @@ export default {
         )
       }
       if ($scopedSlots.default) {
-        contents.push($scopedSlots.default.call(this))
+        contents.push(
+          h('span', {
+            class: 'vxe-button--content'
+          }, $scopedSlots.default.call(this))
+        )
       } else if (content) {
-        contents.push(UtilTools.getFuncText(content))
+        contents.push(
+          h('span', {
+            class: 'vxe-button--content'
+          }, [UtilTools.getFuncText(content)])
+        )
       }
       return contents
     },

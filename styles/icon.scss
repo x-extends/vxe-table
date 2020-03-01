@@ -534,7 +534,6 @@
 .vxe-icon--upload,
 .vxe-icon--download {
   @extend %DefaultWidthHeight;
-  height: 0.9em;
   overflow: hidden;
   &:before {
     @extend %PseudoClass;
@@ -560,7 +559,7 @@
   &:after {
     content: "\2191";
     left: 0;
-    bottom: -0.15em;
+    bottom: -0.1em;
   }
 }
 
