@@ -29,6 +29,7 @@ export default {
   },
   data () {
     return {
+      size: 'mini', // 被所有子组件继承 size
       column: null,
       option: null
     }

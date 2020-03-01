@@ -30,6 +30,10 @@
   &:not(.is--disabled) {
     color: $vxe-font-color;
     cursor: pointer;
+    &:focus {
+      border-color: $vxe-primary-color;
+      box-shadow: 0 0 0.2em 0 $vxe-primary-color;
+    }
   }
   &.is--loading {
     &:before {
@@ -134,7 +138,9 @@
 }
 .vxe-button--loading-icon,
 .vxe-button--icon {
-  margin-right: 5px;
+  &+.vxe-button--content {
+    margin-left: 0.3em;
+  }
 }
 .vxe-button--wrapper,
 .vxe-button--dropdown {

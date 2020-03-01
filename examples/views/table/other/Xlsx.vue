@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 实现导入数据</p>
+    <p class="tip">
+      使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 实现导入数据<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑需要自行实现）</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

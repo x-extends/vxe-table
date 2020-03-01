@@ -7,14 +7,20 @@
 
 /*checkbox*/
 .vxe-checkbox {
-  display: inline;
+  display: inline-block;
+  white-space: nowrap;
   user-select: none;
   cursor: pointer;
   &+.vxe-checkbox {
     margin-left: 10px;
   }
   > input {
-    display: none;
+    &[type="checkbox"] {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 0;
+    }
     &+.vxe-checkbox--icon {
       position: relative;
       display: inline-block;
@@ -70,6 +76,14 @@
     }
   }
   &:not(.is--disabled) {
+    & > input {
+      &:focus {
+        &+.vxe-checkbox--icon {
+          border-color: $vxe-primary-color;
+          box-shadow: 0 0 0.2em 0 $vxe-primary-color;
+        }
+      }
+    }
     &:hover {
       > input {
         &+.vxe-checkbox--icon {
