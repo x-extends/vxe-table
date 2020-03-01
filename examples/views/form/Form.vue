@@ -125,7 +125,10 @@
           </template>
         </vxe-form-item>
         <vxe-form-item title="年龄" field="age" span="12">
-          <vxe-input v-model="formData3.age" type="number" placeholder="请输入年龄" clearable></vxe-input>
+          <vxe-input v-model="formData3.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
+        </vxe-form-item>
+        <vxe-form-item title="日期" field="date" span="12">
+          <vxe-input v-model="formData3.date" type="date" placeholder="请选择日期" clearable></vxe-input>
         </vxe-form-item>
         <vxe-form-item title="地址" field="address" span="24">
           <vxe-textarea v-model="formData3.address" placeholder="请输入地址" clearable></vxe-textarea>
@@ -152,7 +155,7 @@
           </vxe-select>
         </vxe-form-item>
         <vxe-form-item title="年龄" field="age" span="8" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
-          <vxe-input v-model="formData4.age" type="number" placeholder="请输入年龄" clearable></vxe-input>
+          <vxe-input v-model="formData4.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
         </vxe-form-item>
         <vxe-form-item title="区域" field="region" span="8">
           <vxe-input v-model="formData2.region" placeholder="请输入区域" clearable></vxe-input>
@@ -163,11 +166,11 @@
             <vxe-option value="1" label="成功"></vxe-option>
           </vxe-select>
         </vxe-form-item>
-        <vxe-form-item title="身高" field="height" span="8" folding>
-          <vxe-input v-model="formData4.height" placeholder="请输入身高" clearable></vxe-input>
-        </vxe-form-item>
         <vxe-form-item title="体重" field="weight" span="8" folding>
-          <vxe-input v-model="formData4.weight" placeholder="请输入体重" clearable></vxe-input>
+          <vxe-input v-model="formData4.weight" type="number" placeholder="请输入体重" clearable></vxe-input>
+        </vxe-form-item>
+        <vxe-form-item title="日期" field="date" span="8" folding>
+          <vxe-input v-model="formData4.date" type="date" placeholder="请选择日期" clearable></vxe-input>
         </vxe-form-item>
         <vxe-form-item title="是否单身" field="single" span="8" folding>
           <vxe-radio-group v-model="formData4.single">
@@ -216,6 +219,7 @@ export default {
         nickname: '',
         sex: '',
         age: 26,
+        date: null,
         address: null
       },
       formRules3: {
@@ -237,8 +241,8 @@ export default {
         age: 30,
         status: '1',
         region: null,
-        height: '178',
         weight: null,
+        date: null,
         single: '1'
       },
       demoCodes: [
@@ -335,7 +339,10 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item title="年龄" field="age" span="12">
-              <vxe-input v-model="formData3.age" type="number" placeholder="请输入年龄" clearable></vxe-input>
+              <vxe-input v-model="formData3.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
+            </vxe-form-item>
+            <vxe-form-item title="日期" field="date" span="12">
+              <vxe-input v-model="formData3.date" type="date" placeholder="请选择日期" clearable></vxe-input>
             </vxe-form-item>
             <vxe-form-item title="地址" field="address" span="24">
               <vxe-textarea v-model="formData3.address" placeholder="请输入地址" clearable></vxe-textarea>
@@ -362,7 +369,7 @@ export default {
               </vxe-select>
             </vxe-form-item>
             <vxe-form-item title="年龄" field="age" span="8" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
-              <vxe-input v-model="formData4.age" type="number" placeholder="请输入年龄" clearable></vxe-input>
+              <vxe-input v-model="formData4.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
             </vxe-form-item>
             <vxe-form-item title="区域" field="region" span="8">
               <vxe-input v-model="formData2.region" placeholder="请输入区域" clearable></vxe-input>
@@ -373,11 +380,11 @@ export default {
                 <vxe-option value="1" label="成功"></vxe-option>
               </vxe-select>
             </vxe-form-item>
-            <vxe-form-item title="身高" field="height" span="8" folding>
-              <vxe-input v-model="formData4.height" placeholder="请输入身高" clearable></vxe-input>
-            </vxe-form-item>
             <vxe-form-item title="体重" field="weight" span="8" folding>
-              <vxe-input v-model="formData4.weight" placeholder="请输入体重" clearable></vxe-input>
+              <vxe-input v-model="formData4.weight" type="number" placeholder="请输入体重" clearable></vxe-input>
+            </vxe-form-item>
+            <vxe-form-item title="日期" field="date" span="8" folding>
+              <vxe-input v-model="formData4.date" type="date" placeholder="请选择日期" clearable></vxe-input>
             </vxe-form-item>
             <vxe-form-item title="是否单身" field="single" span="8" folding>
               <vxe-radio-group v-model="formData4.single">
@@ -407,6 +414,7 @@ export default {
                 nickname: '',
                 sex: '',
                 age: 26,
+                date: null,
                 address: null
               },
               formRules3: {
@@ -428,9 +436,10 @@ export default {
                 age: 30,
                 status: '1',
                 region: null,
-                height: '178',
                 weight: null,
+                date: null,
                 single: '1'
+              }
             }
           },
           methods: {

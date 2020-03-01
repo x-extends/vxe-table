@@ -265,6 +265,19 @@ function renderNumberIcon (h, _vm) {
   ])
 }
 
+function renderDatePickerIcon (h, _vm) {
+  return h('span', {
+    class: 'vxe-input--date-picker',
+    on: {
+      click: _vm.datePickerOpenEvent
+    }
+  }, [
+    h('i', {
+      class: ['vxe-input--date-picker-icon', GlobalConfig.icon.inputDate]
+    })
+  ])
+}
+
 function renderPasswordIcon (h, _vm) {
   const { showPwd } = _vm
   return h('span', {
@@ -312,28 +325,14 @@ function renderSuffixIcon (h, _vm) {
   ]) : null
 }
 
-function renderExtraPrefixIcon (h, _vm) {
-  const { isDatePicker } = _vm
-  return isDatePicker ? h('span', {
-    class: 'vxe-input--extra-prefix'
-  }, [
-    h('span', {
-      class: 'vxe-input--date-picker'
-    }, [
-      h('i', {
-        class: ['vxe-input--date-picker-icon', GlobalConfig.icon.inputDate]
-      })
-    ])
-  ]) : null
-}
-
 function renderExtraSuffixIcon (h, _vm) {
   const { isPassword, isNumber, isDatePicker } = _vm
   return isPassword || isNumber || isDatePicker ? h('span', {
     class: 'vxe-input--extra-suffix'
   }, [
     isPassword ? renderPasswordIcon(h, _vm) : null,
-    isNumber ? renderNumberIcon(h, _vm) : null
+    isNumber ? renderNumberIcon(h, _vm) : null,
+    isDatePicker ? renderDatePickerIcon(h, _vm) : null
   ]) : null
 }
 
@@ -395,7 +394,7 @@ export default {
       return (this.type === 'integer' ? XEUtils.toInteger(this.step) : XEUtils.toNumber(this.step)) || 1
     },
     isClearable () {
-      return this.clearable && (this.isPassword || this.isNumber || this.type === 'text' || this.type === 'search')
+      return this.clearable && (this.isPassword || this.isNumber || this.isDatePicker || this.type === 'text' || this.type === 'search')
     },
     dateValue () {
       const { value } = this
@@ -578,7 +577,6 @@ export default {
         'is--active': isActivated
       }]
     }, [
-      renderExtraPrefixIcon(h, this),
       rendePrefixIcon(h, this),
       isDatePicker ? renderDateInput(h, this) : renderDefaultInput(h, this),
       renderSuffixIcon(h, this),
@@ -631,8 +629,7 @@ export default {
     clickEvent (evnt) {
       const { isDatePicker } = this
       if (isDatePicker) {
-        evnt.preventDefault()
-        this.showPanel()
+        this.datePickerOpenEvent(evnt)
       }
       this.triggerEvent(evnt)
     },
@@ -721,6 +718,10 @@ export default {
     // 数值
 
     // 日期
+    datePickerOpenEvent (evnt) {
+      evnt.preventDefault()
+      this.showPanel()
+    },
     dateMonthHandle (date, offsetMonth) {
       this.selectMonth = XEUtils.getWhatMonth(date, offsetMonth, 'first')
     },
