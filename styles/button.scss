@@ -30,10 +30,6 @@
   &:not(.is--disabled) {
     color: $vxe-font-color;
     cursor: pointer;
-    &:focus {
-      border-color: $vxe-primary-color;
-      box-shadow: 0 0 0.2em 0 $vxe-primary-color;
-    }
   }
   &.is--loading {
     &:before {
@@ -67,6 +63,10 @@
     &:not(.is--disabled) {
       &:active {
         background-color: darken($vxe-button-default-background-color, 3%);
+      }
+      &:focus {
+        border-color: $vxe-primary-color;
+        box-shadow: 0 0 0.2em 0 $vxe-primary-color;
       }
     }
     &.theme--primary {
