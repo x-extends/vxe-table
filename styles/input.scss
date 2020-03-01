@@ -57,7 +57,6 @@ $iconWidth: 1.6em;
   }
   .vxe-input--prefix,
   .vxe-input--suffix,
-  .vxe-input--extra-prefix,
   .vxe-input--extra-suffix {
     display: flex;
     position: absolute;
@@ -73,32 +72,12 @@ $iconWidth: 1.6em;
 
 // 前缀图标
 .vxe-input {
-  .vxe-input--prefix,
-  .vxe-input--extra-prefix {
+  .vxe-input--prefix {
     left: 0.2em;
   }
-  &.is--prefix,
-  &.type--date,
-  &.type--month,
-  &.type--year {
+  &.is--prefix {
     .vxe-input--inner {
       padding-left: #{$iconWidth + 0.2em};
-    }
-  }
-  &.type--date,
-  &.type--month,
-  &.type--year {
-    .vxe-input--suffix {
-      left: $iconWidth;
-    }
-  }
-  &.is--prefix {
-    &.type--date,
-    &.type--month,
-    &.type--year {
-      .vxe-input--inner {
-        padding-left: #{$iconWidth * 2};
-      }
     }
   }
 }
@@ -114,20 +93,32 @@ $iconWidth: 1.6em;
   }
   &.is--suffix,
   &.type--password,
-  &.type--number {
+  &.type--number,
+  &.type--integer,
+  &.type--date,
+  &.type--month,
+  &.type--year {
     .vxe-input--inner {
       padding-right: #{$iconWidth + 0.2em};
     }
   }
   &.type--password,
-  &.type--number  {
+  &.type--number,
+  &.type--integer,
+  &.type--date,
+  &.type--month,
+  &.type--year   {
     .vxe-input--suffix {
       right: $iconWidth;
     }
   }
   &.is--suffix {
     &.type--password,
-    &.type--number  {
+    &.type--number,
+    &.type--integer,
+    &.type--date,
+    &.type--month,
+    &.type--year {
       .vxe-input--inner {
         padding-right: #{$iconWidth * 2};
       }
