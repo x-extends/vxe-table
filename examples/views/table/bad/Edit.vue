@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      将全表的单元格渲染成可编辑<span class="red">（注：该方式将无法兼容 v3）</span><br>
-      <span class="red">由于不符合 vxe-table 单行编辑的设计原则，使用这个方式的所有逻辑都应该自行处理</span>
+      <span class="red">Warning 1：将全表的单元格渲染成可编辑，该方式将无法兼容 v3</span><br>
+      <span class="red">（注：由于不符合 vxe-table 单行编辑的设计原则，使用这个方式的所有兼容问题都应该自行处理）</span>
     </p>
 
     <vxe-table
@@ -34,8 +34,8 @@
     </pre>
 
     <p class="tip">
-      将全表的可单元格设为可视类型<span class="red">（注：该方式将无法兼容 v3）</span><br>
-      <span class="red">由于不符合 vxe-table 单行编辑的设计原则，使用这个方式的所有逻辑都应该自行处理</span>
+      <span class="red">Warning 2：将全表的可单元格设为可视类型，该方式将无法兼容 v3</span><br>
+      <span class="red">（注：由于不符合 vxe-table 单行编辑的设计原则，使用这个方式的所有兼容问题都应该自行处理）</span>
     </p>
 
     <vxe-table
@@ -113,7 +113,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 2)
           }
         }
         `,
@@ -140,7 +140,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 2)
           }
         }
         `
@@ -148,20 +148,12 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 2)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
-  },
-  methods: {
-    editActivedEvent ({ column }) {
-      console.log(`打开 ${column.title} 列编辑`)
-    },
-    editClosedEvent ({ column }) {
-      console.log(`关闭 ${column.title} 列编辑`)
-    }
   }
 }
 </script>
