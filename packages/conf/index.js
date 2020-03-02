@@ -160,12 +160,13 @@ const GlobalConfig = {
     // colon: false
   },
   input: {
-    startWeek: 1
     // transfer: false,
-    // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
-    // labelFormat: '',
-    // valueFormat: '',
-    // format: ''
+    dateOpts: {
+      startWeek: 1
+      // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
+      // labelFormat: '',
+      // valueFormat: ''
+    }
   },
   select: {
     // transfer: false

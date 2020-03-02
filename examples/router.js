@@ -223,6 +223,7 @@ const TableEditTemplate = () => import(/* webpackChunkName: "edit" */ './views/t
 const TableEditFull = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Full.vue')
 
 const TableBadEdit = () => import(/* webpackChunkName: "edit" */ './views/table/bad/Edit.vue')
+const TableBadNonsupport = () => import(/* webpackChunkName: "edit" */ './views/table/bad/Nonsupport.vue')
 
 const ModuleIcon = () => import(/* webpackChunkName: "module" */ './views/icon/Icon.vue')
 const ModuleButton = () => import(/* webpackChunkName: "module" */ './views/button/Button.vue')
@@ -1343,6 +1344,11 @@ export default new Router({
       path: '/table/bad/edit',
       name: 'TableBadEdit',
       component: TableBadEdit
+    },
+    {
+      path: '/table/bad/nonsupport',
+      name: 'TableBadNonsupport',
+      component: TableBadNonsupport
     },
     {
       path: '/table/module/icon',

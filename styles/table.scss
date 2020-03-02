@@ -867,6 +867,13 @@
   }
   .vxe-body--expanded-column {
     border-bottom: 1px solid $vxe-table-border-color;
+    &.col--ellipsis {
+      & > .vxe-body--expanded-cell {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
   .vxe-body--expanded-cell {
     padding: 20px;

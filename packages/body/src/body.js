@@ -267,6 +267,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     highlightHoverRow,
     rowClassName,
     rowStyle,
+    showOverflow: allColumnOverflow,
     treeConfig,
     treeOpts,
     treeExpandeds,
@@ -334,6 +335,8 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
         }
       }
       if (expandColumn) {
+        const { showOverflow } = expandColumn
+        const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
         rows.push(
           h('tr', {
             class: 'vxe-body--expanded-row',
@@ -342,15 +345,16 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
             on: trOn
           }, [
             h('td', {
-              class: 'vxe-body--expanded-column',
+              class: ['vxe-body--expanded-column', {
+                'fixed--hidden': fixedType,
+                'col--ellipsis': hasEllipsis
+              }],
               attrs: {
                 colspan: tableColumn.length
               }
             }, [
               h('div', {
-                class: ['vxe-body--expanded-cell', {
-                  'fixed--hidden': fixedType
-                }],
+                class: 'vxe-body--expanded-cell',
                 style: cellStyle
               }, [
                 expandColumn.renderData(h, { $table: $xetable, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, level: rowLevel })

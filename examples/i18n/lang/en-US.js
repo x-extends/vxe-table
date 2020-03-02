@@ -157,6 +157,8 @@ module.exports = {
         cell: 'Cell',
 
         bad: 'Bad usage',
+        badEdit: 'The full table is rendered in edit',
+        badNonsupport: 'Unsupported',
 
         module: 'Modules',
         button: 'Button',

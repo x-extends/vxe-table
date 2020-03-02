@@ -144,6 +144,15 @@
           form: {
             // colon: false
           },
+          input: {
+            // transfer: false,
+            dateOpts: {
+              startWeek: 1
+              // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
+              // labelFormat: '',
+              // valueFormat: ''
+            }
+          },
           // 下拉框的全局参数
           select: {
             // transfer: false

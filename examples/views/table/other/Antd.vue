@@ -1,12 +1,9 @@
 <template>
   <div>
     <p class="tip">
-      自定义渲染 <a class="link" href="https://www.npmjs.com/package/ant-design-vue" target="_blank">ant-design-vue</a> 组件<br>
-      使用自定义模板可以实现对更多细节的控制，但会失去默认的一些功能，比如自动聚焦等。（可以通过设置 <table-column-api-link prop="autofocus"/> 属性强制聚焦）<br>
-      如果很多页面都使用相同自定义模板的场景下建议使用<router-link class="link" :to="{name: 'RendererAPI'}">渲染器</router-link>，因为可以更好的复用<br>
-      自定义渲染需要配合 <table-api-link prop="updateStatus"/> 方法使用，在对应单元格的值发生改变时调用更新状态<br>
-      <span class="red">（注：自定义渲染虽然可以支持任意的 vue 组件，但是并不是所有组件都能直接使用的，所有跨组件之间会存在冲突问题，如果不处理好冲突的情况下是大部分组件是无法使用的；
-        可以通过使用 <router-link class="link" :to="{name: 'TablePluginAntdConfig'}">vxe-table-plugin-antd</router-link> 适配插件来解决冲突，当然你也可以<router-link class="link" :to="{name: 'InterceptorAPI'}">自行处理冲突</router-link> ）</span>
+      自定义渲染 <a class="link" href="https://www.npmjs.com/package/ant-design-vue" target="_blank">ant-design-vue</a> 组件，自定义渲染需要配合 <table-api-link prop="updateStatus"/> 方法使用，在对应单元格的值发生改变时调用更新状态<br>
+      建议通过使用 <router-link class="link" :to="{name: 'TablePluginAntdConfig'}">vxe-table-plugin-antd</router-link> 适配插件，不用自己做任何兼容性处理直接就能渲染<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 
     <vxe-table
