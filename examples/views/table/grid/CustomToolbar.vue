@@ -14,7 +14,7 @@
       :toolbar="toolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <template v-slot:buttons>
-        <vxe-input></vxe-input>
+        <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
         <vxe-button status="primary">搜索</vxe-button>
         <vxe-button @click="$refs.xGrid.commitProxy('reload')">刷新</vxe-button>
         <vxe-button @click="$refs.xGrid.commitProxy('insert_actived')">新增</vxe-button>
@@ -40,6 +40,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      searchName: '',
       tablePage: {
         pageSize: 15
       },
@@ -86,7 +87,7 @@ export default {
           :toolbar="toolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <template v-slot:buttons>
-            <vxe-input></vxe-input>
+            <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
             <vxe-button status="primary">搜索</vxe-button>
             <vxe-button @click="$refs.xGrid.commitProxy('reload')">刷新</vxe-button>
             <vxe-button @click="$refs.xGrid.commitProxy('insert_actived')">新增</vxe-button>
@@ -100,6 +101,7 @@ export default {
         export default {
           data () {
             return {
+              searchName: '',
               tablePage: {
                 pageSize: 15
               },

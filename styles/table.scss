@@ -276,7 +276,7 @@ select.vxe-select,
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
-      background-image: linear-gradient(-180deg, $vxe-table-border-color, $vxe-table-border-color);
+      background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color);
       background-repeat: no-repeat;
       background-size: 100% 1px;
       background-position: right bottom;
@@ -287,7 +287,7 @@ select.vxe-select,
       .vxe-header--column,
       .vxe-body--column,
       .vxe-footer--column {
-        background-image: linear-gradient(-90deg, $vxe-table-border-color, $vxe-table-border-color), linear-gradient(-180deg, $vxe-table-border-color, $vxe-table-border-color);
+        background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color), linear-gradient($vxe-table-border-color, $vxe-table-border-color);
         background-repeat: no-repeat;
         background-size: 1px 100%, 100% 1px;
         background-position: right top, right bottom;
@@ -303,7 +303,7 @@ select.vxe-select,
       .vxe-header--column,
       .vxe-body--column,
       .vxe-footer--column {
-        background-image: linear-gradient(-180deg, $vxe-table-border-color, $vxe-table-border-color);
+        background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color);
         background-repeat: no-repeat;
         background-size: 100% 1px;
         background-position: right bottom;
