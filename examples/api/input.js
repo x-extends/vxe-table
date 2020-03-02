@@ -134,40 +134,50 @@ const apis = [
         list: []
       },
       {
-        name: 'startWeek',
-        desc: '只对 type=date 有效，设置起始周',
-        version: '1.15.24',
-        type: 'Number, String',
-        enum: '0, 1, 2, 3, 4, 5, 6',
-        defVal: '默认 1，继承 setup.input.startWeek',
-        list: []
-      },
-      {
-        name: 'labelFormat',
-        desc: '只对 type=date|month|year 有效，输入框中显示的日期格式',
-        version: '1.15.24',
-        type: 'String',
+        name: 'date-config',
+        desc: '只对 type=date|month|year 有效，日期配置项',
+        version: '2.15.24',
+        type: 'Object',
         enum: '',
-        defVal: '继承 setup.input.labelFormat',
-        list: []
-      },
-      {
-        name: 'parseFormat',
-        desc: '只对 type=date|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
-        version: '1.15.24',
-        type: 'String',
-        enum: '',
-        defVal: '继承 setup.input.parseFormat',
-        list: []
-      },
-      {
-        name: 'valueFormat',
-        desc: '只对 type=date|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
-        version: '1.15.24',
-        type: 'String',
-        enum: '',
-        defVal: '继承 setup.input.valueFormat',
-        list: []
+        defVal: '继承 setup.input.dateConfig',
+        list: [
+          {
+            name: 'startWeek',
+            desc: '只对 type=date 有效，设置起始周',
+            version: '',
+            type: 'Number, String',
+            enum: '0, 1, 2, 3, 4, 5, 6',
+            defVal: '1',
+            list: []
+          },
+          {
+            name: 'labelFormat',
+            desc: '只对 type=date|month|year 有效，输入框中显示的日期格式',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'parseFormat',
+            desc: '只对 type=date|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'valueFormat',
+            desc: '只对 type=date|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
       },
       {
         name: 'transfer',
