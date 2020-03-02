@@ -62,7 +62,7 @@ const apis = [
         list: []
       },
       {
-        name: 'optionProps',
+        name: 'option-props',
         desc: '下拉选项属性参数配置',
         version: '2.8.11',
         type: 'Object',
@@ -71,7 +71,7 @@ const apis = [
         list: []
       },
       {
-        name: 'optionGroups',
+        name: 'option-groups',
         desc: '下拉分组选项列表',
         version: '2.8.11',
         type: 'Array',
@@ -80,7 +80,7 @@ const apis = [
         list: []
       },
       {
-        name: 'optionGroupProps',
+        name: 'option-group-props',
         desc: '下拉分组选项属性参数配置',
         version: '2.8.11',
         type: 'Object',

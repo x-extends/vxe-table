@@ -23,7 +23,7 @@
 
     <p>
       <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
-      <vxe-input v-model="value11" placeholder="月份" type="month" value-format="yyyy-MM-dd"></vxe-input>
+      <vxe-input v-model="value11" placeholder="月份" type="month" :date-config="{valueFormat: 'yyyy-MM-dd'}"></vxe-input>
       <vxe-input v-model="value12" placeholder="年份" type="year" clearable></vxe-input>
     </p>
 
@@ -87,7 +87,7 @@ export default {
 
         <p>
           <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
-          <vxe-input v-model="value11" placeholder="月份" type="month" value-format="yyyy-MM-dd"></vxe-input>
+          <vxe-input v-model="value11" placeholder="月份" type="month" :date-config="{valueFormat: 'yyyy-MM-dd'}"></vxe-input>
           <vxe-input v-model="value12" placeholder="年份" type="year" clearable></vxe-input>
         </p>
 
