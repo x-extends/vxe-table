@@ -69,6 +69,35 @@ function findOption (groupList, optionValue) {
   }
 }
 
+function renderOption (h, _vm, options) {
+  const { optionProps = {} } = _vm
+  const labelProp = optionProps.label || 'label'
+  const valueProp = optionProps.value || 'value'
+  const disabledProp = optionProps.disabled || 'disabled'
+  return options ? options.map(option => {
+    return h('vxe-option', {
+      props: {
+        label: option[labelProp],
+        value: option[valueProp],
+        disabled: option[disabledProp]
+      }
+    })
+  }) : []
+}
+
+function renderOptgroup (h, _vm) {
+  const { optionGroups, optionGroupProps = {} } = _vm
+  const groupOptions = optionGroupProps.options || 'options'
+  const groupLabel = optionGroupProps.label || 'label'
+  return optionGroups ? optionGroups.map(group => {
+    return h('vxe-optgroup', {
+      props: {
+        label: group[groupLabel]
+      }
+    }, renderOption(h, _vm, group[groupOptions]))
+  }) : []
+}
+
 export default {
   name: 'VxeSelect',
   props: {
@@ -78,6 +107,10 @@ export default {
     disabled: Boolean,
     prefixIcon: String,
     placement: String,
+    options: Array,
+    optionProps: Object,
+    optionGroups: Array,
+    optionGroupProps: Object,
     size: String,
     transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
   },
@@ -108,7 +141,7 @@ export default {
     },
     selectLabel () {
       if (this.updateFlag) {
-        const selectOption = findOption(this.getOptions(), this.value)
+        const selectOption = findOption(this.getOptComps(), this.value)
         if (selectOption) {
           return selectOption.label
         }
@@ -140,7 +173,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, transfer, isActivated, disabled, clearable, placeholder, selectLabel, animatVisible, visiblePanel, panelStyle, prefixIcon, panelPlacement } = this
+    const { vSize, transfer, isActivated, disabled, clearable, placeholder, selectLabel, animatVisible, visiblePanel, panelStyle, prefixIcon, panelPlacement, optionGroups } = this
     return h('div', {
       class: ['vxe-select', {
         [`size--${vSize}`]: vSize,
@@ -183,13 +216,13 @@ export default {
       }, [
         h('div', {
           class: 'vxe-select-option--wrapper'
-        }, this.$slots.default)
+        }, this.$slots.default || (optionGroups ? renderOptgroup(h, this) : renderOption(h, this, this.options)))
       ])
     ])
   },
   methods: {
-    getOptions () {
-      const options = []
+    getOptComps () {
+      const optComps = []
       if (!this.disabled) {
         this.$children.forEach(option => {
           if (!option.isDisabled && option.$xeselect) {
@@ -197,15 +230,15 @@ export default {
             if (children.length) {
               children = children.filter(option => !option.isDisabled && option.$xeselect && option.$xeoptgroup)
               if (children.length) {
-                options.push({ comp: option, children })
+                optComps.push({ comp: option, children })
               }
             } else {
-              options.push({ comp: option, children })
+              optComps.push({ comp: option, children })
             }
           }
         })
       }
-      return options
+      return optComps
     },
     updateStatus () {
       this.updateFlag++
@@ -264,7 +297,7 @@ export default {
             this.changeOptionEvent(evnt, currentValue)
           } else if (isUpArrow || isDwArrow) {
             evnt.preventDefault()
-            const groupList = this.getOptions()
+            const groupList = this.getOptComps()
             let { offsetOption, firstOption } = findOffsetOption(groupList, currentValue, isUpArrow)
             if (!offsetOption && !findOption(groupList, currentValue)) {
               offsetOption = firstOption
@@ -312,7 +345,7 @@ export default {
         this.animatVisible = true
         setTimeout(() => {
           this.visiblePanel = true
-          this.setCurrentOption(findOption(this.getOptions(), this.value))
+          this.setCurrentOption(findOption(this.getOptComps(), this.value))
         }, 10)
         this.updateZindex()
         this.updatePlacement()
