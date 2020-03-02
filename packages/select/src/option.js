@@ -5,8 +5,8 @@ let optionUniqueId = 0
 export default {
   name: 'VxeOption',
   props: {
-    value: [String, Number],
-    label: [String, Number],
+    value: null,
+    label: [String, Number, Boolean],
     disabled: Boolean,
     size: String
   },
@@ -44,7 +44,7 @@ export default {
     this.updateView()
   },
   render (h) {
-    const { $xeselect, id, isDisabled, value } = this
+    const { $slots, $xeselect, id, isDisabled, value } = this
     return h('div', {
       class: ['vxe-select-option', {
         'is--disabled': isDisabled,
@@ -58,17 +58,21 @@ export default {
         click: this.optionEvent,
         mouseenter: this.mouseenterEvent
       }
-    }, UtilTools.getFuncText(this.label))
+    }, $slots.default || UtilTools.getFuncText(this.label))
   },
   methods: {
     updateView () {
       this.$xeselect.updateStatus()
     },
     optionEvent (evnt) {
-      this.$xeselect.changeOptionEvent(evnt, this.value)
+      if (!this.isDisabled) {
+        this.$xeselect.changeOptionEvent(evnt, this.value)
+      }
     },
     mouseenterEvent () {
-      this.$xeselect.setCurrentOption(this)
+      if (!this.isDisabled) {
+        this.$xeselect.setCurrentOption(this)
+      }
     }
   }
 }
