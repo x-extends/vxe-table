@@ -1423,10 +1423,16 @@ export default {
           expand: false,
           children: [
             {
-              label: 'app.aside.nav.edit',
+              label: 'app.aside.nav.badEdit',
               demoUrl: 'https://jsrun.pro/uIWKp/edit',
               locat: {
                 name: 'TableBadEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.badNonsupport',
+              locat: {
+                name: 'TableBadNonsupport'
               }
             }
           ]
