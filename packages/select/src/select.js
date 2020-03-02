@@ -72,7 +72,7 @@ function findOption (groupList, optionValue) {
 export default {
   name: 'VxeSelect',
   props: {
-    value: [String, Number],
+    value: null,
     clearable: Boolean,
     placeholder: String,
     disabled: Boolean,
