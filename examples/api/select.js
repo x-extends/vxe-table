@@ -53,6 +53,42 @@ const apis = [
         list: []
       },
       {
+        name: 'options',
+        desc: '下拉选项列表',
+        version: '2.8.11',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'optionProps',
+        desc: '下拉选项属性参数配置',
+        version: '2.8.11',
+        type: 'Object',
+        enum: '',
+        defVal: '{ value, label, disabled }',
+        list: []
+      },
+      {
+        name: 'optionGroups',
+        desc: '下拉分组选项列表',
+        version: '2.8.11',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'optionGroupProps',
+        desc: '下拉分组选项属性参数配置',
+        version: '2.8.11',
+        type: 'Object',
+        enum: '',
+        defVal: '{ options, label }',
+        list: []
+      },
+      {
         name: 'transfer',
         descKey: 'app.api.select.desc.transfer',
         version: '',
