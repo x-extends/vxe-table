@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.select') }}</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: '$select'}}">API</router-link></p>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'select'}}">API</router-link></p>
 
     <p>
       <vxe-select v-model="value1" placeholder="默认尺寸">
@@ -77,6 +77,11 @@
       </vxe-select>
     </p>
 
+    <p>
+      <vxe-select v-model="value12" placeholder="配置式" :options="list12"></vxe-select>
+      <vxe-select v-model="value13" placeholder="分组配置式" :option-groups="list13"></vxe-select>
+    </p>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
@@ -103,6 +108,28 @@ export default {
       value9: null,
       value10: null,
       value11: null,
+      value12: null,
+      list12: [
+        { label: '男', value: '1' },
+        { label: '女', value: '0' }
+      ],
+      value13: null,
+      list13: [
+        {
+          label: '组1',
+          options: [
+            { label: '1-1', value: '11' },
+            { label: '1-2', value: '10' }
+          ]
+        },
+        {
+          label: '组2',
+          options: [
+            { label: '2-1', value: '21' },
+            { label: '2-2', value: '22' }
+          ]
+        }
+      ],
       demoCodes: [
         `
         <p>
@@ -178,6 +205,11 @@ export default {
             </vxe-optgroup>
           </vxe-select>
         </p>
+
+        <p>
+          <vxe-select v-model="value12" placeholder="配置式" :options="list12"></vxe-select>
+          <vxe-select v-model="value13" placeholder="分组配置式" :option-groups="list13"></vxe-select>
+        </p>
         `,
         `
         export default {
@@ -193,7 +225,29 @@ export default {
               value8: null,
               value9: null,
               value10: null,
-              value11: null
+              value11: null,
+              value12: null,
+              list12: [
+                { label: '男', value: '1' },
+                { label: '女', value: '0' }
+              ],
+              value13: null,
+              list13: [
+                {
+                  label: '组1',
+                  options: [
+                    { label: '1-1', value: '11' },
+                    { label: '1-2', value: '10' }
+                  ]
+                },
+                {
+                  label: '组2',
+                  options: [
+                    { label: '2-1', value: '21' },
+                    { label: '2-2', value: '22' }
+                  ]
+                }
+              ]
             }
           }
         }
