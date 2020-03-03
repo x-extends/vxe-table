@@ -45,8 +45,13 @@ function renderDateInput (h, _vm) {
   })
 }
 
+function isDateDisabled (_vm, item) {
+  const { disabledMethod } = _vm.dateOpts
+  return disabledMethod && disabledMethod({ date: item.date, $input: _vm })
+}
+
 function renderDateDayTable (h, _vm) {
-  const { datePanelType, dateValue, datePanelValue, weekDatas, dayDatas, dateOpts } = _vm
+  const { datePanelType, dateValue, datePanelValue, weekDatas, dayDatas } = _vm
   return [
     h('table', {
       class: `vxe-input--date-${datePanelType}-view`,
@@ -69,7 +74,7 @@ function renderDateDayTable (h, _vm) {
               'is--current': item.isCurrent,
               'is--today': item.isToday,
               'is--next': item.isNext,
-              'is--disabled': !dateOpts.activeMethod || dateOpts.activeMethod({ date: item.date, isPrev: item.isPrev, isCurrent: item.isCurrent, isNext: item.isNext }),
+              'is--disabled': isDateDisabled(_vm, item),
               'is--selected': XEUtils.isDateSame(dateValue, item.date, 'yyyy-MM-dd'),
               'is--hover': XEUtils.isDateSame(datePanelValue, item.date, 'yyyy-MM-dd')
             },
@@ -85,7 +90,7 @@ function renderDateDayTable (h, _vm) {
 }
 
 function renderDateMonthTable (h, _vm) {
-  const { datePanelType, monthDatas, datePanelValue, dateOpts } = _vm
+  const { dateValue, datePanelType, monthDatas, datePanelValue } = _vm
   return [
     h('table', {
       class: `vxe-input--date-${datePanelType}-view`,
@@ -99,8 +104,12 @@ function renderDateMonthTable (h, _vm) {
         return h('tr', rows.map(item => {
           return h('td', {
             class: {
-              'is--disabled': !dateOpts.activeMethod || dateOpts.activeMethod({ date: item.date, isPrev: item.isPrev, isCurrent: item.isCurrent, isNext: item.isNext }),
-              'is--hover': XEUtils.isDateSame(datePanelValue, item.date, 'MM')
+              'is--prev': item.isPrev,
+              'is--current': item.isCurrent,
+              'is--next': item.isNext,
+              'is--disabled': isDateDisabled(_vm, item),
+              'is--selected': XEUtils.isDateSame(dateValue, item.date, 'yyyy-MM'),
+              'is--hover': XEUtils.isDateSame(datePanelValue, item.date, 'yyyy-MM')
             },
             on: {
               click: () => _vm.dateSelectEvent(item),
@@ -114,7 +123,7 @@ function renderDateMonthTable (h, _vm) {
 }
 
 function renderDateYearTable (h, _vm) {
-  const { datePanelType, yearDatas, datePanelValue, dateOpts } = _vm
+  const { dateValue, datePanelType, yearDatas, datePanelValue } = _vm
   return [
     h('table', {
       class: `vxe-input--date-${datePanelType}-view`,
@@ -128,7 +137,8 @@ function renderDateYearTable (h, _vm) {
         return h('tr', rows.map(item => {
           return h('td', {
             class: {
-              'is--disabled': !dateOpts.activeMethod || dateOpts.activeMethod({ date: item.date, isPrev: item.isPrev, isCurrent: item.isCurrent, isNext: item.isNext }),
+              'is--disabled': isDateDisabled(_vm, item),
+              'is--selected': XEUtils.isDateSame(dateValue, item.date, 'yyyy'),
               'is--hover': XEUtils.isDateSame(datePanelValue, item.date, 'yyyy')
             },
             on: {
@@ -352,6 +362,7 @@ export default {
     maxlength: [String, Number],
     autocomplete: { type: String, default: 'off' },
     form: String,
+    editable: Boolean,
     dateConfig: Object,
     size: String,
     step: [String, Number],
@@ -401,7 +412,32 @@ export default {
       return value ? XEUtils.toStringDate(value, this.dateLabelFormat) : null
     },
     dateLabelFormat () {
-      return this.dateOpts.labelFormat || 'yyyy-MM-dd'
+      const lFormat = this.dateOpts.labelFormat
+      if (!lFormat) {
+        switch (this.type) {
+          case 'year':
+            return 'yyyy'
+          case 'month':
+            return 'yyyy-MM'
+          default:
+            return 'yyyy-MM-dd'
+        }
+      }
+      return lFormat
+    },
+    dateValueFormat () {
+      const vFormat = this.dateOpts.valueFormat
+      if (!vFormat && vFormat !== 'date') {
+        switch (this.type) {
+          case 'year':
+            return 'yyyy'
+          case 'month':
+            return 'yyyy-MM'
+          default:
+            return 'yyyy-MM-dd'
+        }
+      }
+      return vFormat
     },
     selectDatePanelLabel () {
       const { datePanelType, selectMonth, yearList } = this
@@ -452,11 +488,18 @@ export default {
       const { selectMonth } = this
       const months = []
       if (selectMonth) {
-        for (let index = 0; index < 12; index++) {
+        const currFullYear = XEUtils.getWhatYear(selectMonth, 0, 'first').getFullYear()
+        for (let index = 0; index < 16; index++) {
           const date = XEUtils.getWhatYear(selectMonth, 0, index)
+          const month = date.getMonth()
+          const fullYear = date.getFullYear()
+          const isPrev = fullYear < currFullYear
           months.push({
             date,
-            month: index
+            isPrev,
+            isCurrent: fullYear === currFullYear,
+            isNext: !isPrev && fullYear > currFullYear,
+            month
           })
         }
       }
@@ -472,11 +515,10 @@ export default {
         const currentMonth = selectMonth.getMonth()
         const selectDay = selectMonth.getDay()
         const prevOffsetDay = -weekDatas.indexOf(selectDay)
-        const prevDaySize = Math.abs(prevOffsetDay)
         const startDay = XEUtils.getWhatDay(selectMonth, prevOffsetDay)
         for (let index = 0; index < 42; index++) {
           const date = XEUtils.getWhatDay(startDay, index)
-          const isPrev = index < prevDaySize
+          const isPrev = date < selectMonth
           days.push({
             date,
             isPrev,
@@ -496,19 +538,16 @@ export default {
       return Object.assign({}, this.dateConfig, GlobalConfig.input.dateConfig)
     },
     inpAttrs () {
-      const { isDatePicker, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd } = this
+      const { isDatePicker, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd, dateOpts } = this
       const attrs = {
         name,
         form,
-        type,
+        type: isDatePicker || (isPassword && showPwd) ? 'text' : type,
         placeholder,
         maxlength,
-        readonly,
+        readonly: dateOpts.editable === false || readonly,
         disabled,
         autocomplete
-      }
-      if (isDatePicker || (isPassword && showPwd)) {
-        attrs.type = 'text'
       }
       if (placeholder) {
         attrs.placeholder = UtilTools.getFuncText(placeholder)
@@ -651,6 +690,9 @@ export default {
     },
     clearValueEvent (evnt, value) {
       const { $refs } = this
+      if (this.isDatePicker) {
+        this.hidePanel()
+      }
       this.$emit('clear', { $panel: $refs.panel, value }, evnt)
     },
     changeValue () {
@@ -764,7 +806,9 @@ export default {
       }
     },
     dateSelectEvent (item) {
-      this.dateSelectItem(item.date)
+      if (!isDateDisabled(this, item)) {
+        this.dateSelectItem(item.date)
+      }
     },
     dateSelectItem (date) {
       const { type, datePanelType } = this
@@ -790,30 +834,40 @@ export default {
       }
     },
     dateMouseenterEvent (item) {
-      const { datePanelType } = this
-      if (datePanelType === 'month') {
-        this.dateMoveMonth(item.date)
-      } else if (datePanelType === 'year') {
-        this.dateMoveYear(item.date)
-      } else {
-        this.dateMoveDay(item.date)
+      if (!isDateDisabled(this, item)) {
+        const { datePanelType } = this
+        if (datePanelType === 'month') {
+          this.dateMoveMonth(item.date)
+        } else if (datePanelType === 'year') {
+          this.dateMoveYear(item.date)
+        } else {
+          this.dateMoveDay(item.date)
+        }
       }
     },
     dateMoveDay (offsetDay) {
-      if (!this.dayList.some(item => XEUtils.isDateSame(item.date, offsetDay, 'yyyy-MM-dd'))) {
-        this.dateCheckMonth(offsetDay)
+      if (!isDateDisabled(this, { date: offsetDay })) {
+        if (!this.dayList.some(item => XEUtils.isDateSame(item.date, offsetDay, 'yyyy-MM-dd'))) {
+          this.dateCheckMonth(offsetDay)
+        }
+        this.dateParseValue(offsetDay)
       }
-      this.dateParseValue(offsetDay)
     },
     dateMoveMonth (offsetMonth) {
-      this.dateCheckMonth(offsetMonth)
-      this.dateParseValue(offsetMonth)
+      if (!isDateDisabled(this, { date: offsetMonth })) {
+        if (!this.monthList.some(item => XEUtils.isDateSame(item.date, offsetMonth, 'yyyy-MM'))) {
+          this.dateCheckMonth(offsetMonth)
+        }
+        this.dateParseValue(offsetMonth)
+      }
     },
     dateMoveYear (offsetYear) {
-      if (!this.yearList.some(item => XEUtils.isDateSame(item.date, offsetYear, 'yyyy'))) {
-        this.dateCheckMonth(offsetYear)
+      if (!isDateDisabled(this, { date: offsetYear })) {
+        if (!this.yearList.some(item => XEUtils.isDateSame(item.date, offsetYear, 'yyyy'))) {
+          this.dateCheckMonth(offsetYear)
+        }
+        this.dateParseValue(offsetYear)
       }
-      this.dateParseValue(offsetYear)
     },
     dateParseValue (date) {
       const { dateLabelFormat, dateOpts } = this
@@ -876,8 +930,8 @@ export default {
       }
     },
     dateChangeValue (date) {
-      const { value, dateOpts } = this
-      const inpVal = dateOpts.valueFormat ? XEUtils.toDateString(date, dateOpts.valueFormat) : date
+      const { value, dateValueFormat } = this
+      const inpVal = dateValueFormat === 'date' ? date : XEUtils.toDateString(date, dateValueFormat)
       this.dateCheckMonth(date)
       if (!XEUtils.isEqual(value, inpVal)) {
         this.emitUpdate(inpVal)
@@ -894,6 +948,7 @@ export default {
       this.currentDate = XEUtils.getWhatDay(Date.now(), 0, 'first')
       if (dateValue) {
         this.dateMonthHandle(dateValue, 0)
+        this.dateParseValue(dateValue)
       } else {
         this.dateNowHandle()
       }

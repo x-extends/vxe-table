@@ -270,6 +270,21 @@ $iconWidth: 1.6em;
       width: 22em;
     }
   }
+  &.type--date {
+    .vxe-input--date-picker-body {
+      th {
+        width: 14.28571%;
+      }
+    }
+  }
+  &.type--month,
+  &.type--year {
+    .vxe-input--date-picker-body {
+      td {
+        width: 25%;
+      }
+    }
+  }
 }
 
 .vxe-input--date-picker-header {
@@ -339,22 +354,32 @@ $iconWidth: 1.6em;
       box-shadow: inset 0 -1px 0 0 $vxe-table-popup-border-color;
     }
     td {
-      cursor: pointer;
       &.is--prev,
       &.is--next {
         color: $vxe-disabled-color;
       }
       &.is--today {
         box-shadow: inset 0 0 0 1px $vxe-table-popup-border-color;
-        &.is--current {
-          color: $vxe-primary-color;
+        &:not(.is--selected) {
+          &.is--current {
+            color: $vxe-primary-color;
+          }
         }
       }
       &.is--hover {
         background-color: $vxe-input-date-picker-hover-background-color;
       }
       &.is--selected {
+        color: #fff;
         background-color: $vxe-input-date-picker-selected-background-color;
+      }
+      &:not(.is--disabled) {
+        cursor: pointer;
+      }
+      &.is--disabled {
+        cursor: no-drop;
+        color: $vxe-input-disabled-color;
+        background-color: $vxe-input-disabled-background-color;
       }
     }
   }
