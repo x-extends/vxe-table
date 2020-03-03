@@ -788,10 +788,10 @@ export default {
       if (type === 'year') {
         this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
       } else if (type === 'month') {
-        if (datePanelType === 'month') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
+        if (datePanelType === 'year') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
         } else {
-          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, -1, 'first')
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
         }
       } else {
         if (datePanelType === 'year') {
@@ -813,10 +813,10 @@ export default {
       if (type === 'year') {
         this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
       } else if (type === 'month') {
-        if (datePanelType === 'month') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
+        if (datePanelType === 'year') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
         } else {
-          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
         }
       } else {
         if (datePanelType === 'year') {
