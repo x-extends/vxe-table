@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.input') }}</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link></p>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'textarea'}}">API</router-link></p>
 
     <p>
       <vxe-textarea v-model="value1" placeholder="默认尺寸"></vxe-textarea>
@@ -12,7 +12,10 @@
 
     <p>
       <vxe-textarea v-model="value5" placeholder="多行文本域"></vxe-textarea>
-      <vxe-textarea v-model="value6" placeholder="禁用的" disabled></vxe-textarea>
+      <vxe-textarea v-model="value6" placeholder="只读的" readonly></vxe-textarea>
+      <vxe-textarea v-model="value7" placeholder="禁用的" disabled></vxe-textarea>
+      <vxe-textarea v-model="value8" placeholder="显示字数统计" maxlength="100" show-word-count></vxe-textarea>
+      <vxe-textarea v-model="value9" placeholder="自适应文本高度" :autosize="{ minRows: 2, maxRows: 4 }"></vxe-textarea>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -36,6 +39,9 @@ export default {
       value4: '',
       value5: '',
       value6: '',
+      value7: '',
+      value8: '',
+      value9: '',
       demoCodes: [
         `
         <p>
@@ -47,19 +53,25 @@ export default {
 
         <p>
           <vxe-textarea v-model="value5" placeholder="多行文本域"></vxe-textarea>
-          <vxe-textarea v-model="value6" placeholder="禁用的" disabled></vxe-textarea>
+          <vxe-textarea v-model="value6" placeholder="只读的" readonly></vxe-textarea>
+          <vxe-textarea v-model="value7" placeholder="禁用的" disabled></vxe-textarea>
+          <vxe-textarea v-model="value8" placeholder="显示字数统计" maxlength="100" show-word-count></vxe-textarea>
+          <vxe-textarea v-model="value9" placeholder="自适应文本高度" :autosize="{ minRows: 2, maxRows: 4 }"></vxe-textarea>
         </p>
         `,
         `
         export default {
           data () {
             return {
-              value1: '',
+              vvalue1: '',
               value2: '',
               value3: '',
               value4: '',
               value5: '',
-              value6: ''
+              value6: '',
+              value7: '',
+              value8: '',
+              value9: ''
             }
           }
         }
