@@ -25,13 +25,14 @@
       <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
       <vxe-input v-model="value11" placeholder="月份" type="month" :date-config="{valueFormat: 'yyyy-MM-dd'}"></vxe-input>
       <vxe-input v-model="value12" placeholder="年份" type="year" clearable></vxe-input>
+      <vxe-input v-model="value13" placeholder="禁用日期" type="date" :date-config="{disabledMethod: disabledDateMethod}"></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value13" placeholder="数值类型" type="number"></vxe-input>
-      <vxe-input v-model="value14" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
-      <vxe-input v-model="value15" placeholder="整数类型" type="integer"></vxe-input>
-      <vxe-input v-model="value16" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
+      <vxe-input v-model="value14" placeholder="数值类型" type="number"></vxe-input>
+      <vxe-input v-model="value15" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
+      <vxe-input v-model="value16" placeholder="整数类型" type="integer"></vxe-input>
+      <vxe-input v-model="value17" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -65,6 +66,7 @@ export default {
       value14: '',
       value15: '',
       value16: '',
+      value17: '',
       demoCodes: [
         `
         <p>
@@ -89,13 +91,14 @@ export default {
           <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
           <vxe-input v-model="value11" placeholder="月份" type="month" :date-config="{valueFormat: 'yyyy-MM-dd'}"></vxe-input>
           <vxe-input v-model="value12" placeholder="年份" type="year" clearable></vxe-input>
+          <vxe-input v-model="value13" placeholder="禁用日期" type="date" :date-config="{disabledMethod: disabledDateMethod}"></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value13" placeholder="数值类型" type="number"></vxe-input>
-          <vxe-input v-model="value14" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
-          <vxe-input v-model="value15" placeholder="整数类型" type="integer"></vxe-input>
-          <vxe-input v-model="value16" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
+          <vxe-input v-model="value14" placeholder="数值类型" type="number"></vxe-input>
+          <vxe-input v-model="value15" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
+          <vxe-input v-model="value16" placeholder="整数类型" type="integer"></vxe-input>
+          <vxe-input v-model="value17" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
         </p>
         `,
         `
@@ -111,8 +114,20 @@ export default {
               value7: '',
               value8: '',
               value9: '',
-              value10: '',
-              value11: ''
+              value10: '2018-01-09',
+              value11: '',
+              value12: '',
+              value13: '',
+              value14: '',
+              value15: '',
+              value16: '',
+              value17: ''
+            }
+          },
+          methods: {
+            disabledDateMethod ({ date }) {
+              const dd = date.getDate()
+              return dd > 15
             }
           }
         }
@@ -124,6 +139,12 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    disabledDateMethod ({ date }) {
+      const dd = date.getDate()
+      return dd > 15
+    }
   }
 }
 </script>

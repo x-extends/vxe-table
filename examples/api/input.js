@@ -176,6 +176,24 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'editable',
+            desc: '文本框是否允许输入',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'disabledMethod',
+            desc: '该方法 Function({date}) 的返回值用来决定该日期是否允许选中',
+            version: '',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },

@@ -1627,7 +1627,7 @@ const apis = [
           },
           {
             name: 'activeMethod',
-            desc: '该方法 Function({row, rowIndex, column, columnIndex}) 决定该单元格是否允许编辑',
+            desc: '该方法 Function({row, rowIndex, column, columnIndex}) 的返回值用来决定该单元格是否允许编辑',
             version: '',
             type: 'Function',
             enum: '',
