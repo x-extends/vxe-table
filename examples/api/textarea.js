@@ -87,6 +87,52 @@ const apis = [
         enum: '',
         defVal: 'false',
         list: []
+      },
+      {
+        name: 'resize',
+        desc: '调整文本域大小的方式',
+        version: '2.8.13',
+        type: 'String',
+        enum: 'none, both, horizontal, vertical',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'autosize',
+        desc: '自适应文本高度',
+        version: '2.8.13',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.textarea.autosize',
+        list: [
+          {
+            name: 'minRows',
+            desc: '最小行',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '1',
+            list: []
+          },
+          {
+            name: 'maxRows',
+            desc: '最大行',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '10',
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'showWordCount',
+        desc: '是否显示字数统计',
+        version: '2.8.13',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
       }
     ]
   },
