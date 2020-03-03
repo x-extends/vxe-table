@@ -136,7 +136,7 @@ const apis = [
       {
         name: 'date-config',
         desc: '只对 type=date|month|year 有效，日期配置项',
-        version: '2.8.11',
+        version: '2.8.12',
         type: 'Object',
         enum: '',
         defVal: '继承 setup.input.dateConfig',
@@ -173,6 +173,24 @@ const apis = [
             desc: '只对 type=date|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
             version: '',
             type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'editable',
+            desc: '文本框是否允许输入',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'disabledMethod',
+            desc: '该方法 Function({date}) 的返回值用来决定该日期是否允许选中',
+            version: '',
+            type: 'Function',
             enum: '',
             defVal: '',
             list: []
