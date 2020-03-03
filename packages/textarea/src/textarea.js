@@ -21,7 +21,9 @@ export default {
     defaultEvents () {
       const evnts = {}
       XEUtils.each(this.$listeners, (cb, name) => {
-        evnts[name] = this.triggerEvent
+        if (['change'].indexOf(name) === -1) {
+          evnts[name] = this.triggerEvent
+        }
       })
       evnts.input = this.inputEvent
       return evnts
@@ -68,6 +70,9 @@ export default {
     },
     emitUpdate (value) {
       this.$emit('input', value)
+      if (this.value !== value) {
+        this.$emit('change', { value })
+      }
     },
     inputEvent (evnt) {
       this.emitUpdate(evnt.target.value)

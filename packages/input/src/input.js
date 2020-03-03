@@ -557,7 +557,7 @@ export default {
     inpEvents () {
       const evnts = {}
       XEUtils.each(this.$listeners, (cb, name) => {
-        if (['clear', 'prefix-click', 'suffix-click'].indexOf(name) === -1) {
+        if (['change', 'clear', 'prefix-click', 'suffix-click'].indexOf(name) === -1) {
           evnts[name] = this.triggerEvent
         }
       })
@@ -637,6 +637,9 @@ export default {
     },
     emitUpdate (value) {
       this.$emit('input', value)
+      if (this.value !== value) {
+        this.$emit('change', { value })
+      }
     },
     inputEvent (evnt) {
       const { isDatePicker } = this
