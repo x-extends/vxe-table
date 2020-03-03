@@ -189,7 +189,7 @@ function rendeDatePanel (h, _vm) {
             title: GlobalConfig.i18n('vxe.input.date.prevMonth')
           },
           on: {
-            click: _vm.datePrevMonthEvent
+            click: _vm.datePrevEvent
           }
         }, [
           h('i', {
@@ -215,7 +215,7 @@ function rendeDatePanel (h, _vm) {
             title: GlobalConfig.i18n('vxe.input.date.nextMonth')
           },
           on: {
-            click: _vm.dateNextMonthEvent
+            click: _vm.dateNextEvent
           }
         }, [
           h('i', {
@@ -783,14 +783,24 @@ export default {
       }
       this.datePanelType = datePanelType
     },
-    datePrevMonthEvent () {
-      const { type } = this
+    datePrevEvent () {
+      const { type, datePanelType } = this
       if (type === 'year') {
         this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
       } else if (type === 'month') {
-        this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
+        if (datePanelType === 'month') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
+        } else {
+          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, -1, 'first')
+        }
       } else {
-        this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, -1, 'first')
+        if (datePanelType === 'year') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
+        } else if (datePanelType === 'month') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
+        } else {
+          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, -1, 'first')
+        }
       }
     },
     dateTodayMonthEvent () {
@@ -798,14 +808,24 @@ export default {
       this.dateChangeValue(this.currentDate)
       this.hidePanel()
     },
-    dateNextMonthEvent () {
-      const { type } = this
+    dateNextEvent () {
+      const { type, datePanelType } = this
       if (type === 'year') {
         this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
       } else if (type === 'month') {
-        this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
+        if (datePanelType === 'month') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
+        } else {
+          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
+        }
       } else {
-        this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
+        if (datePanelType === 'year') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
+        } else if (datePanelType === 'month') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
+        } else {
+          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
+        }
       }
     },
     dateSelectEvent (item) {
@@ -818,21 +838,26 @@ export default {
       if (type === 'month') {
         if (datePanelType === 'year') {
           this.datePanelType = 'month'
+          this.dateCheckMonth(date)
         } else {
+          this.dateChangeValue(date)
           this.hidePanel()
         }
       } else if (type === 'year') {
         this.hidePanel()
+        this.dateChangeValue(date)
       } else {
         if (datePanelType === 'month') {
           this.datePanelType = 'day'
+          this.dateCheckMonth(date)
         } else if (datePanelType === 'year') {
           this.datePanelType = 'month'
+          this.dateCheckMonth(date)
         } else {
+          this.dateChangeValue(date)
           this.hidePanel()
         }
       }
-      this.dateChangeValue(date)
     },
     dateMouseenterEvent (item) {
       if (!isDateDisabled(this, item)) {
