@@ -819,11 +819,9 @@ export default {
         if (datePanelType === 'year') {
           this.datePanelType = 'month'
         } else {
-          this.dateChangeValue(date)
           this.hidePanel()
         }
       } else if (type === 'year') {
-        this.dateChangeValue(date)
         this.hidePanel()
       } else {
         if (datePanelType === 'month') {
@@ -831,10 +829,10 @@ export default {
         } else if (datePanelType === 'year') {
           this.datePanelType = 'month'
         } else {
-          this.dateChangeValue(date)
           this.hidePanel()
         }
       }
+      this.dateChangeValue(date)
     },
     dateMouseenterEvent (item) {
       if (!isDateDisabled(this, item)) {
