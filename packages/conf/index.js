@@ -168,6 +168,12 @@ const GlobalConfig = {
       // valueFormat: ''
     }
   },
+  textarea: {
+    // autosize: {
+    //   minRows: 1,
+    //   maxRows: 10
+    // }
+  },
   select: {
     // transfer: false
   },
