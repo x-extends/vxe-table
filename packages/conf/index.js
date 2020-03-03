@@ -161,7 +161,7 @@ const GlobalConfig = {
   },
   input: {
     // transfer: false,
-    dateOpts: {
+    dateConfig: {
       startWeek: 1
       // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
       // labelFormat: '',
