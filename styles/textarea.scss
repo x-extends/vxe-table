@@ -50,6 +50,7 @@
   position: absolute;
   bottom: 0.2em;
   right: 0.8em;
+  color: $vxe-textarea-count-color;
   &.is--error {
     color: $vxe-textarea-count-error-color;
   }
