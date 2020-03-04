@@ -157,6 +157,7 @@ module.exports = {
 
         bad: '糟糕的用法',
         badEdit: '全表渲染为编辑状态',
+        badLineHeight: '动态行高与虚拟滚动的取舍',
         badNonsupport: '不被支持的用法',
 
         module: '功能模块',

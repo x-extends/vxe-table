@@ -119,6 +119,10 @@ import destructuring from 'xe-utils/methods/base/destructuring'
 // import toFixedNumber from 'xe-utils/methods/number/toFixedNumber'
 import toInteger from 'xe-utils/methods/number/toInteger'
 import toNumber from 'xe-utils/methods/number/toNumber'
+// import add from 'xe-utils/methods/number/add'
+// import subtract from 'xe-utils/methods/number/subtract'
+// import multiply from 'xe-utils/methods/number/multiply'
+// import divide from 'xe-utils/methods/number/divide'
 
 // date
 import getWhatYear from 'xe-utils/methods/date/getWhatYear'
@@ -294,6 +298,10 @@ export default {
   // toFixedNumber,
   toInteger,
   toNumber,
+  // add,
+  // subtract,
+  // multiply,
+  // divide,
 
   // date
   getWhatYear,

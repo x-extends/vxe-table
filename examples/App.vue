@@ -1435,6 +1435,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.badLineHeight',
+              locat: {
+                name: 'TableBadLineHeight'
+              }
+            },
+            {
               label: 'app.aside.nav.badNonsupport',
               locat: {
                 name: 'TableBadNonsupport'

@@ -158,6 +158,7 @@ module.exports = {
 
         bad: 'Bad usage',
         badEdit: 'The full table is rendered in edit',
+        badLineHeight: 'Dynamic row height with virtual scroll',
         badNonsupport: 'Unsupported',
 
         module: 'Modules',
