@@ -31,8 +31,10 @@
     <p>
       <vxe-input v-model="value14" placeholder="数值类型" type="number"></vxe-input>
       <vxe-input v-model="value15" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
-      <vxe-input v-model="value16" placeholder="整数类型" type="integer"></vxe-input>
-      <vxe-input v-model="value17" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
+      <vxe-input v-model="value16" placeholder="范围值 0-10" type="number" min="0" max="10" clearable></vxe-input>
+      <vxe-input v-model="value17" placeholder="整数类型" type="integer"></vxe-input>
+      <vxe-input v-model="value18" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
+      <vxe-input v-model="value19" placeholder="范围值 0-100" type="integer" min="0" max="100" step="5" clearable></vxe-input>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -67,6 +69,8 @@ export default {
       value15: '',
       value16: '',
       value17: '',
+      value18: '',
+      value19: '',
       demoCodes: [
         `
         <p>
@@ -97,8 +101,10 @@ export default {
         <p>
           <vxe-input v-model="value14" placeholder="数值类型" type="number"></vxe-input>
           <vxe-input v-model="value15" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
-          <vxe-input v-model="value16" placeholder="整数类型" type="integer"></vxe-input>
-          <vxe-input v-model="value17" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
+          <vxe-input v-model="value16" placeholder="范围值 0-10" type="number" min="0" max="10" clearable></vxe-input>
+          <vxe-input v-model="value17" placeholder="整数类型" type="integer"></vxe-input>
+          <vxe-input v-model="value18" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
+          <vxe-input v-model="value19" placeholder="范围值 0-100" type="integer" min="0" max="100" step="5" clearable></vxe-input>
         </p>
         `,
         `
@@ -121,7 +127,9 @@ export default {
               value14: '',
               value15: '',
               value16: '',
-              value17: ''
+              value17: '',
+              value18: '',
+              value19: ''
             }
           },
           methods: {

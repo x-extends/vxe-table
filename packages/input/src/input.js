@@ -256,9 +256,11 @@ function renderNumberIcon (h, _vm) {
     class: 'vxe-input--number'
   }, [
     h('span', {
-      class: 'vxe-input--number-prev',
+      class: 'vxe-input--number-prev is--prev',
       on: {
-        click: _vm.numberPrevEvent
+        mousedown: _vm.numberMousedownEvent,
+        mouseup: _vm.numberDropDown,
+        mouseleave: _vm.numberDropDown
       }
     }, [
       h('i', {
@@ -266,9 +268,11 @@ function renderNumberIcon (h, _vm) {
       })
     ]),
     h('span', {
-      class: 'vxe-input--number-next',
+      class: 'vxe-input--number-next is--next',
       on: {
-        click: _vm.numberNextEvent
+        mousedown: _vm.numberMousedownEvent,
+        mouseup: _vm.numberDropDown,
+        mouseleave: _vm.numberDropDown
       }
     }, [
       h('i', {
@@ -365,6 +369,8 @@ export default {
     editable: Boolean,
     dateConfig: Object,
     size: String,
+    min: { type: [String, Number], default: null },
+    max: { type: [String, Number], default: null },
     step: [String, Number],
     prefixIcon: String,
     suffixIcon: String,
@@ -597,6 +603,7 @@ export default {
     }
   },
   destroyed () {
+    this.numberDropDown()
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'mousewheel')
@@ -658,7 +665,6 @@ export default {
       const isUpArrow = keyCode === 38
       const isDwArrow = keyCode === 40
       if (isUpArrow || isDwArrow) {
-        evnt.preventDefault()
         if (isUpArrow) {
           this.numberPrevEvent(evnt)
         } else {
@@ -705,20 +711,20 @@ export default {
       }
     },
     afterCheckValue () {
-      const { type, value, isDatePicker, isNumber, dateLabelFormat } = this
-      let inpVal = this.inputValue
+      const { value, isDatePicker, isNumber, dateLabelFormat, min, max } = this
       if (isNumber) {
-        if (inpVal) {
-          if (type === 'integer') {
-            inpVal = XEUtils.toInteger(inpVal)
+        if (value || XEUtils.isNumber(value)) {
+          const inputValue = this.type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
+          if (!this.vaildMinNum(inputValue)) {
+            this.emitUpdate(min)
+          } else if (!this.vaildMaxNum(inputValue)) {
+            this.emitUpdate(max)
           } else {
-            inpVal = XEUtils.toNumber(inpVal)
-          }
-          if (!XEUtils.isEqual(value, inpVal)) {
-            this.emitUpdate(inpVal)
+            this.emitUpdate(inputValue)
           }
         }
       } else if (isDatePicker) {
+        let inpVal = this.inputValue
         if (inpVal) {
           inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
           if (XEUtils.isDate(inpVal)) {
@@ -742,22 +748,66 @@ export default {
     // 密码
 
     // 数值
+    vaildMinNum (num) {
+      return this.min === null || num >= XEUtils.toNumber(this.min)
+    },
+    vaildMaxNum (num) {
+      return this.max === null || num <= XEUtils.toNumber(this.max)
+    },
+    numberDropDown () {
+      clearTimeout(this.downbumTimeout)
+    },
+    numberDownPrevEvent (evnt) {
+      this.downbumTimeout = setTimeout(() => {
+        this.numberPrevEvent(evnt)
+        this.numberDownPrevEvent(evnt)
+      }, 60)
+    },
+    numberDownNextEvent (evnt) {
+      this.downbumTimeout = setTimeout(() => {
+        this.numberNextEvent(evnt)
+        this.numberDownNextEvent(evnt)
+      }, 60)
+    },
+    numberMousedownEvent (evnt) {
+      this.numberDropDown()
+      if (evnt.button === 0) {
+        const isPrevNumber = DomTools.hasClass(evnt.currentTarget, 'is--prev')
+        if (isPrevNumber) {
+          this.numberPrevEvent(evnt)
+        } else {
+          this.numberNextEvent(evnt)
+        }
+        this.downbumTimeout = setTimeout(() => {
+          if (isPrevNumber) {
+            this.numberDownPrevEvent(evnt)
+          } else {
+            this.numberDownNextEvent(evnt)
+          }
+        }, 500)
+      }
+    },
     numberPrevEvent () {
       const { disabled, readonly } = this
+      clearTimeout(this.downbumTimeout)
       if (!disabled && !readonly) {
         this.numberChange(true)
       }
     },
     numberNextEvent () {
       const { disabled, readonly } = this
+      clearTimeout(this.downbumTimeout)
       if (!disabled && !readonly) {
         this.numberChange(false)
       }
     },
     numberChange (isPlus) {
       const { value, stepValue } = this
-      const num = this.type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
-      this.emitUpdate(isPlus ? addition(num, stepValue) : subtraction(num, stepValue))
+      const inputValue = this.type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
+      const newValue = isPlus ? addition(inputValue, stepValue) : subtraction(inputValue, stepValue)
+      if (this.vaildMinNum(newValue) && this.vaildMaxNum(newValue)) {
+        this.emitUpdate(newValue)
+      }
     },
     // 数值
 
@@ -788,10 +838,10 @@ export default {
       if (type === 'year') {
         this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
       } else if (type === 'month') {
-        if (datePanelType === 'month') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
+        if (datePanelType === 'year') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
         } else {
-          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, -1, 'first')
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
         }
       } else {
         if (datePanelType === 'year') {
@@ -813,10 +863,10 @@ export default {
       if (type === 'year') {
         this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
       } else if (type === 'month') {
-        if (datePanelType === 'month') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
+        if (datePanelType === 'year') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
         } else {
-          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
         }
       } else {
         if (datePanelType === 'year') {
