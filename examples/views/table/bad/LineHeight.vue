@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       <span class="red">Warning 1：动态行高与虚拟滚动的取舍</span><br>
-      <span class="red">（注：关闭高性能的虚拟滚动来换取支持动态行高，卡不卡顿取决于数据量，使用这个方式的所有问题都应该自行处理）</span>
+      <span class="red">（注：关闭高性能的虚拟滚动来换取支持动态行高，流不流畅取决于数据量，使用这个方式的所有问题都应该自行处理）</span>
     </p>
 
     <vxe-table
@@ -12,9 +12,32 @@
       :data="tableData"
       :optimization="{scrollX: {gt: 500}, scrollY: {gt: 50000}}">
       <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="name" title="Name">
+        <template v-slot="{ row, rowIndex }">
+          <template v-if="rowIndex % 4 === 0">
+            <div>{{ row.name }}</div>
+            <div style="color: red">{{ row.age }}</div>
+            <div>{{ row.role }}</div>
+          </template>
+          <template v-else-if="rowIndex % 3 === 0">
+            <img src="static/other/img2.gif" style="width: 60px;">
+          </template>
+          <template v-else>
+            <span>{{ row.name }}</span>
+          </template>
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="age" title="Age">
+        <template v-slot="{ row, rowIndex }">
+          <template v-if="rowIndex % 5 === 0">
+            <img src="static/other/img1.gif" style="width: 60px;">
+          </template>
+          <template v-else>
+            <span>{{ row.age }}</span>
+          </template>
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
     </vxe-table>
 
@@ -43,9 +66,32 @@ export default {
           :data="tableData"
           :optimization="{scrollX: {gt: 500}, scrollY: {gt: 50000}}">
           <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="name" title="Name">
+            <template v-slot="{ row, rowIndex }">
+              <template v-if="rowIndex % 4 === 0">
+                <div>{{ row.name }}</div>
+                <div style="color: red">{{ row.age }}</div>
+                <div>{{ row.role }}</div>
+              </template>
+              <template v-else-if="rowIndex % 3 === 0">
+                <img src="static/other/img2.gif" style="width: 60px;">
+              </template>
+              <template v-else>
+                <span>{{ row.name }}</span>
+              </template>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="age" title="Age">
+            <template v-slot="{ row, rowIndex }">
+              <template v-if="rowIndex % 5 === 0">
+                <img src="static/other/img1.gif" style="width: 60px;">
+              </template>
+              <template v-else>
+                <span>{{ row.age }}</span>
+              </template>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
         </vxe-table>
         `,
