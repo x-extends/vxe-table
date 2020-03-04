@@ -1372,11 +1372,18 @@ export default {
       return this.fullDataRowMap.has(row) ? this.fullDataRowMap.get(row).index : -1
     },
     /**
+     * 根据 row 获取相对于当前数据中的索引
+     * @param {Row} row 行对象
+     */
+    _getRowIndex (row) {
+      return this.afterFullData.indexOf(row)
+    },
+    /**
      * 根据 row 获取渲染中的虚拟索引
      * @param {Row} row 行对象
      */
     $getRowIndex (row) {
-      return this.afterFullData.indexOf(row)
+      return this.tableData.indexOf(row)
     },
     getColumnIndex (column) {
       return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1

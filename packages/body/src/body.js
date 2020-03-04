@@ -306,7 +306,6 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
   const {
     stripe,
     rowKey,
-    afterFullData,
     highlightHoverRow,
     highlightCurrentRow,
     rowClassName,
@@ -357,7 +356,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
-          'row--stripe': stripe && (afterFullData.indexOf(row) + 1) % 2 === 0,
+          'row--stripe': stripe && ($table._getRowIndex(row) + 1) % 2 === 0,
           'row--current': highlightCurrentRow && row === currentRow,
           'row--hover': row === hoverRow,
           'row--new': editStore.insertList.indexOf(row) > -1,
