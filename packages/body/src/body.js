@@ -266,6 +266,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
   const {
     stripe,
     rowKey,
+    afterFullData,
     highlightHoverRow,
     rowClassName,
     rowStyle,
@@ -311,7 +312,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
-          'row--stripe': stripe && rowIndex > 0 && (rowIndex + 1) % 2 === 0,
+          'row--stripe': stripe && (afterFullData.indexOf(row) + 1) % 2 === 0,
           'row--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $xetable.selectRow === row,
           'row--cheched': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
