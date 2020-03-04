@@ -81,8 +81,26 @@ const apis = [
       },
       {
         name: 'maxlength',
-        desc: '最大长度',
+        desc: '原生 maxlength 属性',
         version: '',
+        type: 'String, Number',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'min',
+        desc: '只对 type=number|integer 有效，最小值',
+        version: '1.15.24',
+        type: 'String, Number',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'max',
+        desc: '只对 type=number|integer 有效，最大值',
+        version: '1.15.24',
         type: 'String, Number',
         enum: '',
         defVal: '',

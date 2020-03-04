@@ -34,6 +34,7 @@ $iconWidth: 1.6em;
 .vxe-input {
   display: inline-block;
   position: relative;
+  width: 180px;
   &.is--disabled {
     .vxe-input--date-picker,
     .vxe-input--clear-icon,
