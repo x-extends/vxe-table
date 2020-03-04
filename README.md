@@ -50,6 +50,7 @@
 * [x] Table sequence （序号)
 * [x] Radio （单选)
 * [x] Checkbox （多选）
+* [x] Select （下拉选项）
 * [x] Sorting （排序）
 * [x] Filter （筛选）
 * [x] Rowspan and colspan （合并行或列）
@@ -105,7 +106,6 @@
   * 增强插件
     * [![vxe-table-plugin-export-xlsx](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-export-xlsx/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20export%20xlsx)](https://www.npmjs.org/package/vxe-table-plugin-export-xlsx)
     * [![vxe-table-plugin-menus](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-menus/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20menus)](https://www.npmjs.org/package/vxe-table-plugin-menus)
-    * [![vxe-table-plugin-charts](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-charts/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20excel)](https://www.npmjs.org/package/vxe-table-plugin-charts)![style](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-charts/dist/style.min.css?compression=gzip&label=style&color=green) ([图表插件](https://www.npmjs.com/package/vxe-table-plugin-charts))
     * [![vxe-table-plugin-shortcut%20key](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-shortcut-key/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20shortcut-key)](https://www.npmjs.org/package/vxe-table-plugin-shortcut-key)
   * 适配插件
     * [![vxe-table-plugin-element](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20element)](https://www.npmjs.org/package/vxe-table-plugin-element)![style](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/style.min.css?compression=gzip&label=style&color=green) ([element-ui 适配插件](https://www.npmjs.org/package/vxe-table-plugin-element))

@@ -6,7 +6,6 @@
       border
       show-overflow
       ref="xGrid"
-      class="vxe-table-antd"
       height="460"
       :loading="loading"
       :data="tableData"
@@ -71,7 +70,6 @@ export default {
           border
           show-overflow
           ref="xGrid"
-          class="vxe-table-antd"
           height="460"
           :loading="loading"
           :data="tableData"

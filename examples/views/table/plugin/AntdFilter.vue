@@ -6,7 +6,6 @@
       border
       resizable
       highlight-hover-row
-      class="vxe-table-antd"
       height="400"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -48,7 +47,6 @@ export default {
           border
           resizable
           highlight-hover-row
-          class="vxe-table-antd"
           height="400"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
