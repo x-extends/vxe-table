@@ -2458,6 +2458,15 @@ const apis = [
         list: []
       },
       {
+        name: '_getRowIndex(row)',
+        desc: '根据 row 获取相对于当前数据中的索引',
+        version: '',
+        type: 'Number',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
         name: '$getRowIndex(row)',
         desc: '根据 row 获取渲染中的虚拟索引',
         version: '',
