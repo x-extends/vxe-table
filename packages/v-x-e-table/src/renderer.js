@@ -86,7 +86,8 @@ function getDefaultEvents (renderOpts, params) {
 }
 
 /**
- * 原生-可编辑渲染器 input、textarea、select
+ * 单元格可编辑渲染-原生的标签
+ * input、textarea、select
  */
 function nativeEditRender (h, renderOpts, params) {
   const { row, column } = params
@@ -163,6 +164,9 @@ function renderDefaultOptgroups (h, renderOpts, params, renderOptionsMethods) {
   })
 }
 
+/**
+ * 渲染原生的 option 标签
+ */
 function renderNativeOptions (h, options, renderOpts, params) {
   const { optionProps = {} } = renderOpts
   const { row, column } = params
@@ -184,6 +188,9 @@ function renderNativeOptions (h, options, renderOpts, params) {
   })
 }
 
+/**
+ * 渲染内置组件的下拉选项
+ */
 function renderDefaultOptions (h, options, renderOpts) {
   const { optionProps = {} } = renderOpts
   const labelProp = optionProps.label || 'label'
@@ -390,7 +397,8 @@ function getDefaultFormItemProps ({ $form }, { props }, defaultProps) {
 }
 
 /**
- * 原生-表单渲染器
+ * 渲染表单-项
+ * 用于渲染原生的标签
  */
 function nativeItemRender (h, renderOpts, params) {
   const { data, property } = params
@@ -441,6 +449,9 @@ function defaultButtonsItemRender (h, renderOpts, params) {
   return renderOpts.children.map(childRenderOpts => defaultButtonItemRender(h, childRenderOpts, params)[0])
 }
 
+/**
+ * 渲染原生的 select 标签
+ */
 function renderNativeFormOptions (h, options, renderOpts, params) {
   const { data, property } = params
   const { optionProps = {} } = renderOpts
@@ -470,6 +481,10 @@ function createExportMethod (valueMethod, isEdit) {
   }
 }
 
+/**
+ * 渲染表单-项中
+ * 单选框和复选框
+ */
 function defaultFormItemRadioAndCheckboxRender (h, renderOpts, params) {
   const { options, optionProps = {} } = renderOpts
   const { data, property } = params
@@ -501,6 +516,9 @@ function defaultFormItemRadioAndCheckboxRender (h, renderOpts, params) {
   ]
 }
 
+/**
+ * 内置的组件渲染
+ */
 const renderMap = {
   input: {
     autofocus: 'input',
