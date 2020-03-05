@@ -426,3 +426,16 @@ $iconWidth: 1.6em;
     }
   }
 }
+
+.vxe-dropdown--panel {
+  font-size: $vxe-font-size;
+  &.size--medium {
+    font-size: $vxe-font-size-medium;
+  }
+  &.size--small {
+    font-size: $vxe-font-size-small;
+  }
+  &.size--mini {
+    font-size: $vxe-font-size-mini;
+  }
+}
