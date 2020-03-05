@@ -1127,6 +1127,26 @@
         }
       }
     }
+    // &.is--change {
+    //   .vxe-header--row {
+    //     &:first-child {
+    //       .vxe-header--column {
+    //         &:first-child {
+    //           &:before {
+    //             content: "";
+    //             top: 2px;
+    //             left: 2px;
+    //             position: absolute;
+    //             border-radius: 50%;
+    //             width: 6px;
+    //             height: 6px;
+    //             background-color: $vxe-primary-color;
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
     .vxe-body--column {
       padding: 0;
       &.col--actived {

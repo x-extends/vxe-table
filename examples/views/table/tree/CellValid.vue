@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置</p>
+    <p class="tip">
+      通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置<br>
+      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

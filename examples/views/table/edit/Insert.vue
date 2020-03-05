@@ -110,7 +110,7 @@ export default {
         }
         `,
         `
-        .my_table_insert .vxe-body--row.row--new {
+        .my_table_insert .vxe-body--row.is--new {
           background-color: #f1fdf1;
         }
         `
@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style>
-.my_table_insert .vxe-body--row.row--new {
+.my_table_insert .vxe-body--row.is--new {
   background-color: #f1fdf1;
 }
 </style>

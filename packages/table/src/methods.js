@@ -568,6 +568,14 @@ const Methods = {
     }
   },
   /**
+   * 判断可编辑数据是否发生变化
+   * 新增、更新、删除
+   */
+  // isDataChange () {
+  //   const { editStore } = this
+  //   return (editStore.insertList.length || editStore.removeList.length) > 0
+  // },
+  /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
   getData (rowIndex) {
