@@ -52,6 +52,14 @@
         </template>
         <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
       </vxe-table-column>
+      <vxe-table-column field="sex1" title="ElSelect" width="180" :edit-render="{type: 'default'}">
+        <template v-slot:edit="scope">
+          <el-select v-model="scope.row.sex1" multiple>
+            <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </template>
+        <template v-slot="{ row }">{{ getSelectMultipleLabel(row.sex1, sexList) }}</template>
+      </vxe-table-column>
       <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row }">
           <el-cascader v-model="row.region" :options="regionList"></el-cascader>
@@ -162,6 +170,14 @@ export default {
             </template>
             <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
           </vxe-table-column>
+          <vxe-table-column field="sex1" title="ElSelect" width="180" :edit-render="{type: 'default'}">
+            <template v-slot:edit="scope">
+              <el-select v-model="scope.row.sex1" multiple>
+                <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </template>
+            <template v-slot="{ row }">{{ getSelectMultipleLabel(row.sex1, sexList) }}</template>
+          </vxe-table-column>
           <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row }">
               <el-cascader v-model="row.region" :options="regionList"></el-cascader>
@@ -226,6 +242,12 @@ export default {
             getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
               let item = XEUtils.find(list, item => item[valueProp] === value)
               return item ? item[labelField] : null
+            },
+            getSelectMultipleLabel (value, list, valueProp = 'value', labelField = 'label') {
+              return value.map(val => {
+                const item = XEUtils.find(list, item => item[valueProp] === val)
+                return item ? item[labelField] : null
+              }).join(', ')
             },
             getCascaderLabel (value, list) {
               let values = value || []
@@ -330,6 +352,12 @@ export default {
     getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
       const item = XEUtils.find(list, item => item[valueProp] === value)
       return item ? item[labelField] : null
+    },
+    getSelectMultipleLabel (value, list, valueProp = 'value', labelField = 'label') {
+      return value.map(val => {
+        const item = XEUtils.find(list, item => item[valueProp] === val)
+        return item ? item[labelField] : null
+      }).join(', ')
     },
     getCascaderLabel (value, list) {
       const values = value || []
