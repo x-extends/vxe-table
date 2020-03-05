@@ -312,7 +312,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
       h('tr', {
         class: ['vxe-body--row', {
           'row--stripe': stripe && ($xetable._getRowIndex(row) + 1) % 2 === 0,
-          'row--new': editStore.insertList.indexOf(row) > -1,
+          'is--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $xetable.selectRow === row,
           'row--cheched': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table: $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],

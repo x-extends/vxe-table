@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">快捷菜单操作<br><span class="red">注：树形结构默认不支持 insert 相关方法，如果要往子节点插入数据，你可以把表格当成一个子组件进行封装，自行操作数据源即可</span></p>
+    <p class="tip">
+      快捷菜单操作<br>
+      <span class="red">（注：树形结构默认不支持 insert、remove 相关方法，如果要往子节点插入或删除节点数据，直接操作数据源即可）</span>
+    </p>
 
     <vxe-toolbar custom>
       <template v-slot:buttons>
