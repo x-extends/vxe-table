@@ -26,11 +26,17 @@ function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
 
+/**
+ * 判断是否点击了单选框或复选框
+ */
 function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
   const target = evnt.target
   return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === (targetType || colType)
 }
 
+/**
+ * 校验规则
+ */
 class Rule {
   constructor (rule) {
     Object.assign(this, {
@@ -46,6 +52,10 @@ class Rule {
     })
   }
 
+  /**
+   * 获取校验不通过的消息
+   * 支持国际化翻译
+   */
   get message () {
     return UtilTools.getFuncText(this.$options.message)
   }
@@ -1112,7 +1122,7 @@ export default {
           ref: 'ctxWrapper'
         }) : _e(),
         /**
-         * Ellipsis tooltip
+         * 单元格溢出的提示
          */
         hasTip ? h('vxe-tooltip', {
           ref: 'tooltip',
@@ -1122,7 +1132,8 @@ export default {
           } : null
         }) : _e(),
         /**
-         * valid error tooltip
+         * 单元格校验不通过的提示
+         * 仅用于一行数据时有效，多行数据使用内部的提示框
          */
         hasTip && editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
