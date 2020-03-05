@@ -36,7 +36,6 @@
   left: 0;
   padding: 0.2em 0;
   color: $vxe-font-color;
-  font-size: $vxe-font-size;
   text-align: left;
   &:not(.is--transfer) {
     min-width: 100%;
@@ -110,12 +109,14 @@
 }
 
 .vxe-select--panel {
+  font-size: $vxe-font-size;
   .vxe-optgroup--title,
   .vxe-select-option {
     height: $vxe-select-option-height-default;
     line-height: $vxe-select-option-height-default;
   }
   &.size--medium {
+    font-size: $vxe-font-size-medium;
     .vxe-optgroup--title,
     .vxe-select-option {
       height: $vxe-select-option-height-medium;
@@ -123,6 +124,7 @@
     }
   }
   &.size--small {
+    font-size: $vxe-font-size-small;
     .vxe-optgroup--title,
     .vxe-select-option {
       height: $vxe-select-option-height-small;
@@ -130,6 +132,7 @@
     }
   }
   &.size--mini {
+    font-size: $vxe-font-size-mini;
     .vxe-optgroup--title,
     .vxe-select-option {
       height: $vxe-select-option-height-mini;
