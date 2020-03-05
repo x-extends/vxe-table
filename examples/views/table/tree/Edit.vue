@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">可编辑树表格，还可以通过手动调用展开收起<br><span class="red">（注：树形结构默认不支持 insert 相关方法，如果要往子节点插入数据，你可以把表格当成一个子组件进行封装，自行操作数据源即可）</span></p>
+    <p class="tip">
+      可编辑树表格，还可以通过手动调用展开收起<br>
+      <span class="red">（注：树形结构默认不支持 insert 相关方法，如果要往子节点插入数据，你可以把表格当成一个子组件进行封装，自行操作数据源即可）</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

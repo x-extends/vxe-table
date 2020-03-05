@@ -359,7 +359,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'row--stripe': stripe && ($table._getRowIndex(row) + 1) % 2 === 0,
           'row--current': highlightCurrentRow && row === currentRow,
           'row--hover': row === hoverRow,
-          'row--new': editStore.insertList.indexOf(row) > -1,
+          'is--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $table.selectRow === row,
           'row--cheched': checkboxOpts.highlight && $table.isCheckedByCheckboxRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
