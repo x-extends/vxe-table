@@ -982,7 +982,7 @@ export default {
           ref: 'ctxWrapper'
         }) : _e(),
         /**
-         * 单元格内容溢出的 tooltip
+         * 单元格溢出的提示
          */
         hasTip ? h('vxe-tooltip', {
           ref: 'tooltip',
@@ -992,7 +992,8 @@ export default {
           } : null
         }) : _e(),
         /**
-         * 校验不通过的 tooltip
+         * 单元格校验不通过的提示
+         * 仅用于一行数据时有效，多行数据使用内部的提示框
          */
         hasTip && editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',

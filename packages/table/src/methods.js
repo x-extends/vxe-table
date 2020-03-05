@@ -20,6 +20,9 @@ function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
 
+/**
+ * 判断是否点击了单选框或复选框
+ */
 function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
   const target = evnt.target
   return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === (targetType || colType)

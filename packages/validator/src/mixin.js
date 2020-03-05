@@ -1,6 +1,9 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 
+/**
+ * 校验规则
+ */
 class Rule {
   constructor (rule) {
     Object.assign(this, {
@@ -16,6 +19,10 @@ class Rule {
     })
   }
 
+  /**
+   * 获取校验不通过的消息
+   * 支持国际化翻译
+   */
   get message () {
     return UtilTools.getFuncText(this.$options.message)
   }
