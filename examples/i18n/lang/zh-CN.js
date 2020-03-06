@@ -422,7 +422,7 @@ module.exports = {
           checkbox: '复选框',
           radio: '单选框',
           expand: '展开行',
-          html: 'HTML 标签（动态渲染任意 HTML 是非常危险的，很容易导致 XSS 攻击，请确保内容是可信的）',
+          html: 'HTML 标签，不支持与其他功能列共存（动态渲染任意 HTML 是非常危险的，很容易导致 XSS 攻击，请确保内容是可信的）',
           prop: '即将废弃，请使用 field',
           visible: '列是否显示',
           field: '列字段名（注：属性层级越深，渲染性能将直线下降）',
