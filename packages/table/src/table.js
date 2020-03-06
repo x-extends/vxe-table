@@ -1496,7 +1496,7 @@ export default {
      * 如果传 rows 则删除多行
      */
     remove (rows) {
-      const { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, hasInsertByRow, scrollYLoad } = this
+      const { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
       const { removeList, insertList } = editStore
       const property = checkboxOpts.checkField || checkboxOpts.checkProp
       let rest = []
@@ -1511,7 +1511,7 @@ export default {
       }
       // 如果是新增，则保存记录
       rows.forEach(row => {
-        if (!hasInsertByRow(row)) {
+        if (!isInsertByRow(row)) {
           removeList.push(row)
         }
       })
