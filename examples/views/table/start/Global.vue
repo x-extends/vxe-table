@@ -27,7 +27,7 @@
           // highlightCurrentColumn: false,
           // highlightHoverColumn: false,
           // zIndex: 100, // 全局 zIndex 起始值
-          // keepSource: false,
+          keepSource: true,
           // rowId: '_XID',
           radioConfig: {
             // trigger: 'default'
