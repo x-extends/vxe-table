@@ -37,6 +37,14 @@
       <vxe-input v-model="value19" placeholder="范围值 0-100" type="integer" min="0" max="100" step="5" clearable></vxe-input>
     </p>
 
+    <pre>
+      <code>
+        | Tab | 切换到上一个 |
+        | Shift Tab | 切换到下一个 |
+        | Enter | 用于某些特定的功能：展开下拉面板、选中选项...等 |
+      </code>
+    </pre>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>

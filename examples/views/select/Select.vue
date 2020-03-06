@@ -82,6 +82,16 @@
       <vxe-select v-model="value13" placeholder="分组配置式" :option-groups="list13"></vxe-select>
     </p>
 
+    <pre>
+      <code>
+        | Tab | 切换到上一个 |
+        | Shift Tab | 切换到下一个 |
+        | Arrow Up ↑ | 如果已展开下拉面板则移动到上一个选项 |
+        | Arrow Down ↓ | 如果已展开下拉面板则移动到下一个选项 |
+        | Enter | 展开下拉面板、选中选项 |
+      </code>
+    </pre>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>

@@ -71,6 +71,13 @@
       </vxe-pager>
     </p>
 
+    <pre>
+      <code>
+        | Arrow Up ↑ | 如果在当前页输入框内则向上翻页 |
+        | Arrow Down ↓ | 如果在当前页输入框内则向下翻页 |
+      </code>
+    </pre>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
