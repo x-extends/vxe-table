@@ -18,6 +18,13 @@
       <vxe-textarea v-model="value9" placeholder="自适应文本高度" :autosize="{ minRows: 2, maxRows: 4 }"></vxe-textarea>
     </p>
 
+    <pre>
+      <code>
+        | Tab | 切换到上一个 |
+        | Shift Tab | 切换到下一个 |
+      </code>
+    </pre>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>

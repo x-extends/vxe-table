@@ -162,6 +162,12 @@
       </vxe-modal>
     </p>
 
+    <pre>
+      <code>
+        | Esc | 如果开启配置，则支持关闭窗口 |
+      </code>
+    </pre>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>

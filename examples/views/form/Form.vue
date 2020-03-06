@@ -185,6 +185,14 @@
       </vxe-form>
     </p>
 
+    <pre>
+      <code>
+        | Tab | 切换到上一个 |
+        | Shift Tab | 切换到下一个 |
+        | Enter | 如果有存在提交按钮则提交表单 |
+      </code>
+    </pre>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>

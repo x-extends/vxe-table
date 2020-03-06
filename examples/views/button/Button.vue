@@ -83,6 +83,15 @@
       </vxe-button>
     </p>
 
+    <pre>
+      <code>
+        | Tab | 切换到上一个 |
+        | Shift Tab | 切换到下一个 |
+        | Spacebar | 按下点击 |
+        | Enter | 点击 |
+      </code>
+    </pre>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
