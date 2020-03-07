@@ -765,6 +765,7 @@ export default {
       columnStore,
       filterStore,
       ctxMenuStore,
+      ctxMenuOpts,
       footerData,
       hasTip,
       emptyRender,
@@ -948,7 +949,8 @@ export default {
          */
         isCtxMenu ? h('vxe-table-context-menu', {
           props: {
-            ctxMenuStore
+            ctxMenuStore,
+            ctxMenuOpts
           },
           ref: 'ctxWrapper'
         }) : _e(),

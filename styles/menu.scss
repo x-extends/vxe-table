@@ -1,45 +1,46 @@
 /**Variable**/
 
 /*快捷菜单*/
-.vxe-table--ctxmenu-wrapper {
+.vxe-table--context-menu-wrapper,
+.vxe-table--context-menu-clild-wrapper {
   display: none;
   position: absolute;
   top: 0;
   left: 0;
   font-size: 12px;
-  background-color: #FFF;
   border: 1px solid $vxe-table-popup-border-color;
   box-shadow: 3px 3px 4px -2px rgba(0,0,0,.6);
   padding: 0 1px;
   user-select: none;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
+  background-color: $vxe-table-menu-background-color;
   &.is--show {
     display: block;
   }
   &.child-pos--left {
-    .vxe-table--ctxmenu-clild-wrapper {
+    .vxe-table--context-menu-clild-wrapper {
       left: -100%;
     }
   }
 }
-.vxe-ctxmenu--link {
+.vxe-context-menu--link {
   display: block;
   padding: 0 2.5em;
   width: $vxe-table-menu-item-width;
   line-height: 26px;
   color: $vxe-font-color;
-  .vxe-ctxmenu--link-prefix,
-  .vxe-ctxmenu--link-suffix {
+  .vxe-context-menu--link-prefix,
+  .vxe-context-menu--link-suffix {
     position: absolute;
     top: 5px;
     margin-right: 5px;
     font-size: 16px;
   }
-  .vxe-ctxmenu--link-prefix {
+  .vxe-context-menu--link-prefix {
     left: 5px;
   }
-  .vxe-ctxmenu--link-suffix {
+  .vxe-context-menu--link-suffix {
     right: 5px;
     &.suffix--haschild {
       top: 8px;
@@ -51,19 +52,20 @@
       }
     }
   }
-  .vxe-ctxmenu--link-content {
+  .vxe-context-menu--link-content {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 }
-.vxe-table--ctxmenu-clild-wrapper {
-  .vxe-ctxmenu--link {
+.vxe-table--context-menu-clild-wrapper {
+  .vxe-context-menu--link {
     padding: 0 2em 0 2.5em;
   }
 }
-.vxe-ctxmenu--option-wrapper {
+.vxe-context-menu--option-wrapper,
+.vxe-table--context-menu-clild-wrapper {
   margin: 0;
   padding: 0;
   list-style-type: none;
@@ -78,12 +80,12 @@
     &.link--active {
       background-color: #C5C5C5;
       border-color:#C5C5C5;
-      .vxe-ctxmenu--link {
+      & > .vxe-context-menu--link {
         color: #2B2B2B;
       }
     }
     &.link--disabled {
-      .vxe-ctxmenu--link {
+      & > .vxe-context-menu--link {
         color: $vxe-disabled-color;
       }
       &.link--active {
@@ -96,8 +98,7 @@
     }
   }
 }
-.vxe-table--ctxmenu-clild-wrapper {
-  @extend .vxe-table--ctxmenu-wrapper, .vxe-ctxmenu--option-wrapper;
+.vxe-table--context-menu-clild-wrapper {
   display: none;
   top: 0;
   left: 100%;
