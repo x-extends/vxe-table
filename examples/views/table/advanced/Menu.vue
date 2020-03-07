@@ -10,7 +10,7 @@
       ref="xTable"
       :footer-method="footerMethod"
       :data="tableData"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, className: 'my-menus'}"
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
@@ -59,7 +59,7 @@ export default {
       ],
       bodyMenus: [
         [
-          { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy' }
+          { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy-item' }
         ],
         [
           { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
@@ -99,7 +99,7 @@ export default {
           ref="xTable"
           :footer-method="footerMethod"
           :data="tableData"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
+          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, className: 'my-menus'}"
           @header-cell-context-menu="headerCellContextMenuEvent"
           @cell-context-menu="cellContextMenuEvent"
           @context-menu-click="contextMenuClickEvent">
@@ -122,7 +122,7 @@ export default {
               ],
               bodyMenus: [
                 [
-                  { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy' }
+                  { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy-item' }
                 ],
                 [
                   { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
@@ -195,8 +195,15 @@ export default {
         }
         `,
         `
-        .my-copy .vxe-ctxmenu--link {
-          color: orange;
+        .my-menus {
+          background-color: #F8F8F9;
+        }
+        .my-menus .vxe-ctxmenu--link {
+          width: 200px;
+        }
+        .my-copy-item {
+          font-weight: 700;
+          font-style: oblique;
         }
         .color-red {
           color: red;
@@ -258,8 +265,15 @@ export default {
 </script>
 
 <style>
-.my-copy .vxe-ctxmenu--link {
-  color: orange;
+.my-menus {
+  background-color: #F8F8F9;
+}
+.my-menus .vxe-ctxmenu--link {
+  width: 200px;
+}
+.my-copy-item {
+  font-weight: 700;
+  font-style: oblique;
 }
 .color-red {
   color: red;

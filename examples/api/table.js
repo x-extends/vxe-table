@@ -1601,6 +1601,15 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'className',
+            desc: '菜单面板的 className',
+            version: '1.15.25',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
