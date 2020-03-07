@@ -169,7 +169,7 @@ const apis = [
             desc: '渲染器名称',
             version: '',
             type: 'String',
-            enum: '',
+            enum: 'input, textarea, select, $input, $textarea, $select',
             defVal: '',
             list: []
           },
