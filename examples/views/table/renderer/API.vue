@@ -5,7 +5,7 @@
       通过渲染器你可以轻松实现筛选、单元格的复用，可以根据不同业务实现不一样的渲染器，这个功能将非常实用；比如这些插件 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a><br>
       <span class="orange">渲染器：抽象一切可复用的功能（类似组件的概念），实现非常简单的可配置化；</span><br>
       <span class="orange">插槽：自定义程度高，但需要重复写冗余代码，比较繁琐；</span><br>
-      <span class="red">建议通过 JSX 实现更加简单，可维护性更好</span><br>
+      <span class="red">建议通过 JSX 实现更加简单，可维护性更好，返回数组格式的 JSX</span><br>
       <span class="red">（注：实际开发中应该将业务封装成一个组件，不要把复杂的渲染逻辑写在渲染器中，渲染器只负责表格与自定义组件之间的对接关系）</span>
     </p>
     <h2>API</h2>
