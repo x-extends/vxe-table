@@ -237,6 +237,15 @@ const apis = [
             list: []
           },
           {
+            name: 'content',
+            desc: '渲染组件的内容（仅用于特殊组件）',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'defaultValue',
             desc: '项默认值（当表单被重置时的默认值）',
             version: '',

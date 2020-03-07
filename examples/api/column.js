@@ -367,6 +367,15 @@ const apis = [
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
             list: []
+          },
+          {
+            name: 'content',
+            desc: '渲染组件的内容（仅用于特殊组件）',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
@@ -448,6 +457,15 @@ const apis = [
             type: 'Object',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'content',
+            desc: '渲染组件的内容（仅用于特殊组件）',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
             list: []
           }
         ]
@@ -539,6 +557,15 @@ const apis = [
             type: 'Object',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'content',
+            desc: '渲染组件的内容（仅用于特殊组件）',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
             list: []
           },
           {
