@@ -332,14 +332,16 @@
     }
   }
   .vxe-header--column {
-    &.col--center {
-      .vxe-cell{
-        justify-content: center;
+    &.col--ellipsis {
+      &.col--center {
+        .vxe-cell{
+          justify-content: center;
+        }
       }
-    }
-    &.col--right {
-      .vxe-cell{
-        justify-content: flex-end;
+      &.col--right {
+        .vxe-cell{
+          justify-content: flex-end;
+        }
       }
     }
   }
