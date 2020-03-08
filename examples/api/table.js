@@ -2506,8 +2506,18 @@ const apis = [
       },
       {
         name: 'refreshData()',
-        desc: '同步刷新 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑（对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到）',
+        disabled: true,
+        desc: '即将废弃，请使用 revertData',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'syncData()',
+        desc: '同步 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑（对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到）',
+        version: '1.15.25',
         type: 'Promise',
         enum: '',
         defVal: '',

@@ -1174,6 +1174,15 @@ export default {
       return this.clearScroll()
     },
     refreshData () {
+      UtilTools.warn('vxe.error.delFunc', ['refreshData', 'syncData'])
+      return this.syncData()
+    },
+    /**
+     * 同步 data 数据
+     * 如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑
+     * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
+     */
+    syncData () {
       return this.$nextTick().then(() => {
         this.tableData = []
         return this.$nextTick().then(() => this.loadTableData(this.tableFullData))
@@ -2570,11 +2579,11 @@ export default {
           targetRow = items[index + 1]
         }
       } else {
-        const rowIndex = afterFullData.indexOf(currentRow)
-        if (isUpArrow && rowIndex > 0) {
-          targetRow = afterFullData[rowIndex - 1]
-        } else if (isDwArrow && rowIndex < afterFullData.length - 1) {
-          targetRow = afterFullData[rowIndex + 1]
+        const _rowIndex = this._getRowIndex(currentRow)
+        if (isUpArrow && _rowIndex > 0) {
+          targetRow = afterFullData[_rowIndex - 1]
+        } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
+          targetRow = afterFullData[_rowIndex + 1]
         }
       }
       if (targetRow) {
@@ -2587,13 +2596,14 @@ export default {
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
       const { afterFullData, visibleColumn } = this
       const params = Object.assign({}, args)
+      let _rowIndex = this._getRowIndex(params.row)
       evnt.preventDefault()
-      if (isUpArrow && params.rowIndex) {
-        params.rowIndex -= 1
-        params.row = afterFullData[params.rowIndex]
-      } else if (isDwArrow && params.rowIndex < afterFullData.length - 1) {
-        params.rowIndex += 1
-        params.row = afterFullData[params.rowIndex]
+      if (isUpArrow && _rowIndex) {
+        _rowIndex -= 1
+        params.row = afterFullData[_rowIndex]
+      } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
+        _rowIndex += 1
+        params.row = afterFullData[_rowIndex]
       } else if (isLeftArrow && params.columnIndex) {
         for (let len = params.columnIndex - 1; len >= 0; len--) {
           if (visibleColumn[len].editRender) {
@@ -2610,6 +2620,9 @@ export default {
             break
           }
         }
+      }
+      if (params.rowIndex > -1) {
+        params.rowIndex = _rowIndex
       }
       params.cell = DomTools.getCell(this, params)
       this.handleSelected(params, evnt)
