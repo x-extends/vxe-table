@@ -39,7 +39,7 @@
 
     <p class="tip">
       <grid-api-link name="vxe-grid"/> 方式：树表格的移动也是一样的<br>
-      由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="refreshData"/> 方法刷新数据<br>
+      由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="syncData"/> 方法刷新数据<br>
       <span class="red">（注：该示例仅供参考，具体逻辑请自行实现，例如：限制自己不能往自己子节点拖动等...）</span>
     </p>
 
@@ -258,7 +258,7 @@ export default {
                       tableTreeData.unshift(currRow)
                     }
                     // 如果变动了树层级，需要刷新数据
-                    xTable.refreshData()
+                    xTable.syncData()
                   }
                 })
               })
@@ -348,7 +348,7 @@ export default {
               tableTreeData.unshift(currRow)
             }
             // 如果变动了树层级，需要刷新数据
-            xTable.refreshData()
+            xTable.syncData()
           }
         })
       })

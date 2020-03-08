@@ -92,11 +92,11 @@ export default {
           targetRow = items[index + 1]
         }
       } else {
-        const rowIndex = afterFullData.indexOf(currentRow)
-        if (isUpArrow && rowIndex > 0) {
-          targetRow = afterFullData[rowIndex - 1]
-        } else if (isDwArrow && rowIndex < afterFullData.length - 1) {
-          targetRow = afterFullData[rowIndex + 1]
+        const _rowIndex = this._getRowIndex(currentRow)
+        if (isUpArrow && _rowIndex > 0) {
+          targetRow = afterFullData[_rowIndex - 1]
+        } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
+          targetRow = afterFullData[_rowIndex + 1]
         }
       }
       if (targetRow) {
@@ -109,13 +109,14 @@ export default {
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
       const { afterFullData, visibleColumn, isSeqColumn } = this
       const params = Object.assign({}, args)
+      let _rowIndex = this._getRowIndex(params.row)
       evnt.preventDefault()
-      if (isUpArrow && params.rowIndex) {
-        params.rowIndex -= 1
-        params.row = afterFullData[params.rowIndex]
-      } else if (isDwArrow && params.rowIndex < afterFullData.length - 1) {
-        params.rowIndex += 1
-        params.row = afterFullData[params.rowIndex]
+      if (isUpArrow && _rowIndex) {
+        _rowIndex -= 1
+        params.row = afterFullData[_rowIndex]
+      } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
+        _rowIndex += 1
+        params.row = afterFullData[_rowIndex]
       } else if (isLeftArrow && params.columnIndex) {
         for (let len = params.columnIndex - 1; len >= 0; len--) {
           if (!isSeqColumn(visibleColumn[len])) {
@@ -132,6 +133,9 @@ export default {
             break
           }
         }
+      }
+      if (params.rowIndex > -1) {
+        params.rowIndex = _rowIndex
       }
       this.scrollToRow(params.row, params.column).then(() => {
         params.cell = DomTools.getCell(this, params)

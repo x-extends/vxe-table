@@ -96,7 +96,7 @@ export default {
               }).then(newRow => {
                 // 插入到第一行
                 this.tableData.unshift(newRow)
-                xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+                xTree.syncData().then(() => xTree.setActiveRow(newRow))
               })
             },
             insertAtEvent () {
@@ -110,7 +110,7 @@ export default {
                 let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
                 if (rowNode) {
                   rowNode.items.splice(rowNode.index, 0, newRow)
-                  xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+                  xTree.syncData().then(() => xTree.setActiveRow(newRow))
                 }
               })
             },
@@ -146,7 +146,7 @@ export default {
       }).then(newRow => {
         // 插入到第一行
         this.tableData.unshift(newRow)
-        xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+        xTree.syncData().then(() => xTree.setActiveRow(newRow))
       })
     },
     insertAtEvent () {
@@ -160,7 +160,7 @@ export default {
         const rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
         if (rowNode) {
           rowNode.items.splice(rowNode.index, 0, newRow)
-          xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+          xTree.syncData().then(() => xTree.setActiveRow(newRow))
         }
       })
     },

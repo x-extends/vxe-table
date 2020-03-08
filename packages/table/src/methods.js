@@ -77,11 +77,11 @@ const Methods = {
     return this.clearScroll()
   },
   /**
-   * 同步刷新 data 数据
+   * 同步 data 数据
    * 如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑
    * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
    */
-  refreshData () {
+  syncData () {
     return this.$nextTick().then(() => {
       this.tableData = []
       return this.$nextTick().then(() => this.loadTableData(this.tableFullData))

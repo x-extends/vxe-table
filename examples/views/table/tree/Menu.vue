@@ -174,7 +174,7 @@ export default {
                 let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
                 if (rowNode) {
                   rowNode.items.splice(rowNode.index, 0, newRow)
-                  xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
+                  xTree.syncData().then(() => xTree.setActiveCell(newRow, column.property))
                 }
               })
             },
@@ -244,7 +244,7 @@ export default {
         const rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
         if (rowNode) {
           rowNode.items.splice(rowNode.index, 0, newRow)
-          xTree.refreshData().then(() => xTree.setActiveCell(newRow, column.property))
+          xTree.syncData().then(() => xTree.setActiveCell(newRow, column.property))
         }
       })
     },

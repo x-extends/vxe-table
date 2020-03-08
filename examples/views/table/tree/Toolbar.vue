@@ -120,7 +120,7 @@ export default {
               }).then(newRow => {
                 // 插入到第一行
                 this.tableData.unshift(newRow)
-                xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+                xTree.syncData().then(() => xTree.setActiveRow(newRow))
               })
             },
             removeEvent () {
@@ -135,7 +135,7 @@ export default {
                   this.removeList.push(restRow)
                 }
               })
-              xTree.refreshData()
+              xTree.syncData()
             },
             reload () {
               // 清除所有状态
@@ -191,7 +191,7 @@ export default {
       }).then(newRow => {
         // 插入到第一行
         this.tableData.unshift(newRow)
-        xTree.refreshData().then(() => xTree.setActiveRow(newRow))
+        xTree.syncData().then(() => xTree.setActiveRow(newRow))
       })
     },
     removeEvent () {
@@ -206,7 +206,7 @@ export default {
           this.removeList.push(restRow)
         }
       })
-      xTree.refreshData()
+      xTree.syncData()
     },
     reload () {
       // 清除所有状态

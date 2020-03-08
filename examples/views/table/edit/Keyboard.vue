@@ -6,9 +6,19 @@
       <span class="red">（注：isEdit 启用任意键覆盖式编辑的）</span>
     </p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
+        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
+        <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
       show-overflow
+      ref="xTable"
       height="500"
       :data="tableData"
       :mouse-config="{selected: true}"
@@ -59,9 +69,19 @@ export default {
       tableData: [],
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
+            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+            <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
+            <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
           show-overflow
+          ref="xTable"
           height="500"
           :data="tableData"
           :mouse-config="{selected: true}"
@@ -84,7 +104,24 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+          },
+          methods: {
+            async insertEvent () {
+              const record = {
+                sex: '1'
+              }
+              const { row: newRow } = await this.$refs.xTable.insertAt(record)
+              await this.$refs.xTable.setActiveCell(newRow, 'name')
+            },
+            getInsertEvent () {
+              const insertRecords = this.$refs.xTable.getInsertRecords()
+              this.$XModal.alert(insertRecords.length)
+            },
+            getSelectionEvent () {
+              const removeRecords = this.$refs.xTable.getCheckboxRecords()
+              this.$XModal.alert(removeRecords.length)
+            }
           }
         }
         `
@@ -92,12 +129,29 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    async insertEvent () {
+      const record = {
+        sex: '1'
+      }
+      const { row: newRow } = await this.$refs.xTable.insertAt(record)
+      await this.$refs.xTable.setActiveCell(newRow, 'name')
+    },
+    getInsertEvent () {
+      const insertRecords = this.$refs.xTable.getInsertRecords()
+      this.$XModal.alert(insertRecords.length)
+    },
+    getSelectionEvent () {
+      const removeRecords = this.$refs.xTable.getCheckboxRecords()
+      this.$XModal.alert(removeRecords.length)
+    }
   }
 }
 </script>
