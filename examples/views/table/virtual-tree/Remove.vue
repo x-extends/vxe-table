@@ -117,7 +117,7 @@ export default {
               xTree.insert(record).then(({ row }) => xTree.setActiveRow(row))
             },
             removeSelectEvent () {
-              this.$refs.xTree.removeSelecteds()
+              this.$refs.xTree.removeCheckboxRow()
             },
             removeRowEvent (row) {
               this.$refs.xTree.remove(row)
@@ -158,7 +158,7 @@ export default {
       xTree.insert(record).then(({ row }) => xTree.setActiveRow(row))
     },
     removeSelectEvent () {
-      this.$refs.xTree.removeSelecteds()
+      this.$refs.xTree.removeCheckboxRow()
     },
     removeRowEvent (row) {
       this.$refs.xTree.remove(row)

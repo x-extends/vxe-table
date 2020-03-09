@@ -430,18 +430,10 @@ export default {
       }
       return this.$nextTick()
     },
-    _getMouseSelecteds () {
-      UtilTools.warn('vxe.error.delFunc', ['getMouseSelecteds', 'getSelectedCell'])
-      return this.getSelectedCell()
-    },
-    _getMouseCheckeds () {
-      // UtilTools.warn('vxe.error.delFunc', ['getMouseCheckeds', 'getSelectedRanges'])
-      return this.getSelectedRanges()
-    },
     /**
      * 获取选中的单元格
      */
-    getSelectedCell () {
+    _getSelectedCell () {
       const { args, column } = this.editStore.selected
       if (args && column) {
         return Object.assign({}, args)
@@ -451,7 +443,7 @@ export default {
     /**
      * 获取所有选中的单元格
      */
-    getSelectedRanges () {
+    _getSelectedRanges () {
       const { checked } = this.editStore
       const { rowNodes = [] } = checked
       let columns = []

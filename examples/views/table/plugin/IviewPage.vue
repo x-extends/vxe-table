@@ -393,7 +393,7 @@ export default {
                 case 'remove': {
                   let selectRecords = this.$refs.xTable.getCheckboxRecords()
                   if (selectRecords.length) {
-                    this.$refs.xTable.removeSelecteds()
+                    this.$refs.xTable.removeCheckboxRow()
                   } else {
                     this.$Message.info('请至少选择一条数据！')
                   }
@@ -546,7 +546,7 @@ export default {
         case 'remove': {
           const selectRecords = this.$refs.xTable.getCheckboxRecords()
           if (selectRecords.length) {
-            this.$refs.xTable.removeSelecteds()
+            this.$refs.xTable.removeCheckboxRow()
           } else {
             this.$Message.info('请至少选择一条数据！')
           }

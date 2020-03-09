@@ -5,7 +5,7 @@
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
-        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="saveEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
@@ -65,7 +65,7 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
-            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="saveEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>

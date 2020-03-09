@@ -9,7 +9,7 @@
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
-        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
         <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
       </template>
@@ -72,7 +72,7 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
-            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
             <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
           </template>

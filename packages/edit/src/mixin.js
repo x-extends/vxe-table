@@ -114,11 +114,31 @@ export default {
       })
     },
     /**
-     * 删除选中数据
+     * 删除复选框选中的数据
      */
-    _removeSelecteds () {
+    _removeCheckboxRow () {
       return this.remove(this.getCheckboxRecords()).then(params => {
         this.clearCheckboxRow()
+        return params
+      })
+    },
+    /**
+     * 删除单选框选中的数据
+     */
+    _removeRadioRow () {
+      const radioRecord = this.getRadioRecord()
+      return this.remove(radioRecord || []).then(params => {
+        this.clearRadioRow()
+        return params
+      })
+    },
+    /**
+     * 删除当前行选中的数据
+     */
+    _removeCurrentRow () {
+      const currentRecord = this.getCurrentRecord()
+      return this.remove(currentRecord || []).then(params => {
+        this.clearCurrentRow()
         return params
       })
     },
