@@ -245,7 +245,7 @@ const apis = [
     list: [
       {
         name: '*',
-        desc: '在需要时触发该事件',
+        desc: '原生事件',
         version: '',
         type: '',
         enum: '',
