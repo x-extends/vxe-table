@@ -45,7 +45,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, $listeners, type, isText, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible } = this
+    const { $scopedSlots, $listeners, type, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible } = this
     return $scopedSlots.dropdowns ? h('div', {
       class: ['vxe-button--dropdown', {
         [`size--${vSize}`]: vSize,
@@ -55,7 +55,7 @@ export default {
       h('button', {
         class: ['vxe-button', `type--${btnType}`, {
           [`size--${vSize}`]: vSize,
-          [`theme--${btnStatus}`]: btnStatus && !isText,
+          [`theme--${btnStatus}`]: btnStatus,
           'is--disabled': disabled || loading,
           'is--loading': loading
         }],
@@ -93,7 +93,7 @@ export default {
     ]) : h('button', {
       class: ['vxe-button', `type--${btnType}`, {
         [`size--${vSize}`]: vSize,
-        [`theme--${btnStatus}`]: btnStatus && !isText,
+        [`theme--${btnStatus}`]: btnStatus,
         'is--disabled': disabled || loading,
         'is--loading': loading
       }],
