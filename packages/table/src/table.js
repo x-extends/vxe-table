@@ -1164,6 +1164,7 @@ export default {
       this.clearFilter()
       this.clearCurrentRow()
       this.clearCurrentColumn()
+      this.clearRadioRow()
       this.clearCheckboxRow()
       this.clearCheckboxReserve()
       this.clearRowExpand()
@@ -1552,12 +1553,36 @@ export default {
         return { row: rest && rest.length ? rest[rest.length - 1] : null, rows: rest }
       })
     },
-    /**
-     * 删除选中数据
-     */
     removeSelecteds () {
+      UtilTools.warn('vxe.error.delFunc', ['removeSelecteds', 'removeCheckboxRow'])
+      return this.removeCheckboxRow()
+    },
+    /**
+     * 删除复选框选中的数据
+     */
+    removeCheckboxRow () {
       return this.remove(this.getCheckboxRecords()).then(params => {
         this.clearCheckboxRow()
+        return params
+      })
+    },
+    /**
+     * 删除单选框选中的数据
+     */
+    removeRadioRow () {
+      const radioRecord = this.getRadioRecord()
+      return this.remove(radioRecord || []).then(params => {
+        this.clearRadioRow()
+        return params
+      })
+    },
+    /**
+     * 删除当前行选中的数据
+     */
+    removeCurrentRow () {
+      const currentRecord = this.getCurrentRecord()
+      return this.remove(currentRecord || []).then(params => {
+        this.clearCurrentRow()
         return params
       })
     },
@@ -1964,11 +1989,11 @@ export default {
       return this.recalculate(true)
     },
     resetResizable () {
-      // UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
+      UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
       return this.handleResetResizable()
     },
     reloadCustoms (customColumns) {
-      // UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
+      UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
       return this.$nextTick().then(() => {
         this.mergeCustomColumn(customColumns)
         return this.refreshColumn().then(() => this.tableFullColumn)
@@ -3744,7 +3769,7 @@ export default {
     },
     // 在 v3.0 中废弃 getActiveRow
     getActiveRow () {
-      // UtilTools.warn('vxe.error.delFunc', ['getActiveRow', 'getActiveRecord'])
+      UtilTools.warn('vxe.error.delFunc', ['getActiveRow', 'getActiveRecord'])
       return this.getActiveRecord()
     },
     getActiveRecord () {
@@ -3757,7 +3782,7 @@ export default {
     },
     // v3 废弃
     hasActiveRow (row) {
-      UtilTools.warn('vxe.error.delFunc', ['hasActiveRow', 'isActiveByRow'])
+      // UtilTools.warn('vxe.error.delFunc', ['hasActiveRow', 'isActiveByRow'])
       return this.isActiveByRow(row)
     },
     /**
@@ -4661,7 +4686,7 @@ export default {
       return this.scrollYLoad
     },
     getVirtualScroller () {
-      // UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getTableScroll'])
+      UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getTableScroll'])
       return this.getTableScroll()
     },
     /**

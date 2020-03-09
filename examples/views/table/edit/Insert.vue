@@ -7,7 +7,7 @@
         <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
         <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
         <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
-        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
         <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
       </template>
@@ -54,7 +54,7 @@ export default {
             <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
             <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
             <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
-            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
             <vxe-button icon="fa fa-save" @click="getInsertEvent">获取新增</vxe-button>
           </template>

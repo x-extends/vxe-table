@@ -387,7 +387,7 @@ export default {
           this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => this.commitProxy(...(['delete'].concat(args))))
           break
         case 'remove_selection':
-          this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeSelecteds())
+          this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeCheckboxRow())
           break
         case 'import':
           this.importData(btnParams)

@@ -16,7 +16,7 @@
         <vxe-button>
           <template>删除操作</template>
           <template v-slot:dropdowns>
-            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
             <vxe-button @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
             <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
@@ -101,7 +101,7 @@ export default {
             <vxe-button>
               <template>删除操作</template>
               <template v-slot:dropdowns>
-                <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+                <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
                 <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
                 <vxe-button @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
                 <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
