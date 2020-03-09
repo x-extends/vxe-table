@@ -2663,7 +2663,7 @@ const apis = [
       {
         name: 'removeCheckboxRow()',
         desc: '删除复选框选中的行数据',
-        version: '1.15.25',
+        version: '1.15.26',
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: '',
@@ -2672,7 +2672,7 @@ const apis = [
       {
         name: 'removeRadioRow()',
         desc: '删除单选框选中的行数据',
-        version: '1.15.25',
+        version: '1.15.26',
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: '',
@@ -2681,7 +2681,7 @@ const apis = [
       {
         name: 'removeCurrentRow()',
         desc: '删除当前行选中的行数据',
-        version: '1.15.25',
+        version: '1.15.26',
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: '',
