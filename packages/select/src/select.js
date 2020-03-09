@@ -8,44 +8,43 @@ function findOffsetOption (groupList, optionValue, isUpArrow) {
   let isMatchOption = false
   for (let gIndex = 0; gIndex < groupList.length; gIndex++) {
     const group = groupList[gIndex]
-    if (group.children.length) {
-      for (let index = 0; index < group.children.length; index++) {
-        const comp = group.children[index]
+    if (group.options) {
+      for (let index = 0; index < group.options.length; index++) {
+        const option = group.options[index]
         if (!firstOption) {
-          firstOption = comp
+          firstOption = option
         }
         if (isUpArrow) {
-          if (optionValue === comp.value) {
+          if (optionValue === option.value) {
             return { offsetOption: prevOption, firstOption }
           }
         } else {
           if (isMatchOption) {
-            return { offsetOption: comp, firstOption }
+            return { offsetOption: option, firstOption }
           }
-          if (optionValue === comp.value) {
+          if (optionValue === option.value) {
             isMatchOption = true
           }
         }
-        prevOption = comp
+        prevOption = option
       }
     } else {
-      const comp = group.comp
       if (!firstOption) {
-        firstOption = comp
+        firstOption = group
       }
       if (isUpArrow) {
-        if (optionValue === comp.value) {
+        if (optionValue === group.value) {
           return { offsetOption: prevOption, firstOption }
         }
       } else {
         if (isMatchOption) {
-          return { offsetOption: comp, firstOption }
+          return { offsetOption: group, firstOption }
         }
-        if (optionValue === comp.value) {
+        if (optionValue === group.value) {
           isMatchOption = true
         }
       }
-      prevOption = comp
+      prevOption = group
     }
   }
   return { firstOption }
@@ -54,16 +53,16 @@ function findOffsetOption (groupList, optionValue, isUpArrow) {
 function findOption (groupList, optionValue) {
   for (let gIndex = 0; gIndex < groupList.length; gIndex++) {
     const group = groupList[gIndex]
-    if (group.children.length) {
-      for (let index = 0; index < group.children.length; index++) {
-        const comp = group.children[index]
-        if (optionValue === comp.value) {
-          return comp
+    if (group.options) {
+      for (let index = 0; index < group.options.length; index++) {
+        const option = group.options[index]
+        if (optionValue === option.value) {
+          return option
         }
       }
     } else {
-      if (optionValue === group.comp.value) {
-        return group.comp
+      if (optionValue === group.value) {
+        return group
       }
     }
   }
@@ -74,8 +73,9 @@ function renderOption (h, _vm, options) {
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
-  return options ? options.map(option => {
+  return options ? options.map((option, cIndex) => {
     return h('vxe-option', {
+      key: cIndex,
       props: {
         label: option[labelProp],
         value: option[valueProp],
@@ -89,8 +89,9 @@ function renderOptgroup (h, _vm) {
   const { optionGroups, optionGroupProps = {} } = _vm
   const groupOptions = optionGroupProps.options || 'options'
   const groupLabel = optionGroupProps.label || 'label'
-  return optionGroups ? optionGroups.map(group => {
+  return optionGroups ? optionGroups.map((group, gIndex) => {
     return h('vxe-optgroup', {
+      key: gIndex,
       props: {
         label: group[groupLabel]
       }
@@ -124,9 +125,10 @@ export default {
   },
   data () {
     return {
-      // 使用技巧去更新视图
       updateFlag: 0,
       panelIndex: 0,
+      optionList: [],
+      allOptList: [],
       panelStyle: null,
       panelPlacement: null,
       currentValue: null,
@@ -140,13 +142,16 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     selectLabel () {
-      if (this.updateFlag) {
-        const selectOption = findOption(this.getOptComps(), this.value)
-        if (selectOption) {
-          return selectOption.label
-        }
+      const selectOption = findOption(this.allOptList, this.value)
+      if (selectOption) {
+        return selectOption.label
       }
       return ''
+    }
+  },
+  watch: {
+    updateFlag () {
+      this.updateOptComps()
     }
   },
   created () {
@@ -221,27 +226,44 @@ export default {
     ])
   },
   methods: {
-    getOptComps () {
-      const optComps = []
-      if (!this.disabled) {
-        this.$children.forEach(option => {
-          if (!option.isDisabled && option.$xeselect) {
-            let children = option.$children
-            if (children.length) {
-              children = children.filter(option => !option.isDisabled && option.$xeselect && option.$xeoptgroup)
-              if (children.length) {
-                optComps.push({ comp: option, children })
+    updateOptions () {
+      this.updateFlag++
+    },
+    updateOptComps () {
+      return this.$nextTick().then(() => {
+        const oList = []
+        const allList = []
+        this.$children.forEach(group => {
+          if (group.$xeselect) {
+            const optChilds = []
+            const allOptChilds = []
+            const isGroup = group.$children.length
+            group.$children.forEach(option => {
+              if (option.$xeselect && option.$xeoptgroup) {
+                if (!option.isDisabled) {
+                  optChilds.push({ label: option.label, value: option.value, disabled: option.isDisabled, id: option.id })
+                }
+                allOptChilds.push({ label: option.label, value: option.value, disabled: option.isDisabled, id: option.id })
+              }
+            })
+            if (isGroup) {
+              if (optChilds.length) {
+                oList.push({ label: group.label, disabled: group.disabled, options: optChilds })
+              }
+              if (allOptChilds.length) {
+                allList.push({ label: group.label, disabled: group.disabled, options: allOptChilds })
               }
             } else {
-              optComps.push({ comp: option, children })
+              if (!group.disabled) {
+                oList.push({ label: group.label, value: group.value, disabled: group.disabled, id: group.id })
+              }
+              allList.push({ label: group.label, value: group.value, disabled: group.disabled, id: group.id })
             }
           }
         })
-      }
-      return optComps
-    },
-    updateStatus () {
-      this.updateFlag++
+        this.optionList = oList
+        this.allOptList = allList
+      })
     },
     setCurrentOption (option) {
       if (option) {
@@ -297,7 +319,7 @@ export default {
             this.changeOptionEvent(evnt, currentValue)
           } else if (isUpArrow || isDwArrow) {
             evnt.preventDefault()
-            const groupList = this.getOptComps()
+            const groupList = this.optionList
             let { offsetOption, firstOption } = findOffsetOption(groupList, currentValue, isUpArrow)
             if (!offsetOption && !findOption(groupList, currentValue)) {
               offsetOption = firstOption
@@ -345,7 +367,7 @@ export default {
         this.animatVisible = true
         setTimeout(() => {
           this.visiblePanel = true
-          this.setCurrentOption(findOption(this.getOptComps(), this.value))
+          this.setCurrentOption(findOption(this.allOptList, this.value))
         }, 10)
         this.updateZindex()
         this.updatePlacement()

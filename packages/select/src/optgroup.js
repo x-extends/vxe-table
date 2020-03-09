@@ -22,15 +22,11 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     }
   },
-  mounted () {
-    this.$xeselect.updateStatus()
-  },
-  destroyed () {
-    this.$xeselect.updateStatus()
-  },
   render (h) {
     return h('div', {
-      class: 'vxe-optgroup'
+      class: ['vxe-optgroup', {
+        'is--disabled': this.disabled
+      }]
     }, [
       h('div', {
         class: 'vxe-optgroup--title'
