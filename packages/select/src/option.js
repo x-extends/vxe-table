@@ -32,16 +32,11 @@ export default {
       return ($xeoptgroup && $xeoptgroup.disabled) || disabled
     }
   },
-  warch: {
-    value () {
-      this.updateView()
-    }
-  },
   mounted () {
-    this.updateView()
+    this.$xeselect.updateOptions()
   },
   destroyed () {
-    this.updateView()
+    this.$xeselect.updateOptions()
   },
   render (h) {
     const { $slots, $xeselect, id, isDisabled, value } = this
@@ -61,9 +56,6 @@ export default {
     }, $slots.default || UtilTools.getFuncText(this.label))
   },
   methods: {
-    updateView () {
-      this.$xeselect.updateStatus()
-    },
     optionEvent (evnt) {
       if (!this.isDisabled) {
         this.$xeselect.changeOptionEvent(evnt, this.value)

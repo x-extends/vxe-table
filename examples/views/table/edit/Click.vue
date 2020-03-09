@@ -15,6 +15,7 @@
       <vxe-table-column field="sex6" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value2', label: 'label'}}"></vxe-table-column>
       <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -38,6 +39,7 @@
       <vxe-table-column field="sex2" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>
       <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'input', props: {type: 'text'}}"></vxe-table-column>
     </vxe-table>
 
@@ -74,6 +76,7 @@ export default {
           <vxe-table-column field="sex6" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value2', label: 'label'}}"></vxe-table-column>
           <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -116,6 +119,7 @@ export default {
           <vxe-table-column field="sex2" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>
           <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,

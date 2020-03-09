@@ -18,8 +18,6 @@
       :span-method="rowspanMethod"
       :data="tableData"
       :edit-rules="validRules"
-      :mouse-config="{selected: true}"
-      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="key" title="Key" :edit-render="{name: 'input', props: {placeholder: '请输入键值'}}"></vxe-table-column>
@@ -46,7 +44,6 @@ export default {
       loading: false,
       tableData: [],
       optionList: [
-        { label: '--请选择--', value: null },
         { label: '中文', value: 'zh_CN' },
         { label: 'English', value: 'en_US' },
         { label: 'Español', value: 'es' },
@@ -81,8 +78,6 @@ export default {
           :span-method="rowspanMethod"
           :data="tableData"
           :edit-rules="validRules"
-          :mouse-config="{selected: true}"
-          :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="key" title="Key" :edit-render="{name: 'input', props: {placeholder: '请输入键值'}}"></vxe-table-column>
@@ -97,7 +92,6 @@ export default {
               loading: false,
               tableData: [],
               optionList: [
-                { label: '--请选择--', value: null },
                 { label: '中文', value: 'zh_CN' },
                 { label: 'English', value: 'en_US' },
                 { label: 'Español', value: 'es' },
