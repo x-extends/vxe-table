@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
+import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 
 const inputEventTypes = ['input', 'textarea', '$input', '$textarea']
@@ -10,6 +11,10 @@ function parseDate (value, props) {
 
 function getFormatDate (value, props, defaultFormat) {
   return XEUtils.toDateString(parseDate(value, props), props.labelFormat || defaultFormat)
+}
+
+function getLabelFormatDate (value, props) {
+  return getFormatDate(value, props, GlobalConfig.i18n(`vxe.input.date.labelFormat.${props.type}`))
 }
 
 function getEventUpdateType (renderOpts) {
@@ -67,7 +72,7 @@ function getNativeEvents (renderOpts, params) {
 function getDefaultEvents (renderOpts, params) {
   const { events } = renderOpts
   const { $table } = params
-  const type = getEventUpdateType(renderOpts)
+  const type = 'input'
   const on = {
     [type] (obj, evnt) {
       $table.updateStatus(params)
@@ -237,10 +242,9 @@ function getNativeFilterEvents (item, renderOpts, params) {
 function getDefaultFilterEvents (item, renderOpts, params) {
   const { column } = params
   const { events } = renderOpts
-  const type = getEventUpdateType(renderOpts)
+  const type = 'input'
   const on = {
     [type] (evnt) {
-      item.data = evnt.target.value
       handleConfirmFilter(params, column, !!item.data, item)
       if (events && events[type]) {
         events[type](params, evnt)
@@ -374,7 +378,7 @@ function getNativeFormEvents (renderOpts, params) {
 function getDefaultFormEvents (renderOpts, params) {
   const { $form } = params
   const { events } = renderOpts
-  const type = getEventUpdateType(renderOpts)
+  const type = 'input'
   const on = {
     [type] ({ value: itemValue }, evnt) {
       $form.updateStatus(params, itemValue)
@@ -574,16 +578,8 @@ const renderMap = {
       const { props = {} } = renderOpts
       const { row, column } = params
       let cellValue = XEUtils.get(row, column.property)
-      switch (props.type) {
-        case 'date':
-          cellValue = getFormatDate(cellValue, props, 'yyyy-MM-dd')
-          break
-        case 'month':
-          cellValue = getFormatDate(cellValue, props, 'yyyy-MM')
-          break
-        case 'year':
-          cellValue = getFormatDate(cellValue, props, 'yyyy')
-          break
+      if (['date', 'week', 'week', 'year'].indexOf(props.type) > -1) {
+        cellValue = getLabelFormatDate(cellValue, props)
       }
       return cellValue
     },
