@@ -149,11 +149,18 @@ export default {
         m11: '11 月',
         m12: '12 月',
         today: '今天',
-        prevMonth: '上个月',
-        nextMonth: '下个月',
+        prevMonth: '上個月',
+        nextMonth: '下個月',
         monthLabel: '{{0}} 年',
         dayLabel: '{{0}} 年 {{1}}',
+        labelFormat: {
+          date: 'yyyy-MM-dd',
+          week: 'yyyy 年第 WW 周',
+          month: 'yyyy-MM',
+          year: 'yyyy'
+        },
         weeks: {
+          w: '周',
           w0: '周日',
           w1: '周一',
           w2: '周二',
