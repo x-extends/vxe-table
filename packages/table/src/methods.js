@@ -57,6 +57,7 @@ const Methods = {
     this.clearSort()
     this.clearCurrentRow()
     this.clearCurrentColumn()
+    this.clearRadioRow()
     this.clearCheckboxRow()
     this.clearCheckboxReserve()
     this.clearRowExpand()
@@ -3244,7 +3245,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

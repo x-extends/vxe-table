@@ -113,12 +113,36 @@ export default {
         return { row: rest.length ? rest[rest.length - 1] : null, rows: rest }
       })
     },
-    /**
-     * 删除选中数据
-     */
     _removeSelecteds () {
+      // UtilTools.warn('vxe.error.delFunc', ['removeSelecteds', 'removeCheckboxRow'])
+      return this.removeCheckboxRow()
+    },
+    /**
+     * 删除复选框选中的数据
+     */
+    _removeCheckboxRow () {
       return this.remove(this.getCheckboxRecords()).then(params => {
         this.clearCheckboxRow()
+        return params
+      })
+    },
+    /**
+     * 删除单选框选中的数据
+     */
+    _removeRadioRow () {
+      const radioRecord = this.getRadioRecord()
+      return this.remove(radioRecord || []).then(params => {
+        this.clearRadioRow()
+        return params
+      })
+    },
+    /**
+     * 删除当前行选中的数据
+     */
+    _removeCurrentRow () {
+      const currentRecord = this.getCurrentRecord()
+      return this.remove(currentRecord || []).then(params => {
+        this.clearCurrentRow()
         return params
       })
     },
@@ -261,7 +285,7 @@ export default {
     },
     // 在 v3.0 中废弃 getActiveRow
     _getActiveRow () {
-      // UtilTools.warn('vxe.error.delFunc', ['getActiveRow', 'getActiveRecord'])
+      UtilTools.warn('vxe.error.delFunc', ['getActiveRow', 'getActiveRecord'])
       return this.getActiveRecord()
     },
     _getActiveRecord () {

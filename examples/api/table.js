@@ -2570,8 +2570,36 @@ const apis = [
       },
       {
         name: 'removeSelecteds()',
-        desc: '删除已选中的所有行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 removeCheckboxRow',
         version: '',
+        type: 'Promise<{row, rows}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'removeCheckboxRow()',
+        desc: '删除复选框选中的行数据',
+        version: '2.8.20',
+        type: 'Promise<{row, rows}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'removeRadioRow()',
+        desc: '删除单选框选中的行数据',
+        version: '2.8.20',
+        type: 'Promise<{row, rows}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'removeCurrentRow()',
+        desc: '删除当前行选中的行数据',
+        version: '2.8.20',
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: '',

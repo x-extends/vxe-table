@@ -6,7 +6,7 @@
       <template v-slot:buttons>
         <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
         <vxe-button @click="removeEvent(tableData[1])">删除第2行</vxe-button>
-        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
       </template>
@@ -47,7 +47,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
             <vxe-button @click="removeEvent(tableData[1])">删除第2行</vxe-button>
-            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
           </template>
