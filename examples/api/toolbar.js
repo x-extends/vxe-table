@@ -291,6 +291,24 @@ const apis = [
             list: []
           },
           {
+            name: 'type',
+            desc: '按钮类型',
+            version: '',
+            type: 'String',
+            enum: 'text,submit,reset,button',
+            defVal: 'button',
+            list: []
+          },
+          {
+            name: 'status',
+            desc: '按钮状态',
+            version: '',
+            type: 'String',
+            enum: 'primary, success, info, warning, danger',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'code',
             desc: '指令编码',
             version: '',
@@ -340,6 +358,24 @@ const apis = [
                 version: '',
                 type: 'String',
                 enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'type',
+                desc: '按钮类型',
+                version: '',
+                type: 'String',
+                enum: 'text,submit,reset,button',
+                defVal: 'button',
+                list: []
+              },
+              {
+                name: 'status',
+                desc: '按钮状态',
+                version: '',
+                type: 'String',
+                enum: 'primary, success, info, warning, danger',
                 defVal: '',
                 list: []
               },
@@ -414,42 +450,6 @@ const apis = [
                 type: 'Object',
                 enum: '',
                 defVal: '',
-                list: []
-              },
-              {
-                name: 'options',
-                desc: '只对 name=select 有效，下拉选项列表',
-                version: '',
-                type: 'Array',
-                enum: '',
-                defVal: '',
-                list: []
-              },
-              {
-                name: 'optionProps',
-                desc: '只对 name=select 有效，下拉选项属性参数配置',
-                version: '',
-                type: 'Object',
-                enum: '',
-                defVal: '{ value, label, disabled }',
-                list: []
-              },
-              {
-                name: 'optionGroups',
-                desc: '只对 name=select 有效，下拉分组选项列表',
-                version: '',
-                type: 'Array',
-                enum: '',
-                defVal: '',
-                list: []
-              },
-              {
-                name: 'optionGroupProps',
-                desc: '只对 name=select 有效，下拉分组选项属性参数配置',
-                version: '',
-                type: 'Object',
-                enum: '',
-                defVal: '{ options, label }',
                 list: []
               },
               {

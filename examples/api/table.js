@@ -3294,16 +3294,6 @@ const apis = [
         list: []
       },
       {
-        name: 'filter(field, callback)',
-        abandoned: true,
-        desc: '手动对表格进行筛选，还可以通过 callback 返回新的选项列表（废弃的 API 不建议使用，被 setFilter 方法取代）',
-        version: '',
-        type: 'Promise<options>',
-        enum: '',
-        defVal: 'field: string, callback?: Function',
-        list: []
-      },
-      {
         name: 'recalculate()',
         desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、更新列宽...等）',
         version: '',

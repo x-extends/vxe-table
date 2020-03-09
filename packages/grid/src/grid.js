@@ -202,10 +202,7 @@ export default {
     }
   },
   created () {
-    const { customs, data, proxyConfig } = this
-    if (customs) {
-      UtilTools.warn('vxe.error.removeProp', ['customs'])
-    }
+    const { data, proxyConfig } = this
     if (data && proxyConfig) {
       console.warn('[vxe-grid] There is a conflict between the props proxy-config and data.')
     }

@@ -423,10 +423,6 @@ const Methods = {
       return isArr ? rows : rows[0]
     })
   },
-  revert (...args) {
-    UtilTools.warn('vxe.error.delFunc', ['revert', 'revertData'])
-    return this.revertData(...args)
-  },
   /**
    * 还原数据
    * 如果不传任何参数，则还原整个表格
@@ -611,7 +607,7 @@ const Methods = {
    * 如果存在筛选条件，继续处理
    */
   updateAfterFullData () {
-    const { visibleColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
+    const { visibleColumn, tableFullData, filterOpts, sortOpts } = this
     let tableData = tableFullData.slice(0)
     const column = XEUtils.find(visibleColumn, column => column.order)
     const filterColumns = []
@@ -631,7 +627,7 @@ const Methods = {
     if (filterColumns.length) {
       tableData = tableData.filter(row => {
         return filterColumns.every(({ column, valueList, itemList }) => {
-          if (valueList.length && !(filterOpts.remote || remoteFilter)) {
+          if (valueList.length && !filterOpts.remote) {
             const { filterRender, property } = column
             let { filterMethod } = column
             const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
@@ -645,8 +641,8 @@ const Methods = {
       })
     }
     if (column && column.order) {
-      const allSortMethod = sortOpts.sortMethod || this.sortMethod
-      const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
+      const allSortMethod = sortOpts.sortMethod
+      const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : sortOpts.remote
       if (!isRemote) {
         if (allSortMethod) {
           tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
@@ -712,14 +708,6 @@ const Methods = {
     this.$nextTick(() => setTimeout(this.recalculate))
   },
   /**
-   * 手动重置列的所有操作，还原到初始状态
-   * 如果已关联工具栏，则会同步更新
-   */
-  resetAll () {
-    UtilTools.warn('vxe.error.delFunc', ['resetAll', 'resetColumn'])
-    this.resetColumn(true)
-  },
-  /**
    * 隐藏指定列
    * @param {ColumnConfig} column 列配置
    */
@@ -748,10 +736,6 @@ const Methods = {
     }
     return this.$nextTick()
   },
-  resetCustoms () {
-    UtilTools.warn('vxe.error.delFunc', ['resetCustoms', 'resetColumn'])
-    return this.resetColumn()
-  },
   handleVisibleColumn (column, visible) {
     if (arguments.length) {
       column.visible = visible
@@ -778,10 +762,6 @@ const Methods = {
     }
     this.analyColumnWidth()
     return this.recalculate(true)
-  },
-  resetResizable () {
-    UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
-    return this.handleResetResizable()
   },
   /**
    * 刷新列信息
@@ -1676,10 +1656,6 @@ const Methods = {
     rows.forEach(row => this.handleSelectRow({ row }, !!value))
     return this.$nextTick()
   },
-  isCheckedByRow (row) {
-    UtilTools.warn('vxe.error.delFunc', ['isCheckedByRow', 'isCheckedByCheckboxRow'])
-    return this.isCheckedByCheckboxRow(row)
-  },
   isCheckedByCheckboxRow (row) {
     const { checkField: property } = this.checkboxOpts
     if (property) {
@@ -2267,10 +2243,10 @@ const Methods = {
     }
   },
   sort (field, order) {
-    const { visibleColumn, tableFullColumn, remoteSort, sortOpts } = this
+    const { visibleColumn, tableFullColumn, sortOpts } = this
     const column = XEUtils.find(visibleColumn, item => item.property === field)
     if (column) {
-      const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
+      const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : sortOpts.remote
       if (column.sortable || column.remoteSort) {
         if (!order) {
           order = column.order === 'desc' ? 'asc' : 'desc'
@@ -2676,10 +2652,6 @@ const Methods = {
     const isExists = this.treeExpandeds.length
     this.treeExpandeds = []
     return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
-  },
-  getVirtualScroller () {
-    UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getTableScroll'])
-    return this.getTableScroll()
   },
   /**
    * 获取表格的滚动状态

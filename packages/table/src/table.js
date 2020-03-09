@@ -138,12 +138,6 @@ export default {
     showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderOverflow },
     // 设置表尾所有内容过长时显示为省略号
     showFooterOverflow: { type: [Boolean, String], default: () => GlobalConfig.showFooterOverflow },
-    // 是否所有服务端筛选
-    remoteFilter: Boolean,
-    // 是否所有服务端排序
-    remoteSort: Boolean,
-    // 自定义所有列的排序方法
-    sortMethod: Function,
     // 所有列宽度
     columnWidth: [Number, String],
     // 所有列最小宽度，把剩余宽度按比例分配
@@ -610,26 +604,11 @@ export default {
     if (!UtilTools.getRowkey(this)) {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
-    if (this.startIndex) {
-      UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
-    }
     if (editOpts.showStatus && !this.keepSource) {
       UtilTools.warn('vxe.error.reqProp', ['keep-source'])
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
       UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
-    }
-    if (this.customs) {
-      UtilTools.warn('vxe.error.removeProp', ['customs'])
-    }
-    if (this.sortMethod) {
-      UtilTools.warn('vxe.error.delProp', ['sort-method', 'sort-config.sortMethod'])
-    }
-    if (this.remoteSort) {
-      UtilTools.warn('vxe.error.delProp', ['remote-sort', 'sort-config.remote'])
-    }
-    if (this.remoteFilter) {
-      UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
     if (editConfig && mouseConfig && (mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
       UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
@@ -685,9 +664,6 @@ export default {
   mounted () {
     if (this.autoResize && VXETable._resize) {
       this.bindResize()
-    }
-    if (!this.$xegrid && this.customs) {
-      UtilTools.warn('vxe.error.removeProp', ['customs'])
     }
     document.body.appendChild(this.$refs.tableWrapper)
     this.preventEvent(null, 'mounted', { $table: this })

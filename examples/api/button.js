@@ -48,7 +48,7 @@ const apis = [
         descKey: 'app.api.button.desc.status',
         version: '',
         type: 'String',
-        enum: 'primary',
+        enum: 'primary, success, info, warning, danger',
         defVal: '',
         list: []
       },

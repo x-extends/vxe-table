@@ -12,7 +12,7 @@ function renderBtns (h, _vm) {
     return $scopedSlots.buttons.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
   }
   return buttons.map(item => {
-    const { name, visible, icon, type, disabled, loading, dropdowns, buttonRender } = item
+    const { name, visible, icon, type, status, disabled, loading, dropdowns, buttonRender } = item
     const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
     if (visible === false) {
       return _e()
@@ -29,6 +29,7 @@ function renderBtns (h, _vm) {
       props: {
         icon,
         type,
+        status,
         disabled,
         loading
       },
@@ -466,16 +467,6 @@ export default {
         localStorage.setItem(resizableOpts.storageKey, XEUtils.toJSONString(columnWidthStorageMap))
       }
       return this.$nextTick()
-    },
-    hideColumn (column) {
-      UtilTools.warn('vxe.error.delFunc', ['hideColumn', 'table.hideColumn'])
-      column.visible = false
-      return this.handleCustoms()
-    },
-    showColumn (column) {
-      UtilTools.warn('vxe.error.delFunc', ['showColumn', 'table.showColumn'])
-      column.visible = true
-      return this.handleCustoms()
     },
     resetCustoms () {
       return this.handleCustoms()

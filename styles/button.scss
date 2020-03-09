@@ -1,16 +1,28 @@
 /**Variable**/
 @import './helpers/mixin.scss';
 
-%ButtonHover {
-  color: lighten($vxe-primary-color, 6%);
-  border-color: lighten($vxe-primary-color, 10%);
-}
-
-%ButtonPrimaryHover {
-  color: #fff;
-  background-color: lighten($vxe-primary-color, 4%);
-  border-color: lighten($vxe-primary-color, 4%);
-}
+$btnThemeList: (
+  (
+    name: "primary",
+    color: $vxe-primary-color
+  ),
+  (
+    name: "success",
+    color: $vxe-success-color
+  ),
+  (
+    name: "info",
+    color: $vxe-info-color
+  ),
+  (
+    name: "warning",
+    color: $vxe-warning-color
+  ),
+  (
+    name: "danger",
+    color: $vxe-danger-color
+  )
+);
 
 .vxe-button {
   position: relative;
@@ -53,6 +65,21 @@
         color: lighten($vxe-primary-color, 10%);
       }
     }
+    @for $index from 0 to length($btnThemeList) {
+      $item: nth($btnThemeList, $index + 1);
+      $color: map-get($item, color);
+      &.theme--#{map-get($item, name)} {
+        color: $color;
+        &:not(.is--disabled) {
+          &:hover {
+            color: lighten($color, 10%);
+          }
+        }
+        &.is--disabled {
+          color: lighten($color, 20%);
+        }
+      }
+    }
   }
   &.type--button {
     padding: 0 1em;
@@ -69,40 +96,44 @@
         box-shadow: 0 0 0.2em 0 $vxe-primary-color;
       }
     }
-    &.theme--primary {
-      color: #fff;
-      .vxe-button--icon {
-        border-color: #fff;
+    &:not(.is--disabled) {
+      &:hover {
+        color: lighten($vxe-primary-color, 6%);
       }
-      &:not(.is--disabled) {
-        border-color: $vxe-primary-color;
-        background-color: $vxe-primary-color;
-        &:hover {
-          @extend %ButtonPrimaryHover;
-        }
-        &:active {
-          color: #fff;
-          background-color: darken($vxe-primary-color, 3%);
-          border-color: darken($vxe-primary-color, 3%);
-        }
-      }
-      &.is--disabled {
-        border-color: #a0cfff;
-        background-color: #a0cfff;
-      }
-      &.is--loading {
-        border-color: $vxe-primary-color;
-        background-color: $vxe-primary-color;
+      &:active {
+        color: darken($vxe-primary-color, 3%);
+        border-color: darken($vxe-primary-color, 3%);
       }
     }
-    &:not(.theme--primary) {
-      &:not(.is--disabled) {
-        &:hover {
-          @extend %ButtonHover;
+    @for $index from 0 to length($btnThemeList) {
+      $item: nth($btnThemeList, $index + 1);
+      $color: map-get($item, color);
+      &.theme--#{map-get($item, name)} {
+        color: #fff;
+        .vxe-button--icon {
+          border-color: #fff;
         }
-        &:active {
-          color: darken($vxe-primary-color, 3%);
-          border-color: darken($vxe-primary-color, 3%);
+        &:not(.is--disabled) {
+          border-color: $color;
+          background-color: $color;
+          &:hover {
+            color: #fff;
+            background-color: lighten($color, 6%);
+            border-color: lighten($color, 6%);
+          }
+          &:active {
+            color: #fff;
+            background-color: darken($color, 3%);
+            border-color: darken($color, 3%);
+          }
+        }
+        &.is--disabled {
+          border-color: lighten($color, 20%);
+          background-color: lighten($color, 20%);
+        }
+        &.is--loading {
+          border-color: $color;
+          background-color: $color;
         }
       }
     }
@@ -152,14 +183,40 @@
   &+.vxe-button--dropdown {
     margin-left: 0.8em;
   }
+  & > .vxe-button {
+    &.type--button {
+      @for $index from 0 to length($btnThemeList) {
+        $item: nth($btnThemeList, $index + 1);
+        $color: map-get($item, color);
+        &.theme--#{map-get($item, name)} {
+          color: #fff;
+        }
+      }
+    }
+  }
   &.is--active {
     & > .vxe-button {
-      &.theme--primary {
-        @extend %ButtonPrimaryHover;
-      }
       &:not(.is--disabled) {
-        &:not(.theme--primary) {
-          @extend %ButtonHover;
+        color: lighten($vxe-primary-color, 6%);
+      }
+      &.type--text {
+        @for $index from 0 to length($btnThemeList) {
+          $item: nth($btnThemeList, $index + 1);
+          $color: map-get($item, color);
+          &.theme--#{map-get($item, name)} {
+            color: lighten($color, 10%);
+          }
+        }
+      }
+      &.type--button {
+        @for $index from 0 to length($btnThemeList) {
+          $item: nth($btnThemeList, $index + 1);
+          $color: map-get($item, color);
+          &.theme--#{map-get($item, name)} {
+            color: #fff;
+            background-color: lighten($color, 6%);
+            border-color: lighten($color, 6%);
+          }
         }
       }
     }
