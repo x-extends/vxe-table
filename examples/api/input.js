@@ -27,10 +27,10 @@ const apis = [
       },
       {
         name: 'type',
-        desc: '原生 type 属性',
+        desc: '渲染类型',
         version: '',
         type: 'String',
-        enum: 'text, number, password, submit, reset',
+        enum: 'text, number, integer, password, date, week, month, year',
         defVal: '',
         list: []
       },

@@ -153,7 +153,14 @@ export default {
         nextMonth: 'Next Month',
         monthLabel: '{{0}}',
         dayLabel: '{{1}} {{0}}',
+        labelFormat: {
+          date: 'dd/MM/yyyy',
+          week: '[Week] WW, yyyy',
+          month: 'MM/yyyy',
+          year: 'yyyy'
+        },
         weeks: {
+          w: 'Week',
           w0: 'Sun',
           w1: 'Mon',
           w2: 'Tue',
