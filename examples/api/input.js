@@ -30,7 +30,7 @@ const apis = [
         desc: '渲染类型',
         version: '',
         type: 'String',
-        enum: 'text, number, integer, password, date, month, year',
+        enum: 'text, number, integer, password, date, week, month, year',
         defVal: 'text',
         list: []
       },

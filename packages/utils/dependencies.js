@@ -119,8 +119,8 @@ import destructuring from 'xe-utils/methods/base/destructuring'
 // import toFixedNumber from 'xe-utils/methods/number/toFixedNumber'
 import toInteger from 'xe-utils/methods/number/toInteger'
 import toNumber from 'xe-utils/methods/number/toNumber'
-// import add from 'xe-utils/methods/number/add'
-// import subtract from 'xe-utils/methods/number/subtract'
+import add from 'xe-utils/methods/number/add'
+import subtract from 'xe-utils/methods/number/subtract'
 // import multiply from 'xe-utils/methods/number/multiply'
 // import divide from 'xe-utils/methods/number/divide'
 
@@ -132,10 +132,10 @@ import toStringDate from 'xe-utils/methods/date/toStringDate'
 import toDateString from 'xe-utils/methods/date/toDateString'
 // import now from 'xe-utils/methods/date/now'
 // import timestamp from 'xe-utils/methods/date/timestamp'
-// import isDateSame from 'xe-utils/methods/date/isDateSame'
+import isDateSame from 'xe-utils/methods/date/isDateSame'
 import getWhatWeek from 'xe-utils/methods/date/getWhatWeek'
 // import getYearDay from 'xe-utils/methods/date/getYearDay'
-// import getYearWeek from 'xe-utils/methods/date/getYearWeek'
+import getYearWeek from 'xe-utils/methods/date/getYearWeek'
 // import getMonthWeek from 'xe-utils/methods/date/getMonthWeek'
 // import getDayOfYear from 'xe-utils/methods/date/getDayOfYear'
 // import getDayOfMonth from 'xe-utils/methods/date/getDayOfMonth'
@@ -298,8 +298,8 @@ export default {
   // toFixedNumber,
   toInteger,
   toNumber,
-  // add,
-  // subtract,
+  add,
+  subtract,
   // multiply,
   // divide,
 
@@ -311,10 +311,10 @@ export default {
   toDateString,
   // now,
   // timestamp,
-  // isDateSame,
+  isDateSame,
   getWhatWeek,
   // getYearDay,
-  // getYearWeek,
+  getYearWeek,
   // getMonthWeek,
   // getDayOfYear,
   // getDayOfMonth,

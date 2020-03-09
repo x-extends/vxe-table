@@ -153,7 +153,14 @@ export default {
         nextMonth: '下个月',
         monthLabel: '{{0}} 年',
         dayLabel: '{{0}} 年 {{1}}',
+        labelFormat: {
+          date: 'yyyy-MM-dd',
+          week: 'yyyy 年第 WW 周',
+          month: 'yyyy-MM',
+          year: 'yyyy'
+        },
         weeks: {
+          w: '周',
           w0: '周日',
           w1: '周一',
           w2: '周二',

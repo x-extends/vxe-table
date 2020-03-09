@@ -97,6 +97,7 @@ $iconWidth: 1.6em;
   &.type--number,
   &.type--integer,
   &.type--date,
+  &.type--week,
   &.type--month,
   &.type--year {
     .vxe-input--inner {
@@ -107,6 +108,7 @@ $iconWidth: 1.6em;
   &.type--number,
   &.type--integer,
   &.type--date,
+  &.type--week,
   &.type--month,
   &.type--year   {
     .vxe-input--suffix {
@@ -118,6 +120,7 @@ $iconWidth: 1.6em;
     &.type--number,
     &.type--integer,
     &.type--date,
+    &.type--week,
     &.type--month,
     &.type--year {
       .vxe-input--inner {
@@ -263,6 +266,7 @@ $iconWidth: 1.6em;
 
 .vxe-input--panel {
   &.type--date,
+  &.type--week,
   &.type--month,
   &.type--year {
     user-select: none;
@@ -271,10 +275,27 @@ $iconWidth: 1.6em;
       width: 22em;
     }
   }
-  &.type--date {
+  &.type--week {
+    .vxe-input--panel-wrapper {
+      width: 24em;
+    }
+  }
+  &.type--date{
     .vxe-input--date-picker-body {
       th {
         width: 14.28571%;
+      }
+    }
+  }
+  &.type--week {
+    .vxe-input--date-picker-body {
+      table {
+        th {
+          width: 12%;
+          &:first-child {
+            width: 16%;
+          }
+        }
       }
     }
   }
@@ -381,6 +402,18 @@ $iconWidth: 1.6em;
         cursor: no-drop;
         color: $vxe-input-disabled-color;
         background-color: $vxe-input-disabled-background-color;
+      }
+    }
+  }
+  .vxe-input--date-week-view {
+    th {
+      &:first-child {
+        box-shadow: inset -1px -1px 0 0 $vxe-table-popup-border-color;
+      }
+    }
+    td {
+      &:first-child {
+        box-shadow: inset -1px 0 0 0 $vxe-table-popup-border-color;
       }
     }
   }
