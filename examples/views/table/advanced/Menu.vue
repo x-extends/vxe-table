@@ -10,9 +10,7 @@
       ref="xTable"
       :footer-method="footerMethod"
       :data="tableData"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, className: 'my-menus'}"
-      @header-cell-context-menu="headerCellContextMenuEvent"
-      @cell-context-menu="cellContextMenuEvent"
+      :context-menu="tableMenu"
       @context-menu-click="contextMenuClickEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -52,43 +50,52 @@ export default {
   data () {
     return {
       tableData: [],
-      headerMenus: [
-        [
-          { code: 'exportAll', name: '导出所有.csv' }
-        ]
-      ],
-      bodyMenus: [
-        [
-          { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy-item' }
-        ],
-        [
-          { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
-          {
-            code: 'filter',
-            name: 'app.body.label.filter',
-            children: [
-              { code: 'clearFilter', name: '清除筛选' },
-              { code: 'filterSelect', name: '按所选单元格的值筛选' }
+      tableMenu: {
+        className: 'my-menus',
+        header: {
+          options: [
+            [
+              { code: 'exportAll', name: '导出所有.csv' }
             ]
-          },
-          {
-            code: 'sort',
-            name: 'app.body.label.sort',
-            prefixIcon: 'fa fa-sort color-blue',
-            children: [
-              { code: 'clearSort', name: '清除排序' },
-              { code: 'sortAsc', name: '升序', prefixIcon: 'fa fa-sort-alpha-asc color-orange' },
-              { code: 'sortDesc', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc color-orange' }
+          ]
+        },
+        body: {
+          options: [
+            [
+              { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy-item' }
+            ],
+            [
+              { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
+              {
+                code: 'filter',
+                name: 'app.body.label.filter',
+                children: [
+                  { code: 'clearFilter', name: '清除筛选' },
+                  { code: 'filterSelect', name: '按所选单元格的值筛选' }
+                ]
+              },
+              {
+                code: 'sort',
+                name: 'app.body.label.sort',
+                prefixIcon: 'fa fa-sort color-blue',
+                children: [
+                  { code: 'clearSort', name: '清除排序' },
+                  { code: 'sortAsc', name: '升序', prefixIcon: 'fa fa-sort-alpha-asc color-orange' },
+                  { code: 'sortDesc', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc color-orange' }
+                ]
+              },
+              { code: 'print', name: '打印', disabled: true }
             ]
-          },
-          { code: 'print', name: '打印', disabled: true }
-        ]
-      ],
-      footerMenus: [
-        [
-          { code: 'clearAll', name: '清空数据' }
-        ]
-      ],
+          ]
+        },
+        footer: {
+          options: [
+            [
+              { code: 'clearAll', name: '清空数据' }
+            ]
+          ]
+        }
+      },
       demoCodes: [
         `
         <vxe-table
@@ -99,9 +106,7 @@ export default {
           ref="xTable"
           :footer-method="footerMethod"
           :data="tableData"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, className: 'my-menus'}"
-          @header-cell-context-menu="headerCellContextMenuEvent"
-          @cell-context-menu="cellContextMenuEvent"
+          :context-menu="tableMenu"
           @context-menu-click="contextMenuClickEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -115,55 +120,58 @@ export default {
           data () {
             return {
               tableData: [],
-              headerMenus: [
-                [
-                  { code: 'exportAll', name: '导出所有.csv' }
-                ]
-              ],
-              bodyMenus: [
-                [
-                  { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy-item' }
-                ],
-                [
-                  { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
-                  {
-                    code: 'filter',
-                    name: 'app.body.label.filter',
-                    children: [
-                      { code: 'clearFilter', name: '清除筛选' },
-                      { code: 'filterSelect', name: '按所选单元格的值筛选' }
+              tableMenu: {
+                className: 'my-menus',
+                header: {
+                  options: [
+                    [
+                      { code: 'exportAll', name: '导出所有.csv' }
                     ]
-                  },
-                  {
-                    code: 'sort',
-                    name: 'app.body.label.sort',
-                    prefixIcon: 'fa fa-sort color-blue',
-                    children: [
-                      { code: 'clearSort', name: '清除排序' },
-                      { code: 'sortAsc', name: '升序', prefixIcon: 'fa fa-sort-alpha-asc color-orange' },
-                      { code: 'sortDesc', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc color-orange' }
+                  ]
+                },
+                body: {
+                  options: [
+                    [
+                      { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy-item' }
+                    ],
+                    [
+                      { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
+                      {
+                        code: 'filter',
+                        name: 'app.body.label.filter',
+                        children: [
+                          { code: 'clearFilter', name: '清除筛选' },
+                          { code: 'filterSelect', name: '按所选单元格的值筛选' }
+                        ]
+                      },
+                      {
+                        code: 'sort',
+                        name: 'app.body.label.sort',
+                        prefixIcon: 'fa fa-sort color-blue',
+                        children: [
+                          { code: 'clearSort', name: '清除排序' },
+                          { code: 'sortAsc', name: '升序', prefixIcon: 'fa fa-sort-alpha-asc color-orange' },
+                          { code: 'sortDesc', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc color-orange' }
+                        ]
+                      },
+                      { code: 'print', name: '打印', disabled: true }
                     ]
-                  },
-                  { code: 'print', name: '打印', disabled: true }
-                ]
-              ],
-              footerMenus: [
-                [
-                  { code: 'clearAll', name: '清空数据' }
-                ]
-              ]
+                  ]
+                },
+                footer: {
+                  options: [
+                    [
+                      { code: 'clearAll', name: '清空数据' }
+                    ]
+                  ]
+                }
+              }
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            headerCellContextMenuEvent ({ column }) {
-              this.$refs.xTable.setCurrentColumn(column)
-            },
-            cellContextMenuEvent ({ row }) {
-              this.$refs.xTable.setCurrentRow(row)
-            },
             contextMenuClickEvent ({ menu, row, column }) {
               switch (menu.code) {
                 case 'copy':
@@ -227,12 +235,6 @@ export default {
     })
   },
   methods: {
-    headerCellContextMenuEvent ({ column }) {
-      this.$refs.xTable.setCurrentColumn(column)
-    },
-    cellContextMenuEvent ({ row }) {
-      this.$refs.xTable.setCurrentRow(row)
-    },
     contextMenuClickEvent ({ menu, row, column }) {
       switch (menu.code) {
         case 'copy':

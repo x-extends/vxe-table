@@ -582,8 +582,15 @@ export default {
     },
     weekDates () {
       return this.dayDatas.map(list => {
-        const item = Object.assign({}, list[0])
-        item.label = XEUtils.getYearWeek(item.date)
+        const firstItem = list[0]
+        const item = {
+          date: firstItem.date,
+          isPrev: false,
+          isCurrent: false,
+          isToday: false,
+          isNext: false,
+          label: XEUtils.getYearWeek(firstItem.date)
+        }
         return [item].concat(list)
       })
     },

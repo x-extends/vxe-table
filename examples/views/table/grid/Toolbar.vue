@@ -57,38 +57,26 @@ export default {
             code: 'mark_cancel',
             name: 'app.body.button.markCancel',
             dropdowns: [
-              { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
-              { code: 'remove_selection', name: '移除数据' }
+              { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', type: 'text' },
+              { code: 'remove_selection', name: '移除数据', type: 'text' }
             ]
           },
-          { code: 'save', name: 'app.body.button.save' },
+          { code: 'save', name: 'app.body.button.save', status: 'success' },
           {
             name: '数据导出',
             dropdowns: [
-              { code: 'open_import', name: '高级导入' },
-              { code: 'open_export', name: '高级导出' }
+              { code: 'open_import', name: '高级导入', type: 'text' },
+              { code: 'open_export', name: '高级导出', type: 'text' }
             ]
           },
-          { code: 'exportData111', name: '自定义按钮' },
+          { code: 'exportData111', name: '自定义按钮', type: 'text', status: 'warning' },
           {
             name: '禁用按钮',
             disabled: false,
             dropdowns: [
-              {
-                code: 'other1',
-                name: '下拉的按钮1',
-                disabled: false
-              },
-              {
-                code: 'other2',
-                name: '下拉的按钮2',
-                disabled: true
-              },
-              {
-                code: 'other3',
-                name: '下拉的按钮3',
-                disabled: false
-              }
+              { code: 'other1', name: '下拉的按钮1', type: 'text', disabled: false },
+              { code: 'other2', name: '下拉的按钮2', type: 'text', disabled: true },
+              { code: 'other3', name: '下拉的按钮3', type: 'text', disabled: false }
             ]
           }
         ],
@@ -135,14 +123,13 @@ export default {
                 pageSize: 15
               },
               tableProxy: {
-                // 配置响应的数据属性
                 props: {
                   result: 'result',
                   total: 'page.total'
                 },
                 ajax: {
                   // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
+                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
                   // body 对象： { removeRecords }
                   delete: ({ body }) => XEAjax.post('/api/user/save', body),
                   // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
@@ -150,56 +137,43 @@ export default {
                 }
               },
               tableToolbar: {
+                id: 'toolbar_demo_1',
                 buttons: [
                   { code: 'insert_actived', name: '新增' },
                   {
                     code: 'mark_cancel',
                     name: 'app.body.button.markCancel',
                     dropdowns: [
-                      { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
-                      { code: 'remove_selection', name: '移除数据' }
+                      { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', type: 'text' },
+                      { code: 'remove_selection', name: '移除数据', type: 'text' }
                     ]
                   },
-                  { code: 'save', name: 'app.body.button.save' },
+                  { code: 'save', name: 'app.body.button.save', status: 'success' },
                   {
                     name: '数据导出',
                     dropdowns: [
-                      { code: 'open_import', name: '高级导入' },
-                      { code: 'open_export', name: '高级导出' }
+                      { code: 'open_import', name: '高级导入', type: 'text' },
+                      { code: 'open_export', name: '高级导出', type: 'text' }
                     ]
                   },
-                  { code: 'myBtn', name: '自定义按钮' },
+                  { code: 'exportData111', name: '自定义按钮', type: 'text', status: 'warning' },
                   {
                     name: '禁用按钮',
                     disabled: false,
                     dropdowns: [
-                      {
-                        code: 'other1',
-                        name: '下拉的按钮1',
-                        disabled: false
-                      },
-                      {
-                        code: 'other2',
-                        name: '下拉的按钮2',
-                        disabled: true
-                      },
-                      {
-                        code: 'other3',
-                        name: '下拉的按钮3',
-                        disabled: false
-                      }
+                      { code: 'other1', name: '下拉的按钮1', type: 'text', disabled: false },
+                      { code: 'other2', name: '下拉的按钮2', type: 'text', disabled: true },
+                      { code: 'other3', name: '下拉的按钮3', type: 'text', disabled: false }
                     ]
                   }
                 ],
-                refresh: true, // 刷新按钮
-                import: true, // 导入按钮
-                export: true, // 导出按钮
-                zoom: true, // 最大化按钮
-                // 列宽操作记录
+                refresh: true,
+                import: true,
+                export: true,
+                zoom: true,
                 resizable: {
                   storage: true
                 },
-                // 列操作记录
                 custom: {
                   storage: true
                 }
