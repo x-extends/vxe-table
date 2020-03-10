@@ -17,6 +17,11 @@
     overflow: hidden;
     visibility: hidden;
   }
+  &.is--perfect {
+    border: 1px solid $vxe-table-border-color;
+    border-bottom-width: 0;
+    background-color: $vxe-table-header-background-color;
+  }
   &.is--loading {
     position: relative;
     &:before {

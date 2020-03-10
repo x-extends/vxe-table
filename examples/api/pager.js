@@ -108,7 +108,7 @@ const apis = [
       },
       {
         name: 'perfect',
-        descKey: 'app.api.pager.desc.perfect',
+        desc: '配套的样式',
         version: '',
         type: 'Boolean',
         enum: '',

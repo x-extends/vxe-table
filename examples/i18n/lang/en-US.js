@@ -507,7 +507,6 @@ module.exports = {
           align: 'On the way',
           border: 'Show border',
           background: 'Show background color',
-          perfect: 'Default style',
           iconPrevPage: 'Custom the previous page icon',
           iconJumpPrev: 'Custom jump previous page icon',
           iconJumpNext: 'Custom jump next page icon',

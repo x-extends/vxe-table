@@ -55,12 +55,12 @@
     </p>
 
     <p>
-      <vxe-button type="text" disabled>默认颜色</vxe-button>
-      <vxe-button type="text" status="primary" disabled>主要颜色</vxe-button>
-      <vxe-button type="text" status="success" disabled>成功颜色</vxe-button>
-      <vxe-button type="text" status="info" disabled>信息颜色</vxe-button>
-      <vxe-button type="text" status="warning" disabled>警告颜色</vxe-button>
-      <vxe-button type="text" status="danger" disabled>危险颜色</vxe-button>
+      <vxe-button type="text" disabled>默认禁用颜色</vxe-button>
+      <vxe-button type="text" status="primary" disabled>主要禁用颜色</vxe-button>
+      <vxe-button type="text" status="success" disabled>成功禁用颜色</vxe-button>
+      <vxe-button type="text" status="info" disabled>信息禁用颜色</vxe-button>
+      <vxe-button type="text" status="warning" disabled>警告禁用颜色</vxe-button>
+      <vxe-button type="text" status="danger" disabled>危险禁用颜色</vxe-button>
     </p>
 
     <p>
@@ -82,12 +82,12 @@
     </p>
 
     <p>
-      <vxe-button disabled>默认颜色</vxe-button>
-      <vxe-button status="primary" disabled>主要颜色</vxe-button>
-      <vxe-button status="success" disabled>成功颜色</vxe-button>
-      <vxe-button status="info" disabled>信息颜色</vxe-button>
-      <vxe-button status="warning" disabled>警告颜色</vxe-button>
-      <vxe-button status="danger" disabled>危险颜色</vxe-button>
+      <vxe-button disabled>默认禁用颜色</vxe-button>
+      <vxe-button status="primary" disabled>主要禁用颜色</vxe-button>
+      <vxe-button status="success" disabled>成功禁用颜色</vxe-button>
+      <vxe-button status="info" disabled>信息禁用颜色</vxe-button>
+      <vxe-button status="warning" disabled>警告禁用颜色</vxe-button>
+      <vxe-button status="danger" disabled>危险禁用颜色</vxe-button>
     </p>
 
     <p>
@@ -139,12 +139,29 @@
     </p>
 
     <p>
+      <vxe-button icon="fa fa-plus">默认图标颜色</vxe-button>
+      <vxe-button status="primary" icon="fa fa-save">主要图标颜色</vxe-button>
+      <vxe-button status="success" icon="fa fa-check">成功图标颜色</vxe-button>
+      <vxe-button status="info" icon="fa fa-info">信息图标颜色</vxe-button>
+      <vxe-button status="warning" icon="fa fa-warning">警告图标颜色</vxe-button>
+      <vxe-button status="danger" icon="fa fa-trash-o">危险图标颜色</vxe-button>
+    </p>
+
+    <p>
+      <vxe-button icon="vxe-icon--download">默认图标颜色</vxe-button>
+      <vxe-button icon="fa fa-save vxe-primary-color">主要图标颜色</vxe-button>
+      <vxe-button icon="fa fa-check vxe-success-color">成功图标颜色</vxe-button>
+      <vxe-button icon="fa fa-info vxe-info-color">信息图标颜色</vxe-button>
+      <vxe-button icon="fa fa-warning vxe-warning-color">警告图标颜色</vxe-button>
+      <vxe-button icon="fa fa-trash-o vxe-danger-color">危险图标颜色</vxe-button>
+    </p>
+
+    <p>
       <vxe-button type="text" icon="vxe-icon--plus"></vxe-button>
       <vxe-button type="text" icon="vxe-icon--refresh" loading></vxe-button>
-      <vxe-button type="text" icon="vxe-icon--download">图标按钮</vxe-button>
       <vxe-button status="primary" icon="vxe-icon--download">图标按钮</vxe-button>
       <vxe-button status="my-purple" icon="fa fa-save">自定义按钮颜色</vxe-button>
-      <vxe-button status="my-green" icon="fa fa-graduation-cap">自定义图标颜色</vxe-button>
+      <vxe-button icon="fa fa-graduation-cap my-green">自定义图标颜色</vxe-button>
     </p>
 
     <pre>
@@ -225,12 +242,12 @@ export default {
         </p>
 
         <p>
-          <vxe-button type="text" disabled>默认颜色</vxe-button>
-          <vxe-button type="text" status="primary" disabled>主要颜色</vxe-button>
-          <vxe-button type="text" status="success" disabled>成功颜色</vxe-button>
-          <vxe-button type="text" status="info" disabled>信息颜色</vxe-button>
-          <vxe-button type="text" status="warning" disabled>警告颜色</vxe-button>
-          <vxe-button type="text" status="danger" disabled>危险颜色</vxe-button>
+          <vxe-button type="text" disabled>默认禁用颜色</vxe-button>
+          <vxe-button type="text" status="primary" disabled>主要禁用颜色</vxe-button>
+          <vxe-button type="text" status="success" disabled>成功禁用颜色</vxe-button>
+          <vxe-button type="text" status="info" disabled>信息禁用颜色</vxe-button>
+          <vxe-button type="text" status="warning" disabled>警告禁用颜色</vxe-button>
+          <vxe-button type="text" status="danger" disabled>危险禁用颜色</vxe-button>
         </p>
 
         <p>
@@ -252,12 +269,12 @@ export default {
         </p>
 
         <p>
-          <vxe-button disabled>默认颜色</vxe-button>
-          <vxe-button status="primary" disabled>主要颜色</vxe-button>
-          <vxe-button status="success" disabled>成功颜色</vxe-button>
-          <vxe-button status="info" disabled>信息颜色</vxe-button>
-          <vxe-button status="warning" disabled>警告颜色</vxe-button>
-          <vxe-button status="danger" disabled>危险颜色</vxe-button>
+          <vxe-button disabled>默认禁用颜色</vxe-button>
+          <vxe-button status="primary" disabled>主要禁用颜色</vxe-button>
+          <vxe-button status="success" disabled>成功禁用颜色</vxe-button>
+          <vxe-button status="info" disabled>信息禁用颜色</vxe-button>
+          <vxe-button status="warning" disabled>警告禁用颜色</vxe-button>
+          <vxe-button status="danger" disabled>危险禁用颜色</vxe-button>
         </p>
 
         <p>
@@ -309,12 +326,29 @@ export default {
         </p>
 
         <p>
+          <vxe-button icon="fa fa-plus">默认图标颜色</vxe-button>
+          <vxe-button status="primary" icon="fa fa-save">主要图标颜色</vxe-button>
+          <vxe-button status="success" icon="fa fa-check">成功图标颜色</vxe-button>
+          <vxe-button status="info" icon="fa fa-info">信息图标颜色</vxe-button>
+          <vxe-button status="warning" icon="fa fa-warning">警告图标颜色</vxe-button>
+          <vxe-button status="danger" icon="fa fa-trash-o">危险图标颜色</vxe-button>
+        </p>
+
+        <p>
+          <vxe-button icon="vxe-icon--download">默认图标颜色</vxe-button>
+          <vxe-button icon="fa fa-save vxe-primary-color">主要图标颜色</vxe-button>
+          <vxe-button icon="fa fa-check vxe-success-color">成功图标颜色</vxe-button>
+          <vxe-button icon="fa fa-info vxe-info-color">信息图标颜色</vxe-button>
+          <vxe-button icon="fa fa-warning vxe-warning-color">警告图标颜色</vxe-button>
+          <vxe-button icon="fa fa-trash-o vxe-danger-color">危险图标颜色</vxe-button>
+        </p>
+
+        <p>
           <vxe-button type="text" icon="vxe-icon--plus"></vxe-button>
           <vxe-button type="text" icon="vxe-icon--refresh" loading></vxe-button>
-          <vxe-button type="text" icon="vxe-icon--download">图标按钮</vxe-button>
           <vxe-button status="primary" icon="vxe-icon--download">图标按钮</vxe-button>
           <vxe-button status="my-purple" icon="fa fa-save">自定义按钮颜色</vxe-button>
-          <vxe-button status="my-green" icon="fa fa-graduation-cap">自定义图标颜色</vxe-button>
+          <vxe-button icon="fa fa-graduation-cap my-green">自定义图标颜色</vxe-button>
         </p>
         `,
         `
@@ -328,8 +362,8 @@ export default {
         .vxe-button.type--button.theme--my-purple:active {
           background-color: #a50aa5;
         }
-        .vxe-button.type--button.theme--my-green .vxe-button--icon {
-          color: #67c23a;
+        .my-green {
+          color: #008000;
         }
         `
       ]
@@ -354,7 +388,7 @@ export default {
 .vxe-button.type--button.theme--my-purple:active {
   background-color: #a50aa5;
 }
-.vxe-button.type--button.theme--my-green .vxe-button--icon {
-  color: #67c23a;
+.my-green {
+  color: #008000;
 }
 </style>

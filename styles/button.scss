@@ -4,23 +4,39 @@
 $btnThemeList: (
   (
     name: "primary",
-    color: $vxe-primary-color
+    textColor: $vxe-primary-color,
+    btnColor: #fff,
+    btnBackground: $vxe-primary-color
   ),
   (
     name: "success",
-    color: $vxe-success-color
+    textColor: $vxe-success-color,
+    btnColor: #fff,
+    btnBackground: $vxe-success-color
   ),
   (
     name: "info",
-    color: $vxe-info-color
+    textColor: $vxe-info-color,
+    btnColor: #fff,
+    btnBackground: $vxe-info-color
   ),
   (
     name: "warning",
-    color: $vxe-warning-color
+    textColor: $vxe-warning-color,
+    btnColor: #fff,
+    btnBackground: $vxe-warning-color
   ),
   (
     name: "danger",
-    color: $vxe-danger-color
+    textColor: $vxe-danger-color,
+    btnColor: #fff,
+    btnBackground: $vxe-danger-color
+  ),
+  (
+    name: "perfect",
+    textColor: $vxe-table-header-background-color,
+    btnColor: $vxe-font-color,
+    btnBackground: $vxe-table-header-background-color
   )
 );
 
@@ -67,16 +83,16 @@ $btnThemeList: (
     }
     @for $index from 0 to length($btnThemeList) {
       $item: nth($btnThemeList, $index + 1);
-      $color: map-get($item, color);
+      $textColor: map-get($item, textColor);
       &.theme--#{map-get($item, name)} {
-        color: $color;
+        color: $textColor;
         &:not(.is--disabled) {
           &:hover {
-            color: lighten($color, 10%);
+            color: lighten($textColor, 10%);
           }
         }
         &.is--disabled {
-          color: lighten($color, 20%);
+          color: lighten($textColor, 20%);
         }
       }
     }
@@ -107,33 +123,31 @@ $btnThemeList: (
     }
     @for $index from 0 to length($btnThemeList) {
       $item: nth($btnThemeList, $index + 1);
-      $color: map-get($item, color);
+      $btnColor: map-get($item, btnColor);
+      $btnBackground: map-get($item, btnBackground);
       &.theme--#{map-get($item, name)} {
-        color: #fff;
-        .vxe-button--icon {
-          border-color: #fff;
-        }
+        color: $btnColor;
         &:not(.is--disabled) {
-          border-color: $color;
-          background-color: $color;
+          border-color: $btnBackground;
+          background-color: $btnBackground;
           &:hover {
-            color: #fff;
-            background-color: lighten($color, 6%);
-            border-color: lighten($color, 6%);
+            color: $btnColor;
+            background-color: lighten($btnBackground, 6%);
+            border-color: lighten($btnBackground, 6%);
           }
           &:active {
-            color: #fff;
-            background-color: darken($color, 3%);
-            border-color: darken($color, 3%);
+            color: $btnColor;
+            background-color: darken($btnBackground, 3%);
+            border-color: darken($btnBackground, 3%);
           }
         }
         &.is--disabled {
-          border-color: lighten($color, 20%);
-          background-color: lighten($color, 20%);
+          border-color: lighten($btnBackground, 20%);
+          background-color: lighten($btnBackground, 20%);
         }
         &.is--loading {
-          border-color: $color;
-          background-color: $color;
+          border-color: $btnBackground;
+          background-color: $btnBackground;
         }
       }
     }
@@ -187,9 +201,9 @@ $btnThemeList: (
     &.type--button {
       @for $index from 0 to length($btnThemeList) {
         $item: nth($btnThemeList, $index + 1);
-        $color: map-get($item, color);
+        $btnColor: map-get($item, btnColor);
         &.theme--#{map-get($item, name)} {
-          color: #fff;
+          color: $btnColor;
         }
       }
     }
@@ -202,20 +216,21 @@ $btnThemeList: (
       &.type--text {
         @for $index from 0 to length($btnThemeList) {
           $item: nth($btnThemeList, $index + 1);
-          $color: map-get($item, color);
+          $textColor: map-get($item, textColor);
           &.theme--#{map-get($item, name)} {
-            color: lighten($color, 10%);
+            color: lighten($textColor, 10%);
           }
         }
       }
       &.type--button {
         @for $index from 0 to length($btnThemeList) {
           $item: nth($btnThemeList, $index + 1);
-          $color: map-get($item, color);
+          $btnColor: map-get($item, btnColor);
+          $btnBackground: map-get($item, btnBackground);
           &.theme--#{map-get($item, name)} {
-            color: #fff;
-            background-color: lighten($color, 6%);
-            border-color: lighten($color, 6%);
+            color: $btnColor;
+            background-color: lighten($btnBackground, 6%);
+            border-color: lighten($btnBackground, 6%);
           }
         }
       }

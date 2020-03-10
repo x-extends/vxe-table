@@ -506,7 +506,6 @@ module.exports = {
           align: '对齐方式',
           border: '带边框',
           background: '带背景颜色',
-          perfect: '默认的样式',
           iconPrevPage: '自定义上一页图标',
           iconJumpPrev: '自定义向上跳页图标',
           iconJumpNext: '自定义向下跳页图标',

@@ -77,6 +77,7 @@ export default {
     setting: [Boolean, Object],
     custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
+    perfect: { type: Boolean, default: () => GlobalConfig.toolbar.perfect },
     size: String
   },
   inject: {
@@ -152,7 +153,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { $xegrid, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
+    const { $xegrid, perfect, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
     const customBtnOns = {}
     const customWrapperOns = {}
     if (custom || setting) {
@@ -172,6 +173,7 @@ export default {
     return h('div', {
       class: ['vxe-toolbar', {
         [`size--${vSize}`]: vSize,
+        'is--perfect': perfect,
         'is--loading': loading
       }]
     }, [
