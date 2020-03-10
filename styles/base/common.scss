@@ -17,6 +17,25 @@ body {
   font-feature-settings: 'tnum';
 }
 
+.vxe-primary-color {
+  color: $vxe-primary-color;
+}
+.vxe-success-color {
+  color: $vxe-success-color;
+}
+.vxe-info-color {
+  color: $vxe-info-color;
+}
+.vxe-warning-color {
+  color: $vxe-warning-color;
+}
+.vxe-danger-color {
+  color: $vxe-danger-color;
+}
+.vxe-perfect-color {
+  color: $vxe-table-header-background-color;
+}
+
 /*animat*/
 .t--animat {
   .vxe-sort--asc-btn,

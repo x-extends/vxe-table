@@ -32,6 +32,7 @@ export default {
   data () {
     return {
       tablePage: {
+        perfect: true,
         pageSize: 15
       },
       tableProxy: {
@@ -50,26 +51,11 @@ export default {
       },
       tableToolbar: {
         buttons: [
-          { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
-          {
-            code: 'mark_cancel',
-            name: 'app.body.button.markCancel',
-            icon: 'fa fa-bookmark-o',
-            dropdowns: [
-              { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', icon: 'fa fa-trash-o' },
-              { code: 'remove_selection', name: '移除数据', icon: 'fa fa-remove' }
-            ]
-          },
-          { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save' },
-          {
-            name: '导入导出',
-            icon: 'fa fa-file',
-            dropdowns: [
-              { code: 'import', name: '高级导入', icon: 'fa fa-cloud-upload' },
-              { code: 'export', name: '高级导出', icon: 'fa fa-cloud-download' }
-            ]
-          }
+          { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus vxe-primary-color' },
+          { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o vxe-danger-color' },
+          { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save vxe-success-color' }
         ],
+        perfect: true,
         resizable: true,
         refresh: {
           icon: 'fa fa-refresh',
@@ -117,17 +103,17 @@ export default {
           data () {
             return {
               tablePage: {
+                perfect: true,
                 pageSize: 15
               },
               tableProxy: {
-                // 配置响应的数据属性
                 props: {
                   result: 'result',
                   total: 'page.total'
                 },
                 ajax: {
                   // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
+                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
                   // body 对象： { removeRecords }
                   delete: ({ body }) => XEAjax.post('/api/user/save', body),
                   // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
@@ -136,26 +122,11 @@ export default {
               },
               tableToolbar: {
                 buttons: [
-                  { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
-                  {
-                    code: 'mark_cancel',
-                    name: 'app.body.button.markCancel',
-                    icon: 'fa fa-bookmark-o',
-                    dropdowns: [
-                      { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', icon: 'fa fa-trash-o' },
-                      { code: 'remove_selection', name: '移除数据', icon: 'fa fa-remove' }
-                    ]
-                  },
-                  { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save' },
-                  {
-                    name: '导入导出',
-                    icon: 'fa fa-file',
-                    dropdowns: [
-                      { code: 'import', name: '高级导入', icon: 'fa fa-cloud-upload' },
-                      { code: 'export', name: '高级导出', icon: 'fa fa-cloud-download' }
-                    ]
-                  }
+                  { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus vxe-primary-color' },
+                  { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o vxe-danger-color' },
+                  { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save vxe-success-color' }
                 ],
+                perfect: true,
                 resizable: true,
                 refresh: {
                   icon: 'fa fa-refresh',
