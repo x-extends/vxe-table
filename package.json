@@ -98,10 +98,9 @@
   },
   "keywords": [
     "vxe-table",
-    "vxe-editable",
+    "vxe-grid",
     "vue table",
-    "vue editable",
-    "datatable"
+    "vue grid"
   ],
   "author": {
     "name": "Xu Liangzhan",
