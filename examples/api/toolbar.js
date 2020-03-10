@@ -35,6 +35,15 @@ const apis = [
         list: []
       },
       {
+        name: 'perfect',
+        desc: '配套的样式',
+        version: '1.15.27',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.toolbar.perfect',
+        list: []
+      },
+      {
         name: 'import',
         descKey: 'app.api.toolbar.desc.import',
         version: '2.6.12',

@@ -5,10 +5,12 @@
       <span class="red">（注：开启 keep-source 将会导致性能直线下降，具体取决于数据量）</span>
     </p>
 
-    <vxe-toolbar>
+    <vxe-toolbar perfect>
       <template v-slot:buttons>
-        <vxe-button @click="$refs.xTable.revertData()">还原全部</vxe-button>
-        <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+        <vxe-button icon="fa fa-plus vxe-success-color" status="perfect" @click="insertEvent()">新增</vxe-button>
+        <vxe-button icon="fa fa-trash-o vxe-danger-color" status="perfect" @click="$refs.xTable.removeCheckboxRow()">移除</vxe-button>
+        <vxe-button icon="fa fa-save vxe-primary-color" status="perfect">保存</vxe-button>
+        <vxe-button icon="fa fa-mail-reply vxe-warning-color" status="perfect" @click="revertEvent">还原</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -49,10 +51,12 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-toolbar>
+        <vxe-toolbar perfect>
           <template v-slot:buttons>
-            <vxe-button @click="$refs.xTable.revertData()">还原全部</vxe-button>
-            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+            <vxe-button icon="fa fa-plus vxe-success-color" @click="insertEvent()">新增</vxe-button>
+            <vxe-button icon="fa fa-trash-o vxe-danger-color" @click="$refs.xTable.removeCheckboxRow()">移除</vxe-button>
+            <vxe-button icon="fa fa-save vxe-primary-color">保存</vxe-button>
+            <vxe-button icon="fa fa-mail-reply vxe-warning-color" @click="revertEvent">还原</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -84,6 +88,23 @@ export default {
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods: {
+            insertEvent () {
+              const record = {
+                sex: '1'
+              }
+              this.$refs.xTable.insert(record).then(({ row }) => {
+                this.$refs.xTable.setActiveCell(row, 'sex')
+              })
+            },
+            revertEvent () {
+              this.$XModal.confirm('您确定要还原数据?').then(type => {
+                if (type === 'confirm') {
+                  this.$refs.xTable.revertData()
+                }
+              })
+            }
           }
         }
         `
@@ -91,13 +112,29 @@ export default {
     }
   },
   created () {
-    const list = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    insertEvent () {
+      const record = {
+        sex: '1'
+      }
+      this.$refs.xTable.insert(record).then(({ row }) => {
+        this.$refs.xTable.setActiveCell(row, 'sex')
+      })
+    },
+    revertEvent () {
+      this.$XModal.confirm('您确定要还原数据?').then(type => {
+        if (type === 'confirm') {
+          this.$refs.xTable.revertData()
+        }
+      })
+    }
   }
 }
 </script>

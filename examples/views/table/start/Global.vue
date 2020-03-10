@@ -26,7 +26,7 @@
           // highlightHoverRow: false,
           // highlightCurrentColumn: false,
           // highlightHoverColumn: false,
-          // zIndex: 100, // 全局 zIndex 起始值
+          // zIndex: 100, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
           keepSource: true,
           // rowId: '_XID',
           radioConfig: {

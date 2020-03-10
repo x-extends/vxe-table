@@ -38,9 +38,9 @@
   .vxe-pager--jump-next {
     border: 1px solid transparent;
   }
-  &.p--border,
-  &.p--perfect {
-    &:not(.p--background) {
+  &.is--border,
+  &.is--perfect {
+    &:not(.is--background) {
       .vxe-pager--prev-btn,
       .vxe-pager--next-btn,
       .vxe-pager--num-btn,
@@ -50,8 +50,8 @@
       }
     }
   }
-  &.p--background,
-  &.p--perfect {
+  &.is--background,
+  &.is--perfect {
     .vxe-pager--prev-btn,
     .vxe-pager--next-btn {
       background-color: #f4f4f5;
@@ -69,7 +69,7 @@
       }
     }
   }
-  &.p--perfect {
+  &.is--perfect {
     border: 1px solid $vxe-table-border-color;
     border-top-width: 0;
     background-color: $vxe-table-header-background-color;
@@ -81,7 +81,7 @@
       background-color: #fff;
     }
   }
-  &.p--border {
+  &.is--border {
     .vxe-pager--num-btn {
       &.is--active {
         border-color: $vxe-primary-color;

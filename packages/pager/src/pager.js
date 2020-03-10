@@ -26,7 +26,7 @@ export default {
     border: { type: Boolean, default: () => GlobalConfig.pager.border },
     // 带背景颜色
     background: { type: Boolean, default: () => GlobalConfig.pager.background },
-    // 默认的样式
+    // 配套的样式
     perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect },
     // 自定义图标
     iconPrevPage: String,
@@ -68,9 +68,9 @@ export default {
       class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
         [`align--${align}`]: align,
-        'p--border': this.border,
-        'p--background': this.background,
-        'p--perfect': this.perfect,
+        'is--border': this.border,
+        'is--background': this.background,
+        'is--perfect': this.perfect,
         'is--loading': this.loading
       }]
     }, [
