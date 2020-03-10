@@ -248,11 +248,11 @@ export default {
         h('div', {
           class: 'vxe-export--panel-btns'
         }, [
-          defaultOptions.isPrint === false ? null : h('vxe-button', {
+          defaultOptions.isPrint ? h('vxe-button', {
             on: {
               click: this.printEvent
             }
-          }, GlobalConfig.i18n('vxe.export.expPrint')),
+          }, GlobalConfig.i18n('vxe.export.expPrint')) : null,
           h('vxe-button', {
             props: {
               status: 'primary'
