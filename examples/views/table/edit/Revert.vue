@@ -7,9 +7,9 @@
 
     <vxe-toolbar perfect>
       <template v-slot:buttons>
-        <vxe-button icon="fa fa-plus vxe-success-color" status="perfect" @click="insertEvent()">新增</vxe-button>
-        <vxe-button icon="fa fa-trash-o vxe-danger-color" status="perfect" @click="$refs.xTable.removeCheckboxRow()">移除</vxe-button>
-        <vxe-button icon="fa fa-save vxe-primary-color" status="perfect">保存</vxe-button>
+        <vxe-button icon="fa fa-plus vxe-success-color" status="perfect" @click="insertEvent">新增</vxe-button>
+        <vxe-button icon="fa fa-trash-o vxe-danger-color" status="perfect" @click="removeEvent">移除</vxe-button>
+        <vxe-button icon="fa fa-save vxe-primary-color" status="perfect" @click="saveEvent">保存</vxe-button>
         <vxe-button icon="fa fa-mail-reply vxe-warning-color" status="perfect" @click="revertEvent">还原</vxe-button>
       </template>
     </vxe-toolbar>
@@ -28,7 +28,7 @@
       <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column title="操作">
         <template v-slot="{ row }">
-          <vxe-button @click="$refs.xTable.revertData(row)">还原</vxe-button>
+          <vxe-button v-if="!$refs.xTable.isInsertByRow(row)" @click="$refs.xTable.revertData(row)">还原</vxe-button>
         </template>
       </vxe-table-column>
     </vxe-table>
@@ -53,10 +53,10 @@ export default {
         `
         <vxe-toolbar perfect>
           <template v-slot:buttons>
-            <vxe-button icon="fa fa-plus vxe-success-color" @click="insertEvent()">新增</vxe-button>
-            <vxe-button icon="fa fa-trash-o vxe-danger-color" @click="$refs.xTable.removeCheckboxRow()">移除</vxe-button>
-            <vxe-button icon="fa fa-save vxe-primary-color">保存</vxe-button>
-            <vxe-button icon="fa fa-mail-reply vxe-warning-color" @click="revertEvent">还原</vxe-button>
+            <vxe-button icon="fa fa-plus vxe-success-color" status="perfect" @click="insertEvent">新增</vxe-button>
+            <vxe-button icon="fa fa-trash-o vxe-danger-color" status="perfect" @click="removeEvent">移除</vxe-button>
+            <vxe-button icon="fa fa-save vxe-primary-color" status="perfect" @click="saveEvent">保存</vxe-button>
+            <vxe-button icon="fa fa-mail-reply vxe-warning-color" status="perfect" @click="revertEvent">还原</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -74,7 +74,7 @@ export default {
           <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column title="操作">
             <template v-slot="{ row }">
-              <vxe-button @click="$refs.xTable.revertData(row)">还原</vxe-button>
+              <vxe-button v-if="!$refs.xTable.isInsertByRow(row)" @click="$refs.xTable.revertData(row)">还原</vxe-button>
             </template>
           </vxe-table-column>
         </vxe-table>
@@ -98,12 +98,28 @@ export default {
                 this.$refs.xTable.setActiveCell(row, 'sex')
               })
             },
+            removeEvent () {
+              const selectRecords = this.$refs.xTable.getCheckboxRecords()
+              if (selectRecords.length) {
+                this.$XModal.confirm('您确定要删除选中的数据吗?').then(type => {
+                  if (type === 'confirm') {
+                    this.$refs.xTable.removeCheckboxRow()
+                  }
+                })
+              } else {
+                this.$XModal.message({ message: '请至少选择一条数据', status: 'error' })
+              }
+            },
             revertEvent () {
-              this.$XModal.confirm('您确定要还原数据?').then(type => {
+              this.$XModal.confirm('您确定要还原数据吗?').then(type => {
                 if (type === 'confirm') {
                   this.$refs.xTable.revertData()
                 }
               })
+            },
+            saveEvent () {
+              const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+              this.$XModal.alert(\`insertRecords=\${insertRecords.length} removeRecords=\${removeRecords.length} updateRecords=\${updateRecords.length}\`)
             }
           }
         }
@@ -128,12 +144,28 @@ export default {
         this.$refs.xTable.setActiveCell(row, 'sex')
       })
     },
+    removeEvent () {
+      const selectRecords = this.$refs.xTable.getCheckboxRecords()
+      if (selectRecords.length) {
+        this.$XModal.confirm('您确定要删除选中的数据吗?').then(type => {
+          if (type === 'confirm') {
+            this.$refs.xTable.removeCheckboxRow()
+          }
+        })
+      } else {
+        this.$XModal.message({ message: '请至少选择一条数据', status: 'error' })
+      }
+    },
     revertEvent () {
-      this.$XModal.confirm('您确定要还原数据?').then(type => {
+      this.$XModal.confirm('您确定要还原数据吗?').then(type => {
         if (type === 'confirm') {
           this.$refs.xTable.revertData()
         }
       })
+    },
+    saveEvent () {
+      const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+      this.$XModal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
     }
   }
 }
