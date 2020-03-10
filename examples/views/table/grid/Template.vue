@@ -89,6 +89,14 @@
           <button @click="showDetailEvent(row, column)">弹框</button>
         </span>
       </template>
+
+      <!--使用 bottom 插槽-->
+      <template v-slot:bottom>
+        <div class="alert-message">
+          <i class="fa fa-info-circle alert-message-icon"></i>
+          <span>可以在这里自定义底部模板</span>
+        </div>
+      </template>
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
@@ -315,6 +323,14 @@ export default {
               <span style="color: red;">{{ row.name }}</span>
               <button @click="showDetailEvent(row, column)">弹框</button>
             </span>
+          </template>
+
+          <!--使用 bottom 插槽-->
+          <template v-slot:bottom>
+            <div class="alert-message">
+              <i class="fa fa-info-circle alert-message-icon"></i>
+              <span>可以在这里自定义底部模板</span>
+            </div>
           </template>
         </vxe-grid>
 
