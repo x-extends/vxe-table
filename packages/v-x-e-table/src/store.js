@@ -1,14 +1,14 @@
 /**
  * 创建数据仓库
  */
-class VXEStore {
+class Store {
   constructor () {
     this.store = {}
   }
 
   mixin (map) {
     Object.assign(this.store, map)
-    return VXEStore
+    return Store
   }
 
   get (type) {
@@ -17,13 +17,13 @@ class VXEStore {
 
   add (type, render) {
     this.store[type] = render
-    return VXEStore
+    return Store
   }
 
   delete (type) {
     delete this.store[type]
-    return VXEStore
+    return Store
   }
 }
 
-export default VXEStore
+export default Store
