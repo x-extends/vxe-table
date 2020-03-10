@@ -2112,6 +2112,15 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'keydown',
+        desc: '当表格被激活且键盘被按下时会触发的事件',
+        version: '2.8.21',
+        type: '',
+        enum: '',
+        defVal: '{},event',
+        list: []
+      },
+      {
         name: 'current-change',
         descKey: 'app.api.table.desc.currentChange',
         version: '',
@@ -3705,7 +3714,17 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
-        list: XEUtils.clone(exportDataAPI, true)
+        list: XEUtils.clone(exportDataAPI, true).concat([
+          {
+            name: 'isPrint',
+            desc: '是否需要打印按钮',
+            version: '2.8.21',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          }
+        ])
       },
       {
         name: 'importData(options)',

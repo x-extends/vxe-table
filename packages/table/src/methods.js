@@ -1592,6 +1592,7 @@ const Methods = {
             }
           }
         }
+        this.$emit('keydown', { $table: this }, evnt)
       })
     }
   },

@@ -11,7 +11,7 @@
       :footer-method="footerMethod"
       :columns="tableColumn"
       :data="tableData"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
+      :context-menu="tableMenu"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent"></vxe-grid>
 
@@ -44,34 +44,43 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      tableData: [],
       tableColumn: [
         { type: 'seq', width: 50 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'age', title: 'app.body.label.age' },
         { field: 'date3', title: 'Date', showOverflow: true }
       ],
-      headerMenus: [
-        [
-          { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
-        ]
-      ],
-      bodyMenus: [
-        [
-          { code: 'copy', name: '复制内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
-          { code: 'clear', name: '清除内容', visible: true, disabled: false },
-          { code: 'reload', name: '刷新表格', visible: true, disabled: false }
-        ],
-        [
-          { code: 'myPrint', name: '打印', prefixIcon: 'fa fa-print', visible: true, disabled: false },
-          { code: 'myExport', name: '导出.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
-        ]
-      ],
-      footerMenus: [
-        [
-          { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
-        ]
-      ],
-      tableData: [],
+      tableMenu: {
+        header: {
+          options: [
+            [
+              { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+            ]
+          ]
+        },
+        body: {
+          options: [
+            [
+              { code: 'copy', name: '复制内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+              { code: 'clear', name: '清除内容', visible: true, disabled: false },
+              { code: 'reload', name: '刷新表格', visible: true, disabled: false }
+            ],
+            [
+              { code: 'myPrint', name: '打印', prefixIcon: 'fa fa-print', visible: true, disabled: false },
+              { code: 'myExport', name: '导出.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+            ]
+          ]
+        },
+        footer: {
+          options: [
+            [
+              { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+            ]
+          ]
+        },
+        visibleMethod: this.visibleMethod
+      },
       demoCodes: [
         `
         <vxe-grid
@@ -83,7 +92,7 @@ export default {
           :footer-method="footerMethod"
           :columns="tableColumn"
           :data="tableData"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
+          :context-menu="tableMenu"
           @cell-context-menu="cellContextMenuEvent"
           @context-menu-click="contextMenuClickEvent"></vxe-grid>
         `,
@@ -91,34 +100,43 @@ export default {
         export default {
           data () {
             return {
+              tableData: [],
               tableColumn: [
                 { type: 'seq', width: 50 },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'age', title: 'app.body.label.age' },
                 { field: 'date3', title: 'Date', showOverflow: true }
               ],
-              headerMenus: [
-                [
-                  { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
-                ]
-              ],
-              bodyMenus: [
-                [
-                  { code: 'copy', name: '复制内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
-                  { code: 'clear', name: '清除内容', visible: true, disabled: false },
-                  { code: 'reload', name: '刷新表格', visible: true, disabled: false }
-                ],
-                [
-                  { code: 'myPrint', name: '打印', prefixIcon: 'fa fa-print', visible: true, disabled: false },
-                  { code: 'myExport', name: '导出.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
-                ]
-              ],
-              footerMenus: [
-                [
-                  { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
-                ]
-              ],
-              tableData: []
+              tableMenu: {
+                header: {
+                  options: [
+                    [
+                      { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+                    ]
+                  ]
+                },
+                body: {
+                  options: [
+                    [
+                      { code: 'copy', name: '复制内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+                      { code: 'clear', name: '清除内容', visible: true, disabled: false },
+                      { code: 'reload', name: '刷新表格', visible: true, disabled: false }
+                    ],
+                    [
+                      { code: 'myPrint', name: '打印', prefixIcon: 'fa fa-print', visible: true, disabled: false },
+                      { code: 'myExport', name: '导出.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+                    ]
+                  ]
+                },
+                footer: {
+                  options: [
+                    [
+                      { code: 'exportAll', name: '导出所有.csv', prefixIcon: 'fa fa-download', visible: true, disabled: false }
+                    ]
+                  ]
+                },
+                visibleMethod: this.visibleMethod
+              }
             }
           },
           created () {

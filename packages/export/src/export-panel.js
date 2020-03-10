@@ -248,7 +248,7 @@ export default {
         h('div', {
           class: 'vxe-export--panel-btns'
         }, [
-          h('vxe-button', {
+          defaultOptions.isPrint === false ? null : h('vxe-button', {
             on: {
               click: this.printEvent
             }
