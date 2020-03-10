@@ -119,8 +119,8 @@ export default {
               this.$XModal.alert(insertRecords.length)
             },
             getSelectionEvent () {
-              const removeRecords = this.$refs.xTable.getCheckboxRecords()
-              this.$XModal.alert(removeRecords.length)
+              const selectRecords = this.$refs.xTable.getCheckboxRecords()
+              this.$XModal.alert(selectRecords.length)
             }
           }
         }
@@ -149,8 +149,8 @@ export default {
       this.$XModal.alert(insertRecords.length)
     },
     getSelectionEvent () {
-      const removeRecords = this.$refs.xTable.getCheckboxRecords()
-      this.$XModal.alert(removeRecords.length)
+      const selectRecords = this.$refs.xTable.getCheckboxRecords()
+      this.$XModal.alert(selectRecords.length)
     }
   }
 }
