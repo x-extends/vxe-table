@@ -1,5 +1,5 @@
 import VXEStore from './store'
 
-const commands = new VXEStore()
+const menus = new VXEStore()
 
-export default commands
+export default menus
