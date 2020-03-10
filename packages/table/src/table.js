@@ -1605,13 +1605,15 @@ export default {
             rows = [rows]
           }
           rows.forEach(row => {
-            const rowIndex = tableFullData.indexOf(row)
-            const oRow = tableSourceData[rowIndex]
-            if (oRow && row) {
-              if (field) {
-                XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-              } else {
-                XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+            if (!this.isInsertByRow(row)) {
+              const rowIndex = tableFullData.indexOf(row)
+              const oRow = tableSourceData[rowIndex]
+              if (oRow && row) {
+                if (field) {
+                  XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+                } else {
+                  XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+                }
               }
             }
           })
