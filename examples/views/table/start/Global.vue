@@ -49,6 +49,7 @@
             // importMethod () {}
           },
           exportConfig: {
+            // isPrint: true,
             // modes: ['current', 'selected'],
             // types: ['csv', 'html', 'xml', 'txt'],
             // remote: false,
