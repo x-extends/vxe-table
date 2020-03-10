@@ -196,7 +196,8 @@ function renderNativeOptions (h, options, renderOpts, params) {
 /**
  * 渲染内置组件的下拉选项
  */
-function renderDefaultOptions (h, options, renderOpts) {
+/* eslint-disable @typescript-eslint/no-unused-vars */
+function renderDefaultOptions (h, options, renderOpts, params) {
   const { optionProps = {} } = renderOpts
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
