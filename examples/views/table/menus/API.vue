@@ -58,7 +58,7 @@ export default {
         `
         <vxe-table
           border
-          :context-menu="{body: {options: bodyMenus}}"
+          :context-menu="tableMenu"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -82,21 +82,16 @@ export default {
           data () {
             return {
               tableData: [],
-              bodyMenus: [
-                [
-                  {
-                    code: 'exportData',
-                    name: '导出.csv'
-                  },
-                  {
-                    code: 'insert',
-                    name: '新增',
-                    record: {
-                      name: '默认名称'
-                    }
-                  }
-                ]
-              ]
+              tableMenu: {
+                body: {
+                  options: [
+                    [
+                      { code: 'exportData', name: '导出.csv' },
+                      { code: 'insert', name: '新增', record: { name: '默认名称' } }
+                    ]
+                  ]
+                }
+              }
             }
           },
           created () {

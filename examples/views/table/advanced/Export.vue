@@ -11,11 +11,13 @@
       <template v-slot:buttons>
         <vxe-button @click="exportDataEvent">默认导出</vxe-button>
         <vxe-button @click="exportSelectEvent">导出选中</vxe-button>
+        <vxe-button @click="openExportEvent">高级导出</vxe-button>
       </template>
     </vxe-toolbar>
 
     <vxe-table
       highlight-hover-row
+      export-config
       border="none"
       ref="xTable1"
       height="300"
@@ -157,11 +159,13 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="exportDataEvent">默认导出</vxe-button>
             <vxe-button @click="exportSelectEvent">导出选中</vxe-button>
+            <vxe-button @click="openExportEvent">高级导出</vxe-button>
           </template>
         </vxe-toolbar>
 
         <vxe-table
           highlight-hover-row
+          export-config
           border="none"
           ref="xTable1"
           height="300"
@@ -192,6 +196,9 @@ export default {
               this.$refs.xTable1.exportData({
                 data: this.$refs.xTable1.getCheckboxRecords()
               })
+            },
+            openExportEvent () {
+              this.$refs.xTable1.openExport({ isPrint: false })
             }
           }
         }
@@ -483,6 +490,9 @@ export default {
       this.$refs.xTable1.exportData({
         data: this.$refs.xTable1.getCheckboxRecords()
       })
+    },
+    openExportEvent () {
+      this.$refs.xTable1.openExport({ isPrint: false })
     },
     exportDataEvent2 () {
       this.$refs.xTable2.exportData({

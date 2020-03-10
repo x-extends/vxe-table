@@ -113,13 +113,13 @@
   .vxe-custom--option-wrapper {
     display: none;
     position: absolute;
-    right: 0;
+    right: 2px;
     text-align: left;
     background-color: #fff;
     z-index: 19;
     border: 1px solid $vxe-table-border-color;
     border-radius: 2px;
-    box-shadow: -3px 3px 4px -2px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 1px 6px rgba(0,0,0,.2);
     .vxe-custom--header {
       font-weight: 700;
       border-bottom: 1px solid $vxe-table-popup-border-color;

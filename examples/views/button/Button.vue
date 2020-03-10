@@ -143,6 +143,8 @@
       <vxe-button type="text" icon="vxe-icon--refresh" loading></vxe-button>
       <vxe-button type="text" icon="vxe-icon--download">图标按钮</vxe-button>
       <vxe-button status="primary" icon="vxe-icon--download">图标按钮</vxe-button>
+      <vxe-button status="my-purple" icon="fa fa-save">自定义按钮颜色</vxe-button>
+      <vxe-button status="my-green" icon="fa fa-graduation-cap">自定义图标颜色</vxe-button>
     </p>
 
     <pre>
@@ -158,6 +160,7 @@
 
     <pre>
       <code class="html">{{ demoCodes[0] }}</code>
+      <code class="css">{{ demoCodes[1] }}</code>
     </pre>
   </div>
 </template>
@@ -270,40 +273,64 @@ export default {
           <vxe-button>
             <template>默认颜色</template>
             <template v-slot:dropdowns>
-              <vxe-button>下拉按钮1</vxe-button>
+              <vxe-button type="text">下拉按钮1</vxe-button>
             </template>
           </vxe-button>
           <vxe-button status="primary">
             <template>主要颜色</template>
             <template v-slot:dropdowns>
-              <vxe-button>下拉按钮1</vxe-button>
+              <vxe-button type="text">下拉按钮1</vxe-button>
             </template>
           </vxe-button>
           <vxe-button status="success">
             <template>成功颜色</template>
             <template v-slot:dropdowns>
-              <vxe-button>下拉按钮1</vxe-button>
+              <vxe-button type="text">下拉按钮1</vxe-button>
             </template>
           </vxe-button>
           <vxe-button status="info">
             <template>信息颜色</template>
             <template v-slot:dropdowns>
-              <vxe-button>下拉按钮1</vxe-button>
+              <vxe-button type="text">下拉按钮1</vxe-button>
             </template>
           </vxe-button>
           <vxe-button status="warning">
             <template>警告颜色</template>
             <template v-slot:dropdowns>
-              <vxe-button>下拉按钮1</vxe-button>
+              <vxe-button type="text">下拉按钮1</vxe-button>
             </template>
           </vxe-button>
           <vxe-button status="danger">
             <template>危险颜色</template>
             <template v-slot:dropdowns>
-              <vxe-button>下拉按钮1</vxe-button>
+              <vxe-button type="text">下拉按钮1</vxe-button>
             </template>
           </vxe-button>
         </p>
+
+        <p>
+          <vxe-button type="text" icon="vxe-icon--plus"></vxe-button>
+          <vxe-button type="text" icon="vxe-icon--refresh" loading></vxe-button>
+          <vxe-button type="text" icon="vxe-icon--download">图标按钮</vxe-button>
+          <vxe-button status="primary" icon="vxe-icon--download">图标按钮</vxe-button>
+          <vxe-button status="my-purple" icon="fa fa-save">自定义按钮颜色</vxe-button>
+          <vxe-button status="my-green" icon="fa fa-graduation-cap">自定义图标颜色</vxe-button>
+        </p>
+        `,
+        `
+        .vxe-button.type--button.theme--my-purple,
+        .vxe-button.type--button.theme--my-purple:hover {
+          color: #fff;
+        }
+        .vxe-button.type--button.theme--my-purple {
+          background-color: #800080;
+        }
+        .vxe-button.type--button.theme--my-purple:active {
+          background-color: #a50aa5;
+        }
+        .vxe-button.type--button.theme--my-green .vxe-button--icon {
+          color: #67c23a;
+        }
         `
       ]
     }
@@ -317,10 +344,17 @@ export default {
 </script>
 
 <style>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.vxe-button.type--button.theme--my-purple,
+.vxe-button.type--button.theme--my-purple:hover {
+  color: #fff;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
+.vxe-button.type--button.theme--my-purple {
+  background-color: #800080;
+}
+.vxe-button.type--button.theme--my-purple:active {
+  background-color: #a50aa5;
+}
+.vxe-button.type--button.theme--my-green .vxe-button--icon {
+  color: #67c23a;
 }
 </style>

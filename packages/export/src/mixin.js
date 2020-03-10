@@ -833,7 +833,8 @@ export default {
         original: defOpts.original,
         message: defOpts.message,
         isHeader: defOpts.isHeader,
-        isFooter: hasFooter
+        isFooter: hasFooter,
+        isPrint: defOpts.isPrint
       })
       return this.$nextTick()
     }

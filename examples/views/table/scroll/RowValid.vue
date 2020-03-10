@@ -1,33 +1,33 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动渲染，可编辑表格<br><span class="red">当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时</span></p>
+    <p class="tip">虚拟滚动渲染，可编辑表格<br><span class="red">（注：当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时）</span></p>
 
     <vxe-toolbar :refresh="{query: findList}">
       <template v-slot:buttons>
         <vxe-button>
           <template>新增操作</template>
           <template v-slot:dropdowns>
-            <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
-            <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
-            <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-            <vxe-button @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
+            <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
+            <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
+            <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
+            <vxe-button type="text" @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button>
           <template>删除操作</template>
           <template v-slot:dropdowns>
-            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
-            <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
-            <vxe-button @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
-            <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button>
           <template>校验操作</template>
           <template v-slot:dropdowns>
-            <vxe-button @click="validEvent">基本校验</vxe-button>
-            <vxe-button @click="fullValidEvent">完整校验</vxe-button>
-            <vxe-button @click="selectValidEvent">选中校验</vxe-button>
+            <vxe-button type="text" @click="validEvent">基本校验</vxe-button>
+            <vxe-button type="text" @click="fullValidEvent">完整校验</vxe-button>
+            <vxe-button type="text" @click="selectValidEvent">选中校验</vxe-button>
           </template>
         </vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -92,19 +92,19 @@ export default {
             <vxe-button>
               <template>新增操作</template>
               <template v-slot:dropdowns>
-                <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
-                <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
-                <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-                <vxe-button @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
+                <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
+                <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
+                <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
+                <vxe-button type="text" @click="insertEvent($refs.xTable.getData(2000))">插入到 2000 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button>
               <template>删除操作</template>
               <template v-slot:dropdowns>
-                <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
-                <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
-                <vxe-button @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
-                <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button>
