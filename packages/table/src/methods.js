@@ -2316,12 +2316,12 @@ const Methods = {
    * @param {Event} evnt 事件
    */
   closeFilter () {
-    // Object.assign(this.filterStore, {
-    //   isAllSelected: false,
-    //   isIndeterminate: false,
-    //   options: [],
-    //   visible: false
-    // })
+    Object.assign(this.filterStore, {
+      isAllSelected: false,
+      isIndeterminate: false,
+      options: [],
+      visible: false
+    })
     return this.$nextTick()
   },
   /**
