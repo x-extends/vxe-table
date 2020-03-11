@@ -170,7 +170,11 @@ export default {
               key: columnKey ? column.id : columnIndex
             }, [
               h('div', {
-                class: 'vxe-cell'
+                class: ['vxe-cell', {
+                  'c--title': showTitle,
+                  'c--tooltip': showTooltip,
+                  'c--ellipsis': showEllipsis
+                }]
               }, column.renderFooter(h, params))
             ])
           }).concat(scrollbarWidth ? [
