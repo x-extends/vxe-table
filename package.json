@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "2.8.20",
+  "version": "2.8.21",
   "description": "vxe-table vue 表格解决方案",
   "scripts": {
     "serve": "vue-cli-service serve",
