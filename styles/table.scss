@@ -929,7 +929,8 @@
       @extend %DefaultColumnHeight;
     }
   }
-  .vxe-body--column {
+  .vxe-body--column,
+  .vxe-footer--column {
     &.col--ellipsis {
       @extend %CellEllipsis;
     }
