@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
@@ -756,9 +756,12 @@ export default {
       }
     },
     clearValueEvent (evnt, value) {
-      const { $refs } = this
+      const { $refs, type } = this
       if (this.isDatePicker) {
         this.hidePanel()
+      }
+      if (['text', 'number', 'integer', 'password'].indexOf(type) > -1) {
+        this.focus()
       }
       this.$emit('clear', { $panel: $refs.panel, value }, evnt)
     },
