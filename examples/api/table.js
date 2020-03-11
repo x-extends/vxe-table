@@ -1016,6 +1016,33 @@ const apis = [
         ]
       },
       {
+        name: 'export-config',
+        descKey: 'app.api.table.desc.exportConfig',
+        version: '1.15.18',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.exportConfig',
+        list: XEUtils.clone(exportDataAPI, true)
+      },
+      {
+        name: 'import-config',
+        descKey: 'app.api.table.desc.importConfig',
+        version: '1.15.18',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.importConfig',
+        list: XEUtils.clone(importDataAPI, true)
+      },
+      {
+        name: 'print-config',
+        descKey: 'app.api.table.desc.printConfig',
+        version: '1.15.18',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.printConfig',
+        list: XEUtils.clone(printAPI, true)
+      },
+      {
         name: 'radio-config',
         descKey: 'app.api.table.desc.radioConfig',
         version: '',
@@ -1023,6 +1050,15 @@ const apis = [
         enum: '',
         defVal: '继承 setup.radioConfig',
         list: [
+          {
+            name: 'reserve',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
+            version: '1.15.27',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
           {
             name: 'labelProp',
             disabled: true,
@@ -1079,33 +1115,6 @@ const apis = [
             list: []
           }
         ]
-      },
-      {
-        name: 'export-config',
-        descKey: 'app.api.table.desc.exportConfig',
-        version: '1.15.18',
-        type: 'Boolean, Object',
-        enum: '',
-        defVal: '继承 setup.exportConfig',
-        list: XEUtils.clone(exportDataAPI, true)
-      },
-      {
-        name: 'import-config',
-        descKey: 'app.api.table.desc.importConfig',
-        version: '1.15.18',
-        type: 'Boolean, Object',
-        enum: '',
-        defVal: '继承 setup.importConfig',
-        list: XEUtils.clone(importDataAPI, true)
-      },
-      {
-        name: 'print-config',
-        descKey: 'app.api.table.desc.printConfig',
-        version: '1.15.18',
-        type: 'Object',
-        enum: '',
-        defVal: '继承 setup.printConfig',
-        list: XEUtils.clone(printAPI, true)
       },
       {
         name: 'select-config',
@@ -2963,6 +2972,15 @@ const apis = [
         list: []
       },
       {
+        name: 'getRadioReserveRecord()',
+        desc: '用于 radio-config.reserve，获取已保留选中的行数据',
+        version: '1.15.27',
+        type: 'Row',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getSelectReserveRecords()',
         disabled: true,
         desc: '即将废弃，请使用 getCheckboxReserveRecords',
@@ -3420,6 +3438,15 @@ const apis = [
         name: 'clearRadioRow()',
         desc: '用于单选行，手动清空用户的选择',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearRadioReserve()',
+        desc: '用于 radio-config.reserve，手动清空用户保留选中的行数据',
+        version: '1.15.27',
         type: 'Promise',
         enum: '',
         defVal: '',

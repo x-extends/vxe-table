@@ -58,10 +58,12 @@ export default {
               }
             }
           }, [
-            multiple ? h('i', {
+            multiple ? h('span', {
               class: 'vxe-checkbox--icon'
             }) : null,
-            GlobalConfig.i18n('vxe.table.allFilter')
+            h('span', {
+              class: 'vxe-checkbox--label'
+            }, GlobalConfig.i18n('vxe.table.allFilter'))
           ])
         ]),
         h('ul', {
@@ -80,10 +82,12 @@ export default {
               }
             }
           }, [
-            multiple ? h('i', {
+            multiple ? h('span', {
               class: 'vxe-checkbox--icon'
             }) : null,
-            UtilTools.formatText(item.label, 1)
+            h('span', {
+              class: 'vxe-checkbox--label'
+            }, UtilTools.formatText(item.label, 1))
           ])
         }))
       ]

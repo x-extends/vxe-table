@@ -5,6 +5,14 @@
       默认大小：Table 48px 、Button 34px、Input 34px、Checkbox 16px、Radio 16px，可以通过 scss 变量修改，<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a><br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-custom-theme" target="_blank">（项目示例）</a>
     </p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="allAlign = 'left'">居左</vxe-button>
+        <vxe-button @click="allAlign = 'center'">居中</vxe-button>
+        <vxe-button @click="allAlign = 'right'">居右</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-form :data="formData">
       <vxe-form-item title="输入框" field="iVal">
         <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
@@ -41,6 +49,7 @@
 
     <vxe-table
       export-config
+      :align="allAlign"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
@@ -107,6 +116,7 @@
     <vxe-table
       export-config
       size="medium"
+      :align="allAlign"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
@@ -174,6 +184,7 @@
     <vxe-table
       export-config
       size="small"
+      :align="allAlign"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
@@ -241,6 +252,7 @@
     <vxe-table
       export-config
       size="mini"
+      :align="allAlign"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="60"></vxe-table-column>
@@ -277,6 +289,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      allAlign: null,
       formData: {
         iVal: '',
         sVal: '',
