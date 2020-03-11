@@ -14,8 +14,9 @@
       :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
-      <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title">
+      <vxe-table-column field="name" title="名称"></vxe-table-column>
+      <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" width="160" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
+      <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title" show-footer-overflow>
         <template>
           <span>111111111111 111111111111111111 22222222222222222222222222222222222</span>
         </template>
@@ -25,7 +26,7 @@
           <span>33333333333333333333333333 5555555555555555555555555555555555555555555555</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-table-column field="address" title="Address" width="160" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -46,7 +47,8 @@
       :data="tableData"
       :tooltip-config="{theme: 'light'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-overflow></vxe-table-column>
+      <vxe-table-column field="name" title="名称"></vxe-table-column>
+      <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" width="160" show-overflow="ellipsis"></vxe-table-column>
       <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title" show-footer-overflow>
         <template>
           <span>111111111111 111111111111111111 22222222222222222222222222222222222</span>
@@ -59,7 +61,7 @@
           </template>
         </vxe-table-column>
         <vxe-table-column title="详细信息">
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="address" title="Address" width="160" show-overflow></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
     </vxe-table>

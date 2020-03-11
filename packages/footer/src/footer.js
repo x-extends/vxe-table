@@ -173,7 +173,11 @@ export default {
               key: columnKey || ($table.columnKey ? column.id : columnIndex)
             }, [
               h('div', {
-                class: 'vxe-cell',
+                class: ['vxe-cell', {
+                  'c--title': showTitle,
+                  'c--tooltip': showTooltip,
+                  'c--ellipsis': showEllipsis
+                }],
                 style: {
                   width: hasEllipsis ? `${renderWidth - cellOffsetWidth}px` : null
                 }
