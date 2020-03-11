@@ -39,17 +39,14 @@
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
       &:before {
-        height: 0.64em;
-        width: 0.32em;
-        top: 0;
-        left: 0.2em;
-        bottom: 0.1em;
-        border-width: 0.12em;
-        border-style: solid;
-        border-color: #fff;
+        height: $vxe-checkbox-checked-height;
+        width: $vxe-checkbox-checked-width;
+        left: 50%;
+        top: 50%;
+        border: $vxe-checkbox-border-width solid #fff;
         border-left: 0;
         border-top: 0;
-        transform: rotate(45deg);
+        transform: translate(-50%, -50%) rotate(45deg);
       }
       &+.vxe-checkbox--label {
         color: $vxe-primary-color;
@@ -64,12 +61,12 @@
           border-color: $vxe-primary-color;
           &:before {
             border: 0;
-            left: -0.15em;
-            top: 0.28em;
-            height: 0.18em;
-            width: 1em;
+            left: 50%;
+            top: 50%;
+            height: $vxe-checkbox-indeterminate-height;
+            width: $vxe-checkbox-indeterminate-width;
             background-color: #ffffff;
-            transform: scale(.6);
+            transform: translate(-50%, -50%);
           }
         }
       }

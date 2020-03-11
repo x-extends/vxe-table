@@ -3,7 +3,7 @@ import { UtilTools } from '../../tools'
 export default {
   name: 'VxeOptgroup',
   props: {
-    label: [String, Number],
+    label: { type: [String, Number, Boolean], default: '' },
     disabled: Boolean,
     size: String
   },
