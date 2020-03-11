@@ -191,11 +191,18 @@
       position: absolute;
       height: 1em;
       width: 1em;
-      top: 0.42em;
-      left: 0.6em;
+      top: 0;
+      left: 0;
       border-radius: $vxe-checkbox-border-radius;
       border: $vxe-checkbox-border-width solid $vxe-input-border-color;
     }
+  }
+  .vxe-checkbox--icon {
+    position: absolute;
+    left: 0.6em;
+    top: 0.42em;
+    height: 1em;
+    width: 1em;
   }
   &.is--checked,
   &.is--indeterminate {
@@ -216,8 +223,8 @@
       &:after {
         height: 0.64em;
         width: 0.32em;
-        top: 0.55em;
-        left: 0.95em;
+        top: 0.15em;
+        left: 0.4em;
         border: 2px solid #ffffff;
         border-left: 0;
         border-top: 0;
@@ -228,8 +235,8 @@
   &.is--indeterminate {
     .vxe-checkbox--icon {
       &:after {
-        top: 0.86em;
-        left: 0.6em;
+        top: 0.46em;
+        left: 0;
         height: 0.18em;
         width: 1em;
         background-color: #ffffff;

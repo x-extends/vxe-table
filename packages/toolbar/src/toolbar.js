@@ -273,10 +273,12 @@ export default {
                   click: this.allCustomEvent
                 }
               }, [
-                h('i', {
+                h('span', {
                   class: 'vxe-checkbox--icon'
                 }),
-                GlobalConfig.i18n('vxe.toolbar.customAll')
+                h('span', {
+                  class: 'vxe-checkbox--label'
+                }, GlobalConfig.i18n('vxe.toolbar.customAll'))
               ])
             ]),
             h('ul', {
@@ -306,10 +308,12 @@ export default {
                   }
                 }
               }, [
-                h('i', {
+                h('span', {
                   class: 'vxe-checkbox--icon'
                 }),
-                colTitle
+                h('span', {
+                  class: 'vxe-checkbox--label'
+                }, colTitle)
               ]) : null
             })),
             customOpts.isFooter === false ? null : h('div', {

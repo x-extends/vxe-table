@@ -208,7 +208,11 @@ export const Cell = {
     return [
       h('span', {
         class: 'vxe-cell--title'
-      }, slots && slots.header ? slots.header.call($table, params, h) : UtilTools.formatText(column.getTitle(), 1))
+      }, slots && slots.header ? slots.header.call($table, params, h) : [
+        h('span', {
+          class: 'vxe-radio--label'
+        }, UtilTools.formatText(column.getTitle(), 1))
+      ])
     ]
   },
   renderRadioCell (h, params) {
@@ -240,10 +244,14 @@ export const Cell = {
         }],
         on
       }, [
-        h('i', {
+        h('span', {
           class: 'vxe-radio--icon'
         })
-      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [XEUtils.get(row, labelField)]) : []))
+      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [
+        h('span', {
+          class: 'vxe-radio--label'
+        }, XEUtils.get(row, labelField))
+      ]) : []))
     ]
   },
   renderTreeRadioCell (h, params) {
@@ -265,7 +273,11 @@ export const Cell = {
       return [
         h('span', {
           class: 'vxe-cell--title'
-        }, slots && slots.header ? slots.header.call($table, params, h) : UtilTools.getFuncText(headerTitle))
+        }, slots && slots.header ? slots.header.call($table, params, h) : [
+          h('span', {
+            class: 'vxe-checkbox--label'
+          }, headerTitle)
+        ])
       ]
     }
     if (!isHidden) {
@@ -293,10 +305,14 @@ export const Cell = {
           },
           on
         }, [
-          h('i', {
+          h('span', {
             class: 'vxe-checkbox--icon'
           })
-        ].concat(headerTitle ? (slots && slots.header ? slots.header.call($table, params, h) : [UtilTools.getFuncText(headerTitle)]) : []))
+        ].concat(headerTitle ? (slots && slots.header ? slots.header.call($table, params, h) : [
+          h('span', {
+            class: 'vxe-checkbox--label'
+          }, headerTitle)
+        ]) : []))
       ])
     ]
   },
@@ -334,10 +350,14 @@ export const Cell = {
         }],
         on
       }, [
-        h('i', {
+        h('span', {
           class: 'vxe-checkbox--icon'
         })
-      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [XEUtils.get(row, labelField)]) : []))
+      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [
+        h('span', {
+          class: 'vxe-checkbox--label'
+        }, XEUtils.get(row, labelField))
+      ]) : []))
     ]
   },
   renderTreeSelectionCell (h, params) {
@@ -377,10 +397,14 @@ export const Cell = {
         }],
         on
       }, [
-        h('i', {
+        h('span', {
           class: 'vxe-checkbox--icon'
         })
-      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [XEUtils.get(row, labelField)]) : []))
+      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [
+        h('span', {
+          class: 'vxe-checkbox--label'
+        }, XEUtils.get(row, labelField))
+      ]) : []))
     ]
   },
   renderTreeSelectionCellByProp (h, params) {

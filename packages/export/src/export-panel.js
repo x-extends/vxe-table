@@ -167,10 +167,12 @@ export default {
                           click: this.allColumnEvent
                         }
                       }, [
-                        h('i', {
+                        h('span', {
                           class: 'vxe-checkbox--icon'
                         }),
-                        GlobalConfig.i18n('vxe.export.expCurrentColumn')
+                        h('span', {
+                          class: 'vxe-checkbox--label'
+                        }, GlobalConfig.i18n('vxe.export.expCurrentColumn'))
                       ])
                     ]),
                     h('ul', {
@@ -194,10 +196,12 @@ export default {
                           }
                         }
                       }, [
-                        h('i', {
+                        h('span', {
                           class: 'vxe-checkbox--icon'
                         }),
-                        headerTitle
+                        h('span', {
+                          class: 'vxe-checkbox--label'
+                        }, headerTitle)
                       ])
                     }))
                   ])
