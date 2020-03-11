@@ -616,8 +616,10 @@ export default {
       // 最后滚动位置
       lastScrollLeft: 0,
       lastScrollTop: 0,
+      // 单选框属性，已选中保留的行
+      radioReserveRow: null,
       // 复选框属性，已选中保留的行
-      selectReserveRowMap: {},
+      checkboxReserveRowMap: {},
       // 完整数据、条件处理后
       tableFullData: [],
       afterFullData: [],

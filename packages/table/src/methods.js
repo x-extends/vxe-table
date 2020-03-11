@@ -58,6 +58,7 @@ const Methods = {
     this.clearCurrentRow()
     this.clearCurrentColumn()
     this.clearRadioRow()
+    this.clearRadioReserve()
     this.clearCheckboxRow()
     this.clearCheckboxReserve()
     this.clearRowExpand()
@@ -1767,7 +1768,7 @@ const Methods = {
           XEUtils.eachTree([row], (item, $rowIndex) => {
             if (row === item || (!checkMethod || checkMethod({ row: item, $rowIndex }))) {
               XEUtils.set(item, property, value)
-              this.handleSelectReserveRow(row, value)
+              this.handleCheckboxReserveRow(row, value)
             }
           }, treeOpts)
           XEUtils.remove(treeIndeterminates, item => item === row)
@@ -1788,7 +1789,7 @@ const Methods = {
         }
       } else {
         XEUtils.set(row, property, value)
-        this.handleSelectReserveRow(row, value)
+        this.handleCheckboxReserveRow(row, value)
       }
     } else {
       if (treeConfig && !checkStrictly) {
@@ -1804,7 +1805,7 @@ const Methods = {
               } else {
                 XEUtils.remove(selection, select => select === item)
               }
-              this.handleSelectReserveRow(row, value)
+              this.handleCheckboxReserveRow(row, value)
             }
           }, treeOpts)
           XEUtils.remove(treeIndeterminates, item => item === row)
@@ -1831,7 +1832,7 @@ const Methods = {
         } else {
           XEUtils.remove(selection, item => item === row)
         }
-        this.handleSelectReserveRow(row, value)
+        this.handleCheckboxReserveRow(row, value)
       }
     }
     this.checkSelectionStatus()
@@ -1850,13 +1851,14 @@ const Methods = {
   triggerCheckRowEvent (evnt, params, value) {
     const { checkMethod } = this.checkboxOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
+      const records = this.getCheckboxRecords()
       this.handleSelectRow(params, value)
       // 在 v3.0 中废弃 select-change
       if (this.$listeners['select-change']) {
         UtilTools.warn('vxe.error.delEvent', ['select-change', 'checkbox-change'])
-        UtilTools.emitEvent(this, 'select-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
+        this.$emit('select-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt)
       } else {
-        UtilTools.emitEvent(this, 'checkbox-change', [Object.assign({ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt])
+        this.$emit('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt)
       }
     }
   },
@@ -1882,7 +1884,7 @@ const Methods = {
    * @param {Boolean} value 是否选中
    */
   setAllCheckboxRow (value) {
-    const { afterFullData, treeConfig, treeOpts, selection, selectReserveRowMap, checkboxOpts } = this
+    const { afterFullData, treeConfig, treeOpts, selection, checkboxReserveRowMap, checkboxOpts } = this
     const { checkField: property, reserve, checkStrictly, checkMethod } = checkboxOpts
     let selectRows = []
     const beforeSelection = treeConfig ? [] : selection.filter(row => afterFullData.indexOf(row) === -1)
@@ -1938,13 +1940,13 @@ const Methods = {
       if (reserve) {
         if (value) {
           selectRows.forEach(row => {
-            selectReserveRowMap[UtilTools.getRowid(this, row)] = row
+            checkboxReserveRowMap[UtilTools.getRowid(this, row)] = row
           })
         } else {
           afterFullData.forEach(row => {
             const rowid = UtilTools.getRowid(this, row)
-            if (selectReserveRowMap[rowid]) {
-              delete selectReserveRowMap[rowid]
+            if (checkboxReserveRowMap[rowid]) {
+              delete checkboxReserveRowMap[rowid]
             }
           })
         }
@@ -1977,17 +1979,24 @@ const Methods = {
   },
   // 还原展开、选中等相关状态
   handleReserveStatus () {
-    const { rowId, treeConfig, fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
+    const { treeConfig, fullDataRowIdData, radioReserveRow, radioOpts, checkboxReserveRowMap, checkboxOpts } = this
+    let reserveRadioRow = null
     const reserveSelection = []
     const reserveRowExpandeds = []
     const reserveTreeExpandeds = []
     const reserveTreeIndeterminates = []
-    // 复选框
-    if (rowId) {
-      this.handleReserveByRowid(this.selection, reserveSelection)
+    // 单选框
+    if (radioOpts.reserve && radioReserveRow) {
+      const rowid = UtilTools.getRowid(this, radioReserveRow)
+      if (fullDataRowIdData[rowid]) {
+        reserveRadioRow = fullDataRowIdData[rowid].row
+      }
     }
+    this.selectRow = reserveRadioRow
+    // 复选框
+    this.handleReserveByRowid(this.selection, reserveSelection)
     if (checkboxOpts.reserve) {
-      Object.keys(selectReserveRowMap).forEach(rowid => {
+      XEUtils.each(checkboxReserveRowMap, (item, rowid) => {
         if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
           reserveSelection.push(fullDataRowIdData[rowid].row)
         }
@@ -1995,12 +2004,10 @@ const Methods = {
     }
     this.selection = reserveSelection
     // 行展开
-    if (rowId) {
-      this.handleReserveByRowid(this.rowExpandeds, reserveRowExpandeds)
-    }
+    this.handleReserveByRowid(this.rowExpandeds, reserveRowExpandeds)
     this.rowExpandeds = reserveRowExpandeds
     // 树展开
-    if (rowId && treeConfig) {
+    if (treeConfig) {
       this.handleReserveByRowid(this.treeIndeterminates, reserveTreeIndeterminates)
       this.handleReserveByRowid(this.treeExpandeds, reserveTreeExpandeds)
     }
@@ -2016,6 +2023,28 @@ const Methods = {
       }
     })
   },
+  /**
+   * 获取单选框保留选中的行
+   */
+  getRadioReserveRecord () {
+    const { fullDataRowIdData, radioReserveRow, radioOpts } = this
+    if (radioOpts.reserve && radioReserveRow) {
+      if (!fullDataRowIdData[UtilTools.getRowid(this, radioReserveRow)]) {
+        return radioReserveRow
+      }
+    }
+    return null
+  },
+  clearRadioReserve () {
+    this.radioReserveRow = null
+    return this.$nextTick()
+  },
+  handleRadioReserveRow (row) {
+    const { radioOpts } = this
+    if (radioOpts.reserve) {
+      this.radioReserveRow = row
+    }
+  },
   // 在 v3.0 中废弃 getSelectReserveRecords
   getSelectReserveRecords () {
     UtilTools.warn('vxe.error.delFunc', ['getSelectReserveRecords', 'getCheckboxReserveRecords'])
@@ -2025,12 +2054,12 @@ const Methods = {
    * 获取保留选中的行
    */
   getCheckboxReserveRecords () {
-    const { fullDataRowIdData, selectReserveRowMap, checkboxOpts } = this
+    const { fullDataRowIdData, checkboxReserveRowMap, checkboxOpts } = this
     const reserveSelection = []
     if (checkboxOpts.reserve) {
-      Object.keys(selectReserveRowMap).forEach(rowid => {
+      Object.keys(checkboxReserveRowMap).forEach(rowid => {
         if (!fullDataRowIdData[rowid]) {
-          reserveSelection.push(selectReserveRowMap[rowid])
+          reserveSelection.push(checkboxReserveRowMap[rowid])
         }
       })
     }
@@ -2042,18 +2071,17 @@ const Methods = {
     return this.clearCheckboxReserve()
   },
   clearCheckboxReserve () {
-    this.selectReserveRowMap = {}
+    this.checkboxReserveRowMap = {}
     return this.$nextTick()
   },
-  handleSelectReserveRow (row, checked) {
-    const { selectReserveRowMap, checkboxOpts } = this
-    const { reserve } = checkboxOpts
-    if (reserve) {
+  handleCheckboxReserveRow (row, checked) {
+    const { checkboxReserveRowMap, checkboxOpts } = this
+    if (checkboxOpts.reserve) {
       const rowid = UtilTools.getRowid(this, row)
       if (checked) {
-        selectReserveRowMap[rowid] = row
-      } else if (selectReserveRowMap[rowid]) {
-        delete selectReserveRowMap[rowid]
+        checkboxReserveRowMap[rowid] = row
+      } else if (checkboxReserveRowMap[rowid]) {
+        delete checkboxReserveRowMap[rowid]
       }
     }
   },
@@ -2061,13 +2089,14 @@ const Methods = {
    * 多选，选中所有事件
    */
   triggerCheckAllEvent (evnt, value) {
+    const records = this.getCheckboxRecords()
     this.setAllCheckboxRow(value)
     // 在 v3.0 中废弃 select-all
     if (this.$listeners['select-all']) {
       UtilTools.warn('vxe.error.delEvent', ['select-all', 'checkbox-all'])
-      UtilTools.emitEvent(this, 'select-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
+      this.$emit('select-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt)
     } else {
-      UtilTools.emitEvent(this, 'checkbox-all', [{ selection: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt])
+      this.$emit('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt)
     }
   },
   // 在 v3.0 中废弃 toggleAllSelection
@@ -2126,7 +2155,7 @@ const Methods = {
       const isChange = this.selectRow !== params.row
       this.setRadioRow(params.row)
       if (isChange) {
-        UtilTools.emitEvent(this, 'radio-change', [params, evnt])
+        this.$emit('radio-change', params, evnt)
       }
     }
   },
@@ -2134,7 +2163,7 @@ const Methods = {
     const isChange = this.currentRow !== params.row
     this.setCurrentRow(params.row)
     if (isChange) {
-      UtilTools.emitEvent(this, 'current-change', [params, evnt])
+      this.$emit('current-change', params, evnt)
     }
   },
   /**
@@ -2162,6 +2191,7 @@ const Methods = {
       this.clearRadioRow()
     }
     this.selectRow = row
+    this.handleRadioReserveRow(row)
     return this.$nextTick()
   },
   /**

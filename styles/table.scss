@@ -544,17 +544,23 @@
   .vxe-cell--radio,
   .vxe-cell--checkbox {
     position: relative;
-    padding-left: 1.8em;
+    padding-left: 1.2em;
     user-select: none;
     cursor: pointer;
   }
-  .vxe-radio--icon,
-  .vxe-checkbox--icon {
-    position: absolute;
-    left: 0;
-    top: 0.1em;
-    height: 1em;
-    width: 1em;
+  .vxe-cell {
+    .vxe-radio--icon,
+    .vxe-checkbox--icon {
+      position: absolute;
+      left: 0;
+      top: 0.1em;
+      height: 1em;
+      width: 1em;
+    }
+    .vxe-radio--label,
+    .vxe-checkbox--label {
+      padding-left: 0.5em;
+    }
   }
   .vxe-cell--radio {
     .vxe-radio--icon {

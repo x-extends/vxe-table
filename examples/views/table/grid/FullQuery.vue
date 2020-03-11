@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">数据代理<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">（配置式代理项目示例）</a>、固定列、服务端排序、服务端筛选、服务端分页，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
+    <p class="tip">数据代理<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">（配置式代理项目示例）</a>、固定列、服务端排序、服务端筛选、服务端分页，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="radio-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
 
     <vxe-grid
       resizable
@@ -17,7 +17,7 @@
       :toolbar="tableToolbar"
       :columns="tableColumn"
       :proxy-config="tableProxy"
-      :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
+      :radio-config="{labelField: 'id', reserve: true, highlight: true}">
 
       <template v-slot:buttons>
         <vxe-form :data="formData" @submit="searchEvent">
@@ -83,7 +83,7 @@ export default {
       },
       tableColumn: [
         { type: 'seq', width: 60, fixed: 'left' },
-        { type: 'checkbox', title: 'ID', width: 120, fixed: 'left' },
+        { type: 'radio', title: 'ID', width: 120, fixed: 'left' },
         { field: 'name', title: 'Name', minWidth: 300, remoteSort: true },
         { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 300 },
         { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
@@ -120,7 +120,7 @@ export default {
           :toolbar="tableToolbar"
           :columns="tableColumn"
           :proxy-config="tableProxy"
-          :checkbox-config="{labelField: 'id', reserve: true, highlight: true, range: true}">
+          :radio-config="{labelField: 'id', reserve: true, highlight: true}">
 
           <template v-slot:buttons>
             <vxe-form :data="formData" @submit="searchEvent">
@@ -174,7 +174,7 @@ export default {
               },
               tableColumn: [
                 { type: 'seq', width: 60, fixed: 'left' },
-                { type: 'checkbox', title: 'ID', width: 120, fixed: 'left' },
+                { type: 'radio', title: 'ID', width: 120, fixed: 'left' },
                 { field: 'name', title: 'Name', minWidth: 300, remoteSort: true },
                 { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 300 },
                 { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
