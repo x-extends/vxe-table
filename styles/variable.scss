@@ -109,6 +109,10 @@ $vxe-checkbox-font-size-default: 16px;
 $vxe-checkbox-font-size-medium: 15px;
 $vxe-checkbox-font-size-small: 14px;
 $vxe-checkbox-font-size-mini: 14px;
+$vxe-checkbox-checked-width: 0.32em;
+$vxe-checkbox-checked-height: 0.64em;
+$vxe-checkbox-indeterminate-width: 0.6em;
+$vxe-checkbox-indeterminate-height: 2px;
 $vxe-checkbox-border-width: 2px;
 $vxe-checkbox-border-radius: 0.15em;
 
@@ -117,6 +121,7 @@ $vxe-radio-font-size-default: $vxe-checkbox-font-size-default;
 $vxe-radio-font-size-medium: $vxe-checkbox-font-size-medium;
 $vxe-radio-font-size-small: $vxe-checkbox-font-size-small;
 $vxe-radio-font-size-mini: $vxe-checkbox-font-size-mini;
+$vxe-radio-border-width: $vxe-checkbox-border-width;
 
 /*button*/
 $vxe-button-default-background-color: #fff;

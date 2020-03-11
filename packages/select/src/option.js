@@ -6,7 +6,7 @@ export default {
   name: 'VxeOption',
   props: {
     value: null,
-    label: [String, Number, Boolean],
+    label: { type: [String, Number, Boolean], default: '' },
     disabled: Boolean,
     size: String
   },
@@ -53,7 +53,7 @@ export default {
         click: this.optionEvent,
         mouseenter: this.mouseenterEvent
       }
-    }, $slots.default || UtilTools.getFuncText(this.label))
+    }, $slots.default || UtilTools.formatText(UtilTools.getFuncText(this.label)))
   },
   methods: {
     optionEvent (evnt) {

@@ -18,11 +18,10 @@
         <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
       </vxe-form-item>
       <vxe-form-item title="下拉框" field="sVal">
-        <select v-model="formData.sVal" class="vxe-select">
-          <option value="0"></option>
-          <option value="1">女</option>
-          <option value="2">男</option>
-        </select>
+        <vxe-select v-model="formData.sVal">
+          <vxe-option value="0" label="女"></vxe-option>
+          <vxe-option value="1" label="男"></vxe-option>
+        </vxe-select>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
         <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
@@ -48,6 +47,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      border
       export-config
       :align="allAlign"
       :data="tableData">
@@ -84,11 +84,10 @@
         <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
       </vxe-form-item>
       <vxe-form-item title="下拉框" field="sVal">
-        <select v-model="formData.sVal" class="vxe-select">
-          <option value="0"></option>
-          <option value="1">女</option>
-          <option value="2">男</option>
-        </select>
+        <vxe-select v-model="formData.sVal">
+          <vxe-option value="0" label="女"></vxe-option>
+          <vxe-option value="1" label="男"></vxe-option>
+        </vxe-select>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
         <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
@@ -114,6 +113,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      border
       export-config
       size="medium"
       :align="allAlign"
@@ -152,11 +152,10 @@
         <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
       </vxe-form-item>
       <vxe-form-item title="下拉框" field="sVal">
-        <select v-model="formData.sVal" class="vxe-select">
-          <option value="0"></option>
-          <option value="1">女</option>
-          <option value="2">男</option>
-        </select>
+        <vxe-select v-model="formData.sVal">
+          <vxe-option value="0" label="女"></vxe-option>
+          <vxe-option value="1" label="男"></vxe-option>
+        </vxe-select>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
         <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
@@ -182,6 +181,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      border
       export-config
       size="small"
       :align="allAlign"
@@ -220,11 +220,10 @@
         <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
       </vxe-form-item>
       <vxe-form-item title="下拉框" field="sVal">
-        <select v-model="formData.sVal" class="vxe-select">
-          <option value="0"></option>
-          <option value="1">女</option>
-          <option value="2">男</option>
-        </select>
+        <vxe-select v-model="formData.sVal">
+          <vxe-option value="0" label="女"></vxe-option>
+          <vxe-option value="1" label="男"></vxe-option>
+        </vxe-select>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
         <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
@@ -250,6 +249,7 @@
     </vxe-toolbar>
 
     <vxe-table
+      border
       export-config
       size="mini"
       :align="allAlign"
