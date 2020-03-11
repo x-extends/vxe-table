@@ -48,6 +48,7 @@ export default {
         }
       },
       tableToolbar: {
+        perfect: true,
         refresh: true,
         zoom: true,
         custom: true
@@ -97,6 +98,7 @@ export default {
                 }
               },
               tableToolbar: {
+                perfect: true,
                 refresh: true,
                 zoom: true,
                 custom: true
