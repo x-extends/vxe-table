@@ -5,8 +5,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  min-height: $vxe-toolbar-height-default;
-  font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   &:after {
@@ -34,27 +32,6 @@
       z-index: $vxe-loading-z-index;
       user-select: none;
       background-color: $vxe-loading-background-color;
-    }
-  }
-  &.size--medium {
-    font-size: $vxe-font-size-medium;
-    min-height: $vxe-toolbar-height-medium;
-    .vxe-tools--operate-btn {
-      font-size: $vxe-font-size-medium + 4px;
-    }
-  }
-  &.size--small {
-    font-size: $vxe-font-size-small;
-    min-height: $vxe-toolbar-height-small;
-    .vxe-tools--operate-btn {
-      font-size: $vxe-font-size-small + 4px;
-    }
-  }
-  &.size--mini {
-    font-size: $vxe-font-size-mini;
-    min-height: $vxe-toolbar-height-mini;
-    .vxe-tools--operate-btn {
-      font-size: $vxe-font-size-mini + 4px;
     }
   }
   .vxe-button--wrapper {
@@ -96,7 +73,6 @@
   .vxe-tools--operate-btn {
     padding: 8px;
     text-align: center;
-    font-size: $vxe-font-size + 4px;
     user-select: none;
     cursor: pointer;
     &:hover {
@@ -108,11 +84,6 @@
     }
     & > i {
       display: block;
-    }
-  }
-  .vxe-custom--option {
-    & > .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-default;
     }
   }
   .vxe-custom--option-wrapper {
@@ -221,26 +192,26 @@
   &.is--checked {
     .vxe-checkbox--icon {
       &:after {
-        height: 0.64em;
-        width: 0.32em;
-        top: 0.15em;
-        left: 0.4em;
-        border: 2px solid #ffffff;
+        height: $vxe-checkbox-checked-height;
+        width: $vxe-checkbox-checked-width;
+        top: 50%;
+        left: 50%;
+        border: $vxe-checkbox-border-width solid #ffffff;
         border-left: 0;
         border-top: 0;
-        transform: rotate(45deg);
+        transform: translate(-50%, -50%) rotate(45deg);
       }
     }
   }
   &.is--indeterminate {
     .vxe-checkbox--icon {
       &:after {
-        top: 0.46em;
-        left: 0;
-        height: 0.18em;
-        width: 1em;
+        top: 50%;
+        left: 50%;
+        height: $vxe-checkbox-indeterminate-height;
+        width: $vxe-checkbox-indeterminate-width;
         background-color: #ffffff;
-        transform: scale(.6);
+        transform: translate(-50%, -50%);
       }
     }
   }
@@ -270,13 +241,24 @@
   }
 }
 
+
 .vxe-toolbar {
+  font-size: $vxe-font-size;
+  min-height: $vxe-toolbar-height-default;
+  .vxe-tools--operate-btn {
+    font-size: $vxe-font-size + 4px;
+  }
   .vxe-custom--option {
     & > .vxe-checkbox--icon {
       font-size: $vxe-checkbox-font-size-default;
     }
   }
   &.size--medium {
+    font-size: $vxe-font-size-medium;
+    min-height: $vxe-toolbar-height-medium;
+    .vxe-tools--operate-btn {
+      font-size: $vxe-font-size-medium + 4px;
+    }
     .vxe-custom--option {
       & > .vxe-checkbox--icon {
         font-size: $vxe-checkbox-font-size-medium;
@@ -284,6 +266,11 @@
     }
   }
   &.size--small {
+    font-size: $vxe-font-size-small;
+    min-height: $vxe-toolbar-height-small;
+    .vxe-tools--operate-btn {
+      font-size: $vxe-font-size-small + 4px;
+    }
     .vxe-custom--option {
       & > .vxe-checkbox--icon {
         font-size: $vxe-checkbox-font-size-small;
@@ -291,6 +278,11 @@
     }
   }
   &.size--mini {
+    font-size: $vxe-font-size-mini;
+    min-height: $vxe-toolbar-height-mini;
+    .vxe-tools--operate-btn {
+      font-size: $vxe-font-size-mini + 4px;
+    }
     .vxe-custom--option {
       & > .vxe-checkbox--icon {
         font-size: $vxe-checkbox-font-size-mini;
