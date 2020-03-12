@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
@@ -93,8 +92,8 @@ export default {
         { field: 'validator', title: '校验规则', width: 140, editRender: { name: 'input' } },
         { field: 'validMsg', title: '校验提示消息', width: 150, editRender: { name: 'input' } },
         { field: 'describe', title: '描述', width: 200, showOverflow: true, editRender: { name: 'input' } },
-        { field: 'createTime', title: '创建时间', width: 100, showOverflow: true, formatter: this.formatterDate, editRender: { name: 'input' } },
-        { field: 'updateTime', title: '更新时间', width: 200, showOverflow: true, formatter: this.formatterDate, editRender: { name: 'input' } }
+        { field: 'createTime', title: '创建时间', width: 140, showOverflow: true, editRender: { name: '$input', props: { type: 'date' } } },
+        { field: 'updateTime', title: '更新时间', width: 140, showOverflow: true, editRender: { name: '$input', props: { type: 'date' } } }
       ],
       loading2: false,
       tablePage2: {
@@ -182,14 +181,9 @@ export default {
                 { field: 'validator', title: '校验规则', width: 140, editRender: { name: 'input' } },
                 { field: 'validMsg', title: '校验提示消息', width: 150, editRender: { name: 'input' } },
                 { field: 'describe', title: '描述', width: 200, showOverflow: true, editRender: { name: 'input' } },
-                { field: 'createTime', title: '创建时间', width: 200, showOverflow: true, formatter: this.formatterDate, editRender: { name: 'input' } },
-                { field: 'updateTime', title: '更新时间', width: 200, showOverflow: true, formatter: this.formatterDate, editRender: { name: 'input' } }
+                { field: 'createTime', title: '创建时间', width: 140, showOverflow: true, editRender: { name: '$input', props: { type: 'date' } } },
+                { field: 'updateTime', title: '更新时间', width: 140, showOverflow: true, editRender: { name: '$input', props: { type: 'date' } } }
               ]
-            }
-          },
-          methods: {
-            formatterDate ({ cellValue }) {
-              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             }
           }
         }
@@ -297,9 +291,6 @@ export default {
                   return config
                 })
             },
-            formatterDate ({ cellValue }) {
-              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
-            },
             toolbarButtonClickEvent ({ code }, event) {
               switch (code) {
                 case 'reloadColumn':
@@ -379,9 +370,6 @@ export default {
         this.validRules2 = validRules
         this.loading2 = false
       })
-    },
-    formatterDate ({ cellValue }) {
-      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
     },
     toolbarButtonClickEvent ({ code }) {
       switch (code) {

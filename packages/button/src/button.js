@@ -149,7 +149,7 @@ export default {
             this.animatVisible = false
           }
         }, 200)
-        UtilTools.emitEvent(this, 'dropdown-click', [{ name: targetElem.getAttribute('name') }, evnt])
+        this.$emit('dropdown-click', { name: targetElem.getAttribute('name') }, evnt)
       }
     },
     mouseenterEvent () {

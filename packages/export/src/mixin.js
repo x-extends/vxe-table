@@ -234,7 +234,7 @@ function toHtml ($xetable, opts, columns, datas) {
       if (headAlign) {
         classNames.push(`col--${headAlign}`)
       }
-      if (['selection', 'checkbox'].indexOf(column.type) > -1) {
+      if (column.type === 'checkbox') {
         return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="checkbox" ${isAllSelected ? 'checked' : ''}></div></td>`
       }
       return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div style="width: ${column.renderWidth}px">${cellTitle}</div></th>`
@@ -259,14 +259,14 @@ function toHtml ($xetable, opts, columns, datas) {
             classNames.push('vxe-table--tree-node')
             if (column.type === 'radio') {
               return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${row._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></div></div></td>`
-            } else if (['selection', 'checkbox'].indexOf(column.type) > -1) {
+            } else if (column.type === 'checkbox') {
               return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${row._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></div></div></td>`
             }
             return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px"><div class="vxe-table--tree-node-wrapper" style="padding-left: ${row._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
           }
           if (column.type === 'radio') {
             return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="radio" name="radio_${id}" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></td>`
-          } else if (['selection', 'checkbox'].indexOf(column.type) > -1) {
+          } else if (column.type === 'checkbox') {
             return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="checkbox" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></td>`
           }
           return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`
@@ -283,7 +283,7 @@ function toHtml ($xetable, opts, columns, datas) {
           }
           if (column.type === 'radio') {
             return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="radio" name="radio_${id}" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></td>`
-          } else if (['selection', 'checkbox'].indexOf(column.type) > -1) {
+          } else if (column.type === 'checkbox') {
             return `<td class="${classNames.join(' ')}"><div style="width: ${column.renderWidth}px"><input type="checkbox" ${cellValue === true || cellValue === 'true' ? 'checked' : ''}></div></td>`
           }
           return `<td class="${classNames.join(' ')}" title="${cellValue}"><div style="width: ${column.renderWidth}px">${cellValue}</div></td>`

@@ -103,7 +103,7 @@ export default {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowClassName : ''],
             style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowStyle) : null
           }, tableColumn.map((column, $columnIndex) => {
-            const { showFooterOverflow, footerAlign, align, footerClassName } = column
+            const { type, showFooterOverflow, footerAlign, align, footerClassName } = column
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const footOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
@@ -136,12 +136,12 @@ export default {
             }
             if (tableListeners['header-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($xetable, 'header-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                $xetable.$emit('header-cell-click', { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt)
               }
             }
             if (tableListeners['header-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                $xetable.$emit('header-cell-dblclick', { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt)
               }
             }
             // 合并行或列
@@ -153,7 +153,6 @@ export default {
               attrs.rowspan = rowspan
               attrs.colspan = colspan
             }
-            const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('td', {
               class: ['vxe-footer--column', column.id, {
                 [`col--${footAlign}`]: footAlign,
@@ -212,7 +211,7 @@ export default {
       if (scrollXLoad && isX) {
         triggerScrollXEvent(evnt)
       }
-      UtilTools.emitEvent($xetable, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false, $table: $xetable }, evnt])
+      $xetable.$emit('scroll', { type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false, $table: $xetable }, evnt)
     }
   }
 }

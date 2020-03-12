@@ -14,7 +14,6 @@ export const Cell = {
     }
     switch (type) {
       case 'seq':
-      case 'index':
         renMaps.renderHeader = this.renderIndexHeader
         renMaps.renderCell = treeNode ? this.renderTreeIndexCell : this.renderIndexCell
         break

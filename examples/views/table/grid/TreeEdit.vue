@@ -56,8 +56,8 @@ export default {
         { type: 'checkbox', title: '全选', width: 120 },
         { field: 'name', title: '名称', width: 220, treeNode: true, editRender: { name: 'input' } },
         { field: 'size', title: '大小', editRender: { name: 'input' } },
-        { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: 'input', attrs: { type: 'date' } }, formatter: this.formatterDate },
-        { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: 'input', attrs: { type: 'date' } }, formatter: this.formatterDate }
+        { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: '$input', props: { type: 'date', dateConfig: { labelFormat: 'yyyy-MM-dd HH:mm:ss' } } } },
+        { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: '$input', props: { type: 'date', dateConfig: { labelFormat: 'yyyy-MM-dd HH:mm:ss' } } } }
       ],
       demoCodes: [
         `
@@ -102,14 +102,9 @@ export default {
                 { type: 'checkbox', title: '全选', width: 120 },
                 { field: 'name', title: '名称', width: 220, treeNode: true, editRender: { name: 'input' } },
                 { field: 'size', title: '大小', editRender: { name: 'input' } },
-                { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: 'input', attrs: { type: 'date' } }, formatter: this.formatterDate },
-                { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: 'input', attrs: { type: 'date' } }, formatter: this.formatterDate }
+                { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: '$input', props: { type: 'date', dateConfig: { labelFormat: 'yyyy-MM-dd HH:mm:ss' } } } },
+                { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: '$input', props: { type: 'date', dateConfig: { labelFormat: 'yyyy-MM-dd HH:mm:ss' } } } }
               ]
-            }
-          },
-          methods: {
-            formatterDate ({ cellValue }) {
-              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
             }
           }
         }
@@ -121,11 +116,6 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
-  },
-  methods: {
-    formatterDate ({ cellValue }) {
-      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:mm:ss')
-    }
   }
 }
 </script>

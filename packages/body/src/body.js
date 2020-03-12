@@ -118,7 +118,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     editStore,
     validStore
   } = $xetable
-  const { editRender, align, showOverflow, className, treeNode } = column
+  const { type, editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
   const isMouseSelected = mouseConfig && mouseOpts.selected
   const isMouseChecked = mouseConfig && mouseOpts.range
@@ -206,7 +206,6 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   if (!fixedHiddenColumn && editRender && editConfig && editOpts.showStatus) {
     isDirty = $xetable.isUpdateByRow(row, column.property)
   }
-  const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${cellAlign}`]: cellAlign,
@@ -596,7 +595,7 @@ export default {
       if (scrollYLoad && isY) {
         $xetable.triggerScrollYEvent(evnt)
       }
-      UtilTools.emitEvent($xetable, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table: $xetable }, evnt])
+      $xetable.$emit('scroll', { type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table: $xetable }, evnt)
     }
   }
 }

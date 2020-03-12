@@ -112,7 +112,7 @@ export default {
           filterList.push({ column, property, values: valueList, datas: dataList })
         }
       })
-      UtilTools.emitEvent(this, 'filter-change', [{ column, property, values, datas, filters: filterList, $table: this }])
+      this.$emit('filter-change', { column, property, values, datas, filters: filterList, $table: this })
       this.updateFooter()
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()

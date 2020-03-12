@@ -14,8 +14,8 @@
     "seq": 1,
     "link": "https://xuliangzhan.github.io/vxe-table/",
     "describe": "",
-    "createTime": 1550923830095,
-    "updateTime": 1550105830095
+    "createTime": "2019-06-06",
+    "updateTime": "2020-01-20"
   },
   {
     "id": 2,
@@ -32,8 +32,8 @@
     "seq": 2,
     "link": "",
     "describe": "",
-    "createTime": 1550923830095,
-    "updateTime": 1550205830095
+    "createTime": "2019-06-06",
+    "updateTime": "2020-01-20"
   },
   {
     "id": 3,
@@ -50,8 +50,8 @@
     "seq": 3,
     "link": "",
     "describe": "",
-    "createTime": 1550923830095,
-    "updateTime": 1550305830095
+    "createTime": "2019-06-06",
+    "updateTime": "2020-01-20"
   },
   {
     "id": 4,
@@ -68,8 +68,8 @@
     "seq": 4,
     "link": "",
     "describe": "",
-    "createTime": 1550923830095,
-    "updateTime": 1550405830095
+    "createTime": "2019-06-06",
+    "updateTime": "2020-01-20"
   },
   {
     "id": 5,
@@ -86,8 +86,8 @@
     "seq": 5,
     "link": "",
     "describe": "",
-    "createTime": 1550923830095,
-    "updateTime": 1550505830095
+    "createTime": "2019-06-06",
+    "updateTime": "2020-01-20"
   },
   {
     "id": 6,
@@ -104,7 +104,7 @@
     "seq": 0,
     "link": "",
     "describe": "",
-    "createTime": 1550923830095,
-    "updateTime": 1550505830095
+    "createTime": "2019-06-06",
+    "updateTime": "2020-01-20"
   }
 ]

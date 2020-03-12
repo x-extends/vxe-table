@@ -81,7 +81,7 @@ export default {
               params.rowIndex = this.getRowIndex(row)
             }
             this.openContextMenu(evnt, layout, params)
-            UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
+            this.$emit(`${typePrefix}cell-context-menu`, params, evnt)
             return
           } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => {
             return target.getAttribute('data-tid') === id
@@ -185,7 +185,7 @@ export default {
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)
         }
-        UtilTools.emitEvent(this, 'context-menu-click', [params, evnt])
+        this.$emit('context-menu-click', params, evnt)
         this.closeMenu()
       }
     }

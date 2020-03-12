@@ -2255,7 +2255,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{expanded,row,rowIndex},event',
+        defVal: '{expanded,row},event',
         list: []
       },
       {
@@ -2264,7 +2264,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{expanded,row,rowIndex},event',
+        defVal: '{expanded,row},event',
         list: []
       },
       {

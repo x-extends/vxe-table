@@ -91,13 +91,15 @@ export default {
             itemRender: {
               name: '$select',
               options: [
-                { value: '', label: '' },
                 { value: '0', label: '女' },
                 { value: '1', label: '男' }
-              ]
+              ],
+              props: {
+                placeholder: '请选择性别'
+              }
             }
           },
-          { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
+          { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
           { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
         ]
       },
@@ -145,7 +147,6 @@ export default {
           editRender: {
             name: '$select',
             options: [
-              { value: '', label: '' },
               { value: '0', label: '女' },
               { value: '1', label: '男' }
             ]

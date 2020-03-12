@@ -628,7 +628,7 @@ export default {
           if (commandMethod) {
             commandMethod.call(this, params, evnt)
           }
-          UtilTools.emitEvent(this, 'button-click', [params, evnt])
+          this.$emit('button-click', params, evnt)
         }
       }
     },

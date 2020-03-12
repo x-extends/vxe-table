@@ -46,7 +46,7 @@ export default {
           tableFullData.splice(...([tableFullData.indexOf(row), 0].concat(newRecords)))
         }
       }
-      [].unshift.apply(editStore.insertList, newRecords)
+      editStore.insertList.unshift(...newRecords)
       this.handleTableData()
       this.updateCache()
       this.checkSelectionStatus()
@@ -223,7 +223,7 @@ export default {
               this.handleFocus(params, evnt)
             })
           }
-          UtilTools.emitEvent(this, type, [params, evnt])
+          this.$emit(type, params, evnt)
         } else {
           const { column: oldColumn } = actived
           if (oldColumn !== column) {
@@ -272,7 +272,7 @@ export default {
           this._setColumnModel(row, column)
         }
         this.updateFooter()
-        UtilTools.emitEvent(this, 'edit-closed', [args, evnt])
+        this.$emit('edit-closed', args, evnt)
       }
       actived.args = null
       actived.row = null

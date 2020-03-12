@@ -378,7 +378,7 @@ const Methods = {
    * @param {ColumnConfig} column 列配置
    */
   isSeqColumn (column) {
-    return column && (column.type === 'seq' || column.type === 'index')
+    return column && column.type === 'seq'
   },
   /**
    * 定义行数据中的列属性，如果不存在则定义
@@ -835,9 +835,6 @@ const Methods = {
       if (this.showFooter && !this.showFooterOverflow) {
         UtilTools.warn('vxe.error.reqProp', ['show-footer-overflow'])
       }
-      // if (this.resizable || visibleColumn.some(column => column.resizable)) {
-      //   UtilTools.warn('vxe.error.scrollXNotResizable')
-      // }
       Object.assign(scrollXStore, {
         startIndex: 0,
         visibleIndex: 0
@@ -1119,9 +1116,6 @@ const Methods = {
 
           const listElem = elemStore[`${name}-${layout}-list`]
           if (isGroup && listElem) {
-            // XEUtils.arrayEach(listElem.querySelectorAll(`.col--gutter`), thElem => {
-            //   thElem.style.width = `${scrollbarWidth}px`
-            // })
             XEUtils.arrayEach(listElem.querySelectorAll('.col--group'), thElem => {
               const column = this.getColumnNode(thElem).item
               const { showHeaderOverflow } = column
@@ -1209,12 +1203,6 @@ const Methods = {
           if (tableElem) {
             tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
           }
-          // const listElem = elemStore[`${name}-${layout}-list`]
-          // if (listElem) {
-          //   XEUtils.arrayEach(listElem.querySelectorAll(`.col--gutter`), thElem => {
-          //     thElem.style.width = `${scrollbarWidth}px`
-          //   })
-          // }
         }
         const colgroupElem = elemStore[`${name}-${layout}-colgroup`]
         if (colgroupElem) {
@@ -1951,9 +1939,9 @@ const Methods = {
     const { fullDataRowIdData, checkboxReserveRowMap, checkboxOpts } = this
     const reserveSelection = []
     if (checkboxOpts.reserve) {
-      Object.keys(checkboxReserveRowMap).forEach(rowid => {
-        if (!fullDataRowIdData[rowid]) {
-          reserveSelection.push(checkboxReserveRowMap[rowid])
+      XEUtils.each(checkboxReserveRowMap, (row, rowid) => {
+        if (row && !fullDataRowIdData[rowid]) {
+          reserveSelection.push(row)
         }
       })
     }
@@ -2119,7 +2107,7 @@ const Methods = {
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
       this.triggerSortEvent(evnt, column, column.order ? (column.order === 'desc' ? '' : 'desc') : 'asc')
     }
-    UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
+    this.$emit('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt)
     if (this.highlightCurrentColumn) {
       return this.setCurrentColumn(column)
     }
@@ -2217,7 +2205,7 @@ const Methods = {
         }
       }
     }
-    UtilTools.emitEvent(this, 'cell-click', [params, evnt])
+    this.$emit('cell-click', params, evnt)
   },
   /**
    * 列双击点击事件
@@ -2243,7 +2231,7 @@ const Methods = {
         }
       }
     }
-    UtilTools.emitEvent(this, 'cell-dblclick', [params, evnt])
+    this.$emit('cell-dblclick', params, evnt)
   },
   handleDefaultSort () {
     const defaultSort = this.sortOpts.defaultSort
@@ -2270,7 +2258,7 @@ const Methods = {
       } else {
         this.sort(property, order)
       }
-      UtilTools.emitEvent(this, 'sort-change', [evntParams, evnt])
+      this.$emit('sort-change', evntParams, evnt)
     }
   },
   sort (field, order) {
@@ -2374,7 +2362,7 @@ const Methods = {
     if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
       const expanded = !this.isExpandByRow(row)
       this.setRowExpansion(row, expanded)
-      UtilTools.emitEvent(this, 'toggle-row-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
+      this.$emit('toggle-row-expand', { expanded, row, $table: this }, evnt)
     }
   },
   /**
@@ -2534,7 +2522,7 @@ const Methods = {
     if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
       const expanded = !this.isTreeExpandByRow(row)
       this.setTreeExpansion(row, expanded)
-      UtilTools.emitEvent(this, 'toggle-tree-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
+      this.$emit('toggle-tree-expand', { expanded, row, $table: this }, evnt)
     }
   },
   /**

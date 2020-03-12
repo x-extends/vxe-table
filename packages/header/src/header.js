@@ -183,7 +183,7 @@ export default {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
             style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
-            const { showHeaderOverflow, headerAlign, align, headerClassName } = column
+            const { type, showHeaderOverflow, headerAlign, align, headerClassName } = column
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -227,13 +227,12 @@ export default {
               thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             if (tableListeners['header-cell-dblclick']) {
-              thOns.dblclick = evnt => UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+              thOns.dblclick = evnt => $xetable.$emit('header-cell-dblclick', { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt)
             }
             // 按下事件处理
             if (isMouseSelected || isMouseChecked) {
               thOns.mousedown = evnt => $xetable.triggerHeaderCellMousedownEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
-            const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('th', {
               class: ['vxe-header--column', column.id, {
                 [`col--${headAlign}`]: headAlign,
@@ -355,7 +354,7 @@ export default {
       DomTools.addClass($xetable.$el, 'c--resize')
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
-      document.onmouseup = function () {
+      document.onmouseup = function (evnt) {
         document.onmousemove = domMousemove
         document.onmouseup = domMouseup
         column.resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
@@ -368,7 +367,7 @@ export default {
         if ($xetable.$toolbar) {
           $xetable.$toolbar.updateResizable()
         }
-        UtilTools.emitEvent($xetable, 'resizable-change', [params])
+        $xetable.$emit('resizable-change', params, evnt)
       }
       updateEvent(evnt)
     }
