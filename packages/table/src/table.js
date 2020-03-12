@@ -4417,11 +4417,7 @@ export default {
      * @param {Boolean} expanded 是否展开
      */
     setAllRowExpansion (expanded) {
-      if (this.expandOpts.lazy) {
-        return this.setRowExpansion(this.tableData, true)
-      }
-      this.rowExpandeds = expanded ? this.tableFullData.slice(0) : []
-      return this.$nextTick().then(this.recalculate)
+      return this.setRowExpansion(this.expandOpts.lazy ? this.tableData : this.tableFullData, expanded)
     },
     handleAsyncRowExpand (row) {
       const rest = this.fullAllDataRowMap.get(row)
@@ -4445,35 +4441,35 @@ export default {
     setRowExpansion (rows, expanded) {
       const { fullAllDataRowMap, expandLazyLoadeds, expandOpts } = this
       let { rowExpandeds } = this
-      const { lazy, accordion } = expandOpts
-      const result = []
+      const { lazy, accordion, toggleMethod } = expandOpts
+      const lazyRests = []
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
         }
         if (accordion) {
-        // 只能同时展开一个
+          // 只能同时展开一个
           rowExpandeds = []
           rows = rows.slice(rows.length - 1, rows.length)
         }
         if (expanded) {
           rows.forEach(row => {
-            if (rowExpandeds.indexOf(row) === -1) {
+            if ((!toggleMethod || toggleMethod({ expanded, row })) && rowExpandeds.indexOf(row) === -1) {
               const rest = fullAllDataRowMap.get(row)
               const isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
               if (isLoad) {
-                result.push(this.handleAsyncRowExpand(row))
+                lazyRests.push(this.handleAsyncRowExpand(row))
               } else {
                 rowExpandeds.push(row)
               }
             }
           })
         } else {
-          XEUtils.remove(rowExpandeds, row => rows.indexOf(row) > -1)
+          XEUtils.remove(rowExpandeds, row => (!toggleMethod || toggleMethod({ expanded, row })) && rows.indexOf(row) > -1)
         }
       }
       this.rowExpandeds = rowExpandeds
-      return Promise.all(result).then(this.recalculate)
+      return Promise.all(lazyRests).then(this.recalculate)
     },
     // 在 v3.0 中废弃 hasRowExpand
     hasRowExpand (row) {
@@ -4623,25 +4619,13 @@ export default {
       const { tableFullData, treeOpts } = this
       const { lazy, children } = treeOpts
       const expandeds = []
-      if (expanded) {
-        if (lazy) {
-          XEUtils.eachTree(tableFullData, row => {
-            expandeds.push(row)
-          }, treeOpts)
-          this.setTreeExpansion(expandeds, true)
-        } else {
-          XEUtils.eachTree(tableFullData, row => {
-            const rowChildren = row[children]
-            if (rowChildren && rowChildren.length) {
-              expandeds.push(row)
-            }
-          }, treeOpts)
-          this.treeExpandeds = expandeds
+      XEUtils.eachTree(tableFullData, row => {
+        const rowChildren = row[children]
+        if (lazy || (rowChildren && rowChildren.length)) {
+          expandeds.push(row)
         }
-      } else {
-        this.treeExpandeds = expandeds
-      }
-      return this.$nextTick().then(this.recalculate)
+      }, treeOpts)
+      return this.setTreeExpansion(expandeds, expanded)
     },
     /**
      * 设置展开树形节点，二个参数设置这一行展开与否
@@ -4652,7 +4636,7 @@ export default {
      */
     setTreeExpansion (rows, expanded) {
       const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds } = this
-      const { lazy, hasChild, children, accordion } = treeOpts
+      const { lazy, hasChild, children, accordion, toggleMethod } = treeOpts
       const result = []
       if (rows) {
         if (!XEUtils.isArray(rows)) {
@@ -4667,7 +4651,7 @@ export default {
           }
           if (expanded) {
             rows.forEach(row => {
-              if (treeExpandeds.indexOf(row) === -1) {
+              if ((!toggleMethod || toggleMethod({ expanded, row })) && treeExpandeds.indexOf(row) === -1) {
                 const rest = fullAllDataRowMap.get(row)
                 const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
                 // 是否使用懒加载
@@ -4681,7 +4665,7 @@ export default {
               }
             })
           } else {
-            XEUtils.remove(treeExpandeds, row => rows.indexOf(row) > -1)
+            XEUtils.remove(treeExpandeds, row => (!toggleMethod || toggleMethod({ expanded, row })) && rows.indexOf(row) > -1)
           }
           return Promise.all(result).then(this.recalculate)
         }

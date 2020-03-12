@@ -1393,6 +1393,15 @@ const apis = [
             list: []
           },
           {
+            name: 'toggleMethod',
+            desc: '该方法 Function({expanded,row,rowIndex}) 在展开或关闭时调用，可以通过返回值来决定是否允许继续执行',
+            version: '1.15.27',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '1.15.15',
@@ -1524,6 +1533,15 @@ const apis = [
             name: 'loadMethod',
             desc: '该方法 Function({row}) 用于异步加载子节点（必须返回 Promise<any[]> 对象）',
             version: '1.15.15',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'toggleMethod',
+            desc: '该方法 Function({expanded,row,rowIndex}) 在展开或关闭时调用，可以通过返回值来决定是否允许继续执行',
+            version: '1.15.27',
             type: 'Function',
             enum: '',
             defVal: '',
@@ -3270,7 +3288,7 @@ const apis = [
       },
       {
         name: 'setAllRowExpansion(checked)',
-        desc: '设置所有行的展开与否',
+        desc: '设置所有行的展开与否（如果是关闭所有行，可以使用 clearRowExpand 快速清除）',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3288,7 +3306,7 @@ const apis = [
       },
       {
         name: 'setAllTreeExpansion(checked)',
-        desc: '设置所有树节点的展开与否',
+        desc: '设置所有树节点的展开与否（如果是关闭所有树节点，可以使用 clearTreeExpand 快速清除）',
         version: '',
         type: 'Promise',
         enum: '',

@@ -2,18 +2,18 @@
   <div>
     <p class="tip">
       使用自定义模板渲染，通过 <table-column-api-link prop="slots"/> 属性使用自定义插槽来编写模板或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#JSX" target="_blank">JSX</a> 渲染函数或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#%E8%99%9A%E6%8B%9F-DOM" target="_blank">VNode</a><span class="red">（注：返回数组格式）</span><br>
-      列：<br>
+      Column 列：<br>
       <table-column-api-link prop="default"/>：自定义内容模板（提前格式化好数据 > <table-column-api-link prop="formatter"/> > <table-column-api-link prop="slots"/>）<br>
       <table-column-api-link prop="header"/>：自定义表头模板<br>
       <table-column-api-link prop="footer"/>：自定义表尾模板<br>
       <table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link class="link" :to="{name: 'RendererFilter'}">渲染器</router-link>，可以更好的复用）<br>
       <table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link class="link" :to="{name: 'RendererEdit'}">渲染器</router-link>，可以更好的复用）<br>
-      工具栏：<br>
+      Toolbar 工具栏：<br>
       <grid-api-link prop="buttons"/>：自定义按钮模板（建议使用<router-link class="link" :to="{name: 'RendererToolbar'}">渲染器</router-link>，可以更好的复用）<br>
       <grid-api-link prop="tools"/>：自定义右侧按钮模板（建议使用<router-link class="link" :to="{name: 'RendererToolbar'}">渲染器</router-link>，可以更好的复用）<br>
-      顶部：<br>
+      Grid 顶部：<br>
       <grid-api-link prop="top"/>：自定义顶部模板<br>
-      底部：<br>
+      Grid 底部：<br>
       <grid-api-link prop="bottom"/>：自定义底部模板<br>
     </p>
 
