@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      设置 <table-api-link prop="show-footer"/> show-footer 和 <table-api-link prop="footer-method"/> 自定义表尾合计<br>
-      需要注意的是表尾的的计算并非实时的，而是在 data 初始化时才会触发自动计算；如果要达到实时计算请手动调用 <table-api-link prop="updateFooter"/> 方法<br>
+      设置 <table-api-link prop="show-footer"/> show-footer 和 <table-api-link prop="footer-method"/> 自定义表尾数据<br>
+      需要注意的是表尾的调用并非实时的，而是在 data 初始化时才会触发执行；如果要达到实时计算请手动调用 <table-api-link prop="updateFooter"/> 方法<br>
       <span class="red">（注：<table-api-link prop="footer-method"/> 合计的逻辑都是自行实现的，该示例仅供参考）</span>
     </p>
 
