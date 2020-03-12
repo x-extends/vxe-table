@@ -6,7 +6,8 @@ import VXETable from '../v-x-e-table'
 let AlertController = null
 const allActivedModals = []
 
-function openModal (options) {
+function openModal (opts) {
+  const options = Object.assign({}, opts, { transfer: true })
   return new Promise(resolve => {
     if (options && options.id && queue.some(comp => comp.id === options.id)) {
       resolve('exist')
@@ -33,11 +34,44 @@ function openModal (options) {
   })
 }
 
-export function Modal (options) {
-  return openModal(options)
+function install (Vue) {
+  VXETable._modal = 1
+  Vue.component(VXEModal.name, VXEModal)
+  AlertController = Vue.extend(VXEModal)
+  Vue.prototype.$XModal = Modal
+  VXETable.$modal = Modal
 }
 
-['alert', 'confirm', 'message'].forEach((type, index) => {
+/**
+ * 全局关闭动态的活动窗口（只能用于关闭动态的创建的活动窗口）
+ * 如果传 id 则关闭指定的窗口
+ * 如果不传则关闭所有窗口
+ */
+function closeModal (id) {
+  if (arguments.length) {
+    const modal = getModal(id)
+    if (modal) {
+      modal.close('close')
+    }
+  } else {
+    allActivedModals.forEach($modal => $modal.close('close'))
+  }
+}
+
+function getModal (id) {
+  return allActivedModals.find($modal => $modal.id === id)
+}
+
+export const Modal = {
+  install,
+  get: getModal,
+  close: closeModal,
+  open: openModal
+}
+
+const shortcutTypes = ['alert', 'confirm', 'message']
+
+shortcutTypes.forEach((type, index) => {
   const defOpts = index === 2 ? {
     mask: false,
     lockView: false,
@@ -62,41 +96,5 @@ export function Modal (options) {
     return openModal(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
   }
 })
-
-/**
- * 全局关闭动态的活动窗口（只能用于关闭动态的创建的活动窗口）
- * 如果传 id 则关闭指定的窗口
- * 如果不传则关闭所有窗口
- */
-function closeModal (id) {
-  if (arguments.length) {
-    const modal = getModal(id)
-    if (modal) {
-      modal.close('close')
-    }
-  } else {
-    allActivedModals.forEach($modal => $modal.close('close'))
-  }
-}
-
-function getModal (id) {
-  return allActivedModals.find($modal => $modal.id === id)
-}
-
-Modal.closeAll = function () {
-  closeModal()
-}
-
-Modal.get = getModal
-Modal.close = closeModal
-Modal.open = openModal
-
-Modal.install = function (Vue) {
-  VXETable._modal = 1
-  Vue.component(VXEModal.name, VXEModal)
-  AlertController = Vue.extend(VXEModal)
-  Vue.prototype.$XModal = Modal
-  VXETable.$modal = Modal
-}
 
 export default Modal
