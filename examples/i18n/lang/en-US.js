@@ -63,7 +63,7 @@ module.exports = {
         menuPrivilege: 'Context menu + permission',
         footerImmediately: 'Footer summary + immediately',
         expandRow: 'Expandable row',
-        expandRowIcon: 'Expandable row + custom icon',
+        expandRowIcon: 'Expandable row + More customizations',
         expandRowLazy: 'Expandable row + lazy loading',
         accordion: 'Accordion expandable',
         toolbar: 'Toolbar',
@@ -97,7 +97,7 @@ module.exports = {
 
         tree: 'Tree table',
         treeNormal: 'Normal tree',
-        customIcon: 'Custom icon',
+        customIcon: 'More customizations',
         expandTreeLazy: 'Tree expansion line lazy load',
         treeSearch: 'Deep to search',
         treeSort: 'Deep sort',

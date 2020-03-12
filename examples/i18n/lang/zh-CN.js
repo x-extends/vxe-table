@@ -62,7 +62,7 @@ module.exports = {
         menuPrivilege: '快捷菜单 + 权限控制',
         footerImmediately: '表尾合计 + 实时更新',
         expandRow: '展开行',
-        expandRowIcon: '展开行 + 自定义图标',
+        expandRowIcon: '展开行 + 更多自定义',
         expandRowLazy: '展开行 + 懒加载',
         accordion: '手风琴展开效果',
         toolbar: '工具栏',
@@ -96,7 +96,7 @@ module.exports = {
 
         tree: '树表格',
         treeNormal: '普通树',
-        customIcon: '自定义图标',
+        customIcon: '更多自定义',
         expandTreeLazy: '树形展开行懒加载',
         treeSearch: '深层查找',
         treeSort: '深层排序',
