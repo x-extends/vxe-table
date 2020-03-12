@@ -2418,7 +2418,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex},event',
+        defVal: '{row},event',
         list: []
       },
       {
@@ -2427,7 +2427,7 @@ const apis = [
         version: '1.15.15',
         type: '',
         enum: '',
-        defVal: '{expanded,row,rowIndex},event',
+        defVal: '{expanded,row},event',
         list: []
       },
       {
@@ -2437,7 +2437,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex},event',
+        defVal: '{row},event',
         list: []
       },
       {
@@ -2446,7 +2446,7 @@ const apis = [
         version: '1.15.15',
         type: '',
         enum: '',
-        defVal: '{expanded,row,rowIndex},event',
+        defVal: '{expanded,row},event',
         list: []
       },
       {
