@@ -249,6 +249,7 @@ module.exports = {
         deleteSelectedRecords: '删除选中'
       },
       label: {
+        through: '通过',
         copy: '复制',
         cut: '剪贴',
         paste: '粘贴',
@@ -275,6 +276,15 @@ module.exports = {
         copyToClipboard: '已复制到剪贴板！'
       },
       other: {
+        plan: {
+          v1: 'v1 实现表格的一切实用的功能',
+          v2: 'v2 性能优化，同时兼具功能与性能',
+          v3: 'v3 内部重构，面向现代浏览器吗，不再支持 IE，渲染性能提升',
+          v4: 'v4 基于 vue3 重构，渲染性能提升'
+        },
+        donation: '捐赠',
+        donationTitle: '，支付宝、微信捐赠给作者，使项目能够持续的维护下去',
+        issuesTitle: '如何反馈问题？  ',
         newFunc: '由于作者比较忙，后续有时间可能会支持该功能！',
         newDevelopment: '由于作者比较忙，该版本正在重构中，敬请期待！'
       },
