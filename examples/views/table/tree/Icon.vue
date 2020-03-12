@@ -65,6 +65,26 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
       <code class="css">{{ demoCodes[4] }}</code>
     </pre>
+
+    <p class="tip">还可以通过 <table-api-link prop="tree-config"/>={<table-api-link prop="toggleMethod"/>} 方法实现展开与关闭的细节处理，返回值用来决定是否允许继续执行</p>
+
+    <vxe-table
+      resizable
+      show-overflow
+      :tree-config="{children: 'children', toggleMethod: toggleTreeMethod}"
+      :data="tableData">
+      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
+      <vxe-table-column field="size" title="Size"></vxe-table-column>
+      <vxe-table-column field="type" title="Type"></vxe-table-column>
+      <vxe-table-column field="date" title="Date"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[5] }}</code>
+      <code class="javascript">{{ demoCodes[6] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -157,6 +177,46 @@ export default {
         .tree-node-icon {
           width: 20px;
         }
+        `,
+        `
+        <vxe-table
+          resizable
+          show-overflow
+          :tree-config="{children: 'children', toggleMethod: toggleTreeMethod}"
+          :data="tableData">
+          <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
+          <vxe-table-column field="size" title="Size"></vxe-table-column>
+          <vxe-table-column field="type" title="Type"></vxe-table-column>
+          <vxe-table-column field="date" title="Date"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+          },
+          methods: {
+            toggleTreeMethod ({ expanded, row }) {
+              if (expanded) {
+                if (row.date === '2019-10-22') {
+                  this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+                  return false
+                }
+              } else {
+                if (row.date === '2019-03-04') {
+                  this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+                  return false
+                }
+              }
+              return true
+            }
+          }
+        }
         `
       ]
     }
@@ -173,6 +233,20 @@ export default {
     getTreeExpansionEvent () {
       const treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
+    },
+    toggleTreeMethod ({ expanded, row }) {
+      if (expanded) {
+        if (row.date === '2019-10-22') {
+          this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+          return false
+        }
+      } else {
+        if (row.date === '2019-03-04') {
+          this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+          return false
+        }
+      }
+      return true
     }
   }
 }
