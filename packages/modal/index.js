@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import VXEModal from './src/modal'
 import queue from './src/queue'
 import VXETable from '../v-x-e-table'
@@ -7,7 +7,8 @@ import { UtilTools } from '../tools'
 let AlertController = null
 const allActivedModals = []
 
-function openModal (options) {
+function openModal (opts) {
+  const options = Object.assign({}, opts, { transfer: true })
   return new Promise(resolve => {
     if (options && options.id && queue.some(comp => comp.id === options.id)) {
       resolve('exist')
@@ -35,6 +36,7 @@ function openModal (options) {
 }
 
 export function Modal (options) {
+  UtilTools.warn('vxe.error.delFunc', ['Modal', 'Modal.open'])
   return openModal(options)
 }
 

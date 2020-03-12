@@ -36,6 +36,7 @@ export default {
     remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
     destroyOnClose: Boolean,
     showTitleOverflow: { type: Boolean, default: () => GlobalConfig.modal.showTitleOverflow },
+    transfer: { type: Boolean, default: () => GlobalConfig.modal.transfer },
     storage: { type: Boolean, default: () => GlobalConfig.modal.storage },
     storageKey: { type: String, default: () => GlobalConfig.modal.storageKey },
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
@@ -89,7 +90,7 @@ export default {
     }
   },
   mounted () {
-    const { $listeners, events = {} } = this
+    const { $listeners, $el, events = {}, transfer } = this
     if (this.value) {
       this.open()
     }
@@ -97,7 +98,9 @@ export default {
     if (this.escClosable) {
       GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     }
-    document.body.appendChild(this.$el)
+    if (transfer) {
+      document.body.appendChild($el)
+    }
     // 触发 inserted 事件
     const params = { type: 'inserted', $modal: this }
     if ($listeners.inserted) {
@@ -107,9 +110,12 @@ export default {
     }
   },
   beforeDestroy () {
+    const { $el } = this
     GlobalEvent.off(this, 'keydown')
     this.removeMsgQueue()
-    this.$el.parentNode.removeChild(this.$el)
+    if ($el.parentNode === document.body) {
+      $el.parentNode.removeChild($el)
+    }
   },
   render (h) {
     const {
