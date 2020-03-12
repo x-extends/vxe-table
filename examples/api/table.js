@@ -2172,7 +2172,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{selection,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{records,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -2181,7 +2181,7 @@ const apis = [
         version: '2.8',
         type: '',
         enum: '',
-        defVal: '{selection,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{records,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -2191,7 +2191,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{selection,checked,reserves},event',
+        defVal: '{records,checked,reserves},event',
         list: []
       },
       {
@@ -2200,7 +2200,7 @@ const apis = [
         version: '2.8',
         type: '',
         enum: '',
-        defVal: '{selection,reserves,checked},event',
+        defVal: '{records,reserves,checked},event',
         list: []
       },
       {

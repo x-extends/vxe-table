@@ -1851,8 +1851,8 @@ const Methods = {
   triggerCheckRowEvent (evnt, params, value) {
     const { checkMethod } = this.checkboxOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
-      const records = this.getCheckboxRecords()
       this.handleSelectRow(params, value)
+      const records = this.getCheckboxRecords()
       // 在 v3.0 中废弃 select-change
       if (this.$listeners['select-change']) {
         UtilTools.warn('vxe.error.delEvent', ['select-change', 'checkbox-change'])
@@ -2089,8 +2089,8 @@ const Methods = {
    * 多选，选中所有事件
    */
   triggerCheckAllEvent (evnt, value) {
-    const records = this.getCheckboxRecords()
     this.setAllCheckboxRow(value)
+    const records = this.getCheckboxRecords()
     // 在 v3.0 中废弃 select-all
     if (this.$listeners['select-all']) {
       UtilTools.warn('vxe.error.delEvent', ['select-all', 'checkbox-all'])

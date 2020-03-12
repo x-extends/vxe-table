@@ -238,11 +238,11 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           },
           methods: {
-            selectAllEvent ({ checked }) {
-              console.log(checked ? '所有勾选事件' : '所有取消事件')
+            selectAllEvent ({ checked, records }) {
+              console.log(checked ? '所有勾选事件' : '所有取消事件', records)
             },
-            selectChangeEvent ({ checked, row }) {
-              console.log(checked ? '勾选事件' : '取消事件')
+            selectChangeEvent ({ checked, records }) {
+              console.log(checked ? '勾选事件' : '取消事件', records)
             },
             getSelectEvent () {
               let selectRecords = this.$refs.xTable1.getCheckboxRecords()
@@ -453,11 +453,11 @@ export default {
     checkMethod ({ row }) {
       return row.age > 26
     },
-    selectAllEvent ({ checked }) {
-      console.log(checked ? '所有勾选事件' : '所有取消事件')
+    selectAllEvent ({ checked, records }) {
+      console.log(checked ? '所有勾选事件' : '所有取消事件', records)
     },
-    selectChangeEvent ({ checked }) {
-      console.log(checked ? '勾选事件' : '取消事件')
+    selectChangeEvent ({ checked, records }) {
+      console.log(checked ? '勾选事件' : '取消事件', records)
     },
     getSelectEvent1 () {
       const selectRecords = this.$refs.xTable1.getCheckboxRecords()

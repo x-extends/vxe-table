@@ -117,8 +117,8 @@ export default {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
           },
           methods: {
-            selectChangeEvent ({ selection }) {
-              console.info(\`勾选\${selection.length}个树形节点\`, selection)
+            selectChangeEvent ({ records }) {
+              console.info(\`勾选\${records.length}个树形节点\`, records)
             }
           }
         }
@@ -152,8 +152,8 @@ export default {
             this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
           },
           methods: {
-            selectChangeEvent ({ selection }) {
-              console.info(\`勾选\${selection.length}个树形节点\`, selection)
+            selectChangeEvent ({ records }) {
+              console.info(\`勾选\${records.length}个树形节点\`, records)
             }
           }
         }
@@ -202,8 +202,8 @@ export default {
     checkMethod ({ row }) {
       return !['js', 'mp4'].includes(row.type)
     },
-    selectChangeEvent ({ selection }) {
-      console.info(`勾选${selection.length}个树形节点`, selection)
+    selectChangeEvent ({ records }) {
+      console.info(`勾选${records.length}个树形节点`, records)
     }
   }
 }
