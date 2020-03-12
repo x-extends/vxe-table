@@ -1783,6 +1783,12 @@ export default {
           expand: false,
           children: [
             {
+              label: 'app.footer.donation',
+              locat: {
+                name: 'Donation'
+              }
+            },
+            {
               label: 'app.aside.nav.vxeTable',
               locat: {
                 name: 'VXEAPI',
@@ -1933,12 +1939,6 @@ export default {
                 params: {
                   name: 'form-item'
                 }
-              }
-            },
-            {
-              label: 'app.footer.donation',
-              locat: {
-                name: 'Donation'
               }
             }
           ]
