@@ -250,6 +250,7 @@ module.exports = {
         deleteSelectedRecords: 'Delete selected records'
       },
       label: {
+        through: 'Through',
         copy: 'Copy',
         cut: 'Cut and paste',
         paste: 'Paste',
@@ -276,6 +277,15 @@ module.exports = {
         copyToClipboard: 'Copied to clipboard'
       },
       other: {
+        plan: {
+          v1: 'v1 Achieve all the practical functions of the table.',
+          v2: 'v2 Performance optimization, both functional and performance.',
+          v3: 'v3 Internal refactoring, for modern browsers, no longer support IE, rendering performance improvements.',
+          v4: 'v4 Based on vue3 refactoring, rendering performance improved.'
+        },
+        donation: 'Donation',
+        donationTitle: ', alipay and WeChat donation to the author, the project can be maintained continuously',
+        issuesTitle: 'How to issues feedback?  ',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
       },

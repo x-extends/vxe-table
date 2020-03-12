@@ -4,14 +4,21 @@
     <div class="desc">
       <div class="title">🐬 计划</div>
       <ul class="plan">
-        <li><i class="fa fa-battery-4"></i>v1 实现表格的一切实用的功能</li>
-        <li><i class="fa fa-battery-3"></i>v2 性能优化，同时兼具功能与性能</li>
-        <li><i class="fa fa-battery-0"></i>v3 内部重构，面向现代浏览器吗，不再支持 IE，渲染性能提升</li>
-        <li><i class="fa fa-battery-0"></i>v4 基于 <a class="link" href="https://github.com/vuejs/vue-next" target="_blank">vue3</a> 重构，渲染性能提升</li>
+        <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v1') }}</li>
+        <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v2') }}</li>
+        <li><i class="fa fa-battery-2"></i>{{ $t('app.body.other.plan.v3') }}</li>
+        <li><i class="fa fa-battery-0"></i>{{ $t('app.body.other.plan.v4') }}</li>
       </ul>
     </div>
     <div class="content">
-      <img src="static/donation/pay.jpg">
+      <p>😘{{ $t('app.body.label.through') }} <a href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee {{ $t('app.body.other.donation') }}</a>{{ $t('app.body.other.donationTitle') }}</p>
+      <div>
+        <img src="static/donation/pay.jpg">
+      </div>
+      <div>
+        <p style="padding-top: 40px">QQ群<br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/438" target="_blank">New issues</a></p>
+        <img src="static/donation/qq.png">
+      </div>
     </div>
   </div>
 </template>
