@@ -233,6 +233,15 @@ const apis = [
         list: []
       },
       {
+        name: 'transfer',
+        desc: '是否将弹框容器插入于 body 内',
+        version: '2.8.22',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.modal.transfer',
+        list: []
+      },
+      {
         name: 'fullscreen',
         descKey: 'app.api.modal.desc.fullscreen',
         version: '2.5.18',

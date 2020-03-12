@@ -7,7 +7,8 @@ import { UtilTools } from '../tools'
 let AlertController = null
 const allActivedModals = []
 
-function openModal (options) {
+function openModal (opts) {
+  const options = Object.assign({}, opts, { transfer: true })
   return new Promise(resolve => {
     if (options && options.id && queue.some(comp => comp.id === options.id)) {
       resolve('exist')
@@ -35,6 +36,7 @@ function openModal (options) {
 }
 
 export function Modal (options) {
+  UtilTools.warn('vxe.error.delFunc', ['Modal', 'Modal.open'])
   return openModal(options)
 }
 
