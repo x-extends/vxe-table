@@ -153,7 +153,7 @@ const apis = [
       },
       {
         name: 'date-config',
-        desc: '只对 type=date|month|year 有效，日期配置项',
+        desc: '只对 type=date|week|month|year 有效，日期配置项',
         version: '2.8.12',
         type: 'Object',
         enum: '',
@@ -170,7 +170,7 @@ const apis = [
           },
           {
             name: 'labelFormat',
-            desc: '只对 type=date|month|year 有效，输入框中显示的日期格式',
+            desc: '只对 type=date|week|month|year 有效，输入框中显示的日期格式',
             version: '',
             type: 'String',
             enum: '',
@@ -179,7 +179,7 @@ const apis = [
           },
           {
             name: 'parseFormat',
-            desc: '只对 type=date|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
+            desc: '只对 type=date|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
             version: '',
             type: 'String',
             enum: '',
@@ -188,7 +188,7 @@ const apis = [
           },
           {
             name: 'valueFormat',
-            desc: '只对 type=date|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
+            desc: '只对 type=date|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
             version: '',
             type: 'String',
             enum: '',
@@ -217,7 +217,7 @@ const apis = [
       },
       {
         name: 'transfer',
-        desc: '只对 type=date|month|year 有效，是否将弹框容器插入于 body 内',
+        desc: '只对 type=date|week|month|year 有效，是否将弹框容器插入于 body 内',
         version: '2.8.9',
         type: 'Boolean',
         enum: '',
