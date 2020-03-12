@@ -3710,7 +3710,7 @@ const apis = [
       },
       {
         name: 'updateFooter()',
-        desc: '手动更新表尾合计（对于某些需要频繁更新的场景下可能会用到）',
+        desc: '手动更新表尾（对于某些需要频繁更新的场景下可能会用到）',
         version: '',
         type: 'Promise',
         enum: '',
