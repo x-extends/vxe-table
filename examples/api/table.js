@@ -2111,7 +2111,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{selection,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{records,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
         list: []
       },
       {
@@ -2120,7 +2120,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{selection,reserves,checked},event',
+        defVal: '{records,reserves,checked},event',
         list: []
       },
       {

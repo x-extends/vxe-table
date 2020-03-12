@@ -1767,9 +1767,8 @@ const Methods = {
   triggerCheckRowEvent (evnt, params, value) {
     const { checkMethod } = this.checkboxOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
-      const records = this.getCheckboxRecords()
       this.handleSelectRow(params, value)
-      this.$emit('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt)
+      this.$emit('checkbox-change', Object.assign({ records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt)
     }
   },
   /**
@@ -1979,9 +1978,8 @@ const Methods = {
    * 多选，选中所有事件
    */
   triggerCheckAllEvent (evnt, value) {
-    const records = this.getCheckboxRecords()
     this.setAllCheckboxRow(value)
-    this.$emit('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt)
+    this.$emit('checkbox-all', { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt)
   },
   /**
    * 多选，切换所有行的选中状态
