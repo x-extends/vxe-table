@@ -46,7 +46,7 @@ export default {
           tableFullData.splice(...([tableFullData.indexOf(row), 0].concat(newRecords)))
         }
       }
-      [].unshift.apply(editStore.insertList, newRecords)
+      editStore.insertList.unshift(...newRecords)
       this.handleTableData()
       this.updateCache()
       this.checkSelectionStatus()

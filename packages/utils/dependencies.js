@@ -55,7 +55,7 @@ import isObject from 'xe-utils/methods/base/isObject'
 import isString from 'xe-utils/methods/base/isString'
 import isPlainObject from 'xe-utils/methods/base/isPlainObject'
 // import isLeapYear from 'xe-utils/methods/base/isLeapYear'
-// import isDate from 'xe-utils/methods/base/isDate'
+import isDate from 'xe-utils/methods/base/isDate'
 import eqNull from 'xe-utils/methods/base/eqNull'
 import each from 'xe-utils/methods/base/each'
 // import forOf from 'xe-utils/methods/base/forOf'
@@ -234,7 +234,7 @@ export default {
   isString,
   isPlainObject,
   // isLeapYear,
-  // isDate,
+  isDate,
   eqNull,
   each,
   // forOf,

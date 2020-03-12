@@ -10,7 +10,8 @@ function parseDate (value, props) {
 }
 
 function getFormatDate (value, props, defaultFormat) {
-  return XEUtils.toDateString(parseDate(value, props), props.labelFormat || defaultFormat)
+  const { dateConfig = {} } = props
+  return XEUtils.toDateString(parseDate(value, props), dateConfig.labelFormat || defaultFormat)
 }
 
 function getLabelFormatDate (value, props) {
