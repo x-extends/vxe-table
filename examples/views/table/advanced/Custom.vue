@@ -163,7 +163,9 @@ export default {
                   column.visible = false
                 }
               })
-              this.$refs.xTable.refreshColumn()
+              if (this.$refs.xTable) {
+                this.$refs.xTable.refreshColumn()
+              }
               this.loading = false
             }, 800)
           }
@@ -231,7 +233,9 @@ export default {
           column.visible = false
         }
       })
-      this.$refs.xTable2.refreshColumn()
+      if (this.$refs.xTable2) {
+        this.$refs.xTable2.refreshColumn()
+      }
       this.loading = false
     }, 800)
   },
