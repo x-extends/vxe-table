@@ -2,6 +2,8 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 
+let autoTxtElem
+
 export default {
   name: 'VxeTextarea',
   props: {
@@ -28,9 +30,6 @@ export default {
     isCountError () {
       return this.maxlength && this.inputCount > XEUtils.toNumber(this.maxlength)
     },
-    sizeValue () {
-      return ('' + (this.value || '　')).replace(/\n$/, '\n　')
-    },
     defaultEvents () {
       const evnts = {}
       XEUtils.each(this.$listeners, (cb, name) => {
@@ -45,7 +44,19 @@ export default {
       return Object.assign({ minRows: 1, maxRows: 10 }, GlobalConfig.textarea.autosize, this.autosize)
     }
   },
+  watch: {
+    value () {
+      this.updateAutoTxt()
+    }
+  },
   created () {
+    if (!autoTxtElem) {
+      autoTxtElem = document.createElement('div')
+      document.body.appendChild(autoTxtElem)
+    }
+  },
+  mounted () {
+    this.updateAutoTxt()
     this.handleResize()
   },
   render (h) {
@@ -80,10 +91,6 @@ export default {
         } : null,
         on: defaultEvents
       }),
-      autosize ? h('span', {
-        ref: 'size',
-        class: 'vxe-textarea--autosize'
-      }, this.sizeValue) : null,
       showWordCount ? h('span', {
         class: ['vxe-textarea--count', {
           'is--error': this.isCountError
@@ -110,14 +117,22 @@ export default {
       this.emitUpdate(evnt.target.value)
       this.handleResize()
     },
+    updateAutoTxt () {
+      const { $refs, value, size, autosize } = this
+      if (autosize) {
+        const textElem = $refs.textarea
+        autoTxtElem.className = ['vxe-textarea--autosize', size ? `size--${size}` : ''].join(' ')
+        autoTxtElem.style.width = `${textElem.clientWidth}px`
+        autoTxtElem.innerHTML = ('' + (value || '　')).replace(/\n$/, '\n　')
+      }
+    },
     handleResize () {
       if (this.autosize) {
         this.$nextTick(() => {
           const { $refs, sizeOpts } = this
           const { minRows, maxRows } = sizeOpts
           const textElem = $refs.textarea
-          const sizeElem = $refs.size
-          const sizeHeight = sizeElem.clientHeight
+          const sizeHeight = autoTxtElem.clientHeight
           const textStyle = getComputedStyle(textElem)
           const lineHeight = XEUtils.toNumber(textStyle.lineHeight)
           const paddingTop = XEUtils.toNumber(textStyle.paddingTop)
