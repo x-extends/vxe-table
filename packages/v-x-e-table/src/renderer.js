@@ -590,6 +590,14 @@ const renderMap = {
     filterMethod: handleFilterMethod,
     renderItem: defaultItemRender
   },
+  $textarea: {
+    autofocus: '.vxe-textarea--inner',
+    renderEdit: defaultEditRender,
+    renderDefault: defaultEditRender,
+    renderFilter: defaultFilterRender,
+    filterMethod: handleFilterMethod,
+    renderItem: defaultItemRender
+  },
   $button: {
     renderEdit: defaultButtonEditRender,
     renderDefault: defaultButtonEditRender,
