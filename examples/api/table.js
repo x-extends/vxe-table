@@ -1394,7 +1394,7 @@ const apis = [
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({expanded,row,rowIndex}) 在展开或关闭时调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法 Function({expanded,row,rowIndex}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '1.15.27',
             type: 'Function',
             enum: '',
@@ -1549,7 +1549,7 @@ const apis = [
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({expanded,row,rowIndex}) 在展开或关闭时调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法 Function({expanded,row,rowIndex}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '1.15.27',
             type: 'Function',
             enum: '',
