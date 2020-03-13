@@ -162,7 +162,7 @@ const exportDataAPI = [
   },
   {
     name: 'sheetName',
-    desc: '默认的表名（只对支持的文档类型有效）',
+    desc: '表名（只对支持的文档类型有效）',
     version: '',
     type: 'String',
     enum: '',
@@ -189,7 +189,7 @@ const exportDataAPI = [
   },
   {
     name: 'mode',
-    desc: '导出数据的方式',
+    desc: '输出数据的方式',
     version: '1.15.21',
     type: 'String',
     enum: 'current, selected, all',
@@ -198,7 +198,7 @@ const exportDataAPI = [
   },
   {
     name: 'modes',
-    desc: '导出数据的方式列表',
+    desc: '输出数据的方式列表',
     version: '1.15.21',
     type: 'Array',
     enum: 'current, selected, all',
@@ -363,7 +363,7 @@ const importDataAPI = [
   }
 ]
 
-const printAPI = exportDataAPI.filter(item => !['filename', 'sheetName', 'type', 'download', 'message'].includes(item.name))
+const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod'].includes(item.name))
 
 const apis = [
   {
