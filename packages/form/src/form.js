@@ -34,6 +34,15 @@ function getResetValue (value, resetValue) {
   return resetValue
 }
 
+function renderItems (h, _vm) {
+  const { items } = _vm
+  return items ? items.map(item => {
+    return h('vxe-form-item', {
+      props: item
+    })
+  }) : []
+}
+
 export default {
   name: 'VxeForm',
   props: {
@@ -45,6 +54,7 @@ export default {
     titleAlign: String,
     titleWidth: [String, Number],
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
+    items: Array,
     rules: Object
   },
   data () {
@@ -79,8 +89,8 @@ export default {
     }
   },
   render (h) {
-    const { titleColon, loading, isLoading, vSize } = this
-    const itemSlots = [].concat(this.$slots.default)
+    const { $slots, titleColon, loading, isLoading, vSize } = this
+    const itemSlots = [].concat($slots.default || renderItems(h, this))
     if (VXETable._loading && isLoading) {
       itemSlots.push(
         h('vxe-loading', {

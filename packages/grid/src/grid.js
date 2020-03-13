@@ -41,11 +41,7 @@ function renderFormContent (h, _vm) {
           'toggle-collapse': _vm.togglCollapseEvent
         },
         ref: 'form'
-      }, formOpts.items.map(item => {
-        return h('vxe-form-item', {
-          props: item
-        })
-      }))
+      })
     ]
   }
   return []
