@@ -422,7 +422,7 @@ export const Cell = {
   renderExpandCell (h, params) {
     const { $table, isHidden, row, column } = params
     const { expandOpts, rowExpandeds, expandLazyLoadeds } = $table
-    const { lazy, labelField, iconLoaded, iconOpen, iconClose } = expandOpts
+    const { lazy, labelField, iconLoaded, iconOpen, iconClose, visibleMethod } = expandOpts
     const { slots } = column
     let isAceived = false
     let isLazyLoaded = false
@@ -436,7 +436,7 @@ export const Cell = {
       }
     }
     return [
-      h('span', {
+      !visibleMethod || visibleMethod({ row }) ? h('span', {
         class: ['vxe-table--expanded', {
           'is--active': isAceived
         }],
@@ -449,8 +449,10 @@ export const Cell = {
         h('i', {
           class: ['vxe-table--expand-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.treeLoaded) : (isAceived ? (iconOpen || GlobalConfig.icon.expandOpen) : (iconClose || GlobalConfig.icon.expandClose))]
         })
-      ]),
-      slots.content && slots.default ? slots.default.call($table, params, h) : (labelField ? XEUtils.get(row, labelField) : null)
+      ]) : null,
+      h('span', {
+        class: 'vxe-table--expand-label'
+      }, slots && slots.default ? slots.default.call($table, params, h) : (labelField ? XEUtils.get(row, labelField) : null))
     ]
   },
   renderExpandData (h, params) {

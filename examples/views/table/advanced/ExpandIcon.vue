@@ -118,6 +118,59 @@
       <code class="xml">{{ demoCodes[2] }}</code>
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
+
+    <p class="tip">还可以通过 <table-api-link prop="expand-config"/>={<table-api-link prop="visibleMethod"/>} 方法实现权限控制，返回值用来决定是否显示展开按钮</p>
+
+    <vxe-table
+      border
+      :expand-config="{visibleMethod: expandVisibleMethod}"
+      :data="tableData">
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-table-column type="expand" title="Name">
+        <template v-slot="{ row }">
+          <span>{{ row.name }}</span>
+        </template>
+        <template v-slot:content="{ row, rowIndex }">
+          <template v-if="rowIndex === 1">
+            <vxe-table
+              border
+              :data="tableData">
+              <vxe-table-column field="role" title="Role"></vxe-table-column>
+              <vxe-table-column field="age" title="Age"></vxe-table-column>
+            </vxe-table>
+          </template>
+          <template v-else>
+            <ul>
+              <li>
+                <span>ID：</span>
+                <span>{{ row.id }}</span>
+              </li>
+              <li>
+                <span>Name：</span>
+                <span>{{ row.name }}</span>
+              </li>
+              <li>
+                <span>UpdateTime：</span>
+                <span>{{ row.updateTime }}</span>
+              </li>
+              <li>
+                <span>CreateTime：</span>
+                <span>{{ row.createTime }}</span>
+              </li>
+            </ul>
+          </template>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -259,6 +312,71 @@ export default {
             }
           }
         }
+        `,
+        `
+        <vxe-table
+          border
+          :expand-config="{visibleMethod: expandVisibleMethod}"
+          :data="tableData">
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-table-column type="expand" title="Name">
+            <template v-slot="{ row, rowIndex }">
+              <span>{{ row.name }}</span>
+            </template>
+            <template v-slot:content="{ row, rowIndex }">
+              <template v-if="rowIndex === 1">
+                <vxe-table
+                  border
+                  :data="tableData">
+                  <vxe-table-column field="role" title="Role"></vxe-table-column>
+                  <vxe-table-column field="age" title="Age"></vxe-table-column>
+                </vxe-table>
+              </template>
+              <template v-else>
+                <ul>
+                  <li>
+                    <span>ID：</span>
+                    <span>{{ row.id }}</span>
+                  </li>
+                  <li>
+                    <span>Name：</span>
+                    <span>{{ row.name }}</span>
+                  </li>
+                  <li>
+                    <span>UpdateTime：</span>
+                    <span>{{ row.updateTime }}</span>
+                  </li>
+                  <li>
+                    <span>CreateTime：</span>
+                    <span>{{ row.createTime }}</span>
+                  </li>
+                </ul>
+              </template>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+          },
+          methods: {
+            expandVisibleMethod ({ row }) {
+              if (row.sex === '1') {
+                return false
+              }
+              return true
+            }
+          }
+        }
         `
       ]
     }
@@ -283,6 +401,12 @@ export default {
           this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
           return false
         }
+      }
+      return true
+    },
+    expandVisibleMethod ({ row }) {
+      if (row.sex === '1') {
+        return false
       }
       return true
     }

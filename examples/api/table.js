@@ -1331,6 +1331,15 @@ const apis = [
             list: []
           },
           {
+            name: 'visibleMethod',
+            desc: '该函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex}) 的返回值用来决定是否允许显示展开按钮',
+            version: '2.8.24',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '2.7',
@@ -1541,7 +1550,7 @@ const apis = [
           },
           {
             name: 'visibleMethod',
-            desc: '该函数会在菜单显示之前执行，支持通过 Function({type, options, columns, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）',
+            desc: '该函数 Function({type, options, columns, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）',
             version: '',
             type: 'Function',
             enum: '',
