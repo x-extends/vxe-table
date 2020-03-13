@@ -388,6 +388,10 @@ export default {
             </vxe-form-item>
           </vxe-form>
         </p>
+
+        <p>
+          <vxe-form :data="formData4" :items="formItems4"></vxe-form>
+        </p>
         `,
         `
         export default {
