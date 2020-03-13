@@ -346,6 +346,7 @@ export default {
     if (this.$refs.xTable) {
       this.$refs.xTable.clearAll()
     }
+    this.handleSearch()
   }
 }
 </script>
