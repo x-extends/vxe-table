@@ -80,6 +80,15 @@ const apis = [
         list: []
       },
       {
+        name: 'items',
+        desc: '项列表',
+        version: '2.8.24',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'rules',
         descKey: 'app.api.form.desc.rules',
         version: '',

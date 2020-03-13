@@ -33,6 +33,23 @@
         </template>
         <template v-slot="{ row }">选中日期：{{ row.date3 }}</template>
       </vxe-table-column>
+      <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{type: 'default'}">
+        <template v-slot:edit="{ row, rowIndex }">
+          <template v-if="rowIndex <= 1">
+            <vxe-input type="date" v-model="row.attr1" placeholder="请选择日期" transfer></vxe-input>
+          </template>
+          <template v-else-if="rowIndex <= 3">
+            <vxe-select v-model="row.attr1" placeholder="请选择下拉" transfer>
+              <vxe-option value="选项1" label="选项1"></vxe-option>
+              <vxe-option value="选项2" label="选项2"></vxe-option>
+              <vxe-option value="选项3" label="选项3"></vxe-option>
+            </vxe-select>
+          </template>
+          <template v-else>
+            <vxe-input type="number" v-model="row.attr1" placeholder="请输入数值" transfer></vxe-input>
+          </template>
+        </template>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -79,6 +96,23 @@ export default {
               <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
             </template>
             <template v-slot="{ row }">选中日期：{{ row.date3 }}</template>
+          </vxe-table-column>
+          <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{type: 'default'}">
+            <template v-slot:edit="{ row, rowIndex }">
+              <template v-if="rowIndex <= 1">
+                <vxe-input type="date" v-model="row.attr1" placeholder="请选择日期" transfer></vxe-input>
+              </template>
+              <template v-else-if="rowIndex <= 3">
+                <vxe-select v-model="row.attr1" placeholder="请选择下拉" transfer>
+                  <vxe-option value="选项1" label="选项1"></vxe-option>
+                  <vxe-option value="选项2" label="选项2"></vxe-option>
+                  <vxe-option value="选项3" label="选项3"></vxe-option>
+                </vxe-select>
+              </template>
+              <template v-else>
+                <vxe-input type="number" v-model="row.attr1" placeholder="请输入数值" transfer></vxe-input>
+              </template>
+            </template>
           </vxe-table-column>
         </vxe-table>
         `,
