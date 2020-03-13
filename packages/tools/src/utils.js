@@ -36,12 +36,12 @@ class ColumnConfig {
       if (XEUtils.isString(formatter)) {
         const globalFunc = formats.get(formatter) || XEUtils[formatter]
         if (!XEUtils.isFunction(globalFunc)) {
-          UtilTools.error('vxe.error.notFunc', [globalFunc])
+          UtilTools.error('vxe.error.notFunc', [formatter])
         }
       } else if (XEUtils.isArray(formatter)) {
         const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
         if (!XEUtils.isFunction(globalFunc)) {
-          UtilTools.error('vxe.error.notFunc', [globalFunc])
+          UtilTools.error('vxe.error.notFunc', [formatter[0]])
         }
       }
     }
