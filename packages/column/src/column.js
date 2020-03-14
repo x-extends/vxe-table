@@ -62,6 +62,8 @@ const props = {
   cellRender: Object,
   // 单元格编辑渲染配置项
   editRender: Object,
+  // 内容渲染配置项
+  contentRender: Object,
   // 额外的参数
   params: Object
 }

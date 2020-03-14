@@ -451,9 +451,15 @@ export const Cell = {
   },
   renderExpandData (h, params) {
     const { $table, column } = params
-    const { slots } = column
+    const { slots, contentRender } = column
     if (slots && slots.content) {
       return slots.content.call($table, params, h)
+    }
+    if (contentRender) {
+      const compConf = VXETable.renderer.get(contentRender.name)
+      if (compConf && compConf.renderExpand) {
+        return compConf.renderExpand.call($table, h, contentRender, params, { $grid: $table.$xegrid, $table })
+      }
     }
     return []
   },
