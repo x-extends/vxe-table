@@ -58,7 +58,7 @@
       highlight-hover-row
       row-key
       ref="xTree3"
-      border="none"
+      border="inner"
       :show-header="false"
       :data="tableData3"
       :checkbox-config="{labelField: 'name'}"
@@ -178,7 +178,7 @@ export default {
           highlight-hover-row
           row-key
           ref="xTree3"
-          border="none"
+          border="inner"
           :show-header="false"
           :data="tableData"
           :checkbox-config="{labelField: 'name'}"
