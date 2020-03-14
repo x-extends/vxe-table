@@ -440,9 +440,9 @@ const apis = [
       {
         name: 'border',
         descKey: 'app.api.table.desc.border',
-        version: '2 | 2.7',
+        version: '2 | 2.8.25',
         type: 'Boolean, String',
-        enum: '',
+        enum: 'default（默认）, full（完整边框）, outer（外边框）, inner（内边框）, none（无边框）',
         defVal: 'false',
         list: []
       },

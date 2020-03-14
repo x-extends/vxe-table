@@ -493,6 +493,16 @@ export default {
     expandColumn () {
       return this.tableColumn.find(column => column.type === 'expand')
     },
+    tableBorder () {
+      const { border } = this
+      if (border === true) {
+        return 'full'
+      }
+      if (border) {
+        return border
+      }
+      return 'default'
+    },
     /**
      * 判断列全选的复选框是否禁用
      */
@@ -769,7 +779,7 @@ export default {
       isLoading,
       showHeader,
       height,
-      border,
+      tableBorder,
       treeOpts,
       treeConfig,
       mouseConfig,
@@ -816,7 +826,7 @@ export default {
       }
     }
     return h('div', {
-      class: ['vxe-table', `tid_${id}`, vSize ? `size--${vSize}` : '', border && XEUtils.isString(border) ? `b--style-${border}` : '', {
+      class: ['vxe-table', `tid_${id}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         'vxe-editable': editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
@@ -828,7 +838,6 @@ export default {
         'c--highlight': highlightCell,
         't--animat': optimizeOpts.animat,
         't--stripe': stripe,
-        't--border': border,
         't--selected': mouseConfig && mouseOpts.selected,
         't--checked': isMouseChecked,
         'row--highlight': highlightHoverRow,

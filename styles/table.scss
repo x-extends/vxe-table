@@ -353,7 +353,15 @@
   .vxe-table--footer-wrapper {
     border-top: 1px solid $vxe-table-border-color;
   }
-  &:not(.t--border) {
+  &.border--default,
+  &.border--full,
+  &.border--outer {
+    .vxe-table--header-wrapper {
+      background-color: $vxe-table-header-background-color;
+    }
+  }
+  &.border--default,
+  &.border--inner {
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
@@ -378,30 +386,28 @@
       }
     }
   }
-  &.t--border {
-    &:not(.b--style-none) {
-      .vxe-header--column,
-      .vxe-body--column,
-      .vxe-footer--column {
-        background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color), linear-gradient($vxe-table-border-color, $vxe-table-border-color);
-        background-repeat: no-repeat;
-        background-size: 1px 100%, 100% 1px;
-        background-position: right top, right bottom;
+  &.border--full {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
+      background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color), linear-gradient($vxe-table-border-color, $vxe-table-border-color);
+      background-repeat: no-repeat;
+      background-size: 1px 100%, 100% 1px;
+      background-position: right top, right bottom;
+    }
+    .vxe-header--column {
+      &.col--title-checked {
+        background-image: linear-gradient($vxe-table-header-column-checked-border-color, $vxe-table-header-column-checked-border-color), linear-gradient($vxe-table-header-column-checked-border-color, $vxe-table-header-column-checked-border-color);
       }
-      .vxe-header--column {
-        &.col--title-checked {
-          background-image: linear-gradient($vxe-table-header-column-checked-border-color, $vxe-table-header-column-checked-border-color), linear-gradient($vxe-table-header-column-checked-border-color, $vxe-table-header-column-checked-border-color);
-        }
+    }
+    .vxe-body--column {
+      &.col--seq-checked {
+        background-image: linear-gradient($vxe-table-body-seq-column-checked-border-color, $vxe-table-body-seq-column-checked-border-color), linear-gradient($vxe-table-body-seq-column-checked-border-color, $vxe-table-body-seq-column-checked-border-color);
       }
-      .vxe-body--column {
-        &.col--seq-checked {
-          background-image: linear-gradient($vxe-table-body-seq-column-checked-border-color, $vxe-table-body-seq-column-checked-border-color), linear-gradient($vxe-table-body-seq-column-checked-border-color, $vxe-table-body-seq-column-checked-border-color);
-        }
-      }
-      .vxe-body--column {
-        &.col--checked {
-          background-image: linear-gradient($vxe-table-body-column-checked-border-color, $vxe-table-body-column-checked-border-color), linear-gradient($vxe-table-body-column-checked-border-color, $vxe-table-body-column-checked-border-color);
-        }
+    }
+    .vxe-body--column {
+      &.col--checked {
+        background-image: linear-gradient($vxe-table-body-column-checked-border-color, $vxe-table-body-column-checked-border-color), linear-gradient($vxe-table-body-column-checked-border-color, $vxe-table-body-column-checked-border-color);
       }
     }
     .vxe-table--fixed-left-wrapper {
@@ -410,37 +416,21 @@
         border-right-color: $vxe-table-border-color;
       }
     }
-    &.b--style-none {
-      .vxe-header--column,
-      .vxe-body--column,
-      .vxe-footer--column {
-        background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color);
-        background-repeat: no-repeat;
-        background-size: 100% 1px;
-        background-position: right bottom;
-      }
-      .vxe-header--column {
-        &.col--title-checked {
-          background-image: linear-gradient($vxe-table-header-column-checked-border-color, $vxe-table-header-column-checked-border-color);
-        }
-      }
-      .vxe-body--column {
-        &.col--seq-checked {
-          background-image: linear-gradient($vxe-table-body-seq-column-checked-border-color, $vxe-table-body-seq-column-checked-border-color);
-        }
-      }
-      .vxe-body--column {
-        &.col--checked {
-          background-image: linear-gradient($vxe-table-body-column-checked-border-color, $vxe-table-body-column-checked-border-color);
-        }
-      }
-      &:before,
-      .vxe-table--border-line {
-        display: none;
-      }
-      .vxe-table--fixed-left-wrapper {
-        border-right: 0;
-      }
+  }
+  &.border--inner,
+  &.border--none {
+    &:before,
+    .vxe-table--border-line {
+      display: none;
+    }
+    .vxe-table--fixed-left-wrapper {
+      border-right: 0;
+    }
+  }
+  &.border--none {
+    &:after,
+    .vxe-table--repair{
+      display: none;
     }
   }
   &.t--checked,
