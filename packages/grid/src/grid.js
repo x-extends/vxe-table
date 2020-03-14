@@ -203,7 +203,7 @@ export default {
     if (customs) {
       UtilTools.warn('vxe.error.removeProp', ['customs'])
     }
-    if ((data || formOpts.data) && proxyConfig) {
+    if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
       console.warn('[vxe-grid] There is a conflict between the props proxy-config and data.')
     }
     // v3.0 中废弃 proxy-config.index
