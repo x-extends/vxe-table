@@ -121,7 +121,7 @@
 }
 
 /*默认的渲染*/
-.vxe-table,
+.vxe-cell,
 .vxe-table--filter-wrapper {
   .vxe-default-input,
   .vxe-default-textarea,
@@ -470,15 +470,17 @@
         padding: #{floor(($vxe-table-row-height-medium - $vxe-table-row-line-height) / 2)} 0;
       }
     }
-    .vxe-default-input,
-    .vxe-default-textarea,
-    .vxe-default-select,
-    .vxe-input {
-      height: floor($vxe-table-row-height-medium - 8);
-    }
-    .vxe-default-input {
-      &[type="date"]::-webkit-inner-spin-button {
-        margin-top: 4px;
+    .vxe-cell {
+      .vxe-default-input,
+      .vxe-default-textarea,
+      .vxe-default-select,
+      .vxe-input {
+        height: floor($vxe-table-row-height-medium - 8);
+      }
+      .vxe-default-input {
+        &[type="date"]::-webkit-inner-spin-button {
+          margin-top: 4px;
+        }
       }
     }
   }
@@ -491,15 +493,17 @@
         padding: #{floor(($vxe-table-row-height-small - $vxe-table-row-line-height) / 2)} 0;
       }
     }
-    .vxe-default-input,
-    .vxe-default-textarea,
-    .vxe-default-select,
-    .vxe-input {
-      height: floor($vxe-table-row-height-small - 8);
-    }
-    .vxe-default-input {
-      &[type="date"]::-webkit-inner-spin-button {
-        margin-top: 2px;
+    .vxe-cell {
+      .vxe-default-input,
+      .vxe-default-textarea,
+      .vxe-default-select,
+      .vxe-input {
+        height: floor($vxe-table-row-height-small - 8);
+      }
+      .vxe-default-input {
+        &[type="date"]::-webkit-inner-spin-button {
+          margin-top: 2px;
+        }
       }
     }
   }
@@ -512,15 +516,17 @@
         padding: #{floor(($vxe-table-row-height-mini - $vxe-table-row-line-height) / 2)} 0;
       }
     }
-    .vxe-default-input,
-    .vxe-default-textarea,
-    .vxe-default-select,
-    .vxe-input {
-      height: floor($vxe-table-row-height-mini - 8);
-    }
-    .vxe-default-input {
-      &[type="date"]::-webkit-inner-spin-button {
-        margin-top: 0;
+    .vxe-cell {
+      .vxe-default-input,
+      .vxe-default-textarea,
+      .vxe-default-select,
+      .vxe-input {
+        height: floor($vxe-table-row-height-mini - 8);
+      }
+      .vxe-default-input {
+        &[type="date"]::-webkit-inner-spin-button {
+          margin-top: 0;
+        }
       }
     }
   }
