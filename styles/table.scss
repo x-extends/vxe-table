@@ -63,7 +63,7 @@ select.vxe-select,
 }
 
 /*默认的渲染*/
-.vxe-table,
+.vxe-cell,
 .vxe-table--filter-wrapper {
   .vxe-default-select {
     outline: 0;
@@ -349,14 +349,16 @@ select.vxe-select,
         padding: #{floor(($vxe-table-row-height-medium - $vxe-table-row-line-height) / 2)} 0;
       }
     }
-    .vxe-default-select,
-    .vxe-input {
-      height: floor($vxe-table-row-height-medium - 8);
-    }
-    .vxe-input {
-      .vxe-input--inner {
-        &[type="date"]::-webkit-inner-spin-button {
-          margin-top: 4px;
+    .vxe-cell {
+      .vxe-default-select,
+      .vxe-input {
+        height: floor($vxe-table-row-height-medium - 8);
+      }
+      .vxe-input {
+        .vxe-input--inner {
+          &[type="date"]::-webkit-inner-spin-button {
+            margin-top: 4px;
+          }
         }
       }
     }
@@ -376,14 +378,16 @@ select.vxe-select,
         padding: #{floor(($vxe-table-row-height-small - $vxe-table-row-line-height) / 2)} 0;
       }
     }
-    .vxe-default-select,
-    .vxe-input {
-      height: floor($vxe-table-row-height-small - 8);
-    }
-    .vxe-input {
-      .vxe-input--inner {
-        &[type="date"]::-webkit-inner-spin-button {
-          margin-top: 2px;
+    .vxe-cell {
+      .vxe-default-select,
+      .vxe-input {
+        height: floor($vxe-table-row-height-small - 8);
+      }
+      .vxe-input {
+        .vxe-input--inner {
+          &[type="date"]::-webkit-inner-spin-button {
+            margin-top: 2px;
+          }
         }
       }
     }
@@ -403,14 +407,16 @@ select.vxe-select,
         padding: #{floor(($vxe-table-row-height-mini - $vxe-table-row-line-height) / 2)} 0;
       }
     }
-    .vxe-default-select,
-    .vxe-input {
-      height: floor($vxe-table-row-height-mini - 8);
-    }
-    .vxe-input {
-      .vxe-input--inner {
-        &[type="date"]::-webkit-inner-spin-button {
-          margin-top: 0;
+    .vxe-cell {
+      .vxe-default-select,
+      .vxe-input {
+        height: floor($vxe-table-row-height-mini - 8);
+      }
+      .vxe-input {
+        .vxe-input--inner {
+          &[type="date"]::-webkit-inner-spin-button {
+            margin-top: 0;
+          }
         }
       }
     }
