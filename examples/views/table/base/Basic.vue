@@ -11,7 +11,7 @@
     </vxe-toolbar>
 
     <vxe-table
-      border="none"
+      border="inner"
       :align="allAlign"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -71,7 +71,7 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          border="none"
+          border="inner"
           :align="allAlign"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>

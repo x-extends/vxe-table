@@ -15,7 +15,7 @@
     </vxe-toolbar>
 
     <vxe-table
-      border="none"
+      border="inner"
       highlight-hover-row
       highlight-current-row
       ref="xTable"
@@ -65,7 +65,7 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          border="none"
+          border="inner"
           highlight-hover-row
           highlight-current-row
           ref="xTable"
