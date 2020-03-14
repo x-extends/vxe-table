@@ -130,13 +130,7 @@ npm install xe-utils vxe-table
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
 
-```HTML
-<!-- 引入样式 -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/index.css">
-<!-- 引入脚本 -->
-<script src="https://unpkg.com/xe-utils"></script>
-<script src="https://unpkg.com/vxe-table"></script>
-```
+### npm
 
 ```javascript
 import Vue from 'vue'
@@ -145,6 +139,16 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
 Vue.use(VXETable)
+```
+
+### CDN
+
+```HTML
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/index.css">
+<!-- 引入脚本 -->
+<script src="https://unpkg.com/xe-utils"></script>
+<script src="https://unpkg.com/vxe-table"></script>
 ```
 
 ## Example
