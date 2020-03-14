@@ -25,6 +25,8 @@
           <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
             <vxe-option value="zh_CN" label="中文"></vxe-option>
             <vxe-option value="en_US" label="English"></vxe-option>
+            <vxe-option value="zh_TW" label="繁体中文"></vxe-option>
+            <vxe-option value="ja_JP" label="ジャパン"></vxe-option>
           </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
@@ -2032,7 +2034,8 @@ export default {
     }
   },
   watch: {
-    '$i18n.locale' () {
+    '$i18n.locale' (value) {
+      localStorage.setItem('language', value)
       this.loadList()
       this.defaultExpand()
     },
