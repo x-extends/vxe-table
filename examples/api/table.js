@@ -432,7 +432,7 @@ const apis = [
         descKey: 'app.api.table.desc.border',
         version: '',
         type: 'Boolean, String',
-        enum: '',
+        enum: 'default（默认）, full（完整边框）, outer（外边框）, inner（内边框）, none（无边框）',
         defVal: 'false',
         list: []
       },
