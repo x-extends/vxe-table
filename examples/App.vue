@@ -1745,6 +1745,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.rendererExpand',
+              locat: {
+                name: 'RendererExpand'
+              }
+            },
+            {
               label: 'app.aside.nav.rendererToolbar',
               locat: {
                 name: 'RendererToolbar'

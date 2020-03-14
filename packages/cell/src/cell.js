@@ -463,7 +463,7 @@ export const Cell = {
   },
   renderExpandData (h, params) {
     const { $table, column } = params
-    const { slots } = column
+    const { slots, contentRender } = column
     if (slots) {
       if (slots.content) {
         return slots.content.call($table, params, h)
@@ -471,6 +471,12 @@ export const Cell = {
       // 在 v3.0 中将严格区分 default 与 content
       if (slots.default) {
         return slots.default.call($table, params, h)
+      }
+    }
+    if (contentRender) {
+      const compConf = VXETable.renderer.get(contentRender.name)
+      if (compConf && compConf.renderExpand) {
+        return compConf.renderExpand.call($table, h, contentRender, params, { $grid: $table.$xegrid, $table })
       }
     }
     return []

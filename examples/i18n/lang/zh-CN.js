@@ -205,9 +205,10 @@ module.exports = {
         rendererFilter: '筛选渲染器',
         rendererDefault: '单元格渲染器',
         rendererEdit: '可编辑渲染器',
+        rendererExpand: '内容渲染器',
         rendererToolbar: '工具栏渲染器',
         rendererForm: '表单渲染器',
-        rendererEmpty: '空内容渲染器',
+        rendererEmpty: '空数据渲染器',
 
         interceptor: '(进阶) 事件拦截器',
 
@@ -465,6 +466,7 @@ module.exports = {
           columnKey: '即将废弃，请使用 table.column-key',
           cellRender: '默认的渲染器配置项',
           editRender: '可编辑渲染器配置项',
+          contentRender: '内容渲染配置项',
           params: '额外的参数（可以用来存放一些私有参数）'
         }
       },

@@ -170,7 +170,7 @@ export default {
     },
     childMenuClickEvent (cItem) {
       const { $table, $panel } = this.params
-      const { option, allCaseList } = this
+      const { $XModal, option, allCaseList } = this
       const { data } = option
       this.selectCMenuItem = cItem
       data.fMode = 'and'
@@ -212,7 +212,7 @@ export default {
       }
       $table.closeFilter()
       // 动态弹出框
-      this.$XModal({
+      $XModal.open({
         title: '自定义自动筛选方式',
         width: 600,
         slots: {

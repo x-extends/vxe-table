@@ -82,6 +82,7 @@ class ColumnConfig {
       columnKey: _vm.columnKey,
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
+      contentRender: _vm.contentRender,
       // 自定义参数
       params: _vm.params,
       // 渲染属性
