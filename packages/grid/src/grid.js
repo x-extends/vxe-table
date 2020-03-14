@@ -198,8 +198,8 @@ export default {
     }
   },
   created () {
-    const { data, formOpts, proxyConfig } = this
-    if ((data || formOpts.data) && proxyConfig) {
+    const { data, formOpts, proxyOpts, proxyConfig } = this
+    if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
       console.error('[vxe-grid] There is a conflict between the props proxy-config and data.')
     }
   },
