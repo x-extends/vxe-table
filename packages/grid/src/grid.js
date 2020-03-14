@@ -460,7 +460,7 @@ export default {
               UtilTools.error('vxe.error.typeErr', ['proxy-config.ajax.query', 'Promise', typeof qRest])
             }
           } else {
-            UtilTools.error('vxe.error.notFunc', [code])
+            UtilTools.error('vxe.error.notFunc', ['query'])
           }
           break
         }
