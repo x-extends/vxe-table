@@ -247,7 +247,7 @@ const apis = [
           },
           {
             name: 'defaultValue',
-            desc: '项默认值（当表单被重置时的默认值）',
+            desc: '项默认值',
             version: '',
             type: 'Any',
             enum: '',

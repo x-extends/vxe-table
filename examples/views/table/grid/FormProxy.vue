@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">表单数据代理，可以通过设置 <grid-api-link prop="form-config"/>={items} 渲染表单</p>
+    <p class="tip">表单数据代理，可以通过设置 <grid-api-link prop="form-config"/>={<grid-api-link prop="items"/>} 渲染表单</p>
 
     <vxe-grid
       resizable
@@ -35,8 +35,8 @@ export default {
         items: [
           { field: 'name', title: '名称', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
           { field: 'sex', title: '性别', itemRender: { name: '$select', options: [] } },
-          { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-          { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+          { itemRender: { name: '$button', props: { content: '查询', type: 'submit', status: 'primary' } } },
+          { itemRender: { name: '$button', props: { content: '重置', type: 'reset' } } }
         ]
       },
       tablePage: {
@@ -84,15 +84,11 @@ export default {
               loading: false,
               tableData: [],
               tableForm: {
-                data: {
-                  name: '',
-                  sex: ''
-                },
                 items: [
                   { field: 'name', title: '名称', itemRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
                   { field: 'sex', title: '性别', itemRender: { name: '$select', options: [] } },
-                  { itemRender: { name: 'input', attrs: { type: 'submit', value: '查询' } } },
-                  { itemRender: { name: 'input', attrs: { type: 'reset', value: '重置' } } }
+                  { itemRender: { name: '$button', props: { content: '查询', type: 'submit', status: 'primary' } } },
+                  { itemRender: { name: '$button', props: { content: '重置', type: 'reset' } } }
                 ]
               },
               tableToolbar: {

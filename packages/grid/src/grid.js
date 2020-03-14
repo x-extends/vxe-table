@@ -199,12 +199,12 @@ export default {
     }
   },
   created () {
-    const { customs, data, proxyConfig, proxyOpts } = this
+    const { customs, data, formOpts, proxyConfig, proxyOpts } = this
     const { props } = proxyOpts
     if (customs) {
       UtilTools.warn('vxe.error.removeProp', ['customs'])
     }
-    if (data && proxyConfig) {
+    if ((data || formOpts.data) && proxyConfig) {
       console.warn('[vxe-grid] There is a conflict between the props proxy-config and data.')
     }
     // v3.0 中废弃 proxy-config.index
