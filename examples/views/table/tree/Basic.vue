@@ -16,7 +16,7 @@
     <vxe-table
       resizable
       tree-config
-      border="none"
+      border="inner"
       ref="xTree"
       :data="tableData"
       @toggle-tree-expand="toggleExpandChangeEvent">
@@ -100,7 +100,7 @@ export default {
         <vxe-table
           resizable
           tree-config
-          border="none"
+          border="inner"
           ref="xTree"
           :data="tableData"
           @toggle-tree-expand="toggleExpandChangeEvent">

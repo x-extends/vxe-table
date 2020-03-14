@@ -7,7 +7,7 @@
       form-config
       show-overflow
       export-config
-      border="none"
+      border="inner"
       ref="xGrid"
       height="548"
       row-id="id"
@@ -110,7 +110,7 @@ export default {
           form-config
           show-overflow
           export-config
-          border="none"
+          border="inner"
           ref="xGrid"
           height="548"
           row-id="id"

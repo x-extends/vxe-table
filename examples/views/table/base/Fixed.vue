@@ -6,7 +6,7 @@
     </p>
 
     <vxe-table
-      border="none"
+      border="inner"
       show-overflow
       :data="tableData">
       <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
@@ -57,7 +57,7 @@ export default {
       demoCodes: [
         `
         <vxe-table
-          border="none"
+          border="inner"
           show-overflow
           :data="tableData">
           <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
