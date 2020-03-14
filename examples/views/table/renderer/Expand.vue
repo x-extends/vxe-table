@@ -1,18 +1,18 @@
 <template>
   <div>
     <p class="tip">
-      空内容渲染器 <table-api-link prop="empty-render"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
+      内容渲染器 <table-column-api-link prop="content-render"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
       配置参数：<br>
-      renderEmpty (h, renderOpts, <vxe-tooltip content="{ $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 空内容<br>
+      renderExpand (h, renderOpts, <vxe-tooltip content="{ row, rowIndex, column, columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 展开内容<br>
     </p>
 
     <vxe-table
       border
       resizable
-      height="400"
       :empty-render="{name: 'NotData'}"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-table-column type="expand" width="80" :content-render="{name: 'MyExpand'}"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -37,15 +37,29 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        // 创建一个空内容渲染器
-        VXETable.renderer.add('NotData', {
-          // 空内容模板
-          renderEmpty (h, renderOpts) {
+        // 创建一个展开内容渲染器
+        VXETable.renderer.add('MyExpand', {
+          renderExpand (h, renderOpts, params) {
+            const { row } = params
             return [
-              <span>
-                <img src="static/other/img1.gif"/>
-                <p>亲，没有更多数据了！</p>
-              </span>
+              <ul>
+                <li>
+                  <span>ID：</span>
+                  <span>{ row.id }</span>
+                </li>
+                <li>
+                  <span>Name：</span>
+                  <span>{ row.name }</span>
+                </li>
+                <li>
+                  <span>UpdateTime：</span>
+                  <span>{ row.updateTime }</span>
+                </li>
+                <li>
+                  <span>CreateTime：</span>
+                  <span>{ row.createTime }</span>
+                </li>
+              </ul>
             ]
           }
         })
@@ -54,10 +68,10 @@ export default {
         <vxe-table
           border
           resizable
-          height="400"
           :empty-render="{name: 'NotData'}"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-table-column type="expand" width="80" :content-render="{name: 'MyExpand'}"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -69,11 +83,17 @@ export default {
             return {
               tableData: []
             }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           }
         }
         `
       ]
     }
+  },
+  created () {
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

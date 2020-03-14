@@ -12,6 +12,7 @@ const RendererAPI = () => import(/* webpackChunkName: "start" */ './views/table/
 const RendererFilter = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Filter.vue')
 const RendererDefault = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Default.vue')
 const RendererEdit = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Edit.vue')
+const RendererExpand = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Expand.vue')
 const RendererToolbar = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Toolbar.vue')
 const RendererForm = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Form.vue')
 const RendererEmpty = () => import(/* webpackChunkName: "start" */ './views/table/renderer/Empty.vue')
@@ -333,6 +334,11 @@ export default new Router({
       path: '/table/renderer/edit',
       name: 'RendererEdit',
       component: RendererEdit
+    },
+    {
+      path: '/table/renderer/expand',
+      name: 'RendererExpand',
+      component: RendererExpand
     },
     {
       path: '/table/renderer/toolbar',

@@ -81,6 +81,7 @@ class ColumnConfig {
       treeNode: _vm.treeNode,
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
+      contentRender: _vm.contentRender,
       // 自定义参数
       params: _vm.params,
       // 渲染属性

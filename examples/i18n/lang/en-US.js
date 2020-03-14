@@ -206,9 +206,10 @@ module.exports = {
         rendererFilter: 'Filter renderer',
         rendererDefault: 'Cell renderer',
         rendererEdit: 'Edit renderer',
+        rendererExpand: 'Content renderer',
         rendererToolbar: 'Toolbar renderer',
         rendererForm: 'Form renderer',
-        rendererEmpty: 'Empty renderer',
+        rendererEmpty: 'No data renderer',
 
         interceptor: '(Advanced) Event interceptor',
 
@@ -466,6 +467,7 @@ module.exports = {
           columnKey: 'Obsolete, please use "table.column-key"',
           cellRender: 'Default renderer config',
           editRender: 'Edit renderer config',
+          contentRender: 'Content renderer config',
           params: 'Additional parameters (Can be used to store some private parameters)'
         }
       },

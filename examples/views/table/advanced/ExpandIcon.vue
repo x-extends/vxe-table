@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       改变图标，通过设置 <table-api-link prop="expand-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标<br>
-      也可以通过 <table-column-api-link prop="slot"/> 自定义内容模板
+      也可以通过 <table-column-api-link prop="slot"/> 自定义内容模板，还可以使用 <router-link class="link" :to="{name: 'RendererExpand'}">渲染器</router-link> 创建可复用的展开行内容模板
     </p>
 
     <vxe-toolbar>
