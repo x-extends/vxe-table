@@ -324,7 +324,7 @@ module.exports = {
           autoResize: 'Auto listen parent element response resize (may be used in scenarios where parent element may be dynamically changing)',
           resizable: 'Resizable',
           stripe: 'Whether with zebra stripes(note that in the editable table scenario, the temporarily inserted data will not have a zebra-like pattern)',
-          border: 'Whether there is a border (if true, horizontal border, vertical border and external border are displayed; if false, horizontal border and external border are displayed; if "none", horizontal border is displayed)',
+          border: 'Whether there is a border',
           size: 'Table size',
           fit: 'Whether the width of all columns is self-supporting(do not use parameters that may be discarded)',
           loading: 'Whether the table is loaded',

@@ -286,7 +286,15 @@ select.vxe-select,
   .vxe-table--footer-wrapper {
     border-top: 1px solid $vxe-table-border-color;
   }
-  &:not(.t--border) {
+  &.border--default,
+  &.border--full,
+  &.border--outer {
+    .vxe-table--header-wrapper {
+      background-color: $vxe-table-header-background-color;
+    }
+  }
+  &.border--default,
+  &.border--inner {
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
@@ -296,16 +304,14 @@ select.vxe-select,
       background-position: right bottom;
     }
   }
-  &.t--border {
-    &:not(.b--style-none) {
-      .vxe-header--column,
-      .vxe-body--column,
-      .vxe-footer--column {
-        background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color), linear-gradient($vxe-table-border-color, $vxe-table-border-color);
-        background-repeat: no-repeat;
-        background-size: 1px 100%, 100% 1px;
-        background-position: right top, right bottom;
-      }
+  &.border--full {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
+      background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color), linear-gradient($vxe-table-border-color, $vxe-table-border-color);
+      background-repeat: no-repeat;
+      background-size: 1px 100%, 100% 1px;
+      background-position: right top, right bottom;
     }
     .vxe-table--fixed-left-wrapper {
       border-right: 1px solid $vxe-table-border-color;
@@ -313,22 +319,21 @@ select.vxe-select,
         border-right-color: $vxe-table-border-color;
       }
     }
-    &.b--style-none {
-      .vxe-header--column,
-      .vxe-body--column,
-      .vxe-footer--column {
-        background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color);
-        background-repeat: no-repeat;
-        background-size: 100% 1px;
-        background-position: right bottom;
-      }
-      &:before,
-      .vxe-table--border-line {
-        display: none;
-      }
-      .vxe-table--fixed-left-wrapper {
-        border-right: 0;
-      }
+  }
+  &.border--inner,
+  &.border--none {
+    &:before,
+    .vxe-table--border-line {
+      display: none;
+    }
+    .vxe-table--fixed-left-wrapper {
+      border-right: 0;
+    }
+  }
+  &.border--none {
+    &:after,
+    .vxe-table--repair{
+      display: none;
     }
   }
   &.t--checked,
