@@ -42,6 +42,9 @@ const components = [
 
 const languages = [
   'zh-CN',
+  'zh-TC',
+  'zh-HK',
+  'zh-MO',
   'zh-TW',
   'en-US',
   'ja-JP'
@@ -64,7 +67,8 @@ gulp.task('build_modules', () => {
 gulp.task('build_i18n', () => {
   return Promise.all(languages.map(code => {
     const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
-    return gulp.src(`packages/locale/lang/${code}.js`)
+    const isZHTC = ['zh-HK', 'zh-MO', 'zh-TW'].includes(code)
+    return gulp.src(`packages/locale/lang/${isZHTC ? 'zh-TC' : code}.js`)
       .pipe(babel({
         moduleId: name,
         presets: ['@babel/env'],
@@ -72,12 +76,14 @@ gulp.task('build_i18n', () => {
       }))
       .pipe(replace(`global.${name} = mod.exports;`, `global.VXETableLang${name} = mod.exports.default;`))
       .pipe(rename({
+        basename: code,
         suffix: '.umd',
         extname: '.js'
       }))
       .pipe(gulp.dest('lib/locale/lang'))
       .pipe(uglify())
       .pipe(rename({
+        basename: code,
         suffix: '.min',
         extname: '.js'
       }))

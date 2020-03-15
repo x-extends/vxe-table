@@ -283,8 +283,10 @@ module.exports = {
           v3: 'v3 内部重构，面向现代浏览器吗，不再支持 IE，渲染性能提升',
           v4: 'v4 基于 vue3 重构，渲染性能提升'
         },
+        compatibility: '兼容性变动',
+        releases: '更新日志',
         donation: '捐赠',
-        donationTitle: '，支付宝、微信捐赠给作者，使项目能够持续的维护下去',
+        donationTitle: '，支付宝、微信来捐赠作者',
         issuesTitle: '如何反馈问题？  ',
         newFunc: '由于作者比较忙，后续有时间可能会支持该功能！',
         newDevelopment: '由于作者比较忙，该版本正在重构中，敬请期待！'
@@ -297,7 +299,7 @@ module.exports = {
     },
     footer: {
       donation: '捐赠',
-      donationDesc: '为了使项目能够健康持续的发展下去，您可以通过赞助来支持作者 😊'
+      donationDesc: 'vxe-table 采用 MIT 许可的开源项目，使用完全免费。为了使项目能够健康持续的发展下去，您可以通过捐赠来支持作者 😊'
     },
     api: {
       apiSearch: 'API 搜索',

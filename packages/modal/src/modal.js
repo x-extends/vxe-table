@@ -4,6 +4,8 @@ import XEUtils from 'xe-utils'
 import MsgQueue from './queue'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
+const activeModals = []
+
 export default {
   name: 'VxeModal',
   props: {
@@ -50,7 +52,7 @@ export default {
       isLoading: false,
       contentVisible: false,
       modalTop: 0,
-      modalZindex: this.zIndex || UtilTools.nextZIndex(),
+      modalZindex: null,
       zoomLocat: null,
       inited: false
     }
@@ -88,6 +90,7 @@ export default {
     if (this.storage && !this.id) {
       UtilTools.error('vxe.error.reqProp', ['id'])
     }
+    activeModals.push(this)
   },
   mounted () {
     const { $listeners, $el, events = {}, transfer } = this
@@ -116,6 +119,7 @@ export default {
     if ($el.parentNode === document.body) {
       $el.parentNode.removeChild($el)
     }
+    XEUtils.remove(activeModals, $modal => $modal === this)
   },
   render (h) {
     const {
@@ -179,7 +183,7 @@ export default {
       h('div', {
         class: 'vxe-modal--box',
         on: {
-          mousedown: this.updateZindex
+          mousedown: this.boxMousedownEvent
         },
         ref: 'modalBox'
       }, [
@@ -276,7 +280,10 @@ export default {
       }
     },
     updateZindex () {
-      if (this.modalZindex < UtilTools.getLastZIndex()) {
+      const { zIndex, modalZindex } = this
+      if (zIndex) {
+        this.modalZindex = zIndex
+      } else if (modalZindex < UtilTools.getLastZIndex()) {
         this.modalZindex = UtilTools.nextZIndex()
       }
     },
@@ -449,6 +456,12 @@ export default {
           events.zoom.call(this, params, evnt)
         }
       })
+    },
+    boxMousedownEvent () {
+      const { modalZindex } = this
+      if (activeModals.some($modal => $modal.visible && $modal.modalZindex > modalZindex)) {
+        this.updateZindex()
+      }
     },
     mousedownEvent (evnt) {
       const { remember, storage, marginSize, zoomLocat } = this
