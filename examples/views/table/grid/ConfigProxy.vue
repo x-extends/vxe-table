@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      进阶封装实现，<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">查看配置式代理项目使用示例</a>，只需要一个 json 数据就可以非常简单的渲染一个支持 CRUD 功能完整的表格<br>
+      进阶封装实现，只需要一个 json 数据就可以非常简单的渲染一个支持 CRUD 功能完整的表格 <a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">如何实现？</a><br>
       <span class="red">（注：实现难度较高，需要熟练运用渲染器及 <grid-api-link name="vxe-grid"/> 高阶用法）</span>
     </p>
 
@@ -74,7 +74,7 @@ export default {
       tableToolbar: {
         buttons: [
           { code: 'insert_actived', name: 'Add', icon: 'fa fa-plus' },
-          { code: 'mark_cancel', name: 'Mark', icon: 'fa fa-bookmark-o' },
+          { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-bookmark-o' },
           { code: 'save', name: 'Save', icon: 'fa fa-save' }
         ],
         refresh: true,
@@ -227,7 +227,7 @@ export default {
                 toolbar: {
                   buttons: [
                     { code: 'insert_actived', name: 'Add', icon: 'fa fa-plus' },
-                    { code: 'mark_cancel', name: 'Mark', icon: 'fa fa-bookmark-o' },
+                    { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-bookmark-o' },
                     { code: 'save', name: 'Save', icon: 'fa fa-save' }
                   ],
                   refresh: true,

@@ -544,19 +544,17 @@
     user-select: none;
     cursor: pointer;
   }
-  .vxe-cell {
-    .vxe-radio--icon,
-    .vxe-checkbox--icon {
-      position: absolute;
-      left: 0;
-      top: 0.1em;
-      height: 1em;
-      width: 1em;
-    }
-    .vxe-radio--label,
-    .vxe-checkbox--label {
-      padding-left: 0.5em;
-    }
+  .vxe-cell--checkbox .vxe-checkbox--icon,
+  .vxe-cell--radio .vxe-radio--icon {
+    position: absolute;
+    left: 0;
+    top: 0.1em;
+    height: 1em;
+    width: 1em;
+  }
+  .vxe-cell--checkbox .vxe-radio--label,
+  .vxe-cell--radio .vxe-checkbox--label {
+    padding-left: 0.5em;
   }
   .vxe-cell--radio {
     .vxe-radio--icon {
@@ -955,10 +953,8 @@
         }
       }
     }
-    .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-medium;
-    }
-    .vxe-radio--icon {
+    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--radio .vxe-radio--icon {
       font-size: $vxe-radio-font-size-medium;
     }
   }
@@ -981,10 +977,8 @@
         }
       }
     }
-    .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-small;
-    }
-    .vxe-radio--icon {
+    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--radio .vxe-radio--icon {
       font-size: $vxe-radio-font-size-small;
     }
   }
@@ -1007,10 +1001,8 @@
         }
       }
     }
-    .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-mini;
-    }
-    .vxe-radio--icon {
+    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--radio .vxe-radio--icon {
       font-size: $vxe-radio-font-size-mini;
     }
   }
