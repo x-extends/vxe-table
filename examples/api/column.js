@@ -740,7 +740,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex,cells,cellIndex}, h',
+        defVal: '{column,columnIndex,$columnIndex,$rowIndex,itemIndex,items}, h',
         list: []
       },
       {
