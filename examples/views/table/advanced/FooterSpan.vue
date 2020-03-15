@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       表尾合并列，通过 <table-api-link prop="footer-span-method"/> 方法<br>
-      <span class="red">（注：<table-api-link prop="footer-method"/> 合计的逻辑都是自行实现的，该示例仅供参考）</span>
+      <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的逻辑都是自行实现的，该示例仅供参考）</span>
     </p>
 
     <vxe-table
