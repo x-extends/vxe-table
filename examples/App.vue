@@ -24,8 +24,8 @@
           <span>{{ $t('app.body.label.translations') }}:</span>
           <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
             <vxe-option value="zh_CN" label="中文"></vxe-option>
+            <vxe-option value="zh_TC" label="繁體中文"></vxe-option>
             <vxe-option value="en_US" label="English"></vxe-option>
-            <vxe-option value="zh_TW" label="繁体中文"></vxe-option>
             <vxe-option value="ja_JP" label="ジャパン"></vxe-option>
           </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
@@ -82,9 +82,8 @@
       </div>
       <div class="body">
         <div class="content" :class="{full: ['VXEAPI', 'Donation'].includes($route.name)}">
-          <template v-if="$route.path.indexOf('/module') === -1 && $route.path.indexOf('/api') === -1">
-            <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">{{ $t('app.body.button.viewCode') }}</a>
-            <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">{{ $t('app.body.button.runDemo') }}</a>
+          <template v-if="!/\/start|\/module|\/api/.test($route.path)">
+            <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank"><i class="fa fa-bug"></i>{{ $t('app.body.button.runDemo') }}</a>
           </template>
           <router-view/>
         </div>

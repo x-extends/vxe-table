@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">进阶封装实现，<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">查看配置式代理项目使用示例</a>，只需要一个 json 数据就可以非常简单的渲染一个支持 CRUD 功能完整的表格</p>
+    <p class="tip">
+      进阶封装实现，<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">查看配置式代理项目使用示例</a>，只需要一个 json 数据就可以非常简单的渲染一个支持 CRUD 功能完整的表格<br>
+      <span class="red">（注：实现难度较高，必须能熟练运用渲染器及 <grid-api-link name="vxe-grid"/> 高级用法）</span>
+    </p>
 
     <vxe-grid
       resizable
@@ -48,6 +51,7 @@ export default {
         pageSizes: [5, 10, 20, 50, 100, 200, 500, 1000]
       },
       tableProxy: {
+        form: true,
         sort: true,
         filter: true,
         ajax: {

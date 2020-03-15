@@ -306,6 +306,7 @@ export default {
         const keyCode = evnt.keyCode
         const isTab = keyCode === 9
         const isEnter = keyCode === 13
+        const isEsc = keyCode === 27
         const isUpArrow = keyCode === 38
         const isDwArrow = keyCode === 40
         const isDel = keyCode === 46
@@ -313,7 +314,7 @@ export default {
           this.isActivated = false
         }
         if (visiblePanel) {
-          if (isTab) {
+          if (isEsc || isTab) {
             this.hideOptionPanel()
           } else if (isEnter) {
             this.changeOptionEvent(evnt, currentValue)
