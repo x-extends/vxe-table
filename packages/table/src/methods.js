@@ -232,7 +232,7 @@ const Methods = {
       if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
         row[treeOpts.children] = null
       }
-      const rest = { row, rowid, index }
+      const rest = { row, rowid, index: treeConfig ? -1 : index }
       if (source) {
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(row, rest)
@@ -2356,13 +2356,15 @@ const Methods = {
    * 展开行事件
    */
   triggerRowExpandEvent (evnt, params) {
-    const { expandOpts, expandLazyLoadeds } = this
+    const { expandOpts, expandLazyLoadeds, expandColumn: column } = this
     const { row } = params
     const { lazy } = expandOpts
     if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
       const expanded = !this.isExpandByRow(row)
+      const columnIndex = this.getColumnIndex(column)
+      const $columnIndex = this.$getColumnIndex(column)
       this.setRowExpansion(row, expanded)
-      this.$emit('toggle-row-expand', { expanded, row, $table: this }, evnt)
+      this.$emit('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this }, evnt)
     }
   },
   /**
@@ -2400,7 +2402,7 @@ const Methods = {
     const rest = this.fullAllDataRowMap.get(row)
     return new Promise(resolve => {
       this.expandLazyLoadeds.push(row)
-      this.expandOpts.loadMethod({ $table: this, row }).catch(e => e).then(() => {
+      this.expandOpts.loadMethod({ $table: this, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) }).catch(e => e).then(() => {
         rest.expandLoaded = true
         XEUtils.remove(this.expandLazyLoadeds, item => item === row)
         this.rowExpandeds.push(row)
@@ -2416,10 +2418,12 @@ const Methods = {
    * @param {Boolean} expanded 是否展开
    */
   setRowExpansion (rows, expanded) {
-    const { fullAllDataRowMap, expandLazyLoadeds, expandOpts } = this
+    const { fullAllDataRowMap, expandLazyLoadeds, expandOpts, expandColumn: column } = this
     let { rowExpandeds } = this
     const { lazy, accordion, toggleMethod } = expandOpts
     const lazyRests = []
+    const columnIndex = this.getColumnIndex(column)
+    const $columnIndex = this.$getColumnIndex(column)
     if (rows) {
       if (!XEUtils.isArray(rows)) {
         rows = [rows]
@@ -2431,7 +2435,7 @@ const Methods = {
       }
       if (expanded) {
         rows.forEach(row => {
-          if ((!toggleMethod || toggleMethod({ expanded, row })) && rowExpandeds.indexOf(row) === -1) {
+          if ((!toggleMethod || toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) && rowExpandeds.indexOf(row) === -1) {
             const rest = fullAllDataRowMap.get(row)
             const isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
             if (isLoad) {
@@ -2442,7 +2446,7 @@ const Methods = {
           }
         })
       } else {
-        XEUtils.remove(rowExpandeds, row => (!toggleMethod || toggleMethod({ expanded, row })) && rows.indexOf(row) > -1)
+        XEUtils.remove(rowExpandeds, row => (!toggleMethod || toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) && rows.indexOf(row) > -1)
       }
     }
     this.rowExpandeds = rowExpandeds
@@ -2516,13 +2520,15 @@ const Methods = {
    * 展开树节点事件
    */
   triggerTreeExpandEvent (evnt, params) {
-    const { treeOpts, treeLazyLoadeds } = this
+    const { treeOpts, treeLazyLoadeds, expandColumn: column } = this
     const { row } = params
     const { lazy } = treeOpts
     if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
       const expanded = !this.isTreeExpandByRow(row)
+      const columnIndex = this.getColumnIndex(column)
+      const $columnIndex = this.$getColumnIndex(column)
       this.setTreeExpansion(row, expanded)
-      this.$emit('toggle-tree-expand', { expanded, row, $table: this }, evnt)
+      this.$emit('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row, $table: this }, evnt)
     }
   },
   /**
@@ -2604,9 +2610,11 @@ const Methods = {
    * @param {Boolean} expanded 是否展开
    */
   setTreeExpansion (rows, expanded) {
-    const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds } = this
+    const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, expandColumn: column } = this
     const { lazy, hasChild, children, accordion, toggleMethod } = treeOpts
     const result = []
+    const columnIndex = this.getColumnIndex(column)
+    const $columnIndex = this.$getColumnIndex(column)
     if (rows) {
       if (!XEUtils.isArray(rows)) {
         rows = [rows]
@@ -2620,7 +2628,7 @@ const Methods = {
         }
         if (expanded) {
           rows.forEach(row => {
-            if ((!toggleMethod || toggleMethod({ expanded, row })) && treeExpandeds.indexOf(row) === -1) {
+            if ((!toggleMethod || toggleMethod({ expanded, column, columnIndex, $columnIndex, row })) && treeExpandeds.indexOf(row) === -1) {
               const rest = fullAllDataRowMap.get(row)
               const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
               // 是否使用懒加载
@@ -2634,7 +2642,7 @@ const Methods = {
             }
           })
         } else {
-          XEUtils.remove(treeExpandeds, row => (!toggleMethod || toggleMethod({ expanded, row })) && rows.indexOf(row) > -1)
+          XEUtils.remove(treeExpandeds, row => (!toggleMethod || toggleMethod({ expanded, column, columnIndex, $columnIndex, row })) && rows.indexOf(row) > -1)
         }
         return Promise.all(result).then(this.recalculate)
       }

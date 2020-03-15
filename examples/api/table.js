@@ -1254,7 +1254,7 @@ const apis = [
           },
           {
             name: 'loadMethod',
-            desc: '该方法 Function({row}) 用于异步加载展开后的内容（必须返回 Promise<any[]> 对象）',
+            desc: '该方法 Function({row, row, rowIndex?, $rowIndex?}) 用于异步加载展开后的内容（必须返回 Promise<any[]> 对象）',
             version: '',
             type: 'Function',
             enum: '',
@@ -1263,7 +1263,7 @@ const apis = [
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({expanded,row}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法 Function({expanded, column, columnIndex, $columnIndex, row, rowIndex?, $rowIndex?}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '',
             type: 'Function',
             enum: '',
@@ -1272,7 +1272,7 @@ const apis = [
           },
           {
             name: 'visibleMethod',
-            desc: '该函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex}) 的返回值用来决定是否允许显示展开按钮',
+            desc: '该函数 Function({column, columnIndex, $columnIndex, row, rowIndex?, $rowIndex?}) 的返回值用来决定是否允许显示展开按钮',
             version: '',
             type: 'Function',
             enum: '',
@@ -1408,7 +1408,7 @@ const apis = [
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({expanded,row}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法 Function({expanded, row, column, columnIndex, $columnIndex}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '',
             type: 'Function',
             enum: '',
@@ -2264,7 +2264,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{expanded,row},event',
+        defVal: '{expanded,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex},event',
         list: []
       },
       {
@@ -2273,7 +2273,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{expanded,row},event',
+        defVal: '{expanded, row, column, columnIndex, $columnIndex},event',
         list: []
       },
       {
