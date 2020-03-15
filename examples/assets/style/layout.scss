@@ -38,6 +38,12 @@ body,
   display: flex;
   flex-direction: column;
 }
+.upgrade {
+  text-align: right;
+  .link {
+    margin-left: 20px;
+  }
+}
 .content {
   h2 {
     margin: 30px 0 0.8em;
@@ -269,7 +275,6 @@ body,
       }
     }
     .full {
-      .tosrc,
       .todemo {
         display: none;
       }
@@ -277,15 +282,12 @@ body,
     .todemo {
       position: absolute;
       top: -30px;
-      right: 120px;
-      font-size: 16px;
-      font-weight: 700;
-    }
-    .tosrc {
-      position: absolute;
-      top: -30px;
       right: 30px;
       font-size: 16px;
+      font-weight: 700;
+      i {
+        margin-right: 2px;
+      }
     }
   }
 }

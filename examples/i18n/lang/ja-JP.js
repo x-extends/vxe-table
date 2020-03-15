@@ -283,8 +283,10 @@ module.exports = {
           v3: 'v3 内部再構成、現代ブラウザ向けですか？IEをサポートしないで、レンダリング性能が向上します',
           v4: 'v4 vue 3再構成により、レンダリング性能が向上します'
         },
+        compatibility: '互換性変動',
+        releases: 'ログを更新',
         donation: '寄付する',
-        donationTitle: '、アリペイ、WeChatを支払って作者に寄付して、プロジェクトを持続的に維持していくことができます',
+        donationTitle: '、Alipay、WeChatを寄付します',
         issuesTitle: 'どうやってフィードバックしますか？ ',
         newFunc: '作者が忙しいので、この機能をサポートする時間があります。',
         newDevelopment: '作者が忙しいので、このバージョンは再構成中です。ご期待ください。'
@@ -297,7 +299,7 @@ module.exports = {
     },
     footer: {
       donation: '寄付する',
-      donationDesc: 'プロジェクトを健全に持続的に発展させるために、スポンサーを通して作者をサポートすることができます 😊'
+      donationDesc: 'vxe-table はMIT許可のオープンソース項目を採用しています。使用は完全無料です。プロジェクトを健全に持続的に発展させるために、寄付を通じて作者をサポートすることができます 😊'
     },
     api: {
       apiSearch: 'API 検索',

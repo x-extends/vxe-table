@@ -284,8 +284,10 @@ module.exports = {
           v3: 'v3 Internal refactoring, for modern browsers, no longer support IE, rendering performance improvements.',
           v4: 'v4 Based on vue3 refactoring, rendering performance improved.'
         },
+        compatibility: 'Compatibility',
+        releases: 'Releases',
         donation: 'Donation',
-        donationTitle: ', alipay and WeChat donation to the author, the project can be maintained continuously',
+        donationTitle: ', Alipay and WeChat to donate authors.',
         issuesTitle: 'How to issues feedback?  ',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
@@ -298,7 +300,7 @@ module.exports = {
     },
     footer: {
       donation: 'Donation',
-      donationDesc: 'To make the project sustainable, you can support the author through sponsorship 😊'
+      donationDesc: 'vxe-table is a MIT licensed open source project, which is free of charge. In order to make the project healthy and sustainable, you can support the author through donation 😊'
     },
     api: {
       apiSearch: 'API Search',

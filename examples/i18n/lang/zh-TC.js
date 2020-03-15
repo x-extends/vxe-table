@@ -283,8 +283,10 @@ module.exports = {
           v3: 'v3 內部重構，面向現代瀏覽器嗎，不再支持IE，渲染性能提升',
           v4: 'v4 基於vue3重構，渲染性能提升'
         },
+        compatibility: '相容性變動',
+        releases: '更新日誌',
         donation: '捐贈',
-        donationTitle: '，支付寶、微信捐贈給作者，使項目能够持續的維護下去',
+        donationTitle: '，支付寶、微信來捐贈作者',
         issuesTitle: '如何迴響問題？  ',
         newFunc: '由於作者比較忙，後續有時間可能會支持該功能！',
         newDevelopment: '由於作者比較忙，該版本正在重構中，敬請期待！'
@@ -297,7 +299,7 @@ module.exports = {
     },
     footer: {
       donation: '捐贈',
-      donationDesc: '為了使項目能够健康持續的發展下去，您可以通過贊助來支持作者 😊'
+      donationDesc: 'vxe-table 採用MIT許可的開源項目，使用完全免費。為了使項目能够健康持續的發展下去，您可以通過捐贈來支持作者 😊'
     },
     api: {
       apiSearch: 'API 蒐索',

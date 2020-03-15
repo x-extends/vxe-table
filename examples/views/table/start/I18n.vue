@@ -19,7 +19,7 @@
     <div>
       <ul class="lang-list">
         <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/zh-CN.js" target="_blank">简体中文（zh-CN）</a></li>
-        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/zh-TW.js" target="_blank">繁体中文（zh-TW）</a></li>
+        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/zh-TC.js" target="_blank">繁体中文（zh-TC）</a></li>
         <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/en-US.js" target="_blank">英文（en-US）</a></li>
         <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/ja-JP.js" target="_blank">日语（ja-JP）</a></li>
       </ul>
