@@ -57,14 +57,21 @@ export default {
                 this.changeAllOption(evnt, !filterStore.isAllSelected)
               }
             }
-          }, [
-            multiple ? h('span', {
-              class: 'vxe-checkbox--icon'
-            }) : null,
+          }, (multiple ? [
+            h('span', {
+              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+            }),
+            h('span', {
+              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+            }),
+            h('span', {
+              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+            })
+          ] : []).concat([
             h('span', {
               class: 'vxe-checkbox--label'
             }, GlobalConfig.i18n('vxe.table.allFilter'))
-          ])
+          ]))
         ]),
         h('ul', {
           class: 'vxe-table--filter-body'
@@ -81,14 +88,21 @@ export default {
                 this.changeOption(evnt, !item.checked, item)
               }
             }
-          }, [
-            multiple ? h('span', {
-              class: 'vxe-checkbox--icon'
-            }) : null,
+          }, (multiple ? [
+            h('span', {
+              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+            }),
+            h('span', {
+              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+            }),
+            h('span', {
+              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+            })
+          ] : []).concat([
             h('span', {
               class: 'vxe-checkbox--label'
             }, UtilTools.formatText(item.label, 1))
-          ])
+          ]))
         }))
       ]
     },

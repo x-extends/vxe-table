@@ -2,6 +2,12 @@
   box-sizing: border-box;
 }
 
+%TextEllipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 [class*="vxe-"] {
   @extend %boxSizing;
   &:after, &:before,

@@ -278,7 +278,13 @@ export default {
                 }
               }, [
                 h('span', {
-                  class: 'vxe-checkbox--icon'
+                  class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+                }),
+                h('span', {
+                  class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+                }),
+                h('span', {
+                  class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
                 }),
                 h('span', {
                   class: 'vxe-checkbox--label'
@@ -313,7 +319,13 @@ export default {
                 }
               }, [
                 h('span', {
-                  class: 'vxe-checkbox--icon'
+                  class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+                }),
+                h('span', {
+                  class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+                }),
+                h('span', {
+                  class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
                 }),
                 h('span', {
                   class: 'vxe-checkbox--label'
