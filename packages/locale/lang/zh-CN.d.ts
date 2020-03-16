@@ -3,6 +3,6 @@ import Language from './language'
 /**
  * 简体中文
  */
-declare const zh_CN: Language
+declare const zhCN: Language
 
-export default zh_CN
+export default zhCN

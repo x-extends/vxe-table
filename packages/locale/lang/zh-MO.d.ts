@@ -1,8 +1,8 @@
 import Language from './language'
 
 /**
- * 繁体中文 - 澳门
+ * 繁體中文 - 澳门
  */
-declare const zh_MO: Language
+declare const zhMO: Language
 
-export default zh_MO
+export default zhMO

@@ -443,8 +443,8 @@ select.vxe-select,
     height: 1em;
     width: 1em;
   }
-  .vxe-cell--checkbox .vxe-radio--label,
-  .vxe-cell--radio .vxe-checkbox--label {
+  .vxe-cell--checkbox .vxe-checkbox--label,
+  .vxe-cell--radio .vxe-radio--label {
     padding-left: 0.5em;
   }
   .vxe-cell--radio {
