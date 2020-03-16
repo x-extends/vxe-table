@@ -1,8 +1,8 @@
 import Language from './language'
 
 /**
- * 繁体中文 - 台湾
+ * 繁體中文 - 台湾
  */
-declare const zh_TW: Language
+declare const zhTW: Language
 
-export default zh_TW
+export default zhTW

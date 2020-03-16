@@ -1,8 +1,8 @@
 import Language from './language'
 
 /**
- * 繁体中文 - 香港
+ * 繁體中文 - 香港
  */
-declare const zh_HK: Language
+declare const zhHK: Language
 
-export default zh_HK
+export default zhHK

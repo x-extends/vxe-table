@@ -3,6 +3,6 @@ import Language from './language'
 /**
  * English
  */
-declare const en: Language
+declare const enUS: Language
 
-export default en
+export default enUS
