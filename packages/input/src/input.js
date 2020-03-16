@@ -702,15 +702,8 @@ export default {
       this.triggerEvent(evnt)
     },
     keydownEvent (evnt) {
-      const { keyCode } = evnt
-      const isUpArrow = keyCode === 38
-      const isDwArrow = keyCode === 40
-      if (isUpArrow || isDwArrow) {
-        if (isUpArrow) {
-          this.numberPrevEvent(evnt)
-        } else {
-          this.numberNextEvent(evnt)
-        }
+      if (this.isNumber) {
+        this.numberKeydownEvent(evnt)
       }
       this.triggerEvent(evnt)
     },
@@ -814,6 +807,19 @@ export default {
         this.numberNextEvent(evnt)
         this.numberDownNextEvent(evnt)
       }, 60)
+    },
+    numberKeydownEvent (evnt) {
+      const { keyCode } = evnt
+      const isUpArrow = keyCode === 38
+      const isDwArrow = keyCode === 40
+      if (isUpArrow || isDwArrow) {
+        evnt.preventDefault()
+        if (isUpArrow) {
+          this.numberPrevEvent(evnt)
+        } else {
+          this.numberNextEvent(evnt)
+        }
+      }
     },
     numberMousedownEvent (evnt) {
       this.numberDropDown()

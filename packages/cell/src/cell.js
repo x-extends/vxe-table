@@ -244,7 +244,10 @@ export const Cell = {
         on
       }, [
         h('span', {
-          class: 'vxe-radio--icon'
+          class: 'vxe-radio--icon vxe-radio--checked-icon'
+        }),
+        h('span', {
+          class: 'vxe-radio--icon vxe-radio--unchecked-icon'
         })
       ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [
         h('span', {
@@ -305,7 +308,13 @@ export const Cell = {
           on
         }, [
           h('span', {
-            class: 'vxe-checkbox--icon'
+            class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
           })
         ].concat(headerTitle ? (slots && slots.header ? slots.header.call($table, params, h) : [
           h('span', {
@@ -350,7 +359,13 @@ export const Cell = {
         on
       }, [
         h('span', {
-          class: 'vxe-checkbox--icon'
+          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+        }),
+        h('span', {
+          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+        }),
+        h('span', {
+          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
         })
       ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [
         h('span', {
@@ -397,7 +412,13 @@ export const Cell = {
         on
       }, [
         h('span', {
-          class: 'vxe-checkbox--icon'
+          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+        }),
+        h('span', {
+          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+        }),
+        h('span', {
+          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
         })
       ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [
         h('span', {

@@ -111,7 +111,7 @@ class ColumnConfig {
 
   getMinWidth () {
     const { type, filters, sortable, remoteSort, editRender } = this
-    return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(filters) + getColFuncWidth(sortable || remoteSort) + getColFuncWidth(editRender)
+    return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(filters) + getColFuncWidth(sortable || remoteSort) + getColFuncWidth(editRender, 32)
   }
 
   update (name, value) {
