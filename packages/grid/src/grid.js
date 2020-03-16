@@ -70,6 +70,7 @@ export default {
   },
   data () {
     return {
+      isCloak: false,
       tableLoading: false,
       maximize: false,
       tableData: [],
@@ -101,6 +102,9 @@ export default {
     formOpts () {
       return Object.assign({}, GlobalConfig.grid.formConfig, this.formConfig)
     },
+    optimizeOpts () {
+      return Object.assign({}, GlobalConfig.optimization, this.optimization)
+    },
     toolbarOpts () {
       return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
     },
@@ -124,12 +128,12 @@ export default {
       return slots
     },
     renderClass () {
-      const { tableProps, vSize, maximize } = this
+      const { vSize, maximize, optimizeOpts } = this
       return ['vxe-grid', {
         [`size--${vSize}`]: vSize,
-        't--animat': tableProps.optimization.animat,
+        't--animat': optimizeOpts.animat,
         'is--maximize': maximize,
-        'is--loading': this.loading || this.tableLoading
+        'is--loading': this.isCloak || this.loading || this.tableLoading
       }]
     },
     renderStyle () {
@@ -143,9 +147,9 @@ export default {
       return rest
     },
     tableProps () {
-      const { maximize, seqConfig, pagerConfig, loading, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, optimization } = this
+      const { maximize, seqConfig, pagerConfig, loading, isCloak, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, optimizeOpts } = this
       const props = Object.assign({}, tableExtendProps, {
-        optimization: Object.assign({}, GlobalConfig.optimization, optimization)
+        optimization: optimizeOpts
       })
       if (maximize) {
         if (tableExtendProps.maxHeight) {
@@ -156,7 +160,7 @@ export default {
       }
       if (proxyConfig) {
         Object.assign(props, {
-          loading: loading || tableLoading,
+          loading: isCloak || loading || tableLoading,
           data: tableData,
           rowClassName: this.handleRowClassName
         })
@@ -201,6 +205,12 @@ export default {
     const { data, formOpts, proxyOpts, proxyConfig } = this
     if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
       console.error('[vxe-grid] There is a conflict between the props proxy-config and data.')
+    }
+    if (this.optimizeOpts.cloak) {
+      this.isCloak = true
+      setTimeout(() => {
+        this.isCloak = false
+      }, DomTools.browse ? 500 : 300)
     }
   },
   mounted () {
