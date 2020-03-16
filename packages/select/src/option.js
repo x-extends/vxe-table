@@ -2,6 +2,14 @@ import { UtilTools } from '../../tools'
 
 let optionUniqueId = 0
 
+const watch = {}
+const wProps = ['value', 'label', 'disabled']
+wProps.forEach(name => {
+  watch[name] = function () {
+    this.$xeselect.updateOptions()
+  }
+})
+
 export default {
   name: 'VxeOption',
   props: {
@@ -32,6 +40,7 @@ export default {
       return ($xeoptgroup && $xeoptgroup.disabled) || disabled
     }
   },
+  watch,
   mounted () {
     this.$xeselect.updateOptions()
   },
