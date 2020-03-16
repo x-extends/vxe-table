@@ -54,7 +54,6 @@
           Header,
           Footer,
           Filter,
-          Loading,
           Tooltip,
           Grid,
           Menu,
@@ -88,7 +87,6 @@
         Vue.use(Header)
         Vue.use(Footer)
         Vue.use(Filter)
-        Vue.use(Loading)
         Vue.use(Tooltip)
         Vue.use(Grid)
         Vue.use(Menu)

@@ -60,7 +60,6 @@ export default {
   data () {
     return {
       collapseAll: true,
-      isLoading: false,
       invalids: []
     }
   },
@@ -74,32 +73,8 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     }
   },
-  watch: {
-    loading () {
-      if (!this.isLoading) {
-        this.isLoading = true
-      }
-    }
-  },
-  created () {
-    // 是否加载过 Loading 模块
-    this.isLoading = this.loading
-    if (!VXETable._loading && XEUtils.isBoolean(this.loading)) {
-      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['Loading']))
-    }
-  },
   render (h) {
-    const { $slots, titleColon, loading, isLoading, vSize } = this
-    const itemSlots = [].concat($slots.default || renderItems(h, this))
-    if (VXETable._loading && isLoading) {
-      itemSlots.push(
-        h('vxe-loading', {
-          props: {
-            visible: loading
-          }
-        })
-      )
-    }
+    const { $slots, titleColon, loading, vSize } = this
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
         [`size--${vSize}`]: vSize,
@@ -110,7 +85,18 @@ export default {
         submit: this.submitEvent,
         reset: this.resetEvent
       }
-    }, itemSlots)
+    }, [].concat($slots.default || renderItems(h, this)).concat([
+      h('div', {
+        class: 'vxe-loading',
+        style: {
+          display: loading ? 'block' : 'none'
+        }
+      }, [
+        h('div', {
+          class: 'vxe-loading--spinner'
+        })
+      ])
+    ]))
   },
   methods: {
     toggleCollapse () {

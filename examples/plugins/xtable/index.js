@@ -8,7 +8,6 @@ import {
   Header,
   Footer,
   Filter,
-  Loading,
   Grid,
   Menu,
   Toolbar,
@@ -71,7 +70,6 @@ Vue.use(Column)
 Vue.use(Header)
 Vue.use(Footer)
 Vue.use(Filter)
-Vue.use(Loading)
 Vue.use(Grid)
 Vue.use(Menu)
 Vue.use(Toolbar)

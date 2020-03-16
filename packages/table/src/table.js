@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from '../../body'
-import { UtilTools, GlobalEvent } from '../../tools'
+import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import methods from './methods'
 
 /**
@@ -83,7 +83,7 @@ export default {
     // 列的宽度是否自撑开（可能会被废弃的参数，不要使用）
     fit: { type: Boolean, default: () => GlobalConfig.fit },
     // 表格是否加载中
-    loading: { type: Boolean, default: null },
+    loading: Boolean,
     // 所有的列对其方式
     align: { type: String, default: () => GlobalConfig.align },
     // 所有的表头列的对齐方式
@@ -224,6 +224,7 @@ export default {
   data () {
     return {
       id: `${XEUtils.uniqueId()}`,
+      isCloak: false,
       // 列分组配置
       collectColumn: [],
       // 完整所有列
@@ -270,8 +271,6 @@ export default {
       treeLazyLoadeds: [],
       // 树节点不确定状态的列表
       treeIndeterminates: [],
-      // 是否加载了 Loading 模块
-      isLoading: false,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -585,11 +584,6 @@ export default {
     height () {
       this.$nextTick(() => this.recalculate(true))
     },
-    loading () {
-      if (!this.isLoading) {
-        this.isLoading = true
-      }
-    },
     syncResize (value) {
       if (value) {
         this.$nextTick(() => {
@@ -602,7 +596,7 @@ export default {
     }
   },
   created () {
-    const { scrollXStore, scrollYStore, optimizeOpts, mouseConfig, mouseOpts, data, loading, editConfig, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    const { scrollXStore, scrollYStore, optimizeOpts, mouseConfig, mouseOpts, data, editConfig, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -642,8 +636,6 @@ export default {
       fullColumnIdData: {}
     })
     const { scrollX, scrollY } = optimizeOpts
-    // 是否加载过 Loading 模块
-    this.isLoading = loading
     if (!UtilTools.getRowkey(this)) {
       UtilTools.error('vxe.error.emptyProp', ['row-id'])
     }
@@ -676,9 +668,7 @@ export default {
     }
     // 检查是否有安装需要的模块
     let errorModuleName
-    if (!VXETable._loading && XEUtils.isBoolean(this.loading)) {
-      errorModuleName = 'Loading'
-    } else if (!VXETable._edit && this.editConfig) {
+    if (!VXETable._edit && this.editConfig) {
       errorModuleName = 'Edit'
     } else if (!VXETable._valid && this.editRules) {
       errorModuleName = 'Validator'
@@ -706,6 +696,12 @@ export default {
         renderSize: XEUtils.toNumber(scrollX.rSize),
         offsetSize: XEUtils.toNumber(scrollX.oSize)
       })
+    }
+    if (this.optimizeOpts.cloak) {
+      this.isCloak = true
+      setTimeout(() => {
+        this.isCloak = false
+      }, DomTools.browse ? 500 : 300)
     }
     this.loadTableData(data).then(() => {
       if (data && data.length) {
@@ -775,8 +771,8 @@ export default {
       isResizable,
       isCtxMenu,
       loading,
+      isCloak,
       stripe,
-      isLoading,
       showHeader,
       height,
       tableBorder,
@@ -842,13 +838,16 @@ export default {
         't--checked': isMouseChecked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
-        'is--loading': loading,
+        'is--loading': isCloak || loading,
         'is--empty': !loading && !tableData.length,
         'scroll--y': overflowY,
         'scroll--x': overflowX,
         'virtual--x': scrollXLoad,
         'virtual--y': scrollYLoad
-      }]
+      }],
+      attrs: {
+        'x-cloak': isCloak
+      }
     }, [
       /**
        * 隐藏列
@@ -940,11 +939,16 @@ export default {
       /**
        * 加载中
        */
-      VXETable._loading && isLoading ? h('vxe-loading', {
-        props: {
-          visible: loading
+      h('div', {
+        class: 'vxe-loading',
+        style: {
+          display: isCloak || loading ? 'block' : 'none'
         }
-      }) : _e(),
+      }, [
+        h('div', {
+          class: 'vxe-loading--spinner'
+        })
+      ]),
       /**
        * 筛选
        */

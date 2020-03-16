@@ -1,5 +1,4 @@
 import GlobalConfig from '../../conf'
-import VXETable from '../../v-x-e-table'
 import XEUtils from 'xe-utils/methods/xe-utils'
 import MsgQueue from './queue'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
@@ -12,7 +11,7 @@ export default {
     value: Boolean,
     id: String,
     type: { type: String, default: 'modal' },
-    loading: { type: Boolean, default: null },
+    loading: Boolean,
     status: String,
     iconStatus: String,
     top: { type: [Number, String], default: 15 },
@@ -49,7 +48,6 @@ export default {
   data () {
     return {
       visible: false,
-      isLoading: false,
       contentVisible: false,
       modalTop: 0,
       modalZindex: null,
@@ -74,19 +72,9 @@ export default {
     },
     value (visible) {
       this[visible ? 'open' : 'close']()
-    },
-    loading () {
-      if (!this.isLoading) {
-        this.isLoading = true
-      }
     }
   },
   created () {
-    // 是否加载过 Loading 模块
-    this.isLoading = this.loading
-    if (!VXETable._loading && XEUtils.isBoolean(this.loading)) {
-      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['Loading']))
-    }
     if (this.storage && !this.id) {
       UtilTools.error('vxe.error.reqProp', ['id'])
     }
@@ -130,7 +118,6 @@ export default {
       resize,
       animat,
       loading,
-      isLoading,
       status,
       iconStatus,
       showHeader,
@@ -226,11 +213,16 @@ export default {
           h('div', {
             class: 'vxe-modal--content'
           }, destroyOnClose && !visible ? [] : (defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message))),
-          VXETable._loading && isLoading && !isMsg ? h('vxe-loading', {
-            props: {
-              visible: loading
+          !isMsg ? h('div', {
+            class: 'vxe-loading',
+            style: {
+              display: loading ? 'block' : 'none'
             }
-          }) : null
+          }, [
+            h('div', {
+              class: 'vxe-loading--spinner'
+            })
+          ]) : null
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'

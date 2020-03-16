@@ -188,6 +188,7 @@
           // 优化的全局参数
           optimization : {
             // animat: true,
+            // cloak: false, // 可以设置为 true 来避免初始化渲染时的闪动
             // delayHover: 250,
             // scrollX: {
             //   gt: 40
