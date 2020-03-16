@@ -55,6 +55,7 @@ const GlobalConfig = {
   },
   optimization: {
     animat: true,
+    // cloak: false,
     delayHover: 250,
     // rHeights: {
     //   default: 48,

@@ -326,6 +326,7 @@ export default {
   data () {
     return {
       id: `${XEUtils.uniqueId()}`,
+      isCloak: false,
       tZindex: 0,
       // 列分组配置
       collectColumn: [],
@@ -392,8 +393,6 @@ export default {
       treeIndeterminates: [],
       // 当前 hover 行
       hoverRow: null,
-      // 是否加载了 Loading 模块
-      isLoading: false,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -740,11 +739,6 @@ export default {
     height () {
       this.$nextTick(() => this.recalculate(true))
     },
-    loading () {
-      if (!this.isLoading) {
-        this.isLoading = true
-      }
-    },
     syncResize (value) {
       if (value) {
         this.$nextTick(() => {
@@ -757,11 +751,8 @@ export default {
     }
   },
   created () {
-    const { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, mouseConfig, mouseOpts, loading, showAllOverflow, showHeaderAllOverflow } = this
+    const { data, scrollXStore, scrollYStore, optimizeOpts, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, mouseConfig, mouseOpts, showAllOverflow, showHeaderAllOverflow } = this
     const { scrollX, scrollY } = optimizeOpts
-    if (loading) {
-      this.isLoading = true
-    }
     if (scrollY) {
       Object.assign(scrollYStore, {
         startIndex: 0,
@@ -839,6 +830,12 @@ export default {
     this.fullDataRowIdData = {}
     this.fullColumnMap = new Map()
     this.fullColumnIdData = {}
+    if (this.optimizeOpts.cloak) {
+      this.isCloak = true
+      setTimeout(() => {
+        this.isCloak = false
+      }, DomTools.browse ? 500 : 300)
+    }
     this.loadTableData(data).then(() => {
       if (checkboxOpts.key) {
         UtilTools.warn('vxe.error.delProp', ['select-config.key', 'row-id'])
@@ -913,8 +910,8 @@ export default {
       isResizable,
       isCtxMenu,
       loading,
+      isCloak,
       stripe,
-      isLoading,
       showHeader,
       headerHeight,
       height,
@@ -979,12 +976,16 @@ export default {
         't--checked': isMouseChecked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
+        'is--loading': isCloak || loading,
         'is--empty': !loading && !tableData.length,
         'scroll--y': overflowY,
         'scroll--x': overflowX,
         'virtual--x': scrollXLoad,
         'virtual--y': scrollYLoad
-      }]
+      }],
+      attrs: {
+        'x-cloak': isCloak
+      }
     }, [
       /**
        * 隐藏列
@@ -1079,11 +1080,16 @@ export default {
       /**
        * 加载中
        */
-      isLoading ? h('vxe-loading', {
-        props: {
-          visible: loading
+      h('div', {
+        class: 'vxe-loading',
+        style: {
+          display: isCloak || loading ? 'block' : 'none'
         }
-      }) : _e(),
+      }, [
+        h('div', {
+          class: 'vxe-loading--spinner'
+        })
+      ]),
       /**
        * 筛选
        */

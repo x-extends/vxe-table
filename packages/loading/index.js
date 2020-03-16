@@ -1,9 +1,6 @@
-import VXETable from '../v-x-e-table'
-import VxeLoading from './src/loading'
-
-VxeLoading.install = function (Vue) {
-  VXETable._loading = 1
-  Vue.component(VxeLoading.name, VxeLoading)
+const VxeLoading = {
+  /* eslint-disable @typescript-eslint/no-empty-function */
+  install () {}
 }
 
 export const Loading = VxeLoading
