@@ -284,7 +284,7 @@ function renderPanel (h, _vm) {
 
 function renderNumberIcon (h, _vm) {
   return h('span', {
-    class: 'vxe-input--number'
+    class: 'vxe-input--number-suffix'
   }, [
     h('span', {
       class: 'vxe-input--number-prev is--prev',
@@ -315,7 +315,7 @@ function renderNumberIcon (h, _vm) {
 
 function renderDatePickerIcon (h, _vm) {
   return h('span', {
-    class: 'vxe-input--date-picker',
+    class: 'vxe-input--date-picker-suffix',
     on: {
       click: _vm.datePickerOpenEvent
     }
@@ -329,7 +329,7 @@ function renderDatePickerIcon (h, _vm) {
 function renderPasswordIcon (h, _vm) {
   const { showPwd } = _vm
   return h('span', {
-    class: 'vxe-input--password',
+    class: 'vxe-input--password-suffix',
     on: {
       click: _vm.passwordToggleEvent
     }
