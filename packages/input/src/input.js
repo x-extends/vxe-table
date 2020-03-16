@@ -2,23 +2,6 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
-function getNumberDecimal (num) {
-  return (('' + num).split('.')[1] || '').length
-}
-
-function addition (num1, num2) {
-  const ratio = Math.pow(10, Math.max(getNumberDecimal(num1), getNumberDecimal(num2)))
-  return (num1 * ratio + num2 * ratio) / ratio
-}
-
-function subtraction (num1, num2) {
-  const digit1 = getNumberDecimal(num1)
-  const digit2 = getNumberDecimal(num2)
-  const ratio = Math.pow(10, Math.max(digit1, digit2))
-  const precision = (digit1 >= digit2) ? digit1 : digit2
-  return parseFloat(((num1 * ratio - num2 * ratio) / ratio).toFixed(precision))
-}
-
 function renderDefaultInput (h, _vm) {
   const { inpAttrs, inpEvents, value } = _vm
   return h('input', {
@@ -719,15 +702,8 @@ export default {
       this.triggerEvent(evnt)
     },
     keydownEvent (evnt) {
-      const { keyCode } = evnt
-      const isUpArrow = keyCode === 38
-      const isDwArrow = keyCode === 40
-      if (isUpArrow || isDwArrow) {
-        if (isUpArrow) {
-          this.numberPrevEvent(evnt)
-        } else {
-          this.numberNextEvent(evnt)
-        }
+      if (this.isNumber) {
+        this.numberKeydownEvent(evnt)
       }
       this.triggerEvent(evnt)
     },
@@ -832,6 +808,19 @@ export default {
         this.numberDownNextEvent(evnt)
       }, 60)
     },
+    numberKeydownEvent (evnt) {
+      const { keyCode } = evnt
+      const isUpArrow = keyCode === 38
+      const isDwArrow = keyCode === 40
+      if (isUpArrow || isDwArrow) {
+        evnt.preventDefault()
+        if (isUpArrow) {
+          this.numberPrevEvent(evnt)
+        } else {
+          this.numberNextEvent(evnt)
+        }
+      }
+    },
     numberMousedownEvent (evnt) {
       this.numberDropDown()
       if (evnt.button === 0) {
@@ -867,7 +856,7 @@ export default {
     numberChange (isPlus) {
       const { value, stepValue } = this
       const inputValue = this.type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
-      const newValue = isPlus ? addition(inputValue, stepValue) : subtraction(inputValue, stepValue)
+      const newValue = isPlus ? XEUtils.add(inputValue, stepValue) : XEUtils.subtract(inputValue, stepValue)
       if (this.vaildMinNum(newValue) && this.vaildMaxNum(newValue)) {
         this.emitUpdate(newValue)
       }
