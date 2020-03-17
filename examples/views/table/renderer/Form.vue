@@ -43,10 +43,6 @@ export default {
         { field: 'role', title: 'Role' }
       ],
       tableForm: {
-        data: {
-          name: '',
-          age: ''
-        },
         items: [
           { field: 'name', title: '名称', itemRender: { name: 'FormItemInput', props: { clearable: true, placeholder: '请输入名称' } } },
           { field: 'age', title: '年龄', itemRender: { name: 'FormItemInput', props: { type: 'number', clearable: true, placeholder: '请输入年龄' } } },
@@ -98,10 +94,6 @@ export default {
                 { field: 'role', title: 'Role' }
               ],
               tableForm: {
-                data: {
-                  name: '',
-                  age: ''
-                },
                 items: [
                   { field: 'name', title: '名称', itemRender: { name: 'FormItemInput', props: { clearable: true, placeholder: '请输入名称' } } },
                   { field: 'age', title: '年龄', itemRender: { name: 'FormItemInput', props: { type: 'number', clearable: true, placeholder: '请输入年龄' } } },

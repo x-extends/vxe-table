@@ -225,11 +225,21 @@ export const UtilTools = {
         }
       }
       if (XEUtils.isString(formatter)) {
-        const globalFunc = formats.get(formatter) || XEUtils[formatter]
-        cellLabel = globalFunc ? globalFunc(cellValue) : ''
+        if (XEUtils[formatter]) {
+          cellLabel = XEUtils[formatter](cellValue)
+        } else if (formats.get(formatter)) {
+          cellLabel = formats.get(formatter)({ cellValue, row, column })
+        } else {
+          cellLabel = ''
+        }
       } else if (XEUtils.isArray(formatter)) {
-        const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
-        cellLabel = globalFunc ? globalFunc(...([cellValue].concat(formatter.slice(1)))) : ''
+        if (XEUtils[formatter[0]]) {
+          cellLabel = XEUtils[formatter[0]](cellValue, ...formatter.slice(1))
+        } else if (formats.get(formatter[0])) {
+          cellLabel = formats.get(formatter[0])({ cellValue, row, column }, ...formatter.slice(1))
+        } else {
+          cellLabel = ''
+        }
       } else {
         cellLabel = formatter(Object.assign({ cellValue }, params))
       }
