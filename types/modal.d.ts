@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { VXETableModule } from './module';
+import { VXETableModule } from './component';
 
 /**
  * 模态窗口

@@ -1,4 +1,4 @@
-import { VXETableModule } from './module';
+import { VXETableModule } from './component';
 
 /**
  * 列

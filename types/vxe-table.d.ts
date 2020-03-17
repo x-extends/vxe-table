@@ -1,13 +1,8 @@
 import Vue from 'vue';
+
 import { Table } from './table';
-import { Icon } from './icon';
 import { Column } from './column';
-import { Header } from './header';
-import { Body } from './body';
-import { Footer } from './footer';
-import { Filter } from './filter';
 import { Grid } from './grid';
-import { Menu } from './menu';
 import { Toolbar } from './toolbar';
 import { Pager } from './pager';
 import { Checkbox } from './checkbox';
@@ -18,11 +13,17 @@ import { Select } from './select';
 import { Modal, XModal } from './modal';
 import { Tooltip } from './tooltip';
 import { Form } from './form';
-import { Edit } from './edit'
-import { Export } from './export';
-import { Keyboard } from './keyboard';
-import { Validator } from './validator';
-import { Resize } from './resize';
+
+import { Header } from './extends/header';
+import { Footer } from './extends/footer';
+import { Icon } from './extends/icon';
+import { Filter } from './extends/filter';
+import { Menu } from './extends/menu';
+import { Edit } from './extends/edit'
+import { Export } from './extends/export';
+import { Keyboard } from './extends/keyboard';
+import { Validator } from './extends/validator';
+import { Resize } from './extends/resize';
 
 export interface VXETableOptions {
   i18n?(key: string, value: any): any;
@@ -195,7 +196,6 @@ export {
   Icon,
   Column,
   Header,
-  Body,
   Footer,
   Filter,
   Grid,

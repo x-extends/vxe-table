@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 export declare class VXETableModule extends Vue {
   /**
-   * 大小
+   * 尺寸
    * @default 'default'
    * @type string
    */
