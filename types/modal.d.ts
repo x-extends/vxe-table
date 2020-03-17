@@ -38,6 +38,12 @@ export declare class Modal extends VXETableModule {
   storage?: boolean;
   storageKey?: string;
   animat?: boolean;
+
+  open(): any;
+  close(): any;
+  getBox(): HTMLElement;
+  maximize(): Promise<any>;
+  revert(): Promise<any>;
 }
 
 export interface XModalOptions {

@@ -9,4 +9,10 @@ export declare class Grid extends Table {
   proxyConfig?: any;
   toolbar?: boolean | any;
   formConfig?: boolean | any;
+
+  commitProxy(): Promise<any>;
+  getPendingRecords(): any[];
+  zoom(): Promise<boolean>;
+  isMaximized(): boolean;
+  getProxyInfo(): { data: any, filter: any, form: any, sort: any, pager: any, pendingRecords: any[] };
 }

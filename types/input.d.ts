@@ -23,4 +23,7 @@ export declare class Input extends VXETableModule {
   suffixIcon?:  string;
   placement?:  string;
   transfer?: boolean;
+
+  focus(): Promise<any>;
+  blur(): Promise<any>;
 }

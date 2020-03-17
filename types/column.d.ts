@@ -69,3 +69,18 @@ export declare class Column extends VXETableModule {
   // 额外的参数
   params?: any;
 }
+
+export class ColumnConfig {
+  id?: string;
+  title?: string;
+  property?: string;
+  type?: string;
+  visible?: boolean;
+  defaultVisible: any;
+  checked?: boolean;
+  disabled?: boolean;
+  order?: string;
+  renderWidth?: number;
+  renderHeight?: number;
+  resizeWidth?: number;
+}

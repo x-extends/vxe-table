@@ -428,7 +428,7 @@ const apis = [
         name: 'getBox()',
         desc: '获取当前窗口元素',
         version: '',
-        type: '',
+        type: 'Element',
         enum: '',
         defVal: '',
         list: []
@@ -437,7 +437,7 @@ const apis = [
         name: 'maximize()',
         desc: '如果窗口处于常规状态，则最大化窗口',
         version: '',
-        type: '',
+        type: 'Promise',
         enum: '',
         defVal: '',
         list: []
@@ -446,7 +446,7 @@ const apis = [
         name: 'revert()',
         desc: '如果窗口处于最大化状态，则还原窗口',
         version: '',
-        type: '',
+        type: 'Promise',
         enum: '',
         defVal: '',
         list: []
