@@ -32,29 +32,20 @@ import '../../../styles/index.scss'
 // import VXETablePluginElement from '../../../../vxe-table-plugin-element/test.js'
 // import VXETablePluginIView from '../../../../vxe-table-plugin-iview/test.js'
 // import VXETablePluginAntd from '../../../../vxe-table-plugin-antd/test.js'
-// import VXETablePluginExcel from '../../../../vxe-table-plugin-excel/test.js'
-// import VXETablePluginRenderer from '../../../../vxe-table-plugin-renderer/test.js'
 // import VXETablePluginMenus from '../../../../vxe-table-plugin-menus/test.js'
-// import VXETablePluginCharts from '../../../../vxe-table-plugin-charts/test.js'
 // import VXETablePluginShortcutKey from '../../../../vxe-table-plugin-shortcut-key/test.js'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
-import VXETablePluginExcel from 'vxe-table-plugin-excel'
-import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
 import VXETablePluginVirtualTree from 'vxe-table-plugin-virtual-tree'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
-import VXETablePluginCharts from 'vxe-table-plugin-charts'
 import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
 import VXETablePluginExportPDF from 'vxe-table-plugin-export-pdf'
 // import VXETablePluginShortcutKey from 'vxe-table-plugin-shortcut-key'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
-import 'vxe-table-plugin-excel/dist/style.css'
 import 'vxe-table-plugin-virtual-tree/dist/style.css'
-import 'vxe-table-plugin-renderer/dist/style.css'
-import 'vxe-table-plugin-charts/dist/style.css'
 
 // 设置默认参数
 VXETable.setup({
@@ -94,11 +85,8 @@ Vue.use(Table)
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
-VXETable.use(VXETablePluginExcel)
-VXETable.use(VXETablePluginRenderer)
 VXETable.use(VXETablePluginVirtualTree)
 VXETable.use(VXETablePluginMenus)
-VXETable.use(VXETablePluginCharts)
 VXETable.use(VXETablePluginExportXLSX)
 VXETable.use(VXETablePluginExportPDF)
 // VXETable.use(VXETablePluginShortcutKey, {

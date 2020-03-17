@@ -34,7 +34,7 @@ function reg (key) {
 
 export const VXETable = {
   t: key => GlobalConfig.i18n(key),
-  v: 'v2',
+  v: 'v3',
   reg,
   use,
   types: {},
