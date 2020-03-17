@@ -70,7 +70,7 @@ export default {
   },
   data () {
     return {
-      isCloak: true,
+      isCloak: false,
       tableLoading: false,
       maximize: false,
       tableData: [],
