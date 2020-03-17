@@ -213,11 +213,11 @@ export const UtilTools = {
         }
       }
       if (XEUtils.isString(formatter)) {
-        const globalFunc = formats.get(formatter) || XEUtils[formatter]
-        cellLabel = globalFunc ? globalFunc(cellValue) : ''
+        const globalFunc = formats.get(formatter)
+        cellLabel = globalFunc ? globalFunc({ cellValue, row, column }) : ''
       } else if (XEUtils.isArray(formatter)) {
-        const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
-        cellLabel = globalFunc ? globalFunc(...([cellValue].concat(formatter.slice(1)))) : ''
+        const globalFunc = formats.get(formatter[0])
+        cellLabel = globalFunc ? globalFunc({ cellValue, row, column }, ...formatter.slice(1)) : ''
       } else {
         cellLabel = formatter(Object.assign({ cellValue }, params))
       }

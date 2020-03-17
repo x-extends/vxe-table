@@ -28,6 +28,7 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" :edit-render="{name: '$input', props: {suffixIcon: 'fa fa-edit'}, events: {'suffix-click': editAddressEvent}}"></vxe-table-column>
       <vxe-table-column field="date3" title="Date" formatter="toDateString"></vxe-table-column>
       <vxe-table-column title="操作" width="200">
         <template v-slot="{ row, rowIndex }">
@@ -43,6 +44,12 @@
         </template>
       </vxe-table-column>
     </vxe-table>
+
+    <vxe-modal v-model="showPopupEdit" title="查看&编辑" width="600" resize esc-closable>
+      <template v-if="selectRow">
+        <vxe-textarea ref="xTextarea" v-model="selectRow.address" :autosize="{minRows: 8, maxRows: 20}"></vxe-textarea>
+      </template>
+    </vxe-modal>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -61,6 +68,8 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      showPopupEdit: false,
+      selectRow: null,
       tableData: [],
       demoCodes: [
         `
@@ -86,6 +95,7 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" :edit-render="{name: '$input', props: {suffixIcon: 'fa fa-edit'}, events: {'suffix-click': editAddressEvent}}"></vxe-table-column>
           <vxe-table-column field="date3" title="Date" formatter="toDateString"></vxe-table-column>
           <vxe-table-column title="操作" width="200">
             <template v-slot="{ row, rowIndex }">
@@ -101,11 +111,19 @@ export default {
             </template>
           </vxe-table-column>
         </vxe-table>
+
+        <vxe-modal v-model="showPopupEdit" title="查看&编辑" width="600" resize esc-closable>
+          <template v-if="selectRow">
+            <vxe-textarea ref="xTextarea" v-model="selectRow.address" :autosize="{minRows: 8, maxRows: 20}"></vxe-textarea>
+          </template>
+        </vxe-modal>
         `,
         `
         export default {
           data () {
             return {
+              showPopupEdit: false,
+              selectRow: null,
               tableData: []
             }
           },
@@ -113,6 +131,10 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
+            editAddressEvent ({ row }) {
+              this.selectRow = row
+              this.showPopupEdit = true
+            },
             insertEvent () {
               this.$refs.xTable.insert()
                 .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'name'))
@@ -191,6 +213,10 @@ export default {
     })
   },
   methods: {
+    editAddressEvent ({ row }) {
+      this.selectRow = row
+      this.showPopupEdit = true
+    },
     insertEvent () {
       this.$refs.xTable.insert()
         .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'name'))
