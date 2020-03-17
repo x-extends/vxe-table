@@ -1,13 +1,15 @@
-import { VXETableModule } from './module';
+import { VXETableModule } from './component';
 
 /**
- * 表单
+ * 工具提示
  */
 export declare class Tooltip extends VXETableModule {
-  /**
-   * 大小
-   * @default 'default'
-   * @type string
-   */
-  size: 'medium' | 'small' | 'mini';
+  value?: boolean;
+  trigger?: string;
+  theme?: string;
+  content?: string | Function;
+  zIndex?: string | number;
+  isArrow?: boolean;
+  enterable?: boolean;
+  leaveDelay?: number;
 }

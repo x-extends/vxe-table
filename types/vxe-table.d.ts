@@ -1,14 +1,8 @@
 import Vue from 'vue';
+
 import { Table } from './table';
-import { Icon } from './icon';
 import { Column } from './column';
-import { Header } from './header';
-import { Body } from './body';
-import { Footer } from './footer';
-import { Filter } from './filter';
-import { Loading } from './loading';
 import { Grid } from './grid';
-import { Menu } from './menu';
 import { Toolbar } from './toolbar';
 import { Pager } from './pager';
 import { Checkbox } from './checkbox';
@@ -19,35 +13,21 @@ import { Select } from './select';
 import { Modal, XModal } from './modal';
 import { Tooltip } from './tooltip';
 import { Form } from './form';
-import { Edit } from './edit'
-import { Export } from './export';
-import { Keyboard } from './keyboard';
-import { Validator } from './validator';
-import { Resize } from './resize';
+
+import { Header } from './extends/header';
+import { Footer } from './extends/footer';
+import { Icon } from './extends/icon';
+import { Filter } from './extends/filter';
+import { Menu } from './extends/menu';
+import { Edit } from './extends/edit'
+import { Export } from './extends/export';
+import { Keyboard } from './extends/keyboard';
+import { Validator } from './extends/validator';
+import { Resize } from './extends/resize';
 
 export interface VXETableOptions {
-  showOverflow?: boolean;
-  showHeaderOverflow?: boolean;
-  resizeInterval?: number;
-  size?: string;
-  validConfig?: object;
-  resizable?: boolean;
-  stripe?: boolean;
-  border?: boolean;
-  fit?: boolean;
-  emptyCell?: string;
-  showHeader?: boolean;
-  rowId?: string;
-  version?: string | number;
-  optimization?: object;
-  icon?: object;
-  grid?: object;
-  menu?: object;
-  tooltip?: object;
-  pager?: object;
-  toolbar?: object;
-  message?: object;
   i18n?(key: string, value: any): any;
+  [key: string]: any;
 }
 
 export interface Interceptor {
@@ -97,7 +77,6 @@ export function use(plugin: PluginObject<any>, ...options: any[]): VXETableStati
 export const interceptor: Interceptor;
 export const renderer: Renderer;
 export const menus: Menus;
-export const buttons: Commands;
 export const commands: Commands;
 export const formats: Formats;
 
@@ -186,7 +165,6 @@ export interface VXETableStatic {
    * 渲染器
    */
   renderer: Renderer;
-  buttons: Commands;
   /**
    * 全局指令
    */
@@ -218,10 +196,8 @@ export {
   Icon,
   Column,
   Header,
-  Body,
   Footer,
   Filter,
-  Loading,
   Grid,
   Menu,
   Toolbar,

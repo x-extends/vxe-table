@@ -1,13 +1,18 @@
-import { VXETableModule } from './module';
+import { VXETableModule } from './component';
 
 /**
- * 工具栏模块
+ * 工具栏
  */
 export declare class Toolbar extends VXETableModule {
-  /**
-   * 大小
-   * @default 'default'
-   * @type string
-   */
-  size: 'medium' | 'small' | 'mini';
+  id?: string;
+  loading?: boolean;
+  resizable?: boolean | any;
+  refresh?: boolean | any;
+  import?: boolean | any;
+  export?: boolean | any;
+  zoom?: boolean | any;
+  setting?: boolean | any;
+  custom?: boolean | any;
+  buttons?: any[];
+  perfect?: boolean;
 }

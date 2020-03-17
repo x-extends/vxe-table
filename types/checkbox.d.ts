@@ -1,13 +1,13 @@
-import { VXETableModule } from './module';
+import { VXETableModule } from './component';
 
 /**
  * 复选框
  */
 export declare class Checkbox extends VXETableModule {
-  /**
-   * 大小
-   * @default 'default'
-   * @type string
-   */
-  size: 'medium' | 'small' | 'mini';
+  value?: boolean;
+  label?: string | number;
+  indeterminate?: boolean;
+  title?: string | number;
+  content?: string | number;
+  disabled?: boolean;
 }

@@ -1,13 +1,14 @@
-import { VXETableModule } from './module';
+import { VXETableModule } from './component';
 
 /**
  * 按钮
  */
 export declare class Button extends VXETableModule {
-  /**
-   * 大小
-   * @default 'default'
-   * @type string
-   */
-  size: 'medium' | 'small' | 'mini';
+  type?: string;
+  name?: string | number;
+  content?: string;
+  status?: string;
+  icon?: string;
+  disabled?: boolean;
+  loading?: boolean;
 }

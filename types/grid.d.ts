@@ -1,13 +1,12 @@
-import { VXETableModule } from './module';
+import { Table } from './table';
 
 /**
- * 动态表格
+ * 高级表格
  */
-export declare class Grid extends VXETableModule {
-  /**
-   * 大小
-   * @default 'default'
-   * @type string
-   */
-  size: 'medium' | 'small' | 'mini';
+export declare class Grid extends Table {
+  columns?: any[];
+  pagerConfig?: boolean | any;
+  proxyConfig?: any;
+  toolbar?: boolean | any;
+  formConfig?: boolean | any;
 }

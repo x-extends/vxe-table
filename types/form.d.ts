@@ -1,13 +1,16 @@
-import { VXETableModule } from './module';
+import { VXETableModule } from './component';
 
 /**
  * 表单
  */
 export declare class Form extends VXETableModule {
-  /**
-   * 大小
-   * @default 'default'
-   * @type string
-   */
-  size: 'medium' | 'small' | 'mini';
+  loading?: boolean;
+  data?: any;
+  span?: string | number;
+  align?: string;
+  titleAlign?: string;
+  titleWidth?: string | number;
+  titleColon?: boolean;
+  items?: any[];
+  rules?: Object;
 }
