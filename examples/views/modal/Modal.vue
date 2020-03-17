@@ -142,9 +142,10 @@
       </vxe-modal>
 
       <vxe-button @click="value10 = !value10">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
-      <vxe-modal v-model="value10" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage>
+      <vxe-modal v-model="value10" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage transfer>
         <template v-slot:title>
           <span style="color: red;">完整功能的窗口（移动、拖动、状态保存）</span>
+          <span style="color: red;">通过设置 transfer 将弹框容器插入 body</span>
         </template>
         <template>
           <vxe-grid
@@ -392,9 +393,10 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value10 = !value10">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
-          <vxe-modal v-model="value10" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage>
+          <vxe-modal v-model="value10" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage transfer>
             <template v-slot:title>
               <span style="color: red;">完整功能的窗口（移动、拖动、状态保存）</span>
+              <span style="color: red;">通过设置 transfer 将弹框容器插入 body</span>
             </template>
             <template>
               <vxe-grid
