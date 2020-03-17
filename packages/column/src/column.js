@@ -2,7 +2,7 @@ import Cell from '../../cell'
 import { UtilTools } from '../../tools'
 
 const props = {
-  // 渲染类型 index,radio,checkbox,expand
+  // 渲染类型 index,radio,checkbox,expand,html
   type: String,
   // 列字段名
   field: String,

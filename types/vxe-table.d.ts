@@ -25,28 +25,8 @@ import { Validator } from './validator';
 import { Resize } from './resize';
 
 export interface VXETableOptions {
-  showOverflow?: boolean;
-  showHeaderOverflow?: boolean;
-  resizeInterval?: number;
-  size?: string;
-  validConfig?: object;
-  resizable?: boolean;
-  stripe?: boolean;
-  border?: boolean;
-  fit?: boolean;
-  emptyCell?: string;
-  showHeader?: boolean;
-  rowId?: string;
-  version?: string | number;
-  optimization?: object;
-  icon?: object;
-  grid?: object;
-  menu?: object;
-  tooltip?: object;
-  pager?: object;
-  toolbar?: object;
-  message?: object;
   i18n?(key: string, value: any): any;
+  [key: string]: any;
 }
 
 export interface Interceptor {
