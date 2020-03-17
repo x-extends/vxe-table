@@ -18,7 +18,6 @@ const components = [
   'body',
   'footer',
   'filter',
-  'loading',
   'menu',
   'export',
   'toolbar',

@@ -5,7 +5,6 @@ import Column from './column'
 import Header from './header'
 import Footer from './footer'
 import Filter from './filter'
-import Loading from './loading'
 import Grid from './grid'
 import Menu from './menu'
 import Toolbar from './toolbar'
@@ -34,7 +33,6 @@ const components = [
   Header,
   Footer,
   Filter,
-  Loading,
   Grid,
   Menu,
   Toolbar,
@@ -83,7 +81,6 @@ export * from './header'
 export * from './body'
 export * from './footer'
 export * from './filter'
-export * from './loading'
 export * from './grid'
 export * from './menu'
 export * from './toolbar'

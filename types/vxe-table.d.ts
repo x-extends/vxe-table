@@ -6,7 +6,6 @@ import { Header } from './header';
 import { Body } from './body';
 import { Footer } from './footer';
 import { Filter } from './filter';
-import { Loading } from './loading';
 import { Grid } from './grid';
 import { Menu } from './menu';
 import { Toolbar } from './toolbar';
@@ -219,7 +218,6 @@ export {
   Body,
   Footer,
   Filter,
-  Loading,
   Grid,
   Menu,
   Toolbar,
