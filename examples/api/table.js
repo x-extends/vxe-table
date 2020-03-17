@@ -2034,6 +2034,15 @@ const apis = [
             list: []
           },
           {
+            name: 'cloak',
+            desc: '可以设置为 true 来避免初始化渲染时的闪动',
+            version: '1.15.27',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'delayHover',
             desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
             version: '1.14.16',
