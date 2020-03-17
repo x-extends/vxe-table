@@ -15,4 +15,7 @@ export declare class Select extends VXETableModule {
   optionGroups?: any[];
   optionGroupProps?: any;
   transfer?: boolean;
+
+  focus(): Promise<any>;
+  blur(): Promise<any>;
 }

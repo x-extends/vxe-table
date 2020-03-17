@@ -1,13 +1,14 @@
 import Vue from 'vue';
 
 import { Table } from './table';
-import { Column } from './column';
+import { Column, ColumnConfig } from './column';
 import { Grid } from './grid';
 import { Toolbar } from './toolbar';
 import { Pager } from './pager';
 import { Checkbox } from './checkbox';
 import { Radio } from './radio';
 import { Input } from './input';
+import { Textarea } from './textarea';
 import { Button } from './button';
 import { Select } from './select';
 import { Modal, XModal } from './modal';
@@ -192,12 +193,10 @@ declare global {
 
 export {
   VXETable,
+
   Table,
-  Icon,
   Column,
-  Header,
-  Footer,
-  Filter,
+  ColumnConfig,
   Grid,
   Menu,
   Toolbar,
@@ -205,11 +204,17 @@ export {
   Checkbox,
   Radio,
   Input,
+  Textarea,
   Button,
   Select,
   Modal,
   Tooltip,
   Form,
+
+  Icon,
+  Header,
+  Footer,
+  Filter,
   Edit,
   Export,
   Keyboard,

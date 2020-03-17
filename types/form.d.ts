@@ -13,4 +13,9 @@ export declare class Form extends VXETableModule {
   titleColon?: boolean;
   items?: any[];
   rules?: Object;
+
+  validate(callback?: Function): Promise<any>;
+  clearValidate(field?: string): Promise<any>;
+  updateStatus(scope: any): Promise<any>;
+  toggleCollapse(): Promise<any>;
 }

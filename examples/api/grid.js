@@ -450,6 +450,24 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'getPendingRecords()',
+        desc: '获取已标记删除的数据',
+        version: '2.8.0',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getProxyInfo()',
+        desc: '获取数据代理信息',
+        version: '2.8.0',
+        type: '{data, filter, form, sort, pager, pendingRecords}',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   }
