@@ -70,7 +70,7 @@ export default {
         `,
         `
         // 格式金额，默认2位数
-        VXETable.formats.add('myAmount', (cellValue, digits) => {
+        VXETable.formats.add('myAmount', ({ cellValue }, digits) => {
           return XEUtils.commafy(cellValue, { digits: digits || 2 })
         })
 
