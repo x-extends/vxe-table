@@ -1633,21 +1633,21 @@ export default {
                 name: 'TablePluginAntdPage'
               }
             },
-            {
-              label: 'app.aside.nav.shortcutKeyPlugin',
-              disabled: true,
-              locat: {
-                name: 'TablePluginShortcutKey'
-              }
-            },
-            {
-              label: 'app.aside.nav.chartsPlugin',
-              demoUrl: 'https://jsrun.pro/9aWKp/edit',
-              disabled: true,
-              locat: {
-                name: 'TablePluginCharts'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.shortcutKeyPlugin',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TablePluginShortcutKey'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.chartsPlugin',
+            //   demoUrl: 'https://jsrun.pro/9aWKp/edit',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TablePluginCharts'
+            //   }
+            // },
             {
               label: 'app.aside.nav.exportXLSXPlugin',
               demoUrl: 'https://jsrun.pro/PIWKp/edit',
@@ -1662,13 +1662,13 @@ export default {
                 name: 'TablePluginExportPDF'
               }
             },
-            {
-              label: 'app.aside.nav.rendererPlugin',
-              disabled: true,
-              locat: {
-                name: 'TablePluginRenderer'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.rendererPlugin',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TablePluginRenderer'
+            //   }
+            // },
             {
               label: 'app.aside.nav.menusPlugin',
               locat: {
