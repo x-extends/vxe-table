@@ -85,7 +85,7 @@
   },
   "peerDependencies": {
     "vue": ">=2.6.0",
-    "xe-utils": ">=2.2.0"
+    "xe-utils": ">=2.4.0"
   },
   "postcss": {
     "plugins": {
