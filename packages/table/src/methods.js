@@ -1383,7 +1383,7 @@ const Methods = {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', { $table: this }, () => {
-        const { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
+        const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
         const { selected, actived } = editStore
         const keyCode = evnt.keyCode
         const isBack = keyCode === 8
@@ -1503,8 +1503,10 @@ const Methods = {
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && selected.column.editRender) {
             if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
-              UtilTools.setCellValue(selected.row, selected.column, null)
-              this.handleActived(selected.args, evnt)
+              if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
+                UtilTools.setCellValue(selected.row, selected.column, null)
+                this.handleActived(selected.args, evnt)
+              }
             }
           }
         }
