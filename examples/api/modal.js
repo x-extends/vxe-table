@@ -434,6 +434,24 @@ const apis = [
         list: []
       },
       {
+        name: 'isMaximized()',
+        desc: '判断是否最大化显示',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'zoom()',
+        desc: '切换窗口最大化/还原',
+        version: '',
+        type: 'Promise<status>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'maximize()',
         desc: '如果窗口处于常规状态，则最大化窗口',
         version: '',

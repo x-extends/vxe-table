@@ -2,7 +2,7 @@ const GlobalConfig = {
   // keepSource: false,
   // showOverflow: null,
   // showHeaderOverflow: null,
-  // resizeInterval: 250,
+  // resizeInterval: 500,
   // size: null,
   // resizable: false,
   // stripe: false,

@@ -116,7 +116,7 @@ export default {
     },
     modal: {
       zoomIn: '最大化',
-      zoomOut: '向下还原',
+      zoomOut: '还原',
       close: '关闭'
     },
     form: {

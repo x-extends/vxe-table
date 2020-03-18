@@ -527,7 +527,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{maximize}, event',
+        defVal: '{type}, event',
         list: []
       },
       {
