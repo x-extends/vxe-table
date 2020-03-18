@@ -19,7 +19,7 @@
       </ul>
     </div>
     <div class="content">
-      <p>💰{{ $t('app.body.label.through') }} <a href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee {{ $t('app.body.other.donation') }}</a>{{ $t('app.body.other.donationTitle') }}</p>
+      <p>💰{{ $t('app.body.label.through') }} <a href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee {{ $t('app.body.other.donation') }}</a>{{ $t('app.body.other.donationTitle') }}<span class="red">（如果有问题需要支持可以留言）</span></p>
       <div>
         <img src="static/donation/pay.jpg">
       </div>
