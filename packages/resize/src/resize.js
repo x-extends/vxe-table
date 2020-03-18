@@ -8,7 +8,7 @@ import DomTools from '../../tools/src/dom'
  */
 let resizeTimeout
 const eventStore = []
-const defaultInterval = 250
+const defaultInterval = 500
 
 function eventHandle () {
   if (eventStore.length) {

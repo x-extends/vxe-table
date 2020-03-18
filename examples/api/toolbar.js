@@ -534,10 +534,10 @@ const apis = [
       {
         name: 'zoom',
         desc: '当工具栏的缩放按钮被点击时会后触发该事件',
-        version: '2.8.5',
+        version: '2.8.29',
         type: '',
         enum: '',
-        defVal: '{maximize}, event',
+        defVal: '{type}, event',
         list: []
       },
       {

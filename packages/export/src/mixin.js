@@ -775,7 +775,7 @@ export default {
         return
       }
       if (!this.importConfig) {
-        UtilTools.warn('vxe.error.reqProp', ['import-config'])
+        UtilTools.error('vxe.error.reqProp', ['import-config'])
       }
       // 处理类型
       const typeList = types.map(value => {

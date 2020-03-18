@@ -116,7 +116,7 @@ export default {
     },
     modal: {
       zoomIn: 'Maximization',
-      zoomOut: 'Downward reduction',
+      zoomOut: 'Reduction',
       close: 'Close'
     },
     form: {

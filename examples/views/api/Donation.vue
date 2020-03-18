@@ -24,7 +24,7 @@
         <img src="static/donation/pay.jpg">
       </div>
       <div>
-        <p style="padding-top: 40px">QQ群<br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/438" target="_blank">New issues</a></p>
+        <p style="padding-top: 40px">QQ群<br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">New issues</a></p>
         <img src="static/donation/qq.png">
       </div>
     </div>

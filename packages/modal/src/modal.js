@@ -400,9 +400,12 @@ export default {
     getBox () {
       return this.$refs.modalBox
     },
+    isMaximized () {
+      return !!this.zoomLocat
+    },
     maximize () {
       return this.$nextTick().then(() => {
-        if (!this.zoomLocat) {
+        if (this.resize && !this.zoomLocat) {
           const marginSize = this.marginSize
           const modalBoxElem = this.getBox()
           const { visibleHeight, visibleWidth } = DomTools.getDomNode()
@@ -438,10 +441,13 @@ export default {
         }
       })
     },
+    zoom () {
+      return this[this.zoomLocat ? 'revert' : 'maximize']().then(() => this.isMaximized())
+    },
     toggleZoomEvent (evnt) {
       const { $listeners, zoomLocat, events = {} } = this
-      const params = { type: zoomLocat ? 'min' : 'max', $modal: this }
-      return this[zoomLocat ? 'revert' : 'maximize']().then(() => {
+      const params = { type: zoomLocat ? 'revert' : 'max', $modal: this }
+      return this.zoom().then(() => {
         if ($listeners.zoom) {
           this.$emit('zoom', params, evnt)
         } else if (events.zoom) {

@@ -677,7 +677,7 @@ export default {
     triggerZoomEvent (evnt) {
       const { $xegrid } = this
       $xegrid.zoom()
-      $xegrid.$emit('zoom', { $grid: $xegrid, maximize: $xegrid.maximize }, evnt)
+      $xegrid.$emit('zoom', { $grid: $xegrid, maximize: $xegrid.isMaximized(), type: $xegrid.isMaximized() ? 'max' : 'revert' }, evnt)
     }
   }
 }

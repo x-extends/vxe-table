@@ -676,6 +676,8 @@ export default {
       errorModuleName = 'Keyboard'
     } else if (!VXETable._resize && this.autoResize) {
       errorModuleName = 'Resize'
+    } else if (!VXETable._export && (this.importConfig || this.expandConfig)) {
+      errorModuleName = 'Export'
     }
     if (errorModuleName) {
       throw new Error(UtilTools.getLog('vxe.error.reqModule', [errorModuleName]))
@@ -962,7 +964,7 @@ export default {
       /**
        * 导入
        */
-      VXETable._export ? h('vxe-import-panel', {
+      this.importConfig ? h('vxe-import-panel', {
         props: {
           defaultOptions: this.importParams,
           storeData: this.importStore
@@ -971,7 +973,7 @@ export default {
       /**
        * 导出
        */
-      VXETable._export ? h('vxe-export-panel', {
+      this.expandConfig ? h('vxe-export-panel', {
         props: {
           defaultOptions: this.exportParams,
           storeData: this.exportStore

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">底部合计</p>
+    <p class="tip">
+      通过表尾来实现合计功能<br>
+      <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的逻辑都是自行实现的，该示例仅供参考）</span>
+    </p>
 
     <vxe-grid
       border
