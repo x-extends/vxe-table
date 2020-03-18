@@ -31,11 +31,11 @@
 
     <p>
       <vxe-input v-model="value15" placeholder="数值类型" type="number"></vxe-input>
-      <vxe-input v-model="value16" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
-      <vxe-input v-model="value17" placeholder="范围值 0-10" type="number" min="0" max="10" clearable></vxe-input>
+      <vxe-input v-model="value16" placeholder="数值间隔" type="number" step="1.4" clearable></vxe-input>
+      <vxe-input v-model="value17" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
       <vxe-input v-model="value18" placeholder="整数类型" type="integer"></vxe-input>
-      <vxe-input v-model="value19" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
-      <vxe-input v-model="value20" placeholder="范围值 0-100" type="integer" min="0" max="100" step="5" clearable></vxe-input>
+      <vxe-input v-model="value19" placeholder="数值间隔" type="integer" step="5" clearable></vxe-input>
+      <vxe-input v-model="value20" placeholder="数值范围限制 0-100" type="integer" min="0" max="100" step="5" clearable></vxe-input>
     </p>
 
     <pre>
@@ -111,11 +111,11 @@ export default {
 
         <p>
           <vxe-input v-model="value15" placeholder="数值类型" type="number"></vxe-input>
-          <vxe-input v-model="value16" placeholder="步数控制" type="number" step="1.4" clearable></vxe-input>
-          <vxe-input v-model="value17" placeholder="范围值 0-10" type="number" min="0" max="10" clearable></vxe-input>
+          <vxe-input v-model="value16" placeholder="数值间隔" type="number" step="1.4" clearable></vxe-input>
+          <vxe-input v-model="value17" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
           <vxe-input v-model="value18" placeholder="整数类型" type="integer"></vxe-input>
-          <vxe-input v-model="value19" placeholder="步数控制" type="integer" step="5" clearable></vxe-input>
-          <vxe-input v-model="value20" placeholder="范围值 0-100" type="integer" min="0" max="100" step="5" clearable></vxe-input>
+          <vxe-input v-model="value19" placeholder="数值间隔" type="integer" step="5" clearable></vxe-input>
+          <vxe-input v-model="value20" placeholder="数值范围限制 0-100" type="integer" min="0" max="100" step="5" clearable></vxe-input>
         </p>
         `,
         `

@@ -73,7 +73,7 @@ export default {
     return {
       isCloak: false,
       tableLoading: false,
-      maximize: false,
+      isZMax: false,
       tableData: [],
       pendingRecords: [],
       filterData: [],
@@ -129,16 +129,16 @@ export default {
       return slots
     },
     renderClass () {
-      const { vSize, maximize, optimizeOpts } = this
+      const { vSize, isZMax, optimizeOpts } = this
       return ['vxe-grid', {
         [`size--${vSize}`]: vSize,
         't--animat': optimizeOpts.animat,
-        'is--maximize': maximize,
+        'is--maximize': isZMax,
         'is--loading': this.isCloak || this.loading || this.tableLoading
       }]
     },
     renderStyle () {
-      return this.maximize ? { zIndex: this.tZindex } : null
+      return this.isZMax ? { zIndex: this.tZindex } : null
     },
     tableExtendProps () {
       const rest = {}
@@ -148,11 +148,11 @@ export default {
       return rest
     },
     tableProps () {
-      const { maximize, seqConfig, pagerConfig, loading, isCloak, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, optimizeOpts } = this
+      const { isZMax, seqConfig, pagerConfig, loading, isCloak, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, optimizeOpts } = this
       const props = Object.assign({}, tableExtendProps, {
         optimization: optimizeOpts
       })
-      if (maximize) {
+      if (isZMax) {
         if (tableExtendProps.maxHeight) {
           props.maxHeight = 'auto'
         } else {
@@ -292,7 +292,7 @@ export default {
   methods: {
     ...methods,
     getParentHeight () {
-      return (this.maximize ? DomTools.getDomNode().visibleHeight : this.$el.parentNode.clientHeight) - this.getExcludeHeight()
+      return (this.isZMax ? DomTools.getDomNode().visibleHeight : this.$el.parentNode.clientHeight) - this.getExcludeHeight()
     },
     /**
      * 获取需要排除的高度
@@ -705,16 +705,26 @@ export default {
       UtilTools.emitEvent(this, 'form-toggle-collapse', [Object.assign({ $grid: this }, params), evnt])
     },
     zoom () {
-      this.maximize = !this.maximize
-      if (this.maximize) {
+      return this[this.isZMax ? 'revert' : 'maximize']()
+    },
+    isMaximized () {
+      return this.isZMax
+    },
+    maximize () {
+      return this.handleZoom(true)
+    },
+    revert () {
+      return this.handleZoom()
+    },
+    handleZoom (isMax) {
+      const { isZMax } = this
+      if (isMax ? !isZMax : isZMax) {
+        this.isZMax = !isZMax
         if (this.tZindex < UtilTools.getLastZIndex()) {
           this.tZindex = UtilTools.nextZIndex()
         }
       }
-      return this.$nextTick().then(() => this.recalculate(true)).then(() => this.maximize)
-    },
-    isMaximized () {
-      return this.maximize
+      return this.$nextTick().then(() => this.recalculate(true)).then(() => this.isZMax)
     },
     getProxyInfo () {
       return this.proxyConfig ? {

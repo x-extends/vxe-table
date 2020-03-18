@@ -6,7 +6,7 @@ import GlobalConfig from '../../conf'
  * 用于支持表格响应式布局，当宽度或高度发生变化时更新表格布局
  */
 const eventStore = []
-const defaultInterval = 250
+const defaultInterval = 500
 let resizeTimeout = null
 
 function eventHandle () {

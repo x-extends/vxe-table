@@ -462,6 +462,24 @@ const apis = [
         list: []
       },
       {
+        name: 'maximize()',
+        desc: '如果表格处于常规状态，则最大化表格',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'revert()',
+        desc: '如果表格处于最大化状态，则还原表格',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getPendingRecords()',
         desc: '获取已标记删除的数据',
         version: '1.15.26',
