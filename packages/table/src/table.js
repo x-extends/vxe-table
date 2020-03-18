@@ -2408,7 +2408,7 @@ export default {
       if (this.isActivated) {
         this.preventEvent(evnt, 'event.keydown', { $table: this }, () => {
           let params
-          const { isCtxMenu, ctxMenuStore, editStore, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
+          const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
           const { selected, actived } = editStore
           const keyCode = evnt.keyCode
           const isBack = keyCode === 8
@@ -2526,8 +2526,10 @@ export default {
           // 如果是按下非功能键之外允许直接编辑
             if (selected.row || selected.column) {
               if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
-                UtilTools.setCellValue(selected.row, selected.column, null)
-                this.handleActived(selected.args, evnt)
+                if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
+                  UtilTools.setCellValue(selected.row, selected.column, null)
+                  this.handleActived(selected.args, evnt)
+                }
               }
             }
           }
