@@ -3,10 +3,10 @@
     <p class="tip">{{ $t('app.footer.donationDesc') }}</p>
     <div class="upgrade">
       <a class="link" href="https://github.com/xuliangzhan/vxe-table/issues/712">
-        <span>{{ $t('app.body.other.compatibility') }}</span>
+        <span>😱{{ $t('app.body.other.compatibility') }}</span>
       </a>
       <a class="link" href="https://github.com/xuliangzhan/vxe-table/releases">
-        <span>{{ $t('app.body.other.releases') }}</span>
+        <span>👀{{ $t('app.body.other.releases') }}</span>
       </a>
     </div>
     <div class="desc">
@@ -24,7 +24,7 @@
         <img src="static/donation/pay.jpg">
       </div>
       <div>
-        <p style="padding-top: 40px">QQ群<br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">New issues</a></p>
+        <p style="padding-top: 40px">😘QQ群<br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">New issues</a></p>
         <img src="static/donation/qq.png">
       </div>
     </div>

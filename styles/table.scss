@@ -40,7 +40,7 @@
   }
 }
 
-.vxe-table-hidden-column,
+.vxe-table-slots,
 .vxe-table--file-form {
   display: none;
 }
@@ -182,8 +182,8 @@
 .vxe-table--checkbox-range {
   display: none;
   position: absolute;
-  background-color: $vxe-table-range-background-color;
-  border: 1px solid $vxe-table-range-border-color;
+  background-color: $vxe-table-checkbox-range-background-color;
+  border: 1px solid $vxe-table-checkbox-range-border-color;
   border-radius: 2px;
   pointer-events: none;
 }
@@ -432,7 +432,7 @@
   }
   &.border--none {
     &:after,
-    .vxe-table--repair{
+    .vxe-table--header-border-line{
       display: none;
     }
   }

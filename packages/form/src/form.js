@@ -87,10 +87,9 @@ export default {
       }
     }, [].concat($slots.default || renderItems(h, this)).concat([
       h('div', {
-        class: 'vxe-loading',
-        style: {
-          display: loading ? 'block' : 'none'
-        }
+        class: ['vxe-loading', {
+          'is--visible': loading
+        }]
       }, [
         h('div', {
           class: 'vxe-loading--spinner'

@@ -24,6 +24,12 @@ export declare class Input extends VXETableModule {
   placement?:  string;
   transfer?: boolean;
 
+  /**
+   * 获取焦点
+   */
   focus(): Promise<any>;
+  /**
+   * 失去焦点
+   */
   blur(): Promise<any>;
 }

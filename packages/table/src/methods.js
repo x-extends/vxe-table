@@ -2842,13 +2842,17 @@ const Methods = {
     return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
   },
   getVirtualScroller () {
-    UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getTableScroll'])
-    return this.getTableScroll()
+    UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getScroll'])
+    return this.getScroll()
+  },
+  getTableScroll () {
+    UtilTools.warn('vxe.error.delFunc', ['getTableScroll', 'getScroll'])
+    return this.getScroll()
   },
   /**
    * 获取表格的滚动状态
    */
-  getTableScroll () {
+  getScroll () {
     const { $refs, scrollXLoad, scrollYLoad } = this
     const bodyElem = $refs.tableBody.$el
     return {

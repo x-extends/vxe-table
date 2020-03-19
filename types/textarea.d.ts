@@ -16,6 +16,12 @@ export declare class Textarea extends VXETableModule {
   form?: string;
   resize?: string;
 
+  /**
+   * 获取焦点
+   */
   focus(): Promise<any>;
+  /**
+   * 失去焦点
+   */
   blur(): Promise<any>;
 }

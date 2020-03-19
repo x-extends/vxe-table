@@ -60,11 +60,6 @@ Object.defineProperty(VXETable, 'buttons', {
 Object.defineProperty(VXETable, 'zIndex', { get: UtilTools.getLastZIndex })
 
 /**
- * 获取当前的 zIndex
- */
-Object.defineProperty(VXETable, 'zIndex', { get: UtilTools.getLastZIndex })
-
-/**
  * 获取下一个 zIndex
  */
 Object.defineProperty(VXETable, 'nextZIndex', { get: UtilTools.nextZIndex })

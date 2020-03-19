@@ -855,7 +855,7 @@ export default {
        * 隐藏列
        */
       h('div', {
-        class: 'vxe-table-hidden-column',
+        class: 'vxe-table-slots',
         ref: 'hideColumn'
       }, this.$slots.default),
       h('div', {
@@ -942,10 +942,9 @@ export default {
        * 加载中
        */
       h('div', {
-        class: 'vxe-loading',
-        style: {
-          display: isCloak || loading ? 'block' : 'none'
-        }
+        class: ['vxe-table--loading vxe-loading', {
+          'is--visible': isCloak || loading
+        }]
       }, [
         h('div', {
           class: 'vxe-loading--spinner'
