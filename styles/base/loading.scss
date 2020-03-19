@@ -9,6 +9,9 @@
   z-index: 99;
   user-select: none;
   background-color: $vxe-loading-background-color;
+  &.is--visible {
+    display: block;
+  }
   .vxe-loading--spinner {
     width: 56px;
     height: 56px;

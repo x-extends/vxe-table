@@ -1524,24 +1524,6 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
-          // },
-          // {
-          //   name: 'checked',
-          //   desc: '即将废弃，请使用 range',
-          //   version: '',
-          //   type: 'Boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
-          // },
-          // {
-          //   name: 'range',
-          //   desc: '开启鼠标移动单元格批量选中功能',
-          //   version: '',
-          //   type: 'Boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
           }
         ]
       },
@@ -2799,17 +2781,8 @@ const apis = [
         defVal: '',
         list: []
       },
-      // {
-      //   name: 'getSelectedRanges()',
-      //   desc: '用于 mouse-config.checked，获取范围选中的所有单元格的信息',
-      //   version: '',
-      //   type: 'Array<{rows[], columns[]}>',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
       {
-        name: 'getTableScroll()',
+        name: 'getScroll()',
         desc: '获取表格的滚动状态',
         version: '',
         type: '{virtualX, virtualY, scrollTop, scrollLeft}',
@@ -3168,14 +3141,6 @@ const apis = [
         defVal: 'field?: string',
         list: []
       },
-      // {
-      //   name: 'clearChecked()',
-      //   desc: '手动清除单元格批量选中状态',
-      //   type: 'Promise',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
       {
         name: 'clearSelected()',
         desc: '手动清除单元格选中状态',
@@ -3214,6 +3179,15 @@ const apis = [
       {
         name: 'clearScroll()',
         desc: '手动清除滚动相关信息，还原到初始状态',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearValidate()',
+        desc: '手动清除校验',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3347,15 +3321,15 @@ const apis = [
         defVal: 'column: ColumnConfig',
         list: []
       },
-      {
-        name: 'scrollToTreeRow(row)',
-        desc: '对于树形结构中，可以直接滚动到指定深层节点中（对于某些特定的场景可能会用到，比如定位到某一节点）',
-        version: '',
-        type: 'Promise',
-        enum: '',
-        defVal: 'column: ColumnConfig',
-        list: []
-      },
+      // {
+      //   name: 'scrollToTreeRow(row)',
+      //   desc: '对于树形结构中，可以直接滚动到指定深层节点中（对于某些特定的场景可能会用到，比如定位到某一节点）',
+      //   version: '',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: 'column: ColumnConfig',
+      //   list: []
+      // },
       {
         name: 'sort(field, order)',
         desc: '手动对表格进行排序（如果 order 为空则自动切换排序）',
@@ -3367,7 +3341,7 @@ const apis = [
       },
       {
         name: 'recalculate()',
-        desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、更新列宽...等）',
+        desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、重新计算列宽...等）',
         version: '',
         type: 'Promise',
         enum: '',

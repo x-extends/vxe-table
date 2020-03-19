@@ -61,30 +61,6 @@ function renderLine (h, _vm, $xetable, rowLevel, items, params) {
     ] : []
 }
 
-function renderBorder (h, type) {
-  return h('div', {
-    class: `vxe-table-${type}ed-borders`,
-    ref: `${type}Borders`
-  }, [
-    h('span', {
-      class: 'vxe-table-border-top',
-      ref: `${type}Top`
-    }),
-    h('span', {
-      class: 'vxe-table-border-right',
-      ref: `${type}Right`
-    }),
-    h('span', {
-      class: 'vxe-table-border-bottom',
-      ref: `${type}Bottom`
-    }),
-    h('span', {
-      class: 'vxe-table-border-left',
-      ref: `${type}Left`
-    })
-  ])
-}
-
 /**
  * 渲染列
  */
@@ -121,7 +97,6 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { type, editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
   const isMouseSelected = mouseConfig && mouseOpts.selected
-  const isMouseChecked = mouseConfig && mouseOpts.range
   const fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -169,7 +144,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 按下事件处理
-  if (checkboxOpts.range || isMouseChecked || isMouseSelected) {
+  if (checkboxOpts.range || isMouseSelected) {
     tdOns.mousedown = evnt => {
       $xetable.triggerCellMousedownEvent(evnt, { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
     }
@@ -177,7 +152,6 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   // 点击事件处理
   if (highlightCurrentRow ||
     tableListeners['cell-click'] ||
-    isMouseChecked ||
     (editRender && editConfig) ||
     (expandOpts.trigger === 'row' || (expandOpts.trigger === 'cell')) ||
     (radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) ||
@@ -435,21 +409,7 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let {
-      $scopedSlots,
-      id,
-      tableData,
-      tableColumn,
-      showOverflow: allColumnOverflow,
-      spanMethod,
-      scrollXLoad,
-      mouseConfig,
-      mouseOpts,
-      emptyRender,
-      emptyOpts,
-      keyboardConfig = {}
-    } = $xetable
-    const isMouseChecked = mouseConfig && mouseOpts.range
+    let { $scopedSlots, id, tableData, tableColumn, showOverflow: allColumnOverflow, spanMethod, scrollXLoad, emptyRender, emptyOpts } = $xetable
     // 如果是固定列与设置了超出隐藏
     if (!spanMethod) {
       if (fixedType && allColumnOverflow) {
@@ -515,15 +475,6 @@ export default {
           ref: 'tbody'
         }, renderRows(h, this, $xetable, '', 0, fixedType, tableData, tableColumn))
       ]),
-      /**
-       * 选中边框线
-       */
-      !fixedType && (isMouseChecked || keyboardConfig.isCut) ? h('div', {
-        class: 'vxe-table--borders'
-      }, [
-        isMouseChecked ? renderBorder(h, 'check') : null,
-        keyboardConfig.isCut ? renderBorder(h, 'copy') : null
-      ]) : null,
       !fixedType ? h('div', {
         class: 'vxe-table--empty-block',
         ref: 'emptyBlock'

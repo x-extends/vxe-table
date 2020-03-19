@@ -61,18 +61,9 @@ $vxe-table-column-icon-border-hover-color: #515A6E;
 $vxe-table-cell-dirty-width: 5px;
 $vxe-table-cell-dirty-color: #f56c6c;
 
-/*table range*/
-$vxe-table-range-border-color: #006af1;
-$vxe-table-range-background-color: rgba(50, 128, 252, 0.2);
-
-/*table checked*/
-$vxe-table-column-checked-border-width: 2px;
-$vxe-table-header-column-checked-border-color: #cccfd6;
-$vxe-table-body-seq-column-checked-border-color: $vxe-table-header-column-checked-border-color;
-$vxe-table-body-column-checked-border-color: #D4D4D4;
-$vxe-table-column-header-checked-background-color: #DCDCDC;
-$vxe-table-column-body-seq-checked-background-color: $vxe-table-column-header-checked-background-color;
-$vxe-table-column-checked-background-color: #e6f7ff;
+/*table checkbox*/
+$vxe-table-checkbox-range-border-color: #006af1;
+$vxe-table-checkbox-range-background-color: rgba(50, 128, 252, 0.2);
 
 /*table tree*/
 $vxe-table-tree-node-line-color:#909399;

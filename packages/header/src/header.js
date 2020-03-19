@@ -101,32 +101,8 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedType, headerColumn, fixedColumn } = this
+    const { $listeners: tableListeners, id, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts } = $xetable
     let { tableColumn } = this
-    const {
-      $listeners: tableListeners,
-      id,
-      resizable,
-      border,
-      columnKey,
-      headerRowClassName,
-      headerCellClassName,
-      headerRowStyle,
-      headerCellStyle,
-      showHeaderOverflow: allColumnHeaderOverflow,
-      headerAlign: allHeaderAlign,
-      align: allAlign,
-      highlightCurrentColumn,
-      currentColumn,
-      mouseConfig,
-      mouseOpts,
-      scrollXLoad,
-      overflowX,
-      scrollbarWidth,
-      getColumnIndex,
-      sortOpts
-    } = $xetable
-    const isMouseSelected = mouseConfig && mouseOpts.selected
-    const isMouseChecked = mouseConfig && mouseOpts.range
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {
@@ -195,7 +171,7 @@ export default {
             const thOns = {}
             const hasFilter = column.filters && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            const columnIndex = getColumnIndex(column)
+            const columnIndex = $xetable.getColumnIndex(column)
             const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
@@ -223,15 +199,11 @@ export default {
                 }
               }
             }
-            if (highlightCurrentColumn || tableListeners['header-cell-click'] || isMouseChecked || sortOpts.trigger === 'cell') {
+            if (highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
               thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             if (tableListeners['header-cell-dblclick']) {
               thOns.dblclick = evnt => $xetable.$emit('header-cell-dblclick', { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt)
-            }
-            // 按下事件处理
-            if (isMouseSelected || isMouseChecked) {
-              thOns.mousedown = evnt => $xetable.triggerHeaderCellMousedownEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
             }
             return h('th', {
               class: ['vxe-header--column', column.id, {
@@ -286,7 +258,7 @@ export default {
        * 其他
        */
       h('div', {
-        class: 'vxe-table--repair',
+        class: 'vxe-table--header-border-line',
         ref: 'repair'
       })
     ])

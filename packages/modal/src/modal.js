@@ -110,32 +110,7 @@ export default {
     XEUtils.remove(activeModals, $modal => $modal === this)
   },
   render (h) {
-    const {
-      $scopedSlots,
-      slots = {},
-      vSize,
-      type,
-      resize,
-      animat,
-      loading,
-      status,
-      iconStatus,
-      showHeader,
-      showFooter,
-      zoomLocat,
-      modalTop,
-      dblclickZoom,
-      contentVisible,
-      visible,
-      title,
-      message,
-      lockScroll,
-      lockView,
-      mask,
-      isMsg,
-      showTitleOverflow,
-      destroyOnClose
-    } = this
+    const { $scopedSlots, slots = {}, vSize, type, resize, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
     const headerSlot = $scopedSlots.header || slots.header
@@ -174,7 +149,7 @@ export default {
         },
         ref: 'modalBox'
       }, [
-        showHeader ? h('div', {
+        this.showHeader ? h('div', {
           class: ['vxe-modal--header', !isMsg && showTitleOverflow ? 'is--ellipsis' : ''],
           on: headerOns
         }, headerSlot ? headerSlot.call(this, { $modal: this }, h) : [
@@ -214,10 +189,9 @@ export default {
             class: 'vxe-modal--content'
           }, destroyOnClose && !visible ? [] : (defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message))),
           !isMsg ? h('div', {
-            class: 'vxe-loading',
-            style: {
-              display: loading ? 'block' : 'none'
-            }
+            class: ['vxe-loading', {
+              'is--visible': loading
+            }]
           }, [
             h('div', {
               class: 'vxe-loading--spinner'
@@ -338,7 +312,7 @@ export default {
               if (this.hasPosStorage()) {
                 this.restorePosStorage()
               } else if (fullscreen) {
-                this.$nextTick(this.maximize)
+                this.$nextTick(() => this.maximize())
               }
             }
           })

@@ -39,10 +39,33 @@ export declare class Modal extends VXETableModule {
   storageKey?: string;
   animat?: boolean;
 
+  /**
+   * 手动打开窗口
+   */
   open(): any;
+  /**
+   * 手动关闭窗口
+   */
   close(): any;
+  /**
+   * 获取当前窗口元素
+   */
   getBox(): HTMLElement;
+  /**
+   * 判断是否最大化显示
+   */
+  isMaximized(): boolean;
+  /**
+   * 切换窗口最大化/还原
+   */
+  zoom(): Promise<boolean>;
+  /**
+   * 如果窗口处于常规状态，则最大化窗口
+   */
   maximize(): Promise<any>;
+  /**
+   * 如果窗口处于最大化状态，则还原窗口
+   */
   revert(): Promise<any>;
 }
 

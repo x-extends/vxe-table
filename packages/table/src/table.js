@@ -719,7 +719,6 @@ export default {
       visibleColumn,
       collectColumn,
       isGroup,
-      hasFilter,
       isResizable,
       isCtxMenu,
       loading,
@@ -760,7 +759,6 @@ export default {
       emptyOpts
     } = this
     const { leftList, rightList } = columnStore
-    const isMouseChecked = mouseConfig && mouseOpts.range
     let emptyContent
     if ($scopedSlots.empty) {
       emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)
@@ -786,7 +784,6 @@ export default {
         't--animat': optimizeOpts.animat,
         't--stripe': stripe,
         't--selected': mouseConfig && mouseOpts.selected,
-        't--checked': isMouseChecked,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
         'is--loading': isCloak || loading,
@@ -804,7 +801,7 @@ export default {
        * 隐藏列
        */
       h('div', {
-        class: 'vxe-table-hidden-column',
+        class: 'vxe-table-slots',
         ref: 'hideColumn'
       }, this.$slots.default),
       h('div', {
@@ -891,10 +888,9 @@ export default {
        * 加载中
        */
       h('div', {
-        class: 'vxe-loading',
-        style: {
-          display: isCloak || loading ? 'block' : 'none'
-        }
+        class: ['vxe-table--loading vxe-loading', {
+          'is--visible': isCloak || loading
+        }]
       }, [
         h('div', {
           class: 'vxe-loading--spinner'
@@ -903,7 +899,7 @@ export default {
       /**
        * 筛选
        */
-      hasFilter ? h('vxe-table-filter', {
+      this.hasFilter ? h('vxe-table-filter', {
         props: {
           optimizeOpts,
           filterStore

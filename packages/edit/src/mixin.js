@@ -203,8 +203,6 @@ export default {
           let type = 'edit-disabled'
           if (!activeMethod || activeMethod(params)) {
             if (this.keyboardConfig || this.mouseConfig) {
-              this.clearCopyed(evnt)
-              this.clearChecked()
               this.clearSelected(evnt)
             }
             this.clostTooltip()
@@ -374,18 +372,14 @@ export default {
      * 处理选中源
      */
     handleSelected (params, evnt) {
-      const { mouseConfig, mouseOpts, editOpts, editStore, elemStore } = this
+      const { mouseConfig, mouseOpts, editOpts, editStore } = this
       const { actived, selected } = editStore
-      const { row, column, cell } = params
+      const { row, column } = params
       const isMouseSelected = mouseConfig && mouseOpts.selected
-      const isMouseChecked = mouseConfig && mouseOpts.range
       const selectMethod = () => {
-        if ((isMouseSelected || isMouseChecked) && (selected.row !== row || selected.column !== column)) {
+        if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
             if (this.keyboardConfig) {
-              this.clearChecked(evnt)
-              this.clearIndexChecked()
-              this.clearHeaderChecked()
               this.clearSelected(evnt)
             }
             this.clearActived(evnt)
@@ -395,20 +389,21 @@ export default {
             if (isMouseSelected) {
               this.addColSdCls()
             }
-            // 如果配置了批量选中功能，则为批量选中状态
-            if (isMouseChecked) {
-              const headerElem = elemStore['main-header-list']
-              this.handleChecked([[cell]])
-              if (headerElem) {
-                this.handleHeaderChecked([[headerElem.querySelector(`.${column.id}`)]])
-              }
-              this.handleIndexChecked([[cell.parentNode.querySelector('.col--seq')]])
-            }
           }
         }
         return this.$nextTick()
       }
       return selectMethod()
+    },
+    /**
+     * 获取选中的单元格
+     */
+    _getSelectedCell () {
+      const { args, column } = this.editStore.selected
+      if (args && column) {
+        return Object.assign({}, args)
+      }
+      return null
     },
     /**
      * 清除所选中源状态

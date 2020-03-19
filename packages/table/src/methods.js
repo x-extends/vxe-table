@@ -70,11 +70,7 @@ const Methods = {
       this.clearFilter()
     }
     if (this.keyboardConfig || this.mouseConfig) {
-      this.clearIndexChecked()
-      this.clearHeaderChecked()
-      this.clearChecked()
       this.clearSelected()
-      this.clearCopyed()
     }
     return this.clearScroll()
   },
@@ -1296,10 +1292,9 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    const { $el, $refs, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
+    const { $el, $refs, mouseConfig, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
     const { actived } = editStore
     const { filterWrapper, validTip } = $refs
-    const isMouseChecked = mouseConfig && mouseOpts.range
     if (filterWrapper) {
       if (DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
         // 如果点击了筛选按钮
@@ -1347,11 +1342,6 @@ const Methods = {
       }
     } else if (mouseConfig) {
       if (!DomTools.getEventTargetNode(evnt, $el).flag && !DomTools.getEventTargetNode(evnt, $refs.tableWrapper).flag) {
-        if (isMouseChecked) {
-          this.clearIndexChecked()
-          this.clearHeaderChecked()
-          this.clearChecked()
-        }
         this.clearSelected()
       }
     }
@@ -1396,10 +1386,6 @@ const Methods = {
         const isRightArrow = keyCode === 39
         const isDwArrow = keyCode === 40
         const isDel = keyCode === 46
-        const isA = keyCode === 65
-        const isC = keyCode === 67
-        const isV = keyCode === 86
-        const isX = keyCode === 88
         const isF2 = keyCode === 113
         const isCtrlKey = evnt.ctrlKey
         const isShiftKey = evnt.shiftKey
@@ -1489,15 +1475,6 @@ const Methods = {
                 .then(() => this.scrollToRow(parentRow))
                 .then(() => this.triggerCurrentRowEvent(evnt, params))
             }
-          }
-        } else if (keyboardConfig.isCut && isCtrlKey && (isA || isX || isC || isV)) {
-          // 如果开启复制功能
-          if (isA) {
-            this.handleAllChecked(evnt)
-          } else if (isX || isC) {
-            this.handleCopyed(isX, evnt)
-          } else {
-            this.handlePaste(evnt)
           }
         } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
           // 如果是按下非功能键之外允许直接编辑
@@ -2157,10 +2134,9 @@ const Methods = {
    * 如果是双击模式，则单击后选中状态
    */
   triggerCellClickEvent (evnt, params) {
-    const { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts, mouseConfig, mouseOpts } = this
+    const { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts } = this
     const { actived } = editStore
     const { row, column } = params
-    const isMouseChecked = mouseConfig && mouseOpts.range
     // 解决 checkbox 重复触发两次问题
     if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox')) {
       return
@@ -2188,21 +2164,19 @@ const Methods = {
       if ((checkboxOpts.trigger === 'row' || (column.type === 'checkbox' && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-cell--checkbox').flag) {
         this.handleToggleCheckRowEvent(params, evnt)
       }
-      // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
-      if (!isMouseChecked) {
-        if (editConfig) {
-          if (editOpts.trigger === 'manual') {
-            if (actived.args && actived.row === row && column !== actived.column) {
-              this.handleChangeCell(evnt, params)
-            }
-          } else if (!actived.args || row !== actived.row || column !== actived.column) {
-            if (editOpts.trigger === 'click') {
-              this.handleChangeCell(evnt, params)
-            } else if (editOpts.trigger === 'dblclick') {
-              if (editOpts.mode === 'row' && actived.row === row) {
-                this.handleChangeCell(evnt, params)
-              }
-            }
+    }
+    // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
+    if (editConfig) {
+      if (editOpts.trigger === 'manual') {
+        if (actived.args && actived.row === row && column !== actived.column) {
+          this.handleChangeCell(evnt, params)
+        }
+      } else if (!actived.args || row !== actived.row || column !== actived.column) {
+        if (editOpts.trigger === 'click') {
+          this.handleChangeCell(evnt, params)
+        } else if (editOpts.trigger === 'dblclick') {
+          if (editOpts.mode === 'row' && actived.row === row) {
+            this.handleChangeCell(evnt, params)
           }
         }
       }
@@ -2669,7 +2643,7 @@ const Methods = {
   /**
    * 获取表格的滚动状态
    */
-  getTableScroll () {
+  getScroll () {
     const { $refs, scrollXLoad, scrollYLoad } = this
     const bodyElem = $refs.tableBody.$el
     return {
@@ -3089,7 +3063,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,clearFilter,closeMenu,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,clearFilter,closeMenu,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {
