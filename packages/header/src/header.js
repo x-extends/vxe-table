@@ -291,7 +291,7 @@ export default {
        * 其他
        */
       h('div', {
-        class: ['vxe-table--repair'],
+        class: 'vxe-table--header-border-line',
         style: {
           width: tableWidth === null ? tableWidth : `${tableWidth}px`
         }

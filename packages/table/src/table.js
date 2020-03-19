@@ -991,7 +991,7 @@ export default {
        * 隐藏列
        */
       h('div', {
-        class: 'vxe-table-hidden-column',
+        class: 'vxe-table-slots',
         ref: 'hideColumn'
       }, this.$slots.default),
       h('div', {
@@ -1081,10 +1081,9 @@ export default {
        * 加载中
        */
       h('div', {
-        class: 'vxe-loading',
-        style: {
-          display: isCloak || loading ? 'block' : 'none'
-        }
+        class: ['vxe-table--loading vxe-loading', {
+          'is--visible': isCloak || loading
+        }]
       }, [
         h('div', {
           class: 'vxe-loading--spinner'
@@ -4716,24 +4715,28 @@ export default {
      * 是否启用了横向 X 可视渲染
      */
     isScrollXLoad () {
-      UtilTools.warn('vxe.error.delFunc', ['isScrollXLoad', 'getTableScroll'])
+      UtilTools.warn('vxe.error.delFunc', ['isScrollXLoad', 'getScroll'])
       return this.scrollXLoad
     },
     /**
      * 是否启用了纵向 Y 可视渲染
      */
     isScrollYLoad () {
-      UtilTools.warn('vxe.error.delFunc', ['isScrollYLoad', 'getTableScroll'])
+      UtilTools.warn('vxe.error.delFunc', ['isScrollYLoad', 'getScroll'])
       return this.scrollYLoad
     },
     getVirtualScroller () {
-      UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getTableScroll'])
-      return this.getTableScroll()
+      UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getScroll'])
+      return this.getScroll()
+    },
+    getTableScroll () {
+      UtilTools.warn('vxe.error.delFunc', ['getTableScroll', 'getScroll'])
+      return this.getScroll()
     },
     /**
      * 获取表格的滚动状态
      */
-    getTableScroll () {
+    getScroll () {
       const { $refs, scrollXLoad, scrollYLoad } = this
       const bodyElem = $refs.tableBody.$el
       return {

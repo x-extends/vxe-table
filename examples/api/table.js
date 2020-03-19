@@ -3112,6 +3112,16 @@ const apis = [
       },
       {
         name: 'getTableScroll()',
+        disabled: true,
+        desc: '即将废弃，请使用 getScroll',
+        version: '',
+        type: '{virtualX, virtualY, scrollTop, scrollLeft}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getScroll()',
         desc: '获取表格的滚动状态',
         version: '1.15.18',
         type: '{virtualX, virtualY, scrollTop, scrollLeft}',
@@ -3633,6 +3643,15 @@ const apis = [
         list: []
       },
       {
+        name: 'clearValidate()',
+        desc: '手动清除校验',
+        version: '1.15.27',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'clearAll()',
         desc: '手动清除表格所有条件，还原到初始状态（对于增删改查的场景中可能会用到，比如在数据保存之后清除表格缓存）',
         version: '',
@@ -3789,15 +3808,15 @@ const apis = [
         defVal: 'column',
         list: []
       },
-      {
-        name: 'scrollToTreeRow(row)',
-        desc: '对于树形结构中，可以直接滚动到指定深层节点中（对于某些特定的场景可能会用到，比如定位到某一节点）',
-        version: '2.6',
-        type: 'Promise',
-        enum: '',
-        defVal: 'column: ColumnConfig',
-        list: []
-      },
+      // {
+      //   name: 'scrollToTreeRow(row)',
+      //   desc: '对于树形结构中，可以直接滚动到指定深层节点中（对于某些特定的场景可能会用到，比如定位到某一节点）',
+      //   version: '2.6',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: 'column: ColumnConfig',
+      //   list: []
+      // },
       {
         name: 'sort(field, order)',
         desc: '手动对表格进行排序（如果 order 为空则自动切换排序）',
@@ -3819,7 +3838,7 @@ const apis = [
       },
       {
         name: 'recalculate()',
-        desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、更新列宽）',
+        desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、重新计算列宽...等）',
         version: '',
         type: 'Promise',
         enum: '',

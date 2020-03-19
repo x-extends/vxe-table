@@ -214,10 +214,9 @@ export default {
             class: 'vxe-modal--content'
           }, destroyOnClose && !visible ? [] : (defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message))),
           !isMsg ? h('div', {
-            class: 'vxe-loading',
-            style: {
-              display: loading ? 'block' : 'none'
-            }
+            class: ['vxe-loading', {
+              'is--visible': loading
+            }]
           }, [
             h('div', {
               class: 'vxe-loading--spinner'
