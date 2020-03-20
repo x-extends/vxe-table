@@ -132,7 +132,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   let isDirty
   const tdOns = {}
   const cellAlign = align || allAlign
-  const validError = validStore.row === row && validStore.column === column
+  const hasValidError = validStore.row === row && validStore.column === column
   const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs = { 'data-colid': column.id }
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
@@ -215,13 +215,13 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
       [`col--${type}`]: type,
       'col--last': $columnIndex === columns.length - 1,
       'col--tree-node': treeNode,
-      'col--edit': editRender,
+      'col--edit': !!editRender,
       'col--ellipsis': hasEllipsis,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn,
       'col--dirty': isDirty,
       'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
-      'col--valid-error': validError,
+      'col--valid-error': hasValidError,
       'col--current': currentColumn === column
     }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
     key: columnKey ? column.id : columnIndex,
@@ -249,7 +249,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
           title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
         }
       }, column.renderCell(h, params)),
-      hasDefaultTip ? validError ? h('div', {
+      hasDefaultTip ? hasValidError ? h('div', {
         class: 'vxe-cell--valid',
         style: validStore.rule && validStore.rule.maxWidth ? {
           width: `${validStore.rule.maxWidth}px`

@@ -825,7 +825,7 @@ export default {
     }
     return h('div', {
       class: ['vxe-table', `tid_${id}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
-        'vxe-editable': editConfig,
+        'vxe-editable': !!editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
         'is--group': isGroup,
@@ -834,7 +834,7 @@ export default {
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         'c--highlight': highlightCell,
-        't--animat': optimizeOpts.animat,
+        't--animat': !!optimizeOpts.animat,
         't--stripe': stripe,
         't--selected': mouseConfig && mouseOpts.selected,
         't--checked': isMouseChecked,
