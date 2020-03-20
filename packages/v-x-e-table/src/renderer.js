@@ -537,9 +537,6 @@ const renderMap = {
   textarea: {
     autofocus: 'textarea',
     renderEdit: nativeEditRender,
-    renderDefault: nativeEditRender,
-    renderFilter: nativeFilterRender,
-    filterMethod: handleFilterMethod,
     renderItem: nativeItemRender
   },
   select: {
@@ -592,10 +589,6 @@ const renderMap = {
   },
   $textarea: {
     autofocus: '.vxe-textarea--inner',
-    renderEdit: defaultEditRender,
-    renderDefault: defaultEditRender,
-    renderFilter: defaultFilterRender,
-    filterMethod: handleFilterMethod,
     renderItem: defaultItemRender
   },
   $button: {

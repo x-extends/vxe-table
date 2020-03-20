@@ -124,7 +124,6 @@
   .vxe-default-select {
     outline: 0;
     padding: 0 2px;
-    height: floor($vxe-table-row-height-default - 8);
     width: 100%;
     color: $vxe-font-color;
     border-radius: 4px;
@@ -136,6 +135,12 @@
       cursor: not-allowed;
       background-color: #f3f3f3;
     }
+  }
+  .vxe-default-input,
+  .vxe-default-textarea,
+  .vxe-default-select,
+  .vxe-input {
+    height: floor($vxe-table-row-height-default - 6);
   }
   .vxe-default-input {
     &[type="date"]::-webkit-inner-spin-button {
@@ -158,9 +163,6 @@
   .vxe-select {
     width: 100%;
     display: block;
-  }
-  .vxe-input {
-    height: floor($vxe-table-row-height-default - 8);
   }
   .vxe-input > .vxe-input--inner,
   .vxe-textarea > .vxe-textarea--inner {
@@ -478,7 +480,7 @@
       .vxe-default-textarea,
       .vxe-default-select,
       .vxe-input {
-        height: floor($vxe-table-row-height-medium - 8);
+        height: floor($vxe-table-row-height-medium - 6);
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -501,7 +503,7 @@
       .vxe-default-textarea,
       .vxe-default-select,
       .vxe-input {
-        height: floor($vxe-table-row-height-small - 8);
+        height: floor($vxe-table-row-height-small - 6);
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -524,7 +526,7 @@
       .vxe-default-textarea,
       .vxe-default-select,
       .vxe-input {
-        height: floor($vxe-table-row-height-mini - 8);
+        height: floor($vxe-table-row-height-mini - 6);
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -977,6 +979,8 @@
             .vxe-default-textarea {
               border: 0;
               padding: 0;
+            }
+            .vxe-default-input {
               height: $vxe-table-row-line-height;
             }
             .vxe-input {
@@ -984,6 +988,12 @@
               .vxe-input--inner {
                 border: 0;
                 padding-left: 0;
+              }
+            }
+            .vxe-textarea {
+              height: $vxe-table-row-line-height - 1;
+              .vxe-textarea--inner {
+                border: 0;
               }
             }
           }

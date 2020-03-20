@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       <span class="red">Warning 1：动态行高与虚拟滚动的取舍</span><br>
-      <span class="red">（注：关闭高性能的虚拟滚动来换取支持动态行高，流不流畅取决于数据量，使用这个方式的所有问题都应该自行处理）</span>
+      <span class="red">（注：‘关闭高性能的虚拟滚动来换取支持动态行高’ 或者 ‘通过任意方式去动态改变行高’，使用这个方式的所有问题都应该自行处理）</span>
     </p>
 
     <vxe-table

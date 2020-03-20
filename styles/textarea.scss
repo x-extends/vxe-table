@@ -32,6 +32,12 @@
   }
 }
 
+.vxe-textarea--inner,
+.vxe-textarea--autosize {
+  color: $vxe-font-color;
+  font-family: $vxe-font-family;
+}
+
 .vxe-textarea--autosize {
   display: block;
   position: fixed;

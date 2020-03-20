@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "2.8.28",
+  "version": "2.8.29",
   "description": "vxe-table vue 表格解决方案",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -80,7 +80,7 @@
     "xe-ajax": "^4.0.3",
     "xe-ajax-mock": "^1.9.4",
     "xe-clipboard": "^1.7.2",
-    "xe-utils": "^2.4.1",
+    "xe-utils": "^2.4.2",
     "xlsx": "^0.15.5"
   },
   "peerDependencies": {

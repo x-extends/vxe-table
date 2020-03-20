@@ -1515,19 +1515,36 @@ const Methods = {
             this.triggerRadioRowEvent(evnt, selected.args)
           }
         } else if (isEnter && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
-          // 如果是激活状态，退则出到下一行
-          if (selected.row || actived.row) {
-            this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, isUpArrow, isRightArrow, true, evnt)
-          } else if (treeConfig && highlightCurrentRow && currentRow) {
-            // 如果是树形表格当前行回车移动到子节点
-            const childrens = currentRow[treeOpts.children]
-            if (childrens && childrens.length) {
-              evnt.preventDefault()
-              const targetRow = childrens[0]
-              params = { $table: this, row: targetRow }
-              this.setTreeExpansion(currentRow, true)
-                .then(() => this.scrollToRow(targetRow))
-                .then(() => this.triggerCurrentRowEvent(evnt, params))
+          // 退出选中
+          if (isCtrlKey) {
+            // 如果是激活编辑状态，则取消编辑
+            if (actived.row) {
+              params = actived.args
+              this.clearActived(evnt)
+              // 如果配置了选中功能，则为选中状态
+              if (mouseConfig.selected) {
+                this.$nextTick(() => this.handleSelected(params, evnt))
+              }
+            }
+          } else {
+            // 如果是激活状态，退则出到上一行/下一行
+            if (selected.row || actived.row) {
+              if (isShiftKey) {
+                this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, true, isRightArrow, false, evnt)
+              } else {
+                this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, false, isRightArrow, true, evnt)
+              }
+            } else if (treeConfig && highlightCurrentRow && currentRow) {
+              // 如果是树形表格当前行回车移动到子节点
+              const childrens = currentRow[treeOpts.children]
+              if (childrens && childrens.length) {
+                evnt.preventDefault()
+                const targetRow = childrens[0]
+                params = { $table: this, row: targetRow }
+                this.setTreeExpansion(currentRow, true)
+                  .then(() => this.scrollToRow(targetRow))
+                  .then(() => this.triggerCurrentRowEvent(evnt, params))
+              }
             }
           }
         } else if (operCtxMenu) {
@@ -1678,7 +1695,7 @@ const Methods = {
    */
   handleTooltip (evnt, cell, overflowElem, column, row) {
     const tooltip = this.$refs.tooltip
-    const content = overflowElem.innerText
+    const content = overflowElem.textContent
     if (content && overflowElem.scrollWidth > overflowElem.clientWidth) {
       Object.assign(this.tooltipStore, {
         row,

@@ -121,8 +121,10 @@ export default {
       const { $refs, value, size, autosize } = this
       if (autosize) {
         const textElem = $refs.textarea
+        const textStyle = getComputedStyle(textElem)
         autoTxtElem.className = ['vxe-textarea--autosize', size ? `size--${size}` : ''].join(' ')
         autoTxtElem.style.width = `${textElem.clientWidth}px`
+        autoTxtElem.style.padding = textStyle.padding
         autoTxtElem.innerHTML = ('' + (value || '　')).replace(/\n$/, '\n　')
       }
     },
