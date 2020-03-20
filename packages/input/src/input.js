@@ -772,6 +772,8 @@ export default {
             } else {
               this.dateRevertValue()
             }
+          } else {
+            this.emitUpdate('')
           }
         }
       }

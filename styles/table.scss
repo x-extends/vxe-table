@@ -64,7 +64,6 @@ select.vxe-select,
   .vxe-default-select {
     outline: 0;
     padding: 0 2px;
-    height: floor($vxe-table-row-height-default - 8);
     width: 100%;
     color: $vxe-font-color;
     border-radius: 4px;
@@ -74,7 +73,6 @@ select.vxe-select,
     }
   }
   .vxe-input {
-    height: floor($vxe-table-row-height-default - 8);
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button {
         margin-top: 6px;
@@ -91,6 +89,11 @@ select.vxe-select,
         background-color: #f3f3f3;
       }
     }
+  }
+  .vxe-default-select,
+  .vxe-input,
+  .vxe-textarea {
+    height: floor($vxe-table-row-height-default - 6);
   }
 }
 
@@ -354,8 +357,9 @@ select.vxe-select,
     }
     .vxe-cell {
       .vxe-default-select,
-      .vxe-input {
-        height: floor($vxe-table-row-height-medium - 8);
+      .vxe-input,
+      .vxe-textarea {
+        height: floor($vxe-table-row-height-medium - 6);
       }
       .vxe-input {
         .vxe-input--inner {
@@ -381,8 +385,9 @@ select.vxe-select,
     }
     .vxe-cell {
       .vxe-default-select,
-      .vxe-input {
-        height: floor($vxe-table-row-height-small - 8);
+      .vxe-input,
+      .vxe-textarea {
+        height: floor($vxe-table-row-height-small - 6);
       }
       .vxe-input {
         .vxe-input--inner {
@@ -408,8 +413,9 @@ select.vxe-select,
     }
     .vxe-cell {
       .vxe-default-select,
-      .vxe-input {
-        height: floor($vxe-table-row-height-mini - 8);
+      .vxe-input,
+      .vxe-textarea {
+        height: floor($vxe-table-row-height-mini - 6);
       }
       .vxe-input {
         .vxe-input--inner {
