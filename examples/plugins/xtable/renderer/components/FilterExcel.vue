@@ -51,8 +51,8 @@
         </div>
       </div>
       <div class="me-footer">
-        <button @click="confirmFilterEvent">确认</button>
-        <button @click="resetFilterEvent">重置</button>
+        <vxe-button status="primary" @click="confirmFilterEvent">确认</vxe-button>
+        <vxe-button @click="resetFilterEvent">重置</vxe-button>
       </div>
     </div>
   </div>
@@ -60,6 +60,7 @@
 
 <script>
 import XEUtils from 'xe-utils'
+import { Modal } from '../../../../../packages/vxe-table'
 
 export default {
   name: 'FilterExcel',
@@ -91,7 +92,6 @@ export default {
         ]
       ],
       allCaseList: [
-        { value: '', label: '' },
         { value: '1', label: '等于' },
         { value: '2', label: '不等于' },
         { value: '3', label: '大于' },
@@ -118,9 +118,9 @@ export default {
     }
   },
   created () {
-    // filters 可以配置多个，实际只用一个就可以满足需求了
     const { $table, column } = this.params
     const { fullData } = $table.getTableData()
+    // filters 可以配置多个，实际只用一个就可以满足需求了
     const option = column.filters[0]
     const colValList = Object.keys(XEUtils.groupBy(fullData, column.property))
     this.column = column
@@ -170,7 +170,7 @@ export default {
     },
     childMenuClickEvent (cItem) {
       const { $table, $panel } = this.params
-      const { $XModal, option, allCaseList } = this
+      const { option, allCaseList } = this
       const { data } = option
       this.selectCMenuItem = cItem
       data.fMode = 'and'
@@ -212,7 +212,7 @@ export default {
       }
       $table.closeFilter()
       // 动态弹出框
-      $XModal.open({
+      Modal.open({
         title: '自定义自动筛选方式',
         width: 600,
         slots: {
@@ -221,40 +221,48 @@ export default {
               <div class="me-popup">
                 <div class="me-popup-title">显示行</div>
                 <div class="me-popup-filter me-popup-f1">
-                  <select v-model={ data.f1Type }>
+                  <vxe-select class="me-select" v-model={ data.f1Type } transfer clearable>
                     {
                       allCaseList.map(fItem => {
-                        return <option value={ fItem.value }>{ fItem.label }</option>
+                        return <vxe-option value={ fItem.value } label={ fItem.label }></vxe-option>
                       })
                     }
-                  </select>
-                  <input v-model={ data.f1Val }/>
+                  </vxe-select>
+                  <vxe-input class="me-input" v-model={ data.f1Val } clearable></vxe-input>
                 </div>
                 <div class="me-popup-concat">
-                  <vxe-radio v-model={ data.fMode } label="and" name="fmode">与</vxe-radio>
-                  <vxe-radio v-model={ data.fMode } label="or" name="fmode">或</vxe-radio>
+                  <vxe-radio-group v-model={ data.fMode }>
+                    <vxe-radio label="and">与</vxe-radio>
+                    <vxe-radio label="or">或</vxe-radio>
+                  </vxe-radio-group>
                 </div>
                 <div class="me-popup-filter me-popup-f2">
-                  <select v-model={ data.f2Type }>
+                  <vxe-select class="me-select" v-model={ data.f2Type } transfer clearable>
                     {
                       allCaseList.map(fItem => {
-                        return <option value={ fItem.value }>{ fItem.label }</option>
+                        return <vxe-option value={ fItem.value } label={ fItem.label }></vxe-option>
                       })
                     }
-                  </select>
-                  <input v-model={ data.f2Val }/>
+                  </vxe-select>
+                  <vxe-input class="me-input" v-model={ data.f2Val } clearable></vxe-input>
                 </div>
                 <div class="me-popup-describe">
                   <span>可用 ? 代表单个字符<br/>用 * 代表任意多个字符</span>
                 </div>
                 <div class="me-popup-footer">
-                  <button onClick={ () => {
-                    data.fMenu = cItem.value
-                    option.checked = true
-                    $modal.close()
-                    $panel.confirmFilter()
-                  } }>确认</button>
-                  <button onClick={ () => { $modal.close() } }>取消</button>
+                  <vxe-button status="primary" onClick={
+                    () => {
+                      data.fMenu = cItem.value
+                      option.checked = true
+                      $modal.close()
+                      $panel.confirmFilter()
+                    }
+                  }>确认</vxe-button>
+                  <vxe-button onClick={
+                    () => {
+                      $modal.close()
+                    }
+                  }>取消</vxe-button>
                 </div>
               </div>
             ]
@@ -390,23 +398,15 @@ export default {
   text-align: right;
   padding: 10px 10px 10px 0;
 }
-.myexcel-filter .me-footer button {
-  padding: 0 15px;
-  margin-left: 15px;
-}
 .me-popup .me-popup-filter {
   padding-left: 30px;
 }
-.me-popup .me-popup-filter > select {
-  height: 22px;
-  line-height: 22px;
-  width: 100px;
+.me-popup .me-popup-filter > .me-select {
+  width: 120px;
 }
-.me-popup .me-popup-filter > input {
-  height: 22px;
-  line-height: 22px;
-  margin-left: 10px;
-  width: 400px;
+.me-popup .me-popup-filter > .me-input {
+  margin-left: 15px;
+  width: 380px;
 }
 .me-popup .me-popup-describe {
   padding: 20px 0 10px 0;
@@ -416,9 +416,5 @@ export default {
 }
 .me-popup .me-popup-footer {
   text-align: right;
-}
-.me-popup .me-popup-footer button {
-  padding: 0 15px;
-  margin-left: 15px;
 }
 </style>
