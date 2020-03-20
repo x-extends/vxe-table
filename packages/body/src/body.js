@@ -127,7 +127,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   const checkedLocat = {}
   const checkedTLocat = {}
   const copyedLocat = {}
-  const validError = validStore.row === row && validStore.column === column
+  const hasValidError = validStore.row === row && validStore.column === column
   const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs = { 'data-colid': column.id }
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
@@ -219,7 +219,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       [`col--${type}`]: type,
       'col--last': $columnIndex === columns.length - 1,
       'col--tree-node': treeNode,
-      'col--edit': editRender,
+      'col--edit': !!editRender,
       'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn,
       'col--ellipsis': hasEllipsis,
@@ -241,7 +241,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       'col--copyed-left': copyedLocat.left,
       'col--copyed-right': copyedLocat.right,
       'col--dirty': isDirty,
-      'col--valid-error': validError,
+      'col--valid-error': hasValidError,
       'col--current': currentColumn === column
     }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
     key: columnKey || ($table.columnKey ? column.id : columnIndex),
@@ -269,7 +269,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
           width: hasEllipsis ? `${renderWidth - cellOffsetWidth}px` : null
         }
       }, column.renderCell(h, params)),
-      hasDefaultTip ? validError ? h('div', {
+      hasDefaultTip ? hasValidError ? h('div', {
         class: 'vxe-cell--valid',
         style: validStore.rule && validStore.rule.maxWidth ? {
           width: `${validStore.rule.maxWidth}px`

@@ -132,7 +132,7 @@ export default {
       const { vSize, isZMax, optimizeOpts } = this
       return ['vxe-grid', {
         [`size--${vSize}`]: vSize,
-        't--animat': optimizeOpts.animat,
+        't--animat': !!optimizeOpts.animat,
         'is--maximize': isZMax,
         'is--loading': this.isCloak || this.loading || this.tableLoading
       }]

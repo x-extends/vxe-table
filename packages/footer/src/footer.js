@@ -164,7 +164,6 @@ export default {
                 'col--last': $columnIndex === tableColumn.length - 1,
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
-                'filter--active': column.filters && column.filters.some(item => item.checked),
                 'col--current': currentColumn === column
               }, UtilTools.getClass(footerClassName, params), UtilTools.getClass(footerCellClassName, params)],
               attrs,
