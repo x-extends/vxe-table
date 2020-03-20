@@ -215,7 +215,7 @@ export default {
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
                 'is--sortable': column.sortable,
-                'is--filter': column.filters,
+                'is--filter': !!column.filters,
                 'filter--active': hasFilter,
                 'col--current': currentColumn === column
               }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],
