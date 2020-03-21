@@ -404,7 +404,7 @@ export default {
                 this.handleSelectRow({ row }, selectRecords.indexOf(row) === -1)
               })
             } else {
-              this.clearCheckboxRow()
+              this.setAllCheckboxRow(false)
               this.setCheckboxRow(rangeRows, true)
             }
           }
