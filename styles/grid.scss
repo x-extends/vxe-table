@@ -50,15 +50,15 @@
       }
     }
   }
-  .vxe-form--wrapper,
-  .vxe-top--wrapper,
-  .vxe-bottom--wrapper  {
+  .vxe-grid--form-wrapper,
+  .vxe-grid--top-wrapper,
+  .vxe-grid--bottom-wrapper  {
     position: relative;
   }
-  .vxe-top--wrapper {
+  .vxe-grid--top-wrapper {
     padding-bottom: 0.8em;
   }
-  .vxe-bottom--wrapper {
+  .vxe-grid--bottom-wrapper {
     padding-top: 0.8em;
   }
 }
