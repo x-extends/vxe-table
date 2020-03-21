@@ -590,12 +590,10 @@ const renderMap = {
     renderItem: defaultItemRender
   },
   $button: {
-    renderEdit: defaultButtonEditRender,
     renderDefault: defaultButtonEditRender,
     renderItem: defaultButtonItemRender
   },
   $buttons: {
-    renderEdit: defaultButtonsEditRender,
     renderDefault: defaultButtonsEditRender,
     renderItem: defaultButtonsItemRender
   },

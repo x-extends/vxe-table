@@ -78,14 +78,14 @@ export default {
                 $panel.confirmFilter()
               }
             },
-            nameChangeEvent ({ column }, event) {
-              console.log(\`\${column.title} 触发 change 事件 value=\${event.target.value}\`)
+            nameChangeEvent ({ column }) {
+              console.log(\`\${column.title} 触发 change 事件\`)
             },
-            roleFocusEvent ({ column }, event) {
-              console.log(\`\${column.title} 触发 focus 事件 value=\${event.target.value}\`)
+            roleFocusEvent ({ column }) {
+              console.log(\`\${column.title} 触发 focus 事件\`)
             },
-            sexChangeEvent ({ column }, event) {
-              console.log(\`\${column.title} 触发 change 事件 value=\${event.target.value}\`)
+            sexChangeEvent ({ column }) {
+              console.log(\`\${column.title} 触发 change 事件\`)
             }
           }
         }
@@ -114,14 +114,14 @@ export default {
         $panel.confirmFilter()
       }
     },
-    nameChangeEvent ({ column }, event) {
-      console.log(`${column.title} 触发 change 事件 value=${event.target.value}`)
+    nameChangeEvent ({ column }) {
+      console.log(`${column.title} 触发 change 事件`)
     },
-    roleFocusEvent ({ column }, event) {
-      console.log(`${column.title} 触发 focus 事件 value=${event.target.value}`)
+    roleFocusEvent ({ column }) {
+      console.log(`${column.title} 触发 focus 事件`)
     },
-    sexChangeEvent ({ column }, event) {
-      console.log(`${column.title} 触发 change 事件 value=${event.target.value}`)
+    sexChangeEvent ({ column }) {
+      console.log(`${column.title} 触发 change 事件`)
     }
   }
 }
