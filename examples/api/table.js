@@ -757,7 +757,7 @@ const apis = [
         version: '',
         type: 'String',
         enum: '',
-        defVal: '默认 _XID，继承 setup.keepSource',
+        defVal: '默认 _XID，继承 setup.rowId',
         list: []
       },
       {

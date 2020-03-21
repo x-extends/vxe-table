@@ -607,8 +607,8 @@ export default {
       fullColumnIdData: {}
     })
     const { scrollX, scrollY } = optimizeOpts
-    if (!UtilTools.getRowkey(this)) {
-      UtilTools.error('vxe.error.emptyProp', ['row-id'])
+    if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
+      UtilTools.warn('vxe.error.reqProp', ['row-id'])
     }
     if (editOpts.showStatus && !this.keepSource) {
       UtilTools.warn('vxe.error.reqProp', ['keep-source'])
