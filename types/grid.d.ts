@@ -1,4 +1,4 @@
-import { Table } from './table';
+import { Table } from './table'
 
 /**
  * 高级表格

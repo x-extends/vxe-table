@@ -1,8 +1,9 @@
-import { VXETableModule } from './component';
+import { VXETableModule } from './component'
 import { ColumnConfig } from './column'
+import { RenderParams, RenderOptions } from './extends/renderer'
 
 /**
- * 核心模块
+ * 表格
  */
 export declare class Table extends VXETableModule {
   // 数据
@@ -128,24 +129,28 @@ export declare class Table extends VXETableModule {
   // 校验规则配置项
   editRules?: any;
   // 空内容渲染配置项
-  emptyRender?: boolean | any;
+  emptyRender?: boolean | EmptyRender;
   // 优化配置项
   optimization?: any;
   // 额外的参数
   params?: any;
 
+  // computed
+  vSize?: string;
+
+  // methods
   /**
-   * 手动清除表格所有条件，还原到初始状态  
+   * 手动清除表格所有条件，还原到初始状态
    * 对于增删改查的场景中可能会用到，比如在数据保存之后清除表格缓存
    */
   clearAll(): Promise<any>;
   /**
-   * 同步 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑  
+   * 同步 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑
    * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
    */
   syncData(): Promise<any>;
   /**
-   * 手动处理数据  
+   * 手动处理数据
    * 对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到
    */
   updateData(): Promise<any>;
@@ -185,7 +190,7 @@ export declare class Table extends VXETableModule {
    * 根据 th/td 元素获取对应的 column 信息
    * @param cell 单元格节点元素
    */
-  getColumnNode(cell: any): { item: ColumnConfig, items: ColumnConfig[], index: number, parent: ColumnConfig };
+  getColumnNode(cell: any): { item: typeof ColumnConfig, items: typeof ColumnConfig[], index: number, parent: typeof ColumnConfig };
   /**
    * 根据 row 获取相对于 data 中的索引
    * @param row 行对象
@@ -205,20 +210,20 @@ export declare class Table extends VXETableModule {
    * 根据 column 获取相对于 columns 中的索引
    * @param column 列对象
    */
-  getColumnIndex(column: ColumnConfig): number;
+  getColumnIndex(column: typeof ColumnConfig): number;
   /**
    * 根据 column 获取渲染中的虚拟索引
    * @param column 列对象
    */
-  $getColumnIndex(column: ColumnConfig): number;
+  $getColumnIndex(column: typeof ColumnConfig): number;
   /**
-   * 创建 data 对象  
+   * 创建 data 对象
    * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义
    * @param records 数据
    */
   createData(records: any[]): Promise<any[]>;
   /**
-   * 创建 Row|Rows 对象  
+   * 创建 Row|Rows 对象
    * 对于某些特殊场景需要对数据进行手动插入时可能会用到
    * @param records 数据
    */
@@ -228,7 +233,7 @@ export declare class Table extends VXETableModule {
    * @param rows 指定行
    * @param field 字段名
    */
-  revertData(rows: any, field?: string):  Promise<any>;
+  revertData(rows: any, field?: string): Promise<any>;
   /**
    * 手动清空单元格内容，如果不传参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容
    * @param rows 指定行
@@ -249,22 +254,22 @@ export declare class Table extends VXETableModule {
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
    */
-  getColumns(columnIndex?: number): ColumnConfig | ColumnConfig[];
+  getColumns(columnIndex?: number): typeof ColumnConfig | typeof ColumnConfig[];
   /**
    * 根据列的唯一主键获取列
    * @param colid 列主键
    */
-  getColumnById(colid: string): ColumnConfig;
+  getColumnById(colid: string): typeof ColumnConfig;
   /**
    * 根据列的字段名获取列
    * @param field 字段名
    */
-  getColumnByField(field: string): ColumnConfig;
+  getColumnByField(field: string): typeof ColumnConfig;
   /**
-   * 获取当前表格的列  
+   * 获取当前表格的列
    * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
    */
-  getTableColumn(): { collectColumn: ColumnConfig[], fullColumn: ColumnConfig[], visibleColumn: ColumnConfig[], tableColumn: ColumnConfig[] };
+  getTableColumn(): { collectColumn: typeof ColumnConfig[], fullColumn: typeof ColumnConfig[], visibleColumn: typeof ColumnConfig[], tableColumn: typeof ColumnConfig[] };
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
@@ -279,7 +284,7 @@ export declare class Table extends VXETableModule {
    */
   getRowById(rowid: string | number): any;
   /**
-   * 获取当前表格的数据  
+   * 获取当前表格的数据
    * 完整的全量表体数据、处理条件之后的全量表体数据、当前渲染中的表体数据、当前渲染中的表尾数据
    */
   getTableData(): { fullData: any[], visibleData: any[], tableData: any[], footerData: any[] };
@@ -287,30 +292,30 @@ export declare class Table extends VXETableModule {
    * 隐藏指定列
    * @param column 列对象
    */
-  hideColumn(column: ColumnConfig): Promise<any>;
+  hideColumn(column: typeof ColumnConfig): Promise<any>;
   /**
    * 显示指定列
    * @param column 列对象
    */
-  showColumn(column: ColumnConfig): Promise<any>;
+  showColumn(column: typeof ColumnConfig): Promise<any>;
   /**
-   * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态  
+   * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
    * @param options 可选参数
    */
   resetColumn(options: { visible?: boolean, resizable?: boolean }): Promise<any>;
   /**
-   * 刷新列配置  
+   * 刷新列配置
    * 对于动态修改属性、显示/隐藏列等场景下可能会用到
    */
   refreshColumn(): Promise<any>;
   /**
-   * 刷新滚动操作，手动同步滚动相关位置  
+   * 刷新滚动操作，手动同步滚动相关位置
    * 对于某些特殊的操作，比如滚动条错位、固定列不同步
    */
   refreshScroll(): Promise<any>;
   /**
-   * 重新计算表格  
+   * 重新计算表格
    * 对于某些特殊场景可能会用到，比如隐藏的表格、重新计算列宽...等
    */
   recalculate(): Promise<any>;
@@ -398,7 +403,7 @@ export declare class Table extends VXETableModule {
    * 用于 highlight-current-column，设置某列行为高亮状态
    * @param column 列对象
    */
-  setCurrentColumn(column: ColumnConfig): Promise<any>;
+  setCurrentColumn(column: typeof ColumnConfig): Promise<any>;
   /**
    * 用于 highlight-current-column，手动清空当前高亮的状态
    */
@@ -416,7 +421,7 @@ export declare class Table extends VXETableModule {
   /**
    * 获取当前排序的 column 信息
    */
-  getSortColumn(): ColumnConfig;
+  getSortColumn(): typeof ColumnConfig;
   /**
    * 手动关闭筛选面板
    */
@@ -425,7 +430,7 @@ export declare class Table extends VXETableModule {
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param column 列对象
    */
-  isFilter(column: ColumnConfig): boolean;
+  isFilter(column: typeof ColumnConfig): boolean;
   /**
    * 用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成
    * @param row 指定行
@@ -446,7 +451,7 @@ export declare class Table extends VXETableModule {
    */
   toggleRowExpansion(row: any): Promise<any>;
   /**
-   * 用于 expand-config，设置所有行的展开与否  
+   * 用于 expand-config，设置所有行的展开与否
    * 如果是关闭所有行，可以使用 clearRowExpand 快速清除
    * @param checked 是否选中
    */
@@ -471,7 +476,7 @@ export declare class Table extends VXETableModule {
    */
   getRowExpandRecords(): any[];
   /**
-   * 用于 tree-config，用于树表格，获取已展开的节点  
+   * 用于 tree-config，用于树表格，获取已展开的节点
    * 注意，即使父节点被收起，只要该节点还处于展开状态都能获取到
    */
   getTreeExpandRecords(): any[];
@@ -494,7 +499,7 @@ export declare class Table extends VXETableModule {
    */
   toggleTreeExpansion(row: any): Promise<any>;
   /**
-   * 用于 tree-config，设置所有树节点的展开与否  
+   * 用于 tree-config，设置所有树节点的展开与否
    * 如果是关闭所有树节点，可以使用 clearTreeExpand 快速清除
    * @param checked 是否选中
    */
@@ -533,7 +538,7 @@ export declare class Table extends VXETableModule {
    * 如果有滚动条，则滚动到对应的列
    * @param column 列对象
    */
-  scrollToColumn(column: ColumnConfig): Promise<any>;
+  scrollToColumn(column: typeof ColumnConfig): Promise<any>;
   /**
    * 手动清除滚动相关信息，还原到初始状态
    */
@@ -548,14 +553,14 @@ export declare class Table extends VXETableModule {
    */
   updateStatus(scope: any): Promise<any>;
   /**
-   * 用于 filters，修改筛选列表  
+   * 用于 filters，修改筛选列表
    * 在筛选条件更新之后可以调用 updateData 函数处理表格数据
    * @param column 列对象
    * @param options 选项列表
    */
-  setFilter(column: ColumnConfig, options: any[]): Promise<any>;
+  setFilter(column: typeof ColumnConfig, options: any[]): Promise<any>;
   /**
-   * 手动清空筛选条件  
+   * 手动清空筛选条件
    * 如果不传 field 则清空所有筛选条件，数据会恢复成未筛选的状态
    * @param field 字段名
    */
@@ -601,7 +606,7 @@ export declare class Table extends VXETableModule {
    */
   removeCurrentRow(): Promise<{ row: any, rows: any[] }>;
   /**
-   * 获取表格数据集  
+   * 获取表格数据集
    * 获取新增、删除、更改的数据
    */
   getRecordset(): { insertRecords: any[], removeRecords: any[], updateRecords: any[] };
@@ -624,7 +629,7 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 edit-config，获取已激活的行数据
    */
-  getActiveRecord(): { row: any, rowIndex: number, $rowIndex: number, column: ColumnConfig, columnIndex: number, $columnIndex: number, cell: HTMLElement };
+  getActiveRecord(): { row: any, rowIndex: number, $rowIndex: number, column: typeof ColumnConfig, columnIndex: number, $columnIndex: number, cell: HTMLElement };
   /**
    * 用于 edit-config，判断行是否为激活编辑状态
    * @param row 指定行
@@ -693,4 +698,13 @@ export declare class Table extends VXETableModule {
    * @param options 参数
    */
   print(options: any): Promise<any>;
+}
+
+/**
+ * 空内容渲染配置项
+ */
+export class EmptyRender extends RenderOptions {}
+
+export class TableRenderParams extends RenderParams {
+  $table: Table;
 }

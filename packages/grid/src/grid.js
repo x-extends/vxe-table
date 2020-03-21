@@ -47,6 +47,40 @@ function renderFormContent (h, _vm) {
   return []
 }
 
+function getToolbarSlots (_vm) {
+  const { $scopedSlots, toolbar, toolbarOpts } = _vm
+  let $buttons = $scopedSlots.buttons
+  let $tools = $scopedSlots.tools
+  const slots = {}
+  if (toolbar) {
+    if (toolbarOpts.slots) {
+      $buttons = toolbarOpts.slots.buttons || $buttons
+      $tools = toolbarOpts.slots.tools || $tools
+    }
+  }
+  if ($buttons) {
+    slots.buttons = $buttons
+  }
+  if ($tools) {
+    slots.tools = $tools
+  }
+  return slots
+}
+
+function getTableOns (_vm) {
+  const { $listeners, proxyConfig, proxyOpts } = _vm
+  const ons = Object.assign({}, $listeners)
+  if (proxyConfig) {
+    if (proxyOpts.sort) {
+      ons['sort-change'] = _vm.sortChangeEvent
+    }
+    if (proxyOpts.filter) {
+      ons['filter-change'] = _vm.filterChangeEvent
+    }
+  }
+  return ons
+}
+
 Object.keys(Table.methods).forEach(name => {
   methods[name] = function (...args) {
     return this.$refs.xTable && this.$refs.xTable[name](...args)
@@ -108,25 +142,6 @@ export default {
     toolbarOpts () {
       return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
     },
-    toolbarSlots () {
-      const { $scopedSlots, toolbar, toolbarOpts } = this
-      let $buttons = $scopedSlots.buttons
-      let $tools = $scopedSlots.tools
-      const slots = {}
-      if (toolbar) {
-        if (toolbarOpts.slots) {
-          $buttons = toolbarOpts.slots.buttons || $buttons
-          $tools = toolbarOpts.slots.tools || $tools
-        }
-      }
-      if ($buttons) {
-        slots.buttons = $buttons
-      }
-      if ($tools) {
-        slots.tools = $tools
-      }
-      return slots
-    },
     renderClass () {
       const { vSize, isZMax, optimizeOpts } = this
       return ['vxe-grid', {
@@ -172,19 +187,6 @@ export default {
         props.editConfig = Object.assign({}, editConfig, { activeMethod: this.handleActiveMethod })
       }
       return props
-    },
-    tableOns () {
-      const { $listeners, proxyConfig, proxyOpts } = this
-      const ons = Object.assign({}, $listeners)
-      if (proxyConfig) {
-        if (proxyOpts.sort) {
-          ons['sort-change'] = this.sortChangeEvent
-        }
-        if (proxyOpts.filter) {
-          ons['filter-change'] = this.filterChangeEvent
-        }
-      }
-      return ons
     },
     pagerProps () {
       return Object.assign({}, this.pagerOpts, this.proxyConfig ? this.tablePage : {})
@@ -233,7 +235,7 @@ export default {
     this.initProxy()
   },
   render (h) {
-    const $scopedSlots = this.$scopedSlots
+    const { $scopedSlots } = this
     return h('div', {
       class: this.renderClass,
       style: this.renderStyle
@@ -243,7 +245,7 @@ export default {
        */
       this.formConfig ? h('div', {
         ref: 'form',
-        class: 'vxe-form--wrapper'
+        class: 'vxe-grid--form-wrapper'
       }, renderFormContent(h, this)) : null,
       /**
        * 渲染工具栏
@@ -251,21 +253,21 @@ export default {
       this.toolbar ? h('vxe-toolbar', {
         ref: 'toolbar',
         props: this.toolbarOpts,
-        scopedSlots: this.toolbarSlots
+        scopedSlots: getToolbarSlots(this)
       }) : null,
       /**
        * 渲染表格顶部区域
        */
       $scopedSlots.top ? h('div', {
         ref: 'top',
-        class: 'vxe-top--wrapper'
+        class: 'vxe-grid--top-wrapper'
       }, $scopedSlots.top.call(this, { $grid: this }, h)) : null,
       /**
        * 渲染表格
        */
       h('vxe-table', {
         props: this.tableProps,
-        on: this.tableOns,
+        on: getTableOns(this),
         scopedSlots: $scopedSlots,
         ref: 'xTable'
       }, this.$slots.default),
@@ -274,7 +276,7 @@ export default {
        */
       $scopedSlots.bottom ? h('div', {
         ref: 'bottom',
-        class: 'vxe-bottom--wrapper'
+        class: 'vxe-grid--bottom-wrapper'
       }, $scopedSlots.bottom.call(this, { $grid: this }, h)) : null,
       /**
        * 渲染分页

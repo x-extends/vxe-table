@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import { VXETableModule } from './component';
+import Vue from 'vue'
+import { VXETableModule } from './component'
 
 /**
  * 模态窗口
@@ -69,7 +69,7 @@ export declare class Modal extends VXETableModule {
   revert(): Promise<any>;
 }
 
-export interface XModalOptions {
+export interface ModalOptions {
   id?: string;
   type?: string;
   loading?: boolean;
@@ -105,52 +105,55 @@ export interface XModalOptions {
   size?: string;
 }
 
-export interface XModal {
+/**
+ * 全局模态窗口控制器
+ */
+export interface ModalController {
   /**
    * 弹出窗口
    * @param options 参数
    */
-  open (options: XModalOptions): Promise<string>;
+  open (options: ModalOptions): Promise<string>;
   /**
    * 弹出提示框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  alert (message: string, title?: string, options?: XModalOptions): Promise<string>;
+  alert (message: string, title?: string, options?: ModalOptions): Promise<string>;
   /**
    * 弹出提示框
    * @param options 参数
    */
-  alert (options: XModalOptions): Promise<string>;
+  alert (options: ModalOptions): Promise<string>;
   /**
    * 弹出确认框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  confirm (message: string, title?: string, options?: XModalOptions): Promise<string>;
+  confirm (message: string, title?: string, options?: ModalOptions): Promise<string>;
   /**
    * 弹出确认框
    * @param options 参数
    */
-  confirm (options: XModalOptions): Promise<string>;
+  confirm (options: ModalOptions): Promise<string>;
   /**
    * 弹出消息提示
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  message (message: string, title?: string, options?: XModalOptions): Promise<string>;
+  message (message: string, title?: string, options?: ModalOptions): Promise<string>;
   /**
    * 弹出消息提示
    * @param options 参数
    */
-  message (options: XModalOptions): Promise<string>;
+  message (options: ModalOptions): Promise<string>;
 }
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $XModal: XModal
+    $XModal: ModalController
   }
 }
