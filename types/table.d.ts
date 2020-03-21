@@ -185,12 +185,22 @@ export declare class Table extends VXETableModule {
    * 根据 tr 元素获取对应的 row 信息
    * @param tr 行节点元素
    */
-  getRowNode(tr: any): { item: any, items: any[], index: number, parent: any };
+  getRowNode(tr: any): {
+    item: any,
+    items: any[],
+    index: number,
+    parent: any
+  };
   /**
    * 根据 th/td 元素获取对应的 column 信息
    * @param cell 单元格节点元素
    */
-  getColumnNode(cell: any): { item: typeof ColumnConfig, items: typeof ColumnConfig[], index: number, parent: typeof ColumnConfig };
+  getColumnNode(cell: any): {
+    item: ColumnConfig,
+    items: ColumnConfig[],
+    index: number,
+    parent: ColumnConfig
+  };
   /**
    * 根据 row 获取相对于 data 中的索引
    * @param row 行对象
@@ -210,12 +220,12 @@ export declare class Table extends VXETableModule {
    * 根据 column 获取相对于 columns 中的索引
    * @param column 列对象
    */
-  getColumnIndex(column: typeof ColumnConfig): number;
+  getColumnIndex(column: ColumnConfig): number;
   /**
    * 根据 column 获取渲染中的虚拟索引
    * @param column 列对象
    */
-  $getColumnIndex(column: typeof ColumnConfig): number;
+  $getColumnIndex(column: ColumnConfig): number;
   /**
    * 创建 data 对象
    * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义
@@ -254,22 +264,27 @@ export declare class Table extends VXETableModule {
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
    */
-  getColumns(columnIndex?: number): typeof ColumnConfig | typeof ColumnConfig[];
+  getColumns(columnIndex?: number): ColumnConfig | ColumnConfig[];
   /**
    * 根据列的唯一主键获取列
    * @param colid 列主键
    */
-  getColumnById(colid: string): typeof ColumnConfig;
+  getColumnById(colid: string): ColumnConfig;
   /**
    * 根据列的字段名获取列
    * @param field 字段名
    */
-  getColumnByField(field: string): typeof ColumnConfig;
+  getColumnByField(field: string): ColumnConfig;
   /**
    * 获取当前表格的列
    * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
    */
-  getTableColumn(): { collectColumn: typeof ColumnConfig[], fullColumn: typeof ColumnConfig[], visibleColumn: typeof ColumnConfig[], tableColumn: typeof ColumnConfig[] };
+  getTableColumn(): {
+    collectColumn: ColumnConfig[],
+    fullColumn: ColumnConfig[],
+    visibleColumn: ColumnConfig[],
+    tableColumn: ColumnConfig[]
+  };
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
@@ -287,17 +302,22 @@ export declare class Table extends VXETableModule {
    * 获取当前表格的数据
    * 完整的全量表体数据、处理条件之后的全量表体数据、当前渲染中的表体数据、当前渲染中的表尾数据
    */
-  getTableData(): { fullData: any[], visibleData: any[], tableData: any[], footerData: any[] };
+  getTableData(): {
+    fullData: any[],
+    visibleData: any[],
+    tableData: any[],
+    footerData: any[]
+  };
   /**
    * 隐藏指定列
    * @param column 列对象
    */
-  hideColumn(column: typeof ColumnConfig): Promise<any>;
+  hideColumn(column: ColumnConfig): Promise<any>;
   /**
    * 显示指定列
    * @param column 列对象
    */
-  showColumn(column: typeof ColumnConfig): Promise<any>;
+  showColumn(column: ColumnConfig): Promise<any>;
   /**
    * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
@@ -403,7 +423,7 @@ export declare class Table extends VXETableModule {
    * 用于 highlight-current-column，设置某列行为高亮状态
    * @param column 列对象
    */
-  setCurrentColumn(column: typeof ColumnConfig): Promise<any>;
+  setCurrentColumn(column: ColumnConfig): Promise<any>;
   /**
    * 用于 highlight-current-column，手动清空当前高亮的状态
    */
@@ -421,7 +441,7 @@ export declare class Table extends VXETableModule {
   /**
    * 获取当前排序的 column 信息
    */
-  getSortColumn(): typeof ColumnConfig;
+  getSortColumn(): ColumnConfig;
   /**
    * 手动关闭筛选面板
    */
@@ -430,7 +450,7 @@ export declare class Table extends VXETableModule {
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param column 列对象
    */
-  isFilter(column: typeof ColumnConfig): boolean;
+  isFilter(column: ColumnConfig): boolean;
   /**
    * 用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成
    * @param row 指定行
@@ -538,7 +558,7 @@ export declare class Table extends VXETableModule {
    * 如果有滚动条，则滚动到对应的列
    * @param column 列对象
    */
-  scrollToColumn(column: typeof ColumnConfig): Promise<any>;
+  scrollToColumn(column: ColumnConfig): Promise<any>;
   /**
    * 手动清除滚动相关信息，还原到初始状态
    */
@@ -558,7 +578,7 @@ export declare class Table extends VXETableModule {
    * @param column 列对象
    * @param options 选项列表
    */
-  setFilter(column: typeof ColumnConfig, options: any[]): Promise<any>;
+  setFilter(column: ColumnConfig, options: any[]): Promise<any>;
   /**
    * 手动清空筛选条件
    * 如果不传 field 则清空所有筛选条件，数据会恢复成未筛选的状态
@@ -609,7 +629,11 @@ export declare class Table extends VXETableModule {
    * 获取表格数据集
    * 获取新增、删除、更改的数据
    */
-  getRecordset(): { insertRecords: any[], removeRecords: any[], updateRecords: any[] };
+  getRecordset(): {
+    insertRecords: any[],
+    removeRecords: any[],
+    updateRecords: any[]
+  };
   /**
    * 用于 edit-config，获取新增的临时数据
    */
@@ -629,7 +653,15 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 edit-config，获取已激活的行数据
    */
-  getActiveRecord(): { row: any, rowIndex: number, $rowIndex: number, column: typeof ColumnConfig, columnIndex: number, $columnIndex: number, cell: HTMLElement };
+  getActiveRecord(): {
+    row: any,
+    rowIndex: number,
+    $rowIndex: number,
+    column: ColumnConfig,
+    columnIndex: number,
+    $columnIndex: number,
+    cell: HTMLElement
+  };
   /**
    * 用于 edit-config，判断行是否为激活编辑状态
    * @param row 指定行
@@ -703,8 +735,11 @@ export declare class Table extends VXETableModule {
 /**
  * 空内容渲染配置项
  */
-export class EmptyRender extends RenderOptions {}
+export class EmptyRender extends RenderOptions { }
 
 export class TableRenderParams extends RenderParams {
+  /**
+   * 表格实例对象
+   */
   $table: Table;
 }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 import { Table, EmptyRender, TableRenderParams } from './table'
 import { Column, CellRenderParams, EditRenderParams, FilterRenderParams, FilterMethodParams, ColumnConfig, CellRenderOptions, EditRenderOptions, FilterRenderOptions, ContentRenderOptions } from './column'
-import { Grid } from './grid'
+import { Grid, GridRenderParams } from './grid'
 import { Toolbar } from './toolbar'
 import { Pager } from './pager'
 import { Checkbox } from './checkbox'
@@ -42,42 +42,6 @@ export interface VXETableStatic {
   Table: any;
   Grid: any;
   /**
-   * Filter 模块的安装状态
-   */
-  _filter: number;
-  /**
-   * Menu 模块的安装状态
-   */
-  _menu: number;
-  /**
-   * Edit 模块的安装状态
-   */
-  _edit: number;
-  /**
-   * Validator 模块的安装状态
-   */
-  _valid: number;
-  /**
-   * Export 模块的安装状态
-   */
-  _export: number;
-  /**
-   * Keyboard 模块的安装状态
-   */
-  _keyboard: number;
-  /**
-   * Resize 模块的安装状态
-   */
-  _resize: number;
-  /**
-   * Modal 模块的安装状态
-   */
-  _modal: number;
-  /**
-   * Tooltip 模块的安装状态
-   */
-  _tooltip: number;
-  /**
    * 全局的模态窗口
    */
   $modal: ModalController;
@@ -114,11 +78,11 @@ export interface VXETableStatic {
    */
   use(plugin: PluginObject<any>, ...options: any[]): VXETableStatic;
   /**
-   * 拦截器
+   * 全局事件拦截器
    */
   interceptor: interceptor;
   /**
-   * 渲染器
+   * 全局渲染器
    */
   renderer: renderer;
   /**
@@ -176,6 +140,8 @@ export {
   ContentRenderOptions,
 
   Grid,
+  GridRenderParams,
+
   Menu,
   Toolbar,
   Pager,

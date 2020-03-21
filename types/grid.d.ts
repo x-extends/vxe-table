@@ -1,4 +1,4 @@
-import { Table } from './table'
+import { Table, TableRenderParams } from './table'
 
 /**
  * 高级表格
@@ -30,5 +30,19 @@ export declare class Grid extends Table {
   /**
    * 获取数据代理信息
    */
-  getProxyInfo(): { data: any, filter: any, form: any, sort: any, pager: any, pendingRecords: any[] };
+  getProxyInfo(): {
+    data: any,
+    filter: any,
+    form: any,
+    sort: any,
+    pager: any,
+    pendingRecords: any[]
+  };
+}
+
+export class GridRenderParams extends TableRenderParams {
+  /**
+   * 高级表格实例对象
+   */
+  $grid: Grid;
 }

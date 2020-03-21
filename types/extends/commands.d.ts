@@ -1,3 +1,6 @@
+/**
+ * 全局指令
+ */
 export class commands {
   mixin(map: object): commands;
   get(type: string): Function;
