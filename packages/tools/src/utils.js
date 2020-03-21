@@ -172,7 +172,7 @@ export const UtilTools = {
       // 在 v2.0 中废弃 key
       rowKey = rowId || checkboxOpts.key || treeOpts.key || expandOpts.key || editConfig.key || GlobalConfig.rowId
     }
-    return rowKey
+    return rowKey || '_XID'
   },
   // 行主键 value
   getRowid ($table, row, rowIndex) {

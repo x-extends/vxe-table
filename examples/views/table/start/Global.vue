@@ -28,7 +28,7 @@
           // highlightHoverColumn: false,
           // zIndex: 100, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
           keepSource: true,
-          // rowId: '_XID',
+          // rowId: null, // 行数据的唯一主键字段名 _XID
           radioConfig: {
             // trigger: 'default'
           },

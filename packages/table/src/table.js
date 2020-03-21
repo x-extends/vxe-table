@@ -769,8 +769,8 @@ export default {
         offsetSize: XEUtils.toNumber(scrollX.oSize)
       })
     }
-    if (!UtilTools.getRowkey(this)) {
-      UtilTools.error('vxe.error.emptyProp', ['row-id'])
+    if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
+      UtilTools.warn('vxe.error.reqProp', ['row-id'])
     }
     if (this.startIndex) {
       // UtilTools.warn('vxe.error.delProp', ['start-index', 'seq-config.startIndex'])
@@ -3644,7 +3644,7 @@ export default {
                 this.handleSelectRow({ row }, selectRecords.indexOf(row) === -1)
               })
             } else {
-              this.clearCheckboxRow()
+              this.setAllCheckboxRow(false)
               this.setCheckboxRow(rangeRows, true)
             }
           }
