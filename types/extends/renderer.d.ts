@@ -11,6 +11,9 @@ export interface renderer {
 /**
  * 渲染器配置项
  */
+/**
+ * 全局渲染器
+ */
 export class RenderOptions {
   /**
    * 渲染器名称

@@ -75,7 +75,16 @@ export class ItemRenderOptions extends RenderOptions {
  * 项渲染参数
  */
 export interface ItemRenderParams extends RenderParams {
+  /**
+   * 表单实例对象
+   */
   $form: Form;
+  /**
+   * 表单数据
+   */
   data: any;
+  /**
+   * 字段名
+   */
   property: string;
 }

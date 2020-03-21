@@ -1,3 +1,6 @@
+/**
+ * 全局快捷菜单
+ */
 export class menus {
   mixin(map: object): menus;
   get(type: string): Function;

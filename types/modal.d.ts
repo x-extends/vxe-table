@@ -154,6 +154,9 @@ export interface ModalController {
 
 declare module 'vue/types/vue' {
   interface Vue {
+    /**
+     * 全局模态窗口控制器
+     */
     $XModal: ModalController
   }
 }

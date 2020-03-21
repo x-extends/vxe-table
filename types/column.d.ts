@@ -239,11 +239,29 @@ export interface ContentRenderOptions extends RenderOptions {
  * 单元格渲染参数
  */
 export interface CellRenderParams extends TableRenderParams {
+  /**
+   * 列对象
+   */
   column: ColumnConfig;
+  /**
+   * 相对于 columns 中的索引
+   */
   columnIndex: number;
+  /**
+   * 相对于可视区渲染中的列索引
+   */
   $columnIndex: number;
+  /**
+   * 行数据对象
+   */
   row: any;
+  /**
+   * 相对于 data 中的索引
+   */
   rowIndex: number;
+  /**
+   * 相对于当前表格数据的索引
+   */
   $rowIndex: number;
 }
 
@@ -256,9 +274,21 @@ export interface EditRenderParams extends CellRenderParams {}
  * 筛选渲染参数
  */
 export interface FilterRenderParams extends TableRenderParams {
+  /**
+   * 筛选面板实例对象
+   */
   $panel: FormPanel;
+  /**
+   * 列对象
+   */
   column: ColumnConfig;
+  /**
+   * 相对于 columns 中的索引
+   */
   columnIndex: number;
+  /**
+   * 相对于可视区渲染中的列索引
+   */
   $columnIndex: number;
 }
 
@@ -266,8 +296,20 @@ export interface FilterRenderParams extends TableRenderParams {
  * 筛选渲染参数
  */
 export interface FilterMethodParams {
+  /**
+   * 选项值
+   */
   value: any;
+  /**
+   * 选项
+   */
   option: any;
+  /**
+   * 行数据对象
+   */
   row: any;
+  /**
+   * 列对象
+   */
   column: ColumnConfig;
 }
