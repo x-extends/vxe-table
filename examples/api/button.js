@@ -69,6 +69,24 @@ const apis = [
         enum: '',
         defVal: 'false',
         list: []
+      },
+      {
+        name: 'placement',
+        descKey: 'app.api.button.desc.placement',
+        version: '2.8.31',
+        type: 'String',
+        enum: 'top, bottom',
+        defVal: 'bottom',
+        list: []
+      },
+      {
+        name: 'transfer',
+        descKey: 'app.api.button.desc.transfer',
+        version: '2.8.31',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.button.transfer',
+        list: []
       }
     ]
   },

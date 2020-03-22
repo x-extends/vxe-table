@@ -195,6 +195,9 @@ const GlobalConfig = {
     // },
     // buttons: []
   },
+  button: {
+    // transfer: false
+  },
   modal: {
     minWidth: 340,
     minHeight: 200,

@@ -1467,7 +1467,7 @@ const Methods = {
   handleGlobalKeydownEvent (evnt) {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
-      this.preventEvent(evnt, 'event.keydown', { $table: this }, () => {
+      this.preventEvent(evnt, 'event.keydown', { $table: this, $grid: this.$xegrid }, () => {
         const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
         const { selected, actived } = editStore
         const keyCode = evnt.keyCode

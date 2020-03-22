@@ -31,12 +31,12 @@ export declare class Grid extends Table {
    * 获取数据代理信息
    */
   getProxyInfo(): {
-    data: any,
-    filter: any,
-    form: any,
-    sort: any,
-    pager: any,
-    pendingRecords: any[]
+    data: any;
+    filter: any;
+    form: any;
+    sort: any;
+    pager: any;
+    pendingRecords: any[];
   };
 }
 

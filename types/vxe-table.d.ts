@@ -1,35 +1,12 @@
 import Vue from 'vue'
 
-import { Table, EmptyRender, TableRenderParams } from './table'
-import { Column, CellRenderParams, EditRenderParams, FilterRenderParams, FilterMethodParams, ColumnConfig, CellRenderOptions, EditRenderOptions, FilterRenderOptions, ContentRenderOptions } from './column'
-import { Grid, GridRenderParams } from './grid'
-import { Toolbar } from './toolbar'
-import { Pager } from './pager'
-import { Checkbox } from './checkbox'
-import { Radio } from './radio'
-import { Input } from './input'
-import { Textarea } from './textarea'
-import { Button } from './button'
-import { Select } from './select'
-import { Modal, ModalController } from './modal'
-import { Tooltip } from './tooltip'
-import { Form, ItemRenderParams, ItemRenderOptions } from './form'
+import { ModalController } from './modal'
 
-import { renderer, RenderParams, RenderOptions } from './extends/renderer'
+import { renderer } from './extends/renderer'
 import { interceptor } from './extends/interceptor'
 import { commands } from './extends/commands'
 import { formats } from './extends/formats'
 import { menus } from './extends/menus'
-import { Header } from './extends/header'
-import { Footer } from './extends/footer'
-import { Icon } from './extends/icon'
-import { Filter } from './extends/filter'
-import { Menu } from './extends/menu'
-import { Edit } from './extends/edit'
-import { Export } from './extends/export'
-import { Keyboard } from './extends/keyboard'
-import { Validator } from './extends/validator'
-import { Resize } from './extends/resize'
 
 export interface VXETableOptions {
   i18n?(key: string, value: any): any;
@@ -102,7 +79,7 @@ export interface VXETableStatic {
 /**
  * 一个简单实用的 Vue 表组件
  */
-declare const VXETable: VXETableStatic
+export declare const VXETable: VXETableStatic
 
 export interface PluginObject<T> {
   install(xTable: typeof VXETable): any;
@@ -114,62 +91,35 @@ declare global {
   }
 }
 
-export {
-  VXETable,
-  renderer,
-  RenderParams,
-  RenderOptions,
-  menus,
-  formats,
-  commands,
-  interceptor,
+export * from './table'
+export * from './column'
+export * from './grid'
+export * from './toolbar'
+export * from './pager'
+export * from './checkbox'
+export * from './radio'
+export * from './input'
+export * from './textarea'
+export * from './button'
+export * from './select'
+export * from './modal'
+export * from './tooltip'
+export * from './form'
 
-  Table,
-  EmptyRender,
-  TableRenderParams,
-
-  Column,
-  ColumnConfig,
-  CellRenderParams,
-  EditRenderParams,
-  FilterRenderParams,
-  FilterMethodParams,
-  CellRenderOptions,
-  EditRenderOptions,
-  FilterRenderOptions,
-  ContentRenderOptions,
-
-  Grid,
-  GridRenderParams,
-
-  Menu,
-  Toolbar,
-  Pager,
-  Checkbox,
-  Radio,
-  Input,
-  Textarea,
-  Button,
-  Select,
-
-  Modal,
-  ModalController,
-
-  Tooltip,
-
-  Form,
-  ItemRenderParams,
-  ItemRenderOptions,
-
-  Icon,
-  Header,
-  Footer,
-  Filter,
-  Edit,
-  Export,
-  Keyboard,
-  Validator,
-  Resize
-}
+export * from './extends/renderer'
+export * from './extends/interceptor'
+export * from './extends/commands'
+export * from './extends/formats'
+export * from './extends/menus'
+export * from './extends/header'
+export * from './extends/footer'
+export * from './extends/icon'
+export * from './extends/filter'
+export * from './extends/menu'
+export * from './extends/edit'
+export * from './extends/export'
+export * from './extends/keyboard'
+export * from './extends/validator'
+export * from './extends/resize'
 
 export default VXETable

@@ -12,7 +12,7 @@ export interface renderer {
  * 渲染器配置项
  */
 /**
- * 全局渲染器
+ * 渲染选项
  */
 export class RenderOptions {
   /**
@@ -38,3 +38,20 @@ export class RenderOptions {
  * 渲染参数
  */
 export class RenderParams {}
+
+/**
+ * 选项参数
+ */
+export interface OptionProps extends RenderParams {
+  value?: string;
+  label?: string;
+  disabled?: string;
+}
+
+/**
+ * 分组选项参数
+ */
+export interface OptionGroupProps extends RenderParams {
+  options?: string;
+  label?: string;
+}

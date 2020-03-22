@@ -731,7 +731,7 @@ export default {
     this.preventEvent(null, 'mounted', { $table: this })
   },
   activated () {
-    this.refreshScroll()
+    this.recalculate().then(() => this.refreshScroll())
     this.preventEvent(null, 'activated', { $table: this })
   },
   deactivated () {
