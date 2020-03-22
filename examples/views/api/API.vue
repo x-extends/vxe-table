@@ -326,12 +326,16 @@ export default {
         }, options)
         this.apiList = rest
         this.$nextTick(() => {
-          this.$refs.xTable.setAllTreeExpansion(true)
+          if (this.$refs.xTable) {
+            this.$refs.xTable.setAllTreeExpansion(true)
+          }
         })
       } else {
         this.apiList = this.tableData
         this.$nextTick(() => {
-          this.$refs.xTable.setTreeExpansion(this.defaultExpandRows, true)
+          if (this.$refs.xTable) {
+            this.$refs.xTable.setTreeExpansion(this.defaultExpandRows, true)
+          }
         })
       }
     },

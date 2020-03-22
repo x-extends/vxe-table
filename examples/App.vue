@@ -67,7 +67,7 @@
                   <span v-html="item.label"></span>
                 </a>
                 <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
-                  <li v-for="(child, cIndex) in item.children" :key="cIndex">
+                  <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name)}">
                     <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
                     <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
                   </li>
@@ -148,6 +148,85 @@ export default {
               demoUrl: 'https://jsrun.pro/SbfKp/edit',
               locat: {
                 name: 'StartI18n'
+              }
+            }
+          ]
+        },
+        {
+          label: 'app.aside.nav.module',
+          value: 'module',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.icon',
+              locat: {
+                name: 'ModuleIcon'
+              }
+            },
+            {
+              label: 'app.aside.nav.button',
+              locat: {
+                name: 'ModuleButton'
+              }
+            },
+            {
+              label: 'app.aside.nav.radio',
+              locat: {
+                name: 'ModuleRadio'
+              }
+            },
+            {
+              label: 'app.aside.nav.checkbox',
+              locat: {
+                name: 'ModuleCheckbox'
+              }
+            },
+            {
+              label: 'app.aside.nav.input',
+              locat: {
+                name: 'ModuleInput'
+              }
+            },
+            {
+              label: 'app.aside.nav.textarea',
+              locat: {
+                name: 'ModuleTextarea'
+              }
+            },
+            {
+              label: 'app.aside.nav.select',
+              locat: {
+                name: 'ModuleSelect'
+              }
+            },
+            {
+              label: 'app.aside.nav.pager',
+              locat: {
+                name: 'ModulePager'
+              }
+            },
+            {
+              label: 'app.aside.nav.modal',
+              locat: {
+                name: 'ModuleModal'
+              }
+            },
+            // {
+            //   label: 'app.aside.nav.tooltip',
+            //   locat: {
+            //     name: 'ModuleTooltip'
+            //   }
+            // },
+            {
+              label: 'app.aside.nav.toolbar',
+              locat: {
+                name: 'ModuleToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'ModuleForm'
               }
             }
           ]
@@ -589,189 +668,6 @@ export default {
           ]
         },
         {
-          label: 'app.aside.nav.grid',
-          value: 'grid',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.base',
-              demoUrl: 'https://jsrun.net/5RXKp/edit',
-              locat: {
-                name: 'GridBasic'
-              }
-            },
-            {
-              label: 'app.aside.nav.group',
-              demoUrl: 'https://jsrun.pro/M8WKp/edit',
-              locat: {
-                name: 'GridGroup'
-              }
-            },
-            {
-              label: 'app.aside.nav.reverse',
-              demoUrl: 'https://jsrun.pro/zIWKp/edit',
-              locat: {
-                name: 'GridReverse'
-              }
-            },
-            {
-              label: 'app.aside.nav.template',
-              locat: {
-                name: 'GridTemplate'
-              }
-            },
-            {
-              label: 'app.aside.nav.footer',
-              locat: {
-                name: 'GridFooter'
-              }
-            },
-            {
-              label: 'app.aside.nav.pager',
-              locat: {
-                name: 'GridPage'
-              }
-            },
-            {
-              label: 'app.aside.nav.form',
-              locat: {
-                name: 'GridForm'
-              }
-            },
-            {
-              label: 'app.aside.nav.proxy',
-              demoUrl: 'https://jsrun.pro/XwWKp/edit',
-              locat: {
-                name: 'GridProxy'
-              }
-            },
-            {
-              label: 'app.aside.nav.proxyPage',
-              demoUrl: 'https://jsrun.pro/ywWKp/edit',
-              locat: {
-                name: 'GridPageProxy'
-              }
-            },
-            {
-              label: 'app.aside.nav.formProxy',
-              locat: {
-                name: 'GridFormProxy'
-              }
-            },
-            {
-              label: 'app.aside.nav.edit',
-              locat: {
-                name: 'GridEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.cellDisable',
-              locat: {
-                name: 'GridCellDisable'
-              }
-            },
-            {
-              label: 'app.aside.nav.rowDisable',
-              locat: {
-                name: 'GridRowDisable'
-              }
-            },
-            {
-              label: 'app.aside.nav.crudToolbar',
-              locat: {
-                name: 'GridToolbar'
-              }
-            },
-            {
-              label: 'app.aside.nav.customToolbar',
-              locat: {
-                name: 'GridCustomToolbar'
-              }
-            },
-            {
-              label: 'app.aside.nav.toolbarIcon',
-              locat: {
-                name: 'GridToolbarIcon'
-              }
-            },
-            {
-              label: 'app.aside.nav.fullscreen',
-              locat: {
-                name: 'GridFullscreen'
-              }
-            },
-            {
-              label: 'app.aside.nav.dynamicColumn',
-              locat: {
-                name: 'GridDynamic'
-              }
-            },
-            {
-              label: 'app.aside.nav.contextMenu',
-              demoUrl: 'https://jsrun.pro/m6WKp/edit',
-              locat: {
-                name: 'GridMenu'
-              }
-            },
-            {
-              label: 'app.aside.nav.span',
-              disabled: true,
-              locat: {
-                name: 'GridSpan'
-              }
-            },
-            {
-              label: 'app.aside.nav.upload',
-              locat: {
-                name: 'GridUpload'
-              }
-            },
-            {
-              label: 'app.aside.nav.baseTree',
-              locat: {
-                name: 'GridTree'
-              }
-            },
-            {
-              label: 'app.aside.nav.lazyTree',
-              locat: {
-                name: 'GridTreeLazy'
-              }
-            },
-            {
-              label: 'app.aside.nav.treeLazyEdit',
-              locat: {
-                name: 'GridTreeLazyEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.crudTreeToolbar',
-              locat: {
-                name: 'GridTreeEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.fullQuery',
-              locat: {
-                name: 'GridFullQuery'
-              }
-            },
-            {
-              label: 'app.aside.nav.full',
-              demoUrl: 'https://jsrun.pro/r6WKp/edit',
-              locat: {
-                name: 'GridFullEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.configProxy',
-              locat: {
-                name: 'GridConfigProxy'
-              }
-            }
-          ]
-        },
-        {
           label: 'app.aside.nav.tree',
           value: 'tree',
           expand: false,
@@ -972,222 +868,6 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableTreeBasic'
-              }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.virtualTree',
-          value: 'virtualTree',
-          expand: false,
-          disabled: true,
-          children: [
-            {
-              label: 'app.aside.nav.base',
-              locat: {
-                name: 'TableVirtualTreeBasic'
-              }
-            },
-            {
-              label: 'app.aside.nav.treeNormal',
-              locat: {
-                name: 'TableVirtualTreeNormal'
-              }
-            },
-            {
-              label: 'app.aside.nav.radio',
-              locat: {
-                name: 'TableVirtualTreeRadio'
-              }
-            },
-            {
-              label: 'app.aside.nav.checkbox',
-              locat: {
-                name: 'TableVirtualTreeCheckbox'
-              }
-            },
-            {
-              label: 'app.aside.nav.icon',
-              locat: {
-                name: 'TableVirtualTreeIcon'
-              }
-            },
-            {
-              label: 'app.aside.nav.fixed',
-              locat: {
-                name: 'TableVirtualTreeFixed'
-              }
-            },
-            {
-              label: 'app.aside.nav.fluidHeight',
-              locat: {
-                name: 'TableVirtualTreeMaxHeight'
-              }
-            },
-            {
-              label: 'app.aside.nav.edit',
-              locat: {
-                name: 'TableVirtualTreeEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.insert',
-              locat: {
-                name: 'TableVirtualTreeInsert'
-              }
-            },
-            {
-              label: 'app.aside.nav.delete',
-              locat: {
-                name: 'TableVirtualTreeRemove'
-              }
-            },
-            {
-              label: 'app.aside.nav.contextMenu',
-              locat: {
-                name: 'TableVirtualTreeMenu'
-              }
-            },
-            {
-              label: 'app.aside.nav.template',
-              locat: {
-                name: 'TableVirtualTreeTemplate'
-              }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.scroll',
-          value: 'scroll',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.bigData',
-              demoUrl: 'https://jsrun.net/XRXKp/edit',
-              locat: {
-                name: 'TableScroll'
-              }
-            },
-            {
-              label: 'app.aside.nav.moveHighlight',
-              locat: {
-                name: 'TableScrollHighlight'
-              }
-            },
-            {
-              label: 'app.aside.nav.keyboard',
-              locat: {
-                name: 'TableScrollKeyboard'
-              }
-            },
-            {
-              label: 'app.aside.nav.fluidHeight',
-              locat: {
-                name: 'TableScrollMaxHeight'
-              }
-            },
-            {
-              label: 'app.aside.nav.edit',
-              demoUrl: 'https://jsrun.pro/MIWKp/edit',
-              locat: {
-                name: 'TableScrollEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollTree',
-              disabled: true,
-              locat: {
-                name: 'TableScrollTree'
-              }
-            },
-            {
-              label: 'app.aside.nav.rowValid',
-              locat: {
-                name: 'TableScrollRowValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.forceCellValid',
-              disabled: true,
-              locat: {
-                name: 'TableScrollForceCellValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.forceRowValid',
-              disabled: true,
-              locat: {
-                name: 'TableScrollForceRowValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.partialLoad',
-              demoUrl: 'https://jsrun.pro/EVWKp/edit',
-              locat: {
-                name: 'TableScrollPartialLoad'
-              }
-            },
-            {
-              label: 'app.aside.nav.fullPartialLoad',
-              demoUrl: 'https://jsrun.pro/sVWKp/edit',
-              locat: {
-                name: 'TableScrollFullPartialLoad'
-              }
-            },
-            {
-              label: 'app.aside.nav.template',
-              locat: {
-                name: 'TableScrollTemplate'
-              }
-            },
-            {
-              label: 'app.aside.nav.tabs',
-              locat: {
-                name: 'TableScrollTabs'
-              }
-            },
-            {
-              label: 'app.aside.nav.keepAlives',
-              locat: {
-                name: 'TableScrollKeepAliveTable1'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollRows',
-              locat: {
-                name: 'TableScrollRows'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollFullRows',
-              locat: {
-                name: 'TableScrollFullRows'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollCols',
-              locat: {
-                name: 'TableScrollCols'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollFullCols',
-              locat: {
-                name: 'TableScrollFullCols'
-              }
-            },
-            {
-              label: 'app.aside.nav.infiniteScroll',
-              disabled: true,
-              locat: {
-                name: 'TableScroll'
-              }
-            },
-            {
-              label: 'app.aside.nav.full',
-              disabled: true,
-              locat: {
-                name: 'TableScroll'
               }
             }
           ]
@@ -1401,6 +1081,405 @@ export default {
               disabled: true,
               locat: {
                 name: 'TableEditFull'
+              }
+            }
+          ]
+        },
+        // {
+        //   label: 'app.aside.nav.virtualTree',
+        //   value: 'virtualTree',
+        //   expand: false,
+        //   disabled: true,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.base',
+        //       locat: {
+        //         name: 'TableVirtualTreeBasic'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.treeNormal',
+        //       locat: {
+        //         name: 'TableVirtualTreeNormal'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.radio',
+        //       locat: {
+        //         name: 'TableVirtualTreeRadio'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.checkbox',
+        //       locat: {
+        //         name: 'TableVirtualTreeCheckbox'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.icon',
+        //       locat: {
+        //         name: 'TableVirtualTreeIcon'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.fixed',
+        //       locat: {
+        //         name: 'TableVirtualTreeFixed'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.fluidHeight',
+        //       locat: {
+        //         name: 'TableVirtualTreeMaxHeight'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.edit',
+        //       locat: {
+        //         name: 'TableVirtualTreeEdit'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.insert',
+        //       locat: {
+        //         name: 'TableVirtualTreeInsert'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.delete',
+        //       locat: {
+        //         name: 'TableVirtualTreeRemove'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.contextMenu',
+        //       locat: {
+        //         name: 'TableVirtualTreeMenu'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.template',
+        //       locat: {
+        //         name: 'TableVirtualTreeTemplate'
+        //       }
+        //     }
+        //   ]
+        // },
+        {
+          label: 'app.aside.nav.grid',
+          value: 'grid',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.base',
+              demoUrl: 'https://jsrun.net/5RXKp/edit',
+              locat: {
+                name: 'GridBasic'
+              }
+            },
+            {
+              label: 'app.aside.nav.group',
+              demoUrl: 'https://jsrun.pro/M8WKp/edit',
+              locat: {
+                name: 'GridGroup'
+              }
+            },
+            {
+              label: 'app.aside.nav.reverse',
+              demoUrl: 'https://jsrun.pro/zIWKp/edit',
+              locat: {
+                name: 'GridReverse'
+              }
+            },
+            {
+              label: 'app.aside.nav.template',
+              locat: {
+                name: 'GridTemplate'
+              }
+            },
+            {
+              label: 'app.aside.nav.footer',
+              locat: {
+                name: 'GridFooter'
+              }
+            },
+            {
+              label: 'app.aside.nav.pager',
+              locat: {
+                name: 'GridPage'
+              }
+            },
+            {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'GridForm'
+              }
+            },
+            {
+              label: 'app.aside.nav.proxy',
+              demoUrl: 'https://jsrun.pro/XwWKp/edit',
+              locat: {
+                name: 'GridProxy'
+              }
+            },
+            {
+              label: 'app.aside.nav.proxyPage',
+              demoUrl: 'https://jsrun.pro/ywWKp/edit',
+              locat: {
+                name: 'GridPageProxy'
+              }
+            },
+            {
+              label: 'app.aside.nav.formProxy',
+              locat: {
+                name: 'GridFormProxy'
+              }
+            },
+            {
+              label: 'app.aside.nav.edit',
+              locat: {
+                name: 'GridEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.cellDisable',
+              locat: {
+                name: 'GridCellDisable'
+              }
+            },
+            {
+              label: 'app.aside.nav.rowDisable',
+              locat: {
+                name: 'GridRowDisable'
+              }
+            },
+            {
+              label: 'app.aside.nav.crudToolbar',
+              locat: {
+                name: 'GridToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.customToolbar',
+              locat: {
+                name: 'GridCustomToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.toolbarIcon',
+              locat: {
+                name: 'GridToolbarIcon'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullscreen',
+              locat: {
+                name: 'GridFullscreen'
+              }
+            },
+            {
+              label: 'app.aside.nav.dynamicColumn',
+              locat: {
+                name: 'GridDynamic'
+              }
+            },
+            {
+              label: 'app.aside.nav.contextMenu',
+              demoUrl: 'https://jsrun.pro/m6WKp/edit',
+              locat: {
+                name: 'GridMenu'
+              }
+            },
+            {
+              label: 'app.aside.nav.span',
+              disabled: true,
+              locat: {
+                name: 'GridSpan'
+              }
+            },
+            {
+              label: 'app.aside.nav.upload',
+              locat: {
+                name: 'GridUpload'
+              }
+            },
+            {
+              label: 'app.aside.nav.baseTree',
+              locat: {
+                name: 'GridTree'
+              }
+            },
+            {
+              label: 'app.aside.nav.lazyTree',
+              locat: {
+                name: 'GridTreeLazy'
+              }
+            },
+            {
+              label: 'app.aside.nav.treeLazyEdit',
+              locat: {
+                name: 'GridTreeLazyEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.crudTreeToolbar',
+              locat: {
+                name: 'GridTreeEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullQuery',
+              locat: {
+                name: 'GridFullQuery'
+              }
+            },
+            {
+              label: 'app.aside.nav.full',
+              demoUrl: 'https://jsrun.pro/r6WKp/edit',
+              locat: {
+                name: 'GridFullEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.configProxy',
+              locat: {
+                name: 'GridConfigProxy'
+              }
+            }
+          ]
+        },
+        {
+          label: 'app.aside.nav.scroll',
+          value: 'scroll',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.bigData',
+              demoUrl: 'https://jsrun.net/XRXKp/edit',
+              locat: {
+                name: 'TableScroll'
+              }
+            },
+            {
+              label: 'app.aside.nav.moveHighlight',
+              locat: {
+                name: 'TableScrollHighlight'
+              }
+            },
+            {
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableScrollKeyboard'
+              }
+            },
+            {
+              label: 'app.aside.nav.fluidHeight',
+              locat: {
+                name: 'TableScrollMaxHeight'
+              }
+            },
+            {
+              label: 'app.aside.nav.edit',
+              demoUrl: 'https://jsrun.pro/MIWKp/edit',
+              locat: {
+                name: 'TableScrollEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollTree',
+              disabled: true,
+              locat: {
+                name: 'TableScrollTree'
+              }
+            },
+            {
+              label: 'app.aside.nav.rowValid',
+              locat: {
+                name: 'TableScrollRowValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.forceCellValid',
+              disabled: true,
+              locat: {
+                name: 'TableScrollForceCellValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.forceRowValid',
+              disabled: true,
+              locat: {
+                name: 'TableScrollForceRowValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.partialLoad',
+              demoUrl: 'https://jsrun.pro/EVWKp/edit',
+              locat: {
+                name: 'TableScrollPartialLoad'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullPartialLoad',
+              demoUrl: 'https://jsrun.pro/sVWKp/edit',
+              locat: {
+                name: 'TableScrollFullPartialLoad'
+              }
+            },
+            {
+              label: 'app.aside.nav.template',
+              locat: {
+                name: 'TableScrollTemplate'
+              }
+            },
+            {
+              label: 'app.aside.nav.tabs',
+              locat: {
+                name: 'TableScrollTabs'
+              }
+            },
+            {
+              label: 'app.aside.nav.keepAlives',
+              locat: {
+                name: 'TableScrollKeepAliveTable1'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollRows',
+              locat: {
+                name: 'TableScrollRows'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollFullRows',
+              locat: {
+                name: 'TableScrollFullRows'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollCols',
+              locat: {
+                name: 'TableScrollCols'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollFullCols',
+              locat: {
+                name: 'TableScrollFullCols'
+              }
+            },
+            {
+              label: 'app.aside.nav.infiniteScroll',
+              disabled: true,
+              locat: {
+                name: 'TableScroll'
+              }
+            },
+            {
+              label: 'app.aside.nav.full',
+              disabled: true,
+              locat: {
+                name: 'TableScroll'
               }
             }
           ]

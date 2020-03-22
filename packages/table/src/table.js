@@ -868,7 +868,7 @@ export default {
     this.preventEvent(null, 'mounted', { $table: this })
   },
   activated () {
-    this.refreshScroll()
+    this.recalculate().then(() => this.refreshScroll())
     this.preventEvent(null, 'activated', { $table: this })
   },
   deactivated () {
@@ -2405,7 +2405,7 @@ export default {
     handleGlobalKeydownEvent (evnt) {
       // 该行为只对当前激活的表格有效
       if (this.isActivated) {
-        this.preventEvent(evnt, 'event.keydown', { $table: this }, () => {
+        this.preventEvent(evnt, 'event.keydown', { $table: this, $grid: this.$xegrid }, () => {
           let params
           const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
           const { selected, actived } = editStore
