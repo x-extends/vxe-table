@@ -44,7 +44,7 @@ export declare class Form extends VXETableModule {
 /**
  * 项渲染配置项
  */
-export class ItemRenderOptions extends RenderOptions {
+export interface ItemRenderOptions extends RenderOptions {
   /**
    * 下拉选项列表（需要渲染器支持）
    */

@@ -250,19 +250,18 @@ $btnThemeList: (
 .vxe-button--dropdown-panel {
   display: none;
   position: absolute;
-  left: 50%;
+  left: 0;
   padding: 0.2em 0;
-  min-width: 100%;
   &.animat--leave {
     display: block;
     opacity: 0;
-    transform: translateX(-50%) scaleY(0.5);
-    transition: all 0.2s;
+    transform: scaleY(0.5);
+    transition: transform 0.2s, opacity 0.2s;
     transform-origin: 0% 0%;
   }
   &.animat--enter {
     opacity: 1;
-    transform: translateX(-50%) scaleY(1);
+    transform: scaleY(1);
   }
 }
 .vxe-button--dropdown-wrapper {

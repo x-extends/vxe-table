@@ -5,7 +5,15 @@ import { UtilTools } from '../../tools'
 const inputEventTypes = ['input', 'textarea', '$input', '$textarea']
 const defaultCompProps = { transfer: true }
 
-function getChangeType (renderOpts) {
+function getModelProp () {
+  return 'value'
+}
+
+function getModelEvent () {
+  return 'input'
+}
+
+function getChangeEvent (renderOpts) {
   return inputEventTypes.indexOf(renderOpts.name) > -1 ? 'input' : 'change'
 }
 
@@ -40,18 +48,19 @@ function getNativeAttrs ({ name, attrs }) {
 
 function getCellEditFilterProps (renderOpts, params, value, defaultProps) {
   const { vSize } = params.$table
-  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { value })
+  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [getModelProp(renderOpts)]: value })
 }
 
 function getItemProps (renderOpts, params, value, defaultProps) {
   const { vSize } = params.$form
-  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { value })
+  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [getModelProp(renderOpts)]: value })
 }
 
 function getOns (renderOpts, params, inputFunc, changeFunc) {
   const { events } = renderOpts
-  const type = getChangeType(renderOpts)
-  const isInputType = type === 'input'
+  const modelEvent = getModelEvent(renderOpts)
+  const changeEvent = getChangeEvent(renderOpts)
+  const isSameEvent = changeEvent === modelEvent
   const ons = {}
   XEUtils.objectEach(events, (func, key) => {
     ons[key] = function (...args) {
@@ -59,21 +68,21 @@ function getOns (renderOpts, params, inputFunc, changeFunc) {
     }
   })
   if (inputFunc) {
-    ons.input = function (value) {
+    ons[modelEvent] = function (value) {
       inputFunc(value)
-      if (events && events.input) {
-        events.input(value)
+      if (events && events[modelEvent]) {
+        events[modelEvent](value)
       }
-      if (isInputType && changeFunc) {
+      if (isSameEvent && changeFunc) {
         changeFunc()
       }
     }
   }
-  if (!isInputType && changeFunc) {
-    ons[type] = function (...args) {
+  if (!isSameEvent && changeFunc) {
+    ons[changeEvent] = function (...args) {
       changeFunc()
-      if (events && events[type]) {
-        events[type](params, ...args)
+      if (events && events[changeEvent]) {
+        events[changeEvent](params, ...args)
       }
     }
   }
@@ -557,12 +566,6 @@ const renderMap = {
       const itemValue = XEUtils.get(data, property)
       return [
         h(getDefaultComponentName(renderOpts), {
-          model: {
-            value: itemValue,
-            callback (value) {
-              XEUtils.set(data, property, value)
-            }
-          },
           props: getItemProps(renderOpts, params, itemValue),
           on: getItemOns(renderOpts, params)
         },

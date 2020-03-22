@@ -11,7 +11,7 @@ module.exports = {
         i18n: '国際化',
 
         icon: 'アイコン',
-        basics: '基礎機能',
+        basics: 'ベーステーブル',
         base: '基础',
         size: '尺寸',
         width: '列宽',
@@ -126,7 +126,7 @@ module.exports = {
         partialLoad: '局部加载',
         fullPartialLoad: '完整的局部加载',
 
-        editable: 'テーブルの編集可能',
+        editable: '編集可能',
         popupForm: '弹框编辑',
         manual: '手动触发',
         click: '点击触发',
@@ -169,7 +169,7 @@ module.exports = {
         tooltip: '文字提示',
         form: '表单',
 
-        other: '第三者ライブラリを使用する',
+        other: '第三者にまとめる',
         elementRender: 'element-ui -> 自定义渲染',
         iviewRender: 'iview -> 自定义渲染',
         antd: 'ant-design-vue -> 自定义渲染',
@@ -202,15 +202,15 @@ module.exports = {
         menus: '(全局) 快捷菜单',
 
         renderer: '(进阶) 渲染器',
-        rendererFilter: '筛选渲染器',
-        rendererDefault: '单元格渲染器',
-        rendererEdit: '可编辑渲染器',
-        rendererExpand: '内容渲染器',
-        rendererToolbar: '工具栏渲染器',
-        rendererForm: '表单渲染器',
-        rendererEmpty: '空数据渲染器',
+        rendererFilter: '筛选渲染',
+        rendererDefault: '单元格渲染',
+        rendererEdit: '可编辑渲染',
+        rendererExpand: '内容渲染',
+        rendererToolbar: '工具栏渲染',
+        rendererForm: '表单渲染',
+        rendererEmpty: '空数据渲染',
 
-        interceptor: '(进阶) 事件拦截器',
+        interceptor: '(进阶) 事件拦截',
 
         optimize: '优化建议',
         optimizeScroller: '虚拟滚动优化',
@@ -563,7 +563,9 @@ module.exports = {
           name: '用来标识这一项',
           status: '状态',
           disabled: '是否禁用',
-          loading: '是否加载中'
+          loading: '是否加载中',
+          placement: '固定显示下拉面板的方向',
+          transfer: '是否将弹框容器插入于 body 内'
         }
       },
       modal: {

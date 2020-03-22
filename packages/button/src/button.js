@@ -9,17 +9,20 @@ export default {
     size: String,
     name: [String, Number],
     content: String,
+    placement: String,
     status: String,
     icon: String,
     disabled: Boolean,
-    loading: Boolean
+    loading: Boolean,
+    transfer: { type: Boolean, default: () => GlobalConfig.button.transfer }
   },
   data () {
     return {
       showPanel: false,
       animatVisible: false,
       panelIndex: 0,
-      panelStyle: null
+      panelStyle: null,
+      panelPlacement: null
     }
   },
   computed: {
@@ -39,6 +42,18 @@ export default {
       return this.status
     }
   },
+  mounted () {
+    const panelElem = this.$refs.panel
+    if (panelElem && this.transfer) {
+      document.body.appendChild(panelElem)
+    }
+  },
+  beforeDestroy () {
+    const panelElem = this.$refs.panel
+    if (panelElem && panelElem.parentNode) {
+      panelElem.parentNode.removeChild(panelElem)
+    }
+  },
   render (h) {
     const { $scopedSlots, $listeners, type, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible } = this
     return $scopedSlots.dropdowns ? h('div', {
@@ -48,6 +63,7 @@ export default {
       }]
     }, [
       h('button', {
+        ref: 'btn',
         class: ['vxe-button', `type--${btnType}`, {
           [`size--${vSize}`]: vSize,
           [`theme--${btnStatus}`]: btnStatus,
@@ -71,6 +87,7 @@ export default {
       h('div', {
         ref: 'panel',
         class: ['vxe-button--dropdown-panel', {
+          [`size--${vSize}`]: vSize,
           'animat--leave': animatVisible,
           'animat--enter': showPanel
         }],
@@ -86,6 +103,7 @@ export default {
         }, $scopedSlots.dropdowns.call(this))
       ])
     ]) : h('button', {
+      ref: 'btn',
       class: ['vxe-button', `type--${btnType}`, {
         [`size--${vSize}`]: vSize,
         [`theme--${btnStatus}`]: btnStatus,
@@ -154,15 +172,13 @@ export default {
     },
     mouseenterEvent () {
       const wrapperElem = this.$refs.panel
-      this.updateZindex()
-      this.panelStyle = {
-        zIndex: this.panelIndex
-      }
       wrapperElem.dataset.active = 'Y'
       this.animatVisible = true
       setTimeout(() => {
         if (wrapperElem.dataset.active === 'Y') {
           this.showPanel = true
+          this.updateZindex()
+          this.updatePlacement()
         }
       }, 10)
     },
@@ -179,6 +195,59 @@ export default {
           }, 200)
         }
       }, 200)
+    },
+    updatePlacement () {
+      this.$nextTick(() => {
+        const { $refs, transfer, placement, panelIndex } = this
+        const btnElem = $refs.btn
+        const panelElem = $refs.panel
+        const btnHeight = btnElem.offsetHeight
+        const btntWidth = btnElem.offsetWidth
+        const panelHeight = panelElem.offsetHeight
+        const panelWidth = panelElem.offsetWidth
+        const panelStyle = {
+          zIndex: panelIndex,
+          minWidth: `${btntWidth}px`
+        }
+        const { boundingTop, boundingLeft, visibleHeight } = DomTools.getAbsolutePos(btnElem)
+        let panelPlacement = 'bottom'
+        if (transfer) {
+          let top = boundingTop + btnHeight
+          if (placement === 'top') {
+            panelPlacement = 'top'
+            top = boundingTop - panelHeight
+          } else {
+            // 如果下面不够放，则向上
+            if (top + panelHeight > visibleHeight) {
+              panelPlacement = 'top'
+              top = boundingTop - panelHeight
+            }
+            // 如果上面不够放，则向下（优先）
+            if (top < 0) {
+              panelPlacement = 'bottom'
+              top = boundingTop + btnHeight
+            }
+          }
+          panelStyle.left = `${boundingLeft}px`
+          panelStyle.top = `${top}px`
+        } else {
+          if (placement === 'top') {
+            panelPlacement = 'top'
+            panelStyle.bottom = `${btnHeight}px`
+          } else {
+            // 如果下面不够放，则向上
+            if (boundingTop + btnHeight + panelHeight > visibleHeight) {
+              panelPlacement = 'top'
+              panelStyle.bottom = `${btnHeight}px`
+            }
+          }
+          if (panelWidth > btntWidth) {
+            panelStyle.left = `${(btntWidth - panelWidth) / 2}px`
+          }
+        }
+        this.panelStyle = panelStyle
+        this.panelPlacement = panelPlacement
+      })
     }
   }
 }

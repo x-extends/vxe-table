@@ -15,7 +15,7 @@
       <vxe-table-column field="sex" title="Select" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'Select', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
       <vxe-table-column field="sex1" title="Select" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'Select', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
       <vxe-table-column field="date3" title="DatePicker" :filters="[{data: []}]" :filter-render="{name: 'DatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="iSwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'iSwitch'}" :cell-render="{name: 'iSwitch', props: {disabled: true}}"></vxe-table-column>
+      <vxe-table-column field="flag" title="iSwitch" width="100" :filters="[{data: null}]" :filter-render="{name: 'iSwitch'}" :cell-render="{name: 'iSwitch', props: {disabled: true}}"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'Rate'}" :cell-render="{name: 'Rate', props: {disabled: true}}"></vxe-table-column>
     </vxe-table>
 
@@ -53,7 +53,7 @@ export default {
           <vxe-table-column field="sex" title="Select" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'Select', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
           <vxe-table-column field="sex1" title="Select" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'Select', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
           <vxe-table-column field="date3" title="DatePicker" :filters="[{data: []}]" :filter-render="{name: 'DatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
-          <vxe-table-column field="flag" title="iSwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'iSwitch'}" :cell-render="{name: 'iSwitch', props: {disabled: true}}"></vxe-table-column>
+          <vxe-table-column field="flag" title="iSwitch" width="100" :filters="[{data: null}]" :filter-render="{name: 'iSwitch'}" :cell-render="{name: 'iSwitch', props: {disabled: true}}"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'Rate'}" :cell-render="{name: 'Rate', props: {disabled: true}}"></vxe-table-column>
         </vxe-table>
         `,

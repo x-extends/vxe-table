@@ -170,6 +170,10 @@
             // },
             // buttons: []
           },
+          // 按钮的全局参数
+          button: {
+            // transfer: false
+          },
           // 模态窗口的全局参数
           modal: {
             // minWidth: 340,

@@ -127,7 +127,9 @@ export default {
         export default {
           created () {
             XEAjax.mockList(1000).then(data => {
-              this.$refs.xTable.reloadData(data)
+              if (this.$refs.xTable) {
+                this.$refs.xTable.reloadData(data)
+              }
             })
           }
         }
@@ -140,7 +142,9 @@ export default {
       this.tableData = data
     })
     XEAjax.mockList(1000).then(data => {
-      this.$refs.xTable.reloadData(data)
+      if (this.$refs.xTable) {
+        this.$refs.xTable.reloadData(data)
+      }
     })
   },
   mounted () {

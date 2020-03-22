@@ -18,13 +18,15 @@
         <li><i class="fa fa-battery-0"></i>{{ $t('app.body.other.plan.v4') }}</li>
       </ul>
     </div>
-    <div class="content">
-      <p>💰{{ $t('app.body.label.through') }} <a href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee {{ $t('app.body.other.donation') }}</a>{{ $t('app.body.other.donationTitle') }}<span class="red">（如果有问题需要支持可以留言）</span></p>
-      <div>
-        <img src="static/donation/pay.jpg">
+    <div class="content" style="padding-top: 50px">
+      <div style="display: inline-block;">
+        <div>💰{{ $t('app.body.label.through') }} <a href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee {{ $t('app.body.other.donation') }}</a>{{ $t('app.body.other.donationTitle') }}<span class="red">（如果有问题需要支持可以留言）</span></div>
+        <div>
+          <img src="static/donation/pay.jpg">
+        </div>
       </div>
-      <div>
-        <p style="padding-top: 40px">😘QQ群<br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">New issues</a></p>
+      <div style="display: inline-block;margin-left: 20em;">
+        <div>😘QQ群<br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">New issues</a></div>
         <img src="static/donation/qq.png">
       </div>
     </div>

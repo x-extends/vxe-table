@@ -11,7 +11,7 @@ module.exports = {
         i18n: 'Internationalization',
 
         icon: 'Icon',
-        basics: 'Basic',
+        basics: 'Basic table',
         base: 'Basics table',
         size: 'Size',
         ellipsis: 'Ellipsis',
@@ -43,7 +43,7 @@ module.exports = {
         html: 'HTML tag',
         data: 'Data and fields',
 
-        more: 'More',
+        more: 'Complex table',
         events: 'Event',
         template: 'Template',
         dynamic: 'Use v-for dynamic implementation',
@@ -170,7 +170,7 @@ module.exports = {
         tooltip: 'Tooltip',
         form: 'Form',
 
-        other: 'Using third-party libraries',
+        other: 'Integrated third party Library',
         elementRender: 'element-ui -> Custom Templates',
         iviewRender: 'iview -> Custom Templates',
         antd: 'ant-design-vue -> Custom Templates',
@@ -564,7 +564,9 @@ module.exports = {
           name: 'To identify this item',
           status: 'Status',
           disabled: 'Whether to disable',
-          loading: 'Loading or not'
+          loading: 'Loading or not',
+          placement: 'Fix the direction of the display drop - down panel',
+          transfer: 'Whether to insert the popup container into the body'
         }
       },
       modal: {

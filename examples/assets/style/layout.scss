@@ -246,6 +246,7 @@ body,
           color: #409eff;
         }
         &.router-link-active {
+          font-size: 16px;
           font-weight: 700;
         }
         &.disabled {
@@ -258,6 +259,17 @@ body,
       color: #444;
       cursor: pointer;
       text-decoration: none;
+    }
+    .is-donation {
+      .nav-link {
+        font-size: 15px;
+        font-weight: 700;
+        color: green;
+        &.router-link-active {
+          font-size: 16px;
+          color: green;
+        }
+      }
     }
   }
   > .body {

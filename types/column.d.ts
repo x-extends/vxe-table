@@ -102,17 +102,28 @@ export class FormPanel {
 export class ColumnConfig {
   id: string;
   title: string;
+  width: number | string;
+  minWidth: number | string;
+  resizable: boolean;
   property: string;
   type: string;
+  sortable: boolean;
   visible: boolean;
   defaultVisible: any;
   checked: boolean;
   disabled: boolean;
-  filters: { label: string | number, value?: any, data?: any, checked?: boolean }[];
+  treeNode: boolean;
+  filters: { label?: string | number, value?: any, data?: any, checked?: boolean }[];
+  filterRender: FilterRenderOptions;
+  cellRender: CellRenderOptions;
+  editRender: EditRenderOptions;
+  contentRender: ContentRenderOptions;
   order: string;
   renderWidth: number;
   renderHeight: number;
   resizeWidth: number;
+
+  getTitle(): string;
 }
 
 /**

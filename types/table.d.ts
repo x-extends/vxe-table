@@ -1,6 +1,9 @@
 import { VXETableModule } from './component'
 import { ColumnConfig } from './column'
 import { RenderParams, RenderOptions } from './extends/renderer'
+import { ExportOptons, ImportOptons, PrintOptons } from './extends/export'
+import { EditRule } from './extends/validator'
+import { MenuOptions, FirstMenuOption } from './extends/menu'
 
 /**
  * 表格
@@ -95,48 +98,48 @@ export declare class Table extends VXETableModule {
   // 是否自动根据状态属性去更新响应式表格宽高
   syncResize?: boolean | string;
   // 序号配置项
-  seqConfig?: any;
+  seqConfig?: SeqConfig;
   // 排序配置项
-  sortConfig?: any;
+  sortConfig?: SortConfig;
   // 筛选配置项
-  filterConfig?: any;
+  filterConfig?: FilterConfig;
   // 单选框配置
-  radioConfig?: any;
+  radioConfig?: RadioConfig;
   // 复选框配置项
-  checkboxConfig?: any;
-  // tooltip 配置项
-  tooltipConfig?: any;
+  checkboxConfig?: CheckboxConfig;
+  // 提示信息配置项
+  tooltipConfig?: TooltipConfig;
   // 导出配置项
-  exportConfig?: boolean | any;
+  exportConfig?: boolean | ExportOptons;
   // 导入配置项
-  importConfig?: boolean | any;
+  importConfig?: boolean | ImportOptons;
   // 打印配置项
-  printConfig?: any;
+  printConfig?: PrintOptons;
   // 展开行配置项
-  expandConfig?: any;
+  expandConfig?: ExpandConfig;
   // 树形结构配置项
-  treeConfig?: boolean | any;
+  treeConfig?: boolean | TreeConfig;
   // 快捷菜单配置项
-  contextMenu?: boolean | any;
+  contextMenu?: boolean | ContextMenuConfig;
   // 鼠标配置项
-  mouseConfig?: any;
+  mouseConfig?: MouseConfig;
   // 按键配置项
-  keyboardConfig?: any;
+  keyboardConfig?: KeyboardConfig;
   // 编辑配置项
-  editConfig?: boolean | any;
+  editConfig?: boolean | EditConfig;
   // 校验配置项
-  validConfig?: any;
+  validConfig?: ValidConfig;
   // 校验规则配置项
-  editRules?: any;
+  editRules?: EditVaildRules;
   // 空内容渲染配置项
   emptyRender?: boolean | EmptyRender;
   // 优化配置项
-  optimization?: any;
+  optimization?: OptimizationConfig;
   // 额外的参数
   params?: any;
 
   // computed
-  vSize?: string;
+  vSize: string;
 
   // methods
   /**
@@ -186,20 +189,20 @@ export declare class Table extends VXETableModule {
    * @param tr 行节点元素
    */
   getRowNode(tr: any): {
-    item: any,
-    items: any[],
-    index: number,
-    parent: any
+    item: any;
+    items: any[];
+    index: number;
+    parent: any;
   };
   /**
    * 根据 th/td 元素获取对应的 column 信息
    * @param cell 单元格节点元素
    */
   getColumnNode(cell: any): {
-    item: ColumnConfig,
-    items: ColumnConfig[],
-    index: number,
-    parent: ColumnConfig
+    item: ColumnConfig;
+    items: ColumnConfig[];
+    index: number;
+    parent: ColumnConfig;
   };
   /**
    * 根据 row 获取相对于 data 中的索引
@@ -243,13 +246,13 @@ export declare class Table extends VXETableModule {
    * @param rows 指定行
    * @param field 字段名
    */
-  revertData(rows: any, field?: string): Promise<any>;
+  revertData(rows?: any, field?: string): Promise<any>;
   /**
    * 手动清空单元格内容，如果不传参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容
    * @param rows 指定行
    * @param field 字段名
    */
-  clearData(rows: any, field?: string): Promise<any>;
+  clearData(rows?: any, field?: string): Promise<any>;
   /**
    * 用于 edit-config，判断行是否为新增的临时数据
    * @param row 指定行
@@ -280,10 +283,10 @@ export declare class Table extends VXETableModule {
    * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
    */
   getTableColumn(): {
-    collectColumn: ColumnConfig[],
-    fullColumn: ColumnConfig[],
-    visibleColumn: ColumnConfig[],
-    tableColumn: ColumnConfig[]
+    collectColumn: ColumnConfig[];
+    fullColumn: ColumnConfig[];
+    visibleColumn: ColumnConfig[];
+    tableColumn: ColumnConfig[];
   };
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
@@ -303,10 +306,10 @@ export declare class Table extends VXETableModule {
    * 完整的全量表体数据、处理条件之后的全量表体数据、当前渲染中的表体数据、当前渲染中的表尾数据
    */
   getTableData(): {
-    fullData: any[],
-    visibleData: any[],
-    tableData: any[],
-    footerData: any[]
+    fullData: any[];
+    visibleData: any[];
+    tableData: any[];
+    footerData: any[][];
   };
   /**
    * 隐藏指定列
@@ -323,7 +326,7 @@ export declare class Table extends VXETableModule {
    * 如果已关联工具栏，则会同步更新
    * @param options 可选参数
    */
-  resetColumn(options: { visible?: boolean, resizable?: boolean }): Promise<any>;
+  resetColumn(options: boolean | { visible?: boolean, resizable?: boolean }): Promise<any>;
   /**
    * 刷新列配置
    * 对于动态修改属性、显示/隐藏列等场景下可能会用到
@@ -592,7 +595,7 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 mouse-config.selected，获取选中的单元格信息
    */
-  getSelectedCell(): { row: any, colum: any };
+  getSelectedCell(): { row: any, column: any };
   /**
    * 手动清除单元格选中状态
    */
@@ -630,9 +633,9 @@ export declare class Table extends VXETableModule {
    * 获取新增、删除、更改的数据
    */
   getRecordset(): {
-    insertRecords: any[],
-    removeRecords: any[],
-    updateRecords: any[]
+    insertRecords: any[];
+    removeRecords: any[];
+    updateRecords: any[];
   };
   /**
    * 用于 edit-config，获取新增的临时数据
@@ -654,13 +657,13 @@ export declare class Table extends VXETableModule {
    * 用于 edit-config，获取已激活的行数据
    */
   getActiveRecord(): {
-    row: any,
-    rowIndex: number,
-    $rowIndex: number,
-    column: ColumnConfig,
-    columnIndex: number,
-    $columnIndex: number,
-    cell: HTMLElement
+    row: any;
+    rowIndex: number;
+    $rowIndex: number;
+    column: ColumnConfig;
+    columnIndex: number;
+    $columnIndex: number;
+    cell: any;
   };
   /**
    * 用于 edit-config，判断行是否为激活编辑状态
@@ -704,22 +707,22 @@ export declare class Table extends VXETableModule {
    * 打开高级导出
    * @param options 参数
    */
-  openExport(options: any): Promise<any>;
+  openExport(options: ExportOptons): Promise<any>;
   /**
    * 将表格数据导出
    * @param options 参数
    */
-  exportData(options: any): Promise<any>;
+  exportData(options: ExportOptons): Promise<any>;
   /**
    * 打开高级导入
    * @param options 参数
    */
-  openImport(options: any): Promise<any>;
+  openImport(options: ImportOptons): Promise<any>;
   /**
    * 将数据导入表格
    * @param options 参数
    */
-  importData(options: any): Promise<any>;
+  importData(options: ImportOptons): Promise<any>;
   /**
    * 读取本地文件
    * @param options 参数
@@ -729,7 +732,204 @@ export declare class Table extends VXETableModule {
    * 打印配置项
    * @param options 参数
    */
-  print(options: any): Promise<any>;
+  print(options: PrintOptons): Promise<any>;
+}
+
+/**
+ * 序号配置项
+ */
+export interface SeqConfig {
+  startIndex?: number;
+  seqMethod?(params: { row: any, rowIndex: number, column: ColumnConfig, columnIndex: number }): number;
+}
+
+/**
+ * 排序配置项
+ */
+export interface SortConfig {
+  defaultSort?: {
+    field?: string;
+    order?: 'asc' | 'desc';
+  };
+  sortMethod?(params: { data: any[], column: ColumnConfig, property: string, order: string }): any[];
+  remote?: boolean;
+  trigger?: 'default' | 'cell';
+  showIcon: boolean;
+  iconAsc?: string;
+  iconDesc?: string;
+}
+
+/**
+ * 筛选配置项
+ */
+export interface FilterConfig {
+  remote?: boolean;
+  showIcon?: string;
+  iconNone?: string;
+  iconMatch?: string;
+}
+
+/**
+ * 单选框配置
+ */
+export interface RadioConfig {
+  reserve?: boolean;
+  labelField?: string;
+  checkRowKey?: string | number;
+  checkMethod?(params: { row: any }): boolean;
+  trigger?: 'default' | 'cell' | 'row';
+  highlight?: boolean;
+}
+
+/**
+ * 复选框配置项
+ */
+export interface CheckboxConfig {
+  reserve?: boolean;
+  labelField?: string;
+  checkField?: string;
+  showHeader?: boolean;
+  checkAll?: boolean;
+  checkRowKeys?: string[] | number[];
+  checkStrictly?: boolean;
+  strict?: boolean;
+  checkMethod?(params: { row: any }): boolean;
+  trigger?: 'default' | 'cell' | 'row';
+  highlight?: boolean;
+  range?: boolean;
+}
+
+/**
+ * 提示信息配置项
+ */
+export interface TooltipConfig {
+  theme?: 'dark' | 'light';
+  enterable?: boolean;
+  leaveDelay?: number;
+}
+
+/**
+ * 展开行配置项
+ */
+export interface ExpandConfig {
+  labelField?: string;
+  expandAll?: boolean;
+  expandRowKeys?: string[] | number[];
+  accordion?: boolean;
+  trigger?: 'default' | 'cell' | 'row';
+  lazy?: boolean;
+  loadMethod?(params: { row: any, rowIndex: number, $rowIndex: number }): Promise<any>;
+  toggleMethod?(params: { expanded: boolean, row: any, column: ColumnConfig, columnIndex: number, $columnIndex: number }): boolean;
+  visibleMethod?(params: { expanded: boolean, row: any, column: ColumnConfig, columnIndex: number, $columnIndex: number }): boolean;
+  iconOpen?: string;
+  iconClose?: string;
+  iconLoaded?: string;
+}
+
+/**
+ * 树形结构配置项
+ */
+export interface TreeConfig {
+  children?: string;
+  indent?: number;
+  line?: boolean;
+  expandAll?: boolean;
+  expandRowKeys?: string[] | number[];
+  accordion?: boolean;
+  trigger?: 'default' | 'cell' | 'row';
+  lazy?: boolean;
+  hasChild?: string;
+  loadMethod?(params: { row: any }): Promise<any[]>;
+  toggleMethod?(params: { expanded: boolean, row: any, column: ColumnConfig, columnIndex: number, $columnIndex: number }): boolean;
+  iconOpen?: string;
+  iconClose?: string;
+  iconLoaded?: string;
+}
+
+/**
+ * 快捷菜单配置项
+ */
+export interface ContextMenuConfig {
+  header?: MenuOptions;
+  body?: MenuOptions;
+  footer?: MenuOptions;
+  trigger?: 'default' | 'cell';
+  visibleMethod?(params: { type: string, options: FirstMenuOption[], columns: ColumnConfig[], row?: any, rowIndex?: number, column?: ColumnConfig, columnIndex?: number }): boolean;
+  className?: string;
+}
+
+/**
+ * 鼠标配置项
+ */
+export interface MouseConfig {
+  selected?: boolean;
+}
+
+/**
+ * 按键配置项
+ */
+export interface KeyboardConfig {
+  isArrow?: boolean;
+  isDel?: boolean;
+  isEnter?: boolean;
+  isTab?: boolean;
+  isEdit?: boolean;
+  /**
+   * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
+   */
+  editMethod?(params: { row: any, rowIndex: number, column: ColumnConfig, columnIndex: number, cell: any }): boolean;
+}
+
+/**
+ * 编辑配置项
+ */
+export interface EditConfig {
+  trigger?: 'manual' | 'click' | 'dblclick';
+  mode?: string;
+  showIcon?: boolean;
+  showStatus?: boolean;
+  autoClear?: boolean;
+  /**
+   * 该方法的返回值用来决定该单元格是否允许编辑
+   */
+  activeMethod?(params: { row: any, rowIndex: number, column: ColumnConfig, columnIndex: number }): boolean;
+}
+
+/**
+ * 校验配置项
+ */
+export interface ValidConfig {
+  autoPos?: boolean;
+  message?: string;
+  maxWidth?: number;
+}
+
+/**
+ * 校验规则配置项
+ */
+export interface EditVaildRules {
+  [field: string]: EditRule[];
+}
+
+/**
+ * 优化配置项
+ */
+export interface OptimizationConfig {
+  animat?: boolean;
+  cloak?: boolean;
+  delayHover?: boolean;
+  scrollX?: {
+    gt?: number;
+    oSize?: number;
+    rSize?: number;
+    vSize?: number;
+  };
+  scrollY?: {
+    gt?: number;
+    oSize?: number;
+    rSize?: number;
+    vSize?: number;
+  };
 }
 
 /**
