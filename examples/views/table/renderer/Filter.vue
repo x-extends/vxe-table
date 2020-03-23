@@ -6,7 +6,8 @@
       className 自定义容器的 className<br>
       isFooter 是否显示底部按钮<br>
       renderFilter (h, renderOpts, <vxe-tooltip content="{ column, columnIndex, columnIndex, $panel }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 内容<br>
-      filterMethod (<vxe-tooltip content="{ option, row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选函数<br>
+      filterMethod (<vxe-tooltip content="{ option, row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选数据函数<br>
+      filterResetMethod (<vxe-tooltip content="{ options, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选重置函数<br>
     </p>
 
     <vxe-table

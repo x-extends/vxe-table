@@ -38,8 +38,9 @@ function install (Vue) {
   VXETable._modal = 1
   Vue.component(VXEModal.name, VXEModal)
   AlertController = Vue.extend(VXEModal)
-  Vue.prototype.$XModal = Modal
-  VXETable.$modal = Modal
+  Vue.prototype.$XModal = ModalController
+  VXETable.$modal = ModalController
+  VXETable.modal = ModalController
 }
 
 /**
@@ -62,12 +63,14 @@ function getModal (id) {
   return allActivedModals.find($modal => $modal.id === id)
 }
 
-export const Modal = {
+const ModalController = {
   install,
   get: getModal,
   close: closeModal,
   open: openModal
 }
+
+export const Modal = ModalController
 
 const shortcutTypes = ['alert', 'confirm', 'message']
 
@@ -84,7 +87,7 @@ shortcutTypes.forEach((type, index) => {
   if (index === 1) {
     defOpts.status = 'question'
   }
-  Modal[type] = function (message, title, options) {
+  ModalController[type] = function (message, title, options) {
     let opts
     if (XEUtils.isObject(message)) {
       opts = message
@@ -97,4 +100,4 @@ shortcutTypes.forEach((type, index) => {
   }
 })
 
-export default Modal
+export default ModalController

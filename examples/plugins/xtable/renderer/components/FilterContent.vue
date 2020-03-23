@@ -62,6 +62,7 @@ export default {
     this.option = option
     this.colValList = colValList
     this.valList = colValList
+    this.searchEvent()
   },
   methods: {
     searchEvent () {

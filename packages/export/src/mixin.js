@@ -26,7 +26,7 @@ function hasTreeChildren ($xetable, row) {
 
 function getSeq ($xetable, row, rowIndex, column, columnIndex) {
   const seqOpts = $xetable.seqOpts
-  const seqMethod = seqOpts.seqMethod
+  const seqMethod = seqOpts.seqMethod || column.seqMethod
   return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : (seqOpts.startIndex + rowIndex + 1)
 }
 
@@ -795,7 +795,7 @@ export default {
       const types = defOpts.types || VXETable.exportTypes
       const checkMethod = exportOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)
       if (!exportConfig) {
-        UtilTools.warn('vxe.error.reqProp', ['export-config'])
+        UtilTools.error('vxe.error.reqProp', ['export-config'])
       }
       // 处理类型
       const typeList = types.map(value => {

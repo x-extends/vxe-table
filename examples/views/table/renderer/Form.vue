@@ -5,6 +5,7 @@
       配置参数：<br>
       renderItem (h, renderOpts, <vxe-tooltip content="{ data, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项<br>
       itemVisibleMethod (<vxe-tooltip content="{ data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项可视函数<br>
+      itemResetMethod (<vxe-tooltip content="{ data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项重置函数<br>
     </p>
 
     <vxe-grid

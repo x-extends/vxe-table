@@ -103,8 +103,9 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
   * ![Button](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=Button)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/style/style.css?compression=gzip&label=style&color=green) （按钮）
 * Plugins（插件）
   * 增强插件
-    * [![vxe-table-plugin-export-xlsx](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-export-xlsx/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20export%20xlsx)](https://www.npmjs.org/package/vxe-table-plugin-export-xlsx) ([导出 xlsx](https://www.npmjs.com/package/vxe-table-plugin-export-xlsx))
-    * [![vxe-table-plugin-menus](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-menus/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20menus)](https://www.npmjs.org/package/vxe-table-plugin-menus) ([菜单插件](https://www.npmjs.com/package/vxe-table-plugin-menus))
+    * [![vxe-table-plugin-export-pdf](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-export-pdf/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20export%20pdf)](https://www.npmjs.org/package/vxe-table-plugin-export-pdf) ([PDF 导出插件](https://www.npmjs.com/package/vxe-table-plugin-export-pdf))
+    * [![vxe-table-plugin-export-xlsx](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-export-xlsx/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20export%20xlsx)](https://www.npmjs.org/package/vxe-table-plugin-export-xlsx) ([XLSX 导出插件](https://www.npmjs.com/package/vxe-table-plugin-export-xlsx))
+    * [![vxe-table-plugin-menus](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-menus/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20menus)](https://www.npmjs.org/package/vxe-table-plugin-menus) ([快捷菜单插件](https://www.npmjs.com/package/vxe-table-plugin-menus))
     * [![vxe-table-plugin-shortcut-key](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-shortcut-key/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20shortcut%20key)](https://www.npmjs.org/package/vxe-table-plugin-shortcut-key) ([快捷键插件](https://www.npmjs.com/package/vxe-table-plugin-shortcut-key))
   * 适配插件
     * [![vxe-table-plugin-element](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20element)](https://www.npmjs.org/package/vxe-table-plugin-element)![style](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-element/dist/style.min.css?compression=gzip&label=style&color=green) ([element-ui 适配插件](https://www.npmjs.org/package/vxe-table-plugin-element))
@@ -147,6 +148,7 @@ Vue.use(VXETable)
 <!-- 引入脚本 -->
 <script src="https://unpkg.com/xe-utils"></script>
 <script src="https://unpkg.com/vxe-table"></script>
+<!-- 建议使用 CDN 方式引入的用户在链接地址上锁定版本，避免受到非兼容性更新的影响 -->
 ```
 
 ## Example

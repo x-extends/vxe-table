@@ -397,7 +397,6 @@ export default {
     maxlength: [String, Number],
     autocomplete: { type: String, default: 'off' },
     form: String,
-    editable: Boolean,
     dateConfig: Object,
     size: String,
     min: { type: [String, Number], default: null },

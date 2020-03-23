@@ -216,8 +216,8 @@ const apis = [
         list: []
       },
       {
-        name: 'index-method',
-        descKey: 'app.api.tableColumn.desc.indexMethod',
+        name: 'seq-method',
+        descKey: 'app.api.tableColumn.desc.seqMethod',
         version: '',
         type: 'Function',
         enum: '',
@@ -293,6 +293,15 @@ const apis = [
             type: 'Boolean',
             enum: '',
             defVal: 'false',
+            list: []
+          },
+          {
+            name: 'resetValue',
+            desc: '重置时的默认值',
+            version: '',
+            type: 'Any',
+            enum: '',
+            defVal: '',
             list: []
           },
           {

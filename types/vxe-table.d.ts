@@ -15,9 +15,6 @@ export interface VXETableOptions {
 
 export interface VXETableStatic {
   install(vue: typeof Vue): void;
-  Vue: typeof Vue;
-  Table: any;
-  Grid: any;
   /**
    * 全局的模态窗口
    */
@@ -74,10 +71,14 @@ export interface VXETableStatic {
    * 全局快捷菜单
    */
   menus: menus;
+  /**
+   * 全局的模态窗口
+   */
+  modal: ModalController;
 }
 
 /**
- * 一个简单实用的 Vue 表组件
+ * 一个基于 vue 的表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、模态窗口、自定义模板、贼灵活的配置项、扩展接口等...
  */
 export declare const VXETable: VXETableStatic
 
@@ -105,6 +106,7 @@ export * from './select'
 export * from './modal'
 export * from './tooltip'
 export * from './form'
+export * from './form-item'
 
 export * from './extends/renderer'
 export * from './extends/interceptor'

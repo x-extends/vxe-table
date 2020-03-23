@@ -20,6 +20,13 @@ function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
 
+function getNextSortOrder (_vm, column) {
+  const orders = _vm.sortOpts.orders
+  const currOrder = column.order || null
+  const oIndex = orders.indexOf(currOrder) + 1
+  return orders[oIndex < orders.length ? oIndex : 0]
+}
+
 /**
  * 判断是否点击了单选框或复选框
  */
@@ -1301,7 +1308,9 @@ const Methods = {
       } else if (DomTools.getEventTargetNode(evnt, filterWrapper.$el).flag) {
         // 如果点击筛选容器
       } else {
-        this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
+        if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-dropdown--panel').flag) {
+          this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
+        }
       }
     }
     // 如果已激活了编辑状态
@@ -2102,7 +2111,7 @@ const Methods = {
     const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
     const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
-      this.triggerSortEvent(evnt, column, column.order ? (column.order === 'desc' ? '' : 'desc') : 'asc')
+      this.triggerSortEvent(evnt, column, getNextSortOrder(this, column))
     }
     this.$emit('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt)
     if (this.highlightCurrentColumn) {
@@ -2256,13 +2265,13 @@ const Methods = {
     }
   },
   sort (field, order) {
-    const { visibleColumn, tableFullColumn, sortOpts } = this
-    const column = XEUtils.find(visibleColumn, item => item.property === field)
+    const { tableFullColumn, sortOpts } = this
+    const column = this.getColumnByField(field)
     if (column) {
       const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : sortOpts.remote
       if (column.sortable || column.remoteSort) {
-        if (!order) {
-          order = column.order === 'desc' ? 'asc' : 'desc'
+        if (arguments.length <= 1) {
+          order = getNextSortOrder(this, column)
         }
         if (column.order !== order) {
           tableFullColumn.forEach(column => {

@@ -5,36 +5,126 @@ import { VXETableModule } from './component'
  * 模态窗口
  */
 export declare class Modal extends VXETableModule {
+  /**
+   * 绑定值
+   */
   value?: boolean;
+  /**
+   * 设置唯一的 id
+   */
   id?: string;
-  type?: string;
+  /**
+   * 窗口类型
+   */
+  type?: 'alert' | 'confirm' | 'message';
+  /**
+   * 是否加载中
+   */
   loading?: boolean;
+  /**
+   * 只对 type=alert | confirm | message 有效，消息状态
+   */
   status?: string;
+  /**
+   * 自定义状态图标
+   */
   iconStatus?: string;
+  /**
+   * 只对 type=message 有效，消息距离顶部的位置
+   */
   top?: number | string;
+  /**
+   * 窗口的标题
+   */
   title?: string;
+  /**
+   * 只对 type=message 有效，自动关闭的延时
+   */
   duration?: number | string;
+  /**
+   * 窗口的内容
+   */
   message?: string | Function;
+  /**
+   * 是否锁住页面，不允许窗口之外的任何操作
+   */
   lockView?: boolean;
+  /**
+   * 是否锁住滚动条，不允许页面滚动
+   */
   lockScroll?: boolean;
+  /**
+   * 是否显示遮罩层
+   */
   mask?: boolean;
+  /**
+   * 是否允许点击遮罩层关闭窗口
+   */
   maskClosable?: boolean;
+  /**
+   * 是否允许按 Esc 键关闭窗口
+   */
   escClosable?: boolean;
+  /**
+   * 是否允许拖动调整窗口大小
+   */
   resize?: boolean;
+  /**
+   * 是否显示头部
+   */
   showHeader?: boolean;
+  /**
+   * 是否显示底部
+   */
   showFooter?: boolean;
+  /**
+   * 只对 type=modal 有效，是否允许通过双击头部放大或还原窗口
+   */
   dblclickZoom?: boolean;
+  /**
+   * 窗口的宽度
+   */
   width?: number | string;
+  /**
+   * 窗口的高度
+   */
   height?: number | string;
+  /**
+   * 窗口的最小宽度
+   */
   minWidth?: number | string;
+  /**
+   * 窗口的最小高度
+   */
   minHeight?: number | string;
+  /**
+   * 自定义堆叠顺序
+   */
   zIndex?: number;
   marginSize?: number | string;
+  /**
+   * 默认最大化显示
+   */
   fullscreen?: boolean;
+  /**
+   * 记忆功能，会记住最后操作状态，再次打开窗口时还原窗口状态
+   */
   remember?: boolean;
+  /**
+   * 在窗口关闭时销毁内容
+   */
   destroyOnClose?: boolean;
+  /**
+   * 设置标题内容过长时显示为省略号
+   */
   showTitleOverflow?: boolean;
+  /**
+   * 是否将弹框容器插入于 body 内
+   */
   transfer?: boolean;
+  /**
+   * 是否启用 localStorage 本地保存，会将窗口拖动的状态保存到本地
+   */
   storage?: boolean;
   storageKey?: string;
   animat?: boolean;

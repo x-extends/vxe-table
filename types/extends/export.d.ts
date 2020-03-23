@@ -1,4 +1,4 @@
-import { Table } from '../table'
+import { Table, TableRenderParams } from '../table'
 import { Grid, GridRenderParams } from '../grid'
 import { ColumnConfig } from '../column'
 
@@ -183,4 +183,15 @@ export interface InterceptorImportParams extends GridRenderParams {
   options: ExportOptons;
   columns: ColumnConfig[];
   datas: any[];
+}
+
+export interface CellExportParams extends TableRenderParams {
+  row: any;
+  column: ColumnConfig;
+}
+
+export interface FooterCellExportParams extends TableRenderParams {
+  items: any[];
+  itemIndex: number;
+  column: ColumnConfig;
 }

@@ -100,11 +100,13 @@ function getEditOns (renderOpts, params) {
   })
 }
 
-function getFilterOns (renderOpts, params, option, changeFunc) {
+function getFilterOns (renderOpts, params, option) {
   return getOns(renderOpts, params, (value) => {
     // 处理 model 值双向绑定
     option.data = value
-  }, changeFunc)
+  }, () => {
+    handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+  })
 }
 
 function getItemOns (renderOpts, params) {
@@ -145,7 +147,7 @@ function getNativeFilterOns (renderOpts, params, option) {
     // 处理 model 值双向绑定
     option.data = evnt.target.value
   }, () => {
-    handleConfirmFilter(params, !!option.data, option)
+    handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
   })
 }
 
@@ -298,10 +300,7 @@ function defaultFilterRender (h, renderOpts, params) {
     const optionValue = option.data
     return h(getDefaultComponentName(renderOpts), {
       props: getCellEditFilterProps(renderOpts, renderOpts, optionValue),
-      on: getFilterOns(renderOpts, params, option, () => {
-        // 处理 change 事件相关逻辑
-        getNativeItemOns(params, column, !!option.data, option)
-      })
+      on: getFilterOns(renderOpts, params, option)
     })
   })
 }
@@ -552,10 +551,7 @@ const renderMap = {
         const optionValue = option.data
         return h(getDefaultComponentName(renderOpts), {
           props: getCellEditFilterProps(renderOpts, params, optionValue),
-          on: getFilterOns(renderOpts, params, option, () => {
-            // 处理 change 事件相关逻辑
-            getNativeItemOns(params, column, !!option.data, option)
-          })
+          on: getFilterOns(renderOpts, params, option)
         },
         renderOpts.optionGroups ? renderDefaultOptgroups(h, renderOpts, params, renderDefaultOptions) : renderDefaultOptions(h, renderOpts.options, renderOpts, params))
       })

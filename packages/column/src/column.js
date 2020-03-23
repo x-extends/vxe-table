@@ -37,7 +37,7 @@ const props = {
   // 格式化显示内容
   formatter: [Function, Array, String],
   // 自定义索引方法
-  indexMethod: Function,
+  seqMethod: Function,
   // 是否允许排序
   sortable: Boolean,
   // 是否服务端排序

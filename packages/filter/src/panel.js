@@ -109,7 +109,7 @@ export default {
     renderFooter (h) {
       const { filterStore } = this
       const { column, multiple } = filterStore
-      const filterRender = column.own.filterRender
+      const filterRender = column.filterRender
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
       return multiple && (!compConf || compConf.isFooter !== false) ? [
         h('div', {

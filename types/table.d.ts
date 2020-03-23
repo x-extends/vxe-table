@@ -1,5 +1,5 @@
 import { VXETableModule } from './component'
-import { ColumnConfig } from './column'
+import { ColumnConfig, CellRenderParams } from './column'
 import { RenderParams, RenderOptions } from './extends/renderer'
 import { ExportOptons, ImportOptons, PrintOptons } from './extends/export'
 import { EditRule } from './extends/validator'
@@ -740,7 +740,7 @@ export declare class Table extends VXETableModule {
  */
 export interface SeqConfig {
   startIndex?: number;
-  seqMethod?(params: { row: any, rowIndex: number, column: ColumnConfig, columnIndex: number }): number;
+  seqMethod?(params: CellRenderParams): number;
 }
 
 /**
@@ -748,9 +748,10 @@ export interface SeqConfig {
  */
 export interface SortConfig {
   defaultSort?: {
-    field?: string;
-    order?: 'asc' | 'desc';
+    field: string;
+    order: 'asc' | 'desc' | null;
   };
+  orders?: ('asc' | 'desc' | null)[];
   sortMethod?(params: { data: any[], column: ColumnConfig, property: string, order: string }): any[];
   remote?: boolean;
   trigger?: 'default' | 'cell';
@@ -943,3 +944,5 @@ export class TableRenderParams extends RenderParams {
    */
   $table: Table;
 }
+
+export class EmptyRenderParams extends TableRenderParams {}

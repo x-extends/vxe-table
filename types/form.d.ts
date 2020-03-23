@@ -1,5 +1,5 @@
 import { VXETableModule } from './component'
-import { RenderParams, RenderOptions } from './extends/renderer'
+import { ItemOptions } from './form-item'
 
 /**
  * 表单
@@ -8,12 +8,12 @@ export declare class Form extends VXETableModule {
   loading?: boolean;
   data?: any;
   span?: string | number;
-  align?: string;
-  titleAlign?: string;
+  align?: 'left' | 'center' | 'right';
+  titleAlign?: 'left' | 'center' | 'right';
   titleWidth?: string | number;
   titleColon?: boolean;
-  items?: any[];
-  rules?: Object;
+  items?: ItemOptions[];
+  rules?: FormVaildRules;
 
   // computed
   vSize?: string;
@@ -41,50 +41,58 @@ export declare class Form extends VXETableModule {
   toggleCollapse(): Promise<any>;
 }
 
-/**
- * 项渲染配置项
- */
-export interface ItemRenderOptions extends RenderOptions {
+export class FormPanel {
   /**
-   * 下拉选项列表（需要渲染器支持）
+   * 筛选所有发生改变
+   * @param evnt 事件
+   * @param checked 是否选中
    */
-  options?: any[];
+  changeAllOption(evnt: any, checked: boolean): any;
   /**
-   * 下拉选项属性参数配置（需要渲染器支持）
+   * 筛选选项发生改变
+   * @param evnt 事件
+   * @param checked 是否选中
+   * @param option 选项对象
    */
-  optionProps?: { value?: string, label?: string, disabled?: string };
+  changeOption(evnt: any, checked: boolean, option: any): any;
   /**
-   * 下拉分组选项列表（需要渲染器支持）
+   * 确认筛选
    */
-  optionGroups?: any[];
+  confirmFilter(): any;
   /**
-   * 下拉分组选项属性参数配置（需要渲染器支持）
+   * 重置筛选
    */
-  optionGroupProps?: { options?: string, label?: string };
-  /**
-   * 渲染组件的内容（需要渲染器支持）
-   */
-  content?: string;
-  /**
-   * 默认值（需要渲染器支持）
-   */
-  defaultValue?: any;
+  resetFilter(): any;
+}
+
+export interface FormRule {
+  required?: boolean;
+  min?: number;
+  max?: number;
+  type?: 'number' | 'string';
+  pattern?: string | RegExp;
+  validator?(rule: FormRule, cellValue: any, callback: (e: Error) => any, params: { rules: FormRule[], property: string }): any;
+  message?: string | Function;
+  trigger?: 'change';
+  maxWidth?: number;
 }
 
 /**
- * 项渲染参数
+ * 校验规则配置项
  */
-export interface ItemRenderParams extends RenderParams {
-  /**
-   * 表单实例对象
-   */
-  $form: Form;
-  /**
-   * 表单数据
-   */
-  data: any;
-  /**
-   * 字段名
-   */
-  property: string;
+export interface FormVaildRules {
+  [field: string]: FormRule[];
+}
+
+export interface FormOptions {
+  loading?: boolean;
+  data?: any;
+  span?: string | number;
+  size?: string;
+  align?: 'left' | 'center' | 'right';
+  titleAlign?: 'left' | 'center' | 'right';
+  titleWidth?: string | number;
+  titleColon?: boolean;
+  items?: ItemOptions[];
+  rules?: FormVaildRules;
 }
