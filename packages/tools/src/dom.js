@@ -191,8 +191,11 @@ export const DomTools = {
   },
   getCell ($xetable, { row, column }) {
     const rowid = UtilTools.getRowid($xetable, row)
-    const bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`]
-    return (bodyElem || $xetable.$refs.tableBody).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+    const bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`] || $xetable.$refs.tableBody
+    if (bodyElem && bodyElem.$el) {
+      return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+    }
+    return null
   },
   toView (elem) {
     const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'

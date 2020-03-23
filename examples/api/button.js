@@ -44,6 +44,15 @@ const apis = [
         list: []
       },
       {
+        name: 'icon',
+        descKey: 'app.api.button.desc.icon',
+        version: '2.8.0',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'status',
         descKey: 'app.api.button.desc.status',
         version: '2.8.21',

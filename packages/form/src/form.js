@@ -114,9 +114,13 @@ export default {
       evnt.preventDefault()
       const { data } = this
       if (data) {
-        this.$children.forEach(({ field, resetValue }) => {
+        this.$children.forEach(({ field, resetValue, itemRender }) => {
           if (field) {
             XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), resetValue) : resetValue)
+            const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+            if (compConf && compConf.itemResetMethod) {
+              compConf.itemResetMethod({ data, property: field, $form: this })
+            }
           }
         })
       }

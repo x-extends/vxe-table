@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools, DomTools } from '../../tools'
+import VXETable from '../../v-x-e-table'
 
 export default {
   methods: {
@@ -149,16 +150,28 @@ export default {
       this.closeFilter()
       this.$nextTick(this.recalculate)
     },
+    handleClearFilter (column) {
+      if (column) {
+        const { filters, filterRender } = column
+        if (filters) {
+          filters.forEach(item => {
+            item.checked = false
+            item.data = XEUtils.clone(item.resetValue, true)
+          })
+          const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+          if (compConf && compConf.filterResetMethod) {
+            compConf.filterResetMethod({ options: filters, column, $table: this })
+          }
+        }
+      }
+    },
     /**
      * 重置筛选
      * 当筛选面板中的重置按钮被按下时触发
      * @param {Event} evnt 事件
      */
     resetFilterEvent (evnt) {
-      this.filterStore.options.forEach(item => {
-        item.checked = false
-        item.data = item._data
-      })
+      this.handleClearFilter(this.filterStore.column)
       this.confirmFilterEvent(evnt)
     },
     /**
@@ -169,18 +182,10 @@ export default {
     _clearFilter (field) {
       const column = arguments.length ? this.getColumnByField(field) : null
       const filterStore = this.filterStore
-      const handleClear = column => {
-        if (column.filters) {
-          column.filters.forEach(item => {
-            item.checked = false
-            item.data = item._data
-          })
-        }
-      }
       if (column) {
-        handleClear(column)
+        this.handleClearFilter(column)
       } else {
-        this.visibleColumn.forEach(handleClear)
+        this.visibleColumn.forEach(this.handleClearFilter)
       }
       if (!column || column !== filterStore.column) {
         Object.assign(filterStore, {

@@ -39,7 +39,13 @@ VXETable.renderer.add('FilterContent', {
       <filter-content params={ params }></filter-content>
     ]
   },
-  // 筛选方法
+  // 重置数据方法
+  filterResetMethod ({ options }) {
+    options.forEach(option => {
+      option.data = { vals: [], sVal: '' }
+    })
+  },
+  // 筛选数据方法
   filterMethod ({ option, row, column }) {
     const { vals } = option.data
     const cellValue = XEUtils.get(row, column.property)
@@ -58,7 +64,13 @@ VXETable.renderer.add('FilterComplex', {
       <filter-complex params={ params }></filter-complex>
     ]
   },
-  // 筛选方法
+  // 重置数据方法
+  filterResetMethod ({ options }) {
+    options.forEach(option => {
+      option.data = { type: 'has', isCase: true, name: '' }
+    })
+  },
+  // 筛选数据方法
   filterMethod ({ option, row, column }) {
     let cellValue = XEUtils.get(row, column.property)
     const { type, isCase } = option.data
@@ -95,7 +107,13 @@ VXETable.renderer.add('FilterExcel', {
       <filter-excel params={ params }></filter-excel>
     ]
   },
-  // 筛选方法
+  // 重置数据方法
+  filterResetMethod ({ options }) {
+    options.forEach(option => {
+      option.data = { vals: [], sVal: '', fMenu: '', f1Type: '', f1Val: '', fMode: 'and', f2Type: '', f2Val: '' }
+    })
+  },
+  // 筛选数据方法
   filterMethod ({ option, row, column }) {
     const cellValue = XEUtils.get(row, column.property)
     const { vals, f1Type, f1Val, fMode, f2Type, f2Val } = option.data

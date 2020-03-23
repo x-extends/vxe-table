@@ -48,6 +48,7 @@ export default {
       }
       editStore.insertList.unshift(...newRecords)
       this.handleTableData()
+      this.updateFooter()
       this.updateCache()
       this.checkSelectionStatus()
       if (scrollYLoad) {
@@ -103,6 +104,7 @@ export default {
       // 从新增中移除已删除的数据
       XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       this.handleTableData()
+      this.updateFooter()
       this.updateCache()
       this.checkSelectionStatus()
       if (scrollYLoad) {
@@ -183,10 +185,7 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     _getUpdateRecords () {
-      const { keepSource, tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
-      if (!keepSource) {
-        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
-      }
+      const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
       if (treeConfig) {
         return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
       }

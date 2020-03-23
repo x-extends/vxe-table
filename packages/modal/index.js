@@ -103,6 +103,7 @@ Modal.install = function (Vue) {
   Vue.prototype.$XMsg = Modal
   Vue.prototype.$XModal = Modal
   VXETable.$modal = Modal
+  VXETable.modal = Modal
 }
 
 export default Modal

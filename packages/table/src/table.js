@@ -419,7 +419,7 @@ export default {
       return Object.assign({}, GlobalConfig.editConfig, this.editConfig)
     },
     sortOpts () {
-      return Object.assign({}, GlobalConfig.sortConfig, this.sortConfig)
+      return Object.assign({ orders: ['asc', 'desc', null] }, GlobalConfig.sortConfig, this.sortConfig)
     },
     filterOpts () {
       return Object.assign({}, GlobalConfig.filterConfig, this.filterConfig)
@@ -587,10 +587,12 @@ export default {
     syncResize (value) {
       if (value) {
         this.$nextTick(() => {
-          // 只在可视状态下才去更新
-          if (this.$el.clientWidth && this.$el.clientHeight) {
-            this.recalculate(true)
-          }
+          setTimeout(() => {
+            // 只在可视状态下才去更新
+            if (this.$el.clientWidth && this.$el.clientHeight) {
+              this.recalculate(true)
+            }
+          })
         })
       }
     }

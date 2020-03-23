@@ -1,12 +1,15 @@
 import { VXETableModule } from './component'
 import { TableRenderParams } from './table'
+import { FormPanel } from './form'
 import { RenderOptions } from './extends/renderer'
 
 /**
  * 列
  */
 export declare class Column extends VXETableModule {
-  // 渲染类型 index,radio,checkbox,expand,html
+  /**
+   * 渲染类型
+   */
   type?: 'index' | 'radio' | 'checkbox' | 'expand' | 'html';
   // 列字段名
   field?: string;
@@ -19,11 +22,11 @@ export declare class Column extends VXETableModule {
   // 是否允许拖动列宽调整大小
   resizable?: boolean;
   // 将列固定在左侧或者右侧
-  fixed?: string;
+  fixed?: 'left' | 'right';
   // 列对其方式
-  align?: string;
+  align?: 'left' | 'center' | 'right';
   // 表头对齐方式
-  headerAlign?: string;
+  headerAlign?: 'left' | 'center' | 'right';
   // 表尾列的对齐方式
   footerAlign?: string;
   // 当内容过长时显示为省略号
@@ -41,7 +44,7 @@ export declare class Column extends VXETableModule {
   // 格式化显示内容
   formatter?: Function | any[] | string;
   // 自定义索引方法
-  indexMethod?: Function;
+  seqMethod?: Function;
   // 是否允许排序
   sortable?: boolean;
   // 是否服务端排序
@@ -49,9 +52,15 @@ export declare class Column extends VXETableModule {
   // 自定义排序的属性
   sortBy?: string | string[];
   // 自定义排序方法
-  sortMethod?: Function;
+  sortMethod?(a: any, b: any): boolean;
   // 配置筛选条件数组
-  filters?: any[];
+  filters?: {
+    label: string | number;
+    value: any;
+    data: any;
+    resetValue: any;
+    checked: boolean;
+  }[];
   // 筛选是否允许多选
   filterMultiple?: boolean;
   // 自定义筛选方法
@@ -72,28 +81,79 @@ export declare class Column extends VXETableModule {
   params?: any;
 }
 
-export class FormPanel {
+export interface ColumnOptions {
   /**
-   * 筛选所有发生改变
-   * @param evnt 事件
-   * @param checked 是否选中
+   * 渲染类型
    */
-  changeAllOption(evnt: any, checked: boolean): any;
-  /**
-   * 筛选选项发生改变
-   * @param evnt 事件
-   * @param checked 是否选中
-   * @param option 选项对象
-   */
-  changeOption(evnt: any, checked: boolean, option: any): any;
-  /**
-   * 确认筛选
-   */
-  confirmFilter(): any;
-  /**
-   * 重置筛选
-   */
-  resetFilter(): any;
+  type?: 'index' | 'radio' | 'checkbox' | 'expand' | 'html';
+  // 列字段名
+  field?: string;
+  // 列标题
+  title?: string;
+  // 列宽度
+  width?: number | string;
+  // 列最小宽度，把剩余宽度按比例分配
+  minWidth?: number | string;
+  // 是否允许拖动列宽调整大小
+  resizable?: boolean;
+  // 将列固定在左侧或者右侧
+  fixed?: 'left' | 'right';
+  // 列对其方式
+  align?: 'left' | 'center' | 'right';
+  // 表头对齐方式
+  headerAlign?: 'left' | 'center' | 'right';
+  // 表尾列的对齐方式
+  footerAlign?: string;
+  // 当内容过长时显示为省略号
+  showOverflow?: boolean | string;
+  // 当表头内容过长时显示为省略号
+  showHeaderOverflow?: boolean | string;
+  // 当表尾内容过长时显示为省略号
+  showFooterOverflow?: boolean | string;
+  // 给单元格附加 className
+  className?: string | Function;
+  // 给表头单元格附加 className
+  headerClassName?: string | Function;
+  // 给表尾单元格附加 className
+  footerClassName?: string | Function;
+  // 格式化显示内容
+  formatter?: Function | any[] | string;
+  // 自定义索引方法
+  seqMethod?: Function;
+  // 是否允许排序
+  sortable?: boolean;
+  // 是否服务端排序
+  remoteSort?: boolean;
+  // 自定义排序的属性
+  sortBy?: string | string[];
+  // 自定义排序方法
+  sortMethod?(a: any, b: any): boolean;
+  // 配置筛选条件数组
+  filters?: {
+    label: string | number;
+    value: any;
+    data: any;
+    resetValue: any;
+    checked: boolean;
+  }[];
+  // 筛选是否允许多选
+  filterMultiple?: boolean;
+  // 自定义筛选方法
+  filterMethod?: Function;
+  // 筛选模板配置项
+  filterRender?: FilterRenderOptions;
+  // 指定为树节点
+  treeNode?: boolean;
+  // 是否可视
+  visible?: boolean;
+  // 单元格渲染配置项
+  cellRender?: CellRenderOptions;
+  // 单元格编辑渲染配置项
+  editRender?: EditRenderOptions;
+  // 内容渲染配置项
+  contentRender?: ContentRenderOptions;
+  // 额外的参数
+  params?: any;
 }
 
 /**
@@ -113,7 +173,7 @@ export class ColumnConfig {
   checked: boolean;
   disabled: boolean;
   treeNode: boolean;
-  filters: { label?: string | number, value?: any, data?: any, checked?: boolean }[];
+  filters: FilterOption[];
   filterRender: FilterRenderOptions;
   cellRender: CellRenderOptions;
   editRender: EditRenderOptions;
@@ -126,8 +186,16 @@ export class ColumnConfig {
   getTitle(): string;
 }
 
+export interface FilterOption {
+  label: string | number;
+  value: any;
+  data: any;
+  resetValue: any;
+  checked: boolean;
+}
+
 /**
- * 默认的渲染器配置项
+ * 默认的渲染配置项
  */
 export interface CellRenderOptions extends RenderOptions {
   /**
@@ -153,7 +221,7 @@ export interface CellRenderOptions extends RenderOptions {
 }
 
 /**
- * 可编辑渲染器配置项
+ * 编辑渲染配置项
  */
 export interface EditRenderOptions extends RenderOptions {
   /**
@@ -199,7 +267,7 @@ export interface EditRenderOptions extends RenderOptions {
 }
 
 /**
- * 筛选渲染器配置项
+ * 筛选渲染配置项
  */
 export interface FilterRenderOptions extends RenderOptions {
   /**
@@ -282,6 +350,40 @@ export interface CellRenderParams extends TableRenderParams {
 export interface EditRenderParams extends CellRenderParams {}
 
 /**
+ * 表尾渲染参数
+ */
+export interface FooterRenderParams extends TableRenderParams {
+/**
+   * 列对象
+   */
+  column: ColumnConfig;
+  /**
+   * 相对于 columns 中的索引
+   */
+  columnIndex: number;
+  /**
+   * 相对于可视区渲染中的列索引
+   */
+  $columnIndex: number;
+  /**
+   * 相对于表尾行数据的索引
+   */
+  $rowIndex: number;
+  /**
+   * 表尾项列表
+   */
+  items: any[];
+  /**
+   * 表尾项索引
+   */
+  itemIndex: number;
+  /**
+   * 表尾数据集
+   */
+  data: any[][];
+}
+
+/**
  * 筛选渲染参数
  */
 export interface FilterRenderParams extends TableRenderParams {
@@ -319,6 +421,20 @@ export interface FilterMethodParams {
    * 行数据对象
    */
   row: any;
+  /**
+   * 列对象
+   */
+  column: ColumnConfig;
+}
+
+/**
+ * 项渲染参数
+ */
+export interface FilterResetParams extends TableRenderParams {
+  /**
+   * 筛选选项列表
+   */
+  options: FilterOption[];
   /**
    * 列对象
    */

@@ -80,7 +80,7 @@
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
 
-    <p class="tip">点击表头排序，通过 <table-api-link prop="defaultSort"/> 默认排序、通过配置 <table-api-link prop="trigger"/> 设置触发源</p>
+    <p class="tip">点击表头排序，通过 <table-api-link prop="defaultSort"/> 默认排序、<table-api-link prop="orders"/> 自定义轮转顺序、通过配置 <table-api-link prop="trigger"/> 设置触发源</p>
 
     <vxe-table
       border
@@ -88,7 +88,7 @@
       highlight-hover-column
       height="300"
       :data="tableData"
-      :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}}"
+      :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
       @sort-change="sortChangeEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -221,7 +221,7 @@ export default {
           highlight-hover-column
           height="300"
           :data="tableData"
-          :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}}"
+          :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
           @sort-change="sortChangeEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

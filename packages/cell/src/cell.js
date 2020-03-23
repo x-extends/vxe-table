@@ -189,13 +189,13 @@ export const Cell = {
   renderIndexCell (h, params) {
     const { $table, column } = params
     const { seqOpts, startIndex } = $table
-    const { slots, indexMethod } = column
+    const { slots } = column
     if (slots && slots.default) {
       return slots.default.call($table, params, h)
     }
     const { $seq, seq, level } = params
     // 在 v3.0 中废弃 startIndex、indexMethod
-    const seqMethod = seqOpts.seqMethod || indexMethod
+    const seqMethod = seqOpts.seqMethod || column.seqMethod || column.indexMethod
     return [UtilTools.formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex || startIndex) + seq, 1)]
   },
   renderTreeIndexCell (h, params) {
