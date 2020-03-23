@@ -17,18 +17,19 @@
     </vxe-toolbar>
 
     <vxe-table
-      ref="xTable"
       border
       show-overflow
       keep-source
+      ref="xTable"
       :data="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="80"></vxe-table-column>
+      <vxe-table-column type="seq" width="80"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="400" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" width="300" fixed="right" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -54,6 +55,9 @@ export default {
         ],
         sex: [
           { required: true, message: '性别必须填写' }
+        ],
+        date: [
+          { required: true, message: '日期必须填写' }
         ]
       },
       demoCodes: [
@@ -72,18 +76,19 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          ref="xTable"
           border
           show-overflow
           keep-source
+          ref="xTable"
           :data="tableData"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="80"></vxe-table-column>
+          <vxe-table-column type="seq" width="80"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="400" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" width="300" fixed="right" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -98,6 +103,9 @@ export default {
                 ],
                 sex: [
                   { required: true, message: '性别必须填写' }
+                ],
+                date: [
+                  { required: true, message: '日期必须填写' }
                 ]
               }
             }

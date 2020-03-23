@@ -69,6 +69,7 @@ class ColumnConfig {
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,
       indexMethod: _vm.indexMethod,
+      seqMethod: _vm.seqMethod,
       formatter: formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
@@ -198,7 +199,7 @@ export const UtilTools = {
   },
   getFilters (filters) {
     if (filters && XEUtils.isArray(filters)) {
-      return filters.map(({ label, value, data, checked }) => ({ label, value, data, _data: data, checked: !!checked }))
+      return filters.map(({ label, value, data, resetValue, checked }) => ({ label, value, data, resetValue, checked: !!checked }))
     }
     return filters
   },

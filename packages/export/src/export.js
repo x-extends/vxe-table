@@ -14,7 +14,7 @@ function hasTreeChildren ($xetable, row) {
 function getSeq ($xetable, row, rowIndex, column, columnIndex) {
   // 在 v3.0 中废弃 startIndex、indexMethod
   const seqOpts = $xetable.seqOpts
-  const seqMethod = seqOpts.seqMethod || column.indexMethod
+  const seqMethod = seqOpts.seqMethod || column.seqMethod || column.indexMethod
   return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : ((seqOpts.startIndex || $xetable.startIndex) + rowIndex + 1)
 }
 

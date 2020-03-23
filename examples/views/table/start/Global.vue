@@ -37,7 +37,8 @@
           },
           sortConfig: {
             // remote: false,
-            // trigger: 'default'
+            // trigger: 'default',
+            orders: ['asc', 'desc', null]
           },
           filterConfig: {
             // remote: false

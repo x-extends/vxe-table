@@ -143,6 +143,10 @@ export default {
           // 截取小数,默认两位数
           formatCutNumber ({ cellValue }, digits) {
             return XEUtils.toFixedString(cellValue, digits || 2)
+          },
+          // 转换 moment 类型为字符串
+          toMomentString (cellValue, format) {
+            return cellValue ? cellValue.format(format) : ''
           }
         })
         `,

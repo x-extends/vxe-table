@@ -907,11 +907,20 @@ const apis = [
                 desc: '排序方式',
                 version: '',
                 type: 'String',
-                enum: 'asc（升序）,desc（降序）',
+                enum: 'asc（升序）,desc（降序）, null',
                 defVal: '',
                 list: []
               }
             ]
+          },
+          {
+            name: 'orders',
+            desc: '自定义轮转顺序',
+            version: '1.15.27',
+            type: 'Array',
+            enum: 'asc, desc, null',
+            defVal: '[\'asc\', \'desc\', \'null\']',
+            list: []
           },
           {
             name: 'sortMethod',

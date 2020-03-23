@@ -160,10 +160,13 @@ export const DomTools = {
     const rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
     return { rowid, rowIndex, columnIndex }
   },
-  getCell ($table, { row, column }) {
-    const rowid = UtilTools.getRowid($table, row)
-    const bodyElem = $table.$refs[`${column.fixed || 'table'}Body`]
-    return (bodyElem || $table.$refs.tableBody).$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+  getCell ($xetable, { row, column }) {
+    const rowid = UtilTools.getRowid($xetable, row)
+    const bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`] || $xetable.$refs.tableBody
+    if (bodyElem && bodyElem.$el) {
+      return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+    }
+    return null
   },
   getCursorPosition (textarea) {
     const rangeData = { text: '', start: 0, end: 0 }

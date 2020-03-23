@@ -26,6 +26,13 @@ function getRowUniqueId () {
   return `row_${++rowUniqueId}`
 }
 
+function getNextSortOrder (_vm, column) {
+  const orders = _vm.sortOpts.orders
+  const currOrder = column.order || null
+  const oIndex = orders.indexOf(currOrder) + 1
+  return orders[oIndex < orders.length ? oIndex : 0]
+}
+
 /**
  * 判断是否点击了单选框或复选框
  */
@@ -568,7 +575,7 @@ export default {
       return Object.assign({}, GlobalConfig.editConfig, this.editConfig)
     },
     sortOpts () {
-      return Object.assign({}, GlobalConfig.sortConfig, this.sortConfig)
+      return Object.assign({ orders: ['asc', 'desc', null] }, GlobalConfig.sortConfig, this.sortConfig)
     },
     filterOpts () {
       return Object.assign({}, GlobalConfig.filterConfig, this.filterConfig)
@@ -742,10 +749,12 @@ export default {
     syncResize (value) {
       if (value) {
         this.$nextTick(() => {
-          // 只在可视状态下才去更新
-          if (this.$el.clientWidth && this.$el.clientHeight) {
-            this.recalculate(true)
-          }
+          setTimeout(() => {
+            // 只在可视状态下才去更新
+            if (this.$el.clientWidth && this.$el.clientHeight) {
+              this.recalculate(true)
+            }
+          })
         })
       }
     }
@@ -1475,6 +1484,7 @@ export default {
       }
       editStore.insertList.unshift(...newRecords)
       this.handleTableData()
+      this.updateFooter()
       this.updateCache()
       this.checkSelectionStatus()
       if (scrollYLoad) {
@@ -1559,6 +1569,7 @@ export default {
       // 从新增中移除已删除的数据
       XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
       this.handleTableData()
+      this.updateFooter()
       this.updateCache()
       this.checkSelectionStatus()
       if (scrollYLoad) {
@@ -1824,10 +1835,7 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     getUpdateRecords () {
-      const { keepSource, tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
-      if (!keepSource) {
-        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
-      }
+      const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
       if (treeConfig) {
         return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
       }
@@ -2328,7 +2336,9 @@ export default {
         } else if (DomTools.getEventTargetNode(evnt, filterWrapper.$el).flag) {
           // 如果点击筛选容器
         } else {
-          this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
+          if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-dropdown--panel').flag) {
+            this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
+          }
         }
       }
       // 如果已激活了编辑状态
@@ -3663,7 +3673,7 @@ export default {
       const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
       const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
       if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
-        this.triggerSortEvent(evnt, column, column.order ? (column.order === 'desc' ? '' : 'desc') : 'asc')
+        this.triggerSortEvent(evnt, column, getNextSortOrder(this, column))
       }
       UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
       return this.setCurrentColumn(column)
@@ -4156,13 +4166,13 @@ export default {
       }
     },
     sort (field, order) {
-      const { visibleColumn, tableFullColumn, remoteSort, sortOpts } = this
-      const column = XEUtils.find(visibleColumn, item => item.property === field)
+      const { tableFullColumn, sortOpts } = this
+      const column = this.getColumnByField(field)
       if (column) {
-        const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
+        const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : sortOpts.remote
         if (column.sortable || column.remoteSort) {
-          if (!order) {
-            order = column.order === 'desc' ? 'asc' : 'desc'
+          if (arguments.length <= 1) {
+            order = getNextSortOrder(this, column)
           }
           if (column.order !== order) {
             tableFullColumn.forEach(column => {
@@ -4334,29 +4344,42 @@ export default {
       }
       return this.visibleColumn.some(column => column.filters && column.filters.some(option => option.checked))
     },
-    // 重置筛选
+    handleClearFilter (column) {
+      if (column) {
+        const { filters, filterRender } = column
+        if (filters) {
+          filters.forEach(item => {
+            item.checked = false
+            item.data = XEUtils.clone(item.resetValue, true)
+          })
+          const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+          if (compConf && compConf.filterResetMethod) {
+            compConf.filterResetMethod({ options: filters, column, $table: this })
+          }
+        }
+      }
+    },
+    /**
+     * 重置筛选
+     * 当筛选面板中的重置按钮被按下时触发
+     * @param {Event} evnt 事件
+     */
     resetFilterEvent (evnt) {
-      this.filterStore.options.forEach(item => {
-        item.checked = false
-        item.data = item._data
-      })
+      this.handleClearFilter(this.filterStore.column)
       this.confirmFilterEvent(evnt)
     },
+    /**
+     * 清空指定列的筛选条件
+     * 如果为空则清空所有列的筛选条件
+     * @param {String} field 字段名
+     */
     clearFilter (field) {
       const column = arguments.length ? this.getColumnByField(field) : null
       const filterStore = this.filterStore
-      const handleClear = column => {
-        if (column.filters) {
-          column.filters.forEach(item => {
-            item.checked = false
-            item.data = item._data
-          })
-        }
-      }
       if (column) {
-        handleClear(column)
+        this.handleClearFilter(column)
       } else {
-        this.visibleColumn.forEach(handleClear)
+        this.visibleColumn.forEach(this.handleClearFilter)
       }
       if (!column || column !== filterStore.column) {
         Object.assign(filterStore, {
