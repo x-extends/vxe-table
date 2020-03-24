@@ -1,6 +1,6 @@
 import { VXETableModule } from './component'
 import { Form } from './form'
-import { RenderParams, RenderOptions } from './extends/renderer'
+import { RenderParams, RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
 
 /**
  * 表单 - 项
@@ -33,11 +33,11 @@ export class FormItem extends VXETableModule {
   /**
    * 前缀配置项
    */
-  titlePrefix?: ItemTitleOptions;
+  titlePrefix?: FormItemTitleOptions;
   /**
    * 后缀配置项
    */
-  titleSuffix?: ItemTitleOptions;
+  titleSuffix?: FormItemTitleOptions;
   /**
    * 重置时的默认值
    */
@@ -57,10 +57,10 @@ export class FormItem extends VXETableModule {
   /**
    * 项渲染配置项
    */
-  itemRender?: ItemRenderOptions;
+  itemRender?: FormItemRenderOptions;
 }
 
-export interface ItemOptions {
+export interface FormItemOptions {
   /**
    * 标题
    */
@@ -88,11 +88,11 @@ export interface ItemOptions {
   /**
    * 前缀配置项
    */
-  titlePrefix?: ItemTitleOptions;
+  titlePrefix?: FormItemTitleOptions;
   /**
    * 后缀配置项
    */
-  titleSuffix?: ItemTitleOptions;
+  titleSuffix?: FormItemTitleOptions;
   /**
    * 重置时的默认值
    */
@@ -112,10 +112,10 @@ export interface ItemOptions {
   /**
    * 项渲染配置项
    */
-  itemRender?: ItemRenderOptions;
+  itemRender?: FormItemRenderOptions;
 }
 
-export interface ItemTitleOptions {
+export interface FormItemTitleOptions {
   message?: string;
   enterable?: boolean;
   theme?: string;
@@ -125,7 +125,7 @@ export interface ItemTitleOptions {
 /**
  * 项渲染配置项
  */
-export interface ItemRenderOptions extends RenderOptions {
+export interface FormItemRenderOptions extends RenderOptions {
   /**
    * 下拉选项列表（需要渲染器支持）
    */
@@ -133,7 +133,7 @@ export interface ItemRenderOptions extends RenderOptions {
   /**
    * 下拉选项属性参数配置（需要渲染器支持）
    */
-  optionProps?: { value?: string, label?: string, disabled?: string };
+  optionProps?: OptionProps;
   /**
    * 下拉分组选项列表（需要渲染器支持）
    */
@@ -141,7 +141,7 @@ export interface ItemRenderOptions extends RenderOptions {
   /**
    * 下拉分组选项属性参数配置（需要渲染器支持）
    */
-  optionGroupProps?: { options?: string, label?: string };
+  optionGroupProps?: OptionGroupProps;
   /**
    * 渲染组件的内容（需要渲染器支持）
    */
@@ -155,7 +155,7 @@ export interface ItemRenderOptions extends RenderOptions {
 /**
  * 项渲染参数
  */
-export interface ItemRenderParams extends RenderParams {
+export interface FormItemRenderParams extends RenderParams {
   /**
    * 表单实例对象
    */
@@ -173,7 +173,7 @@ export interface ItemRenderParams extends RenderParams {
 /**
  * 项可视方法参数
  */
-export interface ItemVisibleParams extends RenderParams {
+export interface FormItemVisibleParams extends RenderParams {
   /**
    * 表单实例对象
    */
@@ -191,7 +191,7 @@ export interface ItemVisibleParams extends RenderParams {
 /**
  * 项重置方法参数
  */
-export interface ItemResetParams extends RenderParams {
+export interface FormItemResetParams extends RenderParams {
   /**
    * 表单实例对象
    */

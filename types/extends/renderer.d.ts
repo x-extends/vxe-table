@@ -1,9 +1,12 @@
 import { CreateElement, VNode } from 'vue'
 import { EmptyRender, EmptyRenderParams } from '../table'
-import { FilterRenderOptions, FilterRenderParams, FilterMethodParams, CellRenderOptions, ContentRenderOptions, CellRenderParams, EditRenderOptions, EditRenderParams, FooterRenderParams, FilterResetParams } from '../column'
-import { CellExportParams, FooterCellExportParams } from './export'
-import { buttonRenderOptions, buttonRenderParams } from '../toolbar'
-import { ItemRenderOptions, ItemRenderParams, ItemVisibleParams, ItemResetParams } from '../form-item'
+import { ColumnCellRenderOptions, ColumnContentRenderOptions, ColumnCellRenderParams } from '../column'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
+import { ColumnEditRenderOptions, ColumnEditRenderParams } from './edit'
+import { ColumnFooterRenderParams } from './footer'
+import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethodParams, ColumnFilterResetParams } from './filter'
+import { ToolbarButtonRenderOptions, ToolbarButtonRenderParams } from '../toolbar'
+import { FormItemRenderOptions, FormItemRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
 
 /**
  * 渲染器
@@ -19,33 +22,33 @@ export interface RendererMapOptions {
   // 筛选渲染
   className?: string;
   isFooter?: boolean;
-  renderFilter?(h: CreateElement, renderOpts: FilterRenderOptions, params: FilterRenderParams): VNode[] | string[];
-  filterMethod?(params: FilterMethodParams): boolean;
-  filterResetMethod?(params: FilterResetParams): void;
+  renderFilter?(h: CreateElement, renderOpts: ColumnFilterRenderOptions, params: ColumnFilterRenderParams): VNode[] | string[];
+  filterMethod?(params: ColumnFilterMethodParams): boolean;
+  filterResetMethod?(params: ColumnFilterResetParams): void;
 
   // 单元格渲染
-  renderHeader?(h: CreateElement, renderOpts: CellRenderOptions | EditRenderOptions, params: CellRenderParams | EditRenderParams): VNode[] | string[];
-  renderDefault?(h: CreateElement, renderOpts: CellRenderOptions | EditRenderOptions, params: CellRenderParams | EditRenderParams): VNode[] | string[];
-  renderFooter?(h: CreateElement, renderOpts: CellRenderOptions | EditRenderOptions, params: FooterRenderParams): VNode[] | string[];
-  cellExportMethod?(params: CellExportParams): string;
-  footerCellExportMethod?(params: FooterCellExportParams): string;
+  renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
+  renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
+  renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): VNode[] | string[];
+  cellExportMethod?(params: ColumnExportCellRenderParams): string;
+  footerCellExportMethod?(params: ColumnExportFooterRenderParams): string;
 
   // 编辑渲染
   autofocus?: string;
-  renderEdit?(h: CreateElement, renderOpts: CellRenderOptions | EditRenderOptions, params: CellRenderParams | EditRenderParams): VNode[] | string[];
-  renderCell?(h: CreateElement, renderOpts: CellRenderOptions | EditRenderOptions, params: CellRenderParams | EditRenderParams): VNode[] | string[];
-  editCellExportMethod?(params: CellExportParams): string;
+  renderEdit?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
+  renderCell?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
+  editCellExportMethod?(params: ColumnExportCellRenderParams): string;
 
   // 内容渲染
-  renderExpand?(h: CreateElement, renderOpts: ContentRenderOptions, params: CellRenderParams | EditRenderParams): VNode[] | string[];
+  renderExpand?(h: CreateElement, renderOpts: ColumnContentRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
 
   // 工具栏-按钮渲染
-  renderButton?(h: CreateElement, renderOpts: buttonRenderOptions, params: buttonRenderParams): VNode[] | string[];
+  renderButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): VNode[] | string[];
 
   // 表单-项渲染
-  renderItem?(h: CreateElement, renderOpts: ItemRenderOptions, params: ItemRenderParams): VNode[] | string[];
-  itemVisibleMethod?(params: ItemVisibleParams): boolean;
-  itemResetMethod?(params: ItemResetParams): void;
+  renderItem?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
+  itemVisibleMethod?(params: FormItemVisibleParams): boolean;
+  itemResetMethod?(params: FormItemResetParams): void;
 
   // 空内容渲染
   renderEmpty?(h: CreateElement, renderOpts: EmptyRender, params: EmptyRenderParams): VNode[] | string[];

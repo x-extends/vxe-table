@@ -1,4 +1,4 @@
-import { Table, TableRenderParams } from '../table'
+import { Table } from '../table'
 import { Grid, GridRenderParams } from '../grid'
 import { ColumnConfig } from '../column'
 
@@ -161,36 +161,12 @@ export interface PrintOptons {
   footerFilterMethod?(cells: any[], $rowIndex: number, footerData: any[][]): boolean;
 }
 
-export interface DataExportLabelParams extends GridRenderParams {
+export interface ColumnExportCellRenderParams extends GridRenderParams {
   row: any;
   column: ColumnConfig;
 }
 
-export interface FooterExportLabelParams extends GridRenderParams {
-  items: any[];
-  itemIndex: number;
-  column: ColumnConfig;
-}
-
-export interface InterceptorExportParams extends GridRenderParams {
-  options: ExportOptons;
-  columns: ColumnConfig[];
-  datas: any[];
-}
-
-export interface InterceptorImportParams extends GridRenderParams {
-  file: File;
-  options: ExportOptons;
-  columns: ColumnConfig[];
-  datas: any[];
-}
-
-export interface CellExportParams extends TableRenderParams {
-  row: any;
-  column: ColumnConfig;
-}
-
-export interface FooterCellExportParams extends TableRenderParams {
+export interface ColumnExportFooterRenderParams extends GridRenderParams {
   items: any[];
   itemIndex: number;
   column: ColumnConfig;

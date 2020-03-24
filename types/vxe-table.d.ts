@@ -16,10 +16,6 @@ export interface VXETableOptions {
 export interface VXETableStatic {
   install(vue: typeof Vue): void;
   /**
-   * 全局的模态窗口
-   */
-  $modal: ModalController;
-  /**
    * 版本号
    */
   v: string;

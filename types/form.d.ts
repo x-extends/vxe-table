@@ -1,5 +1,5 @@
 import { VXETableModule } from './component'
-import { ItemOptions } from './form-item'
+import { FormItemOptions } from './form-item'
 
 /**
  * 表单
@@ -12,7 +12,7 @@ export declare class Form extends VXETableModule {
   titleAlign?: 'left' | 'center' | 'right';
   titleWidth?: string | number;
   titleColon?: boolean;
-  items?: ItemOptions[];
+  items?: FormItemOptions[];
   rules?: FormVaildRules;
 
   // computed
@@ -39,30 +39,6 @@ export declare class Form extends VXETableModule {
    * 手动切换折叠状态
    */
   toggleCollapse(): Promise<any>;
-}
-
-export class FormPanel {
-  /**
-   * 筛选所有发生改变
-   * @param evnt 事件
-   * @param checked 是否选中
-   */
-  changeAllOption(evnt: any, checked: boolean): any;
-  /**
-   * 筛选选项发生改变
-   * @param evnt 事件
-   * @param checked 是否选中
-   * @param option 选项对象
-   */
-  changeOption(evnt: any, checked: boolean, option: any): any;
-  /**
-   * 确认筛选
-   */
-  confirmFilter(): any;
-  /**
-   * 重置筛选
-   */
-  resetFilter(): any;
 }
 
 export interface FormRule {
@@ -93,6 +69,6 @@ export interface FormOptions {
   titleAlign?: 'left' | 'center' | 'right';
   titleWidth?: string | number;
   titleColon?: boolean;
-  items?: ItemOptions[];
+  items?: FormItemOptions[];
   rules?: FormVaildRules;
 }

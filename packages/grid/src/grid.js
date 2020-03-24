@@ -508,7 +508,7 @@ export default {
                 }
               } else {
                 if (isMsg && !selectRecords.length) {
-                  VXETable.$modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+                  VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
                 }
               }
             })
@@ -541,7 +541,7 @@ export default {
                     try {
                       resolve(
                         sRest.then(() => {
-                          VXETable.$modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
+                          VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
                           this.tableLoading = false
                         }).catch(e => {
                           this.tableLoading = false
@@ -563,7 +563,7 @@ export default {
                       if (pendingRecords.length) {
                         this.remove(pendingRecords)
                       } else {
-                        VXETable.$modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
+                        VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
                       }
                     }
                     resolve()
@@ -591,13 +591,13 @@ export default {
       const selectRecords = this.getCheckboxRecords()
       if (this.isMsg) {
         if (selectRecords.length) {
-          VXETable.$modal.confirm(GlobalConfig.i18n(alertKey)).then(type => {
+          VXETable.modal.confirm(GlobalConfig.i18n(alertKey)).then(type => {
             if (type === 'confirm') {
               callback()
             }
           })
         } else {
-          VXETable.$modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+          VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       } else {
         if (selectRecords.length) {
@@ -633,7 +633,7 @@ export default {
         this.clearCheckboxRow()
       } else {
         if (isMsg) {
-          VXETable.$modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+          VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       }
     },

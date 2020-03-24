@@ -1,4 +1,5 @@
 import { VXETableModule } from './component'
+import { OptionProps, OptionGroupProps } from './extends/renderer'
 
 /**
  * 下拉框
@@ -31,7 +32,7 @@ export declare class Select extends VXETableModule {
   /**
    * 下拉选项属性参数配置
    */
-  optionProps?: { value?: string, label?: string, disabled?: string };
+  optionProps?: OptionProps;
   /**
    * 下拉分组选项列表
    */
@@ -39,7 +40,7 @@ export declare class Select extends VXETableModule {
   /**
    * 下拉分组选项属性参数配置
    */
-  optionGroupProps?: { options?: string, label?: string };
+  optionGroupProps?: OptionGroupProps;
   /**
    * 固定显示下拉面板的方向
    */

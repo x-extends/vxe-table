@@ -1,5 +1,5 @@
 import { GridRenderParams } from '../grid'
-import { ButtonConfig } from '../toolbar'
+import { ToolbarButtonConfig } from '../toolbar'
 
 declare function commandsFunc(params: CommandsParams, ...args: any[]): any;
 
@@ -15,5 +15,5 @@ export class commands {
 
 export interface CommandsParams extends GridRenderParams {
   code: string;
-  button?: ButtonConfig;
+  button?: ToolbarButtonConfig;
 }

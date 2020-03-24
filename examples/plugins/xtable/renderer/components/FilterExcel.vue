@@ -60,7 +60,7 @@
 
 <script>
 import XEUtils from 'xe-utils'
-import { Modal } from '../../../../../packages/vxe-table'
+import { ModalController } from '../../../../../packages/vxe-table'
 
 export default {
   name: 'FilterExcel',
@@ -85,9 +85,6 @@ export default {
           { value: 'between', label: '介于' }
         ],
         [
-          // { value: 'top10', label: '前 10 项' },
-          // { value: 'gt_mean', label: '高于平均值' },
-          // { value: 'lt_mean', label: '低于平均值' },
           { value: 'custom', label: '自定义筛选' }
         ]
       ],
@@ -212,7 +209,7 @@ export default {
       }
       $table.closeFilter()
       // 动态弹出框
-      Modal.open({
+      ModalController.open({
         title: '自定义自动筛选方式',
         width: 600,
         slots: {
