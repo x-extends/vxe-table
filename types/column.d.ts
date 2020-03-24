@@ -1,7 +1,11 @@
+import { CreateElement, VNode } from 'vue'
 import { VXETableModule } from './component'
 import { TableRenderParams } from './table'
-import { FormPanel } from './form'
-import { RenderOptions } from './extends/renderer'
+import { ColumnFilterOption, ColumnFilterRenderOptions, ColumnFilterSlotParams } from './extends/filter'
+import { RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
+import { ColumnHeaderSlotParams } from './extends/header'
+import { ColumnFooterSlotParams } from './extends/footer'
+import { ColumnEditRenderOptions, ColumnEditSlotParams } from './extends/edit'
 
 /**
  * 列
@@ -66,17 +70,17 @@ export declare class Column extends VXETableModule {
   // 自定义筛选方法
   filterMethod?: Function;
   // 筛选模板配置项
-  filterRender?: FilterRenderOptions;
+  filterRender?: ColumnFilterRenderOptions;
   // 指定为树节点
   treeNode?: boolean;
   // 是否可视
   visible?: boolean;
   // 单元格渲染配置项
-  cellRender?: CellRenderOptions;
+  cellRender?: ColumnCellRenderOptions;
   // 单元格编辑渲染配置项
-  editRender?: EditRenderOptions;
+  editRender?: ColumnEditRenderOptions;
   // 内容渲染配置项
-  contentRender?: ContentRenderOptions;
+  contentRender?: ColumnContentRenderOptions;
   // 额外的参数
   params?: any;
 }
@@ -141,20 +145,34 @@ export interface ColumnOptions {
   // 自定义筛选方法
   filterMethod?: Function;
   // 筛选模板配置项
-  filterRender?: FilterRenderOptions;
+  filterRender?: ColumnFilterRenderOptions;
   // 指定为树节点
   treeNode?: boolean;
   // 是否可视
   visible?: boolean;
   // 单元格渲染配置项
-  cellRender?: CellRenderOptions;
+  cellRender?: ColumnCellRenderOptions;
   // 单元格编辑渲染配置项
-  editRender?: EditRenderOptions;
+  editRender?: ColumnEditRenderOptions;
   // 内容渲染配置项
-  contentRender?: ContentRenderOptions;
+  contentRender?: ColumnContentRenderOptions;
   // 额外的参数
   params?: any;
+
+  slots?: {
+    default?(params: ColumnDefaultSlotParams, h: CreateElement): VNode[] | string[];
+    header?(params: ColumnHeaderSlotParams, h: CreateElement): VNode[] | string[];
+    footer?(params: ColumnFooterSlotParams, h: CreateElement): VNode[] | string[];
+    content?(params: ColumnContentSlotParams, h: CreateElement): VNode[] | string[];
+    filter?(params: ColumnFilterSlotParams, h: CreateElement): VNode[] | string[];
+    edit?(params: ColumnEditSlotParams, h: CreateElement): VNode[] | string[];
+    icon?(params: ColumnIconSlotParams, h: CreateElement): VNode[] | string[];
+  };
 }
+
+export interface ColumnDefaultSlotParams extends ColumnCellRenderParams {}
+export interface ColumnContentSlotParams extends ColumnContentRenderParams {}
+export interface ColumnIconSlotParams extends ColumnIconRenderParams {}
 
 /**
  * 列对象
@@ -173,11 +191,11 @@ export class ColumnConfig {
   checked: boolean;
   disabled: boolean;
   treeNode: boolean;
-  filters: FilterOption[];
-  filterRender: FilterRenderOptions;
-  cellRender: CellRenderOptions;
-  editRender: EditRenderOptions;
-  contentRender: ContentRenderOptions;
+  filters: ColumnFilterOption[];
+  filterRender: ColumnFilterRenderOptions;
+  cellRender: ColumnCellRenderOptions;
+  editRender: ColumnEditRenderOptions;
+  contentRender: ColumnContentRenderOptions;
   order: string;
   renderWidth: number;
   renderHeight: number;
@@ -186,18 +204,10 @@ export class ColumnConfig {
   getTitle(): string;
 }
 
-export interface FilterOption {
-  label: string | number;
-  value: any;
-  data: any;
-  resetValue: any;
-  checked: boolean;
-}
-
 /**
  * 默认的渲染配置项
  */
-export interface CellRenderOptions extends RenderOptions {
+export interface ColumnCellRenderOptions extends RenderOptions {
   /**
    * 下拉选项列表（需要渲染器支持）
    */
@@ -205,7 +215,7 @@ export interface CellRenderOptions extends RenderOptions {
   /**
    * 下拉选项属性参数配置（需要渲染器支持）
    */
-  optionProps?: { value?: string, label?: string, disabled?: string };
+  optionProps?: OptionProps;
   /**
    * 下拉分组选项列表（需要渲染器支持）
    */
@@ -213,79 +223,7 @@ export interface CellRenderOptions extends RenderOptions {
   /**
    * 下拉分组选项属性参数配置（需要渲染器支持）
    */
-  optionGroupProps?: { options?: string, label?: string };
-  /**
-   * 渲染组件的内容（需要渲染器支持）
-   */
-  content?: string;
-}
-
-/**
- * 编辑渲染配置项
- */
-export interface EditRenderOptions extends RenderOptions {
-  /**
-   * 渲染类型（需要渲染器支持）
-   */
-  type?: 'default' | 'visible';
-  /**
-   * 下拉选项列表（需要渲染器支持）
-   */
-  options?: any[];
-  /**
-   * 下拉选项属性参数配置（需要渲染器支持）
-   */
-  optionProps?: { value?: string, label?: string, disabled?: string };
-  /**
-   * 下拉分组选项列表（需要渲染器支持）
-   */
-  optionGroups?: any[];
-  /**
-   * 下拉分组选项属性参数配置（需要渲染器支持）
-   */
-  optionGroupProps?: { options?: string, label?: string };
-  /**
-   * 指定聚焦的选择器（需要渲染器支持）
-   */
-  autofocus?: string;
-  /**
-   * 是否在激活编辑之后自动选中输入框内容（需要渲染器支持）
-   */
-  autoselect?: boolean;
-  /**
-   * 默认值（需要渲染器支持）
-   */
-  defaultValue?: any;
-  /**
-   * 输入值实时同步更新（需要渲染器支持）
-   */
-  immediate?: boolean;
-  /**
-   * 渲染组件的内容（需要渲染器支持）
-   */
-  content?: string;
-}
-
-/**
- * 筛选渲染配置项
- */
-export interface FilterRenderOptions extends RenderOptions {
-  /**
-   * 下拉选项列表（需要渲染器支持）
-   */
-  options?: any[];
-  /**
-   * 下拉选项属性参数配置（需要渲染器支持）
-   */
-  optionProps?: { value?: string, label?: string, disabled?: string };
-  /**
-   * 下拉分组选项列表（需要渲染器支持）
-   */
-  optionGroups?: any[];
-  /**
-   * 下拉分组选项属性参数配置（需要渲染器支持）
-   */
-  optionGroupProps?: { options?: string, label?: string };
+  optionGroupProps?: OptionGroupProps;
   /**
    * 渲染组件的内容（需要渲染器支持）
    */
@@ -295,7 +233,7 @@ export interface FilterRenderOptions extends RenderOptions {
 /**
  * 内容渲染配置项
  */
-export interface ContentRenderOptions extends RenderOptions {
+export interface ColumnContentRenderOptions extends RenderOptions {
   /**
    * 下拉选项列表（需要渲染器支持）
    */
@@ -303,7 +241,7 @@ export interface ContentRenderOptions extends RenderOptions {
   /**
    * 下拉选项属性参数配置（需要渲染器支持）
    */
-  optionProps?: { value?: string, label?: string, disabled?: string };
+  optionProps?: OptionProps;
   /**
    * 下拉分组选项列表（需要渲染器支持）
    */
@@ -311,13 +249,13 @@ export interface ContentRenderOptions extends RenderOptions {
   /**
    * 下拉分组选项属性参数配置（需要渲染器支持）
    */
-  optionGroupProps?: { options?: string, label?: string };
+  optionGroupProps?: OptionGroupProps;
 }
 
 /**
  * 单元格渲染参数
  */
-export interface CellRenderParams extends TableRenderParams {
+export interface ColumnCellRenderParams extends TableRenderParams {
   /**
    * 列对象
    */
@@ -344,99 +282,5 @@ export interface CellRenderParams extends TableRenderParams {
   $rowIndex: number;
 }
 
-/**
- * 单元格渲染参数
- */
-export interface EditRenderParams extends CellRenderParams {}
-
-/**
- * 表尾渲染参数
- */
-export interface FooterRenderParams extends TableRenderParams {
-/**
-   * 列对象
-   */
-  column: ColumnConfig;
-  /**
-   * 相对于 columns 中的索引
-   */
-  columnIndex: number;
-  /**
-   * 相对于可视区渲染中的列索引
-   */
-  $columnIndex: number;
-  /**
-   * 相对于表尾行数据的索引
-   */
-  $rowIndex: number;
-  /**
-   * 表尾项列表
-   */
-  items: any[];
-  /**
-   * 表尾项索引
-   */
-  itemIndex: number;
-  /**
-   * 表尾数据集
-   */
-  data: any[][];
-}
-
-/**
- * 筛选渲染参数
- */
-export interface FilterRenderParams extends TableRenderParams {
-  /**
-   * 筛选面板实例对象
-   */
-  $panel: FormPanel;
-  /**
-   * 列对象
-   */
-  column: ColumnConfig;
-  /**
-   * 相对于 columns 中的索引
-   */
-  columnIndex: number;
-  /**
-   * 相对于可视区渲染中的列索引
-   */
-  $columnIndex: number;
-}
-
-/**
- * 筛选渲染参数
- */
-export interface FilterMethodParams {
-  /**
-   * 选项值
-   */
-  value: any;
-  /**
-   * 选项
-   */
-  option: any;
-  /**
-   * 行数据对象
-   */
-  row: any;
-  /**
-   * 列对象
-   */
-  column: ColumnConfig;
-}
-
-/**
- * 项渲染参数
- */
-export interface FilterResetParams extends TableRenderParams {
-  /**
-   * 筛选选项列表
-   */
-  options: FilterOption[];
-  /**
-   * 列对象
-   */
-  column: ColumnConfig;
-}
+export interface ColumnContentRenderParams extends ColumnCellRenderParams {}
+export interface ColumnIconRenderParams extends ColumnCellRenderParams {}

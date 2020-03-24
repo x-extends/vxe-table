@@ -431,7 +431,7 @@ export default {
     },
     boxMousedownEvent () {
       const { modalZindex } = this
-      if (activeModals.some($modal => $modal.visible && $modal.modalZindex > modalZindex)) {
+      if (activeModals.some(_vm => _vm.visible && _vm.modalZindex > modalZindex)) {
         this.updateZindex()
       }
     },

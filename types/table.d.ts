@@ -1,9 +1,9 @@
 import { VXETableModule } from './component'
-import { ColumnConfig, CellRenderParams } from './column'
+import { ColumnConfig, ColumnCellRenderParams } from './column'
 import { RenderParams, RenderOptions } from './extends/renderer'
 import { ExportOptons, ImportOptons, PrintOptons } from './extends/export'
 import { EditRule } from './extends/validator'
-import { MenuOptions, FirstMenuOption } from './extends/menu'
+import { MenuOptions, MenuFirstOption } from './extends/menu'
 
 /**
  * 表格
@@ -740,7 +740,7 @@ export declare class Table extends VXETableModule {
  */
 export interface SeqConfig {
   startIndex?: number;
-  seqMethod?(params: CellRenderParams): number;
+  seqMethod?(params: ColumnCellRenderParams): number;
 }
 
 /**
@@ -855,7 +855,7 @@ export interface ContextMenuConfig {
   body?: MenuOptions;
   footer?: MenuOptions;
   trigger?: 'default' | 'cell';
-  visibleMethod?(params: { type: string, options: FirstMenuOption[], columns: ColumnConfig[], row?: any, rowIndex?: number, column?: ColumnConfig, columnIndex?: number }): boolean;
+  visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnConfig[], row?: any, rowIndex?: number, column?: ColumnConfig, columnIndex?: number }): boolean;
   className?: string;
 }
 

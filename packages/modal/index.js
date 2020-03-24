@@ -3,7 +3,7 @@ import VXEModal from './src/modal'
 import queue from './src/queue'
 import VXETable from '../v-x-e-table'
 
-let AlertController = null
+let ModalClass = null
 const allActivedModals = []
 
 function openModal (opts) {
@@ -24,7 +24,7 @@ function openModal (opts) {
           resolve(params.type)
         }
       })
-      const $modal = new AlertController({
+      const $modal = new ModalClass({
         el: document.createElement('div'),
         propsData: options
       })
@@ -32,15 +32,6 @@ function openModal (opts) {
       allActivedModals.push($modal)
     }
   })
-}
-
-function install (Vue) {
-  VXETable._modal = 1
-  Vue.component(VXEModal.name, VXEModal)
-  AlertController = Vue.extend(VXEModal)
-  Vue.prototype.$XModal = ModalController
-  VXETable.$modal = ModalController
-  VXETable.modal = ModalController
 }
 
 /**
@@ -57,20 +48,18 @@ function closeModal (id) {
   } else {
     allActivedModals.forEach($modal => $modal.close('close'))
   }
+  return Promise.resolve()
 }
 
 function getModal (id) {
   return allActivedModals.find($modal => $modal.id === id)
 }
 
-const ModalController = {
-  install,
+export const ModalController = {
   get: getModal,
   close: closeModal,
   open: openModal
 }
-
-export const Modal = ModalController
 
 const shortcutTypes = ['alert', 'confirm', 'message']
 
@@ -100,4 +89,12 @@ shortcutTypes.forEach((type, index) => {
   }
 })
 
-export default ModalController
+VXEModal.install = function (Vue) {
+  VXETable._modal = 1
+  Vue.component(VXEModal.name, VXEModal)
+  ModalClass = Vue.extend(VXEModal)
+  VXETable.modal = ModalController
+}
+
+export const Modal = VXEModal
+export default VXEModal

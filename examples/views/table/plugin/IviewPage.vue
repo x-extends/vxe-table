@@ -14,7 +14,7 @@
       <vxe-form-item field="rate" title="Rate" span="8" folding :item-render="{name: 'Rate'}"></vxe-form-item>
       <vxe-form-item field="flag1" title="Radio" span="8" folding :item-render="{name: 'Radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
       <vxe-form-item field="checkedList" title="Checkbox" span="8" folding :item-render="{name: 'Checkbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
-      <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ content: '查询', props: {type: 'primary', htmlType: 'submit'} }, { content: '重置', props: {htmlType: 'reset'} }]}"></vxe-form-item>
+      <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ content: '查询', props: {type: 'primary', nativeType: 'submit'} }, { content: '重置', props: {nativeType: 'reset'} }]}"></vxe-form-item>
     </vxe-form>
 
     <vxe-toolbar export custom>
@@ -159,7 +159,7 @@ export default {
           <vxe-form-item field="rate" title="Rate" span="8" folding :item-render="{name: 'Rate'}"></vxe-form-item>
           <vxe-form-item field="flag1" title="Radio" span="8" folding :item-render="{name: 'Radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
           <vxe-form-item field="checkedList" title="Checkbox" span="8" folding :item-render="{name: 'Checkbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
-          <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ content: '查询', props: {type: 'primary', htmlType: 'submit'} }, { content: '重置', props: {htmlType: 'reset'} }]}"></vxe-form-item>
+          <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ content: '查询', props: {type: 'primary', nativeType: 'submit'} }, { content: '重置', props: {nativeType: 'reset'} }]}"></vxe-form-item>
         </vxe-form>
 
         <vxe-toolbar export custom>

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { CreateElement, VNode } from 'vue'
 import { VXETableModule } from './component'
 
 /**
@@ -10,7 +10,7 @@ export declare class Modal extends VXETableModule {
    */
   value?: boolean;
   /**
-   * 设置唯一的 id
+   * 设置窗口唯一标识
    */
   id?: string;
   /**
@@ -193,7 +193,22 @@ export interface ModalOptions {
   storageKey?: string;
   animat?: boolean;
   size?: string;
+
+  slots?: {
+    default?(params: ModalDefaultSlotParams, h: CreateElement): VNode[] | string[];
+    header?(params: ModalHeaderSlotParams, h: CreateElement): VNode[] | string[];
+    title?(params: ModalTitleSlotParams, h: CreateElement): VNode[] | string[];
+    footer?(params: ModalFooterSlotParams, h: CreateElement): VNode[] | string[];
+  };
 }
+
+export interface ModalDefaultSlotParams {
+  $modal: Modal;
+}
+
+export interface ModalHeaderSlotParams extends ModalDefaultSlotParams {}
+export interface ModalTitleSlotParams extends ModalDefaultSlotParams {}
+export interface ModalFooterSlotParams extends ModalDefaultSlotParams {}
 
 /**
  * 全局模态窗口控制器
@@ -240,13 +255,14 @@ export interface ModalController {
    * @param options 参数
    */
   message (options: ModalOptions): Promise<string>;
-}
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    /**
-     * 全局模态窗口控制器
-     */
-    $XModal: ModalController
-  }
+  /**
+   * 获取动态的活动窗口
+   * @param id 窗口唯一标识
+   */
+  get (id: string): Modal;
+  /**
+   * 关闭动态的活动窗口，如果为空则关闭所有
+   * @param id 窗口唯一标识
+   */
+  close (id?: string): Promise<any>;
 }

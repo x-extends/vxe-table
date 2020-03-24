@@ -153,42 +153,6 @@ export const DomTools = {
     const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
     return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
   },
-  /**
-   * 获取单元格节点索引
-   */
-  getCellNodeIndex (cell) {
-    const trElem = cell.parentNode
-    const columnIndex = XEUtils.arrayIndexOf(trElem.children, cell)
-    const rowIndex = XEUtils.arrayIndexOf(trElem.parentNode.children, trElem)
-    return { columnIndex, rowIndex }
-  },
-  /**
-   * 获取选中单元格矩阵范围
-   */
-  getRowNodes (trList, cellNode, targetCellNode) {
-    const startColIndex = cellNode.columnIndex
-    const startRowIndex = cellNode.rowIndex
-    const targetColIndex = targetCellNode.columnIndex
-    const targetRowIndex = targetCellNode.rowIndex
-    const rows = []
-    for (let rowIndex = Math.min(startRowIndex, targetRowIndex), rowLen = Math.max(startRowIndex, targetRowIndex); rowIndex <= rowLen; rowIndex++) {
-      const cells = []
-      const trElem = trList[rowIndex]
-      for (let colIndex = Math.min(startColIndex, targetColIndex), colLen = Math.max(startColIndex, targetColIndex); colIndex <= colLen; colIndex++) {
-        const tdElem = trElem.children[colIndex]
-        cells.push(tdElem)
-      }
-      rows.push(cells)
-    }
-    return rows
-  },
-  getCellIndexs (cell) {
-    const trElem = cell.parentNode
-    const rowid = trElem.getAttribute('data-rowid')
-    const columnIndex = [].indexOf.call(trElem.children, cell)
-    const rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
-    return { rowid, rowIndex, columnIndex }
-  },
   getCell ($xetable, { row, column }) {
     const rowid = UtilTools.getRowid($xetable, row)
     const bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`] || $xetable.$refs.tableBody

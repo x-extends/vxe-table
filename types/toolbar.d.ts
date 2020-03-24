@@ -1,5 +1,6 @@
+import { CreateElement, VNode } from 'vue'
 import { VXETableModule } from './component'
-import { TableRenderParams } from './table'
+import { GridRenderParams } from './grid'
 import { ColumnConfig } from './column'
 import { RenderOptions } from './extends/renderer'
 
@@ -58,7 +59,7 @@ export declare class Toolbar extends VXETableModule {
   /**
    * 按钮列表
    */
-  buttons?: ButtonConfig[];
+  buttons?: ToolbarButtonConfig[];
   /**
    * 配套的样式
    */
@@ -117,29 +118,37 @@ export interface ToolbarOptions {
   /**
    * 按钮列表
    */
-  buttons?: ButtonConfig[];
+  buttons?: ToolbarButtonConfig[];
   /**
    * 配套的样式
    */
   perfect?: boolean;
+
+  slots?: {
+    buttons?(params: ToolbarButtonsSlotParams, h: CreateElement): VNode[] | string[];
+    tools?(params: ToolbarToolsSlotParams, h: CreateElement): VNode[] | string[];
+  };
 }
+
+export interface ToolbarButtonsSlotParams extends GridRenderParams {}
+export interface ToolbarToolsSlotParams extends ToolbarButtonsSlotParams {}
 
 /**
  * 按钮渲染配置项
  */
-export interface buttonRenderOptions extends RenderOptions {}
+export interface ToolbarButtonRenderOptions extends RenderOptions {}
 
 /**
  * 按钮渲染渲染参数
  */
-export interface buttonRenderParams extends TableRenderParams {
+export interface ToolbarButtonRenderParams extends GridRenderParams {
   /**
    * 按钮对象
    */
-  button: ButtonConfig;
+  button: ToolbarButtonConfig;
 }
 
-export class ButtonConfig {
+export class ToolbarButtonConfig {
   name?: string;
   type?: string;
   status?: string;
@@ -148,5 +157,5 @@ export class ButtonConfig {
   disabled?: boolean;
   icon?: string;
   dropdowns?: string;
-  buttonRender?: buttonRenderOptions;
+  buttonRender?: ToolbarButtonRenderOptions;
 }

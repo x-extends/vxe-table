@@ -4,11 +4,15 @@
 
     <p class="tip">
       查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，对于某些场景如果需要动态创建的窗口，可以通过<br>
-      Modal.open(options) 模态窗口<br>
-      Modal.message(message, title, options) 消息框<br>
-      Modal.alert(message, title, options) 提示框<br>
-      Modal.confirm(message, title, options) 确认框<br>
-      如果需要手动关闭动态创建的窗口，通过 Modal.close(id?: string)
+      ModalController.open(options) 打开模态窗口<br>
+      ModalController.message(message, title, options) 打开消息框<br>
+      ModalController.alert(message, title, options) 打开提示框<br>
+      ModalController.confirm(message, title, options) 打开确认框<br>
+      ModalController.close(id?: string) 手动关闭动态创建的窗口<br>
+      还可以自行挂载到 vue 实例中，例如<br>
+      Vue.prototype.$alert = ModalController.alert<br>
+      Vue.prototype.$confirm = ModalController.confirm<br>
+      Vue.prototype.$message = ModalController.message
     </p>
 
     <p>

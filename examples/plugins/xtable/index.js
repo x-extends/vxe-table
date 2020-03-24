@@ -18,6 +18,7 @@ import {
   Textarea,
   Button,
   Modal,
+  ModalController,
   Tooltip,
   Form,
   Select,
@@ -81,6 +82,9 @@ Vue.use(Validator)
 Vue.use(Resize)
 // 再安装核心
 Vue.use(Table)
+
+// 给 vue 实例挂载全局模态窗口对象
+Vue.prototype.$XModal = ModalController
 
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
