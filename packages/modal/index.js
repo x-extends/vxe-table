@@ -4,7 +4,7 @@ import queue from './src/queue'
 import VXETable from '../v-x-e-table'
 import { UtilTools } from '../tools'
 
-let AlertController = null
+let ModalClass = null
 const allActivedModals = []
 
 function openModal (opts) {
@@ -25,7 +25,7 @@ function openModal (opts) {
           resolve(params.type)
         }
       })
-      const $modal = new AlertController({
+      const $modal = new ModalClass({
         el: document.createElement('div'),
         propsData: options
       })
@@ -35,7 +35,7 @@ function openModal (opts) {
   })
 }
 
-export function Modal (options) {
+export function ModalController (options) {
   UtilTools.warn('vxe.error.delFunc', ['Modal', 'Modal.open'])
   return openModal(options)
 }
@@ -53,7 +53,7 @@ export function Modal (options) {
   if (index === 1) {
     defOpts.status = 'question'
   }
-  Modal[type] = function (message, title, options) {
+  ModalController[type] = function (message, title, options) {
     let opts
     if (XEUtils.isObject(message)) {
       opts = message
@@ -86,24 +86,25 @@ function getModal (id) {
   return allActivedModals.find($modal => $modal.id === id)
 }
 
-Modal.closeAll = function () {
+ModalController.closeAll = function () {
   UtilTools.warn('vxe.error.delFunc', ['closeAll', 'close'])
   closeModal()
 }
 
-Modal.get = getModal
-Modal.close = closeModal
-Modal.open = openModal
+ModalController.get = getModal
+ModalController.close = closeModal
+ModalController.open = openModal
 
-Modal.install = function (Vue) {
+ModalController.install = function (Vue) {
   VXETable._modal = 1
   Vue.component('vxe-message', VXEModal)
   Vue.component(VXEModal.name, VXEModal)
-  AlertController = Vue.extend(VXEModal)
-  Vue.prototype.$XMsg = Modal
-  Vue.prototype.$XModal = Modal
-  VXETable.$modal = Modal
-  VXETable.modal = Modal
+  ModalClass = Vue.extend(VXEModal)
+  Vue.prototype.$XMsg = ModalController
+  Vue.prototype.$XModal = ModalController
+  VXETable.$modal = ModalController
+  VXETable.modal = ModalController
 }
 
-export default Modal
+export const Modal = ModalController
+export default ModalController
