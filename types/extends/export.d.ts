@@ -161,6 +161,12 @@ export interface PrintOptons {
   footerFilterMethod?(cells: any[], $rowIndex: number, footerData: any[][]): boolean;
 }
 
+export interface ReadFileOptions {
+  multiple?: boolean;
+  types?: string[];
+  message?: boolean;
+}
+
 export interface ColumnExportCellRenderParams extends GridRenderParams {
   row: any;
   column: ColumnConfig;

@@ -1,89 +1,162 @@
 import { VXETableModule } from './component'
-import { ColumnConfig, ColumnCellRenderParams } from './column'
+import { ColumnOptions, ColumnConfig, ColumnCellRenderParams } from './column'
 import { RenderParams, RenderOptions } from './extends/renderer'
-import { ExportOptons, ImportOptons, PrintOptons } from './extends/export'
-import { EditRule } from './extends/validator'
+import { ExportOptons, ImportOptons, PrintOptons, ReadFileOptions } from './extends/export'
+import { ColumnFilterOption } from './extends/filter'
+import { ColumnEditRule, ColumnEditValidErrMapParams } from './extends/validator'
+import { ColumnFooterRenderParams } from './extends/footer'
 import { MenuOptions, MenuFirstOption } from './extends/menu'
 
 /**
  * 表格
  */
 export declare class Table extends VXETableModule {
-  // 数据
+  /**
+   * 数据
+   */
   data?: any[];
-  // 表格的高度
+  /**
+   * 表格的高度
+   */
   height?: number | string;
-  // 表格的最大高度
+  /**
+   * 表格的最大高度
+   */
   maxHeight?: number | string;
-  // 所有列是否允许拖动列宽调整大小
+  /**
+   * 所有列是否允许拖动列宽调整大小
+   */
   resizable?: boolean;
-  // 是否带有斑马纹
+  /**
+   * 是否带有斑马纹
+   */
   stripe?: boolean;
-  // 是否带有纵向边框
-  border?: boolean | string;
-  // 列的宽度是否自撑开（可能会被废弃的参数，不要使用）
+  /**
+   * 是否带有纵向边框
+   */
+  border?: boolean | 'default' | 'full' | 'outer' | 'inner' | 'none';
   fit?: boolean;
-  // 表格是否加载中
+  /**
+   * 表格是否加载中
+   */
   loading?: boolean;
-  // 所有的列对其方式
-  align?: string;
-  // 所有的表头列的对齐方式
-  headerAlign?: string;
-  // 所有的表尾列的对齐方式
-  footerAlign?: string;
-  // 是否显示表头
+  /**
+   * 所有的列对其方式
+   */
+  align?: 'left' | 'center' | 'right';
+  /**
+   * 所有的表头列的对齐方式
+   */
+  headerAlign?: 'left' | 'center' | 'right';
+  /**
+   * 所有的表尾列的对齐方式
+   */
+  footerAlign?: 'left' | 'center' | 'right';
+  /**
+   * 是否显示表头
+   */
   showHeader?: boolean;
-  // 是否要高亮当前选中行
+  /**
+   * 是否要高亮当前选中行
+   */
   highlightCurrentRow?: boolean;
-  // 鼠标移到行是否要高亮显示
+  /**
+   * 鼠标移到行是否要高亮显示
+   */
   highlightHoverRow?: boolean;
-  // 是否要高亮当前选中列
+  /**
+   * 是否要高亮当前选中列
+   */
   highlightCurrentColumn?: boolean;
-  // 鼠标移到列是否要高亮显示
+  /**
+   * 鼠标移到列是否要高亮显示
+   */
   highlightHoverColumn?: boolean;
-  // 激活单元格编辑时是否高亮显示
+  /**
+   * 激活单元格编辑时是否高亮显示
+   */
   highlightCell?: boolean;
-  // 是否显示表尾合计
+  /**
+   * 是否显示表尾
+   */
   showFooter?: boolean;
-  // 表尾合计的计算方法
-  footerMethod?: Function;
-  // 给行附加 className
+  /**
+   * 表尾数据获取的方法
+   */
+  footerMethod?(params: { columns: ColumnConfig[], data: any[] }): Array<string | number>[];
+  /**
+   * 给行附加 className
+   */
   rowClassName?: string | Function;
-  // 给单元格附加 className
+  /**
+   * 给单元格附加 className
+   */
   cellClassName?: string | Function;
-  // 给表头的行附加 className
+  /**
+   * 给表头的行附加 className
+   */
   headerRowClassName?: string | Function;
-  // 给表头的单元格附加 className
+  /**
+   * 给表头的单元格附加 className
+   */
   headerCellClassName?: string | Function;
-  // 给表尾的行附加 className
+  /**
+   * 给表尾的行附加 className
+   */
   footerRowClassName?: string | Function;
-  // 给表尾的单元格附加 className
+  /**
+   * 给表尾的单元格附加 className
+   */
   footerCellClassName?: string | Function;
-  // 给单元格附加样式
-  cellStyle?: any | Function;
-  // 给表头单元格附加样式
-  headerCellStyle?: any | Function;
-  // 给表尾单元格附加样式
-  footerCellStyle?: any | Function;
-  // 给行附加样式
-  rowStyle?: any | Function;
-  // 给表头行附加样式
-  headerRowStyle?: any | Function;
-  // 给表尾行附加样式
-  footerRowStyle?: any | Function;
+  /**
+   * 给单元格附加样式
+   */
+  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  /**
+   * 给表头单元格附加样式
+   */
+  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  /**
+   * 给表尾单元格附加样式
+   */
+  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  /**
+   * 给行附加样式
+   */
+  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  /**
+   * 给表头行附加样式
+   */
+  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  /**
+   * 给表尾行附加样式
+   */
+  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
   // 合并行或列
-  spanMethod?: Function;
-  // 表尾合并行或列
-  footerSpanMethod?: Function;
-  // 设置所有内容过长时显示为省略号
-  showOverflow?: boolean | string;
-  // 设置表头所有内容过长时显示为省略号
-  showHeaderOverflow?: boolean | string;
-  // 设置表尾所有内容过长时显示为省略号
-  showFooterOverflow?: boolean | string;
-  // 所有列宽度
+  spanMethod?(params: ColumnCellRenderParams): { rowspan: number, colspan: number};
+  /**
+   * 表尾合并行或列
+   */
+  footerSpanMethod?(params: ColumnFooterRenderParams): { rowspan: number, colspan: number};
+  /**
+   * 设置所有内容过长时显示为省略号
+   */
+  showOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+  /**
+   * 设置表头所有内容过长时显示为省略号
+   */
+  showHeaderOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+  /**
+   * 设置表尾所有内容过长时显示为省略号
+   */
+  showFooterOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+  /**
+   * 所有列宽度
+   */
   columnWidth?: number | string;
-  // 所有列最小宽度，把剩余宽度按比例分配
+  /**
+   * 所有列最小宽度，把剩余宽度按比例分配
+   */
   columnMinWidth?: number | string;
 
   /** 高级属性 */
@@ -178,17 +251,17 @@ export declare class Table extends VXETableModule {
    * 加载列配置
    * @param columns 列对象
    */
-  loadColumn(columns: any[]): Promise<any>;
+  loadColumn(columns: ColumnOptions[]): Promise<any>;
   /**
    * 加载列配置并恢复到初始状态
    * @param columns 列对象
    */
-  reloadColumn(columns: any[]): Promise<any>;
+  reloadColumn(columns: ColumnOptions[]): Promise<any>;
   /**
    * 根据 tr 元素获取对应的 row 信息
    * @param tr 行节点元素
    */
-  getRowNode(tr: any): {
+  getRowNode(trElem: HTMLElement): {
     item: any;
     items: any[];
     index: number;
@@ -198,7 +271,7 @@ export declare class Table extends VXETableModule {
    * 根据 th/td 元素获取对应的 column 信息
    * @param cell 单元格节点元素
    */
-  getColumnNode(cell: any): {
+  getColumnNode(cellElem: HTMLElement): {
     item: ColumnConfig;
     items: ColumnConfig[];
     index: number;
@@ -267,7 +340,8 @@ export declare class Table extends VXETableModule {
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
    */
-  getColumns(columnIndex?: number): ColumnConfig | ColumnConfig[];
+  getColumns(): ColumnConfig[];
+  getColumns(columnIndex?: number): ColumnConfig;
   /**
    * 根据列的唯一主键获取列
    * @param colid 列主键
@@ -506,7 +580,7 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 tree-config.lazy，用于懒加载树表格，判断树节点是否懒加载完成
    */
-  isTreeExpandLoaded(): boolean;
+  isTreeExpandLoaded(row: any): boolean;
   /**
    * 用于 tree-config.lazy，手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
@@ -545,7 +619,12 @@ export declare class Table extends VXETableModule {
   /**
    * 获取表格的滚动状态
    */
-  getScroll(): any;
+  getScroll(): {
+    virtualX: boolean;
+    virtualY: boolean;
+    scrollTop: number;
+    scrollLeft: number;
+  };
   /**
    * 如果有滚动条，则滚动到对应的位置
    * @param scrollLeft 左边距离
@@ -574,20 +653,25 @@ export declare class Table extends VXETableModule {
    * 更新单元格状态
    * @param scope 插槽对象
    */
-  updateStatus(scope: any): Promise<any>;
+  updateStatus(
+    scope: {
+      row: any;
+      column: ColumnConfig;
+    }
+  ): Promise<any>;
   /**
    * 用于 filters，修改筛选列表
    * 在筛选条件更新之后可以调用 updateData 函数处理表格数据
    * @param column 列对象
    * @param options 选项列表
    */
-  setFilter(column: ColumnConfig, options: any[]): Promise<any>;
+  setFilter(column: ColumnConfig, options: ColumnFilterOption[]): Promise<any>;
   /**
    * 手动清空筛选条件
-   * 如果不传 field 则清空所有筛选条件，数据会恢复成未筛选的状态
-   * @param field 字段名
+   * 如果不传 column 则清空所有筛选条件，数据会恢复成未筛选的状态
+   * @param column 字段名
    */
-  clearFilter(field?: string): Promise<any>;
+  clearFilter(column?: ColumnConfig): Promise<any>;
   /**
    * 手动关闭快捷菜单
    */
@@ -595,7 +679,10 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 mouse-config.selected，获取选中的单元格信息
    */
-  getSelectedCell(): { row: any, column: any };
+  getSelectedCell(): {
+    row: any;
+    column: ColumnConfig;
+  };
   /**
    * 手动清除单元格选中状态
    */
@@ -663,7 +750,7 @@ export declare class Table extends VXETableModule {
     column: ColumnConfig;
     columnIndex: number;
     $columnIndex: number;
-    cell: any;
+    cell: HTMLElement;
   };
   /**
    * 用于 edit-config，判断行是否为激活编辑状态
@@ -696,13 +783,13 @@ export declare class Table extends VXETableModule {
    * @param rows 指定行
    * @param callback 回调函数
    */
-  fullValidate(rows?: any, callback?: Function): Promise<any>;
+  fullValidate(rows?: any, callback?: (status: boolean, errMap: ColumnEditValidErrMapParams) => void): Promise<any>;
   /**
    * 表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise
    * @param rows 指定行
    * @param callback 回调函数
    */
-  validate(rows?: any, callback?: Function): Promise<any>;
+  validate(rows?: any, callback?: (status: boolean, errMap: ColumnEditValidErrMapParams) => void): Promise<any>;
   /**
    * 打开高级导出
    * @param options 参数
@@ -727,7 +814,7 @@ export declare class Table extends VXETableModule {
    * 读取本地文件
    * @param options 参数
    */
-  readFile(options: any): Promise<any>;
+  readFile(options: ReadFileOptions): Promise<any>;
   /**
    * 打印配置项
    * @param options 参数
@@ -909,7 +996,7 @@ export interface ValidConfig {
  * 校验规则配置项
  */
 export interface EditVaildRules {
-  [field: string]: EditRule[];
+  [field: string]: ColumnEditRule[];
 }
 
 /**
@@ -936,7 +1023,7 @@ export interface OptimizationConfig {
 /**
  * 空内容渲染配置项
  */
-export class EmptyRender extends RenderOptions { }
+export class EmptyRender extends RenderOptions {}
 
 export class TableRenderParams extends RenderParams {
   /**

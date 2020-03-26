@@ -26,7 +26,7 @@
         </div>
       </div>
       <div style="display: inline-block;margin-left: 20em;">
-        <div>😘QQ群<br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">New issues</a></div>
+        <div><span style="font-size: 22px;font-weight: 700;">😘QQ群</span><br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">New issues</a></div>
         <img src="static/donation/qq.png">
       </div>
     </div>

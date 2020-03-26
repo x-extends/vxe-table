@@ -6,7 +6,6 @@ import { ColumnConfig } from '../column'
  */
 export declare class Footer {}
 
-
 export interface ColumnFooterSlotParams extends ColumnFooterRenderParams {}
 
 /**

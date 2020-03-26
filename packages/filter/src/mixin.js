@@ -152,10 +152,12 @@ export default {
     /**
      * 清空指定列的筛选条件
      * 如果为空则清空所有列的筛选条件
-     * @param {String} field 字段名
+     * @param {String} column 列
      */
-    _clearFilter (field) {
-      const column = arguments.length ? this.getColumnByField(field) : null
+    _clearFilter (column) {
+      if (arguments.length && XEUtils.isString(column)) {
+        column = this.getColumnByField(column)
+      }
       const filterStore = this.filterStore
       if (column) {
         this.handleClearFilter(column)

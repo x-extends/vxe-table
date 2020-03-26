@@ -26,17 +26,17 @@ export declare class Select extends VXETableModule {
    */
   prefixIcon?: string;
   /**
-   * 下拉选项列表
+   * 下拉选项列表（需要渲染器支持）
    */
-  options?: any[];
+  options?: { [key: string]: any }[];
   /**
-   * 下拉选项属性参数配置
+   * 下拉选项属性参数配置（需要渲染器支持）
    */
   optionProps?: OptionProps;
   /**
-   * 下拉分组选项列表
+   * 下拉分组选项列表（需要渲染器支持）
    */
-  optionGroups?: any[];
+  optionGroups?: { [key: string]: any }[];
   /**
    * 下拉分组选项属性参数配置
    */

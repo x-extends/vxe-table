@@ -79,14 +79,14 @@ export default {
         const columns = this.getColumns()
         const handleVaild = row => {
           const colVailds = []
-          columns.forEach((column, columnIndex) => {
+          columns.forEach((column) => {
             if (XEUtils.has(editRules, column.property)) {
               colVailds.push(
                 new Promise((resolve, reject) => {
                   this.validCellRules('all', row, column)
                     .then(resolve)
                     .catch(({ rule, rules }) => {
-                      const rest = { rule, rules, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), row, columnIndex, column, $table: this }
+                      const rest = { rule, rules, rowIndex: this.getRowIndex(row), row, columnIndex: this.getColumnIndex(column), column, $table: this }
                       if (isAll) {
                         if (!validRest[column.property]) {
                           validRest[column.property] = []

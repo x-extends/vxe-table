@@ -1,7 +1,7 @@
 import { CreateElement, VNode } from 'vue'
 import { VXETableModule } from './component'
 import { TableRenderParams } from './table'
-import { ColumnFilterOption, ColumnFilterRenderOptions, ColumnFilterSlotParams } from './extends/filter'
+import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams } from './extends/filter'
 import { RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
 import { ColumnHeaderSlotParams } from './extends/header'
 import { ColumnFooterSlotParams } from './extends/footer'
@@ -58,13 +58,7 @@ export declare class Column extends VXETableModule {
   // 自定义排序方法
   sortMethod?(a: any, b: any): boolean;
   // 配置筛选条件数组
-  filters?: {
-    label: string | number;
-    value: any;
-    data: any;
-    resetValue: any;
-    checked: boolean;
-  }[];
+  filters?: ColumnFilterOption[];
   // 筛选是否允许多选
   filterMultiple?: boolean;
   // 自定义筛选方法
@@ -131,15 +125,9 @@ export interface ColumnOptions {
   // 自定义排序的属性
   sortBy?: string | string[];
   // 自定义排序方法
-  sortMethod?(a: any, b: any): boolean;
+  sortMethod?(v1: any, v2: any): boolean;
   // 配置筛选条件数组
-  filters?: {
-    label: string | number;
-    value: any;
-    data: any;
-    resetValue: any;
-    checked: boolean;
-  }[];
+  filters?: ColumnFilterOption[];
   // 筛选是否允许多选
   filterMultiple?: boolean;
   // 自定义筛选方法
@@ -191,7 +179,7 @@ export class ColumnConfig {
   checked: boolean;
   disabled: boolean;
   treeNode: boolean;
-  filters: ColumnFilterOption[];
+  filters: ColumnFilterParams[];
   filterRender: ColumnFilterRenderOptions;
   cellRender: ColumnCellRenderOptions;
   editRender: ColumnEditRenderOptions;
@@ -211,7 +199,7 @@ export interface ColumnCellRenderOptions extends RenderOptions {
   /**
    * 下拉选项列表（需要渲染器支持）
    */
-  options?: any[];
+  options?: { [key: string]: any }[];
   /**
    * 下拉选项属性参数配置（需要渲染器支持）
    */
@@ -219,7 +207,7 @@ export interface ColumnCellRenderOptions extends RenderOptions {
   /**
    * 下拉分组选项列表（需要渲染器支持）
    */
-  optionGroups?: any[];
+  optionGroups?: { [key: string]: any }[];
   /**
    * 下拉分组选项属性参数配置（需要渲染器支持）
    */
@@ -237,7 +225,7 @@ export interface ColumnContentRenderOptions extends RenderOptions {
   /**
    * 下拉选项列表（需要渲染器支持）
    */
-  options?: any[];
+  options?: { [key: string]: any }[];
   /**
    * 下拉选项属性参数配置（需要渲染器支持）
    */
@@ -245,7 +233,7 @@ export interface ColumnContentRenderOptions extends RenderOptions {
   /**
    * 下拉分组选项列表（需要渲染器支持）
    */
-  optionGroups?: any[];
+  optionGroups?: { [key: string]: any }[];
   /**
    * 下拉分组选项属性参数配置（需要渲染器支持）
    */
