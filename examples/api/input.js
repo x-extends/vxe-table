@@ -30,7 +30,7 @@ const apis = [
         desc: '渲染类型',
         version: '',
         type: 'String',
-        enum: 'text, number, integer, password, date, week, month, year',
+        enum: 'text, number, integer, float, password, date, week, month, year',
         defVal: '',
         list: []
       },
@@ -89,24 +89,6 @@ const apis = [
         list: []
       },
       {
-        name: 'min',
-        desc: '只对 type=number|integer 有效，最小值',
-        version: '1.15.24',
-        type: 'String, Number',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'max',
-        desc: '只对 type=number|integer 有效，最大值',
-        version: '1.15.24',
-        type: 'String, Number',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'readonly',
         desc: '是否只读',
         version: '',
@@ -143,6 +125,24 @@ const apis = [
         list: []
       },
       {
+        name: 'min',
+        desc: '只对 type=number|integer 有效，最小值',
+        version: '1.15.24',
+        type: 'String, Number',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'max',
+        desc: '只对 type=number|integer 有效，最大值',
+        version: '1.15.24',
+        type: 'String, Number',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'step',
         desc: '只对 type=number|integer 有效，数字间隔',
         version: '1.15.24',
@@ -152,7 +152,17 @@ const apis = [
         list: []
       },
       {
+        name: 'digits',
+        desc: '只对 type=float 有效，小数位数',
+        version: '1.15.27',
+        type: 'Number, String',
+        enum: '',
+        defVal: '默认 2，继承 setup.input.digits',
+        list: []
+      },
+      {
         name: 'date-config',
+        disabled: true,
         desc: '只对 type=date|week|month|year 有效，日期配置项',
         version: '2.15.24',
         type: 'Object',
@@ -161,7 +171,7 @@ const apis = [
         list: [
           {
             name: 'startWeek',
-            desc: '只对 type=date 有效，设置起始周',
+            desc: '只对 type=week 有效，设置起始周',
             version: '',
             type: 'Number, String',
             enum: '0, 1, 2, 3, 4, 5, 6',
@@ -214,6 +224,60 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'startWeek',
+        desc: '只对 type=week 有效，设置起始周',
+        version: '1.15.27',
+        type: 'Number, String',
+        enum: '0, 1, 2, 3, 4, 5, 6',
+        defVal: '默认 1，继承 setup.input.startWeek',
+        list: []
+      },
+      {
+        name: 'labelFormat',
+        desc: '只对 type=date|week|month|year 有效，输入框中显示的日期格式',
+        version: '1.15.27',
+        type: 'String',
+        enum: '',
+        defVal: '继承 setup.input.labelFormat',
+        list: []
+      },
+      {
+        name: 'parseFormat',
+        desc: '只对 type=date|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
+        version: '1.15.27',
+        type: 'String',
+        enum: '',
+        defVal: '继承 setup.input.parseFormat',
+        list: []
+      },
+      {
+        name: 'valueFormat',
+        desc: '只对 type=date|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
+        version: '1.15.27',
+        type: 'String',
+        enum: '',
+        defVal: '继承 setup.input.valueFormat',
+        list: []
+      },
+      {
+        name: 'editable',
+        desc: '只对 type=date|week|month|year 有效，文本框是否允许输入',
+        version: '1.15.27',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 true，继承 setup.input.editable',
+        list: []
+      },
+      {
+        name: 'disabledMethod',
+        desc: '只对 type=date|week|month|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中',
+        version: '1.15.27',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
       },
       {
         name: 'transfer',

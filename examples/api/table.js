@@ -424,7 +424,7 @@ const apis = [
         name: 'sync-resize',
         descKey: 'app.api.table.desc.syncResize',
         version: '1.14.3',
-        type: 'Boolean, String',
+        type: 'Boolean, String, Number',
         enum: '',
         defVal: '',
         list: []

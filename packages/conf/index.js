@@ -162,13 +162,12 @@ const GlobalConfig = {
     // colon: false
   },
   input: {
-    // transfer: false,
-    dateConfig: {
-      startWeek: 1
-      // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
-      // labelFormat: '',
-      // valueFormat: ''
-    }
+    // transfer: false
+    // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
+    // labelFormat: '',
+    // valueFormat: '',
+    startWeek: 1,
+    digits: 2
   },
   textarea: {
     // autosize: {

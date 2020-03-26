@@ -29,7 +29,7 @@ function renderDateInput (h, _vm) {
 }
 
 function isDateDisabled (_vm, item) {
-  const { disabledMethod } = _vm.dateOpts
+  const disabledMethod = _vm.disabledMethod || _vm.dateOpts.disabledMethod
   return disabledMethod && disabledMethod({ date: item.date, $input: _vm })
 }
 
@@ -397,12 +397,25 @@ export default {
     maxlength: [String, Number],
     autocomplete: { type: String, default: 'off' },
     form: String,
-    editable: Boolean,
-    dateConfig: Object,
     size: String,
+
+    // number、integer、float
     min: { type: [String, Number], default: null },
     max: { type: [String, Number], default: null },
     step: [String, Number],
+
+    // float
+    digits: { type: [String, Number], default: () => GlobalConfig.input.digits },
+
+    // date、week、month、year
+    dateConfig: Object,
+    startWeek: { type: Number, default: () => GlobalConfig.input.startWeek },
+    labelFormat: { type: String, default: () => GlobalConfig.input.labelFormat },
+    parseFormat: { type: String, default: () => GlobalConfig.input.parseFormat },
+    valueFormat: { type: String, default: () => GlobalConfig.input.valueFormat },
+    editable: { type: Boolean, default: true },
+    disabledMethod: Function,
+
     prefixIcon: String,
     suffixIcon: String,
     placement: String,
@@ -430,7 +443,7 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     isNumber () {
-      return ['number', 'integer'].indexOf(this.type) > -1
+      return ['number', 'integer', 'float'].indexOf(this.type) > -1
     },
     isDatePicker () {
       return ['date', 'week', 'month', 'year'].indexOf(this.type) > -1
@@ -450,12 +463,12 @@ export default {
     },
     dateLabelFormat () {
       if (this.isDatePicker) {
-        return this.dateOpts.labelFormat || GlobalConfig.i18n(`vxe.input.date.labelFormat.${this.type}`)
+        return this.labelFormat || this.dateOpts.labelFormat || GlobalConfig.i18n(`vxe.input.date.labelFormat.${this.type}`)
       }
       return null
     },
     dateValueFormat () {
-      return this.dateOpts.valueFormat || 'yyyy-MM-dd'
+      return this.valueFormat || this.dateOpts.valueFormat || 'yyyy-MM-dd'
     },
     selectDatePanelLabel () {
       const { datePanelType, selectMonth, yearList } = this
@@ -473,7 +486,7 @@ export default {
       return XEUtils.template(GlobalConfig.i18n('vxe.input.date.dayLabel'), [year, month ? GlobalConfig.i18n(`vxe.input.date.m${month}`) : '-'])
     },
     weekDatas () {
-      let sWeek = XEUtils.toNumber(this.dateOpts.startWeek)
+      let sWeek = XEUtils.toNumber(XEUtils.isNumber(this.startWeek) ? this.startWeek : this.dateOpts.startWeek)
       const weeks = [sWeek]
       for (let index = 0; index < 6; index++) {
         if (sWeek >= 6) {
@@ -581,14 +594,14 @@ export default {
       return Object.assign({}, this.dateConfig, GlobalConfig.input.dateConfig)
     },
     inpAttrs () {
-      const { isDatePicker, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd, dateOpts } = this
+      const { isDatePicker, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd, editable } = this
       const attrs = {
         name,
         form,
         type: isDatePicker || (isPassword && showPwd) ? 'text' : type,
         placeholder,
         maxlength,
-        readonly: readonly || type === 'week' || dateOpts.editable === false,
+        readonly: readonly || type === 'week' || !editable || this.dateOpts.editable === false,
         disabled,
         autocomplete
       }
@@ -624,13 +637,16 @@ export default {
     }
   },
   created () {
-    this.changeValue()
+    this.initValue()
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
   mounted () {
+    if (this.dateConfig) {
+      UtilTools.warn('vxe.error.removeProp', ['date-config'])
+    }
     if (this.isDatePicker) {
       if (this.transfer) {
         document.body.appendChild(this.$refs.panel)
@@ -736,11 +752,30 @@ export default {
       if (this.isDatePicker) {
         this.hidePanel()
       }
-      if (['text', 'number', 'integer', 'password'].indexOf(type) > -1) {
+      if (['text', 'number', 'integer', 'float', 'password'].indexOf(type) > -1) {
         this.focus()
       }
       this.$emit('clear', { $panel: $refs.panel, value }, evnt)
     },
+    /**
+     * 检查初始值
+     */
+    initValue () {
+      const { type, isDatePicker, value, digits } = this
+      if (isDatePicker) {
+        this.changeValue()
+      } else if (type === 'float') {
+        if (value) {
+          const validValue = XEUtils.toFixedString(value, XEUtils.toNumber(digits))
+          if (value !== validValue) {
+            this.emitUpdate(validValue)
+          }
+        }
+      }
+    },
+    /**
+     * 值变化时处理
+     */
     changeValue () {
       if (this.isDatePicker) {
         this.dateParseValue(this.value)
@@ -748,18 +783,17 @@ export default {
       }
     },
     afterCheckValue () {
-      const { inpAttrs, value, isDatePicker, isNumber, dateLabelFormat, min, max } = this
+      const { type, inpAttrs, value, isDatePicker, isNumber, dateLabelFormat, min, max, digits } = this
       if (!inpAttrs.readonly) {
         if (isNumber) {
-          if (value || XEUtils.isNumber(value)) {
-            const inputValue = this.type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
+          if (value) {
+            let inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
             if (!this.vaildMinNum(inputValue)) {
-              this.emitUpdate(min)
+              inputValue = min
             } else if (!this.vaildMaxNum(inputValue)) {
-              this.emitUpdate(max)
-            } else {
-              this.emitUpdate(inputValue)
+              inputValue = max
             }
+            this.emitUpdate(type === 'float' ? XEUtils.toFixedString(inputValue, XEUtils.toNumber(digits)) : '' + inputValue)
           }
         } else if (isDatePicker) {
           let inpVal = this.inputValue
@@ -767,10 +801,10 @@ export default {
             inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
             if (XEUtils.isDate(inpVal)) {
               if (!XEUtils.isEqual(value, inpVal)) {
-                this.dateChangeValue(inpVal)
+                this.dateChange(inpVal)
               }
             } else {
-              this.dateRevertValue()
+              this.dateRevert()
             }
           } else {
             this.emitUpdate('')
@@ -856,11 +890,11 @@ export default {
       }
     },
     numberChange (isPlus) {
-      const { value, stepValue } = this
-      const inputValue = this.type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
+      const { type, digits, value, stepValue } = this
+      const inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
       const newValue = isPlus ? XEUtils.add(inputValue, stepValue) : XEUtils.subtract(inputValue, stepValue)
       if (this.vaildMinNum(newValue) && this.vaildMaxNum(newValue)) {
-        this.emitUpdate(newValue)
+        this.emitUpdate(type === 'float' ? XEUtils.toFixedString(newValue, XEUtils.toNumber(digits)) : '' + newValue)
       }
     },
     // 数值
@@ -909,7 +943,7 @@ export default {
     },
     dateTodayMonthEvent () {
       this.dateNowHandle()
-      this.dateChangeValue(this.currentDate)
+      this.dateChange(this.currentDate)
       this.hidePanel()
     },
     dateNextEvent () {
@@ -944,12 +978,12 @@ export default {
           this.datePanelType = 'month'
           this.dateCheckMonth(date)
         } else {
-          this.dateChangeValue(date)
+          this.dateChange(date)
           this.hidePanel()
         }
       } else if (type === 'year') {
         this.hidePanel()
-        this.dateChangeValue(date)
+        this.dateChange(date)
       } else {
         if (datePanelType === 'month') {
           this.datePanelType = type === 'week' ? type : 'day'
@@ -958,7 +992,7 @@ export default {
           this.datePanelType = 'month'
           this.dateCheckMonth(date)
         } else {
-          this.dateChangeValue(date)
+          this.dateChange(date)
           this.hidePanel()
         }
       }
@@ -1000,8 +1034,8 @@ export default {
       }
     },
     dateParseValue (date) {
-      const { dateLabelFormat, dateOpts } = this
-      let dValue = date ? XEUtils.toStringDate(date, dateOpts.parseFormat) : null
+      const { dateLabelFormat, parseFormat } = this
+      let dValue = date ? XEUtils.toStringDate(date, parseFormat || this.dateOpts.parseFormat) : null
       let dLabel = ''
       if (XEUtils.isDate(dValue)) {
         dLabel = XEUtils.toDateString(dValue, dateLabelFormat)
@@ -1059,10 +1093,11 @@ export default {
         }
       }
     },
-    dateChangeValue (date) {
-      const { value, type, dateValueFormat, dateOpts } = this
+    dateChange (date) {
+      const { value, type, dateValueFormat } = this
       if (type === 'week') {
-        date = XEUtils.getWhatWeek(date, 0, dateOpts.startWeek)
+        const sWeek = XEUtils.toNumber(XEUtils.isNumber(this.startWeek) ? this.startWeek : this.dateOpts.startWeek)
+        date = XEUtils.getWhatWeek(date, 0, sWeek)
       }
       const inpVal = XEUtils.toDateString(date, dateValueFormat)
       this.dateCheckMonth(date)
@@ -1091,7 +1126,7 @@ export default {
         this.dateNowHandle()
       }
     },
-    dateRevertValue () {
+    dateRevert () {
       this.inputValue = this.datePanelLabel
     },
     // 日期
@@ -1187,7 +1222,9 @@ export default {
           if (visiblePanel) {
             this.hidePanel()
           }
-          this.afterCheckValue()
+          if (isActivated) {
+            this.afterCheckValue()
+          }
         }
       }
     },
@@ -1206,10 +1243,10 @@ export default {
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         let isActivated = this.isActivated
         if (isTab) {
-          isActivated = false
-          if (this.isActivated) {
+          if (isActivated) {
             this.afterCheckValue()
           }
+          isActivated = false
           this.isActivated = isActivated
         } else if (operArrow) {
           if (isDatePicker) {
@@ -1238,19 +1275,21 @@ export default {
     },
     handleGlobalMousewheelEvent (evnt) {
       const { $refs, $el, visiblePanel } = this
-      if (!DomTools.getEventTargetNode(evnt, $el).flag && !DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
-        if (visiblePanel) {
+      if (visiblePanel) {
+        if (!DomTools.getEventTargetNode(evnt, $el).flag && !DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
           this.hidePanel()
+          this.afterCheckValue()
         }
-        this.afterCheckValue()
       }
     },
     handleGlobalBlurEvent () {
-      const { visiblePanel } = this
+      const { isActivated, visiblePanel } = this
       if (visiblePanel) {
         this.hidePanel()
+        this.afterCheckValue()
+      } else if (isActivated) {
+        this.afterCheckValue()
       }
-      this.afterCheckValue()
     }
     // 全局事件
   }
