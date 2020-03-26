@@ -517,8 +517,18 @@ const renderMap = {
       const { props = {} } = renderOpts
       const { row, column } = params
       let cellValue = XEUtils.get(row, column.property)
-      if (['date', 'week', 'week', 'year'].indexOf(props.type) > -1) {
-        cellValue = getLabelFormatDate(cellValue, props)
+      if (cellValue) {
+        switch (props.type) {
+          case 'date':
+          case 'week':
+          case 'month':
+          case 'year':
+            cellValue = getLabelFormatDate(cellValue, props)
+            break
+          case 'float':
+            cellValue = XEUtils.toFixedString(cellValue, XEUtils.toNumber(props.digits || GlobalConfig.input.digits))
+            break
+        }
       }
       return cellValue
     },

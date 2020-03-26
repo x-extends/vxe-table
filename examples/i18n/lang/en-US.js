@@ -354,7 +354,7 @@ module.exports = {
           headerRowStyle: 'Append styles to header rows, which can also be function, Function({$rowIndex, column, columnIndex, $columnIndex})',
           footerRowStyle: 'Attach a style to the end of a table, or a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
           showFooter: 'Whether to display table footer',
-          footerMethod: 'The data method at table footer, Function({columns, data})',
+          footerMethod: 'The data method at table footer, Function({columns, data}) return a two-dimensional array',
           spanMethod: 'Merge rows or columns, Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data})',
           footerSpanMethod: 'Footer merge rows or columns, Function({$rowIndex, column, columnIndex, $columnIndex, data})',
           showOverflow: 'Sets all content to appear as ellipses if it is too long',
