@@ -11,4 +11,3 @@ export class menus {
   add(type: string, callback: typeof menuFunc): menus;
   delete(type: string): menus;
 }
-

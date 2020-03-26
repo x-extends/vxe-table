@@ -457,7 +457,7 @@ export const Cell = {
       }
     }
     return [
-      !visibleMethod || visibleMethod({ row }) ? h('span', {
+      !visibleMethod || visibleMethod(params) ? h('span', {
         class: ['vxe-table--expanded', {
           'is--active': isAceived
         }],

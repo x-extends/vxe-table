@@ -6,7 +6,7 @@ import { ColumnConfig } from '../column'
  */
 export declare class Header {}
 
-export interface ColumnHeaderSlotParams  extends ColumnHeaderRenderParams {}
+export interface ColumnHeaderSlotParams extends ColumnHeaderRenderParams {}
 
 /**
  * 表头渲染参数

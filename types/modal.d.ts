@@ -200,6 +200,13 @@ export interface ModalOptions {
     title?(params: ModalTitleSlotParams, h: CreateElement): VNode[] | string[];
     footer?(params: ModalFooterSlotParams, h: CreateElement): VNode[] | string[];
   };
+
+  events?: {
+    inserted?(params: ModalEventParams): any;
+    show?(params: ModalEventParams): any;
+    hide?(params: ModalEventParams): any;
+    zoom?(params: ModalEventParams): any;
+  };
 }
 
 export interface ModalDefaultSlotParams {
@@ -209,6 +216,11 @@ export interface ModalDefaultSlotParams {
 export interface ModalHeaderSlotParams extends ModalDefaultSlotParams {}
 export interface ModalTitleSlotParams extends ModalDefaultSlotParams {}
 export interface ModalFooterSlotParams extends ModalDefaultSlotParams {}
+
+export interface ModalEventParams {
+  $modal: Modal;
+  type: string;
+}
 
 /**
  * 全局模态窗口控制器

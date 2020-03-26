@@ -14,7 +14,7 @@
         <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
         <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
         <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
-        <vxe-button @click="$refs.xTable.clearFilter('age')">清除 Age 的筛选条件</vxe-button>
+        <vxe-button @click="$refs.xTable.clearFilter($refs.xTable.getColumnByField('age'))">清除 Age 的筛选条件</vxe-button>
         <vxe-button @click="$refs.xTable.clearFilter()">清除所有的筛选条件</vxe-button>
       </template>
     </vxe-toolbar>
@@ -94,7 +94,7 @@ export default {
             <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
             <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
             <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
-            <vxe-button @click="$refs.xTable.clearFilter('age')">清除 Age 的筛选条件</vxe-button>
+            <vxe-button @click="$refs.xTable.clearFilter($refs.xTable.getColumnByField('age'))">清除 Age 的筛选条件</vxe-button>
             <vxe-button @click="$refs.xTable.clearFilter()">清除所有的筛选条件</vxe-button>
           </template>
         </vxe-toolbar>

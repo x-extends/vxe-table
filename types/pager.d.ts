@@ -58,7 +58,6 @@ export declare class Pager extends VXETableModule {
   iconJumpMore?: string;
 }
 
-
 export interface PagerOptions {
   /**
    * 自定义布局

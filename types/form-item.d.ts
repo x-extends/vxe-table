@@ -129,7 +129,7 @@ export interface FormItemRenderOptions extends RenderOptions {
   /**
    * 下拉选项列表（需要渲染器支持）
    */
-  options?: any[];
+  options?: { [key: string]: any }[];
   /**
    * 下拉选项属性参数配置（需要渲染器支持）
    */
@@ -137,7 +137,7 @@ export interface FormItemRenderOptions extends RenderOptions {
   /**
    * 下拉分组选项列表（需要渲染器支持）
    */
-  optionGroups?: any[];
+  optionGroups?: { [key: string]: any }[];
   /**
    * 下拉分组选项属性参数配置（需要渲染器支持）
    */

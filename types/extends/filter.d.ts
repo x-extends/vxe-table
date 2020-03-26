@@ -20,7 +20,7 @@ export class FilterPanel {
    * @param checked 是否选中
    * @param option 选项对象
    */
-  changeOption(evnt: any, checked: boolean, option: any): any;
+  changeOption(evnt: any, checked: boolean, option: ColumnFilterParams): any;
   /**
    * 确认筛选
    */
@@ -32,6 +32,14 @@ export class FilterPanel {
 }
 
 export interface ColumnFilterOption {
+  label?: string | number;
+  value?: any;
+  data?: any;
+  resetValue?: any;
+  checked?: boolean;
+}
+
+export interface ColumnFilterParams {
   label: string | number;
   value: any;
   data: any;
@@ -73,7 +81,7 @@ export interface ColumnFilterMethodParams {
   /**
    * 选项
    */
-  option: any;
+  option: ColumnFilterParams;
   /**
    * 行数据对象
    */
@@ -87,7 +95,7 @@ export interface ColumnFilterMethodParams {
 export interface ColumnFilterSlotParams extends ColumnFilterRenderParams {}
 
 export interface ColumnFilterResetParams extends TableRenderParams {
-  options: ColumnFilterOption[];
+  options: ColumnFilterParams[];
   column: ColumnConfig;
 }
 
@@ -98,7 +106,7 @@ export interface ColumnFilterRenderOptions extends RenderOptions {
   /**
    * 下拉选项列表（需要渲染器支持）
    */
-  options?: any[];
+  options?: { [key: string]: any }[];
   /**
    * 下拉选项属性参数配置（需要渲染器支持）
    */
@@ -106,7 +114,7 @@ export interface ColumnFilterRenderOptions extends RenderOptions {
   /**
    * 下拉分组选项列表（需要渲染器支持）
    */
-  optionGroups?: any[];
+  optionGroups?: { [key: string]: any }[];
   /**
    * 下拉分组选项属性参数配置（需要渲染器支持）
    */
