@@ -20,7 +20,7 @@
         </vxe-button>
       </template>
       <template v-slot:tools>
-        <vxe-input placeholder="搜索"></vxe-input>
+        <vxe-input v-model="value2" placeholder="搜索"></vxe-input>
       </template>
     </vxe-toolbar>
 
@@ -49,9 +49,7 @@
       </vxe-table-column>
       <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
         <template v-slot:header>
-          <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
-            <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
-          </vxe-tooltip>
+          <span style="color: red;">自定义头部</span>
         </template>
         <template v-slot:footer="{ items, itemIndex }">
           <span style="color: red">累计：{{ items[itemIndex] }}</span>
@@ -69,7 +67,7 @@
       </vxe-table-column>
       <vxe-table-column field="time" title="Time">
         <template v-slot:header>
-          <vxe-input placeholder="这样也行" size="mini"></vxe-input>
+          <vxe-input v-model="value1" placeholder="放个输入框" size="mini"></vxe-input>
         </template>
         <template v-slot="{ row }">
           <span>{{ formatDate(row.time) }}</span>
@@ -122,7 +120,8 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      showSexTip: false,
+      value1: '',
+      value2: '',
       showDetails: false,
       selectRow: null,
       tableData: [],
@@ -140,7 +139,7 @@ export default {
             </vxe-button>
           </template>
           <template v-slot:tools>
-            <vxe-input placeholder="搜索"></vxe-input>
+            <vxe-input v-model="value2" placeholder="搜索"></vxe-input>
           </template>
         </vxe-toolbar>
 
@@ -169,9 +168,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
             <template v-slot:header>
-              <vxe-tooltip v-model="showSexTip" content="这样玩也行？">
-                <span style="color: red;" @click="showSexTip = !showSexTip">这样玩也行</span>
-              </vxe-tooltip>
+              <span style="color: red;">自定义头部</span>
             </template>
             <template v-slot:footer="{ items, itemIndex }">
               <span style="color: red">累计：{{ items[itemIndex] }}</span>
@@ -189,7 +186,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="time" title="Time">
             <template v-slot:header>
-              <vxe-input placeholder="这样也行" size="mini"></vxe-input>
+              <vxe-input v-model="value1" placeholder="放个输入框" size="mini"></vxe-input>
             </template>
             <template v-slot="{ row }">
               <span>{{ formatDate(row.time) }}</span>
@@ -229,7 +226,8 @@ export default {
         export default {
           data () {
             return {
-              showSexTip: false,
+              value1: '',
+              value2: '',
               showDetails: false,
               selectRow: null,
               tableData: []

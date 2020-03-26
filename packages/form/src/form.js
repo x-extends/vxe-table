@@ -143,7 +143,6 @@ export default {
       const validRest = {}
       const validFields = []
       const itemValids = []
-      let status = true
       this.clearValidate()
       if (data && formRules) {
         this.$children.forEach(({ field }) => {
@@ -168,12 +167,11 @@ export default {
         })
         return Promise.all(itemValids).then(() => {
           if (callback) {
-            callback(status)
+            callback()
           }
         }).catch(() => {
-          status = false
           if (callback) {
-            callback(status, validRest)
+            callback(validRest)
           }
           this.$nextTick(() => {
             this.handleFocus(validFields)
@@ -182,7 +180,7 @@ export default {
         })
       }
       if (callback) {
-        callback(status)
+        callback()
       }
       return Promise.resolve()
     },
@@ -190,15 +188,15 @@ export default {
      * 校验数据
      * 按表格行、列顺序依次校验（同步或异步）
      * 校验规则根据索引顺序依次校验，如果是异步则会等待校验完成才会继续校验下一列
-     * 如果校验失败则，触发回调或者Promise，结果返回一个 Boolean 值
-     * 如果是传回调方式这返回一个 Boolean 值和校验不通过列的错误消息
+     * 如果校验失败则，触发回调或者 Promise<(ErrMap 校验不通过列的信息)>
+     * 如果是传回调方式这返回一个 (ErrMap 校验不通过列的信息)
      *
      * rule 配置：
      *  required=Boolean 是否必填
      *  min=Number 最小长度
      *  max=Number 最大长度
      *  validator=Function(rule, value, callback, {rules, property}) 自定义校验
-     *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
+     *  trigger=change 触发方式
      */
     validItemRules (type, property, val) {
       const { data, rules: formRules } = this

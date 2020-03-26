@@ -17,7 +17,7 @@
       <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
       <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column title="操作">
+      <vxe-table-column title="操作" width="160">
         <template v-slot="{ row }">
           <template v-if="$refs.xTable.isActiveByRow(row)">
             <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
@@ -65,7 +65,7 @@ export default {
           <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
           <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-table-column title="操作" width="160">
             <template v-slot="{ row }">
               <template v-if="$refs.xTable.isActiveByRow(row)">
                 <vxe-button @click="saveRowEvent(row)">保存</vxe-button>

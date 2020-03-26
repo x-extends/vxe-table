@@ -3591,12 +3591,12 @@ const apis = [
         list: []
       },
       {
-        name: 'clearFilter(field)',
-        desc: '手动清空筛选条件（如果不传 field 则清空所有筛选条件），数据会恢复成未筛选的状态',
-        version: '',
+        name: 'clearFilter(column)',
+        desc: '手动清空筛选条件（如果不传 column 则清空所有筛选条件），数据会恢复成未筛选的状态',
+        version: '1.15.27',
         type: 'Promise',
         enum: '',
-        defVal: 'field?',
+        defVal: 'column?: ColumnConfig',
         list: []
       },
       // {
@@ -3867,7 +3867,7 @@ const apis = [
         name: 'validate(rows, callback)',
         desc: '表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
         version: '',
-        type: 'Promise<ErrorMap>',
+        type: 'Promise<ErrMap>',
         enum: '',
         defVal: 'rows?, callback?',
         list: []
@@ -3876,7 +3876,7 @@ const apis = [
         name: 'fullValidate(rows, callback)',
         desc: '表格完整校验函数，和 validate 的区别就是会对全量数据的所有规则进行完整校验',
         version: '',
-        type: 'Promise<ErrorMap>',
+        type: 'Promise<ErrMap>',
         enum: '',
         defVal: 'rows?, callback?',
         list: []

@@ -4371,10 +4371,12 @@ export default {
     /**
      * 清空指定列的筛选条件
      * 如果为空则清空所有列的筛选条件
-     * @param {String} field 字段名
+     * @param {String} column 列
      */
-    clearFilter (field) {
-      const column = arguments.length ? this.getColumnByField(field) : null
+    clearFilter (column) {
+      if (arguments.length && XEUtils.isString(column)) {
+        column = this.getColumnByField(column)
+      }
       const filterStore = this.filterStore
       if (column) {
         this.handleClearFilter(column)
@@ -5166,14 +5168,14 @@ export default {
         const columns = this.getColumns()
         const handleVaild = row => {
           const colVailds = []
-          columns.forEach((column, columnIndex) => {
+          columns.forEach((column) => {
             if (XEUtils.has(editRules, column.property)) {
               colVailds.push(
                 new Promise((resolve, reject) => {
                   this.validCellRules('all', row, column)
                     .then(resolve)
                     .catch(({ rule, rules }) => {
-                      const rest = { rule, rules, rowIndex: this.getRowIndex(row), row, columnIndex, column, $table: this }
+                      const rest = { rule, rules, rowIndex: this.getRowIndex(row), row, columnIndex: this.getColumnIndex(column), column, $table: this }
                       if (isAll) {
                         if (!validRest[column.property]) {
                           validRest[column.property] = []
