@@ -153,7 +153,7 @@ export default {
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: Boolean,
     // 是否自动根据状态属性去更新响应式表格宽高
-    syncResize: [Boolean, String],
+    syncResize: [Boolean, String, Number],
     // 序号配置项
     seqConfig: Object,
     // 排序配置项
@@ -557,10 +557,14 @@ export default {
     },
     syncResize (value) {
       if (value) {
+        const { $el } = this
+        // 只在可视状态下才去更新
+        if ($el.clientWidth && $el.clientHeight) {
+          this.recalculate()
+        }
         this.$nextTick(() => {
           setTimeout(() => {
-            // 只在可视状态下才去更新
-            if (this.$el.clientWidth && this.$el.clientHeight) {
+            if ($el.clientWidth && $el.clientHeight) {
               this.recalculate(true)
             }
           })

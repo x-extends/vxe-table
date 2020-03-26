@@ -2436,9 +2436,10 @@ const Methods = {
         rowExpandeds = []
         rows = rows.slice(rows.length - 1, rows.length)
       }
+      const removeRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) : rows
       if (expanded) {
-        rows.forEach(row => {
-          if ((!toggleMethod || toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) && rowExpandeds.indexOf(row) === -1) {
+        removeRows.forEach(row => {
+          if (rowExpandeds.indexOf(row) === -1) {
             const rest = fullAllDataRowMap.get(row)
             const isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
             if (isLoad) {
@@ -2449,7 +2450,7 @@ const Methods = {
           }
         })
       } else {
-        XEUtils.remove(rowExpandeds, row => (!toggleMethod || toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) && rows.indexOf(row) > -1)
+        XEUtils.remove(rowExpandeds, row => removeRows.indexOf(row) > -1)
       }
     }
     this.rowExpandeds = rowExpandeds
@@ -2629,9 +2630,10 @@ const Methods = {
           const matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeOpts)
           XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
         }
+        const removeRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row })) : rows
         if (expanded) {
-          rows.forEach(row => {
-            if ((!toggleMethod || toggleMethod({ expanded, column, columnIndex, $columnIndex, row })) && treeExpandeds.indexOf(row) === -1) {
+          removeRows.forEach(row => {
+            if (treeExpandeds.indexOf(row) === -1) {
               const rest = fullAllDataRowMap.get(row)
               const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
               // 是否使用懒加载
@@ -2645,7 +2647,7 @@ const Methods = {
             }
           })
         } else {
-          XEUtils.remove(treeExpandeds, row => (!toggleMethod || toggleMethod({ expanded, column, columnIndex, $columnIndex, row })) && rows.indexOf(row) > -1)
+          XEUtils.remove(treeExpandeds, row => removeRows.indexOf(row) > -1)
         }
         return Promise.all(result).then(this.recalculate)
       }

@@ -56,8 +56,8 @@ export default {
         { type: 'checkbox', title: '全选', width: 120 },
         { field: 'name', title: '名称', width: 220, treeNode: true, editRender: { name: 'input' } },
         { field: 'size', title: '大小', editRender: { name: 'input' } },
-        { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: '$input', props: { type: 'date', dateConfig: { labelFormat: 'yyyy-MM-dd HH:mm:ss' } } } },
-        { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: '$input', props: { type: 'date', dateConfig: { labelFormat: 'yyyy-MM-dd HH:mm:ss' } } } }
+        { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: '$input', props: { type: 'date', labelFormat: 'yyyy-MM-dd HH:mm:ss' } } },
+        { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: '$input', props: { type: 'date', labelFormat: 'yyyy-MM-dd HH:mm:ss' } } }
       ],
       demoCodes: [
         `
@@ -102,8 +102,8 @@ export default {
                 { type: 'checkbox', title: '全选', width: 120 },
                 { field: 'name', title: '名称', width: 220, treeNode: true, editRender: { name: 'input' } },
                 { field: 'size', title: '大小', editRender: { name: 'input' } },
-                { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: '$input', props: { type: 'date', dateConfig: { labelFormat: 'yyyy-MM-dd HH:mm:ss' } } } },
-                { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: '$input', props: { type: 'date', dateConfig: { labelFormat: 'yyyy-MM-dd HH:mm:ss' } } } }
+                { field: 'createTime', title: 'app.body.label.createTime', editRender: { name: '$input', props: { type: 'date', labelFormat: 'yyyy-MM-dd HH:mm:ss' } } },
+                { field: 'updateTime', title: 'app.body.label.updateTime', editRender: { name: '$input', props: { type: 'date', labelFormat: 'yyyy-MM-dd HH:mm:ss' } } }
               ]
             }
           }

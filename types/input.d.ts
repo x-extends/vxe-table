@@ -15,7 +15,7 @@ export declare class Input extends VXETableModule {
   /**
    * 渲染类型
    */
-  type?: string;
+  type?: 'text' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'week' | 'month' | 'year';
   /**
    * 当有值时，是否在右侧显示清除按钮
    */
@@ -44,26 +44,46 @@ export declare class Input extends VXETableModule {
    * 原生 form 属性
    */
   form?: string;
-  dateConfig?: {
-    startWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-    labelFormat?: string;
-    parseFormat?: string;
-    valueFormat?: string;
-    editable?: string;
-    disabledMethod?(params: { date: Date }): boolean;
-  };
   /**
-   * 只对 type=number|integer 有效，最小值
+   * 只对 type=week 有效，设置起始周
+   */
+  startWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  /**
+   * 只对 type=date|week|month|year 有效，输入框中显示的日期格式
+   */
+  labelFormat?: string;
+  /**
+   * 只对 type=date|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到
+   */
+  parseFormat?: string;
+  /**
+   * 只对 type=date|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串
+   */
+  valueFormat?: string;
+  /**
+   * 只对 type=date|week|month|year 有效，文本框是否允许输入
+   */
+  editable?: string;
+  /**
+   * 只对 type=date|week|month|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中
+   */
+  disabledMethod?(params: { date: Date }): boolean;
+  /**
+   * 只对 type=number|integer|float 有效，最小值
    */
   min?: string | number;
   /**
-   * 只对 type=number|integer 有效，最大值
+   * 只对 type=number|integer|float 有效，最大值
    */
   max?: string | number;
   /**
-   * 只对 type=number|integer 有效，数字间隔
+   * 只对 type=number|integer|float 有效，数字间隔
    */
   step?: string | number;
+  /**
+   * 只对 type=float 有效，小数位数
+   */
+  digits?: string | number;
   /**
    * 头部图标
    */

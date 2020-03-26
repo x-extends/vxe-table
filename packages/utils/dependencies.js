@@ -115,8 +115,8 @@ import destructuring from 'xe-utils/methods/base/destructuring'
 // import max from 'xe-utils/methods/number/max'
 // import min from 'xe-utils/methods/number/min'
 // import commafy from 'xe-utils/methods/number/commafy'
-// import toFixedString from 'xe-utils/methods/number/toFixedString'
-// import toFixedNumber from 'xe-utils/methods/number/toFixedNumber'
+import toFixedString from 'xe-utils/methods/number/toFixedString'
+import toFixedNumber from 'xe-utils/methods/number/toFixedNumber'
 import toInteger from 'xe-utils/methods/number/toInteger'
 import toNumber from 'xe-utils/methods/number/toNumber'
 import add from 'xe-utils/methods/number/add'
@@ -294,8 +294,8 @@ export default {
   // max,
   // min,
   // commafy,
-  // toFixedString,
-  // toFixedNumber,
+  toFixedString,
+  toFixedNumber,
   toInteger,
   toNumber,
   add,

@@ -24,18 +24,21 @@
     <p>
       <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
       <vxe-input v-model="value11" placeholder="周" type="week" clearable></vxe-input>
-      <vxe-input v-model="value12" placeholder="月" type="month" :date-config="{valueFormat: 'yyyy-MM-dd'}"></vxe-input>
+      <vxe-input v-model="value12" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
       <vxe-input v-model="value13" placeholder="年" type="year" clearable></vxe-input>
-      <vxe-input v-model="value14" placeholder="禁用日期" type="date" :date-config="{disabledMethod: disabledDateMethod}"></vxe-input>
+      <vxe-input v-model="value14" placeholder="禁用日期" type="date" :disabledMethod="disabledDateMethod"></vxe-input>
     </p>
 
     <p>
       <vxe-input v-model="value15" placeholder="数值类型" type="number"></vxe-input>
-      <vxe-input v-model="value16" placeholder="数值间隔" type="number" step="1.4" clearable></vxe-input>
+      <vxe-input v-model="value16" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
       <vxe-input v-model="value17" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
-      <vxe-input v-model="value18" placeholder="整数类型" type="integer"></vxe-input>
-      <vxe-input v-model="value19" placeholder="数值间隔" type="integer" step="5" clearable></vxe-input>
-      <vxe-input v-model="value20" placeholder="数值范围限制 0-100" type="integer" min="0" max="100" step="5" clearable></vxe-input>
+      <vxe-input v-model="value18" placeholder="小数类型" type="float"></vxe-input>
+      <vxe-input v-model="value19" placeholder="小数间隔 2.3" type="float" step="2.3" clearable></vxe-input>
+      <vxe-input v-model="value20" placeholder="小数范围限制 0-50" type="float" min="0" max="50" clearable></vxe-input>
+      <vxe-input v-model="value21" placeholder="整数类型" type="integer"></vxe-input>
+      <vxe-input v-model="value22" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
+      <vxe-input v-model="value23" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
     </p>
 
     <pre>
@@ -75,12 +78,15 @@ export default {
       value12: '',
       value13: '',
       value14: '',
-      value15: '',
+      value15: '22',
       value16: '',
       value17: '',
-      value18: '',
+      value18: '33.33',
       value19: '',
       value20: '',
+      value21: '44',
+      value22: '',
+      value23: '',
       demoCodes: [
         `
         <p>
@@ -104,9 +110,9 @@ export default {
         <p>
           <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
           <vxe-input v-model="value11" placeholder="周" type="week" clearable></vxe-input>
-          <vxe-input v-model="value12" placeholder="月" type="month" :date-config="{valueFormat: 'yyyy-MM-dd'}"></vxe-input>
+          <vxe-input v-model="value12" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
           <vxe-input v-model="value13" placeholder="年" type="year" clearable></vxe-input>
-          <vxe-input v-model="value14" placeholder="禁用日期" type="date" :date-config="{disabledMethod: disabledDateMethod}"></vxe-input>
+          <vxe-input v-model="value14" placeholder="禁用日期" type="date" :disabledMethod="disabledDateMethod"></vxe-input>
         </p>
 
         <p>

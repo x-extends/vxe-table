@@ -353,7 +353,7 @@ module.exports = {
           headerRowStyle: '给表头行附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
           footerRowStyle: '给表尾行附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
           showFooter: '是否显示表尾',
-          footerMethod: '表尾的数据获取方法 Function({columns, data})',
+          footerMethod: '表尾的数据获取方法 Function({columns, data}) 返回一个二维数组',
           spanMethod: '合并行或列，该函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
           footerSpanMethod: '表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
           showOverflow: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',

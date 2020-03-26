@@ -82,7 +82,7 @@ shortcutTypes.forEach((type, index) => {
       opts = message
     } else {
       if (title) {
-        opts = { title }
+        opts = index === 2 ? { status: title } : { title }
       }
     }
     return openModal(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))

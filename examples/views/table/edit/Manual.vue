@@ -7,6 +7,7 @@
       border
       resizable
       show-overflow
+      :loading="loading"
       :data="tableData"
       :edit-config="{trigger: 'manual', mode: 'row'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -46,6 +47,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      loading: false,
       tableData: [],
       sexList: [],
       demoCodes: [
@@ -55,6 +57,7 @@ export default {
           border
           resizable
           show-overflow
+          :loading="loading"
           :data="tableData"
           :edit-config="{trigger: 'manual', mode: 'row'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -82,6 +85,7 @@ export default {
         export default {
           data () {
             return {
+              loading: false,
               tableData: [],
               sexList: []
             }
@@ -101,7 +105,11 @@ export default {
             },
             saveRowEvent (row) {
               this.$refs.xTable.clearActived().then(() => {
-                this.$XModal.alert('success')
+                this.loading = true
+                setTimeout(() => {
+                  this.loading = false
+                  this.$XModal.message({ message: '保存成功！', status: 'success' })
+                }, 300)
               })
             },
             cancelRowEvent (row) {
@@ -137,7 +145,11 @@ export default {
     },
     saveRowEvent () {
       this.$refs.xTable.clearActived().then(() => {
-        this.$XModal.alert('success')
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.$XModal.message({ message: '保存成功！', status: 'success' })
+        }, 300)
       })
     },
     cancelRowEvent (row) {
