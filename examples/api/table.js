@@ -874,7 +874,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'String',
-            enum: 'default（点击按钮触发）,cell（点击表头触发）',
+            enum: 'default（点击按钮触发）, cell（点击表头触发）',
             defVal: 'default',
             list: []
           },
@@ -1029,7 +1029,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'String',
-            enum: 'default（默认）,cell（点击单元格触发）,row（点击行触发）',
+            enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
           },
@@ -1138,7 +1138,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'String',
-            enum: 'default（默认）,cell（点击单元格触发）,row（点击行触发）',
+            enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
           },
@@ -1248,7 +1248,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'String',
-            enum: 'default（点击按钮触发）,cell（点击单元格触发）,row（点击行触发）',
+            enum: 'default（点击按钮触发）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
           },
@@ -1493,7 +1493,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'String',
-            enum: 'default（默认触发）,cell（右键单元格触发）',
+            enum: 'default（默认触发）, cell（右键单元格触发）',
             defVal: 'default',
             list: []
           },
@@ -1599,7 +1599,7 @@ const apis = [
           },
           {
             name: 'editMethod',
-            desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({row, rowIndex, column, columnIndex, cell}) 可以返回 false 来阻止默认行为',
+            desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({row, rowIndex, column, columnIndex}) 可以返回 false 来阻止默认行为',
             version: '',
             type: 'Function',
             enum: '',
@@ -2093,7 +2093,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{},event',
+        defVal: '{ $event }',
         list: []
       },
       {
@@ -2102,7 +2102,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2111,7 +2111,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2120,7 +2120,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{records,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ records, reserves, checked, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2129,7 +2129,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{records,reserves,checked},event',
+        defVal: '{ records, reserves, checked, $event }',
         list: []
       },
       {
@@ -2138,7 +2138,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2147,7 +2147,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2156,7 +2156,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{type,row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{ type, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2165,7 +2165,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2174,7 +2174,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2183,7 +2183,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{triggerResizable,triggerSort,triggerFilter,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, triggerResizable, triggerSort, triggerFilter, $event }',
         list: []
       },
       {
@@ -2192,7 +2192,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2201,7 +2201,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{type,column,columnIndex,cell},event',
+        defVal: '{ type, column, columnIndex, $event }',
         list: []
       },
       {
@@ -2210,7 +2210,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2219,7 +2219,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, $event}',
         list: []
       },
       {
@@ -2228,7 +2228,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{type,column,columnIndex,cell},event',
+        defVal: '{ type, column, columnIndex, $event}',
         list: []
       },
       {
@@ -2237,7 +2237,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,property,order}',
+        defVal: '{ column, property, order, $event }',
         list: []
       },
       {
@@ -2246,7 +2246,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,property,values,datas,filters}',
+        defVal: '{ column, property, values, datas, filters, $event }',
         list: []
       },
       {
@@ -2255,7 +2255,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}',
+        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2264,7 +2264,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{expanded,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex},event',
+        defVal: '{ expanded, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2273,7 +2273,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{expanded, row, column, columnIndex, $columnIndex},event',
+        defVal: '{ expanded, row, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2282,7 +2282,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{ menu, type, row, rowIndex, column, columnIndex, $event }',
         list: []
       },
       {
@@ -2291,7 +2291,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
         list: []
       },
       {
@@ -2300,7 +2300,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
         list: []
       },
       {
@@ -2309,7 +2309,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
         list: []
       },
       {
@@ -2318,7 +2318,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{rule,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        defVal: '{ rule, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
         list: []
       },
       {
@@ -2327,7 +2327,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{type,fixed,scrollTop,scrollLeft,isX,isY},event',
+        defVal: '{ type, scrollTop, scrollLeft, isX, isY, $event }',
         list: []
       }
     ]
@@ -2776,7 +2776,7 @@ const apis = [
         name: 'getActiveRecord()',
         desc: '用于 edit-config，获取已激活的行数据',
         version: '',
-        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
         enum: '',
         defVal: 'row',
         list: []

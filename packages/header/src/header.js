@@ -185,7 +185,7 @@ export default {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $xetable.triggerHeaderTooltipEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+                  $xetable.triggerHeaderTooltipEvent(evnt, params)
                 }
               }
             }
@@ -200,10 +200,10 @@ export default {
               }
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
-              thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+              thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, params)
             }
             if (tableListeners['header-cell-dblclick']) {
-              thOns.dblclick = evnt => $xetable.$emit('header-cell-dblclick', { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt)
+              thOns.dblclick = evnt => $xetable.triggerHeaderCellDBLClickEvent(evnt, params)
             }
             return h('th', {
               class: ['vxe-header--column', column.id, {
@@ -339,7 +339,7 @@ export default {
         if ($xetable.$toolbar) {
           $xetable.$toolbar.updateResizable()
         }
-        $xetable.$emit('resizable-change', params, evnt)
+        $xetable.$emit('resizable-change', Object.assign({ $event: evnt }, params))
       }
       updateEvent(evnt)
     }

@@ -279,12 +279,12 @@ export default {
     },
     clearValueEvent (evnt, selectValue) {
       this.changeEvent(evnt, selectValue)
-      this.$emit('clear', { value: selectValue }, evnt)
+      this.$emit('clear', { value: selectValue, $event: evnt }, evnt)
     },
     changeEvent (evnt, selectValue) {
       if (selectValue !== this.value) {
         this.$emit('input', selectValue)
-        this.$emit('change', { value: selectValue }, evnt)
+        this.$emit('change', { value: selectValue, $event: evnt }, evnt)
       }
     },
     changeOptionEvent (evnt, selectValue) {

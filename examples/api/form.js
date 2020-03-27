@@ -204,7 +204,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{data}, event',
+        defVal: '{ data, $event }',
         list: []
       },
       {
@@ -213,7 +213,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{data, errMap}, event',
+        defVal: '{ data, errMap, $event }',
         list: []
       },
       {
@@ -222,7 +222,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{data}, event',
+        defVal: '{ data, $event }',
         list: []
       },
       {
@@ -231,7 +231,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{collapse,data}, event',
+        defVal: '{ collapse, data, $event }',
         list: []
       }
     ]

@@ -86,7 +86,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ label }, event',
+        defVal: '{ label, $event }',
         list: []
       }
     ]

@@ -595,7 +595,7 @@ export default {
     },
     triggerToolbarBtnEvent (button, evnt) {
       this.commitProxy(button, evnt)
-      this.$emit('toolbar-button-click', { code: button.code, button, $grid: this }, evnt)
+      this.$emit('toolbar-button-click', { code: button.code, button, $grid: this, $event: evnt }, evnt)
     },
     triggerPendingEvent (code) {
       const { pendingRecords, isMsg } = this

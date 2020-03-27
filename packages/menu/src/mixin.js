@@ -68,7 +68,7 @@ export default {
             // target=td|th，直接向上找 table 去匹配即可
             return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === id
           })
-          const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0) }
+          const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
             const cell = columnTargetNode.targetElem
             const column = this.getColumnNode(cell).item
@@ -181,7 +181,7 @@ export default {
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
         const ctxMenuMethod = VXETable.menus.get(menu.code)
-        const params = Object.assign({ menu, $table: this }, this.ctxMenuStore.args)
+        const params = Object.assign({ menu, $table: this, $event: evnt }, this.ctxMenuStore.args)
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)
         }

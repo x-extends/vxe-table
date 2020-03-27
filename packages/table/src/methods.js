@@ -1514,7 +1514,7 @@ const Methods = {
             }
           }
         }
-        this.$emit('keydown', { $table: this }, evnt)
+        this.$emit('keydown', { $table: this, $event: evnt }, evnt)
       })
     }
   },
@@ -1553,7 +1553,8 @@ const Methods = {
    */
   triggerHeaderTooltipEvent (evnt, params) {
     const { tooltipStore } = this
-    const { cell, column } = params
+    const { column } = params
+    const cell = evnt.currentTarget
     this.handleTargetEnterEvent()
     if (tooltipStore.column !== column || !tooltipStore.visible) {
       this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--title'), column)
@@ -1563,8 +1564,9 @@ const Methods = {
    * 触发表尾 tooltip 事件
    */
   triggerFooterTooltipEvent (evnt, params) {
-    const { cell, column } = params
-    const tooltipStore = this.tooltipStore
+    const { column } = params
+    const { tooltipStore } = this
+    const cell = evnt.currentTarget
     this.handleTargetEnterEvent()
     if (tooltipStore.column !== column || !tooltipStore.visible) {
       this.handleTooltip(evnt, cell, cell.children[0], column)
@@ -1576,7 +1578,8 @@ const Methods = {
   triggerTooltipEvent (evnt, params) {
     const { editConfig, editOpts, editStore, tooltipStore } = this
     const { actived } = editStore
-    const { cell, row, column } = params
+    const { row, column } = params
+    const cell = evnt.currentTarget
     this.handleTargetEnterEvent()
     if (editConfig) {
       if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
@@ -1762,7 +1765,7 @@ const Methods = {
     const { checkMethod } = this.checkboxOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
       this.handleSelectRow(params, value)
-      this.$emit('checkbox-change', Object.assign({ records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt)
+      this.$emit('checkbox-change', Object.assign({ records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
     }
   },
   /**
@@ -1973,7 +1976,7 @@ const Methods = {
    */
   triggerCheckAllEvent (evnt, value) {
     this.setAllCheckboxRow(value)
-    this.$emit('checkbox-all', { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt)
+    this.$emit('checkbox-all', { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, evnt)
   },
   /**
    * 多选，切换所有行的选中状态
@@ -2021,7 +2024,7 @@ const Methods = {
       const isChange = this.selectRow !== params.row
       this.setRadioRow(params.row)
       if (isChange) {
-        this.$emit('radio-change', params, evnt)
+        this.$emit('radio-change', Object.assign({ $event: evnt }, params), evnt)
       }
     }
   },
@@ -2029,7 +2032,7 @@ const Methods = {
     const isChange = this.currentRow !== params.row
     this.setCurrentRow(params.row)
     if (isChange) {
-      this.$emit('current-change', params, evnt)
+      this.$emit('current-change', Object.assign({ $event: evnt }, params), evnt)
     }
   },
   /**
@@ -2106,18 +2109,22 @@ const Methods = {
   },
   triggerHeaderCellClickEvent (evnt, params) {
     const { _lastResizeTime, sortOpts } = this
-    const { column, cell } = params
+    const { column } = params
+    const cell = evnt.currentTarget
     const triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
     const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
     const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
       this.triggerSortEvent(evnt, column, getNextSortOrder(this, column))
     }
-    this.$emit('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt)
+    this.$emit('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell, $event: evnt }, params), evnt)
     if (this.highlightCurrentColumn) {
       return this.setCurrentColumn(column)
     }
     return this.$nextTick()
+  },
+  triggerHeaderCellDBLClickEvent (evnt, params) {
+    this.$emit('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget, $event: evnt }, params), evnt)
   },
   /**
    * 用于当前列，设置某列行为高亮状态
@@ -2164,6 +2171,8 @@ const Methods = {
     const { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts } = this
     const { actived } = editStore
     const { row, column } = params
+    const cell = evnt.currentTarget
+    params.cell = cell
     // 解决 checkbox 重复触发两次问题
     if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox')) {
       return
@@ -2208,7 +2217,7 @@ const Methods = {
         }
       }
     }
-    this.$emit('cell-click', params, evnt)
+    this.$emit('cell-click', Object.assign({ $event: evnt }, params), evnt)
   },
   /**
    * 列双击点击事件
@@ -2217,6 +2226,8 @@ const Methods = {
   triggerCellDBLClickEvent (evnt, params) {
     const { editStore, editConfig, editOpts } = this
     const { actived } = editStore
+    const cell = evnt.currentTarget
+    params.cell = cell
     if (editConfig && editOpts.trigger === 'dblclick') {
       if (!actived.args || evnt.currentTarget !== actived.args.cell) {
         if (editOpts.mode === 'row') {
@@ -2234,7 +2245,7 @@ const Methods = {
         }
       }
     }
-    this.$emit('cell-dblclick', params, evnt)
+    this.$emit('cell-dblclick', Object.assign({ $event: evnt }, params), evnt)
   },
   handleDefaultSort () {
     const defaultSort = this.sortOpts.defaultSort
@@ -2254,7 +2265,7 @@ const Methods = {
   triggerSortEvent (evnt, column, order) {
     const property = column.property
     if (column.sortable || column.remoteSort) {
-      const evntParams = { column, property, order, $table: this }
+      const evntParams = { column, property, order, $table: this, $event: evnt }
       if (!order || column.order === order) {
         evntParams.order = null
         this.clearSort()
@@ -2367,7 +2378,7 @@ const Methods = {
       const columnIndex = this.getColumnIndex(column)
       const $columnIndex = this.$getColumnIndex(column)
       this.setRowExpansion(row, expanded)
-      this.$emit('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this }, evnt)
+      this.$emit('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this, $event: evnt }, evnt)
     }
   },
   /**
@@ -2532,7 +2543,7 @@ const Methods = {
       const columnIndex = this.getColumnIndex(column)
       const $columnIndex = this.$getColumnIndex(column)
       this.setTreeExpansion(row, expanded)
-      this.$emit('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row, $table: this }, evnt)
+      this.$emit('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row, $table: this, $event: evnt }, evnt)
     }
   },
   /**

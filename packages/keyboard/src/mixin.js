@@ -136,7 +136,9 @@ export default {
     triggerCellMousedownEvent (evnt, params) {
       const { editConfig, editOpts, handleSelected, checkboxOpts, mouseOpts } = this
       const { button } = evnt
+      const cell = evnt.currentTarget
       const isLeftBtn = button === 0
+      params.cell = cell
       if (checkboxOpts.range) {
         if (isLeftBtn) {
           this.handleCheckboxRangeEvent(evnt, params)
