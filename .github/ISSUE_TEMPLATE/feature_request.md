@@ -15,7 +15,7 @@ assignees: ''
 
  ?
 
-### （必填）建议的 API 是什么样的 What does the proposed API look like
+### 建议的 API 是什么样的 What does the proposed API look like
 
  ?
 

@@ -183,7 +183,7 @@ export default {
 ## Donation
 
 If the open source project is very helpful to you, you can buy the author a cup of coffee.  
-如果这个开源项目对您有帮助，请作者喝杯咖啡吧。☕
+如果这个开源项目对您有帮助，请作者喝杯咖啡吧。☕（如果有问题需要支持可以留言或者提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)）
 
 [![pay](https://github.com/xuliangzhan/vxe-table/blob/master/public/static/donation/pay.jpg?raw=true)](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)
 

@@ -266,7 +266,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{code}, event',
+        defVal: '{code}',
         list: []
       }
     ]

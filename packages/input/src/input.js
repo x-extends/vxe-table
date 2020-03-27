@@ -697,12 +697,12 @@ export default {
     },
     triggerEvent (evnt) {
       const { $refs, value } = this
-      this.$emit(evnt.type, { $panel: $refs.panel, value }, evnt)
+      this.$emit(evnt.type, { $panel: $refs.panel, value, $event: evnt }, evnt)
     },
-    emitUpdate (value) {
+    emitUpdate (value, evnt) {
       this.$emit('input', value)
       if (this.value !== value) {
-        this.$emit('change', { value })
+        this.$emit('change', { value, $event: evnt })
       }
     },
     inputEvent (evnt) {
@@ -710,7 +710,7 @@ export default {
       const value = evnt.target.value
       this.inputValue = value
       if (!isDatePicker) {
-        this.emitUpdate(value)
+        this.emitUpdate(value, evnt)
       }
     },
     focusEvent (evnt) {
@@ -733,17 +733,17 @@ export default {
     clickPrefixEvent (evnt) {
       const { $refs, disabled, value } = this
       if (!disabled) {
-        this.$emit('prefix-click', { $panel: $refs.panel, value }, evnt)
+        this.$emit('prefix-click', { $panel: $refs.panel, value, $event: evnt }, evnt)
       }
     },
     clickSuffixEvent (evnt) {
       const { $refs, disabled, value } = this
       if (!disabled) {
         if (DomTools.hasClass(evnt.currentTarget, 'is--clear')) {
-          this.emitUpdate('')
+          this.emitUpdate('', evnt)
           this.clearValueEvent(evnt, '')
         } else {
-          this.$emit('suffix-click', { $panel: $refs.panel, value }, evnt)
+          this.$emit('suffix-click', { $panel: $refs.panel, value, $event: evnt }, evnt)
         }
       }
     },
@@ -755,7 +755,7 @@ export default {
       if (['text', 'number', 'integer', 'float', 'password'].indexOf(type) > -1) {
         this.focus()
       }
-      this.$emit('clear', { $panel: $refs.panel, value }, evnt)
+      this.$emit('clear', { $panel: $refs.panel, value, $event: evnt }, evnt)
     },
     /**
      * 检查初始值
@@ -768,7 +768,7 @@ export default {
         if (value) {
           const validValue = XEUtils.toFixedString(value, XEUtils.toNumber(digits))
           if (value !== validValue) {
-            this.emitUpdate(validValue)
+            this.emitUpdate(validValue, { type: 'init' })
           }
         }
       }
@@ -793,7 +793,7 @@ export default {
             } else if (!this.vaildMaxNum(inputValue)) {
               inputValue = max
             }
-            this.emitUpdate(type === 'float' ? XEUtils.toFixedString(inputValue, XEUtils.toNumber(digits)) : '' + inputValue)
+            this.emitUpdate(type === 'float' ? XEUtils.toFixedString(inputValue, XEUtils.toNumber(digits)) : '' + inputValue, { type: 'check' })
           }
         } else if (isDatePicker) {
           let inpVal = this.inputValue
@@ -807,7 +807,7 @@ export default {
               this.dateRevert()
             }
           } else {
-            this.emitUpdate('')
+            this.emitUpdate('', { type: 'check' })
           }
         }
       }
@@ -875,26 +875,26 @@ export default {
         }, 500)
       }
     },
-    numberPrevEvent () {
+    numberPrevEvent (evnt) {
       const { disabled, readonly } = this
       clearTimeout(this.downbumTimeout)
       if (!disabled && !readonly) {
-        this.numberChange(true)
+        this.numberChange(true, evnt)
       }
     },
-    numberNextEvent () {
+    numberNextEvent (evnt) {
       const { disabled, readonly } = this
       clearTimeout(this.downbumTimeout)
       if (!disabled && !readonly) {
-        this.numberChange(false)
+        this.numberChange(false, evnt)
       }
     },
-    numberChange (isPlus) {
+    numberChange (isPlus, evnt) {
       const { type, digits, value, stepValue } = this
       const inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
       const newValue = isPlus ? XEUtils.add(inputValue, stepValue) : XEUtils.subtract(inputValue, stepValue)
       if (this.vaildMinNum(newValue) && this.vaildMaxNum(newValue)) {
-        this.emitUpdate(type === 'float' ? XEUtils.toFixedString(newValue, XEUtils.toNumber(digits)) : '' + newValue)
+        this.emitUpdate(type === 'float' ? XEUtils.toFixedString(newValue, XEUtils.toNumber(digits)) : '' + newValue, evnt)
       }
     },
     // 数值
@@ -1102,7 +1102,7 @@ export default {
       const inpVal = XEUtils.toDateString(date, dateValueFormat)
       this.dateCheckMonth(date)
       if (!XEUtils.isEqual(value, inpVal)) {
-        this.emitUpdate(inpVal)
+        this.emitUpdate(inpVal, { type: 'update' })
       }
     },
     dateCheckMonth (date) {

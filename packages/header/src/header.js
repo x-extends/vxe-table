@@ -210,7 +210,7 @@ export default {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $xetable.triggerHeaderTooltipEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+                  $xetable.triggerHeaderTooltipEvent(evnt, params)
                 }
               }
             }
@@ -225,14 +225,14 @@ export default {
               }
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || isMouseChecked || sortOpts.trigger === 'cell') {
-              thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+              thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, params)
             }
             if (tableListeners['header-cell-dblclick']) {
-              thOns.dblclick = evnt => UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+              thOns.dblclick = evnt => $xetable.triggerHeaderCellDBLClickEvent(evnt, params)
             }
             // 按下事件处理
             if (isMouseSelected || isMouseChecked) {
-              thOns.mousedown = evnt => $xetable.triggerHeaderCellMousedownEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+              thOns.mousedown = evnt => $xetable.triggerHeaderCellMousedownEvent(evnt, params)
             }
             const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('th', {
@@ -369,7 +369,7 @@ export default {
         if ($xetable.$toolbar) {
           $xetable.$toolbar.updateResizable()
         }
-        UtilTools.emitEvent($xetable, 'resizable-change', [params])
+        $xetable.$emit('resizable-change', Object.assign({ $event: evnt }, params))
       }
       updateEvent(evnt)
     }

@@ -123,7 +123,7 @@ export default {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $xetable.triggerFooterTooltipEvent(evnt, { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget })
+                  $xetable.triggerFooterTooltipEvent(evnt, params)
                 }
               }
             }
@@ -134,14 +134,14 @@ export default {
                 }
               }
             }
-            if (tableListeners['header-cell-click']) {
+            if (tableListeners['footer-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($xetable, 'header-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'footer-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
-            if (tableListeners['header-cell-dblclick']) {
+            if (tableListeners['footer-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($xetable, 'header-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'footer-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             // 合并行或列
@@ -211,7 +211,7 @@ export default {
       if (scrollXLoad && isX) {
         triggerScrollXEvent(evnt)
       }
-      UtilTools.emitEvent($xetable, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false, $table: $xetable }, evnt])
+      UtilTools.emitEvent($xetable, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false, $table: $xetable, $event: evnt }, evnt])
     }
   }
 }

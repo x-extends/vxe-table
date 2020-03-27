@@ -20,7 +20,7 @@
     </div>
     <div class="content" style="padding-top: 50px">
       <div style="display: inline-block;">
-        <div>💰{{ $t('app.body.label.through') }} <a href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee {{ $t('app.body.other.donation') }}</a>{{ $t('app.body.other.donationTitle') }}<span class="red">（如果有问题需要支持可以留言）</span></div>
+        <div>💰{{ $t('app.body.label.through') }} <a href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee {{ $t('app.body.other.donation') }}</a>{{ $t('app.body.other.donationTitle') }}<span class="red">（如果有问题需要支持可以留言或者提 <a class="link" href="https://github.com/xuliangzhan/vxe-table/issues/390">Issues</a>）</span></div>
         <div>
           <img src="static/donation/pay.jpg">
         </div>

@@ -147,14 +147,13 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
       if (isOperateMouse($xetable)) {
         return
       }
-      const evntParams = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }
       if (showTitle) {
         DomTools.updateCellTitle(evnt)
       } else if (showTooltip) {
         // 如果配置了显示 tooltip
-        $xetable.triggerTooltipEvent(evnt, evntParams)
+        $xetable.triggerTooltipEvent(evnt, params)
       }
-      UtilTools.emitEvent($xetable, 'cell-mouseenter', [evntParams, evnt])
+      UtilTools.emitEvent($xetable, 'cell-mouseenter', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, $event: evnt }, evnt])
     }
   }
   // hover 退出事件
@@ -166,13 +165,13 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
       if (showTooltip) {
         $xetable.handleTargetLeaveEvent(evnt)
       }
-      UtilTools.emitEvent($xetable, 'cell-mouseleave', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget }, evnt])
+      UtilTools.emitEvent($xetable, 'cell-mouseleave', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, $event: evnt }, evnt])
     }
   }
   // 按下事件处理
   if (checkboxOpts.range || isMouseChecked || isMouseSelected) {
     tdOns.mousedown = evnt => {
-      $xetable.triggerCellMousedownEvent(evnt, { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+      $xetable.triggerCellMousedownEvent(evnt, params)
     }
   }
   // 点击事件处理
@@ -186,13 +185,13 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     (checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxOpts.trigger === 'cell')) ||
     (treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
     tdOns.click = evnt => {
-      $xetable.triggerCellClickEvent(evnt, { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+      $xetable.triggerCellClickEvent(evnt, params)
     }
   }
   // 双击事件处理
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $xetable.triggerCellDBLClickEvent(evnt, { $table: $xetable, $seq, seq, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, cell: evnt.currentTarget })
+      $xetable.triggerCellDBLClickEvent(evnt, params)
     }
   }
   // 合并行或列
@@ -599,7 +598,7 @@ export default {
       if (scrollYLoad && isY) {
         $xetable.triggerScrollYEvent(evnt)
       }
-      UtilTools.emitEvent($xetable, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table: $xetable }, evnt])
+      UtilTools.emitEvent($xetable, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table: $xetable, $event: evnt }, evnt])
     }
   }
 }

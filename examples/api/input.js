@@ -313,7 +313,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{ $event }',
         list: []
       },
       {
@@ -322,7 +322,7 @@ const apis = [
         version: '2.8',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{ $event }',
         list: []
       },
       {
@@ -331,7 +331,7 @@ const apis = [
         version: '2.8.4',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{ $event }',
         list: []
       },
       {
@@ -340,7 +340,7 @@ const apis = [
         version: '2.8.4',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{ $event }',
         list: []
       }
     ]

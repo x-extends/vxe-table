@@ -205,7 +205,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{type, currentPage, pageSize}',
+        defVal: '{ type, currentPage, pageSize, $event }',
         list: []
       }
     ]

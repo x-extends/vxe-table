@@ -346,7 +346,7 @@ const apis = [
         name: 'inserted',
         desc: '在窗口元素插入父节点时会触发该事件（只会执行一次）',
         version: '2.6.6',
-        type: '{type}',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -355,7 +355,7 @@ const apis = [
         name: 'show',
         desc: '在窗口显示时会触发该事件',
         version: '',
-        type: '{type}',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -364,7 +364,7 @@ const apis = [
         name: 'hide',
         desc: '在窗口关闭时会触发该事件',
         version: '',
-        type: '{type}',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -373,7 +373,7 @@ const apis = [
         name: 'confirm',
         desc: '点击确定按钮时会触发该事件',
         version: '',
-        type: '{type}, event',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -382,7 +382,7 @@ const apis = [
         name: 'close',
         desc: '点击关闭按钮时会触发该事件',
         version: '',
-        type: '{type}, event',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -391,7 +391,7 @@ const apis = [
         name: 'zoom',
         desc: '窗口缩放时会触发该事件',
         version: '',
-        type: '{type}, event',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []

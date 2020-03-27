@@ -226,7 +226,7 @@ export default {
               this.handleFocus(params, evnt)
             })
           }
-          UtilTools.emitEvent(this, type, [params, evnt])
+          UtilTools.emitEvent(this, type, [Object.assign({ $event: evnt }, params), evnt])
         } else {
           const { column: oldColumn } = actived
           if (oldColumn !== column) {
@@ -275,7 +275,7 @@ export default {
           this._setColumnModel(row, column)
         }
         this.updateFooter()
-        UtilTools.emitEvent(this, 'edit-closed', [args, evnt])
+        UtilTools.emitEvent(this, 'edit-closed', [Object.assign({ $event: evnt }, args), evnt])
       }
       actived.args = null
       actived.row = null

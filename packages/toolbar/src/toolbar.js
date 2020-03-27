@@ -540,11 +540,8 @@ export default {
     },
     emitCustomEvent (type, evnt) {
       const { $xetable, $xegrid } = this
-      if ($xegrid) {
-        $xegrid.$emit('custom', { type, $grid: $xegrid }, evnt)
-      } else {
-        $xetable.$emit('custom', { type, $table: $xetable }, evnt)
-      }
+      const params = { type, $table: $xetable, $grid: $xegrid, $event: evnt }
+      $xetable.$emit('custom', params, evnt)
     },
     updateResizable (isReset) {
       const comp = this.$xegrid || this.$xetable
@@ -650,7 +647,7 @@ export default {
           $xegrid.triggerToolbarBtnEvent(item, evnt)
         } else {
           const commandMethod = VXETable.commands.get(code)
-          const params = { code, button: item, $xegrid, $table: $xetable }
+          const params = { code, button: item, $xegrid, $table: $xetable, $event: evnt }
           if (commandMethod) {
             commandMethod.call(this, params, evnt)
           }
@@ -677,7 +674,7 @@ export default {
     triggerZoomEvent (evnt) {
       const { $xegrid } = this
       $xegrid.zoom()
-      $xegrid.$emit('zoom', { $grid: $xegrid, maximize: $xegrid.isMaximized(), type: $xegrid.isMaximized() ? 'max' : 'revert' }, evnt)
+      $xegrid.$emit('zoom', { $grid: $xegrid, maximize: $xegrid.isMaximized(), type: $xegrid.isMaximized() ? 'max' : 'revert', $event: evnt }, evnt)
     }
   }
 }

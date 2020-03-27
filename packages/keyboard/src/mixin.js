@@ -148,12 +148,14 @@ export default {
     triggerHeaderCellMousedownEvent (evnt, params) {
       const { $el, tableData, mouseConfig, mouseOpts, elemStore, handleChecked, handleHeaderChecked } = this
       const { button } = evnt
-      const { column, cell } = params
+      const { column } = params
+      const cell = evnt.currentTarget
       const isLeftBtn = button === 0
       // v3.0 废弃 type=index
       const isIndex = column.type === 'seq' || column.type === 'index'
       // 在 v3.0 中废弃 mouse-config.checked
       const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      params.cell = cell
       if (mouseConfig) {
         if (isMouseChecked) {
           const headerList = elemStore['main-header-list'].children
@@ -234,13 +236,15 @@ export default {
         elemStore
       } = this
       const { checked } = editStore
-      const { column, cell } = params
+      const { column } = params
       const { button } = evnt
+      const cell = evnt.currentTarget
       const isLeftBtn = button === 0
       // v3.0 废弃 type=index
       const isIndex = column.type === 'seq' || column.type === 'index'
       // 在 v3.0 中废弃 mouse-config.checked
       const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      params.cell = cell
       if (isMouseChecked) {
         this.clearHeaderChecked()
         this.clearIndexChecked()

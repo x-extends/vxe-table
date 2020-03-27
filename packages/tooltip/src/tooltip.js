@@ -233,7 +233,7 @@ export default {
       const { $listeners, trigger, enterable, leaveDelay } = this
       this.isHover = false
       if ($listeners.leave) {
-        this.$emit('leave', evnt)
+        this.$emit('leave', { $event: evnt })
       } else if (enterable && trigger === 'hover') {
         setTimeout(() => {
           if (!this.targetActive) {

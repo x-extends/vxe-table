@@ -93,7 +93,8 @@ export default {
       document.body.appendChild($el)
     }
     // 触发 inserted 事件
-    const params = { type: 'inserted', $modal: this }
+    const type = 'inserted'
+    const params = { type, $modal: this, $event: { type } }
     if ($listeners.inserted) {
       this.$emit('inserted', params)
     } else if (events.inserted) {
@@ -280,23 +281,24 @@ export default {
     },
     closeEvent (evnt) {
       const type = 'close'
-      this.$emit(type, { type, $modal: this }, evnt)
+      this.$emit(type, { type, $modal: this, $event: evnt }, evnt)
       this.close(type)
     },
     confirmEvent (evnt) {
       const type = 'confirm'
-      this.$emit(type, { type, $modal: this }, evnt)
+      this.$emit(type, { type, $modal: this, $event: evnt }, evnt)
       this.close(type)
     },
     cancelEvent (evnt) {
       const type = 'cancel'
-      this.$emit(type, { type, $modal: this }, evnt)
+      this.$emit(type, { type, $modal: this, $event: evnt }, evnt)
       this.close(type)
     },
     open () {
       const { $listeners, events = {}, duration, visible, isMsg, remember } = this
       if (!visible) {
-        const params = { type: 'show', $modal: this }
+        const type = 'show'
+        const params = { type, $modal: this, $event: { type } }
         if (!remember) {
           this.recalculate()
         }
@@ -368,7 +370,7 @@ export default {
     },
     close (type) {
       const { events = {}, remember, visible, isMsg } = this
-      const params = { type, $modal: this }
+      const params = { type, $modal: this, $event: { type } }
       if (visible) {
         if (isMsg) {
           this.removeMsgQueue()
@@ -445,7 +447,7 @@ export default {
     },
     toggleZoomEvent (evnt) {
       const { $listeners, zoomLocat, events = {} } = this
-      const params = { type: zoomLocat ? 'revert' : 'max', $modal: this }
+      const params = { type: zoomLocat ? 'revert' : 'max', $modal: this, $event: evnt }
       return this.zoom().then(() => {
         if ($listeners.zoom) {
           this.$emit('zoom', params, evnt)
