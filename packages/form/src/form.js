@@ -105,9 +105,9 @@ export default {
     submitEvent (evnt) {
       evnt.preventDefault()
       this.beginValidate().then(() => {
-        this.$emit('submit', { data: this.data, $form: this }, evnt)
+        this.$emit('submit', { data: this.data, $form: this, $event: evnt }, evnt)
       }).catch(errMap => {
-        this.$emit('submit-invalid', { data: this.data, errMap, $form: this }, evnt)
+        this.$emit('submit-invalid', { data: this.data, errMap, $form: this, $event: evnt }, evnt)
       })
     },
     resetEvent (evnt) {
@@ -125,7 +125,7 @@ export default {
         })
       }
       this.clearValidate()
-      this.$emit('reset', { data, $form: this }, evnt)
+      this.$emit('reset', { data, $form: this, $event: evnt }, evnt)
     },
     clearValidate (field) {
       if (field) {

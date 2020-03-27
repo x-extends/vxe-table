@@ -50,7 +50,7 @@ export default {
           change: evnt => {
             if (!this.disabled) {
               const checked = evnt.target.checked
-              const params = { checked, label }
+              const params = { checked, label, $event: evnt }
               if (isGroup) {
                 $xegroup.handleChecked(params, evnt)
               } else {

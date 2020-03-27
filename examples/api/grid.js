@@ -358,7 +358,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{type, currentPage, pageSize}',
+        defVal: '{ type, currentPage, pageSize, $event }',
         list: []
       },
       {
@@ -367,7 +367,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{data}, event',
+        defVal: '{ data, $event }',
         list: []
       },
       {
@@ -376,7 +376,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{data, errMap}, event',
+        defVal: '{ data, errMap, $event }',
         list: []
       },
       {
@@ -385,7 +385,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{data}, event',
+        defVal: '{ data, $event }',
         list: []
       },
       {
@@ -394,7 +394,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{collapse, data}, event',
+        defVal: '{ collapse, data, $event }',
         list: []
       },
       {
@@ -403,7 +403,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{code}, event',
+        defVal: '{ code, $event }',
         list: []
       },
       {
@@ -412,7 +412,7 @@ const apis = [
         version: '1.15.23',
         type: '',
         enum: '',
-        defVal: '{maximize}, event',
+        defVal: '{ maximize, $event }',
         list: []
       },
       {
@@ -421,7 +421,7 @@ const apis = [
         version: '1.15.23',
         type: '',
         enum: '',
-        defVal: '{type}, event',
+        defVal: '{ type, $event }',
         list: []
       }
     ]

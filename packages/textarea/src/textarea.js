@@ -107,14 +107,18 @@ export default {
       this.$refs.textarea.blur()
       return this.$nextTick()
     },
-    emitUpdate (value) {
+    triggerEvent (evnt) {
+      const { value } = this
+      this.$emit(evnt.type, { value, $event: evnt }, evnt)
+    },
+    emitUpdate (value, evnt) {
       this.$emit('input', value)
       if (this.value !== value) {
-        this.$emit('change', { value })
+        this.$emit('change', { value, $event: evnt })
       }
     },
     inputEvent (evnt) {
-      this.emitUpdate(evnt.target.value)
+      this.emitUpdate(evnt.target.value, evnt)
       this.handleResize()
     },
     updateAutoTxt () {

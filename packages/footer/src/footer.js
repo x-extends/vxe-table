@@ -126,7 +126,7 @@ export default {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt)
                 } else if (showTooltip) {
-                  $table.triggerFooterTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget })
+                  $table.triggerFooterTooltipEvent(evnt, params)
                 }
               }
             }
@@ -137,14 +137,14 @@ export default {
                 }
               }
             }
-            if (tableListeners['header-cell-click']) {
+            if (tableListeners['footer-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-click', [{ $table, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($table, 'footer-cell-click', [{ $table, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
-            if (tableListeners['header-cell-dblclick']) {
+            if (tableListeners['footer-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($table, 'footer-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             // 合并行或列
@@ -218,7 +218,7 @@ export default {
       if (scrollXLoad) {
         triggerScrollXEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, $table }, evnt])
+      UtilTools.emitEvent($table, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, $table, $event: evnt }, evnt])
     }
   }
 }

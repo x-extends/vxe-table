@@ -95,7 +95,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ checked }, event',
+        defVal: '{ checked, $event }',
         list: []
       }
     ]

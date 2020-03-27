@@ -142,14 +142,13 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       if (isOperateMouse($table)) {
         return
       }
-      const evntParams = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }
       if (showTitle) {
         DomTools.updateCellTitle(evnt)
       } else if (showTooltip) {
         // 如果配置了显示 tooltip
-        $table.triggerTooltipEvent(evnt, evntParams)
+        $table.triggerTooltipEvent(evnt, params)
       }
-      UtilTools.emitEvent($table, 'cell-mouseenter', [evntParams, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseenter', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, $event: evnt }, evnt])
     }
   }
   // hover 退出事件
@@ -161,13 +160,13 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       if (showTooltip) {
         $table.handleTargetLeaveEvent()
       }
-      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget }, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, $event: evnt }, evnt])
     }
   }
   // 按下事件处理
   if (checkboxOpts.range || isMouseSelected || isMouseChecked) {
     tdOns.mousedown = evnt => {
-      $table.triggerCellMousedownEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellMousedownEvent(evnt, params)
     }
   }
   // 点击事件处理
@@ -180,13 +179,13 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     (checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' | column.type === 'selection') && checkboxOpts.trigger === 'cell')) ||
     (treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
     tdOns.click = evnt => {
-      $table.triggerCellClickEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellClickEvent(evnt, params)
     }
   }
   // 双击事件处理
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $table.triggerCellDBLClickEvent(evnt, { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.currentTarget })
+      $table.triggerCellDBLClickEvent(evnt, params)
     }
   }
   // 合并行或列
@@ -661,7 +660,7 @@ export default {
       $table.lastScrollTop = scrollTop
       $table.lastScrollLeft = scrollLeft
       $table.lastScrollTime = Date.now()
-      UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table }, evnt])
+      UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table, $event: evnt }, evnt])
     }
   }
 }

@@ -13,7 +13,6 @@
     <vxe-table
       border
       ref="xTable1"
-      class="radio-table"
       height="300"
       :data="tableData"
       :radio-config="{highlight: true}"
@@ -177,7 +176,6 @@ export default {
         <vxe-table
           border
           ref="xTable1"
-          class="radio-table"
           height="300"
           :data="tableData"
           :radio-config="{highlight: true}"

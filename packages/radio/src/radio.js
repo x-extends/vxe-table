@@ -49,7 +49,7 @@ export default {
         on: {
           change: evnt => {
             if (!disabled) {
-              const params = { label }
+              const params = { label, $event: evnt }
               if (isGroup) {
                 $xegroup.handleChecked(params, evnt)
               } else {

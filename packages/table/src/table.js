@@ -2563,7 +2563,7 @@ export default {
               }
             }
           }
-          this.$emit('keydown', { $table: this }, evnt)
+          this.$emit('keydown', { $table: this, $event: evnt })
         })
       }
     },
@@ -2760,7 +2760,7 @@ export default {
             // target=td|th，直接向上找 table 去匹配即可
             return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === id
           })
-          const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0) }
+          const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
             const cell = columnTargetNode.targetElem
             const column = this.getColumnNode(cell).item
@@ -2890,7 +2890,7 @@ export default {
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)
         }
-        UtilTools.emitEvent(this, 'context-menu-click', [Object.assign({ menu, $table: this }, this.ctxMenuStore.args), evnt])
+        UtilTools.emitEvent(this, 'context-menu-click', [Object.assign({ menu, $table: this, $event: evnt }, this.ctxMenuStore.args), evnt])
         this.closeMenu()
       }
     },
@@ -2925,7 +2925,8 @@ export default {
      */
     triggerHeaderTooltipEvent (evnt, params) {
       const { tooltipStore } = this
-      const { cell, column } = params
+      const { column } = params
+      const cell = evnt.currentTarget
       this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--title'), column)
@@ -2935,8 +2936,9 @@ export default {
      * 触发表尾 tooltip 事件
      */
     triggerFooterTooltipEvent (evnt, params) {
-      const { cell, column } = params
-      const tooltipStore = this.tooltipStore
+      const { column } = params
+      const { tooltipStore } = this
+      const cell = evnt.currentTarget
       this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
         this.handleTooltip(evnt, cell, cell.children[0], column)
@@ -2948,7 +2950,8 @@ export default {
     triggerTooltipEvent (evnt, params) {
       const { editConfig, editOpts, editStore, tooltipStore } = this
       const { actived } = editStore
-      const { cell, row, column } = params
+      const { row, column } = params
+      const cell = evnt.currentTarget
       this.handleTargetEnterEvent()
       if (editConfig) {
         if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
@@ -3146,9 +3149,9 @@ export default {
         // 在 v3.0 中废弃 select-change
         if (this.$listeners['select-change']) {
           UtilTools.warn('vxe.error.delEvent', ['select-change', 'checkbox-change'])
-          this.$emit('select-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt)
+          this.$emit('select-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
         } else {
-          this.$emit('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, params), evnt)
+          this.$emit('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
         }
       }
     },
@@ -3386,9 +3389,9 @@ export default {
       // 在 v3.0 中废弃 select-all
       if (this.$listeners['select-all']) {
         UtilTools.warn('vxe.error.delEvent', ['select-all', 'checkbox-all'])
-        this.$emit('select-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt)
+        this.$emit('select-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, evnt)
       } else {
-        this.$emit('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this }, evnt)
+        this.$emit('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, evnt)
       }
     },
     // 在 v3.0 中废弃 toggleAllSelection
@@ -3447,7 +3450,7 @@ export default {
         const isChange = this.selectRow !== params.row
         this.setRadioRow(params.row)
         if (isChange) {
-          this.$emit('radio-change', params, evnt)
+          this.$emit('radio-change', Object.assign({ $event: evnt }, params), evnt)
         }
       }
     },
@@ -3455,7 +3458,7 @@ export default {
       const isChange = this.currentRow !== params.row
       this.setCurrentRow(params.row)
       if (isChange) {
-        this.$emit('current-change', params, evnt)
+        this.$emit('current-change', Object.assign({ $event: evnt }, params), evnt)
       }
     },
     /**
@@ -3522,12 +3525,14 @@ export default {
     triggerCellMousedownEvent (evnt, params) {
       const { $el, tableData, visibleColumn, editStore, checkboxOpts, mouseConfig, mouseOpts, editConfig, editOpts, handleSelected, handleChecked } = this
       const { checked, actived } = editStore
-      const { row, column, cell } = params
+      const { row, column } = params
       const { button } = evnt
+      const cell = evnt.currentTarget
       const isLeftBtn = button === 0
       const isRightBtn = button === 2
       // 在 v3.0 中废弃 mouse-config.checked
       const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      params.cell = cell
       if (isLeftBtn || isRightBtn) {
         if (isMouseChecked) {
           if (editConfig && editOpts.trigger === 'dblclick') {
@@ -3671,16 +3676,20 @@ export default {
       }
     },
     triggerHeaderCellClickEvent (evnt, params) {
+      const cell = evnt.currentTarget
       const { _lastResizeTime, sortOpts } = this
-      const { column, cell } = params
+      const { column } = params
       const triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
       const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
       const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
       if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
         this.triggerSortEvent(evnt, column, getNextSortOrder(this, column))
       }
-      UtilTools.emitEvent(this, 'header-cell-click', [Object.assign({ triggerResizable, triggerSort, triggerFilter }, params), evnt])
+      this.$emit('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell, $event: evnt }, params), evnt)
       return this.setCurrentColumn(column)
+    },
+    triggerHeaderCellDBLClickEvent (evnt, params) {
+      this.$emit('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget, $event: evnt }, params), evnt)
     },
     setCurrentColumn (column) {
       if (this.highlightCurrentColumn) {
@@ -3701,6 +3710,8 @@ export default {
       const { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts } = this
       const { actived } = editStore
       const { column, row } = params
+      const cell = evnt.currentTarget
+      params.cell = cell
       // 解决 checkbox 重复触发两次问题
       if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
         // 在 v3.0 中废弃 selection
@@ -3762,7 +3773,7 @@ export default {
           }
         }
       }
-      UtilTools.emitEvent(this, 'cell-click', [params, evnt])
+      UtilTools.emitEvent(this, 'cell-click', [Object.assign({ $event: evnt }, params), evnt])
     },
     /**
      * 列双击点击事件
@@ -3771,6 +3782,8 @@ export default {
     triggerCellDBLClickEvent (evnt, params) {
       const { editStore, editConfig, editOpts } = this
       const { actived } = editStore
+      const cell = evnt.currentTarget
+      params.cell = cell
       if (editConfig) {
         if (editOpts.trigger === 'dblclick') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
@@ -3788,7 +3801,7 @@ export default {
           }
         }
       }
-      UtilTools.emitEvent(this, 'cell-dblclick', [params, evnt])
+      UtilTools.emitEvent(this, 'cell-dblclick', [Object.assign({ $event: evnt }, params), evnt])
     },
     /**
      * 处理激活编辑
@@ -3818,7 +3831,7 @@ export default {
               this.handleFocus(params, evnt)
             })
           }
-          UtilTools.emitEvent(this, type, [params, evnt])
+          UtilTools.emitEvent(this, type, [Object.assign({ $event: evnt }, params), evnt])
         } else {
           column.renderHeight = cell.offsetHeight
           actived.args = params
@@ -3841,7 +3854,7 @@ export default {
       const { args, row, column } = actived
       if (row || column) {
         this.updateFooter()
-        UtilTools.emitEvent(this, 'edit-closed', [args, evnt])
+        UtilTools.emitEvent(this, 'edit-closed', [Object.assign({ $event: evnt }, args), evnt])
       }
       actived.args = null
       actived.row = null
@@ -4159,7 +4172,7 @@ export default {
     triggerSortEvent (evnt, column, order) {
       const property = column.property
       if (column.sortable || column.remoteSort) {
-        const evntParams = { column, property, field: property, prop: property, order, $table: this }
+        const evntParams = { column, property, field: property, prop: property, order, $table: this, $event: evnt }
         if (!order || column.order === order) {
           evntParams.order = null
           this.clearSort()
@@ -4446,9 +4459,9 @@ export default {
         // 在 v3.0 中废弃 toggle-expand-change
         if ($listeners['toggle-expand-change']) {
           UtilTools.warn('vxe.error.delEvent', ['toggle-expand-change', 'toggle-row-expand'])
-          UtilTools.emitEvent(this, 'toggle-expand-change', [{ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this }, evnt])
+          UtilTools.emitEvent(this, 'toggle-expand-change', [{ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this, $event: evnt }, evnt])
         } else {
-          UtilTools.emitEvent(this, 'toggle-row-expand', [{ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this }, evnt])
+          UtilTools.emitEvent(this, 'toggle-row-expand', [{ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this, $event: evnt }, evnt])
         }
       }
     },
@@ -4617,9 +4630,9 @@ export default {
         // 在 v3.0 中废弃 toggle-tree-change
         if ($listeners['toggle-tree-change']) {
           UtilTools.warn('vxe.error.delEvent', ['toggle-tree-change', 'toggle-tree-expand'])
-          UtilTools.emitEvent(this, 'toggle-tree-change', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
+          UtilTools.emitEvent(this, 'toggle-tree-change', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this, $event: evnt }, evnt])
         } else {
-          UtilTools.emitEvent(this, 'toggle-tree-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this }, evnt])
+          UtilTools.emitEvent(this, 'toggle-tree-expand', [{ expanded, row, rowIndex: this.getRowIndex(row), $table: this, $event: evnt }, evnt])
         }
       }
     },
