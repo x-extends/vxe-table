@@ -225,7 +225,7 @@ export interface ModalEventParams {
 /**
  * 全局模态窗口控制器
  */
-export interface ModalController {
+export interface ModalClass {
   /**
    * 弹出窗口
    * @param options 参数
@@ -278,3 +278,5 @@ export interface ModalController {
    */
   close (id?: string): Promise<any>;
 }
+
+export declare const ModalController: ModalClass

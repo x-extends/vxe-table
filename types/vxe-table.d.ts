@@ -13,8 +13,9 @@ export interface VXETableOptions {
   [key: string]: any;
 }
 
+export function install(vue: typeof Vue, options?: VXETableOptions): void;
+
 export interface VXETableStatic {
-  install(vue: typeof Vue): void;
   /**
    * 版本号
    */
@@ -70,7 +71,7 @@ export interface VXETableStatic {
   /**
    * 全局的模态窗口
    */
-  modal: ModalController;
+  modal: typeof ModalController;
 }
 
 /**
