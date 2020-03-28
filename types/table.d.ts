@@ -784,13 +784,13 @@ export declare class Table extends VXETableModule {
    * @param rows 指定行
    * @param callback 回调函数
    */
-  fullValidate(rows?: any, callback?: (status: boolean, errMap: ColumnEditValidErrMapParams) => void): Promise<any>;
+  fullValidate(rows?: any, callback?: (errMap: ColumnEditValidErrMapParams) => void): Promise<any>;
   /**
    * 表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise
    * @param rows 指定行
    * @param callback 回调函数
    */
-  validate(rows?: any, callback?: (status: boolean, errMap: ColumnEditValidErrMapParams) => void): Promise<any>;
+  validate(rows?: any, callback?: (errMap: ColumnEditValidErrMapParams) => void): Promise<any>;
   /**
    * 打开高级导出
    * @param options 参数
