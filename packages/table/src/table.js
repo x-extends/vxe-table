@@ -3007,6 +3007,22 @@ export default {
       return this.$nextTick()
     },
     /**
+     * 判断复选框是否全选
+     */
+    isAllCheckboxChecked () {
+      return this.isAllSelected
+    },
+    /**
+     * 获取复选框半选状态的行数据
+     */
+    getCheckboxIndeterminateRecords () {
+      const { treeConfig, treeIndeterminates } = this
+      if (treeConfig) {
+        return treeIndeterminates.slice(0)
+      }
+      return []
+    },
+    /**
      * 处理复选框默认勾选
      */
     handleDefaultSelectionChecked () {
