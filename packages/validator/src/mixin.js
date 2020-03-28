@@ -187,8 +187,8 @@ export default {
      * 校验数据
      * 按表格行、列顺序依次校验（同步或异步）
      * 校验规则根据索引顺序依次校验，如果是异步则会等待校验完成才会继续校验下一列
-     * 如果校验失败则，触发回调或者Promise，结果返回一个 Boolean 值
-     * 如果是传回调方式这返回一个 Boolean 值和校验不通过列的错误消息
+     * 如果校验失败则，触发回调或者Promise<不通过列的错误消息>
+     * 如果是传回调方式这返回一个校验不通过列的错误消息
      *
      * rule 配置：
      *  required=Boolean 是否必填
@@ -198,7 +198,7 @@ export default {
      *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
     validCellRules (type, row, column, val) {
-      const { editRules, treeConfig } = this
+      const { editRules } = this
       const { property } = column
       const errorRules = []
       const cellVailds = []
@@ -217,7 +217,7 @@ export default {
                         errorRules.push(new Rule(cusRule))
                       }
                       return resolve()
-                    }, { rules, row, column, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
+                    }, { rule, rules, row, column, rowIndex: this.getRowIndex(row), columnIndex: this.getColumnIndex(column), $table: this })
                   } else {
                     const isNumber = rule.type === 'number'
                     const numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)

@@ -1807,7 +1807,9 @@ const Methods = {
     if (property) {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
-          treeIndeterminates.push(row)
+          if (treeIndeterminates.indexOf(row) === -1) {
+            treeIndeterminates.push(row)
+          }
           XEUtils.set(row, property, false)
         } else {
           // 更新子节点状态
@@ -1840,7 +1842,9 @@ const Methods = {
     } else {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
-          treeIndeterminates.push(row)
+          if (treeIndeterminates.indexOf(row) === -1) {
+            treeIndeterminates.push(row)
+          }
           XEUtils.remove(selection, item => item === row)
         } else {
           // 更新子节点状态
@@ -1904,7 +1908,7 @@ const Methods = {
         UtilTools.warn('vxe.error.delEvent', ['select-change', 'checkbox-change'])
         this.$emit('select-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
       } else {
-        this.$emit('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
+        this.$emit('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
       }
     }
   },
@@ -2142,7 +2146,7 @@ const Methods = {
       UtilTools.warn('vxe.error.delEvent', ['select-all', 'checkbox-all'])
       this.$emit('select-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, evnt)
     } else {
-      this.$emit('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, evnt)
+      this.$emit('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, evnt)
     }
   },
   // 在 v3.0 中废弃 toggleAllSelection

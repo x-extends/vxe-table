@@ -110,7 +110,7 @@ export default {
       loading: false,
       validRules: {
         name: [
-          { required: true, message: '名称必须填写' },
+          { required: true, message: 'app.body.valid.rName' },
           { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
         ],
         sex: [
@@ -195,7 +195,7 @@ export default {
               loading: false,
               validRules: {
                 name: [
-                  { required: true, message: '名称必须填写' },
+                  { required: true, message: 'app.body.valid.rName' },
                   { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
                 ],
                 sex: [

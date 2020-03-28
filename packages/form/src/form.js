@@ -152,7 +152,7 @@ export default {
                 this.validItemRules(type || 'all', field)
                   .then(resolve)
                   .catch(({ rule, rules }) => {
-                    const rest = { rule, rules, property: field }
+                    const rest = { rule, rules, data, property: field, $form: this }
                     if (!validRest[field]) {
                       validRest[field] = []
                     }
@@ -217,7 +217,7 @@ export default {
                         errorRules.push(new Rule(cusRule))
                       }
                       return resolve()
-                    }, { rules, property })
+                    }, { rule, rules, data, property, $form: this })
                   } else {
                     const isNumber = rule.type === 'number'
                     const numVal = isNumber ? XEUtils.toNumber(itemValue) : XEUtils.getSize(itemValue)
