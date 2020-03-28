@@ -2755,6 +2755,15 @@ const apis = [
         list: []
       },
       {
+        name: 'getCheckboxIndeterminateRecords()',
+        desc: '用于 type=checkbox，获取半选状态的行数据',
+        version: '',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getRowExpandRecords()',
         desc: '用于 expand-config，用于展开行，获取已展开的行数据',
         version: '',
@@ -2824,6 +2833,15 @@ const apis = [
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row, field?: string',
+        list: []
+      },
+      {
+        name: 'isAllCheckboxChecked()',
+        desc: '用于 type=checkbox，判断复选行是否被全部选中',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
         list: []
       },
       {
