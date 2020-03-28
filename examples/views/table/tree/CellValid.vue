@@ -106,19 +106,17 @@ export default {
           },
           methods: {
             validEvent () {
-              this.$refs.xTree.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTree.validate((errMap) => {
+                if (errMap) {
                   this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
             fullValidEvent () {
-              this.$refs.xTree.fullValidate((valid, errMap) => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTree.fullValidate((errMap) => {
+                if (errMap) {
                   let msgList = []
                   Object.values(errMap).forEach(errList => {
                     errList.forEach(params => {
@@ -144,17 +142,19 @@ export default {
                       ]
                     }
                   })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
             selectValidEvent () {
               let selectRecords = this.$refs.xTree.getCheckboxRecords()
               if (selectRecords.length > 0) {
-                this.$refs.xTree.validate(selectRecords, valid => {
-                  if (valid) {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
-                  } else {
+                this.$refs.xTree.validate(selectRecords, (errMap) => {
+                  if (errMap) {
                     this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                  } else {
+                    this.$XModal.message({ status: 'success', message: '校验成功！' })
                   }
                 })
               } else {
@@ -185,19 +185,17 @@ export default {
   },
   methods: {
     validEvent () {
-      this.$refs.xTree.validate(valid => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTree.validate((errMap) => {
+        if (errMap) {
           this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
     fullValidEvent () {
-      this.$refs.xTree.fullValidate((valid, errMap) => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTree.fullValidate((errMap) => {
+        if (errMap) {
           const msgList = []
           Object.values(errMap).forEach(errList => {
             errList.forEach(params => {
@@ -223,17 +221,19 @@ export default {
               ]
             }
           })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
     selectValidEvent () {
       const selectRecords = this.$refs.xTree.getCheckboxRecords()
       if (selectRecords.length > 0) {
-        this.$refs.xTree.validate(selectRecords, valid => {
-          if (valid) {
-            this.$XModal.message({ status: 'success', message: '校验成功！' })
-          } else {
+        this.$refs.xTree.validate(selectRecords, (errMap) => {
+          if (errMap) {
             this.$XModal.message({ status: 'error', message: '校验不通过！' })
+          } else {
+            this.$XModal.message({ status: 'success', message: '校验成功！' })
           }
         })
       } else {

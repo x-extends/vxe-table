@@ -62,7 +62,6 @@ export default {
      */
     beginValidate (rows, cb, isAll) {
       const validRest = {}
-      let status = true
       const { editRules, afterFullData, treeConfig, treeOpts } = this
       let vaildDatas = afterFullData
       if (rows) {
@@ -113,15 +112,14 @@ export default {
             return Promise.reject(validRest[ruleProps[0]][0])
           }
           if (cb) {
-            cb(status)
+            cb()
           }
         }).catch(params => {
           const args = isAll ? validRest : { [params.column.property]: params }
           return new Promise((resolve, reject) => {
             const finish = () => {
-              status = false
               if (cb) {
-                cb(status, args)
+                cb(args)
                 resolve()
               } else {
                 reject(args)
@@ -154,7 +152,7 @@ export default {
         })
       }
       if (cb) {
-        cb(status)
+        cb()
       }
       return Promise.resolve()
     },

@@ -130,8 +130,10 @@ export default {
               let body = this.$refs.xTable.getRecordset()
               let { insertRecords, removeRecords, updateRecords } = body
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
-                this.$refs.xTable.validate(valid => {
-                  if (valid) {
+                this.$refs.xTable.validate((errMap) => {
+                  if (errMap) {
+                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                  } else {
                     XEAjax.post('/api/i18n/save', body).then(() => {
                       this.$XModal.message({ message: '保存成功！', status: 'success' })
                       this.findList()
@@ -195,8 +197,10 @@ export default {
       const body = this.$refs.xTable.getRecordset()
       const { insertRecords, removeRecords, updateRecords } = body
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
-        this.$refs.xTable.validate(valid => {
-          if (valid) {
+        this.$refs.xTable.validate((errMap) => {
+          if (errMap) {
+            this.$XModal.message({ status: 'error', message: '校验不通过！' })
+          } else {
             XEAjax.post('/api/i18n/save', body).then(() => {
               this.$XModal.message({ message: '保存成功！', status: 'success' })
               this.findList()
