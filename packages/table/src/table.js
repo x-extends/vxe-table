@@ -1502,35 +1502,44 @@ export default {
         }
       })
     },
-    defineField (row) {
+    defineField (record) {
       const { treeConfig, treeOpts } = this
       const rowkey = UtilTools.getRowkey(this)
       this.visibleColumn.forEach(({ property, editRender }) => {
-        if (property && !XEUtils.has(row, property)) {
-          XEUtils.set(row, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
+        if (property && !XEUtils.has(record, property)) {
+          XEUtils.set(record, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
         }
       })
-      if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(row[treeOpts.children])) {
-        row[treeOpts.children] = null
+      if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[treeOpts.children])) {
+        record[treeOpts.children] = null
       }
       // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
-      if (!XEUtils.get(row, rowkey)) {
-        XEUtils.set(row, rowkey, getRowUniqueId())
+      if (!XEUtils.get(record, rowkey)) {
+        XEUtils.set(record, rowkey, getRowUniqueId())
       }
-      return row
+      return record
     },
+    /**
+     * 创建 data 对象
+     * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义
+     * @param {Array} records 新数据
+     */
     createData (records) {
-      return this.$nextTick().then(() => records.map(this.defineField))
+      const rowkey = UtilTools.getRowkey(this)
+      const rows = records.map(record => this.defineField(Object.assign({}, record, { [rowkey]: null })))
+      return this.$nextTick().then(() => rows)
     },
+    /**
+     * 创建 Row|Rows 对象
+     * 对于某些特殊场景需要对数据进行手动插入时可能会用到
+     * @param {Array/Object} records 新数据
+     */
     createRow (records) {
       const isArr = XEUtils.isArray(records)
       if (!isArr) {
         records = [records]
       }
-      return this.$nextTick().then(() => {
-        const rows = records.map(record => this.defineField(Object.assign({}, record)))
-        return isArr ? rows : rows[0]
-      })
+      return this.$nextTick().then(() => this.createData(records).then(rows => isArr ? rows : rows[0]))
     },
     /**
      * 删除指定行数据
@@ -5221,7 +5230,12 @@ export default {
             return Promise.reject(validRest[ruleProps[0]][0])
           }
           if (cb) {
-            cb(status)
+            // 在 v3.0 中废弃 setup.validArgs
+            if (GlobalConfig.validArgs === 'obsolete') {
+              cb(status)
+            } else {
+              cb()
+            }
           }
         }).catch(params => {
           const args = isAll ? validRest : { [params.column.property]: params }
@@ -5229,7 +5243,12 @@ export default {
             const finish = () => {
               status = false
               if (cb) {
-                cb(status, args)
+                // 在 v3.0 中废弃 setup.validArgs
+                if (GlobalConfig.validArgs === 'obsolete') {
+                  cb(status, args)
+                } else {
+                  cb(args)
+                }
                 resolve()
               } else {
                 reject(args)
@@ -5262,7 +5281,12 @@ export default {
         })
       }
       if (cb) {
-        cb(status)
+        // 在 v3.0 中废弃 setup.validArgs
+        if (GlobalConfig.validArgs === 'obsolete') {
+          cb(status)
+        } else {
+          cb()
+        }
       }
       return Promise.resolve()
     },
