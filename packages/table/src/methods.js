@@ -1689,7 +1689,9 @@ const Methods = {
     if (property) {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
-          treeIndeterminates.push(row)
+          if (treeIndeterminates.indexOf(row) === -1) {
+            treeIndeterminates.push(row)
+          }
           XEUtils.set(row, property, false)
         } else {
           // 更新子节点状态
@@ -1722,7 +1724,9 @@ const Methods = {
     } else {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
-          treeIndeterminates.push(row)
+          if (treeIndeterminates.indexOf(row) === -1) {
+            treeIndeterminates.push(row)
+          }
           XEUtils.remove(selection, item => item === row)
         } else {
           // 更新子节点状态
@@ -1780,7 +1784,7 @@ const Methods = {
     const { checkMethod } = this.checkboxOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
       this.handleSelectRow(params, value)
-      this.$emit('checkbox-change', Object.assign({ records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
+      this.$emit('checkbox-change', Object.assign({ records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
     }
   },
   /**
@@ -1991,7 +1995,7 @@ const Methods = {
    */
   triggerCheckAllEvent (evnt, value) {
     this.setAllCheckboxRow(value)
-    this.$emit('checkbox-all', { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, evnt)
+    this.$emit('checkbox-all', { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, evnt)
   },
   /**
    * 多选，切换所有行的选中状态
