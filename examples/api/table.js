@@ -1954,7 +1954,7 @@ const apis = [
             name: 'message',
             desc: '校验提示内容（支持开启国际化）',
             version: '',
-            type: 'String, Function',
+            type: 'String',
             enum: '',
             defVal: '',
             list: []
@@ -2290,7 +2290,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{ records, reserves, checked, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
+        defVal: '{ records, reserves, indeterminates, checked, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2309,7 +2309,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{ records, reserves, checked, $event }',
+        defVal: '{ records, reserves, indeterminates, checked, $event }',
         list: []
       },
       {

@@ -3079,7 +3079,9 @@ export default {
       if (property) {
         if (treeConfig && !checkStrictly) {
           if (value === -1) {
-            treeIndeterminates.push(row)
+            if (treeIndeterminates.indexOf(row) === -1) {
+              treeIndeterminates.push(row)
+            }
             XEUtils.set(row, property, false)
           } else {
             // 更新子节点状态
@@ -3112,7 +3114,9 @@ export default {
       } else {
         if (treeConfig && !checkStrictly) {
           if (value === -1) {
-            treeIndeterminates.push(row)
+            if (treeIndeterminates.indexOf(row) === -1) {
+              treeIndeterminates.push(row)
+            }
             XEUtils.remove(selection, item => item === row)
           } else {
             // 更新子节点状态
@@ -3176,7 +3180,7 @@ export default {
           UtilTools.warn('vxe.error.delEvent', ['select-change', 'checkbox-change'])
           this.$emit('select-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
         } else {
-          this.$emit('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
+          this.$emit('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
         }
       }
     },
@@ -3416,7 +3420,7 @@ export default {
         UtilTools.warn('vxe.error.delEvent', ['select-all', 'checkbox-all'])
         this.$emit('select-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, evnt)
       } else {
-        this.$emit('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, evnt)
+        this.$emit('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, evnt)
       }
     },
     // 在 v3.0 中废弃 toggleAllSelection
@@ -5339,8 +5343,8 @@ export default {
      * 校验数据
      * 按表格行、列顺序依次校验（同步或异步）
      * 校验规则根据索引顺序依次校验，如果是异步则会等待校验完成才会继续校验下一列
-     * 如果校验失败则，触发回调或者Promise，结果返回一个 Boolean 值
-     * 如果是传回调方式这返回一个 Boolean 值和校验不通过列的错误消息
+     * 如果校验失败则，触发回调或者Promise<不通过列的错误消息>
+     * 如果是传回调方式这返回一个校验不通过列的错误消息
      *
      * rule 配置：
      *  required=Boolean 是否必填
@@ -5350,7 +5354,7 @@ export default {
      *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
     validCellRules (type, row, column, val) {
-      const { editRules, treeConfig } = this
+      const { editRules } = this
       const { property } = column
       const errorRules = []
       const cellVailds = []
@@ -5369,7 +5373,7 @@ export default {
                         errorRules.push(new Rule(cusRule))
                       }
                       return resolve()
-                    }, { rules, row, column, [`${treeConfig ? '$' : ''}rowIndex`]: this.getRowIndex(row), columnIndex: this.getColumnIndex(column) })
+                    }, { rule, rules, row, column, rowIndex: this.getRowIndex(row), columnIndex: this.getColumnIndex(column), $table: this })
                   } else {
                     const isNumber = rule.type === 'number'
                     const numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
