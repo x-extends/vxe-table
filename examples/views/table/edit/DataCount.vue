@@ -71,14 +71,10 @@ export default {
           },
           methods: {
             countAmount (row) {
-              return XEUtils.toNumber(row.amount) * XEUtils.toNumber(row.number)
+              return XEUtils.multiply(row.amount, row.number)
             },
             countAllAmount (data) {
-              let count = 0
-              data.forEach(row => {
-                count += this.countAmount(row)
-              })
-              return count
+              return XEUtils.sum(data.map(row => this.countAmount(row)))
             },
             footerMethod ({ columns, data }) {
               return [
@@ -108,14 +104,10 @@ export default {
   },
   methods: {
     countAmount (row) {
-      return XEUtils.toNumber(row.amount) * XEUtils.toNumber(row.number)
+      return XEUtils.multiply(row.amount, row.number)
     },
     countAllAmount (data) {
-      let count = 0
-      data.forEach(row => {
-        count += this.countAmount(row)
-      })
-      return count
+      return XEUtils.sum(data.map(row => this.countAmount(row)))
     },
     footerMethod ({ columns, data }) {
       return [

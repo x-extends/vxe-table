@@ -428,6 +428,10 @@ export declare class Table extends VXETableModule {
    */
   setCheckboxRow(rows: any, checked: boolean): Promise<any>;
   /**
+   * 用于 type=checkbox，判断复选行是否被全部选中
+   */
+  isAllCheckboxChecked(): boolean;
+  /**
    * 用于 type=checkbox，判断复选行数据是否勾选
    * @param row 指定行
    */
@@ -454,6 +458,10 @@ export declare class Table extends VXETableModule {
    * 用于 checkbox-config.reserve，获取已保留选中的行数据
    */
   getCheckboxReserveRecords(): any[];
+  /**
+   * 用于 type=checkbox，获取半选状态的行数据
+   */
+  getCheckboxIndeterminateRecords(): any[]
   /**
    * 用于 checkbox-config.reserve，手动清空用户保留选中的行数据
    */
