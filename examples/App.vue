@@ -1339,12 +1339,12 @@ export default {
               locat: {
                 name: 'GridFullEdit'
               }
-            },
-            {
-              label: 'app.aside.nav.configProxy',
-              locat: {
-                name: 'GridConfigProxy'
-              }
+            // },
+            // {
+            //   label: 'app.aside.nav.configProxy',
+            //   locat: {
+            //     name: 'GridConfigProxy'
+            //   }
             }
           ]
         },
