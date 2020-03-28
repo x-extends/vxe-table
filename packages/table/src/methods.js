@@ -393,24 +393,24 @@ const Methods = {
   },
   /**
    * 定义行数据中的列属性，如果不存在则定义
-   * @param {Row} row 行数据
+   * @param {Row} record 行数据
    */
-  defineField (row) {
+  defineField (record) {
     const { treeConfig, treeOpts } = this
     const rowkey = UtilTools.getRowkey(this)
     this.visibleColumn.forEach(({ property, editRender }) => {
-      if (property && !XEUtils.has(row, property)) {
-        XEUtils.set(row, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
+      if (property && !XEUtils.has(record, property)) {
+        XEUtils.set(record, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
       }
     })
-    if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(row[treeOpts.children])) {
-      row[treeOpts.children] = null
+    if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[treeOpts.children])) {
+      record[treeOpts.children] = null
     }
     // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
-    if (!XEUtils.get(row, rowkey)) {
-      XEUtils.set(row, rowkey, getRowUniqueId())
+    if (!XEUtils.get(record, rowkey)) {
+      XEUtils.set(record, rowkey, getRowUniqueId())
     }
-    return row
+    return record
   },
   /**
    * 创建 data 对象
@@ -418,7 +418,9 @@ const Methods = {
    * @param {Array} records 新数据
    */
   createData (records) {
-    return this.$nextTick().then(() => records.map(this.defineField))
+    const rowkey = UtilTools.getRowkey(this)
+    const rows = records.map(record => this.defineField(Object.assign({}, record, { [rowkey]: null })))
+    return this.$nextTick().then(() => rows)
   },
   /**
    * 创建 Row|Rows 对象
@@ -430,10 +432,7 @@ const Methods = {
     if (!isArr) {
       records = [records]
     }
-    return this.$nextTick().then(() => {
-      const rows = records.map(record => this.defineField(Object.assign({}, record)))
-      return isArr ? rows : rows[0]
-    })
+    return this.$nextTick().then(() => this.createData(records).then(rows => isArr ? rows : rows[0]))
   },
   revert (...args) {
     UtilTools.warn('vxe.error.delFunc', ['revert', 'revertData'])

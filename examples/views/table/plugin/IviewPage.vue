@@ -380,11 +380,11 @@ export default {
               }
             },
             vaildEvent () {
-              this.$refs.xTable.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTable.validate((errMap) => {
+                if (errMap) {
                   this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
@@ -533,11 +533,11 @@ export default {
       }
     },
     vaildEvent () {
-      this.$refs.xTable.validate(valid => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTable.validate((errMap) => {
+        if (errMap) {
           this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },

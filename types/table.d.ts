@@ -313,6 +313,7 @@ export declare class Table extends VXETableModule {
    * 对于某些特殊场景需要对数据进行手动插入时可能会用到
    * @param records 数据
    */
+  createRow(records: any[]): Promise<any[]>;
   createRow(records: any): Promise<any>;
   /**
    * 只对 keep-source 开启有效，还原指定行 row 或者整个表格的数据

@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
+import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
 
 /**
@@ -113,7 +114,12 @@ export default {
             return Promise.reject(validRest[ruleProps[0]][0])
           }
           if (cb) {
-            cb(status)
+            // 在 v3.0 中废弃 setup.validArgs
+            if (GlobalConfig.validArgs === 'obsolete') {
+              cb(status)
+            } else {
+              cb()
+            }
           }
         }).catch(params => {
           const args = isAll ? validRest : { [params.column.property]: params }
@@ -121,7 +127,12 @@ export default {
             const finish = () => {
               status = false
               if (cb) {
-                cb(status, args)
+                // 在 v3.0 中废弃 setup.validArgs
+                if (GlobalConfig.validArgs === 'obsolete') {
+                  cb(status, args)
+                } else {
+                  cb(args)
+                }
                 resolve()
               } else {
                 reject(args)
@@ -154,7 +165,12 @@ export default {
         })
       }
       if (cb) {
-        cb(status)
+        // 在 v3.0 中废弃 setup.validArgs
+        if (GlobalConfig.validArgs === 'obsolete') {
+          cb(status)
+        } else {
+          cb()
+        }
       }
       return Promise.resolve()
     },

@@ -180,19 +180,17 @@ export default {
               })
             },
             validEvent () {
-              this.$refs.xTable.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTable.validate((errMap) => {
+                if (errMap) {
                   this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
             fullValidEvent () {
-              this.$refs.xTable.fullValidate((valid, errMap) => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTable.fullValidate((errMap) => {
+                if (errMap) {
                   let msgList = []
                   Object.values(errMap).forEach(errList => {
                     errList.forEach(params => {
@@ -216,17 +214,19 @@ export default {
                       ]
                     }
                   })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
             selectValidEvent () {
               let selectRecords = this.$refs.xTable.getCheckboxRecords()
               if (selectRecords.length > 0) {
-                this.$refs.xTable.validate(selectRecords, valid => {
-                  if (valid) {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
-                  } else {
+                this.$refs.xTable.validate(selectRecords, (errMap) => {
+                  if (errMap) {
                     this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                  } else {
+                    this.$XModal.message({ status: 'success', message: '校验成功！' })
                   }
                 })
               } else {
@@ -282,25 +282,23 @@ export default {
       })
     },
     validEvent () {
-      this.$refs.xTable.validate(valid => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTable.validate((errMap) => {
+        if (errMap) {
           this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
     fullValidEvent () {
-      this.$refs.xTable.fullValidate((valid, errMap) => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTable.fullValidate((errMap) => {
+        if (errMap) {
           const msgList = []
           Object.values(errMap).forEach(errList => {
             errList.forEach(params => {
               const { rowIndex, column, rules } = params
               rules.forEach(rule => {
-                msgList.push(`第 ${rowIndex} 行 ${column.title} 校验错误：${rule.message}`)
+                msgList.push(`第 ${rowIndex + 1} 行 ${column.title} 校验错误：${rule.message}`)
               })
             })
           })
@@ -318,17 +316,19 @@ export default {
               ]
             }
           })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
     selectValidEvent () {
       const selectRecords = this.$refs.xTable.getCheckboxRecords()
       if (selectRecords.length > 0) {
-        this.$refs.xTable.validate(selectRecords, valid => {
-          if (valid) {
-            this.$XModal.message({ status: 'success', message: '校验成功！' })
-          } else {
+        this.$refs.xTable.validate(selectRecords, (errMap) => {
+          if (errMap) {
             this.$XModal.message({ status: 'error', message: '校验不通过！' })
+          } else {
+            this.$XModal.message({ status: 'success', message: '校验成功！' })
           }
         })
       } else {
