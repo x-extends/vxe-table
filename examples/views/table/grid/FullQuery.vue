@@ -20,9 +20,9 @@
       :radio-config="{labelField: 'id', reserve: true, highlight: true}">
 
       <template v-slot:buttons>
-        <vxe-form :data="formData" @submit="searchEvent">
+        <vxe-form :data="formData" @submit="searchEvent" @reset="searchEvent">
           <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
-          <vxe-form-item :item-render="{name: 'input', attrs: {type: 'submit', value: $t('app.body.label.search')}}"></vxe-form-item>
+          <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }"></vxe-form-item>
         </vxe-form>
       </template>
 
@@ -45,6 +45,7 @@
 
 <script>
 import XEAjax from 'xe-ajax'
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -73,7 +74,7 @@ export default {
             filters.forEach(({ field, values }) => {
               queryParams[field] = values.join(',')
             })
-            return XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+            return XEAjax.get(`https://api.xuliangzhan.com:10443/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           }
         }
       },
@@ -84,15 +85,14 @@ export default {
       tableColumn: [
         { type: 'seq', width: 60, fixed: 'left' },
         { type: 'radio', title: 'ID', width: 120, fixed: 'left' },
-        { field: 'name', title: 'Name', minWidth: 300, remoteSort: true },
-        { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 300 },
-        { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
+        { field: 'name', title: 'Name', minWidth: 200, remoteSort: true },
+        { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 200 },
+        { field: 'age', title: 'Age', remoteSort: true, width: 100 },
         {
           field: 'role',
           title: 'Role',
-          visible: false,
           remoteSort: true,
-          width: 200,
+          minWidth: 200,
           filters: [
             { label: '前端开发', value: '前端' },
             { label: '后端开发', value: '后端' },
@@ -101,7 +101,9 @@ export default {
           ],
           filterMultiple: false
         },
-        { field: 'describe', title: 'Describe', minWidth: 300, showOverflow: true }
+        { field: 'amount', title: 'Amount', width: 100 },
+        { field: 'updateDate', title: 'Update Date', width: 160, remoteSort: true, formatter: this.formatDate },
+        { field: 'createDate', title: 'Create Date', width: 160, remoteSort: true, formatter: this.formatDate }
       ],
       demoCodes: [
         `
@@ -123,9 +125,9 @@ export default {
           :radio-config="{labelField: 'id', reserve: true, highlight: true}">
 
           <template v-slot:buttons>
-            <vxe-form :data="formData" @submit="searchEvent">
+            <vxe-form :data="formData" @submit="searchEvent" @reset="searchEvent">
               <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
-              <vxe-form-item :item-render="{name: 'input', attrs: {type: 'submit', value: $t('app.body.label.search')}}"></vxe-form-item>
+              <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }"></vxe-form-item>
             </vxe-form>
           </template>
 
@@ -164,7 +166,7 @@ export default {
                     filters.forEach(({ column, property, values }) => {
                       queryParams[property] = values.join(',')
                     })
-                    return XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                    return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                   }
                 }
               },
@@ -175,15 +177,14 @@ export default {
               tableColumn: [
                 { type: 'seq', width: 60, fixed: 'left' },
                 { type: 'radio', title: 'ID', width: 120, fixed: 'left' },
-                { field: 'name', title: 'Name', minWidth: 300, remoteSort: true },
-                { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 300 },
-                { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
+                { field: 'name', title: 'Name', minWidth: 200, remoteSort: true },
+                { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 200 },
+                { field: 'age', title: 'Age', remoteSort: true, width: 100 },
                 {
                   field: 'role',
                   title: 'Role',
-                  visible: false,
                   remoteSort: true,
-                  width: 200,
+                  minWidth: 200,
                   filters: [
                     { label: '前端开发', value: '前端' },
                     { label: '后端开发', value: '后端' },
@@ -192,13 +193,18 @@ export default {
                   ],
                   filterMultiple: false
                 },
-                { field: 'describe', title: 'Describe', minWidth: 300, showOverflow: true }
+                { field: 'amount', title: 'Amount', width: 100 },
+                { field: 'updateDate', title: 'Update Date', width: 160, remoteSort: true, formatter: this.formatDate },
+                { field: 'createDate', title: 'Create Date', width: 160, remoteSort: true, formatter: this.formatDate }
               ]
             }
           },
           methods: {
             searchEvent () {
               this.$refs.xGrid.commitProxy('reload')
+            },
+            formatDate ({ cellValue }) {
+              return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
             }
           }
         }
@@ -214,6 +220,9 @@ export default {
   methods: {
     searchEvent () {
       this.$refs.xGrid.commitProxy('reload')
+    },
+    formatDate ({ cellValue }) {
+      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
     }
   }
 }
