@@ -4,41 +4,42 @@
     <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link>，支持：text 文本、number 数值、integer 整数、date 日期、week 周、month 月份、year 年份、password 密码</p>
 
     <p>
-      <vxe-input v-model="value1" placeholder="默认尺寸"></vxe-input>
-      <vxe-input v-model="value2" placeholder="中等尺寸" size="medium"></vxe-input>
-      <vxe-input v-model="value3" placeholder="小型尺寸" size="small"></vxe-input>
-      <vxe-input v-model="value4" placeholder="超小尺寸" size="mini"></vxe-input>
+      <vxe-input v-model="value100" placeholder="默认尺寸"></vxe-input>
+      <vxe-input v-model="value101" placeholder="中等尺寸" size="medium"></vxe-input>
+      <vxe-input v-model="value102" placeholder="小型尺寸" size="small"></vxe-input>
+      <vxe-input v-model="value103" placeholder="超小尺寸" size="mini"></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value5" placeholder="可清除" clearable></vxe-input>
-      <vxe-input v-model="value6" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
-      <vxe-input v-model="value7" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
-      <vxe-input v-model="value8" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
+      <vxe-input v-model="value200" placeholder="可清除" clearable></vxe-input>
+      <vxe-input v-model="value201" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
+      <vxe-input v-model="value202" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
+      <vxe-input v-model="value203" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value9" placeholder="密码类型" type="password"></vxe-input>
+      <vxe-input v-model="value300" placeholder="密码类型" type="password"></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
-      <vxe-input v-model="value11" placeholder="周" type="week" clearable></vxe-input>
-      <vxe-input v-model="value12" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
-      <vxe-input v-model="value13" placeholder="年" type="year" clearable></vxe-input>
-      <vxe-input v-model="value14" placeholder="禁用日期" type="date" :disabledMethod="disabledDateMethod"></vxe-input>
+      <vxe-input v-model="value400" placeholder="日期类型" type="date"></vxe-input>
+      <vxe-input v-model="value401" placeholder="周" type="week" clearable></vxe-input>
+      <vxe-input v-model="value402" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
+      <vxe-input v-model="value403" placeholder="年" type="year" clearable></vxe-input>
+      <vxe-input v-model="value404" placeholder="支持输入时分秒" type="datetime"></vxe-input>
+      <vxe-input v-model="value405" placeholder="禁用日期" type="date" :disabledMethod="disabledDateMethod"></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value15" placeholder="数值类型" type="number"></vxe-input>
-      <vxe-input v-model="value16" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
-      <vxe-input v-model="value17" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
-      <vxe-input v-model="value18" placeholder="小数类型" type="float"></vxe-input>
-      <vxe-input v-model="value19" placeholder="小数间隔 2.3" type="float" step="2.3" clearable></vxe-input>
-      <vxe-input v-model="value20" placeholder="小数范围限制 0-50" type="float" min="0" max="50" clearable></vxe-input>
-      <vxe-input v-model="value21" placeholder="整数类型" type="integer"></vxe-input>
-      <vxe-input v-model="value22" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
-      <vxe-input v-model="value23" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
+      <vxe-input v-model="value500" placeholder="数值类型" type="number"></vxe-input>
+      <vxe-input v-model="value501" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
+      <vxe-input v-model="value502" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
+      <vxe-input v-model="value503" placeholder="小数类型" type="float"></vxe-input>
+      <vxe-input v-model="value504" placeholder="小数间隔 2.3" type="float" step="2.3" clearable></vxe-input>
+      <vxe-input v-model="value505" placeholder="小数范围限制 0-50" type="float" min="0" max="50" clearable></vxe-input>
+      <vxe-input v-model="value506" placeholder="整数类型" type="integer"></vxe-input>
+      <vxe-input v-model="value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
+      <vxe-input v-model="value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
     </p>
 
     <pre>
@@ -64,90 +65,99 @@ import hljs from 'highlight.js'
 export default {
   data  () {
     return {
-      value1: '',
-      value2: '',
-      value3: '',
-      value4: '',
-      value5: '',
-      value6: '',
-      value7: '',
-      value8: '',
-      value9: '',
-      value10: '2018-01-09',
-      value11: '',
-      value12: '',
-      value13: '',
-      value14: '',
-      value15: '22',
-      value16: '',
-      value17: '',
-      value18: '33.33',
-      value19: '',
-      value20: '',
-      value21: '44',
-      value22: '',
-      value23: '',
+      value100: '',
+      value101: '',
+      value102: '',
+      value103: '',
+      value200: '',
+      value201: '',
+      value202: '',
+      value203: '',
+      value300: '',
+      value400: '2018-01-09',
+      value401: '',
+      value402: '',
+      value403: '',
+      value404: '',
+      value405: '',
+      value500: '22',
+      value501: '',
+      value502: '',
+      value503: '33.33',
+      value504: '',
+      value505: '',
+      value506: '44',
+      value507: '',
+      value508: '',
       demoCodes: [
         `
         <p>
-          <vxe-input v-model="value1" placeholder="默认尺寸"></vxe-input>
-          <vxe-input v-model="value2" placeholder="中等尺寸" size="medium"></vxe-input>
-          <vxe-input v-model="value3" placeholder="小型尺寸" size="small"></vxe-input>
-          <vxe-input v-model="value4" placeholder="超小尺寸" size="mini"></vxe-input>
+          <vxe-input v-model="value100" placeholder="默认尺寸"></vxe-input>
+          <vxe-input v-model="value101" placeholder="中等尺寸" size="medium"></vxe-input>
+          <vxe-input v-model="value102" placeholder="小型尺寸" size="small"></vxe-input>
+          <vxe-input v-model="value103" placeholder="超小尺寸" size="mini"></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value5" placeholder="可清除" clearable></vxe-input>
-          <vxe-input v-model="value6" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
-          <vxe-input v-model="value7" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
-          <vxe-input v-model="value8" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
+          <vxe-input v-model="value200" placeholder="可清除" clearable></vxe-input>
+          <vxe-input v-model="value201" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
+          <vxe-input v-model="value202" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
+          <vxe-input v-model="value203" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value9" placeholder="密码类型" type="password"></vxe-input>
+          <vxe-input v-model="value300" placeholder="密码类型" type="password"></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value10" placeholder="日期类型" type="date"></vxe-input>
-          <vxe-input v-model="value11" placeholder="周" type="week" clearable></vxe-input>
-          <vxe-input v-model="value12" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
-          <vxe-input v-model="value13" placeholder="年" type="year" clearable></vxe-input>
-          <vxe-input v-model="value14" placeholder="禁用日期" type="date" :disabledMethod="disabledDateMethod"></vxe-input>
+          <vxe-input v-model="value400" placeholder="日期类型" type="date"></vxe-input>
+          <vxe-input v-model="value401" placeholder="周" type="week" clearable></vxe-input>
+          <vxe-input v-model="value402" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
+          <vxe-input v-model="value403" placeholder="年" type="year" clearable></vxe-input>
+          <vxe-input v-model="value404" placeholder="支持输入时分秒" type="datetime"></vxe-input>
+          <vxe-input v-model="value405" placeholder="禁用日期" type="date" :disabledMethod="disabledDateMethod"></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value15" placeholder="数值类型" type="number"></vxe-input>
-          <vxe-input v-model="value16" placeholder="数值间隔" type="number" step="1.4" clearable></vxe-input>
-          <vxe-input v-model="value17" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
-          <vxe-input v-model="value18" placeholder="整数类型" type="integer"></vxe-input>
-          <vxe-input v-model="value19" placeholder="数值间隔" type="integer" step="5" clearable></vxe-input>
-          <vxe-input v-model="value20" placeholder="数值范围限制 0-100" type="integer" min="0" max="100" step="5" clearable></vxe-input>
+          <vxe-input v-model="value500" placeholder="数值类型" type="number"></vxe-input>
+          <vxe-input v-model="value501" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
+          <vxe-input v-model="value502" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
+          <vxe-input v-model="value503" placeholder="小数类型" type="float"></vxe-input>
+          <vxe-input v-model="value504" placeholder="小数间隔 2.3" type="float" step="2.3" clearable></vxe-input>
+          <vxe-input v-model="value505" placeholder="小数范围限制 0-50" type="float" min="0" max="50" clearable></vxe-input>
+          <vxe-input v-model="value506" placeholder="整数类型" type="integer"></vxe-input>
+          <vxe-input v-model="value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
+          <vxe-input v-model="value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
         </p>
         `,
         `
         export default {
           data () {
             return {
-              value1: '',
-              value2: '',
-              value3: '',
-              value4: '',
-              value5: '',
-              value6: '',
-              value7: '',
-              value8: '',
-              value9: '',
-              value10: '2018-01-09',
-              value11: '',
-              value12: '',
-              value13: '',
-              value14: '',
-              value15: '',
-              value16: '',
-              value17: '',
-              value18: '',
-              value19: '',
-              value20: ''
+              value100: '',
+              value101: '',
+              value102: '',
+              value103: '',
+              value200: '',
+              value201: '',
+              value202: '',
+              value203: '',
+              value300: '',
+              value400: '2018-01-09',
+              value401: '',
+              value402: '',
+              value403: '',
+              value404: '',
+              value405: '',
+              value500: '22',
+              value501: '',
+              value502: '',
+              value503: '33.33',
+              value504: '',
+              value505: '',
+              value506: '44',
+              value507: '',
+              value508: ''
             }
           },
           methods: {
