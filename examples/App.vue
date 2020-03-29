@@ -2082,18 +2082,14 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://registry.npm.taobao.org/vxe-table').then(data => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(versions => {
         const stableVersionList = []
         const betaVersionList = []
-        Object.values(data.versions).forEach(pack => {
-          if (/^2.\d{1,3}.\d{1,3}$/.test(pack.version)) {
-            stableVersionList.push({
-              version: pack.version
-            })
-          } else if (/^2.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(pack.version)) {
-            betaVersionList.push({
-              version: pack.version
-            })
+        versions.forEach(version => {
+          if (/^2.\d{1,3}.\d{1,3}$/.test(version)) {
+            stableVersionList.push({ version })
+          } else if (/^2.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(version)) {
+            betaVersionList.push({ version })
           }
         })
         this.stableVersionList = stableVersionList
