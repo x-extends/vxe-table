@@ -490,7 +490,7 @@ export default {
       return this.handleCustoms()
     },
     resetResizable () {
-      this.updateResizable(this)
+      this.updateResizable(true)
     },
     confirmCustomEvent (evnt) {
       this.closeCustom()

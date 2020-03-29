@@ -50,7 +50,9 @@ export default {
       deleteSelectRecord: 'レコードを削除してもよろしいですか？',
       removeSelectRecord: 'レコードを削除してもよろしいですか？',
       dataUnchanged: 'データは変更されませんでした',
-      saveSuccess: '保存しました'
+      delSuccess: '選択したレコードを削除しました',
+      saveSuccess: '保存しました',
+      operError: 'エラーが発生しました。操作が失敗しました'
     },
     pager: {
       goto: '移動',
