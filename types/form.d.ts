@@ -20,7 +20,7 @@ export declare class Form extends VXETableModule {
 
   // methods
   /**
-   * 对表单进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise
+   * 对表单进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
    * @param callback 回调函数
    */
   validate(callback?: (errMap?: FormValidErrMapParams) => void): Promise<any>;
@@ -63,18 +63,10 @@ export interface FormRule {
    */
   pattern?: string | RegExp;
   /**
-   * 使用自定义校验函数
-   * @param rule 当前校验的规则
-   * @param itemValue 项的值
-   * @param callback 回调函数，如果为空则校验成功，如果传 Error 对象则校验不通过
+   * 使用自定义校验函数，接收一个 Promise
    * @param params 参数
    */
-  validator?(
-    rule: FormRule,
-    itemValue: any,
-    callback: (e?: Error) => void,
-    params: FormValidErrParams
-  ): void;
+  validator?(params: FormValidErrParams): Promise<any>;
   /**
    * 提示消息
    */
@@ -92,6 +84,7 @@ export interface FormVaildRules {
 
 export interface FormValidErrParams {
   $form: Form,
+  itemValue: any,
   rule: FormRule;
   rules: FormRule[];
   data: any;
