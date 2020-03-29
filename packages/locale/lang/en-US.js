@@ -50,7 +50,9 @@ export default {
       deleteSelectRecord: 'Are you sure you want to delete the selected record?',
       removeSelectRecord: 'Are you sure you want to remove the selected record?',
       dataUnchanged: 'Data unchanged! ',
-      saveSuccess: 'save successfully.'
+      delSuccess: 'Successfully deleted the selected record!',
+      saveSuccess: 'Saved successfully!',
+      operError: 'Error occurred, operation failed!'
     },
     pager: {
       goto: 'Go to',

@@ -394,9 +394,7 @@ export default {
         case 'mark_cancel':
           this.triggerPendingEvent(code)
           break
-        case 'delete_selection':
-          this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => this.commitProxy(...(['delete'].concat(args))))
-          break
+        case 'remove':
         case 'remove_selection':
           this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeCheckboxRow())
           break
@@ -413,7 +411,7 @@ export default {
           this.openExport(btnParams)
           break
         case 'reset_custom':
-          this.resetAll()
+          this.resetColumn(true)
           break
         case 'reload':
         case 'query': {
@@ -428,7 +426,6 @@ export default {
               form: formData,
               options: ajaxMethods
             }
-            this.tableLoading = true
             if (pagerConfig) {
               params.page = tablePage
             }
@@ -442,9 +439,6 @@ export default {
               if (defaultSort) {
                 sortParams = {
                   property: defaultSort.field,
-                  field: defaultSort.field,
-                  // v3 废弃 prop
-                  prop: defaultSort.field,
                   order: defaultSort.order
                 }
               }
@@ -453,9 +447,11 @@ export default {
               this.pendingRecords = []
               this.clearAll()
             }
-            const qRest = (beforeQuery || ajaxMethods).apply(this, [params].concat(args))
-            try {
-              return qRest.then(rest => {
+            this.tableLoading = true
+            return Promise.resolve((beforeQuery || ajaxMethods).apply(this, [params].concat(args)))
+              .catch(e => e)
+              .then(rest => {
+                this.tableLoading = false
                 if (rest) {
                   if (pagerConfig) {
                     tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
@@ -466,55 +462,50 @@ export default {
                 } else {
                   this.tableData = []
                 }
-                this.tableLoading = false
-              }).catch(e => {
-                this.tableLoading = false
-                console.error(e)
               })
-            } catch (e) {
-              UtilTools.error('vxe.error.typeErr', ['proxy-config.ajax.query', 'Promise', typeof qRest])
-            }
           } else {
             UtilTools.error('vxe.error.notFunc', ['query'])
           }
           break
         }
+        case 'delete_selection':
         case 'delete': {
-          const ajaxMethods = ajax.delete
-          if (ajaxMethods) {
-            const selectRecords = this.getCheckboxRecords()
-            this.remove(selectRecords).then(() => {
-              const removeRecords = this.getRemoveRecords()
+          this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
+            const ajaxMethods = ajax.delete
+            if (ajaxMethods) {
+              const removeRecords = this.getCheckboxRecords()
               const body = { removeRecords }
               const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
               if (removeRecords.length) {
                 this.tableLoading = true
-                const dRest = (beforeDelete || ajaxMethods).apply(this, applyArgs)
-                try {
-                  return dRest.then(() => {
+                return Promise.resolve((beforeDelete || ajaxMethods).apply(this, applyArgs))
+                  .then(() => {
                     this.tableLoading = false
-                  }).catch(e => {
-                    this.tableLoading = false
-                    console.error(e)
-                  }).then(() => {
+                    this.pendingRecords = this.pendingRecords.filter(row => removeRecords.indexOf(row) === -1)
+                    if (isMsg) {
+                      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.grid.delSuccess'), status: 'success' })
+                    }
                     if (afterDelete) {
-                      afterDelete.apply(this, applyArgs)
+                      afterDelete(...applyArgs)
                     } else {
                       this.commitProxy('query')
                     }
                   })
-                } catch (e) {
-                  UtilTools.error('vxe.error.typeErr', ['proxy-config.ajax.delete', 'Promise', typeof dRest])
-                }
+                  .catch(() => {
+                    this.tableLoading = false
+                    if (isMsg) {
+                      VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.operError'), status: 'error' })
+                    }
+                  })
               } else {
-                if (isMsg && !selectRecords.length) {
+                if (isMsg) {
                   VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
                 }
               }
-            })
-          } else {
-            UtilTools.error('vxe.error.notFunc', [code])
-          }
+            } else {
+              UtilTools.error('vxe.error.notFunc', [code])
+            }
+          })
           break
         }
         case 'save': {
@@ -532,47 +523,34 @@ export default {
               body.insertRecords = insertRecords.filter(row => pendingRecords.indexOf(row) === -1)
             }
             // 只校验新增和修改的数据
-            return new Promise(resolve => {
-              this.validate(body.insertRecords.concat(updateRecords), vaild => {
-                if (vaild) {
-                  if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
-                    this.tableLoading = true
-                    const sRest = (beforeSave || ajaxMethods).apply(this, applyArgs)
-                    try {
-                      resolve(
-                        sRest.then(() => {
-                          VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
-                          this.tableLoading = false
-                        }).catch(e => {
-                          this.tableLoading = false
-                          console.error(e)
-                        }).then(() => {
-                          if (afterSave) {
-                            afterSave.apply(this, applyArgs)
-                          } else {
-                            this.commitProxy('query')
-                          }
-                        })
-                      )
-                    } catch (e) {
-                      UtilTools.error('vxe.error.typeErr', ['proxy-config.ajax.save', 'Promise', typeof sRest])
-                    }
-                  } else {
+            return this.validate(body.insertRecords.concat(updateRecords)).then(() => {
+              if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
+                this.tableLoading = true
+                return Promise.resolve((beforeSave || ajaxMethods).apply(this, applyArgs))
+                  .then(() => {
+                    this.tableLoading = false
+                    this.pendingRecords = []
                     if (isMsg) {
-                      // 直接移除未保存且标记为删除的数据
-                      if (pendingRecords.length) {
-                        this.remove(pendingRecords)
-                      } else {
-                        VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
-                      }
+                      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
                     }
-                    resolve()
-                  }
-                } else {
-                  resolve(vaild)
+                    if (afterSave) {
+                      afterSave(...applyArgs)
+                    } else {
+                      this.commitProxy('query')
+                    }
+                  })
+                  .catch(() => {
+                    this.tableLoading = false
+                    if (isMsg) {
+                      VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.operError'), status: 'error' })
+                    }
+                  })
+              } else {
+                if (isMsg) {
+                  VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
                 }
-              })
-            })
+              }
+            }).catch(errMap => errMap)
           } else {
             UtilTools.error('vxe.error.notFunc', [code])
           }

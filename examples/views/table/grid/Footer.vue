@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       通过表尾来实现合计功能<br>
-      <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的逻辑都是自行实现的，该示例仅供参考）</span>
+      <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的数据都是自行生成的，该示例仅供参考）</span>
     </p>
 
     <vxe-grid
