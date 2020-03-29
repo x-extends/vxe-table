@@ -98,6 +98,7 @@ $iconWidth: 1.6em;
   &.type--integer,
   &.type--float,
   &.type--date,
+  &.type--datetime,
   &.type--week,
   &.type--month,
   &.type--year {
@@ -110,6 +111,7 @@ $iconWidth: 1.6em;
   &.type--integer,
   &.type--float,
   &.type--date,
+  &.type--datetime,
   &.type--week,
   &.type--month,
   &.type--year   {
@@ -123,6 +125,7 @@ $iconWidth: 1.6em;
     &.type--integer,
     &.type--float,
     &.type--date,
+    &.type--datetime,
     &.type--week,
     &.type--month,
     &.type--year {
@@ -269,6 +272,7 @@ $iconWidth: 1.6em;
 
 .vxe-input--panel {
   &.type--date,
+  &.type--datetime,
   &.type--week,
   &.type--month,
   &.type--year {
@@ -283,7 +287,8 @@ $iconWidth: 1.6em;
       width: 24em;
     }
   }
-  &.type--date{
+  &.type--date,
+  &.type--datetime {
     .vxe-input--date-picker-body {
       th {
         width: 14.28571%;

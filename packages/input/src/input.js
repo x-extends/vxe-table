@@ -446,7 +446,7 @@ export default {
       return ['number', 'integer', 'float'].indexOf(this.type) > -1
     },
     isDatePicker () {
-      return ['date', 'week', 'month', 'year'].indexOf(this.type) > -1
+      return ['date', 'datetime', 'week', 'month', 'year'].indexOf(this.type) > -1
     },
     isPassword () {
       return this.type === 'password'
@@ -461,6 +461,10 @@ export default {
       const { value } = this
       return value ? XEUtils.toStringDate(value, this.dateValueFormat) : null
     },
+    hmsTime () {
+      const { type, dateValue } = this
+      return dateValue && type === 'datetime' ? (dateValue.getHours() * 3600 + dateValue.getMinutes() * 60 + dateValue.getSeconds()) * 1000 : 0
+    },
     dateLabelFormat () {
       if (this.isDatePicker) {
         return this.labelFormat || this.dateOpts.labelFormat || GlobalConfig.i18n(`vxe.input.date.labelFormat.${this.type}`)
@@ -468,7 +472,7 @@ export default {
       return null
     },
     dateValueFormat () {
-      return this.valueFormat || this.dateOpts.valueFormat || 'yyyy-MM-dd'
+      return this.valueFormat || this.dateOpts.valueFormat || (this.type === 'datetime' ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd')
     },
     selectDatePanelLabel () {
       const { datePanelType, selectMonth, yearList } = this
@@ -551,13 +555,13 @@ export default {
       return XEUtils.chunk(this.monthList, 4)
     },
     dayList () {
-      const { weekDatas, selectMonth, currentDate } = this
+      const { weekDatas, selectMonth, currentDate, hmsTime } = this
       const days = []
       if (selectMonth && currentDate) {
         const currentMonth = selectMonth.getMonth()
         const selectDay = selectMonth.getDay()
         const prevOffsetDay = -weekDatas.indexOf(selectDay)
-        const startDay = XEUtils.getWhatDay(selectMonth, prevOffsetDay)
+        const startDay = new Date(XEUtils.getWhatDay(selectMonth, prevOffsetDay).getTime() + hmsTime)
         for (let index = 0; index < 42; index++) {
           const date = XEUtils.getWhatDay(startDay, index)
           const isPrev = date < selectMonth
@@ -748,11 +752,11 @@ export default {
       }
     },
     clearValueEvent (evnt, value) {
-      const { $refs, type } = this
+      const { $refs, type, isNumber } = this
       if (this.isDatePicker) {
         this.hidePanel()
       }
-      if (['text', 'number', 'integer', 'float', 'password'].indexOf(type) > -1) {
+      if (isNumber || ['text', 'password'].indexOf(type) > -1) {
         this.focus()
       }
       this.$emit('clear', { $panel: $refs.panel, value, $event: evnt }, evnt)
@@ -787,21 +791,23 @@ export default {
       if (!inpAttrs.readonly) {
         if (isNumber) {
           if (value) {
-            let inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
-            if (!this.vaildMinNum(inputValue)) {
-              inputValue = min
-            } else if (!this.vaildMaxNum(inputValue)) {
-              inputValue = max
+            let inpVal = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
+            if (!this.vaildMinNum(inpVal)) {
+              inpVal = min
+            } else if (!this.vaildMaxNum(inpVal)) {
+              inpVal = max
             }
-            this.emitUpdate(type === 'float' ? XEUtils.toFixedString(inputValue, XEUtils.toNumber(digits)) : '' + inputValue, { type: 'check' })
+            this.emitUpdate(type === 'float' ? XEUtils.toFixedString(inpVal, XEUtils.toNumber(digits)) : '' + inpVal, { type: 'check' })
           }
         } else if (isDatePicker) {
           let inpVal = this.inputValue
           if (inpVal) {
             inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
             if (XEUtils.isDate(inpVal)) {
-              if (!XEUtils.isEqual(value, inpVal)) {
+              if (!XEUtils.isDateSame(value, inpVal)) {
                 this.dateChange(inpVal)
+              } else {
+                this.inputValue = XEUtils.toDateString(value, dateLabelFormat)
               }
             } else {
               this.dateRevert()
