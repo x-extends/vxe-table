@@ -68,19 +68,19 @@ function getOns (renderOpts, params, inputFunc, changeFunc) {
     }
   })
   if (inputFunc) {
-    ons[modelEvent] = function (value) {
-      inputFunc(value)
+    ons[modelEvent] = function (args1) {
+      inputFunc(args1)
       if (events && events[modelEvent]) {
-        events[modelEvent](value)
+        events[modelEvent](args1)
       }
       if (isSameEvent && changeFunc) {
-        changeFunc()
+        changeFunc(args1)
       }
     }
   }
   if (!isSameEvent && changeFunc) {
     ons[changeEvent] = function (...args) {
-      changeFunc()
+      changeFunc(...args)
       if (events && events[changeEvent]) {
         events[changeEvent](params, ...args)
       }
@@ -136,9 +136,10 @@ function getNativeEditOns (renderOpts, params) {
       model.update = true
       model.value = cellValue
     }
-  }, () => {
+  }, (evnt) => {
     // 处理 change 事件相关逻辑
-    $table.updateStatus(params)
+    const cellValue = evnt.target.value
+    $table.updateStatus(params, cellValue)
   })
 }
 

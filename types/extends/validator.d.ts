@@ -28,18 +28,10 @@ export interface ColumnEditRule {
    */
   pattern?: string | RegExp;
   /**
-   * 使用自定义校验函数
-   * @param rule 当前校验的规则
-   * @param cellValue 单元格的值
-   * @param callback 回调函数，如果为空则校验成功，如果传 Error 对象则校验不通过
+   * 使用自定义校验函数，接收一个 Promise
    * @param params 参数
    */
-  validator?(
-    rule: ColumnEditRule,
-    cellValue: any,
-    callback: (e?: Error) => void,
-    params: ColumnEditValidErrParams
-  ): void;
+  validator?(params: ColumnEditValidErrParams): Promise<any>;
   /**
    * 提示消息
    */
@@ -50,6 +42,7 @@ export interface ColumnEditRule {
 
 export interface ColumnEditValidErrParams {
   $table: Table,
+  cellValue: any,
   rule: ColumnEditRule;
   rules: ColumnEditRule[];
   column: ColumnConfig;

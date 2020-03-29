@@ -143,9 +143,9 @@ const apis = [
           },
           {
             name: 'validator',
-            desc: '自定义校验方法，Function(rule, value, callback, {rules,property})，通过调用 callback() 则校验成功，调用 callback(new Error("该字段必填")) 则校验失败',
-            version: '',
-            type: 'Function',
+            desc: '自定义校验方法 Function({ itemValue, rule, rules, data, property }) 返回一个 Promise<new Error("提示消息")>',
+            version: '2.9',
+            type: 'Promise<e?: Error>',
             enum: '',
             defVal: '',
             list: []

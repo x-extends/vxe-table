@@ -194,7 +194,7 @@ export default {
      *  required=Boolean 是否必填
      *  min=Number 最小长度
      *  max=Number 最大长度
-     *  validator=Function(rule, value, callback, {rules, row, column, rowIndex, columnIndex}) 自定义校验
+     *  validator=Function({ cellValue, rule, rules, row, column, rowIndex, columnIndex }) 自定义校验，接收一个 Promise
      *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
     validCellRules (type, row, column, val) {
@@ -211,13 +211,29 @@ export default {
               new Promise(resolve => {
                 if (type === 'all' || !rule.trigger || type === rule.trigger) {
                   if (XEUtils.isFunction(rule.validator)) {
-                    rule.validator(rule, cellValue, e => {
-                      if (XEUtils.isError(e)) {
-                        const cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
-                        errorRules.push(new Rule(cusRule))
-                      }
-                      return resolve()
-                    }, { rule, rules, row, column, rowIndex: this.getRowIndex(row), columnIndex: this.getColumnIndex(column), $table: this })
+                    // 在 v3.0 中废弃 setup.validArgs
+                    if (GlobalConfig.validArgs === 'obsolete') {
+                      rule.validator(rule, cellValue, e => {
+                        if (XEUtils.isError(e)) {
+                          const cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
+                          errorRules.push(new Rule(cusRule))
+                        }
+                        return resolve()
+                      }, { rule, rules, row, column, rowIndex: this.getRowIndex(row), columnIndex: this.getColumnIndex(column), $table: this })
+                    } else {
+                      Promise.resolve(rule.validator({
+                        cellValue,
+                        rule,
+                        rules,
+                        row,
+                        rowIndex: this.getRowIndex(row),
+                        column,
+                        columnIndex: this.getColumnIndex(column),
+                        $table: this
+                      })).catch(e => {
+                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
+                      }).then(resolve)
+                    }
                   } else {
                     const isNumber = rule.type === 'number'
                     const numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
