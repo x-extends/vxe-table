@@ -556,18 +556,18 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
         list: []
       },
       {
-        name: 'delete_selection',
+        name: 'delete',
         desc: '删除选中行；会自动触发 ajax.delete 方法',
-        version: '',
+        version: '1.15.27',
         type: '',
         enum: '',
         defVal: '',
         list: []
       },
       {
-        name: 'remove_selection',
+        name: 'remove',
         desc: '移除选中行',
-        version: '',
+        version: '1.15.27',
         type: '',
         enum: '',
         defVal: '',

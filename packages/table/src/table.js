@@ -1972,14 +1972,24 @@ export default {
       this.$emit('update:customs', this.tableFullColumn)
     },
     resetAll () {
-      // UtilTools.warn('vxe.error.delFunc', ['resetAll', 'resetColumn'])
+      UtilTools.warn('vxe.error.delFunc', ['resetAll', 'resetColumn'])
       this.resetColumn(true)
     },
+    /**
+     * 隐藏指定列
+     * @param {ColumnConfig} column 列配置
+     */
     hideColumn (column) {
-      return this.handleVisibleColumn(column, false)
+      column.visible = false
+      return this.updateToolbarCustom()
     },
+    /**
+     * 显示指定列
+     * @param {ColumnConfig} column 列配置
+     */
     showColumn (column) {
-      return this.handleVisibleColumn(column, true)
+      column.visible = true
+      return this.updateToolbarCustom()
     },
     /**
      * 手动重置列的显示隐藏、列宽拖动的状态；
@@ -1987,45 +1997,22 @@ export default {
      * 如果已关联工具栏，则会同步更新
      */
     resetColumn (options) {
-      const opts = Object.assign({ visible: true }, options)
-      if (options === true || opts.resizable) {
-        this.handleResetResizable()
-      }
-      if (opts.visible) {
-        return this.handleVisibleColumn()
-      }
-      return this.$nextTick()
-    },
-    resetCustoms () {
-      // UtilTools.warn('vxe.error.delFunc', ['resetCustoms', 'resetColumn'])
-      return this.resetColumn()
-    },
-    handleVisibleColumn (column, visible) {
-      if (arguments.length) {
-        column.visible = visible
-      } else {
-        this.tableFullColumn.forEach(column => {
-          column.visible = true
-        })
-      }
-      if (this.$toolbar) {
-        this.$toolbar.handleCustoms()
-      }
-      return this.$nextTick()
-    },
-    /**
-     * 手动重置列宽拖动的操作，还原到初始状态
-     * 如果已关联工具栏，则会同步更新
-     */
-    handleResetResizable () {
+      const { $toolbar } = this
+      const opts = Object.assign({ visible: true, resizable: options === true }, options)
       this.tableFullColumn.forEach(column => {
-        column.resizeWidth = 0
+        if (opts.resizable) {
+          column.resizeWidth = 0
+        }
+        if (opts.visible) {
+          column.visible = column.defaultVisible
+        }
       })
-      if (this.$toolbar) {
-        this.$toolbar.resetResizable()
+      if ($toolbar) {
+        if (opts.resizable) {
+          $toolbar.resetResizable()
+        }
       }
-      this.analyColumnWidth()
-      return this.recalculate(true)
+      return this.updateToolbarCustom()
     },
     resetResizable () {
       UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])

@@ -49,8 +49,10 @@ export default {
       selectOneRecord: '请至少选择一条记录！',
       deleteSelectRecord: '您确定要删除所选记录吗？',
       removeSelectRecord: '您确定要移除所选记录吗？',
-      dataUnchanged: '数据未改动！ ',
-      saveSuccess: '保存成功'
+      dataUnchanged: '数据未改动！',
+      delSuccess: '成功删除所选记录！',
+      saveSuccess: '保存成功！',
+      operError: '发生错误，操作失败！'
     },
     pager: {
       goto: '前往',

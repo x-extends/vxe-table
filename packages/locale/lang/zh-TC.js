@@ -50,7 +50,9 @@ export default {
       deleteSelectRecord: '您確定要刪除所選記錄嗎？',
       removeSelectRecord: '您確定要移除所選記錄嗎？',
       dataUnchanged: '資料未更改！ ',
-      saveSuccess: '保存成功'
+      delSuccess: '成功删除所選記錄！',
+      saveSuccess: '保存成功！',
+      operError: '發生錯誤，操作失敗！'
     },
     pager: {
       goto: '前往',

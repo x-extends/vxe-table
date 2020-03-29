@@ -1,6 +1,10 @@
 <template>
   <div>
-    <p class="tip">统计编辑列的表尾合计，数据发生变化时实时统计，对于某些场景下如果需要频繁计算的可以手动调用 <table-api-link prop="updateFooter"/> 函数<br>如果是内置的渲染器，可以设置 <table-column-api-link prop="immediate"/> 属性和相关事件去实时更新</p>
+    <p class="tip">
+      通过表尾来实现合计功能，数据发生变化时实时统计，对于某些场景下如果需要频繁计算的可以手动调用 <table-api-link prop="updateFooter"/> 函数<br>
+      如果是内置的渲染器，可以设置 <table-column-api-link prop="immediate"/> 属性和相关事件去实时更新<br>
+      <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的数据都是自行生成的，该示例仅供参考）</span>
+    </p>
 
     <vxe-toolbar export>
       <template v-slot:buttons>

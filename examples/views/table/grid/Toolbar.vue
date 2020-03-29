@@ -57,8 +57,8 @@ export default {
             code: 'mark_cancel',
             name: 'app.body.button.markCancel',
             dropdowns: [
-              { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', type: 'text' },
-              { code: 'remove_selection', name: '移除数据', type: 'text' }
+              { code: 'delete', name: 'app.body.button.deleteSelectedRecords', type: 'text' },
+              { code: 'remove', name: '移除数据', type: 'text' }
             ]
           },
           { code: 'save', name: 'app.body.button.save', status: 'success' },
@@ -144,8 +144,8 @@ export default {
                     code: 'mark_cancel',
                     name: 'app.body.button.markCancel',
                     dropdowns: [
-                      { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords', type: 'text' },
-                      { code: 'remove_selection', name: '移除数据', type: 'text' }
+                      { code: 'delete', name: 'app.body.button.deleteSelectedRecords', type: 'text' },
+                      { code: 'remove', name: '移除数据', type: 'text' }
                     ]
                   },
                   { code: 'save', name: 'app.body.button.save', status: 'success' },
