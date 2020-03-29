@@ -48,11 +48,9 @@ import hljs from 'highlight.js'
 
 export default {
   data () {
-    const roleValid = (rule, value, callback) => {
-      if (!value || ['前端', '后端', '设计师', '项目经理', '测试'].includes(value)) {
-        callback()
-      } else {
-        callback(new Error('角色输入不正确'))
+    const roleValid = ({ cellValue }) => {
+      if (cellValue && !['前端', '后端', '设计师', '项目经理', '测试'].includes(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
       }
     }
     return {
@@ -109,11 +107,9 @@ export default {
         `
         export default {
           data () {
-            const roleValid = (rule, value, callback) => {
-              if (!value || ['前端', '后端', '设计师', '项目经理', '测试'].includes(value)) {
-                callback()
-              } else {
-                callback(new Error('角色输入不正确'))
+            const roleValid = ({ cellValue }) => {
+              if (cellValue && !['前端', '后端', '设计师', '项目经理', '测试'].includes(cellValue)) {
+                return Promise.reject(new Error('角色输入不正确'))
               }
             }
             return {
