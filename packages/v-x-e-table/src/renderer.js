@@ -587,6 +587,11 @@ const renderMap = {
   },
   $checkbox: {
     renderItem: defaultFormItemRadioAndCheckboxRender
+  },
+  $switch: {
+    renderEdit: defaultEditRender,
+    renderDefault: defaultEditRender,
+    renderItem: defaultItemRender
   }
 }
 

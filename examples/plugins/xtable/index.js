@@ -21,6 +21,7 @@ import {
   Tooltip,
   Form,
   Select,
+  Switch,
   Edit,
   Export,
   Keyboard,
@@ -83,6 +84,7 @@ Vue.use(Modal)
 Vue.use(Tooltip)
 Vue.use(Form)
 Vue.use(Select)
+Vue.use(Switch)
 Vue.use(Edit)
 Vue.use(Export)
 Vue.use(Keyboard)

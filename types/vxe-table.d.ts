@@ -104,6 +104,7 @@ export * from './modal'
 export * from './tooltip'
 export * from './form'
 export * from './form-item'
+export * from './switch'
 
 export * from './extends/renderer'
 export * from './extends/interceptor'
