@@ -24,12 +24,8 @@ class Rule {
 }
 
 function getResetValue (value, resetValue) {
-  if (XEUtils.isString(value)) {
-    resetValue = ''
-  } else if (XEUtils.isArray(value)) {
+  if (XEUtils.isArray(value)) {
     resetValue = []
-  } else if (XEUtils.isBoolean(value)) {
-    resetValue = false
   }
   return resetValue
 }
@@ -116,7 +112,7 @@ export default {
       if (data) {
         this.$children.forEach(({ field, resetValue, itemRender }) => {
           if (field) {
-            XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), resetValue) : resetValue)
+            XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
             const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
             if (compConf && compConf.itemResetMethod) {
               compConf.itemResetMethod({ data, property: field, $form: this })

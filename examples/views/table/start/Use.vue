@@ -62,6 +62,7 @@
           Form,
           Checkbox,
           Radio,
+          Switch,
           Input,
           Select,
           Button,
@@ -95,6 +96,7 @@
         Vue.use(Form)
         Vue.use(Checkbox)
         Vue.use(Radio)
+        Vue.use(Switch)
         Vue.use(Input)
         Vue.use(Select)
         Vue.use(Button)

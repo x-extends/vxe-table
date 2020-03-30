@@ -66,6 +66,7 @@ import tooltipAPI from '../../api/tooltip'
 import modalAPI from '../../api/modal'
 import formAPI from '../../api/form'
 import formItemAPI from '../../api/form-item'
+import switchAPI from '../../api/switch'
 
 export default {
   data () {
@@ -217,6 +218,9 @@ export default {
               break
             case 'form-item':
               apis = formItemAPI
+              break
+            case 'switch':
+              apis = switchAPI
               break
           }
           // 生成唯一 id

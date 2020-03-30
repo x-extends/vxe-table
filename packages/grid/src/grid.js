@@ -348,7 +348,7 @@ export default {
           const formData = {}
           formOpts.items.forEach(({ field, itemRender }) => {
             if (field) {
-              formData[field] = itemRender && !XEUtils.isUndefined(itemRender.defaultValue) ? itemRender.defaultValue : null
+              formData[field] = itemRender && !XEUtils.isUndefined(itemRender.defaultValue) ? itemRender.defaultValue : undefined
             }
           })
           this.formData = formData

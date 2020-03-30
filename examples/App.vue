@@ -182,6 +182,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.switch',
+              locat: {
+                name: 'ModuleSwitch'
+              }
+            },
+            {
               label: 'app.aside.nav.input',
               locat: {
                 name: 'ModuleInput'
@@ -1875,6 +1881,15 @@ export default {
                 name: 'VXEAPI',
                 params: {
                   name: 'checkbox'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeSwitch',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'switch'
                 }
               }
             },
