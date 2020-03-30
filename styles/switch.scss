@@ -16,7 +16,7 @@
   }
   &.is--on {
     .vxe-switch--button {
-      padding-right: 1.6em;
+      padding-right: 1.7em;
       background-color: $vxe-primary-color;
     }
     .vxe-switch--icon {
@@ -26,7 +26,7 @@
   }
   &.is--off {
     .vxe-switch--button {
-      padding-left: 1.6em;
+      padding-left: 1.7em;
       background-color: rgba(0,0,0,.35);
     }
     .vxe-switch--icon {
@@ -64,9 +64,9 @@
     display: block;
     position: relative;
     height: 1.6em;
-    line-height: 1.5em;
+    line-height: 1.6em;
     min-width: 3.2em;
-    padding: 0 0.5em;
+    padding: 0 0.6em;
     border-radius: 1em;
     border: 0;
     outline: 0;
