@@ -69,6 +69,42 @@ const apis = [
         enum: '',
         defVal: 'false',
         list: []
+      },
+      {
+        name: 'on-icon',
+        descKey: 'app.api.switch.desc.onIcon',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'off-icon',
+        descKey: 'app.api.switch.desc.offIcon',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'on-class',
+        descKey: 'app.api.switch.desc.onClass',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'off-class',
+        descKey: 'app.api.switch.desc.offClass',
+        version: '',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },

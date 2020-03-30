@@ -24,6 +24,14 @@
       <vxe-switch v-model="value12" on-label="是" off-label="否" disabled></vxe-switch>
     </p>
 
+    <p>
+      <vxe-switch v-model="value13" on-icon="fa fa-check" off-icon="fa fa-close"></vxe-switch>
+      <vxe-switch v-model="value14" on-label="app.body.label.on" off-label="app.body.label.off" on-icon="fa fa-bell" off-icon="fa fa-bell-slash"></vxe-switch>
+      <vxe-switch v-model="value15" on-label="app.body.label.on" off-label="app.body.label.off" on-class="color-green" off-class="color-red"></vxe-switch>
+      <vxe-switch v-model="value16" on-label="app.body.label.on" off-label="app.body.label.off" on-class="color-red" off-class="color-green"></vxe-switch>
+      <vxe-switch v-model="value17" on-label="开" on-class="color-other" off-label="关" off-class="color-other"></vxe-switch>
+    </p>
+
     <pre>
       <code>
         | Tab | 切换到上一个 |
@@ -60,6 +68,11 @@ export default {
       value10: 1,
       value11: false,
       value12: true,
+      value13: false,
+      value14: false,
+      value15: true,
+      value16: false,
+      value17: false,
       demoCodes: [
         `
         <p>
@@ -82,6 +95,12 @@ export default {
           <vxe-switch v-model="value11" disabled></vxe-switch>
           <vxe-switch v-model="value12" on-label="是" off-label="否" disabled></vxe-switch>
         </p>
+
+        <p>
+          <vxe-switch v-model="value13" on-label="ON " on-class="color-green" off-label="OFF" off-class="color-red"></vxe-switch>
+          <vxe-switch v-model="value14" on-label="OFF" on-class="color-red" off-label="ON" off-class="color-green"></vxe-switch>
+          <vxe-switch v-model="value15" on-label="开" on-class="color-other" off-label="关" off-class="color-other"></vxe-switch>
+        </p>
         `,
         `
         export default {
@@ -98,9 +117,29 @@ export default {
               value9: 'Y',
               value10: 1,
               value11: false,
-              value12: true
+              value12: true,
+              value13: false,
+              value14: false,
+              value15: true
             }
           }
+        }
+        `,
+        `
+        .vxe-switch .vxe-switch--button.color-green {
+          background-color: #13ce66;
+        }
+        .vxe-switch .vxe-switch--button.color-red {
+          background-color: #ff4949;
+        }
+        .vxe-switch .vxe-switch--button.color-other .vxe-switch--icon {
+          background-color: rgba(0,0,0,.5);
+        }
+        .vxe-switch .vxe-switch--button.color-other .vxe-switch--label {
+          color: #c0c4cc;
+        }
+        .vxe-switch .vxe-switch--button.color-other {
+          background-color: #880DD7;
         }
         `
       ]
@@ -116,3 +155,21 @@ export default {
   }
 }
 </script>
+
+<style>
+.vxe-switch .vxe-switch--button.color-green {
+  background-color: #13ce66;
+}
+.vxe-switch .vxe-switch--button.color-red {
+  background-color: #ff4949;
+}
+.vxe-switch .vxe-switch--button.color-other .vxe-switch--icon {
+  background-color: rgba(0,0,0,.5);
+}
+.vxe-switch .vxe-switch--button.color-other .vxe-switch--label {
+  color: #c0c4cc;
+}
+.vxe-switch .vxe-switch--button.color-other {
+  background-color: #880DD7;
+}
+</style>
