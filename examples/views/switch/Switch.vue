@@ -25,9 +25,11 @@
     </p>
 
     <p>
-      <vxe-switch v-model="value13" on-label="ON" on-class="color-green" off-label="OFF" off-class="color-red"></vxe-switch>
-      <vxe-switch v-model="value14" on-label="OFF" on-class="color-red" off-label="ON" off-class="color-green"></vxe-switch>
-      <vxe-switch v-model="value15" on-label="开" on-class="color-other" off-label="关" off-class="color-other"></vxe-switch>
+      <vxe-switch v-model="value13" on-icon="fa fa-check" off-icon="fa fa-close"></vxe-switch>
+      <vxe-switch v-model="value14" on-label="app.body.label.on" off-label="app.body.label.off" on-icon="fa fa-bell" off-icon="fa fa-bell-slash"></vxe-switch>
+      <vxe-switch v-model="value15" on-label="app.body.label.on" off-label="app.body.label.off" on-class="color-green" off-class="color-red"></vxe-switch>
+      <vxe-switch v-model="value16" on-label="app.body.label.on" off-label="app.body.label.off" on-class="color-red" off-class="color-green"></vxe-switch>
+      <vxe-switch v-model="value17" on-label="开" on-class="color-other" off-label="关" off-class="color-other"></vxe-switch>
     </p>
 
     <pre>
@@ -69,6 +71,8 @@ export default {
       value13: false,
       value14: false,
       value15: true,
+      value16: false,
+      value17: false,
       demoCodes: [
         `
         <p>
@@ -93,9 +97,11 @@ export default {
         </p>
 
         <p>
-          <vxe-switch v-model="value13" on-label="ON" on-class="color-green" off-label="OFF" off-class="color-red"></vxe-switch>
-          <vxe-switch v-model="value14" on-label="OFF" on-class="color-red" off-label="ON" off-class="color-green"></vxe-switch>
-          <vxe-switch v-model="value15" on-label="开" on-class="color-other" off-label="关" off-class="color-other"></vxe-switch>
+          <vxe-switch v-model="value13" on-icon="fa fa-check" off-icon="fa fa-close"></vxe-switch>
+          <vxe-switch v-model="value14" on-label="app.body.label.on" off-label="app.body.label.off" on-icon="fa fa-bell" off-icon="fa fa-bell-slash"></vxe-switch>
+          <vxe-switch v-model="value15" on-label="app.body.label.on" off-label="app.body.label.off" on-class="color-green" off-class="color-red"></vxe-switch>
+          <vxe-switch v-model="value16" on-label="app.body.label.on" off-label="app.body.label.off" on-class="color-red" off-class="color-green"></vxe-switch>
+          <vxe-switch v-model="value17" on-label="开" on-class="color-other" off-label="关" off-class="color-other"></vxe-switch>
         </p>
         `,
         `
@@ -116,7 +122,9 @@ export default {
               value12: true,
               value13: false,
               value14: false,
-              value15: true
+              value15: true,
+              value16: false,
+              value17: false
             }
           }
         }
