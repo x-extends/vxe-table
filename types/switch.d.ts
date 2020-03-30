@@ -28,4 +28,20 @@ export declare class Switch extends VXETableModule {
    * 关闭时的值
    */
   offValue?: string | number | boolean;
+  /**
+   * 打开时的图标
+   */
+  onIcon?: string;
+  /**
+   * 关闭时的图标
+   */
+  offIcon?: string;
+  /**
+   * 打开时的 className
+   */
+  onClass?: string;
+  /**
+   * 关闭时的 className
+   */
+  offClass?: string;
 }

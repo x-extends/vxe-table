@@ -252,6 +252,8 @@ module.exports = {
         deleteSelectedRecords: '删除选中'
       },
       label: {
+        on: '开',
+        off: '关',
         through: '通過する',
         copy: 'コピー',
         cut: 'テープを切る',
@@ -666,7 +668,11 @@ module.exports = {
           onLabel: '打开时显示的文字',
           offLabel: '关闭时显示的文字',
           onValue: '打开时的值',
-          offValue: '关闭时的值'
+          offValue: '关闭时的值',
+          onIcon: '打开时的图标',
+          offIcon: '关闭时的图标',
+          onClass: '打开时的 className',
+          offClass: '关闭时的 className'
         }
       }
     }
