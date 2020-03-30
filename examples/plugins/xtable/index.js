@@ -23,6 +23,7 @@ import {
   Tooltip,
   Form,
   Select,
+  Switch,
   Export,
   Resize
 } from '../../../packages/vxe-table'
@@ -73,6 +74,7 @@ Vue.use(Modal)
 Vue.use(Tooltip)
 Vue.use(Form)
 Vue.use(Select)
+Vue.use(Switch)
 Vue.use(Export)
 Vue.use(Resize)
 Vue.use(Table)

@@ -127,14 +127,14 @@
         <vxe-form-item title="年龄" field="age" span="8" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
           <vxe-input v-model="formData3.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
         </vxe-form-item>
-        <vxe-form-item title="区域" field="region" span="8">
-          <vxe-input v-model="formData4.region" placeholder="请输入区域" clearable></vxe-input>
-        </vxe-form-item>
         <vxe-form-item title="状态" field="status" span="8">
           <vxe-select v-model="formData3.status" placeholder="请选择状态" clearable>
             <vxe-option value="0" label="失败"></vxe-option>
             <vxe-option value="1" label="成功"></vxe-option>
           </vxe-select>
+        </vxe-form-item>
+        <vxe-form-item title="是否禁用" field="active" span="8">
+          <vxe-switch v-model="formData3.active" on-label="是" off-label="否"></vxe-switch>
         </vxe-form-item>
         <vxe-form-item title="体重" field="weight" span="8" folding>
           <vxe-input v-model="formData3.weight" type="number" placeholder="请输入体重" clearable></vxe-input>
@@ -147,6 +147,13 @@
             <vxe-radio label="1">是</vxe-radio>
             <vxe-radio label="0">否</vxe-radio>
           </vxe-radio-group>
+        </vxe-form-item>
+        <vxe-form-item title="兴趣爱好" field="flagList" span="8" folding>
+          <vxe-checkbox-group v-model="formData3.flagList">
+            <vxe-checkbox label="1">爬山</vxe-checkbox>
+            <vxe-checkbox label="2">跑步</vxe-checkbox>
+            <vxe-checkbox label="3">听歌</vxe-checkbox>
+          </vxe-checkbox-group>
         </vxe-form-item>
         <vxe-form-item align="center" span="24" collapse-node>
           <vxe-button type="submit" status="primary">折叠式表单</vxe-button>
@@ -214,10 +221,11 @@ export default {
         sex: '',
         age: 30,
         status: '1',
-        region: null,
         weight: null,
         date: null,
-        single: '1'
+        active: false,
+        single: '1',
+        flagList: []
       },
       formData4: {
         name: '',
@@ -361,14 +369,14 @@ export default {
             <vxe-form-item title="年龄" field="age" span="8" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
               <vxe-input v-model="formData3.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
             </vxe-form-item>
-            <vxe-form-item title="区域" field="region" span="8">
-              <vxe-input v-model="formData4.region" placeholder="请输入区域" clearable></vxe-input>
-            </vxe-form-item>
             <vxe-form-item title="状态" field="status" span="8">
               <vxe-select v-model="formData3.status" placeholder="请选择状态" clearable>
                 <vxe-option value="0" label="失败"></vxe-option>
                 <vxe-option value="1" label="成功"></vxe-option>
               </vxe-select>
+            </vxe-form-item>
+            <vxe-form-item title="是否禁用" field="active" span="8" folding>
+              <vxe-switch v-model="formData3.active" on-label="是" off-label="否"></vxe-switch>
             </vxe-form-item>
             <vxe-form-item title="体重" field="weight" span="8" folding>
               <vxe-input v-model="formData3.weight" type="number" placeholder="请输入体重" clearable></vxe-input>
@@ -381,6 +389,13 @@ export default {
                 <vxe-radio label="1">是</vxe-radio>
                 <vxe-radio label="0">否</vxe-radio>
               </vxe-radio-group>
+            </vxe-form-item>
+            <vxe-form-item title="兴趣爱好" field="flagList" span="8" folding>
+              <vxe-checkbox-group v-model="formData3.flagList">
+                <vxe-checkbox label="1">爬山</vxe-checkbox>
+                <vxe-checkbox label="2">跑步</vxe-checkbox>
+                <vxe-checkbox label="3">听歌</vxe-checkbox>
+              </vxe-checkbox-group>
             </vxe-form-item>
             <vxe-form-item align="center" span="24" collapse-node>
               <vxe-button type="submit" status="primary">折叠式表单</vxe-button>
@@ -429,10 +444,11 @@ export default {
                 sex: '',
                 age: 30,
                 status: '1',
-                region: null,
                 weight: null,
                 date: null,
-                single: '1'
+                active: false,
+                single: '1',
+                flagList: []
               },
               formData4: {
                 name: '',

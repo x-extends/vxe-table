@@ -24,12 +24,8 @@ class Rule {
 }
 
 function getResetValue (value, resetValue) {
-  if (XEUtils.isString(value)) {
-    resetValue = ''
-  } else if (XEUtils.isArray(value)) {
+  if (XEUtils.isArray(value)) {
     resetValue = []
-  } else if (XEUtils.isBoolean(value)) {
-    resetValue = false
   }
   return resetValue
 }

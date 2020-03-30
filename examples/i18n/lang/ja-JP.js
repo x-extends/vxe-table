@@ -168,6 +168,7 @@ module.exports = {
         modal: '模态窗口',
         tooltip: '文字提示',
         form: '表单',
+        switch: '开关',
 
         other: '第三者にまとめる',
         elementRender: 'element-ui -> 自定义渲染',
@@ -235,7 +236,8 @@ module.exports = {
         vxeTooltip: 'vxe-tooltip',
         vxeModal: 'vxe-modal',
         vxeForm: 'vxe-form',
-        vxeFormItem: 'vxe-form-item'
+        vxeFormItem: 'vxe-form-item',
+        vxeSwitch: 'vxe-switch'
       }
     },
     body: {
@@ -654,6 +656,17 @@ module.exports = {
       selectOption: {
         desc: {
           disabled: '是否禁用'
+        }
+      },
+      switch: {
+        desc: {
+          value: '绑定值',
+          size: '尺寸',
+          disabled: '是否禁用',
+          onLabel: '打开时显示的文字',
+          offLabel: '关闭时显示的文字',
+          onValue: '打开时的值',
+          offValue: '关闭时的值'
         }
       }
     }

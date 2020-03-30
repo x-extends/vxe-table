@@ -62,6 +62,7 @@
           Pager,
           Checkbox,
           Radio,
+          Switch,
           Input,
           Button,
           Modal,
@@ -92,6 +93,7 @@
         Vue.use(Form)
         Vue.use(Checkbox)
         Vue.use(Radio)
+        Vue.use(Switch)
         Vue.use(Input)
         Vue.use(Button)
         Vue.use(Modal)
