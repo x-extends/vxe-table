@@ -6,6 +6,7 @@
   vertical-align: middle;
   padding: 0.4em;
   user-select: none;
+  text-align: center;
   &.is--animat {
     .vxe-switch--button {
       transition: border-color .3s, background-color .3s;
@@ -34,6 +35,12 @@
       transform: translateX(0);
     }
   }
+  &.is--on .vxe-switch--label-off,
+  &.is--off .vxe-switch--label-on {
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+  }
   &.is--on,
   &.is--off {
     .vxe-switch--label {
@@ -42,13 +49,16 @@
   }
   &:not(.is--disabled) {
     .vxe-switch--button {
+      cursor: pointer;
       &:focus {
         box-shadow: 0 0 0.4em 0 $vxe-primary-color;
       }
     }
   }
   &.is--disabled {
-    cursor: no-drop;
+    .vxe-switch--button {
+      cursor: no-drop;
+    }
     &.is--on {
       .vxe-switch--button {
         background-color: lighten($vxe-primary-color, 20%);
@@ -70,7 +80,6 @@
     border-radius: 1em;
     border: 0;
     outline: 0;
-    cursor: pointer;
   }
   .vxe-switch--label {
     opacity: 0;
@@ -86,6 +95,9 @@
     height: 1.2em;
     border-radius: 50%;
     background-color: #fff;
+  }
+  .vxe-switch--label-icon {
+    margin-right: 0.25em;
   }
 }
 

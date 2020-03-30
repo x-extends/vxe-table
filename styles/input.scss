@@ -153,20 +153,23 @@ $iconWidth: 1.6em;
       .vxe-input--suffix {
         &:hover {
           .vxe-input--clear-icon {
-            color: $vxe-primary-color;
+            color: $vxe-font-color;
           }
         }
       }
       .vxe-input--extra-suffix {
         &:hover {
           .vxe-input--password-suffix {
-            color: $vxe-primary-color;
+            color: $vxe-font-color;
           }
         }
       }
       .vxe-input--number-prev,
       .vxe-input--number-next {
         &:hover {
+          color: $vxe-font-color;
+        }
+        &:active {
           color: $vxe-primary-color;
         }
       }
@@ -202,29 +205,23 @@ $iconWidth: 1.6em;
 .vxe-input--number-suffix {
   .vxe-input--number-prev,
   .vxe-input--number-next {
-    position: absolute;
-    left: 0;
+    position: relative;
+    display: block;
     height: 50%;
     width: 100%;
     text-align: center;
-  }
-  .vxe-input--number-prev {
-    top: 0;
-  }
-  .vxe-input--number-next {
-    bottom: 0;
   }
   .vxe-input--number-prev-icon,
   .vxe-input--number-next-icon {
     position: absolute;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
   }
   .vxe-input--number-prev-icon {
-    top: 65%;
+    bottom: 0;
   }
   .vxe-input--number-next-icon {
-    top: 35%;
+    top: 0;
   }
 }
 

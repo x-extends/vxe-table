@@ -253,6 +253,8 @@ module.exports = {
         deleteSelectedRecords: 'Delete selected records'
       },
       label: {
+        on: 'ON',
+        off: 'OFF',
         through: 'Through',
         copy: 'Copy',
         cut: 'Cut and paste',
@@ -667,7 +669,11 @@ module.exports = {
           onLabel: '打开时显示的文字',
           offLabel: '关闭时显示的文字',
           onValue: '打开时的值',
-          offValue: '关闭时的值'
+          offValue: '关闭时的值',
+          onIcon: '打开时的图标',
+          offIcon: '关闭时的图标',
+          onClass: '打开时的 className',
+          offClass: '关闭时的 className'
         }
       }
     }
