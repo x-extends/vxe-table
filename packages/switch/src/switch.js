@@ -13,9 +13,7 @@ export default {
     onValue: { type: [String, Number, Boolean], default: true },
     offValue: { type: [String, Number, Boolean], default: false },
     onIcon: String,
-    offIcon: String,
-    onClass: String,
-    offClass: String
+    offIcon: String
   },
   data () {
     return {
@@ -48,7 +46,7 @@ export default {
     }
   },
   render (h) {
-    const { isChecked, vSize, disabled, onIcon, offIcon, onClass, offClass } = this
+    const { isChecked, vSize, disabled, onIcon, offIcon } = this
     return h('div', {
       class: ['vxe-switch', isChecked ? 'is--on' : 'is--off', {
         [`size--${vSize}`]: vSize,
@@ -58,7 +56,7 @@ export default {
     }, [
       h('button', {
         ref: 'btn',
-        class: ['vxe-switch--button', isChecked ? onClass : offClass],
+        class: 'vxe-switch--button',
         attrs: {
           type: 'button',
           disabled: disabled

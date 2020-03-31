@@ -174,7 +174,7 @@
           button: {
             // transfer: false
           },
-          // 模态窗口的全局参数
+          // 窗口的全局参数
           modal: {
             // minWidth: 340,
             // minHeight: 200,

@@ -69,13 +69,13 @@ export interface VXETableStatic {
    */
   menus: menus;
   /**
-   * 全局的模态窗口
+   * 全局窗口控制器
    */
   modal: typeof ModalController;
 }
 
 /**
- * 一个基于 vue 的表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、模态窗口、自定义模板、贼灵活的配置项、扩展接口等...
+ * 一个基于 vue 的表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、对话窗口、自定义模板、贼灵活的配置项、扩展接口等...
  */
 export declare const VXETable: VXETableStatic
 

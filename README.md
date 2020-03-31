@@ -187,7 +187,7 @@ If the open source project is very helpful to you, you can buy the author a cup 
 
 [👉 捐赠方式💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
-[![pay](https://github.com/xuliangzhan/vxe-table/blob/master/public/static/donation/pay.jpg?raw=true)](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)
+[![pay](https://gitee.com/xuliangzhan_admin/vxe-table/raw/master/public/static/donation/pay.jpg)](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)
 
 ## License
 

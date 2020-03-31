@@ -33,7 +33,7 @@ export default {
       tableData: [
         {
           name: 'add(code, callback)',
-          desc: '添加',
+          desc: '添加一个',
           version: '',
           type: '',
           enum: '',
@@ -42,7 +42,7 @@ export default {
         },
         {
           name: 'mixin(map)',
-          desc: '混合多个',
+          desc: '添加多个',
           version: '',
           type: '',
           enum: '',
@@ -73,7 +73,7 @@ export default {
         </vxe-table>
         `,
         `
-        VXETable.commands.add('exportBtn', (params, event) => {
+        VXETable.commands.add('exportBtn', (params) => {
           let { $table, code, button } = params
           $table.exportData()
         })
@@ -107,7 +107,7 @@ export default {
         </vxe-grid>
         `,
         `
-        VXETable.commands.add('myPrint', (params, event) => {
+        VXETable.commands.add('myPrint', (params) => {
           let { $table, code, button } = params
           $table.print()
         })

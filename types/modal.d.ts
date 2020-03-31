@@ -223,47 +223,47 @@ export interface ModalEventParams {
 }
 
 /**
- * 全局模态窗口控制器
+ * 全局窗口控制器
  */
 export interface ModalClass {
   /**
-   * 弹出窗口
+   * 创建窗口
    * @param options 参数
    */
   open (options: ModalOptions): Promise<string>;
   /**
-   * 弹出提示框
+   * 创建提示框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
   alert (message: string, title?: string, options?: ModalOptions): Promise<string>;
   /**
-   * 弹出提示框
+   * 创建提示框
    * @param options 参数
    */
   alert (options: ModalOptions): Promise<string>;
   /**
-   * 弹出确认框
+   * 创建确认框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
   confirm (message: string, title?: string, options?: ModalOptions): Promise<string>;
   /**
-   * 弹出确认框
+   * 创建确认框
    * @param options 参数
    */
   confirm (options: ModalOptions): Promise<string>;
   /**
-   * 弹出消息提示
+   * 创建消息提示
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
   message (message: string, title?: string, options?: ModalOptions): Promise<string>;
   /**
-   * 弹出消息提示
+   * 创建消息提示
    * @param options 参数
    */
   message (options: ModalOptions): Promise<string>;
