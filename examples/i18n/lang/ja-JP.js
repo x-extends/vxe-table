@@ -287,10 +287,15 @@ module.exports = {
           v3: 'v3 内部再構成、現代ブラウザ向けですか？IEをサポートしないで、レンダリング性能が向上します',
           v4: 'v4 vue 3再構成により、レンダリング性能が向上します'
         },
+        ways: {
+          wechat: '以下のWeChatを通じてコードをスキャンして寄付します',
+          alipay: '以下の支払いを通じて、アリスキャンコードを寄付します',
+          gitee: '<a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation">Gitee寄付</a> を通じて (プロジェクトで<a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation">寄付記録</a>を見ることができます。)'
+        },
         compatibility: '互換性変動',
         releases: 'ログを更新',
         donation: '寄付する',
-        donationTitle: '、Alipay、WeChatを寄付します',
+        donationTitle: '寄付方法<span class="red"> (解決できない問題があれば、サポートが必要であれば、メッセージを残したり、<a class="link" href="https://github.com/xuliangzhan/vxe-table/issues/390">Issues</a>を提出したりすることができます)</span>：',
         issuesTitle: 'どうやってフィードバックしますか？ ',
         newFunc: '作者が忙しいので、この機能をサポートする時間があります。',
         newDevelopment: '作者が忙しいので、このバージョンは再構成中です。ご期待ください。'
