@@ -31,7 +31,7 @@ export default {
       tableData: [
         {
           name: 'add(code, callback)',
-          desc: '添加',
+          desc: '添加一个',
           version: '',
           type: '',
           enum: '',
@@ -40,7 +40,7 @@ export default {
         },
         {
           name: 'mixin(map)',
-          desc: '混合多个',
+          desc: '添加多个',
           version: '',
           type: '',
           enum: '',

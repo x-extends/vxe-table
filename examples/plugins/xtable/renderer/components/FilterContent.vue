@@ -47,24 +47,35 @@ export default {
       valList: []
     }
   },
+  watch: {
+    params () {
+      this.load()
+    },
+    colValList () {
+      this.searchEvent()
+    }
+  },
   created () {
-    // filters 可以配置多个，实际只用一个就可以满足需求了
-    const { $table, column } = this.params
-    const { fullData } = $table.getTableData()
-    const option = column.filters[0]
-    const { vals } = option.data
-    const colValList = Object.keys(XEUtils.groupBy(fullData, column.property)).map(val => {
-      return {
-        checked: vals.includes(val),
-        value: val
-      }
-    })
-    this.option = option
-    this.colValList = colValList
-    this.valList = colValList
+    this.load()
     this.searchEvent()
   },
   methods: {
+    load () {
+      // filters 可以配置多个，实际只用一个就可以满足需求了
+      const { $table, column } = this.params
+      const { fullData } = $table.getTableData()
+      const option = column.filters[0]
+      const { vals } = option.data
+      const colValList = Object.keys(XEUtils.groupBy(fullData, column.property)).map(val => {
+        return {
+          checked: vals.includes(val),
+          value: val
+        }
+      })
+      this.option = option
+      this.colValList = colValList
+      this.valList = colValList
+    },
     searchEvent () {
       const { option, colValList } = this
       this.valList = option.data.sVal ? colValList.filter(item => item.value.indexOf(option.data.sVal) > -1) : colValList

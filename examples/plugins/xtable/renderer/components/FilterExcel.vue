@@ -114,17 +114,25 @@ export default {
       return option.data.sVal ? colValList.filter(val => val.indexOf(option.data.sVal) > -1) : colValList
     }
   },
+  watch: {
+    params () {
+      this.load()
+    }
+  },
   created () {
-    const { $table, column } = this.params
-    const { fullData } = $table.getTableData()
-    // filters 可以配置多个，实际只用一个就可以满足需求了
-    const option = column.filters[0]
-    const colValList = Object.keys(XEUtils.groupBy(fullData, column.property))
-    this.column = column
-    this.option = option
-    this.colValList = colValList
+    this.load()
   },
   methods: {
+    load () {
+      const { $table, column } = this.params
+      const { fullData } = $table.getTableData()
+      // filters 可以配置多个，实际只用一个就可以满足需求了
+      const option = column.filters[0]
+      const colValList = Object.keys(XEUtils.groupBy(fullData, column.property))
+      this.column = column
+      this.option = option
+      this.colValList = colValList
+    },
     sortAscEvent () {
       const { $table, column } = this.params
       $table.closeFilter()
