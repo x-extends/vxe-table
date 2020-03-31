@@ -287,10 +287,15 @@ module.exports = {
           v3: 'v3 内部重构，面向现代浏览器吗，不再支持 IE，渲染性能提升',
           v4: 'v4 基于 vue3 重构，渲染性能提升'
         },
+        ways: {
+          wechat: '通过以下 微信扫码 捐赠',
+          alipay: '通过以下 支付宝扫码 捐赠',
+          gitee: '通过 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation">Gitee 捐赠</a> （该方式可以在项目中查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation">捐赠记录</a>）'
+        },
         compatibility: '兼容性变动',
         releases: '更新日志',
         donation: '捐赠',
-        donationTitle: '，支付宝、微信来捐赠作者',
+        donationTitle: '捐赠方式<span class="red">（如果有无法解决的问题需要支持可以留言或者提 <a class="link" href="https://github.com/xuliangzhan/vxe-table/issues/390">Issues</a>）</span>：',
         issuesTitle: '如何反馈问题？  ',
         newFunc: '由于作者比较忙，后续有时间可能会支持该功能！',
         newDevelopment: '由于作者比较忙，该版本正在重构中，敬请期待！'

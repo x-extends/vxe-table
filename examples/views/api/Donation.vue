@@ -19,8 +19,15 @@
       </ul>
     </div>
     <div class="content" style="padding-top: 50px">
-      <div style="display: inline-block;">
-        <div>💰{{ $t('app.body.label.through') }} <a href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee {{ $t('app.body.other.donation') }}</a>{{ $t('app.body.other.donationTitle') }}<span class="red">（如果有问题需要支持可以留言或者提 <a class="link" href="https://github.com/xuliangzhan/vxe-table/issues/390">Issues</a>）</span></div>
+      <div style="display: inline-block;text-align: left;">
+        <div>
+          <div>💰<span v-html="$t('app.body.other.donationTitle')"></span></div>
+          <ul>
+            <li>1. <span v-html="$t('app.body.other.ways.alipay')"></span></li>
+            <li>2. <span v-html="$t('app.body.other.ways.wechat')"></span></li>
+            <li>3. <span v-html="$t('app.body.other.ways.gitee')"></span></li>
+          </ul>
+        </div>
         <div>
           <img src="static/donation/pay.jpg">
         </div>
