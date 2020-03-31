@@ -373,7 +373,7 @@ export default {
      */
     commitProxy (code, ...args) {
       const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
-      const { beforeQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props = {} } = proxyOpts
+      const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props = {} } = proxyOpts
       const $xetable = $refs.xTable
       let button
       if (XEUtils.isString(code)) {
@@ -447,8 +447,9 @@ export default {
               this.pendingRecords = []
               this.clearAll()
             }
+            const applyArgs = [params].concat(args)
             this.tableLoading = true
-            return Promise.resolve((beforeQuery || ajaxMethods).apply(this, [params].concat(args)))
+            return Promise.resolve((beforeQuery || ajaxMethods).apply(this, applyArgs))
               .catch(e => e)
               .then(rest => {
                 this.tableLoading = false
@@ -461,6 +462,9 @@ export default {
                   }
                 } else {
                   this.tableData = []
+                }
+                if (afterQuery) {
+                  afterQuery(...applyArgs)
                 }
               })
           } else {

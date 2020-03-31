@@ -288,10 +288,15 @@ module.exports = {
           v3: 'v3 Internal refactoring, for modern browsers, no longer support IE, rendering performance improvements.',
           v4: 'v4 Based on vue3 refactoring, rendering performance improved.'
         },
+        ways: {
+          wechat: 'Donate via the following wechat code scanning',
+          alipay: 'Through the following Alipay sweep code donation',
+          gitee: 'Donation through <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation">Gitee</a> (<a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation">donation records</a> can be viewed in the project)'
+        },
         compatibility: 'Compatibility',
         releases: 'Releases',
         donation: 'Donation',
-        donationTitle: ', Alipay and WeChat to donate authors.',
+        donationTitle: 'Donation method<span class="red"> (you can leave a message or raise <a class="link" href="https://github.com/xuliangzhan/vxe-table/issues/390">Issues</a> if you have problems that cannot be solved and need support)</span>：',
         issuesTitle: 'How to issues feedback?  ',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
