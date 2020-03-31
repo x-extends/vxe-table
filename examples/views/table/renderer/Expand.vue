@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      内容渲染 <table-column-api-link prop="content-render"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
+      内容渲染 <table-column-api-link prop="content-render"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       renderExpand (h, renderOpts, <vxe-tooltip content="{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 展开内容<br>
     </p>

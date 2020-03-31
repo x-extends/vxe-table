@@ -207,6 +207,24 @@ const apis = [
                 defVal: '',
                 list: []
               },
+              // {
+              //   name: 'beforeQuery',
+              //   desc: '查询之前触发该 Function({ page, sort, filters, form }, ...arguments) 方法',
+              //   version: '',
+              //   type: 'Function / Promise',
+              //   enum: '',
+              //   defVal: '',
+              //   list: []
+              // },
+              // {
+              //   name: 'afterQuery',
+              //   desc: '查询之后触发该 Function({ page, sort, filters, form }, ...arguments) 方法',
+              //   version: '',
+              //   type: 'Function',
+              //   enum: '',
+              //   defVal: '',
+              //   list: []
+              // },
               {
                 name: 'delete',
                 desc: '删除方法 Function({ body }, ...arguments)，提交的参数 { removeRecords }',
@@ -216,6 +234,24 @@ const apis = [
                 defVal: '',
                 list: []
               },
+              // {
+              //   name: 'beforeDelete',
+              //   desc: '删除之前触发该 Function({ body }, ...arguments) 方法',
+              //   version: '',
+              //   type: 'Function / Promise',
+              //   enum: '',
+              //   defVal: '',
+              //   list: []
+              // },
+              // {
+              //   name: 'afterDelete',
+              //   desc: '删除之后触发该 Function({ body }, ...arguments) 方法',
+              //   version: '',
+              //   type: 'Function',
+              //   enum: '',
+              //   defVal: '',
+              //   list: []
+              // },
               {
                 name: 'save',
                 desc: '保存方法 Function({ body }, ...arguments)，提交的参数 { insertRecords, updateRecords, removeRecords, pendingRecords}',
@@ -224,6 +260,24 @@ const apis = [
                 enum: '',
                 defVal: '',
                 list: []
+              // },
+              // {
+              //   name: 'beforeSave',
+              //   desc: '保存之前触发该 Function({ body }, ...arguments) 方法',
+              //   version: '',
+              //   type: 'Function / Promise',
+              //   enum: '',
+              //   defVal: '',
+              //   list: []
+              // },
+              // {
+              //   name: 'afterSave',
+              //   desc: '保存之后触发该 Function({ body }, ...arguments) 方法',
+              //   version: '',
+              //   type: 'Function',
+              //   enum: '',
+              //   defVal: '',
+              //   list: []
               }
             ]
           }
