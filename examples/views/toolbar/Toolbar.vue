@@ -67,6 +67,14 @@
         </template>
       </vxe-toolbar>
 
+      <vxe-toolbar perfect>
+        <template v-slot:buttons>
+          <vxe-button icon="fa fa-plus" status="perfect">新增</vxe-button>
+          <vxe-button icon="fa fa-trash-o" status="perfect">删除</vxe-button>
+          <vxe-button icon="fa fa-save" status="perfect">保存</vxe-button>
+        </template>
+      </vxe-toolbar>
+
       <vxe-toolbar :refresh="{ query: findList }">
         <template v-slot:buttons>
           <vxe-button>自定义模板</vxe-button>
@@ -168,6 +176,14 @@ export default {
               <vxe-button type="text" icon="fa fa-plus">新增</vxe-button>
               <vxe-button type="text" icon="fa fa-trash-o">删除</vxe-button>
               <vxe-button type="text" icon="fa fa-save">保存</vxe-button>
+            </template>
+          </vxe-toolbar>
+
+          <vxe-toolbar perfect>
+            <template v-slot:buttons>
+              <vxe-button icon="fa fa-plus" status="perfect">新增</vxe-button>
+              <vxe-button icon="fa fa-trash-o" status="perfect">删除</vxe-button>
+              <vxe-button icon="fa fa-save" status="perfect">保存</vxe-button>
             </template>
           </vxe-toolbar>
 

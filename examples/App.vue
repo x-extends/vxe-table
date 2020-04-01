@@ -234,12 +234,6 @@ export default {
               locat: {
                 name: 'ModuleForm'
               }
-            },
-            {
-              label: 'app.aside.nav.switch',
-              locat: {
-                name: 'ModuleSwitch'
-              }
             }
           ]
         },

@@ -5,7 +5,6 @@ import Cell from '../../cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../../tools'
 
-let rowUniqueId = 0
 const browse = DomTools.browse
 const debounceScrollYDuration = browse.msie ? 40 : 20
 
@@ -23,7 +22,7 @@ function createFrame () {
 }
 
 function getRowUniqueId () {
-  return `row_${++rowUniqueId}`
+  return XEUtils.uniqueId('row_')
 }
 
 function getNextSortOrder (_vm, column) {

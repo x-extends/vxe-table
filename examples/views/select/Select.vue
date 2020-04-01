@@ -80,6 +80,8 @@
     <p>
       <vxe-select v-model="value12" placeholder="配置式" :options="list12"></vxe-select>
       <vxe-select v-model="value13" placeholder="分组配置式" :option-groups="list13"></vxe-select>
+      <vxe-select v-model="value14" placeholder="禁用选项" :options="list14"></vxe-select>
+      <vxe-select v-model="value15" placeholder="禁用分组" :option-groups="list15"></vxe-select>
     </p>
 
     <pre>
@@ -138,6 +140,47 @@ export default {
           options: [
             { label: '2-1', value: '21' },
             { label: '2-2', value: '22' }
+          ]
+        }
+      ],
+      value14: null,
+      list14: [
+        { label: '1111', value: '1', disabled: true },
+        { label: '2222', value: '2', disabled: false },
+        { label: '3333', value: '3', disabled: false },
+        { label: '4444', value: '4', disabled: false },
+        { label: '5555', value: '5', disabled: true },
+        { label: '6666', value: '6', disabled: true },
+        { label: '7777', value: '7', disabled: false },
+        { label: '8888', value: '8', disabled: false },
+        { label: '9999', value: '9', disabled: false },
+        { label: '1010', value: '10', disabled: false },
+        { label: '1111', value: '11', disabled: false }
+      ],
+      value15: null,
+      list15: [
+        {
+          label: '组1',
+          disabled: true,
+          options: [
+            { label: '1-1', value: '11', disabled: false },
+            { label: '1-2', value: '10', disabled: false }
+          ]
+        },
+        {
+          label: '组2',
+          disabled: false,
+          options: [
+            { label: '2-1', value: '21', disabled: true },
+            { label: '2-2', value: '22', disabled: false }
+          ]
+        },
+        {
+          label: '组3',
+          disabled: false,
+          options: [
+            { label: '3-1', value: '31', disabled: false },
+            { label: '3-2', value: '32', disabled: false }
           ]
         }
       ],
@@ -220,6 +263,8 @@ export default {
         <p>
           <vxe-select v-model="value12" placeholder="配置式" :options="list12"></vxe-select>
           <vxe-select v-model="value13" placeholder="分组配置式" :option-groups="list13"></vxe-select>
+          <vxe-select v-model="value14" placeholder="禁用选项" :options="list14"></vxe-select>
+          <vxe-select v-model="value15" placeholder="禁用分组" :option-groups="list15"></vxe-select>
         </p>
         `,
         `
@@ -256,6 +301,47 @@ export default {
                   options: [
                     { label: '2-1', value: '21' },
                     { label: '2-2', value: '22' }
+                  ]
+                }
+              ],
+              value14: null,
+              list14: [
+                { label: '1111', value: '1', disabled: true },
+                { label: '2222', value: '2', disabled: false },
+                { label: '3333', value: '3', disabled: false },
+                { label: '4444', value: '4', disabled: false },
+                { label: '5555', value: '5', disabled: true },
+                { label: '6666', value: '6', disabled: true },
+                { label: '7777', value: '7', disabled: false },
+                { label: '8888', value: '8', disabled: false },
+                { label: '9999', value: '9', disabled: false },
+                { label: '1010', value: '10', disabled: false },
+                { label: '1111', value: '11', disabled: false }
+              ],
+              value15: null,
+              list15: [
+                {
+                  label: '组1',
+                  disabled: true,
+                  options: [
+                    { label: '1-1', value: '11', disabled: false },
+                    { label: '1-2', value: '10', disabled: false }
+                  ]
+                },
+                {
+                  label: '组2',
+                  disabled: false,
+                  options: [
+                    { label: '2-1', value: '21', disabled: true },
+                    { label: '2-2', value: '22', disabled: false }
+                  ]
+                },
+                {
+                  label: '组3',
+                  disabled: false,
+                  options: [
+                    { label: '3-1', value: '31', disabled: false },
+                    { label: '3-2', value: '32', disabled: false }
                   ]
                 }
               ]

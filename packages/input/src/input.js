@@ -261,6 +261,63 @@ function rendeDatePanel (h, _vm) {
   ]
 }
 
+function rendeTimePanel (h, _vm) {
+  const { dateTimeLabel, datetimePanelValue, hourList, minuteList, secondList } = _vm
+  return [
+    h('div', {
+      class: 'vxe-input--time-picker-header'
+    }, [
+      h('span', {
+        class: 'vxe-input--time-picker-title'
+      }, dateTimeLabel)
+    ]),
+    h('div', {
+      ref: 'timeBody',
+      class: 'vxe-input--time-picker-body'
+    }, [
+      h('ul', {
+        class: 'vxe-input--time-picker-hour-list'
+      }, hourList.map((item, index) => {
+        return h('li', {
+          key: index,
+          class: {
+            'is--selected': datetimePanelValue && datetimePanelValue.getHours() === item.value
+          },
+          on: {
+            click: (evnt) => _vm.dateHourEvent(evnt, item)
+          }
+        }, item.label)
+      })),
+      h('ul', {
+        class: 'vxe-input--time-picker-minute-list'
+      }, minuteList.map((item, index) => {
+        return h('li', {
+          key: index,
+          class: {
+            'is--selected': datetimePanelValue && datetimePanelValue.getMinutes() === item.value
+          },
+          on: {
+            click: (evnt) => _vm.dateMinuteEvent(evnt, item)
+          }
+        }, item.label)
+      })),
+      h('ul', {
+        class: 'vxe-input--time-picker-second-list'
+      }, secondList.map((item, index) => {
+        return h('li', {
+          key: index,
+          class: {
+            'is--selected': datetimePanelValue && datetimePanelValue.getSeconds() === item.value
+          },
+          on: {
+            click: (evnt) => _vm.dateSecondEvent(evnt, item)
+          }
+        }, item.label)
+      }))
+    ])
+  ]
+}
+
 function renderPanel (h, _vm) {
   const { type, vSize, isDatePicker, transfer, animatVisible, visiblePanel, panelPlacement, panelStyle } = _vm
   return isDatePicker ? h('div', {
@@ -276,7 +333,16 @@ function renderPanel (h, _vm) {
     },
     style: panelStyle
   }, [
-    h('div', {
+    type === 'datetime' ? h('div', {
+      class: 'vxe-input--panel-layout-wrapper'
+    }, [
+      h('div', {
+        class: 'vxe-input--panel-left-wrapper'
+      }, rendeDatePanel(h, _vm)),
+      h('div', {
+        class: 'vxe-input--panel-right-wrapper'
+      }, rendeTimePanel(h, _vm))
+    ]) : h('div', {
       class: 'vxe-input--panel-wrapper'
     }, rendeDatePanel(h, _vm))
   ]) : null
@@ -431,6 +497,7 @@ export default {
       panelPlacement: null,
       isActivated: false,
       inputValue: '',
+      datetimePanelValue: null,
       datePanelValue: null,
       datePanelLabel: '',
       datePanelType: 'day',
@@ -460,6 +527,13 @@ export default {
     dateValue () {
       const { value } = this
       return value ? XEUtils.toStringDate(value, this.dateValueFormat) : null
+    },
+    dateTimeLabel () {
+      const { datetimePanelValue } = this
+      if (datetimePanelValue) {
+        return XEUtils.toDateString(datetimePanelValue, 'HH : mm : ss')
+      }
+      return ''
     },
     hmsTime () {
       const { type, dateValue } = this
@@ -596,6 +670,29 @@ export default {
     },
     dateOpts () {
       return Object.assign({}, this.dateConfig, GlobalConfig.input.dateConfig)
+    },
+    hourList () {
+      const list = []
+      for (let index = 0; index < 24; index++) {
+        list.push({
+          value: index,
+          label: ('' + index).padStart(2, 0)
+        })
+      }
+      return list
+    },
+    minuteList () {
+      const list = []
+      for (let index = 0; index < 60; index++) {
+        list.push({
+          value: index,
+          label: ('' + index).padStart(2, 0)
+        })
+      }
+      return list
+    },
+    secondList () {
+      return this.minuteList
     },
     inpAttrs () {
       const { isDatePicker, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd, editable } = this
@@ -787,7 +884,7 @@ export default {
       }
     },
     afterCheckValue () {
-      const { type, inpAttrs, value, isDatePicker, isNumber, dateLabelFormat, min, max, digits } = this
+      const { type, inpAttrs, value, isDatePicker, isNumber, datetimePanelValue, dateLabelFormat, min, max, digits } = this
       if (!inpAttrs.readonly) {
         if (isNumber) {
           if (value) {
@@ -804,7 +901,12 @@ export default {
           if (inpVal) {
             inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
             if (XEUtils.isDate(inpVal)) {
-              if (!XEUtils.isDateSame(value, inpVal)) {
+              if (!XEUtils.isDateSame(value, inpVal, dateLabelFormat)) {
+                if (type === 'datetime') {
+                  datetimePanelValue.setHours(inpVal.getHours())
+                  datetimePanelValue.setMinutes(inpVal.getMinutes())
+                  datetimePanelValue.setSeconds(inpVal.getSeconds())
+                }
                 this.dateChange(inpVal)
               } else {
                 this.inputValue = XEUtils.toDateString(value, dateLabelFormat)
@@ -1015,6 +1117,28 @@ export default {
         }
       }
     },
+    dateHourEvent (evnt, item) {
+      this.datetimePanelValue.setHours(item.value)
+      this.dateTimeChangeEvent(evnt)
+    },
+    dateMinuteEvent (evnt, item) {
+      this.datetimePanelValue.setMinutes(item.value)
+      this.dateTimeChangeEvent(evnt)
+    },
+    dateSecondEvent (evnt, item) {
+      this.datetimePanelValue.setSeconds(item.value)
+      this.dateTimeChangeEvent(evnt)
+    },
+    dateTimeChangeEvent (evnt) {
+      this.datetimePanelValue = new Date(this.datetimePanelValue.getTime())
+      this.updateTimePos(evnt.currentTarget)
+    },
+    updateTimePos (liElem) {
+      if (liElem) {
+        const height = liElem.offsetHeight
+        liElem.parentNode.scrollTop = liElem.offsetTop - height * 3
+      }
+    },
     dateMoveDay (offsetDay) {
       if (!isDateDisabled(this, { date: offsetDay })) {
         if (!this.dayList.some(item => XEUtils.isDateSame(item.date, offsetDay, 'yyyy-MM-dd'))) {
@@ -1100,10 +1224,14 @@ export default {
       }
     },
     dateChange (date) {
-      const { value, type, dateValueFormat } = this
+      const { value, type, datetimePanelValue, dateValueFormat } = this
       if (type === 'week') {
         const sWeek = XEUtils.toNumber(XEUtils.isNumber(this.startWeek) ? this.startWeek : this.dateOpts.startWeek)
         date = XEUtils.getWhatWeek(date, 0, sWeek)
+      } else if (type === 'datetime') {
+        date.setHours(datetimePanelValue.getHours())
+        date.setMinutes(datetimePanelValue.getMinutes())
+        date.setSeconds(datetimePanelValue.getSeconds())
       }
       const inpVal = XEUtils.toDateString(date, dateValueFormat)
       this.dateCheckMonth(date)
@@ -1130,6 +1258,12 @@ export default {
         this.dateParseValue(dateValue)
       } else {
         this.dateNowHandle()
+      }
+      if (type === 'datetime') {
+        this.datetimePanelValue = this.datePanelValue || XEUtils.getWhatDay(Date.now(), 0, 'first')
+        this.$nextTick(() => {
+          XEUtils.arrayEach(this.$refs.timeBody.querySelectorAll('li.is--selected'), this.updateTimePos)
+        })
       }
     },
     dateRevert () {
