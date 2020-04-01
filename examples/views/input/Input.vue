@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.input') }}</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link>，支持：text 文本、number 数值、integer 整数、date 日期、week 周、month 月份、year 年份、password 密码</p>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link>，支持：text 文本、number 数值、integer 整数、date 日期、datetime 时间选择、week 周、month 月份、year 年份、password 密码</p>
 
     <p>
       <vxe-input v-model="value100" placeholder="默认尺寸"></vxe-input>
@@ -46,7 +46,7 @@
       <code>
         | Tab | 切换到上一个 |
         | Shift Tab | 切换到下一个 |
-        | Enter | 用于某些特定的功能：展开下拉面板、选中选项...等 |
+        | Enter | 展开下拉面板、确定选中日期...等 |
       </code>
     </pre>
 

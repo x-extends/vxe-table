@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools } from '../../tools'
 
 export default {
@@ -17,6 +18,11 @@ export default {
       default: null
     }
   },
+  data () {
+    return {
+      id: XEUtils.uniqueId('opt_')
+    }
+  },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
@@ -26,7 +32,10 @@ export default {
     return h('div', {
       class: ['vxe-optgroup', {
         'is--disabled': this.disabled
-      }]
+      }],
+      attrs: {
+        'data-optid': this.id
+      }
     }, [
       h('div', {
         class: 'vxe-optgroup--title'

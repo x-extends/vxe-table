@@ -89,6 +89,24 @@ const apis = [
         list: []
       },
       {
+        name: 'optId',
+        desc: '自定义选项唯一主键的字段名（选项必须要有唯一主键，默认自动生成）',
+        version: '2.9',
+        type: 'String',
+        enum: '',
+        defVal: '默认 _XID，继承 setup.select.rowId',
+        list: []
+      },
+      {
+        name: 'optKey',
+        desc: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
+        version: '2.9',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'transfer',
         descKey: 'app.api.select.desc.transfer',
         version: '',

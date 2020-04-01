@@ -165,7 +165,7 @@
 
 .vxe-toolbar {
   font-size: $vxe-font-size;
-  min-height: $vxe-toolbar-height-default;
+  height: $vxe-toolbar-height-default;
   .vxe-tools--operate-btn {
     font-size: $vxe-font-size + 4px;
   }
@@ -176,7 +176,7 @@
   }
   &.size--medium {
     font-size: $vxe-font-size-medium;
-    min-height: $vxe-toolbar-height-medium;
+    height: $vxe-toolbar-height-medium;
     .vxe-tools--operate-btn {
       font-size: $vxe-font-size-medium + 4px;
     }
@@ -188,7 +188,7 @@
   }
   &.size--small {
     font-size: $vxe-font-size-small;
-    min-height: $vxe-toolbar-height-small;
+    height: $vxe-toolbar-height-small;
     .vxe-tools--operate-btn {
       font-size: $vxe-font-size-small + 4px;
     }
@@ -200,7 +200,7 @@
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
-    min-height: $vxe-toolbar-height-mini;
+    height: $vxe-toolbar-height-mini;
     .vxe-tools--operate-btn {
       font-size: $vxe-font-size-mini + 4px;
     }

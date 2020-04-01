@@ -1,6 +1,5 @@
+import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools } from '../../tools'
-
-let optionUniqueId = 0
 
 const watch = {}
 const wProps = ['value', 'label', 'disabled']
@@ -28,7 +27,7 @@ export default {
   },
   data () {
     return {
-      id: `option_${++optionUniqueId}`
+      id: XEUtils.uniqueId('opt_')
     }
   },
   computed: {
@@ -56,11 +55,11 @@ export default {
         'is--hover': $xeselect.currentValue === value
       }],
       attrs: {
-        'data-option-id': id
+        'data-optid': id
       },
       on: {
         click: this.optionEvent,
-        mouseenter: this.mouseenterEvent
+        mouseenter: this.opeionMouseenterEvent
       }
     }, $slots.default || UtilTools.formatText(UtilTools.getFuncText(this.label)))
   },
@@ -70,7 +69,7 @@ export default {
         this.$xeselect.changeOptionEvent(evnt, this.value)
       }
     },
-    mouseenterEvent () {
+    opeionMouseenterEvent () {
       if (!this.isDisabled) {
         this.$xeselect.setCurrentOption(this)
       }

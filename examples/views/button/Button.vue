@@ -148,7 +148,7 @@
     </p>
 
     <p>
-      <vxe-button icon="vxe-icon--download">默认图标颜色</vxe-button>
+      <vxe-button icon="fa fa-download">默认图标颜色</vxe-button>
       <vxe-button icon="fa fa-save vxe-primary-color">主要图标颜色</vxe-button>
       <vxe-button icon="fa fa-check vxe-success-color">成功图标颜色</vxe-button>
       <vxe-button icon="fa fa-info vxe-info-color">信息图标颜色</vxe-button>
@@ -166,9 +166,9 @@
     </p>
 
     <p>
-      <vxe-button type="text" icon="vxe-icon--plus"></vxe-button>
-      <vxe-button type="text" icon="vxe-icon--refresh" loading></vxe-button>
-      <vxe-button status="primary" icon="vxe-icon--download">图标按钮</vxe-button>
+      <vxe-button type="text" icon="fa fa-plus"></vxe-button>
+      <vxe-button type="text" icon="fa fa-refresh"></vxe-button>
+      <vxe-button status="primary" icon="fa fa-download">图标按钮</vxe-button>
       <vxe-button status="my-purple" icon="fa fa-save">自定义按钮颜色</vxe-button>
       <vxe-button icon="fa fa-graduation-cap my-green">自定义图标颜色</vxe-button>
     </p>
@@ -344,7 +344,7 @@ export default {
         </p>
 
         <p>
-          <vxe-button icon="vxe-icon--download">默认图标颜色</vxe-button>
+          <vxe-button icon="fa fa-download">默认图标颜色</vxe-button>
           <vxe-button icon="fa fa-save vxe-primary-color">主要图标颜色</vxe-button>
           <vxe-button icon="fa fa-check vxe-success-color">成功图标颜色</vxe-button>
           <vxe-button icon="fa fa-info vxe-info-color">信息图标颜色</vxe-button>
@@ -362,9 +362,9 @@ export default {
         </p>
 
         <p>
-          <vxe-button type="text" icon="vxe-icon--plus"></vxe-button>
-          <vxe-button type="text" icon="vxe-icon--refresh" loading></vxe-button>
-          <vxe-button status="primary" icon="vxe-icon--download">图标按钮</vxe-button>
+          <vxe-button type="text" icon="fa fa-plus"></vxe-button>
+          <vxe-button type="text" icon="fa fa-refresh"></vxe-button>
+          <vxe-button status="primary" icon="fa fa-download">图标按钮</vxe-button>
           <vxe-button status="my-purple" icon="fa fa-save">自定义按钮颜色</vxe-button>
           <vxe-button icon="fa fa-graduation-cap my-green">自定义图标颜色</vxe-button>
         </p>

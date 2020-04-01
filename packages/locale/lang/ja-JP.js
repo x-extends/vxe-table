@@ -157,6 +157,7 @@ export default {
         dayLabel: '{{0}} 年 {{1}}',
         labelFormat: {
           date: 'yyyy-MM-dd',
+          datetime: 'yyyy-MM-dd HH:mm:ss',
           week: 'yyyy 年 WW',
           month: 'yyyy-MM',
           year: 'yyyy'

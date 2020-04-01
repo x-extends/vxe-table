@@ -48,6 +48,7 @@ $btnThemeList: (
   font-size: $vxe-font-size;
   white-space: nowrap;
   user-select: none;
+  appearance: none;
   @include animatTransition(border, .2s);
   &.is--disabled {
     color: $vxe-disabled-color;
@@ -100,7 +101,7 @@ $btnThemeList: (
   &.type--button {
     padding: 0 1em;
     height: $vxe-button-height-default;
-    line-height: $vxe-button-height-default - 2px;
+    line-height: 1;
     border: 1px solid $vxe-input-border-color;
     border-radius: 0.2em;
     &:not(.is--disabled) {
@@ -152,21 +153,18 @@ $btnThemeList: (
     font-size: $vxe-font-size-medium;
     &.type--button {
       height: $vxe-button-height-medium;
-      line-height: $vxe-button-height-medium - 2px;
     }
   }
   &.size--small {
     font-size: $vxe-font-size-small;
     &.type--button {
       height: $vxe-button-height-small;
-      line-height: $vxe-button-height-small - 2px;
     }
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
     &.type--button {
       height: $vxe-button-height-mini;
-      line-height: $vxe-button-height-mini - 2px;
     }
   }
 }
@@ -254,6 +252,9 @@ $btnThemeList: (
     transform: scaleY(0.5);
     transition: transform 0.2s, opacity 0.2s;
     transform-origin: 0% 0%;
+    &[data-placement="top"] {
+      transform-origin: 0% 100%;
+    }
   }
   &.animat--enter {
     opacity: 1;
