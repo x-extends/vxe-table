@@ -55,7 +55,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, $listeners, type, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible } = this
+    const { $scopedSlots, $listeners, type, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
     return $scopedSlots.dropdowns ? h('div', {
       class: ['vxe-button--dropdown', {
         [`size--${vSize}`]: vSize,
@@ -91,6 +91,9 @@ export default {
           'animat--leave': animatVisible,
           'animat--enter': showPanel
         }],
+        attrs: {
+          'data-placement': panelPlacement
+        },
         style: this.panelStyle
       }, [
         h('div', {

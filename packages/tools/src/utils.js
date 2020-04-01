@@ -4,7 +4,6 @@ import formats from '../../v-x-e-table/src/formats'
 
 let zindexIndex = 0
 let lastZindex = 0
-let columnUniqueId = 0
 
 function getColFuncWidth (isExists, defaultWidth = 16) {
   return isExists ? defaultWidth : 0
@@ -40,7 +39,7 @@ class ColumnConfig {
     }
     Object.assign(this, {
       // 基本属性
-      id: `col_${++columnUniqueId}`,
+      id: XEUtils.uniqueId('col_'),
       type: _vm.type,
       property: _vm.field,
       title: _vm.title,

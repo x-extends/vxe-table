@@ -99,4 +99,5 @@ export interface OptionProps extends RenderParams {
 export interface OptionGroupProps extends RenderParams {
   options?: string;
   label?: string;
+  disabled?: boolean;
 }

@@ -3,7 +3,6 @@ import Cell from '../../cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
-let rowUniqueId = 0
 const browse = DomTools.browse
 const isWebkit = browse['-webkit'] && !browse.edge
 const debounceScrollYDuration = browse.msie ? 40 : 20
@@ -17,7 +16,7 @@ const headerProps = {
  * 生成行的唯一主键
  */
 function getRowUniqueId () {
-  return `row_${++rowUniqueId}`
+  return XEUtils.uniqueId('row_')
 }
 
 function getNextSortOrder (_vm, column) {
