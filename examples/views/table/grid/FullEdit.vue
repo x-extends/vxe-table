@@ -137,7 +137,7 @@ export default {
         { field: 'nickname', title: 'Nickname', editRender: { name: '$input' } },
         { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
         { field: 'age', title: 'Age', remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
-        { field: 'amount', title: 'Amount', editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
+        { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
         { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
         { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
       ],
@@ -258,7 +258,7 @@ export default {
                 { field: 'nickname', title: 'Nickname', editRender: { name: '$input' } },
                 { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
                 { field: 'age', title: 'Age', remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
-                { field: 'amount', title: 'Amount', editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
+                { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
                 { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
                 { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
               ]
@@ -274,6 +274,9 @@ export default {
               this.sexList = sexList
               this.tableColumn[4].editRender.options = sexList
               this.tableForm.items[3].itemRender.options = sexList
+            },
+            formatAmount ({ cellValue }) {
+              return \`$\${XEUtils.commafy(cellValue, 2)}\`
             },
             formatDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -344,6 +347,9 @@ export default {
       this.sexList = sexList
       this.tableColumn[4].editRender.options = sexList
       this.tableForm.items[3].itemRender.options = sexList
+    },
+    formatAmount ({ cellValue }) {
+      return `$${XEUtils.commafy(cellValue, 2)}`
     },
     formatDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
