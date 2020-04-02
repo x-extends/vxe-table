@@ -22,12 +22,15 @@
       resizable
       form-config
       show-footer
-      height="500"
+      height="600"
+      ref="xGrid"
       :footer-method="footerMethod"
       :toolbar="tableToolbar"
       :columns="tableColumn"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}">
+      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}"
+      @checkbox-change="checkboxChangeEvent"
+      @checkbox-all="checkboxChangeEvent">
       <!--使用 form 插槽-->
       <template v-slot:form>
         <vxe-form :data="formData" @submit="searchEvent">
@@ -53,7 +56,7 @@
       <template v-slot:top>
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
-          <span>可以在这里自定义顶部模板</span>
+          <span>顶部模板，已选中 {{ selectRecords.length }} 条数据</span>
         </div>
       </template>
 
@@ -94,7 +97,7 @@
       <template v-slot:bottom>
         <div class="alert-message">
           <i class="fa fa-info-circle alert-message-icon"></i>
-          <span>可以在这里自定义底部模板</span>
+          <span>底部模板，已选中 {{ selectRecords.length }} 条数据</span>
         </div>
       </template>
     </vxe-grid>
@@ -122,6 +125,7 @@ export default {
     return {
       showDetails: false,
       selectRow: null,
+      selectRecords: [],
       formData: {
         name: '',
         nickname: '',
@@ -129,32 +133,17 @@ export default {
       },
       tableData: [],
       tableColumn: [
-        {
-          type: 'seq',
-          width: 100,
-          resizable: false,
-          slots: {
-            // 对应自定义插槽的名称
-            header: 'seq_header'
-          }
-        },
-        {
-          field: 'name',
-          title: 'Name',
-          slots: {
-            // 对应自定义插槽的名称
-            default: 'name_default'
-          }
-        },
+        { type: 'checkbox', width: 60 },
+        // 对应自定义插槽的名称
+        { type: 'seq', width: 100, resizable: false, slots: { header: 'seq_header' } },
+        { field: 'name', title: 'Name', slots: { default: 'name_default' } },
         {
           field: 'num1',
           title: 'Money',
           showHeaderOverflow: true,
-          filters: [{ data: '' }],
-          filterMethod: this.filterSexMethod,
           editRender: { type: 'default', autofocus: '.my-input' },
           slots: {
-            // 使用 JSX 渲染函数
+            // 使用 JSX 渲染
             default: ({ row }) => {
               return [
                 <span>￥{ row.num1 }元</span>
@@ -198,7 +187,7 @@ export default {
           title: 'Address',
           showOverflow: true,
           slots: {
-            // 使用 JSX 渲染函数
+            // 使用渲染函数
             default: ({ row }, h) => {
               return [
                 h('span', {
@@ -218,7 +207,7 @@ export default {
           title: 'Html片段',
           showOverflow: true,
           slots: {
-            // 使用 JSX 渲染函数
+            // 使用 JSX 渲染
             default: ({ row }) => {
               return [
                 <span domPropsInnerHTML={ row.html1 }></span>
@@ -230,7 +219,7 @@ export default {
           field: 'img1',
           title: '图片路径',
           slots: {
-            // 使用 JSX 渲染函数
+            // 使用 JSX 渲染
             default: ({ row }) => {
               return [
                 row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
@@ -242,7 +231,7 @@ export default {
       tableToolbar: {
         custom: true,
         slots: {
-          // 使用 JSX 渲染函数
+          // 使用 JSX 渲染
           tools: () => {
             return [
               <vxe-input placeholder="搜索"></vxe-input>
@@ -257,12 +246,15 @@ export default {
           resizable
           form-config
           show-footer
-          height="500"
+          height="600"
+          ref="xGrid"
           :footer-method="footerMethod"
           :toolbar="tableToolbar"
           :columns="tableColumn"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}">
+          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}"
+          @checkbox-change="checkboxChangeEvent"
+          @checkbox-all="checkboxChangeEvent">
           <!--使用 form 插槽-->
           <template v-slot:form>
             <vxe-form :data="formData" @submit="searchEvent">
@@ -288,7 +280,7 @@ export default {
           <template v-slot:top>
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
-              <span>可以在这里自定义顶部模板</span>
+              <span>顶部模板，已选中 {{ selectRecords.length }} 条数据</span>
             </div>
           </template>
 
@@ -329,7 +321,7 @@ export default {
           <template v-slot:bottom>
             <div class="alert-message">
               <i class="fa fa-info-circle alert-message-icon"></i>
-              <span>可以在这里自定义底部模板</span>
+              <span>底部模板，已选中 {{ selectRecords.length }} 条数据</span>
             </div>
           </template>
         </vxe-grid>
@@ -344,6 +336,7 @@ export default {
             return {
               showDetails: false,
               selectRow: null,
+              selectRecords: [],
               formData: {
                 name: '',
                 nickname: '',
@@ -351,32 +344,17 @@ export default {
               },
               tableData: [],
               tableColumn: [
-                {
-                  type: 'seq',
-                  width: 100,
-                  resizable: false,
-                  slots: {
-                    // 对应自定义插槽的名称
-                    header: 'seq_header'
-                  }
-                },
-                {
-                  field: 'name',
-                  title: 'Name',
-                  slots: {
-                    // 对应自定义插槽的名称
-                    default: 'name_default'
-                  }
-                },
+                { type: 'checkbox', width: 60 },
+                // 对应自定义插槽的名称
+                { type: 'seq', width: 100, resizable: false, slots: { header: 'seq_header' } },
+                { field: 'name', title: 'Name', slots: { default: 'name_default' } },
                 {
                   field: 'num1',
                   title: 'Money',
                   showHeaderOverflow: true,
-                  filters: [{ data: '' }],
-                  filterMethod: this.filterSexMethod,
                   editRender: { type: 'default', autofocus: '.my-input' },
                   slots: {
-                    // 使用 JSX 渲染函数
+                    // 使用 JSX 渲染
                     default: ({ row }) => {
                       return [
                         <span>￥{ row.num1 }元</span>
@@ -420,7 +398,7 @@ export default {
                   title: 'Address',
                   showOverflow: true,
                   slots: {
-                    // 使用 JSX 渲染函数
+                    // 使用渲染函数
                     default: ({ row }, h) => {
                       return [
                         h('span', {
@@ -440,7 +418,7 @@ export default {
                   title: 'Html片段',
                   showOverflow: true,
                   slots: {
-                    // 使用 JSX 渲染函数
+                    // 使用 JSX 渲染
                     default: ({ row }) => {
                       return [
                         <span domPropsInnerHTML={ row.html1 }></span>
@@ -452,7 +430,7 @@ export default {
                   field: 'img1',
                   title: '图片路径',
                   slots: {
-                    // 使用 JSX 渲染函数
+                    // 使用 JSX 渲染
                     default: ({ row }) => {
                       return [
                         row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
@@ -464,7 +442,7 @@ export default {
               tableToolbar: {
                 custom: true,
                 slots: {
-                  // 使用 JSX 渲染函数
+                  // 使用 JSX 渲染
                   tools: () => {
                     return [
                       <vxe-input placeholder="搜索"></vxe-input>
@@ -475,7 +453,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             searchEvent () {
@@ -491,16 +469,16 @@ export default {
             addressClickEvent (row) {
               this.$XModal.alert(\`address点击事件：\${row.address}\`)
             },
-            filterSexMethod ({ option, row }) {
-              return row.sex === option.data
-            },
             changeFilterEvent (evnt, option, $panel) {
               $panel.changeOption(evnt, !!option.data, option)
+            },
+            checkboxChangeEvent ({ records }) {
+              this.selectRecords = records
             },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, columnIndex) => {
-                  if (['sex', 'num'].includes(column.property)) {
+                  if (['num1', 'num'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
                   return null
@@ -550,7 +528,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 100)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -571,16 +549,16 @@ export default {
     addressClickEvent (row) {
       this.$XModal.alert(`address点击事件：${row.address}`)
     },
-    filterSexMethod ({ option, row }) {
-      return row.sex === option.data
-    },
     changeFilterEvent (evnt, option, $panel) {
       $panel.changeOption(evnt, !!option.data, option)
+    },
+    checkboxChangeEvent ({ records }) {
+      this.selectRecords = records
     },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column) => {
-          if (['sex', 'num'].includes(column.property)) {
+          if (['num1', 'num'].includes(column.property)) {
             return XEUtils.sum(data, column.property)
           }
           return null
