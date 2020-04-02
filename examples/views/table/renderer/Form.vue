@@ -59,7 +59,7 @@ export default {
       },
       demoCodes: [
         `
-        // 创建一个表单-输入框渲染器
+        // 创建一个简单的表单-输入框渲染
         VXETable.renderer.add('FormItemInput', {
           // 项显示模板
           renderItem (h, renderOpts, params) {

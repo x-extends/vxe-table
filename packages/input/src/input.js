@@ -269,7 +269,16 @@ function rendeTimePanel (h, _vm) {
     }, [
       h('span', {
         class: 'vxe-input--time-picker-title'
-      }, dateTimeLabel)
+      }, dateTimeLabel),
+      h('button', {
+        class: 'vxe-input--time-picker-confirm',
+        attrs: {
+          type: 'button'
+        },
+        on: {
+          click: _vm.dateConfirmEvent
+        }
+      }, GlobalConfig.i18n('vxe.button.confirm'))
     ]),
     h('div', {
       ref: 'timeBody',
@@ -531,7 +540,7 @@ export default {
     dateTimeLabel () {
       const { datetimePanelValue } = this
       if (datetimePanelValue) {
-        return XEUtils.toDateString(datetimePanelValue, 'HH : mm : ss')
+        return XEUtils.toDateString(datetimePanelValue, 'HH:mm:ss')
       }
       return ''
     },
@@ -1120,6 +1129,10 @@ export default {
     dateHourEvent (evnt, item) {
       this.datetimePanelValue.setHours(item.value)
       this.dateTimeChangeEvent(evnt)
+    },
+    dateConfirmEvent () {
+      this.dateChange(this.dateValue || this.currentDate)
+      this.hidePanel()
     },
     dateMinuteEvent (evnt, item) {
       this.datetimePanelValue.setMinutes(item.value)

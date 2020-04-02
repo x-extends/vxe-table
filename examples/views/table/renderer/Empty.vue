@@ -37,7 +37,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        // 创建一个空内容渲染器
+        // 创建一个空内容渲染
         VXETable.renderer.add('NotData', {
           // 空内容模板
           renderEmpty (h, renderOpts) {
