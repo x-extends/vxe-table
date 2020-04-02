@@ -38,7 +38,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        // 创建一个超链接渲染器
+        // 创建一个简单的超链接渲染
         VXETable.renderer.add('MyLink', {
           // 默认显示模板
           renderDefault (h, renderOpts, params) {

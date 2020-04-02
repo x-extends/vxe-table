@@ -814,7 +814,7 @@ const apis = [
       },
       {
         name: 'filter',
-        desc: '只对 filter-render 启用时有效，自定义筛选模板',
+        desc: '只对 filter-render 有效，自定义筛选模板',
         version: '',
         type: '',
         enum: '',
@@ -823,21 +823,21 @@ const apis = [
       },
       {
         name: 'edit',
-        desc: '只对 edit-render 启用时有效，自定义可编辑组件模板',
+        desc: '只对 edit-render 有效，自定义可编辑组件模板',
         version: '',
         type: '',
         enum: '',
         defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
         list: []
-      },
-      {
-        name: 'icon',
-        desc: '只对 type=expand 或 tree-node 有效，自定义图标模板',
-        version: '1.15.15',
-        type: '',
-        enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
-        list: []
+      // },
+      // {
+      //   name: 'icon',
+      //   desc: '只对 type=expand 或 tree-node 有效，自定义图标模板',
+      //   version: '1.15.15',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
+      //   list: []
       }
     ]
   },

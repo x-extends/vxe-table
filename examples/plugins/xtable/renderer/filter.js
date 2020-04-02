@@ -12,7 +12,19 @@ Vue.component(FilterContent.name, FilterContent)
 Vue.component(FilterComplex.name, FilterComplex)
 Vue.component(FilterExcel.name, FilterExcel)
 
-// 创建一个支持输入的筛选器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
+// 创建一个简单的筛选渲染
+VXETable.renderer.add('MyFilter', {
+  // 筛选模板
+  renderFilter (h, renderOpts, params) {
+    const { column } = params
+    const option = column.filters[0]
+    return [
+      <input v-model={ option.data } placeholder="请输入名称" />
+    ]
+  }
+})
+
+// 创建一个支持输入的筛选
 VXETable.renderer.add('FilterInput', {
   // 筛选模板
   renderFilter (h, renderOpts, params) {
@@ -29,7 +41,7 @@ VXETable.renderer.add('FilterInput', {
   }
 })
 
-// 创建一个支持列内容的筛选器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
+// 创建一个支持列内容的筛选
 VXETable.renderer.add('FilterContent', {
   // 不显示底部按钮，使用自定义的按钮
   isFooter: false,
@@ -54,7 +66,7 @@ VXETable.renderer.add('FilterContent', {
   }
 })
 
-// 创建一个条件的渲染器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
+// 创建一个条件的渲染器
 VXETable.renderer.add('FilterComplex', {
   // 不显示底部按钮，使用自定义的按钮
   isFooter: false,
@@ -96,9 +108,9 @@ VXETable.renderer.add('FilterComplex', {
   }
 })
 
-// 创建一个实现Excel的筛选器（仅用于简单示例，实际开发中应该封装成一个组件，不应该把复杂的渲染逻辑写在渲染器中）
+// 创建一个实现Excel的筛选器
 VXETable.renderer.add('FilterExcel', {
-  className: 'myexcel-filter-render',
+  className: 'my-filter-excel-wrapper',
   // 不显示底部按钮，使用自定义的按钮
   isFooter: false,
   // 筛选模板

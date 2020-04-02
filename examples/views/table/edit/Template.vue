@@ -27,11 +27,11 @@
           <vxe-input type="number" v-model="row.age"></vxe-input>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="date3" title="Date" :edit-render="{autofocus: '.vxe-input--inner'}">
+      <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
         <template v-slot:edit="{ row }">
-          <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
+          <vxe-input type="number" v-model="row.num"></vxe-input>
         </template>
-        <template v-slot="{ row }">选中日期：{{ row.date3 }}</template>
+        <template v-slot="{ row }">￥{{ row.num }}</template>
       </vxe-table-column>
       <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row, rowIndex }">
@@ -91,11 +91,11 @@ export default {
               <vxe-input type="number" v-model="row.age"></vxe-input>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="date3" title="Date" :edit-render="{autofocus: '.vxe-input--inner'}">
+          <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
             <template v-slot:edit="{ row }">
-              <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
+              <vxe-input type="number" v-model="row.num"></vxe-input>
             </template>
-            <template v-slot="{ row }">选中日期：{{ row.date3 }}</template>
+            <template v-slot="{ row }">￥{{ row.num }}</template>
           </vxe-table-column>
           <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row, rowIndex }">

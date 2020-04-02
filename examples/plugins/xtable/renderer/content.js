@@ -1,6 +1,6 @@
 import VXETable from '../../../../packages/v-x-e-table'
 
-// 创建一个展开内容渲染器
+// 创建一个简单的展开内容渲染
 VXETable.renderer.add('MyExpand', {
   renderExpand (h, renderOpts, params) {
     const { row } = params

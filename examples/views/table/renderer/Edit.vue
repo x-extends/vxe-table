@@ -41,7 +41,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        // 创建一个简单输入框渲染器
+        // 创建一个简单输入框渲染
         VXETable.renderer.add('MyInput', {
           // 可编辑激活模板
           renderEdit (h, renderOpts, { row, column }) {

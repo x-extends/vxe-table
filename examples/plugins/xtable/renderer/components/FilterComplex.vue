@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="cmplex-filter">
-      <div class="f-type">
+    <div class="my-filter-complex">
+      <div class="my-fc-type">
         <vxe-radio v-model="option.data.type" name="fType" label="has">包含</vxe-radio>
         <vxe-radio v-model="option.data.type" name="fType" label="eq">等于</vxe-radio>
         <vxe-radio v-model="option.data.type" name="fType" label="gt">大于</vxe-radio>
         <vxe-radio v-model="option.data.type" name="fType" label="lt">小于</vxe-radio>
       </div>
-      <div class="f-name">
+      <div class="my-fc-name">
         <vxe-input v-model="option.data.name" type="text" placeholder="请输入名称" @input="changeOptionEvent()"></vxe-input>
       </div>
-      <div class="f-iscase">
+      <div class="my-fc-iscase">
         <vxe-checkbox v-model="option.data.isCase">不区分大小写</vxe-checkbox>
       </div>
-      <div class="f-footer">
+      <div class="my-fc-footer">
         <vxe-button status="primary" @click="confirmEvent">确认</vxe-button>
         <vxe-button @click="resetEvent">重置</vxe-button>
       </div>
@@ -69,17 +69,17 @@ export default {
 </script>
 
 <style scoped>
-.cmplex-filter {
+.my-filter-complex {
   width: 260px;
   padding: 0 8px;
 }
-.cmplex-filter .f-type {
+.my-filter-complex .my-fc-type {
   padding: 8px 0;
 }
-.cmplex-filter .f-iscase {
+.my-filter-complex .my-fc-iscase {
   padding: 12px 0;
 }
-.cmplex-filter .f-footer {
+.my-filter-complex .my-fc-footer {
   text-align: center;
 }
 </style>
