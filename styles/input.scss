@@ -334,7 +334,7 @@ $iconWidth: 1.6em;
 }
 
 .vxe-input--time-picker-title {
-  margin: 0 auto;
+  display: inline-block;
   height: 2em;
   line-height: 2em;
   text-align: center;
@@ -342,19 +342,42 @@ $iconWidth: 1.6em;
   border: 1px solid $vxe-input-border-color;
   border-radius: 0.25em;
 }
+.vxe-input--time-picker-confirm {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 2em;
+  outline: 0;
+  padding: 0 0.6em;
+  border: 1px solid $vxe-input-border-color;
+  border-radius: 0.25em;
+  cursor: pointer;
+  color: #fff;
+  border-color: $vxe-primary-color;
+  background-color: $vxe-primary-color;
+  &:hover {
+    background-color: lighten($vxe-primary-color, 6%);
+    border-color: lighten($vxe-primary-color, 6%);
+  }
+  &:active {
+    background-color: darken($vxe-primary-color, 3%);
+    border-color: darken($vxe-primary-color, 3%);
+  }
+}
 
 .vxe-input--time-picker-header {
+  position: relative;
   flex-shrink: 0;
 }
 
 .vxe-input--time-picker-header,
 .vxe-input--date-picker-header {
-  display: flex;
-  flex-direction: row;
   padding-bottom: 0.8em;
 }
 
 .vxe-input--date-picker-header {
+  display: flex;
+  flex-direction: row;
   user-select: none;
   .vxe-input--date-picker-type-wrapper {
     flex-grow: 1;
@@ -393,6 +416,9 @@ $iconWidth: 1.6em;
 }
 .vxe-input--date-picker-btn {
   cursor: pointer;
+  &:hover {
+    background-color: lighten($vxe-button-default-background-color, 6%);
+  }
   &:active {
     background-color: darken($vxe-button-default-background-color, 3%);
   }

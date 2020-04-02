@@ -147,17 +147,17 @@ export default {
           }
         },
         {
-          field: 'sex',
-          title: 'Sex',
+          field: 'num1',
+          title: 'Money',
           showHeaderOverflow: true,
           filters: [{ data: '' }],
           filterMethod: this.filterSexMethod,
-          editRender: { type: 'default' },
+          editRender: { type: 'default', autofocus: '.my-input' },
           slots: {
             // 使用 JSX 渲染函数
             default: ({ row }) => {
               return [
-                <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
+                <span>￥{ row.num1 }元</span>
               ]
             },
             header: ({ column }) => {
@@ -180,7 +180,7 @@ export default {
             },
             edit: ({ row }) => {
               return [
-                <input type="text" v-model={ row.sex } />
+                <input type="number" class="my-input" v-model={ row.num1 } />
               ]
             }
           }
@@ -369,17 +369,17 @@ export default {
                   }
                 },
                 {
-                  field: 'sex',
-                  title: 'Sex',
+                  field: 'num1',
+                  title: 'Money',
                   showHeaderOverflow: true,
                   filters: [{ data: '' }],
                   filterMethod: this.filterSexMethod,
-                  editRender: { type: 'default' },
+                  editRender: { type: 'default', autofocus: '.my-input' },
                   slots: {
                     // 使用 JSX 渲染函数
-                    default: ({ row, column }) => {
+                    default: ({ row }) => {
                       return [
-                        <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
+                        <span>￥{ row.num1 }元</span>
                       ]
                     },
                     header: ({ column }) => {
@@ -402,7 +402,7 @@ export default {
                     },
                     edit: ({ row }) => {
                       return [
-                        <input type="text" v-model={ row.sex } />
+                        <input type="number" class="my-input" v-model={ row.num1 } />
                       ]
                     }
                   }
@@ -441,7 +441,7 @@ export default {
                   showOverflow: true,
                   slots: {
                     // 使用 JSX 渲染函数
-                    default: ({ row }, h) => {
+                    default: ({ row }) => {
                       return [
                         <span domPropsInnerHTML={ row.html1 }></span>
                       ]
@@ -453,7 +453,7 @@ export default {
                   title: '图片路径',
                   slots: {
                     // 使用 JSX 渲染函数
-                    default: ({ row }, h) => {
+                    default: ({ row }) => {
                       return [
                         row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
                       ]

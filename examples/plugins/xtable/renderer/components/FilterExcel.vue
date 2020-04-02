@@ -1,56 +1,56 @@
 <template>
   <div>
-    <div class="myexcel-filter">
-      <div class="me-list">
-        <ul class="me-group">
-          <li class="me-menu" @click="sortAscEvent">
-            <i class="fa fa-sort-alpha-asc me-menu-left-icon"></i>
+    <div class="my-filter-excel">
+      <div class="my-fe-top">
+        <ul class="my-fe-menu-group">
+          <li class="my-fe-menu-link" @click="sortAscEvent">
+            <i class="fa fa-sort-alpha-asc my-fe-menu-link-left-icon"></i>
             <span>升序</span>
           </li>
-          <li class="me-menu" @click="sortDescEvent">
-            <i class="fa fa-sort-alpha-desc me-menu-left-icon"></i>
+          <li class="my-fe-menu-link" @click="sortDescEvent">
+            <i class="fa fa-sort-alpha-desc my-fe-menu-link-left-icon"></i>
             <span>降序</span>
           </li>
         </ul>
-        <ul class="me-group">
-          <li class="me-menu" @click="resetFilterEvent">
+        <ul class="my-fe-menu-group">
+          <li class="my-fe-menu-link" @click="resetFilterEvent">
             <span>清除筛选</span>
           </li>
-          <li class="me-menu">
-            <i class="fa fa-filter me-menu-left-icon"></i>
+          <li class="my-fe-menu-link">
+            <i class="fa fa-filter my-fe-menu-link-left-icon"></i>
             <span>筛选条件</span>
-            <i class="fa fa-caret-right me-menu-right-icon"></i>
-            <div class="me-child-list">
-                <ul class="me-child-group" v-for="(cList, gIndex) in caseGroups" :key="gIndex">
-                  <li v-for="(cItem, cIndex) in cList" :key="cIndex" :class="[option.data.fMenu === cItem.value ? 'me-child-menu active' : 'me-child-menu']" @click="childMenuClickEvent(cItem)">
-                    <i class="fa fa-check me-child-menu-left-icon"></i>
-                    <span>{{ cItem.label }}</span>
-                  </li>
-                </ul>
+            <i class="fa fa-caret-right my-fe-menu-link-right-icon"></i>
+            <div class="my-fe-menu-child-list">
+              <ul class="my-fe-child-menu-group-list" v-for="(cList, gIndex) in caseGroups" :key="gIndex">
+                <li v-for="(cItem, cIndex) in cList" :key="cIndex" :class="[option.data.fMenu === cItem.value ? 'my-fe-child-menu-item active' : 'my-fe-child-menu-item']" @click="childMenuClickEvent(cItem)">
+                  <i class="fa fa-check my-fe-child-menu-left-icon"></i>
+                  <span>{{ cItem.label }}</span>
+                </li>
+              </ul>
             </div>
           </li>
         </ul>
       </div>
-      <div class="me-search">
-        <div class="header">
+      <div class="my-fe-search">
+        <div class="my-fe-search-top">
           <input v-model="option.data.sVal" placeholder="搜索"/>
-          <i class="fa fa-search me-search-icon"></i>
+          <i class="fa fa-search my-fe-search-icon"></i>
         </div>
-        <ul v-if="searchList.length" class="body">
-          <li class="me-val-item" @click="sAllEvent">
-            <i :class="[isAllSearch ? 'fa fa-check-square-o me-val-icon' : 'fa fa-square-o me-val-icon']"></i>
+        <ul class="my-fe-search-list" v-if="searchList.length">
+          <li class="my-fe-search-item" @click="sAllEvent">
+            <i :class="[isAllSearch ? 'fa fa-check-square-o my-fe-search-item-icon' : 'fa fa-square-o my-fe-search-item-icon']"></i>
             <span>(全选)</span>
           </li>
-          <li class="me-val-item" v-for="(val, sIndex) in searchList" :key="sIndex" @click="sItemEvent(val)">
-            <i :class="[option.data.vals.indexOf(val) === -1 ? 'fa fa-square-o me-val-icon' : 'fa fa-check-square-o me-val-icon']"></i>
+          <li class="my-fe-search-item" v-for="(val, sIndex) in searchList" :key="sIndex" @click="sItemEvent(val)">
+            <i :class="[option.data.vals.indexOf(val) === -1 ? 'fa fa-square-o my-fe-search-item-icon' : 'fa fa-check-square-o my-fe-search-item-icon']"></i>
             <span>{{ val }}</span>
           </li>
         </ul>
         <div v-else class="body">
-          <div class="me-search-empty">无匹配项</div>
+          <div class="my-fe-search-empty">无匹配项</div>
         </div>
       </div>
-      <div class="me-footer">
+      <div class="my-fe-footer">
         <vxe-button status="primary" @click="confirmFilterEvent">确认</vxe-button>
         <vxe-button @click="resetFilterEvent">重置</vxe-button>
       </div>
@@ -223,38 +223,38 @@ export default {
         slots: {
           default: ({ $modal }) => {
             return [
-              <div class="me-popup">
-                <div class="me-popup-title">显示行</div>
-                <div class="me-popup-filter me-popup-f1">
-                  <vxe-select class="me-select" v-model={ data.f1Type } transfer clearable>
+              <div class="my-fe-popup">
+                <div class="my-fe-popup-title">显示行</div>
+                <div class="my-fe-popup-filter my-fe-popup-f1">
+                  <vxe-select class="my-fe-popup-filter-select" v-model={ data.f1Type } transfer clearable>
                     {
                       allCaseList.map(fItem => {
                         return <vxe-option value={ fItem.value } label={ fItem.label }></vxe-option>
                       })
                     }
                   </vxe-select>
-                  <vxe-input class="me-input" v-model={ data.f1Val } clearable></vxe-input>
+                  <vxe-input class="my-fe-popup-filter-input" v-model={ data.f1Val } clearable></vxe-input>
                 </div>
-                <div class="me-popup-concat">
+                <div class="my-fe-popup-concat">
                   <vxe-radio-group v-model={ data.fMode }>
                     <vxe-radio label="and">与</vxe-radio>
                     <vxe-radio label="or">或</vxe-radio>
                   </vxe-radio-group>
                 </div>
-                <div class="me-popup-filter me-popup-f2">
-                  <vxe-select class="me-select" v-model={ data.f2Type } transfer clearable>
+                <div class="my-fe-popup-filter my-fe-popup-f2">
+                  <vxe-select class="my-fe-popup-filter-select" v-model={ data.f2Type } transfer clearable>
                     {
                       allCaseList.map(fItem => {
                         return <vxe-option value={ fItem.value } label={ fItem.label }></vxe-option>
                       })
                     }
                   </vxe-select>
-                  <vxe-input class="me-input" v-model={ data.f2Val } clearable></vxe-input>
+                  <vxe-input class="my-fe-popup-filter-input" v-model={ data.f2Val } clearable></vxe-input>
                 </div>
-                <div class="me-popup-describe">
+                <div class="my-fe-popup-describe">
                   <span>可用 ? 代表单个字符<br/>用 * 代表任意多个字符</span>
                 </div>
-                <div class="me-popup-footer">
+                <div class="my-fe-popup-footer">
                   <vxe-button status="primary" onClick={
                     () => {
                       data.fMenu = cItem.value
@@ -280,20 +280,20 @@ export default {
 </script>
 
 <style>
-.vxe-table--filter-wrapper.myexcel-filter-render .vxe-table--filter-template {
+.vxe-table--filter-wrapper.my-filter-excel-wrapper .vxe-table--filter-template {
   overflow: initial;
   max-height: initial;
   padding: 0;
 }
-.myexcel-filter {
+.my-filter-excel {
   user-select: none;
 }
-.myexcel-filter .me-list .me-group {
+.my-filter-excel .my-fe-top .my-fe-menu-group {
   position: relative;
   margin: 0;
   padding: 0;
 }
-.myexcel-filter .me-list .me-group:after {
+.my-filter-excel .my-fe-top .my-fe-menu-group:after {
   content: "";
   position: absolute;
   width: 190px;
@@ -301,28 +301,28 @@ export default {
   bottom: 0;
   border-bottom: 1px solid #E2E4E7;
 }
-.myexcel-filter .me-list .me-group .me-menu {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link {
   position: relative;
   padding: 4px 20px 4px 30px;
   cursor: pointer;
 }
-.myexcel-filter .me-list .me-group .me-menu:hover {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link:hover {
   background-color: #C5C5C5;
 }
-.myexcel-filter .me-list .me-group .me-menu-left-icon {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link-left-icon {
   position: absolute;
   left: 10px;
   top: 6px;
 }
-.myexcel-filter .me-list .me-group .me-menu-right-icon {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link-right-icon {
   position: absolute;
   right: 10px;
   top: 6px;
 }
-.myexcel-filter .me-list .me-group .me-menu:hover .me-child-list {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link:hover .my-fe-menu-child-list {
   display: block;
 }
-.myexcel-filter .me-list .me-group .me-menu .me-child-list {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-menu-child-list {
   display: none;
   position: absolute;
   top: 0;
@@ -332,10 +332,10 @@ export default {
   border: 1px solid #DADCE0;
   box-shadow: 3px 3px 4px -2px rgba(0, 0, 0, 0.6);
 }
-.myexcel-filter .me-list .me-group .me-menu .me-child-group {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list {
   position: relative;
 }
-.myexcel-filter .me-list .me-group .me-menu .me-child-group:after {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list:after {
   content: "";
   position: absolute;
   width: 90px;
@@ -343,83 +343,83 @@ export default {
   bottom: 0;
   border-bottom: 1px solid #E2E4E7;
 }
-.myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item {
   position: relative;
   padding: 4px 20px 4px 30px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu:hover {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item:hover {
   background-color: #C5C5C5;
 }
-.myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu .me-child-menu-left-icon {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item .my-fe-child-menu-left-icon {
   display: none;
   position: absolute;
   left: 10px;
   top: 6px;
 }
-.myexcel-filter .me-list .me-group .me-menu .me-child-group > .me-child-menu.active .me-child-menu-left-icon {
+.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item.active .my-fe-child-menu-left-icon {
   display: block;
 }
-.myexcel-filter .me-search {
+.my-filter-excel .my-fe-search {
   padding: 0 10px 0 30px;
 }
-.myexcel-filter .me-search .header {
+.my-filter-excel .my-fe-search .my-fe-search-top {
   position: relative;
   padding: 5px 0;
 }
-.myexcel-filter .me-search .header > input {
+.my-filter-excel .my-fe-search .my-fe-search-top > input {
   border: 1px solid #ABABAB;
   padding: 0 20px 0 2px;
   width: 200px;
   height: 22px;
   line-height: 22px;
 }
-.myexcel-filter .me-search .header > .me-search-icon {
+.my-filter-excel .my-fe-search .my-fe-search-top > .my-fe-search-icon {
   position: absolute;
   right: 5px;
   top: 10px;
 }
-.myexcel-filter .me-search .body {
+.my-filter-excel .my-fe-search .my-fe-search-list {
   margin: 0;
   border: 1px solid #E2E4E7;
   padding: 2px 10px;
   overflow: auto;
   height: 140px;
 }
-.myexcel-filter .me-search .body .me-search-empty {
+.my-filter-excel .my-fe-search .my-fe-search-list .my-fe-search-empty {
   text-align: center;
   padding-top: 20px;
 }
-.myexcel-filter .me-search .body .me-val-item {
+.my-filter-excel .my-fe-search .my-fe-search-list .my-fe-search-item {
   cursor: pointer;
   padding: 2px 0;
 }
-.myexcel-filter .me-search .body .me-val-item .me-val-icon {
+.my-filter-excel .my-fe-search .my-fe-search-list .my-fe-search-item .my-fe-search-item-icon {
   width: 16px;
 }
-.myexcel-filter .me-footer {
+.my-filter-excel .my-fe-footer {
   text-align: right;
   padding: 10px 10px 10px 0;
 }
-.me-popup .me-popup-filter {
+.my-fe-popup .my-fe-popup-filter {
   padding-left: 30px;
 }
-.me-popup .me-popup-filter > .me-select {
+.my-fe-popup .my-fe-popup-filter > .my-fe-popup-filter-select {
   width: 120px;
 }
-.me-popup .me-popup-filter > .me-input {
+.my-fe-popup .my-fe-popup-filter > .my-fe-popup-filter-input {
   margin-left: 15px;
   width: 380px;
 }
-.me-popup .me-popup-describe {
+.my-fe-popup .my-fe-popup-describe {
   padding: 20px 0 10px 0;
 }
-.me-popup .me-popup-concat {
+.my-fe-popup .my-fe-popup-concat {
   padding-left: 50px;
 }
-.me-popup .me-popup-footer {
+.my-fe-popup .my-fe-popup-footer {
   text-align: right;
 }
 </style>
