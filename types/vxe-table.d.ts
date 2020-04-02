@@ -13,8 +13,6 @@ export interface VXETableOptions {
   [key: string]: any;
 }
 
-export function install(vue: typeof Vue, options?: VXETableOptions): void;
-
 export interface VXETableStatic {
   /**
    * 版本号
@@ -43,12 +41,6 @@ export interface VXETableStatic {
    */
   setup(options?: VXETableOptions): any;
   /**
-   * 安装插件
-   * @param plugin 插件
-   * @param options 参数
-   */
-  use(plugin: PluginObject<any>, ...options: any[]): VXETableStatic;
-  /**
    * 全局事件拦截器
    */
   interceptor: interceptor;
@@ -69,18 +61,26 @@ export interface VXETableStatic {
    */
   menus: menus;
   /**
-   * 全局窗口控制器
+   * 全局的模态窗口
    */
   modal: typeof ModalController;
+  /**
+   * 安装插件
+   * @param plugin 插件
+   * @param options 参数
+   */
+  use(plugin: PluginObject, ...options: any[]): VXETableStatic;
+  install(vue: typeof Vue, options?: VXETableOptions): void;
 }
 
 /**
- * 一个基于 vue 的表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、对话窗口、自定义模板、贼灵活的配置项、扩展接口等...
+ * 一个基于 vue 的表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、模态窗口、自定义模板、贼灵活的配置项、扩展接口等...
  */
 export declare const VXETable: VXETableStatic
 
-export interface PluginObject<T> {
-  install(xTable: typeof VXETable): any;
+export interface PluginObject {
+  install(xTable: typeof VXETable): void;
+  [key: string]: any;
 }
 
 declare global {
@@ -104,7 +104,6 @@ export * from './modal'
 export * from './tooltip'
 export * from './form'
 export * from './form-item'
-export * from './switch'
 
 export * from './extends/renderer'
 export * from './extends/interceptor'
