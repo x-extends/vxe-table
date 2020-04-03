@@ -95,9 +95,18 @@
 
       <!--使用 bottom 插槽-->
       <template v-slot:bottom>
-        <div class="alert-message">
-          <i class="fa fa-info-circle alert-message-icon"></i>
-          <span>底部模板，已选中 {{ selectRecords.length }} 条数据</span>
+        <div class="mygrid-bottom">
+          <div class="left">
+            <span class="select-message">底部模板，已选中 {{ selectRecords.length }} 条数据</span>
+          </div>
+          <div class="right">
+            <vxe-pager
+              :current-page="tablePage.currentPage"
+              :page-size="tablePage.pageSize"
+              :total="tablePage.total"
+              :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']">
+            </vxe-pager>
+          </div>
         </div>
       </template>
     </vxe-grid>
@@ -130,6 +139,11 @@ export default {
         name: '',
         nickname: '',
         sex: ''
+      },
+      tablePage: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10
       },
       tableData: [],
       tableColumn: [
@@ -319,9 +333,18 @@ export default {
 
           <!--使用 bottom 插槽-->
           <template v-slot:bottom>
-            <div class="alert-message">
-              <i class="fa fa-info-circle alert-message-icon"></i>
-              <span>底部模板，已选中 {{ selectRecords.length }} 条数据</span>
+            <div class="mygrid-bottom">
+              <div class="left">
+                <span class="select-message">底部模板，已选中 {{ selectRecords.length }} 条数据</span>
+              </div>
+              <div class="right">
+                <vxe-pager
+                  :current-page="tablePage.currentPage"
+                  :page-size="tablePage.pageSize"
+                  :total="tablePage.total"
+                  :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']">
+                </vxe-pager>
+              </div>
             </div>
           </template>
         </vxe-grid>
@@ -341,6 +364,11 @@ export default {
                 name: '',
                 nickname: '',
                 sex: ''
+              },
+              tablePage: {
+                total: 0,
+                currentPage: 1,
+                pageSize: 10
               },
               tableData: [],
               tableColumn: [
@@ -491,6 +519,7 @@ export default {
         `
         .alert-message {
           padding: 8px 15px;
+          margin-bottom: 10px;
           border-radius: 4px;
           background-color: #e6f7ff;
           border: 1px solid #91d5ff;
@@ -498,6 +527,18 @@ export default {
         .alert-message-icon {
           color: #409eff;
           margin-right: 8px;
+        }
+        .mygrid-bottom {
+          display: flex;
+          flex-direction: row;
+        }
+        .mygrid-bottom > .left {
+          display: flex;
+          align-items: center;
+          width: 200px;
+        }
+        .mygrid-bottom > .right {
+          flex-grow: 1;
         }
         .first-col {
           position: relative;
@@ -572,6 +613,7 @@ export default {
 <style scoped>
 .alert-message {
   padding: 8px 15px;
+  margin-bottom: 10px;
   border-radius: 4px;
   background-color: #e6f7ff;
   border: 1px solid #91d5ff;
@@ -579,6 +621,18 @@ export default {
 .alert-message-icon {
   color: #409eff;
   margin-right: 8px;
+}
+.mygrid-bottom {
+  display: flex;
+  flex-direction: row;
+}
+.mygrid-bottom > .left {
+  display: flex;
+  align-items: center;
+  width: 200px;
+}
+.mygrid-bottom > .right {
+  flex-grow: 1;
 }
 .first-col {
   position: relative;

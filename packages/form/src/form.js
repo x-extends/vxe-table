@@ -259,7 +259,7 @@ export default {
     handleFocus (fields) {
       const { $children } = this
       fields.some(property => {
-        const comp = $children.find(item => item.field === property)
+        const comp = XEUtils.find($children, item => item.field === property)
         if (comp && comp.itemRender) {
           const { $el, itemRender } = comp
           const compConf = VXETable.renderer.get(itemRender.name)
@@ -298,7 +298,7 @@ export default {
             this.clearValidate(property)
           })
           .catch(({ rule, rules }) => {
-            const rest = this.invalids.find(rest => rest.property === property)
+            const rest = XEUtils.find(this.invalids, rest => rest.property === property)
             if (rest) {
               rest.rule = rule
               rest.rules = rules

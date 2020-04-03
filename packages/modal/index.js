@@ -52,7 +52,7 @@ function closeModal (id) {
 }
 
 function getModal (id) {
-  return allActivedModals.find($modal => $modal.id === id)
+  return XEUtils.find(allActivedModals, $modal => $modal.id === id)
 }
 
 export const ModalController = {
