@@ -9,13 +9,13 @@
     <vxe-grid
       border
       resizable
-      toolbar
       height="300"
       :align="allAlign"
       :loading="loading"
       :columns="tableColumn"
+      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
       :data="tableData">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="allAlign = 'left'">居左</vxe-button>
         <vxe-button @click="allAlign = 'center'">居中</vxe-button>
         <vxe-button @click="allAlign = 'right'">居右</vxe-button>
@@ -53,9 +53,17 @@ export default {
           border
           resizable
           height="300"
+          :align="allAlign"
           :loading="loading"
           :columns="tableColumn"
-          :data="tableData"></vxe-grid>
+          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+          :data="tableData">
+          <template v-slot:toolbar_buttons>
+            <vxe-button @click="allAlign = 'left'">居左</vxe-button>
+            <vxe-button @click="allAlign = 'center'">居中</vxe-button>
+            <vxe-button @click="allAlign = 'right'">居右</vxe-button>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {

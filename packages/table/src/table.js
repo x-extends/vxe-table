@@ -635,7 +635,7 @@ export default {
       errorModuleName = 'Keyboard'
     } else if (!VXETable._resize && this.autoResize) {
       errorModuleName = 'Resize'
-    } else if (!VXETable._export && (this.importConfig || this.expandConfig)) {
+    } else if (!VXETable._export && (this.importConfig || this.exportConfig)) {
       errorModuleName = 'Export'
     }
     if (errorModuleName) {

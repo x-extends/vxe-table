@@ -3,6 +3,7 @@
 
 /*pager*/
 .vxe-pager {
+  position: relative;
   height: $vxe-table-row-height-default;
   display: flex;
   align-items: center;
@@ -17,7 +18,6 @@
     text-align: center;
   }
   &.is--loading {
-    position: relative;
     &:after {
       content: "";
       position: absolute;
@@ -144,6 +144,8 @@
   .vxe-pager--wrapper {
     flex-grow: 1;
   }
+  .vxe-pager--left-wrapper,
+  .vxe-pager--right-wrapper,
   .vxe-pager--total,
   .vxe-pager--prev-btn,
   .vxe-pager--next-btn,
@@ -162,6 +164,8 @@
   .vxe-pager--next-btn {
     cursor: pointer;
   }
+  .vxe-pager--left-wrapper,
+  .vxe-pager--right-wrapper,
   .vxe-pager--count,
   .size--content,
   .vxe-pager--prev-btn,
@@ -170,7 +174,7 @@
   .vxe-pager--num-btn,
   .vxe-pager--jump-next {
     height: 30px;
-    line-height: 28px;
+    line-height: 30px;
     display: inline-block;
   }
   .vxe-pager--jump .vxe-pager--goto,

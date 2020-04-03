@@ -490,7 +490,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
@@ -499,7 +499,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       }
     ]

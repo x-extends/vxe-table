@@ -731,7 +731,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
         list: []
       },
       {
@@ -740,7 +740,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex,$rowIndex}, h',
+        defVal: '{column,columnIndex,$columnIndex,$rowIndex}',
         list: []
       },
       {
@@ -749,7 +749,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex,$rowIndex,itemIndex,items}, h',
+        defVal: '{column,columnIndex,$columnIndex,$rowIndex,itemIndex,items}',
         list: []
       },
       {
@@ -758,7 +758,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
         list: []
       },
       {
@@ -767,7 +767,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex}, h',
+        defVal: '{column,columnIndex,$columnIndex}',
         list: []
       },
       {
@@ -776,7 +776,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
+        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
         list: []
       // },
       // {
@@ -785,7 +785,7 @@ const apis = [
       //   version: '',
       //   type: '',
       //   enum: '',
-      //   defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
+      //   defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
       //   list: []
       }
     ]

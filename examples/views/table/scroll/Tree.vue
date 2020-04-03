@@ -6,15 +6,15 @@
       resizable
       show-overflow
       row-key
-      toolbar
       ref="xVTree"
       height="500"
       :loading="loading"
       :data="tableData"
+      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
       :radio-config="{labelField: 'name'}"
       :tree-config="{children: 'children'}"
       :columns="tableColumn">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="$refs.xVTree.setAllTreeExpansion(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpansion(false)">收起所有</vxe-button>
       </template>
@@ -50,15 +50,15 @@ export default {
           resizable
           show-overflow
           row-key
-          toolbar
           ref="xVTree"
           height="500"
           :loading="loading"
           :data="tableData"
+          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
           :radio-config="{labelField: 'name'}"
           :tree-config="{children: 'children'}"
           :columns="tableColumn">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-button @click="$refs.xVTree.setAllTreeExpansion(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpansion(false)">收起所有</vxe-button>
           </template>
