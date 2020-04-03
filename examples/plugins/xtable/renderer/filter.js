@@ -12,19 +12,7 @@ Vue.component(FilterContent.name, FilterContent)
 Vue.component(FilterComplex.name, FilterComplex)
 Vue.component(FilterExcel.name, FilterExcel)
 
-// 创建一个简单的筛选渲染
-VXETable.renderer.add('MyFilter', {
-  // 筛选模板
-  renderFilter (h, renderOpts, params) {
-    const { column } = params
-    const option = column.filters[0]
-    return [
-      <input v-model={ option.data } placeholder="请输入名称" />
-    ]
-  }
-})
-
-// 创建一个支持输入的筛选
+// 创建一个简单的输入框筛选
 VXETable.renderer.add('FilterInput', {
   // 筛选模板
   renderFilter (h, renderOpts, params) {
@@ -36,8 +24,7 @@ VXETable.renderer.add('FilterInput', {
   filterMethod ({ option, row, column }) {
     const { data } = option
     const cellValue = XEUtils.get(row, column.property)
-    /* eslint-disable eqeqeq */
-    return cellValue == data
+    return XEUtils.toString(cellValue).indexOf(data) > -1
   }
 })
 
@@ -110,7 +97,6 @@ VXETable.renderer.add('FilterComplex', {
 
 // 创建一个实现Excel的筛选器
 VXETable.renderer.add('FilterExcel', {
-  className: 'my-filter-excel-wrapper',
   // 不显示底部按钮，使用自定义的按钮
   isFooter: false,
   // 筛选模板

@@ -1,59 +1,57 @@
 <template>
-  <div>
-    <div class="my-filter-excel">
-      <div class="my-fe-top">
-        <ul class="my-fe-menu-group">
-          <li class="my-fe-menu-link" @click="sortAscEvent">
-            <i class="fa fa-sort-alpha-asc my-fe-menu-link-left-icon"></i>
-            <span>升序</span>
-          </li>
-          <li class="my-fe-menu-link" @click="sortDescEvent">
-            <i class="fa fa-sort-alpha-desc my-fe-menu-link-left-icon"></i>
-            <span>降序</span>
-          </li>
-        </ul>
-        <ul class="my-fe-menu-group">
-          <li class="my-fe-menu-link" @click="resetFilterEvent">
-            <span>清除筛选</span>
-          </li>
-          <li class="my-fe-menu-link">
-            <i class="fa fa-filter my-fe-menu-link-left-icon"></i>
-            <span>筛选条件</span>
-            <i class="fa fa-caret-right my-fe-menu-link-right-icon"></i>
-            <div class="my-fe-menu-child-list">
-              <ul class="my-fe-child-menu-group-list" v-for="(cList, gIndex) in caseGroups" :key="gIndex">
-                <li v-for="(cItem, cIndex) in cList" :key="cIndex" :class="[option.data.fMenu === cItem.value ? 'my-fe-child-menu-item active' : 'my-fe-child-menu-item']" @click="childMenuClickEvent(cItem)">
-                  <i class="fa fa-check my-fe-child-menu-left-icon"></i>
-                  <span>{{ cItem.label }}</span>
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
+  <div class="my-filter-excel">
+    <div class="my-fe-top">
+      <ul class="my-fe-menu-group">
+        <li class="my-fe-menu-link" @click="sortAscEvent">
+          <i class="fa fa-sort-alpha-asc my-fe-menu-link-left-icon"></i>
+          <span>升序</span>
+        </li>
+        <li class="my-fe-menu-link" @click="sortDescEvent">
+          <i class="fa fa-sort-alpha-desc my-fe-menu-link-left-icon"></i>
+          <span>降序</span>
+        </li>
+      </ul>
+      <ul class="my-fe-menu-group">
+        <li class="my-fe-menu-link" @click="resetFilterEvent">
+          <span>清除筛选</span>
+        </li>
+        <li class="my-fe-menu-link">
+          <i class="fa fa-filter my-fe-menu-link-left-icon"></i>
+          <span>筛选条件</span>
+          <i class="fa fa-caret-right my-fe-menu-link-right-icon"></i>
+          <div class="my-fe-menu-child-list">
+            <ul class="my-fe-child-menu-group-list" v-for="(cList, gIndex) in caseGroups" :key="gIndex">
+              <li v-for="(cItem, cIndex) in cList" :key="cIndex" :class="[option.data.fMenu === cItem.value ? 'my-fe-child-menu-item active' : 'my-fe-child-menu-item']" @click="childMenuClickEvent(cItem)">
+                <i class="fa fa-check my-fe-child-menu-left-icon"></i>
+                <span>{{ cItem.label }}</span>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="my-fe-search">
+      <div class="my-fe-search-top">
+        <input v-model="option.data.sVal" placeholder="搜索"/>
+        <i class="fa fa-search my-fe-search-icon"></i>
       </div>
-      <div class="my-fe-search">
-        <div class="my-fe-search-top">
-          <input v-model="option.data.sVal" placeholder="搜索"/>
-          <i class="fa fa-search my-fe-search-icon"></i>
-        </div>
-        <ul class="my-fe-search-list" v-if="searchList.length">
-          <li class="my-fe-search-item" @click="sAllEvent">
-            <i :class="[isAllSearch ? 'fa fa-check-square-o my-fe-search-item-icon' : 'fa fa-square-o my-fe-search-item-icon']"></i>
-            <span>(全选)</span>
-          </li>
-          <li class="my-fe-search-item" v-for="(val, sIndex) in searchList" :key="sIndex" @click="sItemEvent(val)">
-            <i :class="[option.data.vals.indexOf(val) === -1 ? 'fa fa-square-o my-fe-search-item-icon' : 'fa fa-check-square-o my-fe-search-item-icon']"></i>
-            <span>{{ val }}</span>
-          </li>
-        </ul>
-        <div v-else class="body">
-          <div class="my-fe-search-empty">无匹配项</div>
-        </div>
+      <ul class="my-fe-search-list" v-if="searchList.length">
+        <li class="my-fe-search-item" @click="sAllEvent">
+          <i :class="[isAllSearch ? 'fa fa-check-square-o my-fe-search-item-icon' : 'fa fa-square-o my-fe-search-item-icon']"></i>
+          <span>(全选)</span>
+        </li>
+        <li class="my-fe-search-item" v-for="(val, sIndex) in searchList" :key="sIndex" @click="sItemEvent(val)">
+          <i :class="[option.data.vals.indexOf(val) === -1 ? 'fa fa-square-o my-fe-search-item-icon' : 'fa fa-check-square-o my-fe-search-item-icon']"></i>
+          <span>{{ val }}</span>
+        </li>
+      </ul>
+      <div v-else class="body">
+        <div class="my-fe-search-empty">无匹配项</div>
       </div>
-      <div class="my-fe-footer">
-        <vxe-button status="primary" @click="confirmFilterEvent">确认</vxe-button>
-        <vxe-button @click="resetFilterEvent">重置</vxe-button>
-      </div>
+    </div>
+    <div class="my-fe-footer">
+      <vxe-button status="primary" @click="confirmFilterEvent">确认</vxe-button>
+      <vxe-button @click="resetFilterEvent">重置</vxe-button>
     </div>
   </div>
 </template>
@@ -280,11 +278,6 @@ export default {
 </script>
 
 <style>
-.vxe-table--filter-wrapper.my-filter-excel-wrapper .vxe-table--filter-template {
-  overflow: initial;
-  max-height: initial;
-  padding: 0;
-}
 .my-filter-excel {
   user-select: none;
 }

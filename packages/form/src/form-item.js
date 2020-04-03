@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils/methods/xe-utils'
 import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 import GlobalConfig from '../../conf'
@@ -109,7 +110,7 @@ export default {
     errRule () {
       const { $vxeform, field } = this
       if ($vxeform) {
-        return $vxeform.invalids.find(({ property }) => field === property)
+        return XEUtils.find($vxeform.invalids, ({ property }) => field === property)
       }
       return null
     }
