@@ -17,7 +17,7 @@
       <template v-slot:top>
         <Alert type="warning" :closable="false" show-icon>已选择 {{ selectRecords.length }} 项</Alert>
       </template>
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
       </template>
@@ -58,7 +58,11 @@ export default {
         { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
         { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
       ],
-      tableToolbar: {},
+      tableToolbar: {
+        slots: {
+          buttons: 'toolbar_buttons'
+        }
+      },
       demoCodes: [
         `
         <vxe-grid
@@ -75,7 +79,7 @@ export default {
           <template v-slot:top>
             <Alert type="warning" :closable="false" show-icon>已选择 {{ selectRecords.length }} 项</Alert>
           </template>
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <el-button @click="insertEvent">新增</el-button>
             <el-button @click="saveEvent">保存</el-button>
           </template>
@@ -104,7 +108,11 @@ export default {
                 { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
                 { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
               ],
-              tableToolbar: {}
+              tableToolbar: {
+                slots: {
+                  buttons: 'toolbar_buttons'
+                }
+              }
             }
           },
           created () {

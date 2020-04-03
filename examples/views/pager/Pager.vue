@@ -68,6 +68,21 @@
         :page-size.sync="page6.pageSize"
         :total="page6.totalResult"
         :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+        <template v-slot:left>
+          <vxe-button size="small">
+            <template>更多操作</template>
+            <template v-slot:dropdowns>
+              <vxe-button type="text">批量修改</vxe-button>
+              <vxe-button type="text">批量管理</vxe-button>
+              <vxe-button type="text">批量删除</vxe-button>
+            </template>
+          </vxe-button>
+        </template>
+        <template v-slot:right>
+          <img src="static/other/img1.gif" height="34">
+          <img src="static/other/img1.gif" height="34">
+          <img src="static/other/img1.gif" height="34">
+        </template>
       </vxe-pager>
     </p>
 
@@ -191,6 +206,21 @@ export default {
             :page-size.sync="page6.pageSize"
             :total="page6.totalResult"
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            <template v-slot:left>
+              <vxe-button size="small">
+                <template>更多操作</template>
+                <template v-slot:dropdowns>
+                  <vxe-button type="text">批量修改</vxe-button>
+                  <vxe-button type="text">批量管理</vxe-button>
+                  <vxe-button type="text">批量删除</vxe-button>
+                </template>
+              </vxe-button>
+            </template>
+            <template v-slot:right>
+              <img src="static/other/img1.gif" height="34">
+              <img src="static/other/img1.gif" height="34">
+              <img src="static/other/img1.gif" height="34">
+            </template>
           </vxe-pager>
         </p>
         `,

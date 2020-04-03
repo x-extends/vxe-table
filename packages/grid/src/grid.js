@@ -15,7 +15,7 @@ function getRefHeight (comp) {
   return getOffsetHeight(comp ? comp.$el : null)
 }
 
-function renderFormContent (h, _vm) {
+function renderDefaultForm (h, _vm) {
   const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
   if ($scopedSlots.form) {
     return $scopedSlots.form.call(_vm, { $grid: _vm }, h)
@@ -48,14 +48,24 @@ function renderFormContent (h, _vm) {
 }
 
 function getToolbarSlots (_vm) {
-  const { $scopedSlots, toolbar, toolbarOpts } = _vm
+  const { $scopedSlots, toolbarOpts } = _vm
+  const toolbarOptSlots = toolbarOpts.slots
+  // v3.0 中废弃 buttons、tools
   let $buttons = $scopedSlots.buttons
   let $tools = $scopedSlots.tools
   const slots = {}
-  if (toolbar) {
-    if (toolbarOpts.slots) {
-      $buttons = toolbarOpts.slots.buttons || $buttons
-      $tools = toolbarOpts.slots.tools || $tools
+  if (toolbarOptSlots) {
+    if (!$buttons) {
+      $buttons = toolbarOptSlots.buttons
+    }
+    if (!$tools) {
+      $tools = toolbarOptSlots.tools
+    }
+    if ($buttons && $scopedSlots[$buttons]) {
+      $buttons = $scopedSlots[$buttons]
+    }
+    if ($tools && $scopedSlots[$tools]) {
+      $tools = $scopedSlots[$tools]
     }
   }
   if ($buttons) {
@@ -63,6 +73,31 @@ function getToolbarSlots (_vm) {
   }
   if ($tools) {
     slots.tools = $tools
+  }
+  return slots
+}
+
+function getPagerSlots (_vm) {
+  const { $scopedSlots, pagerOpts } = _vm
+  const pagerOptSlots = pagerOpts.slots
+  const slots = {}
+  let $left
+  let $right
+  if (pagerOptSlots) {
+    $left = pagerOptSlots.left
+    $right = pagerOptSlots.right
+    if ($left && $scopedSlots[$left]) {
+      $left = $scopedSlots[$left]
+    }
+    if ($right && $scopedSlots[$right]) {
+      $right = $scopedSlots[$right]
+    }
+  }
+  if ($left) {
+    slots.left = $left
+  }
+  if ($right) {
+    slots.right = $right
   }
   return slots
 }
@@ -243,18 +278,22 @@ export default {
       /**
        * 渲染表单
        */
-      this.formConfig ? h('div', {
-        ref: 'form',
-        class: 'vxe-grid--form-wrapper'
-      }, renderFormContent(h, this)) : null,
+      $scopedSlots.form ? $scopedSlots.form.call(this, { $grid: this }, h) : (
+        this.formConfig ? h('div', {
+          ref: 'form',
+          class: 'vxe-grid--form-wrapper'
+        }, renderDefaultForm(h, this)) : null
+      ),
       /**
        * 渲染工具栏
        */
-      this.toolbar ? h('vxe-toolbar', {
-        ref: 'toolbar',
-        props: this.toolbarOpts,
-        scopedSlots: getToolbarSlots(this)
-      }) : null,
+      $scopedSlots.toolbar ? $scopedSlots.toolbar.call(this, { $grid: this }, h) : (
+        this.toolbar ? h('vxe-toolbar', {
+          ref: 'toolbar',
+          props: this.toolbarOpts,
+          scopedSlots: getToolbarSlots(this)
+        }) : null
+      ),
       /**
        * 渲染表格顶部区域
        */
@@ -281,13 +320,16 @@ export default {
       /**
        * 渲染分页
        */
-      this.pagerConfig ? ($scopedSlots.pager ? $scopedSlots.pager.call(this, { $grid: this }, h) : h('vxe-pager', {
-        props: this.pagerProps,
-        on: {
-          'page-change': this.pageChangeEvent
-        },
-        ref: 'pager'
-      })) : null
+      $scopedSlots.pager ? $scopedSlots.pager.call(this, { $grid: this }, h) : (
+        this.pagerConfig ? h('vxe-pager', {
+          props: this.pagerProps,
+          on: {
+            'page-change': this.pageChangeEvent
+          },
+          scopedSlots: getPagerSlots(this),
+          ref: 'pager'
+        }) : null
+      )
     ])
   },
   methods: {

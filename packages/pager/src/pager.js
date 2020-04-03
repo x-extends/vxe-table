@@ -63,7 +63,29 @@ export default {
     }
   },
   render (h) {
-    const { vSize, align } = this
+    const { $scopedSlots, $xegrid, vSize, align } = this
+    const childNodes = []
+    if ($scopedSlots.left) {
+      childNodes.push(
+        h('span', {
+          class: 'vxe-pager--left-wrapper'
+        }, [
+          $scopedSlots.left.call(this, { $grid: $xegrid })
+        ])
+      )
+    }
+    this.layouts.forEach(name => {
+      childNodes.push(this[`render${name}`](h))
+    })
+    if ($scopedSlots.right) {
+      childNodes.push(
+        h('span', {
+          class: 'vxe-pager--right-wrapper'
+        }, [
+          $scopedSlots.right.call(this, { $grid: $xegrid })
+        ])
+      )
+    }
     return h('div', {
       class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
@@ -76,7 +98,7 @@ export default {
     }, [
       h('div', {
         class: 'vxe-pager--wrapper'
-      }, this.layouts.map(name => this[`render${name}`](h)))
+      }, childNodes)
     ])
   },
   methods: {

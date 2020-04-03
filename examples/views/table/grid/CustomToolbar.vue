@@ -13,7 +13,7 @@
       :columns="tableColumn"
       :toolbar="toolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
         <vxe-button status="primary">搜索</vxe-button>
         <vxe-button @click="$refs.xGrid.commitProxy('reload')">刷新</vxe-button>
@@ -63,6 +63,9 @@ export default {
         refresh: true,
         custom: {
           storage: true
+        },
+        slots: {
+          buttons: 'toolbar_buttons'
         }
       },
       tableColumn: [
@@ -86,7 +89,7 @@ export default {
           :columns="tableColumn"
           :toolbar="toolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
             <vxe-button status="primary">搜索</vxe-button>
             <vxe-button @click="$refs.xGrid.commitProxy('reload')">刷新</vxe-button>
@@ -125,6 +128,9 @@ export default {
                 refresh: true,
                 custom: {
                   storage: true
+                },
+                slots: {
+                  buttons: 'toolbar_buttons'
                 }
               },
               tableColumn: [

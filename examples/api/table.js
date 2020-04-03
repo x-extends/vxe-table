@@ -2152,7 +2152,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '暂无数据',
+        defVal: '{}',
         list: []
       }
     ]

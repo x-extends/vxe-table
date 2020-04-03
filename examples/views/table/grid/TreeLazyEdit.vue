@@ -5,16 +5,16 @@
     <vxe-grid
       border
       resizable
-      toolbar
       keep-source
       ref="xGrid"
       :proxy-config="tableProxy"
       :columns="tableColumn"
+      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
       :context-menu="{body: {options: bodyMenus}, visibleMethod}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       @context-menu-click="contextMenuClickEvent">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
     </vxe-grid>
@@ -78,16 +78,16 @@ export default {
         <vxe-grid
           border
           resizable
-          toolbar
           keep-source
           ref="xGrid"
           :proxy-config="tableProxy"
           :columns="tableColumn"
+          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
           :context-menu="{body: {options: bodyMenus}, visibleMethod}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           @context-menu-click="contextMenuClickEvent">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>
         </vxe-grid>

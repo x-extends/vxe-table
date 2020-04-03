@@ -17,7 +17,7 @@
       <template v-slot:top>
         <el-alert type="warning" :title="`已选择 ${selectRecords.length} 项`" :closable="false" show-icon></el-alert>
       </template>
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
       </template>
@@ -58,7 +58,11 @@ export default {
         { field: 'flag', title: 'ElSwitch', width: 100, editRender: { name: 'ElSwitch', type: 'visible' } },
         { field: 'rate', title: 'ElRate', width: 200, editRender: { name: 'ElRate', type: 'visible' } }
       ],
-      tableToolbar: {},
+      tableToolbar: {
+        slots: {
+          buttons: 'toolbar_buttons'
+        }
+      },
       restaurants: [
         { value: '前端', name: '前端' },
         { value: '后端', name: '后端' },
@@ -82,7 +86,7 @@ export default {
           <template v-slot:top>
             <el-alert type="warning" :title="\`已选择 \${selectRecords.length} 项\`" :closable="false" show-icon></el-alert>
           </template>
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <el-button @click="insertEvent">新增</el-button>
             <el-button @click="saveEvent">保存</el-button>
           </template>
@@ -111,7 +115,11 @@ export default {
                 { field: 'flag', title: 'ElSwitch', width: 100, editRender: { name: 'ElSwitch', type: 'visible' } },
                 { field: 'rate', title: 'ElRate', width: 200, editRender: { name: 'ElRate', type: 'visible' } }
               ],
-              tableToolbar: {},
+              tableToolbar: {
+                slots: {
+                  buttons: 'toolbar_buttons'
+                }
+              },
               restaurants: [
                 { value: '前端', name: '前端' },
                 { value: '后端', name: '后端' },

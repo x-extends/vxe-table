@@ -17,7 +17,7 @@
       <template v-slot:top>
         <a-alert type="warning" :message="`已选择 ${selectRecords.length} 项`" banner></a-alert>
       </template>
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
       </template>
@@ -62,7 +62,11 @@ export default {
         { field: 'flag', title: 'ASwitch', width: 100, editRender: { name: 'ASwitch', type: 'visible' } },
         { field: 'rate', title: 'ARate', width: 200, editRender: { name: 'ARate', type: 'visible' } }
       ],
-      tableToolbar: {},
+      tableToolbar: {
+        slots: {
+          buttons: 'toolbar_buttons'
+        }
+      },
       restaurants: ['前端', '后端', '开发', '测试'],
       demoCodes: [
         `
@@ -81,7 +85,7 @@ export default {
           <template v-slot:top>
             <a-alert type="warning" :message="\`已选择 \${selectRecords.length} 项\`" banner></a-alert>
           </template>
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <el-button @click="insertEvent">新增</el-button>
             <el-button @click="saveEvent">保存</el-button>
           </template>
@@ -114,7 +118,11 @@ export default {
                 { field: 'flag', title: 'ASwitch', width: 100, editRender: { name: 'ASwitch', type: 'visible' } },
                 { field: 'rate', title: 'ARate', width: 200, editRender: { name: 'ARate', type: 'visible' } }
               ],
-              tableToolbar: {},
+              tableToolbar: {
+                slots: {
+                  buttons: 'toolbar_buttons'
+                }
+              },
               restaurants: ['前端', '后端', '开发', '测试']
             }
           },

@@ -8,6 +8,17 @@ import formItemAPI from './form-item'
 
 const toolbarSlots = XEUtils.clone(toolbarAPI.find(item => item.name === 'Slots'), true)
 toolbarSlots.name = 'slots'
+toolbarSlots.list.forEach(item => {
+  item.type = 'String, Function'
+  item.defVal = `${item.defVal}, h`
+})
+
+const pagerSlots = XEUtils.clone(pagerAPI.find(item => item.name === 'Slots'), true)
+pagerSlots.name = 'slots'
+pagerSlots.list.forEach(item => {
+  item.type = 'String, Function'
+  item.defVal = `${item.defVal}, h`
+})
 
 const apis = [
   {
@@ -89,7 +100,9 @@ const apis = [
         type: 'Object',
         enum: '',
         defVal: '',
-        list: XEUtils.mapTree(pagerAPI.find(item => item.name === 'Props').list.filter(item => !['size', 'loading'].includes(item.name)), item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
+        list: XEUtils.mapTree(pagerAPI.find(item => item.name === 'Props').list.filter(item => !['size', 'loading'].includes(item.name)), item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat(
+          pagerSlots
+        )
       },
       {
         name: 'proxy-config',
@@ -305,11 +318,20 @@ const apis = [
     list: [
       {
         name: 'form',
-        desc: '只对 form-config 配置时有效，表单模板',
+        desc: '表单模板',
         version: '2.7.19',
         type: '',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'toolbar',
+        desc: '工具栏模板',
+        version: '2.9',
+        type: '',
+        enum: '',
+        defVal: '{}',
         list: []
       },
       {
@@ -318,7 +340,7 @@ const apis = [
         version: '2.8',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
@@ -327,43 +349,36 @@ const apis = [
         version: '2.8',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
         name: 'pager',
-        desc: '只对 pager-config 配置时有效，分页模板',
+        desc: '分页模板',
         version: '2.7.19',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
         name: 'buttons',
-        desc: '只对 toolbar 配置时有效，工具栏按钮列表模板',
+        disabled: true,
+        desc: '即将废弃',
         version: '2.7.15',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
         name: 'tools',
-        desc: '只对 toolbar 配置时有效，工具栏右侧按钮列表',
+        disabled: true,
+        desc: '即将废弃',
         version: '2.7.15',
         type: '',
         enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'empty',
-        desc: '空数据时显示的文本内容',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '暂无数据',
+        defVal: '{}',
         list: []
       }
     ]
@@ -679,6 +694,7 @@ const columnSlots = XEUtils.clone(columnAPI.find(item => item.name === 'Slots'),
 columnSlots.name = 'slots'
 columnSlots.list.forEach(item => {
   item.type = 'String, Function'
+  item.defVal = `${item.defVal}, h`
 })
 
 gridAPI.find(item => item.name === 'Props').list.splice(1, 0, {
