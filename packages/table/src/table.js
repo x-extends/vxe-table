@@ -490,7 +490,7 @@ export default {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
     },
     expandColumn () {
-      return this.tableColumn.find(column => column.type === 'expand')
+      return XEUtils.find(this.tableColumn, column => column.type === 'expand')
     },
     tableBorder () {
       const { border } = this

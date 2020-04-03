@@ -1733,15 +1733,19 @@ const Methods = {
    * 处理默认勾选
    */
   handleDefaultSelectionChecked () {
-    const { fullDataRowIdData, checkboxOpts } = this
+    const { fullDataRowIdData, checkboxOpts, checkboxReserveRowMap } = this
     const { checkAll, checkRowKeys } = checkboxOpts
     if (checkAll) {
       this.setAllCheckboxRow(true)
     } else if (checkRowKeys) {
       const defSelection = []
+      const rowkey = UtilTools.getRowkey(this)
       checkRowKeys.forEach(rowid => {
         if (fullDataRowIdData[rowid]) {
           defSelection.push(fullDataRowIdData[rowid].row)
+        }
+        if (checkboxOpts.reserve) {
+          checkboxReserveRowMap[rowid] = { [rowkey]: rowid }
         }
       })
       this.setCheckboxRow(defSelection, true)
@@ -2168,9 +2172,15 @@ const Methods = {
    */
   handleDefaultRadioChecked () {
     const { radioOpts, fullDataRowIdData } = this
-    const { checkRowKey: rowid } = radioOpts
-    if (rowid && fullDataRowIdData[rowid]) {
-      this.setRadioRow(fullDataRowIdData[rowid].row)
+    const { checkRowKey: rowid, reserve } = radioOpts
+    if (rowid) {
+      if (fullDataRowIdData[rowid]) {
+        this.setRadioRow(fullDataRowIdData[rowid].row)
+      }
+      if (reserve) {
+        const rowkey = UtilTools.getRowkey(this)
+        this.radioReserveRow = { [rowkey]: rowid }
+      }
     }
   },
   /**
@@ -2484,7 +2494,7 @@ const Methods = {
     return this.handleTableData(true)
   },
   getSortColumn () {
-    return this.visibleColumn.find(column => column.sortable && column.order)
+    return XEUtils.find(this.visibleColumn, column => column.sortable && column.order)
   },
   /**
    * 关闭筛选

@@ -56,7 +56,7 @@
         </template>
         <template v-slot:filter="{ $panel, column }">
           <template v-for="(option, index) in column.filters">
-            <input type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, $panel)">
+            <input class="my-filter" type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, $panel)">
           </template>
         </template>
         <template v-slot="{ row }">
@@ -175,7 +175,7 @@ export default {
             </template>
             <template v-slot:filter="{ column, context }">
               <template v-for="(option, index) in column.filters">
-                <input type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, context)">
+                <input class="my-filter" type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, $panel)">
               </template>
             </template>
             <template v-slot="{ row }">
@@ -288,6 +288,9 @@ export default {
           left: 4px;
           bottom: -10px;
         }
+        .my-filter {
+          margin: 10px;
+        }
         `
       ]
     }
@@ -352,5 +355,8 @@ export default {
   position: absolute;
   left: 4px;
   bottom: -10px;
+}
+.my-filter {
+  margin: 10px;
 }
 </style>

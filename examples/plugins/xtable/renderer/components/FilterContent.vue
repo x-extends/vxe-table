@@ -115,6 +115,7 @@ export default {
 
 <style>
 .my-filter-content {
+  padding: 10px;
   user-select: none;
 }
 .my-filter-content .my-fc-search .my-fc-search-top {

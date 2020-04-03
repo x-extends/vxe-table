@@ -8,6 +8,10 @@
       renderFilter (h, renderOpts, <vxe-tooltip content="{ column, columnIndex, columnIndex, $panel }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 内容<br>
       filterMethod (<vxe-tooltip content="{ option, row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选数据函数<br>
       filterResetMethod (<vxe-tooltip content="{ options, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选重置函数<br>
+      $panel 对象:<br>
+      &nbsp;&nbsp;<span class="orange">changeOption(event, checked, option) 更新选项的状态</span><br>
+      &nbsp;&nbsp;<span class="orange">confirmFilter() 确认筛选</span><br>
+      &nbsp;&nbsp;<span class="orange">resetFilter() 清除筛选条件</span>
     </p>
 
     <vxe-table
@@ -15,7 +19,7 @@
       height="400"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="nickname" title="Nickname" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
+      <vxe-table-column field="nickname" title="Nickname" :filters="[{data: null}]" :filter-render="{name: 'FilterInput'}"></vxe-table-column>
       <vxe-table-column field="name" title="实现条件的筛选" :filters="[{data: {type: 'has', isCase: true, name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
       <vxe-table-column field="age" title="实现内容的筛选" :filters="[{data: {vals: [], sVal: ''}}]" :filter-render="{name: 'FilterContent'}"></vxe-table-column>
       <vxe-table-column field="role" title="实现Excel复杂的筛选" sortable :filters="[{data: {vals: [], sVal: '', fMenu: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]" :filter-render="{name: 'FilterExcel'}"></vxe-table-column>
@@ -40,15 +44,19 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        // 创建一个简单的筛选渲染
-        VXETable.renderer.add('MyFilter', {
+        // 创建一个简单的输入框筛选
+        VXETable.renderer.add('FilterInput', {
           // 筛选模板
           renderFilter (h, renderOpts, params) {
-            const { column } = params
-            const option = column.filters[0]
             return [
-              <input v-model={ option.data } placeholder="请输入名称" />
+              <filter-input params={ params }></filter-input>
             ]
+          },
+          // 筛选方法
+          filterMethod ({ option, row, column }) {
+            const { data } = option
+            const cellValue = XEUtils.get(row, column.property)
+            return XEUtils.toString(cellValue).indexOf(data) > -1
           }
         })
         `,
@@ -58,7 +66,7 @@ export default {
           height="400"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="nickname" title="Nickname" :filters="[{data: null}]" :filter-render="{name: 'MyFilter'}"></vxe-table-column>
+          <vxe-table-column field="nickname" title="Nickname" :filters="[{data: null}]" :filter-render="{name: 'FilterInput'}"></vxe-table-column>
           <vxe-table-column field="name" title="实现条件的筛选" :filters="[{data: {type: 'has', isCase: true, name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
           <vxe-table-column field="age" title="实现内容的筛选" :filters="[{data: {vals: [], sVal: ''}}]" :filter-render="{name: 'FilterContent'}"></vxe-table-column>
           <vxe-table-column field="role" title="实现Excel复杂的筛选" sortable :filters="[{data: {vals: [], sVal: '', fMenu: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]" :filter-render="{name: 'FilterExcel'}"></vxe-table-column>

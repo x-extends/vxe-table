@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VxeModal from '../../modal/src/modal'
 import VxeRadio from '../../radio/src/radio'
@@ -32,7 +33,7 @@ export default {
       const { storeData } = this
       const { type, typeList } = storeData
       if (type) {
-        const selectItem = typeList.find(item => type === item.value)
+        const selectItem = XEUtils.find(typeList, item => type === item.value)
         return selectItem ? GlobalConfig.i18n(selectItem.label) : '*.*'
       }
       return `*.${typeList.map(item => item.value).join(', *.')}`
