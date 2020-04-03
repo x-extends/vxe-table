@@ -19,7 +19,7 @@
       :proxy-config="tableProxy"
       :radio-config="{labelField: 'id', reserve: true, highlight: true}">
 
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-form :data="formData" @submit="searchEvent" @reset="searchEvent">
           <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
           <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }"></vxe-form-item>
@@ -80,7 +80,10 @@ export default {
       },
       tableToolbar: {
         export: true,
-        custom: true
+        custom: true,
+        slots: {
+          buttons: 'toolbar_buttons'
+        }
       },
       tableColumn: [
         { type: 'seq', width: 60, fixed: 'left' },
@@ -124,7 +127,7 @@ export default {
           :proxy-config="tableProxy"
           :radio-config="{labelField: 'id', reserve: true, highlight: true}">
 
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-form :data="formData" @submit="searchEvent" @reset="searchEvent">
               <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
               <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }"></vxe-form-item>
@@ -172,7 +175,10 @@ export default {
               },
               tableToolbar: {
                 export: true,
-                custom: true
+                custom: true,
+                slots: {
+                  buttons: 'toolbar_buttons'
+                }
               },
               tableColumn: [
                 { type: 'seq', width: 60, fixed: 'left' },

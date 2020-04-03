@@ -3,6 +3,7 @@
 
 /*toolbar*/
 .vxe-toolbar {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -22,7 +23,6 @@
     background-color: $vxe-table-header-background-color;
   }
   &.is--loading {
-    position: relative;
     &:before {
       content: "";
       position: absolute;

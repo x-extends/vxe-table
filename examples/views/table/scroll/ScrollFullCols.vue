@@ -13,12 +13,12 @@
       show-header-overflow
       highlight-hover-row
       highlight-current-row
-      toolbar
       ref="xGrid"
       height="600"
       :loading="loading"
+      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
@@ -71,12 +71,12 @@ export default {
           show-header-overflow
           highlight-hover-row
           highlight-current-row
-          toolbar
           ref="xGrid"
           height="600"
           :loading="loading"
+          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>

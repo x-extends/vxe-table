@@ -2,18 +2,9 @@
   <div>
     <p class="tip">
       使用自定义模板渲染，通过 <table-column-api-link prop="slots"/> 属性使用自定义插槽来编写模板或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#JSX" target="_blank">JSX</a> 渲染函数或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#%E8%99%9A%E6%8B%9F-DOM" target="_blank">VNode</a><span class="red">（注：返回数组格式）</span><br>
-      Column 列：<br>
-      <table-column-api-link prop="default"/>：自定义内容模板（提前格式化好数据 > <table-column-api-link prop="formatter"/> > <table-column-api-link prop="slots"/>）<br>
-      <table-column-api-link prop="header"/>：自定义表头模板<br>
-      <table-column-api-link prop="footer"/>：自定义表尾模板<br>
-      <table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link class="link" :to="{name: 'RendererFilter'}">渲染器</router-link>，可以更好的复用）<br>
-      <table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link class="link" :to="{name: 'RendererEdit'}">渲染器</router-link>，可以更好的复用）<br>
-      Toolbar 工具栏：<br>
-      <grid-api-link prop="buttons"/>：自定义按钮模板（建议使用<router-link class="link" :to="{name: 'RendererToolbar'}">渲染器</router-link>，可以更好的复用）<br>
-      <grid-api-link prop="tools"/>：自定义右侧按钮模板（建议使用<router-link class="link" :to="{name: 'RendererToolbar'}">渲染器</router-link>，可以更好的复用）<br>
-      Grid 顶部：<br>
+      <grid-api-link prop="form"/>：自定义表单模板<br>
+      <grid-api-link prop="toolbar"/>：自定义工具栏模板<br>
       <grid-api-link prop="top"/>：自定义顶部模板<br>
-      Grid 底部：<br>
       <grid-api-link prop="bottom"/>：自定义底部模板<br>
     </p>
 
@@ -24,8 +15,10 @@
       show-footer
       height="600"
       ref="xGrid"
+      class="my-grid66"
       :footer-method="footerMethod"
       :toolbar="tableToolbar"
+      :pager-config="tablePage"
       :columns="tableColumn"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}"
@@ -56,12 +49,12 @@
       <template v-slot:top>
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
-          <span>顶部模板，已选中 {{ selectRecords.length }} 条数据</span>
+          <span>顶部模板！！！</span>
         </div>
       </template>
 
-      <!--使用 buttons 插槽-->
-      <template v-slot:buttons>
+      <!--自定义插槽 toolbar_buttons 插槽-->
+      <template v-slot:toolbar_buttons>
         <vxe-form>
           <vxe-form-item>
             <vxe-input placeholder="搜索"></vxe-input>
@@ -95,19 +88,15 @@
 
       <!--使用 bottom 插槽-->
       <template v-slot:bottom>
-        <div class="mygrid-bottom">
-          <div class="left">
-            <span class="select-message">底部模板，已选中 {{ selectRecords.length }} 条数据</span>
-          </div>
-          <div class="right">
-            <vxe-pager
-              :current-page="tablePage.currentPage"
-              :page-size="tablePage.pageSize"
-              :total="tablePage.total"
-              :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']">
-            </vxe-pager>
-          </div>
+        <div class="alert-message">
+          <i class="fa fa-exclamation-circle alert-message-icon"></i>
+          <span>底部模板！！！</span>
         </div>
+      </template>
+
+      <!--自定义插槽 pager_left-->
+      <template v-slot:pager_left>
+        <span class="select-message">已选中 {{ selectRecords.length }} 条数据</span>
       </template>
     </vxe-grid>
 
@@ -141,9 +130,13 @@ export default {
         sex: ''
       },
       tablePage: {
+        perfect: true,
         total: 0,
         currentPage: 1,
-        pageSize: 10
+        pageSize: 10,
+        slots: {
+          left: 'pager_left'
+        }
       },
       tableData: [],
       tableColumn: [
@@ -245,6 +238,8 @@ export default {
       tableToolbar: {
         custom: true,
         slots: {
+          // 使用自定义插槽
+          buttons: 'toolbar_buttons',
           // 使用 JSX 渲染
           tools: () => {
             return [
@@ -262,8 +257,10 @@ export default {
           show-footer
           height="600"
           ref="xGrid"
+          class="my-grid66"
           :footer-method="footerMethod"
           :toolbar="tableToolbar"
+          :pager-config="tablePage"
           :columns="tableColumn"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}"
@@ -294,12 +291,12 @@ export default {
           <template v-slot:top>
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
-              <span>顶部模板，已选中 {{ selectRecords.length }} 条数据</span>
+              <span>顶部模板！！！</span>
             </div>
           </template>
 
-          <!--使用 buttons 插槽-->
-          <template v-slot:buttons>
+          <!--自定义插槽 toolbar_buttons 插槽-->
+          <template v-slot:toolbar_buttons>
             <vxe-form>
               <vxe-form-item>
                 <vxe-input placeholder="搜索"></vxe-input>
@@ -333,19 +330,15 @@ export default {
 
           <!--使用 bottom 插槽-->
           <template v-slot:bottom>
-            <div class="mygrid-bottom">
-              <div class="left">
-                <span class="select-message">底部模板，已选中 {{ selectRecords.length }} 条数据</span>
-              </div>
-              <div class="right">
-                <vxe-pager
-                  :current-page="tablePage.currentPage"
-                  :page-size="tablePage.pageSize"
-                  :total="tablePage.total"
-                  :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']">
-                </vxe-pager>
-              </div>
+            <div class="alert-message">
+              <i class="fa fa-exclamation-circle alert-message-icon"></i>
+              <span>底部模板！！！</span>
             </div>
+          </template>
+
+          <!--自定义插槽 pager_left-->
+          <template v-slot:pager_left>
+            <span class="select-message">已选中 {{ selectRecords.length }} 条数据</span>
           </template>
         </vxe-grid>
 
@@ -366,9 +359,13 @@ export default {
                 sex: ''
               },
               tablePage: {
+                perfect: true,
                 total: 0,
                 currentPage: 1,
-                pageSize: 10
+                pageSize: 10,
+                slots: {
+                  left: 'pager_left'
+                }
               },
               tableData: [],
               tableColumn: [
@@ -470,6 +467,8 @@ export default {
               tableToolbar: {
                 custom: true,
                 slots: {
+                  // 使用自定义插槽
+                  buttons: 'toolbar_buttons',
                   // 使用 JSX 渲染
                   tools: () => {
                     return [
@@ -517,34 +516,31 @@ export default {
         }
         `,
         `
-        .alert-message {
+        .my-grid66 .alert-message {
           padding: 8px 15px;
-          margin-bottom: 10px;
+          margin: 10px 0;
           border-radius: 4px;
           background-color: #e6f7ff;
           border: 1px solid #91d5ff;
         }
-        .alert-message-icon {
+        .my-grid66 .alert-message-icon {
           color: #409eff;
           margin-right: 8px;
         }
-        .mygrid-bottom {
-          display: flex;
-          flex-direction: row;
+        .my-grid66 .select-message {
+          position: absolute;
+          left: 15px;
+          top: 50%;
+          transform: translateY(-50%);
         }
-        .mygrid-bottom > .left {
-          display: flex;
-          align-items: center;
-          width: 200px;
+        .my-grid66 .my-input {
+          width: 100%;
         }
-        .mygrid-bottom > .right {
-          flex-grow: 1;
-        }
-        .first-col {
+        .my-grid66 .first-col {
           position: relative;
           height: 20px;
         }
-        .first-col:before {
+        .my-grid66 .first-col:before {
           content: "";
           position: absolute;
           left: -15px;
@@ -554,12 +550,12 @@ export default {
           transform: rotate(28deg);
           background-color: #e8eaec;
         }
-        .first-col .first-col-top {
+        .my-grid66 .first-col .first-col-top {
           position: absolute;
           right: 4px;
           top: -10px;
         }
-        .first-col .first-col-bottom {
+        .my-grid66 .first-col .first-col-bottom {
           position: absolute;
           left: 4px;
           bottom: -10px;
@@ -611,34 +607,31 @@ export default {
 </script>
 
 <style scoped>
-.alert-message {
+.my-grid66 .alert-message {
   padding: 8px 15px;
-  margin-bottom: 10px;
+  margin: 10px 0;
   border-radius: 4px;
   background-color: #e6f7ff;
   border: 1px solid #91d5ff;
 }
-.alert-message-icon {
+.my-grid66 .alert-message-icon {
   color: #409eff;
   margin-right: 8px;
 }
-.mygrid-bottom {
-  display: flex;
-  flex-direction: row;
+.my-grid66 .select-message {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
 }
-.mygrid-bottom > .left {
-  display: flex;
-  align-items: center;
-  width: 200px;
+.my-grid66 .my-input {
+  width: 100%;
 }
-.mygrid-bottom > .right {
-  flex-grow: 1;
-}
-.first-col {
+.my-grid66 .first-col {
   position: relative;
   height: 20px;
 }
-.first-col:before {
+.my-grid66 .first-col:before {
   content: "";
   position: absolute;
   left: -15px;
@@ -648,12 +641,12 @@ export default {
   transform: rotate(28deg);
   background-color: #e8eaec;
 }
-.first-col .first-col-top {
+.my-grid66 .first-col .first-col-top {
   position: absolute;
   right: 4px;
   top: -10px;
 }
-.first-col .first-col-bottom {
+.my-grid66 .first-col .first-col-bottom {
   position: absolute;
   left: 4px;
   bottom: -10px;

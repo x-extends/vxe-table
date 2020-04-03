@@ -169,7 +169,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'left',
+        desc: '自定义左侧模板',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '{}',
+        list: []
+      },
+      {
+        name: 'right',
+        desc: '自定义右侧模板',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '{}',
+        list: []
+      }
+    ]
   },
   {
     name: 'Events',
