@@ -129,7 +129,7 @@ export default {
         }
       }, [
         tagName ? h('i', {
-          class: ['vxe-pager--jump-more', this.iconJumpMore || GlobalConfig.icon.jumpMore]
+          class: ['vxe-pager--jump-more-icon', this.iconJumpMore || GlobalConfig.icon.jumpMore]
         }) : null,
         h('i', {
           class: ['vxe-pager--jump-icon', this.iconJumpPrev || GlobalConfig.icon.jumpPrev]
@@ -163,7 +163,7 @@ export default {
         }
       }, [
         tagName ? h('i', {
-          class: ['vxe-pager--jump-more', this.iconJumpMore || GlobalConfig.icon.jumpMore]
+          class: ['vxe-pager--jump-more-icon', this.iconJumpMore || GlobalConfig.icon.jumpMore]
         }) : null,
         h('i', {
           class: ['vxe-pager--jump-icon', this.iconJumpNext || GlobalConfig.icon.jumpNext]

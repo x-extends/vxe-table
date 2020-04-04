@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.icon') }}</h2>
-    <p class="tip">内置轻量级的 icon 图标，还可以通过修改 <router-link class="link" :to="{name: 'StartIcons'}">icon</router-link> 替换默认的</p>
+    <p class="tip">内置轻量级的 icon 图标，可以通过 <router-link class="link" :to="{name: 'StartIcons'}">setup</router-link> 替换默认的图标</p>
 
     <ul class="icon-list" title="点击复制内容">
       <li v-for="item in list" :key="item.icon" @click="copyEvent(item)">

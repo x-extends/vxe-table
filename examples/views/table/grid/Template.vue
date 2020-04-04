@@ -99,14 +99,6 @@
         <span class="select-message">已选中 {{ selectRecords.length }} 条数据</span>
       </template>
 
-      <!--自定义插槽 pager_right-->
-      <template v-slot:pager_right>
-        <img src="static/other/img1.gif" style="height: 30px;">
-        <img src="static/other/img1.gif" style="height: 30px;">
-        <img src="static/other/img2.gif" style="height: 30px;">
-        <img src="static/other/img1.gif" style="height: 30px;">
-        <img src="static/other/img1.gif" style="height: 30px;">
-      </template>
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
@@ -144,8 +136,20 @@ export default {
         currentPage: 1,
         pageSize: 10,
         slots: {
+          // 使用自定义插槽
           left: 'pager_left',
-          right: 'pager_right'
+          // 使用 JSX 渲染
+          right: () => {
+            return [
+              <span>
+                <img src="static/other/img1.gif" style="height: 30px;" />
+                <img src="static/other/img1.gif" style="height: 30px;" />
+                <img src="static/other/img2.gif" style="height: 30px;" />
+                <img src="static/other/img1.gif" style="height: 30px;" />
+                <img src="static/other/img1.gif" style="height: 30px;" />
+              </span>
+            ]
+          }
         }
       },
       tableData: [],
@@ -351,14 +355,6 @@ export default {
             <span class="select-message">已选中 {{ selectRecords.length }} 条数据</span>
           </template>
 
-          <!--自定义插槽 pager_right-->
-          <template v-slot:pager_right>
-            <img src="static/other/img1.gif" style="height: 30px;">
-            <img src="static/other/img1.gif" style="height: 30px;">
-            <img src="static/other/img2.gif" style="height: 30px;">
-            <img src="static/other/img1.gif" style="height: 30px;">
-            <img src="static/other/img1.gif" style="height: 30px;">
-          </template>
         </vxe-grid>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
@@ -383,8 +379,20 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 slots: {
+                  // 使用自定义插槽
                   left: 'pager_left',
-                  right: 'pager_right'
+                  // 使用 JSX 渲染
+                  right: () => {
+                    return [
+                      <span>
+                        <img src="static/other/img1.gif" style="height: 30px;" />
+                        <img src="static/other/img1.gif" style="height: 30px;" />
+                        <img src="static/other/img2.gif" style="height: 30px;" />
+                        <img src="static/other/img1.gif" style="height: 30px;" />
+                        <img src="static/other/img1.gif" style="height: 30px;" />
+                      </span>
+                    ]
+                  }
                 }
               },
               tableData: [],
