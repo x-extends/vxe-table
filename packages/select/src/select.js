@@ -201,9 +201,9 @@ export default {
       this.updateCache()
       this.updateOptComps()
     }
+    GlobalEvent.on(this, 'syncwheel', this.handleSyncwheelEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
-    GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
   mounted () {
@@ -218,9 +218,9 @@ export default {
     }
   },
   destroyed () {
+    GlobalEvent.off(this, 'syncwheel')
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'keydown')
-    GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
@@ -400,6 +400,21 @@ export default {
       this.changeEvent(evnt, selectValue)
       this.hideOptionPanel()
     },
+    handleSyncwheelEvent (evnt) {
+      const { $refs, $el, disabled, visiblePanel } = this
+      if (!disabled) {
+        if (visiblePanel) {
+          const hasSlef = DomTools.getEventTargetNode(evnt, $el).flag
+          if (hasSlef || DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
+            if (hasSlef) {
+              this.updatePlacement()
+            }
+          } else {
+            this.hideOptionPanel()
+          }
+        }
+      }
+    },
     handleGlobalMousedownEvent (evnt) {
       const { $refs, $el, disabled, visiblePanel } = this
       if (!disabled) {
@@ -442,11 +457,6 @@ export default {
         if (isDel && clearable && this.isActivated) {
           this.clearValueEvent(evnt, null)
         }
-      }
-    },
-    handleGlobalMousewheelEvent (evnt) {
-      if (!DomTools.getEventTargetNode(evnt, this.$el).flag && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
-        this.hideOptionPanel()
       }
     },
     handleGlobalBlurEvent () {
