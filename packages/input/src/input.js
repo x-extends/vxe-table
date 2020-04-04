@@ -365,8 +365,8 @@ function renderNumberIcon (h, _vm) {
       class: 'vxe-input--number-prev is--prev',
       on: {
         mousedown: _vm.numberMousedownEvent,
-        mouseup: _vm.numberDropDown,
-        mouseleave: _vm.numberDropDown
+        mouseup: _vm.numberStopDown,
+        mouseleave: _vm.numberStopDown
       }
     }, [
       h('i', {
@@ -377,8 +377,8 @@ function renderNumberIcon (h, _vm) {
       class: 'vxe-input--number-next is--next',
       on: {
         mousedown: _vm.numberMousedownEvent,
-        mouseup: _vm.numberDropDown,
-        mouseleave: _vm.numberDropDown
+        mouseup: _vm.numberStopDown,
+        mouseleave: _vm.numberStopDown
       }
     }, [
       h('i', {
@@ -754,9 +754,9 @@ export default {
   },
   created () {
     this.initValue()
+    GlobalEvent.on(this, 'syncwheel', this.handleSyncwheelEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
-    GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
   mounted () {
@@ -776,10 +776,10 @@ export default {
     }
   },
   destroyed () {
-    this.numberDropDown()
+    this.numberStopDown()
+    GlobalEvent.off(this, 'syncwheel')
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'keydown')
-    GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
@@ -952,7 +952,7 @@ export default {
     vaildMaxNum (num) {
       return this.max === null || num <= XEUtils.toNumber(this.max)
     },
-    numberDropDown () {
+    numberStopDown () {
       clearTimeout(this.downbumTimeout)
     },
     numberDownPrevEvent (evnt) {
@@ -981,7 +981,7 @@ export default {
       }
     },
     numberMousedownEvent (evnt) {
-      this.numberDropDown()
+      this.numberStopDown()
       if (evnt.button === 0) {
         const isPrevNumber = DomTools.hasClass(evnt.currentTarget, 'is--prev')
         if (isPrevNumber) {
@@ -1432,12 +1432,19 @@ export default {
         }
       }
     },
-    handleGlobalMousewheelEvent (evnt) {
-      const { $refs, $el, visiblePanel } = this
-      if (visiblePanel) {
-        if (!DomTools.getEventTargetNode(evnt, $el).flag && !DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
-          this.hidePanel()
-          this.afterCheckValue()
+    handleSyncwheelEvent (evnt) {
+      const { $refs, $el, disabled, visiblePanel } = this
+      if (!disabled) {
+        if (visiblePanel) {
+          const hasSlef = DomTools.getEventTargetNode(evnt, $el).flag
+          if (hasSlef || DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
+            if (hasSlef) {
+              this.updatePlacement()
+            }
+          } else {
+            this.hidePanel()
+            this.afterCheckValue()
+          }
         }
       }
     },

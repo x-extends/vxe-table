@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
-import { UtilTools, DomTools } from '../../tools'
+import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 export default {
   name: 'VxeButton',
@@ -46,6 +46,7 @@ export default {
     if (this.type === 'primary') {
       UtilTools.warn('vxe.error.delProp', ['type=primary', 'status=primary'])
     }
+    GlobalEvent.on(this, 'syncwheel', this.handleSyncwheelEvent)
   },
   mounted () {
     const panelElem = this.$refs.panel
@@ -58,6 +59,9 @@ export default {
     if (panelElem && panelElem.parentNode) {
       panelElem.parentNode.removeChild(panelElem)
     }
+  },
+  destroyed () {
+    GlobalEvent.off(this, 'syncwheel')
   },
   render (h) {
     const { $scopedSlots, $listeners, type, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
@@ -157,6 +161,12 @@ export default {
         )
       }
       return contents
+    },
+    handleSyncwheelEvent (evnt) {
+      if (this.showPanel && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
+        console.log(111)
+        this.updatePlacement()
+      }
     },
     updateZindex () {
       if (this.panelIndex < UtilTools.getLastZIndex()) {
