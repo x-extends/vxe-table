@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.pager') }}</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'pager'}}">API</router-link>，建议通过 <router-link :to="{name: 'StartGlobal'}">setup</router-link> 设置全局样式</p>
+    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'pager'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
 
     <p>
       <vxe-pager
@@ -35,7 +35,6 @@
 
     <p>
       <vxe-pager
-        border
         :current-page.sync="page4.currentPage"
         :page-size.sync="page4.pageSize"
         :total="page4.totalResult"
@@ -47,7 +46,7 @@
         :current-page.sync="page5.currentPage"
         :page-size.sync="page5.pageSize"
         :total="page5.totalResult"
-        :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+        :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
       </vxe-pager>
     </p>
 
@@ -173,7 +172,6 @@ export default {
 
         <p>
           <vxe-pager
-            border
             :current-page.sync="page4.currentPage"
             :page-size.sync="page4.pageSize"
             :total="page4.totalResult"
@@ -185,7 +183,7 @@ export default {
             :current-page.sync="page5.currentPage"
             :page-size.sync="page5.pageSize"
             :total="page5.totalResult"
-            :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
           </vxe-pager>
         </p>
 

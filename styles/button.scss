@@ -103,14 +103,14 @@ $btnThemeList: (
     height: $vxe-button-height-default;
     line-height: 1;
     border: 1px solid $vxe-input-border-color;
-    border-radius: 0.2em;
+    border-radius: 0.25em;
     &:not(.is--disabled) {
       &:hover {
         color: lighten($vxe-primary-color, 6%);
       }
       &:focus {
         border-color: $vxe-primary-color;
-        box-shadow: 0 0 0.2em 0 $vxe-primary-color;
+        box-shadow: 0 0 0.25em 0 $vxe-primary-color;
       }
       &:active {
         color: darken($vxe-primary-color, 3%);
@@ -264,7 +264,7 @@ $btnThemeList: (
 .vxe-button--dropdown-wrapper {
   padding: 5px;
   background-color: #fff;
-  border-radius: 4px;
+  border-radius: 0.25em;
   border: 1px solid $vxe-input-border-color;
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   & > .vxe-button {
