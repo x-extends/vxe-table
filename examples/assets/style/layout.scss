@@ -1,6 +1,9 @@
+@import './variable.scss';
+
 body {
   color: #000;
   font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
+  filter: grayscale(100%);
   * {
     box-sizing: border-box;
   }
@@ -8,7 +11,7 @@ body {
     list-style: none;
   }
   .link {
-    color: #409eff;
+    color: $themeColor;
     text-decoration: none;
     &:hover {
       text-decoration: underline;
@@ -52,7 +55,7 @@ body,
   }
   p {
     &.tip {
-      border-left: 4px solid #409eff;
+      border-left: 4px solid $themeColor;
       padding: 12px 24px 12px 30px;
       margin: 2em 0;
       background-color: #f8f8f8;
@@ -89,7 +92,7 @@ body,
     padding: 5px 0;
     flex-shrink: 0;
     a {
-      color: #409eff;
+      color: $themeColor;
       text-decoration: none;
       cursor: pointer;
     }
@@ -179,6 +182,12 @@ body,
           font-weight: 700;
           margin: 0 6px;
         }
+        .stable-select {
+          width: 70px;
+        }
+        .latest-select {
+          width: 105px;
+        }
       }
       .search-input {
         height: 34px;
@@ -243,7 +252,7 @@ body,
         line-height: 30px;
         &.router-link-active,
         &:hover {
-          color: #409eff;
+          color: $themeColor;
         }
         &.router-link-active {
           font-size: 16px;
@@ -314,14 +323,14 @@ body,
   background-color: #fff;
   cursor: pointer;
   &:active {
-    border-color: #3a8ee6;
+    border-color: $themeColor;
   }
 }
 
 .demo-code {
   cursor: pointer;
   font-size: 15px;
-  color: #409eff;
+  color: $themeColor;
   font-weight: bold;
   text-align: center;
   user-select: none;

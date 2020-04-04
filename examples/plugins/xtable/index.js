@@ -27,7 +27,6 @@ import {
   Export,
   Resize
 } from '../../../packages/vxe-table'
-import '../../../styles/index.scss'
 
 // import VXETablePluginElement from '../../../../vxe-table-plugin-element/index.js'
 // import VXETablePluginIView from '../../../../vxe-table-plugin-iview/index.js'

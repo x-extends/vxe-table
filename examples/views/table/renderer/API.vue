@@ -82,6 +82,10 @@ export default {
         {
           name: '$checkbox',
           desc: '模块-复选列表'
+        },
+        {
+          name: '$switch',
+          desc: '模块-开关'
         }
       ],
       tableData: [

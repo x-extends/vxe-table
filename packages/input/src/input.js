@@ -704,11 +704,17 @@ export default {
       return this.minuteList
     },
     inpAttrs () {
-      const { isDatePicker, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd, editable } = this
+      const { isDatePicker, isNumber, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd, editable } = this
+      let inputType = type
+      if (isDatePicker || (isPassword && showPwd)) {
+        inputType = 'text'
+      } else if (isNumber) {
+        inputType = 'number'
+      }
       const attrs = {
         name,
         form,
-        type: isDatePicker || (isPassword && showPwd) ? 'text' : type,
+        type: inputType,
         placeholder,
         maxlength,
         readonly: readonly || type === 'week' || !editable || this.dateOpts.editable === false,
