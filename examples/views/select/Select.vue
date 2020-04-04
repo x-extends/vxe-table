@@ -28,7 +28,7 @@
       <vxe-select v-model="value7" placeholder="请选择" clearable>
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value8" placeholder="分组" clearable>
+      <vxe-select v-model="value8" placeholder="分组" clearable transfer>
         <vxe-optgroup label="选项2">
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -52,7 +52,7 @@
         <vxe-option value="2" label="选项2" disabled></vxe-option>
         <vxe-option value="3" label="选项3"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value11" placeholder="禁用分组" clearable>
+      <vxe-select v-model="value11" placeholder="禁用分组" clearable transfer>
         <vxe-optgroup label="选项2" disabled>
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -81,7 +81,7 @@
       <vxe-select v-model="value12" placeholder="配置式" :options="list12"></vxe-select>
       <vxe-select v-model="value13" placeholder="分组配置式" :option-groups="list13"></vxe-select>
       <vxe-select v-model="value14" placeholder="禁用选项" :options="list14"></vxe-select>
-      <vxe-select v-model="value15" placeholder="禁用分组" :option-groups="list15"></vxe-select>
+      <vxe-select v-model="value15" placeholder="禁用分组" :option-groups="list15" transfer></vxe-select>
     </p>
 
     <pre>
@@ -211,7 +211,7 @@ export default {
           <vxe-select v-model="value7" placeholder="请选择" clearable>
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value8" placeholder="分组" clearable>
+          <vxe-select v-model="value8" placeholder="分组" clearable transfer>
             <vxe-optgroup label="选项2">
               <vxe-option value="2-1" label="选项2-1"></vxe-option>
               <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -235,7 +235,7 @@ export default {
             <vxe-option value="2" label="选项2" disabled></vxe-option>
             <vxe-option value="3" label="选项3"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value11" placeholder="禁用分组" clearable>
+          <vxe-select v-model="value11" placeholder="禁用分组" clearable transfer>
             <vxe-optgroup label="选项2" disabled>
               <vxe-option value="2-1" label="选项2-1"></vxe-option>
               <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -264,7 +264,7 @@ export default {
           <vxe-select v-model="value12" placeholder="配置式" :options="list12"></vxe-select>
           <vxe-select v-model="value13" placeholder="分组配置式" :option-groups="list13"></vxe-select>
           <vxe-select v-model="value14" placeholder="禁用选项" :options="list14"></vxe-select>
-          <vxe-select v-model="value15" placeholder="禁用分组" :option-groups="list15"></vxe-select>
+          <vxe-select v-model="value15" placeholder="禁用分组" :option-groups="list15" transfer></vxe-select>
         </p>
         `,
         `

@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils'
+import { getOptUniqueId } from './util'
 import { UtilTools } from '../../tools'
 
 const watch = {}
@@ -27,7 +27,7 @@ export default {
   },
   data () {
     return {
-      id: XEUtils.uniqueId('opt_')
+      id: getOptUniqueId()
     }
   },
   computed: {

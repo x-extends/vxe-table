@@ -1,20 +1,7 @@
-import XEUtils from 'xe-utils'
 import VxeInput from '../../input/src/input'
 import GlobalConfig from '../../conf'
+import { getOptkey, getOptid, getOptUniqueId } from './util'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
-
-function getOptkey (_vm) {
-  return _vm.optId || '_XID'
-}
-
-function getOptid (_vm, option) {
-  const optid = option[getOptkey(_vm)]
-  return optid ? encodeURIComponent(optid) : ''
-}
-
-function getOptUniqueId () {
-  return XEUtils.uniqueId('opt_')
-}
 
 function findOffsetOption (groupList, optionValue, isUpArrow) {
   let prevOption
@@ -82,7 +69,7 @@ function findOption (groupList, optionValue) {
   }
 }
 
-function renderOption (h, _vm, options, group) {
+export function renderOption (h, _vm, options, group) {
   const { optkey, value, currentValue, optionGroupProps = {}, optionProps = {} } = _vm
   const groupDisabled = optionGroupProps.disabled || 'disabled'
   const labelProp = optionProps.label || 'label'
@@ -118,7 +105,7 @@ function renderOption (h, _vm, options, group) {
   }) : []
 }
 
-function renderOptgroup (h, _vm) {
+export function renderOptgroup (h, _vm) {
   const { optkey, optionGroups, optionGroupProps = {} } = _vm
   const groupOptions = optionGroupProps.options || 'options'
   const groupLabel = optionGroupProps.label || 'label'
@@ -158,7 +145,7 @@ export default {
     optionGroups: Array,
     optionGroupProps: Object,
     size: String,
-    optId: String,
+    optId: { type: String, default: () => GlobalConfig.select.optId },
     optKey: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
   },
@@ -214,9 +201,9 @@ export default {
       this.updateCache()
       this.updateOptComps()
     }
+    GlobalEvent.on(this, 'syncwheel', this.handleSyncwheelEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
-    GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
   mounted () {
@@ -231,9 +218,9 @@ export default {
     }
   },
   destroyed () {
+    GlobalEvent.off(this, 'syncwheel')
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'keydown')
-    GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
@@ -295,7 +282,7 @@ export default {
         const optkey = getOptkey(this)
         const handleOptis = (item) => {
           if (!getOptid(this, item)) {
-            XEUtils.set(item, optkey, getOptUniqueId())
+            item[optkey] = getOptUniqueId()
           }
         }
         if (optionGroups) {
@@ -413,6 +400,21 @@ export default {
       this.changeEvent(evnt, selectValue)
       this.hideOptionPanel()
     },
+    handleSyncwheelEvent (evnt) {
+      const { $refs, $el, disabled, visiblePanel } = this
+      if (!disabled) {
+        if (visiblePanel) {
+          const hasSlef = DomTools.getEventTargetNode(evnt, $el).flag
+          if (hasSlef || DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
+            if (hasSlef) {
+              this.updatePlacement()
+            }
+          } else {
+            this.hideOptionPanel()
+          }
+        }
+      }
+    },
     handleGlobalMousedownEvent (evnt) {
       const { $refs, $el, disabled, visiblePanel } = this
       if (!disabled) {
@@ -455,11 +457,6 @@ export default {
         if (isDel && clearable && this.isActivated) {
           this.clearValueEvent(evnt, null)
         }
-      }
-    },
-    handleGlobalMousewheelEvent (evnt) {
-      if (!DomTools.getEventTargetNode(evnt, this.$el).flag && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
-        this.hideOptionPanel()
       }
     },
     handleGlobalBlurEvent () {
