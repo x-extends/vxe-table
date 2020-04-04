@@ -46,14 +46,10 @@
         <div class="header">
           <div v-if="stableVersionList.length" class="version-list">
             <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
-            <select>
-              <option v-for="(pack, index) in stableVersionList" :key="index">{{ pack.version }}</option>
-            </select>
+            <vxe-select class="stable-select" v-model="selectStableVersion" size="mini" :options="stableVersionList"></vxe-select>
             <template v-if="showBetaVetsion">
               <span class="title">{{  $t('app.body.label.latestVersion')}}</span>
-              <select>
-                <option v-for="(pack, index) in newBetsVersionList" :key="index">{{ pack.version }}</option>
-              </select>
+              <vxe-select class="latest-select" v-model="selectBetaVersion" size="mini" :options="newBetsVersionList"></vxe-select>
             </template>
           </div>
           <vxe-input clearable v-model="filterName" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
@@ -103,7 +99,9 @@ export default {
       filterName: '',
       apiList: [],
       tableData: [],
+      selectBetaVersion: null,
       betaVersionList: [],
+      selectStableVersion: null,
       stableVersionList: [],
       version: '3',
       usedJSHeapSize: 0,
@@ -1990,11 +1988,11 @@ export default {
       const { betaVersionList, stableVersionList } = this
       if (stableVersionList.length) {
         if (betaVersionList.length) {
-          const stableNums = stableVersionList[0].version.split('-')[0].split('.')
+          const stableNums = stableVersionList[0].value.split('-')[0].split('.')
           const stable1 = XEUtils.toNumber(stableNums[0])
           const stable2 = XEUtils.toNumber(stableNums[1])
           const stable3 = XEUtils.toNumber(stableNums[2])
-          const betaNums = betaVersionList[0].version.split('-')[0].split('.')
+          const betaNums = betaVersionList[0].value.split('-')[0].split('.')
           const beta1 = XEUtils.toNumber(betaNums[0])
           const beta2 = XEUtils.toNumber(betaNums[1])
           const beta3 = XEUtils.toNumber(betaNums[2])
@@ -2018,12 +2016,12 @@ export default {
     newBetsVersionList () {
       const { betaVersionList, stableVersionList } = this
       if (betaVersionList.length && stableVersionList.length) {
-        const stableNums = stableVersionList[0].version.split('-')[0].split('.')
+        const stableNums = stableVersionList[0].value.split('-')[0].split('.')
         const stable1 = XEUtils.toNumber(stableNums[0])
         const stable2 = XEUtils.toNumber(stableNums[1])
         const stable3 = XEUtils.toNumber(stableNums[2])
         return betaVersionList.filter(pack => {
-          const betaNums = pack.version.split('-')[0].split('.')
+          const betaNums = pack.value.split('-')[0].split('.')
           const beta1 = XEUtils.toNumber(betaNums[0])
           const beta2 = XEUtils.toNumber(betaNums[1])
           const beta3 = XEUtils.toNumber(betaNums[2])
@@ -2103,13 +2101,19 @@ export default {
         const betaVersionList = []
         versions.forEach(version => {
           if (/^2.\d{1,3}.\d{1,3}$/.test(version)) {
-            stableVersionList.push({ version })
+            stableVersionList.push({ label: version, value: version })
           } else if (/^2.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(version)) {
-            betaVersionList.push({ version })
+            betaVersionList.push({ label: version, value: version })
           }
         })
         this.stableVersionList = stableVersionList
         this.betaVersionList = betaVersionList
+        if (stableVersionList.length) {
+          this.selectStableVersion = stableVersionList[0].value
+        }
+        if (betaVersionList.length) {
+          this.selectBetaVersion = betaVersionList[0].value
+        }
       })
     },
     // 调用频率间隔 500 毫秒

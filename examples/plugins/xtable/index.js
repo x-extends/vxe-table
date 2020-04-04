@@ -29,7 +29,6 @@ import {
   Validator,
   Resize
 } from '../../../packages/vxe-table'
-import '../../../styles/index.scss'
 
 // import VXETablePluginElement from '../../../../vxe-table-plugin-element/test.js'
 // import VXETablePluginIView from '../../../../vxe-table-plugin-iview/test.js'
