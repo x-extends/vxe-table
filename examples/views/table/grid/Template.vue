@@ -98,6 +98,15 @@
       <template v-slot:pager_left>
         <span class="select-message">已选中 {{ selectRecords.length }} 条数据</span>
       </template>
+
+      <!--自定义插槽 pager_right-->
+      <template v-slot:pager_right>
+        <img src="static/other/img1.gif" style="height: 30px;">
+        <img src="static/other/img1.gif" style="height: 30px;">
+        <img src="static/other/img2.gif" style="height: 30px;">
+        <img src="static/other/img1.gif" style="height: 30px;">
+        <img src="static/other/img1.gif" style="height: 30px;">
+      </template>
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
@@ -135,7 +144,8 @@ export default {
         currentPage: 1,
         pageSize: 10,
         slots: {
-          left: 'pager_left'
+          left: 'pager_left',
+          right: 'pager_right'
         }
       },
       tableData: [],
@@ -340,6 +350,15 @@ export default {
           <template v-slot:pager_left>
             <span class="select-message">已选中 {{ selectRecords.length }} 条数据</span>
           </template>
+
+          <!--自定义插槽 pager_right-->
+          <template v-slot:pager_right>
+            <img src="static/other/img1.gif" style="height: 30px;">
+            <img src="static/other/img1.gif" style="height: 30px;">
+            <img src="static/other/img2.gif" style="height: 30px;">
+            <img src="static/other/img1.gif" style="height: 30px;">
+            <img src="static/other/img1.gif" style="height: 30px;">
+          </template>
         </vxe-grid>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
@@ -364,7 +383,8 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 slots: {
-                  left: 'pager_left'
+                  left: 'pager_left',
+                  right: 'pager_right'
                 }
               },
               tableData: [],

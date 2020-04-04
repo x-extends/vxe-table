@@ -75,7 +75,7 @@
     "vxe-table-plugin-iview": "^1.8.2",
     "vxe-table-plugin-menus": "^1.3.1",
     "vxe-table-plugin-renderer": "^1.1.0",
-    "vxe-table-plugin-shortcut-key": "^1.2.1",
+    "vxe-table-plugin-shortcut-key": "^1.2.4",
     "vxe-table-plugin-virtual-tree": "0.1.2",
     "xe-ajax": "^4.0.3",
     "xe-ajax-mock": "^1.9.4",

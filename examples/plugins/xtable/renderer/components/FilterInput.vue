@@ -1,6 +1,6 @@
 <template>
   <div class="my-filter-input">
-    <input type="text" v-model="option.data" placeholder="支持回车筛选" @keyup.enter="enterEvent" @input="changeOptionEvent">
+    <vxe-input type="text" v-model="option.data" placeholder="支持回车筛选" @keyup="keyupEvent" @input="changeOptionEvent"></vxe-input>
   </div>
 </template>
 
@@ -38,10 +38,12 @@ export default {
       const checked = !!option.data
       $panel.changeOption(null, checked, option)
     },
-    enterEvent () {
+    keyupEvent ({ $event }) {
       const { params } = this
       const { $panel } = params
-      $panel.confirmFilter()
+      if ($event.keyCode === 13) {
+        $panel.confirmFilter()
+      }
     }
   }
 }
