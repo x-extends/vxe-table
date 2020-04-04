@@ -196,7 +196,7 @@ const GlobalConfig = {
     // buttons: []
   },
   button: {
-    transfer: true
+    // transfer: false
   },
   modal: {
     minWidth: 340,
