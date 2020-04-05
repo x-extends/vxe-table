@@ -161,6 +161,7 @@ const GlobalConfig = {
   },
   pager: {
     // size: null,
+    // autoHidden: false,
     // perfect: true,
     // pageSize: 10,
     // pagerCount: 7,

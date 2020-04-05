@@ -49,6 +49,10 @@ export declare class Pager extends VXETableModule {
    */
   perfect?: boolean;
   /**
+   * 当只有一页时隐藏
+   */
+  autoHidden?: boolean;
+  /**
    * 自定义图标
    */
   iconPrevPage?: string;
@@ -103,6 +107,10 @@ export interface PagerOptions {
    * 配套的样式
    */
   perfect?: boolean;
+  /**
+   * 当只有一页时隐藏
+   */
+  autoHidden?: boolean;
   /**
    * 自定义图标
    */
