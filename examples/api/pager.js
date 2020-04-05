@@ -116,6 +116,15 @@ const apis = [
         list: []
       },
       {
+        name: 'auto-hidden',
+        desc: '当只有一页时自动隐藏',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.pager.autoHidden',
+        list: []
+      },
+      {
         name: 'icon-prev-page',
         descKey: 'app.api.pager.desc.iconPrevPage',
         version: '',

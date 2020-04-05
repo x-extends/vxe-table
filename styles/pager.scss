@@ -9,6 +9,9 @@
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   text-align: right;
+  &.is--hidden {
+    display: none;
+  }
   &.align--left {
     text-align: left;
   }
