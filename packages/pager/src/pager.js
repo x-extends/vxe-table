@@ -28,6 +28,8 @@ export default {
     background: { type: Boolean, default: () => GlobalConfig.pager.background },
     // 配套的样式
     perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect },
+    // 当只有一页时隐藏
+    autoHidden: { type: Boolean, default: () => GlobalConfig.pager.autoHidden },
     // 自定义图标
     iconPrevPage: String,
     iconJumpPrev: String,
@@ -93,6 +95,7 @@ export default {
         'is--border': this.border,
         'is--background': this.background,
         'is--perfect': this.perfect,
+        'is--hidden': this.autoHidden && this.pageCount === 1,
         'is--loading': this.loading
       }]
     }, [

@@ -93,9 +93,9 @@
               autoLoad: true,
               message: true,
               props: {
-                list: null,
-                result: 'result',
-                total: 'page.total'
+                list: null, // 用于列表，读取响应数据
+                result: 'result', // 用于分页，读取响应数据
+                total: 'page.total' // 用于分页，读取总条数
               }
               // beforeItem: null,
               // beforeColumn: null,
@@ -107,14 +107,9 @@
               // afterSave: null
             }
           },
-          tooltip: {
-            // size: null,
-            trigger: 'hover',
-            theme: 'dark',
-            leaveDelay: 300
-          },
           pager: {
             // size: null,
+            // autoHidden: false,
             // perfect: true,
             // pageSize: 10,
             // pagerCount: 7,
@@ -184,9 +179,7 @@
             marginSize: 8,
             dblclickZoom: true,
             showTitleOverflow: true,
-            animat: true,
-            // storage: false,
-            storageKey: 'VXE_MODAL_POSITION'
+            // storage: false
           },
           // 集成国际化（将对列头、校验提示..进行自动翻译）
           // translate: : key => i18n.t(key)
