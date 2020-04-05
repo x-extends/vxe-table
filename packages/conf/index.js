@@ -1,81 +1,85 @@
 const GlobalConfig = {
-  // keepSource: false,
-  // showOverflow: null,
-  // showHeaderOverflow: null,
-  // resizeInterval: 500,
-  // size: null,
-  // resizable: false,
-  // stripe: false,
-  // border: false,
-  // radioConfig: {
-  //   trigger: 'default'
-  // },
-  // checkboxConfig: {
-  //   trigger: 'default'
-  // },
-  // sortConfig: {
-  //   remote: false,
-  //   trigger: 'default',
-  //   orders: ['asc', 'desc', null]
-  // },
-  // filterConfig: {
-  //   remote: false
-  // },
-  // expandConfig: {
-  //   trigger: 'default'
-  // },
-  // treeConfig: {
-  //   children: 'children',
-  //   hasChild: 'hasChild',
-  //   indent: 20
-  // },
-  // tooltipConfig: {
-  //   theme: 'dark'
-  // },
-  // validConfig: {
-  //   message: 'default'
-  // },
-  // editConfig: {
-  //   mode: 'cell'
-  // },
-  // contextMenu: {
-  //   visibleMethod () {}
-  // },
-  fit: true,
-  emptyCell: '　',
-  showHeader: true,
-  zIndex: 100,
-  // rowId: '_XID', // 行数据的唯一主键字段名
+  // size: null, // 全局尺寸
+  zIndex: 100, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
-  importConfig: {
-    modes: ['insert', 'covering']
-  },
-  exportConfig: {
-    isPrint: true,
-    modes: ['current', 'selected']
-  },
-  optimization: {
-    animat: true,
-    // cloak: false,
-    delayHover: 250,
-    // rHeights: {
-    //   default: 48,
-    //   medium: 44,
-    //   small: 40,
-    //   mini: 36
+  emptyCell: '　',
+  table: {
+    fit: true,
+    showHeader: true,
+    // keepSource: false,
+    // showOverflow: null,
+    // showHeaderOverflow: null,
+    // resizeInterval: 500,
+    // size: null,
+    // zIndex: null,
+    // resizable: false,
+    // stripe: false,
+    // border: false,
+    // radioConfig: {
+    //   trigger: 'default'
     // },
-    scrollX: {
-      gt: 60
-      // oSize: 0,
-      // rSize: 0
-      // vSize: 0
+    // checkboxConfig: {
+    //   trigger: 'default'
+    // },
+    // sortConfig: {
+    //   remote: false,
+    //   trigger: 'default',
+    //   orders: ['asc', 'desc', null]
+    // },
+    // filterConfig: {
+    //   remote: false
+    // },
+    // expandConfig: {
+    //   trigger: 'default'
+    // },
+    // treeConfig: {
+    //   children: 'children',
+    //   hasChild: 'hasChild',
+    //   indent: 20
+    // },
+    // tooltipConfig: {
+    //   theme: 'dark'
+    // },
+    // validConfig: {
+    //   message: 'default'
+    // },
+    // editConfig: {
+    //   mode: 'cell'
+    // },
+    // contextMenu: {
+    //   visibleMethod () {}
+    // },
+    // rowId: '_XID', // 行数据的唯一主键字段名
+    importConfig: {
+      modes: ['insert', 'covering']
     },
-    scrollY: {
-      gt: 100
-      // oSize: 0,
-      // rSize: 0
-      // vSize: 0,
-      // rHeight: 0
+    exportConfig: {
+      isPrint: true,
+      modes: ['current', 'selected']
+    },
+    optimization: {
+      animat: true,
+      // cloak: false,
+      delayHover: 250,
+      // rHeights: {
+      //   default: 48,
+      //   medium: 44,
+      //   small: 40,
+      //   mini: 36
+      // },
+      scrollX: {
+        gt: 60
+        // oSize: 0,
+        // rSize: 0
+        // vSize: 0
+      },
+      scrollY: {
+        gt: 100
+        // oSize: 0,
+        // rSize: 0
+        // vSize: 0,
+        // rHeight: 0
+      }
     }
   },
   icon: {
@@ -130,6 +134,7 @@ const GlobalConfig = {
     btnLoading: 'vxe-icon--refresh roll'
   },
   grid: {
+    // size: null,
     proxyConfig: {
       autoLoad: true,
       message: true,
@@ -141,6 +146,7 @@ const GlobalConfig = {
       // beforeItem: null,
       // beforeColumn: null,
       // beforeQuery: null,
+      // afterQuery: null,
       // beforeDelete: null,
       // afterDelete: null,
       // beforeSave: null,
@@ -148,11 +154,13 @@ const GlobalConfig = {
     }
   },
   tooltip: {
+    // size: null,
     trigger: 'hover',
     theme: 'dark',
     leaveDelay: 300
   },
   pager: {
+    // size: null,
     // perfect: true,
     // pageSize: 10,
     // pagerCount: 7,
@@ -160,9 +168,11 @@ const GlobalConfig = {
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
   form: {
+    // size: null,
     // colon: false
   },
   input: {
+    // size: null,
     // transfer: false
     // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
     // labelFormat: '',
@@ -171,15 +181,18 @@ const GlobalConfig = {
     digits: 2
   },
   textarea: {
+    // size: null,
     // autosize: {
     //   minRows: 1,
     //   maxRows: 10
     // }
   },
   select: {
+    // size: null,
     // transfer: false
   },
   toolbar: {
+    // size: null,
     // import: {
     //   mode: 'covering'
     // },
@@ -196,9 +209,20 @@ const GlobalConfig = {
     // buttons: []
   },
   button: {
+    // size: null,
     // transfer: false
   },
+  radio: {
+    // size: null
+  },
+  checkbox: {
+    // size: null
+  },
+  switch: {
+    // size: null
+  },
   modal: {
+    // size: null,
     minWidth: 340,
     minHeight: 200,
     lockView: true,

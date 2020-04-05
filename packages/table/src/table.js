@@ -71,33 +71,33 @@ export default {
     // 表格的最大高度
     maxHeight: [Number, String],
     // 所有列是否允许拖动列宽调整大小
-    resizable: { type: Boolean, default: () => GlobalConfig.resizable },
+    resizable: { type: Boolean, default: () => GlobalConfig.table.resizable },
     // 是否带有斑马纹
-    stripe: { type: Boolean, default: () => GlobalConfig.stripe },
+    stripe: { type: Boolean, default: () => GlobalConfig.table.stripe },
     // 是否带有纵向边框
-    border: { type: [Boolean, String], default: () => GlobalConfig.border },
+    border: { type: [Boolean, String], default: () => GlobalConfig.table.border },
     // 表格的尺寸
-    size: { type: String, default: () => GlobalConfig.size },
+    size: { type: String, default: () => GlobalConfig.table.size || GlobalConfig.size },
     // 列的宽度是否自撑开（可能会被废弃的参数，不要使用）
-    fit: { type: Boolean, default: () => GlobalConfig.fit },
+    fit: { type: Boolean, default: () => GlobalConfig.table.fit },
     // 表格是否加载中
     loading: Boolean,
     // 所有的列对其方式
-    align: { type: String, default: () => GlobalConfig.align },
+    align: { type: String, default: () => GlobalConfig.table.align },
     // 所有的表头列的对齐方式
-    headerAlign: { type: String, default: () => GlobalConfig.headerAlign },
+    headerAlign: { type: String, default: () => GlobalConfig.table.headerAlign },
     // 所有的表尾列的对齐方式
-    footerAlign: { type: String, default: () => GlobalConfig.footerAlign },
+    footerAlign: { type: String, default: () => GlobalConfig.table.footerAlign },
     // 是否显示表头
-    showHeader: { type: Boolean, default: () => GlobalConfig.showHeader },
+    showHeader: { type: Boolean, default: () => GlobalConfig.table.showHeader },
     // 是否要高亮当前选中行
-    highlightCurrentRow: { type: Boolean, default: () => GlobalConfig.highlightCurrentRow },
+    highlightCurrentRow: { type: Boolean, default: () => GlobalConfig.table.highlightCurrentRow },
     // 鼠标移到行是否要高亮显示
-    highlightHoverRow: { type: Boolean, default: () => GlobalConfig.highlightHoverRow },
+    highlightHoverRow: { type: Boolean, default: () => GlobalConfig.table.highlightHoverRow },
     // 是否要高亮当前选中列
-    highlightCurrentColumn: { type: Boolean, default: () => GlobalConfig.highlightCurrentColumn },
+    highlightCurrentColumn: { type: Boolean, default: () => GlobalConfig.table.highlightCurrentColumn },
     // 鼠标移到列是否要高亮显示
-    highlightHoverColumn: { type: Boolean, default: () => GlobalConfig.highlightHoverColumn },
+    highlightHoverColumn: { type: Boolean, default: () => GlobalConfig.table.highlightHoverColumn },
     // 激活单元格编辑时是否高亮显示
     highlightCell: Boolean,
     // 是否显示表尾合计
@@ -133,11 +133,11 @@ export default {
     // 表尾合并行或列
     footerSpanMethod: Function,
     // 设置所有内容过长时显示为省略号
-    showOverflow: { type: [Boolean, String], default: () => GlobalConfig.showOverflow },
+    showOverflow: { type: [Boolean, String], default: () => GlobalConfig.table.showOverflow },
     // 设置表头所有内容过长时显示为省略号
-    showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.showHeaderOverflow },
+    showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.table.showHeaderOverflow },
     // 设置表尾所有内容过长时显示为省略号
-    showFooterOverflow: { type: [Boolean, String], default: () => GlobalConfig.showFooterOverflow },
+    showFooterOverflow: { type: [Boolean, String], default: () => GlobalConfig.table.showFooterOverflow },
     // 所有列宽度
     columnWidth: [Number, String],
     // 所有列最小宽度，把剩余宽度按比例分配
@@ -147,9 +147,9 @@ export default {
     // 主键配置
     columnKey: Boolean,
     rowKey: Boolean,
-    rowId: { type: String, default: () => GlobalConfig.rowId },
+    rowId: { type: String, default: () => GlobalConfig.table.rowId },
     zIndex: Number,
-    keepSource: { type: Boolean, default: () => GlobalConfig.keepSource },
+    keepSource: { type: Boolean, default: () => GlobalConfig.table.keepSource },
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: Boolean,
     // 是否自动根据状态属性去更新响应式表格宽高
@@ -377,10 +377,10 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     validOpts () {
-      return Object.assign({ message: 'default' }, GlobalConfig.validConfig, this.validConfig)
+      return Object.assign({ message: 'default' }, GlobalConfig.table.validConfig, this.validConfig)
     },
     optimizeOpts () {
-      return Object.assign({}, GlobalConfig.optimization, this.optimization)
+      return Object.assign({}, GlobalConfig.table.optimization, this.optimization)
     },
     rowHeightMaps () {
       return Object.assign({
@@ -391,31 +391,31 @@ export default {
       }, this.optimizeOpts.rHeights)
     },
     seqOpts () {
-      return Object.assign({ startIndex: 0 }, GlobalConfig.seqConfig, this.seqConfig)
+      return Object.assign({ startIndex: 0 }, GlobalConfig.table.seqConfig, this.seqConfig)
     },
     radioOpts () {
-      return Object.assign({}, GlobalConfig.radioConfig, this.radioConfig)
+      return Object.assign({}, GlobalConfig.table.radioConfig, this.radioConfig)
     },
     checkboxOpts () {
-      return Object.assign({}, GlobalConfig.checkboxConfig, this.checkboxConfig)
+      return Object.assign({}, GlobalConfig.table.checkboxConfig, this.checkboxConfig)
     },
     tooltipOpts () {
-      return Object.assign({ size: this.vSize, leaveDelay: 300 }, GlobalConfig.tooltipConfig, this.tooltipConfig)
+      return Object.assign({ size: this.vSize, leaveDelay: 300 }, GlobalConfig.table.tooltipConfig, this.tooltipConfig)
     },
     vaildTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
     },
     editOpts () {
-      return Object.assign({}, GlobalConfig.editConfig, this.editConfig)
+      return Object.assign({}, GlobalConfig.table.editConfig, this.editConfig)
     },
     sortOpts () {
-      return Object.assign({ orders: ['asc', 'desc', null] }, GlobalConfig.sortConfig, this.sortConfig)
+      return Object.assign({ orders: ['asc', 'desc', null] }, GlobalConfig.table.sortConfig, this.sortConfig)
     },
     filterOpts () {
-      return Object.assign({}, GlobalConfig.filterConfig, this.filterConfig)
+      return Object.assign({}, GlobalConfig.table.filterConfig, this.filterConfig)
     },
     mouseOpts () {
-      return Object.assign({}, GlobalConfig.mouseConfig, this.mouseConfig)
+      return Object.assign({}, GlobalConfig.table.mouseConfig, this.mouseConfig)
     },
     // 是否使用了分组表头
     isGroup () {
@@ -443,7 +443,7 @@ export default {
       return this.headerCtxMenu.length || this.bodyCtxMenu.length
     },
     ctxMenuOpts () {
-      return Object.assign({}, GlobalConfig.contextMenu, this.contextMenu)
+      return Object.assign({}, GlobalConfig.table.contextMenu, this.contextMenu)
     },
     ctxMenuList () {
       const rest = []
@@ -455,26 +455,26 @@ export default {
       return rest
     },
     exportOpts () {
-      return Object.assign({}, GlobalConfig.exportConfig, this.exportConfig)
+      return Object.assign({}, GlobalConfig.table.exportConfig, this.exportConfig)
     },
     importOpts () {
-      return Object.assign({}, GlobalConfig.importConfig, this.importConfig)
+      return Object.assign({}, GlobalConfig.table.importConfig, this.importConfig)
     },
     printOpts () {
-      return Object.assign({}, GlobalConfig.printConfig, this.printConfig)
+      return Object.assign({}, GlobalConfig.table.printConfig, this.printConfig)
     },
     expandOpts () {
-      return Object.assign({}, GlobalConfig.expandConfig, this.expandConfig)
+      return Object.assign({}, GlobalConfig.table.expandConfig, this.expandConfig)
     },
     treeOpts () {
       return Object.assign({
         children: 'children',
         hasChild: 'hasChild',
         indent: 20
-      }, GlobalConfig.treeConfig, this.treeConfig)
+      }, GlobalConfig.table.treeConfig, this.treeConfig)
     },
     emptyOpts () {
-      return Object.assign({}, GlobalConfig.emptyRender, this.emptyRender)
+      return Object.assign({}, GlobalConfig.table.emptyRender, this.emptyRender)
     },
     cellOffsetWidth () {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1

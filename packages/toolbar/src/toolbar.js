@@ -78,7 +78,7 @@ export default {
     custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     perfect: { type: Boolean, default: () => GlobalConfig.toolbar.perfect },
-    size: String
+    size: { type: String, default: () => GlobalConfig.toolbar.size || GlobalConfig.size }
   },
   inject: {
     $xegrid: {

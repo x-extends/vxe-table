@@ -1,9 +1,10 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+
 export default {
   name: 'VxePager',
   props: {
-    size: String,
+    size: { type: String, default: () => GlobalConfig.pager.size || GlobalConfig.size },
     // 自定义布局
     layouts: { type: Array, default: () => GlobalConfig.pager.layouts || ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] },
     // 当前页

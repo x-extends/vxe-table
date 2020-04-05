@@ -44,7 +44,7 @@ export default {
   props: {
     loading: Boolean,
     data: Object,
-    size: String,
+    size: { type: String, default: () => GlobalConfig.form.size || GlobalConfig.size },
     span: [String, Number],
     align: String,
     titleAlign: String,
