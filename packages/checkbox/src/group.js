@@ -1,8 +1,10 @@
+import GlobalConfig from '../../conf'
+
 export default {
   name: 'VxeCheckboxGroup',
   props: {
     value: Array,
-    size: String
+    size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
   provide () {
     return {

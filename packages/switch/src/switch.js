@@ -1,4 +1,5 @@
 import { UtilTools, DomTools } from '../../tools'
+import GlobalConfig from '../../conf'
 
 const browse = DomTools.browse
 
@@ -7,7 +8,7 @@ export default {
   props: {
     value: [String, Number, Boolean],
     disabled: Boolean,
-    size: String,
+    size: { type: String, default: () => GlobalConfig.switch.size || GlobalConfig.size },
     onLabel: String,
     offLabel: String,
     onValue: { type: [String, Number, Boolean], default: true },

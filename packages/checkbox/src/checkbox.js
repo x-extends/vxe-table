@@ -1,4 +1,5 @@
 import { UtilTools } from '../../tools'
+import GlobalConfig from '../../conf'
 
 export default {
   name: 'VxeCheckbox',
@@ -9,7 +10,7 @@ export default {
     title: [String, Number],
     content: [String, Number],
     disabled: Boolean,
-    size: String
+    size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
   inject: {
     $xegroup: {

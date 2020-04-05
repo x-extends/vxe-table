@@ -6,7 +6,7 @@ export default {
   name: 'VxeButton',
   props: {
     type: String,
-    size: String,
+    size: { type: String, default: () => GlobalConfig.button.size || GlobalConfig.size },
     name: [String, Number],
     content: String,
     placement: String,

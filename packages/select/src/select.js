@@ -144,7 +144,7 @@ export default {
     optionProps: Object,
     optionGroups: Array,
     optionGroupProps: Object,
-    size: String,
+    size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
     optId: { type: String, default: () => GlobalConfig.select.optId },
     optKey: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }

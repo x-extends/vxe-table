@@ -18,7 +18,7 @@ export default {
     autosize: [Boolean, Object],
     form: String,
     resize: { type: String, default: () => GlobalConfig.textarea.resize },
-    size: String
+    size: { type: String, default: () => GlobalConfig.textarea.size || GlobalConfig.size }
   },
   computed: {
     vSize () {

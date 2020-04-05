@@ -6,7 +6,7 @@ export default {
   name: 'VxeTooltip',
   props: {
     value: Boolean,
-    size: String,
+    size: { type: String, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
     trigger: { type: String, default: () => GlobalConfig.tooltip.trigger },
     theme: { type: String, default: () => GlobalConfig.tooltip.theme },
     content: [String, Function],

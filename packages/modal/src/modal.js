@@ -41,7 +41,7 @@ export default {
     storage: { type: Boolean, default: () => GlobalConfig.modal.storage },
     storageKey: { type: String, default: () => GlobalConfig.modal.storageKey },
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
-    size: String,
+    size: { type: String, default: () => GlobalConfig.modal.size || GlobalConfig.size },
     slots: Object,
     events: Object
   },
