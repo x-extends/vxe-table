@@ -597,7 +597,7 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      const { visibleColumn, tableFullData, treeConfig, treeOpts } = this
+      const { visibleColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
       const opts = Object.assign({
         // filename: '',
         // sheetName: '',
@@ -616,7 +616,7 @@ export default {
         // exportMethod: null,
         // 在 v3.0 中废弃 type=selection
         columnFilterMethod: options && options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property
-      }, GlobalConfig.export, options)
+      }, exportOpts, options)
       if (!opts.filename) {
         opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
@@ -678,7 +678,7 @@ export default {
       return Promise.resolve()
     },
     _importData (options) {
-      const opts = Object.assign({}, GlobalConfig.import, options)
+      const opts = Object.assign({}, this.importOpts, options)
       const rest = new Promise((resolve, reject) => {
         this._importResolve = resolve
         this._importReject = reject

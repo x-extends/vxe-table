@@ -125,12 +125,13 @@ Object.keys(Table.methods).forEach(name => {
 export default {
   name: 'VxeGrid',
   props: {
+    ...Table.props,
     columns: Array,
     pagerConfig: [Boolean, Object],
     proxyConfig: Object,
     toolbar: [Boolean, Object],
     formConfig: [Boolean, Object],
-    ...Table.props
+    size: { type: String, default: () => GlobalConfig.grid.size || GlobalConfig.size }
   },
   provide () {
     return {

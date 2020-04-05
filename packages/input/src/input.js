@@ -472,7 +472,7 @@ export default {
     maxlength: [String, Number],
     autocomplete: { type: String, default: 'off' },
     form: String,
-    size: String,
+    size: { type: String, default: () => GlobalConfig.input.size || GlobalConfig.size },
 
     // number、integer、float
     min: { type: [String, Number], default: null },
