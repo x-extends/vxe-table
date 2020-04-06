@@ -1,9 +1,21 @@
-import XEUtils from 'xe-utils'
+import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 
 const inputEventTypes = ['input', 'textarea', '$input', '$textarea']
 const defaultCompProps = { transfer: true }
+
+function getModelProp () {
+  return 'value'
+}
+
+function getModelEvent () {
+  return 'input'
+}
+
+function getChangeEvent (renderOpts) {
+  return inputEventTypes.indexOf(renderOpts.name) > -1 ? 'input' : 'change'
+}
 
 function parseDate (value, props) {
   return value && props.valueFormat ? XEUtils.toStringDate(value, props.valueFormat) : value
@@ -18,12 +30,13 @@ function getLabelFormatDate (value, props) {
   return getFormatDate(value, props, GlobalConfig.i18n(`vxe.input.date.labelFormat.${props.type}`))
 }
 
-function getEventUpdateType (renderOpts) {
-  return inputEventTypes.indexOf(renderOpts.name) > -1 ? 'input' : 'change'
+function getDefaultComponentName ({ name }) {
+  return `vxe-${name.replace('$', '')}`
 }
 
-function getDefaultComponentName ({ name }) {
-  return name.replace('$', 'vxe-')
+function handleConfirmFilter (params, checked, option) {
+  const { $panel } = params
+  $panel.changeOption({}, checked, option)
 }
 
 function getNativeAttrs ({ name, attrs }) {
@@ -33,52 +46,122 @@ function getNativeAttrs ({ name, attrs }) {
   return attrs
 }
 
-function getDefaultProps ({ $table }, { props }, defaultProps) {
-  return XEUtils.assign($table.vSize ? { size: $table.vSize } : {}, defaultCompProps, defaultProps, props)
+function getCellEditFilterProps (renderOpts, params, value, defaultProps) {
+  const { vSize } = params.$table
+  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [getModelProp(renderOpts)]: value })
 }
 
-function getEvents (renderOpts, params) {
+function getItemProps (renderOpts, params, value, defaultProps) {
+  const { vSize } = params.$form
+  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [getModelProp(renderOpts)]: value })
+}
+
+function getOns (renderOpts, params, inputFunc, changeFunc) {
   const { events } = renderOpts
+  const modelEvent = getModelEvent(renderOpts)
+  const changeEvent = getChangeEvent(renderOpts)
+  const isSameEvent = changeEvent === modelEvent
+  const ons = {}
+  XEUtils.objectEach(events, (func, key) => {
+    ons[key] = function (...args) {
+      func(params, ...args)
+    }
+  })
+  if (inputFunc) {
+    ons[modelEvent] = function (args1) {
+      inputFunc(args1)
+      if (events && events[modelEvent]) {
+        events[modelEvent](args1)
+      }
+      if (isSameEvent && changeFunc) {
+        changeFunc(args1)
+      }
+    }
+  }
+  if (!isSameEvent && changeFunc) {
+    ons[changeEvent] = function (...args) {
+      changeFunc(...args)
+      if (events && events[changeEvent]) {
+        events[changeEvent](params, ...args)
+      }
+    }
+  }
+  return ons
+}
+
+function getEditOns (renderOpts, params) {
   const { $table, row, column } = params
-  const type = getEventUpdateType(renderOpts)
-  const on = {
-    [type] (evnt) {
-      const cellValue = evnt.target.value
-      UtilTools.setCellValue(row, column, cellValue)
-      $table.updateStatus(params, cellValue)
-      if (events && events[type]) {
-        events[type](params, evnt)
-      }
-    }
-  }
-  if (events) {
-    return XEUtils.assign({}, XEUtils.objectMap(events, evntFn => function (...args) {
-      args = [params].concat(args)
-      evntFn(...args)
-    }), on)
-  }
-  return on
+  return getOns(renderOpts, params, (value) => {
+    // 处理 model 值双向绑定
+    XEUtils.set(row, column.property, value)
+  }, () => {
+    // 处理 change 事件相关逻辑
+    $table.updateStatus(params)
+  })
 }
 
-function getDefaultEvents (renderOpts, params) {
-  const { events } = renderOpts
-  const { $table } = params
-  const type = 'input'
-  const on = {
-    [type] (obj, evnt) {
-      $table.updateStatus(params)
-      if (events && events[type]) {
-        events[type](params, evnt)
-      }
+function getFilterOns (renderOpts, params, option) {
+  return getOns(renderOpts, params, (value) => {
+    // 处理 model 值双向绑定
+    option.data = value
+  }, () => {
+    handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+  })
+}
+
+function getItemOns (renderOpts, params) {
+  const { $form, data, property } = params
+  return getOns(renderOpts, params, (value) => {
+    // 处理 model 值双向绑定
+    XEUtils.set(data, property, value)
+  }, () => {
+    // 处理 change 事件相关逻辑
+    $form.updateStatus(params)
+  })
+}
+
+function isSyncCell (renderOpts, params) {
+  return renderOpts.immediate || renderOpts.type === 'visible' || params.$type === 'cell'
+}
+
+function getNativeEditOns (renderOpts, params) {
+  const { $table, row, column } = params
+  const { model } = column
+  return getOns(renderOpts, params, (evnt) => {
+    // 处理 model 值双向绑定
+    const cellValue = evnt.target.value
+    if (isSyncCell(renderOpts, params)) {
+      UtilTools.setCellValue(row, column, cellValue)
+    } else {
+      model.update = true
+      model.value = cellValue
     }
-  }
-  if (events) {
-    return XEUtils.assign({}, XEUtils.objectMap(events, evntFn => function (...args) {
-      args = [params].concat(args)
-      evntFn(...args)
-    }), on)
-  }
-  return on
+  }, (evnt) => {
+    // 处理 change 事件相关逻辑
+    const cellValue = evnt.target.value
+    $table.updateStatus(params, cellValue)
+  })
+}
+
+function getNativeFilterOns (renderOpts, params, option) {
+  return getOns(renderOpts, params, (evnt) => {
+    // 处理 model 值双向绑定
+    option.data = evnt.target.value
+  }, () => {
+    handleConfirmFilter(params, !XEUtils.eqNull(option.data), option)
+  })
+}
+
+function getNativeItemOns (renderOpts, params) {
+  const { $form, data, property } = params
+  return getOns(renderOpts, params, (evnt) => {
+    // 处理 model 值双向绑定
+    const itemValue = evnt.target.value
+    XEUtils.set(data, property, itemValue)
+  }, () => {
+    // 处理 change 事件相关逻辑
+    $form.updateStatus(params)
+  })
 }
 
 /**
@@ -89,52 +172,69 @@ function nativeEditRender (h, renderOpts, params) {
   const { row, column } = params
   const { name } = renderOpts
   const attrs = getNativeAttrs(renderOpts)
+  const cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
   return [
-    h('div', {
-      class: `vxe-${name}`
-    }, [
-      h(name, {
-        class: `vxe-${name}--inner`,
-        attrs,
-        domProps: {
-          value: UtilTools.getCellValue(row, column)
-        },
-        on: getEvents(renderOpts, params)
-      })
-    ])
+    h(name, {
+      class: `vxe-default-${name}`,
+      attrs,
+      domProps: {
+        value: cellValue
+      },
+      on: getNativeEditOns(renderOpts, params)
+    })
   ]
 }
 
 function defaultEditRender (h, renderOpts, params) {
   const { row, column } = params
   const cellValue = UtilTools.getCellValue(row, column)
-  const props = getDefaultProps(params, renderOpts)
   return [
     h(getDefaultComponentName(renderOpts), {
-      model: {
-        value: cellValue,
-        callback (value) {
-          UtilTools.setCellValue(row, column, value)
-        }
-      },
-      props,
-      on: getDefaultEvents(renderOpts, params)
+      props: getCellEditFilterProps(renderOpts, params, cellValue),
+      on: getEditOns(renderOpts, params)
     })
   ]
 }
 
 function defaultButtonEditRender (h, renderOpts, params) {
-  const props = getDefaultProps(params, renderOpts)
   return [
     h('vxe-button', {
-      props,
-      on: getDefaultEvents(renderOpts, params)
+      props: getCellEditFilterProps(renderOpts, params),
+      on: getOns(renderOpts, params)
     })
   ]
 }
 
 function defaultButtonsEditRender (h, renderOpts, params) {
   return renderOpts.children.map(childRenderOpts => defaultButtonEditRender(h, childRenderOpts, params)[0])
+}
+
+function renderNativeOptgroups (h, renderOpts, params, renderOptionsMethods) {
+  const { optionGroups, optionGroupProps = {} } = renderOpts
+  const groupOptions = optionGroupProps.options || 'options'
+  const groupLabel = optionGroupProps.label || 'label'
+  return optionGroups.map((group, gIndex) => {
+    return h('optgroup', {
+      key: gIndex,
+      domProps: {
+        label: group[groupLabel]
+      }
+    }, renderOptionsMethods(h, group[groupOptions], renderOpts, params))
+  })
+}
+
+function renderDefaultOptgroups (h, renderOpts, params, renderOptionsMethods) {
+  const { optionGroups, optionGroupProps = {} } = renderOpts
+  const groupOptions = optionGroupProps.options || 'options'
+  const groupLabel = optionGroupProps.label || 'label'
+  return optionGroups.map((group, gIndex) => {
+    return h('vxe-optgroup', {
+      key: gIndex,
+      props: {
+        label: group[groupLabel]
+      }
+    }, renderOptionsMethods(h, group[groupOptions], renderOpts, params))
+  })
 }
 
 /**
@@ -146,18 +246,19 @@ function renderNativeOptions (h, options, renderOpts, params) {
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
-  return options.map((item, index) => {
+  const cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
+  return options.map((option, oIndex) => {
     return h('option', {
+      key: oIndex,
       attrs: {
-        value: item[valueProp],
-        disabled: item[disabledProp]
+        value: option[valueProp],
+        disabled: option[disabledProp]
       },
       domProps: {
         /* eslint-disable eqeqeq */
-        selected: item[valueProp] == UtilTools.getCellValue(row, column)
-      },
-      key: index
-    }, item[labelProp])
+        selected: option[valueProp] == cellValue
+      }
+    }, option[labelProp])
   })
 }
 
@@ -170,125 +271,43 @@ function renderDefaultOptions (h, options, renderOpts, params) {
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
-  return options.map(item => {
+  return options.map((option, oIndex) => {
     return h('vxe-option', {
+      key: oIndex,
       props: {
-        value: item[valueProp],
-        label: item[labelProp],
-        disabled: item[disabledProp]
+        value: option[valueProp],
+        label: option[labelProp],
+        disabled: option[disabledProp]
       }
     })
   })
-}
-
-function renderNativeOptgroups (h, renderOpts, params) {
-  const { optionGroups, optionGroupProps = {} } = renderOpts
-  const groupOptions = optionGroupProps.options || 'options'
-  const groupLabel = optionGroupProps.label || 'label'
-  return optionGroups.map((group, gIndex) => {
-    return h('optgroup', {
-      domProps: {
-        label: group[groupLabel]
-      },
-      key: gIndex
-    }, renderNativeOptions(h, group[groupOptions], renderOpts, params))
-  })
-}
-
-function renderDefaultOptgroups (h, renderOpts, params, renderOptionsMethods) {
-  const { optionGroups, optionGroupProps = {} } = renderOpts
-  const groupOptions = optionGroupProps.options || 'options'
-  const groupLabel = optionGroupProps.label || 'label'
-  return optionGroups.map(group => {
-    return h('vxe-optgroup', {
-      props: {
-        label: group[groupLabel]
-      }
-    }, renderOptionsMethods(h, group[groupOptions], renderOpts, params))
-  })
-}
-
-function handleConfirmFilter (params, column, checked, item) {
-  const { $panel } = params
-  $panel[column.filterMultiple ? 'changeMultipleOption' : 'changeRadioOption']({}, checked, item)
-}
-
-function getNativeFilterEvents (item, renderOpts, params) {
-  const { column } = params
-  const { events } = renderOpts
-  const type = getEventUpdateType(renderOpts)
-  const on = {
-    [type] (evnt) {
-      item.data = evnt.target.value
-      handleConfirmFilter(params, column, !!item.data, item)
-      if (events && events[type]) {
-        events[type](params, evnt)
-      }
-    }
-  }
-  if (events) {
-    return XEUtils.assign({}, XEUtils.objectMap(events, evntFn => function (...args) {
-      args = [params].concat(args)
-      evntFn(...args)
-    }), on)
-  }
-  return on
-}
-
-function getDefaultFilterEvents (item, renderOpts, params) {
-  const { column } = params
-  const { events } = renderOpts
-  const type = 'input'
-  const on = {
-    [type] (evnt) {
-      handleConfirmFilter(params, column, !!item.data, item)
-      if (events && events[type]) {
-        events[type](params, evnt)
-      }
-    }
-  }
-  if (events) {
-    return XEUtils.assign({}, XEUtils.objectMap(events, evntFn => function (...args) {
-      args = [params].concat(args)
-      evntFn(...args)
-    }), on)
-  }
-  return on
 }
 
 function nativeFilterRender (h, renderOpts, params) {
   const { column } = params
   const { name } = renderOpts
   const attrs = getNativeAttrs(renderOpts)
-  return column.filters.map(item => {
-    return h('div', {
-      class: 'vxe-input--wrapper'
-    }, [
-      h(name, {
-        class: `vxe-${name}`,
-        attrs,
-        domProps: {
-          value: item.data
-        },
-        on: getNativeFilterEvents(item, renderOpts, params)
-      })
-    ])
+  return column.filters.map((option, oIndex) => {
+    return h(name, {
+      key: oIndex,
+      class: `vxe-default-${name}`,
+      attrs,
+      domProps: {
+        value: option.data
+      },
+      on: getNativeFilterOns(renderOpts, params, option)
+    })
   })
 }
 
 function defaultFilterRender (h, renderOpts, params) {
   const { column } = params
-  const props = getDefaultProps(renderOpts, renderOpts)
-  return column.filters.map(item => {
+  return column.filters.map((option, oIndex) => {
+    const optionValue = option.data
     return h(getDefaultComponentName(renderOpts), {
-      model: {
-        value: item.data,
-        callback (value) {
-          item.data = value
-        }
-      },
-      props,
-      on: getDefaultFilterEvents(item, renderOpts, params)
+      key: oIndex,
+      props: getCellEditFilterProps(renderOpts, renderOpts, optionValue),
+      on: getFilterOns(renderOpts, params, option)
     })
   })
 }
@@ -305,26 +324,19 @@ function nativeSelectEditRender (h, renderOpts, params) {
     h('select', {
       class: 'vxe-default-select',
       attrs: getNativeAttrs(renderOpts),
-      on: getEvents(renderOpts, params)
+      on: getNativeEditOns(renderOpts, params)
     },
-    renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
+    renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeOptions) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
   ]
 }
 
 function defaultSelectEditRender (h, renderOpts, params) {
   const { row, column } = params
   const cellValue = UtilTools.getCellValue(row, column)
-  const props = getDefaultProps(params, renderOpts)
   return [
     h(getDefaultComponentName(renderOpts), {
-      model: {
-        value: cellValue,
-        callback (value) {
-          UtilTools.setCellValue(row, column, value)
-        }
-      },
-      props,
-      on: getDefaultEvents(renderOpts, params)
+      props: getCellEditFilterProps(renderOpts, params, cellValue),
+      on: getEditOns(renderOpts, params)
     },
     renderOpts.optionGroups ? renderDefaultOptgroups(h, renderOpts, params, renderDefaultOptions) : renderDefaultOptions(h, renderOpts.options, renderOpts, params))
   ]
@@ -352,54 +364,6 @@ function getSelectCellValue (renderOpts, { row, column }) {
   return selectItem ? selectItem[labelProp] : cellValue
 }
 
-function getNativeFormEvents (renderOpts, params) {
-  const { $form, data, property } = params
-  const { events } = renderOpts
-  const type = getEventUpdateType(renderOpts)
-  const on = {
-    [type] (evnt) {
-      const itemValue = evnt.target.value
-      XEUtils.set(data, property, itemValue)
-      $form.updateStatus(params, itemValue)
-      if (events && events[type]) {
-        events[type](params, evnt)
-      }
-    }
-  }
-  if (events) {
-    return XEUtils.assign({}, XEUtils.objectMap(events, evntFn => function (...args) {
-      args = [params].concat(args)
-      evntFn(...args)
-    }), on)
-  }
-  return on
-}
-
-function getDefaultFormEvents (renderOpts, params) {
-  const { $form } = params
-  const { events } = renderOpts
-  const type = 'input'
-  const on = {
-    [type] ({ value: itemValue }, evnt) {
-      $form.updateStatus(params, itemValue)
-      if (events && events[type]) {
-        events[type](params, evnt)
-      }
-    }
-  }
-  if (events) {
-    return XEUtils.assign({}, XEUtils.objectMap(events, evntFn => function (...args) {
-      args = [params].concat(args)
-      evntFn(...args)
-    }), on)
-  }
-  return on
-}
-
-function getDefaultFormItemProps ({ $form }, { props }, defaultProps) {
-  return XEUtils.assign($form.vSize ? { size: $form.vSize } : {}, defaultCompProps, defaultProps, props)
-}
-
 /**
  * 渲染表单-项
  * 用于渲染原生的标签
@@ -408,15 +372,15 @@ function nativeItemRender (h, renderOpts, params) {
   const { data, property } = params
   const { name } = renderOpts
   const attrs = getNativeAttrs(renderOpts)
-  const cellValue = XEUtils.get(data, property)
+  const itemValue = XEUtils.get(data, property)
   return [
     h(name, {
       class: `vxe-default-${name}`,
       attrs,
       domProps: attrs && name === 'input' && (attrs.type === 'submit' || attrs.type === 'reset') ? null : {
-        value: cellValue
+        value: itemValue
       },
-      on: getNativeFormEvents(renderOpts, params)
+      on: getNativeItemOns(renderOpts, params)
     })
   ]
 }
@@ -424,27 +388,19 @@ function nativeItemRender (h, renderOpts, params) {
 function defaultItemRender (h, renderOpts, params) {
   const { data, property } = params
   const itemValue = XEUtils.get(data, property)
-  const props = getDefaultFormItemProps(params, renderOpts)
   return [
     h(getDefaultComponentName(renderOpts), {
-      model: {
-        value: itemValue,
-        callback (value) {
-          XEUtils.set(data, property, value)
-        }
-      },
-      props,
-      on: getDefaultFormEvents(renderOpts, params)
+      props: getItemProps(renderOpts, params, itemValue),
+      on: getItemOns(renderOpts, params)
     })
   ]
 }
 
 function defaultButtonItemRender (h, renderOpts, params) {
-  const props = getDefaultFormItemProps(params, renderOpts)
   return [
     h('vxe-button', {
-      props,
-      on: getDefaultFormEvents(renderOpts, params)
+      props: getItemProps(renderOpts, params),
+      on: getOns(renderOpts, params)
     })
   ]
 }
@@ -463,8 +419,9 @@ function renderNativeFormOptions (h, options, renderOpts, params) {
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
   const cellValue = XEUtils.get(data, property)
-  return options.map((item, index) => {
+  return options.map((item, oIndex) => {
     return h('option', {
+      key: oIndex,
       attrs: {
         value: item[valueProp],
         disabled: item[disabledProp]
@@ -472,8 +429,7 @@ function renderNativeFormOptions (h, options, renderOpts, params) {
       domProps: {
         /* eslint-disable eqeqeq */
         selected: item[valueProp] == cellValue
-      },
-      key: index
+      }
     }, item[labelProp])
   })
 }
@@ -496,24 +452,18 @@ function defaultFormItemRadioAndCheckboxRender (h, renderOpts, params) {
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
   const itemValue = XEUtils.get(data, property)
-  const props = getDefaultFormItemProps(params, renderOpts)
   const name = getDefaultComponentName(renderOpts)
   return [
     h(`${name}-group`, {
-      props,
-      model: {
-        value: itemValue,
-        callback (value) {
-          XEUtils.set(data, property, value)
-        }
-      },
-      on: getDefaultFormEvents(renderOpts, params)
-    }, options.map(option => {
+      props: getItemProps(renderOpts, params, itemValue),
+      on: getItemOns(renderOpts, params)
+    }, options.map((item, index) => {
       return h(name, {
+        key: index,
         props: {
-          label: option[valueProp],
-          content: option[labelProp],
-          disabled: option[disabledProp]
+          label: item[valueProp],
+          content: item[labelProp],
+          disabled: item[disabledProp]
         }
       })
     }))
@@ -541,17 +491,18 @@ const renderMap = {
     renderEdit: nativeSelectEditRender,
     renderDefault: nativeSelectEditRender,
     renderCell (h, renderOpts, params) {
-      getSelectCellValue(renderOpts, params)
+      return getSelectCellValue(renderOpts, params)
     },
     renderFilter (h, renderOpts, params) {
       const { column } = params
-      return column.filters.map(item => {
+      return column.filters.map((option, oIndex) => {
         return h('select', {
+          key: oIndex,
           class: 'vxe-default-select',
           attrs: getNativeAttrs(renderOpts),
-          on: getNativeFilterEvents(item, renderOpts, params)
+          on: getNativeFilterOns(renderOpts, params, option)
         },
-        renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
+        renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeOptions) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
       })
     },
     filterMethod: handleFilterMethod,
@@ -560,7 +511,7 @@ const renderMap = {
         h('select', {
           class: 'vxe-default-select',
           attrs: getNativeAttrs(renderOpts),
-          on: getNativeFormEvents(renderOpts, params)
+          on: getNativeItemOns(renderOpts, params)
         },
         renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeFormOptions) : renderNativeFormOptions(h, renderOpts.options, renderOpts, params))
       ]
@@ -615,17 +566,12 @@ const renderMap = {
     },
     renderFilter (h, renderOpts, params) {
       const { column } = params
-      const props = getDefaultProps(params, renderOpts)
-      return column.filters.map(item => {
+      return column.filters.map((option, oIndex) => {
+        const optionValue = option.data
         return h(getDefaultComponentName(renderOpts), {
-          model: {
-            value: item.data,
-            callback (value) {
-              item.data = value
-            }
-          },
-          props,
-          on: getDefaultFilterEvents(item, renderOpts, params)
+          key: oIndex,
+          props: getCellEditFilterProps(renderOpts, params, optionValue),
+          on: getFilterOns(renderOpts, params, option)
         },
         renderOpts.optionGroups ? renderDefaultOptgroups(h, renderOpts, params, renderDefaultOptions) : renderDefaultOptions(h, renderOpts.options, renderOpts, params))
       })
@@ -634,17 +580,10 @@ const renderMap = {
     renderItem (h, renderOpts, params) {
       const { data, property } = params
       const itemValue = XEUtils.get(data, property)
-      const props = getDefaultFormItemProps(params, renderOpts)
       return [
         h(getDefaultComponentName(renderOpts), {
-          model: {
-            value: itemValue,
-            callback (value) {
-              XEUtils.set(data, property, value)
-            }
-          },
-          props,
-          on: getDefaultFormEvents(renderOpts, params)
+          props: getItemProps(renderOpts, params, itemValue),
+          on: getItemOns(renderOpts, params)
         },
         renderOpts.optionGroups ? renderDefaultOptgroups(h, renderOpts, params, renderDefaultOptions) : renderDefaultOptions(h, renderOpts.options, renderOpts, params))
       ]

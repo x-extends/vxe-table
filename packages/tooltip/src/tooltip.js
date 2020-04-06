@@ -167,13 +167,12 @@ export default {
         return this.$nextTick().then(() => {
           const wrapperElem = $el
           if (wrapperElem) {
-            const clientHeight = wrapperElem.clientHeight
-            const clientWidth = XEUtils.toNumber(getComputedStyle(wrapperElem).width)
-            tipLeft = left + Math.floor((target.offsetWidth - clientWidth) / 2)
+            const offsetHeight = wrapperElem.offsetHeight
+            const offsetWidth = wrapperElem.offsetWidth
+            tipLeft = left + Math.floor((target.offsetWidth - offsetWidth) / 2)
             tipStore.style = {
               zIndex: zIndex || this.tipZindex,
-              width: `${clientWidth}px`,
-              top: `${top - clientHeight - 6}px`,
+              top: `${top - offsetHeight - 6}px`,
               left: `${tipLeft}px`
             }
             return this.$nextTick()
@@ -181,13 +180,13 @@ export default {
         }).then(() => {
           const wrapperElem = $el
           if (wrapperElem) {
-            const clientHeight = wrapperElem.clientHeight
-            const clientWidth = wrapperElem.clientWidth
+            const offsetHeight = wrapperElem.offsetHeight
+            const offsetWidth = wrapperElem.offsetWidth
             Object.assign(tipStore.style, {
-              top: `${top - clientHeight - 6}px`,
+              top: `${top - offsetHeight - 6}px`,
               left: `${tipLeft}px`
             })
-            if (top - clientHeight < scrollTop + 6) {
+            if (top - offsetHeight < scrollTop + 6) {
               tipStore.placement = 'bottom'
               tipStore.style.top = `${top + target.offsetHeight + 6}px`
             }
@@ -196,10 +195,10 @@ export default {
               tipLeft = scrollLeft + 6
               tipStore.arrowStyle.left = `${left > tipLeft + 16 ? left - tipLeft + 16 : 16}px`
               tipStore.style.left = `${tipLeft}px`
-            } else if (tipLeft + clientWidth > scrollLeft + visibleWidth) {
+            } else if (tipLeft + offsetWidth > scrollLeft + visibleWidth) {
               // 超出右边界
-              tipLeft = scrollLeft + visibleWidth - clientWidth - 6
-              tipStore.arrowStyle.left = `${clientWidth - Math.max(Math.floor((tipLeft + clientWidth - left) / 2), 22)}px`
+              tipLeft = scrollLeft + visibleWidth - offsetWidth - 6
+              tipStore.arrowStyle.left = `${offsetWidth - Math.max(Math.floor((tipLeft + offsetWidth - left) / 2), 22)}px`
               tipStore.style.left = `${tipLeft}px`
             }
           }

@@ -98,4 +98,5 @@ export * from './switch'
 export * from './export'
 export * from './resize'
 export * from './v-x-e-table'
+
 export default VXETable

@@ -104,7 +104,7 @@ export default {
           ],
           filterMultiple: false
         },
-        { field: 'amount', title: 'Amount', width: 100 },
+        { field: 'amount', title: 'Amount', width: 100, formatter: this.formatAmount },
         { field: 'updateDate', title: 'Update Date', width: 160, remoteSort: true, formatter: this.formatDate },
         { field: 'createDate', title: 'Create Date', width: 160, remoteSort: true, formatter: this.formatDate }
       ],
@@ -199,7 +199,7 @@ export default {
                   ],
                   filterMultiple: false
                 },
-                { field: 'amount', title: 'Amount', width: 100 },
+                { field: 'amount', title: 'Amount', width: 100, formatter: this.formatAmount },
                 { field: 'updateDate', title: 'Update Date', width: 160, remoteSort: true, formatter: this.formatDate },
                 { field: 'createDate', title: 'Create Date', width: 160, remoteSort: true, formatter: this.formatDate }
               ]
@@ -208,6 +208,9 @@ export default {
           methods: {
             searchEvent () {
               this.$refs.xGrid.commitProxy('reload')
+            },
+            formatAmount ({ cellValue }) {
+              return cellValue ? \`$\${XEUtils.commafy(cellValue, 2)}\` : ''
             },
             formatDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -226,6 +229,9 @@ export default {
   methods: {
     searchEvent () {
       this.$refs.xGrid.commitProxy('reload')
+    },
+    formatAmount ({ cellValue }) {
+      return cellValue ? `$${XEUtils.commafy(cellValue, 2)}` : ''
     },
     formatDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
