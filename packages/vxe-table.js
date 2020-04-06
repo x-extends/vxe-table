@@ -106,4 +106,5 @@ export * from './keyboard'
 export * from './validator'
 export * from './resize'
 export * from './table'
+
 export default VXETable

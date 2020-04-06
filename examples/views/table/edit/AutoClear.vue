@@ -13,7 +13,7 @@
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: { type: 'date' }}"></vxe-table-column>
       <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
       <vxe-table-column title="操作">
         <template v-slot="{ row }">
           <template v-if="$refs.xTable.isActiveByRow(row)">
@@ -58,7 +58,7 @@ export default {
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: { type: 'date' }}"></vxe-table-column>
           <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
           <vxe-table-column title="操作">
             <template v-slot="{ row }">
               <template v-if="$refs.xTable.isActiveByRow(row)">

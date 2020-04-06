@@ -213,8 +213,9 @@ function renderNativeOptgroups (h, renderOpts, params, renderOptionsMethods) {
   const { optionGroups, optionGroupProps = {} } = renderOpts
   const groupOptions = optionGroupProps.options || 'options'
   const groupLabel = optionGroupProps.label || 'label'
-  return optionGroups.map(group => {
+  return optionGroups.map((group, gIndex) => {
     return h('optgroup', {
+      key: gIndex,
       domProps: {
         label: group[groupLabel]
       }
@@ -226,8 +227,9 @@ function renderDefaultOptgroups (h, renderOpts, params, renderOptionsMethods) {
   const { optionGroups, optionGroupProps = {} } = renderOpts
   const groupOptions = optionGroupProps.options || 'options'
   const groupLabel = optionGroupProps.label || 'label'
-  return optionGroups.map(group => {
+  return optionGroups.map((group, gIndex) => {
     return h('vxe-optgroup', {
+      key: gIndex,
       props: {
         label: group[groupLabel]
       }
@@ -245,17 +247,18 @@ function renderNativeOptions (h, options, renderOpts, params) {
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
   const cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
-  return options.map(item => {
+  return options.map((option, oIndex) => {
     return h('option', {
+      key: oIndex,
       attrs: {
-        value: item[valueProp],
-        disabled: item[disabledProp]
+        value: option[valueProp],
+        disabled: option[disabledProp]
       },
       domProps: {
         /* eslint-disable eqeqeq */
-        selected: item[valueProp] == cellValue
+        selected: option[valueProp] == cellValue
       }
-    }, item[labelProp])
+    }, option[labelProp])
   })
 }
 
@@ -268,12 +271,13 @@ function renderDefaultOptions (h, options, renderOpts, params) {
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
-  return options.map(item => {
+  return options.map((option, oIndex) => {
     return h('vxe-option', {
+      key: oIndex,
       props: {
-        value: item[valueProp],
-        label: item[labelProp],
-        disabled: item[disabledProp]
+        value: option[valueProp],
+        label: option[labelProp],
+        disabled: option[disabledProp]
       }
     })
   })
@@ -283,8 +287,9 @@ function nativeFilterRender (h, renderOpts, params) {
   const { column } = params
   const { name } = renderOpts
   const attrs = getNativeAttrs(renderOpts)
-  return column.filters.map(option => {
+  return column.filters.map((option, oIndex) => {
     return h(name, {
+      key: oIndex,
       class: `vxe-default-${name}`,
       attrs,
       domProps: {
@@ -297,9 +302,10 @@ function nativeFilterRender (h, renderOpts, params) {
 
 function defaultFilterRender (h, renderOpts, params) {
   const { column } = params
-  return column.filters.map(option => {
+  return column.filters.map((option, oIndex) => {
     const optionValue = option.data
     return h(getDefaultComponentName(renderOpts), {
+      key: oIndex,
       props: getCellEditFilterProps(renderOpts, renderOpts, optionValue),
       on: getFilterOns(renderOpts, params, option)
     })
@@ -413,8 +419,9 @@ function renderNativeFormOptions (h, options, renderOpts, params) {
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
   const cellValue = XEUtils.get(data, property)
-  return options.map((item, index) => {
+  return options.map((item, oIndex) => {
     return h('option', {
+      key: oIndex,
       attrs: {
         value: item[valueProp],
         disabled: item[disabledProp]
@@ -422,8 +429,7 @@ function renderNativeFormOptions (h, options, renderOpts, params) {
       domProps: {
         /* eslint-disable eqeqeq */
         selected: item[valueProp] == cellValue
-      },
-      key: index
+      }
     }, item[labelProp])
   })
 }
@@ -451,12 +457,13 @@ function defaultFormItemRadioAndCheckboxRender (h, renderOpts, params) {
     h(`${name}-group`, {
       props: getItemProps(renderOpts, params, itemValue),
       on: getItemOns(renderOpts, params)
-    }, options.map(option => {
+    }, options.map((item, index) => {
       return h(name, {
+        key: index,
         props: {
-          label: option[valueProp],
-          content: option[labelProp],
-          disabled: option[disabledProp]
+          label: item[valueProp],
+          content: item[labelProp],
+          disabled: item[disabledProp]
         }
       })
     }))
@@ -488,8 +495,9 @@ const renderMap = {
     },
     renderFilter (h, renderOpts, params) {
       const { column } = params
-      return column.filters.map(option => {
+      return column.filters.map((option, oIndex) => {
         return h('select', {
+          key: oIndex,
           class: 'vxe-default-select',
           attrs: getNativeAttrs(renderOpts),
           on: getNativeFilterOns(renderOpts, params, option)
@@ -558,9 +566,10 @@ const renderMap = {
     },
     renderFilter (h, renderOpts, params) {
       const { column } = params
-      return column.filters.map(option => {
+      return column.filters.map((option, oIndex) => {
         const optionValue = option.data
         return h(getDefaultComponentName(renderOpts), {
+          key: oIndex,
           props: getCellEditFilterProps(renderOpts, params, optionValue),
           on: getFilterOns(renderOpts, params, option)
         },

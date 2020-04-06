@@ -145,7 +145,7 @@ export default {
             return XEUtils.toFixedString(cellValue, digits || 2)
           },
           // 转换 moment 类型为字符串
-          toMomentString (cellValue, format) {
+          toMomentString ({ cellValue }, format) {
             return cellValue ? cellValue.format(format) : ''
           }
         })
