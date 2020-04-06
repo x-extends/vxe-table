@@ -276,7 +276,7 @@ export default {
               this.tableForm.items[3].itemRender.options = sexList
             },
             formatAmount ({ cellValue }) {
-              return \`$\${XEUtils.commafy(cellValue, 2)}\`
+              return cellValue ? \`$\${XEUtils.commafy(cellValue, 2)}\` : ''
             },
             formatDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -349,7 +349,7 @@ export default {
       this.tableForm.items[3].itemRender.options = sexList
     },
     formatAmount ({ cellValue }) {
-      return `$${XEUtils.commafy(cellValue, 2)}`
+      return cellValue ? `$${XEUtils.commafy(cellValue, 2)}` : ''
     },
     formatDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')

@@ -238,6 +238,7 @@
     border: 1px solid $vxe-input-border-color;
     color: $vxe-font-color;
     transition: border .2s ease-in-out;
+    padding: 0 0.4em;
     &:focus {
       border: 1px solid $vxe-primary-color;
       outline: 0;

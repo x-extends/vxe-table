@@ -49,7 +49,9 @@
       <template v-slot:top>
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
-          <span>顶部模板！！！</span>
+          <span class="alert-message-content">
+            <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！</marquee>
+          </span>
         </div>
       </template>
 
@@ -90,13 +92,29 @@
       <template v-slot:bottom>
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
-          <span>底部模板！！！</span>
+          <span class="alert-message-content">
+            <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">前方高能！！！ 底部模板！！！ 底部模板！！！ 底部模板！！！前方高能！！！ 底部模板！！！ 底部模板！！！ 底部模板！！！</marquee>
+          </span>
         </div>
       </template>
 
       <!--自定义插槽 pager_left-->
       <template v-slot:pager_left>
-        <span class="select-message">已选中 {{ selectRecords.length }} 条数据</span>
+        <span class="page-left">
+          <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+          <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+          <vxe-button>修改</vxe-button>
+          <vxe-button>管理</vxe-button>
+          <vxe-button>删除</vxe-button>
+          <vxe-button size="small">
+            <template>更多操作</template>
+            <template v-slot:dropdowns>
+              <vxe-button type="text">批量修改</vxe-button>
+              <vxe-button type="text">批量管理</vxe-button>
+              <vxe-button type="text">批量删除</vxe-button>
+            </template>
+          </vxe-button>
+        </span>
       </template>
 
     </vxe-grid>
@@ -124,6 +142,8 @@ export default {
     return {
       showDetails: false,
       selectRow: null,
+      isAllChecked: false,
+      isIndeterminate: false,
       selectRecords: [],
       formData: {
         name: '',
@@ -305,7 +325,9 @@ export default {
           <template v-slot:top>
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
-              <span>顶部模板！！！</span>
+              <span class="alert-message-content">
+                <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！</marquee>
+              </span>
             </div>
           </template>
 
@@ -346,13 +368,29 @@ export default {
           <template v-slot:bottom>
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
-              <span>底部模板！！！</span>
+              <span class="alert-message-content">
+                <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">前方高能！！！ 底部模板！！！ 底部模板！！！ 底部模板！！！前方高能！！！ 底部模板！！！ 底部模板！！！ 底部模板！！！</marquee>
+              </span>
             </div>
           </template>
 
           <!--自定义插槽 pager_left-->
           <template v-slot:pager_left>
-            <span class="select-message">已选中 {{ selectRecords.length }} 条数据</span>
+            <span class="page-left">
+              <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+              <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+              <vxe-button>修改</vxe-button>
+              <vxe-button>管理</vxe-button>
+              <vxe-button>删除</vxe-button>
+              <vxe-button size="small">
+                <template>更多操作</template>
+                <template v-slot:dropdowns>
+                  <vxe-button type="text">批量修改</vxe-button>
+                  <vxe-button type="text">批量管理</vxe-button>
+                  <vxe-button type="text">批量删除</vxe-button>
+                </template>
+              </vxe-button>
+            </span>
           </template>
 
         </vxe-grid>
@@ -367,6 +405,8 @@ export default {
             return {
               showDetails: false,
               selectRow: null,
+              isAllChecked: false,
+              isIndeterminate: false,
               selectRecords: [],
               formData: {
                 name: '',
@@ -508,7 +548,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
           },
           methods: {
             searchEvent () {
@@ -528,7 +568,12 @@ export default {
               $panel.changeOption(evnt, !!option.data, option)
             },
             checkboxChangeEvent ({ records }) {
+              this.isAllChecked = this.$refs.xGrid.isAllCheckboxChecked()
+              this.isIndeterminate = this.$refs.xGrid.isCheckboxIndeterminate()
               this.selectRecords = records
+            },
+            changeAllEvent () {
+              this.$refs.xGrid.setAllCheckboxRow(this.isAllChecked)
             },
             footerMethod ({ columns, data }) {
               return [
@@ -545,21 +590,33 @@ export default {
         `,
         `
         .my-grid66 .alert-message {
-          padding: 8px 15px;
+          height: 40px;
+          display: flex;
+          align-items: center;
           margin: 10px 0;
           border-radius: 4px;
           background-color: #e6f7ff;
           border: 1px solid #91d5ff;
         }
         .my-grid66 .alert-message-icon {
+          width: 30px;
+          text-align: center;
           color: #409eff;
           margin-right: 8px;
         }
-        .my-grid66 .select-message {
+        .my-grid66 .alert-message-content {
+          flex-grow: 1;
+          padding-right: 20px;
+        }
+        .my-grid66 .page-left {
           position: absolute;
           left: 15px;
           top: 50%;
           transform: translateY(-50%);
+        }
+        .my-grid66 .select-count {
+          display: inline-block;
+          vertical-align: middle;
         }
         .my-grid66 .my-input {
           width: 100%;
@@ -593,7 +650,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -618,7 +675,12 @@ export default {
       $panel.changeOption(evnt, !!option.data, option)
     },
     checkboxChangeEvent ({ records }) {
+      this.isAllChecked = this.$refs.xGrid.isAllCheckboxChecked()
+      this.isIndeterminate = this.$refs.xGrid.isCheckboxIndeterminate()
       this.selectRecords = records
+    },
+    changeAllEvent () {
+      this.$refs.xGrid.setAllCheckboxRow(this.isAllChecked)
     },
     footerMethod ({ columns, data }) {
       return [
@@ -636,21 +698,33 @@ export default {
 
 <style scoped>
 .my-grid66 .alert-message {
-  padding: 8px 15px;
+  height: 40px;
+  display: flex;
+  align-items: center;
   margin: 10px 0;
   border-radius: 4px;
   background-color: #e6f7ff;
   border: 1px solid #91d5ff;
 }
 .my-grid66 .alert-message-icon {
+  width: 30px;
+  text-align: center;
   color: #409eff;
   margin-right: 8px;
 }
-.my-grid66 .select-message {
+.my-grid66 .alert-message-content {
+  flex-grow: 1;
+  padding-right: 20px;
+}
+.my-grid66 .page-left {
   position: absolute;
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
+}
+.my-grid66 .select-count {
+  display: inline-block;
+  vertical-align: middle;
 }
 .my-grid66 .my-input {
   width: 100%;

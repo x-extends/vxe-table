@@ -1587,7 +1587,7 @@ const Methods = {
         visible: true
       })
       if (tooltip) {
-        tooltip.toVisible(cell, UtilTools.formatText(content))
+        tooltip.toVisible(overflowElem, UtilTools.formatText(content))
       }
     }
     return this.$nextTick()
@@ -1613,6 +1613,12 @@ const Methods = {
    */
   isAllCheckboxChecked () {
     return this.isAllSelected
+  },
+  /**
+   * 判断复选框是否全选
+   */
+  isCheckboxIndeterminate () {
+    return this.isIndeterminate
   },
   /**
    * 获取复选框半选状态的行数据

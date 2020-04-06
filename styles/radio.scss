@@ -3,11 +3,13 @@
 /*radio-group*/
 .vxe-radio-group {
   display: inline-block;
+  vertical-align: middle;
 }
 
 /*radio*/
 .vxe-radio {
   display: inline-block;
+  vertical-align: middle;
   white-space: nowrap;
   user-select: none;
   cursor: pointer;

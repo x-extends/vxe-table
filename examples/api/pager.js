@@ -226,60 +226,51 @@ const apis = [
     enum: '',
     defVal: '',
     list: [
-      {
-        name: 'prevPage()',
-        desc: '跳转到上一页',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'nextPage()',
-        desc: '跳转到下一页',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'prevJump()',
-        desc: '向上翻页',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'nextJump()',
-        desc: '向下翻页',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'jumpPage(currentPage)',
-        desc: '跳转到指定页',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: 'currentPage: number',
-        list: []
-      },
-      {
-        name: 'changePageSize(pageSize)',
-        desc: '更改每页大小',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: 'pageSize: number',
-        list: []
-      }
+      // {
+      //   name: 'prevPage()',
+      //   desc: '跳转到上一页',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'nextPage()',
+      //   desc: '跳转到下一页',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'prevJump()',
+      //   desc: '向上翻页',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'nextJump()',
+      //   desc: '向下翻页',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'jumpPage(currentPage)',
+      //   desc: '跳转到指定页',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: 'currentPage: number',
+      //   list: []
+      // }
     ]
   }
 ]
