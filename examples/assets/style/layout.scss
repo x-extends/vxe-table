@@ -71,6 +71,7 @@ body,
   border-bottom: 1px solid #dcdfe6;
   box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.12);
   display: flex;
+  background-color: #fbfbfb;
   &:after {
     content: "";
     display: block;
@@ -85,7 +86,9 @@ body,
     border-radius: 50%;
   }
   .title {
-    margin-right: 10px;
+    padding: 0 0.4em;
+    font-weight: 700;
+    color: #5A5A5A;
   }
   .left {
     font-size: 22px;
