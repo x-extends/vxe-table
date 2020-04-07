@@ -3,7 +3,8 @@
     <header class="page-header">
       <div class="left">
         <a href="https://github.com/xuliangzhan/vxe-table">
-          <span class="title">🐬vxe-table</span>
+          <img src="logo.png" width="18">
+          <span class="title">vxe-table</span>
         </a>
         <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
           <img src='https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark' alt='star'>
@@ -13,9 +14,6 @@
         </a>
         <a href="http://npm-stat.com/charts.html?package=vxe-table">
           <img src="https://img.shields.io/npm/dm/vxe-table.svg">
-        </a>
-        <a href="https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE">
-          <img src="https://img.shields.io/github/license/mashape/apistatus.svg">
         </a>
       </div>
       <div class="right">

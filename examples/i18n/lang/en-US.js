@@ -255,6 +255,7 @@ module.exports = {
       label: {
         on: 'ON',
         off: 'OFF',
+        plan: 'Plan',
         through: 'Through',
         copy: 'Copy',
         cut: 'Cut and paste',
