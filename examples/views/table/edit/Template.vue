@@ -14,8 +14,12 @@
     <vxe-table
       border
       show-overflow
+      ref="xTable"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}">
+      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}"
+      @checkbox-change="checkboxChangeEvent"
+      @checkbox-all="checkboxChangeEvent">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
         <template v-slot:edit="{ row }">
@@ -60,11 +64,42 @@
       </vxe-table-column>
     </vxe-table>
 
+    <vxe-pager
+      perfect
+      :current-page.sync="tablePage.currentPage"
+      :page-size.sync="tablePage.pageSize"
+      :total="tablePage.total"
+      :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+      <template v-slot:left>
+        <span class="page-left">
+          <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+          <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+          <vxe-button>修改</vxe-button>
+          <vxe-button>管理</vxe-button>
+          <vxe-button>删除</vxe-button>
+          <vxe-button size="small">
+            <template>更多操作</template>
+            <template v-slot:dropdowns>
+              <vxe-button type="text">批量修改</vxe-button>
+              <vxe-button type="text">批量管理</vxe-button>
+              <vxe-button type="text">批量删除</vxe-button>
+            </template>
+          </vxe-button>
+        </span>
+      </template>
+      <template v-slot:right>
+        <img src="static/other/img1.gif" height="34">
+        <img src="static/other/img1.gif" height="34">
+        <img src="static/other/img1.gif" height="34">
+      </template>
+    </vxe-pager>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -75,14 +110,26 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      isAllChecked: false,
+      isIndeterminate: false,
+      selectRecords: [],
       tableData: [],
+      tablePage: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10
+      },
       demoCodes: [
         `
         <vxe-table
           border
           show-overflow
+          ref="xTable"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}">
+          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}"
+          @checkbox-change="checkboxChangeEvent"
+          @checkbox-all="checkboxChangeEvent">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
             <template v-slot:edit="{ row }">
@@ -126,17 +173,74 @@ export default {
             </template>
           </vxe-table-column>
         </vxe-table>
+
+        <vxe-pager
+          perfect
+          :current-page.sync="tablePage.currentPage"
+          :page-size.sync="tablePage.pageSize"
+          :total="tablePage.total"
+          :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+          <template v-slot:left>
+            <span class="page-left">
+              <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+              <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+              <vxe-button>修改</vxe-button>
+              <vxe-button>管理</vxe-button>
+              <vxe-button>删除</vxe-button>
+              <vxe-button size="small">
+                <template>更多操作</template>
+                <template v-slot:dropdowns>
+                  <vxe-button type="text">批量修改</vxe-button>
+                  <vxe-button type="text">批量管理</vxe-button>
+                  <vxe-button type="text">批量删除</vxe-button>
+                </template>
+              </vxe-button>
+            </span>
+          </template>
+          <template v-slot:right>
+            <img src="static/other/img1.gif" height="34">
+            <img src="static/other/img1.gif" height="34">
+            <img src="static/other/img1.gif" height="34">
+          </template>
+        </vxe-pager>
         `,
         `
         export default {
           data () {
             return {
-              tableData: []
+              isAllChecked: false,
+              isIndeterminate: false,
+              selectRecords: [],
+              tableData: [],
+              tablePage: {
+                total: 0,
+                currentPage: 1,
+                pageSize: 10
+              }
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
+          },
+          methods: {
+            checkboxChangeEvent ({ records }) {
+              this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()
+              this.isIndeterminate = this.$refs.xTable.isCheckboxIndeterminate()
+              this.selectRecords = records
+            },
+            changeAllEvent () {
+              this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
+            }
           }
+        }
+        `,
+        `
+        .page-left {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
         }
         `
       ]
@@ -149,6 +253,26 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    checkboxChangeEvent ({ records }) {
+      this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()
+      this.isIndeterminate = this.$refs.xTable.isCheckboxIndeterminate()
+      this.selectRecords = records
+    },
+    changeAllEvent () {
+      this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
+    }
   }
 }
 </script>
+
+<style scoped>
+.page-left {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+</style>
