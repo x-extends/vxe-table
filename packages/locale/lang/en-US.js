@@ -6,6 +6,7 @@ export default {
       cellEditRender: 'The renderer "cell-render" and "edit-render" cannot be used together.',
       treeFixedExpand: 'The fixed column of the tree structure conflicts with the expanded row.',
       treeLineExpand: 'The node line of tree structure conflicts with the expanded line.',
+      treeErrProp: 'Tree structure does not support this parameter "{{0}}".',
       scrollXNotGroup: 'Horizontal Virtual scrolling does not support grouping headers',
       unableInsert: 'Unable to insert to the specified location.',
       useErr: 'Error installing "{{0}}" module, possibly in the wrong order, dependent modules need to be installed before Table.',
