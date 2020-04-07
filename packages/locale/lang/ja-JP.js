@@ -6,6 +6,7 @@ export default {
       cellEditRender: 'Rendererは"cell-render"と"edit-render"を同時に仕様できません',
       treeFixedExpand: 'ツリー構造の固定列は、展開された行と競合します',
       treeLineExpand: 'ツリー構造のノード行が展開された行と競合します',
+      treeErrProp: '树结构不支持该参数 "{{0}}"',
       scrollXNotGroup: '水平仮想スクロールはグループ化ヘッダーをサポートしていません',
       unableInsert: '指定された位置に挿入できない',
       useErr: '"{{0}}" モジュールをインストールする際にエラーが発生し,順序が正しくない可能性があり,依頼するモジュールはTableの前にインストールする必要がある',

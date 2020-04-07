@@ -826,6 +826,9 @@ export default {
     if (editConfig && mouseConfig && (mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
       UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
     }
+    if (treeConfig && this.stripe) {
+      UtilTools.error('vxe.error.treeErrProp', ['stripe'])
+    }
     ['header', 'body', 'footer'].forEach(name => {
       if (ctxMenuOpts[name] && ctxMenuOpts[name].visibleMethod) {
         UtilTools.warn('vxe.error.delProp', [`context-menu.${name}.visibleMethod`, 'context-menu.visibleMethod'])
