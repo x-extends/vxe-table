@@ -254,6 +254,7 @@ module.exports = {
       label: {
         on: '开',
         off: '关',
+        plan: '计划',
         through: '通過',
         copy: '複製',
         cut: '剪貼',

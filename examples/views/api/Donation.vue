@@ -10,7 +10,10 @@
       </a>
     </div>
     <div class="desc">
-      <div class="title">🐬 计划</div>
+      <div class="title">
+        <img src="logo.png" width="18">
+        <span style="vertical-align: middle;padding-left: 0.4em;">{{ $t('app.body.label.plan') }}</span>
+      </div>
       <ul class="plan">
         <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v1') }}</li>
         <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v2') }}</li>

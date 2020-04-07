@@ -19,13 +19,13 @@
   * 模块化表格、按需加载、扩展接口
   * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能  
 
-* 计划
+* [计划](#donation)
   * [x] v1.0 100% 实现表格的一切实用的功能
   * [x] v2.0 &nbsp;100% 性能优化，同时兼具功能与性能
   * [x] v3.0 &nbsp;&nbsp;50% 内部重构，不再支持 IE，渲染性能提升
   * [ ] v4.0 &nbsp;&nbsp;0% 基于 Vue3 重构，渲染性能提升
 
-🐬 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
+👉 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
 
 ## Browser Support
 
