@@ -1579,7 +1579,7 @@ const Methods = {
    */
   handleTooltip (evnt, cell, overflowElem, column, row) {
     const tooltip = this.$refs.tooltip
-    const content = overflowElem.textContent
+    const content = overflowElem.innerText
     if (content && overflowElem.scrollWidth > overflowElem.clientWidth) {
       Object.assign(this.tooltipStore, {
         row,
