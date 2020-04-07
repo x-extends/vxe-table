@@ -73,7 +73,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Validate（数据校验）
 * [x] Data Proxy（数据代理）
 * [x] Keyboard navigation（键盘导航）
-* [x] Modal window（模态窗口）
+* [x] Modal window（模态窗口） 
 
 ## Modules
 
