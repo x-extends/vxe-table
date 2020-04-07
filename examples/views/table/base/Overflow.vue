@@ -15,15 +15,15 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="名称"></vxe-table-column>
-      <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" width="160" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
-      <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title" show-footer-overflow>
+      <vxe-table-column field="address" title="内容和标题显示 tooltip" width="160" show-header-overflow show-overflow></vxe-table-column>
+      <vxe-table-column field="date" title="内容显示原生 title" show-overflow="title" show-footer-overflow>
         <template>
-          <span>111111111111 111111111111111111 22222222222222222222222222222222222</span>
+          <span>111111111111<br>换行换行换行换行换行<br>22222222222222222222222222222222222</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="rate" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
+      <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
         <template v-slot:header>
-          <span>33333333333333333333333333 5555555555555555555555555555555555555555555555</span>
+          <span>标题显示原生 title ___________________________</span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="address" title="Address" width="160" show-overflow></vxe-table-column>
@@ -48,10 +48,10 @@
       :tooltip-config="{theme: 'light'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="名称"></vxe-table-column>
-      <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" width="160" show-overflow="ellipsis"></vxe-table-column>
-      <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title" show-footer-overflow>
+      <vxe-table-column field="address" title="显示为省略号_____________" width="160" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
+      <vxe-table-column field="date" title="显示 tooltip" show-overflow show-footer-overflow>
         <template>
-          <span>111111111111 111111111111111111 22222222222222222222222222222222222</span>
+          <span>111111111111<br>换行换行换行换行换行<br>22222222222222222222222222222222222</span>
         </template>
       </vxe-table-column>
       <vxe-table-column title="基本信息">
@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -91,18 +90,19 @@ export default {
           :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-header-overflow show-overflow></vxe-table-column>
-          <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title">
+          <vxe-table-column field="name" title="名称"></vxe-table-column>
+          <vxe-table-column field="address" title="内容和标题显示 tooltip" width="160" show-header-overflow show-overflow></vxe-table-column>
+          <vxe-table-column field="date" title="内容显示原生 title" show-overflow="title" show-footer-overflow>
             <template>
-              <span>111111111111 111111111111111111 22222222222222222222222222222222222</span>
+              <span>111111111111<br>换行换行换行换行换行<br>22222222222222222222222222222222222</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="rate" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
+          <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
             <template v-slot:header>
-              <span>33333333333333333333333333 5555555555555555555555555555555555555555555555</span>
+              <span>标题显示原生 title ___________________________</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="address" title="Address" width="160" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -146,20 +146,21 @@ export default {
           :data="tableData"
           :tooltip-config="{theme: 'light'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="address" title="超过隐藏时显示为省略号————————————" show-overflow></vxe-table-column>
-          <vxe-table-column field="date" title="内容超过隐藏时显示为省略号并用原生 title 显示" show-overflow="title">
+          <vxe-table-column field="name" title="名称"></vxe-table-column>
+          <vxe-table-column field="address" title="显示为省略号_____________" width="160" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
+          <vxe-table-column field="date" title="显示 tooltip" show-overflow show-footer-overflow>
             <template>
-              <span>111111111111 111111111111111111 22222222222222222222222222222222222</span>
+              <span>111111111111<br>换行换行换行换行换行<br>22222222222222222222222222222222222</span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="基本信息">
-            <vxe-table-column field="rate" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title" show-footer-overflow>
+            <vxe-table-column field="rate" title="表头超过隐藏时显示为省略号并用原生 title 显示" show-header-overflow="title">
               <template v-slot:header>
                 <span>33333333333333333333333333 5555555555555555555555555555555555555555555555</span>
               </template>
             </vxe-table-column>
             <vxe-table-column title="详细信息">
-              <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="Address" width="160" show-overflow></vxe-table-column>
             </vxe-table-column>
           </vxe-table-column>
         </vxe-table>
@@ -175,7 +176,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods:{
-            footerMethod ({ columns, data }) {
+            footerMethod ({ columns }) {
               const footerData = [
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
@@ -185,7 +186,7 @@ export default {
                     return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
                   }
                   if (['rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return '老子不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行'
                   }
                   return null
                 })
@@ -207,7 +208,7 @@ export default {
     })
   },
   methods: {
-    footerMethod ({ columns, data }) {
+    footerMethod ({ columns }) {
       const footerData = [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
@@ -217,7 +218,7 @@ export default {
             return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
           }
           if (['rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return '老子不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行'
           }
           return null
         })
