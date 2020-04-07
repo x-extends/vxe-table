@@ -4,6 +4,7 @@
 .vxe-checkbox-group {
   display: inline-block;
   vertical-align: middle;
+  line-height: 1;
 }
 
 /*checkbox*/
@@ -12,6 +13,7 @@
   vertical-align: middle;
   white-space: nowrap;
   user-select: none;
+  line-height: 1;
   cursor: pointer;
   &+.vxe-checkbox {
     margin-left: 10px;
