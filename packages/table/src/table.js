@@ -625,6 +625,9 @@ export default {
     if (editConfig && mouseConfig && (mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
       UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
     }
+    if (treeConfig && this.stripe) {
+      UtilTools.error('vxe.error.treeErrProp', ['stripe'])
+    }
     // 检查是否有安装需要的模块
     let errorModuleName
     if (!VXETable._edit && this.editConfig) {

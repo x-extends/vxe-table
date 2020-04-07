@@ -6,6 +6,7 @@ export default {
       cellEditRender: '渲染器 "cell-render" 和 "edit-render" 不能同時使用',
       treeFixedExpand: '樹結構的固定列與展開行有衝突',
       treeLineExpand: '樹結構的節點線與展開行有衝突',
+      treeErrProp: '樹結構不支持該參數 "{{0}}"',
       scrollXNotGroup: '橫向虛擬滾動不支持分組表頭',
       unableInsert: '無法插入到指定位置',
       useErr: '安裝 "{{0}}" 模塊時發生錯誤，可能順序不正確，依賴的模塊需要在Table之前安裝',
