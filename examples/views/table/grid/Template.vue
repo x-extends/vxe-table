@@ -610,9 +610,10 @@ export default {
         }
         .my-grid66 .page-left {
           position: absolute;
-          left: 15px;
+          left: 10px;
           top: 50%;
           transform: translateY(-50%);
+          z-index: 10;
         }
         .my-grid66 .select-count {
           display: inline-block;
@@ -718,9 +719,10 @@ export default {
 }
 .my-grid66 .page-left {
   position: absolute;
-  left: 15px;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 10;
 }
 .my-grid66 .select-count {
   display: inline-block;

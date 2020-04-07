@@ -28,9 +28,13 @@
       border
       resizable
       show-footer
+      ref="xTable"
       height="500"
       :footer-method="footerMethod"
-      :data="tableData">
+      :data="tableData"
+      @checkbox-change="checkboxChangeEvent"
+      @checkbox-all="checkboxChangeEvent">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
         <template v-slot:header>
           <div class="first-col">
@@ -99,6 +103,36 @@
       </vxe-table-column>
     </vxe-table>
 
+    <vxe-pager
+      perfect
+      :current-page.sync="tablePage.currentPage"
+      :page-size.sync="tablePage.pageSize"
+      :total="tablePage.total"
+      :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+      <template v-slot:left>
+        <span class="page-left">
+          <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+          <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+          <vxe-button>修改</vxe-button>
+          <vxe-button>管理</vxe-button>
+          <vxe-button>删除</vxe-button>
+          <vxe-button size="small">
+            <template>更多操作</template>
+            <template v-slot:dropdowns>
+              <vxe-button type="text">批量修改</vxe-button>
+              <vxe-button type="text">批量管理</vxe-button>
+              <vxe-button type="text">批量删除</vxe-button>
+            </template>
+          </vxe-button>
+        </span>
+      </template>
+      <template v-slot:right>
+        <img src="static/other/img1.gif" height="34">
+        <img src="static/other/img1.gif" height="34">
+        <img src="static/other/img1.gif" height="34">
+      </template>
+    </vxe-pager>
+
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
       <template>{{ selectRow ? selectRow.text : '' }}</template>
     </vxe-modal>
@@ -124,7 +158,15 @@ export default {
       value2: '',
       showDetails: false,
       selectRow: null,
+      isAllChecked: false,
+      isIndeterminate: false,
+      selectRecords: [],
       tableData: [],
+      tablePage: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10
+      },
       demoCodes: [
         `
         <vxe-toolbar>
@@ -147,9 +189,13 @@ export default {
           border
           resizable
           show-footer
+          ref="xTable"
           height="500"
           :footer-method="footerMethod"
-          :data="tableData">
+          :data="tableData"
+          @checkbox-change="checkboxChangeEvent"
+          @checkbox-all="checkboxChangeEvent">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
             <template v-slot:header>
               <div class="first-col">
@@ -173,7 +219,7 @@ export default {
             <template v-slot:footer="{ items, itemIndex }">
               <span style="color: red">累计：{{ items[itemIndex] }}</span>
             </template>
-            <template v-slot:filter="{ column, context }">
+            <template v-slot:filter="{ $panel, column }">
               <template v-for="(option, index) in column.filters">
                 <input class="my-filter" type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, $panel)">
               </template>
@@ -218,6 +264,36 @@ export default {
           </vxe-table-column>
         </vxe-table>
 
+        <vxe-pager
+          perfect
+          :current-page.sync="tablePage.currentPage"
+          :page-size.sync="tablePage.pageSize"
+          :total="tablePage.total"
+          :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+          <template v-slot:left>
+            <span class="page-left">
+              <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+              <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+              <vxe-button>修改</vxe-button>
+              <vxe-button>管理</vxe-button>
+              <vxe-button>删除</vxe-button>
+              <vxe-button size="small">
+                <template>更多操作</template>
+                <template v-slot:dropdowns>
+                  <vxe-button type="text">批量修改</vxe-button>
+                  <vxe-button type="text">批量管理</vxe-button>
+                  <vxe-button type="text">批量删除</vxe-button>
+                </template>
+              </vxe-button>
+            </span>
+          </template>
+          <template v-slot:right>
+            <img src="static/other/img1.gif" height="34">
+            <img src="static/other/img1.gif" height="34">
+            <img src="static/other/img1.gif" height="34">
+          </template>
+        </vxe-pager>
+
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
           <template>{{ selectRow ? selectRow.text : '' }}</template>
         </vxe-modal>
@@ -230,7 +306,15 @@ export default {
               value2: '',
               showDetails: false,
               selectRow: null,
-              tableData: []
+              isAllChecked: false,
+              isIndeterminate: false,
+              selectRecords: [],
+              tableData: [],
+              tablePage: {
+                total: 0,
+                currentPage: 1,
+                pageSize: 10
+              }
             }
           },
           created () {
@@ -249,6 +333,14 @@ export default {
             showDetailEvent (row) {
               this.selectRow = row
               this.showDetails = true
+            },
+            checkboxChangeEvent ({ records }) {
+              this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()
+              this.isIndeterminate = this.$refs.xTable.isCheckboxIndeterminate()
+              this.selectRecords = records
+            },
+            changeAllEvent () {
+              this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
             },
             footerMethod ({ columns, data }) {
               return [
@@ -291,6 +383,13 @@ export default {
         .my-filter {
           margin: 10px;
         }
+        .page-left {
+          position: absolute;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+        }
         `
       ]
     }
@@ -316,6 +415,14 @@ export default {
     showDetailEvent (row) {
       this.selectRow = row
       this.showDetails = true
+    },
+    checkboxChangeEvent ({ records }) {
+      this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()
+      this.isIndeterminate = this.$refs.xTable.isCheckboxIndeterminate()
+      this.selectRecords = records
+    },
+    changeAllEvent () {
+      this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
     },
     footerMethod ({ columns, data }) {
       return [
@@ -358,5 +465,12 @@ export default {
 }
 .my-filter {
   margin: 10px;
+}
+.page-left {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
 }
 </style>
