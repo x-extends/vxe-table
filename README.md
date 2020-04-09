@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、模态窗口、自定义模板、贼灵活的配置项、扩展接口等...  
+一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...  
 
 * 设计理念
   * 面向现代浏览器，高效的简洁 API 设计
@@ -37,33 +37,31 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 * [x] Basic table （基础表格）
 * [x] Grid （高级表格）
-* [x] Size （尺寸）
 * [x] Striped （斑马线条纹）
-* [x] Table with border （带边框）
+* [x] Table with border （多种边框）
 * [x] Cell style （单元格样式）
 * [x] Column resizable （列宽拖动）
 * [x] Maximum table height （最大高度）
-* [x] Resize height and width （响应式宽高）
+* [x] Resize height and width （自适应宽高）
 * [x] Fixed column （固定列）
-* [x] Grouping table head （表头分组）
+* [x] Grouping table header （多级表头）
+* [x] Table footer （表尾数据）
 * [x] Highlight row and column （高亮行、列)
 * [x] Table sequence （序号)
-* [x] Radio （单选)
-* [x] Checkbox （多选）
+* [x] Radio （单选框)
+* [x] Checkbox （复选框）
 * [x] Select （下拉选项）
 * [x] Sorting （排序）
 * [x] Filter （筛选）
 * [x] Rowspan and colspan （合并行或列）
-* [x] Footer summary （表尾合计）
 * [x] Import （导入)
 * [x] Export （导出)
 * [x] Print （打印)
 * [x] Show/Hide column （显示/隐藏列）
 * [x] Loading （加载中）
-* [x] Formatted content （格式化内容）
-* [x] Custom template （自定义模板）
+* [x] Formatted cell （格式化内容）
+* [x] Slot/template （自定义插槽/模板）
 * [x] Context menu（快捷菜单）
-* [x] Virtual Scroller（虚拟滚动）
 * [x] Expandable row （展开行）
 * [x] Pager（分页）
 * [x] Form（表单）
@@ -73,7 +71,9 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Validate（数据校验）
 * [x] Data Proxy（数据代理）
 * [x] Keyboard navigation（键盘导航）
-* [x] Modal window（模态窗口）
+* [x] Modal（模态窗口）
+* [x] Renderer（渲染器）
+* [x] Virtual Scroller（虚拟滚动）
 
 ## Modules
 
