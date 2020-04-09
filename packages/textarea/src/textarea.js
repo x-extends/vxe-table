@@ -109,7 +109,7 @@ export default {
     },
     triggerEvent (evnt) {
       const { value } = this
-      this.$emit(evnt.type, { value, $event: evnt }, evnt)
+      this.$emit(evnt.type, { value, $event: evnt })
     },
     emitUpdate (value, evnt) {
       this.$emit('input', value)

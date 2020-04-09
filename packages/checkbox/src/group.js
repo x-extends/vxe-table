@@ -22,7 +22,7 @@ export default {
     }, this.$slots.default)
   },
   methods: {
-    handleChecked (params, evnt) {
+    handleChecked (params) {
       const { checked, label } = params
       const checklist = this.value || []
       const checkIndex = checklist.indexOf(label)
@@ -34,7 +34,7 @@ export default {
         checklist.splice(checkIndex, 1)
       }
       this.$emit('input', checklist)
-      this.$emit('change', Object.assign({ checklist }, params), evnt)
+      this.$emit('change', Object.assign({ checklist }, params))
     }
   }
 }

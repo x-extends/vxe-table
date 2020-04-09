@@ -174,6 +174,7 @@ export default {
         const domMousemove = document.onmousemove
         const domMouseup = document.onmouseup
         const trEleme = cell.parentNode
+        const { scrollTop, scrollLeft } = DomTools.getDomNode()
         const absPos = DomTools.getAbsolutePos(trEleme)
         const selectRecords = this.getCheckboxRecords()
         let lastRangeRows = []
@@ -184,12 +185,12 @@ export default {
           const offsetLeft = evnt.clientX - disX
           const offsetTop = evnt.clientY - disY
           const rangeHeight = Math.abs(offsetTop)
-          const rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.top)
+          const rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.boundingTop)
           checkboxRangeElem.style.display = 'block'
           checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
           checkboxRangeElem.style.height = `${rangeHeight}px`
-          checkboxRangeElem.style.left = `${disX + (offsetLeft > 0 ? 0 : offsetLeft)}px`
-          checkboxRangeElem.style.top = `${disY + (offsetTop > 0 ? 0 : offsetTop)}px`
+          checkboxRangeElem.style.left = `${scrollLeft + disX + (offsetLeft > 0 ? 0 : offsetLeft)}px`
+          checkboxRangeElem.style.top = `${scrollTop + disY + (offsetTop > 0 ? 0 : offsetTop)}px`
           checkboxRangeElem.style.zIndex = `${this.tZindex}`
           // 至少滑动 10px 才能有效匹配
           if (rangeHeight > 10 && rangeRows.length !== lastRangeRows.length) {

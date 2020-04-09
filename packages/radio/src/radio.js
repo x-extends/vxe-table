@@ -52,10 +52,10 @@ export default {
             if (!disabled) {
               const params = { label, $event: evnt }
               if (isGroup) {
-                $xegroup.handleChecked(params, evnt)
+                $xegroup.handleChecked(params)
               } else {
                 this.$emit('input', label)
-                this.$emit('change', params, evnt)
+                this.$emit('change', params)
               }
             }
           }

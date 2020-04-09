@@ -747,8 +747,7 @@ const Methods = {
     if ($toolbar) {
       $toolbar.handleCustoms()
     }
-    this.analyColumnWidth()
-    return this.recalculate(true)
+    return this.refreshColumn()
   },
   /**
    * 刷新列信息
@@ -1266,7 +1265,7 @@ const Methods = {
   preventEvent (evnt, type, args, next, end) {
     const evntList = VXETable.interceptor.get(type)
     let rest
-    if (!evntList.some(func => func(Object.assign({ $table: this }, args), evnt, this) === false)) {
+    if (!evntList.some(func => func(Object.assign({ $grid: this.$xegrid, $table: this, $event: evnt }, args)) === false)) {
       if (next) {
         rest = next()
       }
@@ -1362,7 +1361,7 @@ const Methods = {
   handleGlobalKeydownEvent (evnt) {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
-      this.preventEvent(evnt, 'event.keydown', { $table: this, $grid: this.$xegrid }, () => {
+      this.preventEvent(evnt, 'event.keydown', null, () => {
         const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
         const { selected, actived } = editStore
         const keyCode = evnt.keyCode
@@ -1495,7 +1494,7 @@ const Methods = {
             }
           }
         }
-        this.$emit('keydown', { $table: this, $event: evnt }, evnt)
+        this.$emit('keydown', { $table: this, $event: evnt })
       })
     }
   },
@@ -1776,7 +1775,7 @@ const Methods = {
     const { checkMethod } = this.checkboxOpts
     if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
       this.handleSelectRow(params, value)
-      this.$emit('checkbox-change', Object.assign({ records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
+      this.$emit('checkbox-change', Object.assign({ records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, params))
     }
   },
   /**
@@ -1887,7 +1886,6 @@ const Methods = {
   // 还原展开、选中等相关状态
   handleReserveStatus () {
     const { treeConfig, fullDataRowIdData, radioReserveRow, radioOpts, checkboxReserveRowMap, checkboxOpts } = this
-    let reserveRadioRow = null
     const reserveSelection = []
     const reserveRowExpandeds = []
     const reserveTreeExpandeds = []
@@ -1896,10 +1894,9 @@ const Methods = {
     if (radioOpts.reserve && radioReserveRow) {
       const rowid = UtilTools.getRowid(this, radioReserveRow)
       if (fullDataRowIdData[rowid]) {
-        reserveRadioRow = fullDataRowIdData[rowid].row
+        this.setRadioRow(fullDataRowIdData[rowid].row)
       }
     }
-    this.selectRow = reserveRadioRow
     // 复选框
     this.handleReserveByRowid(this.selection, reserveSelection)
     if (checkboxOpts.reserve) {
@@ -1909,7 +1906,7 @@ const Methods = {
         }
       })
     }
-    this.selection = reserveSelection
+    this.setCheckboxRow(reserveSelection, true)
     // 行展开
     this.handleReserveByRowid(this.rowExpandeds, reserveRowExpandeds)
     this.rowExpandeds = reserveRowExpandeds
@@ -1987,7 +1984,7 @@ const Methods = {
    */
   triggerCheckAllEvent (evnt, value) {
     this.setAllCheckboxRow(value)
-    this.$emit('checkbox-all', { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, evnt)
+    this.$emit('checkbox-all', { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt })
   },
   /**
    * 多选，切换所有行的选中状态
@@ -2000,14 +1997,22 @@ const Methods = {
    * 用于多选行，手动清空用户的选择
    */
   clearCheckboxRow () {
-    const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
-    const { checkField: property } = checkboxOpts
+    const { tableFullData, treeConfig, treeOpts, checkboxOpts, checkboxReserveRowMap } = this
+    const { checkField: property, reserve } = checkboxOpts
     if (property) {
       if (treeConfig) {
         XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeOpts)
       } else {
         tableFullData.forEach(item => XEUtils.set(item, property, false))
       }
+    }
+    if (reserve) {
+      tableFullData.forEach(row => {
+        const rowid = UtilTools.getRowid(this, row)
+        if (checkboxReserveRowMap[rowid]) {
+          delete checkboxReserveRowMap[rowid]
+        }
+      })
     }
     this.isAllSelected = false
     this.isIndeterminate = false
@@ -2041,7 +2046,7 @@ const Methods = {
       const isChange = this.selectRow !== params.row
       this.setRadioRow(params.row)
       if (isChange) {
-        this.$emit('radio-change', Object.assign({ $event: evnt }, params), evnt)
+        this.$emit('radio-change', Object.assign({ $event: evnt }, params))
       }
     }
   },
@@ -2049,7 +2054,7 @@ const Methods = {
     const isChange = this.currentRow !== params.row
     this.setCurrentRow(params.row)
     if (isChange) {
-      this.$emit('current-change', Object.assign({ $event: evnt }, params), evnt)
+      this.$emit('current-change', Object.assign({ $event: evnt }, params))
     }
   },
   /**
@@ -2134,14 +2139,14 @@ const Methods = {
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
       this.triggerSortEvent(evnt, column, getNextSortOrder(this, column))
     }
-    this.$emit('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell, $event: evnt }, params), evnt)
+    this.$emit('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell, $event: evnt }, params))
     if (this.highlightCurrentColumn) {
       return this.setCurrentColumn(column)
     }
     return this.$nextTick()
   },
   triggerHeaderCellDBLClickEvent (evnt, params) {
-    this.$emit('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget, $event: evnt }, params), evnt)
+    this.$emit('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget, $event: evnt }, params))
   },
   /**
    * 用于当前列，设置某列行为高亮状态
@@ -2234,7 +2239,7 @@ const Methods = {
         }
       }
     }
-    this.$emit('cell-click', Object.assign({ $event: evnt }, params), evnt)
+    this.$emit('cell-click', Object.assign({ $event: evnt }, params))
   },
   /**
    * 列双击点击事件
@@ -2262,7 +2267,7 @@ const Methods = {
         }
       }
     }
-    this.$emit('cell-dblclick', Object.assign({ $event: evnt }, params), evnt)
+    this.$emit('cell-dblclick', Object.assign({ $event: evnt }, params))
   },
   handleDefaultSort () {
     const defaultSort = this.sortOpts.defaultSort
@@ -2289,7 +2294,7 @@ const Methods = {
       } else {
         this.sort(property, order)
       }
-      this.$emit('sort-change', evntParams, evnt)
+      this.$emit('sort-change', evntParams)
     }
   },
   sort (field, order) {
@@ -2395,7 +2400,7 @@ const Methods = {
       const columnIndex = this.getColumnIndex(column)
       const $columnIndex = this.$getColumnIndex(column)
       this.setRowExpansion(row, expanded)
-      this.$emit('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this, $event: evnt }, evnt)
+      this.$emit('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this, $event: evnt })
     }
   },
   /**
@@ -2560,7 +2565,7 @@ const Methods = {
       const columnIndex = this.getColumnIndex(column)
       const $columnIndex = this.$getColumnIndex(column)
       this.setTreeExpansion(row, expanded)
-      this.$emit('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row, $table: this, $event: evnt }, evnt)
+      this.$emit('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row, $table: this, $event: evnt })
     }
   },
   /**

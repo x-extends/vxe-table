@@ -6,6 +6,7 @@
       ref="xTable"
       border
       show-overflow
+      keep-source
       :data="tableData"
       :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -51,6 +52,7 @@ export default {
           ref="xTable"
           border
           show-overflow
+          keep-source
           :data="tableData"
           :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>

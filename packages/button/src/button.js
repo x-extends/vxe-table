@@ -84,10 +84,10 @@ export default {
         on: Object.assign({
           mouseenter: this.mouseenterEvent,
           mouseleave: this.mouseleaveEvent
-        }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, { $event: evnt }, evnt)))
+        }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, { $event: evnt })))
       }, this.renderContent(h).concat([
         h('i', {
-          class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.dropdownBtn}`
+          class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.BUTTON_DROPDOWN}`
         })
       ])),
       h('div', {
@@ -124,7 +124,7 @@ export default {
         type: isFormBtn ? type : 'button',
         disabled: disabled || loading
       },
-      on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, { $event: evnt }, evnt))
+      on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, { $event: evnt }))
     }, this.renderContent(h))
   },
   methods: {
@@ -134,7 +134,7 @@ export default {
       if (loading) {
         contents.push(
           h('i', {
-            class: ['vxe-button--loading-icon', GlobalConfig.icon.btnLoading]
+            class: ['vxe-button--loading-icon', GlobalConfig.icon.BUTTON_LOADING]
           })
         )
       } else if (icon) {
@@ -182,7 +182,7 @@ export default {
             this.animatVisible = false
           }
         }, 200)
-        this.$emit('dropdown-click', { name: targetElem.getAttribute('name'), $event: evnt }, evnt)
+        this.$emit('dropdown-click', { name: targetElem.getAttribute('name'), $event: evnt })
       }
     },
     mouseenterEvent () {

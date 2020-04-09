@@ -53,10 +53,10 @@ export default {
               const checked = evnt.target.checked
               const params = { checked, label, $event: evnt }
               if (isGroup) {
-                $xegroup.handleChecked(params, evnt)
+                $xegroup.handleChecked(params)
               } else {
                 this.$emit('input', checked)
-                this.$emit('change', params, evnt)
+                this.$emit('change', params)
               }
             }
           }

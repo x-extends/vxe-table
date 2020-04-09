@@ -5,8 +5,18 @@
       还可以通过动态修改列的 visible 属性，可以轻松实现远程读取配置后控制是否显示，最后调用 <table-api-link prop="refreshColumn"/> 刷新列
     </p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable1.hideColumn($refs.xTable1.getColumnByField('role'))">隐藏role</vxe-button>
+        <vxe-button @click="$refs.xTable1.showColumn($refs.xTable1.getColumnByField('role'))">显示role</vxe-button>
+        <vxe-button @click="$refs.xTable1.showColumn($refs.xTable1.getColumnByField('sex'))">显示sex</vxe-button>
+        <vxe-button @click="$refs.xTable1.resetColumn()">重置</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
+      ref="xTable1"
       height="200"
       :data="tableData">
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -99,8 +109,18 @@ export default {
       columns3: [],
       demoCodes: [
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable1.hideColumn($refs.xTable1.getColumnByField('role'))">隐藏role</vxe-button>
+            <vxe-button @click="$refs.xTable1.showColumn($refs.xTable1.getColumnByField('role'))">显示role</vxe-button>
+            <vxe-button @click="$refs.xTable1.showColumn($refs.xTable1.getColumnByField('sex'))">显示sex</vxe-button>
+            <vxe-button @click="$refs.xTable1.resetColumn()">重置</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
+          ref="xTable1"
           height="200"
           :data="tableData">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -117,7 +137,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
           }
         }
         `,
@@ -155,7 +175,7 @@ export default {
               this.columns = this.$refs.xTable.getColumns()
             })
             this.loading = true
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
             setTimeout(() => {
               // 将指定列设置为隐藏状态
               this.columns.forEach(column => {
@@ -211,7 +231,7 @@ export default {
             this.$nextTick(() => {
               this.columns = this.$refs.xTable.getColumns()
             })
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
           }
         }
         `
@@ -225,7 +245,7 @@ export default {
       this.columns3 = this.$refs.xTable3.getColumns()
     })
     this.loading = true
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
     setTimeout(() => {
       // 将指定列设置为隐藏状态
       this.columns2.forEach(column => {

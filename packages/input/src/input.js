@@ -370,7 +370,7 @@ function renderNumberIcon (h, _vm) {
       }
     }, [
       h('i', {
-        class: ['vxe-input--number-prev-icon', GlobalConfig.icon.inputPrevNum]
+        class: ['vxe-input--number-prev-icon', GlobalConfig.icon.INPUT_PREV_NUM]
       })
     ]),
     h('span', {
@@ -382,7 +382,7 @@ function renderNumberIcon (h, _vm) {
       }
     }, [
       h('i', {
-        class: ['vxe-input--number-next-icon', GlobalConfig.icon.inputNextNum]
+        class: ['vxe-input--number-next-icon', GlobalConfig.icon.INPUT_NEXT_NUM]
       })
     ])
   ])
@@ -396,7 +396,7 @@ function renderDatePickerIcon (h, _vm) {
     }
   }, [
     h('i', {
-      class: ['vxe-input--date-picker-icon', GlobalConfig.icon.inputDate]
+      class: ['vxe-input--date-picker-icon', GlobalConfig.icon.INPUT_DATE]
     })
   ])
 }
@@ -410,7 +410,7 @@ function renderPasswordIcon (h, _vm) {
     }
   }, [
     h('i', {
-      class: ['vxe-input--pwd-icon', showPwd ? GlobalConfig.icon.inputShowPwd : GlobalConfig.icon.inputPwd]
+      class: ['vxe-input--pwd-icon', showPwd ? GlobalConfig.icon.INPUT_SHOW_PWD : GlobalConfig.icon.INPUT_PWD]
     })
   ])
 }
@@ -443,7 +443,7 @@ function renderSuffixIcon (h, _vm) {
       class: ['vxe-input--suffix-icon', suffixIcon]
     }) : null,
     isClearable ? h('i', {
-      class: ['vxe-input--clear-icon', GlobalConfig.icon.inputClear]
+      class: ['vxe-input--clear-icon', GlobalConfig.icon.INPUT_CLEAR]
     }) : null
   ]) : null
 }
@@ -813,7 +813,7 @@ export default {
     },
     triggerEvent (evnt) {
       const { $refs, value } = this
-      this.$emit(evnt.type, { $panel: $refs.panel, value, $event: evnt }, evnt)
+      this.$emit(evnt.type, { $panel: $refs.panel, value, $event: evnt })
     },
     emitUpdate (value, evnt) {
       this.$emit('input', value)
@@ -849,7 +849,7 @@ export default {
     clickPrefixEvent (evnt) {
       const { $refs, disabled, value } = this
       if (!disabled) {
-        this.$emit('prefix-click', { $panel: $refs.panel, value, $event: evnt }, evnt)
+        this.$emit('prefix-click', { $panel: $refs.panel, value, $event: evnt })
       }
     },
     clickSuffixEvent (evnt) {
@@ -859,7 +859,7 @@ export default {
           this.emitUpdate('', evnt)
           this.clearValueEvent(evnt, '')
         } else {
-          this.$emit('suffix-click', { $panel: $refs.panel, value, $event: evnt }, evnt)
+          this.$emit('suffix-click', { $panel: $refs.panel, value, $event: evnt })
         }
       }
     },
@@ -871,7 +871,7 @@ export default {
       if (isNumber || ['text', 'password'].indexOf(type) > -1) {
         this.focus()
       }
-      this.$emit('clear', { $panel: $refs.panel, value, $event: evnt }, evnt)
+      this.$emit('clear', { $panel: $refs.panel, value, $event: evnt })
     },
     /**
      * 检查初始值

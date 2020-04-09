@@ -127,7 +127,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
         // 如果配置了显示 tooltip
         $xetable.triggerTooltipEvent(evnt, params)
       }
-      UtilTools.emitEvent($xetable, 'cell-mouseenter', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
+      UtilTools.emitEvent($xetable, 'cell-mouseenter', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }])
     }
   }
   // hover 退出事件
@@ -139,7 +139,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
       if (showTooltip) {
         $xetable.handleTargetLeaveEvent(evnt)
       }
-      UtilTools.emitEvent($xetable, 'cell-mouseleave', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
+      UtilTools.emitEvent($xetable, 'cell-mouseleave', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }])
     }
   }
   // 按下事件处理
@@ -545,7 +545,7 @@ export default {
       if (scrollYLoad && isY) {
         $xetable.triggerScrollYEvent(evnt)
       }
-      $xetable.$emit('scroll', { type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table: $xetable, $event: evnt }, evnt)
+      $xetable.$emit('scroll', { type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table: $xetable, $event: evnt })
     }
   }
 }

@@ -431,16 +431,22 @@ export default {
       return this.resizable || this.tableFullColumn.some(column => column.resizable)
     },
     hasFilter () {
-      return this.tableColumn.some(column => column.filters && column.filters.length)
+      return this.tableColumn.some(column => column.filters)
     },
     headerCtxMenu () {
-      return this.ctxMenuOpts.header && this.ctxMenuOpts.header.options ? this.ctxMenuOpts.header.options : []
+      const headerOpts = this.ctxMenuOpts.header
+      return headerOpts && headerOpts.options ? headerOpts.options : []
     },
     bodyCtxMenu () {
-      return this.ctxMenuOpts.body && this.ctxMenuOpts.body.options ? this.ctxMenuOpts.body.options : []
+      const bodyOpts = this.ctxMenuOpts.body
+      return bodyOpts && bodyOpts.options ? bodyOpts.options : []
+    },
+    footerCtxMenu () {
+      const footerOpts = this.ctxMenuOpts.footer
+      return footerOpts && footerOpts.options ? footerOpts.options : []
     },
     isCtxMenu () {
-      return this.headerCtxMenu.length || this.bodyCtxMenu.length
+      return this.headerCtxMenu.length || this.bodyCtxMenu.length || this.footerCtxMenu.length
     },
     ctxMenuOpts () {
       return Object.assign({}, GlobalConfig.table.contextMenu, this.contextMenu)
@@ -533,15 +539,17 @@ export default {
         }
       })
       this.handleTableData(true)
-      if (this.$toolbar) {
-        this.$toolbar.updateColumns(tableFullColumn)
-      }
       if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
         UtilTools.warn('vxe.error.treeFixedExpand')
       }
       if (this.isGroup && this.mouseConfig && (this.mouseOpts.range || this.mouseOpts.checked)) {
         UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.range'])
       }
+      this.$nextTick(() => {
+        if (this.$toolbar) {
+          this.$toolbar.updateColumns(tableFullColumn)
+        }
+      })
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -680,21 +688,21 @@ export default {
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'resize', this.handleGlobalResizeEvent)
     GlobalEvent.on(this, 'contextmenu', this.handleGlobalContextmenuEvent)
-    this.preventEvent(null, 'created', { $table: this })
+    this.preventEvent(null, 'created')
   },
   mounted () {
     if (this.autoResize && VXETable._resize) {
       this.bindResize()
     }
     document.body.appendChild(this.$refs.tableWrapper)
-    this.preventEvent(null, 'mounted', { $table: this })
+    this.preventEvent(null, 'mounted')
   },
   activated () {
     this.recalculate().then(() => this.refreshScroll())
-    this.preventEvent(null, 'activated', { $table: this })
+    this.preventEvent(null, 'activated')
   },
   deactivated () {
-    this.preventEvent(null, 'deactivated', { $table: this })
+    this.preventEvent(null, 'deactivated')
   },
   beforeDestroy () {
     const tableWrapper = this.$refs.tableWrapper
@@ -707,7 +715,7 @@ export default {
     this.closeFilter()
     this.closeMenu()
     this.clearAll()
-    this.preventEvent(null, 'beforeDestroy', { $table: this })
+    this.preventEvent(null, 'beforeDestroy')
   },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
@@ -716,7 +724,7 @@ export default {
     GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'resize')
     GlobalEvent.off(this, 'contextmenu')
-    this.preventEvent(null, 'destroyed', { $table: this })
+    this.preventEvent(null, 'destroyed')
   },
   render (h) {
     const {

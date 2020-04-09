@@ -242,7 +242,7 @@ export default {
           disabled: disabled,
           type: 'text',
           prefixIcon: prefixIcon,
-          suffixIcon: visiblePanel ? GlobalConfig.icon.selectOpen : GlobalConfig.icon.selectClose,
+          suffixIcon: visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE,
           value: selectLabel
         },
         on: {
@@ -388,12 +388,12 @@ export default {
     },
     clearValueEvent (evnt, selectValue) {
       this.changeEvent(evnt, selectValue)
-      this.$emit('clear', { value: selectValue, $event: evnt }, evnt)
+      this.$emit('clear', { value: selectValue, $event: evnt })
     },
     changeEvent (evnt, selectValue) {
       if (selectValue !== this.value) {
         this.$emit('input', selectValue)
-        this.$emit('change', { value: selectValue, $event: evnt }, evnt)
+        this.$emit('change', { value: selectValue, $event: evnt })
       }
     },
     changeOptionEvent (evnt, selectValue) {
@@ -472,8 +472,9 @@ export default {
         this.isActivated = true
       }
     },
-    togglePanelEvent (params, evnt) {
-      evnt.preventDefault()
+    togglePanelEvent (params) {
+      const { $event } = params
+      $event.preventDefault()
       if (this.visiblePanel) {
         this.hideOptionPanel()
       } else {

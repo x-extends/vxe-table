@@ -74,7 +74,6 @@ export default {
     import: [Boolean, Object],
     export: [Boolean, Object],
     zoom: [Boolean, Object],
-    setting: [Boolean, Object],
     custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     perfect: { type: Boolean, default: () => GlobalConfig.toolbar.perfect },
@@ -117,11 +116,11 @@ export default {
       return Object.assign({}, GlobalConfig.toolbar.zoom, this.zoom)
     },
     customOpts () {
-      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE' }, GlobalConfig.toolbar.custom || GlobalConfig.toolbar.setting, this.custom || this.setting)
+      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE' }, GlobalConfig.toolbar.custom, this.custom)
     }
   },
   created () {
-    const { customOpts, refresh, resizable, custom, setting, id, refreshOpts } = this
+    const { customOpts, refresh, resizable, custom, id, refreshOpts } = this
     if (customOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
     }
@@ -137,11 +136,10 @@ export default {
       if (comp) {
         comp.connect({ toolbar: this })
       } else {
-        if (resizable || custom || setting) {
+        if (resizable || custom) {
           throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
         }
       }
-      this.restoreCustomStorage()
     })
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
@@ -153,10 +151,10 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { $xegrid, perfect, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, setting, customOpts, vSize, tableFullColumn } = this
+    const { $xegrid, perfect, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, customOpts, vSize, tableFullColumn } = this
     const customBtnOns = {}
     const customWrapperOns = {}
-    if (custom || setting) {
+    if (custom) {
       if (customOpts.trigger === 'manual') {
         // 手动触发
       } else if (customOpts.trigger === 'hover') {
@@ -196,7 +194,7 @@ export default {
           }
         }, [
           h('i', {
-            class: importOpts.icon || GlobalConfig.icon.import
+            class: importOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_IMPORT
           })
         ]) : null,
         this.export ? h('div', {
@@ -209,7 +207,7 @@ export default {
           }
         }, [
           h('i', {
-            class: exportOpts.icon || GlobalConfig.icon.export
+            class: exportOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_EXPORT
           })
         ]) : null,
         refresh ? h('div', {
@@ -222,7 +220,7 @@ export default {
           }
         }, [
           h('i', {
-            class: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.refreshLoading) : (refreshOpts.icon || GlobalConfig.icon.refresh)
+            class: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH_LOADING) : (refreshOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH)
           })
         ]) : null,
         zoom && $xegrid ? h('div', {
@@ -235,10 +233,10 @@ export default {
           }
         }, [
           h('i', {
-            class: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.zoomOut) : (zoomOpts.iconIn || GlobalConfig.icon.zoomIn)
+            class: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_OUT) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_IN)
           })
         ]) : null,
-        custom || setting ? h('div', {
+        custom ? h('div', {
           class: ['vxe-custom--wrapper', {
             'is--active': customStore.visible
           }],
@@ -252,7 +250,7 @@ export default {
             on: customBtnOns
           }, [
             h('i', {
-              class: customOpts.icon || GlobalConfig.icon.custom
+              class: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM
             })
           ]),
           h('div', {
@@ -306,7 +304,7 @@ export default {
                   click: () => {
                     if (!isDisabled) {
                       column.visible = !column.visible
-                      if ((custom || setting) && customOpts.immediate) {
+                      if (custom && customOpts.immediate) {
                         this.handleCustoms()
                       }
                       this.checkCustomStatus()
@@ -360,17 +358,17 @@ export default {
       this.checkCustomStatus()
     },
     closeCustom () {
-      const { custom, setting, customStore } = this
+      const { custom, customStore } = this
       if (customStore.visible) {
         customStore.visible = false
-        if ((custom || setting) && !customStore.immediate) {
+        if (custom && !customStore.immediate) {
           this.handleCustoms()
         }
       }
     },
     restoreCustomStorage () {
-      const { $xegrid, $xetable, id, resizable, custom, setting, resizableOpts, customOpts } = this
-      if (resizable || custom || setting) {
+      const { $xegrid, $xetable, id, resizable, custom, resizableOpts, customOpts } = this
+      if (resizable || custom) {
         const customMap = {}
         const comp = $xegrid || $xetable
         const { fullColumn } = comp.getTableColumn()
@@ -432,6 +430,7 @@ export default {
      */
     updateColumns (fullColumn) {
       this.tableFullColumn = fullColumn
+      this.restoreCustomStorage()
     },
     getStorageMap (key) {
       const version = GlobalConfig.version
@@ -527,7 +526,7 @@ export default {
     emitCustomEvent (type, evnt) {
       const { $xetable, $xegrid } = this
       const params = { type, $table: $xetable, $grid: $xegrid, $event: evnt }
-      $xetable.$emit('custom', params, evnt)
+      $xetable.$emit('custom', params)
     },
     updateResizable (isReset) {
       const comp = this.$xegrid || this.$xetable
@@ -637,7 +636,7 @@ export default {
           if (commandMethod) {
             commandMethod.call(this, params, evnt)
           }
-          this.$emit('button-click', params, evnt)
+          this.$emit('button-click', params)
         }
       }
     },
@@ -660,7 +659,7 @@ export default {
     triggerZoomEvent (evnt) {
       const { $xegrid } = this
       $xegrid.zoom()
-      $xegrid.$emit('zoom', { $grid: $xegrid, type: $xegrid.isMaximized() ? 'max' : 'revert', $event: evnt }, evnt)
+      $xegrid.$emit('zoom', { $grid: $xegrid, type: $xegrid.isMaximized() ? 'max' : 'revert', $event: evnt })
     }
   }
 }

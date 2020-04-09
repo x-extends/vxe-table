@@ -394,7 +394,7 @@ function downloadFile ($xetable, opts, content) {
 function handleExport ($xetable, opts) {
   const { columns, datas } = getExportData($xetable, opts)
   return Promise.resolve(
-    $xetable.preventEvent(null, 'event.export', { $table: $xetable, options: opts, columns, datas }, () => {
+    $xetable.preventEvent(null, 'event.export', { options: opts, columns, datas }, () => {
       return downloadFile($xetable, opts, getContent($xetable, opts, columns, datas))
     })
   )
@@ -644,7 +644,7 @@ export default {
             }
             return Promise.resolve(params)
           }
-          this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
+          this.preventEvent(null, 'event.import', { file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = () => {
               UtilTools.error('vxe.error.notType', [type])

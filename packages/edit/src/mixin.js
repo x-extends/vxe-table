@@ -220,7 +220,7 @@ export default {
               this.handleFocus(params, evnt)
             })
           }
-          this.$emit(type, Object.assign({ $event: evnt }, params), evnt)
+          this.$emit(type, Object.assign({ $event: evnt }, params))
         } else {
           const { column: oldColumn } = actived
           if (oldColumn !== column) {
@@ -269,7 +269,7 @@ export default {
           this._setColumnModel(row, column)
         }
         this.updateFooter()
-        this.$emit('edit-closed', Object.assign({ $event: evnt }, args), evnt)
+        this.$emit('edit-closed', Object.assign({ $event: evnt }, args))
       }
       actived.args = null
       actived.row = null

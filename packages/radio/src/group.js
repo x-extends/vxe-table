@@ -28,9 +28,9 @@ export default {
     }, this.$slots.default)
   },
   methods: {
-    handleChecked (params, evnt) {
+    handleChecked (params) {
       this.$emit('input', params.label)
-      this.$emit('change', params, evnt)
+      this.$emit('change', params)
     }
   }
 }

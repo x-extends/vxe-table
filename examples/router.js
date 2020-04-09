@@ -267,6 +267,7 @@ const TablePluginExcel = () => import(/* webpackChunkName: "excel" */ './views/t
 
 const VXEAPI = () => import(/* webpackChunkName: "api" */ './views/api/API.vue')
 const Donation = () => import(/* webpackChunkName: "api" */ './views/api/Donation.vue')
+const Run = () => import(/* webpackChunkName: "api" */ './views/api/Run.vue')
 
 Vue.use(Router)
 
@@ -1547,6 +1548,11 @@ export default new Router({
       path: '/:name/api',
       name: 'VXEAPI',
       component: VXEAPI
+    },
+    {
+      path: '/api/run',
+      name: 'Run',
+      component: Run
     }
   ]
 })
