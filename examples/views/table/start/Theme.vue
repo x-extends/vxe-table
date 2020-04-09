@@ -17,7 +17,7 @@
         $vxe-font-color: #666;
         $vxe-primary-color: #409eff;
 
-        @import 'vxe-table/styles/default.scss';
+        @import 'vxe-table/styles/modules.scss';
       </code>
     </pre>
     <p class="tip">Case 3.修改主题颜色，并按需引入样式（<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）<br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-custom-theme" target="_blank">项目示例</a></p>

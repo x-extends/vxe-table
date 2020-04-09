@@ -119,7 +119,7 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-pager--btn-icon', this.iconPrevPage || GlobalConfig.icon.prevPage]
+          class: ['vxe-pager--btn-icon', this.iconPrevPage || GlobalConfig.icon.PAGER_PREV_PAGE]
         })
       ])
     },
@@ -138,10 +138,10 @@ export default {
         }
       }, [
         tagName ? h('i', {
-          class: ['vxe-pager--jump-more-icon', this.iconJumpMore || GlobalConfig.icon.jumpMore]
+          class: ['vxe-pager--jump-more-icon', this.iconJumpMore || GlobalConfig.icon.PAGER_JUMP_MORE]
         }) : null,
         h('i', {
-          class: ['vxe-pager--jump-icon', this.iconJumpPrev || GlobalConfig.icon.jumpPrev]
+          class: ['vxe-pager--jump-icon', this.iconJumpPrev || GlobalConfig.icon.PAGER_JUMP_PREV]
         })
       ])
     },
@@ -172,10 +172,10 @@ export default {
         }
       }, [
         tagName ? h('i', {
-          class: ['vxe-pager--jump-more-icon', this.iconJumpMore || GlobalConfig.icon.jumpMore]
+          class: ['vxe-pager--jump-more-icon', this.iconJumpMore || GlobalConfig.icon.PAGER_JUMP_MORE]
         }) : null,
         h('i', {
-          class: ['vxe-pager--jump-icon', this.iconJumpNext || GlobalConfig.icon.jumpNext]
+          class: ['vxe-pager--jump-icon', this.iconJumpNext || GlobalConfig.icon.PAGER_JUMP_NEXT]
         })
       ])
     },
@@ -193,7 +193,7 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-pager--btn-icon', this.iconNextPage || GlobalConfig.icon.nextPage]
+          class: ['vxe-pager--btn-icon', this.iconNextPage || GlobalConfig.icon.PAGER_NEXT_PAGE]
         })
       ])
     },

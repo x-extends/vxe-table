@@ -805,6 +805,13 @@ const Methods = {
     }
     return this.updateToolbarCustom()
   },
+  updateToolbarCustom () {
+    const { $toolbar } = this
+    if ($toolbar) {
+      $toolbar.handleCustoms()
+    }
+    return this.refreshColumn()
+  },
   resetResizable () {
     UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
     return this.handleResetResizable()
@@ -1347,7 +1354,7 @@ const Methods = {
   preventEvent (evnt, type, args, next, end) {
     const evntList = VXETable.interceptor.get(type)
     let rest
-    if (!evntList.some(func => func(Object.assign({ $table: this }, args), evnt, this) === false)) {
+    if (!evntList.some(func => func(Object.assign({ $grid: this.$xegrid, $table: this, $event: evnt }, args), evnt, this) === false)) {
       if (next) {
         rest = next()
       }
@@ -1453,7 +1460,7 @@ const Methods = {
   handleGlobalKeydownEvent (evnt) {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
-      this.preventEvent(evnt, 'event.keydown', { $table: this, $grid: this.$xegrid }, () => {
+      this.preventEvent(evnt, 'event.keydown', null, () => {
         const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
         const { selected, actived } = editStore
         const keyCode = evnt.keyCode
@@ -2018,7 +2025,6 @@ const Methods = {
   // 还原展开、选中等相关状态
   handleReserveStatus () {
     const { treeConfig, fullDataRowIdData, radioReserveRow, radioOpts, checkboxReserveRowMap, checkboxOpts } = this
-    let reserveRadioRow = null
     const reserveSelection = []
     const reserveRowExpandeds = []
     const reserveTreeExpandeds = []
@@ -2027,10 +2033,9 @@ const Methods = {
     if (radioOpts.reserve && radioReserveRow) {
       const rowid = UtilTools.getRowid(this, radioReserveRow)
       if (fullDataRowIdData[rowid]) {
-        reserveRadioRow = fullDataRowIdData[rowid].row
+        this.setRadioRow(fullDataRowIdData[rowid].row)
       }
     }
-    this.selectRow = reserveRadioRow
     // 复选框
     this.handleReserveByRowid(this.selection, reserveSelection)
     if (checkboxOpts.reserve) {
@@ -2040,7 +2045,7 @@ const Methods = {
         }
       })
     }
-    this.selection = reserveSelection
+    this.setCheckboxRow(reserveSelection, true)
     // 行展开
     this.handleReserveByRowid(this.rowExpandeds, reserveRowExpandeds)
     this.rowExpandeds = reserveRowExpandeds
@@ -2158,14 +2163,22 @@ const Methods = {
    * 用于多选行，手动清空用户的选择
    */
   clearCheckboxRow () {
-    const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
-    const { checkField: property } = checkboxOpts
+    const { tableFullData, treeConfig, treeOpts, checkboxOpts, checkboxReserveRowMap } = this
+    const { checkField: property, reserve } = checkboxOpts
     if (property) {
       if (treeConfig) {
         XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeOpts)
       } else {
         tableFullData.forEach(item => XEUtils.set(item, property, false))
       }
+    }
+    if (reserve) {
+      tableFullData.forEach(row => {
+        const rowid = UtilTools.getRowid(this, row)
+        if (checkboxReserveRowMap[rowid]) {
+          delete checkboxReserveRowMap[rowid]
+        }
+      })
     }
     this.isAllSelected = false
     this.isIndeterminate = false

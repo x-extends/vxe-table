@@ -90,7 +90,7 @@ export default {
         }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, { $event: evnt }, evnt)))
       }, this.renderContent(h).concat([
         h('i', {
-          class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.dropdownBtn}`
+          class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.BUTTON_DROPDOWN}`
         })
       ])),
       h('div', {
@@ -137,7 +137,7 @@ export default {
       if (loading) {
         contents.push(
           h('i', {
-            class: ['vxe-button--loading-icon', GlobalConfig.icon.btnLoading]
+            class: ['vxe-button--loading-icon', GlobalConfig.icon.BUTTON_LOADING]
           })
         )
       } else if (icon) {

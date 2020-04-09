@@ -145,7 +145,6 @@ export default {
           throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
         }
       }
-      this.restoreCustomStorage()
     })
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
@@ -200,7 +199,7 @@ export default {
           }
         }, [
           h('i', {
-            class: importOpts.icon || GlobalConfig.icon.import
+            class: importOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_IMPORT
           })
         ]) : null,
         this.export ? h('div', {
@@ -213,7 +212,7 @@ export default {
           }
         }, [
           h('i', {
-            class: exportOpts.icon || GlobalConfig.icon.export
+            class: exportOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_EXPORT
           })
         ]) : null,
         refresh ? h('div', {
@@ -226,7 +225,7 @@ export default {
           }
         }, [
           h('i', {
-            class: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.refreshLoading) : (refreshOpts.icon || GlobalConfig.icon.refresh)
+            class: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH_LOADING) : (refreshOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH)
           })
         ]) : null,
         zoom && $xegrid ? h('div', {
@@ -239,7 +238,7 @@ export default {
           }
         }, [
           h('i', {
-            class: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.zoomOut) : (zoomOpts.iconIn || GlobalConfig.icon.zoomIn)
+            class: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_OUT) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_IN)
           })
         ]) : null,
         custom || setting ? h('div', {
@@ -256,7 +255,7 @@ export default {
             on: customBtnOns
           }, [
             h('i', {
-              class: customOpts.icon || GlobalConfig.icon.custom
+              class: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM
             })
           ]),
           h('div', {
@@ -436,6 +435,7 @@ export default {
      */
     updateColumns (fullColumn) {
       this.tableFullColumn = fullColumn
+      this.restoreCustomStorage()
     },
     getStorageMap (key) {
       const version = GlobalConfig.version

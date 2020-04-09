@@ -2,6 +2,7 @@ const GlobalConfig = {
   // size: null, // 全局尺寸
   zIndex: 100, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
+  // resizeInterval: 500,
   emptyCell: '　',
   table: {
     fit: true,
@@ -9,6 +10,7 @@ const GlobalConfig = {
     // keepSource: false,
     // showOverflow: null,
     // showHeaderOverflow: null,
+    // showFooterOverflow: null,
     // resizeInterval: 500,
     // size: null,
     // zIndex: null,
@@ -38,7 +40,8 @@ const GlobalConfig = {
     //   indent: 20
     // },
     // tooltipConfig: {
-    //   theme: 'dark'
+    //   theme: 'dark',
+    //   enterable: false
     // },
     // validConfig: {
     //   message: 'default'
@@ -83,55 +86,67 @@ const GlobalConfig = {
     }
   },
   icon: {
-    sortAsc: 'vxe-icon--caret-top',
-    sortDesc: 'vxe-icon--caret-bottom',
-    filterNone: 'vxe-icon--funnel',
-    filterMatch: 'vxe-icon--funnel',
-    edit: 'vxe-icon--edit-outline',
-    treeLoaded: 'vxe-icon--refresh roll',
-    treeOpen: 'vxe-icon--caret-right rotate90',
-    treeClose: 'vxe-icon--caret-right',
-    expandLoaded: 'vxe-icon--refresh roll',
-    expandOpen: 'vxe-icon--arrow-right rotate90',
-    expandClose: 'vxe-icon--arrow-right',
-    refresh: 'vxe-icon--refresh',
-    refreshLoading: 'vxe-icon--refresh roll',
-    formPrefix: 'vxe-icon--question',
-    formSuffix: 'vxe-icon--question',
-    formFolding: 'vxe-icon--arrow-top rotate180',
-    formUnfolding: 'vxe-icon--arrow-top',
-    import: 'vxe-icon--upload',
-    importRemove: 'vxe-icon--close',
-    export: 'vxe-icon--download',
-    zoomIn: 'vxe-icon--zoomin',
-    zoomOut: 'vxe-icon--zoomout',
-    custom: 'vxe-icon--menu',
-    inputClear: 'vxe-icon--close',
-    inputPwd: 'vxe-icon--eye-slash',
-    inputShowPwd: 'vxe-icon--eye',
-    inputPrevNum: 'vxe-icon--caret-top',
-    inputNextNum: 'vxe-icon--caret-bottom',
-    inputDate: 'vxe-icon--calendar',
-    inputDateOpen: 'vxe-icon--caret-bottom rotate180',
-    inputDateClose: 'vxe-icon--caret-bottom',
-    selectOpen: 'vxe-icon--caret-bottom rotate180',
-    selectClose: 'vxe-icon--caret-bottom',
-    jumpPrev: 'vxe-icon--d-arrow-left',
-    jumpNext: 'vxe-icon--d-arrow-right',
-    prevPage: 'vxe-icon--arrow-left',
-    nextPage: 'vxe-icon--arrow-right',
-    jumpMore: 'vxe-icon--more',
-    modalZoomIn: 'vxe-icon--square',
-    modalZoomOut: 'vxe-icon--zoomout',
-    modalClose: 'vxe-icon--close',
-    modalInfo: 'vxe-icon--info',
-    modalSuccess: 'vxe-icon--success',
-    modalWarning: 'vxe-icon--warning',
-    modalError: 'vxe-icon--error',
-    modalQuestion: 'vxe-icon--question',
-    modalLoading: 'vxe-icon--refresh roll',
-    dropdownBtn: 'vxe-icon--arrow-bottom',
-    btnLoading: 'vxe-icon--refresh roll'
+    // table
+    TABLE_SORT_ASC: 'vxe-icon--caret-top',
+    TABLE_SORT_DESC: 'vxe-icon--caret-bottom',
+    TABLE_FILTER_NONE: 'vxe-icon--funnel',
+    TABLE_FILTER_MATCH: 'vxe-icon--funnel',
+    TABLE_EDIT: 'vxe-icon--edit-outline',
+    TABLE_TREE_LOADED: 'vxe-icon--refresh roll',
+    TABLE_TREE_OPEN: 'vxe-icon--caret-right rotate90',
+    TABLE_TREE_CLOSE: 'vxe-icon--caret-right',
+    TABLE_EXPAND_LOADED: 'vxe-icon--refresh roll',
+    TABLE_EXPAND_OPEN: 'vxe-icon--arrow-right rotate90',
+    TABLE_EXPAND_CLOSE: 'vxe-icon--arrow-right',
+
+    // button
+    BUTTON_DROPDOWN: 'vxe-icon--arrow-bottom',
+    BUTTON_LOADING: 'vxe-icon--refresh roll',
+
+    // select
+    SELECT_OPEN: 'vxe-icon--caret-bottom rotate180',
+    SELECT_CLOSE: 'vxe-icon--caret-bottom',
+
+    // pager
+    PAGER_JUMP_PREV: 'vxe-icon--d-arrow-left',
+    PAGER_JUMP_NEXT: 'vxe-icon--d-arrow-right',
+    PAGER_PREV_PAGE: 'vxe-icon--arrow-left',
+    PAGER_NEXT_PAGE: 'vxe-icon--arrow-right',
+    PAGER_JUMP_MORE: 'vxe-icon--more',
+
+    // input
+    INPUT_CLEAR: 'vxe-icon--close',
+    INPUT_PWD: 'vxe-icon--eye-slash',
+    INPUT_SHOW_PWD: 'vxe-icon--eye',
+    INPUT_PREV_NUM: 'vxe-icon--caret-top',
+    INPUT_NEXT_NUM: 'vxe-icon--caret-bottom',
+    INPUT_DATE: 'vxe-icon--calendar',
+
+    // modal
+    MODAL_ZOOM_IN: 'vxe-icon--square',
+    MODAL_ZOOM_OUT: 'vxe-icon--zoomout',
+    MODAL_CLOSE: 'vxe-icon--close',
+    MODAL_INFO: 'vxe-icon--info',
+    MODAL_SUCCESS: 'vxe-icon--success',
+    MODAL_WARNING: 'vxe-icon--warning',
+    MODAL_ERROR: 'vxe-icon--error',
+    MODAL_QUESTION: 'vxe-icon--question',
+    MODAL_LOADING: 'vxe-icon--refresh roll',
+
+    // toolbar
+    TOOLBAR_TOOLS_REFRESH: 'vxe-icon--refresh',
+    TOOLBAR_TOOLS_REFRESH_LOADING: 'vxe-icon--refresh roll',
+    TOOLBAR_TOOLS_IMPORT: 'vxe-icon--upload',
+    TOOLBAR_TOOLS_EXPORT: 'vxe-icon--download',
+    TOOLBAR_TOOLS_ZOOM_IN: 'vxe-icon--zoomin',
+    TOOLBAR_TOOLS_ZOOM_OUT: 'vxe-icon--zoomout',
+    TOOLBAR_TOOLS_CUSTOM: 'vxe-icon--menu',
+
+    // form
+    FORM_PREFIX: 'vxe-icon--info',
+    FORM_SUFFIX: 'vxe-icon--info',
+    FORM_FOLDING: 'vxe-icon--arrow-top rotate180',
+    FORM_UNFOLDING: 'vxe-icon--arrow-top'
   },
   grid: {
     // size: null,

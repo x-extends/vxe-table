@@ -163,7 +163,7 @@ export const Cell = {
             on
           }, [
             h('i', {
-              class: ['vxe-tree--node-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.treeLoaded) : (isAceived ? (iconOpen || GlobalConfig.icon.treeOpen) : (iconClose || GlobalConfig.icon.treeClose))]
+              class: ['vxe-tree--node-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.TABLE_TREE_LOADED) : (isAceived ? (iconOpen || GlobalConfig.icon.TABLE_TREE_OPEN) : (iconClose || GlobalConfig.icon.TABLE_TREE_CLOSE))]
             })
           ])
         ] : null,
@@ -468,7 +468,7 @@ export const Cell = {
         }
       }, [
         h('i', {
-          class: ['vxe-table--expand-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.treeLoaded) : (isAceived ? (iconOpen || GlobalConfig.icon.expandOpen) : (iconClose || GlobalConfig.icon.expandClose))]
+          class: ['vxe-table--expand-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.TABLE_EXPAND_LOADED) : (isAceived ? (iconOpen || GlobalConfig.icon.TABLE_EXPAND_OPEN) : (iconClose || GlobalConfig.icon.TABLE_EXPAND_CLOSE))]
         })
       ]) : null,
       h('span', {
@@ -542,7 +542,7 @@ export const Cell = {
         class: 'vxe-cell--sort'
       }, [
         h('i', {
-          class: ['vxe-sort--asc-btn', iconAsc || GlobalConfig.icon.sortAsc, {
+          class: ['vxe-sort--asc-btn', iconAsc || GlobalConfig.icon.TABLE_SORT_ASC, {
             'sort--active': column.order === 'asc'
           }],
           attrs: {
@@ -555,7 +555,7 @@ export const Cell = {
           }
         }),
         h('i', {
-          class: ['vxe-sort--desc-btn', iconDesc || GlobalConfig.icon.sortDesc, {
+          class: ['vxe-sort--desc-btn', iconDesc || GlobalConfig.icon.TABLE_SORT_DESC, {
             'sort--active': column.order === 'desc'
           }],
           attrs: {
@@ -588,7 +588,7 @@ export const Cell = {
         }]
       }, [
         h('i', {
-          class: ['vxe-filter--btn', hasFilter ? (iconMatch || GlobalConfig.icon.filterMatch) : (iconNone || GlobalConfig.icon.filterNone)],
+          class: ['vxe-filter--btn', hasFilter ? (iconMatch || GlobalConfig.icon.TABLE_FILTER_MATCH) : (iconNone || GlobalConfig.icon.TABLE_FILTER_NONE)],
           attrs: {
             title: GlobalConfig.i18n('vxe.table.filter')
           },
@@ -621,7 +621,7 @@ export const Cell = {
         class: 'vxe-required-icon'
       }) : null,
       editOpts.showIcon === false ? null : h('i', {
-        class: ['vxe-edit-icon', editOpts.icon || GlobalConfig.icon.edit]
+        class: ['vxe-edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
       })
     ].concat(Cell.renderDefaultHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])

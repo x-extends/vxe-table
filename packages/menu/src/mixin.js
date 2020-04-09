@@ -52,9 +52,9 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      const { $refs, id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
+      const { $refs, id, contextMenu, ctxMenuStore, ctxMenuOpts } = this
       const layoutList = ['header', 'body', 'footer']
-      if (contextMenu && isCtxMenu) {
+      if (contextMenu) {
         if (ctxMenuStore.visible) {
           if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
             evnt.preventDefault()
@@ -83,9 +83,7 @@ export default {
             this.openContextMenu(evnt, layout, params)
             UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
             return
-          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => {
-            return target.getAttribute('data-tid') === id
-          }).flag) {
+          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === id).flag) {
             if (ctxMenuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {
