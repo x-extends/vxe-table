@@ -82,7 +82,7 @@ export default {
                 }, [
                   h('span', selectName),
                   h('i', {
-                    class: GlobalConfig.icon.importRemove,
+                    class: GlobalConfig.icon.INPUT_CLEAR,
                     on: {
                       click: this.clearFileEvent
                     }

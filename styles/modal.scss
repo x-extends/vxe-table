@@ -196,28 +196,28 @@
   }
   &.status--info {
     .vxe-modal--status-wrapper {
-      color: #2998FF;
+      color: $vxe-info-color;
     }
   }
   &.status--warning,
   &.status--question {
     .vxe-modal--status-wrapper {
-      color: #FAAD14;
+      color: $vxe-warning-color;
     }
   }
   &.status--success {
     .vxe-modal--status-wrapper {
-      color: #52C41A;
+      color: $vxe-success-color;
     }
   }
   &.status--error {
     .vxe-modal--status-wrapper {
-      color: #F5222D;
+      color: $vxe-danger-color;
     }
   }
   &.status--loading {
     .vxe-modal--status-wrapper {
-      color: #78B1EB;
+      color: $vxe-disabled-color;
     }
   }
   .vxe-modal--status-wrapper {

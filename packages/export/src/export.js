@@ -528,7 +528,7 @@ export default {
   handleExport ($xetable, opts) {
     const { columns, datas } = getExportData($xetable, opts)
     return Promise.resolve(
-      $xetable.preventEvent(null, 'event.export', { $table: $xetable, options: opts, columns, datas }, () => {
+      $xetable.preventEvent(null, 'event.export', { options: opts, columns, datas }, () => {
         return downloadFile($xetable, opts, getContent($xetable, opts, columns, datas))
       })
     )

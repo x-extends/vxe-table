@@ -242,7 +242,7 @@ export default {
           disabled: disabled,
           type: 'text',
           prefixIcon: prefixIcon,
-          suffixIcon: visiblePanel ? GlobalConfig.icon.selectOpen : GlobalConfig.icon.selectClose,
+          suffixIcon: visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE,
           value: selectLabel
         },
         on: {
@@ -472,8 +472,9 @@ export default {
         this.isActivated = true
       }
     },
-    togglePanelEvent (params, evnt) {
-      evnt.preventDefault()
+    togglePanelEvent (params) {
+      const { $event } = params
+      $event.preventDefault()
       if (this.visiblePanel) {
         this.hideOptionPanel()
       } else {

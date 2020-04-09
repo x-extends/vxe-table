@@ -183,7 +183,7 @@ export default {
             class: 'vxe-modal--title'
           }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
           resize ? h('i', {
-            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.modalZoomOut : GlobalConfig.icon.modalZoomIn],
+            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
             attrs: {
               title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`)
             },
@@ -192,7 +192,7 @@ export default {
             }
           }) : null,
           h('i', {
-            class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.modalClose],
+            class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
             attrs: {
               title: GlobalConfig.i18n('vxe.modal.close')
             },
@@ -208,7 +208,7 @@ export default {
             class: 'vxe-modal--status-wrapper'
           }, [
             h('i', {
-              class: ['vxe-modal--status-icon', iconStatus || GlobalConfig.icon[`modal${status.replace(/\b(\w)/, word => word.toUpperCase())}`]]
+              class: ['vxe-modal--status-icon', iconStatus || GlobalConfig.icon[`MODAL_${status}`.toLocaleUpperCase()]]
             })
           ]) : null,
           h('div', {

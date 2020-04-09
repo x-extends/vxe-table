@@ -22,12 +22,10 @@ $iconWidth: 1.6em;
   &::placeholder {
     color: $vxe-input-placeholder-color;
   }
+  &[type="search"],
   &[type="number"]::-webkit-outer-spin-button,
   &[type="number"]::-webkit-inner-spin-button {
     appearance: none;
-  }
-  &[type="number"] {
-    appearance: textfield;
   }
 }
 
@@ -463,7 +461,7 @@ $iconWidth: 1.6em;
       }
       &.is--selected {
         color: #fff;
-        background-color: $vxe-input-date-picker-selected-background-color;
+        background-color: $vxe-primary-color;
       }
       &:not(.is--disabled) {
         cursor: pointer;

@@ -599,13 +599,19 @@ export default {
       return this.tableColumn.some(column => column.filters)
     },
     headerCtxMenu () {
-      return this.ctxMenuOpts.header && this.ctxMenuOpts.header.options ? this.ctxMenuOpts.header.options : []
+      const headerOpts = this.ctxMenuOpts.header
+      return headerOpts && headerOpts.options ? headerOpts.options : []
     },
     bodyCtxMenu () {
-      return this.ctxMenuOpts.body && this.ctxMenuOpts.body.options ? this.ctxMenuOpts.body.options : []
+      const bodyOpts = this.ctxMenuOpts.body
+      return bodyOpts && bodyOpts.options ? bodyOpts.options : []
+    },
+    footerCtxMenu () {
+      const footerOpts = this.ctxMenuOpts.footer
+      return footerOpts && footerOpts.options ? footerOpts.options : []
     },
     isCtxMenu () {
-      return this.headerCtxMenu.length || this.bodyCtxMenu.length
+      return this.headerCtxMenu.length || this.bodyCtxMenu.length || this.footerCtxMenu.length
     },
     ctxMenuOpts () {
       return Object.assign({}, GlobalConfig.table.contextMenu, this.contextMenu)
@@ -707,9 +713,6 @@ export default {
         }
       })
       this.handleTableData(true)
-      if (this.$toolbar) {
-        this.$toolbar.updateColumns(tableFullColumn)
-      }
       // 在 v2.0 中废弃
       if (tableFullColumn.length) {
         if (tableFullColumn.some(column => column.columnKey)) {
@@ -732,6 +735,11 @@ export default {
       if (this.isGroup && this.mouseConfig && (this.mouseOpts.range || this.mouseOpts.checked)) {
         UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.range'])
       }
+      this.$nextTick(() => {
+        if (this.$toolbar) {
+          this.$toolbar.updateColumns(tableFullColumn)
+        }
+      })
     },
     tableColumn () {
       this.analyColumnWidth()
@@ -870,7 +878,7 @@ export default {
     GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'resize', this.handleGlobalResizeEvent)
-    this.preventEvent(null, 'created', { $table: this })
+    this.preventEvent(null, 'created')
   },
   mounted () {
     if (this.autoResize) {
@@ -880,14 +888,14 @@ export default {
       UtilTools.warn('vxe.error.removeProp', ['customs'])
     }
     document.body.appendChild(this.$refs.tableWrapper)
-    this.preventEvent(null, 'mounted', { $table: this })
+    this.preventEvent(null, 'mounted')
   },
   activated () {
     this.recalculate().then(() => this.refreshScroll())
-    this.preventEvent(null, 'activated', { $table: this })
+    this.preventEvent(null, 'activated')
   },
   deactivated () {
-    this.preventEvent(null, 'deactivated', { $table: this })
+    this.preventEvent(null, 'deactivated')
   },
   beforeDestroy () {
     const tableWrapper = this.$refs.tableWrapper
@@ -900,7 +908,7 @@ export default {
     this.closeFilter()
     this.closeMenu()
     this.clearAll()
-    this.preventEvent(null, 'beforeDestroy', { $table: this })
+    this.preventEvent(null, 'beforeDestroy')
   },
   destroyed () {
     GlobalEvent.off(this, 'mousedown')
@@ -909,7 +917,7 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'resize')
-    this.preventEvent(null, 'destroyed', { $table: this })
+    this.preventEvent(null, 'destroyed')
   },
   render (h) {
     const {
@@ -2016,6 +2024,13 @@ export default {
       }
       return this.updateToolbarCustom()
     },
+    updateToolbarCustom () {
+      const { $toolbar } = this
+      if ($toolbar) {
+        $toolbar.handleCustoms()
+      }
+      return this.refreshColumn()
+    },
     resetResizable () {
       UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
       return this.handleResetResizable()
@@ -2313,7 +2328,7 @@ export default {
     preventEvent (evnt, type, args, next, end) {
       const evntList = VXETable.interceptor.get(type)
       let rest
-      if (!evntList.some(func => func(Object.assign({ $table: this }, args), evnt, this) === false)) {
+      if (!evntList.some(func => func(Object.assign({ $grid: this.$xegrid, $table: this, $event: evnt }, args), evnt, this) === false)) {
         if (next) {
           rest = next()
         }
@@ -2417,7 +2432,7 @@ export default {
     handleGlobalKeydownEvent (evnt) {
       // 该行为只对当前激活的表格有效
       if (this.isActivated) {
-        this.preventEvent(evnt, 'event.keydown', { $table: this, $grid: this.$xegrid }, () => {
+        this.preventEvent(evnt, 'event.keydown', null, () => {
           let params
           const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
           const { selected, actived } = editStore
@@ -2742,9 +2757,9 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      const { $refs, id, contextMenu, isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
+      const { $refs, id, contextMenu, ctxMenuStore, ctxMenuOpts } = this
       const layoutList = ['header', 'body', 'footer']
-      if (contextMenu && isCtxMenu) {
+      if (contextMenu) {
         if (ctxMenuStore.visible) {
           if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
             evnt.preventDefault()
@@ -2773,9 +2788,7 @@ export default {
             this.openContextMenu(evnt, layout, params)
             UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
             return
-          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => {
-            return target.getAttribute('data-tid') === id
-          }).flag) {
+          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === id).flag) {
             if (ctxMenuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {
@@ -3303,7 +3316,6 @@ export default {
     // 还原展开、选中等相关状态
     handleReserveStatus () {
       const { treeConfig, fullDataRowIdData, radioReserveRow, radioOpts, checkboxReserveRowMap, checkboxOpts } = this
-      let reserveRadioRow = null
       const reserveSelection = []
       const reserveRowExpandeds = []
       const reserveTreeExpandeds = []
@@ -3312,10 +3324,9 @@ export default {
       if (radioOpts.reserve && radioReserveRow) {
         const rowid = UtilTools.getRowid(this, radioReserveRow)
         if (fullDataRowIdData[rowid]) {
-          reserveRadioRow = fullDataRowIdData[rowid].row
+          this.setRadioRow(fullDataRowIdData[rowid].row)
         }
       }
-      this.selectRow = reserveRadioRow
       // 复选框
       this.handleReserveByRowid(this.selection, reserveSelection)
       if (checkboxOpts.reserve) {
@@ -3325,7 +3336,7 @@ export default {
           }
         })
       }
-      this.selection = reserveSelection
+      this.setCheckboxRow(reserveSelection, true)
       // 行展开
       this.handleReserveByRowid(this.rowExpandeds, reserveRowExpandeds)
       this.rowExpandeds = reserveRowExpandeds
@@ -3443,14 +3454,22 @@ export default {
      * 用于多选行，手动清空用户的选择
      */
     clearCheckboxRow () {
-      const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
-      const property = checkboxOpts.checkField || checkboxOpts.checkProp
+      const { tableFullData, treeConfig, treeOpts, checkboxOpts, checkboxReserveRowMap } = this
+      const { checkField: property, reserve } = checkboxOpts
       if (property) {
         if (treeConfig) {
           XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeOpts)
         } else {
           tableFullData.forEach(item => XEUtils.set(item, property, false))
         }
+      }
+      if (reserve) {
+        tableFullData.forEach(row => {
+          const rowid = UtilTools.getRowid(this, row)
+          if (checkboxReserveRowMap[rowid]) {
+            delete checkboxReserveRowMap[rowid]
+          }
+        })
       }
       this.isAllSelected = false
       this.isIndeterminate = false
@@ -3673,6 +3692,7 @@ export default {
         const domMouseup = document.onmouseup
         const trEleme = cell.parentNode
         const absPos = DomTools.getAbsolutePos(trEleme)
+        const { scrollTop, scrollLeft } = DomTools.getDomNode()
         const selectRecords = this.getCheckboxRecords()
         let lastRangeRows = []
         this.updateZindex()
@@ -3682,12 +3702,12 @@ export default {
           const offsetLeft = evnt.clientX - disX
           const offsetTop = evnt.clientY - disY
           const rangeHeight = Math.abs(offsetTop)
-          const rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.top)
+          const rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.boundingTop)
           checkboxRangeElem.style.display = 'block'
           checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
           checkboxRangeElem.style.height = `${rangeHeight}px`
-          checkboxRangeElem.style.left = `${disX + (offsetLeft > 0 ? 0 : offsetLeft)}px`
-          checkboxRangeElem.style.top = `${disY + (offsetTop > 0 ? 0 : offsetTop)}px`
+          checkboxRangeElem.style.left = `${scrollLeft + disX + (offsetLeft > 0 ? 0 : offsetLeft)}px`
+          checkboxRangeElem.style.top = `${scrollTop + disY + (offsetTop > 0 ? 0 : offsetTop)}px`
           checkboxRangeElem.style.zIndex = `${this.tZindex}`
           // 至少滑动 10px 才能有效匹配
           if (rangeHeight > 10 && rangeRows.length !== lastRangeRows.length) {
@@ -5547,7 +5567,7 @@ export default {
             }
             return Promise.resolve(params)
           }
-          this.preventEvent(null, 'event.import', { $table: this, file, options, columns: this.tableFullColumn }, () => {
+          this.preventEvent(null, 'event.import', { file, options, columns: this.tableFullColumn }, () => {
             const reader = new FileReader()
             reader.onerror = () => {
               UtilTools.error('vxe.error.notType', [type])
