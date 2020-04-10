@@ -263,7 +263,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{ data, property }',
         list: []
       }
     ]

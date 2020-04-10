@@ -163,7 +163,7 @@ export default {
         }, renderTitle(h, this)) : null,
         h('div', {
           class: ['vxe-form--item-content', align ? `align--${align}` : null]
-        }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, property: field, $form: $vxeform }, { $form: $vxeform }) : ($scopedSlots.default ? $scopedSlots.default.call(this, { data: $vxeform.data, property: field, $form: $vxeform }) : [])).concat(
+        }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, property: field, $form: $vxeform }, { $form: $vxeform }) : ($scopedSlots.default ? $scopedSlots.default.call(this, { data: $vxeform.data, property: field, $form: $vxeform }, h) : [])).concat(
           [
             collapseNode ? h('div', {
               class: 'vxe-form--item-trigger-node',

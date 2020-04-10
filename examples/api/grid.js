@@ -20,6 +20,13 @@ pagerSlots.list.forEach(item => {
   item.defVal = `${item.defVal}, h`
 })
 
+const formItemSlots = XEUtils.clone(formItemAPI.find(item => item.name === 'Slots'), true)
+formItemSlots.name = 'slots'
+formItemSlots.list.forEach(item => {
+  item.type = 'String, Function'
+  item.defVal = `${item.defVal}, h`
+})
+
 const apis = [
   {
     name: 'Props',
@@ -44,7 +51,9 @@ const apis = [
             type: 'Array',
             enum: '',
             defVal: '',
-            list: XEUtils.clone(formItemAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
+            list: XEUtils.clone(formItemAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
+              formItemSlots
+            ])
           }
         ])
       },

@@ -30,11 +30,29 @@ function getResetValue (value, resetValue) {
   return resetValue
 }
 
+function getItemSlots (_vm, item) {
+  const { $scopedSlots } = _vm
+  const itemSlots = item.slots
+  const slots = {}
+  let $default
+  if (itemSlots) {
+    $default = itemSlots.default
+    if ($default && $scopedSlots[$default]) {
+      $default = $scopedSlots[$default]
+    }
+  }
+  if ($default) {
+    slots.default = $default
+  }
+  return slots
+}
+
 function renderItems (h, _vm) {
   const { items } = _vm
   return items ? items.map(item => {
     return h('vxe-form-item', {
-      props: item
+      props: item,
+      scopedSlots: getItemSlots(_vm, item)
     })
   }) : []
 }
