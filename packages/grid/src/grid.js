@@ -684,13 +684,13 @@ export default {
       const property = params.order ? params.property : null
       // 如果是服务端排序
       if (isRemote) {
-        this.sortData = {
+        this.sortData = property ? {
           property,
           field: property,
           // v3 废弃 prop
           prop: property,
           order: params.order
-        }
+        } : {}
         if (proxyConfig) {
           this.commitProxy('query')
         }
