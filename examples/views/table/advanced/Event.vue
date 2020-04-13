@@ -4,17 +4,20 @@
 
     <vxe-table
       border
-      height="500"
+      context-menu
       highlight-hover-row
       show-overflow
       resizable
+      height="500"
       :data="tableData"
       @header-cell-click="headerCellClickEvent"
       @header-cell-dblclick="headerCellDBLClickEvent"
+      @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-click="cellClickEvent"
       @cell-dblclick="cellDBLClickEvent"
       @cell-mouseenter="cellMouseenterEvent"
       @cell-mouseleave="cellMouseleaveEvent"
+      @cell-context-menu="cellContextMenuEvent"
       @scroll="scrollEvent">
       <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
@@ -44,17 +47,20 @@ export default {
         `
         <vxe-table
           border
-          height="500"
+          context-menu
           highlight-hover-row
           show-overflow
           resizable
+          height="500"
           :data="tableData"
           @header-cell-click="headerCellClickEvent"
           @header-cell-dblclick="headerCellDBLClickEvent"
+          @header-cell-context-menu="headerCellContextMenuEvent"
           @cell-click="cellClickEvent"
           @cell-dblclick="cellDBLClickEvent"
           @cell-mouseenter="cellMouseenterEvent"
           @cell-mouseleave="cellMouseleaveEvent"
+          @cell-context-menu="cellContextMenuEvent"
           @scroll="scrollEvent">
           <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
@@ -81,6 +87,9 @@ export default {
             headerCellDBLClickEvent ({ column }) {
               console.log(\`表头单元格双击\${column.title}\`)
             },
+            headerCellContextMenuEvent ({ column }) {
+              console.log(\`右键列 \${column.title}\`)
+            },
             cellClickEvent ({ column }) {
               console.log(\`单元格点击\${column.title}\`)
             },
@@ -92,6 +101,9 @@ export default {
             },
             cellMouseleaveEvent ({ column }) {
               console.log(\`鼠标离开单元格\${column.title}\`)
+            },
+            cellContextMenuEvent ({ row }) {
+              console.log(\`右键行 \${row.name}\`)
             },
             scrollEvent ({ scrollTop, scrollLeft }) {
               console.log(\`滚动事件scrollTop=\${scrollTop} scrollLeft=\${scrollLeft}\`)
@@ -117,6 +129,9 @@ export default {
     headerCellDBLClickEvent ({ column }) {
       console.log(`表头单元格双击${column.title}`)
     },
+    headerCellContextMenuEvent ({ column }) {
+      console.log(`右键列 ${column.title}`)
+    },
     cellClickEvent ({ column }) {
       console.log(`单元格点击${column.title}`)
     },
@@ -128,6 +143,9 @@ export default {
     },
     cellMouseleaveEvent ({ column }) {
       console.log(`鼠标离开单元格${column.title}`)
+    },
+    cellContextMenuEvent ({ row }) {
+      console.log(`右键行 ${row.name}`)
     },
     scrollEvent ({ scrollTop, scrollLeft }) {
       console.log(`滚动事件scrollTop=${scrollTop} scrollLeft=${scrollLeft}`)

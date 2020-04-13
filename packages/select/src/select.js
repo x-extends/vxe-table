@@ -377,9 +377,6 @@ export default {
     setCurrentOption (option) {
       if (option) {
         this.currentValue = option.value
-        this.$nextTick(() => {
-          DomTools.toView(this.$refs.panel.querySelector(`[data-optid='${option.id}']`))
-        })
       }
     },
     clearEvent (params, evnt) {
@@ -487,8 +484,19 @@ export default {
         this.isActivated = true
         this.animatVisible = true
         setTimeout(() => {
+          const currOption = findOption(this.allOptList, this.value)
           this.visiblePanel = true
-          this.setCurrentOption(findOption(this.allOptList, this.value))
+          if (currOption) {
+            this.setCurrentOption(currOption)
+            this.$nextTick(() => {
+              const { $refs } = this
+              const optWrapperElem = $refs.optWrapper
+              const optElem = $refs.panel.querySelector(`[data-optid='${currOption.id}']`)
+              if (optWrapperElem && optElem) {
+                optWrapperElem.scrollTop = optElem.offsetTop
+              }
+            })
+          }
         }, 10)
         this.updateZindex()
         this.updatePlacement()

@@ -2,6 +2,9 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
+const browse = DomTools.browse
+const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
+
 function renderDefaultInput (h, _vm) {
   const { inpAttrs, inpEvents, value } = _vm
   return h('input', {
@@ -735,6 +738,7 @@ export default {
       })
       if (this.isNumber) {
         evnts.keydown = this.keydownEvent
+        evnts[wheelName] = this.mousewheelEvent
       } else if (this.isDatePicker) {
         evnts.click = this.clickEvent
       }
@@ -832,6 +836,17 @@ export default {
     focusEvent (evnt) {
       this.isActivated = true
       this.triggerEvent(evnt)
+    },
+    mousewheelEvent (evnt) {
+      if (this.isNumber) {
+        const delta = -evnt.wheelDelta || evnt.detail
+        if (delta > 0) {
+          this.numberNextEvent(evnt)
+        } else if (delta < 0) {
+          this.numberPrevEvent(evnt)
+        }
+        evnt.preventDefault()
+      }
     },
     keydownEvent (evnt) {
       if (this.isNumber) {

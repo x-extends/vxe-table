@@ -16,7 +16,7 @@
     <vxe-table
       border
       resizable
-      height="400"
+      height="300"
       :align="allAlign"
       :span-method="colspanMethod"
       :data="tableData">
@@ -34,13 +34,13 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">合并行</p>
+    <p class="tip">通用合并行</p>
 
     <vxe-table
       border
       resizable
-      height="400"
-      :span-method="rowspanMethod"
+      height="300"
+      :span-method="mergeRowMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="key" title="Key"></vxe-table-column>
@@ -54,6 +54,29 @@
       <code class="xml">{{ demoCodes[2] }}</code>
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
+
+    <p class="tip">通用单元格合并，按区域合并 { row: 起始行, col: 起始列, rowspan: 合并几行, colspan: 合并几列 }</p>
+
+    <vxe-table
+      border
+      resizable
+      height="300"
+      :span-method="mergeMethod"
+      :data="tableData">
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="role" title="Role"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="date12" title="Date"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[4] }}</code>
+      <code class="javascript">{{ demoCodes[5] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -66,6 +89,10 @@ export default {
     return {
       allAlign: null,
       tableData: [],
+      mergeCells: [
+        { row: 1, col: 1, rowspan: 3, colspan: 3 },
+        { row: 6, col: 0, rowspan: 2, colspan: 2 }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -79,7 +106,7 @@ export default {
         <vxe-table
           border
           resizable
-          height="400"
+          height="300"
           :align="allAlign"
           :span-method="colspanMethod"
           :data="tableData">
@@ -99,21 +126,15 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
-            colspanMethod ({ row, rowIndex, column, columnIndex, data }) {
+            colspanMethod ({ rowIndex, columnIndex }) {
               if (rowIndex % 2 === 0) {
                 if (columnIndex === 2) {
-                  return {
-                    rowspan: 1,
-                    colspan: 2
-                  }
+                  return { rowspan: 1, colspan: 2 }
                 } else if (columnIndex === 3) {
-                  return {
-                    rowspan: 0,
-                    colspan: 0
-                  }
+                  return { rowspan: 0, colspan: 0 }
                 }
               }
             }
@@ -124,8 +145,8 @@ export default {
         <vxe-table
           border
           resizable
-          height="400"
-          :span-method="rowspanMethod"
+          height="300"
+          :span-method="mergeRowMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="key" title="Key"></vxe-table-column>
@@ -141,11 +162,11 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             // 通用行合并函数（将相同多列数据合并为一行）
-            rowspanMethod ({ row, $rowIndex, column, data }) {
+            mergeRowMethod ({ row, $rowIndex, column, data }) {
               const fields = ['key']
               const cellValue = XEUtils.get(row, column.property)
               if (cellValue && fields.includes(column.property)) {
@@ -166,13 +187,59 @@ export default {
             }
           }
         }
+        `,
+        `
+        <vxe-table
+          border
+          resizable
+          height="300"
+          :span-method="mergeMethod"
+          :data="tableData">
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="role" title="Role"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: [],
+              mergeCells: [
+                { row: 1, col: 1, rowspan: 3, colspan: 3 },
+                { row: 6, col: 0, rowspan: 2, colspan: 2 }
+              ]
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+          },
+          methods: {
+            // 通用单元格合并函数（将指定区域进行合并）
+            mergeMethod ({ rowIndex, columnIndex }) {
+              const { mergeCells } = this
+              for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
+                const { row, col, rowspan, colspan } = mergeCells[mIndex]
+                if (row === rowIndex && col === columnIndex) {
+                  return { rowspan, colspan }
+                }
+                if (rowIndex >= row && rowIndex < row + rowspan && columnIndex >= col && columnIndex < col + colspan) {
+                  return { rowspan: 0, colspan: 0 }
+                }
+              }
+              return { rowspan: 1, colspan: 1 }
+            }
+          }
+        }
         `
       ]
     }
   },
   created () {
-    const list = window.MOCK_DATA_LIST.slice(0, 20)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -183,20 +250,14 @@ export default {
     colspanMethod ({ rowIndex, columnIndex }) {
       if (rowIndex % 2 === 0) {
         if (columnIndex === 2) {
-          return {
-            rowspan: 1,
-            colspan: 2
-          }
+          return { rowspan: 1, colspan: 2 }
         } else if (columnIndex === 3) {
-          return {
-            rowspan: 0,
-            colspan: 0
-          }
+          return { rowspan: 0, colspan: 0 }
         }
       }
     },
     // 通用行合并函数（将相同多列数据合并为一行）
-    rowspanMethod ({ row, $rowIndex, column, data }) {
+    mergeRowMethod ({ row, $rowIndex, column, data }) {
       const fields = ['key']
       const cellValue = XEUtils.get(row, column.property)
       if (cellValue && fields.includes(column.property)) {
@@ -214,6 +275,20 @@ export default {
           }
         }
       }
+    },
+    // 通用单元格合并函数（将指定区域进行合并）
+    mergeMethod ({ rowIndex, columnIndex }) {
+      const { mergeCells } = this
+      for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
+        const { row, col, rowspan, colspan } = mergeCells[mIndex]
+        if (row === rowIndex && col === columnIndex) {
+          return { rowspan, colspan }
+        }
+        if (rowIndex >= row && rowIndex < row + rowspan && columnIndex >= col && columnIndex < col + colspan) {
+          return { rowspan: 0, colspan: 0 }
+        }
+      }
+      return { rowspan: 1, colspan: 1 }
     }
   }
 }

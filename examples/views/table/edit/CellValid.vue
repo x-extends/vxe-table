@@ -48,6 +48,15 @@ import hljs from 'highlight.js'
 
 export default {
   data () {
+    const nameValid = ({ cellValue }) => {
+      return new Promise((resolve, reject) => {
+        if (cellValue.length < 3 || cellValue.length > 50) {
+          reject(new Error('名称长度在 3 到 50 个字符之间'))
+        } else {
+          resolve()
+        }
+      })
+    }
     const roleValid = ({ cellValue }) => {
       if (cellValue && !['前端', '后端', '设计师', '项目经理', '测试'].includes(cellValue)) {
         return Promise.reject(new Error('角色输入不正确'))
@@ -58,7 +67,7 @@ export default {
       validRules: {
         name: [
           { required: true, message: 'app.body.valid.rName' },
-          { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+          { validator: nameValid }
         ],
         role: [
           { validator: roleValid }
@@ -107,6 +116,15 @@ export default {
         `
         export default {
           data () {
+            const nameValid = ({ cellValue }) => {
+              return new Promise((resolve, reject) => {
+                if (cellValue.length < 3 || cellValue.length > 50) {
+                  reject(new Error('名称长度在 3 到 50 个字符之间'))
+                } else {
+                  resolve()
+                }
+              })
+            }
             const roleValid = ({ cellValue }) => {
               if (cellValue && !['前端', '后端', '设计师', '项目经理', '测试'].includes(cellValue)) {
                 return Promise.reject(new Error('角色输入不正确'))
@@ -117,7 +135,7 @@ export default {
               validRules: {
                 name: [
                   { required: true, message: 'app.body.valid.rName' },
-                  { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+                  { validator: nameValid }
                 ],
                 role: [
                   { validator: roleValid }

@@ -19,8 +19,13 @@ $iconWidth: 1.6em;
 .vxe-input--inner {
   width: 100%;
   height: 100%;
+  box-shadow: none;
   &::placeholder {
     color: $vxe-input-placeholder-color;
+  }
+  &[type="number"] {
+    appearance: none;
+    -moz-appearance: textfield;
   }
   &[type="search"],
   &[type="number"]::-webkit-outer-spin-button,

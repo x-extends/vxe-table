@@ -2149,15 +2149,15 @@ const apis = [
                 enum: '',
                 defVal: '默认自动计算',
                 list: []
-              },
-              {
-                name: 'rHeight',
-                desc: '指定行高',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
+              // },
+              // {
+              //   name: 'rHeight',
+              //   desc: '指定行高',
+              //   version: '',
+              //   type: 'Number',
+              //   enum: '',
+              //   defVal: '默认自动计算',
+              //   list: []
               }
             ]
           // },

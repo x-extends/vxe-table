@@ -9,7 +9,7 @@
       show-footer
       :footer-method="footerMethod"
       :data="tableData"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
+      :context-menu="tableMenu"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
@@ -37,53 +37,61 @@ export default {
   data () {
     return {
       tableData: [],
-      headerMenus: [
-        [
-          { code: 'HIDDEN_COLUMN', name: '隐藏' },
-          { code: 'RESET_COLUMN', name: '取消隐藏' },
-          { code: 'RESET_ALL', name: '重置个性化数据', prefixIcon: 'fa fa-undo' }
-        ],
-        [
-          { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
-          { code: 'EXPORT_ALL', name: '导出.html', prefixIcon: 'fa fa-download', params: { type: 'html' } }
-        ]
-      ],
-      bodyMenus: [
-        [
-          { code: 'INSERT_AT_ACTIVED_ROW', name: '插入' },
-          { code: 'DELETE_ROW', name: 'app.body.label.delete' },
-          { code: 'CLEAR_CELL', name: '清除内容' }
-        ],
-        [
-          {
-            name: 'app.body.label.filter',
-            prefixIcon: 'fa fa-filter',
-            children: [
-              { code: 'CLEAR_FILTER', name: '清除筛选' },
-              { code: 'CLEAR_ALL_FILTER', name: '重置所有筛选' },
-              { code: 'FILTER_CELL', name: '按所选单元格的值筛选' }
+      tableMenu: {
+        header: {
+          options: [
+            [
+              { code: 'HIDDEN_COLUMN', name: '隐藏' },
+              { code: 'RESET_COLUMN', name: '取消隐藏' },
+              { code: 'RESET_ALL', name: '重置个性化数据', prefixIcon: 'fa fa-undo' }
+            ],
+            [
+              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
+              { code: 'EXPORT_ALL', name: '导出.html', prefixIcon: 'fa fa-download', params: { type: 'html' } }
             ]
-          },
-          {
-            name: 'app.body.label.sort',
-            children: [
-              { code: 'SORT_ASC', name: '升序', prefixIcon: 'fa fa-sort-alpha-desc' },
-              { code: 'SORT_DESC', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc' },
-              { code: 'CLEAR_SORT', name: '清除排序' }
+          ]
+        },
+        body: {
+          options: [
+            [
+              { code: 'INSERT_AT_ACTIVED_ROW', name: '插入' },
+              { code: 'DELETE_ROW', name: 'app.body.label.delete' },
+              { code: 'CLEAR_CELL', name: '清除内容' }
+            ],
+            [
+              {
+                name: 'app.body.label.filter',
+                prefixIcon: 'fa fa-filter',
+                children: [
+                  { code: 'CLEAR_FILTER', name: '清除筛选' },
+                  { code: 'CLEAR_ALL_FILTER', name: '重置所有筛选' },
+                  { code: 'FILTER_CELL', name: '按所选单元格的值筛选' }
+                ]
+              },
+              {
+                name: 'app.body.label.sort',
+                children: [
+                  { code: 'SORT_ASC', name: '升序', prefixIcon: 'fa fa-sort-alpha-desc' },
+                  { code: 'SORT_DESC', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc' },
+                  { code: 'CLEAR_SORT', name: '清除排序' }
+                ]
+              }
+            ],
+            [
+              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
+              { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { type: 'csv' } }
             ]
-          }
-        ],
-        [
-          { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
-          { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { type: 'csv' } }
-        ]
-      ],
-      footerMenus: [
-        [
-          { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { type: 'xml' } },
-          { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' }
-        ]
-      ],
+          ]
+        },
+        footer: {
+          options: [
+            [
+              { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { type: 'xml' } },
+              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' }
+            ]
+          ]
+        }
+      },
       demoCodes: [
         `
         <vxe-table
@@ -93,7 +101,7 @@ export default {
           show-footer
           :footer-method="footerMethod"
           :data="tableData"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}}"
+          :context-menu="tableMenu"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
@@ -109,53 +117,61 @@ export default {
           data () {
             return {
               tableData: [],
-              headerMenus: [
-                [
-                  { code: 'HIDDEN_COLUMN', name: '隐藏' },
-                  { code: 'RESET_COLUMN', name: '取消隐藏' },
-                  { code: 'RESET_ALL', name: '重置个性化数据', prefixIcon: 'fa fa-undo' }
-                ],
-                [
-                  { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
-                  { code: 'EXPORT_ALL', name: '导出.html', prefixIcon: 'fa fa-download', params: { type: 'html' } }
-                ]
-              ],
-              bodyMenus: [
-                [
-                  { code: 'INSERT_AT_ACTIVED_ROW', name: '插入' },
-                  { code: 'DELETE_ROW', name: 'app.body.label.delete' },
-                  { code: 'CLEAR_CELL', name: '清除内容' }
-                ],
-                [
-                  {
-                    name: 'app.body.label.filter',
-                    prefixIcon: 'fa fa-filter',
-                    children: [
-                      { code: 'CLEAR_FILTER', name: '清除筛选' },
-                      { code: 'CLEAR_ALL_FILTER', name: '重置所有筛选' },
-                      { code: 'FILTER_CELL', name: '按所选单元格的值筛选' }
+              tableMenu: {
+                header: {
+                  options: [
+                    [
+                      { code: 'HIDDEN_COLUMN', name: '隐藏' },
+                      { code: 'RESET_COLUMN', name: '取消隐藏' },
+                      { code: 'RESET_ALL', name: '重置个性化数据', prefixIcon: 'fa fa-undo' }
+                    ],
+                    [
+                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
+                      { code: 'EXPORT_ALL', name: '导出.html', prefixIcon: 'fa fa-download', params: { type: 'html' } }
                     ]
-                  },
-                  {
-                    name: 'app.body.label.sort',
-                    children: [
-                      { code: 'SORT_ASC', name: '升序', prefixIcon: 'fa fa-sort-alpha-desc' },
-                      { code: 'SORT_DESC', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc' },
-                      { code: 'CLEAR_SORT', name: '清除排序' }
+                  ]
+                },
+                body: {
+                  options: [
+                    [
+                      { code: 'INSERT_AT_ACTIVED_ROW', name: '插入' },
+                      { code: 'DELETE_ROW', name: 'app.body.label.delete' },
+                      { code: 'CLEAR_CELL', name: '清除内容' }
+                    ],
+                    [
+                      {
+                        name: 'app.body.label.filter',
+                        prefixIcon: 'fa fa-filter',
+                        children: [
+                          { code: 'CLEAR_FILTER', name: '清除筛选' },
+                          { code: 'CLEAR_ALL_FILTER', name: '重置所有筛选' },
+                          { code: 'FILTER_CELL', name: '按所选单元格的值筛选' }
+                        ]
+                      },
+                      {
+                        name: 'app.body.label.sort',
+                        children: [
+                          { code: 'SORT_ASC', name: '升序', prefixIcon: 'fa fa-sort-alpha-desc' },
+                          { code: 'SORT_DESC', name: '倒序', prefixIcon: 'fa fa-sort-alpha-desc' },
+                          { code: 'CLEAR_SORT', name: '清除排序' }
+                        ]
+                      }
+                    ],
+                    [
+                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
+                      { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { type: 'csv' } }
                     ]
-                  }
-                ],
-                [
-                  { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
-                  { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { type: 'csv' } }
-                ]
-              ],
-              footerMenus: [
-                [
-                  { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { type: 'xml' } },
-                  { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' }
-                ]
-              ]
+                  ]
+                },
+                footer: {
+                  options: [
+                    [
+                      { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { type: 'xml' } },
+                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' }
+                    ]
+                  ]
+                }
+              }
             }
           },
           created () {

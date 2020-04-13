@@ -169,6 +169,7 @@ module.exports = {
         tooltip: '文字提示',
         form: '表单',
         switch: '开关',
+        list: '列表',
 
         other: '集成第三方库',
         elementRender: 'element-ui -> 自定义渲染',
@@ -237,7 +238,8 @@ module.exports = {
         vxeModal: 'vxe-modal',
         vxeForm: 'vxe-form',
         vxeFormItem: 'vxe-form-item',
-        vxeSwitch: 'vxe-switch'
+        vxeSwitch: 'vxe-switch',
+        vxeList: 'vxe-list'
       }
     },
     body: {
@@ -679,6 +681,11 @@ module.exports = {
           offIcon: '关闭时的图标',
           onClass: '打开时的 className',
           offClass: '关闭时的 className'
+        }
+      },
+      list: {
+        desc: {
+          data: '列表数据'
         }
       }
     }

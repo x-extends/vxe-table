@@ -2981,7 +2981,7 @@ export default {
      */
     handleTooltip (evnt, cell, overflowElem, column, row) {
       const tooltip = this.$refs.tooltip
-      const content = overflowElem.innerText
+      const content = overflowElem.textContent
       if (content && overflowElem.scrollWidth > overflowElem.clientWidth) {
         Object.assign(this.tooltipStore, {
           row,

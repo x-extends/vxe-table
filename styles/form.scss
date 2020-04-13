@@ -76,14 +76,19 @@
   transition: all 0.2s ease-in-out;
 }
 
-.vxe-form--item {
-  padding: 0.5em 0.8em 0.5em 0;
-  display: none;
-  &.is--active {
-    &:not(.is--hidden) {
-      display: inline-block;
+.vxe-form {
+  .vxe-form--item {
+    display: none;
+    padding: 0.5em 0.8em 0.5em 0;
+    &.is--active {
+      &:not(.is--hidden) {
+        display: inline-block;
+      }
     }
   }
+}
+
+.vxe-form--item {
   &.is--span {
     .vxe-default-input:not([type="submit"]):not([type="reset"]),
     .vxe-default-textarea,
