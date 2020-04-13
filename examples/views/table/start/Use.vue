@@ -41,6 +41,13 @@
       </code>
     </pre>
     <p class="tip">最后这样按需引入模块，就可以减小体积了</p>
+    <div>src/plugins/utils.js</div>
+    <pre>
+      <code class="javascript">
+        import 'xe-utils'
+      </code>
+    </pre>
+    <div>src/plugins/table.js</div>
     <pre>
       <code class="javascript">
         import Vue from 'vue'
@@ -108,6 +115,13 @@
         Vue.use(Resize)
         // 再安装核心库
         Vue.use(Table)
+      </code>
+    </pre>
+    <div>main.js</div>
+    <pre>
+      <code class="javascript">
+        import './plugins/utils'
+        import './plugins/table'
       </code>
     </pre>
   </div>

@@ -1,10 +1,11 @@
+import { VXETableModule } from '../component'
 import { ColumnConfig } from '../column'
 import { Table } from '../table'
 
 /**
  * 表格校验
  */
-export declare class Validator {}
+export declare class Validator extends VXETableModule {}
 
 export interface ColumnEditRule {
   /**

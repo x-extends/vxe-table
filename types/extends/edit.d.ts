@@ -1,10 +1,11 @@
+import { VXETableModule } from '../component'
 import { ColumnCellRenderParams } from '../column'
 import { RenderOptions, OptionProps, OptionGroupProps } from './renderer'
 
 /**
  * 编辑
  */
-export declare class Edit {}
+export declare class Edit extends VXETableModule {}
 
 export interface ColumnEditSlotParams extends ColumnEditRenderParams {}
 

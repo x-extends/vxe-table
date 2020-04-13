@@ -18,7 +18,7 @@
       <vxe-table-column field="address" title="内容和标题显示 tooltip" width="160" show-header-overflow show-overflow></vxe-table-column>
       <vxe-table-column field="date" title="内容显示原生 title" show-overflow="title" show-footer-overflow>
         <template>
-          <span>111111111111<br>换行换行换行换行换行<br>22222222222222222222222222222222222</span>
+          <span style="white-space: pre-line;" v-html="`111111111111\n换行换行换行换行换行\n22222222222`"></span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
@@ -26,7 +26,7 @@
           <span>标题显示原生 title ___________________________</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="160" show-overflow></vxe-table-column>
+      <vxe-table-column field="address" title="不换行不换行不换行不换行不换行不换行不换行不换行不换行" width="160" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -51,7 +51,7 @@
       <vxe-table-column field="address" title="显示为省略号_____________" width="160" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
       <vxe-table-column field="date" title="显示 tooltip" show-overflow show-footer-overflow>
         <template>
-          <span>111111111111<br>换行换行换行换行换行<br>22222222222222222222222222222222222</span>
+          <span v-html="`超出隐藏,tooltip支持换行\n111111111111\n换行换行换行换行换行\n33333333333333`"></span>
         </template>
       </vxe-table-column>
       <vxe-table-column title="基本信息">
@@ -94,7 +94,7 @@ export default {
           <vxe-table-column field="address" title="内容和标题显示 tooltip" width="160" show-header-overflow show-overflow></vxe-table-column>
           <vxe-table-column field="date" title="内容显示原生 title" show-overflow="title" show-footer-overflow>
             <template>
-              <span>111111111111<br>换行换行换行换行换行<br>22222222222222222222222222222222222</span>
+              <span style="white-space: pre-line;" v-html="\`111111111111\\n换行换行换行换行换行\\n22222222222\`"></span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
@@ -102,7 +102,7 @@ export default {
               <span>标题显示原生 title ___________________________</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="160" show-overflow></vxe-table-column>
+          <vxe-table-column field="address" title="不换行不换行不换行不换行不换行不换行不换行不换行不换行" width="160" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -150,7 +150,7 @@ export default {
           <vxe-table-column field="address" title="显示为省略号_____________" width="160" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
           <vxe-table-column field="date" title="显示 tooltip" show-overflow show-footer-overflow>
             <template>
-              <span>111111111111<br>换行换行换行换行换行<br>22222222222222222222222222222222222</span>
+              <span v-html="\`超出隐藏,tooltip支持换行\\n111111111111\\n换行换行换行换行换行\\n33333333333333\`"></span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="基本信息">
@@ -186,7 +186,7 @@ export default {
                     return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
                   }
                   if (['rate'].includes(column.property)) {
-                    return '老子不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行'
+                    return '不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行'
                   }
                   return null
                 })
@@ -218,7 +218,7 @@ export default {
             return '说明 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
           }
           if (['rate'].includes(column.property)) {
-            return '老子不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行'
+            return '不想换行不想换行不想换行不想换行不想换行不想换行不想换行不想换行'
           }
           return null
         })

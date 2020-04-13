@@ -247,55 +247,77 @@
     background-color: $vxe-table-background-color;
     &.row--stripe {
       background-color: $vxe-table-row-striped-background-color;
-      .vxe-tree--btn-wrapper {
-        background-color: $vxe-table-row-striped-background-color;
-      }
     }
     &.row--radio {
       background-color: $vxe-table-row-radio-background-color;
-      .vxe-tree--btn-wrapper {
-        background-color: $vxe-table-row-radio-background-color;
-      }
     }
     &.row--cheched {
       background-color: $vxe-table-row-cheched-background-color;
-      .vxe-tree--btn-wrapper {
-        background-color: $vxe-table-row-cheched-background-color;
-      }
     }
     &.row--current {
       background-color: $vxe-table-row-current-background-color;
-      .vxe-tree--btn-wrapper {
-        background-color: $vxe-table-row-current-background-color;
-      }
     }
     &.row--hover {
       background-color: $vxe-table-row-hover-background-color;
-      .vxe-tree--btn-wrapper {
-        background-color: $vxe-table-row-hover-background-color;
-      }
       &.row--stripe {
         background-color: $vxe-table-row-hover-striped-background-color;
-        .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-hover-striped-background-color;
-        }
       }
       &.row--radio {
         background-color: $vxe-table-row-hover-radio-background-color;
-        .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-hover-radio-background-color;
-        }
       }
       &.row--cheched {
         background-color: $vxe-table-row-hover-cheched-background-color;
-        .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-hover-cheched-background-color;
-        }
       }
       &.row--current {
         background-color: $vxe-table-row-hover-current-background-color;
+      }
+    }
+  }
+  &.has--tree-line {
+    .vxe-body--row {
+      &.row--stripe {
         .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-hover-current-background-color;
+          background-color: $vxe-table-row-striped-background-color;
+        }
+      }
+      &.row--radio {
+        .vxe-tree--btn-wrapper {
+          background-color: $vxe-table-row-radio-background-color;
+        }
+      }
+      &.row--cheched {
+        .vxe-tree--btn-wrapper {
+          background-color: $vxe-table-row-cheched-background-color;
+        }
+      }
+      &.row--current {
+        .vxe-tree--btn-wrapper {
+          background-color: $vxe-table-row-current-background-color;
+        }
+      }
+      &.row--hover {
+        .vxe-tree--btn-wrapper {
+          background-color: $vxe-table-row-hover-background-color;
+        }
+        &.row--stripe {
+          .vxe-tree--btn-wrapper {
+            background-color: $vxe-table-row-hover-striped-background-color;
+          }
+        }
+        &.row--radio {
+          .vxe-tree--btn-wrapper {
+            background-color: $vxe-table-row-hover-radio-background-color;
+          }
+        }
+        &.row--cheched {
+          .vxe-tree--btn-wrapper {
+            background-color: $vxe-table-row-hover-cheched-background-color;
+          }
+        }
+        &.row--current {
+          .vxe-tree--btn-wrapper {
+            background-color: $vxe-table-row-hover-current-background-color;
+          }
         }
       }
     }
@@ -334,6 +356,17 @@
     }
     &.col--right {
       text-align: right;
+    }
+  }
+  &.has--tree-line {
+    .vxe-header--column,
+    .vxe-body--column,
+    .vxe-footer--column {
+      &.col--current {
+        .vxe-tree--btn-wrapper {
+          background-color: $vxe-table-column-current-background-color;
+        }
+      }
     }
   }
   .vxe-header--column {
@@ -679,6 +712,9 @@
         background-image: none;
       }
     }
+    .vxe-tree--btn-wrapper {
+      background-color: $vxe-table-background-color;
+    }
   }
   .vxe-tree--line-wrapper {
     position: relative;
@@ -706,7 +742,6 @@
     text-align: center;
     transform: translateY(-50%);
     z-index: 1;
-    background-color: $vxe-table-background-color;
     user-select: none;
     cursor: pointer;
   }

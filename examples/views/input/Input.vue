@@ -2,8 +2,8 @@
   <div>
     <h2>{{ $t('app.aside.nav.input') }}</h2>
     <p class="tip">
-      查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
-      支持类型：text 文本、number 数值、integer 整数、date 日期、datetime 时间选择、week 周、month 月份、year 年份、password 密码
+      支持多种类型的输入框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
+      支持类型：text 文本、password 密码、number 数值、integer 整数、float 小数、date 日期、datetime 时间选择、week 周、month 月份、year 年份
     </p>
 
     <p>

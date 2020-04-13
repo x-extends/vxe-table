@@ -67,6 +67,7 @@ import modalAPI from '../../api/modal'
 import formAPI from '../../api/form'
 import formItemAPI from '../../api/form-item'
 import switchAPI from '../../api/switch'
+import listAPI from '../../api/list'
 
 export default {
   data () {
@@ -221,6 +222,9 @@ export default {
               break
             case 'switch':
               apis = switchAPI
+              break
+            case 'list':
+              apis = listAPI
               break
           }
           // 生成唯一 id
