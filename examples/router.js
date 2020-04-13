@@ -240,6 +240,7 @@ const ModuleTooltip = () => import(/* webpackChunkName: "module" */ './views/too
 const ModuleToolbar = () => import(/* webpackChunkName: "module" */ './views/toolbar/Toolbar.vue')
 const ModuleForm = () => import(/* webpackChunkName: "module" */ './views/form/Form.vue')
 const ModuleSwitch = () => import(/* webpackChunkName: "module" */ './views/switch/Switch.vue')
+const ModuleList = () => import(/* webpackChunkName: "module" */ './views/list/List.vue')
 
 const TableOtherElement = () => import(/* webpackChunkName: "other" */ './views/table/other/Element.vue')
 const TableOtherIview = () => import(/* webpackChunkName: "other" */ './views/table/other/Iview.vue')
@@ -1428,6 +1429,11 @@ export default new Router({
       path: '/table/module/switch',
       name: 'ModuleSwitch',
       component: ModuleSwitch
+    },
+    {
+      path: '/table/module/list',
+      name: 'ModuleList',
+      component: ModuleList
     },
     {
       path: '/table/other/element',

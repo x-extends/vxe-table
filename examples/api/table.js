@@ -1981,15 +1981,15 @@ const apis = [
                 defVal: '默认自动计算',
                 list: []
               },
-              {
-                name: 'rHeight',
-                desc: '指定行高',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
+              // {
+              //   name: 'rHeight',
+              //   desc: '指定行高',
+              //   version: '',
+              //   type: 'Number',
+              //   enum: '',
+              //   defVal: '默认自动计算',
+              //   list: []
+              // },
               {
                 name: 'adaptive',
                 desc: '自动适配最优的渲染方式',

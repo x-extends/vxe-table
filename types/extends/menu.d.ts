@@ -1,9 +1,10 @@
+import { VXETableModule } from '../component'
 import { ColumnCellRenderParams } from '../column'
 
 /**
  * 快捷菜单
  */
-export declare class Menu {}
+export declare class Menu extends VXETableModule {}
 
 export interface MenuOptions {
   disabled?: boolean;

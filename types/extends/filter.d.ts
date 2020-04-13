@@ -1,3 +1,4 @@
+import { VXETableModule } from '../component'
 import { TableRenderParams } from '../table'
 import { ColumnConfig } from '../column'
 import { RenderOptions, OptionProps, OptionGroupProps } from './renderer'
@@ -5,7 +6,7 @@ import { RenderOptions, OptionProps, OptionGroupProps } from './renderer'
 /**
  * 筛选
  */
-export declare class Filter {}
+export declare class Filter extends VXETableModule {}
 
 export class FilterPanel {
   /**

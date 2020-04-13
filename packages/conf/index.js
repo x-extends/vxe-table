@@ -1,3 +1,4 @@
+const iconPrefix = 'vxe-icon--'
 const GlobalConfig = {
   // size: null, // 全局尺寸
   zIndex: 100, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
@@ -87,66 +88,66 @@ const GlobalConfig = {
   },
   icon: {
     // table
-    TABLE_SORT_ASC: 'vxe-icon--caret-top',
-    TABLE_SORT_DESC: 'vxe-icon--caret-bottom',
-    TABLE_FILTER_NONE: 'vxe-icon--funnel',
-    TABLE_FILTER_MATCH: 'vxe-icon--funnel',
-    TABLE_EDIT: 'vxe-icon--edit-outline',
-    TABLE_TREE_LOADED: 'vxe-icon--refresh roll',
-    TABLE_TREE_OPEN: 'vxe-icon--caret-right rotate90',
-    TABLE_TREE_CLOSE: 'vxe-icon--caret-right',
-    TABLE_EXPAND_LOADED: 'vxe-icon--refresh roll',
-    TABLE_EXPAND_OPEN: 'vxe-icon--arrow-right rotate90',
-    TABLE_EXPAND_CLOSE: 'vxe-icon--arrow-right',
+    TABLE_SORT_ASC: iconPrefix + 'caret-top',
+    TABLE_SORT_DESC: iconPrefix + 'caret-bottom',
+    TABLE_FILTER_NONE: iconPrefix + 'funnel',
+    TABLE_FILTER_MATCH: iconPrefix + 'funnel',
+    TABLE_EDIT: iconPrefix + 'edit-outline',
+    TABLE_TREE_LOADED: iconPrefix + 'refresh roll',
+    TABLE_TREE_OPEN: iconPrefix + 'caret-right rotate90',
+    TABLE_TREE_CLOSE: iconPrefix + 'caret-right',
+    TABLE_EXPAND_LOADED: iconPrefix + 'refresh roll',
+    TABLE_EXPAND_OPEN: iconPrefix + 'arrow-right rotate90',
+    TABLE_EXPAND_CLOSE: iconPrefix + 'arrow-right',
 
     // button
-    BUTTON_DROPDOWN: 'vxe-icon--arrow-bottom',
-    BUTTON_LOADING: 'vxe-icon--refresh roll',
+    BUTTON_DROPDOWN: iconPrefix + 'arrow-bottom',
+    BUTTON_LOADING: iconPrefix + 'refresh roll',
 
     // select
-    SELECT_OPEN: 'vxe-icon--caret-bottom rotate180',
-    SELECT_CLOSE: 'vxe-icon--caret-bottom',
+    SELECT_OPEN: iconPrefix + 'caret-bottom rotate180',
+    SELECT_CLOSE: iconPrefix + 'caret-bottom',
 
     // pager
-    PAGER_JUMP_PREV: 'vxe-icon--d-arrow-left',
-    PAGER_JUMP_NEXT: 'vxe-icon--d-arrow-right',
-    PAGER_PREV_PAGE: 'vxe-icon--arrow-left',
-    PAGER_NEXT_PAGE: 'vxe-icon--arrow-right',
-    PAGER_JUMP_MORE: 'vxe-icon--more',
+    PAGER_JUMP_PREV: iconPrefix + 'd-arrow-left',
+    PAGER_JUMP_NEXT: iconPrefix + 'd-arrow-right',
+    PAGER_PREV_PAGE: iconPrefix + 'arrow-left',
+    PAGER_NEXT_PAGE: iconPrefix + 'arrow-right',
+    PAGER_JUMP_MORE: iconPrefix + 'more',
 
     // input
-    INPUT_CLEAR: 'vxe-icon--close',
-    INPUT_PWD: 'vxe-icon--eye-slash',
-    INPUT_SHOW_PWD: 'vxe-icon--eye',
-    INPUT_PREV_NUM: 'vxe-icon--caret-top',
-    INPUT_NEXT_NUM: 'vxe-icon--caret-bottom',
-    INPUT_DATE: 'vxe-icon--calendar',
+    INPUT_CLEAR: iconPrefix + 'close',
+    INPUT_PWD: iconPrefix + 'eye-slash',
+    INPUT_SHOW_PWD: iconPrefix + 'eye',
+    INPUT_PREV_NUM: iconPrefix + 'caret-top',
+    INPUT_NEXT_NUM: iconPrefix + 'caret-bottom',
+    INPUT_DATE: iconPrefix + 'calendar',
 
     // modal
-    MODAL_ZOOM_IN: 'vxe-icon--square',
-    MODAL_ZOOM_OUT: 'vxe-icon--zoomout',
-    MODAL_CLOSE: 'vxe-icon--close',
-    MODAL_INFO: 'vxe-icon--info',
-    MODAL_SUCCESS: 'vxe-icon--success',
-    MODAL_WARNING: 'vxe-icon--warning',
-    MODAL_ERROR: 'vxe-icon--error',
-    MODAL_QUESTION: 'vxe-icon--question',
-    MODAL_LOADING: 'vxe-icon--refresh roll',
+    MODAL_ZOOM_IN: iconPrefix + 'square',
+    MODAL_ZOOM_OUT: iconPrefix + 'zoomout',
+    MODAL_CLOSE: iconPrefix + 'close',
+    MODAL_INFO: iconPrefix + 'info',
+    MODAL_SUCCESS: iconPrefix + 'success',
+    MODAL_WARNING: iconPrefix + 'warning',
+    MODAL_ERROR: iconPrefix + 'error',
+    MODAL_QUESTION: iconPrefix + 'question',
+    MODAL_LOADING: iconPrefix + 'refresh roll',
 
     // toolbar
-    TOOLBAR_TOOLS_REFRESH: 'vxe-icon--refresh',
-    TOOLBAR_TOOLS_REFRESH_LOADING: 'vxe-icon--refresh roll',
-    TOOLBAR_TOOLS_IMPORT: 'vxe-icon--upload',
-    TOOLBAR_TOOLS_EXPORT: 'vxe-icon--download',
-    TOOLBAR_TOOLS_ZOOM_IN: 'vxe-icon--zoomin',
-    TOOLBAR_TOOLS_ZOOM_OUT: 'vxe-icon--zoomout',
-    TOOLBAR_TOOLS_CUSTOM: 'vxe-icon--menu',
+    TOOLBAR_TOOLS_REFRESH: iconPrefix + 'refresh',
+    TOOLBAR_TOOLS_REFRESH_LOADING: iconPrefix + 'refresh roll',
+    TOOLBAR_TOOLS_IMPORT: iconPrefix + 'upload',
+    TOOLBAR_TOOLS_EXPORT: iconPrefix + 'download',
+    TOOLBAR_TOOLS_ZOOM_IN: iconPrefix + 'zoomin',
+    TOOLBAR_TOOLS_ZOOM_OUT: iconPrefix + 'zoomout',
+    TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'menu',
 
     // form
-    FORM_PREFIX: 'vxe-icon--info',
-    FORM_SUFFIX: 'vxe-icon--info',
-    FORM_FOLDING: 'vxe-icon--arrow-top rotate180',
-    FORM_UNFOLDING: 'vxe-icon--arrow-top'
+    FORM_PREFIX: iconPrefix + 'info',
+    FORM_SUFFIX: iconPrefix + 'info',
+    FORM_FOLDING: iconPrefix + 'arrow-top rotate180',
+    FORM_UNFOLDING: iconPrefix + 'arrow-top'
   },
   grid: {
     // size: null,
@@ -250,6 +251,15 @@ const GlobalConfig = {
     animat: true,
     // storage: false,
     storageKey: 'VXE_MODAL_POSITION'
+  },
+  list: {
+    scrollY: {
+      gt: 100
+      // oSize: 0,
+      // rSize: 0
+      // vSize: 0,
+      // rHeight: 0
+    }
   },
   i18n: key => key
 }

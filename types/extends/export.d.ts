@@ -1,3 +1,4 @@
+import { VXETableModule } from '../component'
 import { Table } from '../table'
 import { Grid, GridRenderParams } from '../grid'
 import { ColumnConfig } from '../column'
@@ -5,7 +6,7 @@ import { ColumnConfig } from '../column'
 /**
  * 导出
  */
-export declare class Export {}
+export declare class Export extends VXETableModule {}
 
 /**
  * 导出参数

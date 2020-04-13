@@ -3,7 +3,7 @@
     <h2>{{ $t('app.aside.nav.modal') }}</h2>
 
     <p class="tip">
-      查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
+      支持轻提示、提示框、缩放窗口，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
       对于某些场景如果需要动态创建的窗口，可以通过以下 API 全局调用<br>
       ModalController.open(options) 创建窗口<br>
       ModalController.message(message, title, options) 创建消息框<br>

@@ -1,10 +1,11 @@
+import { VXETableModule } from '../component'
 import { TableRenderParams } from '../table'
 import { ColumnConfig } from '../column'
 
 /**
  * 表头
  */
-export declare class Header {}
+export declare class Header extends VXETableModule {}
 
 export interface ColumnHeaderSlotParams extends ColumnHeaderRenderParams {}
 

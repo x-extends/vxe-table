@@ -46,12 +46,24 @@ import hljs from 'highlight.js'
 
 export default {
   data () {
+    const nameValid = ({ cellValue }) => {
+      return new Promise((resolve, reject) => {
+        if (cellValue) {
+          if (!/^\w+$/.test(cellValue)) {
+            reject(new Error('名称格式不正确，必须字母或数字'))
+          } else {
+            resolve()
+          }
+        } else {
+          resolve()
+        }
+      })
+    }
     return {
       tableData: [],
       validRules: {
         name: [
-          { required: true, message: 'app.body.valid.rName' },
-          { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+          { validator: nameValid }
         ],
         sex: [
           { required: true, message: '性别必须填写' }
@@ -94,12 +106,24 @@ export default {
         `
         export default {
           data () {
+            const nameValid = ({ cellValue }) => {
+              return new Promise((resolve, reject) => {
+                if (cellValue) {
+                  if (!/^\\w+$/.test(cellValue)) {
+                    reject(new Error('名称格式不正确，必须字母或数字'))
+                  } else {
+                    resolve()
+                  }
+                } else {
+                  resolve()
+                }
+              })
+            }
             return {
               tableData: [],
               validRules: {
                 name: [
-                  { required: true, message: 'app.body.valid.rName' },
-                  { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+                  { validator: nameValid }
                 ],
                 sex: [
                   { required: true, message: '性别必须填写' }

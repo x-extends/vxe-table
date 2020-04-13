@@ -1,10 +1,11 @@
+import { VXETableModule } from '../component'
 import { TableRenderParams } from '../table'
 import { ColumnConfig } from '../column'
 
 /**
  * 表尾
  */
-export declare class Footer {}
+export declare class Footer extends VXETableModule {}
 
 export interface ColumnFooterSlotParams extends ColumnFooterRenderParams {}
 

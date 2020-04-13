@@ -3,7 +3,7 @@ import DomTools from './dom'
 
 // 监听全局事件
 const browse = DomTools.browse
-const wheelName = browse.isDoc && /Firefox/i.test(navigator.userAgent) ? 'DOMMouseScroll' : 'mousewheel'
+const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 const eventStore = []
 
 // 滚轮行为监听
