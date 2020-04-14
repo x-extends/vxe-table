@@ -166,7 +166,7 @@ export default {
               attrs,
               style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
               on: tfOns,
-              key: columnKey ? column.id : columnIndex
+              key: columnKey ? column.id : $columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {

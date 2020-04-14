@@ -98,13 +98,12 @@ export default {
          */
         h('colgroup', {
           ref: 'colgroup'
-        }, tableColumn.map((column, columnIndex) => {
-          const isColGroup = column.children && column.children.length
+        }, tableColumn.map((column, $columnIndex) => {
           return h('col', {
             attrs: {
               name: column.id
             },
-            key: columnKey || isColGroup ? column.id : columnIndex
+            key: $columnIndex
           })
         }).concat(scrollbarWidth ? [
           h('col', {
@@ -195,7 +194,7 @@ export default {
               },
               style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
               on: thOns,
-              key: columnKey || isColGroup ? column.id : columnIndex
+              key: columnKey || isColGroup ? column.id : $columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {

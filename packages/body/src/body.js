@@ -223,7 +223,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
       'col--valid-error': hasValidError,
       'col--current': currentColumn === column
     }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
-    key: columnKey ? column.id : columnIndex,
+    key: columnKey ? column.id : $columnIndex,
     attrs,
     style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
     on: tdOns
