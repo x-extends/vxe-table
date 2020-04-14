@@ -43,7 +43,7 @@ const apis = [
         version: '1.15.18',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.grid.formConfig',
         list: XEUtils.clone(formAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
           {
             name: 'items',
@@ -64,7 +64,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.grid.toolbar',
         list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
           name: 'zoom',
           desc: '是否允许最大化显示',
@@ -73,15 +73,6 @@ const apis = [
           enum: '',
           defVal: '',
           list: [
-            {
-              name: 'escRestore',
-              desc: '是否允许按 Esc 键还原',
-              version: '',
-              type: 'Boolean',
-              enum: '',
-              defVal: 'true',
-              list: []
-            },
             {
               name: 'iconIn',
               desc: '自定义最大化图标',
@@ -109,7 +100,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.grid.pagerConfig',
         list: XEUtils.mapTree(pagerAPI.find(item => item.name === 'Props').list.filter(item => !['size', 'loading'].includes(item.name)), item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat(
           pagerSlots
         )
@@ -120,7 +111,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.grid.proxyConfig',
         list: [
           {
             name: 'autoLoad',
@@ -269,6 +260,25 @@ const apis = [
                 list: []
               }
             ]
+          }
+        ]
+      },
+      {
+        name: 'zoom-config',
+        descKey: 'app.api.grid.desc.zoomConfig',
+        version: '1.15.28',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.grid.zoomConfig',
+        list: [
+          {
+            name: 'escRestore',
+            desc: '是否允许通过按下 ESC 键还原',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
           }
         ]
       }
@@ -433,16 +443,7 @@ const apis = [
       },
       {
         name: 'zoom',
-        desc: '只对 toolbar.zoom 配置时有效，当工具栏的缩放按钮被点击时会后触发该事件',
-        version: '1.15.23',
-        type: '',
-        enum: '',
-        defVal: '{ maximize, $event }',
-        list: []
-      },
-      {
-        name: 'custom',
-        desc: '只对 toolbar.custom 配置时有效，当工具栏的自定义列按钮被点击时会后触发该事件',
+        desc: '当最大化或还原操作被手动点击时会后触发该事件',
         version: '1.15.23',
         type: '',
         enum: '',

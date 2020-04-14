@@ -146,12 +146,10 @@ export default {
         }
       }
     })
-    GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
   destroyed () {
-    GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'blur')
   },
@@ -234,7 +232,7 @@ export default {
             title: GlobalConfig.i18n(`vxe.toolbar.zoom${$xegrid.isMaximized() ? 'Out' : 'In'}`)
           },
           on: {
-            click: this.triggerZoomEvent
+            click: $xegrid.triggerZoomEvent
           }
         }, [
           h('i', {
@@ -540,8 +538,8 @@ export default {
     },
     emitCustomEvent (type, evnt) {
       const { $xetable, $xegrid } = this
-      const params = { type, $table: $xetable, $grid: $xegrid, $event: evnt }
-      $xetable.$emit('custom', params, evnt)
+      const comp = $xegrid || $xetable
+      comp.$emit('custom', { type, $table: $xetable, $grid: $xegrid, $event: evnt }, evnt)
     },
     updateResizable (isReset) {
       const comp = this.$xegrid || this.$xetable
@@ -570,12 +568,6 @@ export default {
       })
       this.customStore.isAll = isAll
       this.checkCustomStatus()
-    },
-    handleGlobalKeydownEvent (evnt) {
-      const isEsc = evnt.keyCode === 27
-      if (isEsc && this.$xegrid && this.$xegrid.isMaximized() && this.zoomOpts && this.zoomOpts.escRestore !== false) {
-        this.triggerZoomEvent(evnt)
-      }
     },
     handleGlobalMousedownEvent (evnt) {
       if (!DomTools.getEventTargetNode(evnt, this.$refs.customWrapper).flag) {
@@ -651,7 +643,7 @@ export default {
           if (commandMethod) {
             commandMethod.call(this, params, evnt)
           }
-          UtilTools.emitEvent(this, 'button-click', [params, evnt])
+          this.$emit('button-click', params, evnt)
         }
       }
     },
@@ -670,11 +662,6 @@ export default {
       } else {
         throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
       }
-    },
-    triggerZoomEvent (evnt) {
-      const { $xegrid } = this
-      $xegrid.zoom()
-      $xegrid.$emit('zoom', { $grid: $xegrid, maximize: $xegrid.isMaximized(), type: $xegrid.isMaximized() ? 'max' : 'revert', $event: evnt }, evnt)
     }
   }
 }

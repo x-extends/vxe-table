@@ -3745,6 +3745,9 @@ export default {
     triggerHeaderCellDBLClickEvent (evnt, params) {
       this.$emit('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget, $event: evnt }, params), evnt)
     },
+    getCurrentColumn () {
+      return this.currentColumn
+    },
     setCurrentColumn (column) {
       if (this.highlightCurrentColumn) {
         this.clearCurrentRow()
@@ -4983,7 +4986,7 @@ export default {
               scrollXStore.offsetSize = visibleXSize
             }
             if (!scrollX.rSize) {
-              scrollXStore.renderSize = visibleXSize + 4
+              scrollXStore.renderSize = Math.max(5, visibleXSize + 4)
             }
             this.updateScrollXData()
           } else {
@@ -5015,7 +5018,7 @@ export default {
               scrollYStore.offsetSize = visibleYSize
             }
             if (!scrollY.rSize) {
-              scrollYStore.renderSize = visibleYSize * (browse.edge ? 10 : 8)
+              scrollYStore.renderSize = Math.max(5, visibleYSize * (browse.edge ? 10 : 8))
             }
             this.updateScrollYData()
           } else {

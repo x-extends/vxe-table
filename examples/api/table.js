@@ -2529,6 +2529,15 @@ const apis = [
         enum: '',
         defVal: '{ type, scrollTop, scrollLeft, isX, isY, $event }',
         list: []
+      },
+      {
+        name: 'custom',
+        desc: '如果与工具栏关联，在自定义列按钮被手动点击后会触发该事件',
+        version: '1.15.28',
+        type: '',
+        enum: '',
+        defVal: '{ type, $event}',
+        list: []
       }
     ]
   },
@@ -2955,6 +2964,15 @@ const apis = [
         desc: '获取已修改的数据',
         version: '',
         type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getCurrentColumn()',
+        desc: '用于 highlight-current-column，获取当前列',
+        version: '1.15.28',
+        type: 'ColumnConfig',
         enum: '',
         defVal: '',
         list: []

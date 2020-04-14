@@ -17,8 +17,17 @@ const apis = [
         list: []
       },
       {
+        name: 'loading',
+        desc: '是否加载中',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'height',
-        descKey: '高度',
+        desc: '列表高度',
         version: '',
         type: 'Number, String',
         enum: '',
@@ -77,15 +86,15 @@ const apis = [
             enum: '',
             defVal: '默认自动计算',
             list: []
-          },
-          {
-            name: 'rHeight',
-            desc: '指定行高',
-            version: '',
-            type: 'Number',
-            enum: '',
-            defVal: '默认自动计算',
-            list: []
+          // },
+          // {
+          //   name: 'rHeight',
+          //   desc: '指定行高',
+          //   version: '',
+          //   type: 'Number',
+          //   enum: '',
+          //   defVal: '默认自动计算',
+          //   list: []
           }
         ]
       }
@@ -129,7 +138,7 @@ const apis = [
     list: [
       {
         name: 'loadData(data)',
-        desc: '加载数据（',
+        desc: '加载数据',
         version: '',
         type: 'Promise',
         enum: '',
