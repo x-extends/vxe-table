@@ -34,7 +34,7 @@
       <div class="vxe-col--4">
         <vxe-list class="my-list" :data="list3">
           <template v-slot="{ items }">
-            <div class="my-list-item" v-for="item in items" :key="item.id">
+            <div class="my-list-item" v-for="(item, index) in items" :key="index">
               <img src="static/other/img2.gif" height="28">
               <span>{{ item.label }}</span>
             </div>
@@ -45,7 +45,7 @@
         <vxe-list class="my-ul-list" :data="list4" :scrollY="{sItem: 'li'}">
           <template v-slot="{ items }">
             <ul>
-              <li v-for="item in items" :key="item.id">
+              <li v-for="(item, index) in items" :key="index">
                 <img src="static/other/img1.gif" height="28">
                 <span>{{ item.label }}</span>
               </li>
@@ -58,7 +58,7 @@
           <template v-slot="{ items }">
             <table>
               <tbody>
-                <tr class="my-tr" v-for="item in items" :key="item.id">
+                <tr class="my-tr" v-for="(item, index) in items" :key="index">
                   <td>{{ item.label }} - 列1</td>
                   <td>{{ item.label }} - 列2</td>
                   <td>{{ item.label }} - 列3</td>
@@ -138,7 +138,7 @@ export default {
           <div class="vxe-col--4">
             <vxe-list class="my-list" :data="list3">
               <template v-slot="{ items }">
-                <div class="my-list-item" v-for="item in items" :key="item.id">
+                <div class="my-list-item" v-for="(item, index) in items" :key="index">
                   <img src="static/other/img2.gif" height="28">
                   <span>{{ item.label }}</span>
                 </div>
@@ -149,7 +149,7 @@ export default {
             <vxe-list class="my-ul-list" :data="list4" :scrollY="{sItem: 'li'}">
               <template v-slot="{ items }">
                 <ul>
-                  <li v-for="item in items" :key="item.id">
+                  <li v-for="(item, index) in items" :key="index">
                     <img src="static/other/img1.gif" height="28">
                     <span>{{ item.label }}</span>
                   </li>
@@ -162,7 +162,7 @@ export default {
               <template v-slot="{ items }">
                 <table>
                   <tbody>
-                    <tr class="my-tr" v-for="item in items" :key="item.id">
+                    <tr class="my-tr" v-for="(item, index) in items" :key="index">
                       <td>{{ item.label }} - 列1</td>
                       <td>{{ item.label }} - 列2</td>
                       <td>{{ item.label }} - 列3</td>
@@ -247,6 +247,9 @@ export default {
         .my-table-list .my-tr {
           height: 32px;
         }
+        .my-table-list .my-tr:hover {
+          background-color: #f5f7fa;
+        }
         .my-table-list td {
           border-right: 1px solid #e8eaec;;
         }
@@ -320,6 +323,9 @@ export default {
 }
 .my-table-list .my-tr {
   height: 32px;
+}
+.my-table-list .my-tr:hover {
+  background-color: #f5f7fa;
 }
 .my-table-list td {
   border-right: 1px solid #e8eaec;;

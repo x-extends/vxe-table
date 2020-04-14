@@ -524,29 +524,11 @@ const apis = [
     list: [
       {
         name: 'button-click',
-        desc: '当工具栏的按钮被点击时会后触发该事件',
+        desc: '只对 buttons 配置时有效，当工具栏的按钮被点击时会后触发该事件',
         version: '',
         type: '',
         enum: '',
         defVal: '{ code, $event }',
-        list: []
-      },
-      {
-        name: 'zoom',
-        desc: '当工具栏的缩放按钮被点击时会后触发该事件',
-        version: '2.8.29',
-        type: '',
-        enum: '',
-        defVal: '{ type, $event }',
-        list: []
-      },
-      {
-        name: 'custom',
-        desc: '当工具栏的自定义列按钮被点击时会后触发该事件',
-        version: '2.8.5',
-        type: '',
-        enum: '',
-        defVal: '{ type, $event }',
         list: []
       }
     ]

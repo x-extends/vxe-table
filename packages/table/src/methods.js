@@ -2324,6 +2324,9 @@ const Methods = {
   triggerHeaderCellDBLClickEvent (evnt, params) {
     this.$emit('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget, $event: evnt }, params), evnt)
   },
+  getCurrentColumn () {
+    return this.currentColumn
+  },
   /**
    * 用于当前列，设置某列行为高亮状态
    * @param {ColumnConfig} column 列配置
@@ -3075,7 +3078,7 @@ const Methods = {
             scrollXStore.offsetSize = visibleXSize
           }
           if (!scrollX.rSize) {
-            scrollXStore.renderSize = visibleXSize + 4
+            scrollXStore.renderSize = Math.max(5, visibleXSize + 4)
           }
           this.updateScrollXData()
         } else {
@@ -3107,7 +3110,7 @@ const Methods = {
             scrollYStore.offsetSize = visibleYSize
           }
           if (!scrollY.rSize) {
-            scrollYStore.renderSize = browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6)
+            scrollYStore.renderSize = Math.max(5, browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6))
           }
           this.updateScrollYData()
         } else {

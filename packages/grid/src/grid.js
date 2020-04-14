@@ -2,7 +2,7 @@ import Table from '../../table'
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
+import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
@@ -178,6 +178,9 @@ export default {
     toolbarOpts () {
       return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
     },
+    zoomOpts () {
+      return Object.assign({}, GlobalConfig.grid.zoomConfig, this.zoomConfig)
+    },
     renderClass () {
       const { vSize, isZMax, optimizeOpts } = this
       return ['vxe-grid', {
@@ -262,6 +265,7 @@ export default {
         this.isCloak = false
       }, DomTools.browse ? 500 : 300)
     }
+    GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
   mounted () {
     if (this.columns && this.columns.length) {
@@ -269,6 +273,9 @@ export default {
     }
     this.initPages()
     this.initProxy()
+  },
+  destroyed () {
+    GlobalEvent.off(this, 'keydown')
   },
   render (h) {
     const { $scopedSlots } = this
@@ -408,6 +415,12 @@ export default {
           })
           this.formData = formData
         }
+      }
+    },
+    handleGlobalKeydownEvent (evnt) {
+      const isEsc = evnt.keyCode === 27
+      if (isEsc && this.isZMax && this.zoomOpts.escRestore !== false) {
+        this.triggerZoomEvent(evnt)
       }
     },
     /**
@@ -733,6 +746,10 @@ export default {
     togglCollapseEvent (params, evnt) {
       this.recalculate(true)
       UtilTools.emitEvent(this, 'form-toggle-collapse', [Object.assign({ $grid: this }, params), evnt])
+    },
+    triggerZoomEvent (evnt) {
+      this.zoom()
+      this.$emit('zoom', { $grid: this, maximize: this.isZMax, type: this.isZMax ? 'max' : 'revert', $event: evnt })
     },
     zoom () {
       return this[this.isZMax ? 'revert' : 'maximize']()

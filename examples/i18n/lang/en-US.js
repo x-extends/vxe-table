@@ -504,6 +504,7 @@ module.exports = {
           formConfig: 'Form config',
           toolbar: 'Toolbar config',
           pagerConfig: 'Pager config',
+          zoomConfig: 'Zoom config',
           proxyConfig: 'Data proxy config(based on the Promise API)',
           toolbarRender: 'Toolbar renderer config'
         }
