@@ -2721,7 +2721,7 @@ const apis = [
       {
         name: 'getCurrentColumn()',
         desc: '用于 highlight-current-column，获取当前列',
-        version: '1.15.28',
+        version: '',
         type: 'ColumnConfig',
         enum: '',
         defVal: '',

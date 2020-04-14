@@ -16,7 +16,7 @@
     </p>
 
     <p>
-      <vxe-list height="200px" class="my-list" :loading="loading1" :data="list1">
+      <vxe-list height="240" class="my-list" :loading="loading1" :data="list1">
         <template v-slot="{ items }">
           <div class="my-list-item" v-for="(item, index) in items" :key="index">{{ item.label }}</div>
         </template>
@@ -120,7 +120,7 @@ export default {
         </p>
 
         <p>
-          <vxe-list height="200px" class="my-list" :loading="loading1" :data="list1">
+          <vxe-list height="240" class="my-list" :loading="loading1" :data="list1">
             <template v-slot="{ items }">
               <div class="my-list-item" v-for="(item, index) in items" :key="index">{{ item.label }}</div>
             </template>

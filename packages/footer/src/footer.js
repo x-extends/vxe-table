@@ -79,12 +79,12 @@ export default {
          */
         h('colgroup', {
           ref: 'colgroup'
-        }, tableColumn.map((column, columnIndex) => {
+        }, tableColumn.map((column, $columnIndex) => {
           return h('col', {
             attrs: {
               name: column.id
             },
-            key: columnIndex
+            key: $columnIndex
           })
         }).concat(scrollbarWidth ? [
           h('col', {
@@ -165,7 +165,7 @@ export default {
               attrs,
               style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
               on: tfOns,
-              key: columnKey ? column.id : columnIndex
+              key: columnKey ? column.id : $columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {

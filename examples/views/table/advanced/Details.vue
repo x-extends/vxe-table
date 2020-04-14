@@ -17,9 +17,9 @@
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
-    <vxe-modal v-model="showDetails" title="查看详情" width="600" :mask="false" :lock-view="false" resize>
+    <vxe-modal v-model="showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
       <vxe-table
-        border
+        border="inner"
         auto-resize
         show-overflow
         highlight-hover-row
@@ -67,9 +67,9 @@ export default {
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
 
-        <vxe-modal v-model="showDetails" title="查看详情" width="600" :mask="false" :lock-view="false" resize>
+        <vxe-modal v-model="showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
           <vxe-table
-            border
+            border="inner"
             auto-resize
             show-overflow
             highlight-hover-row
