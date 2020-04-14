@@ -243,7 +243,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       'col--valid-error': hasValidError,
       'col--current': currentColumn === column
     }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
-    key: columnKey || ($table.columnKey ? column.id : columnIndex),
+    key: columnKey || ($table.columnKey ? column.id : $columnIndex),
     attrs,
     style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
     on: tdOns
@@ -581,7 +581,7 @@ export default {
         /**
          * 列宽
          */
-        h('colgroup', tableColumn.map((column, columnIndex) => {
+        h('colgroup', tableColumn.map((column, $columnIndex) => {
           return h('col', {
             attrs: {
               name: column.id
@@ -589,7 +589,7 @@ export default {
             style: {
               width: `${column.renderWidth}px`
             },
-            key: columnIndex
+            key: $columnIndex
           })
         })),
         /**

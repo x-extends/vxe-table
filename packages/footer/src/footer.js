@@ -78,7 +78,7 @@ export default {
         /**
          * 列宽
          */
-        h('colgroup', tableColumn.map((column, columnIndex) => {
+        h('colgroup', tableColumn.map((column, $columnIndex) => {
           return h('col', {
             attrs: {
               name: column.id
@@ -86,7 +86,7 @@ export default {
             style: {
               width: `${column.renderWidth}px`
             },
-            key: columnIndex
+            key: $columnIndex
           })
         }).concat(scrollbarWidth ? [
           h('col', {
@@ -169,7 +169,7 @@ export default {
               attrs,
               style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
               on: tfOns,
-              key: columnKey || ($table.columnKey ? column.id : columnIndex)
+              key: columnKey || ($table.columnKey ? column.id : $columnIndex)
             }, [
               h('div', {
                 class: ['vxe-cell', {
