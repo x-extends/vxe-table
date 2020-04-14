@@ -2,21 +2,19 @@
   <div>
     <p class="tip">
       使用自带的工具栏 <toolbar-api-link name="vxe-toolbar"/>，配合模板可以非常简单的实现强大的功能<br>
-      支持显示/隐藏列、列宽拖动状态的保存功能<br>
+      支持显示/隐藏列、列宽拖动状态的保存功能，还可以配合 <table-api-link prop="custom"/> 事件实现服务端保存<br>
       <span class="red">注：组成一套完整的表格，工具栏和表格必须是上下相邻关系，渲染时会自动进行上下关联，不允许更换位置（如果是复杂的布局不建议使用工具栏，自行写模板即可）</span>
     </p>
 
-    <vxe-toolbar
-      custom
-      export
-      :buttons="toolbarButtons"
-      :refresh="{query: findList}"></vxe-toolbar>
+    <vxe-toolbar custom export :buttons="toolbarButtons" :refresh="{query: findList}" />
 
     <vxe-table
       border
+      ref="xTable"
       height="400"
       :loading="loading"
-      :data="tableData">
+      :data="tableData"
+      @custom="toolbarCustomEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -43,37 +41,26 @@ export default {
       loading: false,
       tableData: [],
       toolbarButtons: [
-        {
-          code: 'btn1',
-          name: 'app.body.button.insert'
-        },
+        { code: 'btn1', name: 'app.body.button.insert' },
         {
           name: '下拉按钮',
           dropdowns: [
-            {
-              name: '按钮111',
-              code: 'btn2'
-            },
-            {
-              name: '按钮222',
-              code: 'btn3'
-            }
+            { name: '按钮111', code: 'btn2' },
+            { name: '按钮222', code: 'btn3' }
           ]
         }
       ],
       demoCodes: [
         `
-        <vxe-toolbar 
-          custom
-          export
-          :buttons="toolbarButtons" 
-          :refresh="{query: findList}"></vxe-toolbar>
+        <vxe-toolbar custom export :buttons="toolbarButtons" :refresh="{query: findList}" />
 
         <vxe-table
           border
+          ref="xTable"
           height="400"
           :loading="loading"
-          :data="tableData">
+          :data="tableData"
+          @custom="toolbarCustomEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -89,21 +76,12 @@ export default {
               loading: false,
               tableData: [],
               toolbarButtons: [
-                {
-                  code: 'btn1',
-                  name: 'app.body.button.insert'
-                },
+                { code: 'btn1', name: 'app.body.button.insert' },
                 {
                   name: '下拉按钮',
                   dropdowns: [
-                    {
-                      name: '按钮111',
-                      code: 'btn2'
-                    },
-                    {
-                      name: '按钮222',
-                      code: 'btn3'
-                    }
+                    { name: '按钮111', code: 'btn2' },
+                    { name: '按钮222', code: 'btn3' }
                   ]
                 }
               ]
@@ -122,6 +100,25 @@ export default {
                   resolve()
                 }, 300)
               })
+            },
+            toolbarCustomEvent (params) {
+              switch (params.type) {
+                case 'confirm': {
+                  const visibleColumn = this.$refs.xTable.getColumns()
+                  this.$XModal.message({ message: \`点击了确认，显示为 \${visibleColumn.length} 列\`, status: 'info' })
+                  break
+                }
+                case 'reset': {
+                  const visibleColumn = this.$refs.xTable.getColumns()
+                  this.$XModal.message({ message: \`点击了重置，显示为 \${visibleColumn.length} 列\`, status: 'info' })
+                  break
+                }
+                case 'close': {
+                  const visibleColumn = this.$refs.xTable.getColumns()
+                  this.$XModal.message({ message: \`关闭了面板，显示为 \${visibleColumn.length} 列\`, status: 'info' })
+                  break
+                }
+              }
             }
           }
         }
@@ -147,6 +144,25 @@ export default {
           resolve()
         }, 300)
       })
+    },
+    toolbarCustomEvent (params) {
+      switch (params.type) {
+        case 'confirm': {
+          const visibleColumn = this.$refs.xTable.getColumns()
+          this.$XModal.message({ message: `点击了确认，显示为 ${visibleColumn.length} 列`, status: 'info' })
+          break
+        }
+        case 'reset': {
+          const visibleColumn = this.$refs.xTable.getColumns()
+          this.$XModal.message({ message: `点击了重置，显示为 ${visibleColumn.length} 列`, status: 'info' })
+          break
+        }
+        case 'close': {
+          const visibleColumn = this.$refs.xTable.getColumns()
+          this.$XModal.message({ message: `关闭了面板，显示为 ${visibleColumn.length} 列`, status: 'info' })
+          break
+        }
+      }
     }
   }
 }

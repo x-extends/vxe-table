@@ -503,6 +503,7 @@ module.exports = {
           formConfig: '表单配置项',
           toolbar: '工具栏配置',
           pagerConfig: '分页配置项',
+          zoomConfig: '缩放配置项',
           proxyConfig: '数据代理配置项（基于 Promise API）',
           toolbarRender: '工具栏渲染器配置项'
         }

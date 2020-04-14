@@ -18,7 +18,7 @@ const apis = [
       },
       {
         name: 'loading',
-        descKey: '是否加载中',
+        desc: '是否加载中',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -27,7 +27,7 @@ const apis = [
       },
       {
         name: 'height',
-        descKey: '列表高度',
+        desc: '列表高度',
         version: '',
         type: 'Number, String',
         enum: '',
@@ -138,7 +138,7 @@ const apis = [
     list: [
       {
         name: 'loadData(data)',
-        desc: '加载数据（',
+        desc: '加载数据',
         version: '',
         type: 'Promise',
         enum: '',

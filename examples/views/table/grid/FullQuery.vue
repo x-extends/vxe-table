@@ -210,7 +210,7 @@ export default {
               this.$refs.xGrid.commitProxy('reload')
             },
             formatAmount ({ cellValue }) {
-              return cellValue ? \`$\${XEUtils.commafy(cellValue, 2)}\` : ''
+              return cellValue ? \`$\${XEUtils.commafy(XEUtils.toFixedString(cellValue, 2))}\` : ''
             },
             formatDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -231,7 +231,7 @@ export default {
       this.$refs.xGrid.commitProxy('reload')
     },
     formatAmount ({ cellValue }) {
-      return cellValue ? `$${XEUtils.commafy(cellValue, 2)}` : ''
+      return cellValue ? `$${XEUtils.commafy(XEUtils.toFixedString(cellValue, 2))}` : ''
     },
     formatDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
