@@ -837,6 +837,12 @@ export default {
       this.isActivated = true
       this.triggerEvent(evnt)
     },
+    keydownEvent (evnt) {
+      if (this.isNumber) {
+        this.numberKeydownEvent(evnt)
+      }
+      this.triggerEvent(evnt)
+    },
     mousewheelEvent (evnt) {
       if (this.isNumber) {
         const delta = -evnt.wheelDelta || evnt.detail
@@ -847,12 +853,6 @@ export default {
         }
         evnt.preventDefault()
       }
-    },
-    keydownEvent (evnt) {
-      if (this.isNumber) {
-        this.numberKeydownEvent(evnt)
-      }
-      this.triggerEvent(evnt)
     },
     clickEvent (evnt) {
       const { isDatePicker } = this
@@ -1211,26 +1211,14 @@ export default {
     },
     dateOffsetEvent (evnt) {
       const { isActivated, datePanelValue, datePanelType } = this
-      const keyCode = evnt.keyCode
-      const isLeftArrow = keyCode === 37
-      const isUpArrow = keyCode === 38
-      const isRightArrow = keyCode === 39
-      const isDwArrow = keyCode === 40
       if (isActivated) {
         evnt.preventDefault()
-        if (datePanelType === 'month') {
-          let offsetMonth = XEUtils.getWhatMonth(datePanelValue || Date.now(), 0, 'first')
-          if (isLeftArrow) {
-            offsetMonth = XEUtils.getWhatMonth(offsetMonth, -1)
-          } else if (isUpArrow) {
-            offsetMonth = XEUtils.getWhatMonth(offsetMonth, -4)
-          } else if (isRightArrow) {
-            offsetMonth = XEUtils.getWhatMonth(offsetMonth, 1)
-          } else if (isDwArrow) {
-            offsetMonth = XEUtils.getWhatMonth(offsetMonth, 4)
-          }
-          this.dateMoveMonth(offsetMonth)
-        } else if (datePanelType === 'year') {
+        const keyCode = evnt.keyCode
+        const isLeftArrow = keyCode === 37
+        const isUpArrow = keyCode === 38
+        const isRightArrow = keyCode === 39
+        const isDwArrow = keyCode === 40
+        if (datePanelType === 'year') {
           let offsetYear = XEUtils.getWhatYear(datePanelValue || Date.now(), 0, 'first')
           if (isLeftArrow) {
             offsetYear = XEUtils.getWhatYear(offsetYear, -1)
@@ -1242,6 +1230,18 @@ export default {
             offsetYear = XEUtils.getWhatYear(offsetYear, 4)
           }
           this.dateMoveYear(offsetYear)
+        } else if (datePanelType === 'month') {
+          let offsetMonth = XEUtils.getWhatMonth(datePanelValue || Date.now(), 0, 'first')
+          if (isLeftArrow) {
+            offsetMonth = XEUtils.getWhatMonth(offsetMonth, -1)
+          } else if (isUpArrow) {
+            offsetMonth = XEUtils.getWhatMonth(offsetMonth, -4)
+          } else if (isRightArrow) {
+            offsetMonth = XEUtils.getWhatMonth(offsetMonth, 1)
+          } else if (isDwArrow) {
+            offsetMonth = XEUtils.getWhatMonth(offsetMonth, 4)
+          }
+          this.dateMoveMonth(offsetMonth)
         } else {
           let offsetDay = datePanelValue || XEUtils.getWhatDay(Date.now(), 0, 'first')
           if (isLeftArrow) {
@@ -1254,6 +1254,17 @@ export default {
             offsetDay = XEUtils.getWhatWeek(offsetDay, 1)
           }
           this.dateMoveDay(offsetDay)
+        }
+      }
+    },
+    datePgOffsetEvent (evnt) {
+      const { isActivated } = this
+      if (isActivated) {
+        evnt.preventDefault()
+        if (evnt.keyCode === 33) {
+          this.dateNextEvent(evnt)
+        } else {
+          this.dateNextEvent(evnt)
         }
       }
     },
@@ -1414,6 +1425,8 @@ export default {
         const isUpArrow = keyCode === 38
         const isRightArrow = keyCode === 39
         const isDwArrow = keyCode === 40
+        const isPgUp = keyCode === 33
+        const isPgDn = keyCode === 34
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         let isActivated = this.isActivated
         if (isTab) {
@@ -1426,21 +1439,30 @@ export default {
           if (isDatePicker) {
             this.dateOffsetEvent(evnt)
           }
-        }
-        if (isEnter) {
+        } else if (isEnter) {
           if (isDatePicker) {
             if (visiblePanel) {
-              this.dateSelectItem(this.datePanelValue)
+              if (this.datePanelValue) {
+                this.dateSelectItem(this.datePanelValue)
+              } else {
+                this.hidePanel()
+              }
             } else if (isActivated) {
               this.showPanel()
             }
           }
-        } else if (isTab || isEsc) {
+        } else if (isPgUp || isPgDn) {
+          if (isDatePicker) {
+            if (isActivated) {
+              this.datePgOffsetEvent(evnt)
+            }
+          }
+        }
+        if (isTab || isEsc) {
           if (visiblePanel) {
             this.hidePanel()
           }
-        }
-        if (isDel && clearable) {
+        } else if (isDel && clearable) {
           if (isActivated) {
             this.clearValueEvent(evnt, null)
           }
