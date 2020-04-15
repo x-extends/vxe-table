@@ -24,7 +24,7 @@
     <div class="content" style="padding-top: 50px">
       <div style="display: inline-block;text-align: left;">
         <div>
-          <div>💰<span v-html="$t('app.body.other.donationTitle')"></span></div>
+          <div>😘<span v-html="$t('app.body.other.donationTitle')"></span></div>
           <ul>
             <li>1. <span v-html="$t('app.body.other.ways.alipay')"></span></li>
             <li>2. <span v-html="$t('app.body.other.ways.wechat')"></span></li>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div style="display: inline-block;margin-left: 20em;">
-        <div><span style="font-size: 22px;font-weight: 700;">😘QQ群</span><br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">New issues</a></div>
+        <div><span style="font-size: 22px;font-weight: 700;">QQ群</span><br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">👉New issues</a></div>
         <img src="static/donation/qq.png">
       </div>
     </div>

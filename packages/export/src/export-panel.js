@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VxeModal from '../../modal/src/modal'
 import VxeInput from '../../input/src/input'
@@ -35,6 +36,44 @@ export default {
   },
   render (h) {
     const { _e, isAll, isIndeterminate, showSheet, defaultOptions, storeData } = this
+    const cols = []
+    XEUtils.eachTree(storeData.columns, column => {
+      const colTitle = column.getTitle()
+      const isColGroup = column.children && column.children.length
+      cols.push(
+        h('li', {
+          class: ['vxe-export--panel-column-option', `level--${column.level}`, {
+            'is--group': isColGroup,
+            'is--checked': column.checked,
+            'is--indeterminate': column.halfChecked,
+            'is--disabled': column.disabled
+          }],
+          attrs: {
+            title: colTitle
+          },
+          on: {
+            click: () => {
+              if (!column.disabled) {
+                this.changeOption(column)
+              }
+            }
+          }
+        }, [
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--label'
+          }, colTitle)
+        ])
+      )
+    })
     return h('vxe-modal', {
       res: 'modal',
       model: {
@@ -183,39 +222,7 @@ export default {
                     ]),
                     h('ul', {
                       class: 'vxe-export--panel-column-body'
-                    }, storeData.columns.map(column => {
-                      const headerTitle = column.getTitle()
-                      return h('li', {
-                        class: ['vxe-export--panel-column-option', {
-                          'is--checked': column.checked,
-                          'is--disabled': column.disabled
-                        }],
-                        attrs: {
-                          title: headerTitle
-                        },
-                        on: {
-                          click: () => {
-                            if (!column.disabled) {
-                              column.checked = !column.checked
-                              this.checkStatus()
-                            }
-                          }
-                        }
-                      }, [
-                        h('span', {
-                          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-                        }),
-                        h('span', {
-                          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-                        }),
-                        h('span', {
-                          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
-                        }),
-                        h('span', {
-                          class: 'vxe-checkbox--label'
-                        }, headerTitle)
-                      ])
-                    }))
+                    }, cols)
                   ])
                 ])
               ]),
@@ -282,16 +289,37 @@ export default {
     ])
   },
   methods: {
+    changeOption (column) {
+      const isChecked = !column.checked
+      XEUtils.eachTree([column], (item) => {
+        item.checked = isChecked
+        item.halfChecked = false
+      })
+      this.handleOptionCheck(column)
+      this.checkStatus()
+    },
+    handleOptionCheck (column) {
+      const matchObj = XEUtils.findTree(this.storeData.columns, item => item === column)
+      if (matchObj && matchObj.parent) {
+        const { parent } = matchObj
+        if (parent.children && parent.children.length) {
+          parent.checked = parent.children.every(column => column.checked)
+          parent.halfChecked = !parent.checked && parent.children.some(column => column.checked || column.halfChecked)
+          this.handleOptionCheck(parent)
+        }
+      }
+    },
     checkStatus () {
       const columns = this.storeData.columns
       this.isAll = columns.every(column => column.disabled || column.checked)
-      this.isIndeterminate = !this.isAll && columns.some(column => !column.disabled && column.checked)
+      this.isIndeterminate = !this.isAll && columns.some(column => !column.disabled && (column.checked || column.halfChecked))
     },
     allColumnEvent () {
       const isAll = !this.isAll
-      this.storeData.columns.forEach(column => {
+      XEUtils.eachTree(this.storeData.columns, column => {
         if (!column.disabled) {
           column.checked = isAll
+          column.halfChecked = false
         }
       })
       this.isAll = isAll
@@ -305,8 +333,15 @@ export default {
     },
     getExportOption () {
       const { storeData, defaultOptions } = this
+      const checkColumns = []
+      XEUtils.eachTree(storeData.columns, column => {
+        const isColGroup = column.children && column.children.length
+        if (!isColGroup && column.checked) {
+          checkColumns.push(column)
+        }
+      })
       return Object.assign({
-        columns: storeData.columns.filter(column => column.checked)
+        columns: checkColumns
       }, defaultOptions)
     },
     printEvent () {

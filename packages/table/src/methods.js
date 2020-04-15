@@ -7,11 +7,6 @@ const browse = DomTools.browse
 const isWebkit = browse['-webkit'] && !browse.edge
 const debounceScrollYDuration = browse.msie ? 40 : 20
 
-// 分组表头的属性
-const headerProps = {
-  children: 'children'
-}
-
 /**
  * 生成行的唯一主键
  */
@@ -212,7 +207,7 @@ const Methods = {
    * @param {ColumnConfig} columns 列配置
    */
   loadColumn (columns) {
-    this.collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), headerProps)
+    this.collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column))
     return this.$nextTick()
   },
   /**
@@ -305,13 +300,13 @@ const Methods = {
           fullColumnIdData[column.id] = rest
           fullColumnMap.set(column, rest)
         }
-      }, headerProps)
+      })
     }
     tableFullColumn.forEach((column, index) => {
       const rest = { column, colid: column.id, index }
       fullColumnIdData[column.id] = rest
       fullColumnMap.set(column, rest)
-    }, headerProps)
+    })
   },
   /**
    * 根据 tr 元素获取对应的 row 信息
@@ -845,9 +840,9 @@ const Methods = {
     if (isGroup) {
       XEUtils.eachTree(this.collectColumn, column => {
         if (column.children && column.children.length) {
-          column.visible = !!XEUtils.findTree(column.children, subColumn => subColumn.children && subColumn.children.length ? 0 : subColumn.visible, headerProps)
+          column.visible = !!XEUtils.findTree(column.children, subColumn => subColumn.children && subColumn.children.length ? 0 : subColumn.visible)
         }
-      }, headerProps)
+      })
     }
     // 重新分配列
     tableFullColumn.filter(column => column.visible).forEach((column, columnIndex) => {

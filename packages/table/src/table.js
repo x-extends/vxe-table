@@ -576,7 +576,7 @@ export default {
       }
       this.$nextTick(() => {
         if (this.$toolbar) {
-          this.$toolbar.updateColumns(tableFullColumn)
+          this.$toolbar.updateColumns(value)
         }
       })
     },
