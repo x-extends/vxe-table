@@ -786,14 +786,14 @@ export default {
       Object.assign(this.importParams, defOpts)
     },
     _openExport (options) {
-      const { $toolbar, exportConfig, exportOpts, treeConfig, tableFullColumn, footerData } = this
+      const { $toolbar, exportConfig, exportOpts, treeConfig, collectColumn, footerData } = this
       const selectRecords = this.getCheckboxRecords()
-      const exportColumns = tableFullColumn.filter(column => ['seq'].indexOf(column.type) > -1 || column.property)
       const isTree = !!treeConfig
       const hasFooter = !!footerData.length
       const defOpts = Object.assign({ message: true, isHeader: true }, exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
       const checkMethod = exportOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)
+      const exportColumns = collectColumn.slice(0)
       if (!exportConfig) {
         UtilTools.error('vxe.error.reqProp', ['export-config'])
       }
@@ -811,9 +811,13 @@ export default {
         }
       })
       // 默认全部选中
-      exportColumns.forEach(column => {
-        column.checked = column.visible
-        column.disabled = checkMethod ? !checkMethod({ column }) : false
+      XEUtils.eachTree(exportColumns, (column, index, items, path, parent) => {
+        const isColGroup = column.children && column.children.length
+        if (isColGroup || column.property || column.type === 'seq') {
+          column.checked = column.visible
+          column.halfChecked = false
+          column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ column }) : false)
+        }
       })
       // 更新条件
       Object.assign(this.exportStore, {

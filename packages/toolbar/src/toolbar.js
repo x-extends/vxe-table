@@ -64,6 +64,137 @@ function renderRightTools (h, _vm) {
   return []
 }
 
+function renderCustoms (h, _vm) {
+  const { customStore, customOpts, collectColumn } = _vm
+  const cols = []
+  const customBtnOns = {}
+  const customWrapperOns = {}
+  if (customOpts.trigger === 'manual') {
+    // 手动触发
+  } else if (customOpts.trigger === 'hover') {
+    // hover 触发
+    customBtnOns.mouseenter = _vm.handleMouseenterSettingEvent
+    customBtnOns.mouseleave = _vm.handleMouseleaveSettingEvent
+    customWrapperOns.mouseenter = _vm.handleWrapperMouseenterEvent
+    customWrapperOns.mouseleave = _vm.handleWrapperMouseleaveEvent
+  } else {
+    // 点击触发
+    customBtnOns.click = _vm.handleClickSettingEvent
+  }
+  XEUtils.eachTree(collectColumn, (column) => {
+    const colTitle = column.getTitle()
+    const colKey = column.getKey()
+    const isColGroup = column.children && column.children.length
+    const isDisabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
+    if (isColGroup || (colTitle && colKey)) {
+      cols.push(
+        h('li', {
+          class: ['vxe-custom--option', `level--${column.level}`, {
+            'is--group': isColGroup,
+            'is--checked': column.visible,
+            'is--indeterminate': column.halfVisible,
+            'is--disabled': isDisabled
+          }],
+          attrs: {
+            title: colTitle
+          },
+          on: {
+            click: () => {
+              if (!isDisabled) {
+                _vm.changeCustomOption(column)
+              }
+            }
+          }
+        }, [
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--label'
+          }, colTitle)
+        ])
+      )
+    }
+  })
+  return h('div', {
+    class: ['vxe-custom--wrapper', {
+      'is--active': customStore.visible
+    }],
+    ref: 'customWrapper'
+  }, [
+    h('div', {
+      class: 'vxe-tools--operate-btn vxe-tools--operate-custom-btn',
+      attrs: {
+        title: GlobalConfig.i18n('vxe.toolbar.custom')
+      },
+      on: customBtnOns
+    }, [
+      h('i', {
+        class: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM
+      })
+    ]),
+    h('div', {
+      class: 'vxe-custom--option-wrapper'
+    }, [
+      h('div', {
+        class: 'vxe-custom--header'
+      }, [
+        h('li', {
+          class: ['vxe-custom--option', {
+            'is--checked': customStore.isAll,
+            'is--indeterminate': customStore.isIndeterminate
+          }],
+          attrs: {
+            title: GlobalConfig.i18n('vxe.table.allTitle')
+          },
+          on: {
+            click: _vm.allCustomEvent
+          }
+        }, [
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          }),
+          h('span', {
+            class: 'vxe-checkbox--label'
+          }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+        ])
+      ]),
+      h('ul', {
+        class: 'vxe-custom--body',
+        on: customWrapperOns
+      }, cols),
+      customOpts.isFooter === false ? null : h('div', {
+        class: 'vxe-custom--footer'
+      }, [
+        h('button', {
+          class: 'btn--confirm',
+          on: {
+            click: _vm.confirmCustomEvent
+          }
+        }, GlobalConfig.i18n('vxe.toolbar.customConfirm')),
+        h('button', {
+          class: 'btn--reset',
+          on: {
+            click: _vm.resetCustomEvent
+          }
+        }, GlobalConfig.i18n('vxe.toolbar.customRestore'))
+      ])
+    ])
+  ])
+}
+
 export default {
   name: 'VxeToolbar',
   props: {
@@ -88,7 +219,7 @@ export default {
     return {
       $xetable: null,
       isRefresh: false,
-      tableFullColumn: [],
+      collectColumn: [],
       customStore: {
         isAll: false,
         isIndeterminate: false,
@@ -149,23 +280,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { $xegrid, perfect, loading, customStore, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, customOpts, vSize, tableFullColumn } = this
-    const customBtnOns = {}
-    const customWrapperOns = {}
-    if (custom) {
-      if (customOpts.trigger === 'manual') {
-        // 手动触发
-      } else if (customOpts.trigger === 'hover') {
-        // hover 触发
-        customBtnOns.mouseenter = this.handleMouseenterSettingEvent
-        customBtnOns.mouseleave = this.handleMouseleaveSettingEvent
-        customWrapperOns.mouseenter = this.handleWrapperMouseenterEvent
-        customWrapperOns.mouseleave = this.handleWrapperMouseleaveEvent
-      } else {
-        // 点击触发
-        customBtnOns.click = this.handleClickSettingEvent
-      }
-    }
+    const { $xegrid, perfect, loading, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, vSize } = this
     return h('div', {
       class: ['vxe-toolbar', {
         [`size--${vSize}`]: vSize,
@@ -234,114 +349,7 @@ export default {
             class: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_OUT) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_IN)
           })
         ]) : null,
-        custom ? h('div', {
-          class: ['vxe-custom--wrapper', {
-            'is--active': customStore.visible
-          }],
-          ref: 'customWrapper'
-        }, [
-          h('div', {
-            class: 'vxe-tools--operate-btn vxe-tools--operate-custom-btn',
-            attrs: {
-              title: GlobalConfig.i18n('vxe.toolbar.custom')
-            },
-            on: customBtnOns
-          }, [
-            h('i', {
-              class: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM
-            })
-          ]),
-          h('div', {
-            class: 'vxe-custom--option-wrapper'
-          }, [
-            h('div', {
-              class: 'vxe-custom--header'
-            }, [
-              h('li', {
-                class: ['vxe-custom--option', {
-                  'is--checked': customStore.isAll,
-                  'is--indeterminate': customStore.isIndeterminate
-                }],
-                attrs: {
-                  title: GlobalConfig.i18n('vxe.table.allTitle')
-                },
-                on: {
-                  click: this.allCustomEvent
-                }
-              }, [
-                h('span', {
-                  class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-                }),
-                h('span', {
-                  class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-                }),
-                h('span', {
-                  class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
-                }),
-                h('span', {
-                  class: 'vxe-checkbox--label'
-                }, GlobalConfig.i18n('vxe.toolbar.customAll'))
-              ])
-            ]),
-            h('ul', {
-              class: 'vxe-custom--body',
-              on: customWrapperOns
-            }, tableFullColumn.map(column => {
-              const colTitle = column.getTitle()
-              const colKey = column.getKey()
-              const isDisabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
-              return colTitle && colKey ? h('li', {
-                class: ['vxe-custom--option', {
-                  'is--checked': column.visible,
-                  'is--disabled': isDisabled
-                }],
-                attrs: {
-                  title: colTitle
-                },
-                on: {
-                  click: () => {
-                    if (!isDisabled) {
-                      column.visible = !column.visible
-                      if (custom && customOpts.immediate) {
-                        this.handleCustoms()
-                      }
-                      this.checkCustomStatus()
-                    }
-                  }
-                }
-              }, [
-                h('span', {
-                  class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-                }),
-                h('span', {
-                  class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-                }),
-                h('span', {
-                  class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
-                }),
-                h('span', {
-                  class: 'vxe-checkbox--label'
-                }, colTitle)
-              ]) : null
-            })),
-            customOpts.isFooter === false ? null : h('div', {
-              class: 'vxe-custom--footer'
-            }, [
-              h('button', {
-                class: 'btn--confirm',
-                on: {
-                  click: this.confirmCustomEvent
-                }
-              }, GlobalConfig.i18n('vxe.toolbar.customConfirm')),
-              h('button', {
-                class: 'btn--reset',
-                on: {
-                  click: this.resetCustomEvent
-                }
-              }, GlobalConfig.i18n('vxe.toolbar.customRestore'))
-            ])
-          ])
-        ]) : null
+        custom ? renderCustoms(h, this) : null
       ])
     ])
   },
@@ -369,7 +377,7 @@ export default {
       if (resizable || custom) {
         const customMap = {}
         const comp = $xegrid || $xetable
-        const { fullColumn } = comp.getTableColumn()
+        const { collectColumn } = comp.getTableColumn()
         if (resizableOpts.storage) {
           const columnWidthStorage = this.getStorageMap(resizableOpts.storageKey)[id]
           if (columnWidthStorage) {
@@ -401,7 +409,7 @@ export default {
           }
         }
         const keyMap = {}
-        fullColumn.forEach(column => {
+        collectColumn.forEach(column => {
           const colKey = column.getKey()
           if (colKey) {
             keyMap[colKey] = column
@@ -419,15 +427,15 @@ export default {
           }
         })
         comp.refreshColumn()
-        this.tableFullColumn = fullColumn
+        this.collectColumn = collectColumn
       }
     },
     /**
      * 暴露给 table 调用，用于关联列
-     * @param {Array} fullColumn 所有列
+     * @param {Array} collectColumn 列分组配置
      */
-    updateColumns (fullColumn) {
-      this.tableFullColumn = fullColumn
+    updateColumns (collectColumn) {
+      this.collectColumn = collectColumn
       this.restoreCustomStorage()
     },
     getStorageMap (key) {
@@ -436,13 +444,13 @@ export default {
       return rest && rest._v === version ? rest : { _v: version }
     },
     saveColumnVisible () {
-      const { id, tableFullColumn, customOpts } = this
+      const { id, collectColumn, customOpts } = this
       const { checkMethod, storage, storageKey } = customOpts
       if (storage) {
         const columnVisibleStorageMap = this.getStorageMap(storageKey)
         const colHides = []
         const colShows = []
-        tableFullColumn.forEach(column => {
+        XEUtils.eachTree(collectColumn, column => {
           if (!checkMethod || checkMethod({ column })) {
             if (!column.visible && column.defaultVisible) {
               const colKey = column.getKey()
@@ -463,13 +471,13 @@ export default {
       return this.$nextTick()
     },
     saveColumnWidth (isReset) {
-      const { id, tableFullColumn, resizableOpts } = this
+      const { id, collectColumn, resizableOpts } = this
       if (resizableOpts.storage) {
         const columnWidthStorageMap = this.getStorageMap(resizableOpts.storageKey)
         let columnWidthStorage
         if (!isReset) {
           columnWidthStorage = XEUtils.isPlainObject(columnWidthStorageMap[id]) ? columnWidthStorageMap[id] : {}
-          tableFullColumn.forEach(column => {
+          XEUtils.eachTree(collectColumn, column => {
             if (column.resizeWidth) {
               const colKey = column.getKey()
               if (colKey) {
@@ -508,11 +516,12 @@ export default {
       }
     },
     resetCustomEvent (evnt) {
-      const { customOpts } = this
+      const { collectColumn, customOpts } = this
       const { checkMethod } = customOpts
-      this.tableFullColumn.forEach(column => {
+      XEUtils.eachTree(collectColumn, column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = column.defaultVisible
+          column.halfVisible = false
         }
         column.resizeWidth = 0
       })
@@ -532,26 +541,51 @@ export default {
       comp.analyColumnWidth()
       return comp.recalculate(true)
     },
+    changeCustomOption (column) {
+      const isChecked = !column.visible
+      XEUtils.eachTree([column], (item) => {
+        item.visible = isChecked
+        item.halfVisible = false
+      })
+      this.handleOptionCheck(column)
+      if (this.custom && this.customOpts.immediate) {
+        this.handleCustoms()
+      }
+      this.checkCustomStatus()
+    },
+    handleOptionCheck (column) {
+      const matchObj = XEUtils.findTree(this.collectColumn, item => item === column)
+      if (matchObj && matchObj.parent) {
+        const { parent } = matchObj
+        if (parent.children && parent.children.length) {
+          parent.visible = parent.children.every(column => column.visible)
+          parent.halfVisible = !parent.visible && parent.children.some(column => column.visible || column.halfVisible)
+          this.handleOptionCheck(parent)
+        }
+      }
+    },
     handleCustoms () {
       const comp = this.$xegrid || this.$xetable
       comp.refreshColumn()
       return this.saveColumnVisible()
     },
     checkCustomStatus () {
-      const { checkMethod } = this.customOpts
-      const tableFullColumn = this.tableFullColumn
-      this.customStore.isAll = tableFullColumn.every(column => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
-      this.customStore.isIndeterminate = !this.customStore.isAll && tableFullColumn.some(column => (!checkMethod || checkMethod({ column })) && column.visible)
+      const { collectColumn, customOpts } = this
+      const { checkMethod } = customOpts
+      this.customStore.isAll = collectColumn.every(column => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
+      this.customStore.isIndeterminate = !this.customStore.isAll && collectColumn.some(column => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
     },
     allCustomEvent () {
-      const { checkMethod } = this.customOpts
-      const isAll = !this.customStore.isAll
-      this.tableFullColumn.forEach(column => {
+      const { collectColumn, customOpts, customStore } = this
+      const { checkMethod } = customOpts
+      const isAll = !customStore.isAll
+      XEUtils.eachTree(collectColumn, column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = isAll
+          column.halfVisible = false
         }
       })
-      this.customStore.isAll = isAll
+      customStore.isAll = isAll
       this.checkCustomStatus()
     },
     handleGlobalMousedownEvent (evnt) {
