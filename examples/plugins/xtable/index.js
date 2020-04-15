@@ -45,8 +45,8 @@ import 'vxe-table-plugin-antd/dist/style.css'
 import 'vxe-table-plugin-virtual-tree/dist/style.css'
 
 VXETable.setup({
-  toolbar: {
-    export: {
+  table: {
+    exportConfig: {
       types: ['csv', 'html', 'xml', 'txt']
     }
   },

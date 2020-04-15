@@ -113,9 +113,18 @@
       padding: 0.2em 0;
       max-height: 17.6em;
       & > li {
-        max-width: 12.85em;
+        max-width: 16em;
         min-width: 10em;
         padding: 0.2em 1em 0.2em 2.3em;
+        @for $i from 2 through 8 {
+          $interval: $i - 1 + 0.2;
+          &.level--#{$i}{
+            padding-left: #{$interval + 2.3}em;
+            .vxe-checkbox--icon {
+              left: #{$interval + 0.6}em;
+            }
+          }
+        }
       }
     }
     .vxe-custom--footer {

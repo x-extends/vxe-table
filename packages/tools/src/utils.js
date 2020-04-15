@@ -87,8 +87,10 @@ class ColumnConfig {
       params: _vm.params,
       // 渲染属性
       visible,
+      halfVisible: false,
       defaultVisible: visible,
       checked: false,
+      halfChecked: false,
       disabled: false,
       level: 1,
       rowSpan: 1,

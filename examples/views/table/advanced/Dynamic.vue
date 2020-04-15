@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       配合 v-for 动态生成，动态改变宽度、固定列..等<span class="green">（如果是全动态的数据源建议使用 <grid-api-link name="vxe-grid"/>）</span><br>
-      无法列发生变动，需要通过调用 <table-api-link prop="refreshColumn"/> 方法刷新列信息<br>
+      如果是列发生变动，则需要通过调用 <table-api-link prop="refreshColumn"/> 方法刷新列信息<br>
       <span class="red">（注：动态更新属性必须要先定义，否则将失去自动响应）</span>
     </p>
 

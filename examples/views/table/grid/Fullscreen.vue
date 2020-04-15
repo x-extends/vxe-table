@@ -1,17 +1,24 @@
 <template>
   <div>
-    <p class="tip">通过 <grid-api-link prop="toolbar"/> 属性配置 <grid-api-link prop="zoom"/> 开启全屏缩放按钮，按 Esc 可退出全屏</p>
+    <p class="tip">通过 <grid-api-link prop="toolbar"/> 属性配置 <grid-api-link prop="zoom"/> 开启全屏缩放按钮或者直接调用相关方法，按 Esc 可退出全屏</p>
 
     <vxe-grid
       border
       resizable
       keep-source
+      ref="xGrid"
       height="530"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="tableToolbar"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+      <template v-slot:toolbar_buttons>
+        <vxe-button @click="$refs.xGrid.maximize()">表格最大化</vxe-button>
+        <vxe-button @click="$refs.xGrid.revert()">表格还原</vxe-button>
+        <vxe-button @click="$refs.xGrid.zoom()">切换表格最大化/还原</vxe-button>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -51,7 +58,10 @@ export default {
         perfect: true,
         refresh: true,
         zoom: true,
-        custom: true
+        custom: true,
+        slots: {
+          buttons: 'toolbar_buttons'
+        }
       },
       tableColumn: [
         { type: 'checkbox', width: 50 },
@@ -67,12 +77,19 @@ export default {
           border
           resizable
           keep-source
+          ref="xGrid"
           height="530"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="tableToolbar"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+          <template v-slot:toolbar_buttons>
+            <vxe-button @click="$refs.xGrid.maximize()">表格最大化</vxe-button>
+            <vxe-button @click="$refs.xGrid.revert()">表格还原</vxe-button>
+            <vxe-button @click="$refs.xGrid.zoom()">切换表格最大化/还原</vxe-button>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {
@@ -101,7 +118,10 @@ export default {
                 perfect: true,
                 refresh: true,
                 zoom: true,
-                custom: true
+                custom: true,
+                slots: {
+                  buttons: 'toolbar_buttons'
+                }
               },
               tableColumn: [
                 { type: 'checkbox', width: 50 },
