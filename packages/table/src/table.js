@@ -75,7 +75,7 @@ function renderFixed (h, $table, fixedType) {
     tableData,
     tableColumn,
     visibleColumn,
-    collectColumn,
+    tableGroupColumn,
     isGroup,
     height,
     parentHeight,
@@ -118,7 +118,7 @@ function renderFixed (h, $table, fixedType) {
         tableData,
         tableColumn,
         visibleColumn,
-        collectColumn,
+        tableGroupColumn,
         size: vSize,
         fixedColumn,
         isGroup
@@ -134,7 +134,6 @@ function renderFixed (h, $table, fixedType) {
         tableData,
         tableColumn,
         visibleColumn,
-        collectColumn,
         fixedColumn,
         size: vSize,
         isGroup
@@ -331,6 +330,8 @@ export default {
       tZindex: 0,
       // 列分组配置
       collectColumn: [],
+      // 渲染的列分组
+      tableGroupColumn: [],
       // 完整所有列
       tableFullColumn: [],
       // 渲染的列
@@ -848,6 +849,7 @@ export default {
     this.fullDataRowIdData = {}
     this.fullColumnMap = new Map()
     this.fullColumnIdData = {}
+    this.fullColumnFieldData = {}
     if (this.optimizeOpts.cloak) {
       this.isCloak = true
       setTimeout(() => {
@@ -922,7 +924,7 @@ export default {
       tableData,
       tableColumn,
       visibleColumn,
-      collectColumn,
+      tableGroupColumn,
       isGroup,
       hasFilter,
       isResizable,
@@ -1024,7 +1026,7 @@ export default {
             tableData,
             tableColumn,
             visibleColumn,
-            collectColumn,
+            tableGroupColumn,
             size: vSize,
             isGroup
           }
@@ -1038,7 +1040,6 @@ export default {
             tableData,
             tableColumn,
             visibleColumn,
-            collectColumn,
             size: vSize,
             isGroup
           }
@@ -1382,21 +1383,21 @@ export default {
     cacheColumnMap () {
       const { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
       const fullColumnIdData = this.fullColumnIdData = {}
-      fullColumnMap.clear()
-      if (isGroup) {
-        XEUtils.eachTree(collectColumn, (column, index) => {
-          if (column.children && column.children.length) {
-            const rest = { column, colid: column.id, index }
-            fullColumnIdData[column.id] = rest
-            fullColumnMap.set(column, rest)
-          }
-        })
-      }
-      tableFullColumn.forEach((column, index) => {
+      const fullColumnFieldData = this.fullColumnFieldData = {}
+      const handleFunc = (column, index) => {
         const rest = { column, colid: column.id, index }
+        if (column.property) {
+          fullColumnFieldData[column.property] = rest
+        }
         fullColumnIdData[column.id] = rest
         fullColumnMap.set(column, rest)
-      })
+      }
+      fullColumnMap.clear()
+      if (isGroup) {
+        XEUtils.eachTree(collectColumn, handleFunc)
+      } else {
+        tableFullColumn.forEach(handleFunc)
+      }
     },
     getRowNode (tr) {
       if (tr) {
@@ -1757,7 +1758,8 @@ export default {
       return fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
     },
     getColumnByField (field) {
-      return XEUtils.find(this.tableFullColumn, column => column.property === field)
+      const fullColumnFieldData = this.fullColumnFieldData
+      return fullColumnFieldData[field] ? fullColumnFieldData[field].column : null
     },
     /**
      * 获取当前表格的列
@@ -2040,62 +2042,64 @@ export default {
     /**
      * 刷新列信息
      * 将固定的列左边、右边分别靠边
-     * 如果使用了分组表头，固定列必须在左侧或者右侧
      */
     refreshColumn () {
-      let isColspan
-      let letIndex = 0
       const leftList = []
-      let leftStartIndex = null
-      let rightEndIndex = null
       const centerList = []
       const rightList = []
       const { collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
       const { scrollX } = optimizeOpts
       // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
       if (isGroup) {
-        XEUtils.eachTree(collectColumn, column => {
-          if (column.children && column.children.length) {
-            column.visible = !!XEUtils.findTree(column.children, subColumn => subColumn.children && subColumn.children.length ? 0 : subColumn.visible)
+        const leftGroupList = []
+        const centerGroupList = []
+        const rightGroupList = []
+        XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
+          const isColGroup = UtilTools.hasChildrenList(column)
+          // 如果是分组，必须按组设置固定列，不允许给子列设置固定
+          if (parent && parent.fixed) {
+            column.fixed = parent.fixed
+          }
+          if (parent && column.fixed !== parent.fixed) {
+            UtilTools.error('vxe.error.groupFixed')
+          }
+          if (isColGroup) {
+            column.visible = !!XEUtils.findTree(column.children, subColumn => UtilTools.hasChildrenList(subColumn) ? null : subColumn.visible)
+          } else if (column.visible) {
+            if (column.fixed === 'left') {
+              leftList.push(column)
+            } else if (column.fixed === 'right') {
+              rightList.push(column)
+            } else {
+              centerList.push(column)
+            }
+          }
+        })
+        collectColumn.filter(column => column.visible).forEach((column) => {
+          if (column.fixed === 'left') {
+            leftGroupList.push(column)
+          } else if (column.fixed === 'right') {
+            rightGroupList.push(column)
+          } else {
+            centerGroupList.push(column)
+          }
+        })
+        this.tableGroupColumn = leftGroupList.concat(centerGroupList).concat(rightGroupList)
+      } else {
+        // 重新分配列
+        tableFullColumn.filter(column => column.visible).forEach((column) => {
+          if (column.fixed === 'left') {
+            leftList.push(column)
+          } else if (column.fixed === 'right') {
+            rightList.push(column)
+          } else {
+            centerList.push(column)
           }
         })
       }
-      // 重新分配列
-      tableFullColumn.filter(column => column.visible).forEach((column, columnIndex) => {
-        if (column.fixed === 'left') {
-          if (leftStartIndex === null) {
-            leftStartIndex = letIndex
-          }
-          if (!isColspan) {
-            if (columnIndex - letIndex !== 0) {
-              isColspan = true
-            } else {
-              letIndex++
-            }
-          }
-          leftList.push(column)
-        } else if (column.fixed === 'right') {
-          if (!isColspan) {
-            if (rightEndIndex === null) {
-              rightEndIndex = columnIndex
-            }
-            if (columnIndex - rightEndIndex !== 0) {
-              isColspan = true
-            } else {
-              rightEndIndex++
-            }
-          }
-          rightList.push(column)
-        } else {
-          centerList.push(column)
-        }
-      })
       let visibleColumn = leftList.concat(centerList).concat(rightList)
       const scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
       Object.assign(columnStore, { leftList, centerList, rightList })
-      if (isGroup && (isColspan || leftStartIndex || (rightEndIndex !== null && rightEndIndex !== visibleColumn.length))) {
-        UtilTools.error('vxe.error.groupFixed')
-      }
       if (scrollXLoad) {
         if (this.isGroup) {
           UtilTools.warn('vxe.error.scrollXNotGroup')
@@ -2106,11 +2110,10 @@ export default {
         if (this.showFooter && !this.showFooterOverflow) {
           UtilTools.warn('vxe.error.reqProp', ['show-footer-overflow'])
         }
-        // if (this.resizable || visibleColumn.some(column => column.resizable)) {
-        //   UtilTools.warn('vxe.error.scrollXNotResizable')
-        // }
-        scrollXStore.startIndex = 0
-        scrollXStore.visibleIndex = 0
+        Object.assign(scrollXStore, {
+          startIndex: 0,
+          visibleIndex: 0
+        })
         visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
       }
       this.scrollXLoad = scrollXLoad

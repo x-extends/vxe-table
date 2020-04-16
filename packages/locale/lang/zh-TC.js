@@ -1,7 +1,8 @@
 export default {
   vxe: {
     error: {
-      groupFixed: '如果使用分组表頭，固定列必须在左右兩側',
+      groupFixed: '如果使用分組表頭，固定列必須按組設定',
+      groupPosFixed: '如果使用分组表頭，固定列必须在左右兩側',
       groupMouseRange: '分组表頭与 "{{0}}" 不能同時使用，这可能會出現錯誤',
       cellEditRender: '渲染器 "cell-render" 和 "edit-render" 不能同時使用',
       treeFixedExpand: '樹結構的固定列與展開行有衝突',

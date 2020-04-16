@@ -26,15 +26,16 @@ function mockColumns (size) {
     }
     if (index === 0) {
       colItem.width = 100
+      colItem.fixed = 'left'
       colItem.type = 'seq'
       colItem.title = '序号'
     }
     if (index === 1) {
+      colItem.fixed = 'left'
       colItem.type = 'checkbox'
       colItem.title = '多选'
     }
-    if (index < 0 && index < 4) {
-      colItem.fixed = 'left'
+    if (index < 4) {
       colItem.sortable = true
     } else if (index === 5) {
       colItem.filters = [

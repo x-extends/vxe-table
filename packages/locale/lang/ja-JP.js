@@ -1,7 +1,8 @@
 export default {
   vxe: {
     error: {
-      groupFixed: 'Grouping headersが使われている場合、fixed columnsは左右になくてはなりません',
+      groupFixed: 'グループのヘッダを使用すると、固定列はグループで設定しなければなりません',
+      groupPosFixed: 'グループのヘッダを使うと、固定列は左右にある必要があります',
       groupMouseRange: 'グループ化ヘッダーと「{{0}}」は同時に使用できません。これによりエラーが発生する可能性があります',
       cellEditRender: 'Rendererは"cell-render"と"edit-render"を同時に仕様できません',
       treeFixedExpand: 'ツリー構造の固定列は、展開された行と競合します',

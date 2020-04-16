@@ -154,7 +154,7 @@
       border
       resizable
       :data="tableData">
-      <vxe-table-column title="基本信息">
+      <vxe-table-column title="基本信息" fixed="left">
         <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
       </vxe-table-column>
@@ -166,7 +166,7 @@
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column title="其他信息">
+      <vxe-table-column title="其他信息" fixed="right">
         <vxe-table-column field="age" title="Age" width="100" fixed="right" show-overflow></vxe-table-column>
         <vxe-table-column field="address" title="Address" width="100" fixed="right" show-overflow></vxe-table-column>
       </vxe-table-column>
@@ -366,7 +366,7 @@ export default {
           border
           resizable
           :data="tableData">
-          <vxe-table-column title="基本信息">
+          <vxe-table-column title="基本信息" fixed="left">
             <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
           </vxe-table-column>
@@ -378,7 +378,7 @@ export default {
               <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
             </vxe-table-column>
           </vxe-table-column>
-          <vxe-table-column title="其他信息">
+          <vxe-table-column title="其他信息" fixed="right">
             <vxe-table-column field="age" title="Age" width="100" fixed="right" show-overflow></vxe-table-column>
             <vxe-table-column field="address" title="Address" width="100" fixed="right" show-overflow></vxe-table-column>
           </vxe-table-column>

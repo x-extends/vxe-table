@@ -459,7 +459,6 @@ export default {
     tableData: Array,
     tableColumn: Array,
     visibleColumn: Array,
-    collectColumn: Array,
     fixedColumn: Array,
     size: String,
     fixedType: String,
