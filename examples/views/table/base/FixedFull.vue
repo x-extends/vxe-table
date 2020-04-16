@@ -71,14 +71,14 @@
     </pre>
 
     <p class="tip">
-      <span class="red">注：如果使用了分组表头，则需要按组来设置固定列，且固定列必须是在左右两侧位置，不允许跨列</span>
+      <span class="red">分组表头</span>
     </p>
 
     <vxe-table
       border
       height="400"
       :data="tableData">
-      <vxe-table-column title="基本信息">
+      <vxe-table-column title="基本信息" fixed="left">
         <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
       </vxe-table-column>
@@ -90,7 +90,7 @@
           <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column title="额外信息">
+      <vxe-table-column title="额外信息" fixed="right">
         <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
         <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
       </vxe-table-column>
@@ -182,7 +182,7 @@ export default {
           border
           height="400"
           :data="tableData">
-          <vxe-table-column title="基本信息">
+          <vxe-table-column title="基本信息" fixed="left">
             <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
           </vxe-table-column>
@@ -194,7 +194,7 @@ export default {
               <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
             </vxe-table-column>
           </vxe-table-column>
-          <vxe-table-column title="额外信息">
+          <vxe-table-column title="额外信息" fixed="right">
             <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
             <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
           </vxe-table-column>
