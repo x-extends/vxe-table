@@ -14,7 +14,7 @@ import methods from './methods'
  * @param {String} fixedType 固定列类型
  */
 function renderFixed (h, $xetable, fixedType) {
-  const { tableData, tableColumn, visibleColumn, collectColumn, isGroup, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
+  const { tableData, tableColumn, visibleColumn, tableGroupColumn, isGroup, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
   const fixedColumn = columnStore[`${fixedType}List`]
   return h('div', {
     class: `vxe-table--fixed-${fixedType}-wrapper`,
@@ -26,7 +26,7 @@ function renderFixed (h, $xetable, fixedType) {
         tableData,
         tableColumn,
         visibleColumn,
-        collectColumn,
+        tableGroupColumn,
         size: vSize,
         fixedColumn,
         isGroup
@@ -39,7 +39,6 @@ function renderFixed (h, $xetable, fixedType) {
         tableData,
         tableColumn,
         visibleColumn,
-        collectColumn,
         fixedColumn,
         size: vSize,
         isGroup
@@ -215,6 +214,8 @@ export default {
       isCloak: false,
       // 列分组配置
       collectColumn: [],
+      // 渲染的列分组
+      tableGroupColumn: [],
       // 完整所有列
       tableFullColumn: [],
       // 渲染的列
@@ -618,7 +619,8 @@ export default {
       fullDataRowMap: new Map(),
       fullDataRowIdData: {},
       fullColumnMap: new Map(),
-      fullColumnIdData: {}
+      fullColumnIdData: {},
+      fullColumnFieldData: {}
     })
     const { scrollX, scrollY } = optimizeOpts
     if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
@@ -734,7 +736,7 @@ export default {
       tableData,
       tableColumn,
       visibleColumn,
-      collectColumn,
+      tableGroupColumn,
       isGroup,
       isResizable,
       isCtxMenu,
@@ -833,7 +835,7 @@ export default {
             tableData,
             tableColumn,
             visibleColumn,
-            collectColumn,
+            tableGroupColumn,
             size: vSize,
             isGroup
           }
@@ -847,7 +849,6 @@ export default {
             tableData,
             tableColumn,
             visibleColumn,
-            collectColumn,
             size: vSize,
             isGroup
           }

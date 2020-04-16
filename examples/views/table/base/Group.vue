@@ -17,6 +17,9 @@
           <vxe-table-column field="age" title="Age"></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
+      <vxe-table-column title="分类信息">
+        <vxe-table-column field="date3" title="Date"></vxe-table-column>
+      </vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
@@ -27,19 +30,30 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">
-      <span class="red">注：如果使用了分组表头，则需要按组来设置固定列，且固定列必须是在左右两侧位置，不允许跨列</span>
-    </p>
+    <p class="tip">分组表头与固定列</p>
+
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="toggleFixedColumn('group0', 'left')">切换第一列固定</vxe-button>
+        <vxe-button @click="toggleFixedColumn('group1', 'left')">切换第二列固定</vxe-button>
+        <vxe-button @click="toggleFixedColumn('group3', 'right')">切换第四列固定</vxe-button>
+        <vxe-button @click="toggleFixedColumn('group4', 'right')">切换第五列固定</vxe-button>
+      </template>
+    </vxe-toolbar>
 
     <vxe-table
       border
+      ref="xTable"
       height="400"
       :data="tableData">
-      <vxe-table-column title="基本信息">
-        <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-        <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
+      <vxe-table-column field="group0" title="基本信息">
+        <vxe-table-column type="seq" width="60"></vxe-table-column>
+        <vxe-table-column field="name" title="Name" width="180"></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column title="更多信息">
+      <vxe-table-column field="group1" title="分类信息1">
+        <vxe-table-column field="age" title="Age1" width="120"></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column field="group2" title="更多信息">
         <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
         <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
         <vxe-table-column title="详细信息">
@@ -47,9 +61,12 @@
           <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column title="额外信息">
-        <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
-        <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
+      <vxe-table-column field="group3" title="分类信息2">
+        <vxe-table-column field="sex" title="Age2" width="120"></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column field="group4" title="额外信息">
+        <vxe-table-column field="date3" title="Date" width="140"></vxe-table-column>
+        <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
       </vxe-table-column>
     </vxe-table>
 
@@ -64,6 +81,7 @@
 
 <script>
 import hljs from 'highlight.js'
+import XEUtils from 'xe-utils'
 
 export default {
   data () {
@@ -86,6 +104,9 @@ export default {
               <vxe-table-column field="age" title="Age"></vxe-table-column>
             </vxe-table-column>
           </vxe-table-column>
+          <vxe-table-column title="分类信息">
+            <vxe-table-column field="date3" title="Date"></vxe-table-column>
+          </vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
@@ -97,20 +118,33 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           }
         }
         `,
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="toggleFixedColumn('group0', 'left')">切换第一列固定</vxe-button>
+            <vxe-button @click="toggleFixedColumn('group1', 'left')">切换第二列固定</vxe-button>
+            <vxe-button @click="toggleFixedColumn('group3', 'right')">切换第四列固定</vxe-button>
+            <vxe-button @click="toggleFixedColumn('group4', 'right')">切换第五列固定</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           border
+          ref="xTable"
           height="400"
           :data="tableData">
-          <vxe-table-column title="基本信息">
-            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
+          <vxe-table-column field="group0" title="基本信息">
+            <vxe-table-column type="seq" width="60"></vxe-table-column>
+            <vxe-table-column field="name" title="Name" width="180"></vxe-table-column>
           </vxe-table-column>
-          <vxe-table-column title="更多信息">
+          <vxe-table-column field="group1" title="分类信息1">
+            <vxe-table-column field="age" title="Age1" width="120"></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column field="group2" title="更多信息">
             <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
             <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
             <vxe-table-column title="详细信息">
@@ -118,9 +152,12 @@ export default {
               <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
             </vxe-table-column>
           </vxe-table-column>
-          <vxe-table-column title="额外信息">
-            <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
+          <vxe-table-column field="group3" title="分类信息2">
+            <vxe-table-column field="sex" title="Age2" width="120"></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column field="group4" title="额外信息">
+            <vxe-table-column field="date3" title="Date" width="140"></vxe-table-column>
+            <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
         `,
@@ -132,7 +169,20 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+          },
+          methods: {
+            toggleFixedColumn (field, type) {
+              const xTable = this.$refs.xTable
+              const column = xTable.getColumnByField(field)
+              const groupFixed = column.fixed ? null : type
+              // 将分组整体设置固定列
+              XEUtils.eachTree([column], column => {
+                column.fixed = groupFixed
+              })
+              // 刷新列
+              xTable.refreshColumn()
+            }
           }
         }
         `
@@ -140,12 +190,25 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    toggleFixedColumn (field, type) {
+      const xTable = this.$refs.xTable
+      const column = xTable.getColumnByField(field)
+      const groupFixed = column.fixed ? null : type
+      // 将分组整体设置固定列
+      XEUtils.eachTree([column], column => {
+        column.fixed = groupFixed
+      })
+      // 刷新列
+      xTable.refreshColumn()
+    }
   }
 }
 </script>

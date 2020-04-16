@@ -284,21 +284,21 @@ const Methods = {
   cacheColumnMap () {
     const { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
     const fullColumnIdData = this.fullColumnIdData = {}
-    fullColumnMap.clear()
-    if (isGroup) {
-      XEUtils.eachTree(collectColumn, (column, index) => {
-        if (column.children && column.children.length) {
-          const rest = { column, colid: column.id, index }
-          fullColumnIdData[column.id] = rest
-          fullColumnMap.set(column, rest)
-        }
-      })
-    }
-    tableFullColumn.forEach((column, index) => {
+    const fullColumnFieldData = this.fullColumnFieldData = {}
+    const handleFunc = (column, index) => {
       const rest = { column, colid: column.id, index }
+      if (column.property) {
+        fullColumnFieldData[column.property] = rest
+      }
       fullColumnIdData[column.id] = rest
       fullColumnMap.set(column, rest)
-    })
+    }
+    fullColumnMap.clear()
+    if (isGroup) {
+      XEUtils.eachTree(collectColumn, handleFunc)
+    } else {
+      tableFullColumn.forEach(handleFunc)
+    }
   },
   /**
    * 根据 tr 元素获取对应的 row 信息
@@ -549,7 +549,8 @@ const Methods = {
    * @param {String} field 字段名
    */
   getColumnByField (field) {
-    return XEUtils.find(this.tableFullColumn, column => column.property === field)
+    const fullColumnFieldData = this.fullColumnFieldData
+    return fullColumnFieldData[field] ? fullColumnFieldData[field].column : null
   },
   /**
    * 获取当前表格的列
@@ -747,62 +748,64 @@ const Methods = {
   /**
    * 刷新列信息
    * 将固定的列左边、右边分别靠边
-   * 如果使用了分组表头，固定列必须在左侧或者右侧
    */
   refreshColumn () {
-    let isColspan
-    let letIndex = 0
     const leftList = []
-    let leftStartIndex = null
-    let rightEndIndex = null
     const centerList = []
     const rightList = []
-    const { tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
+    const { collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
     const { scrollX } = optimizeOpts
     // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
     if (isGroup) {
-      XEUtils.eachTree(this.collectColumn, column => {
-        if (column.children && column.children.length) {
-          column.visible = !!XEUtils.findTree(column.children, subColumn => subColumn.children && subColumn.children.length ? 0 : subColumn.visible)
+      const leftGroupList = []
+      const centerGroupList = []
+      const rightGroupList = []
+      XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
+        const isColGroup = UtilTools.hasChildrenList(column)
+        // 如果是分组，必须按组设置固定列，不允许给子列设置固定
+        if (parent && parent.fixed) {
+          column.fixed = parent.fixed
+        }
+        if (parent && column.fixed !== parent.fixed) {
+          UtilTools.error('vxe.error.groupFixed')
+        }
+        if (isColGroup) {
+          column.visible = !!XEUtils.findTree(column.children, subColumn => UtilTools.hasChildrenList(subColumn) ? null : subColumn.visible)
+        } else if (column.visible) {
+          if (column.fixed === 'left') {
+            leftList.push(column)
+          } else if (column.fixed === 'right') {
+            rightList.push(column)
+          } else {
+            centerList.push(column)
+          }
+        }
+      })
+      collectColumn.filter(column => column.visible).forEach((column) => {
+        if (column.fixed === 'left') {
+          leftGroupList.push(column)
+        } else if (column.fixed === 'right') {
+          rightGroupList.push(column)
+        } else {
+          centerGroupList.push(column)
+        }
+      })
+      this.tableGroupColumn = leftGroupList.concat(centerGroupList).concat(rightGroupList)
+    } else {
+      // 重新分配列
+      tableFullColumn.filter(column => column.visible).forEach((column) => {
+        if (column.fixed === 'left') {
+          leftList.push(column)
+        } else if (column.fixed === 'right') {
+          rightList.push(column)
+        } else {
+          centerList.push(column)
         }
       })
     }
-    // 重新分配列
-    tableFullColumn.filter(column => column.visible).forEach((column, columnIndex) => {
-      if (column.fixed === 'left') {
-        if (leftStartIndex === null) {
-          leftStartIndex = letIndex
-        }
-        if (!isColspan) {
-          if (columnIndex - letIndex !== 0) {
-            isColspan = true
-          } else {
-            letIndex++
-          }
-        }
-        leftList.push(column)
-      } else if (column.fixed === 'right') {
-        if (!isColspan) {
-          if (rightEndIndex === null) {
-            rightEndIndex = columnIndex
-          }
-          if (columnIndex - rightEndIndex !== 0) {
-            isColspan = true
-          } else {
-            rightEndIndex++
-          }
-        }
-        rightList.push(column)
-      } else {
-        centerList.push(column)
-      }
-    })
     let visibleColumn = leftList.concat(centerList).concat(rightList)
     const scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
     Object.assign(columnStore, { leftList, centerList, rightList })
-    if (isGroup && (isColspan || leftStartIndex || (rightEndIndex !== null && rightEndIndex !== visibleColumn.length))) {
-      UtilTools.error('vxe.error.groupFixed')
-    }
     if (scrollXLoad) {
       if (this.isGroup) {
         UtilTools.warn('vxe.error.scrollXNotGroup')
@@ -1111,8 +1114,8 @@ const Methods = {
                   }
                   childWidth += item.renderWidth
                 })
-                thElem.style.width = `${childWidth - countChild - (border ? 2 : 0)}px`
               }
+              thElem.style.width = hasEllipsis ? `${childWidth - countChild - (border ? 2 : 0)}px` : ''
             })
           }
         } else if (layout === 'body') {
@@ -1210,7 +1213,7 @@ const Methods = {
               if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
                 hasEllipsis = true
               }
-              if (listElem && hasEllipsis) {
+              if (listElem) {
                 XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), elem => {
                   const colspan = parseInt(elem.getAttribute('colspan') || 1)
                   const cellElem = elem.querySelector('.vxe-cell')
@@ -1225,7 +1228,7 @@ const Methods = {
                         }
                       }
                     }
-                    cellElem.style.width = `${colWidth - (cellOffsetWidth * colspan)}px`
+                    cellElem.style.width = hasEllipsis ? `${colWidth - (cellOffsetWidth * colspan)}px` : ''
                   }
                 })
               }

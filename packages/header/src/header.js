@@ -8,7 +8,7 @@ export default {
     tableData: Array,
     tableColumn: Array,
     visibleColumn: Array,
-    collectColumn: Array,
+    tableGroupColumn: Array,
     fixedColumn: Array,
     size: String,
     fixedType: String,
@@ -203,7 +203,7 @@ export default {
   },
   methods: {
     uploadColumn () {
-      this.headerColumn = this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
+      this.headerColumn = this.isGroup ? convertToRows(this.tableGroupColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
     },
     resizeMousedown (evnt, params) {
       const { column } = params
