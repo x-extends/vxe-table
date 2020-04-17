@@ -7,7 +7,7 @@
       <span class="red">（注：如果要启用纵向虚拟滚动，所有的行高必须一致，否则无法兼容）</span>
     </p>
 
-    <vxe-toolbar export>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="loadList(10000)">1w条</vxe-button>
         <vxe-button @click="loadList(50000)">5w条</vxe-button>

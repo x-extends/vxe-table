@@ -517,6 +517,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.mergeCell',
+              locat: {
+                name: 'TableMergeCell'
+              }
+            },
+            {
               label: 'app.aside.nav.footer',
               demoUrl: 'https://jsrun.pro/dmXKp/edit',
               locat: {

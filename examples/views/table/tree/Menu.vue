@@ -24,7 +24,7 @@
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
     <pre>
@@ -61,35 +61,15 @@ export default {
       },
       headerMenus: [
         [
-          {
-            code: 'hideColumn',
-            name: '隐藏列',
-            disabled: false
-          },
-          {
-            code: 'showAllColumn',
-            name: '取消所有隐藏列',
-            disabled: false
-          }
+          { code: 'hideColumn', name: '隐藏列', disabled: false },
+          { code: 'showAllColumn', name: '取消所有隐藏列', disabled: false }
         ]
       ],
       bodyMenus: [
         [
-          {
-            code: 'insertAt',
-            name: '插入一行',
-            disabled: false
-          },
-          {
-            code: 'expand',
-            name: '展开节点',
-            disabled: false
-          },
-          {
-            code: 'contract',
-            name: '收缩节点',
-            disabled: false
-          }
+          { code: 'insertAt', name: '插入一行', disabled: false },
+          { code: 'expand', name: '展开节点', disabled: false },
+          { code: 'contract', name: '收缩节点', disabled: false }
         ]
       ],
       demoCodes: [
@@ -113,7 +93,7 @@ export default {
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -126,35 +106,15 @@ export default {
               },
               headerMenus: [
                 [
-                  {
-                    code: 'hideColumn',
-                    name: '隐藏列',
-                    disabled: false
-                  },
-                  {
-                    code: 'showAllColumn',
-                    name: '取消所有隐藏列',
-                    disabled: false
-                  }
+                  { code: 'hideColumn', name: '隐藏列', disabled: false },
+                  { code: 'showAllColumn', name: '取消所有隐藏列', disabled: false }
                 ]
               ],
               bodyMenus: [
                 [
-                  {
-                    code: 'insertAt',
-                    name: '插入一行',
-                    disabled: false
-                  },
-                  {
-                    code: 'expand',
-                    name: '展开节点',
-                    disabled: false
-                  },
-                  {
-                    code: 'contract',
-                    name: '收缩节点',
-                    disabled: false
-                  }
+                  { code: 'insertAt', name: '插入一行', disabled: false },
+                  { code: 'expand', name: '展开节点', disabled: false },
+                  { code: 'contract', name: '收缩节点', disabled: false }
                 ]
               ]
             }

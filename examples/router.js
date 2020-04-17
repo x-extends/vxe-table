@@ -62,6 +62,7 @@ const TableManualFilter = () => import(/* webpackChunkName: "advanced" */ './vie
 const TableFilterIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/FilterIcon.vue')
 const TableSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Span.vue')
 const TableSpanRow = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/SpanRow.vue')
+const TableMergeCell = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MergeCell')
 const TableFooter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Footer.vue')
 const TableFooterSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/FooterSpan.vue')
 const TableFooterMaxHeight = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MaxHeight.vue')
@@ -572,6 +573,11 @@ export default new Router({
       path: '/table/advanced/spanRow',
       name: 'TableSpanRow',
       component: TableSpanRow
+    },
+    {
+      path: '/table/advanced/mergeCell',
+      name: 'TableMergeCell',
+      component: TableMergeCell
     },
     {
       path: '/table/advanced/footer',
