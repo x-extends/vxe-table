@@ -35,6 +35,7 @@
           70.83333%, 75%, 79.16667%, 83.33333%, 87.5%, 91.66667%, 95.83333%, 100%;
   @for $index from 0 to length($spans) {
     & > .vxe-col--#{$index + 1} {
+      display: inline-block;
       width: nth($spans, $index + 1);
     }
   }

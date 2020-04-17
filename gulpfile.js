@@ -34,6 +34,7 @@ const components = [
   'form',
   'select',
   'switch',
+  'list',
 
   'edit',
   'keyboard',

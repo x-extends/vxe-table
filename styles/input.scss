@@ -544,10 +544,14 @@ $iconWidth: 1.6em;
   font-size: $vxe-font-size;
   height: $vxe-input-height-default;
   .vxe-input--inner {
-    &[type="date"]::-webkit-inner-spin-button {
+    &[type="date"]::-webkit-inner-spin-button,
+      &[type="month"]::-webkit-inner-spin-button,
+      &[type="week"]::-webkit-inner-spin-button {
       margin-top: 6px;
     }
     &[type="date"]::-webkit-inner-spin-button,
+    &[type="month"]::-webkit-inner-spin-button,
+    &[type="week"]::-webkit-inner-spin-button,
     &[type="number"]::-webkit-inner-spin-button {
       height: 24px;
     }
@@ -556,7 +560,9 @@ $iconWidth: 1.6em;
     font-size: $vxe-font-size-medium;
     height: $vxe-input-height-medium;
     .vxe-input--inner {
-      &[type="date"]::-webkit-inner-spin-button {
+      &[type="date"]::-webkit-inner-spin-button,
+      &[type="month"]::-webkit-inner-spin-button,
+      &[type="week"]::-webkit-inner-spin-button {
         margin-top: 4px;
       }
     }
@@ -565,7 +571,9 @@ $iconWidth: 1.6em;
     font-size: $vxe-font-size-small;
     height: $vxe-input-height-small;
     .vxe-input--inner {
-      &[type="date"]::-webkit-inner-spin-button {
+      &[type="date"]::-webkit-inner-spin-button,
+      &[type="month"]::-webkit-inner-spin-button,
+      &[type="week"]::-webkit-inner-spin-button {
         margin-top: 2px;
       }
     }
@@ -574,7 +582,9 @@ $iconWidth: 1.6em;
     font-size: $vxe-font-size-mini;
     height: $vxe-input-height-mini;
     .vxe-input--inner {
-      &[type="date"]::-webkit-inner-spin-button {
+      &[type="date"]::-webkit-inner-spin-button,
+      &[type="month"]::-webkit-inner-spin-button,
+      &[type="week"]::-webkit-inner-spin-button {
         margin-top: 0;
       }
     }

@@ -252,6 +252,15 @@ const GlobalConfig = {
     // storage: false,
     storageKey: 'VXE_MODAL_POSITION'
   },
+  list: {
+    scrollY: {
+      gt: 100
+      // oSize: 0,
+      // rSize: 0
+      // vSize: 0,
+      // rHeight: 0
+    }
+  },
   i18n: key => key
 }
 

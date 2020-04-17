@@ -62,6 +62,7 @@ const TableManualFilter = () => import(/* webpackChunkName: "advanced" */ './vie
 const TableFilterIcon = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/FilterIcon.vue')
 const TableSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Span.vue')
 const TableSpanRow = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/SpanRow.vue')
+const TableMergeCell = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MergeCell')
 const TableFooter = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Footer.vue')
 const TableFooterSpan = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/FooterSpan.vue')
 const TableFooterMaxHeight = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/MaxHeight.vue')
@@ -240,6 +241,7 @@ const ModuleTooltip = () => import(/* webpackChunkName: "module" */ './views/too
 const ModuleToolbar = () => import(/* webpackChunkName: "module" */ './views/toolbar/Toolbar.vue')
 const ModuleForm = () => import(/* webpackChunkName: "module" */ './views/form/Form.vue')
 const ModuleSwitch = () => import(/* webpackChunkName: "module" */ './views/switch/Switch.vue')
+const ModuleList = () => import(/* webpackChunkName: "module" */ './views/list/List.vue')
 
 const TableOtherElement = () => import(/* webpackChunkName: "other" */ './views/table/other/Element.vue')
 const TableOtherIview = () => import(/* webpackChunkName: "other" */ './views/table/other/Iview.vue')
@@ -570,6 +572,11 @@ export default new Router({
       path: '/table/advanced/spanRow',
       name: 'TableSpanRow',
       component: TableSpanRow
+    },
+    {
+      path: '/table/advanced/mergeCell',
+      name: 'TableMergeCell',
+      component: TableMergeCell
     },
     {
       path: '/table/advanced/footer',
@@ -1427,6 +1434,11 @@ export default new Router({
       path: '/table/module/switch',
       name: 'ModuleSwitch',
       component: ModuleSwitch
+    },
+    {
+      path: '/table/module/list',
+      name: 'ModuleList',
+      component: ModuleList
     },
     {
       path: '/table/other/element',

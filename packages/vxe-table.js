@@ -20,6 +20,7 @@ import Tooltip from './tooltip'
 import Form from './form'
 import Select from './select'
 import Switch from './switch'
+import List from './list'
 
 import Edit from './edit'
 import Export from './export'
@@ -50,6 +51,7 @@ const components = [
   Form,
   Select,
   Switch,
+  List,
 
   Edit,
   Export,
@@ -100,6 +102,8 @@ export * from './tooltip'
 export * from './form'
 export * from './select'
 export * from './switch'
+export * from './list'
+
 export * from './edit'
 export * from './export'
 export * from './keyboard'

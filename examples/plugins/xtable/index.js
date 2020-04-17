@@ -23,6 +23,8 @@ import {
   Select,
   Switch,
   Edit,
+  List,
+
   Export,
   Keyboard,
   Validator,
@@ -86,6 +88,8 @@ Vue.use(Tooltip)
 Vue.use(Form)
 Vue.use(Select)
 Vue.use(Switch)
+Vue.use(List)
+
 Vue.use(Edit)
 Vue.use(Export)
 Vue.use(Keyboard)
