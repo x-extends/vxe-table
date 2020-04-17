@@ -207,12 +207,6 @@ export default {
                 name: 'ModulePager'
               }
             },
-            {
-              label: 'app.aside.nav.modal',
-              locat: {
-                name: 'ModuleModal'
-              }
-            },
             // {
             //   label: 'app.aside.nav.tooltip',
             //   locat: {
@@ -229,6 +223,18 @@ export default {
               label: 'app.aside.nav.form',
               locat: {
                 name: 'ModuleForm'
+              }
+            },
+            {
+              label: 'app.aside.nav.list',
+              locat: {
+                name: 'ModuleList'
+              }
+            },
+            {
+              label: 'app.aside.nav.modal',
+              locat: {
+                name: 'ModuleModal'
               }
             }
           ]
@@ -2035,6 +2041,15 @@ export default {
                 name: 'VXEAPI',
                 params: {
                   name: 'form-item'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeList',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'list'
                 }
               }
             }

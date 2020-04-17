@@ -30,7 +30,7 @@
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -82,7 +82,7 @@ export default {
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
         `

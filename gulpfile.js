@@ -35,6 +35,7 @@ const components = [
   'form',
   'select',
   'switch',
+  'list',
 
   'keyboard',
   'resize',

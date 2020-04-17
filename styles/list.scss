@@ -1,0 +1,24 @@
+/**Variable**/
+
+.vxe-list {
+  position: relative;
+  display: block;
+  height: 100px;
+  padding: 0;
+  .vxe-list--virtual-wrapper {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+  }
+  .vxe-list--y-space {
+    width: 0;
+    float: left;
+  }
+  .vxe-list--virtual-wrapper,
+  .vxe-list--body {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: 0;
+  }
+}

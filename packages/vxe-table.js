@@ -20,6 +20,7 @@ import Tooltip from './tooltip'
 import Form from './form'
 import Select from './select'
 import Switch from './switch'
+import List from './list'
 
 import Export from './export'
 import Resize from './resize'
@@ -49,6 +50,7 @@ const components = [
   Form,
   Select,
   Switch,
+  List,
 
   Export,
   Resize
@@ -95,6 +97,8 @@ export * from './tooltip'
 export * from './form'
 export * from './select'
 export * from './switch'
+export * from './list'
+
 export * from './export'
 export * from './resize'
 export * from './v-x-e-table'
