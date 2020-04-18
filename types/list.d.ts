@@ -26,4 +26,38 @@ export declare class List extends VXETableModule {
     vSize?: number;
     sItem?: string;
   };
+
+  /**
+   * 加载数据
+   * @param data 列表数据
+   */
+  loadData(data: any[]): Promise<any>;
+
+  /**
+   * 加载数据
+   * @param data 列表数据
+   */
+  reloadData(data: any[]): Promise<any>;
+
+  /**
+   * 重新计算列表
+   */
+  recalculate(): Promise<any>;
+
+  /**
+   * 如果有滚动条，则滚动到对应的位置
+   * @param scrollLeft 左边距离
+   * @param scrollTop 顶部距离
+   */
+  scrollTo(scrollLeft: number, scrollTop?: number): Promise<any>;
+
+  /**
+   * 刷新滚动操作，手动同步滚动相关位置
+   */
+  refreshScroll(): Promise<any>;
+  
+  /**
+   * 手动清除滚动相关信息，还原到初始状态
+   */
+  clearScroll(): Promise<any>;
 }
