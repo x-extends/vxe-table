@@ -2,7 +2,7 @@
   <div>
     <h2>{{ $t('app.aside.nav.list') }}</h2>
     <p class="tip">
-      高性能的虚拟列表，用于处理将大数组按需切割成可视区 items 条数，使渲染性能大幅提升，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'list'}}">API</router-link><br>
+      高性能的虚拟列表<span class="orange">（最大可以支撑 80w 行）</span>，用于处理将大数组按需切割成可视区 items 条数，使渲染性能大幅提升，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'list'}}">API</router-link><br>
       <span class="red">（注：必须固定容器高度和行高）</span>
     </p>
 

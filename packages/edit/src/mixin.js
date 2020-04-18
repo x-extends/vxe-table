@@ -237,6 +237,7 @@ export default {
             this.handleFocus(params, evnt)
           })
         }
+        this.isActivated = true
       }
       return this.$nextTick()
     },
