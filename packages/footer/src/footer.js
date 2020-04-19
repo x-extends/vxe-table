@@ -150,8 +150,12 @@ export default {
               if (!rowspan || !colspan) {
                 return null
               }
-              attrs.rowspan = rowspan
-              attrs.colspan = colspan
+              if (rowspan > 1) {
+                attrs.rowspan = rowspan
+              }
+              if (colspan > 1) {
+                attrs.colspan = colspan
+              }
             }
             const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('td', {

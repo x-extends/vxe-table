@@ -200,8 +200,12 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     if (!rowspan || !colspan) {
       return null
     }
-    attrs.rowspan = rowspan
-    attrs.colspan = colspan
+    if (rowspan > 1) {
+      attrs.rowspan = rowspan
+    }
+    if (colspan > 1) {
+      attrs.colspan = colspan
+    }
   }
   // 如果编辑列开启显示状态
   if (!fixedHiddenColumn && editRender && editConfig && editOpts.showStatus) {
