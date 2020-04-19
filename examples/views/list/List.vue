@@ -86,11 +86,11 @@
         <template v-slot="{ items }">
           <div
             class="my-tree-item"
-            v-for="(item, index) in items"
-            :key="index"
-            :class="[`level-${item._LEVEL}`, {'has-child': item._HAS_CHILDREN}]"
+            v-for="item in items"
+            :key="item.id"
+            :class="[`level-${item._LEVEL}`, {'has-child': item._HAS_CHILDREN, 'is-expand': item._EXPAND}]"
             :style="{paddingLeft: `${item._LEVEL * 20}px`}">
-            <i class="tree-icon fa" :class="[item._EXPAND ? 'fa-chevron-right' : 'fa-chevron-down']" @click="toggleTreeNode(item)"></i>
+            <i class="tree-icon fa fa-chevron-right" @click="toggleTreeNode(item)"></i>
             <span class="tree-label">{{ item.label }}</span>
           </div>
         </template>
@@ -218,11 +218,11 @@ export default {
             <template v-slot="{ items }">
               <div
                 class="my-tree-item"
-                v-for="(item, index) in items"
-                :key="index"
-                :class="[\`level-\${item._LEVEL}\`, {'has-child': item._HAS_CHILDREN}]"
+                v-for="item in items"
+                :key="item.id"
+                :class="[\`level-\${item._LEVEL}\`, {'has-child': item._HAS_CHILDREN, 'is-expand': item._EXPAND}]"
                 :style="{paddingLeft: \`\${item._LEVEL * 20}px\`}">
-                <i class="tree-icon fa" :class="[item._EXPAND ? 'fa-chevron-right' : 'fa-chevron-down']" @click="toggleTreeNode(item)"></i>
+                <i class="tree-icon fa fa-chevron-right" @click="toggleTreeNode(item)"></i>
                 <span class="tree-label">{{ item.label }}</span>
               </div>
             </template>
@@ -265,8 +265,10 @@ export default {
             },
             getTree (size) {
               const result = []
+              let idKey = 0
               for (let index = 0; index < size; index++) {
                 const item = {
+                  id: ++idKey,
                   label: \`节点 \${index}\`
                 }
                 if (index) {
@@ -274,6 +276,7 @@ export default {
                     const childList = []
                     for (let cIndex = 0; cIndex < 1000; cIndex++) {
                       childList.push({
+                        id: ++idKey,
                         label: \`子节点 \${index}-\${cIndex}\`,
                         children: [
                           { label: \`子节点 \${index}-\${cIndex}-0\` },
@@ -292,6 +295,7 @@ export default {
                     const childList = []
                     for (let cIndex = 0; cIndex < 500; cIndex++) {
                       childList.push({
+                        id: ++idKey,
                         label: \`子节点 \${index}-\${cIndex}\`,
                         children: [
                           { label: \`子节点 \${index}-\${cIndex}-0\` },
@@ -305,6 +309,7 @@ export default {
                     const childList = []
                     for (let cIndex = 0; cIndex < 200; cIndex++) {
                       childList.push({
+                        id: ++idKey,
                         label: \`子节点 \${index}-\${cIndex}\`,
                         children: [
                           { label: \`子节点 \${index}-\${cIndex}-0\` },
@@ -320,6 +325,7 @@ export default {
                     const childList = []
                     for (let cIndex = 0; cIndex < 100; cIndex++) {
                       childList.push({
+                        id: ++idKey,
                         label: \`子节点 \${index}-\${cIndex}\`,
                         children: [
                           { label: \`子节点 \${index}-\${cIndex}-0\` },
@@ -334,6 +340,7 @@ export default {
                     const childList = []
                     for (let cIndex = 0; cIndex < 10; cIndex++) {
                       childList.push({
+                        id: ++idKey,
                         label: \`子节点 \${index}-\${cIndex}\`,
                         children: [
                           { label: \`子节点 \${index}-\${cIndex}-0\` },
@@ -396,15 +403,9 @@ export default {
               const matchObj = XEUtils.findTree(this.tree6, item => item === row)
               row._EXPAND = isExpand
               if (matchObj) {
-                if (isExpand) {
-                  matchObj.item.children.forEach(item => {
-                    item._VISIBLE = true
-                  })
-                } else {
-                  XEUtils.eachTree(matchObj.item.children, item => {
-                    item._VISIBLE = false
-                  })
-                }
+                XEUtils.eachTree(matchObj.item.children, (item, index, items, path, parent) => {
+                  item._VISIBLE = parent ? parent._EXPAND && parent._VISIBLE : isExpand
+                })
               }
               this.refreshTree()
             },
@@ -464,7 +465,7 @@ export default {
           border-right: 1px solid #e8eaec;
         }
         .my-tree {
-          padding: 0 15px;
+          padding: 0 10px;
           border: 1px solid #e8eaec;
         }
         .my-tree .my-tree-item {
@@ -473,10 +474,16 @@ export default {
         }
         .my-tree .my-tree-item.has-child .tree-icon {
           visibility: visible;
+          transition: all 0.3s;
+        }
+        .my-tree .my-tree-item.is-expand .tree-icon {
+          transform: rotate(90deg);
         }
         .my-tree .tree-icon {
           cursor: pointer;
           width: 20px;
+          line-height: 20px;
+          text-align: center;
           visibility: hidden;
           user-select: none;
         }
@@ -511,8 +518,10 @@ export default {
     },
     getTree (size) {
       const result = []
+      let idKey = 0
       for (let index = 0; index < size; index++) {
         const item = {
+          id: ++idKey,
           label: `节点 ${index}`
         }
         if (index) {
@@ -520,6 +529,7 @@ export default {
             const childList = []
             for (let cIndex = 0; cIndex < 1000; cIndex++) {
               childList.push({
+                id: ++idKey,
                 label: `子节点 ${index}-${cIndex}`,
                 children: [
                   { label: `子节点 ${index}-${cIndex}-0` },
@@ -538,6 +548,7 @@ export default {
             const childList = []
             for (let cIndex = 0; cIndex < 500; cIndex++) {
               childList.push({
+                id: ++idKey,
                 label: `子节点 ${index}-${cIndex}`,
                 children: [
                   { label: `子节点 ${index}-${cIndex}-0` },
@@ -551,6 +562,7 @@ export default {
             const childList = []
             for (let cIndex = 0; cIndex < 200; cIndex++) {
               childList.push({
+                id: ++idKey,
                 label: `子节点 ${index}-${cIndex}`,
                 children: [
                   { label: `子节点 ${index}-${cIndex}-0` },
@@ -566,6 +578,7 @@ export default {
             const childList = []
             for (let cIndex = 0; cIndex < 100; cIndex++) {
               childList.push({
+                id: ++idKey,
                 label: `子节点 ${index}-${cIndex}`,
                 children: [
                   { label: `子节点 ${index}-${cIndex}-0` },
@@ -580,6 +593,7 @@ export default {
             const childList = []
             for (let cIndex = 0; cIndex < 10; cIndex++) {
               childList.push({
+                id: ++idKey,
                 label: `子节点 ${index}-${cIndex}`,
                 children: [
                   { label: `子节点 ${index}-${cIndex}-0` },
@@ -642,15 +656,9 @@ export default {
       const matchObj = XEUtils.findTree(this.tree6, item => item === row)
       row._EXPAND = isExpand
       if (matchObj) {
-        if (isExpand) {
-          matchObj.item.children.forEach(item => {
-            item._VISIBLE = true
-          })
-        } else {
-          XEUtils.eachTree(matchObj.item.children, item => {
-            item._VISIBLE = false
-          })
-        }
+        XEUtils.eachTree(matchObj.item.children, (item, index, items, path, parent) => {
+          item._VISIBLE = parent ? parent._EXPAND && parent._VISIBLE : isExpand
+        })
       }
       this.refreshTree()
     },
@@ -711,7 +719,7 @@ export default {
   border-right: 1px solid #e8eaec;
 }
 .my-tree {
-  padding: 0 15px;
+  padding: 0 10px;
   border: 1px solid #e8eaec;
 }
 .my-tree .my-tree-item {
@@ -720,10 +728,16 @@ export default {
 }
 .my-tree .my-tree-item.has-child .tree-icon {
   visibility: visible;
+  transition: all 0.3s;
+}
+.my-tree .my-tree-item.is-expand .tree-icon {
+  transform: rotate(90deg);
 }
 .my-tree .tree-icon {
   cursor: pointer;
   width: 20px;
+  line-height: 20px;
+  text-align: center;
   visibility: hidden;
   user-select: none;
 }
