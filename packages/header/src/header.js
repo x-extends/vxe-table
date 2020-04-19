@@ -159,8 +159,8 @@ export default {
               }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],
               attrs: {
                 'data-colid': column.id,
-                colspan: column.colSpan,
-                rowspan: column.rowSpan
+                colspan: column.colSpan > 1 ? column.colSpan : null,
+                rowspan: column.rowSpan > 1 ? column.rowSpan : null
               },
               style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
               on: thOns,

@@ -9,6 +9,7 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-table-column>
       <vxe-table-column
         field="role"
         title="Role"
@@ -16,6 +17,7 @@
         :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
         :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, events: {change: sexChangeEvent}}"></vxe-table-column>
+      <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, events: {change: dateChangeEvent}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -45,6 +47,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-table-column>
           <vxe-table-column
             field="role"
             title="Role"
@@ -52,6 +55,7 @@ export default {
             :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
             :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, events: {change: sexChangeEvent}}"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, events: {change: dateChangeEvent}}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -79,12 +83,18 @@ export default {
               }
             },
             nameChangeEvent ({ column }) {
-              console.log(\`\${column.title} 触发 change 事件\`)
+              console.log(\`\${column.title} 触发 input 事件\`)
+            },
+            roleChangeEvent ({ column }) {
+              console.log(\`\${column.title} 触发 input 事件\`)
             },
             roleFocusEvent ({ column }) {
               console.log(\`\${column.title} 触发 focus 事件\`)
             },
             sexChangeEvent ({ column }) {
+              console.log(\`\${column.title} 触发 change 事件\`)
+            },
+            dateChangeEvent ({ column }) {
               console.log(\`\${column.title} 触发 change 事件\`)
             }
           }
@@ -115,12 +125,18 @@ export default {
       }
     },
     nameChangeEvent ({ column }) {
-      console.log(`${column.title} 触发 change 事件`)
+      console.log(`${column.title} 触发 input 事件`)
+    },
+    roleChangeEvent ({ column }) {
+      console.log(`${column.title} 触发 input 事件`)
     },
     roleFocusEvent ({ column }) {
       console.log(`${column.title} 触发 focus 事件`)
     },
     sexChangeEvent ({ column }) {
+      console.log(`${column.title} 触发 change 事件`)
+    },
+    dateChangeEvent ({ column }) {
       console.log(`${column.title} 触发 change 事件`)
     }
   }
