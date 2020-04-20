@@ -132,11 +132,7 @@
           //   export: {
           //     types: ['csv', 'html', 'xml', 'txt']
           //   },
-          //   resizable: {
-          //     storage: false
-          //   },
           //   custom: {
-          //     storage: false,
           //     isFooter: true
           //   },
           //   buttons: []

@@ -15,9 +15,11 @@
       show-overflow
       highlight-hover-row
       keep-source
+      id="full_edit_1"
       ref="xGrid"
       height="600"
       row-id="id"
+      :custom-config="tableCustom"
       :sort-config="{trigger: 'cell'}"
       :filter-config="{remote: true}"
       :form-config="tableForm"
@@ -104,8 +106,11 @@ export default {
           save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body)
         }
       },
+      tableCustom: {
+        storage: true,
+        checkMethod: this.checkColumnMethod
+      },
       tableToolbar: {
-        id: 'full_edit_1',
         buttons: [
           { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
           { code: 'delete', name: '直接删除', icon: 'fa fa-trash-o' },
@@ -116,13 +121,7 @@ export default {
         import: true,
         export: true,
         zoom: true,
-        resizable: {
-          storage: true
-        },
-        custom: {
-          storage: true,
-          checkMethod: this.checkColumnMethod
-        }
+        custom: true
       },
       tableColumn: [
         { type: 'checkbox', title: 'ID', width: 120 },
@@ -155,9 +154,11 @@ export default {
           show-overflow
           highlight-hover-row
           keep-source
+          id="full_edit_1"
           ref="xGrid"
           height="600"
           row-id="id"
+          :custom-config="tableCustom"
           :sort-config="{trigger: 'cell'}"
           :filter-config="{remote: true}"
           :form-config="tableForm"
@@ -231,8 +232,11 @@ export default {
                   save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body)
                 }
               },
+              tableCustom: {
+                storage: true,
+                checkMethod: this.checkColumnMethod
+              },
               tableToolbar: {
-                id: 'full_edit_1',
                 buttons: [
                   { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
                   { code: 'delete', name: '直接删除', icon: 'fa fa-trash-o' },
@@ -243,13 +247,7 @@ export default {
                 import: true,
                 export: true,
                 zoom: true,
-                resizable: {
-                  storage: true
-                },
-                custom: {
-                  storage: true,
-                  checkMethod: this.checkColumnMethod
-                }
+                custom: true
               },
               tableColumn: [
                 { type: 'checkbox', title: 'ID', width: 120 },

@@ -8,15 +8,6 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'id',
-        descKey: 'app.api.toolbar.desc.id',
-        version: '',
-        type: 'String',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'size',
         descKey: 'app.api.toolbar.desc.size',
         version: '',
@@ -200,25 +191,6 @@ const apis = [
         ]
       },
       {
-        name: 'resizable',
-        descKey: 'app.api.toolbar.desc.resizable',
-        version: '',
-        type: 'Boolean, Object',
-        enum: '',
-        defVal: '默认继承 setup.toolbar.resizable',
-        list: [
-          {
-            name: 'storage',
-            desc: '是否启用 localStorage 本地保存，会将列宽拖动的状态保存到本地（需要设置 id）',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          }
-        ]
-      },
-      {
         name: 'custom',
         descKey: 'app.api.toolbar.desc.custom',
         version: '',
@@ -242,24 +214,6 @@ const apis = [
             type: 'Boolean',
             enum: '',
             defVal: 'false',
-            list: []
-          },
-          {
-            name: 'storage',
-            desc: '是否启用 localStorage 本地保存，会将列的隐藏状态保存到本地（需要设置 id）',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
-            name: 'checkMethod',
-            desc: '是否允许选中的方法，该方法 Function({column}) 的返回值用来决定这一列的 checkbox 是否可以选中',
-            version: '',
-            type: 'Function',
-            enum: '',
-            defVal: '',
             list: []
           },
           {

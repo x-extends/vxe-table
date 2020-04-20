@@ -63,6 +63,7 @@ export default {
   name: 'VxeTable',
   props: {
     /** 基本属性 */
+    id: String,
     // 数据
     data: Array,
     // 表格的高度
@@ -189,6 +190,8 @@ export default {
     editRules: Object,
     // 空内容渲染配置项
     emptyRender: [Boolean, Object],
+    // 自定义列配置项
+    customConfig: [Boolean, Object],
     // 优化配置项
     optimization: Object,
     // 额外的参数
@@ -210,7 +213,7 @@ export default {
   mixins: [],
   data () {
     return {
-      id: `${XEUtils.uniqueId()}`,
+      tId: `${XEUtils.uniqueId()}`,
       isCloak: false,
       // 列分组配置
       collectColumn: [],
@@ -489,6 +492,9 @@ export default {
     expandColumn () {
       return XEUtils.find(this.tableColumn, column => column.type === 'expand')
     },
+    customOpts () {
+      return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig === true ? { storage: true } : this.customConfig)
+    },
     tableBorder () {
       const { border } = this
       if (border === true) {
@@ -534,6 +540,9 @@ export default {
       const tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
+      if (this.customConfig) {
+        this.restoreCustomStorage()
+      }
       this.refreshColumn().then(() => {
         if (this.scrollXLoad) {
           this.loadScrollXData(true)
@@ -549,6 +558,12 @@ export default {
       this.$nextTick(() => {
         if (this.$toolbar) {
           this.$toolbar.updateColumns(value)
+          // 在 v3.0 中废弃 toolbar 方式
+          if (!this.customConfig) {
+            this.restoreCustomStorage()
+            this.analyColumnWidth()
+            this.refreshColumn()
+          }
         }
       })
     },
@@ -637,6 +652,10 @@ export default {
     }
     if (treeConfig && this.stripe) {
       UtilTools.error('vxe.error.treeErrProp', ['stripe'])
+    }
+    const customOpts = this.customOpts
+    if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
+      UtilTools.error('vxe.error.reqProp', ['id'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName
@@ -732,7 +751,7 @@ export default {
     const {
       _e,
       $scopedSlots,
-      id,
+      tId,
       tableData,
       tableColumn,
       visibleColumn,
@@ -790,7 +809,7 @@ export default {
       }
     }
     return h('div', {
-      class: ['vxe-table', `tid_${id}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
+      class: ['vxe-table', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         'vxe-editable': !!editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
@@ -943,7 +962,7 @@ export default {
         }
       }) : _e(),
       h('div', {
-        class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
+        class: `vxe-table${tId}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
         /**

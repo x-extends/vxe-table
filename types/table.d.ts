@@ -12,6 +12,10 @@ import { MenuOptions, MenuFirstOption } from './extends/menu'
  */
 export declare class Table extends VXETableModule {
   /**
+   * 唯一标识
+   */
+  id?: string;
+  /**
    * 数据
    */
   data?: any[];

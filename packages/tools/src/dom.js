@@ -51,9 +51,9 @@ export const DomTools = {
       elem.className = `${elem.className} ${cls}`
     }
   },
-  updateCellTitle (evnt) {
+  updateCellTitle (evnt, column) {
     const cellElem = evnt.currentTarget.querySelector('.vxe-cell')
-    const content = cellElem.textContent
+    const content = column.type === 'html' ? cellElem.innerText : cellElem.textContent
     if (cellElem.getAttribute('title') !== content) {
       cellElem.setAttribute('title', content)
     }

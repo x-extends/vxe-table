@@ -1,11 +1,9 @@
 <template>
   <div>
     <vxe-toolbar
-      id="document_api"
+      custom
       :loading="loading"
-      :refresh="{query: loadList}"
-      :resizable="{storage: true}"
-      :custom="{storage: true, checkMethod: checkColumnMethod}">
+      :refresh="{query: loadList}">
       <template v-slot:buttons>
         <vxe-input clearable class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
       </template>
@@ -17,11 +15,13 @@
       highlight-hover-row
       highlight-current-column
       ref="xTable"
+      id="document_api"
       class="api-table"
       row-id="id"
       :loading="loading"
       :cell-class-name="cellClassNameFunc"
       :data="apiList"
+      :custom-config="{storage: true, checkMethod: checkColumnMethod}"
       :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
       @header-cell-context-menu="headerCellContextMenuEvent"

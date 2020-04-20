@@ -249,6 +249,7 @@ export default {
           clear: this.clearEvent,
           click: this.togglePanelEvent,
           focus: this.focusEvent,
+          blur: this.blurEvent,
           'suffix-click': this.togglePanelEvent
         }
       }),
@@ -432,6 +433,7 @@ export default {
         const isUpArrow = keyCode === 38
         const isDwArrow = keyCode === 40
         const isDel = keyCode === 46
+        const isSpacebar = keyCode === 32
         if (isTab) {
           this.isActivated = false
         }
@@ -448,12 +450,17 @@ export default {
               offsetOption = firstOption
             }
             this.setCurrentOption(offsetOption)
+          } else if (isSpacebar) {
+            evnt.preventDefault()
           }
-        } else if (isEnter && this.isActivated) {
+        } else if ((isUpArrow || isDwArrow || isEnter || isSpacebar) && this.isActivated) {
+          evnt.preventDefault()
           this.showOptionPanel()
         }
-        if (isDel && clearable && this.isActivated) {
-          this.clearValueEvent(evnt, null)
+        if (this.isActivated) {
+          if (isDel && clearable) {
+            this.clearValueEvent(evnt, null)
+          }
         }
       }
     },
@@ -469,6 +476,9 @@ export default {
       if (!this.disabled) {
         this.isActivated = true
       }
+    },
+    blurEvent () {
+      this.isActivated = false
     },
     togglePanelEvent (params) {
       const { $event } = params

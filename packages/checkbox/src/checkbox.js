@@ -40,6 +40,7 @@ export default {
       attrs
     }, [
       h('input', {
+        class: 'vxe-checkbox--input',
         attrs: {
           type: 'checkbox',
           disabled

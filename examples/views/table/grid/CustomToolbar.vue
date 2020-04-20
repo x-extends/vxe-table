@@ -8,10 +8,12 @@
       keep-source
       ref="xGrid"
       height="530"
+      id="toolbar_demo_2"
+      :custom-config="tableCustom"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :toolbar="toolbar"
+      :toolbar="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <template v-slot:toolbar_buttons>
         <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
@@ -58,12 +60,12 @@ export default {
           save: ({ body }) => XEAjax.post('/api/user/save', body)
         }
       },
-      toolbar: {
-        id: 'toolbar_demo_2',
+      tableCustom: {
+        storage: true
+      },
+      tableToolbar: {
         refresh: true,
-        custom: {
-          storage: true
-        },
+        custom: true,
         slots: {
           buttons: 'toolbar_buttons'
         }
@@ -84,10 +86,12 @@ export default {
           keep-source
           ref="xGrid"
           height="530"
+          id="toolbar_demo_2"
+          :custom-config="tableCustom"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :toolbar="toolbar"
+          :toolbar="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <template v-slot:toolbar_buttons>
             <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
@@ -123,12 +127,12 @@ export default {
                   save: ({ body }) => XEAjax.post('/api/user/save', body)
                 }
               },
-              toolbar: {
-                id: 'toolbar_demo_2',
+              tableCustom: {
+                storage: true
+              },
+              tableToolbar: {
                 refresh: true,
-                custom: {
-                  storage: true
-                },
+                custom: true,
                 slots: {
                   buttons: 'toolbar_buttons'
                 }

@@ -551,6 +551,7 @@ const renderMap = {
     renderItem: defaultButtonsItemRender
   },
   $select: {
+    autofocus: '.vxe-input--inner',
     renderEdit: defaultSelectEditRender,
     renderDefault: defaultSelectEditRender,
     renderCell (h, renderOpts, params) {
@@ -583,12 +584,15 @@ const renderMap = {
     cellExportMethod: createExportMethod(getSelectCellValue)
   },
   $radio: {
+    autofocus: '.vxe-radio--input',
     renderItem: defaultFormItemRadioAndCheckboxRender
   },
   $checkbox: {
+    autofocus: '.vxe-checkbox--input',
     renderItem: defaultFormItemRadioAndCheckboxRender
   },
   $switch: {
+    autofocus: '.vxe-switch--button',
     renderEdit: defaultEditRender,
     renderDefault: defaultEditRender,
     renderItem: defaultItemRender

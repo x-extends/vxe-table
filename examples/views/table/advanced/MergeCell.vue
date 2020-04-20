@@ -1,28 +1,64 @@
 <template>
   <div>
-    <p class="tip">通用的单元格合并<br><span class="red">（注：<table-api-link prop="span-method"/> 合并的逻辑都是自行实现的，该示例仅供参考）</span></p>
+    <p class="tip">实现复杂的报表<br><span class="red">（注：<table-api-link prop="span-method"/> 合并的逻辑都是自行实现的，该示例仅供参考）</span></p>
 
     <vxe-table
       border
       resizable
-      height="600"
+      ref="xTable"
+      height="800"
       align="center"
+      column-width="80"
       :span-method="mergeMethod"
       :data="tableData">
-      <vxe-table-column field="a" title="A"></vxe-table-column>
-      <vxe-table-column field="b" title="B"></vxe-table-column>
-      <vxe-table-column field="c" title="C"></vxe-table-column>
-      <vxe-table-column field="d" title="D"></vxe-table-column>
-      <vxe-table-column field="e" title="E"></vxe-table-column>
-      <vxe-table-column field="f" title="F"></vxe-table-column>
-      <vxe-table-column field="g" title="G"></vxe-table-column>
-      <vxe-table-column field="h" title="H"></vxe-table-column>
-      <vxe-table-column field="i" title="I"></vxe-table-column>
-      <vxe-table-column field="j" title="J"></vxe-table-column>
-      <vxe-table-column field="k" title="K"></vxe-table-column>
-      <vxe-table-column field="l" title="L"></vxe-table-column>
-      <vxe-table-column field="m" title="M"></vxe-table-column>
-      <vxe-table-column field="n" title="N"></vxe-table-column>
+      <vxe-table-column field="a" title="名称"></vxe-table-column>
+      <vxe-table-column field="b" title="教育经费投入">
+        <vxe-table-column field="c" title="总计"></vxe-table-column>
+        <vxe-table-column title="基本投入">
+          <vxe-table-column title="合计">
+            <vxe-table-column field="d" title="合计"></vxe-table-column>
+            <vxe-table-column field="e" title="比上年增长"></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column field="f" title="人员经费"></vxe-table-column>
+          <vxe-table-column field="g" title="公用经费"></vxe-table-column>
+          <vxe-table-column title="其他经费">
+            <vxe-table-column field="d" title="合计"></vxe-table-column>
+            <vxe-table-column title="其中">
+              <vxe-table-column field="h" title="标准化建设"></vxe-table-column>
+              <vxe-table-column field="i" title="信息化建设"></vxe-table-column>
+            </vxe-table-column>
+          </vxe-table-column>
+        </vxe-table-column>
+        <vxe-table-column field="j" title="附加信息"></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column title="其他投入">
+        <vxe-table-column title="投入">
+          <vxe-table-column field="k" title="合计"></vxe-table-column>
+          <vxe-table-column title="其中">
+            <vxe-table-column field="l" title="人员经费"></vxe-table-column>
+            <vxe-table-column field="m" title="教育经费"></vxe-table-column>
+            <vxe-table-column field="n" title="项目经费"></vxe-table-column>
+            <vxe-table-column field="o" title="基建投入"></vxe-table-column>
+          </vxe-table-column>
+        </vxe-table-column>
+        <vxe-table-column title="社会捐款">
+          <vxe-table-column field="p" title="合计"></vxe-table-column>
+          <vxe-table-column title="其中">
+            <vxe-table-column field="q" title="项目经费"></vxe-table-column>
+            <vxe-table-column field="r" title="基建投入"></vxe-table-column>
+          </vxe-table-column>
+        </vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column title="补充资料">
+        <vxe-table-column title="信息化建设">
+          <vxe-table-column field="s" title="本年投入金额"></vxe-table-column>
+          <vxe-table-column title="其中">
+            <vxe-table-column field="t" title="合计"></vxe-table-column>
+            <vxe-table-column field="u" title="建设数"></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column field="v" title="备注"></vxe-table-column>
+        </vxe-table-column>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -42,38 +78,112 @@ export default {
     return {
       tableData: [],
       mergeCells: [
-        { row: 1, col: 1, rowspan: 3, colspan: 1 },
-        { row: 1, col: 2, rowspan: 3, colspan: 1 },
-        { row: 1, col: 3, rowspan: 3, colspan: 1 },
-        { row: 6, col: 0, rowspan: 1, colspan: 4 },
-        { row: 7, col: 0, rowspan: 1, colspan: 4 },
-        { row: 8, col: 0, rowspan: 1, colspan: 4 },
-        { row: 2, col: 7, rowspan: 2, colspan: 2 },
-        { row: 4, col: 6, rowspan: 8, colspan: 4 }
+        { row: 0, col: 0, rowspan: 2, colspan: 1 },
+        { row: 0, col: 1, rowspan: 2, colspan: 1 },
+        { row: 0, col: 2, rowspan: 2, colspan: 1 },
+        { row: 0, col: 3, rowspan: 2, colspan: 1 },
+        { row: 0, col: 4, rowspan: 2, colspan: 1 },
+        { row: 0, col: 5, rowspan: 2, colspan: 1 },
+        { row: 0, col: 6, rowspan: 2, colspan: 1 },
+        { row: 0, col: 7, rowspan: 2, colspan: 1 },
+        { row: 0, col: 8, rowspan: 2, colspan: 1 },
+        { row: 0, col: 9, rowspan: 2, colspan: 1 },
+        { row: 0, col: 16, rowspan: 10, colspan: 1 },
+        { row: 0, col: 18, rowspan: 2, colspan: 1 },
+        { row: 0, col: 19, rowspan: 2, colspan: 1 },
+        { row: 0, col: 20, rowspan: 2, colspan: 1 },
+        { row: 0, col: 21, rowspan: 2, colspan: 1 },
+        { row: 1, col: 11, rowspan: 1, colspan: 4 },
+
+        { row: 2, col: 0, rowspan: 4, colspan: 2 },
+        { row: 2, col: 2, rowspan: 4, colspan: 1 },
+        { row: 2, col: 3, rowspan: 4, colspan: 1 },
+        { row: 2, col: 6, rowspan: 4, colspan: 1 },
+        { row: 2, col: 7, rowspan: 4, colspan: 1 },
+        { row: 2, col: 8, rowspan: 4, colspan: 1 },
+        { row: 2, col: 9, rowspan: 4, colspan: 1 },
+        { row: 2, col: 17, rowspan: 4, colspan: 1 },
+        { row: 2, col: 18, rowspan: 3, colspan: 1 },
+        { row: 2, col: 19, rowspan: 3, colspan: 1 },
+        { row: 2, col: 20, rowspan: 3, colspan: 2 },
+        { row: 3, col: 4, rowspan: 2, colspan: 2 },
+        { row: 4, col: 11, rowspan: 2, colspan: 4 },
+        { row: 5, col: 18, rowspan: 1, colspan: 4 },
+
+        { row: 6, col: 0, rowspan: 3, colspan: 1 },
+        { row: 6, col: 1, rowspan: 3, colspan: 1 },
+        { row: 6, col: 4, rowspan: 3, colspan: 1 },
+        { row: 6, col: 5, rowspan: 3, colspan: 1 },
+        { row: 6, col: 6, rowspan: 3, colspan: 1 },
+        { row: 6, col: 7, rowspan: 3, colspan: 1 },
+        { row: 6, col: 8, rowspan: 3, colspan: 1 },
+        { row: 6, col: 9, rowspan: 3, colspan: 1 },
+        { row: 6, col: 18, rowspan: 3, colspan: 1 },
+        { row: 6, col: 19, rowspan: 3, colspan: 1 },
+        { row: 6, col: 20, rowspan: 3, colspan: 1 },
+        { row: 6, col: 21, rowspan: 3, colspan: 1 },
+        { row: 6, col: 2, rowspan: 1, colspan: 2 },
+        { row: 8, col: 2, rowspan: 1, colspan: 2 }
       ],
       demoCodes: [
         `
         <vxe-table
           border
           resizable
-          height="600"
+          ref="xTable"
+          height="800"
           align="center"
+          column-width="80"
           :span-method="mergeMethod"
           :data="tableData">
-          <vxe-table-column field="a" title="A"></vxe-table-column>
-          <vxe-table-column field="b" title="B"></vxe-table-column>
-          <vxe-table-column field="c" title="C"></vxe-table-column>
-          <vxe-table-column field="d" title="D"></vxe-table-column>
-          <vxe-table-column field="e" title="E"></vxe-table-column>
-          <vxe-table-column field="f" title="F"></vxe-table-column>
-          <vxe-table-column field="g" title="G"></vxe-table-column>
-          <vxe-table-column field="h" title="H"></vxe-table-column>
-          <vxe-table-column field="i" title="I"></vxe-table-column>
-          <vxe-table-column field="j" title="J"></vxe-table-column>
-          <vxe-table-column field="k" title="K"></vxe-table-column>
-          <vxe-table-column field="l" title="L"></vxe-table-column>
-          <vxe-table-column field="m" title="M"></vxe-table-column>
-          <vxe-table-column field="n" title="N"></vxe-table-column>
+          <vxe-table-column field="a" title="名称"></vxe-table-column>
+          <vxe-table-column field="b" title="教育经费投入">
+            <vxe-table-column field="c" title="总计"></vxe-table-column>
+            <vxe-table-column title="基本投入">
+              <vxe-table-column title="合计">
+                <vxe-table-column field="d" title="合计"></vxe-table-column>
+                <vxe-table-column field="e" title="比上年增长"></vxe-table-column>
+              </vxe-table-column>
+              <vxe-table-column field="f" title="人员经费"></vxe-table-column>
+              <vxe-table-column field="g" title="公用经费"></vxe-table-column>
+              <vxe-table-column title="其他经费">
+                <vxe-table-column field="d" title="合计"></vxe-table-column>
+                <vxe-table-column title="其中">
+                  <vxe-table-column field="h" title="标准化建设"></vxe-table-column>
+                  <vxe-table-column field="i" title="信息化建设"></vxe-table-column>
+                </vxe-table-column>
+              </vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="j" title="附加信息"></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column title="其他投入">
+            <vxe-table-column title="投入">
+              <vxe-table-column field="k" title="合计"></vxe-table-column>
+              <vxe-table-column title="其中">
+                <vxe-table-column field="l" title="人员经费"></vxe-table-column>
+                <vxe-table-column field="m" title="教育经费"></vxe-table-column>
+                <vxe-table-column field="n" title="项目经费"></vxe-table-column>
+                <vxe-table-column field="o" title="基建投入"></vxe-table-column>
+              </vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column title="社会捐款">
+              <vxe-table-column field="p" title="合计"></vxe-table-column>
+              <vxe-table-column title="其中">
+                <vxe-table-column field="q" title="项目经费"></vxe-table-column>
+                <vxe-table-column field="r" title="基建投入"></vxe-table-column>
+              </vxe-table-column>
+            </vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column title="补充资料">
+            <vxe-table-column title="信息化建设">
+              <vxe-table-column field="s" title="本年投入金额"></vxe-table-column>
+              <vxe-table-column title="其中">
+                <vxe-table-column field="t" title="合计"></vxe-table-column>
+                <vxe-table-column field="u" title="建设数"></vxe-table-column>
+              </vxe-table-column>
+              <vxe-table-column field="v" title="备注"></vxe-table-column>
+            </vxe-table-column>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
@@ -82,30 +192,98 @@ export default {
             return {
               tableData: [],
               mergeCells: [
-                { row: 1, col: 1, rowspan: 3, colspan: 1 },
-                { row: 1, col: 2, rowspan: 3, colspan: 1 },
-                { row: 1, col: 3, rowspan: 3, colspan: 1 },
-                { row: 6, col: 0, rowspan: 1, colspan: 4 },
-                { row: 7, col: 0, rowspan: 1, colspan: 4 },
-                { row: 8, col: 0, rowspan: 1, colspan: 4 },
-                { row: 2, col: 7, rowspan: 2, colspan: 2 },
-                { row: 4, col: 6, rowspan: 8, colspan: 4 }
+                { row: 0, col: 0, rowspan: 2, colspan: 1 },
+                { row: 0, col: 1, rowspan: 2, colspan: 1 },
+                { row: 0, col: 2, rowspan: 2, colspan: 1 },
+                { row: 0, col: 3, rowspan: 2, colspan: 1 },
+                { row: 0, col: 4, rowspan: 2, colspan: 1 },
+                { row: 0, col: 5, rowspan: 2, colspan: 1 },
+                { row: 0, col: 6, rowspan: 2, colspan: 1 },
+                { row: 0, col: 7, rowspan: 2, colspan: 1 },
+                { row: 0, col: 8, rowspan: 2, colspan: 1 },
+                { row: 0, col: 9, rowspan: 2, colspan: 1 },
+                { row: 0, col: 16, rowspan: 10, colspan: 1 },
+                { row: 0, col: 18, rowspan: 2, colspan: 1 },
+                { row: 0, col: 19, rowspan: 2, colspan: 1 },
+                { row: 0, col: 20, rowspan: 2, colspan: 1 },
+                { row: 0, col: 21, rowspan: 2, colspan: 1 },
+                { row: 1, col: 11, rowspan: 1, colspan: 4 },
+
+                { row: 2, col: 0, rowspan: 4, colspan: 2 },
+                { row: 2, col: 2, rowspan: 4, colspan: 1 },
+                { row: 2, col: 3, rowspan: 4, colspan: 1 },
+                { row: 2, col: 6, rowspan: 4, colspan: 1 },
+                { row: 2, col: 7, rowspan: 4, colspan: 1 },
+                { row: 2, col: 8, rowspan: 4, colspan: 1 },
+                { row: 2, col: 9, rowspan: 4, colspan: 1 },
+                { row: 2, col: 17, rowspan: 4, colspan: 1 },
+                { row: 2, col: 18, rowspan: 3, colspan: 1 },
+                { row: 2, col: 19, rowspan: 3, colspan: 1 },
+                { row: 2, col: 20, rowspan: 3, colspan: 2 },
+                { row: 3, col: 4, rowspan: 2, colspan: 2 },
+                { row: 4, col: 11, rowspan: 2, colspan: 4 },
+                { row: 5, col: 18, rowspan: 1, colspan: 4 },
+
+                { row: 6, col: 0, rowspan: 3, colspan: 1 },
+                { row: 6, col: 1, rowspan: 3, colspan: 1 },
+                { row: 6, col: 4, rowspan: 3, colspan: 1 },
+                { row: 6, col: 5, rowspan: 3, colspan: 1 },
+                { row: 6, col: 6, rowspan: 3, colspan: 1 },
+                { row: 6, col: 7, rowspan: 3, colspan: 1 },
+                { row: 6, col: 8, rowspan: 3, colspan: 1 },
+                { row: 6, col: 9, rowspan: 3, colspan: 1 },
+                { row: 6, col: 18, rowspan: 3, colspan: 1 },
+                { row: 6, col: 19, rowspan: 3, colspan: 1 },
+                { row: 6, col: 20, rowspan: 3, colspan: 1 },
+                { row: 6, col: 21, rowspan: 3, colspan: 1 },
+                { row: 6, col: 2, rowspan: 1, colspan: 2 },
+                { row: 8, col: 2, rowspan: 1, colspan: 2 }
               ]
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            const list = []
+            for (let index = 0; index < 10; index++) {
+              list.push({
+                a: 'a' + index,
+                b: 'b' + index,
+                c: 'c' + index,
+                d: 'd' + index,
+                e: 'e' + index,
+                f: 'f' + index,
+                g: 'g' + index,
+                h: 'h' + index,
+                i: 'i' + index,
+                j: 'j' + index,
+                k: 'k' + index,
+                l: 'l' + index,
+                m: 'm' + index,
+                n: 'n' + index,
+                o: 'o' + index,
+                p: 'p' + index,
+                q: 'q' + index,
+                r: 'r' + index,
+                s: 's' + index,
+                t: 't' + index,
+                u: 'u' + index,
+                v: 'v' + index
+              })
+            }
+            this.tableData = list
           },
           methods: {
             // 通用单元格合并函数（将指定区域进行合并）
-            mergeMethod ({ rowIndex, columnIndex }) {
+            mergeMethod ({ row, column }) {
               const { mergeCells } = this
+              const xTable = this.$refs.xTable
+              const _rowIndex = xTable._getRowIndex(row)
+              const _columnIndex = xTable._getColumnIndex(column)
               for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
                 const { row, col, rowspan, colspan } = mergeCells[mIndex]
-                if (row === rowIndex && col === columnIndex) {
+                if (row === _rowIndex && col === _columnIndex) {
                   return { rowspan, colspan }
                 }
-                if (rowIndex >= row && rowIndex < row + rowspan && columnIndex >= col && columnIndex < col + colspan) {
+                if (_rowIndex >= row && _rowIndex < row + rowspan && _columnIndex >= col && _columnIndex < col + colspan) {
                   return { rowspan: 0, colspan: 0 }
                 }
               }
@@ -119,7 +297,7 @@ export default {
   },
   created () {
     const list = []
-    for (let index = 0; index < 20; index++) {
+    for (let index = 0; index < 10; index++) {
       list.push({
         a: 'a' + index,
         b: 'b' + index,
@@ -134,7 +312,15 @@ export default {
         k: 'k' + index,
         l: 'l' + index,
         m: 'm' + index,
-        n: 'n' + index
+        n: 'n' + index,
+        o: 'o' + index,
+        p: 'p' + index,
+        q: 'q' + index,
+        r: 'r' + index,
+        s: 's' + index,
+        t: 't' + index,
+        u: 'u' + index,
+        v: 'v' + index
       })
     }
     this.tableData = list
@@ -146,14 +332,17 @@ export default {
   },
   methods: {
     // 通用单元格合并函数（将指定区域进行合并）
-    mergeMethod ({ rowIndex, columnIndex }) {
+    mergeMethod ({ row, column }) {
       const { mergeCells } = this
+      const xTable = this.$refs.xTable
+      const _rowIndex = xTable._getRowIndex(row)
+      const _columnIndex = xTable._getColumnIndex(column)
       for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
         const { row, col, rowspan, colspan } = mergeCells[mIndex]
-        if (row === rowIndex && col === columnIndex) {
+        if (row === _rowIndex && col === _columnIndex) {
           return { rowspan, colspan }
         }
-        if (rowIndex >= row && rowIndex < row + rowspan && columnIndex >= col && columnIndex < col + colspan) {
+        if (_rowIndex >= row && _rowIndex < row + rowspan && _columnIndex >= col && _columnIndex < col + colspan) {
           return { rowspan: 0, colspan: 0 }
         }
       }

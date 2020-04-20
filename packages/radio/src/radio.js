@@ -39,6 +39,7 @@ export default {
       attrs
     }, [
       h('input', {
+        class: 'vxe-radio--input',
         attrs: {
           type: 'radio',
           name: isGroup ? $xegroup.name : name,

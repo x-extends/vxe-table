@@ -40,7 +40,7 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedType, headerColumn, fixedColumn } = this
-    const { $listeners: tableListeners, id, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts } = $xetable
+    const { $listeners: tableListeners, tId, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts } = $xetable
     let { tableColumn } = this
     // 横向滚动渲染
     if (scrollXLoad) {
@@ -51,7 +51,7 @@ export default {
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
-        'data-tid': id
+        'data-tid': tId
       }
     }, [
       fixedType ? _e() : h('div', {
@@ -61,7 +61,7 @@ export default {
       h('table', {
         class: 'vxe-table--header',
         attrs: {
-          'data-tid': id,
+          'data-tid': tId,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -121,7 +121,7 @@ export default {
                   return
                 }
                 if (showTitle) {
-                  DomTools.updateCellTitle(evnt)
+                  DomTools.updateCellTitle(evnt, column)
                 } else if (showTooltip) {
                   $xetable.triggerHeaderTooltipEvent(evnt, params)
                 }
@@ -274,9 +274,7 @@ export default {
         $xetable.analyColumnWidth()
         $xetable.recalculate(true)
         DomTools.removeClass($xetable.$el, 'c--resize')
-        if ($xetable.$toolbar) {
-          $xetable.$toolbar.updateResizable()
-        }
+        $xetable.saveCustomResizable()
         $xetable.$emit('resizable-change', Object.assign({ $event: evnt }, params))
       }
       updateEvent(evnt)

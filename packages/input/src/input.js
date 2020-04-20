@@ -531,7 +531,13 @@ export default {
       return this.type === 'password'
     },
     stepValue () {
-      return (this.type === 'integer' ? XEUtils.toInteger(this.step) : XEUtils.toNumber(this.step)) || 1
+      const { type, step } = this
+      if (type === 'integer') {
+        return XEUtils.toInteger(step) || 1
+      } else if (type === 'float') {
+        return XEUtils.toNumber(step || ('0.' + '1'.padStart(this.digits, '0')))
+      }
+      return 1
     },
     isClearable () {
       return this.clearable && (this.isPassword || this.isNumber || this.isDatePicker || this.type === 'text' || this.type === 'search')
@@ -709,17 +715,15 @@ export default {
     inpAttrs () {
       const { isDatePicker, isNumber, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd, editable } = this
       let inputType = type
-      if (isDatePicker || (isPassword && showPwd)) {
+      if (isDatePicker || isNumber || (isPassword && showPwd) || type === 'number') {
         inputType = 'text'
-      } else if (isNumber) {
-        inputType = 'number'
       }
       const attrs = {
         name,
         form,
         type: inputType,
         placeholder,
-        maxlength,
+        maxlength: isNumber ? 16 : maxlength, // 数值最大长度限制 16 位，包含小数
         readonly: readonly || type === 'week' || !editable || this.dateOpts.editable === false,
         disabled,
         autocomplete
@@ -839,6 +843,14 @@ export default {
     },
     keydownEvent (evnt) {
       if (this.isNumber) {
+        const isCtrlKey = evnt.ctrlKey
+        const isShiftKey = evnt.shiftKey
+        const isAltKey = evnt.altKey
+        const keyCode = evnt.keyCode
+        const value = evnt.target.value
+        if (value && !isCtrlKey && !isShiftKey && !isAltKey && (keyCode === 32 || (keyCode >= 65 && keyCode <= 90))) {
+          evnt.preventDefault()
+        }
         this.numberKeydownEvent(evnt)
       }
       this.triggerEvent(evnt)
@@ -1437,7 +1449,14 @@ export default {
           this.isActivated = isActivated
         } else if (operArrow) {
           if (isDatePicker) {
-            this.dateOffsetEvent(evnt)
+            if (isActivated) {
+              if (visiblePanel) {
+                this.dateOffsetEvent(evnt)
+              } else if (isUpArrow || isDwArrow) {
+                evnt.preventDefault()
+                this.showPanel()
+              }
+            }
           }
         } else if (isEnter) {
           if (isDatePicker) {

@@ -52,7 +52,7 @@ module.exports = {
         filterIcon: '自定义筛选图标',
         span: '合并行或列',
         spanRow: '合并横向树列表',
-        mergeCell: '合并单元格',
+        mergeCell: '合并复杂的报表',
         footer: '表尾',
         footerSpan: '表尾合并行或列',
         import: '导入数据',
@@ -330,6 +330,7 @@ module.exports = {
       },
       table: {
         desc: {
+          id: '唯一标识',
           data: '表格数据（与 loadData 行为一致，更新数据是不会重置状态）',
           columns: '列配置',
           customs: '用于读取列配置，和手动调用 getColumns 方法是一样的效果，如果是想要显示隐藏列直接通过修改列的 visible 属性（废弃的 API 不建议使用）',
@@ -403,6 +404,7 @@ module.exports = {
           validConfig: '校验配置项',
           editRules: '校验规则配置项',
           emptyRender: '空内容渲染配置项',
+          customConfig: '自定义列配置项',
           optimization: '优化配置项',
 
           params: '额外的参数（可以用来存放一些私有参数）',
@@ -517,9 +519,9 @@ module.exports = {
           import: '导入按钮配置（需要设置 "import-config"）',
           export: '导出按钮配置（需要设置 "export-config"）',
           refresh: '刷新按钮配置',
-          resizable: '列宽拖动配置（需要设置 "id"）',
+          resizable: '即将废弃，请使用 custom-config',
           setting: '即将废弃，请使用 custom',
-          custom: '自定义列配置（需要设置 "id"）'
+          custom: '自定义列配置'
         }
       },
       pager: {
