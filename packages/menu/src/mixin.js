@@ -52,7 +52,7 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      const { $refs, id, contextMenu, ctxMenuStore, ctxMenuOpts } = this
+      const { $refs, tId, contextMenu, ctxMenuStore, ctxMenuOpts } = this
       const layoutList = ['header', 'body', 'footer']
       if (contextMenu) {
         if (ctxMenuStore.visible) {
@@ -66,7 +66,7 @@ export default {
           const layout = layoutList[index]
           const columnTargetNode = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`, target => {
             // target=td|th，直接向上找 table 去匹配即可
-            return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === id
+            return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === tId
           })
           const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
@@ -83,7 +83,7 @@ export default {
             this.openContextMenu(evnt, layout, params)
             UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
             return
-          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === id).flag) {
+          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === tId).flag) {
             if (ctxMenuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {

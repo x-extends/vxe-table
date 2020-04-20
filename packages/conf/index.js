@@ -53,6 +53,10 @@ const GlobalConfig = {
     // contextMenu: {
     //   visibleMethod () {}
     // },
+    // customConfig: {
+    //  storage: false,
+    //  checkMethod () {}
+    // },
     // rowId: '_XID', // 行数据的唯一主键字段名
     importConfig: {
       modes: ['insert', 'covering']
@@ -216,11 +220,7 @@ const GlobalConfig = {
     // export: {
     //   types: ['csv', 'html', 'xml', 'txt']
     // },
-    // resizable: {
-    //   storage: false
-    // },
     // custom: {
-    //   storage: false,
     //   isFooter: true
     // },
     // buttons: []

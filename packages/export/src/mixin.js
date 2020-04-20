@@ -801,13 +801,13 @@ export default {
       Object.assign(this.importParams, defOpts)
     },
     _openExport (options) {
-      const { $toolbar, exportConfig, exportOpts, treeConfig, collectColumn, footerData } = this
+      const { $toolbar, exportConfig, customOpts, exportOpts, treeConfig, collectColumn, footerData } = this
       const selectRecords = this.getCheckboxRecords()
       const isTree = !!treeConfig
       const hasFooter = !!footerData.length
       const defOpts = Object.assign({ message: true, isHeader: true }, exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
-      const checkMethod = exportOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)
+      const checkMethod = customOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)
       const exportColumns = collectColumn.slice(0)
       if (!exportConfig) {
         UtilTools.error('vxe.error.reqProp', ['export-config'])

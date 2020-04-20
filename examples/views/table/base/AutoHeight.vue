@@ -6,7 +6,7 @@
       还可以根据不同场景添加 <table-api-link prop="sync-resize"/>（属性监听） 或 <table-api-link prop="auto-resize"/>（父元素监听），这样就只需要通过样式控制父容器高度就可以实现响应式表格
     </p>
 
-    <div style="height: 300px">
+    <div style="width: 100%; height: 300px">
       <vxe-table
         border
         height="auto"
@@ -101,7 +101,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <div style="height: 600px">
+        <div style="width: 100%; height: 300px">
           <vxe-table
             border
             height="auto"

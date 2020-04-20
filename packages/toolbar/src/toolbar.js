@@ -69,6 +69,8 @@ function renderCustoms (h, _vm) {
   const cols = []
   const customBtnOns = {}
   const customWrapperOns = {}
+  const comp = _vm.$xegrid || _vm.$xetable
+  const checkMethod = (comp && comp.customOpts ? comp.customOpts.checkMethod : null) || customOpts.checkMethod
   if (customOpts.trigger === 'manual') {
     // 手动触发
   } else if (customOpts.trigger === 'hover') {
@@ -85,7 +87,7 @@ function renderCustoms (h, _vm) {
     const colTitle = column.getTitle()
     const colKey = column.getKey()
     const isColGroup = column.children && column.children.length
-    const isDisabled = customOpts.checkMethod ? !customOpts.checkMethod({ column }) : false
+    const isDisabled = checkMethod ? !checkMethod({ column }) : false
     if (isColGroup || (colTitle && colKey)) {
       cols.push(
         h('li', {
@@ -241,14 +243,16 @@ export default {
     exportOpts () {
       return Object.assign({}, GlobalConfig.toolbar.export, this.export)
     },
+    // 在 v3.0 中废弃 toolbar.resizable
     resizableOpts () {
-      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_WIDTH' }, GlobalConfig.toolbar.resizable, this.resizable)
+      return Object.assign({}, GlobalConfig.toolbar.resizable, this.resizable)
     },
     zoomOpts () {
       return Object.assign({}, GlobalConfig.toolbar.zoom, this.zoom)
     },
+    // 在 v3.0 中废弃 toolbar.custom
     customOpts () {
-      return Object.assign({ storageKey: 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE' }, GlobalConfig.toolbar.custom || GlobalConfig.toolbar.setting, this.custom || this.setting)
+      return Object.assign({}, GlobalConfig.toolbar.custom, this.custom)
     }
   },
   created () {
@@ -256,12 +260,21 @@ export default {
     if (customOpts.storage && !id) {
       return UtilTools.error('vxe.error.toolbarId')
     }
+    if (id) {
+      UtilTools.warn('vxe.error.removeProp', ['toolbar.id'])
+    }
     // 在 v3 中废弃 setting
     if (setting) {
-      UtilTools.warn('vxe.error.delProp', ['setting', 'custom'])
+      UtilTools.warn('vxe.error.delProp', ['toolbar.setting', 'toolbar.custom'])
     }
     if (!VXETable._export && (this.export || this.import)) {
       UtilTools.error('vxe.error.reqModule', ['Export'])
+    }
+    if (resizable) {
+      UtilTools.warn('vxe.error.delProp', ['toolbar.resizable', 'custom-config.storage'])
+    }
+    if (customOpts.storage) {
+      UtilTools.warn('vxe.error.delProp', ['toolbar.custom.storage', 'custom-config.storage'])
     }
     this.$nextTick(() => {
       this.updateConf()
@@ -377,140 +390,12 @@ export default {
         }
       }
     },
-    restoreCustomStorage () {
-      const { $xegrid, $xetable, id, resizable, custom, setting, resizableOpts, customOpts } = this
-      if (resizable || custom || setting) {
-        const customMap = {}
-        const comp = $xegrid || $xetable
-        const { collectColumn } = comp.getTableColumn()
-        if (resizableOpts.storage) {
-          const columnWidthStorage = this.getStorageMap(resizableOpts.storageKey)[id]
-          if (columnWidthStorage) {
-            XEUtils.each(columnWidthStorage, (resizeWidth, field) => {
-              customMap[field] = { field, resizeWidth }
-            })
-          }
-        }
-        if (customOpts.storage) {
-          const columnVisibleStorage = this.getStorageMap(customOpts.storageKey)[id]
-          if (columnVisibleStorage) {
-            const colVisibles = columnVisibleStorage.split('|')
-            const colHides = colVisibles[0] ? colVisibles[0].split(',') : []
-            const colShows = colVisibles[1] ? colVisibles[1].split(',') : []
-            colHides.forEach(field => {
-              if (customMap[field]) {
-                customMap[field].visible = false
-              } else {
-                customMap[field] = { field, visible: false }
-              }
-            })
-            colShows.forEach(field => {
-              if (customMap[field]) {
-                customMap[field].visible = true
-              } else {
-                customMap[field] = { field, visible: true }
-              }
-            })
-          }
-        }
-        const keyMap = {}
-        collectColumn.forEach(column => {
-          const colKey = column.getKey()
-          if (colKey) {
-            keyMap[colKey] = column
-          }
-        })
-        XEUtils.each(customMap, ({ visible, resizeWidth }, field) => {
-          const column = keyMap[field]
-          if (column) {
-            if (XEUtils.isNumber(resizeWidth)) {
-              column.resizeWidth = resizeWidth
-            }
-            if (XEUtils.isBoolean(visible)) {
-              column.visible = visible
-            }
-          }
-        })
-        comp.refreshColumn()
-        this.collectColumn = collectColumn
-      }
-    },
     /**
      * 暴露给 table 调用，用于关联列
      * @param {Array} collectColumn 列分组配置
      */
     updateColumns (collectColumn) {
       this.collectColumn = collectColumn
-      this.restoreCustomStorage()
-    },
-    getStorageMap (key) {
-      const version = GlobalConfig.version
-      const rest = XEUtils.toStringJSON(localStorage.getItem(key))
-      return rest && rest._v === version ? rest : { _v: version }
-    },
-    saveColumnVisible () {
-      const { id, collectColumn, customOpts } = this
-      const { checkMethod, storage, storageKey } = customOpts
-      if (storage) {
-        const columnVisibleStorageMap = this.getStorageMap(storageKey)
-        const colHides = []
-        const colShows = []
-        XEUtils.eachTree(collectColumn, column => {
-          if (!checkMethod || checkMethod({ column })) {
-            if (!column.visible && column.defaultVisible) {
-              const colKey = column.getKey()
-              if (colKey) {
-                colHides.push(colKey)
-              }
-            } else if (column.visible && !column.defaultVisible) {
-              const colKey = column.getKey()
-              if (colKey) {
-                colShows.push(colKey)
-              }
-            }
-          }
-        })
-        columnVisibleStorageMap[id] = [colHides.join(',')].concat(colShows.length ? [colShows.join(',')] : []).join('|') || undefined
-        localStorage.setItem(storageKey, XEUtils.toJSONString(columnVisibleStorageMap))
-      }
-      return this.$nextTick()
-    },
-    saveColumnWidth (isReset) {
-      const { id, collectColumn, resizableOpts } = this
-      if (resizableOpts.storage) {
-        const columnWidthStorageMap = this.getStorageMap(resizableOpts.storageKey)
-        let columnWidthStorage
-        if (!isReset) {
-          columnWidthStorage = XEUtils.isPlainObject(columnWidthStorageMap[id]) ? columnWidthStorageMap[id] : {}
-          XEUtils.eachTree(collectColumn, column => {
-            if (column.resizeWidth) {
-              const colKey = column.getKey()
-              if (colKey) {
-                columnWidthStorage[colKey] = column.renderWidth
-              }
-            }
-          })
-        }
-        columnWidthStorageMap[id] = XEUtils.isEmpty(columnWidthStorage) ? undefined : columnWidthStorage
-        localStorage.setItem(resizableOpts.storageKey, XEUtils.toJSONString(columnWidthStorageMap))
-      }
-      return this.$nextTick()
-    },
-    hideColumn (column) {
-      UtilTools.warn('vxe.error.delFunc', ['hideColumn', 'table.hideColumn'])
-      column.visible = false
-      return this.handleCustoms()
-    },
-    showColumn (column) {
-      UtilTools.warn('vxe.error.delFunc', ['showColumn', 'table.showColumn'])
-      column.visible = true
-      return this.handleCustoms()
-    },
-    resetCustoms () {
-      return this.handleCustoms()
-    },
-    resetResizable () {
-      this.updateResizable(true)
     },
     confirmCustomEvent (evnt) {
       this.closeCustom()
@@ -532,7 +417,8 @@ export default {
     },
     resetCustomEvent (evnt) {
       const { collectColumn, customOpts } = this
-      const { checkMethod } = customOpts
+      const comp = this.$xegrid || this.$xetable
+      const checkMethod = comp.customOpts.checkMethod || customOpts.checkMethod
       XEUtils.eachTree(collectColumn, column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = column.defaultVisible
@@ -540,8 +426,7 @@ export default {
         }
         column.resizeWidth = 0
       })
-      this.resetCustoms()
-      this.resetResizable()
+      comp.saveCustomResizable(true)
       this.closeCustom()
       this.emitCustomEvent('reset', evnt)
     },
@@ -550,16 +435,10 @@ export default {
       const comp = $xegrid || $xetable
       comp.$emit('custom', { type, $table: $xetable, $grid: $xegrid, $event: evnt }, evnt)
     },
-    updateResizable (isReset) {
-      const comp = this.$xegrid || this.$xetable
-      this.saveColumnWidth(isReset)
-      comp.analyColumnWidth()
-      return comp.recalculate(true)
-    },
     changeCustomOption (column) {
-      const visible = !column.visible
+      const isChecked = !column.visible
       XEUtils.eachTree([column], (item) => {
-        item.visible = visible
+        item.visible = isChecked
         item.halfVisible = false
       })
       this.handleOptionCheck(column)
@@ -581,18 +460,21 @@ export default {
     },
     handleCustoms () {
       const comp = this.$xegrid || this.$xetable
+      comp.saveCustomVisible()
+      comp.analyColumnWidth()
       comp.refreshColumn()
-      return this.saveColumnVisible()
     },
     checkCustomStatus () {
       const { collectColumn, customOpts } = this
-      const { checkMethod } = customOpts
+      const comp = this.$xegrid || this.$xetable
+      const checkMethod = comp.customOpts.checkMethod || customOpts.checkMethod
       this.customStore.isAll = collectColumn.every(column => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
       this.customStore.isIndeterminate = !this.customStore.isAll && collectColumn.some(column => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
     },
     allCustomEvent () {
       const { collectColumn, customOpts, customStore } = this
-      const { checkMethod } = customOpts
+      const comp = this.$xegrid || this.$xetable
+      const checkMethod = comp.customOpts.checkMethod || customOpts.checkMethod
       const isAll = !customStore.isAll
       XEUtils.eachTree(collectColumn, column => {
         if (!checkMethod || checkMethod({ column })) {

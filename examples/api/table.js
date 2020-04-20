@@ -365,6 +365,15 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'id',
+        descKey: 'app.api.table.desc.id',
+        version: '2.9.3',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'data',
         descKey: 'app.api.table.desc.data',
         version: '',
@@ -1935,6 +1944,53 @@ const apis = [
         ]
       },
       {
+        name: 'custom-config',
+        descKey: 'app.api.table.desc.customConfig',
+        version: '2.9.3',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.customConfig',
+        list: [
+          {
+            name: 'storage',
+            desc: '是否启用 localStorage 本地保存，会将列操作状态保留在本地',
+            version: '',
+            type: 'Boolean, Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'visible',
+                desc: '启用显示/隐藏列状态',
+                version: '',
+                type: 'Boolean',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'resizable',
+                desc: '启用列宽状态',
+                version: '',
+                type: 'Boolean',
+                enum: '',
+                defVal: '',
+                list: []
+              }
+            ]
+          },
+          {
+            name: 'checkMethod',
+            desc: '自定义列是否允许列选中的方法，该方法 Function({column}) 的返回值用来决定这一列的 checkbox 是否可以选中',
+            version: '',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'optimization',
         descKey: 'app.api.table.desc.optimization',
         version: '',
@@ -2771,6 +2827,15 @@ const apis = [
         name: '$getColumnIndex(column)',
         desc: '根据 column 获取渲染中的虚拟索引',
         version: '2.7',
+        type: 'Number',
+        enum: '',
+        defVal: 'column',
+        list: []
+      },
+      {
+        name: '_getColumnIndex(column)',
+        desc: '根据 column 获取相对于当前表格列中的索引（分组表头可能会用到）',
+        version: '2.9.3',
         type: 'Number',
         enum: '',
         defVal: 'column',

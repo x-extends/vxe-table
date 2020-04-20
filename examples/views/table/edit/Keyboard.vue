@@ -28,8 +28,8 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="num" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
 
@@ -91,8 +91,8 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="num" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
         `,

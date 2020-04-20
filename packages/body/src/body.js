@@ -148,7 +148,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
         return
       }
       if (showTitle) {
-        DomTools.updateCellTitle(evnt)
+        DomTools.updateCellTitle(evnt, column)
       } else if (showTooltip) {
         // 如果配置了显示 tooltip
         $xetable.triggerTooltipEvent(evnt, params)
@@ -442,7 +442,7 @@ export default {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
     let {
       $scopedSlots,
-      id,
+      tId,
       tableData,
       tableColumn,
       showOverflow: allColumnOverflow,
@@ -480,7 +480,7 @@ export default {
     return h('div', {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
-        'data-tid': id
+        'data-tid': tId
       }
     }, [
       fixedType ? _e() : h('div', {
@@ -494,7 +494,7 @@ export default {
       h('table', {
         class: 'vxe-table--body',
         attrs: {
-          'data-tid': id,
+          'data-tid': tId,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
