@@ -32,7 +32,7 @@ export default {
     let { tableColumn } = this
     const {
       $listeners: tableListeners,
-      id,
+      tId,
       resizable, border,
       overflowX,
       columnKey,
@@ -66,7 +66,7 @@ export default {
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
       attrs: {
-        'data-tid': id
+        'data-tid': tId
       }
     }, [
       !fixedType && scrollXLoad ? h('div', {
@@ -78,7 +78,7 @@ export default {
       h('table', {
         class: 'vxe-table--header',
         attrs: {
-          'data-tid': id,
+          'data-tid': tId,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -138,7 +138,7 @@ export default {
             if (showTitle || showTooltip) {
               thOns.mouseenter = evnt => {
                 if (showTitle) {
-                  DomTools.updateCellTitle(evnt)
+                  DomTools.updateCellTitle(evnt, column)
                 } else if (showTooltip) {
                   $table.triggerHeaderTooltipEvent(evnt, params)
                 }
@@ -305,9 +305,7 @@ export default {
         $xetable._lastResizeTime = Date.now()
         $xetable.analyColumnWidth()
         $xetable.recalculate(true)
-        if ($xetable.$toolbar) {
-          $xetable.$toolbar.updateResizable()
-        }
+        $xetable.saveCustomResizable()
         $xetable.$emit('resizable-change', Object.assign({ $event: evnt }, params))
       }
       updateEvent(evnt)

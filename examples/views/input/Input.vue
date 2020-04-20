@@ -2,7 +2,7 @@
   <div>
     <h2>{{ $t('app.aside.nav.input') }}</h2>
     <p class="tip">
-      支持多种类型的输入框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
+      支持多种类型的输入框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link><br>
       支持类型：text 文本、password 密码、number 数值、integer 整数、float 小数、date 日期、datetime 时间选择、week 周、month 月份、year 年份
     </p>
 
@@ -49,6 +49,10 @@
       <code>
         | Tab | 切换到上一个 |
         | Shift Tab | 切换到下一个 |
+        | Arrow Up ↑ | 展开下拉面板、如果已展开则向上移动（用于日期类型...等） |
+        | Arrow Down ↓ | 展开下拉面板、如果已展开则向下移动（用于日期类型...等） |
+        | Arrow Left ← | 如果已展开则向左移动（用于日期类型...等） |
+        | Arrow Right → | 如果已展开则向右移动（用于日期类型...等） |
         | Enter | 展开下拉面板、确定选中日期...等（用于日期类型...等） |
         | Page Up | 向前翻页（用于日期类型...等） |
         | Page Down | 向后翻页（用于日期类型...等） |

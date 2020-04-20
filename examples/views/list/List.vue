@@ -73,7 +73,8 @@
     <p class="tip">实现高性能的虚拟树列表：1.拍平树结构 2.构建列表树结构 3.处理展开收缩</p>
 
     <p>
-      <vxe-button @click="loadTree6(10)">加载2000条</vxe-button>
+      <vxe-button @click="loadTree6(6)">加载30条</vxe-button>
+      <vxe-button @click="loadTree6(15)">加载2000条</vxe-button>
       <vxe-button @click="loadTree6(45)">加载2w条</vxe-button>
       <vxe-button @click="loadTree6(100)">加载5w条</vxe-button>
       <vxe-button @click="loadTree6(200)">加载10w条</vxe-button>
@@ -205,7 +206,8 @@ export default {
         </div>
 
         <p>
-          <vxe-button @click="loadTree6(10)">加载2000条</vxe-button>
+          <vxe-button @click="loadTree6(6)">加载30条</vxe-button>
+          <vxe-button @click="loadTree6(15)">加载2000条</vxe-button>
           <vxe-button @click="loadTree6(45)">加载2w条</vxe-button>
           <vxe-button @click="loadTree6(100)">加载5w条</vxe-button>
           <vxe-button @click="loadTree6(200)">加载10w条</vxe-button>

@@ -16,9 +16,9 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="名称"></vxe-table-column>
       <vxe-table-column field="address" title="内容和标题显示 tooltip" width="160" show-header-overflow show-overflow></vxe-table-column>
-      <vxe-table-column field="date" title="内容显示原生 title" show-overflow="title" show-footer-overflow>
+      <vxe-table-column field="date" title="内容显示原生 title" show-header-overflow="title" show-overflow="title" show-footer-overflow>
         <template>
-          <span style="white-space: pre-line;" v-html="`111111111111\n换行换行换行换行换行\n22222222222`"></span>
+          <span style="white-space: pre-line;" v-html="`文本换行显示1xxxxxxxxxxxxx\n文本换行显示2xxxxxxxxxxxxxxxxxx`"></span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
@@ -49,9 +49,9 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="名称"></vxe-table-column>
       <vxe-table-column field="address" title="显示为省略号_____________" width="160" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
-      <vxe-table-column field="date" title="显示 tooltip" show-overflow show-footer-overflow>
+      <vxe-table-column type="html" field="date" title="显示 tooltip" show-overflow show-footer-overflow>
         <template>
-          <span v-html="`超出隐藏,tooltip支持换行\n111111111111\n换行换行换行换行换行\n33333333333333`"></span>
+          <span>html换行显示1xxxxxxxxxxxxxxxxxxxxxxx<br>html换行显示2xxxxxxxxxxxxxxxxxxxx<br>html换行显示3xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
         </template>
       </vxe-table-column>
       <vxe-table-column title="基本信息">
@@ -92,9 +92,9 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="名称"></vxe-table-column>
           <vxe-table-column field="address" title="内容和标题显示 tooltip" width="160" show-header-overflow show-overflow></vxe-table-column>
-          <vxe-table-column field="date" title="内容显示原生 title" show-overflow="title" show-footer-overflow>
+          <vxe-table-column field="date" title="内容显示原生 title" show-header-overflow="title" show-overflow="title" show-footer-overflow>
             <template>
-              <span style="white-space: pre-line;" v-html="\`111111111111\\n换行换行换行换行换行\\n22222222222\`"></span>
+              <span style="white-space: pre-line;" v-html="\`文本换行显示1xxxxxxxxxxxxx\n文本换行显示2xxxxxxxxxxxxxxxxxx\`"></span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
@@ -148,9 +148,9 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="名称"></vxe-table-column>
           <vxe-table-column field="address" title="显示为省略号_____________" width="160" show-header-overflow="ellipsis" show-overflow="ellipsis"></vxe-table-column>
-          <vxe-table-column field="date" title="显示 tooltip" show-overflow show-footer-overflow>
+          <vxe-table-column type="html" field="date" title="显示 tooltip" show-overflow show-footer-overflow>
             <template>
-              <span v-html="\`超出隐藏,tooltip支持换行\\n111111111111\\n换行换行换行换行换行\\n33333333333333\`"></span>
+              <span>html换行显示1xxxxxxxxxxxxxxxxxxxxxxx<br>html换行显示2xxxxxxxxxxxxxxxxxxxx<br>html换行显示3xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="基本信息">

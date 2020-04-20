@@ -9,6 +9,7 @@ const apis = [
     list: [
       {
         name: 'id',
+        disabled: true,
         descKey: 'app.api.toolbar.desc.id',
         version: '',
         type: 'String',
@@ -201,14 +202,16 @@ const apis = [
       },
       {
         name: 'resizable',
+        disabled: true,
         descKey: 'app.api.toolbar.desc.resizable',
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '默认继承 setup.toolbar.resizable',
+        defVal: '',
         list: [
           {
             name: 'storage',
+            disabled: true,
             desc: '是否启用 localStorage 本地保存，会将列宽拖动的状态保存到本地（需要设置 id）',
             version: '',
             type: 'Boolean',
@@ -256,6 +259,7 @@ const apis = [
           },
           {
             name: 'storage',
+            disabled: true,
             desc: '是否启用 localStorage 本地保存，会将列的隐藏状态保存到本地（需要设置 id）',
             version: '',
             type: 'Boolean',
@@ -265,6 +269,7 @@ const apis = [
           },
           {
             name: 'checkMethod',
+            disabled: true,
             desc: '是否允许选中的方法，该方法 Function({column}) 的返回值用来决定这一列的 checkbox 是否可以选中',
             version: '1.15.14',
             type: 'Function',

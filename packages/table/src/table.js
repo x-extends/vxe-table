@@ -8,6 +8,9 @@ import { UtilTools, DomTools, ExportTools, GlobalEvent, ResizeEvent } from '../.
 const browse = DomTools.browse
 const debounceScrollYDuration = browse.msie ? 40 : 20
 
+const resizableStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_WIDTH'
+const visibleStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE'
+
 // 导入
 let fileForm
 let fileInput
@@ -38,6 +41,12 @@ function getNextSortOrder (_vm, column) {
 function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
   const target = evnt.target
   return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === (targetType || colType)
+}
+
+function getCustomStorageMap (key) {
+  const version = GlobalConfig.version
+  const rest = XEUtils.toStringJSON(localStorage.getItem(key))
+  return rest && rest._v === version ? rest : { _v: version }
 }
 
 /**
@@ -161,6 +170,7 @@ export default {
   name: 'VxeTable',
   props: {
     /** 基本属性 */
+    id: String,
     // 数据
     data: Array,
     // （v3.0 废弃）
@@ -301,6 +311,8 @@ export default {
     editRules: Object,
     // 空内容渲染配置项
     emptyRender: [Boolean, Object],
+    // 自定义列配置项
+    customConfig: [Boolean, Object],
     // 优化配置项
     optimization: Object,
     // 额外的参数
@@ -325,7 +337,7 @@ export default {
   },
   data () {
     return {
-      id: `${XEUtils.uniqueId()}`,
+      tId: `${XEUtils.uniqueId()}`,
       isCloak: false,
       tZindex: 0,
       // 列分组配置
@@ -649,6 +661,9 @@ export default {
     expandColumn () {
       return XEUtils.find(this.tableColumn, column => column.type === 'expand')
     },
+    customOpts () {
+      return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig === true ? { storage: true } : this.customConfig)
+    },
     tableBorder () {
       const { border } = this
       if (border === true) {
@@ -703,6 +718,9 @@ export default {
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
       }
+      if (this.customConfig) {
+        this.restoreCustomStorage()
+      }
       this.refreshColumn().then(() => {
         if (this.scrollXLoad) {
           this.loadScrollXData(true)
@@ -734,6 +752,12 @@ export default {
       this.$nextTick(() => {
         if (this.$toolbar) {
           this.$toolbar.updateColumns(value)
+          // 在 v3.0 中废弃 toolbar 方式
+          if (!this.customConfig) {
+            this.restoreCustomStorage()
+            this.analyColumnWidth()
+            this.refreshColumn()
+          }
         }
       })
     },
@@ -833,6 +857,10 @@ export default {
     if (treeConfig && this.stripe) {
       UtilTools.error('vxe.error.treeErrProp', ['stripe'])
     }
+    const customOpts = this.customOpts
+    if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
+      UtilTools.error('vxe.error.reqProp', ['id'])
+    }
     ['header', 'body', 'footer'].forEach(name => {
       if (ctxMenuOpts[name] && ctxMenuOpts[name].visibleMethod) {
         UtilTools.warn('vxe.error.delProp', [`context-menu.${name}.visibleMethod`, 'context-menu.visibleMethod'])
@@ -920,7 +948,7 @@ export default {
     const {
       _e,
       $scopedSlots,
-      id,
+      tId,
       tableData,
       tableColumn,
       visibleColumn,
@@ -981,7 +1009,7 @@ export default {
       }
     }
     return h('div', {
-      class: ['vxe-table', `tid_${id}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
+      class: ['vxe-table', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         'vxe-editable': !!editConfig,
         'show--head': showHeader,
         'show--foot': showFooter,
@@ -1137,7 +1165,7 @@ export default {
         }
       }) : _e(),
       h('div', {
-        class: `vxe-table${id}-wrapper ${this.$vnode.data.staticClass || ''}`,
+        class: `vxe-table${tId}-wrapper ${this.$vnode.data.staticClass || ''}`,
         ref: 'tableWrapper'
       }, [
         /**
@@ -1447,9 +1475,16 @@ export default {
       return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1
     },
     /**
-   * 根据 column 获取渲染中的虚拟索引
-   * @param {ColumnConfig} column 列配置
-   */
+     * 根据 column 获取相对于当前表格列中的索引
+     * @param {ColumnConfig} column 列配置
+     */
+    _getColumnIndex (column) {
+      return this.tableFullColumn.indexOf(column)
+    },
+    /**
+     * 根据 column 获取渲染中的虚拟索引
+     * @param {ColumnConfig} column 列配置
+     */
     $getColumnIndex (column) {
       return this.visibleColumn.indexOf(column)
     },
@@ -1978,6 +2013,10 @@ export default {
       })
       this.$emit('update:customs', this.tableFullColumn)
     },
+    /**
+     * 手动重置列的所有操作，还原到初始状态
+     * 如果已关联工具栏，则会同步更新
+     */
     resetAll () {
       UtilTools.warn('vxe.error.delFunc', ['resetAll', 'resetColumn'])
       this.resetColumn(true)
@@ -1988,7 +2027,7 @@ export default {
      */
     hideColumn (column) {
       column.visible = false
-      return this.updateToolbarCustom()
+      return this.handleCustom()
     },
     /**
      * 显示指定列
@@ -1996,7 +2035,7 @@ export default {
      */
     showColumn (column) {
       column.visible = true
-      return this.updateToolbarCustom()
+      return this.handleCustom()
     },
     /**
      * 手动重置列的显示隐藏、列宽拖动的状态；
@@ -2004,40 +2043,173 @@ export default {
      * 如果已关联工具栏，则会同步更新
      */
     resetColumn (options) {
-      const { $toolbar } = this
+      const { customOpts } = this
+      const { checkMethod } = customOpts
       const opts = Object.assign({ visible: true, resizable: options === true }, options)
       this.tableFullColumn.forEach(column => {
         if (opts.resizable) {
           column.resizeWidth = 0
         }
-        if (opts.visible) {
+        if (!checkMethod || checkMethod({ column })) {
           column.visible = column.defaultVisible
         }
       })
-      if ($toolbar) {
-        if (opts.resizable) {
-          $toolbar.resetResizable()
-        }
+      if (opts.resizable) {
+        this.saveCustomResizable(true)
       }
-      return this.updateToolbarCustom()
+      return this.handleCustom()
     },
-    updateToolbarCustom () {
-      const { $toolbar } = this
-      if ($toolbar) {
-        $toolbar.handleCustoms()
-      }
+    handleCustom () {
+      this.saveCustomVisible()
+      this.analyColumnWidth()
       return this.refreshColumn()
     },
     resetResizable () {
       UtilTools.warn('vxe.error.delFunc', ['resetResizable', 'resetColumn'])
-      return this.handleResetResizable()
+      return this.resetColumn()
     },
+    /**
+     * 已废弃的方法
+     */
     reloadCustoms (customColumns) {
       UtilTools.warn('vxe.error.delFunc', ['reloadCustoms', 'column.visible & refreshColumn'])
       return this.$nextTick().then(() => {
         this.mergeCustomColumn(customColumns)
         return this.refreshColumn().then(() => this.tableFullColumn)
       })
+    },
+    /**
+     * 还原自定义列操作状态
+     */
+    restoreCustomStorage () {
+      const { $toolbar, collectColumn, customConfig, customOpts } = this
+      const { storage } = customOpts
+      const isAllStorage = customOpts.storage === true
+      const isResizable = isAllStorage || (storage && storage.resizable) || ($toolbar && $toolbar.resizableOpts.storage)
+      const isVisible = isAllStorage || (storage && storage.visible) || ($toolbar && $toolbar.customOpts.storage)
+      // 在 v3.0 中废弃 $toolbar 方式
+      if ((customConfig || $toolbar) && (isResizable || isVisible)) {
+        // 在 v3.0 中废弃 toolbar.id
+        const id = customConfig ? this.id : ($toolbar ? $toolbar.id : null)
+        const customMap = {}
+        if (!id) {
+          UtilTools.error('vxe.error.reqProp', ['id'])
+          return
+        }
+        if (isResizable) {
+          const columnWidthStorage = getCustomStorageMap(resizableStorageKey)[id]
+          if (columnWidthStorage) {
+            XEUtils.each(columnWidthStorage, (resizeWidth, field) => {
+              customMap[field] = { field, resizeWidth }
+            })
+          }
+        }
+        if (isVisible) {
+          const columnVisibleStorage = getCustomStorageMap(visibleStorageKey)[id]
+          if (columnVisibleStorage) {
+            const colVisibles = columnVisibleStorage.split('|')
+            const colHides = colVisibles[0] ? colVisibles[0].split(',') : []
+            const colShows = colVisibles[1] ? colVisibles[1].split(',') : []
+            colHides.forEach(field => {
+              if (customMap[field]) {
+                customMap[field].visible = false
+              } else {
+                customMap[field] = { field, visible: false }
+              }
+            })
+            colShows.forEach(field => {
+              if (customMap[field]) {
+                customMap[field].visible = true
+              } else {
+                customMap[field] = { field, visible: true }
+              }
+            })
+          }
+        }
+        const keyMap = {}
+        XEUtils.eachTree(collectColumn, column => {
+          const colKey = column.getKey()
+          if (colKey) {
+            keyMap[colKey] = column
+          }
+        })
+        XEUtils.each(customMap, ({ visible, resizeWidth }, field) => {
+          const column = keyMap[field]
+          if (column) {
+            if (XEUtils.isNumber(resizeWidth)) {
+              column.resizeWidth = resizeWidth
+            }
+            if (XEUtils.isBoolean(visible)) {
+              column.visible = visible
+            }
+          }
+        })
+      }
+    },
+    saveCustomVisible () {
+      const { $toolbar, collectColumn, customConfig, customOpts } = this
+      const { checkMethod, storage } = customOpts
+      const isAllStorage = customOpts.storage === true
+      const isVisible = isAllStorage || (storage && storage.visible) || ($toolbar && $toolbar.customOpts.storage)
+      // 在 v3.0 中废弃 $toolbar 方式
+      if ((customConfig || $toolbar) && isVisible) {
+        // 在 v3.0 中废弃 toolbar.id
+        const id = customConfig ? this.id : ($toolbar ? $toolbar.id : null)
+        const columnVisibleStorageMap = getCustomStorageMap(visibleStorageKey)
+        const colHides = []
+        const colShows = []
+        if (!id) {
+          UtilTools.error('vxe.error.reqProp', ['id'])
+          return
+        }
+        XEUtils.eachTree(collectColumn, column => {
+          if (!checkMethod || checkMethod({ column })) {
+            if (!column.visible && column.defaultVisible) {
+              const colKey = column.getKey()
+              if (colKey) {
+                colHides.push(colKey)
+              }
+            } else if (column.visible && !column.defaultVisible) {
+              const colKey = column.getKey()
+              if (colKey) {
+                colShows.push(colKey)
+              }
+            }
+          }
+        })
+        columnVisibleStorageMap[id] = [colHides.join(',')].concat(colShows.length ? [colShows.join(',')] : []).join('|') || undefined
+        localStorage.setItem(visibleStorageKey, XEUtils.toJSONString(columnVisibleStorageMap))
+      }
+    },
+    saveCustomResizable (isReset) {
+      const { $toolbar, collectColumn, customConfig, customOpts } = this
+      const { storage } = customOpts
+      const isAllStorage = customOpts.storage === true
+      const isResizable = isAllStorage || (storage && storage.resizable) || ($toolbar && $toolbar.resizableOpts.storage)
+      // 在 v3.0 中废弃 $toolbar 方式
+      if ((customConfig || $toolbar) && isResizable) {
+        // 在 v3.0 中废弃 toolbar.id
+        const id = customConfig ? this.id : ($toolbar ? $toolbar.id : null)
+        const columnWidthStorageMap = getCustomStorageMap(resizableStorageKey)
+        let columnWidthStorage
+        if (!id) {
+          UtilTools.error('vxe.error.reqProp', ['id'])
+          return
+        }
+        if (!isReset) {
+          columnWidthStorage = XEUtils.isPlainObject(columnWidthStorageMap[id]) ? columnWidthStorageMap[id] : {}
+          XEUtils.eachTree(collectColumn, column => {
+            if (column.resizeWidth) {
+              const colKey = column.getKey()
+              if (colKey) {
+                columnWidthStorage[colKey] = column.renderWidth
+              }
+            }
+          })
+        }
+        columnWidthStorageMap[id] = XEUtils.isEmpty(columnWidthStorage) ? undefined : columnWidthStorage
+        localStorage.setItem(resizableStorageKey, XEUtils.toJSONString(columnWidthStorageMap))
+      }
     },
     /**
      * 刷新列信息
@@ -2755,7 +2927,7 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      const { $refs, id, contextMenu, ctxMenuStore, ctxMenuOpts } = this
+      const { $refs, tId, contextMenu, ctxMenuStore, ctxMenuOpts } = this
       const layoutList = ['header', 'body', 'footer']
       if (contextMenu) {
         if (ctxMenuStore.visible) {
@@ -2769,7 +2941,7 @@ export default {
           const layout = layoutList[index]
           const columnTargetNode = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`, target => {
             // target=td|th，直接向上找 table 去匹配即可
-            return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === id
+            return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === tId
           })
           const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
@@ -2786,7 +2958,7 @@ export default {
             this.openContextMenu(evnt, layout, params)
             UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
             return
-          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === id).flag) {
+          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === tId).flag) {
             if (ctxMenuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {
@@ -2979,7 +3151,7 @@ export default {
      */
     handleTooltip (evnt, cell, overflowElem, column, row) {
       const tooltip = this.$refs.tooltip
-      const content = overflowElem.textContent
+      const content = column.type === 'html' ? overflowElem.innerText : overflowElem.textContent
       if (content && overflowElem.scrollWidth > overflowElem.clientWidth) {
         Object.assign(this.tooltipStore, {
           row,
@@ -5711,13 +5883,13 @@ export default {
       Object.assign(this.importParams, defOpts)
     },
     openExport (options) {
-      const { $toolbar, exportConfig, exportOpts, treeConfig, collectColumn, footerData } = this
+      const { $toolbar, exportConfig, customOpts, exportOpts, treeConfig, collectColumn, footerData } = this
       const selectRecords = this.getCheckboxRecords()
       const isTree = !!treeConfig
       const hasFooter = !!footerData.length
       const defOpts = Object.assign({ message: true, isHeader: true }, exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
-      const checkMethod = exportOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)
+      const checkMethod = customOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)
       const exportColumns = collectColumn.slice(0)
       if (!exportConfig) {
         UtilTools.error('vxe.error.reqProp', ['export-config'])

@@ -53,7 +53,7 @@ module.exports = {
         filterIcon: 'Custom filter icon',
         span: 'Rowspan and colspan',
         spanRow: 'Merge the list of horizontal trees',
-        mergeCell: 'Merge cells',
+        mergeCell: 'Consolidate complex reports',
         footer: 'Footer',
         footerSpan: 'Footer rowspan and colspan',
         import: 'Import data',
@@ -331,6 +331,7 @@ module.exports = {
       },
       table: {
         desc: {
+          id: 'Unique identification',
           data: 'Table data(note that updating data does not reset the status)',
           columns: 'Column configuration',
           customs: 'For reading column configuration, same effect as calling getColumns method manually, if you want to show hidden columns directly by modifying the visible property of the column (deprecated apis are not recommended)',
@@ -404,6 +405,7 @@ module.exports = {
           validConfig: 'Validate configuration',
           editRules: 'Checksum rule configuration entries',
           emptyRender: 'Empty content renderer config',
+          customConfig: 'Custom configuration',
           optimization: 'Optimize configuration',
 
           params: 'Additional parameters (Can be used to store some private parameters)',
@@ -518,9 +520,9 @@ module.exports = {
           import: 'Import button config("import-config" needs to be set)',
           export: 'Export button config("export-config" needs to be set)',
           refresh: 'Refresh button config',
-          resizable: 'Column width drag config("id" needs to be set)',
+          resizable: 'Obsolete, please use "custom-config"',
           setting: 'Obsolete, please use "custom"',
-          custom: 'Custom column config("id" needs to be set)'
+          custom: 'Custom column config'
         }
       },
       pager: {

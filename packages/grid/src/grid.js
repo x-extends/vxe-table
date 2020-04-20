@@ -179,6 +179,9 @@ export default {
     zoomOpts () {
       return Object.assign({}, GlobalConfig.grid.zoomConfig, this.zoomConfig)
     },
+    customOpts () {
+      return Object.assign({}, GlobalConfig.grid.customConfig, this.customConfig === true ? { storage: true } : this.customConfig)
+    },
     renderClass () {
       const { vSize, isZMax, optimizeOpts } = this
       return ['vxe-grid', {

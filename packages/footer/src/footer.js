@@ -15,7 +15,7 @@ export default {
     let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
     let {
       $listeners: tableListeners,
-      id,
+      tId,
       footerRowClassName,
       footerCellClassName,
       footerRowStyle,
@@ -47,7 +47,7 @@ export default {
     return h('div', {
       class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'footer--wrapper'],
       attrs: {
-        'data-tid': id
+        'data-tid': tId
       },
       style: {
         'margin-top': `${-scrollbarHeight}px`
@@ -65,7 +65,7 @@ export default {
       h('table', {
         class: 'vxe-table--footer',
         attrs: {
-          'data-tid': id,
+          'data-tid': tId,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -124,7 +124,7 @@ export default {
             if (showTitle || showTooltip) {
               tfOns.mouseenter = evnt => {
                 if (showTitle) {
-                  DomTools.updateCellTitle(evnt)
+                  DomTools.updateCellTitle(evnt, column)
                 } else if (showTooltip) {
                   $table.triggerFooterTooltipEvent(evnt, params)
                 }
