@@ -66,7 +66,6 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Pager（分页）
 * [x] Form（表单）
 * [x] Toolbar（工具栏）
-* [x] Tree table （树形表格)
 * [x] Editable CRUD（增删改查)
 * [x] Validate（数据校验）
 * [x] Data Proxy（数据代理）

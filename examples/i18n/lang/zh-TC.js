@@ -513,7 +513,7 @@ module.exports = {
       },
       toolbar: {
         desc: {
-          id: '唯一 ID 标识',
+          id: '即将废弃',
           size: '尺寸',
           loading: '是否加载中',
           import: '导入按钮配置（需要设置 "import-config"）',

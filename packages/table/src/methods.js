@@ -378,14 +378,14 @@ const Methods = {
    * @param {ColumnConfig} column 列配置
    */
   _getColumnIndex (column) {
-    return this.tableFullColumn.indexOf(column)
+    return this.visibleColumn.indexOf(column)
   },
   /**
    * 根据 column 获取渲染中的虚拟索引
    * @param {ColumnConfig} column 列配置
    */
   $getColumnIndex (column) {
-    return this.visibleColumn.indexOf(column)
+    return this.tableColumn.indexOf(column)
   },
   /**
    * 判断是否为索引列
@@ -919,35 +919,41 @@ const Methods = {
           }
         }
       })
-      collectColumn.filter(column => column.visible).forEach((column) => {
-        if (column.fixed === 'left') {
-          leftGroupList.push(column)
-        } else if (column.fixed === 'right') {
-          rightGroupList.push(column)
-        } else {
-          centerGroupList.push(column)
+      collectColumn.forEach((column) => {
+        if (column.visible) {
+          if (column.fixed === 'left') {
+            leftGroupList.push(column)
+          } else if (column.fixed === 'right') {
+            rightGroupList.push(column)
+          } else {
+            centerGroupList.push(column)
+          }
         }
       })
       this.tableGroupColumn = leftGroupList.concat(centerGroupList).concat(rightGroupList)
     } else {
       // 重新分配列
-      tableFullColumn.filter(column => column.visible).forEach((column) => {
-        if (column.fixed === 'left') {
-          leftList.push(column)
-        } else if (column.fixed === 'right') {
-          rightList.push(column)
-        } else {
-          centerList.push(column)
+      tableFullColumn.forEach((column) => {
+        if (column.visible) {
+          if (column.fixed === 'left') {
+            leftList.push(column)
+          } else if (column.fixed === 'right') {
+            rightList.push(column)
+          } else {
+            centerList.push(column)
+          }
         }
       })
     }
-    let visibleColumn = leftList.concat(centerList).concat(rightList)
-    const scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
+    const visibleColumn = leftList.concat(centerList).concat(rightList)
+    let tableColumn = visibleColumn
+    let scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
     Object.assign(columnStore, { leftList, centerList, rightList })
+    if (scrollXLoad && isGroup) {
+      scrollXLoad = false
+      UtilTools.warn('vxe.error.scrollXNotGroup')
+    }
     if (scrollXLoad) {
-      if (this.isGroup) {
-        UtilTools.warn('vxe.error.scrollXNotGroup')
-      }
       if (this.showHeader && !this.showHeaderOverflow) {
         UtilTools.warn('vxe.error.reqProp', ['show-header-overflow'])
       }
@@ -958,10 +964,11 @@ const Methods = {
         startIndex: 0,
         visibleIndex: 0
       })
-      visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
+      tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
     }
     this.scrollXLoad = scrollXLoad
-    this.tableColumn = visibleColumn
+    this.tableColumn = tableColumn
+    this.visibleColumn = visibleColumn
     return this.$nextTick().then(() => {
       this.updateFooter()
       this.recalculate(true)
@@ -1348,8 +1355,14 @@ const Methods = {
               let hasEllipsis = showTitle || showTooltip || showEllipsis
               const listElem = elemStore[`${name}-${layout}-list`]
               // 滚动的渲染不支持动态行高
-              if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-                hasEllipsis = true
+              if (layout === 'header' || layout === 'footer') {
+                if (scrollXLoad && !hasEllipsis) {
+                  hasEllipsis = true
+                }
+              } else {
+                if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+                  hasEllipsis = true
+                }
               }
               if (listElem) {
                 XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), elem => {
@@ -2346,34 +2359,39 @@ const Methods = {
     if ((treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
       this.triggerTreeExpandEvent(evnt, params)
     }
-    if ((!column.treeNode || !DomTools.getEventTargetNode(evnt, $el, 'vxe-tree--btn-wrapper').flag) && (column.type !== 'expand' || !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
-      // 如果是高亮行
-      if (highlightCurrentRow) {
-        if (radioOpts.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--radio').flag)) {
-          this.triggerCurrentRowEvent(evnt, params)
+    const triggerTreeNode = column.treeNode && DomTools.getEventTargetNode(evnt, $el, 'vxe-tree--btn-wrapper').flag
+    // 如果点击了树节点
+    if (!triggerTreeNode) {
+      const triggerExpandNode = column.type === 'expand' && DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag
+      if (!triggerExpandNode) {
+        // 如果是高亮行
+        if (highlightCurrentRow) {
+          if (radioOpts.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--radio').flag)) {
+            this.triggerCurrentRowEvent(evnt, params)
+          }
+        }
+        // 如果是单选框
+        if ((radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--radio').flag) {
+          this.triggerRadioRowEvent(evnt, params)
+        }
+        // 如果是复选框
+        if ((checkboxOpts.trigger === 'row' || (column.type === 'checkbox' && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-cell--checkbox').flag) {
+          this.handleToggleCheckRowEvent(params, evnt)
         }
       }
-      // 如果是单选框
-      if ((radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--radio').flag) {
-        this.triggerRadioRowEvent(evnt, params)
-      }
-      // 如果是复选框
-      if ((checkboxOpts.trigger === 'row' || (column.type === 'checkbox' && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-cell--checkbox').flag) {
-        this.handleToggleCheckRowEvent(params, evnt)
-      }
-    }
-    // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
-    if (editConfig) {
-      if (editOpts.trigger === 'manual') {
-        if (actived.args && actived.row === row && column !== actived.column) {
-          this.handleChangeCell(evnt, params)
-        }
-      } else if (!actived.args || row !== actived.row || column !== actived.column) {
-        if (editOpts.trigger === 'click') {
-          this.handleChangeCell(evnt, params)
-        } else if (editOpts.trigger === 'dblclick') {
-          if (editOpts.mode === 'row' && actived.row === row) {
+      // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
+      if (editConfig) {
+        if (editOpts.trigger === 'manual') {
+          if (actived.args && actived.row === row && column !== actived.column) {
             this.handleChangeCell(evnt, params)
+          }
+        } else if (!actived.args || row !== actived.row || column !== actived.column) {
+          if (editOpts.trigger === 'click') {
+            this.handleChangeCell(evnt, params)
+          } else if (editOpts.trigger === 'dblclick') {
+            if (editOpts.mode === 'row' && actived.row === row) {
+              this.handleChangeCell(evnt, params)
+            }
           }
         }
       }
@@ -2998,7 +3016,7 @@ const Methods = {
             scrollXStore.offsetSize = visibleXSize
           }
           if (!scrollX.rSize) {
-            scrollXStore.renderSize = Math.max(6, visibleXSize + 4)
+            scrollXStore.renderSize = Math.max(8, visibleXSize + 6)
           }
           this.updateScrollXData()
         } else {
@@ -3030,7 +3048,7 @@ const Methods = {
             scrollYStore.offsetSize = visibleYSize
           }
           if (!scrollY.rSize) {
-            scrollYStore.renderSize = Math.max(5, browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6))
+            scrollYStore.renderSize = Math.max(6, browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6))
           }
           this.updateScrollYData()
         } else {
@@ -3203,9 +3221,9 @@ const Methods = {
    * 更新表尾合计
    */
   updateFooter () {
-    const { showFooter, tableColumn, footerMethod } = this
+    const { showFooter, visibleColumn, footerMethod } = this
     if (showFooter && footerMethod) {
-      this.footerData = tableColumn.length ? footerMethod({ columns: tableColumn, data: this.afterFullData }) : []
+      this.footerData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData }) : []
     }
     return this.$nextTick()
   },

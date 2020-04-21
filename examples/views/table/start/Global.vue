@@ -59,6 +59,9 @@
             //   isPrint: true,
             //   modes: ['current', 'selected']
             // },
+            // customConfig: {
+            //  storage: false
+            // },
             optimization: {
               // animat: true,
               // cloak: false,
@@ -161,7 +164,12 @@
           //   dblclickZoom: true,
           //   showTitleOverflow: true
           //   storage: false
-          // }
+          // },
+          list: {
+            scrollY: {
+              gt: 100
+            }
+          },
           // 集成国际化（将对列头、校验提示..进行自动翻译）
           translate: key => i18n.t(key)
         })
