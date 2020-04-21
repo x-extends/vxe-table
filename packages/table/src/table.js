@@ -233,7 +233,9 @@ export default {
       tableGroupColumn: [],
       // 完整所有列
       tableFullColumn: [],
-      // 渲染的列
+      // 渲染所有列
+      visibleColumn: [],
+      // 可视区渲染的列
       tableColumn: [],
       // 渲染中的数据
       tableData: [],
@@ -275,6 +277,8 @@ export default {
       treeLazyLoadeds: [],
       // 树节点不确定状态的列表
       treeIndeterminates: [],
+      // 是否已经加载了筛选
+      hasFilterPanel: false,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -438,14 +442,8 @@ export default {
     hasTip () {
       return VXETable._tooltip
     },
-    visibleColumn () {
-      return this.tableFullColumn ? this.tableFullColumn.filter(column => column.visible) : []
-    },
     isResizable () {
       return this.resizable || this.tableFullColumn.some(column => column.resizable)
-    },
-    hasFilter () {
-      return this.tableColumn.some(column => column.filters)
     },
     headerCtxMenu () {
       const headerOpts = this.ctxMenuOpts.header
@@ -807,7 +805,6 @@ export default {
       visibleColumn,
       tableGroupColumn,
       isGroup,
-      hasFilter,
       isResizable,
       isCtxMenu,
       loading,
@@ -990,7 +987,7 @@ export default {
       /**
        * 筛选
        */
-      hasFilter ? h('vxe-table-filter', {
+      this.hasFilterPanel ? h('vxe-table-filter', {
         props: {
           optimizeOpts,
           filterStore

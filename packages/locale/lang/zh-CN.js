@@ -8,7 +8,7 @@ export default {
       treeFixedExpand: '树结构的固定列与展开行有冲突',
       treeLineExpand: '树结构的节点线与展开行有冲突',
       treeErrProp: '树结构不支持该参数 "{{0}}"',
-      scrollXNotGroup: '横向虚拟滚动不支持分组表头',
+      scrollXNotGroup: '横向虚拟滚动不支持分组表头，请修改正确 "optimization.scrollX.gt" 的参数，否则可能会导致出现错误',
       unableInsert: '无法插入到指定位置',
       useErr: '安装 "{{0}}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
       barUnableLink: '工具栏无法关联表格',

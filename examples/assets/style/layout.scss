@@ -283,6 +283,17 @@ body,
         }
       }
     }
+    .is-bad {
+      .nav-link {
+        color: #f56c6c;
+        text-decoration: line-through;
+        &:hover,
+        &.router-link-active {
+          color: #f14444;
+          text-decoration: line-through;
+        }
+      }
+    }
   }
   > .body {
     position: relative;

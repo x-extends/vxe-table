@@ -11,10 +11,7 @@
       ModalController.confirm(message, title, options) 创建确认框<br>
       ModalController.close(id?: string) 手动关闭动态创建的窗口<br>
       还可以自行挂载到 vue 实例中，例如<br>
-      Vue.prototype.$XModal = ModalController
-      Vue.prototype.$alert = ModalController.alert<br>
-      Vue.prototype.$confirm = ModalController.confirm<br>
-      Vue.prototype.$message = ModalController.message
+      Vue.prototype.$XModal = VXETable.modal 或者 Vue.prototype.$XModal = ModalController
     </p>
 
     <p>

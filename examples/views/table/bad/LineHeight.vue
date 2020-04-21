@@ -103,7 +103,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 400)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
           }
         }
         `
@@ -111,7 +111,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 400)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

@@ -134,7 +134,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             getTreeExpansionEvent () {
@@ -168,7 +168,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `,
@@ -214,7 +214,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             removeRowEvent (row) {

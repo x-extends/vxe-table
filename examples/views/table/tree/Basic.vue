@@ -118,7 +118,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             toggleExpandChangeEvent ({ row, expanded }) {
@@ -153,7 +153,7 @@ export default {
           },
           created () {
             this.defaultExpandKeys = ['30000']
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `,
@@ -180,7 +180,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `

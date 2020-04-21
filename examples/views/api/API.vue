@@ -273,10 +273,10 @@ export default {
           xTable.hideColumn(column)
           break
         case 'showAllColumn':
-          xTable.resetColumn()
+          xTable.resetColumn({ visible: true })
           break
         case 'resetColumn':
-          xTable.resetAll()
+          xTable.resetColumn(true)
           break
         case 'exportHTMLAPI':
           xTable.exportData({

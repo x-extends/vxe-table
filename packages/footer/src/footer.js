@@ -38,8 +38,7 @@ export default {
       showFooterOverflow: allColumnFooterOverflow,
       currentColumn,
       overflowX,
-      scrollbarWidth,
-      getColumnIndex
+      scrollbarWidth
     } = $xetable
     // 如果是使用优化模式
     if (!footerSpanMethod) {
@@ -108,16 +107,21 @@ export default {
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const footOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
             const footAlign = footerAlign || align || allFooterAlign || allAlign
-            const showEllipsis = footOverflow === 'ellipsis'
+            let showEllipsis = footOverflow === 'ellipsis'
             const showTitle = footOverflow === 'title'
             const showTooltip = footOverflow === true || footOverflow === 'tooltip'
-            const hasEllipsis = showTitle || showTooltip || showEllipsis
+            let hasEllipsis = showTitle || showTooltip || showEllipsis
             const attrs = { 'data-colid': column.id }
             const tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            const columnIndex = getColumnIndex(column)
-            const itemIndex = $xetable.tableColumn.indexOf(column)
-            const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData }
+            const columnIndex = $xetable.getColumnIndex(column)
+            const _columnIndex = $xetable._getColumnIndex(column)
+            const itemIndex = _columnIndex
+            const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData }
+            // 虚拟滚动不支持动态高度
+            if (scrollXLoad && !hasEllipsis) {
+              showEllipsis = hasEllipsis = true
+            }
             if (showTitle || showTooltip) {
               tfOns.mouseenter = evnt => {
                 if (showTitle) {
@@ -136,12 +140,12 @@ export default {
             }
             if (tableListeners['footer-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($xetable, 'footer-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'footer-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             if (tableListeners['footer-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($xetable, 'footer-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'footer-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             // 合并行或列

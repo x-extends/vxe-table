@@ -36,15 +36,43 @@
     <vxe-table
       border
       show-overflow
+      show-header-overflow
+      show-footer-overflow
+      show-footer
       ref="xTable"
       height="300"
       :sort-config="{trigger: 'cell'}"
-      :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200}}">
+      :footer-method="footerMethod"
+      :optimization="{scrollX: {gt: 10}, scrollY: {gt: 100}}"
+      :data="tableData2">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+      <vxe-table-column field="num" title="Num" width="100"></vxe-table-column>
+      <vxe-table-column field="num2" title="Num2" width="100"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+      <vxe-table-column field="date3" title="Date" width="200" show-overflow></vxe-table-column>
+      <vxe-table-column field="role" title="Role" width="100"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+      <vxe-table-column field="num2" title="Num2" width="100"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+      <vxe-table-column field="num" title="Num" width="100"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
+      <vxe-table-column field="role" title="Role" width="100"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+      <vxe-table-column field="num2" title="Num2" width="100"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate" width="100"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
+      <vxe-table-column field="date3" title="Date" width="200" show-overflow></vxe-table-column>
+      <vxe-table-column field="role" title="Role" width="100"></vxe-table-column>
+      <vxe-table-column field="num" title="Num" width="100"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
     </vxe-table>
 
     <pre>
@@ -72,12 +100,14 @@
 
 <script>
 import XEAjax from 'xe-ajax'
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
       tableData: [],
+      tableData2: [],
       demoCodes: [
         `
         <vxe-table
@@ -102,7 +132,7 @@ export default {
             }
           },
           created () {
-            XEAjax.mockList(600).then(data => {
+            XEAjax.mockList(500).then(data => {
               this.tableData = data
             })
           }
@@ -112,25 +142,77 @@ export default {
         <vxe-table
           border
           show-overflow
+          show-header-overflow
+          show-footer-overflow
+          show-footer
           ref="xTable"
           height="300"
           :sort-config="{trigger: 'cell'}"
-          :optimization="{scrollX: {gt: 40}, scrollY: {gt: 200}}">
+          :footer-method="footerMethod"
+          :optimization="{scrollX: {gt: 10}, scrollY: {gt: 100}}"
+          :data="tableData2">
           <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+          <vxe-table-column field="num" title="Num" width="100"></vxe-table-column>
+          <vxe-table-column field="num2" title="Num2" width="100"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+          <vxe-table-column field="date3" title="Date" width="200" show-overflow></vxe-table-column>
+          <vxe-table-column field="role" title="Role" width="100"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+          <vxe-table-column field="num2" title="Num2" width="100"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+          <vxe-table-column field="num" title="Num" width="100"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
+          <vxe-table-column field="role" title="Role" width="100"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
+          <vxe-table-column field="num2" title="Num2" width="100"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate" width="100"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
+          <vxe-table-column field="date3" title="Date" width="200" show-overflow></vxe-table-column>
+          <vxe-table-column field="role" title="Role" width="100"></vxe-table-column>
+          <vxe-table-column field="num" title="Num" width="100"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
           created () {
-            XEAjax.mockList(1000).then(data => {
-              if (this.$refs.xTable) {
-                this.$refs.xTable.reloadData(data)
-              }
+            XEAjax.mockList(200).then(data => {
+              this.tableData = data
             })
+          },
+          methods: {
+            footerMethod ({ columns, data }) {
+              // 返回一个二维数组的表尾合计
+              console.log(data.length)
+              return [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '平均'
+                  }
+                  switch (column.property) {
+                    case 'age':
+                    case 'rate':
+                    case 'num':
+                    case 'num2':
+                      return parseInt(XEUtils.mean(data, column.property))
+                  }
+                  return '无'
+                })
+              ]
+            }
           }
         }
         `
@@ -138,19 +220,37 @@ export default {
     }
   },
   created () {
-    XEAjax.mockList(600).then(data => {
+    XEAjax.mockList(500).then(data => {
       this.tableData = data
     })
-    XEAjax.mockList(1000).then(data => {
-      if (this.$refs.xTable) {
-        this.$refs.xTable.reloadData(data)
-      }
+    XEAjax.mockList(200).then(data => {
+      this.tableData2 = data
     })
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    footerMethod ({ columns, data }) {
+      // 返回一个二维数组的表尾合计
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '平均'
+          }
+          switch (column.property) {
+            case 'age':
+            case 'rate':
+            case 'num':
+            case 'num2':
+              return parseInt(XEUtils.mean(data, column.property))
+          }
+          return '无'
+        })
+      ]
+    }
   }
 }
 </script>

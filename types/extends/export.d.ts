@@ -175,6 +175,6 @@ export interface ColumnExportCellRenderParams extends GridRenderParams {
 
 export interface ColumnExportFooterRenderParams extends GridRenderParams {
   items: any[];
-  itemIndex: number;
+  _columnIndex: number;
   column: ColumnConfig;
 }

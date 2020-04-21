@@ -52,7 +52,6 @@ export default {
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        const filterWrapper = $refs.filterWrapper
         const bodyElem = $refs.tableBody.$el
         const { target: targetElem, pageX } = evnt
         const { visibleWidth } = DomTools.getDomNode()
@@ -66,8 +65,9 @@ export default {
         })
         filterStore.isAllSelected = filterStore.options.every(item => item.checked)
         filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
+        this.hasFilterPanel = true
         this.$nextTick(() => {
-          const filterWrapperElem = filterWrapper.$el
+          const filterWrapperElem = $refs.filterWrapper.$el
           const filterWidth = filterWrapperElem.offsetWidth
           const centerWidth = filterWidth / 2
           const minMargin = 32

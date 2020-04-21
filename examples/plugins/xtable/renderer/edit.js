@@ -19,7 +19,7 @@ VXETable.renderer.add('MyInput', {
   //   return `值为：${row[column.property]}`
   // },
   // // 表尾单元格导出函数
-  // footerCellExportMethod ({ items, itemIndex, column }) {
-  //   return `合计为：${items[itemIndex]}`
+  // footerCellExportMethod ({ items, _columnIndex, column }) {
+  //   return `合计为：${items[_columnIndex]}`
   }
 })

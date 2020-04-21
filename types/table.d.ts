@@ -302,6 +302,11 @@ export declare class Table extends VXETableModule {
    */
   getColumnIndex(column: ColumnConfig): number;
   /**
+   * 根据 column 获取相对于当前表格列中的索引
+   * @param column 列对象
+   */
+  _getColumnIndex(column: ColumnConfig): number;
+  /**
    * 根据 column 获取渲染中的虚拟索引
    * @param column 列对象
    */

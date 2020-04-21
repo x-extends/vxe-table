@@ -22,6 +22,10 @@ export interface ColumnFooterRenderParams extends TableRenderParams {
      */
     columnIndex: number;
     /**
+     * 相对于当前表格列中的索引
+     */
+    _columnIndex: number;
+    /**
      * 相对于可视区渲染中的列索引
      */
     $columnIndex: number;
@@ -33,10 +37,6 @@ export interface ColumnFooterRenderParams extends TableRenderParams {
      * 表尾项列表
      */
     items: any[];
-    /**
-     * 表尾项索引
-     */
-    itemIndex: number;
     /**
      * 表尾数据集
      */

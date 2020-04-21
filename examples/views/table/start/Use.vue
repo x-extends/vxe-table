@@ -18,6 +18,9 @@
         import 'vxe-table/lib/index.css'
 
         Vue.use(VXETable)
+
+        // 给 vue 实例挂载全局窗口对象
+        Vue.prototype.$XModal = VXETable.modal
       </code>
     </pre>
     <h2>Import on demand 按需引入</h2>
@@ -53,34 +56,32 @@
         import Vue from 'vue'
         import XEUtils from 'xe-utils'
         import {
-          // 实例
           VXETable,
-          // 模块
-          Icon,
+          Table,
           Column,
           Header,
           Footer,
           Filter,
-          Tooltip,
           Grid,
           Menu,
           Toolbar,
           Pager,
-          Form,
           Checkbox,
           Radio,
-          Switch,
           Input,
-          Select,
+          Textarea,
           Button,
           Modal,
+          Tooltip,
+          Form,
+          Select,
+          Switch,
           Edit,
+          List,
           Export,
           Keyboard,
           Validator,
-          Resize,
-          // 核心
-          Table
+          Resize
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
@@ -115,6 +116,9 @@
         Vue.use(Resize)
         // 再安装核心库
         Vue.use(Table)
+
+        // 给 vue 实例挂载全局窗口对象
+        Vue.prototype.$XModal = VXETable.modal
       </code>
     </pre>
     <div>main.js</div>
