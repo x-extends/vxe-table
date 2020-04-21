@@ -12,7 +12,7 @@ export default {
     fixedType: String
   },
   render (h) {
-    let { $parent: $table, fixedType, fixedColumn, tableColumn, footerData } = this
+    let { $parent: $xetable, fixedType, fixedColumn, tableColumn, footerData } = this
     let {
       $listeners: tableListeners,
       tId,
@@ -31,9 +31,8 @@ export default {
       cellOffsetWidth,
       showFooterOverflow: allColumnFooterOverflow,
       currentColumn,
-      overflowX,
-      getColumnIndex
-    } = $table
+      overflowX
+    } = $xetable
     // 如果是使用优化模式
     if (fixedType && allColumnFooterOverflow && !footerSpanMethod) {
       tableColumn = fixedColumn
@@ -59,7 +58,7 @@ export default {
       !fixedType && scrollXLoad ? h('div', {
         class: ['vxe-body--x-space'],
         style: {
-          width: `${$table.tableWidth}px`
+          width: `${$xetable.tableWidth}px`
         }
       }) : null,
       h('table', {
@@ -103,48 +102,53 @@ export default {
          */
         h('tfoot', footerData.map((list, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table, $rowIndex, fixed: fixedType }) : footerRowClassName : ''],
-            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table, $rowIndex, fixed: fixedType }) : footerRowStyle) : null
+            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowClassName : ''],
+            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType }) : footerRowStyle) : null
           }, tableColumn.map((column, $columnIndex) => {
             const { showFooterOverflow, renderWidth, columnKey, footerAlign, align, footerClassName } = column
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const footOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
             const footAlign = footerAlign || align || allFooterAlign || allAlign
-            const showEllipsis = footOverflow === 'ellipsis'
+            let showEllipsis = footOverflow === 'ellipsis'
             const showTitle = footOverflow === 'title'
             const showTooltip = footOverflow === true || footOverflow === 'tooltip'
-            const hasEllipsis = showTitle || showTooltip || showEllipsis
+            let hasEllipsis = showTitle || showTooltip || showEllipsis
             const attrs = { 'data-colid': column.id }
             const tfOns = {}
             // 确保任何情况下 columnIndex 都精准指向真实列索引
-            const columnIndex = getColumnIndex(column)
-            const itemIndex = $table.tableColumn.indexOf(column)
-            const params = { $table, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData }
+            const columnIndex = $xetable.getColumnIndex(column)
+            const _columnIndex = $xetable._getColumnIndex(column)
+            const itemIndex = _columnIndex
+            const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData }
+            // 虚拟滚动不支持动态高度
+            if (scrollXLoad && !hasEllipsis) {
+              showEllipsis = hasEllipsis = true
+            }
             if (showTitle || showTooltip) {
               tfOns.mouseenter = evnt => {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt, column)
                 } else if (showTooltip) {
-                  $table.triggerFooterTooltipEvent(evnt, params)
+                  $xetable.triggerFooterTooltipEvent(evnt, params)
                 }
               }
             }
             if (showTooltip) {
               tfOns.mouseleave = evnt => {
                 if (showTooltip) {
-                  $table.handleTargetLeaveEvent(evnt)
+                  $xetable.handleTargetLeaveEvent(evnt)
                 }
               }
             }
             if (tableListeners['footer-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($table, 'footer-cell-click', [{ $table, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'footer-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             if (tableListeners['footer-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($table, 'footer-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
+                UtilTools.emitEvent($xetable, 'footer-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, data: footerData, cell: evnt.currentTarget }, evnt])
               }
             }
             // 合并行或列
@@ -173,7 +177,7 @@ export default {
               attrs,
               style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
               on: tfOns,
-              key: columnKey || ($table.columnKey ? column.id : $columnIndex)
+              key: columnKey || ($xetable.columnKey ? column.id : $columnIndex)
             }, [
               h('div', {
                 class: ['vxe-cell', {
@@ -205,14 +209,14 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt) {
-      const { $parent: $table, fixedType } = this
-      const { $refs, scrollXLoad, triggerScrollXEvent } = $table
+      const { $parent: $xetable, fixedType } = this
+      const { $refs, scrollXLoad, triggerScrollXEvent } = $xetable
       const tableHeader = $refs.tableHeader
       const headerElem = tableHeader ? tableHeader.$el : null
       const bodyElem = $refs.tableBody.$el
       const footerElem = $refs.tableFooter.$el
       const scrollLeft = footerElem.scrollLeft
-      $table.lastScrollTime = Date.now()
+      $xetable.lastScrollTime = Date.now()
       if (headerElem) {
         headerElem.scrollLeft = scrollLeft
       }
@@ -222,7 +226,7 @@ export default {
       if (scrollXLoad) {
         triggerScrollXEvent(evnt)
       }
-      UtilTools.emitEvent($table, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, $table, $event: evnt }, evnt])
+      UtilTools.emitEvent($xetable, 'scroll', [{ type: 'footer', fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, $table: $xetable, $event: evnt }, evnt])
     }
   }
 }

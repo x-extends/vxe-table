@@ -76,8 +76,8 @@
       </template>
 
       <!--自定义插槽 num_footer-->
-      <template v-slot:num_footer="{ items, itemIndex }">
-        <span style="color: red">合计：{{ items[itemIndex] }}</span>
+      <template v-slot:num_footer="{ items, _columnIndex }">
+        <span style="color: red">合计：{{ items[_columnIndex] }}</span>
       </template>
 
       <!--自定义插槽 name_default-->
@@ -198,9 +198,9 @@ export default {
                 </span>
               ]
             },
-            footer: ({ items, itemIndex }) => {
+            footer: ({ items, _columnIndex }) => {
               return [
-                <span>累计：{ items[itemIndex] }</span>
+                <span>累计：{ items[_columnIndex] }</span>
               ]
             },
             filter: ({ column, $panel }) => {
@@ -352,8 +352,8 @@ export default {
           </template>
 
           <!--自定义插槽 num_footer-->
-          <template v-slot:num_footer="{ items, itemIndex }">
-            <span style="color: red">合计：{{ items[itemIndex] }}</span>
+          <template v-slot:num_footer="{ items, _columnIndex }">
+            <span style="color: red">合计：{{ items[_columnIndex] }}</span>
           </template>
 
           <!--自定义插槽 name_default-->
@@ -461,9 +461,9 @@ export default {
                         </span>
                       ]
                     },
-                    footer: ({ items, itemIndex }) => {
+                    footer: ({ items, _columnIndex }) => {
                       return [
-                        <span>累计：{ items[itemIndex] }</span>
+                        <span>累计：{ items[_columnIndex] }</span>
                       ]
                     },
                     filter: ({ column, $panel }) => {

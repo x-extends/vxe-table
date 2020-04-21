@@ -37,17 +37,23 @@
         @import 'vxe-table/styles/body.scss';
         @import 'vxe-table/styles/footer.scss';
         @import 'vxe-table/styles/filter.scss';
-        @import 'vxe-table/styles/loading.scss';
         @import 'vxe-table/styles/grid.scss';
+        @import 'vxe-table/styles/excel.scss';
         @import 'vxe-table/styles/menu.scss';
+        @import 'vxe-table/styles/export.scss';
         @import 'vxe-table/styles/toolbar.scss';
         @import 'vxe-table/styles/pager.scss';
         @import 'vxe-table/styles/checkbox.scss';
         @import 'vxe-table/styles/radio.scss';
         @import 'vxe-table/styles/input.scss';
+        @import 'vxe-table/styles/textarea.scss';
         @import 'vxe-table/styles/button.scss';
         @import 'vxe-table/styles/modal.scss';
         @import 'vxe-table/styles/tooltip.scss';
+        @import 'vxe-table/styles/form.scss';
+        @import 'vxe-table/styles/select.scss';
+        @import 'vxe-table/styles/switch.scss';
+        @import 'vxe-table/styles/list.scss';
       </code>
     </pre>
     <p>Case 4.如果需要完全重写主题样式，把 vxe-table/styles/** 目录全部复制到项目中自行修改（例如 /assets/styles/xtable 目录下）</p>

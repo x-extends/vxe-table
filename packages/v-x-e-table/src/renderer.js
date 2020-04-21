@@ -120,22 +120,12 @@ function getItemOns (renderOpts, params) {
   })
 }
 
-function isSyncCell (renderOpts, params) {
-  return renderOpts.immediate || renderOpts.type === 'visible' || params.$type === 'cell'
-}
-
 function getNativeEditOns (renderOpts, params) {
   const { $table, row, column } = params
-  const { model } = column
   return getOns(renderOpts, params, (evnt) => {
     // 处理 model 值双向绑定
     const cellValue = evnt.target.value
-    if (isSyncCell(renderOpts, params)) {
-      UtilTools.setCellValue(row, column, cellValue)
-    } else {
-      model.update = true
-      model.value = cellValue
-    }
+    UtilTools.setCellValue(row, column, cellValue)
   }, (evnt) => {
     // 处理 change 事件相关逻辑
     const cellValue = evnt.target.value
@@ -172,7 +162,7 @@ function nativeEditRender (h, renderOpts, params) {
   const { row, column } = params
   const { name } = renderOpts
   const attrs = getNativeAttrs(renderOpts)
-  const cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
+  const cellValue = UtilTools.getCellValue(row, column)
   return [
     h(name, {
       class: `vxe-default-${name}`,
@@ -246,7 +236,7 @@ function renderNativeOptions (h, options, renderOpts, params) {
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
-  const cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
+  const cellValue = UtilTools.getCellValue(row, column)
   return options.map((option, oIndex) => {
     return h('option', {
       key: oIndex,

@@ -148,8 +148,8 @@ function getFooterCellValue ($xetable, opts, items, column) {
       exportLabelMethod = compConf.footerCellExportMethod
     }
   }
-  const itemIndex = $xetable.$getColumnIndex(column)
-  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex, column }) : XEUtils.toString(items[itemIndex])
+  const _columnIndex = $xetable._getColumnIndex(column)
+  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column }) : XEUtils.toString(items[_columnIndex])
   return cellValue
 }
 

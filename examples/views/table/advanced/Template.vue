@@ -55,8 +55,8 @@
         <template v-slot:header>
           <span style="color: red;">自定义头部</span>
         </template>
-        <template v-slot:footer="{ items, itemIndex }">
-          <span style="color: red">累计：{{ items[itemIndex] }}</span>
+        <template v-slot:footer="{ items, _columnIndex }">
+          <span style="color: red">累计：{{ items[_columnIndex] }}</span>
         </template>
         <template v-slot:filter="{ $panel, column }">
           <template v-for="(option, index) in column.filters">
@@ -216,8 +216,8 @@ export default {
             <template v-slot:header>
               <span style="color: red;">自定义头部</span>
             </template>
-            <template v-slot:footer="{ items, itemIndex }">
-              <span style="color: red">累计：{{ items[itemIndex] }}</span>
+            <template v-slot:footer="{ items, _columnIndex }">
+              <span style="color: red">累计：{{ items[_columnIndex] }}</span>
             </template>
             <template v-slot:filter="{ $panel, column }">
               <template v-for="(option, index) in column.filters">

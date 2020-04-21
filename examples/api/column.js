@@ -800,7 +800,7 @@ const apis = [
         version: '1.15.19',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex,$rowIndex,itemIndex,items}',
+        defVal: '{column,columnIndex,$columnIndex,$rowIndex,_columnIndex,items}',
         list: []
       },
       {

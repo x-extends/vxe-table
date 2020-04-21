@@ -61,7 +61,7 @@
                   <span v-html="item.label"></span>
                 </a>
                 <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
-                  <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name)}">
+                  <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name), 'is-bad': ['TableBadEdit', 'TableBadLineHeight', 'TableBadNonsupport'].includes(child.locat.name)}">
                     <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
                     <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
                   </li>
@@ -789,26 +789,26 @@ export default {
                 name: 'TableTreeMenu'
               }
             },
-            {
-              label: 'app.aside.nav.span',
-              disabled: true,
-              locat: {
-                name: 'TableTreeSpan'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.span',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableTreeSpan'
+            //   }
+            // },
             {
               label: 'app.aside.nav.moveHighlight',
               locat: {
                 name: 'TableTreeHighlight'
               }
             },
-            {
-              label: 'app.aside.nav.keyboard',
-              disabled: true,
-              locat: {
-                name: 'TableTreeKeyboard'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.keyboard',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableTreeKeyboard'
+            //   }
+            // },
             {
               label: 'app.aside.nav.lazy',
               locat: {
@@ -851,31 +851,24 @@ export default {
                 name: 'TableTreeEditRowValid'
               }
             },
-            {
-              label: 'app.aside.nav.forceCellValid',
-              disabled: true,
-              locat: {
-                name: 'TableTreeEditForceCellValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.forceRowValid',
-              disabled: true,
-              locat: {
-                name: 'TableTreeEditForceRowValid'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.forceCellValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableTreeEditForceCellValid'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.forceRowValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableTreeEditForceRowValid'
+            //   }
+            // },
             {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableTreeTemplate'
-              }
-            },
-            {
-              label: 'app.aside.nav.full',
-              disabled: true,
-              locat: {
-                name: 'TableTreeBasic'
               }
             }
           ]
@@ -1083,13 +1076,13 @@ export default {
               locat: {
                 name: 'TableEditTemplate'
               }
-            },
-            {
-              label: 'app.aside.nav.full',
-              disabled: true,
-              locat: {
-                name: 'TableEditFull'
-              }
+            // },
+            // {
+            //   label: 'app.aside.nav.full',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableEditFull'
+            //   }
             }
           ]
         },
@@ -1298,13 +1291,13 @@ export default {
                 name: 'GridMenu'
               }
             },
-            {
-              label: 'app.aside.nav.span',
-              disabled: true,
-              locat: {
-                name: 'GridSpan'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.span',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'GridSpan'
+            //   }
+            // },
             {
               label: 'app.aside.nav.upload',
               locat: {
@@ -1406,20 +1399,20 @@ export default {
                 name: 'TableScrollRowValid'
               }
             },
-            {
-              label: 'app.aside.nav.forceCellValid',
-              disabled: true,
-              locat: {
-                name: 'TableScrollForceCellValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.forceRowValid',
-              disabled: true,
-              locat: {
-                name: 'TableScrollForceRowValid'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.forceCellValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScrollForceCellValid'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.forceRowValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScrollForceRowValid'
+            //   }
+            // },
             {
               label: 'app.aside.nav.partialLoad',
               demoUrl: 'https://jsrun.pro/EVWKp/edit',
@@ -1478,13 +1471,6 @@ export default {
             },
             {
               label: 'app.aside.nav.infiniteScroll',
-              disabled: true,
-              locat: {
-                name: 'TableScroll'
-              }
-            },
-            {
-              label: 'app.aside.nav.full',
               disabled: true,
               locat: {
                 name: 'TableScroll'

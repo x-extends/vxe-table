@@ -114,7 +114,8 @@
   .vxe-pager--jump,
   .vxe-pager--jump-prev,
   .vxe-pager--jump-next,
-  .vxe-pager--count {
+  .vxe-pager--count,
+  .vxe-pager--sizes {
     margin: 0 0.4em;
     vertical-align: middle;
     display: inline-block;
@@ -215,8 +216,6 @@
   .vxe-pager--sizes {
     width: 7em;
     text-align: center;
-    display: inline-block;
-    vertical-align: middle;
     cursor: pointer;
     & .vxe-input--inner {
       text-align: center;

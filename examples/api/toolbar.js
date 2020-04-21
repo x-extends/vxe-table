@@ -212,7 +212,7 @@ const apis = [
           {
             name: 'storage',
             disabled: true,
-            desc: '是否启用 localStorage 本地保存，会将列宽拖动的状态保存到本地（需要设置 id）',
+            desc: '即将废弃，请使用 custom-config.storage',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -260,7 +260,7 @@ const apis = [
           {
             name: 'storage',
             disabled: true,
-            desc: '是否启用 localStorage 本地保存，会将列的隐藏状态保存到本地（需要设置 id）',
+            desc: '即将废弃，请使用 custom-config.storage',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -270,7 +270,7 @@ const apis = [
           {
             name: 'checkMethod',
             disabled: true,
-            desc: '是否允许选中的方法，该方法 Function({column}) 的返回值用来决定这一列的 checkbox 是否可以选中',
+            desc: '即将废弃，请使用 custom-config.checkMethod',
             version: '1.15.14',
             type: 'Function',
             enum: '',

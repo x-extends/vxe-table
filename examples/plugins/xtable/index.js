@@ -82,6 +82,9 @@ Vue.use(Export)
 Vue.use(Resize)
 Vue.use(Table)
 
+// 给 vue 实例挂载全局窗口对象
+Vue.prototype.$XModal = VXETable.modal
+
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)

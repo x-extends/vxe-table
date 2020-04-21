@@ -105,7 +105,7 @@ function renderFixed (h, $table, fixedType) {
   const fixedColumn = columnStore[`${fixedType}List`]
   let customHeight = 0
   if (height) {
-    customHeight = height === 'auto' ? parentHeight : (DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height))
+    customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - $table.getExcludeHeight())
     if (showFooter) {
       customHeight += scrollbarHeight + 1
     }
@@ -346,7 +346,9 @@ export default {
       tableGroupColumn: [],
       // 完整所有列
       tableFullColumn: [],
-      // 渲染的列
+      // 渲染所有列
+      visibleColumn: [],
+      // 可视区渲染的列
       tableColumn: [],
       // 完整数据
       // tableFullData: [],
@@ -407,6 +409,8 @@ export default {
       treeIndeterminates: [],
       // 当前 hover 行
       hoverRow: null,
+      // 是否已经加载了筛选
+      hasFilterPanel: false,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -597,14 +601,8 @@ export default {
     hasTip () {
       return VXETable._tooltip
     },
-    visibleColumn () {
-      return this.tableFullColumn ? this.tableFullColumn.filter(column => column.visible) : []
-    },
     isResizable () {
       return this.resizable || this.tableFullColumn.some(column => column.resizable)
-    },
-    hasFilter () {
-      return this.tableColumn.some(column => column.filters)
     },
     headerCtxMenu () {
       const headerOpts = this.ctxMenuOpts.header
@@ -954,7 +952,6 @@ export default {
       visibleColumn,
       tableGroupColumn,
       isGroup,
-      hasFilter,
       isResizable,
       isCtxMenu,
       loading,
@@ -1139,7 +1136,7 @@ export default {
       /**
        * 筛选
        */
-      hasFilter ? h('vxe-table-filter', {
+      this.hasFilterPanel ? h('vxe-table-filter', {
         props: {
           optimizeOpts,
           filterStore
@@ -1479,14 +1476,14 @@ export default {
      * @param {ColumnConfig} column 列配置
      */
     _getColumnIndex (column) {
-      return this.tableFullColumn.indexOf(column)
+      return this.visibleColumn.indexOf(column)
     },
     /**
      * 根据 column 获取渲染中的虚拟索引
      * @param {ColumnConfig} column 列配置
      */
     $getColumnIndex (column) {
-      return this.visibleColumn.indexOf(column)
+      return this.tableColumn.indexOf(column)
     },
     /**
      * 判断是否为索引列
@@ -2247,35 +2244,41 @@ export default {
             }
           }
         })
-        collectColumn.filter(column => column.visible).forEach((column) => {
-          if (column.fixed === 'left') {
-            leftGroupList.push(column)
-          } else if (column.fixed === 'right') {
-            rightGroupList.push(column)
-          } else {
-            centerGroupList.push(column)
+        collectColumn.forEach((column) => {
+          if (column.visible) {
+            if (column.fixed === 'left') {
+              leftGroupList.push(column)
+            } else if (column.fixed === 'right') {
+              rightGroupList.push(column)
+            } else {
+              centerGroupList.push(column)
+            }
           }
         })
         this.tableGroupColumn = leftGroupList.concat(centerGroupList).concat(rightGroupList)
       } else {
         // 重新分配列
-        tableFullColumn.filter(column => column.visible).forEach((column) => {
-          if (column.fixed === 'left') {
-            leftList.push(column)
-          } else if (column.fixed === 'right') {
-            rightList.push(column)
-          } else {
-            centerList.push(column)
+        tableFullColumn.forEach((column) => {
+          if (column.visible) {
+            if (column.fixed === 'left') {
+              leftList.push(column)
+            } else if (column.fixed === 'right') {
+              rightList.push(column)
+            } else {
+              centerList.push(column)
+            }
           }
         })
       }
-      let visibleColumn = leftList.concat(centerList).concat(rightList)
-      const scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
+      const visibleColumn = leftList.concat(centerList).concat(rightList)
+      let tableColumn = visibleColumn
+      let scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
       Object.assign(columnStore, { leftList, centerList, rightList })
+      if (scrollXLoad && isGroup) {
+        scrollXLoad = false
+        UtilTools.warn('vxe.error.scrollXNotGroup')
+      }
       if (scrollXLoad) {
-        if (this.isGroup) {
-          UtilTools.warn('vxe.error.scrollXNotGroup')
-        }
         if (this.showHeader && !this.showHeaderOverflow) {
           UtilTools.warn('vxe.error.reqProp', ['show-header-overflow'])
         }
@@ -2286,10 +2289,11 @@ export default {
           startIndex: 0,
           visibleIndex: 0
         })
-        visibleColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
+        tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
       }
       this.scrollXLoad = scrollXLoad
-      this.tableColumn = visibleColumn
+      this.tableColumn = tableColumn
+      this.visibleColumn = visibleColumn
       return this.$nextTick().then(() => {
         this.updateFooter()
         this.recalculate(true)
@@ -4477,7 +4481,6 @@ export default {
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        const filterWrapper = $refs.filterWrapper
         const bodyElem = $refs.tableBody.$el
         const { target: targetElem, pageX } = evnt
         const { visibleWidth } = DomTools.getDomNode()
@@ -4491,8 +4494,9 @@ export default {
         })
         filterStore.isAllSelected = filterStore.options.every(item => item.checked)
         filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(item => item.checked)
+        this.hasFilterPanel = true
         this.$nextTick(() => {
-          const filterWrapperElem = filterWrapper.$el
+          const filterWrapperElem = $refs.filterWrapper.$el
           const filterWidth = filterWrapperElem.offsetWidth
           const centerWidth = filterWidth / 2
           const minMargin = 32
@@ -5157,7 +5161,7 @@ export default {
               scrollXStore.offsetSize = visibleXSize
             }
             if (!scrollX.rSize) {
-              scrollXStore.renderSize = Math.max(5, visibleXSize + 4)
+              scrollXStore.renderSize = Math.max(8, visibleXSize + 6)
             }
             this.updateScrollXData()
           } else {
@@ -5189,7 +5193,7 @@ export default {
               scrollYStore.offsetSize = visibleYSize
             }
             if (!scrollY.rSize) {
-              scrollYStore.renderSize = Math.max(5, visibleYSize * (browse.edge ? 10 : 8))
+              scrollYStore.renderSize = Math.max(6, visibleYSize * (browse.edge ? 10 : 8))
             }
             this.updateScrollYData()
           } else {
@@ -5300,9 +5304,9 @@ export default {
      * 更新表尾合计
      */
     updateFooter () {
-      const { showFooter, tableColumn, footerMethod } = this
+      const { showFooter, visibleColumn, footerMethod } = this
       if (showFooter && footerMethod) {
-        this.footerData = tableColumn.length ? footerMethod({ columns: tableColumn, data: this.afterFullData }) : []
+        this.footerData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData }) : []
       }
       return this.$nextTick()
     },

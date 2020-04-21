@@ -514,7 +514,7 @@ module.exports = {
       },
       toolbar: {
         desc: {
-          id: 'Unique ID identification',
+          id: 'Obsolete',
           size: 'Size',
           loading: 'Loading',
           import: 'Import button config("import-config" needs to be set)',

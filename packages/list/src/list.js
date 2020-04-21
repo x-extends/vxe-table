@@ -188,7 +188,7 @@ export default {
             scrollYStore.offsetSize = visibleYSize
           }
           if (!sYOpts.rSize) {
-            scrollYStore.renderSize = Math.max(5, visibleYSize + 2)
+            scrollYStore.renderSize = Math.max(6, visibleYSize + 2)
           }
           this.updateYData()
         } else {
