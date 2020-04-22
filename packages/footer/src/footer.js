@@ -8,8 +8,8 @@ export default {
     tableColumn: Array,
     visibleColumn: Array,
     fixedColumn: Array,
-    size: String,
-    fixedType: String
+    fixedType: String,
+    size: String
   },
   mounted () {
     const { $parent: $xetable, $el, $refs, fixedType } = this

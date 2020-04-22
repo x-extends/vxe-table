@@ -5,17 +5,16 @@ import { UtilTools } from '../../tools'
 export default {
   name: 'VxeTableFilter',
   props: {
-    filterStore: Object,
-    optimizeOpts: Object
+    filterStore: Object
   },
   render (h) {
-    const { filterStore, optimizeOpts } = this
+    const { $parent: $xetable, filterStore } = this
     const { column } = filterStore
     const filterRender = column ? column.own.filterRender : null
     const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
     return h('div', {
       class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
-        't--animat': optimizeOpts.animat,
+        't--animat': $xetable.animat,
         'is--multiple': filterStore.multiple,
         'filter--active': filterStore.visible
       }],

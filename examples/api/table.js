@@ -766,7 +766,7 @@ const apis = [
         version: '',
         type: 'String',
         enum: '',
-        defVal: '默认 _XID，继承 setup.rowId',
+        defVal: '默认 _XID，继承 setup.table.rowId',
         list: []
       },
       {
@@ -775,7 +775,7 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: '默认 false，继承 setup.keepSource',
+        defVal: '默认 false，继承 setup.table.keepSource',
         list: []
       },
       {
@@ -784,7 +784,7 @@ const apis = [
         version: '',
         type: 'Number',
         enum: '',
-        defVal: '继承 setup.zIndex',
+        defVal: '继承 setup.table.zIndex',
         list: []
       },
       {
@@ -793,7 +793,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.seqConfig',
+        defVal: '继承 setup.table.seqConfig',
         list: [
           {
             name: 'startIndex',
@@ -821,7 +821,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.sortConfig',
+        defVal: '继承 setup.table.sortConfig',
         list: [
           {
             name: 'defaultSort',
@@ -922,7 +922,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.filterConfig',
+        defVal: '继承 setup.table.filterConfig',
         list: [
           {
             name: 'remote',
@@ -968,7 +968,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.exportConfig',
+        defVal: '继承 setup.table.exportConfig',
         list: XEUtils.clone(exportDataAPI, true)
       },
       {
@@ -977,7 +977,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.importConfig',
+        defVal: '继承 setup.table.importConfig',
         list: XEUtils.clone(importDataAPI, true)
       },
       {
@@ -986,7 +986,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.printConfig',
+        defVal: '继承 setup.table.printConfig',
         list: XEUtils.clone(printAPI, true)
       },
       {
@@ -995,7 +995,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.radioConfig',
+        defVal: '继承 setup.table.radioConfig',
         list: [
           {
             name: 'reserve',
@@ -1059,7 +1059,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.checkboxConfig',
+        defVal: '继承 setup.table.checkboxConfig',
         list: [
           {
             name: 'reserve',
@@ -1177,7 +1177,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.tooltipConfig',
+        defVal: '继承 setup.table.tooltipConfig',
         list: [
           {
             name: 'theme',
@@ -1214,7 +1214,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.expandConfig',
+        defVal: '继承 setup.table.expandConfig',
         list: [
           {
             name: 'labelField',
@@ -1332,7 +1332,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.treeConfig',
+        defVal: '继承 setup.table.treeConfig',
         list: [
           {
             name: 'children',
@@ -1468,7 +1468,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.contextMenu',
+        defVal: '继承 setup.table.contextMenu',
         list: [
           {
             name: 'header',
@@ -1623,7 +1623,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.editConfig',
+        defVal: '继承 setup.table.editConfig',
         list: [
           {
             name: 'trigger',
@@ -1825,7 +1825,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.emptyRender',
+        defVal: '继承 setup.table.emptyRender',
         list: [
           {
             name: 'name',
@@ -1871,7 +1871,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.customConfig',
+        defVal: '继承 setup.table.customConfig',
         list: [
           {
             name: 'storage',
@@ -1913,197 +1913,187 @@ const apis = [
         ]
       },
       {
-        name: 'optimization',
-        descKey: 'app.api.table.desc.optimization',
+        name: 'animat',
+        desc: '表格动画效果开关（关闭后视觉效果更快）',
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.optimization',
+        defVal: '默认 true，继承 setup.table.animat',
+        list: []
+      },
+      {
+        name: 'cloak',
+        desc: '可以设置为 true 来避免初始化渲染时的闪动',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.table.cloak',
+        list: []
+      },
+      {
+        name: 'delayHover',
+        desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
+        version: '',
+        type: 'Number',
+        enum: '',
+        defVal: '默认 250，继承 setup.table.delayHover',
+        list: []
+      },
+      {
+        name: 'scrollX',
+        desc: '横向虚拟滚动配置（tree-config 启用后无效）',
+        version: '',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.scrollX',
         list: [
           {
-            name: 'animat',
-            desc: '表格动画效果开关（关闭后视觉效果更快）',
-            version: '',
-            type: 'Object',
-            enum: '',
-            defVal: 'true',
-            list: []
-          },
-          {
-            name: 'cloak',
-            desc: '可以设置为 true 来避免初始化渲染时的闪动',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
-            name: 'delayHover',
-            desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
+            name: 'gt',
+            desc: '指定大于指定列时自动启动横向虚拟滚动（注：启用横向虚拟滚动之后将不能支持分组表头）',
             version: '',
             type: 'Number',
             enum: '',
-            defVal: '250',
+            defVal: '60',
             list: []
           },
           {
-            name: 'scrollX',
-            desc: '横向虚拟滚动配置（tree-config 启用后无效）',
+            name: 'oSize',
+            desc: '当剩余数据少于指定列时触发重新渲染',
             version: '',
-            type: 'Object',
+            type: 'Number',
             enum: '',
-            defVal: '',
-            list: [
-              {
-                name: 'gt',
-                desc: '指定大于指定列时自动启动横向虚拟滚动（注：启用横向虚拟滚动之后将不能支持分组表头）',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '60',
-                list: []
-              },
-              {
-                name: 'oSize',
-                desc: '当剩余数据少于指定列时触发重新渲染',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              {
-                name: 'rSize',
-                desc: '每次渲染条数',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              {
-                name: 'vSize',
-                desc: '指定可视区域条数',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              }
-            ]
+            defVal: '默认自动计算',
+            list: []
           },
           {
-            name: 'scrollY',
-            desc: '纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）',
+            name: 'rSize',
+            desc: '每次渲染条数',
             version: '',
-            type: 'Object',
+            type: 'Number',
             enum: '',
-            defVal: '',
-            list: [
-              {
-                name: 'gt',
-                desc: '指定大于指定行时自动启动纵向虚拟滚动（注：启用纵向虚拟滚动之后将不能支持动态行高）',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '100',
-                list: []
-              },
-              {
-                name: 'oSize',
-                desc: '当剩余数据少于指定行时触发重新渲染',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              {
-                name: 'rSize',
-                desc: '每次渲染条数',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              {
-                name: 'vSize',
-                desc: '指定可视区域条数',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              // {
-              //   name: 'rHeight',
-              //   desc: '指定行高',
-              //   version: '',
-              //   type: 'Number',
-              //   enum: '',
-              //   defVal: '默认自动计算',
-              //   list: []
-              // },
-              {
-                name: 'adaptive',
-                desc: '自动适配最优的渲染方式',
-                version: '',
-                type: 'Boolean',
-                enum: '',
-                defVal: 'true',
-                list: []
-              }
-            ]
-          // },
-          // {
-          //   name: 'rHeights',
-          //   desc: '重写表格默认高度,必须和 scss 中的变量一致（用于重写表格默认行高的场景，谨慎使用，99%场景不需要更改）',
-          //   version: '',
-          //   type: 'Object',
-          //   enum: '',
-          //   defVal: '',
-          //   list: [
-          //     {
-          //       name: 'default',
-          //       desc: '表格 default size',
-          //       version: '',
-          //       type: 'Number',
-          //       enum: '',
-          //       defVal: '48',
-          //       list: []
-          //     },
-          //     {
-          //       name: 'medium',
-          //       desc: '表格 medium size',
-          //       version: '',
-          //       type: 'Number',
-          //       enum: '',
-          //       defVal: '44',
-          //       list: []
-          //     },
-          //     {
-          //       name: 'small',
-          //       desc: '表格 small size',
-          //       version: '',
-          //       type: 'Number',
-          //       enum: '',
-          //       defVal: '40',
-          //       list: []
-          //     },
-          //     {
-          //       name: 'mini',
-          //       desc: '表格 mini size',
-          //       version: '',
-          //       type: 'Number',
-          //       enum: '',
-          //       defVal: '36',
-          //       list: []
-          //     }
-          //   ]
+            defVal: '默认自动计算',
+            list: []
+          },
+          {
+            name: 'vSize',
+            desc: '指定可视区域条数',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
           }
         ]
+      },
+      {
+        name: 'scrollY',
+        desc: '纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）',
+        version: '',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.scrollY',
+        list: [
+          {
+            name: 'gt',
+            desc: '指定大于指定行时自动启动纵向虚拟滚动（注：启用纵向虚拟滚动之后将不能支持动态行高）',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '100',
+            list: []
+          },
+          {
+            name: 'oSize',
+            desc: '当剩余数据少于指定行时触发重新渲染',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
+          },
+          {
+            name: 'rSize',
+            desc: '每次渲染条数',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
+          },
+          {
+            name: 'vSize',
+            desc: '指定可视区域条数',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
+          },
+          // {
+          //   name: 'rHeight',
+          //   desc: '指定行高',
+          //   version: '',
+          //   type: 'Number',
+          //   enum: '',
+          //   defVal: '默认自动计算',
+          //   list: []
+          // },
+          {
+            name: 'adaptive',
+            desc: '自动适配最优的渲染方式',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          }
+        ]
+      // },
+      // {
+      //   name: 'rHeights',
+      //   desc: '重写表格默认高度,必须和 scss 中的变量一致（用于重写表格默认行高的场景，谨慎使用，99%场景不需要更改）',
+      //   version: '',
+      //   type: 'Object',
+      //   enum: '',
+      //   defVal: '',
+      //   list: [
+      //     {
+      //       name: 'default',
+      //       desc: '表格 default size',
+      //       version: '',
+      //       type: 'Number',
+      //       enum: '',
+      //       defVal: '48',
+      //       list: []
+      //     },
+      //     {
+      //       name: 'medium',
+      //       desc: '表格 medium size',
+      //       version: '',
+      //       type: 'Number',
+      //       enum: '',
+      //       defVal: '44',
+      //       list: []
+      //     },
+      //     {
+      //       name: 'small',
+      //       desc: '表格 small size',
+      //       version: '',
+      //       type: 'Number',
+      //       enum: '',
+      //       defVal: '40',
+      //       list: []
+      //     },
+      //     {
+      //       name: 'mini',
+      //       desc: '表格 mini size',
+      //       version: '',
+      //       type: 'Number',
+      //       enum: '',
+      //       defVal: '36',
+      //       list: []
+      //     }
+      //   ]
       },
       {
         name: 'params',

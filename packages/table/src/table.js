@@ -47,12 +47,12 @@ function renderFixed (h, $xetable, fixedType) {
     }),
     showFooter ? h('vxe-table-footer', {
       props: {
-        fixedType,
         footerData,
         tableColumn,
         visibleColumn,
-        size: vSize,
-        fixedColumn
+        fixedColumn,
+        fixedType,
+        size: vSize
       },
       ref: `${fixedType}Footer`
     }) : null
@@ -192,8 +192,14 @@ export default {
     emptyRender: [Boolean, Object],
     // 自定义列配置项
     customConfig: [Boolean, Object],
-    // 优化配置项
-    optimization: Object,
+    // 横向虚拟滚动配置项
+    scrollX: Object,
+    // 纵向虚拟滚动配置项
+    scrollY: Object,
+    // 优化相关
+    cloak: { type: Boolean, default: () => GlobalConfig.table.cloak },
+    animat: { type: Boolean, default: () => GlobalConfig.table.animat },
+    delayHover: { type: Number, default: () => GlobalConfig.table.delayHover },
     // 额外的参数
     params: Object
   },
@@ -385,16 +391,19 @@ export default {
     validOpts () {
       return Object.assign({ message: 'default' }, GlobalConfig.table.validConfig, this.validConfig)
     },
-    optimizeOpts () {
-      return Object.assign({}, GlobalConfig.table.optimization, this.optimization)
+    sXOpts () {
+      return Object.assign({}, GlobalConfig.table.scrollX, this.scrollX)
+    },
+    sYOpts () {
+      return Object.assign({}, GlobalConfig.table.scrollY, this.scrollY)
     },
     rowHeightMaps () {
-      return Object.assign({
+      return {
         default: 48,
         medium: 44,
         small: 40,
         mini: 36
-      }, this.optimizeOpts.rHeights)
+      }
     },
     seqOpts () {
       return Object.assign({ startIndex: 0 }, GlobalConfig.table.seqConfig, this.seqConfig)
@@ -536,9 +545,7 @@ export default {
       const tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
-      if (this.customConfig) {
-        this.restoreCustomStorage()
-      }
+      this.restoreCustomStorage()
       this.refreshColumn().then(() => {
         if (this.scrollXLoad) {
           this.loadScrollXData(true)
@@ -553,13 +560,7 @@ export default {
       }
       this.$nextTick(() => {
         if (this.$toolbar) {
-          this.$toolbar.updateColumns(value)
-          // 在 v3.0 中废弃 toolbar 方式
-          if (!this.customConfig) {
-            this.restoreCustomStorage()
-            this.analyColumnWidth()
-            this.refreshColumn()
-          }
+          this.$toolbar.syncUpdate({ collectColumn: value, $table: this })
         }
       })
     },
@@ -593,7 +594,7 @@ export default {
     }
   },
   created () {
-    const { scrollXStore, scrollYStore, optimizeOpts, mouseConfig, mouseOpts, data, editConfig, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseConfig, mouseOpts, data, editConfig, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -633,7 +634,6 @@ export default {
       fullColumnIdData: {},
       fullColumnFieldData: {}
     })
-    const { scrollX, scrollY } = optimizeOpts
     if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
       UtilTools.warn('vxe.error.reqProp', ['row-id'])
     }
@@ -669,24 +669,20 @@ export default {
     if (errorModuleName) {
       throw new Error(UtilTools.getLog('vxe.error.reqModule', [errorModuleName]))
     }
-    if (scrollY) {
-      Object.assign(scrollYStore, {
-        startIndex: 0,
-        visibleIndex: 0,
-        adaptive: XEUtils.isBoolean(scrollY.adaptive) ? scrollY.adaptive : true,
-        renderSize: XEUtils.toNumber(scrollY.rSize),
-        offsetSize: XEUtils.toNumber(scrollY.oSize)
-      })
-    }
-    if (scrollX) {
-      Object.assign(scrollXStore, {
-        startIndex: 0,
-        visibleIndex: 0,
-        renderSize: XEUtils.toNumber(scrollX.rSize),
-        offsetSize: XEUtils.toNumber(scrollX.oSize)
-      })
-    }
-    if (this.optimizeOpts.cloak) {
+    Object.assign(scrollYStore, {
+      startIndex: 0,
+      visibleIndex: 0,
+      adaptive: sYOpts.adaptive !== false,
+      renderSize: XEUtils.toNumber(sYOpts.rSize),
+      offsetSize: XEUtils.toNumber(sYOpts.oSize)
+    })
+    Object.assign(scrollXStore, {
+      startIndex: 0,
+      visibleIndex: 0,
+      renderSize: XEUtils.toNumber(sXOpts.rSize),
+      offsetSize: XEUtils.toNumber(sXOpts.oSize)
+    })
+    if (this.cloak) {
       this.isCloak = true
       setTimeout(() => {
         this.isCloak = false
@@ -769,7 +765,6 @@ export default {
       validOpts,
       editRules,
       showFooter,
-      footerMethod,
       overflowX,
       overflowY,
       scrollXLoad,
@@ -780,7 +775,6 @@ export default {
       highlightHoverColumn,
       editConfig,
       checkboxOpts,
-      optimizeOpts,
       vaildTipOpts,
       tooltipOpts,
       columnStore,
@@ -815,7 +809,7 @@ export default {
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         'c--highlight': highlightCell,
-        't--animat': !!optimizeOpts.animat,
+        't--animat': !!this.animat,
         't--stripe': stripe,
         't--selected': mouseConfig && mouseOpts.selected,
         'row--highlight': highlightHoverRow,
@@ -874,7 +868,6 @@ export default {
         showFooter ? h('vxe-table-footer', {
           props: {
             footerData,
-            footerMethod,
             tableColumn,
             visibleColumn,
             size: vSize
@@ -934,7 +927,6 @@ export default {
        */
       this.hasFilterPanel ? h('vxe-table-filter', {
         props: {
-          optimizeOpts,
           filterStore
         },
         ref: 'filterWrapper'

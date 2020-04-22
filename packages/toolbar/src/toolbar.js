@@ -65,12 +65,11 @@ function renderRightTools (h, _vm) {
 }
 
 function renderCustoms (h, _vm) {
-  const { customStore, customOpts, collectColumn } = _vm
+  const { $xetable, customStore, customOpts, collectColumn } = _vm
   const cols = []
   const customBtnOns = {}
   const customWrapperOns = {}
-  const comp = _vm.$xegrid || _vm.$xetable
-  const checkMethod = comp ? comp.customOpts.checkMethod : null
+  const checkMethod = $xetable ? $xetable.customOpts.checkMethod : null
   if (customOpts.trigger === 'manual') {
     // 手动触发
   } else if (customOpts.trigger === 'hover') {
@@ -248,22 +247,17 @@ export default {
     }
   },
   created () {
-    const { refresh, custom, refreshOpts } = this
+    const { refresh, refreshOpts } = this
     if (!VXETable._export && (this.export || this.import)) {
       UtilTools.error('vxe.error.reqModule', ['Export'])
     }
     this.$nextTick(() => {
-      this.updateConf()
-      const comp = this.$xegrid || this.$xetable
+      const $xetable = this.fintTable()
       if (refresh && !this.$xegrid && !refreshOpts.query) {
         UtilTools.warn('vxe.error.notFunc', ['query'])
       }
-      if (comp) {
-        comp.connect({ toolbar: this })
-      } else {
-        if (custom) {
-          throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
-        }
+      if ($xetable) {
+        $xetable.connect(this)
       }
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
@@ -348,14 +342,27 @@ export default {
     ])
   },
   methods: {
-    updateConf () {
+    syncUpdate (params) {
+      const { collectColumn, $table } = params
+      this.$xetable = $table
+      this.collectColumn = collectColumn
+    },
+    fintTable () {
       const { $children } = this.$parent
       const selfIndex = $children.indexOf(this)
-      this.$xetable = XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
+      return XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
+    },
+    checkTable () {
+      if (!this.$xetable) {
+        throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+      }
+      return true
     },
     openCustom () {
-      this.customStore.visible = true
-      this.checkCustomStatus()
+      if (this.checkTable()) {
+        this.customStore.visible = true
+        this.checkCustomStatus()
+      }
     },
     closeCustom () {
       const { custom, customStore } = this
@@ -365,13 +372,6 @@ export default {
           this.handleCustoms()
         }
       }
-    },
-    /**
-     * 暴露给 table 调用，用于关联列
-     * @param {Array} collectColumn 列分组配置
-     */
-    updateColumns (collectColumn) {
-      this.collectColumn = collectColumn
     },
     confirmCustomEvent (evnt) {
       this.closeCustom()
@@ -392,9 +392,8 @@ export default {
       }
     },
     resetCustomEvent (evnt) {
-      const { collectColumn } = this
-      const comp = this.$xegrid || this.$xetable
-      const checkMethod = comp.customOpts.checkMethod
+      const { $xetable, collectColumn } = this
+      const checkMethod = $xetable.customOpts.checkMethod
       XEUtils.eachTree(collectColumn, column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = column.defaultVisible
@@ -402,7 +401,7 @@ export default {
         }
         column.resizeWidth = 0
       })
-      comp.saveCustomResizable(true)
+      $xetable.saveCustomResizable(true)
       this.closeCustom()
       this.emitCustomEvent('reset', evnt)
     },
@@ -435,22 +434,20 @@ export default {
       }
     },
     handleCustoms () {
-      const comp = this.$xegrid || this.$xetable
-      comp.saveCustomVisible()
-      comp.analyColumnWidth()
-      comp.refreshColumn()
+      const { $xetable } = this
+      $xetable.saveCustomVisible()
+      $xetable.analyColumnWidth()
+      $xetable.refreshColumn()
     },
     checkCustomStatus () {
-      const { collectColumn } = this
-      const comp = this.$xegrid || this.$xetable
-      const checkMethod = comp.customOpts.checkMethod
+      const { $xetable, collectColumn } = this
+      const checkMethod = $xetable.customOpts.checkMethod
       this.customStore.isAll = collectColumn.every(column => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
       this.customStore.isIndeterminate = !this.customStore.isAll && collectColumn.some(column => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
     },
     allCustomEvent () {
-      const { collectColumn, customStore } = this
-      const comp = this.$xegrid || this.$xetable
-      const checkMethod = comp.customOpts.checkMethod
+      const { $xetable, collectColumn, customStore } = this
+      const checkMethod = $xetable.customOpts.checkMethod
       const isAll = !customStore.isAll
       XEUtils.eachTree(collectColumn, column => {
         if (!checkMethod || checkMethod({ column })) {
@@ -507,13 +504,12 @@ export default {
       if (!isRefresh) {
         if (refreshOpts.query) {
           this.isRefresh = true
-          const qRest = refreshOpts.query()
           try {
-            qRest.catch(e => e).then(() => {
+            Promise.resolve(refreshOpts.query()).catch(e => e).then(() => {
               this.isRefresh = false
             })
           } catch (e) {
-            UtilTools.error('vxe.error.typeErr', ['refresh.query', 'Promise', typeof qRest])
+            this.isRefresh = false
           }
         } else if ($xegrid) {
           this.isRefresh = true
@@ -540,19 +536,13 @@ export default {
       }
     },
     importEvent () {
-      const comp = this.$xegrid || this.$xetable
-      if (comp) {
-        comp.openImport(this.importOpts)
-      } else {
-        throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+      if (this.checkTable()) {
+        this.$xetable.openImport(this.importOpts)
       }
     },
     exportEvent () {
-      const comp = this.$xegrid || this.$xetable
-      if (comp) {
-        comp.openExport(this.exportOpts)
-      } else {
-        throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+      if (this.checkTable()) {
+        this.$xetable.openExport(this.exportOpts)
       }
     }
   }

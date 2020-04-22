@@ -42,7 +42,7 @@
         </vxe-list>
       </div>
       <div class="vxe-col--4">
-        <vxe-list class="my-ul-list" :data="list4" :scrollY="{sItem: 'li'}">
+        <vxe-list class="my-ul-list" :data="list4" :scroll-y="{sItem: 'li'}">
           <template v-slot="{ items }">
             <ul>
               <li v-for="(item, index) in items" :key="index">
@@ -54,7 +54,7 @@
         </vxe-list>
       </div>
       <div class="vxe-col--12">
-        <vxe-list class="my-table-list" :data="list5" :scrollY="{gt: 60, sItem: '.my-tr'}">
+        <vxe-list class="my-table-list" :data="list5" :scroll-y="{gt: 60, sItem: '.my-tr'}">
           <template v-slot="{ items }">
             <table>
               <tbody>
@@ -177,7 +177,7 @@ export default {
             </vxe-list>
           </div>
           <div class="vxe-col--4">
-            <vxe-list class="my-ul-list" :data="list4" :scrollY="{sItem: 'li'}">
+            <vxe-list class="my-ul-list" :data="list4" :scroll-y="{sItem: 'li'}">
               <template v-slot="{ items }">
                 <ul>
                   <li v-for="(item, index) in items" :key="index">
@@ -189,7 +189,7 @@ export default {
             </vxe-list>
           </div>
           <div class="vxe-col--12">
-            <vxe-list class="my-table-list" :data="list5" :scrollY="{gt: 60, sItem: '.my-tr'}">
+            <vxe-list class="my-table-list" :data="list5" :scroll-y="{gt: 60, sItem: '.my-tr'}">
               <template v-slot="{ items }">
                 <table>
                   <tbody>

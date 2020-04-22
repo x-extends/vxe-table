@@ -114,10 +114,9 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas) {
-    const { keepSource, height, maxHeight, showOverflow, treeConfig, editStore, optimizeOpts, scrollYStore } = this
-    const { scrollY } = optimizeOpts
+    const { keepSource, height, maxHeight, showOverflow, treeConfig, editStore, sYOpts, scrollYStore } = this
     const tableFullData = datas ? datas.slice(0) : []
-    const scrollYLoad = !treeConfig && scrollY && scrollY.gt && scrollY.gt < tableFullData.length
+    const scrollYLoad = !treeConfig && sYOpts && sYOpts.gt && sYOpts.gt < tableFullData.length
     scrollYStore.startIndex = 0
     scrollYStore.visibleIndex = 0
     editStore.insertList = []
@@ -891,8 +890,7 @@ const Methods = {
     const leftList = []
     const centerList = []
     const rightList = []
-    const { collectColumn, tableFullColumn, isGroup, columnStore, scrollXStore, optimizeOpts } = this
-    const { scrollX } = optimizeOpts
+    const { collectColumn, tableFullColumn, isGroup, columnStore, sXOpts, scrollXStore } = this
     // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
     if (isGroup) {
       const leftGroupList = []
@@ -947,7 +945,7 @@ const Methods = {
     }
     const visibleColumn = leftList.concat(centerList).concat(rightList)
     let tableColumn = visibleColumn
-    let scrollXLoad = scrollX && scrollX.gt && scrollX.gt < tableFullColumn.length
+    let scrollXLoad = sXOpts && sXOpts.gt && sXOpts.gt < tableFullColumn.length
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad && isGroup) {
       scrollXLoad = false
@@ -1632,7 +1630,11 @@ const Methods = {
                 .then(() => this.triggerCurrentRowEvent(evnt, params))
             }
           }
-        } else if (keyboardConfig.isEdit && !isCtrlKey && ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222) || keyCode === 32)) {
+        } else if (keyboardConfig.isEdit && !isCtrlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+          // 启用编辑后，空格键功能将失效
+          if (isSpacebar) {
+            evnt.preventDefault()
+          }
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && selected.column.editRender) {
             if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
@@ -2987,8 +2989,7 @@ const Methods = {
   // 计算可视渲染相关数据
   computeScrollLoad () {
     return this.$nextTick().then(() => {
-      const { vSize, scrollXLoad, scrollYLoad, scrollYStore, scrollXStore, visibleColumn, optimizeOpts, rowHeightMaps } = this
-      const { scrollX, scrollY } = optimizeOpts
+      const { vSize, scrollXLoad, scrollYLoad, sXOpts, scrollYStore, sYOpts, scrollXStore, visibleColumn, rowHeightMaps } = this
       const tableBody = this.$refs.tableBody
       const tableBodyElem = tableBody ? tableBody.$el : null
       const tableHeader = this.$refs.tableHeader
@@ -2996,8 +2997,8 @@ const Methods = {
         // 计算 X 逻辑
         if (scrollXLoad) {
           const bodyWidth = tableBodyElem.clientWidth
-          let visibleXSize = XEUtils.toNumber(scrollX.vSize)
-          if (!scrollX.vSize) {
+          let visibleXSize = XEUtils.toNumber(sXOpts.vSize)
+          if (!sXOpts.vSize) {
             const len = visibleXSize = visibleColumn.length
             let countWidth = 0
             let column
@@ -3012,10 +3013,10 @@ const Methods = {
           }
           scrollXStore.visibleSize = visibleXSize
           // 自动优化
-          if (!scrollX.oSize) {
+          if (!sXOpts.oSize) {
             scrollXStore.offsetSize = visibleXSize
           }
-          if (!scrollX.rSize) {
+          if (!sXOpts.rSize) {
             scrollXStore.renderSize = Math.max(8, visibleXSize + 6)
           }
           this.updateScrollXData()
@@ -3025,8 +3026,8 @@ const Methods = {
         // 计算 Y 逻辑
         if (scrollYLoad) {
           let rHeight
-          if (scrollY.rHeight) {
-            rHeight = scrollY.rHeight
+          if (sYOpts.rHeight) {
+            rHeight = sYOpts.rHeight
           } else {
             let firstTrElem = tableBodyElem.querySelector('tbody>tr')
             if (!firstTrElem && tableHeader) {
@@ -3040,14 +3041,14 @@ const Methods = {
           if (!rHeight) {
             rHeight = rowHeightMaps[vSize || 'default']
           }
-          const visibleYSize = XEUtils.toNumber(scrollY.vSize || Math.ceil(tableBodyElem.clientHeight / rHeight))
+          const visibleYSize = XEUtils.toNumber(sYOpts.vSize || Math.ceil(tableBodyElem.clientHeight / rHeight))
           scrollYStore.visibleSize = visibleYSize
           scrollYStore.rowHeight = rHeight
           // 自动优化
-          if (!scrollY.oSize) {
+          if (!sYOpts.oSize) {
             scrollYStore.offsetSize = visibleYSize
           }
-          if (!scrollY.rSize) {
+          if (!sYOpts.rSize) {
             scrollYStore.renderSize = Math.max(6, browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6))
           }
           this.updateScrollYData()
@@ -3162,7 +3163,7 @@ const Methods = {
     if (row) {
       if (this.treeConfig) {
         rest.push(this.scrollToTreeRow(row))
-      } else if (this.fullAllDataRowMap.has(row)) {
+      } else {
         rest.push(DomTools.rowToVisible(this, row))
       }
     }
@@ -3267,15 +3268,17 @@ const Methods = {
     }
   },
 
+  // 检查触发源是否属于目标节点
+  getEventTargetNode: DomTools.getEventTargetNode,
+
   /*************************
    * Publish methods
    *************************/
   // 与工具栏对接
-  connect ({ toolbar }) {
-    this.$toolbar = toolbar
-  },
-  // 检查触发源是否属于目标节点
-  getEventTargetNode: DomTools.getEventTargetNode
+  connect ($toolbar) {
+    $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: this })
+    this.$toolbar = $toolbar
+  }
   /*************************
    * Publish methods
    *************************/

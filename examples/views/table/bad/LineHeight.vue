@@ -10,7 +10,8 @@
       resizable
       height="400"
       :data="tableData"
-      :optimization="{scrollX: {gt: 500}, scrollY: {gt: 50000}}">
+      :scroll-x="{gt: 500}"
+      :scroll-y="{gt: 50000}">
       <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name">
         <template v-slot="{ row, rowIndex }">
@@ -64,7 +65,8 @@ export default {
           resizable
           height="400"
           :data="tableData"
-          :optimization="{scrollX: {gt: 500}, scrollY: {gt: 50000}}">
+          :scroll-x="{gt: 500}"
+          :scroll-y="{gt: 50000}">
           <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name">
             <template v-slot="{ row, rowIndex }">

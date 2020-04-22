@@ -23,7 +23,7 @@
       :data="apiList"
       :custom-config="{storage: true, checkMethod: checkColumnMethod}"
       :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod: menuVisibleMethod}"
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
@@ -87,7 +87,8 @@ export default {
         [
           {
             code: 'hideColumn',
-            name: '隐藏列'
+            name: '隐藏列',
+            disabled: false
           },
           {
             code: 'showAllColumn',
@@ -101,7 +102,7 @@ export default {
         [
           {
             code: 'exportXLSXAPI',
-            name: '完整文档',
+            name: '导出文档.xlsx',
             prefixIcon: 'fa fa-download'
           }
         ]
@@ -121,12 +122,12 @@ export default {
           },
           {
             code: 'exportHTMLAPI',
-            name: '导出 HTML 文档',
+            name: '导出文档.html',
             prefixIcon: 'fa fa-download'
           },
           {
             code: 'exportXLSXAPI',
-            name: '导出 XLSX 文档',
+            name: '导出文档.xlsx',
             prefixIcon: 'fa fa-download'
           }
         ],
@@ -319,6 +320,17 @@ export default {
           xTable.clearTreeExpand()
           break
       }
+    },
+    menuVisibleMethod ({ options, column }) {
+      const isDisabled = !this.checkColumnMethod({ column })
+      options.forEach(list => {
+        list.forEach(item => {
+          if (['hideColumn'].includes(item.code)) {
+            item.disabled = isDisabled
+          }
+        })
+      })
+      return true
     },
     handleSearch () {
       const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()

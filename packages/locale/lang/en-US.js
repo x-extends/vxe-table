@@ -8,7 +8,7 @@ export default {
       treeFixedExpand: 'The fixed column of the tree structure conflicts with the expanded row.',
       treeLineExpand: 'The node line of tree structure conflicts with the expanded line.',
       treeErrProp: 'Tree structure does not support this parameter "{{0}}".',
-      scrollXNotGroup: 'Horizontal virtual scrolling does not support grouping headers. Please modify the parameters of "optimization. Scrollx. GT" correctly, otherwise errors may occur.',
+      scrollXNotGroup: 'Horizontal virtual scrolling does not support grouping headers. Please modify the parameters of "scroll-x.gt" correctly, otherwise errors may occur.',
       unableInsert: 'Unable to insert to the specified location.',
       useErr: 'Error installing "{{0}}" module, possibly in the wrong order, dependent modules need to be installed before Table.',
       barUnableLink: 'Toolbar cannot associate table.',

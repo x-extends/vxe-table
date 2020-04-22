@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import MyDiv from '../components/MyDiv.vue'
 import TableAPILink from '../components/TableAPILink.vue'
 import TableColumnAPILink from '../components/TableColumnAPILink.vue'
 import PagerAPILink from '../components/PagerAPILink.vue'
@@ -17,6 +18,7 @@ import './xtable'
 import './xtable/renderer'
 import './xtable/formatter'
 
+Vue.component(MyDiv.name, MyDiv)
 Vue.component(TableAPILink.name, TableAPILink)
 Vue.component(TableColumnAPILink.name, TableColumnAPILink)
 Vue.component(PagerAPILink.name, PagerAPILink)
