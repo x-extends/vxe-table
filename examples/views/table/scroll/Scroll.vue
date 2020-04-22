@@ -29,7 +29,7 @@
 
     <p class="tip">
       手动调优，默认自动优化（<span class="red">注：如果需要手动调优只需要更改参数即可</span>）<br>
-      通过指定 <table-api-link prop="optimization"/> ：{<table-api-link prop="scrollX"/>:{gt: 20},<table-api-link prop="scrollY"/>:{gt:40}} 适合的参数可以手动调优<br>
+      通过指定 <table-api-link prop="scroll-x"/>={gt: 20} 或 <table-api-link prop="scroll-y"/>={gt: 40} 适合的参数可以手动调优<br>
       数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数
     </p>
 
@@ -43,7 +43,8 @@
       height="300"
       :sort-config="{trigger: 'cell'}"
       :footer-method="footerMethod"
-      :optimization="{scrollX: {gt: 10}, scrollY: {gt: 100}}"
+      :scroll-x="{gt: 10}"
+      :scroll-y="{gt: 100}"
       :data="tableData2">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
@@ -149,7 +150,8 @@ export default {
           height="300"
           :sort-config="{trigger: 'cell'}"
           :footer-method="footerMethod"
-          :optimization="{scrollX: {gt: 10}, scrollY: {gt: 100}}"
+          :scroll-x="{gt: 10}"
+          :scroll-y="{gt: 100}"
           :data="tableData2">
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>

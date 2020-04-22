@@ -333,7 +333,7 @@ module.exports = {
           id: '唯一标识',
           data: '表格数据（与 loadData 行为一致，更新数据是不会重置状态）',
           columns: '列配置',
-          customs: '用于读取列配置，和手动调用 getColumns 方法是一样的效果，如果是想要显示隐藏列直接通过修改列的 visible 属性（废弃的 API 不建议使用）',
+          customs: '即将废弃',
           height: '表格的高度；支持铺满父容器或者固定高度，如果设置 auto 为铺满父容器（如果设置自适应时，必须确保存在父节点且不允许存在相邻元素）',
           maxHeight: '表格的最大高度',
           syncResize: '自动跟随某个属性的变化去调整大小，和手动调用 recalculate 方法是一样的效果（对于通过某个属性来控制显示/隐藏切换的场景可能会用到）',
@@ -405,7 +405,7 @@ module.exports = {
           editRules: '校验规则配置项',
           emptyRender: '空内容渲染配置项',
           customConfig: '自定义列配置项',
-          optimization: '优化配置项',
+          optimization: '即将废弃',
 
           params: '额外的参数（可以用来存放一些私有参数）',
 

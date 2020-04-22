@@ -334,7 +334,7 @@ module.exports = {
           id: 'Unique identification',
           data: 'Table data(note that updating data does not reset the status)',
           columns: 'Column configuration',
-          customs: 'For reading column configuration, same effect as calling getColumns method manually, if you want to show hidden columns directly by modifying the visible property of the column (deprecated apis are not recommended)',
+          customs: 'Have been obsolete',
           height: 'Table height, supports adaptive or fixed height(if you set adaptive, you must ensure that parent nodes exist and no adjacent elements are allowed)',
           maxHeight: 'Maximum height of the table',
           syncResize: 'Automatically resizing a property following a property change has the same effect as calling the recalculate method manually (this may be used in scenarios where a property is used to control the show/hide toggle)',
@@ -406,7 +406,7 @@ module.exports = {
           editRules: 'Checksum rule configuration entries',
           emptyRender: 'Empty content renderer config',
           customConfig: 'Custom configuration',
-          optimization: 'Optimize configuration',
+          optimization: 'Have been obsolete',
 
           params: 'Additional parameters (Can be used to store some private parameters)',
 

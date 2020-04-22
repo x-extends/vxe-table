@@ -172,23 +172,17 @@ export default {
     formOpts () {
       return Object.assign({}, GlobalConfig.grid.formConfig, this.formConfig)
     },
-    optimizeOpts () {
-      return Object.assign({}, GlobalConfig.optimization, this.optimization)
-    },
     toolbarOpts () {
       return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
     },
     zoomOpts () {
       return Object.assign({}, GlobalConfig.grid.zoomConfig, this.zoomConfig)
     },
-    customOpts () {
-      return Object.assign({}, GlobalConfig.grid.customConfig, this.customConfig === true ? { storage: true } : this.customConfig)
-    },
     renderClass () {
-      const { vSize, isZMax, optimizeOpts } = this
+      const { vSize, isZMax } = this
       return ['vxe-grid', {
         [`size--${vSize}`]: vSize,
-        't--animat': !!optimizeOpts.animat,
+        't--animat': !!this.animat,
         'is--maximize': isZMax,
         'is--loading': this.isCloak || this.loading || this.tableLoading
       }]
@@ -204,10 +198,8 @@ export default {
       return rest
     },
     tableProps () {
-      const { isZMax, seqConfig, pagerConfig, loading, isCloak, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData, optimizeOpts } = this
-      const props = Object.assign({}, tableExtendProps, {
-        optimization: optimizeOpts
-      })
+      const { isZMax, seqConfig, pagerConfig, loading, isCloak, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData } = this
+      const props = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
           props.maxHeight = 'auto'
@@ -262,7 +254,7 @@ export default {
     if (props && props.data) {
       UtilTools.warn('vxe.error.delProp', ['proxy-config.props.data', 'proxy-config.props.result'])
     }
-    if (this.optimizeOpts.cloak) {
+    if (this.cloak) {
       this.isCloak = true
       setTimeout(() => {
         this.isCloak = false

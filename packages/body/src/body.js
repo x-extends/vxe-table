@@ -5,7 +5,8 @@ import { UtilTools, DomTools } from '../../tools'
 
 // 滚动、拖动过程中不需要触发
 function isOperateMouse ($xetable) {
-  return $xetable._isResize || ($xetable.lastScrollTime && Date.now() < $xetable.lastScrollTime + $xetable.optimizeOpts.delayHover)
+  // 在 v3.0 中废弃 optimization.delayHover
+  return $xetable._isResize || ($xetable.lastScrollTime && Date.now() < $xetable.lastScrollTime + $xetable.delayHover)
 }
 
 function countTreeExpand (prevRow, params) {
