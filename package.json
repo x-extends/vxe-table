@@ -82,8 +82,8 @@
     "xlsx": "^0.15.6"
   },
   "peerDependencies": {
-    "vue": ">=2.6.10",
-    "xe-utils": ">=2.4.0"
+    "vue": ">= 2.6.0 < 3",
+    "xe-utils": ">= 2.4.0"
   },
   "postcss": {
     "plugins": {

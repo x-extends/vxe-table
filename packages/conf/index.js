@@ -8,7 +8,10 @@ const GlobalConfig = {
   table: {
     fit: true,
     showHeader: true,
+    animat: true,
+    delayHover: 250,
     keepSource: true,
+    cloak: false,
     // showOverflow: null,
     // showHeaderOverflow: null,
     // showFooterOverflow: null,
@@ -64,29 +67,18 @@ const GlobalConfig = {
       isPrint: true,
       modes: ['current', 'selected']
     },
-    optimization: {
-      animat: true,
-      // cloak: false,
-      delayHover: 250,
-      // rHeights: {
-      //   default: 48,
-      //   medium: 44,
-      //   small: 40,
-      //   mini: 36
-      // },
-      scrollX: {
-        gt: 60
-        // oSize: 0,
-        // rSize: 0
-        // vSize: 0
-      },
-      scrollY: {
-        gt: 100
-        // oSize: 0,
-        // rSize: 0
-        // vSize: 0,
-        // rHeight: 0
-      }
+    scrollX: {
+      gt: 60
+      // oSize: 0,
+      // rSize: 0
+      // vSize: 0
+    },
+    scrollY: {
+      gt: 100
+      // oSize: 0,
+      // rSize: 0
+      // vSize: 0,
+      // rHeight: 0
     }
   },
   icon: {

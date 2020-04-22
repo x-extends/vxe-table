@@ -68,8 +68,9 @@ function renderLine (h, _vm, $table, rowLevel, items, params) {
 }
 
 // 滚动、拖动过程中不需要触发
-function isOperateMouse ($table) {
-  return $table._isResize || ($table.lastScrollTime && Date.now() < $table.lastScrollTime + $table.optimizeOpts.delayHover)
+function isOperateMouse ($xetable) {
+  // 在 v3.0 中废弃 optimization.delayHover
+  return $xetable._isResize || ($xetable.lastScrollTime && Date.now() < $xetable.lastScrollTime + $xetable.delayHover)
 }
 
 /**

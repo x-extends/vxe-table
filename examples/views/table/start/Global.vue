@@ -7,73 +7,71 @@
 
         VXETable.setup({
           // size: null, // 全局尺寸
-          zIndex: 100, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
-          version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
-          table: {
-            // showHeader: true,
-            keepSource: true,
-            // showOverflow: null,
-            // showHeaderOverflow: null,
-            // showFooterOverflow: null,
-            // size: null,
-            // resizable: false,
-            // stripe: false,
-            // border: false,
-            // radioConfig: {
-            //   trigger: 'default'
-            // },
-            // checkboxConfig: {
-            //   trigger: 'default'
-            // },
-            // sortConfig: {
-            //   remote: false,
-            //   trigger: 'default',
-            //   orders: ['asc', 'desc', null]
-            // },
-            // filterConfig: {
-            //   remote: false
-            // },
-            // expandConfig: {
-            //   trigger: 'default'
-            // },
-            // treeConfig: {
-            //   children: 'children',
-            //   hasChild: 'hasChild',
-            //   indent: 20
-            // },
-            // tooltipConfig: {
-            //   theme: 'dark',
-            //   enterable: false
-            // },
-            // editConfig: {
-            //   mode: 'cell'
-            // },
-            // contextMenu: {
-            //   visibleMethod () {}
-            // },
-            // rowId: '_XID', // 行数据的唯一主键字段名
-            // importConfig: {
-            //   modes: ['insert', 'covering']
-            // },
-            // exportConfig: {
-            //   isPrint: true,
-            //   modes: ['current', 'selected']
-            // },
-            // customConfig: {
-            //  storage: false
-            // },
-            optimization: {
-              // animat: true,
-              // cloak: false,
-              // delayHover: 250,
-              scrollX: {
-                gt: 60
-              },
-              scrollY: {
-                gt: 100
-              }
-            }
-          },
+          // zIndex: 100, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
+          // version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
+          // table: {
+          //   showHeader: true,
+          //   keepSource: true,
+          //   animat: true,
+          //   cloak: false,
+          //   delayHover: 250,
+          //   showOverflow: null,
+          //   showHeaderOverflow: null,
+          //   showFooterOverflow: null,
+          //   size: null,
+          //   resizable: false,
+          //   stripe: false,
+          //   border: false,
+          //   radioConfig: {
+          //     trigger: 'default'
+          //   },
+          //   checkboxConfig: {
+          //     trigger: 'default'
+          //   },
+          //   sortConfig: {
+          //     remote: false,
+          //     trigger: 'default',
+          //     orders: ['asc', 'desc', null]
+          //   },
+          //   filterConfig: {
+          //     remote: false
+          //   },
+          //   expandConfig: {
+          //     trigger: 'default'
+          //   },
+          //   treeConfig: {
+          //     children: 'children',
+          //     hasChild: 'hasChild',
+          //     indent: 20
+          //   },
+          //   tooltipConfig: {
+          //     theme: 'dark',
+          //     enterable: false
+          //   },
+          //   editConfig: {
+          //     mode: 'cell'
+          //   },
+          //   contextMenu: {
+          //     visibleMethod () {}
+          //   },
+          //   rowId: '_XID', // 行数据的唯一主键字段名
+          //   importConfig: {
+          //     modes: ['insert', 'covering']
+          //   },
+          //   exportConfig: {
+          //     isPrint: true,
+          //     modes: ['current', 'selected']
+          //   },
+          //   customConfig: {
+          //    storage: false
+          //   },
+          //   scrollX: {
+          //     gt: 60
+          //   },
+          //   scrollY: {
+          //     gt: 100
+          //   }
+          // },
           // grid: {
           //   size: null,
           //   proxyConfig: {
@@ -165,11 +163,11 @@
           //   showTitleOverflow: true
           //   storage: false
           // },
-          list: {
-            scrollY: {
-              gt: 100
-            }
-          },
+          // list: {
+          //   scrollY: {
+          //     gt: 100
+          //   }
+          // },
           // 集成国际化（将对列头、校验提示..进行自动翻译）
           translate: key => i18n.t(key)
         })
