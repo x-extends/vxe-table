@@ -17,15 +17,25 @@ class ColumnConfig {
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
     if (_vm.cellRender && _vm.editRender) {
-      UtilTools.warn('vxe.error.cellEditRender')
+      UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
     }
+    // 在 v3.0 中废弃 prop
+    if (_vm.prop) {
+      UtilTools.warn('vxe.error.delProp', ['column.prop', 'column.field'])
+    }
+    // 在 v3.0 中废弃 label
+    if (_vm.label) {
+      UtilTools.warn('vxe.error.delProp', ['column.label', 'column.title'])
+    }
+    // 在 v3.0 中废弃 type=index
     if (_vm.type === 'index') {
-      // UtilTools.warn('vxe.error.delProp', ['index', 'seq'])
+      UtilTools.warn('vxe.error.delProp', ['column.type=index', 'column.type=seq'])
     } else if (_vm.type === 'selection') {
-      // UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
+      // 在 v3.0 中废弃 type=selection
+      UtilTools.warn('vxe.error.delProp', ['column.type=selection', 'column.type=checkbox'])
     } else if (_vm.type === 'expand') {
       if ($table.treeConfig && $table.treeOpts.line) {
-        UtilTools.error('vxe.error.treeLineExpand')
+        UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
       }
       if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
         UtilTools.warn('vxe.error.expandContent')
@@ -150,16 +160,10 @@ export const UtilTools = {
   getLog (message, params) {
     return `[vxe-table] ${XEUtils.template(GlobalConfig.i18n(message), params)}`
   },
-  getSize ({ size, $parent }) {
-    return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
-  },
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
   },
-  nextZIndex ($table) {
-    if ($table && $table.zIndex) {
-      return $table.zIndex
-    }
+  nextZIndex () {
     lastZindex = GlobalConfig.zIndex + zindexIndex++
     return lastZindex
   },

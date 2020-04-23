@@ -379,7 +379,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       }))
     )
     // 如果行被展开了
-    if (rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
+    if (expandColumn && rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
       const expandColumnIndex = getColumnIndex(expandColumn)
       let cellStyle
       if (treeConfig) {
@@ -387,35 +387,33 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           paddingLeft: `${(rowLevel * treeOpts.indent) + 30}px`
         }
       }
-      if (expandColumn) {
-        const { showOverflow } = expandColumn
-        const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-        rows.push(
-          h('tr', {
-            class: 'vxe-body--expanded-row',
-            key: `expand_${rowid}`,
-            style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
-            on: trOn
+      const { showOverflow } = expandColumn
+      const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+      rows.push(
+        h('tr', {
+          class: 'vxe-body--expanded-row',
+          key: `expand_${rowid}`,
+          style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
+          on: trOn
+        }, [
+          h('td', {
+            class: ['vxe-body--expanded-column', {
+              'fixed--hidden': fixedType,
+              'col--ellipsis': hasEllipsis
+            }],
+            attrs: {
+              colspan: tableColumn.length
+            }
           }, [
-            h('td', {
-              class: ['vxe-body--expanded-column', {
-                'fixed--hidden': fixedType,
-                'col--ellipsis': hasEllipsis
-              }],
-              attrs: {
-                colspan: tableColumn.length
-              }
+            h('div', {
+              class: 'vxe-body--expanded-cell',
+              style: cellStyle
             }, [
-              h('div', {
-                class: 'vxe-body--expanded-cell',
-                style: cellStyle
-              }, [
-                expandColumn.renderData(h, { $table, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, level: rowLevel })
-              ])
+              expandColumn.renderData(h, { $table, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, level: rowLevel })
             ])
           ])
-        )
-      }
+        ])
+      )
     }
     // 如果是树形表格
     if (treeConfig && treeExpandeds.length) {

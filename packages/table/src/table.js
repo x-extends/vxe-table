@@ -405,6 +405,8 @@ export default {
       currentColumn: null,
       // 表尾合计数据
       footerData: [],
+      // 展开列信息
+      expandColumn: null,
       // 已展开的行
       rowExpandeds: [],
       // 懒加载中的展开行的列表
@@ -670,9 +672,6 @@ export default {
     cellOffsetWidth () {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
     },
-    expandColumn () {
-      return XEUtils.find(this.tableColumn, column => column.type === 'expand')
-    },
     customOpts () {
       return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig === true ? { storage: true } : this.customConfig)
     },
@@ -715,6 +714,9 @@ export default {
           this.inited = true
           this.handleDefaults()
         }
+        if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
+          UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+        }
       })
     },
     customs (value) {
@@ -745,18 +747,8 @@ export default {
           UtilTools.warn('vxe.error.delProp', ['column.column-key', 'table.column-key'])
         }
       }
-      // 在 v3.0 中废弃 prop/label
-      if (tableFullColumn.length) {
-        const cIndex = Math.floor((tableFullColumn.length - 1) / 2)
-        if (tableFullColumn[cIndex].prop) {
-          UtilTools.warn('vxe.error.delProp', ['prop', 'field'])
-        }
-        if (tableFullColumn[cIndex].label) {
-          UtilTools.warn('vxe.error.delProp', ['label', 'title'])
-        }
-      }
-      if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
-        UtilTools.warn('vxe.error.treeFixedExpand')
+      if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
+        UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
       }
       if (this.isGroup && this.mouseConfig && (this.mouseOpts.range || this.mouseOpts.checked)) {
         UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.range'])
@@ -869,11 +861,16 @@ export default {
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
-    if (editConfig && mouseConfig && (mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
-      UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
+    if (mouseConfig && this.editConfig) {
+      if ((mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
+        UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
+      }
+      if (mouseOpts.selected && editOpts.mode !== 'cell') {
+        UtilTools.error('vxe.error.errProp', ['edit-config.mode', 'cell'])
+      }
     }
     if (treeConfig && this.stripe) {
-      UtilTools.error('vxe.error.treeErrProp', ['stripe'])
+      UtilTools.error('vxe.error.errConflicts', ['tree-config', 'stripe'])
     }
     // 在 v3.0 中废弃 optimization
     if (this.optimization) {
@@ -1299,7 +1296,7 @@ export default {
       return this.$nextTick()
     },
     loadTableData (datas) {
-      const { keepSource, height, maxHeight, showOverflow, treeConfig, editStore, sYOpts, scrollYStore } = this
+      const { keepSource, treeConfig, editStore, sYOpts, scrollYStore } = this
       const tableFullData = datas ? datas.slice(0) : []
       const scrollYLoad = !treeConfig && sYOpts && sYOpts.gt && sYOpts.gt < tableFullData.length
       scrollYStore.startIndex = 0
@@ -1317,10 +1314,10 @@ export default {
       }
       this.scrollYLoad = scrollYLoad
       if (scrollYLoad) {
-        if (!(height || maxHeight)) {
+        if (!(this.height || this.maxHeight)) {
           UtilTools.error('vxe.error.reqProp', ['height | max-height'])
         }
-        if (!showOverflow) {
+        if (!this.showOverflow) {
           UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
         }
       }
@@ -1448,12 +1445,21 @@ export default {
       const { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
       const fullColumnIdData = this.fullColumnIdData = {}
       const fullColumnFieldData = this.fullColumnFieldData = {}
+      let expandColumn
+      let hasFixed
       const handleFunc = (column, index) => {
-        const rest = { column, colid: column.id, index }
-        if (column.property) {
-          fullColumnFieldData[column.property] = rest
+        const { id: colid, property, fixed, type } = column
+        const rest = { column, colid, index }
+        if (property) {
+          fullColumnFieldData[property] = rest
         }
-        fullColumnIdData[column.id] = rest
+        if (!hasFixed && fixed) {
+          hasFixed = fixed
+        }
+        if (!expandColumn && type === 'expand') {
+          expandColumn = column
+        }
+        fullColumnIdData[colid] = rest
         fullColumnMap.set(column, rest)
       }
       fullColumnMap.clear()
@@ -1462,6 +1468,10 @@ export default {
       } else {
         tableFullColumn.forEach(handleFunc)
       }
+      if (hasFixed && expandColumn) {
+        UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
+      }
+      this.expandColumn = expandColumn
     },
     getRowNode (tr) {
       if (tr) {
@@ -5981,8 +5991,10 @@ export default {
       return this.$nextTick()
     },
     updateZindex () {
-      if (this.tZindex < UtilTools.getLastZIndex()) {
-        this.tZindex = UtilTools.nextZIndex(this)
+      if (this.zIndex) {
+        this.tZindex = this.zIndex
+      } else if (this.tZindex < UtilTools.getLastZIndex()) {
+        this.tZindex = UtilTools.nextZIndex()
       }
     },
 
@@ -5994,8 +6006,12 @@ export default {
      *************************/
     // 与工具栏对接
     connect ($toolbar) {
-      $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: this })
-      this.$toolbar = $toolbar
+      if ($toolbar && $toolbar.syncUpdate) {
+        $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: this })
+        this.$toolbar = $toolbar
+      } else {
+        UtilTools.error('vxe.error.barUnableLink')
+      }
     }
     /*************************
      * Publish methods

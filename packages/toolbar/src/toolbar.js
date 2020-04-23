@@ -257,7 +257,7 @@ export default {
   created () {
     const { customOpts, refresh, resizable, setting, id, refreshOpts } = this
     if (customOpts.storage && !id) {
-      return UtilTools.error('vxe.error.toolbarId')
+      return UtilTools.error('vxe.error.reqProp', ['toolbar.id'])
     }
     if (id) {
       UtilTools.warn('vxe.error.removeProp', ['toolbar.id'])
@@ -376,11 +376,15 @@ export default {
       const selfIndex = $children.indexOf(this)
       return XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
-    openCustom () {
-      if (this.checkTable()) {
-        this.customStore.visible = true
-        this.checkCustomStatus()
+    checkTable () {
+      if (this.$xetable) {
+        return true
       }
+      UtilTools.error('vxe.error.barUnableLink')
+    },
+    openCustom () {
+      this.customStore.visible = true
+      this.checkCustomStatus()
     },
     closeCustom () {
       const { custom, setting, customStore } = this
@@ -397,9 +401,11 @@ export default {
     },
     customOpenEvent (evnt) {
       const { customStore } = this
-      if (!customStore.visible) {
-        this.openCustom()
-        this.emitCustomEvent('open', evnt)
+      if (this.checkTable()) {
+        if (!customStore.visible) {
+          this.openCustom()
+          this.emitCustomEvent('open', evnt)
+        }
       }
     },
     customColseEvent (evnt) {
@@ -522,13 +528,12 @@ export default {
       if (!isRefresh) {
         if (refreshOpts.query) {
           this.isRefresh = true
-          const qRest = refreshOpts.query()
           try {
-            qRest.catch(e => e).then(() => {
+            Promise.resolve(refreshOpts.query()).catch(e => e).then(() => {
               this.isRefresh = false
             })
           } catch (e) {
-            UtilTools.error('vxe.error.typeErr', ['refresh.query', 'Promise', typeof qRest])
+            this.isRefresh = false
           }
         } else if ($xegrid) {
           this.isRefresh = true
@@ -555,19 +560,13 @@ export default {
       }
     },
     importEvent () {
-      const { $xetable } = this
-      if ($xetable) {
-        $xetable.openImport(this.importOpts)
-      } else {
-        throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+      if (this.checkTable()) {
+        this.$xetable.openImport(this.importOpts)
       }
     },
     exportEvent () {
-      const { $xetable } = this
-      if ($xetable) {
-        $xetable.openExport(this.exportOpts)
-      } else {
-        throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+      if (this.checkTable()) {
+        this.$xetable.openExport(this.exportOpts)
       }
     }
   }
