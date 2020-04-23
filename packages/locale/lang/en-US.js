@@ -2,17 +2,13 @@ export default {
   vxe: {
     error: {
       groupFixed: 'If you use group headers, the fixed columns must be set by group.',
-      groupPosFixed: 'If grouping headers are used, fixed columns must be on the left and right sides.',
       groupMouseRange: 'Grouping headers and "{{0}}" cannot be used at the same time, which may cause errors.',
-      cellEditRender: 'The renderer "cell-render" and "edit-render" cannot be used together.',
-      treeFixedExpand: 'The fixed column of the tree structure conflicts with the expanded row.',
-      treeLineExpand: 'The node line of tree structure conflicts with the expanded line.',
-      treeErrProp: 'Tree structure does not support this parameter "{{0}}".',
+      scrollErrProp: 'The parameter "{{0}}" is not supported when virtual scrolling is enabled.',
       scrollXNotGroup: 'Horizontal virtual scrolling does not support grouping headers. Please modify the parameters of "scroll-x.gt" correctly, otherwise errors may occur.',
+      errConflicts: 'Argument "{{0}}" conflicts with "{{1}}"',
       unableInsert: 'Unable to insert to the specified location.',
       useErr: 'Error installing "{{0}}" module, possibly in the wrong order, dependent modules need to be installed before Table.',
       barUnableLink: 'Toolbar cannot associate table.',
-      toolbarId: 'Toolbar must have a unique "id"',
       expandContent: 'Expand row slot should be "content", please check if it is correct.',
       reqModule: 'require "{{0}}" module.',
       reqProp: 'Missing the necessary "{{0}}" parameter, which can cause error.',
@@ -28,8 +24,7 @@ export default {
       notType: 'Unsupported file types "{{0}}"',
       notExp: 'The browser does not support import / export.',
       impFields: 'Import failed, please check that the field name and data format are correct.',
-      treeNotImp: 'Tree table does not support import.',
-      typeErr: 'type error for "{{0}}". Expected {{1}}, got value {{2}}.'
+      treeNotImp: 'Tree table does not support import.'
     },
     table: {
       emptyText: 'No Data',

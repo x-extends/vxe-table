@@ -2,17 +2,13 @@ export default {
   vxe: {
     error: {
       groupFixed: '如果使用分组表头，固定列必须按组设置',
-      groupPosFixed: '如果使用分组表头，固定列必须在左右两侧',
       groupMouseRange: '分组表头与 "{{0}}" 不能同时使用，这可能會出現错误',
-      cellEditRender: '渲染器 "cell-render" 和 "edit-render" 不能同时使用',
-      treeFixedExpand: '树结构的固定列与展开行有冲突',
-      treeLineExpand: '树结构的节点线与展开行有冲突',
-      treeErrProp: '树结构不支持该参数 "{{0}}"',
+      scrollErrProp: '启用虚拟滚动后不支持该参数 "{{0}}"',
       scrollXNotGroup: '横向虚拟滚动不支持分组表头，请修改正确 "scroll-x.gt" 的参数，否则可能会导致出现错误',
-      unableInsert: '无法插入到指定位置',
+      errConflicts: '参数 "{{0}}" 与 "{{1}}" 有冲突',
+      unableInsert: '无法插入到指定位置，请检查参数是否正确',
       useErr: '安装 "{{0}}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
       barUnableLink: '工具栏无法关联表格',
-      toolbarId: '工具栏需要设置唯一 "id"',
       expandContent: '展开行的插槽应该是 "content"，请检查是否正确',
       reqModule: '缺少 "{{0}}" 模块',
       reqProp: '缺少必要的 "{{0}}" 参数，这可能会导致出现错误',
@@ -28,8 +24,7 @@ export default {
       notType: '不支持的文件类型 "{{0}}"',
       notExp: '该浏览器不支持导入/导出功能',
       impFields: '导入失败，请检查字段名和数据格式是否正确',
-      treeNotImp: '树表格不支持导入',
-      typeErr: '"{{0}}" 类型错误，期望是 {{1}}，得到是 {{2}}'
+      treeNotImp: '树表格不支持导入'
     },
     table: {
       emptyText: '暂无数据',

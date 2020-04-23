@@ -47,16 +47,6 @@ export const VXETable = {
 }
 
 /**
- * 获取当前的 zIndex
- */
-Object.defineProperty(VXETable, 'zIndex', { get: UtilTools.getLastZIndex })
-
-/**
- * 获取下一个 zIndex
- */
-Object.defineProperty(VXETable, 'nextZIndex', { get: UtilTools.nextZIndex })
-
-/**
  * 获取所有导出类型
  */
 Object.defineProperty(VXETable, 'exportTypes', {

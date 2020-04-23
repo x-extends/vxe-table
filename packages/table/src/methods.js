@@ -114,7 +114,7 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas) {
-    const { keepSource, height, maxHeight, showOverflow, treeConfig, editStore, sYOpts, scrollYStore } = this
+    const { keepSource, treeConfig, editStore, sYOpts, scrollYStore } = this
     const tableFullData = datas ? datas.slice(0) : []
     const scrollYLoad = !treeConfig && sYOpts && sYOpts.gt && sYOpts.gt < tableFullData.length
     scrollYStore.startIndex = 0
@@ -132,10 +132,10 @@ const Methods = {
     }
     this.scrollYLoad = scrollYLoad
     if (scrollYLoad) {
-      if (!(height || maxHeight)) {
+      if (!(this.height || this.maxHeight)) {
         UtilTools.error('vxe.error.reqProp', ['height | max-height'])
       }
-      if (!showOverflow) {
+      if (!this.showOverflow) {
         UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
       }
     }
@@ -294,12 +294,21 @@ const Methods = {
     const { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
     const fullColumnIdData = this.fullColumnIdData = {}
     const fullColumnFieldData = this.fullColumnFieldData = {}
+    let expandColumn
+    let hasFixed
     const handleFunc = (column, index) => {
-      const rest = { column, colid: column.id, index }
-      if (column.property) {
-        fullColumnFieldData[column.property] = rest
+      const { id: colid, property, fixed, type } = column
+      const rest = { column, colid, index }
+      if (property) {
+        fullColumnFieldData[property] = rest
       }
-      fullColumnIdData[column.id] = rest
+      if (!hasFixed && fixed) {
+        hasFixed = fixed
+      }
+      if (!expandColumn && type === 'expand') {
+        expandColumn = column
+      }
+      fullColumnIdData[colid] = rest
       fullColumnMap.set(column, rest)
     }
     fullColumnMap.clear()
@@ -308,6 +317,10 @@ const Methods = {
     } else {
       tableFullColumn.forEach(handleFunc)
     }
+    if (hasFixed && expandColumn) {
+      UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
+    }
+    this.expandColumn = expandColumn
   },
   /**
    * 根据 tr 元素获取对应的 row 信息
@@ -3263,21 +3276,24 @@ const Methods = {
     })
   },
   updateZindex () {
-    if (this.tZindex < UtilTools.getLastZIndex()) {
-      this.tZindex = UtilTools.nextZIndex(this)
+    if (this.zIndex) {
+      this.tZindex = this.zIndex
+    } else if (this.tZindex < UtilTools.getLastZIndex()) {
+      this.tZindex = UtilTools.nextZIndex()
     }
   },
-
-  // 检查触发源是否属于目标节点
-  getEventTargetNode: DomTools.getEventTargetNode,
 
   /*************************
    * Publish methods
    *************************/
   // 与工具栏对接
   connect ($toolbar) {
-    $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: this })
-    this.$toolbar = $toolbar
+    if ($toolbar && $toolbar.syncUpdate) {
+      $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: this })
+      this.$toolbar = $toolbar
+    } else {
+      UtilTools.error('vxe.error.barUnableLink')
+    }
   }
   /*************************
    * Publish methods

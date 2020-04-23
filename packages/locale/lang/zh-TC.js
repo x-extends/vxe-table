@@ -2,17 +2,13 @@ export default {
   vxe: {
     error: {
       groupFixed: '如果使用分組表頭，固定列必須按組設定',
-      groupPosFixed: '如果使用分组表頭，固定列必须在左右兩側',
       groupMouseRange: '分组表頭与 "{{0}}" 不能同時使用，这可能會出現錯誤',
-      cellEditRender: '渲染器 "cell-render" 和 "edit-render" 不能同時使用',
-      treeFixedExpand: '樹結構的固定列與展開行有衝突',
-      treeLineExpand: '樹結構的節點線與展開行有衝突',
-      treeErrProp: '樹結構不支持該參數 "{{0}}"',
+      scrollErrProp: '啟用虛擬滾動後不支持該參數 "{{0}}"',
       scrollXNotGroup: '橫向虛擬滾動不支持分組表頭，請修改正確 "scroll-x.gt" 的參數，否則可能會導致出現錯誤',
-      unableInsert: '無法插入到指定位置',
+      errConflicts: '參數 "{{0}}" 與 "{{1}}" 有衝突',
+      unableInsert: '無法插入到指定位置，請檢查參數是否正確',
       useErr: '安裝 "{{0}}" 模塊時發生錯誤，可能順序不正確，依賴的模塊需要在Table之前安裝',
       barUnableLink: '工具欄無法關聯表格',
-      toolbarId: '工具欄需要設置唯一 "id"',
       expandContent: '展開行的插槽應該是 “content”，請檢查是否正確',
       reqModule: '缺少 "{{0}}" 模塊',
       reqProp: '缺少必要的 "{{0}}" 參數，可能會導致出現錯誤',
@@ -28,8 +24,7 @@ export default {
       notType: '不支持的檔案類型 "{{0}}"',
       notExp: '該瀏覽器不支持導入/匯出功能',
       impFields: '導入失敗，請檢查欄位名和數據格式是否正確',
-      treeNotImp: '樹錶不支持導入',
-      typeErr: '"{{0}}" 類型錯誤，期望是 {{1}}，得到是 {{2}}'
+      treeNotImp: '樹錶不支持導入'
     },
     table: {
       emptyText: '暫無資料',

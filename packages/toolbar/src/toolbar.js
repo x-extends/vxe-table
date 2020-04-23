@@ -353,16 +353,14 @@ export default {
       return XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
     checkTable () {
-      if (!this.$xetable) {
-        throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+      if (this.$xetable) {
+        return true
       }
-      return true
+      UtilTools.error('vxe.error.barUnableLink')
     },
     openCustom () {
-      if (this.checkTable()) {
-        this.customStore.visible = true
-        this.checkCustomStatus()
-      }
+      this.customStore.visible = true
+      this.checkCustomStatus()
     },
     closeCustom () {
       const { custom, customStore } = this
@@ -379,9 +377,11 @@ export default {
     },
     customOpenEvent (evnt) {
       const { customStore } = this
-      if (!customStore.visible) {
-        this.openCustom()
-        this.emitCustomEvent('open', evnt)
+      if (this.checkTable()) {
+        if (!customStore.visible) {
+          this.openCustom()
+          this.emitCustomEvent('open', evnt)
+        }
       }
     },
     customColseEvent (evnt) {

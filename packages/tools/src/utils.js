@@ -9,6 +9,26 @@ function getColFuncWidth (isExists, defaultWidth = 16) {
   return isExists ? defaultWidth : 0
 }
 
+function buildField (column) {
+  const { property } = column
+  return 'row' + (/^\d+/.test(property) ? `[${property}]` : (/^\[/.test(property) ? property : `.${property}`))
+}
+
+function buildGetField (column) {
+  /* eslint-disable no-new-func */
+  return new Function('row', 'return ' + (column.property ? buildField(column) : 'null'))
+}
+
+function buildSetField (column) {
+  /* eslint-disable no-new-func */
+  return new Function('row,value', column.property ? buildField(column) + '=value' : '')
+}
+
+function handleColumnField (column) {
+  column.gVal = buildGetField(column)
+  column.sVal = buildSetField(column)
+}
+
 class ColumnConfig {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xetable, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
@@ -17,11 +37,11 @@ class ColumnConfig {
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
     if (_vm.cellRender && _vm.editRender) {
-      UtilTools.warn('vxe.error.cellEditRender')
+      UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
     }
     if (_vm.type === 'expand') {
       if ($xetable.treeConfig && $xetable.treeOpts.line) {
-        UtilTools.error('vxe.error.treeLineExpand')
+        UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
       }
     }
     if (formatter) {
@@ -100,6 +120,15 @@ class ColumnConfig {
     if (proxyOpts && proxyOpts.beforeColumn) {
       proxyOpts.beforeColumn({ $grid: $xegrid, column: this })
     }
+    handleColumnField(this)
+  }
+
+  getValueByRow (row) {
+    return this.gVal(row)
+  }
+
+  setValueByRow (row) {
+    this.sVal(row)
   }
 
   getTitle () {
@@ -119,6 +148,9 @@ class ColumnConfig {
     // 不支持双向的属性
     if (name !== 'filters') {
       this[name] = value
+      if (name === 'field') {
+        handleColumnField(this)
+      }
     }
   }
 }
@@ -137,16 +169,10 @@ export const UtilTools = {
   getLog (message, params) {
     return `[vxe-table] ${XEUtils.template(GlobalConfig.i18n(message), params)}`
   },
-  getSize ({ size, $parent }) {
-    return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
-  },
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
   },
-  nextZIndex ($xetable) {
-    if ($xetable && $xetable.zIndex) {
-      return $xetable.zIndex
-    }
+  nextZIndex () {
     lastZindex = GlobalConfig.zIndex + zindexIndex++
     return lastZindex
   },
