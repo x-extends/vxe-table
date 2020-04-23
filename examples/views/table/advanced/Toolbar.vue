@@ -35,15 +35,19 @@
 
     <p class="tip">工具栏和表格默认是上下相邻关系，渲染时会自动进行关联；如果位置不是相邻关系，也可以手动调用 connect() 方法关联</p>
 
-    <my-div>
-      <vxe-toolbar
-        custom
-        export
-        ref="xToolbar"
-        :buttons="toolbarButtons"
-        :refresh="{query: findList}">
-      </vxe-toolbar>
-    </my-div>
+    <div>
+      <p>工具栏位置随意放</p>
+      <my-div>
+        <vxe-toolbar
+          custom
+          export
+          ref="xToolbar"
+          :buttons="toolbarButtons"
+          :refresh="{query: findList}">
+        </vxe-toolbar>
+      </my-div>
+      <p>工具栏位置随意放</p>
+    </div>
 
     <vxe-table
       border
@@ -125,16 +129,6 @@ export default {
         }
         `,
         `
-        <my-div>
-          <vxe-toolbar
-            custom
-            export
-            ref="xToolbar"
-            :buttons="toolbarButtons"
-            :refresh="{query: findList}">
-          </vxe-toolbar>
-        </my-div>
-
         <vxe-table
           border
           export-config
@@ -150,6 +144,20 @@ export default {
           <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         </vxe-table>
+
+        <div>
+          <p>工具栏位置随意放</p>
+          <my-div>
+            <vxe-toolbar
+              custom
+              export
+              ref="xToolbar"
+              :buttons="toolbarButtons"
+              :refresh="{query: findList}">
+            </vxe-toolbar>
+          </my-div>
+          <p>工具栏位置随意放</p>
+        </div>
         `,
         `
         export default {

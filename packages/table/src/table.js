@@ -275,6 +275,8 @@ export default {
       selectRow: null,
       // 表尾合计数据
       footerData: [],
+      // 展开列信息
+      expandColumn: null,
       // 已展开的行
       rowExpandeds: [],
       // 懒加载中的展开行的列表
@@ -511,9 +513,6 @@ export default {
     cellOffsetWidth () {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
     },
-    expandColumn () {
-      return XEUtils.find(this.tableColumn, column => column.type === 'expand')
-    },
     customOpts () {
       return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig === true ? { storage: true } : this.customConfig)
     },
@@ -556,6 +555,9 @@ export default {
           this.inited = true
           this.handleDefaults()
         }
+        if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
+          UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+        }
       })
     },
     customs (value) {
@@ -580,18 +582,8 @@ export default {
         }
       })
       this.handleTableData(true)
-      // 在 v3.0 中废弃 prop、label
-      if (tableFullColumn.length) {
-        const cIndex = Math.floor((tableFullColumn.length - 1) / 2)
-        if (tableFullColumn[cIndex].prop) {
-          UtilTools.warn('vxe.error.delProp', ['prop', 'field'])
-        }
-        if (tableFullColumn[cIndex].label) {
-          UtilTools.warn('vxe.error.delProp', ['label', 'title'])
-        }
-      }
-      if (this.treeConfig && tableFullColumn.some(column => column.fixed) && tableFullColumn.some(column => column.type === 'expand')) {
-        UtilTools.warn('vxe.error.treeFixedExpand')
+      if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
+        UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
       }
       if (this.isGroup && this.mouseConfig && (this.mouseOpts.range || this.mouseOpts.checked)) {
         UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.range'])
@@ -638,7 +630,7 @@ export default {
     }
   },
   created () {
-    const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseConfig, mouseOpts, data, editConfig, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseConfig, mouseOpts, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -711,11 +703,16 @@ export default {
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
-    if (editConfig && mouseConfig && (mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
-      UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
+    if (mouseConfig && this.editConfig) {
+      if ((mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
+        UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
+      }
+      if (mouseOpts.selected && editOpts.mode !== 'cell') {
+        UtilTools.error('vxe.error.errProp', ['edit-config.mode', 'cell'])
+      }
     }
     if (treeConfig && this.stripe) {
-      UtilTools.error('vxe.error.treeErrProp', ['stripe'])
+      UtilTools.error('vxe.error.errConflicts', ['tree-config', 'stripe'])
     }
     // 在 v3.0 中废弃 optimization
     if (this.optimization) {

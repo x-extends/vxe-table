@@ -257,7 +257,7 @@ export default {
   created () {
     const { customOpts, refresh, resizable, setting, id, refreshOpts } = this
     if (customOpts.storage && !id) {
-      return UtilTools.error('vxe.error.toolbarId')
+      return UtilTools.error('vxe.error.reqProp', ['toolbar.id'])
     }
     if (id) {
       UtilTools.warn('vxe.error.removeProp', ['toolbar.id'])
@@ -377,16 +377,14 @@ export default {
       return XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
     checkTable () {
-      if (!this.$xetable) {
-        throw new Error(UtilTools.getLog('vxe.error.barUnableLink'))
+      if (this.$xetable) {
+        return true
       }
-      return true
+      UtilTools.error('vxe.error.barUnableLink')
     },
     openCustom () {
-      if (this.checkTable()) {
-        this.customStore.visible = true
-        this.checkCustomStatus()
-      }
+      this.customStore.visible = true
+      this.checkCustomStatus()
     },
     closeCustom () {
       const { custom, setting, customStore } = this
@@ -403,9 +401,11 @@ export default {
     },
     customOpenEvent (evnt) {
       const { customStore } = this
-      if (!customStore.visible) {
-        this.openCustom()
-        this.emitCustomEvent('open', evnt)
+      if (this.checkTable()) {
+        if (!customStore.visible) {
+          this.openCustom()
+          this.emitCustomEvent('open', evnt)
+        }
       }
     },
     customColseEvent (evnt) {
@@ -528,13 +528,12 @@ export default {
       if (!isRefresh) {
         if (refreshOpts.query) {
           this.isRefresh = true
-          const qRest = refreshOpts.query()
           try {
-            qRest.catch(e => e).then(() => {
+            Promise.resolve(refreshOpts.query()).catch(e => e).then(() => {
               this.isRefresh = false
             })
           } catch (e) {
-            UtilTools.error('vxe.error.typeErr', ['refresh.query', 'Promise', typeof qRest])
+            this.isRefresh = false
           }
         } else if ($xegrid) {
           this.isRefresh = true

@@ -1306,15 +1306,21 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.keyboard',
-              locat: {
-                name: 'TableScrollKeyboard'
-              }
-            },
-            {
               label: 'app.aside.nav.fluidHeight',
               locat: {
                 name: 'TableScrollMaxHeight'
+              }
+            },
+            {
+              label: 'app.aside.nav.group',
+              locat: {
+                name: 'TableScrollGroup'
+              }
+            },
+            {
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableScrollKeyboard'
               }
             },
             {
