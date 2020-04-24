@@ -223,20 +223,6 @@ function renderNativeOptgroups (h, renderOpts, params, renderOptionsMethods) {
   })
 }
 
-function renderDefaultOptgroups (h, renderOpts, params, renderOptionsMethods) {
-  const { optionGroups, optionGroupProps = {} } = renderOpts
-  const groupOptions = optionGroupProps.options || 'options'
-  const groupLabel = optionGroupProps.label || 'label'
-  return optionGroups.map((group, gIndex) => {
-    return h('vxe-optgroup', {
-      key: gIndex,
-      props: {
-        label: group[groupLabel]
-      }
-    }, renderOptionsMethods(h, group[groupOptions], renderOpts, params))
-  })
-}
-
 /**
  * 渲染原生的 option 标签
  */
@@ -259,27 +245,6 @@ function renderNativeOptions (h, options, renderOpts, params) {
         selected: option[valueProp] == cellValue
       }
     }, option[labelProp])
-  })
-}
-
-/**
- * 渲染内置组件的下拉选项
- */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-function renderDefaultOptions (h, options, renderOpts, params) {
-  const { optionProps = {} } = renderOpts
-  const labelProp = optionProps.label || 'label'
-  const valueProp = optionProps.value || 'value'
-  const disabledProp = optionProps.disabled || 'disabled'
-  return options.map((option, oIndex) => {
-    return h('vxe-option', {
-      key: oIndex,
-      props: {
-        value: option[valueProp],
-        label: option[labelProp],
-        disabled: option[disabledProp]
-      }
-    })
   })
 }
 
@@ -332,13 +297,13 @@ function nativeSelectEditRender (h, renderOpts, params) {
 
 function defaultSelectEditRender (h, renderOpts, params) {
   const { row, column } = params
+  const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
   const cellValue = UtilTools.getCellValue(row, column)
   return [
     h(getDefaultComponentName(renderOpts), {
-      props: getCellEditFilterProps(renderOpts, params, cellValue),
+      props: getCellEditFilterProps(renderOpts, params, cellValue, { options, optionProps, optionGroups, optionGroupProps }),
       on: getEditOns(renderOpts, params)
-    },
-    renderOpts.optionGroups ? renderDefaultOptgroups(h, renderOpts, params, renderDefaultOptions) : renderDefaultOptions(h, renderOpts.options, renderOpts, params))
+    })
   ]
 }
 
@@ -567,26 +532,26 @@ const renderMap = {
     },
     renderFilter (h, renderOpts, params) {
       const { column } = params
+      const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
       return column.filters.map((option, oIndex) => {
         const optionValue = option.data
         return h(getDefaultComponentName(renderOpts), {
           key: oIndex,
-          props: getCellEditFilterProps(renderOpts, params, optionValue),
+          props: getCellEditFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
           on: getFilterOns(renderOpts, params, option)
-        },
-        renderOpts.optionGroups ? renderDefaultOptgroups(h, renderOpts, params, renderDefaultOptions) : renderDefaultOptions(h, renderOpts.options, renderOpts, params))
+        })
       })
     },
     filterMethod: handleFilterMethod,
     renderItem (h, renderOpts, params) {
       const { data, property } = params
+      const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
       const itemValue = XEUtils.get(data, property)
       return [
         h(getDefaultComponentName(renderOpts), {
-          props: getItemProps(renderOpts, params, itemValue),
+          props: getItemProps(renderOpts, params, itemValue, { options, optionProps, optionGroups, optionGroupProps }),
           on: getItemOns(renderOpts, params)
-        },
-        renderOpts.optionGroups ? renderDefaultOptgroups(h, renderOpts, params, renderDefaultOptions) : renderDefaultOptions(h, renderOpts.options, renderOpts, params))
+        })
       ]
     },
     editCellExportMethod: createExportMethod(getSelectCellValue, true),
