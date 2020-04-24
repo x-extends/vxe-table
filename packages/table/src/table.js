@@ -1292,7 +1292,7 @@ export default {
     handleTableData (force) {
       const { scrollYLoad, scrollYStore } = this
       const fullData = force ? this.updateAfterFullData() : this.afterFullData
-      this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : fullData.slice(0)
+      this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, Math.max(scrollYStore.startIndex + scrollYStore.renderSize, 1)) : fullData.slice(0)
       return this.$nextTick()
     },
     loadTableData (datas) {
@@ -5274,21 +5274,31 @@ export default {
       scrollYStore.bottomSpaceHeight = Math.max((afterFullData.length - (scrollYStore.startIndex + scrollYStore.renderSize)) * scrollYStore.rowHeight, 0)
     },
     scrollTo (scrollLeft, scrollTop) {
-      const bodyElem = this.$refs.tableBody.$el
+      const { $refs } = this
+      const bodyElem = $refs.tableBody.$el
+      let istriggerBody
       if (XEUtils.isNumber(scrollLeft)) {
-        const tableFooter = this.$refs.tableFooter
-        if (tableFooter) {
-          tableFooter.$el.scrollLeft = scrollLeft
+        const footerElem = $refs.tableFooter ? $refs.tableFooter.$el : null
+        if (footerElem) {
+          footerElem.scrollLeft = scrollLeft
+          DomTools.triggerEvent(footerElem, 'scroll')
         } else {
+          istriggerBody = true
           bodyElem.scrollLeft = scrollLeft
         }
       }
       if (XEUtils.isNumber(scrollTop)) {
-        const rightBody = this.$refs.rightBody
-        if (rightBody) {
-          rightBody.$el.scrollTop = scrollTop
+        const rightBodyElem = $refs.rightBody ? $refs.rightBody.$el : null
+        if (rightBodyElem) {
+          rightBodyElem.scrollTop = scrollTop
+          DomTools.triggerEvent(rightBodyElem, 'scroll')
+        } else {
+          istriggerBody = true
+          bodyElem.scrollTop = scrollTop
         }
-        bodyElem.scrollTop = scrollTop
+      }
+      if (istriggerBody) {
+        DomTools.triggerEvent(bodyElem, 'scroll')
       }
       if (this.scrollXLoad || this.scrollYLoad) {
         return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))

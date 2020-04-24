@@ -216,6 +216,16 @@ export const DomTools = {
         elem[scrollIntoView]()
       }
     }
+  },
+  triggerEvent (targetElem, type) {
+    let evnt
+    if (typeof Event === 'function') {
+      evnt = new Event(type)
+    } else {
+      evnt = document.createEvent('Event')
+      evnt.initEvent(type, true, true)
+    }
+    targetElem.dispatchEvent(evnt)
   }
 }
 
