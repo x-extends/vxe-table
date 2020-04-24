@@ -306,31 +306,34 @@ export default {
       if (optionGroups || options) {
         const { optionProps = {}, optionGroupProps = {} } = this
         const disabledProp = optionProps.disabled || 'disabled'
+        const labelProp = optionProps.label || 'label'
+        const valueProp = optionProps.value || 'value'
         if (optionGroups) {
           const groupOptions = optionGroupProps.options || 'options'
+          const groupLabel = optionGroupProps.label || 'label'
           const groupDisabled = optionGroupProps.disabled || 'disabled'
           optionGroups.forEach(group => {
             const optChilds = []
             const allOptChilds = []
             group[groupOptions].forEach(option => {
               const isDisabled = (group && group[groupDisabled]) || option[disabledProp]
-              const item = { label: option.label, value: option.value, disabled: isDisabled, id: getOptid(this, option) }
+              const item = { label: option[labelProp], value: option[valueProp], disabled: isDisabled, id: getOptid(this, option) }
               if (!isDisabled) {
                 optChilds.push(item)
               }
               allOptChilds.push(item)
             })
             if (optChilds.length) {
-              oList.push({ label: group.label, disabled: group[groupDisabled], options: optChilds, id: getOptid(this, group) })
+              oList.push({ label: group[groupLabel], disabled: group[groupDisabled], options: optChilds, id: getOptid(this, group) })
             }
             if (allOptChilds.length) {
-              allList.push({ label: group.label, disabled: group[groupDisabled], options: allOptChilds, id: getOptid(this, group) })
+              allList.push({ label: group[groupLabel], disabled: group[groupDisabled], options: allOptChilds, id: getOptid(this, group) })
             }
           })
         } else {
           options.forEach(option => {
             const isDisabled = option[disabledProp]
-            const item = { label: option.label, value: option.value, disabled: isDisabled, id: getOptid(this, option) }
+            const item = { label: option[labelProp], value: option[valueProp], disabled: isDisabled, id: getOptid(this, option) }
             if (!isDisabled) {
               oList.push(item)
             }

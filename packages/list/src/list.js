@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import { DomTools } from '../../tools'
 
 export default {
   name: 'VxeList',
@@ -157,6 +158,7 @@ export default {
       if (XEUtils.isNumber(scrollTop)) {
         scrollBodyElem.scrollTop = scrollTop
       }
+      DomTools.triggerEvent(scrollBodyElem, 'scroll')
       if (this.scrollYLoad) {
         return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
       }
