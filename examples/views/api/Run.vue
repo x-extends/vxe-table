@@ -1,19 +1,24 @@
 <template>
   <div class="run-view">
-    <div class="left">
-      <div class="code-wrapper">
-        <div ref="runHTML"></div>
-      </div>
-      <div class="code-wrapper">
-        <div ref="runJS"></div>
-      </div>
+    <div class="run-header">
+      <vxe-button>运行</vxe-button>
     </div>
-    <div class="right">
-      <div class="code-wrapper">
-        <div ref="runCSS"></div>
+    <div class="run-body">
+      <div class="left">
+        <div class="code-wrapper">
+          <div ref="runHTML"></div>
+        </div>
+        <div class="code-wrapper">
+          <div ref="runJS"></div>
+        </div>
       </div>
-      <div class="code-wrapper">
-        <div ref="runDemo"></div>
+      <div class="right">
+        <div class="code-wrapper">
+          <div ref="runCSS"></div>
+        </div>
+        <div class="code-wrapper">
+          <div ref="runDemo"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -43,7 +48,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.run-view {
+.run-body {
   height: 100%;
   display: flex;
   flex-direction: row;

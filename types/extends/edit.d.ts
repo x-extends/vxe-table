@@ -18,10 +18,10 @@ export interface ColumnEditRenderParams extends ColumnCellRenderParams {}
  * 编辑渲染配置项
  */
 export interface ColumnEditRenderOptions extends RenderOptions {
-  /**
-   * 渲染类型（需要渲染器支持）
-   */
-  type?: 'default' | 'visible';
+  // /**
+  //  * 渲染类型（可能废弃，不建议使用）
+  //  */
+  // type?: 'default' | 'visible';
   /**
    * 下拉选项列表（需要渲染器支持）
    */

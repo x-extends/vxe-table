@@ -164,13 +164,18 @@ body,
   border-bottom: 1px solid #dcdfe6;
   overflow: hidden;
   > .aside {
+    position: relative;
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: 0;
     flex-shrink: 0;
     user-select: none;
     padding-top: 10px;
     border-right: 1px solid #dcdfe6;
+    overflow: hidden;
+    &.visible {
+      width: 300px;
+    }
     ul {
       padding: 0;
       margin: 0;
@@ -293,6 +298,20 @@ body,
           text-decoration: line-through;
         }
       }
+    }
+  }
+  > .oper-wrapper {
+    position: relative;
+    width: 16px;
+    .oper-btn {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      line-height: 50px;
+      user-select: none;
+      cursor: pointer;
+      border: 1px solid #e4e4e4;
+      background: #ffffff;
     }
   }
   > .body {

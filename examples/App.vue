@@ -1,93 +1,93 @@
 <template>
   <div id="app" @click="clickEvent">
-    <template v-if="$route.path === '/api/run'">
-      <router-view/>
-    </template>
-    <template v-else>
-      <header class="page-header">
-        <div class="left">
-          <a href="https://github.com/xuliangzhan/vxe-table">
-            <img src="logo.png" width="18">
-            <span class="title">vxe-table</span>
-          </a>
-          <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
-            <img src='https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark' alt='star'>
-          </a>
-          <a href="https://github.com/xuliangzhan/vxe-table/stargazers">
-            <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg">
-          </a>
-          <a href="http://npm-stat.com/charts.html?package=vxe-table">
-            <img src="https://img.shields.io/npm/dm/vxe-table.svg">
-          </a>
-        </div>
-        <div class="right">
-          <div class="content">
-            <span v-if="usedJSHeapSize" class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
-            <span>{{ $t('app.body.label.translations') }}:</span>
-            <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
-              <vxe-option value="zh_CN" label="中文"></vxe-option>
-              <vxe-option value="zh_TC" label="繁體中文"></vxe-option>
-              <vxe-option value="en_US" label="English"></vxe-option>
-              <vxe-option value="ja_JP" label="ジャパン"></vxe-option>
-            </vxe-select>
-            <span>{{ $t('app.body.label.version') }}: </span>
-            <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
-              <vxe-option value="1" label="1.x"></vxe-option>
-              <vxe-option value="2" label="2.x"></vxe-option>
-              <vxe-option value="3" label="3.x"></vxe-option>
-              <vxe-option value="4" label="4.x"></vxe-option>
-            </vxe-select>
-            <vxe-tooltip :content="$t('app.footer.donationDesc')" enterable>
-              <router-link class="donation" :to="{name: 'Donation'}">{{ $t('app.footer.donation') }}☕</router-link>
-            </vxe-tooltip>
-          </div>
-        </div>
-      </header>
-      <div class="page-container">
-        <div class="aside">
-          <div class="header">
-            <div v-if="stableVersionList.length" class="version-list">
-              <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
-              <vxe-select class="stable-select" v-model="selectStableVersion" size="mini" :options="stableVersionList"></vxe-select>
-              <template v-if="showBetaVetsion">
-                <span class="title">{{  $t('app.body.label.latestVersion')}}</span>
-                <vxe-select class="latest-select" v-model="selectBetaVersion" size="mini" :options="newBetsVersionList"></vxe-select>
-              </template>
-            </div>
-            <vxe-input clearable v-model="filterName" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
-          </div>
-          <div class="body">
-            <template v-if="apiList.length">
-              <ul class="nav-menu">
-                <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
-                  <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
-                    <i class="vxe-icon--arrow-right nav-link-icon"></i>
-                    <span v-html="item.label"></span>
-                  </a>
-                  <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
-                    <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name), 'is-bad': ['TableBadEdit', 'TableBadLineHeight', 'TableBadNonsupport'].includes(child.locat.name)}">
-                      <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
-                      <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </template>
-            <template v-else>
-              <div class="search-nodata">{{ $t('app.body.search.noDataPrefix') }}<span class="keyword-lighten">{{ filterName }}</span>{{ $t('app.body.search.noDataSuffix') }}</div>
-            </template>
-          </div>
-        </div>
-        <div class="body">
-          <div class="content" :class="{full: ['VXEAPI', 'Donation'].includes($route.name)}">
-            <template v-if="!/\/start|\/module|\/api/.test($route.path)">
-              <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank"><i class="fa fa-bug"></i>{{ $t('app.body.button.runDemo') }}</a>
-            </template>
-            <router-view/>
-          </div>
+    <header class="page-header">
+      <div class="left">
+        <a href="https://github.com/xuliangzhan/vxe-table">
+          <img src="logo.png" width="18">
+          <span class="title">vxe-table</span>
+        </a>
+        <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
+          <img src='https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark' alt='star'>
+        </a>
+        <a href="https://github.com/xuliangzhan/vxe-table/stargazers">
+          <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg">
+        </a>
+        <a href="http://npm-stat.com/charts.html?package=vxe-table">
+          <img src="https://img.shields.io/npm/dm/vxe-table.svg">
+        </a>
+      </div>
+      <div class="right">
+        <div class="content">
+          <span v-if="usedJSHeapSize" class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
+          <span>{{ $t('app.body.label.translations') }}:</span>
+          <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
+            <vxe-option value="zh_CN" label="中文"></vxe-option>
+            <vxe-option value="zh_TC" label="繁體中文"></vxe-option>
+            <vxe-option value="en_US" label="English"></vxe-option>
+            <vxe-option value="ja_JP" label="ジャパン"></vxe-option>
+          </vxe-select>
+          <span>{{ $t('app.body.label.version') }}: </span>
+          <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
+            <vxe-option value="1" label="1.x"></vxe-option>
+            <vxe-option value="2" label="2.x"></vxe-option>
+            <vxe-option value="3" label="3.x"></vxe-option>
+            <vxe-option value="4" label="4.x"></vxe-option>
+          </vxe-select>
+          <vxe-tooltip :content="$t('app.footer.donationDesc')" enterable>
+            <router-link class="donation" :to="{name: 'Donation'}">{{ $t('app.footer.donation') }}☕</router-link>
+          </vxe-tooltip>
         </div>
       </div>
-    </template>
+    </header>
+    <div class="page-container">
+      <div class="aside" :class="{visible: showLeft}">
+        <div class="header">
+          <div v-if="stableVersionList.length" class="version-list">
+            <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
+            <vxe-select class="stable-select" v-model="selectStableVersion" size="mini" :options="stableVersionList"></vxe-select>
+            <template v-if="showBetaVetsion">
+              <span class="title">{{  $t('app.body.label.latestVersion')}}</span>
+              <vxe-select class="latest-select" v-model="selectBetaVersion" size="mini" :options="newBetsVersionList"></vxe-select>
+            </template>
+          </div>
+          <vxe-input clearable v-model="filterName" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
+        </div>
+        <div class="body">
+          <template v-if="apiList.length">
+            <ul class="nav-menu">
+              <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
+                <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
+                  <i class="vxe-icon--arrow-right nav-link-icon"></i>
+                  <span v-html="item.label"></span>
+                </a>
+                <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
+                  <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name), 'is-bad': ['TableBadEdit', 'TableBadLineHeight', 'TableBadNonsupport'].includes(child.locat.name)}">
+                    <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
+                    <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </template>
+          <template v-else>
+            <div class="search-nodata">{{ $t('app.body.search.noDataPrefix') }}<span class="keyword-lighten">{{ filterName }}</span>{{ $t('app.body.search.noDataSuffix') }}</div>
+          </template>
+        </div>
+      </div>
+      <div class="oper-wrapper" @click="showLeft = !showLeft" v-show="['VXEAPI', 'Donation', 'Run'].includes($route.name)">
+        <div class="oper-btn">
+          <i :class="showLeft ? 'vxe-icon--arrow-left' : 'vxe-icon--arrow-right'"></i>
+        </div>
+      </div>
+      <div class="body">
+        <div class="content" :class="{full: ['VXEAPI', 'Donation', 'Run'].includes($route.name)}">
+          <template v-if="!/\/start|\/module|\/api/.test($route.path)">
+            <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank"><i class="fa fa-bug"></i>{{ $t('app.body.button.runDemo') }}</a>
+          </template>
+          <router-view/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -98,6 +98,7 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
+      showLeft: true,
       selected: null,
       filterName: '',
       apiList: [],
