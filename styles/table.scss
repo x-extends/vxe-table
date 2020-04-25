@@ -62,6 +62,8 @@ select.vxe-select,
 /*默认的渲染*/
 .vxe-cell,
 .vxe-table--filter-wrapper {
+  .vxe-default-input,
+  .vxe-default-textarea,
   .vxe-default-select {
     outline: 0;
     padding: 0 2px;
@@ -72,29 +74,52 @@ select.vxe-select,
     &:focus {
       border: 1px solid $vxe-primary-color;
     }
-  }
-  .vxe-input {
-    .vxe-input--inner {
-      &[type="date"]::-webkit-inner-spin-button {
-        margin-top: 6px;
-      }
-      &[type="date"]::-webkit-inner-spin-button,
-      &[type="number"]::-webkit-inner-spin-button {
-        height: 24px;
-      }
-      &::placeholder {
-        color: $vxe-input-placeholder-color;
-      }
-      &[disabled] {
-        cursor: not-allowed;
-        background-color: #f3f3f3;
-      }
+    &[disabled] {
+      cursor: not-allowed;
+      background-color: #f3f3f3;
     }
   }
+  .vxe-default-input,
+  .vxe-default-textarea,
   .vxe-default-select,
-  .vxe-input,
-  .vxe-textarea {
+  .vxe-input {
     height: floor($vxe-table-row-height-default - 6);
+  }
+  .vxe-default-input {
+    &[type="date"]::-webkit-inner-spin-button {
+      margin-top: 6px;
+    }
+    &[type="date"]::-webkit-inner-spin-button,
+    &[type="number"]::-webkit-inner-spin-button {
+      height: 24px;
+    }
+    &::placeholder {
+      color: $vxe-input-placeholder-color;
+    }
+  }
+  .vxe-default-textarea {
+    resize: none;
+    vertical-align: middle;
+  }
+  .vxe-input,
+  .vxe-textarea,
+  .vxe-select {
+    width: 100%;
+    display: block;
+  }
+  .vxe-input > .vxe-input--inner,
+  .vxe-textarea > .vxe-textarea--inner {
+    padding: 0 2px;
+  }
+  .vxe-textarea--inner,
+  .vxe-default-textarea {
+    resize: none;
+  }
+}
+.vxe-table--filter-wrapper {
+  .vxe-default-input,
+  .vxe-default-textarea {
+    padding: 0 10px;
   }
 }
 
@@ -401,22 +426,17 @@ select.vxe-select,
       }
     }
     .vxe-cell {
+      .vxe-default-input,
+      .vxe-default-textarea,
       .vxe-default-select,
-      .vxe-input,
-      .vxe-textarea {
+      .vxe-input {
         height: floor($vxe-table-row-height-medium - 6);
       }
-      .vxe-input {
-        .vxe-input--inner {
-          &[type="date"]::-webkit-inner-spin-button {
-            margin-top: 4px;
-          }
+      .vxe-default-input {
+        &[type="date"]::-webkit-inner-spin-button {
+          margin-top: 4px;
         }
       }
-    }
-    .vxe-cell--checkbox .vxe-checkbox--icon,
-    .vxe-cell--radio .vxe-radio--icon {
-      font-size: $vxe-radio-font-size-medium;
     }
   }
   &.size--small {
@@ -429,22 +449,17 @@ select.vxe-select,
       }
     }
     .vxe-cell {
+      .vxe-default-input,
+      .vxe-default-textarea,
       .vxe-default-select,
-      .vxe-input,
-      .vxe-textarea {
+      .vxe-input {
         height: floor($vxe-table-row-height-small - 6);
       }
-      .vxe-input {
-        .vxe-input--inner {
-          &[type="date"]::-webkit-inner-spin-button {
-            margin-top: 2px;
-          }
+      .vxe-default-input {
+        &[type="date"]::-webkit-inner-spin-button {
+          margin-top: 2px;
         }
       }
-    }
-    .vxe-cell--checkbox .vxe-checkbox--icon,
-    .vxe-cell--radio .vxe-radio--icon {
-      font-size: $vxe-radio-font-size-small;
     }
   }
   &.size--mini {
@@ -457,22 +472,17 @@ select.vxe-select,
       }
     }
     .vxe-cell {
+      .vxe-default-input,
+      .vxe-default-textarea,
       .vxe-default-select,
-      .vxe-input,
-      .vxe-textarea {
+      .vxe-input {
         height: floor($vxe-table-row-height-mini - 6);
       }
-      .vxe-input {
-        .vxe-input--inner {
-          &[type="date"]::-webkit-inner-spin-button {
-            margin-top: 0;
-          }
+      .vxe-default-input {
+        &[type="date"]::-webkit-inner-spin-button {
+          margin-top: 0;
         }
       }
-    }
-    .vxe-cell--checkbox .vxe-checkbox--icon,
-    .vxe-cell--radio .vxe-radio--icon {
-      font-size: $vxe-radio-font-size-mini;
     }
   }
   .vxe-cell {
@@ -787,6 +797,10 @@ select.vxe-select,
         }
       }
     }
+    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--radio .vxe-radio--icon {
+      font-size: $vxe-radio-font-size-medium;
+    }
   }
   &.size--small {
     .vxe-header--column,
@@ -804,6 +818,10 @@ select.vxe-select,
         }
       }
     }
+    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--radio .vxe-radio--icon {
+      font-size: $vxe-radio-font-size-small;
+    }
   }
   &.size--mini {
     .vxe-header--column,
@@ -820,6 +838,10 @@ select.vxe-select,
           max-height: $vxe-table-row-height-mini;
         }
       }
+    }
+    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--radio .vxe-radio--icon {
+      font-size: $vxe-radio-font-size-mini;
     }
   }
 

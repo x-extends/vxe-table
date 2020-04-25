@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import VxeModal from '../../modal/src/modal'
 import VxeRadio from '../../radio/src/radio'
