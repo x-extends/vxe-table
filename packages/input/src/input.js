@@ -1272,9 +1272,10 @@ export default {
     datePgOffsetEvent (evnt) {
       const { isActivated } = this
       if (isActivated) {
+        const isPgUp = evnt.keyCode === 33
         evnt.preventDefault()
-        if (evnt.keyCode === 33) {
-          this.dateNextEvent(evnt)
+        if (isPgUp) {
+          this.datePrevEvent(evnt)
         } else {
           this.dateNextEvent(evnt)
         }
@@ -1418,8 +1419,6 @@ export default {
         if (!this.isActivated) {
           if (visiblePanel) {
             this.hidePanel()
-          }
-          if (isActivated) {
             this.afterCheckValue()
           }
         }
