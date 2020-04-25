@@ -11,6 +11,7 @@
 
     <vxe-table
       resizable
+      auto-resize
       highlight-current-row
       highlight-hover-row
       highlight-current-column

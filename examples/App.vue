@@ -74,8 +74,13 @@
           </template>
         </div>
       </div>
+      <div class="oper-wrapper" @click="showLeft = !showLeft" v-show="['VXEAPI', 'Donation', 'Run'].includes($route.name)">
+        <div class="oper-btn">
+          <i :class="showLeft ? 'vxe-icon--arrow-left' : 'vxe-icon--arrow-right'"></i>
+        </div>
+      </div>
       <div class="body">
-        <div class="content" :class="{full: ['VXEAPI', 'Donation'].includes($route.name)}">
+        <div class="content" :class="{full: ['VXEAPI', 'Donation', 'Run'].includes($route.name)}">
           <template v-if="!/\/start|\/module|\/api/.test($route.path)">
             <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank"><i class="fa fa-bug"></i>{{ $t('app.body.button.runDemo') }}</a>
           </template>

@@ -287,10 +287,10 @@ module.exports = {
       },
       other: {
         plan: {
-          v1: 'v1 Achieve all the practical functions of the table.',
-          v2: 'v2 Performance optimization, both functional and performance.',
-          v3: 'v3 Internal refactoring, for modern browsers, no longer support IE, rendering performance improvements.',
-          v4: 'v4 Based on vue3 refactoring, rendering performance improved.'
+          vv1: 'v1 Based on vue2, support all the mainstream browsers and IE11+, to achieve all the practical functions of the table',
+          v2: 'v2 Based on vue2+, support all mainstream browsing and IE11+, both function and performance',
+          v3: 'v3 Based on vue2, only support H5 browser, do not support IE, rendering performance significantly improved',
+          v4: 'v4 Based on vue3, only support H5 browser, do not support IE, rendering performance significantly improved'
         },
         ways: {
           wechat: 'Donate via the following wechat code scanning',
