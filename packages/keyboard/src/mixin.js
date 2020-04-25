@@ -8,53 +8,42 @@ export default {
       const { afterFullData, visibleColumn, editConfig, editOpts } = this
       let targetRow
       let targetRowIndex
-      let targetColumn
       let targetColumnIndex
       const params = Object.assign({}, args)
-      const rowIndex = afterFullData.indexOf(params.row)
-      const columnIndex = visibleColumn.indexOf(params.column)
+      const _rowIndex = this._getRowIndex(params.row)
+      const _columnIndex = this._getColumnIndex(params.column)
       evnt.preventDefault()
       if (isLeft) {
         // 向左
-        for (let len = columnIndex - 1; len >= 0; len--) {
-          targetColumnIndex = len
-          targetColumn = visibleColumn[len]
-          break
-        }
-        if (!targetColumn && rowIndex > 0) {
-          // 如果找不到从上一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
-          targetRowIndex = rowIndex - 1
-          targetRow = afterFullData[targetRowIndex]
-          for (let len = visibleColumn.length - 1; len >= 0; len--) {
-            targetColumnIndex = len
-            targetColumn = visibleColumn[len]
-            break
+        if (_columnIndex <= 0) {
+          // 如果已经是第一列，则移动到上一行
+          if (_rowIndex > 0) {
+            targetRowIndex = _rowIndex - 1
+            targetRow = afterFullData[targetRowIndex]
+            targetColumnIndex = visibleColumn.length - 1
           }
+        } else {
+          targetColumnIndex = _columnIndex - 1
         }
       } else {
-        // 向右
-        for (let index = columnIndex + 1; index < visibleColumn.length; index++) {
-          targetColumnIndex = index
-          targetColumn = visibleColumn[index]
-          break
-        }
-        if (!targetColumn && rowIndex < afterFullData.length - 1) {
-          // 如果找不到从下一行开始找，如果一行都找不到就不需要继续找了，可能不存在可编辑的列
-          targetRowIndex = rowIndex + 1
-          targetRow = afterFullData[targetRowIndex]
-          for (let index = 0; index < visibleColumn.length; index++) {
-            targetColumnIndex = index
-            targetColumn = visibleColumn[index]
-            break
+        if (_columnIndex >= visibleColumn.length - 1) {
+          // 如果已经是第一列，则移动到上一行
+          if (_rowIndex < afterFullData.length - 1) {
+            targetRowIndex = _rowIndex + 1
+            targetRow = afterFullData[targetRowIndex]
+            targetColumnIndex = 0
           }
+        } else {
+          targetColumnIndex = _columnIndex + 1
         }
       }
+      const targetColumn = visibleColumn[targetColumnIndex]
       if (targetColumn) {
         if (targetRow) {
           params.rowIndex = targetRowIndex
           params.row = targetRow
         } else {
-          params.rowIndex = rowIndex
+          params.rowIndex = _rowIndex
         }
         params.columnIndex = targetColumnIndex
         params.column = targetColumn
@@ -101,29 +90,25 @@ export default {
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
       const { afterFullData, visibleColumn } = this
       const params = Object.assign({}, args)
-      let _rowIndex = this._getRowIndex(params.row)
+      const _rowIndex = this._getRowIndex(params.row)
+      const _columnIndex = this._getColumnIndex(params.column)
       evnt.preventDefault()
-      if (isUpArrow && _rowIndex) {
-        _rowIndex -= 1
-        params.row = afterFullData[_rowIndex]
+      if (isUpArrow && _rowIndex > 0) {
+        // 移动到上一行
+        params.rowIndex = _rowIndex - 1
+        params.row = afterFullData[params.rowIndex]
       } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
-        _rowIndex += 1
-        params.row = afterFullData[_rowIndex]
-      } else if (isLeftArrow && params.columnIndex) {
-        for (let len = params.columnIndex - 1; len >= 0; len--) {
-          params.columnIndex = len
-          params.column = visibleColumn[len]
-          break
-        }
-      } else if (isRightArrow) {
-        for (let index = params.columnIndex + 1; index < visibleColumn.length; index++) {
-          params.columnIndex = index
-          params.column = visibleColumn[index]
-          break
-        }
-      }
-      if (params.rowIndex > -1) {
-        params.rowIndex = _rowIndex
+        // 移动到下一行
+        params.rowIndex = _rowIndex + 1
+        params.row = afterFullData[params.rowIndex]
+      } else if (isLeftArrow && _columnIndex) {
+        // 移动到左侧单元格
+        params.columnIndex = _columnIndex - 1
+        params.column = visibleColumn[params.columnIndex]
+      } else if (isRightArrow && _columnIndex < visibleColumn.length - 1) {
+        // 移动到右侧单元格
+        params.columnIndex = _columnIndex + 1
+        params.column = visibleColumn[params.columnIndex]
       }
       this.scrollToRow(params.row, params.column).then(() => {
         params.cell = DomTools.getCell(this, params)
