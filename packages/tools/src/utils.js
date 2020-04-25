@@ -9,25 +9,25 @@ function getColFuncWidth (isExists, defaultWidth = 16) {
   return isExists ? defaultWidth : 0
 }
 
-function buildField (column) {
-  const { property } = column
-  return 'row' + (/^\d+/.test(property) ? `[${property}]` : (/^\[/.test(property) ? property : `.${property}`))
-}
+// function buildField (column) {
+//   const { property } = column
+//   return 'row' + (/^\d+/.test(property) ? `[${property}]` : (/^\[/.test(property) ? property : `.${property}`))
+// }
 
-function buildGetField (column) {
-  /* eslint-disable no-new-func */
-  return new Function('row', 'return ' + (column.property ? buildField(column) : 'null'))
-}
+// function buildGetField (column) {
+//   /* eslint-disable no-new-func */
+//   return new Function('row', 'return ' + (column.property ? buildField(column) : 'null'))
+// }
 
-function buildSetField (column) {
-  /* eslint-disable no-new-func */
-  return new Function('row,value', column.property ? buildField(column) + '=value' : '')
-}
+// function buildSetField (column) {
+//   /* eslint-disable no-new-func */
+//   return new Function('row,value', column.property ? buildField(column) + '=value' : '')
+// }
 
-function handleColumnField (column) {
-  column.gVal = buildGetField(column)
-  column.sVal = buildSetField(column)
-}
+// function handleColumnField (column) {
+//   column.gVal = buildGetField(column)
+//   column.sVal = buildSetField(column)
+// }
 
 class ColumnConfig {
   /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -120,16 +120,16 @@ class ColumnConfig {
     if (proxyOpts && proxyOpts.beforeColumn) {
       proxyOpts.beforeColumn({ $grid: $xegrid, column: this })
     }
-    handleColumnField(this)
+    // handleColumnField(this)
   }
 
-  getValueByRow (row) {
-    return this.gVal(row)
-  }
+  // getValueByRow (row) {
+  //   return this.gVal(row)
+  // }
 
-  setValueByRow (row) {
-    this.sVal(row)
-  }
+  // setValueByRow (row) {
+  //   this.sVal(row)
+  // }
 
   getTitle () {
     return UtilTools.getFuncText(this.own.title || (this.type === 'seq' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
@@ -148,9 +148,9 @@ class ColumnConfig {
     // 不支持双向的属性
     if (name !== 'filters') {
       this[name] = value
-      if (name === 'field') {
-        handleColumnField(this)
-      }
+      // if (name === 'field') {
+      //   handleColumnField(this)
+      // }
     }
   }
 }

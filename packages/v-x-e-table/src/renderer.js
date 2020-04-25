@@ -5,14 +5,6 @@ import { UtilTools } from '../../tools'
 const inputEventTypes = ['input', 'textarea', '$input', '$textarea']
 const defaultCompProps = { transfer: true }
 
-function getModelProp () {
-  return 'value'
-}
-
-function getModelEvent () {
-  return 'input'
-}
-
 function getChangeEvent (renderOpts) {
   return inputEventTypes.indexOf(renderOpts.name) > -1 ? 'input' : 'change'
 }
@@ -48,17 +40,17 @@ function getNativeAttrs ({ name, attrs }) {
 
 function getCellEditFilterProps (renderOpts, params, value, defaultProps) {
   const { vSize } = params.$table
-  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [getModelProp(renderOpts)]: value })
+  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { value })
 }
 
 function getItemProps (renderOpts, params, value, defaultProps) {
   const { vSize } = params.$form
-  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [getModelProp(renderOpts)]: value })
+  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { value })
 }
 
 function getOns (renderOpts, params, inputFunc, changeFunc) {
   const { events } = renderOpts
-  const modelEvent = getModelEvent(renderOpts)
+  const modelEvent = 'input'
   const changeEvent = getChangeEvent(renderOpts)
   const isSameEvent = changeEvent === modelEvent
   const ons = {}
