@@ -40,7 +40,11 @@ export default {
       expSuccess: '导出成功',
       expFilename: '导出_{{0}}',
       expOriginFilename: '导出_源_{{0}}',
-      expSheetName: 'Sheet1'
+      expSheetName: 'Sheet1',
+      customTitle: '列设置',
+      customAll: '全部',
+      customConfirm: '确认',
+      customRestore: '还原'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',

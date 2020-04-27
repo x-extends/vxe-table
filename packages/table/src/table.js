@@ -385,7 +385,6 @@ export default {
       },
       // 自定义列相关信息
       customStore: {
-        columns: [],
         visible: false
       }
     }
@@ -501,7 +500,7 @@ export default {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
     },
     customOpts () {
-      return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig === true ? { storage: true } : this.customConfig)
+      return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig)
     },
     tableBorder () {
       const { border } = this
@@ -958,6 +957,15 @@ export default {
         props: {
           defaultOptions: this.exportParams,
           storeData: this.exportStore
+        }
+      }) : _e(),
+      /**
+       * 自定义列
+       */
+      this.customConfig ? h('vxe-custom-panel', {
+        props: {
+          storeData: this.customStore,
+          collectColumn: this.collectColumn
         }
       }) : _e(),
       h('div', {

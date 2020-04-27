@@ -181,11 +181,14 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     _getUpdateRecords () {
-      const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
-      if (treeConfig) {
-        return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
+      const { keepSource, tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      if (keepSource) {
+        if (treeConfig) {
+          return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
+        }
+        return tableFullData.filter(row => isUpdateByRow(row))
       }
-      return tableFullData.filter(row => isUpdateByRow(row))
+      return []
     },
     /**
      * 处理激活编辑

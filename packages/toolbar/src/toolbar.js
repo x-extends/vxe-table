@@ -72,6 +72,9 @@ function renderCustoms (h, _vm) {
   const checkMethod = $xetable ? $xetable.customOpts.checkMethod : null
   if (customOpts.trigger === 'manual') {
     // 手动触发
+  } if (customOpts.trigger === 'popup') {
+    // 弹窗
+    customBtnOns.click = _vm.customPanelEvent
   } else if (customOpts.trigger === 'hover') {
     // hover 触发
     customBtnOns.mouseenter = _vm.handleMouseenterSettingEvent
@@ -143,7 +146,7 @@ function renderCustoms (h, _vm) {
     h('div', {
       class: 'vxe-custom--option-wrapper'
     }, [
-      h('div', {
+      h('ul', {
         class: 'vxe-custom--header'
       }, [
         h('li', {
@@ -358,7 +361,7 @@ export default {
       }
       UtilTools.error('vxe.error.barUnableLink')
     },
-    openCustom () {
+    showCustom () {
       this.customStore.visible = true
       this.checkCustomStatus()
     },
@@ -379,7 +382,7 @@ export default {
       const { customStore } = this
       if (this.checkTable()) {
         if (!customStore.visible) {
-          this.openCustom()
+          this.showCustom()
           this.emitCustomEvent('open', evnt)
         }
       }
@@ -457,6 +460,10 @@ export default {
       })
       customStore.isAll = isAll
       this.checkCustomStatus()
+    },
+    customPanelEvent () {
+      const { $xetable } = this
+      $xetable.openCustom()
     },
     handleGlobalMousedownEvent (evnt) {
       if (!DomTools.getEventTargetNode(evnt, this.$refs.customWrapper).flag) {

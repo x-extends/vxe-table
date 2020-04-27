@@ -19,7 +19,6 @@ const components = [
   'footer',
   'filter',
   'menu',
-  'export',
   'toolbar',
   'grid',
   'pager',
@@ -36,6 +35,8 @@ const components = [
   'list',
 
   'edit',
+  'export',
+  'custom',
   'keyboard',
   'validator',
   'resize',

@@ -40,7 +40,11 @@ export default {
       expSuccess: 'Export success',
       expFilename: 'Export_{{0}}',
       expOriginFilename: 'Export_original_{{0}}',
-      expSheetName: 'Sheet1'
+      expSheetName: 'Sheet1',
+      customTitle: 'Column settings',
+      customAll: 'All',
+      customConfirm: 'Confirm',
+      customRestore: 'Restore'
     },
     grid: {
       selectOneRecord: 'Please choose at least one piece of record!',

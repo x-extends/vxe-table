@@ -40,7 +40,11 @@ export default {
       expSuccess: '匯出成功',
       expOriginFilename: '匯出_{{0}}',
       expSrcFilename: '匯出_據_{{0}}',
-      expSheetName: 'Sheet1'
+      expSheetName: 'Sheet1',
+      customTitle: '列設定',
+      customAll: '全部',
+      customConfirm: '确认',
+      customRestore: '還原'
     },
     grid: {
       selectOneRecord: '請至少選擇一條記錄！',

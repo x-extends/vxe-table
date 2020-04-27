@@ -26,6 +26,7 @@ import {
 
   Edit,
   Export,
+  Custom,
   Keyboard,
   Validator,
   Resize
@@ -83,6 +84,7 @@ Vue.use(List)
 
 Vue.use(Edit)
 Vue.use(Export)
+Vue.use(Custom)
 Vue.use(Keyboard)
 Vue.use(Validator)
 Vue.use(Resize)

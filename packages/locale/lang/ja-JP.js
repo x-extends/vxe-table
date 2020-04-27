@@ -40,7 +40,11 @@ export default {
       expSuccess: 'エクスポートが成功しました',
       expOriginFilename: 'エクスポート_{{0}}',
       expSrcFilename: 'エクスポート_ソース_{{0}}',
-      expSheetName: 'Sheet1'
+      expSheetName: 'Sheet1',
+      customTitle: '列设置',
+      customAll: '全部',
+      customConfirm: '确认',
+      customRestore: '还原'
     },
     grid: {
       selectOneRecord: '少なくとも1つのレコードを選択してください',

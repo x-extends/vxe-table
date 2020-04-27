@@ -479,6 +479,8 @@ const Methods = {
         return this.$nextTick()
       }
       return this.reloadData(tableSourceData)
+    } else {
+      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
     }
     return this.$nextTick()
   },
@@ -3311,7 +3313,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,clearFilter,closeMenu,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,clearFilter,closeMenu,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {
