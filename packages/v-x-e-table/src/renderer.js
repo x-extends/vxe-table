@@ -113,7 +113,7 @@ function getItemOns (renderOpts, params) {
 }
 
 function isSyncCell (renderOpts, params) {
-  return renderOpts.immediate || renderOpts.type === 'visible' || params.$type === 'cell'
+  return renderOpts.immediate || params.$type === 'cell'
 }
 
 function getNativeEditOns (renderOpts, params) {

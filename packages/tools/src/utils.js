@@ -39,6 +39,10 @@ class ColumnConfig {
     if (_vm.cellRender && _vm.editRender) {
       UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
     }
+    // 在 v3.0 中废弃 editRender.type
+    if (_vm.editRender && _vm.editRender.type === 'visible') {
+      UtilTools.warn('vxe.error.delProp', ['column.edit-render.type', 'column.cell-render'])
+    }
     if (_vm.type === 'expand') {
       if ($xetable.treeConfig && $xetable.treeOpts.line) {
         UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])

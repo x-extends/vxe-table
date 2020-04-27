@@ -59,8 +59,8 @@ export default {
         { field: 'date10', title: 'ATimePicker', width: 140, editRender: { name: 'ATimePicker' } },
         { field: 'attr1', title: 'ATreeSelect', width: 140, editRender: { name: 'ATreeSelect', props: { treeData: [] } } },
         { field: 'attr2', title: 'ATreeSelect（不建议放在单元格中）', width: 300, editRender: { name: 'ATreeSelect', props: { treeData: [], treeCheckable: true } } },
-        { field: 'flag', title: 'ASwitch', width: 100, editRender: { name: 'ASwitch', type: 'visible' } },
-        { field: 'rate', title: 'ARate', width: 200, editRender: { name: 'ARate', type: 'visible' } }
+        { field: 'flag', title: 'ASwitch', width: 100, cellRender: { name: 'ASwitch' } },
+        { field: 'rate', title: 'ARate', width: 200, cellRender: { name: 'ARate' } }
       ],
       tableToolbar: {
         slots: {
@@ -115,8 +115,8 @@ export default {
                 { field: 'date10', title: 'ATimePicker', width: 140, editRender: { name: 'ATimePicker' } },
                 { field: 'attr1', title: 'ATreeSelect', width: 140, editRender: { name: 'ATreeSelect', props: { treeData: [] } } },
                 { field: 'attr2', title: 'ATreeSelect（不建议放在单元格中）', width: 300, editRender: { name: 'ATreeSelect', props: { treeData: [], treeCheckable: true } } },
-                { field: 'flag', title: 'ASwitch', width: 100, editRender: { name: 'ASwitch', type: 'visible' } },
-                { field: 'rate', title: 'ARate', width: 200, editRender: { name: 'ARate', type: 'visible' } }
+                { field: 'flag', title: 'ASwitch', width: 100, cellRender: { name: 'ASwitch' } },
+                { field: 'rate', title: 'ARate', width: 200, cellRender: { name: 'ARate' } }
               ],
               tableToolbar: {
                 slots: {

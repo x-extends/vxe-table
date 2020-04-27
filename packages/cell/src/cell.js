@@ -638,7 +638,7 @@ export const Cell = {
     const { slots, own, formatter } = column
     const editRender = own.editRender
     const compConf = VXETable.renderer.get(editRender.name)
-    if (editRender.type === 'visible' || isEdit) {
+    if (isEdit) {
       if (slots && slots.edit) {
         return slots.edit.call($table, params, h)
       }

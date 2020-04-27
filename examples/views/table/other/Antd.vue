@@ -72,13 +72,13 @@
         </template>
         <template v-slot="{ row }">{{ formatDate(row.date7, 'YYYY/MM/DD hh:mm:ss') }}</template>
       </vxe-table-column>
-      <vxe-table-column field="rate" title="ARate" width="200" :edit-render="{type: 'visible'}">
-        <template v-slot:edit="{ row }">
+      <vxe-table-column field="rate" title="ARate" width="200">
+        <template v-slot="{ row }">
           <a-rate v-model="row.rate"></a-rate>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{type: 'visible'}">
-        <template v-slot:edit="{ row }">
+      <vxe-table-column field="flag" title="ElSwitch" width="100">
+        <template v-slot="{ row }">
           <a-switch v-model="row.flag"></a-switch>
         </template>
       </vxe-table-column>
@@ -179,13 +179,13 @@ export default {
             </template>
             <template v-slot="{ row }">{{ formatDate(row.date7, 'YYYY/MM/DD hh:mm:ss') }}</template>
           </vxe-table-column>
-          <vxe-table-column field="rate" title="ARate" width="200" :edit-render="{type: 'visible'}">
-            <template v-slot:edit="{ row }">
+          <vxe-table-column field="rate" title="ARate" width="200">
+            <template v-slot="{ row }">
               <a-rate v-model="row.rate"></a-rate>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{type: 'visible'}">
-            <template v-slot:edit="{ row }">
+          <vxe-table-column field="flag" title="ElSwitch" width="100">
+            <template v-slot="{ row }">
               <a-switch v-model="row.flag"></a-switch>
             </template>
           </vxe-table-column>

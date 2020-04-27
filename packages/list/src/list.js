@@ -97,7 +97,7 @@ export default {
       scrollYStore.startIndex = 0
       scrollYStore.visibleIndex = 0
       this.fullData = fullData
-      this.scrollYLoad = fullData.length > sYOpts.gt
+      this.scrollYLoad = sYOpts.gt > -1 && fullData.length > sYOpts.gt
       this.handleData()
       return this.computeScrollLoad().then(() => {
         this.refreshScroll()

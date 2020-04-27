@@ -77,13 +77,13 @@
           <TimePicker v-model="row.date2" type="time" transfer></TimePicker>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200" :edit-render="{type: 'visible'}">
-        <template v-slot:edit="{ row }">
+      <vxe-table-column field="rate" title="Rate" width="200">
+        <template v-slot="{ row }">
           <Rate v-model="row.rate" />
         </template>
       </vxe-table-column>
-      <vxe-table-column field="flag" title="iSwitch" width="100" :edit-render="{type: 'visible'}">
-        <template v-slot:edit="{ row }">
+      <vxe-table-column field="flag" title="iSwitch" width="100">
+        <template v-slot="{ row }">
           <iSwitch v-model="row.flag"/>
         </template>
       </vxe-table-column>
@@ -185,13 +185,13 @@ export default {
               <TimePicker v-model="row.date2" type="time" transfer></TimePicker>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200" :edit-render="{type: 'visible'}">
-            <template v-slot:edit="{ row }">
+          <vxe-table-column field="rate" title="Rate" width="200">
+            <template v-slot="{ row }">
               <Rate v-model="row.rate" />
             </template>
           </vxe-table-column>
-          <vxe-table-column field="flag" title="iSwitch" width="100" :edit-render="{type: 'visible'}">
-            <template v-slot:edit="{ row }">
+          <vxe-table-column field="flag" title="iSwitch" width="100">
+            <template v-slot="{ row }">
               <iSwitch v-model="row.flag"/>
             </template>
           </vxe-table-column>
