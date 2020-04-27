@@ -143,7 +143,7 @@ function renderCustoms (h, _vm) {
     h('div', {
       class: 'vxe-custom--option-wrapper'
     }, [
-      h('div', {
+      h('ul', {
         class: 'vxe-custom--header'
       }, [
         h('li', {
@@ -382,7 +382,7 @@ export default {
       }
       UtilTools.error('vxe.error.barUnableLink')
     },
-    openCustom () {
+    showCustom () {
       this.customStore.visible = true
       this.checkCustomStatus()
     },
@@ -403,7 +403,7 @@ export default {
       const { customStore } = this
       if (this.checkTable()) {
         if (!customStore.visible) {
-          this.openCustom()
+          this.showCustom()
           this.emitCustomEvent('open', evnt)
         }
       }

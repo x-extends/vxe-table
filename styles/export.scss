@@ -60,13 +60,14 @@
       }
     }
     .vxe-export--panel-column-header {
+      padding: 0.1em 0;
       background-color: #f8f8f9;
       font-weight: 700;
       border-bottom: 1px solid #DADCE0;
     }
     .vxe-export--panel-column-body {
       padding: 0.2em 0;
-      max-height: 208px;
+      max-height: 16em;
     }
   }
   .vxe-import-selected--file {

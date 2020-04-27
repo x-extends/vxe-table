@@ -513,7 +513,7 @@ export default {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
     },
     customOpts () {
-      return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig === true ? { storage: true } : this.customConfig)
+      return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig)
     },
     tableBorder () {
       const { border } = this

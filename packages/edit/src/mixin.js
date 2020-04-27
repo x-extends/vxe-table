@@ -186,16 +186,18 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     _getUpdateRecords () {
-      const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      const { keepSource, tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
       // 在 v3 中必须要开启 keep-source
-      if (!this.keepSource) {
+      if (!keepSource) {
         UtilTools.warn('vxe.error.reqProp', ['keep-source'])
-        return []
       }
-      if (treeConfig) {
-        return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
+      if (keepSource) {
+        if (treeConfig) {
+          return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
+        }
+        return tableFullData.filter(row => isUpdateByRow(row))
       }
-      return tableFullData.filter(row => isUpdateByRow(row))
+      return []
     },
     /**
      * 处理激活编辑
