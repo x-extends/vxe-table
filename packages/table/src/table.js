@@ -371,8 +371,7 @@ export default {
         typeList: [],
         columns: [],
         hasFooter: false,
-        visible: false,
-        isTree: false
+        visible: false
       },
       exportParams: {
         filename: '',
@@ -383,6 +382,11 @@ export default {
         message: true,
         isHeader: false,
         isFooter: false
+      },
+      // 自定义列相关信息
+      customStore: {
+        columns: [],
+        visible: false
       }
     }
   },
@@ -639,7 +643,7 @@ export default {
     if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
       UtilTools.warn('vxe.error.reqProp', ['row-id'])
     }
-    if (editOpts.showStatus && !this.keepSource) {
+    if (this.editConfig && editOpts.showStatus && !this.keepSource) {
       UtilTools.warn('vxe.error.reqProp', ['keep-source'])
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {

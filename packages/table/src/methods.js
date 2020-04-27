@@ -1467,7 +1467,7 @@ const Methods = {
               if (editOpts.mode === 'row') {
                 const rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
                 // row 方式，如果点击了不同行
-                isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : false
+                isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== actived.args.row : false
               } else {
                 // cell 方式，如果是非编辑列
                 isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag

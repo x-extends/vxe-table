@@ -786,9 +786,8 @@ export default {
       Object.assign(this.importParams, defOpts)
     },
     _openExport (options) {
-      const { exportConfig, customOpts, exportOpts, treeConfig, collectColumn, footerData } = this
+      const { exportConfig, customOpts, exportOpts, collectColumn, footerData } = this
       const selectRecords = this.getCheckboxRecords()
-      const isTree = !!treeConfig
       const hasFooter = !!footerData.length
       const defOpts = Object.assign({ message: true, isHeader: true }, exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
@@ -825,8 +824,7 @@ export default {
         typeList,
         modeList,
         hasFooter: hasFooter,
-        visible: true,
-        isTree
+        visible: true
       })
       // 重置参数
       Object.assign(this.exportParams, {

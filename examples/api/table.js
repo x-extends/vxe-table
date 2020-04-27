@@ -1654,7 +1654,7 @@ const apis = [
           },
           {
             name: 'showStatus',
-            desc: '是否显示单元格值的修改状态（需要设置 keep-source）',
+            desc: '只对 keep-source 开启有效，是否显示单元格值的修改状态',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -1953,7 +1953,7 @@ const apis = [
             version: '',
             type: 'Number',
             enum: '',
-            defVal: '60',
+            defVal: '40',
             list: []
           },
           {
@@ -1999,7 +1999,7 @@ const apis = [
             version: '',
             type: 'Number',
             enum: '',
-            defVal: '100',
+            defVal: '50',
             list: []
           },
           {
@@ -2766,7 +2766,7 @@ const apis = [
       },
       {
         name: 'getUpdateRecords()',
-        desc: '用于 edit-config，获取已修改的数据',
+        desc: '只对 keep-source 开启有效，获取已修改的数据',
         version: '',
         type: 'Array',
         enum: '',

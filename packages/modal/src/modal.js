@@ -270,7 +270,7 @@ export default {
       this.close(type)
     },
     open () {
-      const { $listeners, events = {}, duration, visible, isMsg, remember } = this
+      const { events = {}, duration, visible, isMsg, remember } = this
       if (!visible) {
         const type = 'show'
         const params = { type, $modal: this, $event: { type } }
@@ -284,12 +284,11 @@ export default {
         setTimeout(() => {
           this.contentVisible = true
           this.$nextTick(() => {
-            if (!events.show) {
+            if (events.show) {
+              events.show.call(this, params)
+            } else {
               this.$emit('input', true)
               this.$emit('show', params)
-            }
-            if (!$listeners.show && events.show) {
-              events.show.call(this, params)
             }
           })
         }, 10)
@@ -354,17 +353,15 @@ export default {
         if (!remember) {
           this.zoomLocat = null
         }
-        if (events.hide) {
-          events.hide.call(this, params)
-        } else {
-          this.$emit('hide', params)
-        }
+        this.$emit('deactivated', params)
         setTimeout(() => {
           this.visible = false
-          if (!events.hide) {
+          if (events.hide) {
+            events.hide.call(this, params)
+          } else {
             this.$emit('input', false)
+            this.$emit('hide', params)
           }
-          this.$emit('deactivated', params)
         }, 200)
       }
     },
@@ -471,17 +468,15 @@ export default {
           }
           modalBoxElem.style.left = `${left}px`
           modalBoxElem.style.top = `${top}px`
-          modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
         }
         document.onmouseup = () => {
           document.onmousemove = demMousemove
           document.onmouseup = demMouseup
-          this.$nextTick(() => {
-            modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '')
-            if (remember && storage) {
+          if (remember && storage) {
+            this.$nextTick(() => {
               this.savePosStorage()
-            }
-          })
+            })
+          }
         }
       }
     },

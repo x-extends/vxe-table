@@ -23,6 +23,7 @@ import List from './list'
 
 import Edit from './edit'
 import Export from './export'
+import Custom from './custom'
 import Keyboard from './keyboard'
 import Validator from './validator'
 import Resize from './resize'
@@ -53,6 +54,7 @@ const components = [
 
   Edit,
   Export,
+  Custom,
   Keyboard,
   Validator,
   Resize,
@@ -103,6 +105,7 @@ export * from './list'
 
 export * from './edit'
 export * from './export'
+export * from './custom'
 export * from './keyboard'
 export * from './validator'
 export * from './resize'
