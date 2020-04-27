@@ -3,6 +3,7 @@ import GlobalConfig from '../../conf'
 import VxeModal from '../../modal/src/modal'
 import VxeInput from '../../input/src/input'
 import VxeCheckbox from '../../checkbox/src/checkbox'
+import { UtilTools } from '../../tools'
 
 export default {
   name: 'VxeCustomPanel',
@@ -40,7 +41,7 @@ export default {
     const checkMethod = $xetable ? $xetable.customOpts.checkMethod : null
     const cols = []
     XEUtils.eachTree(collectColumn, column => {
-      const colTitle = column.getTitle()
+      const colTitle = UtilTools.formatText(column.getTitle(), 1)
       const isColGroup = column.children && column.children.length
       const isDisabled = checkMethod ? !checkMethod({ column }) : false
       cols.push(
