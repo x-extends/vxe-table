@@ -541,8 +541,7 @@ export default {
         typeList: [],
         columns: [],
         hasFooter: false,
-        visible: false,
-        isTree: false
+        visible: false
       },
       exportParams: {
         filename: '',
@@ -827,7 +826,7 @@ export default {
     if (radioOpts.labelProp) {
       UtilTools.warn('vxe.error.delProp', ['radio-config.labelProp', 'radio-config.labelField'])
     }
-    if (editOpts.showStatus && !this.keepSource) {
+    if (this.editConfig && editOpts.showStatus && !this.keepSource) {
       UtilTools.warn('vxe.error.reqProp', ['keep-source'])
     }
     // 在 v3.0 中废弃 select-config
@@ -1345,28 +1344,29 @@ export default {
         .then(this.handleDefaults)
     },
     reloadRow (row, record, field) {
-      const { keepSource, tableSourceData, tableData } = this
-      if (keepSource) {
-        const rowIndex = this.getRowIndex(row)
-        const oRow = tableSourceData[rowIndex]
-        if (oRow && row) {
-          if (field) {
-            XEUtils.set(oRow, field, XEUtils.get(record || row, field))
+      const { tableSourceData, tableData } = this
+      // 在 v3 中必须要开启 keep-source
+      if (!this.keepSource) {
+        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+        return this.$nextTick()
+      }
+      const rowIndex = this.getRowIndex(row)
+      const oRow = tableSourceData[rowIndex]
+      if (oRow && row) {
+        if (field) {
+          XEUtils.set(oRow, field, XEUtils.get(record || row, field))
+        } else {
+          if (record) {
+            tableSourceData[rowIndex] = record
+            XEUtils.clear(row, undefined)
+            Object.assign(row, this.defineField(Object.assign({}, record)))
+            this.updateCache(true)
           } else {
-            if (record) {
-              tableSourceData[rowIndex] = record
-              XEUtils.clear(row, undefined)
-              Object.assign(row, this.defineField(Object.assign({}, record)))
-              this.updateCache(true)
-            } else {
-              XEUtils.destructuring(oRow, XEUtils.clone(row, true))
-            }
+            XEUtils.destructuring(oRow, XEUtils.clone(row, true))
           }
         }
-        this.tableData = tableData.slice(0)
-      } else {
-        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
       }
+      this.tableData = tableData.slice(0)
       return this.$nextTick()
     },
     loadColumn (columns) {
@@ -1681,6 +1681,7 @@ export default {
       })
     },
     removeSelecteds () {
+      // 在 v3 中废弃 removeSelecteds
       UtilTools.warn('vxe.error.delFunc', ['removeSelecteds', 'removeCheckboxRow'])
       return this.removeCheckboxRow()
     },
@@ -1725,30 +1726,32 @@ export default {
      * 如果还额外传了 field 则还原指定单元格
      */
     revertData (rows, field) {
-      const { keepSource, tableSourceData, tableFullData } = this
-      if (keepSource) {
-        if (arguments.length) {
-          if (rows && !XEUtils.isArray(rows)) {
-            rows = [rows]
-          }
-          rows.forEach(row => {
-            if (!this.isInsertByRow(row)) {
-              const rowIndex = tableFullData.indexOf(row)
-              const oRow = tableSourceData[rowIndex]
-              if (oRow && row) {
-                if (field) {
-                  XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-                } else {
-                  XEUtils.destructuring(row, XEUtils.clone(oRow, true))
-                }
+      const { tableSourceData, tableFullData } = this
+      // 在 v3 中必须要开启 keep-source
+      if (!this.keepSource) {
+        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+        return this.$nextTick()
+      }
+      if (arguments.length) {
+        if (rows && !XEUtils.isArray(rows)) {
+          rows = [rows]
+        }
+        rows.forEach(row => {
+          if (!this.isInsertByRow(row)) {
+            const rowIndex = tableFullData.indexOf(row)
+            const oRow = tableSourceData[rowIndex]
+            if (oRow && row) {
+              if (field) {
+                XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+              } else {
+                XEUtils.destructuring(row, XEUtils.clone(oRow, true))
               }
             }
-          })
-          return this.$nextTick()
-        }
-        return this.reloadData(tableSourceData)
+          }
+        })
+        return this.$nextTick()
       }
-      return this.$nextTick()
+      return this.reloadData(tableSourceData)
     },
     /**
      * 清空单元格内容
@@ -1937,6 +1940,11 @@ export default {
      */
     getUpdateRecords () {
       const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      // 在 v3 中必须要开启 keep-source
+      if (!this.keepSource) {
+        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+        return []
+      }
       if (treeConfig) {
         return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
       }
@@ -2594,7 +2602,7 @@ export default {
                 if (editOpts.mode === 'row') {
                   const rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
                   // row 方式，如果点击了不同行
-                  isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : false
+                  isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== actived.args.row : false
                 } else {
                   // cell 方式，如果是非编辑列
                   isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag
@@ -5944,9 +5952,8 @@ export default {
       Object.assign(this.importParams, defOpts)
     },
     openExport (options) {
-      const { $toolbar, exportConfig, customOpts, exportOpts, treeConfig, collectColumn, footerData } = this
+      const { $toolbar, exportConfig, customOpts, exportOpts, collectColumn, footerData } = this
       const selectRecords = this.getCheckboxRecords()
-      const isTree = !!treeConfig
       const hasFooter = !!footerData.length
       const defOpts = Object.assign({ message: true, isHeader: true }, exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
@@ -5983,8 +5990,7 @@ export default {
         typeList,
         modeList,
         hasFooter: hasFooter,
-        visible: true,
-        isTree
+        visible: true
       })
       // 重置参数
       Object.assign(this.exportParams, {
