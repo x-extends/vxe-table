@@ -124,7 +124,7 @@ const Methods = {
   loadTableData (datas) {
     const { keepSource, treeConfig, editStore, sYOpts, scrollYStore } = this
     const tableFullData = datas ? datas.slice(0) : []
-    const scrollYLoad = !treeConfig && sYOpts && sYOpts.gt && sYOpts.gt < tableFullData.length
+    const scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
     scrollYStore.startIndex = 0
     scrollYStore.visibleIndex = 0
     editStore.insertList = []
@@ -1044,7 +1044,7 @@ const Methods = {
     }
     const visibleColumn = leftList.concat(centerList).concat(rightList)
     let tableColumn = visibleColumn
-    let scrollXLoad = sXOpts && sXOpts.gt && sXOpts.gt < tableFullColumn.length
+    let scrollXLoad = sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad && isGroup) {
       scrollXLoad = false

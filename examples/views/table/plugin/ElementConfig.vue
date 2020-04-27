@@ -55,8 +55,8 @@ export default {
         { field: 'date', title: 'ElDatePicker', width: 200, editRender: { name: 'ElDatePicker', props: { type: 'date', format: 'yyyy/MM/dd' } } },
         { field: 'date1', title: 'DateTimePicker', width: 220, editRender: { name: 'ElDatePicker', props: { type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss' } } },
         { field: 'date5', title: 'ElTimeSelect', width: 200, editRender: { name: 'ElTimeSelect', props: { pickerOptions: { start: '08:30', step: '00:15', end: '18:30' } } } },
-        { field: 'flag', title: 'ElSwitch', width: 100, editRender: { name: 'ElSwitch', type: 'visible' } },
-        { field: 'rate', title: 'ElRate', width: 200, editRender: { name: 'ElRate', type: 'visible' } }
+        { field: 'flag', title: 'ElSwitch', width: 100, cellRender: { name: 'ElSwitch' } },
+        { field: 'rate', title: 'ElRate', width: 200, cellRender: { name: 'ElRate' } }
       ],
       tableToolbar: {
         slots: {
@@ -112,8 +112,8 @@ export default {
                 { field: 'date', title: 'ElDatePicker', width: 200, editRender: { name: 'ElDatePicker', props: { type: 'date', format: 'yyyy/MM/dd' } } },
                 { field: 'date1', title: 'DateTimePicker', width: 220, editRender: { name: 'ElDatePicker', props: { type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss' } } },
                 { field: 'date5', title: 'ElTimeSelect', width: 200, editRender: { name: 'ElTimeSelect', props: { pickerOptions: { start: '08:30', step: '00:15', end: '18:30' } } } },
-                { field: 'flag', title: 'ElSwitch', width: 100, editRender: { name: 'ElSwitch', type: 'visible' } },
-                { field: 'rate', title: 'ElRate', width: 200, editRender: { name: 'ElRate', type: 'visible' } }
+                { field: 'flag', title: 'ElSwitch', width: 100, cellRender: { name: 'ElSwitch' } },
+                { field: 'rate', title: 'ElRate', width: 200, cellRender: { name: 'ElRate' } }
               ],
               tableToolbar: {
                 slots: {

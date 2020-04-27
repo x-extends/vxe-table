@@ -57,6 +57,12 @@ $vxe-table-column-icon-border-color: #c0c4cc;
 $vxe-table-column-icon-border-hover-color: #515A6E;
 
 /*table cell*/
+$vxe-table-cell-padding-left: 10px;
+$vxe-table-cell-padding-right: 10px;
+$vxe-table-cell-input-height-default: $vxe-table-row-height-default - 6;
+$vxe-table-cell-input-height-medium: $vxe-table-row-height-medium - 6;
+$vxe-table-cell-input-height-small: $vxe-table-row-height-small - 6;
+$vxe-table-cell-input-height-mini: $vxe-table-row-height-mini - 6;
 $vxe-table-cell-dirty-width: 5px;
 $vxe-table-cell-dirty-color: #f56c6c;
 

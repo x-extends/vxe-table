@@ -141,7 +141,7 @@
   .vxe-default-textarea,
   .vxe-default-select,
   .vxe-input {
-    height: floor($vxe-table-row-height-default - 6);
+    height: $vxe-table-cell-input-height-default;
   }
   .vxe-default-input {
     &[type="date"]::-webkit-inner-spin-button {
@@ -172,12 +172,6 @@
   .vxe-textarea--inner,
   .vxe-default-textarea {
     resize: none;
-  }
-}
-.vxe-table--filter-wrapper {
-  .vxe-default-input,
-  .vxe-default-textarea {
-    padding: 0 10px;
   }
 }
 
@@ -514,7 +508,7 @@
       .vxe-default-textarea,
       .vxe-default-select,
       .vxe-input {
-        height: floor($vxe-table-row-height-medium - 6);
+        height: $vxe-table-cell-input-height-medium;
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -537,7 +531,7 @@
       .vxe-default-textarea,
       .vxe-default-select,
       .vxe-input {
-        height: floor($vxe-table-row-height-small - 6);
+        height: $vxe-table-cell-input-height-small;
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -560,7 +554,7 @@
       .vxe-default-textarea,
       .vxe-default-select,
       .vxe-input {
-        height: floor($vxe-table-row-height-mini - 6);
+        height: $vxe-table-cell-input-height-mini;
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -572,7 +566,8 @@
   .vxe-cell {
     white-space: normal;
     word-break: break-all;
-    padding: 0 10px;
+    padding-left: $vxe-table-cell-padding-left;
+    padding-right: $vxe-table-cell-padding-right;
   }
 
   // 单选框和复选框

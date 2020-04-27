@@ -113,6 +113,7 @@ function getItemOns (renderOpts, params) {
 }
 
 function isSyncCell (renderOpts, params) {
+  // 在 v3.0 中废弃 editRender.type
   return renderOpts.immediate || renderOpts.type === 'visible' || params.$type === 'cell'
 }
 
