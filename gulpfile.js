@@ -20,7 +20,6 @@ const components = [
   'filter',
   'loading',
   'menu',
-  'export',
   'toolbar',
   'grid',
   'excel',
@@ -37,6 +36,7 @@ const components = [
   'switch',
   'list',
 
+  'export',
   'keyboard',
   'resize',
   'v-x-e-table'

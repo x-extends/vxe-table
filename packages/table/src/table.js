@@ -672,7 +672,7 @@ export default {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
     },
     customOpts () {
-      return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig === true ? { storage: true } : this.customConfig)
+      return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig)
     },
     tableBorder () {
       const { border } = this
@@ -1939,16 +1939,18 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     getUpdateRecords () {
-      const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      const { keepSource, tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
       // 在 v3 中必须要开启 keep-source
-      if (!this.keepSource) {
+      if (!keepSource) {
         UtilTools.warn('vxe.error.reqProp', ['keep-source'])
-        return []
       }
-      if (treeConfig) {
-        return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
+      if (keepSource) {
+        if (treeConfig) {
+          return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
+        }
+        return tableFullData.filter(row => isUpdateByRow(row))
       }
-      return tableFullData.filter(row => isUpdateByRow(row))
+      return []
     },
     /**
      * 获取处理后全量的表格数据
