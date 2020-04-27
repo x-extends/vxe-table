@@ -385,8 +385,7 @@ export default {
         typeList: [],
         columns: [],
         hasFooter: false,
-        visible: false,
-        isTree: false
+        visible: false
       },
       exportParams: {
         filename: '',
@@ -681,7 +680,7 @@ export default {
     if (this.selectConfig) {
       UtilTools.warn('vxe.error.delProp', ['select-config', 'checkbox-config'])
     }
-    if (editOpts.showStatus && !this.keepSource) {
+    if (this.editConfig && editOpts.showStatus && !this.keepSource) {
       UtilTools.warn('vxe.error.reqProp', ['keep-source'])
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {

@@ -1732,7 +1732,7 @@ const apis = [
           },
           {
             name: 'showStatus',
-            desc: '是否显示单元格值的修改状态（需要设置 keep-source）',
+            desc: '只对 keep-source 开启有效是否显示单元格值的修改状态',
             version: '2 | 2.8',
             type: 'Boolean',
             enum: '',
@@ -2929,7 +2929,7 @@ const apis = [
       },
       {
         name: 'getUpdateRecords()',
-        desc: '用于 edit-config，获取已修改的数据',
+        desc: '只对 keep-source 开启有效，获取已修改的数据',
         version: '',
         type: 'Array',
         enum: '',

@@ -116,7 +116,8 @@ export default {
       })
     },
     _removeSelecteds () {
-      // UtilTools.warn('vxe.error.delFunc', ['removeSelecteds', 'removeCheckboxRow'])
+      // 在 v3 中废弃 removeSelecteds
+      UtilTools.warn('vxe.error.delFunc', ['removeSelecteds', 'removeCheckboxRow'])
       return this.removeCheckboxRow()
     },
     /**
@@ -186,6 +187,11 @@ export default {
      */
     _getUpdateRecords () {
       const { tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      // 在 v3 中必须要开启 keep-source
+      if (!this.keepSource) {
+        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+        return []
+      }
       if (treeConfig) {
         return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
       }

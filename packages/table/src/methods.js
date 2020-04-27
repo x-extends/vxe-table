@@ -186,28 +186,29 @@ const Methods = {
    * @param {String} field 字段名
    */
   reloadRow (row, record, field) {
-    const { keepSource, tableSourceData, tableData } = this
-    if (keepSource) {
-      const rowIndex = this.getRowIndex(row)
-      const oRow = tableSourceData[rowIndex]
-      if (oRow && row) {
-        if (field) {
-          XEUtils.set(oRow, field, XEUtils.get(record || row, field))
+    const { tableSourceData, tableData } = this
+    // 在 v3 中必须要开启 keep-source
+    if (!this.keepSource) {
+      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+      return this.$nextTick()
+    }
+    const rowIndex = this.getRowIndex(row)
+    const oRow = tableSourceData[rowIndex]
+    if (oRow && row) {
+      if (field) {
+        XEUtils.set(oRow, field, XEUtils.get(record || row, field))
+      } else {
+        if (record) {
+          tableSourceData[rowIndex] = record
+          XEUtils.clear(row, undefined)
+          Object.assign(row, this.defineField(Object.assign({}, record)))
+          this.updateCache(true)
         } else {
-          if (record) {
-            tableSourceData[rowIndex] = record
-            XEUtils.clear(row, undefined)
-            Object.assign(row, this.defineField(Object.assign({}, record)))
-            this.updateCache(true)
-          } else {
-            XEUtils.destructuring(oRow, XEUtils.clone(row, true))
-          }
+          XEUtils.destructuring(oRow, XEUtils.clone(row, true))
         }
       }
-      this.tableData = tableData.slice(0)
-    } else {
-      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
     }
+    this.tableData = tableData.slice(0)
     return this.$nextTick()
   },
   /**
@@ -469,30 +470,32 @@ const Methods = {
    * 如果还额外传了 field 则还原指定的单元格数据
    */
   revertData (rows, field) {
-    const { keepSource, tableSourceData, tableFullData } = this
-    if (keepSource) {
-      if (arguments.length) {
-        if (rows && !XEUtils.isArray(rows)) {
-          rows = [rows]
-        }
-        rows.forEach(row => {
-          if (!this.isInsertByRow(row)) {
-            const rowIndex = tableFullData.indexOf(row)
-            const oRow = tableSourceData[rowIndex]
-            if (oRow && row) {
-              if (field) {
-                XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-              } else {
-                XEUtils.destructuring(row, XEUtils.clone(oRow, true))
-              }
+    const { tableSourceData, tableFullData } = this
+    // 在 v3 中必须要开启 keep-source
+    if (!this.keepSource) {
+      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+      return this.$nextTick()
+    }
+    if (arguments.length) {
+      if (rows && !XEUtils.isArray(rows)) {
+        rows = [rows]
+      }
+      rows.forEach(row => {
+        if (!this.isInsertByRow(row)) {
+          const rowIndex = tableFullData.indexOf(row)
+          const oRow = tableSourceData[rowIndex]
+          if (oRow && row) {
+            if (field) {
+              XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+            } else {
+              XEUtils.destructuring(row, XEUtils.clone(oRow, true))
             }
           }
-        })
-        return this.$nextTick()
-      }
-      return this.reloadData(tableSourceData)
+        }
+      })
+      return this.$nextTick()
     }
-    return this.$nextTick()
+    return this.reloadData(tableSourceData)
   },
   /**
    * 清空单元格内容
@@ -1564,7 +1567,7 @@ const Methods = {
               if (editOpts.mode === 'row') {
                 const rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
                 // row 方式，如果点击了不同行
-                isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== getRowNode(actived.args.cell.parentNode).item : false
+                isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== actived.args.row : false
               } else {
                 // cell 方式，如果是非编辑列
                 isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag
