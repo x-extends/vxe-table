@@ -83,11 +83,11 @@ function renderCustoms (h, _vm) {
     customBtnOns.click = _vm.handleClickSettingEvent
   }
   XEUtils.eachTree(collectColumn, (column) => {
-    const colTitle = column.getTitle()
+    const colTitle = UtilTools.formatText(column.getTitle(), 1)
     const colKey = column.getKey()
     const isColGroup = column.children && column.children.length
     const isDisabled = checkMethod ? !checkMethod({ column }) : false
-    if (isColGroup || (colTitle && colKey)) {
+    if (isColGroup || colKey) {
       cols.push(
         h('li', {
           class: ['vxe-custom--option', `level--${column.level}`, {

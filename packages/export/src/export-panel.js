@@ -5,6 +5,7 @@ import VxeInput from '../../input/src/input'
 import VxeCheckbox from '../../checkbox/src/checkbox'
 import VxeSelect from '../../select/src/select'
 import VxeOption from '../../select/src/option'
+import { UtilTools } from '../../tools'
 
 export default {
   name: 'VxeExportPanel',
@@ -38,7 +39,7 @@ export default {
     const { _e, isAll, isIndeterminate, showSheet, defaultOptions, storeData } = this
     const cols = []
     XEUtils.eachTree(storeData.columns, column => {
-      const colTitle = column.getTitle()
+      const colTitle = UtilTools.formatText(column.getTitle(), 1)
       const isColGroup = column.children && column.children.length
       cols.push(
         h('li', {
