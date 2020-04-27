@@ -224,7 +224,6 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       'col--last': $columnIndex === columns.length - 1,
       'col--tree-node': treeNode,
       'col--edit': !!editRender,
-      'edit--visible': editRender && editRender.type === 'visible',
       'fixed--hidden': fixedHiddenColumn,
       'col--ellipsis': hasEllipsis,
       'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),

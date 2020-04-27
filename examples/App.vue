@@ -40,7 +40,7 @@
       </div>
     </header>
     <div class="page-container">
-      <div class="aside">
+      <div class="aside" :class="{visible: showLeft}">
         <div class="header">
           <div v-if="stableVersionList.length" class="version-list">
             <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
@@ -98,6 +98,7 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
+      showLeft: true,
       selected: null,
       filterName: '',
       apiList: [],

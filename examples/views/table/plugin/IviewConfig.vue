@@ -55,8 +55,8 @@ export default {
         { field: 'region', title: 'Cascader', width: 200, editRender: { name: 'Cascader', props: { data: [] } } },
         { field: 'date', title: 'DatePicker', width: 200, editRender: { name: 'DatePicker', props: { type: 'date', format: 'yyyy/MM/dd' } } },
         { field: 'date1', title: 'TimePicker', width: 200, editRender: { name: 'TimePicker', props: { type: 'time' } } },
-        { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
-        { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
+        { field: 'flag', title: 'iSwitch', width: 100, cellRender: { name: 'iSwitch' } },
+        { field: 'rate', title: 'Rate', width: 200, cellRender: { name: 'Rate' } }
       ],
       tableToolbar: {
         slots: {
@@ -105,8 +105,8 @@ export default {
                 { field: 'region', title: 'Cascader', width: 200, editRender: { name: 'Cascader', props: { data: [] } } },
                 { field: 'date', title: 'DatePicker', width: 200, editRender: { name: 'DatePicker', props: { type: 'date', format: 'yyyy/MM/dd' } } },
                 { field: 'date1', title: 'TimePicker', width: 200, editRender: { name: 'TimePicker', props: { type: 'time' } } },
-                { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
-                { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
+                { field: 'flag', title: 'iSwitch', width: 100, cellRender: { name: 'iSwitch' } },
+                { field: 'rate', title: 'Rate', width: 200, cellRender: { name: 'Rate' } }
               ],
               tableToolbar: {
                 slots: {

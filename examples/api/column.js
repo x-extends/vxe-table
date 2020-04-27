@@ -537,15 +537,16 @@ const apis = [
         enum: '',
         defVal: '',
         list: [
-          // {
-          //   name: 'type',
-          //   desc: '渲染类型（可能会废弃，不建议使用）',
-          //   version: '',
-          //   type: 'String',
-          //   enum: 'default（组件触发后可视）,visible（组件一直可视）',
-          //   defVal: 'default',
-          //   list: []
-          // },
+          {
+            name: 'type',
+            disabled: true,
+            desc: '即将废弃，请使用 cell-render',
+            version: '',
+            type: 'String',
+            enum: 'default（组件触发后可视）,visible（组件一直可视）',
+            defVal: 'default',
+            list: []
+          },
           {
             name: 'name',
             desc: '渲染器名称',

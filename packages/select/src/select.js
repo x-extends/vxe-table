@@ -267,6 +267,7 @@ export default {
         style: panelStyle
       }, [
         h('div', {
+          ref: 'optWrapper',
           class: 'vxe-select-option--wrapper'
         }, this.$slots.default || (optionGroups ? renderOptgroup(h, this) : renderOption(h, this, this.options)))
       ])
@@ -383,18 +384,45 @@ export default {
         this.currentValue = option.value
       }
     },
+    scrollToOption (option, isAlignBottom) {
+      return new Promise(resolve => {
+        if (option) {
+          return this.$nextTick().then(() => {
+            const { $refs } = this
+            const optWrapperElem = $refs.optWrapper
+            const optElem = $refs.panel.querySelector(`[data-optid='${option.id}']`)
+            if (optWrapperElem && optElem) {
+              const wrapperHeight = optWrapperElem.offsetHeight
+              const offsetPadding = 5
+              if (isAlignBottom) {
+                if (optElem.offsetTop + optElem.offsetHeight - optWrapperElem.scrollTop > wrapperHeight) {
+                  optWrapperElem.scrollTop = optElem.offsetTop + optElem.offsetHeight - wrapperHeight
+                }
+              } else {
+                if (optElem.offsetTop - offsetPadding < optWrapperElem.scrollTop) {
+                  optWrapperElem.scrollTop = optElem.offsetTop - offsetPadding
+                }
+              }
+            }
+            resolve()
+          })
+        } else {
+          resolve()
+        }
+      })
+    },
     clearEvent (params, evnt) {
       this.clearValueEvent(evnt, null)
       this.hideOptionPanel()
     },
     clearValueEvent (evnt, selectValue) {
       this.changeEvent(evnt, selectValue)
-      this.$emit('clear', { value: selectValue, $event: evnt }, evnt)
+      this.$emit('clear', { value: selectValue, $event: evnt })
     },
     changeEvent (evnt, selectValue) {
       if (selectValue !== this.value) {
         this.$emit('input', selectValue)
-        this.$emit('change', { value: selectValue, $event: evnt }, evnt)
+        this.$emit('change', { value: selectValue, $event: evnt })
       }
     },
     changeOptionEvent (evnt, selectValue) {
@@ -452,6 +480,7 @@ export default {
               offsetOption = firstOption
             }
             this.setCurrentOption(offsetOption)
+            this.scrollToOption(offsetOption, isDwArrow)
           } else if (isSpacebar) {
             evnt.preventDefault()
           }
@@ -501,14 +530,7 @@ export default {
           this.visiblePanel = true
           if (currOption) {
             this.setCurrentOption(currOption)
-            this.$nextTick(() => {
-              const { $refs } = this
-              const optWrapperElem = $refs.optWrapper
-              const optElem = $refs.panel.querySelector(`[data-optid='${currOption.id}']`)
-              if (optWrapperElem && optElem) {
-                optWrapperElem.scrollTop = optElem.offsetTop
-              }
-            })
+            this.scrollToOption(currOption)
           }
         }, 10)
         this.updateZindex()

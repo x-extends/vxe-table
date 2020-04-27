@@ -59,8 +59,8 @@
       <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
       <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
       <vxe-table-column field="date6" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="iSwitch" width="100" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
+      <vxe-table-column field="flag" title="iSwitch" width="100" :cell-render="{name: 'iSwitch'}"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :cell-render="{name: 'Rate'}"></vxe-table-column>
     </vxe-table>
 
     <Page
@@ -204,8 +204,8 @@ export default {
           <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
           <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
           <vxe-table-column field="date6" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
-          <vxe-table-column field="flag" title="iSwitch" width="100" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
+          <vxe-table-column field="flag" title="iSwitch" width="100" :cell-render="{name: 'iSwitch'}"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :cell-render="{name: 'Rate'}"></vxe-table-column>
         </vxe-table>
 
         <Page
