@@ -21,7 +21,7 @@ class ColumnConfig {
     }
     // 在 v3.0 中废弃 editRender.type
     if (_vm.editRender && _vm.editRender.type === 'visible') {
-      UtilTools.warn('vxe.error.delProp', ['column.edit-render.type', 'column.cell-render'])
+      // UtilTools.warn('vxe.error.delProp', ['column.edit-render.type', 'column.cell-render'])
     }
     // 在 v3.0 中废弃 prop
     if (_vm.prop) {
@@ -47,12 +47,22 @@ class ColumnConfig {
     }
     if (formatter) {
       if (XEUtils.isString(formatter)) {
-        const globalFunc = formats.get(formatter) || XEUtils[formatter]
+        let globalFunc = formats.get(formatter)
+        if (!globalFunc && XEUtils[formatter]) {
+          globalFunc = XEUtils[formatter]
+          // 在 v3.0 中废弃挂载格式化方式
+          UtilTools.warn('vxe.error.errFormat', [formatter])
+        }
         if (!XEUtils.isFunction(globalFunc)) {
           UtilTools.error('vxe.error.notFunc', [formatter])
         }
       } else if (XEUtils.isArray(formatter)) {
-        const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
+        let globalFunc = formats.get(formatter[0])
+        if (!globalFunc && XEUtils[formatter[0]]) {
+          globalFunc = XEUtils[formatter[0]]
+          // 在 v3.0 中废弃挂载格式化方式
+          UtilTools.warn('vxe.error.errFormat', [formatter[0]])
+        }
         if (!XEUtils.isFunction(globalFunc)) {
           UtilTools.error('vxe.error.notFunc', [formatter[0]])
         }
@@ -60,7 +70,6 @@ class ColumnConfig {
     }
     Object.assign(this, {
       // 基本属性
-      id: XEUtils.uniqueId('col_'),
       type: _vm.type,
       // 在 v3.0 中废弃 prop
       prop: _vm.prop,
@@ -100,6 +109,8 @@ class ColumnConfig {
       // 自定义参数
       params: _vm.params,
       // 渲染属性
+      id: XEUtils.uniqueId('col_'),
+      parentId: null,
       visible,
       halfVisible: false,
       defaultVisible: visible,

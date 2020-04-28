@@ -74,6 +74,15 @@
           // },
           // grid: {
           //   size: null,
+          //   zoomConfig: {
+          //     escRestore: true
+          //   },
+          //   pagerConfig: {
+          //     perfect: false
+          //   },
+          //   toolbar: {
+          //     perfect: false
+          //   },
           //   proxyConfig: {
           //     autoLoad: true,
           //     message: true,
@@ -167,9 +176,7 @@
           //   scrollY: {
           //     gt: 100
           //   }
-          // },
-          // 集成国际化（将对列头、校验提示..进行自动翻译）
-          translate: key => i18n.t(key)
+          // }
         })
       </code>
     </pre>

@@ -204,7 +204,7 @@ module.exports = {
         commands: '(全局) 指令注册',
         menus: '(全局) 快捷菜单',
 
-        renderer: '(进阶) 渲染器',
+        renderer: '(复用) 渲染器',
         rendererFilter: '筛选渲染',
         rendererDefault: '单元格渲染',
         rendererEdit: '可编辑渲染',
@@ -213,7 +213,7 @@ module.exports = {
         rendererForm: '表单渲染',
         rendererEmpty: '空数据渲染',
 
-        interceptor: '(进阶) 事件拦截',
+        interceptor: '(兼容) 事件拦截',
 
         optimize: '优化建议',
         optimizeScroller: '虚拟滚动优化',
@@ -286,10 +286,10 @@ module.exports = {
       },
       other: {
         plan: {
-          v1: 'v1 基于 vue2，支持所有主流浏览器及 IE11+，实现表格的一切实用的功能',
-          v2: 'v2 基于 vue2+，支持所有主流浏览及 IE11+，同时兼具功能与性能',
-          v3: 'v3 基于 vue2，只支持 H5 浏览器，不支持 IE，渲染性能大幅提升',
-          v4: 'v4 基于 vue3，只支持 H5 浏览器，不支持 IE，渲染性能大幅提升'
+          v1: 'v1 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能',
+          v2: 'v2 基于 vue2.6+，支持所有主的流浏览，同时兼具功能与性能',
+          v3: 'v3 基于 vue2.6+，只支持 H5 浏览器，不支持 IE，渲染性能大幅提升',
+          v4: 'v4 基于 vue3+，只支持 H5 浏览器，不支持 IE，渲染性能大幅提升'
         },
         ways: {
           wechat: '通過以下 微信掃碼 捐贈',

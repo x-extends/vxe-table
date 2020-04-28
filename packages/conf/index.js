@@ -146,6 +146,15 @@ const GlobalConfig = {
   },
   grid: {
     // size: null,
+    // zoomConfig: {
+    //   escRestore: true
+    // },
+    // pagerConfig: {
+    //   perfect: false
+    // },
+    // toolbar: {
+    //   perfect: false
+    // },
     proxyConfig: {
       autoLoad: true,
       message: true,
