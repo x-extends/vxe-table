@@ -103,8 +103,10 @@ export default {
             findSexList () {
               return XEAjax.get('/api/conf/sex/list').then(data => {
                 // 异步更新下拉选项
-                let column = this.$refs.xGrid.getColumnByField('sex')
-                column.editRender.options = data
+                if (this.$refs.xGrid) {
+                  const column = this.$refs.xGrid.getColumnByField('sex')
+                  column.editRender.options = data
+                }
               })
             },
             searchEvent () {
@@ -145,8 +147,10 @@ export default {
     findSexList () {
       return XEAjax.get('/api/conf/sex/list').then(data => {
         // 异步更新下拉选项
-        const column = this.$refs.xGrid.getColumnByField('sex')
-        column.editRender.options = data
+        if (this.$refs.xGrid) {
+          const column = this.$refs.xGrid.getColumnByField('sex')
+          column.editRender.options = data
+        }
       })
     },
     searchEvent () {

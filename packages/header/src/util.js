@@ -1,10 +1,11 @@
-const getAllColumns = (columns) => {
+const getAllColumns = (columns, parentColumn) => {
   const result = []
   columns.forEach((column) => {
+    column.parentId = parentColumn ? parentColumn.id : null
     if (column.visible) {
       if (column.children && column.children.length && column.children.some(column => column.visible)) {
         result.push(column)
-        result.push(...getAllColumns(column.children))
+        result.push(...getAllColumns(column.children, column))
       } else {
         result.push(column)
       }

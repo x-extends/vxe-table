@@ -2,19 +2,13 @@ export default {
   vxe: {
     error: {
       groupFixed: 'グループのヘッダを使用すると、固定列はグループで設定しなければなりません',
-      groupPosFixed: 'グループのヘッダを使うと、固定列は左右にある必要があります',
       groupMouseRange: 'グループ化ヘッダーと「{{0}}」は同時に使用できません。これによりエラーが発生する可能性があります',
-      cellEditRender: 'Rendererは"cell-render"と"edit-render"を同時に仕様できません',
-      treeFixedExpand: 'ツリー構造の固定列は、展開された行と競合します',
-      treeLineExpand: 'ツリー構造のノード行が展開された行と競合します',
-      treeErrProp: '树结构不支持该参数 "{{0}}"',
       scrollErrProp: '启用虚拟滚动后不支持该参数 "{{0}}"',
       scrollXNotGroup: '水平のバーチャルスクロールは、グループヘッダーをサポートしない。 "scroll-x.gt" のパラメータを正しく修正してください。そうしないとエラーが発生します。',
       errConflicts: '参数 "{{0}}" 与 "{{1}}" 有冲突',
       unableInsert: '指定された位置に挿入できない',
       useErr: '"{{0}}" モジュールをインストールする際にエラーが発生し,順序が正しくない可能性があり,依頼するモジュールはTableの前にインストールする必要がある',
       barUnableLink: 'ツールバーはフォームを関連付けることができない',
-      toolbarId: 'ツールバーはユニーク"id"を設定する必要がある',
       expandContent: '拡張行スロットは "content" である必要があります。正しいかどうかを確認してください',
       reqModule: '"{{0}}" モジュールが必要',
       reqProp: '必要な "{{0}}" パラメーターが欠落しているため、エラーが発生する可能性があります',
@@ -27,11 +21,11 @@ export default {
       delProp: '"{{0}}" propertyは非推奨です、"{{1}}"を使用してください',
       delEvent: 'イベント "{{0}}" は廃止されました。 "{{1}}" を使用してください',
       removeProp: 'パラメーター "{{0}}" は非推奨および非推奨です。エラーが発生する可能性があります',
+      errFormat: '全局的格式化内容应该使用 "VXETable.formats" 定义，挂载 "formatter={{0}}" 的方式已不建议使用',
       notType: 'サポートされていないファイルの種類 "{{0}}"',
       notExp: 'ブラウザはインポート/エクスポートをサポートしていません',
       impFields: 'インポートに失敗しました。フィールド名とデータ形式が正しいかどうかを確認してください',
-      treeNotImp: 'ツリーテーブルはインポートをサポートしていません',
-      typeErr: '"{{0}}" の入力エラー，{{1}} の代わりに {{2}} が取得されました'
+      treeNotImp: 'ツリーテーブルはインポートをサポートしていません'
     },
     table: {
       emptyText: 'データがありません',
@@ -47,7 +41,11 @@ export default {
       expSuccess: 'エクスポートが成功しました',
       expOriginFilename: 'エクスポート_{{0}}',
       expSrcFilename: 'エクスポート_ソース_{{0}}',
-      expSheetName: 'Sheet1'
+      expSheetName: 'Sheet1',
+      customTitle: '列设置',
+      customAll: '全部',
+      customConfirm: '确认',
+      customRestore: '还原'
     },
     grid: {
       selectOneRecord: '少なくとも1つのレコードを選択してください',

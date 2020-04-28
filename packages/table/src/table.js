@@ -715,27 +715,27 @@ export default {
     }
     // 在 v3.0 中废弃 optimization
     if (this.optimization) {
-      UtilTools.warn('vxe.error.removeProp', ['optimization'])
+      // UtilTools.warn('vxe.error.removeProp', ['optimization'])
     }
     // 废弃 optimization.cloak
     if (this.optimizeOpts.cloak) {
-      UtilTools.warn('vxe.error.delProp', ['optimization.cloak', 'cloak'])
+      // UtilTools.warn('vxe.error.delProp', ['optimization.cloak', 'cloak'])
     }
     // 废弃 optimization.animat
     if (this.optimizeOpts.animat) {
-      UtilTools.warn('vxe.error.delProp', ['optimization.animat', 'animat'])
+      // UtilTools.warn('vxe.error.delProp', ['optimization.animat', 'animat'])
     }
     // 废弃 optimization.delayHover
     if (this.optimizeOpts.delayHover) {
-      UtilTools.warn('vxe.error.delProp', ['optimization.delayHover', 'delay-hover'])
+      // UtilTools.warn('vxe.error.delProp', ['optimization.delayHover', 'delay-hover'])
     }
     // 废弃 optimization.scrollX
     if (this.optimizeOpts.scrollX) {
-      UtilTools.warn('vxe.error.delProp', ['optimization.scrollX', 'scroll-x'])
+      // UtilTools.warn('vxe.error.delProp', ['optimization.scrollX', 'scroll-x'])
     }
     // 废弃 optimization.scrollY
     if (this.optimizeOpts.scrollY) {
-      UtilTools.warn('vxe.error.delProp', ['optimization.scrollY', 'scroll-y'])
+      // UtilTools.warn('vxe.error.delProp', ['optimization.scrollY', 'scroll-y'])
     }
     const customOpts = this.customOpts
     if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {

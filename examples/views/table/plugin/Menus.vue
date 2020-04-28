@@ -14,10 +14,18 @@
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" sortable></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column title="基本信息">
+        <vxe-table-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-table-column>
+        <vxe-table-column title="详细详细">
+          <vxe-table-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
+        </vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column field="rate" title="Rate" width="180" sortable></vxe-table-column>
+      <vxe-table-column title="其他信息">
+        <vxe-table-column field="date13" title="Date" width="250"></vxe-table-column>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -43,6 +51,9 @@ export default {
             [
               { code: 'HIDDEN_COLUMN', name: '隐藏' },
               { code: 'RESET_COLUMN', name: '取消隐藏' },
+              { code: 'FIXED_LEFT_COLUMN', name: '固定到左侧' },
+              { code: 'FIXED_RIGHT_COLUMN', name: '固定到右侧' },
+              { code: 'CLEAR_FIXED_COLUMN', name: '取消固定' },
               { code: 'RESET_ALL', name: '重置个性化数据', prefixIcon: 'fa fa-undo' }
             ],
             [
@@ -106,10 +117,18 @@ export default {
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" sortable></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column title="基本信息">
+            <vxe-table-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-table-column title="详细详细">
+              <vxe-table-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
+            </vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column field="rate" title="Rate" width="180" sortable></vxe-table-column>
+          <vxe-table-column title="其他信息">
+            <vxe-table-column field="date13" title="Date" width="250"></vxe-table-column>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
@@ -123,6 +142,9 @@ export default {
                     [
                       { code: 'HIDDEN_COLUMN', name: '隐藏' },
                       { code: 'RESET_COLUMN', name: '取消隐藏' },
+                      { code: 'FIXED_LEFT_COLUMN', name: '固定到左侧' },
+                      { code: 'FIXED_RIGHT_COLUMN', name: '固定到右侧' },
+                      { code: 'CLEAR_FIXED_COLUMN', name: '取消固定' },
                       { code: 'RESET_ALL', name: '重置个性化数据', prefixIcon: 'fa fa-undo' }
                     ],
                     [

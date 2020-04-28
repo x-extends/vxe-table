@@ -290,28 +290,41 @@ export interface ColumnIconSlotParams extends ColumnIconRenderParams {}
  * 列对象
  */
 export class ColumnConfig {
-  id: string;
   title: string;
   width: number | string;
   minWidth: number | string;
   resizable: boolean;
+  fixed: string;
   property: string;
   type: string;
   sortable: boolean;
-  visible: boolean;
-  defaultVisible: any;
-  checked: boolean;
-  disabled: boolean;
   treeNode: boolean;
   filters: ColumnFilterParams[];
   filterRender: ColumnFilterRenderOptions;
   cellRender: ColumnCellRenderOptions;
   editRender: ColumnEditRenderOptions;
   contentRender: ColumnContentRenderOptions;
+
+  id: string;
+  parentId: string;
+  level: number;
+  rowSpan: number;
+  colSpan: number;
+  visible: boolean;
+  halfVisible: boolean;
+  defaultVisible: any;
+  checked: boolean;
+  halfChecked: boolean;
+  disabled: boolean;
   order: string;
   renderWidth: number;
   renderHeight: number;
   resizeWidth: number;
+  model: {
+    update: boolean;
+    value: any;
+  };
+  children: ColumnConfig[];
 
   getTitle(): string;
 }

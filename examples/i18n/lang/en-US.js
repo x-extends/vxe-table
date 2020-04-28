@@ -205,7 +205,7 @@ module.exports = {
         commands: '(Global) Command register',
         menus: '(Global) Context menu',
 
-        renderer: '(Advanced) Renderer',
+        renderer: '(Reusable) Renderer',
         rendererFilter: 'Filter renderer',
         rendererDefault: 'Cell renderer',
         rendererEdit: 'Edit renderer',
@@ -214,7 +214,7 @@ module.exports = {
         rendererForm: 'Form renderer',
         rendererEmpty: 'No data renderer',
 
-        interceptor: '(Advanced) Event interceptor',
+        interceptor: '(Compatibility) Event interceptor',
 
         optimize: 'Optimization and suggestion',
         optimizeScroller: '虚拟滚动优化',
@@ -287,10 +287,10 @@ module.exports = {
       },
       other: {
         plan: {
-          vv1: 'v1 Based on vue2, support all the mainstream browsers and IE11+, to achieve all the practical functions of the table',
-          v2: 'v2 Based on vue2+, support all mainstream browsing and IE11+, both function and performance',
-          v3: 'v3 Based on vue2, only support H5 browser, do not support IE, rendering performance significantly improved',
-          v4: 'v4 Based on vue3, only support H5 browser, do not support IE, rendering performance significantly improved'
+          vv1: 'v1 Based on vue2.6+, support all the mainstream browsers, to achieve all the practical functions of the table',
+          v2: 'v2 Based on vue2.6+, support all mainstream browsing, both function and performance',
+          v3: 'v3 Based on vue2.6+, only support H5 browser, do not support IE, rendering performance significantly improved',
+          v4: 'v4 Based on vue3+, only support H5 browser, do not support IE, rendering performance significantly improved'
         },
         ways: {
           wechat: 'Donate via the following wechat code scanning',
