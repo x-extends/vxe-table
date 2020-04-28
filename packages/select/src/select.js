@@ -97,7 +97,7 @@ export function renderOption (h, _vm, options, group) {
         },
         mouseenter: () => {
           if (!isDisabled) {
-            _vm.setCurrentOption(option)
+            _vm.setCurrentOption({ value: optionValue })
           }
         }
       }

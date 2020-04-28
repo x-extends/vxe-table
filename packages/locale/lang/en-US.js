@@ -21,6 +21,7 @@ export default {
       delProp: 'The property "{{0}}" is deprecated, please use "{{1}}".',
       delEvent: 'The event "{{0}}" is deprecated, please use "{{1}}"',
       removeProp: 'The property "{{0}}" is deprecated and is not recommended, which may cause error.',
+      errFormat: 'The global formatted content should be defined with "VXETable.formats". Mounting "formatter={{0}}" is not recommended.',
       notType: 'Unsupported file types "{{0}}"',
       notExp: 'The browser does not support import / export.',
       impFields: 'Import failed, please check that the field name and data format are correct.',

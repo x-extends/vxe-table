@@ -21,6 +21,7 @@ export default {
       delProp: '參數 "{{0}}" 已停用，請使用 "{{1}}"',
       delEvent: '事件 "{{0}}" 已停用，請使用 "{{1}}"',
       removeProp: '參數 "{{0}}" 已停用，不建議使用，這可能會導致出現錯誤',
+      errFormat: '全域的格式化內容應該使用 "VXETable.formats" 定義，掛載 "formatter={{0}}" 的管道已不建議使用',
       notType: '不支持的檔案類型 "{{0}}"',
       notExp: '該瀏覽器不支持導入/匯出功能',
       impFields: '導入失敗，請檢查欄位名和數據格式是否正確',

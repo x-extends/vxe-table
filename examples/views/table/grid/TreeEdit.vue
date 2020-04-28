@@ -42,7 +42,6 @@ export default {
         }
       },
       tableToolbar: {
-        id: 'treeEdit_demo1',
         buttons: [
           { code: 'reload', name: 'app.body.button.refresh' },
           { code: 'mark_cancel', name: 'app.body.button.markCancel' },
@@ -88,7 +87,6 @@ export default {
                 }
               },
               tableToolbar: {
-                id: 'treeEdit_demo1',
                 buttons: [
                   { code: 'reload', name: 'app.body.button.refresh' },
                   { code: 'mark_cancel', name: 'app.body.button.markCancel' },
