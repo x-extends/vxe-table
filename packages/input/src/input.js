@@ -857,13 +857,15 @@ export default {
     },
     mousewheelEvent (evnt) {
       if (this.isNumber) {
-        const delta = -evnt.wheelDelta || evnt.detail
-        if (delta > 0) {
-          this.numberNextEvent(evnt)
-        } else if (delta < 0) {
-          this.numberPrevEvent(evnt)
+        if (this.isActivated) {
+          const delta = -evnt.wheelDelta || evnt.detail
+          if (delta > 0) {
+            this.numberNextEvent(evnt)
+          } else if (delta < 0) {
+            this.numberPrevEvent(evnt)
+          }
+          evnt.preventDefault()
         }
-        evnt.preventDefault()
       }
     },
     clickEvent (evnt) {

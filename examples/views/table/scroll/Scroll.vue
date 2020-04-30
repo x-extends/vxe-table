@@ -28,7 +28,7 @@
     </pre>
 
     <p class="tip">
-      手动调优，默认自动优化（<span class="red">注：如果需要手动调优只需要更改参数即可</span>）<br>
+      手动调优，默认自动优化（<span class="red">注：如果启用横向虚拟滚动，当列不确定大小时应该设置 <table-api-link prop="scroll-x"/>.<table-api-link prop="rSize"/> 来避免出现空白区域</span>）<br>
       通过指定 <table-api-link prop="scroll-x"/>={gt: 20} 或 <table-api-link prop="scroll-y"/>={gt: 40} 适合的参数可以手动调优，如果为 0 则总是启用，如果为 -1 关闭虚拟滚动<br>
       数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数
     </p>

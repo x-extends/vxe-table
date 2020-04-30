@@ -398,7 +398,7 @@ module.exports = {
           expandConfig: '展开行配置项',
           treeConfig: '树形结构配置项',
           contextMenu: '快捷菜单配置项',
-          mouseConfig: '鼠标配置项',
+          mouseConfig: '鼠标配置项（只对 edit-config.mode=cell 有效）',
           keyboardConfig: '按键配置项',
           editConfig: '可编辑配置项',
           validConfig: '校验配置项',
@@ -583,7 +583,7 @@ module.exports = {
           disabled: '是否禁用',
           loading: '是否加载中',
           placement: '固定显示下拉面板的方向',
-          transfer: '是否将弹框容器插入于 body 内'
+          transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
       modal: {
@@ -659,7 +659,7 @@ module.exports = {
           disabled: '是否禁用',
           prefixIcon: '头部图标',
           placement: '固定显示下拉面板的方向',
-          transfer: '是否将弹框容器插入于 body 内'
+          transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
       selectGroup: {
