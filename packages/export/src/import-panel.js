@@ -43,13 +43,8 @@ export default {
     const { hasFile, parseTypeLabel, defaultOptions, storeData, selectName } = this
     return h('vxe-modal', {
       res: 'modal',
-      model: {
-        value: storeData.visible,
-        callback (value) {
-          storeData.visible = value
-        }
-      },
       props: {
+        value: storeData.visible,
         title: GlobalConfig.i18n('vxe.import.impTitle'),
         width: 440,
         mask: true,
@@ -58,6 +53,11 @@ export default {
         escClosable: true,
         maskClosable: true,
         loading: this.loading
+      },
+      on: {
+        input (value) {
+          storeData.visible = value
+        }
       }
     }, [
       h('div', {
@@ -103,9 +103,11 @@ export default {
               h('td', GlobalConfig.i18n('vxe.import.impOpts')),
               h('td', [
                 h('vxe-radio-group', {
-                  model: {
-                    value: defaultOptions.mode,
-                    callback (value) {
+                  props: {
+                    value: defaultOptions.mode
+                  },
+                  on: {
+                    input (value) {
                       defaultOptions.mode = value
                     }
                   }

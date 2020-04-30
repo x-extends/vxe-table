@@ -180,7 +180,7 @@ export default {
       if (selectOption) {
         return selectOption.label
       }
-      return ''
+      return this.value
     }
   },
   watch: {

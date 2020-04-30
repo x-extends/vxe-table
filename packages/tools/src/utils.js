@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import formats from '../../v-x-e-table/src/formats'
 
 let zindexIndex = 0
-let lastZindex = 0
+let lastZindex = 1
 
 function getColFuncWidth (isExists, defaultWidth = 16) {
   return isExists ? defaultWidth : 0

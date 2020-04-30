@@ -869,7 +869,7 @@ export default {
       }
     }
     if (treeConfig && this.stripe) {
-      UtilTools.error('vxe.error.errConflicts', ['tree-config', 'stripe'])
+      UtilTools.warn('vxe.error.noTree', ['stripe'])
     }
     // 在 v3.0 中废弃 optimization
     if (this.optimization) {

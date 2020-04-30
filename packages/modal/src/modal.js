@@ -50,7 +50,7 @@ export default {
       visible: false,
       contentVisible: false,
       modalTop: 0,
-      modalZindex: null,
+      modalZindex: 0,
       zoomLocat: null,
       inited: false
     }

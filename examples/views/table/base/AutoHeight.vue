@@ -58,7 +58,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">设置为 <table-api-link prop="auto-resize"/> 响应式就可以自动跟随父容器高度</p>
+    <p class="tip">设置为 <table-api-link prop="auto-resize"/> 响应式就可以自动跟随父容器宽、高动态变化</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

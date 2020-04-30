@@ -202,20 +202,21 @@ export default {
       return h('vxe-select', {
         class: 'vxe-pager--sizes',
         props: {
-          placement: 'top'
-        },
-        model: {
           value: this.pageSize,
-          callback: num => this.pageSizeEvent(num)
-        }
-      }, this.pageSizes.map(num => {
-        return h('vxe-option', {
-          props: {
-            value: num,
-            label: `${XEUtils.template(GlobalConfig.i18n('vxe.pager.pagesize'), [num])}`
+          placement: 'top',
+          options: this.pageSizes.map(num => {
+            return {
+              value: num,
+              label: `${XEUtils.template(GlobalConfig.i18n('vxe.pager.pagesize'), [num])}`
+            }
+          })
+        },
+        on: {
+          change: ({ value }) => {
+            this.pageSizeEvent(value)
           }
-        })
-      }))
+        }
+      })
     },
     // FullJump
     renderFullJump (h) {
