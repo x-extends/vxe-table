@@ -67,7 +67,7 @@
     </pre>
 
     <p class="tip">
-      <span class="red">分组表头</span>
+      <span>分组表头<span class="red">（注：固定列必须按组进行设置）</span></span>
     </p>
 
     <vxe-table

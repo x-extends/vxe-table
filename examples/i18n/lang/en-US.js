@@ -399,7 +399,7 @@ module.exports = {
           expandConfig: 'Expand the row configuration',
           treeConfig: 'Tree configuration',
           contextMenu: 'context menu configuration',
-          mouseConfig: 'Mouse configuration',
+          mouseConfig: 'Mouse configuration (Only valid for edit-config.mode=cell)',
           keyboardConfig: 'Keyboard configuration',
           editConfig: 'Editable configuration',
           validConfig: 'Validate configuration',
@@ -584,7 +584,7 @@ module.exports = {
           disabled: 'Whether to disable',
           loading: 'Loading or not',
           placement: 'Fix the direction of the display drop - down panel',
-          transfer: 'Whether to insert the popup container into the body'
+          transfer: 'Whether to insert the popup container into the body（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
       modal: {
@@ -660,7 +660,7 @@ module.exports = {
           disabled: 'Whether to disable',
           prefixIcon: 'Prefix icon',
           placement: 'Fix the direction of the display drop - down panel',
-          transfer: 'Whether to insert the popup container into the body'
+          transfer: 'Whether to insert the popup container into the body（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
       selectGroup: {

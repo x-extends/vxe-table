@@ -657,7 +657,7 @@ export default {
       }
     }
     if (treeConfig && this.stripe) {
-      UtilTools.error('vxe.error.errConflicts', ['tree-config', 'stripe'])
+      UtilTools.warn('vxe.error.noTree', ['stripe'])
     }
     const customOpts = this.customOpts
     if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {

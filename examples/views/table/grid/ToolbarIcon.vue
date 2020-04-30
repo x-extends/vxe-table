@@ -56,7 +56,6 @@ export default {
           { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save vxe-success-color' }
         ],
         perfect: true,
-        resizable: true,
         refresh: {
           icon: 'fa fa-refresh',
           iconLoading: 'fa fa-spinner fa-spin'
@@ -127,7 +126,6 @@ export default {
                   { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save vxe-success-color' }
                 ],
                 perfect: true,
-                resizable: true,
                 refresh: {
                   icon: 'fa fa-refresh',
                   iconLoading: 'fa fa-spinner fa-spin'

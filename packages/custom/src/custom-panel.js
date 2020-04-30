@@ -80,13 +80,8 @@ export default {
     })
     return h('vxe-modal', {
       res: 'modal',
-      model: {
-        value: storeData.visible,
-        callback (value) {
-          storeData.visible = value
-        }
-      },
       props: {
+        value: storeData.visible,
         title: GlobalConfig.i18n('vxe.table.customTitle'),
         width: 660,
         mask: true,
@@ -97,6 +92,9 @@ export default {
         loading: this.loading
       },
       on: {
+        input (value) {
+          storeData.visible = value
+        },
         activated: this.showEvent,
         deactivated: this.hideEvent
       }

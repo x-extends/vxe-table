@@ -58,7 +58,7 @@
 
 <script>
 import XEUtils from 'xe-utils'
-import { ModalController } from '../../../../../packages/vxe-table'
+import { VXETable } from '../../../../../packages/vxe-table'
 
 export default {
   name: 'FilterExcel',
@@ -215,7 +215,7 @@ export default {
       }
       $table.closeFilter()
       // 动态弹出框
-      ModalController.open({
+      VXETable.modal.open({
         title: '自定义自动筛选方式',
         width: 600,
         slots: {

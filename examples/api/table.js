@@ -296,7 +296,7 @@ const exportDataAPI = [
   },
   {
     name: 'exportMethod',
-    desc: '只对 remote=true 有效，该函数 Function({ options }) 用于自定义导出逻辑，返回 Promise',
+    desc: '只对 remote=true 有效，该函数 Function({ options }) 用于自定义导出或服务端导出，返回 Promise',
     version: '',
     type: 'Function',
     enum: '',
@@ -344,7 +344,7 @@ const importDataAPI = [
   },
   {
     name: 'importMethod',
-    desc: '只对 remote=true 有效，该函数 Function({ file, options }) 用于自定义导入逻辑，返回 Promise',
+    desc: '只对 remote=true 有效，该函数 Function({ file, options }) 用于自定义导入或服务端导入，返回 Promise',
     version: '',
     type: 'Function',
     enum: '',
@@ -1931,7 +1931,7 @@ const apis = [
         list: []
       },
       {
-        name: 'delayHover',
+        name: 'delay-hover',
         desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
         version: '',
         type: 'Number',
@@ -1940,7 +1940,7 @@ const apis = [
         list: []
       },
       {
-        name: 'scrollX',
+        name: 'scroll-x',
         desc: '横向虚拟滚动配置（tree-config 启用后无效）',
         version: '',
         type: 'Object',
@@ -1986,7 +1986,7 @@ const apis = [
         ]
       },
       {
-        name: 'scrollY',
+        name: 'scroll-y',
         desc: '纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）',
         version: '',
         type: 'Object',
@@ -3009,7 +3009,7 @@ const apis = [
       },
       {
         name: 'setSelectCell(row, field)',
-        desc: '用于 mouse-config.mouse-config，选中某个单元格',
+        desc: '用于 mouse-config.selected，选中指定的单元格',
         version: '',
         type: 'Promise',
         enum: '',

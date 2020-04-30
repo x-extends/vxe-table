@@ -216,7 +216,7 @@ const apis = [
       },
       {
         name: 'transfer',
-        desc: '只对 type=date|datetime|week|month|year 有效，是否将弹框容器插入于 body 内',
+        desc: '只对 type=date|datetime|week|month|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）',
         version: '',
         type: 'Boolean',
         enum: '',
