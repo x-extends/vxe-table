@@ -560,9 +560,6 @@ export default {
       if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
         UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
       }
-      if (this.isGroup && this.mouseConfig && (this.mouseOpts.range || this.mouseOpts.checked)) {
-        UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.range'])
-      }
       this.$nextTick(() => {
         if (this.$toolbar) {
           this.$toolbar.syncUpdate({ collectColumn: value, $table: this })
@@ -599,7 +596,7 @@ export default {
     }
   },
   created () {
-    const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseConfig, mouseOpts, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseOpts, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -648,10 +645,7 @@ export default {
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
       UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
     }
-    if (mouseConfig && this.editConfig) {
-      if ((mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
-        UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
-      }
+    if (this.mouseConfig && this.editConfig) {
       if (mouseOpts.selected && editOpts.mode !== 'cell') {
         UtilTools.error('vxe.error.errProp', ['edit-config.mode', 'cell'])
       }

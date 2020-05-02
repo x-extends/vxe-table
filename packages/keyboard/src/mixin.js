@@ -1,6 +1,54 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import { DomTools } from '../../tools'
 
+const browse = DomTools.browse
+
+function getTargetOffset (targer, container) {
+  let offsetTop = 0
+  let offsetLeft = 0
+  const triggerCheckboxLabel = !browse.firefox && DomTools.hasClass(targer, 'vxe-checkbox--label')
+  if (triggerCheckboxLabel) {
+    const checkboxLabelStyle = getComputedStyle(targer)
+    offsetTop -= XEUtils.toNumber(checkboxLabelStyle.paddingTop)
+    offsetLeft -= XEUtils.toNumber(checkboxLabelStyle.paddingLeft)
+  }
+  while (targer && targer !== container) {
+    offsetTop += targer.offsetTop
+    offsetLeft += targer.offsetLeft
+    targer = targer.offsetParent
+    if (triggerCheckboxLabel) {
+      const checkboxStyle = getComputedStyle(targer)
+      offsetTop -= XEUtils.toNumber(checkboxStyle.paddingTop)
+      offsetLeft -= XEUtils.toNumber(checkboxStyle.paddingLeft)
+    }
+  }
+  return { offsetTop, offsetLeft }
+}
+
+function getCheckboxRangeResult ($table, params, targetTrElem, moveRange) {
+  let countHeight = 0
+  let rangeRows = []
+  const isDown = moveRange > 0
+  const moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
+  if ($table.scrollYLoad) {
+    const { afterFullData, scrollYStore } = $table
+    const _rowIndex = $table._getRowIndex(params.row)
+    if (isDown) {
+      rangeRows = afterFullData.slice(_rowIndex, _rowIndex + Math.ceil(moveSize / scrollYStore.rowHeight))
+    } else {
+      rangeRows = afterFullData.slice(_rowIndex - Math.floor(moveSize / scrollYStore.rowHeight) + 1, _rowIndex + 1)
+    }
+  } else {
+    const siblingProp = isDown ? 'next' : 'previous'
+    while (targetTrElem && countHeight < moveSize) {
+      rangeRows.push($table.getRowNode(targetTrElem).item)
+      countHeight += targetTrElem.offsetHeight
+      targetTrElem = targetTrElem[`${siblingProp}ElementSibling`]
+    }
+  }
+  return rangeRows
+}
+
 export default {
   methods: {
     // 处理 Tab 键移动
@@ -138,45 +186,65 @@ export default {
       this.closeFilter()
       this.closeMenu()
     },
-    getCheckboxRangeResult (targetTrElem, moveRange) {
-      let countHeight = 0
-      const rangeRows = []
-      const siblingProp = moveRange > 0 ? 'next' : 'previous'
-      const moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
-      while (targetTrElem && countHeight < moveSize) {
-        rangeRows.push(this.getRowNode(targetTrElem).item)
-        countHeight += targetTrElem.offsetHeight
-        targetTrElem = targetTrElem[`${siblingProp}ElementSibling`]
-      }
-      return rangeRows
-    },
     handleCheckboxRangeEvent (evnt, params) {
       const { column, cell } = params
       if (column.type === 'checkbox') {
+        const { elemStore } = this
         const disX = evnt.clientX
         const disY = evnt.clientY
-        const checkboxRangeElem = this.$refs.checkboxRange
+        const bodyWrapperElem = elemStore[`${column.fixed || 'main'}-body-wrapper`]
+        const checkboxRangeElem = elemStore[`${column.fixed || 'main'}-body-checkRange`]
         const domMousemove = document.onmousemove
         const domMouseup = document.onmouseup
-        const trEleme = cell.parentNode
-        const { scrollTop, scrollLeft } = DomTools.getDomNode()
-        const absPos = DomTools.getAbsolutePos(trEleme)
+        const trElem = cell.parentNode
         const selectRecords = this.getCheckboxRecords()
         let lastRangeRows = []
-        this.updateZindex()
-        document.onmousemove = evnt => {
-          evnt.preventDefault()
-          evnt.stopPropagation()
-          const offsetLeft = evnt.clientX - disX
-          const offsetTop = evnt.clientY - disY
-          const rangeHeight = Math.abs(offsetTop)
-          const rangeRows = this.getCheckboxRangeResult(trEleme, evnt.clientY - absPos.boundingTop)
-          checkboxRangeElem.style.display = 'block'
-          checkboxRangeElem.style.width = `${Math.abs(offsetLeft)}px`
+        const marginSize = 1
+        const offsetRest = getTargetOffset(evnt.target, bodyWrapperElem)
+        const startTop = offsetRest.offsetTop + evnt.offsetY
+        const startLet = offsetRest.offsetLeft + evnt.offsetX
+        const startScrollTop = bodyWrapperElem.scrollTop
+        const rowHeight = trElem.offsetHeight
+        let mouseScrollTimeout = null
+        let isMouseScrollDown = false
+        let mouseScrollSpaceSize = 1
+        // 处理复选框选中
+        const handleChecked = (evnt) => {
+          const { clientX, clientY } = evnt
+          const offsetLeft = clientX - disX
+          const offsetTop = clientY - disY + (bodyWrapperElem.scrollTop - startScrollTop)
+          let rangeHeight = Math.abs(offsetTop)
+          let rangeWidth = Math.abs(offsetLeft)
+          let rangeTop = startTop
+          let rangeLeft = startLet
+          if (offsetTop < marginSize) {
+            // 向上
+            rangeTop += offsetTop
+            if (rangeTop < marginSize) {
+              rangeTop = marginSize
+              rangeHeight = startTop
+            }
+          } else {
+            // 向下
+            rangeHeight = Math.min(rangeHeight, bodyWrapperElem.scrollHeight - startTop - marginSize)
+          }
+          if (offsetLeft < marginSize) {
+            // 向左
+            rangeLeft += offsetLeft
+            if (rangeWidth > startLet) {
+              rangeLeft = marginSize
+              rangeWidth = startLet
+            }
+          } else {
+            // 向右
+            rangeWidth = Math.min(rangeWidth, bodyWrapperElem.clientWidth - startLet - marginSize)
+          }
           checkboxRangeElem.style.height = `${rangeHeight}px`
-          checkboxRangeElem.style.left = `${scrollLeft + disX + (offsetLeft > 0 ? 0 : offsetLeft)}px`
-          checkboxRangeElem.style.top = `${scrollTop + disY + (offsetTop > 0 ? 0 : offsetTop)}px`
-          checkboxRangeElem.style.zIndex = `${this.tZindex}`
+          checkboxRangeElem.style.width = `${rangeWidth}px`
+          checkboxRangeElem.style.left = `${rangeLeft}px`
+          checkboxRangeElem.style.top = `${rangeTop}px`
+          checkboxRangeElem.style.display = 'block'
+          const rangeRows = getCheckboxRangeResult(this, params, trElem, offsetTop < marginSize ? -rangeHeight : rangeHeight)
           // 至少滑动 10px 才能有效匹配
           if (rangeHeight > 10 && rangeRows.length !== lastRangeRows.length) {
             lastRangeRows = rangeRows
@@ -190,7 +258,63 @@ export default {
             }
           }
         }
+        // 停止鼠标滚动
+        const stopMouseScroll = () => {
+          clearTimeout(mouseScrollTimeout)
+          mouseScrollTimeout = null
+        }
+        // 开始鼠标滚动
+        const startMouseScroll = (evnt) => {
+          stopMouseScroll()
+          mouseScrollTimeout = setTimeout(() => {
+            if (mouseScrollTimeout) {
+              const { scrollLeft, scrollTop, clientHeight, scrollHeight } = bodyWrapperElem
+              const topSize = Math.ceil(mouseScrollSpaceSize * 50 / rowHeight)
+              if (isMouseScrollDown) {
+                if (scrollTop + clientHeight < scrollHeight) {
+                  this.scrollTo(scrollLeft, scrollTop + topSize)
+                  startMouseScroll(evnt)
+                  handleChecked(evnt)
+                } else {
+                  stopMouseScroll()
+                }
+              } else {
+                if (scrollTop) {
+                  this.scrollTo(scrollLeft, scrollTop - topSize)
+                  startMouseScroll(evnt)
+                  handleChecked(evnt)
+                } else {
+                  stopMouseScroll()
+                }
+              }
+            }
+          }, 50)
+        }
+        document.onmousemove = evnt => {
+          evnt.preventDefault()
+          evnt.stopPropagation()
+          const { clientY } = evnt
+          const { boundingTop } = DomTools.getAbsolutePos(bodyWrapperElem)
+          // 如果超过可视区，触发滚动
+          if (clientY < boundingTop) {
+            isMouseScrollDown = false
+            mouseScrollSpaceSize = boundingTop - clientY
+            if (!mouseScrollTimeout) {
+              startMouseScroll(evnt)
+            }
+          } else if (clientY > boundingTop + bodyWrapperElem.clientHeight) {
+            isMouseScrollDown = true
+            mouseScrollSpaceSize = clientY - boundingTop - bodyWrapperElem.clientHeight
+            if (!mouseScrollTimeout) {
+              startMouseScroll(evnt)
+            }
+          } else if (mouseScrollTimeout) {
+            stopMouseScroll()
+          }
+          handleChecked(evnt)
+        }
         document.onmouseup = () => {
+          stopMouseScroll()
           checkboxRangeElem.removeAttribute('style')
           document.onmousemove = domMousemove
           document.onmouseup = domMouseup
