@@ -629,7 +629,7 @@ export default {
     }
   },
   created () {
-    const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseConfig, mouseOpts, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseOpts, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -702,7 +702,7 @@ export default {
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
-    if (mouseConfig && this.editConfig) {
+    if (this.mouseConfig && this.editConfig) {
       if ((mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
         UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
       }
