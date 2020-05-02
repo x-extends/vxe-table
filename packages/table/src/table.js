@@ -794,7 +794,7 @@ export default {
     }
   },
   created () {
-    const { data, sXOpts, scrollXStore, sYOpts, scrollYStore, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, mouseConfig, mouseOpts, showAllOverflow, showHeaderAllOverflow } = this
+    const { data, sXOpts, scrollXStore, sYOpts, scrollYStore, ctxMenuOpts, showOverflow, radioOpts, checkboxOpts, treeConfig, treeOpts, editConfig, editOpts, mouseOpts, showAllOverflow, showHeaderAllOverflow } = this
     Object.assign(scrollYStore, {
       startIndex: 0,
       visibleIndex: 0,
@@ -860,7 +860,7 @@ export default {
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
-    if (mouseConfig && this.editConfig) {
+    if (this.mouseConfig && this.editConfig) {
       if ((mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
         UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
       }
