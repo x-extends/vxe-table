@@ -525,7 +525,7 @@ export default {
               // 暂时不支持树形结构
             }
             // 如果所有行都被禁用
-            return tableFullData.every((row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
+            return tableFullData.every((row) => !checkMethod({ row }))
           }
           return false
         }

@@ -909,9 +909,11 @@ export interface CheckboxConfig {
  * 提示信息配置项
  */
 export interface TooltipConfig {
+  enabled?: boolean;
   theme?: 'dark' | 'light';
   enterable?: boolean;
   leaveDelay?: number;
+  contentMethod?(params: { items: any[], row: any, rowIndex: number, $rowIndex: number, column: ColumnConfig, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
 }
 
 /**
@@ -983,7 +985,7 @@ export interface KeyboardConfig {
   /**
    * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
    */
-  editMethod?(params: { row: any, rowIndex: number, column: ColumnConfig, columnIndex: number, cell: any }): boolean;
+  editMethod?(params: { row: any, rowIndex: number, column: ColumnConfig, columnIndex: number, cell: HTMLElement }): boolean;
 }
 
 /**
