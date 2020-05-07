@@ -28,8 +28,7 @@ import {
   Export,
   Custom,
   Keyboard,
-  Validator,
-  Resize
+  Validator
 } from '../../../packages/vxe-table'
 
 // import VXETablePluginElement from '../../../../vxe-table-plugin-element/test.js'
@@ -87,7 +86,6 @@ Vue.use(Export)
 Vue.use(Custom)
 Vue.use(Keyboard)
 Vue.use(Validator)
-Vue.use(Resize)
 // 再安装核心
 Vue.use(Table)
 

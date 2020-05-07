@@ -2,6 +2,8 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 import { convertToRows } from './util'
 
+const cellType = 'header'
+
 export default {
   name: 'VxeTableHeader',
   props: {
@@ -40,7 +42,7 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedType, headerColumn, fixedColumn } = this
-    const { $listeners: tableListeners, tId, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts } = $xetable
+    const { $listeners: tableListeners, tId, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, tooltipOpts, sortOpts } = $xetable
     let { tableColumn } = this
     // 横向滚动渲染
     if (scrollXLoad) {
@@ -94,10 +96,11 @@ export default {
           ref: 'thead'
         }, headerColumn.map((cols, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
-            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
+            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : headerRowClassName : ''],
+            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
             const { type, showHeaderOverflow, headerAlign, align, headerClassName } = column
+            const { enabled } = tooltipOpts
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -110,29 +113,29 @@ export default {
             const hasFilter = column.filters && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             const columnIndex = $xetable.getColumnIndex(column)
-            const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
+            const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
             }
-            if (showTitle || showTooltip) {
+            if (showTitle || showTooltip || enabled) {
               thOns.mouseenter = evnt => {
                 if ($xetable._isResize) {
                   return
                 }
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt, column)
-                } else if (showTooltip) {
+                } else if (showTooltip || enabled) {
                   $xetable.triggerHeaderTooltipEvent(evnt, params)
                 }
               }
             }
-            if (showTooltip) {
+            if (showTooltip || enabled) {
               thOns.mouseleave = evnt => {
                 if ($xetable._isResize) {
                   return
                 }
-                if (showTooltip) {
+                if (showTooltip || enabled) {
                   $xetable.handleTargetLeaveEvent(evnt)
                 }
               }

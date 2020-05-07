@@ -39,7 +39,6 @@ const components = [
   'custom',
   'keyboard',
   'validator',
-  'resize',
   'v-x-e-table'
 ]
 

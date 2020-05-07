@@ -26,7 +26,6 @@ import Export from './export'
 import Custom from './custom'
 import Keyboard from './keyboard'
 import Validator from './validator'
-import Resize from './resize'
 import zhCN from './locale/lang/zh-CN'
 
 // 按需加载的组件
@@ -57,7 +56,6 @@ const components = [
   Custom,
   Keyboard,
   Validator,
-  Resize,
   // 核心
   Table
 ]
@@ -108,7 +106,6 @@ export * from './export'
 export * from './custom'
 export * from './keyboard'
 export * from './validator'
-export * from './resize'
 export * from './table'
 
 export default VXETable

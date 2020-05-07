@@ -712,6 +712,11 @@
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
     }
+    &:not(.col--ellipsis) {
+      .vxe-cell {
+        white-space: pre-line;
+      }
+    }
   }
   .vxe-body--column,
   .vxe-footer--column {
