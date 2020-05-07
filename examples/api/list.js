@@ -35,6 +35,24 @@ const apis = [
         list: []
       },
       {
+        name: 'auto-resize',
+        desc: '自动监听父元素的变化去重新计算列表（对于父元素可能存在动态变化的场景可能会用到）',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'sync-resize',
+        desc: '自动跟随某个属性的变化去重新计算列表，和手动调用 recalculate 方法是一样的效果（对于通过某个属性来控制显示/隐藏切换的场景可能会用到）',
+        version: '',
+        type: 'Boolean, String, Number',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'scrollY',
         desc: '纵向虚拟滚动配置',
         version: '',

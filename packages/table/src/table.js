@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from '../../body'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import { UtilTools, DomTools, GlobalEvent, ResizeEvent } from '../../tools'
 import methods from './methods'
 
 /**
@@ -749,8 +749,6 @@ export default {
       errorModuleName = 'Validator'
     } else if (!VXETable._keyboard && (this.keyboardConfig || this.mouseConfig)) {
       errorModuleName = 'Keyboard'
-    } else if (!VXETable._resize && this.autoResize) {
-      errorModuleName = 'Resize'
     } else if (!VXETable._export && (this.importConfig || this.exportConfig)) {
       errorModuleName = 'Export'
     }
@@ -792,8 +790,11 @@ export default {
     this.preventEvent(null, 'created')
   },
   mounted () {
-    if (this.autoResize && VXETable._resize) {
-      this.bindResize()
+    if (this.autoResize) {
+      const resizeObserver = new ResizeEvent(() => this.recalculate(true))
+      resizeObserver.observe(this.$el)
+      resizeObserver.observe(this.getParentElem())
+      this.$resize = resizeObserver
     }
     if (!this.$xegrid && this.customs) {
       UtilTools.warn('vxe.error.removeProp', ['customs'])
@@ -813,8 +814,8 @@ export default {
     if (tableWrapper && tableWrapper.parentNode) {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
-    if (VXETable._resize) {
-      this.unbindResize()
+    if (this.$resize) {
+      this.$resize.disconnect()
     }
     this.closeFilter()
     this.closeMenu()

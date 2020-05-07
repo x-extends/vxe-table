@@ -26,6 +26,7 @@ const TableBasic = () => import(/* webpackChunkName: "base" */ './views/table/ba
 const TableSize = () => import(/* webpackChunkName: "base" */ './views/table/base/Size.vue')
 const TableWidth = () => import(/* webpackChunkName: "base" */ './views/table/base/Width.vue')
 const TableOverflow = () => import(/* webpackChunkName: "base" */ './views/table/base/Overflow.vue')
+const TableTooltip = () => import(/* webpackChunkName: "base" */ './views/table/base/Tooltip.vue')
 const TableStripe = () => import(/* webpackChunkName: "base" */ './views/table/base/Stripe.vue')
 const TableBorder = () => import(/* webpackChunkName: "base" */ './views/table/base/Border.vue')
 const TableStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/Style.vue')
@@ -398,6 +399,11 @@ export default new Router({
       path: '/table/base/overflow',
       name: 'TableOverflow',
       component: TableOverflow
+    },
+    {
+      path: '/table/base/tooltip',
+      name: 'TableTooltip',
+      component: TableTooltip
     },
     {
       path: '/table/base/stripe',

@@ -121,6 +121,5 @@ export * from './extends/edit'
 export * from './extends/export'
 export * from './extends/keyboard'
 export * from './extends/validator'
-export * from './extends/resize'
 
 export default VXETable

@@ -278,6 +278,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.tooltips',
+              locat: {
+                name: 'TableTooltip'
+              }
+            },
+            {
               label: 'app.aside.nav.ellipsis',
               locat: {
                 name: 'TableOverflow'
