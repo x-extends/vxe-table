@@ -74,8 +74,18 @@ export default {
         { type: 'checkbox', width: 50 },
         { type: 'seq', width: 60 },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
-        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-        { field: 'role', title: 'Role', editRender: { name: 'input' } },
+        {
+          title: '分类',
+          children: [
+            { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+            {
+              title: '子类',
+              children: [
+                { field: 'role', title: 'Role', editRender: { name: 'input' } }
+              ]
+            }
+          ]
+        },
         { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
       ],
       demoCodes: [
@@ -141,8 +151,18 @@ export default {
                 { type: 'checkbox', width: 50 },
                 { type: 'seq', width: 60 },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
-                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                { field: 'role', title: 'Role', editRender: { name: 'input' } },
+                {
+                  title: '分类',
+                  children: [
+                    { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                    {
+                      title: '子类',
+                      children: [
+                        { field: 'role', title: 'Role', editRender: { name: 'input' } }
+                      ]
+                    }
+                  ]
+                },
                 { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
               ]
             }

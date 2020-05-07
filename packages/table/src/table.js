@@ -35,6 +35,10 @@ function getNextSortOrder (_vm, column) {
   return orders[oIndex < orders.length ? oIndex : 0]
 }
 
+function defaultFilterExportColumn (column) {
+  return column.property || ['seq', 'index', 'checkbox', 'selection', 'radio'].indexOf(column.type) > -1
+}
+
 /**
  * 判断是否点击了单选框或复选框
  */
@@ -697,7 +701,7 @@ export default {
               // 暂时不支持树形结构
             }
             // 如果所有行都被禁用
-            return tableFullData.every((row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
+            return tableFullData.every((row) => !checkMethod({ row }))
           }
           return false
         }
@@ -3342,8 +3346,8 @@ export default {
             XEUtils.set(row, property, false)
           } else {
             // 更新子节点状态
-            XEUtils.eachTree([row], (item, $rowIndex) => {
-              if (row === item || (!checkMethod || checkMethod({ row: item, $rowIndex }))) {
+            XEUtils.eachTree([row], (item) => {
+              if (row === item || (!checkMethod || checkMethod({ row: item }))) {
                 XEUtils.set(item, property, value)
                 this.handleCheckboxReserveRow(row, value)
               }
@@ -3354,7 +3358,7 @@ export default {
           const matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
           if (matchObj && matchObj.parent) {
             let parentStatus
-            const vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
+            const vItems = checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
             const indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
             if (indeterminatesItem) {
               parentStatus = -1
@@ -3377,8 +3381,8 @@ export default {
             XEUtils.remove(selection, item => item === row)
           } else {
             // 更新子节点状态
-            XEUtils.eachTree([row], (item, $rowIndex) => {
-              if (row === item || (!checkMethod || checkMethod({ row: item, $rowIndex }))) {
+            XEUtils.eachTree([row], (item) => {
+              if (row === item || (!checkMethod || checkMethod({ row: item }))) {
                 if (value) {
                   selection.push(item)
                 } else {
@@ -3393,7 +3397,7 @@ export default {
           const matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
           if (matchObj && matchObj.parent) {
             let parentStatus
-            const vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
+            const vItems = checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
             const indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
             if (indeterminatesItem) {
               parentStatus = -1
@@ -3429,7 +3433,7 @@ export default {
     },
     triggerCheckRowEvent (evnt, params, value) {
       const { checkMethod } = this.checkboxOpts
-      if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
+      if (!checkMethod || checkMethod({ row: params.row })) {
         this.handleSelectRow(params, value)
         const records = this.getCheckboxRecords()
         // 在 v3.0 中废弃 select-change
@@ -3470,14 +3474,13 @@ export default {
       const beforeSelection = treeConfig ? [] : selection.filter(row => afterFullData.indexOf(row) === -1)
       if (!checkStrictly) {
         if (property) {
-          const indexKey = `${treeConfig ? '$' : ''}rowIndex`
-          const setValFn = (row, rowIndex) => {
-            if (!checkMethod || checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex })) {
+          const setValFn = (row) => {
+            if (!checkMethod || checkMethod({ row })) {
               XEUtils.set(row, property, value)
             }
           }
-          const clearValFn = (row, rowIndex) => {
-            if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)) {
+          const clearValFn = (row) => {
+            if (!checkMethod || (checkMethod({ row }) ? 0 : selection.indexOf(row) > -1)) {
               XEUtils.set(row, property, value)
             }
           }
@@ -3489,15 +3492,15 @@ export default {
         } else {
           if (treeConfig) {
             if (value) {
-              XEUtils.eachTree(afterFullData, (row, $rowIndex) => {
-                if (!checkMethod || checkMethod({ row, $rowIndex })) {
+              XEUtils.eachTree(afterFullData, (row) => {
+                if (!checkMethod || checkMethod({ row })) {
                   selectRows.push(row)
                 }
               }, treeOpts)
             } else {
               if (checkMethod) {
-                XEUtils.eachTree(afterFullData, (row, $rowIndex) => {
-                  if (checkMethod({ row, $rowIndex }) ? 0 : selection.indexOf(row) > -1) {
+                XEUtils.eachTree(afterFullData, (row) => {
+                  if (checkMethod({ row }) ? 0 : selection.indexOf(row) > -1) {
                     selectRows.push(row)
                   }
                 }, treeOpts)
@@ -3506,13 +3509,13 @@ export default {
           } else {
             if (value) {
               if (checkMethod) {
-                selectRows = afterFullData.filter((row, rowIndex) => selection.indexOf(row) > -1 || checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
+                selectRows = afterFullData.filter((row) => selection.indexOf(row) > -1 || checkMethod({ row }))
               } else {
                 selectRows = afterFullData.slice(0)
               }
             } else {
               if (checkMethod) {
-                selectRows = afterFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)
+                selectRows = afterFullData.filter((row) => checkMethod({ row }) ? 0 : selection.indexOf(row) > -1)
               }
             }
           }
@@ -3544,14 +3547,14 @@ export default {
         if (property) {
           this.isAllSelected = afterFullData.length && afterFullData.every(
             checkMethod
-              ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || XEUtils.get(row, property)
+              ? (row) => !checkMethod({ row }) || XEUtils.get(row, property)
               : row => XEUtils.get(row, property)
           )
           this.isIndeterminate = !this.isAllSelected && afterFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
         } else {
           this.isAllSelected = afterFullData.length && afterFullData.every(
             checkMethod
-              ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || selection.indexOf(row) > -1
+              ? (row) => !checkMethod({ row }) || selection.indexOf(row) > -1
               : row => selection.indexOf(row) > -1
           )
           this.isIndeterminate = !this.isAllSelected && afterFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
@@ -3744,7 +3747,7 @@ export default {
     triggerRadioRowEvent (evnt, params) {
       const { radioOpts } = this
       const { checkMethod } = radioOpts
-      if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
+      if (!checkMethod || checkMethod({ row: params.row })) {
         const isChange = this.selectRow !== params.row
         this.setRadioRow(params.row)
         if (isChange) {
@@ -5777,7 +5780,7 @@ export default {
         // footerFilterMethod: null,
         // exportMethod: null,
         // 在 v3.0 中废弃 type=selection
-        columnFilterMethod: options && options.columns ? null : column => ['seq', 'index'].indexOf(column.type) > -1 || column.property
+        columnFilterMethod: options && options.columns ? null : column => defaultFilterExportColumn(column)
       }, exportOpts, options)
       if (!opts.filename) {
         opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
@@ -5986,10 +5989,10 @@ export default {
           label: `vxe.export.modes.${value}`
         }
       })
-      // 默认全部选中
+      // 默认选中
       XEUtils.eachTree(exportColumns, (column, index, items, path, parent) => {
         const isColGroup = column.children && column.children.length
-        if (isColGroup || column.property || ['seq', 'index'].indexOf(column.type) > -1) {
+        if (isColGroup || defaultFilterExportColumn(column)) {
           column.checked = column.visible
           column.halfChecked = false
           column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ column }) : false)
