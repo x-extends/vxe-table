@@ -1987,8 +1987,8 @@ const Methods = {
           XEUtils.set(row, property, false)
         } else {
           // 更新子节点状态
-          XEUtils.eachTree([row], (item, $rowIndex) => {
-            if (row === item || (!checkMethod || checkMethod({ row: item, $rowIndex }))) {
+          XEUtils.eachTree([row], (item) => {
+            if (row === item || (!checkMethod || checkMethod({ row: item }))) {
               XEUtils.set(item, property, value)
               this.handleCheckboxReserveRow(row, value)
             }
@@ -1999,7 +1999,7 @@ const Methods = {
         const matchObj = XEUtils.findTree(afterFullData, item => item === row, treeOpts)
         if (matchObj && matchObj.parent) {
           let parentStatus
-          const vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
+          const vItems = checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
           const indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
           if (indeterminatesItem) {
             parentStatus = -1
@@ -2022,8 +2022,8 @@ const Methods = {
           XEUtils.remove(selection, item => item === row)
         } else {
           // 更新子节点状态
-          XEUtils.eachTree([row], (item, $rowIndex) => {
-            if (row === item || (!checkMethod || checkMethod({ row: item, $rowIndex }))) {
+          XEUtils.eachTree([row], (item) => {
+            if (row === item || (!checkMethod || checkMethod({ row: item }))) {
               if (value) {
                 selection.push(item)
               } else {
@@ -2038,7 +2038,7 @@ const Methods = {
         const matchObj = XEUtils.findTree(afterFullData, item => item === row, treeOpts)
         if (matchObj && matchObj.parent) {
           let parentStatus
-          const vItems = checkMethod ? matchObj.items.filter((item, $rowIndex) => checkMethod({ row: item, $rowIndex })) : matchObj.items
+          const vItems = checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
           const indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
           if (indeterminatesItem) {
             parentStatus = -1
@@ -2074,7 +2074,7 @@ const Methods = {
   },
   triggerCheckRowEvent (evnt, params, value) {
     const { checkMethod } = this.checkboxOpts
-    if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
+    if (!checkMethod || checkMethod({ row: params.row })) {
       this.handleSelectRow(params, value)
       const records = this.getCheckboxRecords()
       // 在 v3.0 中废弃 select-change
@@ -2114,14 +2114,13 @@ const Methods = {
     const beforeSelection = treeConfig ? [] : selection.filter(row => afterFullData.indexOf(row) === -1)
     if (!checkStrictly) {
       if (property) {
-        const indexKey = `${treeConfig ? '$' : ''}rowIndex`
-        const setValFn = (row, rowIndex) => {
-          if (!checkMethod || checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex })) {
+        const setValFn = (row) => {
+          if (!checkMethod || checkMethod({ row })) {
             XEUtils.set(row, property, value)
           }
         }
-        const clearValFn = (row, rowIndex) => {
-          if (!checkMethod || (checkMethod({ row, [indexKey]: rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)) {
+        const clearValFn = (row) => {
+          if (!checkMethod || (checkMethod({ row }) ? 0 : selection.indexOf(row) > -1)) {
             XEUtils.set(row, property, value)
           }
         }
@@ -2133,15 +2132,15 @@ const Methods = {
       } else {
         if (treeConfig) {
           if (value) {
-            XEUtils.eachTree(afterFullData, (row, $rowIndex) => {
-              if (!checkMethod || checkMethod({ row, $rowIndex })) {
+            XEUtils.eachTree(afterFullData, (row) => {
+              if (!checkMethod || checkMethod({ row })) {
                 selectRows.push(row)
               }
             }, treeOpts)
           } else {
             if (checkMethod) {
-              XEUtils.eachTree(afterFullData, (row, $rowIndex) => {
-                if (checkMethod({ row, $rowIndex }) ? 0 : selection.indexOf(row) > -1) {
+              XEUtils.eachTree(afterFullData, (row) => {
+                if (checkMethod({ row }) ? 0 : selection.indexOf(row) > -1) {
                   selectRows.push(row)
                 }
               }, treeOpts)
@@ -2150,13 +2149,13 @@ const Methods = {
         } else {
           if (value) {
             if (checkMethod) {
-              selectRows = afterFullData.filter((row, rowIndex) => selection.indexOf(row) > -1 || checkMethod({ row, rowIndex, $rowIndex: rowIndex }))
+              selectRows = afterFullData.filter((row) => selection.indexOf(row) > -1 || checkMethod({ row }))
             } else {
               selectRows = afterFullData.slice(0)
             }
           } else {
             if (checkMethod) {
-              selectRows = afterFullData.filter((row, rowIndex) => checkMethod({ row, rowIndex, $rowIndex: rowIndex }) ? 0 : selection.indexOf(row) > -1)
+              selectRows = afterFullData.filter((row) => checkMethod({ row }) ? 0 : selection.indexOf(row) > -1)
             }
           }
         }
@@ -2187,14 +2186,14 @@ const Methods = {
       if (property) {
         this.isAllSelected = afterFullData.length && afterFullData.every(
           checkMethod
-            ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || XEUtils.get(row, property)
+            ? (row) => !checkMethod({ row }) || XEUtils.get(row, property)
             : row => XEUtils.get(row, property)
         )
         this.isIndeterminate = !this.isAllSelected && afterFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
       } else {
         this.isAllSelected = afterFullData.length && afterFullData.every(
           checkMethod
-            ? (row, rowIndex) => !checkMethod({ row, rowIndex, $rowIndex: rowIndex }) || selection.indexOf(row) > -1
+            ? (row) => !checkMethod({ row }) || selection.indexOf(row) > -1
             : row => selection.indexOf(row) > -1
         )
         this.isIndeterminate = !this.isAllSelected && afterFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
@@ -2387,7 +2386,7 @@ const Methods = {
   triggerRadioRowEvent (evnt, params) {
     const { radioOpts } = this
     const { checkMethod } = radioOpts
-    if (!checkMethod || checkMethod({ row: params.row, rowIndex: params.rowIndex, $rowIndex: params.$rowIndex })) {
+    if (!checkMethod || checkMethod({ row: params.row })) {
       const isChange = this.selectRow !== params.row
       this.setRadioRow(params.row)
       if (isChange) {

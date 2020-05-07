@@ -254,11 +254,11 @@ export const Cell = {
         h('span', {
           class: 'vxe-radio--icon vxe-radio--unchecked-icon'
         })
-      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [
+      ].concat(slots && slots.default ? slots.default.call($table, params, h) : (labelField ? [
         h('span', {
           class: 'vxe-radio--label'
         }, XEUtils.get(row, labelField))
-      ]) : []))
+      ] : [])))
     ]
   },
   renderTreeRadioCell (h, params) {
@@ -322,11 +322,11 @@ export const Cell = {
           h('span', {
             class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
           })
-        ].concat(headerTitle ? (slots && slots.header ? slots.header.call($table, params, h) : [
+        ].concat(slots && slots.header ? slots.header.call($table, params, h) : (headerTitle ? [
           h('span', {
             class: 'vxe-checkbox--label'
           }, headerTitle)
-        ]) : []))
+        ] : [])))
       ])
     ]
   },
@@ -373,11 +373,11 @@ export const Cell = {
         h('span', {
           class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
         })
-      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [
+      ].concat(slots && slots.default ? slots.default.call($table, params, h) : (labelField ? [
         h('span', {
           class: 'vxe-checkbox--label'
         }, XEUtils.get(row, labelField))
-      ]) : []))
+      ] : [])))
     ]
   },
   renderTreeSelectionCell (h, params) {
@@ -426,11 +426,11 @@ export const Cell = {
         h('span', {
           class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
         })
-      ].concat(labelField ? (slots && slots.default ? slots.default.call($table, params, h) : [
+      ].concat(slots && slots.default ? slots.default.call($table, params, h) : (labelField ? [
         h('span', {
           class: 'vxe-checkbox--label'
         }, XEUtils.get(row, labelField))
-      ]) : []))
+      ] : [])))
     ]
   },
   renderTreeSelectionCellByProp (h, params) {
