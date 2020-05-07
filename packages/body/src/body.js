@@ -3,6 +3,8 @@ import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
+const cellType = 'body'
+
 // 处理选中位置
 function handleLocation (obj, rows, columns, row, column) {
   const rowIndex = rows.indexOf(row)
@@ -99,6 +101,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     radioOpts,
     checkboxOpts,
     treeOpts,
+    tooltipOpts,
     mouseConfig,
     mouseOpts,
     editConfig,
@@ -112,6 +115,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   const allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
   const { editRender, align, showOverflow, renderWidth, columnKey, className, treeNode } = column
   const { checked, selected, actived, copyed } = editStore
+  const { enabled } = tooltipOpts
   const isMouseSelected = mouseConfig && mouseOpts.selected
   // 在 v3.0 中废弃 mouse-config.checked
   const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
@@ -132,36 +136,36 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs = { 'data-colid': column.id }
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  const params = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData, items }
+  const params = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
   }
   // hover 进入事件
-  if (showTitle || showTooltip || tableListeners['cell-mouseenter']) {
+  if (showTitle || showTooltip || enabled || tableListeners['cell-mouseenter']) {
     tdOns.mouseenter = evnt => {
       if (isOperateMouse($table)) {
         return
       }
       if (showTitle) {
         DomTools.updateCellTitle(evnt, column)
-      } else if (showTooltip) {
+      } else if (showTooltip || enabled) {
         // 如果配置了显示 tooltip
         $table.triggerTooltipEvent(evnt, params)
       }
-      UtilTools.emitEvent($table, 'cell-mouseenter', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseenter', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
     }
   }
   // hover 退出事件
-  if (showTooltip || tableListeners['cell-mouseleave']) {
+  if (showTooltip || enabled || tableListeners['cell-mouseleave']) {
     tdOns.mouseleave = evnt => {
       if (isOperateMouse($table)) {
         return
       }
-      if (showTooltip) {
+      if (showTooltip || enabled) {
         $table.handleTargetLeaveEvent()
       }
-      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
     }
   }
   // 按下事件处理
@@ -298,7 +302,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
         class: 'vxe-body--column-checked-corner',
         on: {
           mousedown (evnt) {
-            $table.triggerCornerMousedownEvent({ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, level: rowLevel, cell: evnt.target.parentNode }, evnt)
+            $table.triggerCornerMousedownEvent({ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, level: rowLevel, cell: evnt.target.parentNode }, evnt)
           }
         }
       }) : null
@@ -365,11 +369,11 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'is--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $table.selectRow === row,
           'row--cheched': checkboxOpts.highlight && $table.isCheckedByCheckboxRow(row)
-        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
+        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table, $seq, seq, rowid, fixed: fixedType, type: cellType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid
         },
-        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex }) : rowStyle) : null,
+        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixed: fixedType, type: cellType, rowLevel, row, rowIndex, $rowIndex }) : rowStyle) : null,
         key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
@@ -392,7 +396,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
         h('tr', {
           class: 'vxe-body--expanded-row',
           key: `expand_${rowid}`,
-          style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
+          style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table, $seq, seq, rowid, fixed: fixedType, type: cellType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
           on: trOn
         }, [
           h('td', {
@@ -408,7 +412,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
               class: 'vxe-body--expanded-cell',
               style: cellStyle
             }, [
-              expandColumn.renderData(h, { $table, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, level: rowLevel })
+              expandColumn.renderData(h, { $table, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, type: cellType, level: rowLevel })
             ])
           ])
         ])
@@ -661,7 +665,7 @@ export default {
       $table.lastScrollTop = scrollTop
       $table.lastScrollLeft = scrollLeft
       $table.lastScrollTime = Date.now()
-      UtilTools.emitEvent($table, 'scroll', [{ type: 'body', fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table, $event: evnt }, evnt])
+      UtilTools.emitEvent($table, 'scroll', [{ type: cellType, fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table, $event: evnt }, evnt])
     }
   }
 }

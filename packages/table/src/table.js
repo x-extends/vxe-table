@@ -945,7 +945,10 @@ export default {
   },
   mounted () {
     if (this.autoResize) {
-      ResizeEvent.on(this, this.getParentElem(), () => this.recalculate(true))
+      const resizeObserver = new ResizeEvent(() => this.recalculate(true))
+      resizeObserver.observe(this.$el)
+      resizeObserver.observe(this.getParentElem())
+      this.$resize = resizeObserver
     }
     if (!this.$grid && this.customs) {
       UtilTools.warn('vxe.error.removeProp', ['customs'])
@@ -965,8 +968,8 @@ export default {
     if (tableWrapper && tableWrapper.parentNode) {
       tableWrapper.parentNode.removeChild(tableWrapper)
     }
-    if (ResizeEvent.off) {
-      ResizeEvent.off(this, this.getParentElem())
+    if (this.$resize) {
+      this.$resize.disconnect()
     }
     this.closeFilter()
     this.closeMenu()
@@ -3176,7 +3179,7 @@ export default {
       const cell = evnt.currentTarget
       this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--title'), column)
+        this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--title'), params)
       }
     },
     /**
@@ -3188,7 +3191,7 @@ export default {
       const cell = evnt.currentTarget
       this.handleTargetEnterEvent()
       if (tooltipStore.column !== column || !tooltipStore.visible) {
-        this.handleTooltip(evnt, cell, cell.children[0], column)
+        this.handleTooltip(evnt, cell, cell.children[0], params)
       }
     },
     /**
@@ -3206,7 +3209,7 @@ export default {
         }
       }
       if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-        this.handleTooltip(evnt, cell, column.treeNode ? cell.querySelector('.vxe-tree-cell') : cell.children[0], column, row)
+        this.handleTooltip(evnt, cell, column.treeNode ? cell.querySelector('.vxe-tree-cell') : cell.children[0], params)
       }
     },
     /**
@@ -3215,11 +3218,17 @@ export default {
      * @param {ColumnConfig} column 列配置
      * @param {Row} row 行对象
      */
-    handleTooltip (evnt, cell, overflowElem, column, row) {
-      const tooltip = this.$refs.tooltip
-      const content = column.type === 'html' ? overflowElem.innerText : overflowElem.textContent
-      if (content && overflowElem.scrollWidth > overflowElem.clientWidth) {
-        Object.assign(this.tooltipStore, {
+    handleTooltip (evnt, cell, overflowElem, params) {
+      params.cell = cell
+      const { $refs, tooltipOpts, tooltipStore } = this
+      const { column, row } = params
+      const { enabled, contentMethod } = tooltipOpts
+      const tooltip = $refs.tooltip
+      const customContent = contentMethod ? contentMethod(params) : null
+      const useCustom = contentMethod && !XEUtils.eqNull(customContent)
+      const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
+      if (content && (enabled || useCustom || overflowElem.scrollWidth > overflowElem.clientWidth)) {
+        Object.assign(tooltipStore, {
           row,
           column,
           visible: true

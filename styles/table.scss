@@ -767,6 +767,11 @@ select.vxe-select,
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
     }
+    &:not(.col--ellipsis) {
+      .vxe-cell {
+        white-space: pre-line;
+      }
+    }
   }
   &.virtual--x,
   &.virtual--y {

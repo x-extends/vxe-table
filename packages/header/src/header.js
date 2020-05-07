@@ -2,6 +2,8 @@ import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 import { convertToRows } from './util'
 
+const cellType = 'header'
+
 export default {
   name: 'VxeTableHeader',
   props: {
@@ -51,7 +53,8 @@ export default {
       scrollbarWidth,
       cellOffsetWidth,
       getColumnIndex,
-      sortOpts
+      sortOpts,
+      tooltipOpts
     } = $table
     let { tableWidth } = $table
     // v2.0 废弃属性，保留兼容
@@ -113,11 +116,12 @@ export default {
          */
         h('thead', headerColumn.map((cols, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
-            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
+            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType, type: cellType }) : headerRowClassName : ''],
+            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table, $rowIndex, fixed: fixedType, type: cellType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
             const { showHeaderOverflow, headerAlign, align, headerClassName } = column
             let { renderWidth } = column
+            const { enabled } = tooltipOpts
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -130,23 +134,23 @@ export default {
             const hasFilter = column.filters && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             const columnIndex = getColumnIndex(column)
-            const params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
+            const params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
             }
-            if (showTitle || showTooltip) {
+            if (showTitle || showTooltip || enabled) {
               thOns.mouseenter = evnt => {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt, column)
-                } else if (showTooltip) {
+                } else if (showTooltip || enabled) {
                   $table.triggerHeaderTooltipEvent(evnt, params)
                 }
               }
             }
-            if (showTooltip) {
+            if (showTooltip || enabled) {
               thOns.mouseleave = evnt => {
-                if (showTooltip) {
+                if (showTooltip || enabled) {
                   $table.handleTargetLeaveEvent(evnt)
                 }
               }

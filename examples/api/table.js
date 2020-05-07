@@ -1301,8 +1301,17 @@ const apis = [
         defVal: '继承 setup.table.tooltipConfig',
         list: [
           {
+            name: 'enabled',
+            desc: '所有单元格开启 tooltip 显示',
+            version: '1.15.29',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'theme',
-            desc: '列 tooltip 的主题',
+            desc: 'tooltip 的主题颜色',
             version: '',
             type: 'String',
             enum: 'dark,light',
@@ -1325,6 +1334,15 @@ const apis = [
             type: 'Number',
             enum: '',
             defVal: '300',
+            list: []
+          },
+          {
+            name: 'contentMethod',
+            desc: '该方法 Function({items?, row?, rowIndex?, $rowIndex, column, columnIndex, $columnIndex, type, cell, $event}) 接收一个字符串，可以通过返回值来重写默认的提示内容',
+            version: '1.15.29',
+            type: 'Function',
+            enum: '',
+            defVal: '',
             list: []
           }
         ]
@@ -2451,7 +2469,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, $event }',
+        defVal: '{ items, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2460,7 +2478,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, $event }',
+        defVal: '{ items, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {

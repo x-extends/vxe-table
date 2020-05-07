@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
-import { DomTools } from '../../tools'
+import { DomTools, GlobalEvent, ResizeEvent } from '../../tools'
 
 export default {
   name: 'VxeList',
@@ -8,6 +8,8 @@ export default {
     data: Array,
     height: [Number, String],
     loading: Boolean,
+    autoResize: Boolean,
+    syncResize: [Boolean, String, Number],
     scrollY: Object
   },
   data () {
@@ -26,6 +28,12 @@ export default {
   watch: {
     data (value) {
       this.loadData(value)
+    },
+    syncResize (value) {
+      if (value) {
+        this.recalculate()
+        this.$nextTick(() => setTimeout(() => this.recalculate()))
+      }
     }
   },
   created () {
@@ -40,6 +48,22 @@ export default {
       }
     })
     this.loadData(this.data)
+    GlobalEvent.on(this, 'resize', this.handleGlobalResizeEvent)
+  },
+  mounted () {
+    if (this.autoResize) {
+      const resizeObserver = new ResizeEvent(() => this.recalculate())
+      resizeObserver.observe(this.$el)
+      this.$resize = resizeObserver
+    }
+  },
+  beforeDestroy () {
+    if (this.$resize) {
+      this.$resize.disconnect()
+    }
+  },
+  destroyed () {
+    GlobalEvent.off(this, 'resize')
   },
   render (h) {
     const { $scopedSlots, height, bodyHeight, topSpaceHeight, items, loading } = this
@@ -87,6 +111,9 @@ export default {
     ]
   },
   methods: {
+    getParentElem () {
+      return this.$el.parentNode
+    },
     /**
      * 加载数据
      * @param {Array} datas 数据
@@ -120,7 +147,11 @@ export default {
      * 重新计算列表
      */
     recalculate () {
-      return this.computeScrollLoad()
+      const { $el } = this
+      if ($el.clientWidth && $el.clientHeight) {
+        return this.computeScrollLoad()
+      }
+      return Promise.resolve()
     },
     /**
      * 清除滚动条
@@ -246,6 +277,9 @@ export default {
       const { scrollYStore, scrollYLoad, fullData } = this
       this.bodyHeight = scrollYLoad ? fullData.length * scrollYStore.rowHeight : 0
       this.topSpaceHeight = scrollYLoad ? Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0) : 0
+    },
+    handleGlobalResizeEvent () {
+      this.recalculate()
     }
   }
 }
