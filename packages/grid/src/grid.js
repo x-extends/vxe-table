@@ -281,12 +281,10 @@ export default {
       /**
        * 渲染表单
        */
-      $scopedSlots.form ? $scopedSlots.form.call(this, { $grid: this }, h) : (
-        this.formConfig ? h('div', {
-          ref: 'form',
-          class: 'vxe-grid--form-wrapper'
-        }, renderDefaultForm(h, this)) : null
-      ),
+      $scopedSlots.form && this.formConfig ? h('div', {
+        ref: 'form',
+        class: 'vxe-grid--form-wrapper'
+      }, $scopedSlots.form ? $scopedSlots.form.call(this, { $grid: this }, h) : renderDefaultForm(h, this)) : null,
       /**
        * 渲染工具栏
        */
