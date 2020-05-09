@@ -172,6 +172,7 @@ module.exports = {
         form: '表单',
         switch: '开关',
         list: '列表',
+        pulldown: '下拉容器',
 
         other: '集成協力廠商庫',
         elementRender: 'element-ui -> 自定义渲染',
@@ -241,7 +242,8 @@ module.exports = {
         vxeForm: 'vxe-form',
         vxeFormItem: 'vxe-form-item',
         vxeSwitch: 'vxe-switch',
-        vxeList: 'vxe-list'
+        vxeList: 'vxe-list',
+        vxePulldown: 'vxe-pulldown'
       }
     },
     body: {
@@ -483,6 +485,7 @@ module.exports = {
           filterRender: '筛选渲染器配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: '即将废弃，请使用 table.column-key',
+          cellType: '单元格值类型（对于某些场景可能会用到，例如：导出数据类型设置）',
           cellRender: '默认的渲染器配置项',
           editRender: '可编辑渲染器配置项',
           contentRender: '内容渲染配置项',
@@ -665,12 +668,14 @@ module.exports = {
       },
       selectGroup: {
         desc: {
-          disabled: '是否禁用'
+          disabled: '是否禁用',
+          size: '尺寸'
         }
       },
       selectOption: {
         desc: {
-          disabled: '是否禁用'
+          disabled: '是否禁用',
+          size: '尺寸'
         }
       },
       switch: {
@@ -690,7 +695,17 @@ module.exports = {
       },
       list: {
         desc: {
-          data: '列表数据'
+          data: '列表数据',
+          size: '尺寸'
+        }
+      },
+      pulldown: {
+        desc: {
+          data: '列表数据',
+          size: '尺寸',
+          disabled: '是否禁用',
+          placement: '固定显示下拉面板的方向',
+          transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       }
     }

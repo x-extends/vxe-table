@@ -2592,7 +2592,7 @@ export default {
         } else if (DomTools.getEventTargetNode(evnt, filterWrapper.$el).flag) {
           // 如果点击筛选容器
         } else {
-          if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-dropdown--panel').flag) {
+          if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
             this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
           }
         }
@@ -2604,7 +2604,7 @@ export default {
             // 如果是激活状态，且点击了校验提示框
           } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
             // 如果是激活状态，且点击了下拉选项
-            if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-dropdown--panel').flag) {
+            if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
               // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
               this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
                 let isClear

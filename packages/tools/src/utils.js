@@ -103,6 +103,7 @@ class ColumnConfig {
       filterRender: _vm.filterRender,
       treeNode: _vm.treeNode,
       columnKey: _vm.columnKey,
+      cellType: _vm.cellType,
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
       contentRender: _vm.contentRender,

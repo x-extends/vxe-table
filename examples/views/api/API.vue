@@ -69,6 +69,7 @@ import formAPI from '../../api/form'
 import formItemAPI from '../../api/form-item'
 import switchAPI from '../../api/switch'
 import listAPI from '../../api/list'
+import pulldownAPI from '../../api/pulldown'
 
 export default {
   data () {
@@ -227,6 +228,9 @@ export default {
               break
             case 'list':
               apis = listAPI
+              break
+            case 'pulldown':
+              apis = pulldownAPI
               break
           }
           // 生成唯一 id

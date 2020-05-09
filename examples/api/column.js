@@ -439,6 +439,15 @@ const apis = [
         ]
       },
       {
+        name: 'cell-type',
+        descKey: 'app.api.tableColumn.desc.cellType',
+        version: '1.15.29',
+        type: 'String',
+        enum: 'auto（默认自动转换），number（数值）, string（字符串）',
+        defVal: 'auto',
+        list: []
+      },
+      {
         name: 'cell-render',
         descKey: 'app.api.tableColumn.desc.cellRender',
         version: '',

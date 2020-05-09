@@ -67,6 +67,7 @@
 * [x] Pager（分页）
 * [x] Form（表单）
 * [x] Toolbar（工具栏）
+* [x] Pulldown（下拉容器）
 * [x] List（虚拟列表）
 * [x] Editable CRUD（增删改查)
 * [x] Tree table（树表格)
@@ -103,6 +104,7 @@
   * ![Switch](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/switch/src/switch.min.js?compression=gzip&label=Switch) ![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/switch/style/style.css?compression=gzip&label=style&color=green)（开关）
   * ![Modal](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/modal/src/modal.min.js?compression=gzip&label=Modal)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/modal/style/style.css?compression=gzip&label=style&color=green) （模态窗口）
   * ![Button](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=Button)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/style/style.css?compression=gzip&label=style&color=green) （按钮）
+  * ![Pulldown](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/pulldown/src/pulldown.min.js?compression=gzip&label=Pulldown)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/pulldown/style/style.css?compression=gzip&label=style&color=green) （下拉容器）
 * Plugins（插件）
   * 增强插件
     * [![vxe-table-plugin-export-pdf](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-export-pdf/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20export%20pdf)](https://www.npmjs.org/package/vxe-table-plugin-export-pdf) ([PDF 导出插件](https://www.npmjs.com/package/vxe-table-plugin-export-pdf))

@@ -66,6 +66,8 @@ const props = {
   visible: { type: Boolean, default: null },
   // 列的 key
   columnKey: [String, Number],
+  // 单元格值类型
+  cellType: String,
   // 单元格渲染配置项
   cellRender: Object,
   // 单元格编辑渲染配置项

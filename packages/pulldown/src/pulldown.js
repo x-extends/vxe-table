@@ -1,0 +1,227 @@
+import GlobalConfig from '../../conf'
+import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+
+export default {
+  name: 'VxePulldown',
+  props: {
+    disabled: Boolean,
+    placement: String,
+    size: { type: String, default: () => GlobalConfig.size },
+    transfer: Boolean
+  },
+  data () {
+    return {
+      panelIndex: 0,
+      panelStyle: null,
+      panelPlacement: null,
+      currentValue: null,
+      visiblePanel: false,
+      animatVisible: false,
+      isActivated: false
+    }
+  },
+  computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    }
+  },
+  created () {
+    GlobalEvent.on(this, 'syncwheel', this.handleSyncwheelEvent)
+    GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
+    GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
+  },
+  mounted () {
+    if (this.transfer) {
+      document.body.appendChild(this.$refs.panel)
+    }
+  },
+  beforeDestroy () {
+    const panelElem = this.$refs.panel
+    if (panelElem && panelElem.parentNode) {
+      panelElem.parentNode.removeChild(panelElem)
+    }
+  },
+  destroyed () {
+    GlobalEvent.off(this, 'syncwheel')
+    GlobalEvent.off(this, 'mousedown')
+    GlobalEvent.off(this, 'blur')
+  },
+  render (h) {
+    const { $slots, vSize, transfer, isActivated, disabled, animatVisible, visiblePanel, panelStyle, panelPlacement } = this
+    return h('div', {
+      class: ['vxe-pulldown', {
+        [`size--${vSize}`]: vSize,
+        'is--visivle': visiblePanel,
+        'is--disabled': disabled,
+        'is--active': isActivated
+      }]
+    }, [
+      h('div', {
+        ref: 'content',
+        class: 'vxe-pulldown--content'
+      }, $slots.default),
+      h('div', {
+        ref: 'panel',
+        class: ['vxe-table--ignore-clear vxe-pulldown--panel', {
+          [`size--${vSize}`]: vSize,
+          'is--transfer': transfer,
+          'animat--leave': animatVisible,
+          'animat--enter': visiblePanel
+        }],
+        attrs: {
+          'data-placement': panelPlacement
+        },
+        style: panelStyle
+      }, $slots.dropdown)
+    ])
+  },
+  methods: {
+    handleSyncwheelEvent (evnt) {
+      const { $refs, $el, disabled, visiblePanel } = this
+      if (!disabled) {
+        if (visiblePanel) {
+          const hasSlef = DomTools.getEventTargetNode(evnt, $el).flag
+          if (hasSlef || DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
+            if (hasSlef) {
+              this.updatePlacement()
+            }
+          } else {
+            this.hidePanel()
+            this.$emit('hide-panel', { $event: evnt })
+          }
+        }
+      }
+    },
+    handleGlobalMousedownEvent (evnt) {
+      const { $refs, $el, disabled, visiblePanel } = this
+      if (!disabled) {
+        this.isActivated = DomTools.getEventTargetNode(evnt, $el).flag || DomTools.getEventTargetNode(evnt, $refs.panel).flag
+        if (visiblePanel && !this.isActivated) {
+          this.hidePanel()
+          this.$emit('hide-panel', { $event: evnt })
+        }
+      }
+    },
+    handleGlobalBlurEvent (evnt) {
+      if (this.visiblePanel) {
+        this.hidePanel()
+        this.$emit('hide-panel', { $event: evnt })
+      }
+    },
+    updateZindex () {
+      if (this.panelIndex < UtilTools.getLastZIndex()) {
+        this.panelIndex = UtilTools.nextZIndex()
+      }
+    },
+    isPanelVisible () {
+      return this.visiblePanel
+    },
+    /**
+     * 切换下拉面板
+     */
+    togglePanel () {
+      if (this.visiblePanel) {
+        return this.hidePanel()
+      }
+      return this.showPanel()
+    },
+    /**
+     * 显示下拉面板
+     */
+    showPanel () {
+      return new Promise(resolve => {
+        if (!this.disabled) {
+          clearTimeout(this.hidePanelTimeout)
+          this.isActivated = true
+          this.animatVisible = true
+          setTimeout(() => {
+            this.visiblePanel = true
+            resolve(this.$nextTick())
+          }, 10)
+          this.updateZindex()
+          this.updatePlacement()
+        } else {
+          resolve(this.$nextTick())
+        }
+      })
+    },
+    /**
+     * 隐藏下拉面板
+     */
+    hidePanel () {
+      this.visiblePanel = false
+      return new Promise(resolve => {
+        this.hidePanelTimeout = setTimeout(() => {
+          this.animatVisible = false
+          resolve(this.$nextTick())
+        }, 200)
+      })
+    },
+    /**
+     * 手动更新位置
+     */
+    updatePlacement () {
+      return this.$nextTick().then(() => {
+        const { $refs, transfer, placement, panelIndex } = this
+        const targetElem = $refs.content
+        const panelElem = $refs.panel
+        const targetHeight = targetElem.offsetHeight
+        const targetWidth = targetElem.offsetWidth
+        const panelHeight = panelElem.offsetHeight
+        const panelWidth = panelElem.offsetWidth
+        const marginSize = 5
+        const panelStyle = {
+          zIndex: panelIndex
+        }
+        const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
+        let panelPlacement = 'bottom'
+        if (transfer) {
+          let left = boundingLeft
+          let top = boundingTop + targetHeight
+          if (placement === 'top') {
+            panelPlacement = 'top'
+            top = boundingTop - panelHeight
+          } else {
+            // 如果下面不够放，则向上
+            if (top + panelHeight + marginSize > visibleHeight) {
+              panelPlacement = 'top'
+              top = boundingTop - panelHeight
+            }
+            // 如果上面不够放，则向下（优先）
+            if (top < marginSize) {
+              panelPlacement = 'bottom'
+              top = boundingTop + targetHeight
+            }
+          }
+          // 如果溢出右边
+          if (left + panelWidth + marginSize > visibleWidth) {
+            left -= left + panelWidth + marginSize - visibleWidth
+          }
+          // 如果溢出左边
+          if (left < marginSize) {
+            left = marginSize
+          }
+          Object.assign(panelStyle, {
+            left: `${left}px`,
+            top: `${top}px`,
+            minWidth: `${targetWidth}px`
+          })
+        } else {
+          if (placement === 'top') {
+            panelPlacement = 'top'
+            panelStyle.bottom = `${targetHeight}px`
+          } else {
+            // 如果下面不够放，则向上
+            if (boundingTop + targetHeight + panelHeight > visibleHeight) {
+              panelPlacement = 'top'
+              panelStyle.bottom = `${targetHeight}px`
+            }
+          }
+        }
+        this.panelStyle = panelStyle
+        this.panelPlacement = panelPlacement
+        return this.$nextTick()
+      })
+    }
+  }
+}

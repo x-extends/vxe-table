@@ -255,7 +255,7 @@ export default {
       }),
       h('div', {
         ref: 'panel',
-        class: ['vxe-dropdown--panel vxe-select--panel', {
+        class: ['vxe-table--ignore-clear vxe-select--panel', {
           [`size--${vSize}`]: vSize,
           'is--transfer': transfer,
           'animat--leave': animatVisible,
@@ -544,55 +544,66 @@ export default {
       }, 200)
     },
     updatePlacement () {
-      this.$nextTick(() => {
+      return this.$nextTick().then(() => {
         const { $refs, transfer, placement, panelIndex } = this
-        const inputElem = $refs.input.$el
+        const targetElem = $refs.input.$el
         const panelElem = $refs.panel
-        const inputHeight = inputElem.offsetHeight
-        const inputWidth = inputElem.offsetWidth
+        const targetHeight = targetElem.offsetHeight
+        const targetWidth = targetElem.offsetWidth
         const panelHeight = panelElem.offsetHeight
+        const panelWidth = panelElem.offsetWidth
+        const marginSize = 5
         const panelStyle = {
           zIndex: panelIndex
         }
-        const { boundingTop, boundingLeft, visibleHeight } = DomTools.getAbsolutePos(inputElem)
+        const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
         let panelPlacement = 'bottom'
         if (transfer) {
-          const left = boundingLeft
-          let top = boundingTop + inputHeight
+          let left = boundingLeft
+          let top = boundingTop + targetHeight
           if (placement === 'top') {
             panelPlacement = 'top'
             top = boundingTop - panelHeight
           } else {
             // 如果下面不够放，则向上
-            if (top + panelHeight > visibleHeight) {
+            if (top + panelHeight + marginSize > visibleHeight) {
               panelPlacement = 'top'
               top = boundingTop - panelHeight
             }
             // 如果上面不够放，则向下（优先）
-            if (top < 0) {
+            if (top < marginSize) {
               panelPlacement = 'bottom'
-              top = boundingTop + inputHeight
+              top = boundingTop + targetHeight
             }
+          }
+          // 如果溢出右边
+          if (left + panelWidth + marginSize > visibleWidth) {
+            left -= left + panelWidth + marginSize - visibleWidth
+          }
+          // 如果溢出左边
+          if (left < marginSize) {
+            left = marginSize
           }
           Object.assign(panelStyle, {
             left: `${left}px`,
             top: `${top}px`,
-            minWidth: `${inputWidth}px`
+            minWidth: `${targetWidth}px`
           })
         } else {
           if (placement === 'top') {
             panelPlacement = 'top'
-            panelStyle.bottom = `${inputHeight}px`
+            panelStyle.bottom = `${targetHeight}px`
           } else {
             // 如果下面不够放，则向上
-            if (boundingTop + inputHeight + panelHeight > visibleHeight) {
+            if (boundingTop + targetHeight + panelHeight > visibleHeight) {
               panelPlacement = 'top'
-              panelStyle.bottom = `${inputHeight}px`
+              panelStyle.bottom = `${targetHeight}px`
             }
           }
         }
         this.panelStyle = panelStyle
         this.panelPlacement = panelPlacement
+        return this.$nextTick()
       })
     },
     focus () {

@@ -25,6 +25,7 @@ import {
   Select,
   Switch,
   List,
+  Pulldown,
 
   Export,
   Resize
@@ -77,6 +78,7 @@ Vue.use(Form)
 Vue.use(Select)
 Vue.use(Switch)
 Vue.use(List)
+Vue.use(Pulldown)
 
 Vue.use(Export)
 Vue.use(Resize)
