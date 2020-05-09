@@ -2693,15 +2693,6 @@ const apis = [
         list: []
       },
       {
-        name: 'revert(rows, field)',
-        desc: '即将废弃，请使用 revertData',
-        version: '',
-        type: 'Promise',
-        enum: '',
-        defVal: 'rows: Row | Array<Row>, field?: string',
-        list: []
-      },
-      {
         name: 'revertData(rows, field)',
         desc: '只对 keep-source 开启有效，还原指定行 row 或者整个表格的数据',
         version: '2 | 2.8',

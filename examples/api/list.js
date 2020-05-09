@@ -17,6 +17,15 @@ const apis = [
         list: []
       },
       {
+        name: 'size',
+        descKey: 'app.api.list.desc.size',
+        version: '',
+        type: 'String',
+        enum: 'medium,small,mini',
+        defVal: '继承上下文',
+        list: []
+      },
+      {
         name: 'loading',
         desc: '是否加载中',
         version: '',

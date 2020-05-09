@@ -24,6 +24,7 @@ import {
   Switch,
   Edit,
   List,
+  Pulldown,
 
   Export,
   Keyboard,
@@ -89,6 +90,7 @@ Vue.use(Form)
 Vue.use(Select)
 Vue.use(Switch)
 Vue.use(List)
+Vue.use(Pulldown)
 
 Vue.use(Edit)
 Vue.use(Export)

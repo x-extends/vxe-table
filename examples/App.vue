@@ -242,6 +242,12 @@ export default {
               locat: {
                 name: 'ModuleModal'
               }
+            },
+            {
+              label: 'app.aside.nav.pulldown',
+              locat: {
+                name: 'ModulePulldown'
+              }
             }
           ]
         },
@@ -1982,6 +1988,15 @@ export default {
                 name: 'VXEAPI',
                 params: {
                   name: 'list'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxePulldown',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'pulldown'
                 }
               }
             }

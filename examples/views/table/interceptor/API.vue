@@ -38,7 +38,10 @@
       </vxe-table-column>
     </vxe-table>
     <h2>示例</h2>
-    <p class="tip">例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了</p>
+    <p class="tip">
+      例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了<br>
+      当然还有最简单的用法，直接给弹出面板加上 class=vxe-table--ignore-clear 即可
+    </p>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
     </pre>

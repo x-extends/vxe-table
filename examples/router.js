@@ -244,6 +244,7 @@ const ModuleToolbar = () => import(/* webpackChunkName: "module" */ './views/too
 const ModuleForm = () => import(/* webpackChunkName: "module" */ './views/form/Form.vue')
 const ModuleSwitch = () => import(/* webpackChunkName: "module" */ './views/switch/Switch.vue')
 const ModuleList = () => import(/* webpackChunkName: "module" */ './views/list/List.vue')
+const ModulePulldown = () => import(/* webpackChunkName: "module" */ './views/pulldown/Pulldown.vue')
 
 const TableOtherElement = () => import(/* webpackChunkName: "other" */ './views/table/other/Element.vue')
 const TableOtherIview = () => import(/* webpackChunkName: "other" */ './views/table/other/Iview.vue')
@@ -1451,6 +1452,11 @@ export default new Router({
       path: '/table/module/list',
       name: 'ModuleList',
       component: ModuleList
+    },
+    {
+      path: '/table/module/pulldown',
+      name: 'ModulePulldown',
+      component: ModulePulldown
     },
     {
       path: '/table/other/element',

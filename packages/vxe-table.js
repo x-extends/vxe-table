@@ -21,6 +21,7 @@ import Form from './form'
 import Select from './select'
 import Switch from './switch'
 import List from './list'
+import Pulldown from './pulldown'
 
 import Edit from './edit'
 import Export from './export'
@@ -52,6 +53,7 @@ const components = [
   Select,
   Switch,
   List,
+  Pulldown,
 
   Edit,
   Export,
@@ -103,6 +105,7 @@ export * from './form'
 export * from './select'
 export * from './switch'
 export * from './list'
+export * from './pulldown'
 
 export * from './edit'
 export * from './export'

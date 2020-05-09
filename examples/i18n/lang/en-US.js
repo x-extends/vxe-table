@@ -172,7 +172,8 @@ module.exports = {
         tooltip: 'Tooltip',
         form: 'Form',
         switch: 'Switch',
-        list: '列表',
+        list: 'List',
+        pulldown: 'Pulldown',
 
         other: 'Integrated third party Library',
         elementRender: 'element-ui -> Custom Templates',
@@ -242,7 +243,8 @@ module.exports = {
         vxeForm: 'vxe-form',
         vxeFormItem: 'vxe-form-item',
         vxeSwitch: 'vxe-switch',
-        vxeList: 'vxe-list'
+        vxeList: 'vxe-list',
+        vxePulldown: 'vxe-pulldown'
       }
     },
     body: {
@@ -484,6 +486,7 @@ module.exports = {
           filterRender: 'Filter renderer config',
           treeNode: 'Only valid for tree-config configuration, specified as the tree node',
           columnKey: 'Obsolete, please use "table.column-key"',
+          cellType: 'Cell value type',
           cellRender: 'Default renderer config',
           editRender: 'Edit renderer config',
           contentRender: 'Content renderer config',
@@ -666,18 +669,20 @@ module.exports = {
       },
       selectGroup: {
         desc: {
-          disabled: 'Whether to disable'
+          disabled: 'Whether to disable',
+          size: 'Size'
         }
       },
       selectOption: {
         desc: {
-          disabled: 'Whether to disable'
+          disabled: 'Whether to disable',
+          size: 'Size'
         }
       },
       switch: {
         desc: {
-          value: '绑定值',
-          size: '尺寸',
+          value: 'Binding values',
+          size: 'Size',
           disabled: '是否禁用',
           onLabel: '打开时显示的文字',
           offLabel: '关闭时显示的文字',
@@ -691,7 +696,17 @@ module.exports = {
       },
       list: {
         desc: {
-          data: 'List data'
+          data: 'List data',
+          size: 'Size'
+        }
+      },
+      pulldown: {
+        desc: {
+          data: '列表数据',
+          size: '尺寸',
+          disabled: '是否禁用',
+          placement: '固定显示下拉面板的方向',
+          transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       }
     }

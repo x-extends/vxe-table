@@ -34,6 +34,7 @@ const components = [
   'select',
   'switch',
   'list',
+  'pulldown',
 
   'edit',
   'export',

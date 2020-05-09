@@ -7,6 +7,7 @@ export default {
   props: {
     data: Array,
     height: [Number, String],
+    maxHeight: [Number, String],
     loading: Boolean,
     autoResize: Boolean,
     syncResize: [Boolean, String, Number],
@@ -23,6 +24,17 @@ export default {
   computed: {
     sYOpts () {
       return Object.assign({}, GlobalConfig.list.scrollY, this.scrollY)
+    },
+    styles () {
+      const { height, maxHeight } = this
+      const style = {}
+      if (height) {
+        style.height = isNaN(height) ? height : `${height}px`
+      } else if (maxHeight) {
+        style.height = 'auto'
+        style.maxHeight = isNaN(maxHeight) ? maxHeight : `${maxHeight}px`
+      }
+      return style
     }
   },
   watch: {
@@ -66,19 +78,17 @@ export default {
     GlobalEvent.off(this, 'resize')
   },
   render (h) {
-    const { $scopedSlots, height, bodyHeight, topSpaceHeight, items, loading } = this
+    const { $scopedSlots, styles, bodyHeight, topSpaceHeight, items, loading } = this
     return [
       h('div', {
         class: ['vxe-list', {
           'is--loading': loading
-        }],
-        style: height ? {
-          height: isNaN(height) ? height : `${height}px`
-        } : null
+        }]
       }, [
         h('div', {
           ref: 'virtualWrapper',
           class: 'vxe-list--virtual-wrapper',
+          style: styles,
           on: {
             scroll: this.scrollEvent
           }

@@ -25,14 +25,14 @@
 
     <div class="vxe-row">
       <div class="vxe-col--4">
-        <vxe-list class="my-list" :data="list2">
+        <vxe-list class="my-list" height="200" :data="list2">
           <template v-slot="{ items }">
             <div class="my-list-item" v-for="(item, index) in items" :key="index">{{ item.label }}</div>
           </template>
         </vxe-list>
       </div>
       <div class="vxe-col--4">
-        <vxe-list class="my-list" :data="list3">
+        <vxe-list class="my-list" height="200" :data="list3">
           <template v-slot="{ items }">
             <div class="my-list-item" v-for="(item, index) in items" :key="index">
               <img src="static/other/img2.gif" height="28">
@@ -42,7 +42,7 @@
         </vxe-list>
       </div>
       <div class="vxe-col--4">
-        <vxe-list class="my-ul-list" :data="list4" :scroll-y="{sItem: 'li'}">
+        <vxe-list class="my-ul-list" height="200" :data="list4" :scroll-y="{sItem: 'li'}">
           <template v-slot="{ items }">
             <ul>
               <li v-for="(item, index) in items" :key="index">
@@ -54,7 +54,7 @@
         </vxe-list>
       </div>
       <div class="vxe-col--12">
-        <vxe-list class="my-table-list" :data="list5" :scroll-y="{gt: 60, sItem: '.my-tr'}">
+        <vxe-list class="my-table-list" height="200" :data="list5" :scroll-y="{gt: 60, sItem: '.my-tr'}">
           <template v-slot="{ items }">
             <table>
               <tbody>
@@ -160,14 +160,14 @@ export default {
 
         <div class="vxe-row">
           <div class="vxe-col--4">
-            <vxe-list class="my-list" :data="list2">
+            <vxe-list class="my-list" height="200" :data="list2">
               <template v-slot="{ items }">
                 <div class="my-list-item" v-for="(item, index) in items" :key="index">{{ item.label }}</div>
               </template>
             </vxe-list>
           </div>
           <div class="vxe-col--4">
-            <vxe-list class="my-list" :data="list3">
+            <vxe-list class="my-list" height="200" :data="list3">
               <template v-slot="{ items }">
                 <div class="my-list-item" v-for="(item, index) in items" :key="index">
                   <img src="static/other/img2.gif" height="28">
@@ -177,7 +177,7 @@ export default {
             </vxe-list>
           </div>
           <div class="vxe-col--4">
-            <vxe-list class="my-ul-list" :data="list4" :scroll-y="{sItem: 'li'}">
+            <vxe-list class="my-ul-list" height="200" :data="list4" :scroll-y="{sItem: 'li'}">
               <template v-slot="{ items }">
                 <ul>
                   <li v-for="(item, index) in items" :key="index">
@@ -189,7 +189,7 @@ export default {
             </vxe-list>
           </div>
           <div class="vxe-col--12">
-            <vxe-list class="my-table-list" :data="list5" :scroll-y="{gt: 60, sItem: '.my-tr'}">
+            <vxe-list class="my-table-list" height="200" :data="list5" :scroll-y="{gt: 60, sItem: '.my-tr'}">
               <template v-slot="{ items }">
                 <table>
                   <tbody>
@@ -204,6 +204,8 @@ export default {
             </vxe-list>
           </div>
         </div>
+
+        <p class="tip">实现高性能的虚拟树列表：1.拍平树结构 2.构建列表树结构 3.处理展开收缩</p>
 
         <p>
           <vxe-button @click="loadTree6(6)">加载30条</vxe-button>
@@ -435,7 +437,6 @@ export default {
         `,
         `
         .my-list {
-          height: 200px;
           border: 1px solid #e8eaec;
         }
         .my-list .my-list-item {
@@ -443,14 +444,12 @@ export default {
           padding-left: 15px;
         }
         .my-ul-list {
-          height: 200px;
           border: 1px solid #e8eaec;
         }
         .my-ul-list li {
           height: 40px;
         }
         .my-table-list {
-          height: 200px;
           border: 1px solid #e8eaec;
         }
         .my-table-list table {
@@ -689,7 +688,6 @@ export default {
 
 <style scoped>
 .my-list {
-  height: 200px;
   border: 1px solid #e8eaec;
 }
 .my-list .my-list-item {
@@ -697,14 +695,12 @@ export default {
   padding-left: 15px;
 }
 .my-ul-list {
-  height: 200px;
   border: 1px solid #e8eaec;
 }
 .my-ul-list li {
   height: 40px;
 }
 .my-table-list {
-  height: 200px;
   border: 1px solid #e8eaec;
 }
 .my-table-list table {
