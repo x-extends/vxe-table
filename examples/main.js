@@ -31,7 +31,7 @@ function mockData () {
       role1: index === 1 ? '1' : '',
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',
-      content: index % 2 === 0 ? '内容' + index : 'Content' + index,
+      content: index % 2 === 0 ? 'vxe-table 从入门到放弃' + index : 'Content' + index,
       checked: false,
       checked1: index % 2 === 0,
       checked2: index % 3 === 0,
@@ -83,7 +83,7 @@ function mockData () {
       rate1: `${index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0}`,
       state: `${index % 4 === 0 ? 'value:Washington' : index % 3 === 0 ? 'value:Delaware' : ''}`,
       address: `vxe-table 从入门到放弃 - 地址${index}`,
-      address2: `地址 地址地址 地址${index}`,
+      address2: `vxe-table 从入门到放弃${index}`,
       img: `static/other/img${index % 3 ? '1' : '2'}.gif`,
       img1: index % 4 === 0 ? `static/other/img${index % 3 ? '1' : '2'}.gif` : '',
       html1: index % 3 === 0 ? `<span style="color:red;">我是一段Html代码</span><br><span style="color:blue;">vxe-table 从入门到放弃${index}</span><br><span style="color:green;">绿到你发慌！</span>` : '',
@@ -143,7 +143,7 @@ window.MOCK_TREE_DATA_LIST = [
           {
             id: '12100',
             parentId: '12000',
-            name: '图片 12100.png',
+            name: 'vxe-table 从入门到放弃 12100.png',
             size: '60k',
             type: '',
             date: '2019-08-20',
@@ -185,7 +185,7 @@ window.MOCK_TREE_DATA_LIST = [
               {
                 id: '123100',
                 parentId: '123000',
-                name: 'xxx 123100.avi',
+                name: 'vxe-table 从入门到放弃 123100.avi',
                 size: '105k',
                 type: 'avi',
                 date: '2019-05-16',
@@ -205,7 +205,7 @@ window.MOCK_TREE_DATA_LIST = [
               {
                 id: '123300',
                 parentId: '123000',
-                name: '文件 123300.txt',
+                name: 'vxe-table 从入门到放弃 123300.txt',
                 size: '18k',
                 type: 'txt',
                 date: '2019-04-21',
@@ -217,7 +217,7 @@ window.MOCK_TREE_DATA_LIST = [
           {
             id: '124000',
             parentId: '12000',
-            name: 'ooo 124000.mp4',
+            name: 'vxe-table 放弃指南 124000.mp4',
             size: '860k',
             type: 'mp4',
             date: '2019-01-27',
@@ -251,7 +251,7 @@ window.MOCK_TREE_DATA_LIST = [
   {
     id: '20000',
     parentId: null,
-    name: '图片 20000.png',
+    name: 'vxe-table 入坑系列 20000.png',
     size: '66k',
     type: 'png',
     date: '2019-08-23',
@@ -313,7 +313,7 @@ window.MOCK_TREE_DATA_LIST = [
           {
             id: '32100',
             parentId: '32000',
-            name: '入门教程 32100.mp4',
+            name: 'vxe-table 从入门到废弃 32100.mp4',
             size: '35k',
             type: 'mp4',
             date: '2019-05-28',
@@ -397,7 +397,7 @@ window.MOCK_TREE_DATA_LIST = [
               {
                 id: '32310',
                 parentId: '32300',
-                name: '某视频 32310.mp4',
+                name: 'vxe-table 从入门到精通 32310.mp4',
                 size: '75k',
                 type: 'mp4',
                 date: '2019-11-09',
@@ -463,7 +463,7 @@ window.MOCK_TREE_DATA_LIST = [
       {
         id: '34000',
         parentId: '30000',
-        name: '视频 34000.avi',
+        name: 'vxe-table 从入门到住院 34000.avi',
         size: '786k',
         type: 'avi',
         date: '2019-01-17',
@@ -517,7 +517,7 @@ window.MOCK_TREE_DATA_LIST = [
   {
     id: '50000',
     parentId: null,
-    name: '在线视频 50000.avi',
+    name: 'vxe-table 从入门到废弃 50000.avi',
     size: '498k',
     type: 'avi',
     date: '2019-12-02',

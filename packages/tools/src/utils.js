@@ -86,6 +86,7 @@ class ColumnConfig {
       filterMethod: _vm.filterMethod,
       filterRender: _vm.filterRender,
       treeNode: _vm.treeNode,
+      cellType: _vm.cellType,
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
       contentRender: _vm.contentRender,

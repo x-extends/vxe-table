@@ -17,6 +17,15 @@ const apis = [
         list: []
       },
       {
+        name: 'size',
+        descKey: 'app.api.select.desc.size',
+        version: '',
+        type: 'String',
+        enum: 'medium,small,mini',
+        defVal: '继承上下文',
+        list: []
+      },
+      {
         name: 'clearable',
         descKey: 'app.api.select.desc.clearable',
         version: '',

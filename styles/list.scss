@@ -3,12 +3,10 @@
 .vxe-list {
   position: relative;
   display: block;
-  height: 100px;
   padding: 0;
   .vxe-list--virtual-wrapper {
     position: relative;
     overflow: auto;
-    height: 100%;
   }
   .vxe-list--y-space {
     width: 0;
@@ -21,4 +19,8 @@
     border: 0;
     outline: 0;
   }
+}
+
+.vxe-list--virtual-wrapper {
+  height: 100px;
 }

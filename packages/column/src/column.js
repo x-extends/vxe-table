@@ -58,6 +58,8 @@ const props = {
   treeNode: Boolean,
   // 是否可视
   visible: { type: Boolean, default: null },
+  // 单元格值类型
+  cellType: String,
   // 单元格渲染配置项
   cellRender: Object,
   // 单元格编辑渲染配置项

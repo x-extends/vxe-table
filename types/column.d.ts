@@ -124,6 +124,10 @@ export declare class Column extends VXETableModule {
    */
   visible?: boolean;
   /**
+   * 单元格值类型
+   */
+  cellType?: string;
+  /**
    * 单元格渲染配置项
    */
   cellRender?: ColumnCellRenderOptions;
@@ -255,6 +259,10 @@ export interface ColumnOptions {
    */
   visible?: boolean;
   /**
+   * 单元格值类型
+   */
+  cellType?: string;
+  /**
    * 单元格渲染配置项
    */
   cellRender?: ColumnCellRenderOptions;
@@ -301,6 +309,7 @@ export class ColumnConfig {
   treeNode: boolean;
   filters: ColumnFilterParams[];
   filterRender: ColumnFilterRenderOptions;
+  cellType: string;
   cellRender: ColumnCellRenderOptions;
   editRender: ColumnEditRenderOptions;
   contentRender: ColumnContentRenderOptions;

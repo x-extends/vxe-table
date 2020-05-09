@@ -84,9 +84,8 @@
   }
   .vxe-default-input,
   .vxe-default-textarea,
-  .vxe-default-select,
-  .vxe-input {
-    height: $vxe-table-cell-input-height-default;
+  .vxe-default-select {
+    height: $vxe-input-height-default;
   }
   .vxe-default-input {
     &[type="date"]::-webkit-inner-spin-button {
@@ -396,9 +395,8 @@
     .vxe-cell {
       .vxe-default-input,
       .vxe-default-textarea,
-      .vxe-default-select,
-      .vxe-input {
-        height: $vxe-table-cell-input-height-medium;
+      .vxe-default-select {
+        height: $vxe-input-height-medium;
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -419,9 +417,8 @@
     .vxe-cell {
       .vxe-default-input,
       .vxe-default-textarea,
-      .vxe-default-select,
-      .vxe-input {
-        height: $vxe-table-cell-input-height-small;
+      .vxe-default-select {
+        height: $vxe-input-height-small;
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -442,9 +439,8 @@
     .vxe-cell {
       .vxe-default-input,
       .vxe-default-textarea,
-      .vxe-default-select,
-      .vxe-input {
-        height: $vxe-table-cell-input-height-mini;
+      .vxe-default-select {
+        height: $vxe-input-height-mini;
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -454,7 +450,7 @@
     }
   }
   .vxe-cell {
-    white-space: normal;
+    white-space: pre-line;
     word-break: break-all;
     padding-left: $vxe-table-cell-padding-left;
     padding-right: $vxe-table-cell-padding-right;
@@ -712,11 +708,6 @@
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
     }
-    &:not(.col--ellipsis) {
-      .vxe-cell {
-        white-space: pre-line;
-      }
-    }
   }
   .vxe-body--column,
   .vxe-footer--column {
@@ -908,7 +899,6 @@
               height: $vxe-table-row-line-height;
             }
             .vxe-input {
-              height: $vxe-table-row-line-height - 1;
               .vxe-input--inner {
                 border: 0;
                 padding-left: 0;

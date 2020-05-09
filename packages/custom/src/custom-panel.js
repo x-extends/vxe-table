@@ -3,6 +3,7 @@ import GlobalConfig from '../../conf'
 import VxeModal from '../../modal/src/modal'
 import VxeInput from '../../input/src/input'
 import VxeCheckbox from '../../checkbox/src/checkbox'
+import VxeList from '../../list/src/list'
 import { UtilTools } from '../../tools'
 
 export default {
@@ -14,7 +15,8 @@ export default {
   components: {
     VxeModal,
     VxeInput,
-    VxeCheckbox
+    VxeCheckbox,
+    VxeList
   },
   inject: {
     $xetable: {
@@ -134,9 +136,13 @@ export default {
               }, GlobalConfig.i18n('vxe.table.customAll'))
             ])
           ]),
-          h('ul', {
-            class: 'vxe-custom--panel-column-body'
-          }, cols)
+          h('vxe-list', {
+            class: 'vxe-custom--panel-list'
+          }, [
+            h('ul', {
+              class: 'vxe-custom--panel-column-body'
+            }, cols)
+          ])
         ]),
         h('div', {
           class: 'vxe-custom--panel-btns'
