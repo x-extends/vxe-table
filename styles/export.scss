@@ -43,7 +43,7 @@
     width: 80%;
     border: 1px solid $vxe-input-border-color;
     margin: 3px 0;
-    border-radius: 4px;
+    border-radius: $vxe-border-radius;
     user-select: none;
     & > ul {
       & > li {
@@ -96,7 +96,7 @@
   .vxe-import-select--file {
     border: 1px dashed $vxe-input-border-color;
     padding: 6px 34px;
-    border-radius: 4px;
+    border-radius: $vxe-border-radius;
     user-select: none;
     cursor: pointer;
     &:hover {

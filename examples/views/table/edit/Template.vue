@@ -31,16 +31,18 @@
           <input type="text" v-model="row.name" class="custom-input">
         </template>
       </vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
-        <template v-slot:edit="{ row }">
-          <vxe-input type="number" v-model="row.age"></vxe-input>
-        </template>
-      </vxe-table-column>
-      <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
-        <template v-slot:edit="{ row }">
-          <vxe-input type="number" v-model="row.num"></vxe-input>
-        </template>
-        <template v-slot="{ row }">￥{{ row.num }}</template>
+      <vxe-table-column title="分组">
+        <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
+          <template v-slot:edit="{ row }">
+            <vxe-input type="number" v-model="row.age"></vxe-input>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
+          <template v-slot:edit="{ row }">
+            <vxe-input type="number" v-model="row.num"></vxe-input>
+          </template>
+          <template v-slot="{ row }">￥{{ row.num }}</template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{type: 'default'}">
         <template v-slot:edit="{ row, rowIndex }">
@@ -141,16 +143,18 @@ export default {
               <input type="text" v-model="row.name" class="custom-input">
             </template>
           </vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
-            <template v-slot:edit="{ row }">
-              <vxe-input type="number" v-model="row.age"></vxe-input>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
-            <template v-slot:edit="{ row }">
-              <vxe-input type="number" v-model="row.num"></vxe-input>
-            </template>
-            <template v-slot="{ row }">￥{{ row.num }}</template>
+          <vxe-table-column title="分组">
+            <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
+              <template v-slot:edit="{ row }">
+                <vxe-input type="number" v-model="row.age"></vxe-input>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
+              <template v-slot:edit="{ row }">
+                <vxe-input type="number" v-model="row.num"></vxe-input>
+              </template>
+              <template v-slot="{ row }">￥{{ row.num }}</template>
+            </vxe-table-column>
           </vxe-table-column>
           <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{type: 'default'}">
             <template v-slot:edit="{ row, rowIndex }">

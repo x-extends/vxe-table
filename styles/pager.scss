@@ -184,7 +184,7 @@
   .vxe-pager--jump-next,
   .vxe-pager--num-btn {
     text-align: center;
-    border-radius: 0.25em;
+    border-radius: $vxe-border-radius;
     margin: 0 0.25em;
     user-select: none;
     &:not(.is--disabled) {
@@ -234,7 +234,7 @@
     }
   }
   .vxe-pager--jump .vxe-pager--goto {
-    border-radius: 0.25em;
+    border-radius: $vxe-border-radius;
     border: 1px solid $vxe-input-border-color;
     color: $vxe-font-color;
     transition: border .2s ease-in-out;

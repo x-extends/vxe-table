@@ -34,7 +34,7 @@
   display: none;
   position: absolute;
   min-width: 100px;
-  border-radius: 2px;
+  border-radius: $vxe-border-radius;
   background-color: #fff;
   border: 1px solid $vxe-table-popup-border-color;
   box-shadow: 0 1px 6px rgba(0,0,0,.2);

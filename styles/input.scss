@@ -4,7 +4,7 @@
 $iconWidth: 1.6em;
 
 .vxe-input--inner {
-  border-radius: 0.25em;
+  border-radius: $vxe-border-radius;
   outline: 0;
   padding: 0 0.6em;
   color: $vxe-font-color;
@@ -270,7 +270,7 @@ $iconWidth: 1.6em;
   overflow-y: auto;
   padding: 0.2em 0;
   max-height: 22em;
-  border-radius: 0.25em;
+  border-radius: $vxe-border-radius;
 }
 
 .vxe-input--panel-layout-wrapper {
@@ -343,7 +343,7 @@ $iconWidth: 1.6em;
   text-align: center;
   padding: 0 0.6em;
   border: 1px solid $vxe-input-border-color;
-  border-radius: 0.25em;
+  border-radius: $vxe-border-radius;
 }
 .vxe-input--time-picker-confirm {
   position: absolute;
@@ -353,7 +353,7 @@ $iconWidth: 1.6em;
   outline: 0;
   padding: 0 0.6em;
   border: 1px solid $vxe-input-border-color;
-  border-radius: 0.25em;
+  border-radius: $vxe-border-radius;
   cursor: pointer;
   color: #fff;
   border-color: $vxe-primary-color;
@@ -411,7 +411,7 @@ $iconWidth: 1.6em;
   height: 2em;
   line-height: 2em;
   display: flex;
-  border-radius: 0.25em;
+  border-radius: $vxe-border-radius;
   border: 1px solid $vxe-input-border-color;
   align-items: center;
   justify-content: center;
@@ -427,7 +427,7 @@ $iconWidth: 1.6em;
   }
 }
 .vxe-input--date-picker-body {
-  border-radius: 0.25em;
+  border-radius: $vxe-border-radius;
   border: 1px solid $vxe-table-popup-border-color;
   user-select: none;
   table {
@@ -498,7 +498,7 @@ $iconWidth: 1.6em;
   flex-direction: row;
   border: 1px solid $vxe-table-popup-border-color;
   flex-grow: 1;
-  border-radius: 0.25em;
+  border-radius: $vxe-border-radius;
   user-select: none;
   & > ul {
     height: 13.6em;
