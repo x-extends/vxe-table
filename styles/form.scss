@@ -152,7 +152,7 @@
   .vxe-default-select {
     outline: 0;
     border: 1px solid $vxe-input-border-color;
-    border-radius: 0.25em;
+    border-radius: $vxe-border-radius;
   }
   .vxe-default-input,
   .vxe-default-select {

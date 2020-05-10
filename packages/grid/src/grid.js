@@ -281,7 +281,7 @@ export default {
       /**
        * 渲染表单
        */
-      $scopedSlots.form && this.formConfig ? h('div', {
+      $scopedSlots.form || this.formConfig ? h('div', {
         ref: 'form',
         class: 'vxe-grid--form-wrapper'
       }, $scopedSlots.form ? $scopedSlots.form.call(this, { $grid: this }, h) : renderDefaultForm(h, this)) : null,
