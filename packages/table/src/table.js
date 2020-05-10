@@ -2528,7 +2528,6 @@ export default {
       this.overflowY = overflowY
       this.tableWidth = tableWidth
       this.tableHeight = tableHeight
-      this.parentHeight = this.getParentHeight()
       if (headerElem) {
         this.headerHeight = headerElem.clientHeight
       } else {
@@ -2544,6 +2543,7 @@ export default {
         this.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
         this.overflowX = tableWidth > bodyWidth
       }
+      this.parentHeight = Math.max(this.headerHeight + this.footerHeight + 20, this.getParentHeight())
       if (this.overflowX) {
         this.checkScrolling()
       }

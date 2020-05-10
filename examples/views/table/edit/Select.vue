@@ -9,9 +9,13 @@
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
-      <vxe-table-column field="sex5" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-table-column>
-      <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-table-column>
+      <vxe-table-column title="分组1">
+        <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
+        <vxe-table-column field="sex5" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column title="分组1">
+        <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-table-column>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -34,28 +38,19 @@ export default {
         {
           label: '第一分组',
           options: [
-            {
-              value: '1',
-              label: '男'
-            }
+            { value: '0', label: '女' }
           ]
         },
         {
           label: '第二分组',
           options: [
-            {
-              value: '0',
-              label: '女'
-            }
+            { value: '1', label: '男' }
           ]
         },
         {
           label: '其他',
           options: [
-            {
-              value: '',
-              label: '无'
-            }
+            { value: '2', label: '无' }
           ]
         }
       ],
@@ -68,9 +63,13 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
-          <vxe-table-column field="sex5" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-table-column>
-          <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-table-column>
+          <vxe-table-column title="分组1">
+            <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
+            <vxe-table-column field="sex5" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column title="分组1">
+            <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-table-column>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
@@ -82,28 +81,19 @@ export default {
                 {
                   label: '第一分组',
                   options: [
-                    {
-                      value: '1',
-                      label: '男'
-                    }
+                    { value: '0', label: '女' }
                   ]
                 },
                 {
                   label: '第二分组',
                   options: [
-                    {
-                      value: '0',
-                      label: '女'
-                    }
+                    { value: '1', label: '男' }
                   ]
                 },
                 {
                   label: '其他',
                   options: [
-                    {
-                      value: '',
-                      label: '无'
-                    }
+                    { value: '2', label: '无' }
                   ]
                 }
               ]

@@ -69,7 +69,7 @@ select.vxe-select,
     padding: 0 2px;
     width: 100%;
     color: $vxe-font-color;
-    border-radius: 4px;
+    border-radius: $vxe-border-radius;
     border: 1px solid $vxe-input-border-color;
     &:focus {
       border: 1px solid $vxe-primary-color;
@@ -122,9 +122,100 @@ select.vxe-select,
   position: absolute;
   background-color: $vxe-table-checkbox-range-background-color;
   border: 1px solid $vxe-table-checkbox-range-border-color;
-  border-radius: 2px;
   pointer-events: none;
 }
+
+/*圆角*/
+// @if $vxe-table-border-radius {
+//   .vxe-table {
+//     %AllRadius {
+//       border-radius: $vxe-table-border-radius;
+//     }
+//     %TopRadius {
+//       border-radius: $vxe-table-border-radius $vxe-table-border-radius 0 0;
+//     }
+//     %TopLeftRadius {
+//       border-radius: $vxe-table-border-radius 0 0 0;
+//     }
+//     %TopRightRadius {
+//       border-radius: 0 $vxe-table-border-radius 0 0;
+//     }
+//     %BottomRadius {
+//       border-radius: 0 0 $vxe-table-border-radius $vxe-table-border-radius;
+//     }
+//     %BottomLeftRadius {
+//       border-radius: 0 0 0 $vxe-table-border-radius;
+//     }
+//     %BottomRightRadius {
+//       border-radius: 0 0 $vxe-table-border-radius 0;
+//     }
+//     @extend %AllRadius;
+//     .vxe-table--border-line {
+//       @extend %AllRadius;
+//     }
+//     &.show--head {
+//       &:not(.show--foot) {
+//         .vxe-table--body-wrapper {
+//           &.fixed-left--wrapper {
+//             @extend %BottomLeftRadius;
+//           }
+//           &.body--wrapper {
+//             @extend %BottomRadius;
+//           }
+//           &.fixed-right--wrapper {
+//             @extend %BottomRightRadius;
+//           }
+//         }
+//       }
+//       .vxe-table--header-wrapper {
+//         &.fixed-left--wrapper {
+//           @extend %TopLeftRadius;
+//         }
+//         &.body--wrapper {
+//           @extend %TopRadius;
+//         }
+//         &.fixed-right--wrapper {
+//           @extend %TopRightRadius;
+//         }
+//       }
+//     }
+//     &:not(.show--head) {
+//       &:not(.show--foot) {
+//         .vxe-table--body-wrapper {
+//           &.body--wrapper {
+//             @extend %AllRadius;
+//           }
+//         }
+//       }
+//     }
+//     &.show--foot {
+//       &:not(.show--head) {
+//         .vxe-table--body-wrapper {
+//           &.fixed-left--wrapper {
+//             @extend %BottomLeftRadius;
+//           }
+//           &.body--wrapper {
+//             @extend %TopRadius;
+//           }
+//           &.fixed-right--wrapper {
+//             @extend %BottomRightRadius;
+//           }
+//         }
+//       }
+//       .vxe-table--footer-wrapper {
+//         &.fixed-left--wrapper {
+//           @extend %BottomLeftRadius;
+//         }
+//         &.body--wrapper {
+//           @extend %BottomRadius;
+//         }
+//         &.fixed-right--wrapper {
+//           @extend %BottomRightRadius;
+//         }
+//       }
+//     }
+//   }
+// }
 
 /*table*/
 .vxe-table {
@@ -132,24 +223,6 @@ select.vxe-select,
   font-size: $vxe-font-size;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
-  background-color: $vxe-table-background-color;
-  &:before,
-  &:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 0;
-    z-index: 2;
-  }
-  &:before {
-    top: 0;
-    border-top: 1px solid $vxe-table-border-color;
-  }
-  &:after {
-    bottom: 0;
-    border-bottom: 1px solid $vxe-table-border-color;
-  }
   &[x-cloak] {
     .vxe-table--main-wrapper,
     .vxe-table--fixed-left-wrapper,
@@ -352,6 +425,8 @@ select.vxe-select,
       user-select: none;
     }
   }
+
+  /*边框*/
   .vxe-table--footer-wrapper {
     border-top: 1px solid $vxe-table-border-color;
   }
@@ -391,20 +466,27 @@ select.vxe-select,
   }
   &.border--inner,
   &.border--none {
-    &:before,
-    .vxe-table--border-line {
-      display: none;
+    .vxe-table--header-wrapper {
+      background-color: $vxe-table-background-color;
     }
     .vxe-table--fixed-left-wrapper {
       border-right: 0;
     }
   }
+  &.border--inner {
+    .vxe-table--border-line {
+      border-width: 0 0 1px 0;
+    }
+  }
   &.border--none {
-    &:after,
-    .vxe-table--header-border-line{
+    .vxe-table--border-line {
+      display: none;
+    }
+    .vxe-table--header-border-line {
       display: none;
     }
   }
+
   &.t--checked,
   &.t--selected {
     user-select: none;
@@ -618,23 +700,14 @@ select.vxe-select,
 
   /*边框线*/
   .vxe-table--border-line {
-    &:before,
-    &:after {
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 0;
-      height: 100%;
-      z-index: 1;
-    }
-    &:before {
-      left: 0;
-      border-left: 1px solid $vxe-table-border-color;
-    }
-    &:after {
-      right: 0;
-      border-right: 1px solid $vxe-table-border-color;
-    }
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    border: 1px solid $vxe-table-border-color;
   }
 
   /*树形节点*/
@@ -896,7 +969,7 @@ select.vxe-select,
         z-index: 1;
         .vxe-cell--valid-msg {
           display: inline-block;
-          border-radius: 4px;
+          border-radius: $vxe-border-radius;
           padding: 8px 12px;
           color: #fff;
           background-color: $vxe-table-validate-error-background-color;

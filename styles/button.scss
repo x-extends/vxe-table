@@ -103,7 +103,7 @@ $btnThemeList: (
     height: $vxe-button-height-default;
     line-height: 1;
     border: 1px solid $vxe-input-border-color;
-    border-radius: 0.25em;
+    border-radius: $vxe-border-radius;
     &:not(.is--disabled) {
       &:hover {
         color: lighten($vxe-primary-color, 6%);
@@ -264,7 +264,7 @@ $btnThemeList: (
 .vxe-button--dropdown-wrapper {
   padding: 5px;
   background-color: #fff;
-  border-radius: 0.25em;
+  border-radius: $vxe-border-radius;
   border: 1px solid $vxe-input-border-color;
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   & > .vxe-button {

@@ -34,12 +34,16 @@
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="sex2" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>
-      <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-      <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
+      <vxe-table-column title="分组1">
+        <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+        <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+        <vxe-table-column field="sex2" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column title="分组2">
+        <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
+        <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+        <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
+      </vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
     </vxe-table>
 
@@ -114,12 +118,16 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="sex2" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>
-          <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-          <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-          <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
+          <vxe-table-column title="分组1">
+            <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+            <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+            <vxe-table-column field="sex2" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value', label: 'spell'}}"></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column title="分组2">
+            <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
+            <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+            <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
+          </vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
         </vxe-table>
         `,

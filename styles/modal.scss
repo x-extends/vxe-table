@@ -168,7 +168,7 @@
     visibility: hidden;
     width: 420px;
     background-color: #fff;
-    border-radius: 4px;
+    border-radius: $vxe-border-radius;
     border: 1px solid #ebeef5;
     text-align: left;
     pointer-events: auto;
@@ -245,7 +245,7 @@
     padding: 0.6em 2.8em 0.6em 1em;
     border-bottom: 1px solid #eee;
     background-color: $vxe-modal-header-background-color;
-    border-radius: 2px 2px 0 0;
+    border-radius: $vxe-border-radius $vxe-border-radius 0 0;
     user-select: none;
     &.is--ellipsis {
       overflow: hidden;

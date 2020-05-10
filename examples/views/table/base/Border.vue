@@ -3,6 +3,7 @@
     <p class="tip">通过设置 <table-api-link prop="border"/>=false|default 默认显示边框</p>
 
     <vxe-table
+      height="200"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -22,6 +23,7 @@
 
     <vxe-table
       border
+      height="200"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -40,6 +42,7 @@
     <p class="tip">通过设置 <table-api-link prop="border"/>=outer 显示外边框</p>
 
     <vxe-table
+      height="200"
       border="outer"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -59,6 +62,7 @@
     <p class="tip">通过设置 <table-api-link prop="border"/>=inner 显示内边框</p>
 
     <vxe-table
+      height="200"
       border="inner"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -78,6 +82,7 @@
     <p class="tip">通过设置 <table-api-link prop="border"/>=none 去掉所有边框</p>
 
     <vxe-table
+      height="200"
       border="none"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -106,6 +111,7 @@ export default {
       demoCodes: [
         `
         <vxe-table
+          height="200"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -122,13 +128,14 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           }
         }
         `,
         `
         <vxe-table
           border
+          height="200"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -145,12 +152,13 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           }
         }
         `,
         `
         <vxe-table
+          height="200"
           border="outer"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -168,12 +176,13 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           }
         }
         `,
         `
         <vxe-table
+          height="200"
           border="inner"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -191,12 +200,13 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           }
         }
         `,
         `
         <vxe-table
+          height="200"
           border="none"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -214,7 +224,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           }
         }
         `
@@ -222,7 +232,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
