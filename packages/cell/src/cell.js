@@ -3,6 +3,14 @@ import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
+function renderTitleContent (h, content) {
+  return [
+    h('span', {
+      class: 'vxe-cell--title'
+    }, content)
+  ]
+}
+
 export const Cell = {
   createColumn ($xetable, _vm) {
     const { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
@@ -64,27 +72,15 @@ export const Cell = {
     const { slots, own } = column
     const renderOpts = own.editRender || own.cellRender
     if (slots && slots.header) {
-      return [
-        h('span', {
-          class: 'vxe-cell--title'
-        }, slots.header.call($table, params, h))
-      ]
+      return renderTitleContent(h, slots.header.call($table, params, h))
     }
     if (renderOpts) {
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf.renderHeader) {
-        return [
-          h('span', {
-            class: 'vxe-cell--title'
-          }, compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table }))
-        ]
+        return renderTitleContent(h, compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table }))
       }
     }
-    return [
-      h('span', {
-        class: 'vxe-cell--title'
-      }, UtilTools.formatText(column.getTitle(), 1))
-    ]
+    return renderTitleContent(h, UtilTools.formatText(column.getTitle(), 1))
   },
   renderDefaultCell (h, params) {
     const { $table, row, column } = params
@@ -180,11 +176,7 @@ export const Cell = {
   renderIndexHeader (h, params) {
     const { $table, column } = params
     const { slots } = column
-    return [
-      h('span', {
-        class: 'vxe-cell--title'
-      }, slots && slots.header ? slots.header.call($table, params, h) : UtilTools.formatText(column.getTitle(), 1))
-    ]
+    return renderTitleContent(h, slots && slots.header ? slots.header.call($table, params, h) : UtilTools.formatText(column.getTitle(), 1))
   },
   renderIndexCell (h, params) {
     const { $table, column } = params
@@ -209,15 +201,11 @@ export const Cell = {
     const { $table, column } = params
     const { slots } = column
     // 在 v3.0 中废弃 label
-    return [
+    return renderTitleContent(h, slots && slots.header ? slots.header.call($table, params, h) : [
       h('span', {
-        class: 'vxe-cell--title'
-      }, slots && slots.header ? slots.header.call($table, params, h) : [
-        h('span', {
-          class: 'vxe-radio--label'
-        }, UtilTools.formatText(column.getTitle(), 1))
-      ])
-    ]
+        class: 'vxe-radio--label'
+      }, UtilTools.formatText(column.getTitle(), 1))
+    ])
   },
   renderRadioCell (h, params) {
     const { $table, column, isHidden } = params
@@ -278,15 +266,11 @@ export const Cell = {
     let isChecked = false
     let on
     if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
-      return [
+      return renderTitleContent(h, slots && slots.header ? slots.header.call($table, params, h) : [
         h('span', {
-          class: 'vxe-cell--title'
-        }, slots && slots.header ? slots.header.call($table, params, h) : [
-          h('span', {
-            class: 'vxe-checkbox--label'
-          }, headerTitle)
-        ])
-      ]
+          class: 'vxe-checkbox--label'
+        }, headerTitle)
+      ])
     }
     if (!isHidden) {
       isChecked = isAllCheckboxDisabled ? false : $table.isAllSelected
@@ -298,37 +282,33 @@ export const Cell = {
         }
       }
     }
-    return [
+    return renderTitleContent(h, [
       h('span', {
-        class: 'vxe-cell--title'
+        class: ['vxe-cell--checkbox', {
+          'is--checked': isChecked,
+          'is--disabled': isAllCheckboxDisabled,
+          'is--indeterminate': isIndeterminate
+        }],
+        attrs: {
+          title: GlobalConfig.i18n('vxe.table.allTitle')
+        },
+        on
       }, [
         h('span', {
-          class: ['vxe-cell--checkbox', {
-            'is--checked': isChecked,
-            'is--disabled': isAllCheckboxDisabled,
-            'is--indeterminate': isIndeterminate
-          }],
-          attrs: {
-            title: GlobalConfig.i18n('vxe.table.allTitle')
-          },
-          on
-        }, [
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
-          })
-        ].concat(slots && slots.header ? slots.header.call($table, params, h) : (headerTitle ? [
-          h('span', {
-            class: 'vxe-checkbox--label'
-          }, headerTitle)
-        ] : [])))
-      ])
-    ]
+          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+        }),
+        h('span', {
+          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+        }),
+        h('span', {
+          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+        })
+      ].concat(slots && slots.header ? slots.header.call($table, params, h) : (headerTitle ? [
+        h('span', {
+          class: 'vxe-checkbox--label'
+        }, headerTitle)
+      ] : [])))
+    ])
   },
   renderSelectionCell (h, params) {
     const { $table, row, column, isHidden } = params

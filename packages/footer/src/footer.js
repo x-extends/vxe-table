@@ -144,12 +144,12 @@ export default {
             }
             if (tableListeners['footer-cell-click']) {
               tfOns.click = evnt => {
-                UtilTools.emitEvent($xetable, 'footer-cell-click', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerData, cell: evnt.currentTarget }, evnt])
+                $xetable.emitEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, params), evnt)
               }
             }
             if (tableListeners['footer-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                UtilTools.emitEvent($xetable, 'footer-cell-dblclick', [{ $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerData, cell: evnt.currentTarget }, evnt])
+                $xetable.emitEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
               }
             }
             // 合并行或列
@@ -223,7 +223,7 @@ export default {
       if (scrollXLoad && isX) {
         triggerScrollXEvent(evnt)
       }
-      UtilTools.emitEvent($xetable, 'scroll', [{ type: cellType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false, $table: $xetable, $event: evnt }, evnt])
+      $xetable.emitEvent('scroll', { type: cellType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false }, evnt)
     }
   }
 }

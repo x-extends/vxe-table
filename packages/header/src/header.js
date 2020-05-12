@@ -309,7 +309,7 @@ export default {
         $xetable.recalculate(true)
         DomTools.removeClass($xetable.$el, 'c--resize')
         $xetable.saveCustomResizable()
-        $xetable.$emit('resizable-change', Object.assign({ $event: evnt }, params))
+        $xetable.emitEvent('resizable-change', params, evnt)
       }
       updateEvent(evnt)
     }

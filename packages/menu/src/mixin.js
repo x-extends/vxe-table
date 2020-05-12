@@ -68,7 +68,7 @@ export default {
             // target=td|th，直接向上找 table 去匹配即可
             return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === tId
           })
-          const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
+          const params = { type: layout, $grid: this.$xegrid, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
             const cell = columnTargetNode.targetElem
             const column = this.getColumnNode(cell).item
@@ -81,7 +81,7 @@ export default {
               params.rowIndex = this.getRowIndex(row)
             }
             this.openContextMenu(evnt, layout, params)
-            UtilTools.emitEvent(this, `${typePrefix}cell-context-menu`, [params, evnt])
+            this.emitEvent(`${typePrefix}cell-context-menu`, params, evnt)
             return
           } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === tId).flag) {
             if (ctxMenuOpts.trigger === 'cell') {
@@ -179,11 +179,11 @@ export default {
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
         const ctxMenuMethod = VXETable.menus.get(menu.code)
-        const params = Object.assign({ menu, $table: this, $event: evnt }, this.ctxMenuStore.args)
+        const params = Object.assign({ menu, $grid: this.$xegrid, $table: this, $event: evnt }, this.ctxMenuStore.args)
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)
         }
-        UtilTools.emitEvent(this, 'context-menu-click', [params, evnt])
+        this.emitEvent('context-menu-click', params, evnt)
         this.closeMenu()
       }
     }

@@ -104,7 +104,12 @@ function getPagerSlots (_vm) {
 
 function getTableOns (_vm) {
   const { $listeners, proxyConfig, proxyOpts } = _vm
-  const ons = Object.assign({}, $listeners)
+  const ons = {}
+  XEUtils.each($listeners, (cb, type) => {
+    ons[type] = function (...args) {
+      _vm.$emit(type, ...args)
+    }
+  })
   if (proxyConfig) {
     if (proxyOpts.sort) {
       ons['sort-change'] = _vm.sortChangeEvent
@@ -641,7 +646,7 @@ export default {
     },
     triggerToolbarBtnEvent (button, evnt) {
       this.commitProxy(button, evnt)
-      UtilTools.emitEvent(this, 'toolbar-button-click', [{ code: button.code, button, $grid: this, $event: evnt }, evnt])
+      this.$emit('toolbar-button-click', { code: button.code, button, $grid: this, $event: evnt }, evnt)
     },
     triggerPendingEvent (code) {
       const { pendingRecords, isMsg } = this
@@ -707,7 +712,7 @@ export default {
           this.commitProxy('query')
         }
       }
-      UtilTools.emitEvent(this, 'sort-change', [Object.assign({ $grid: this }, params)])
+      this.$emit('sort-change', Object.assign({ $grid: this }, params))
     },
     filterChangeEvent (params) {
       const { remoteFilter } = this
@@ -717,28 +722,28 @@ export default {
         this.filterData = filters
         this.commitProxy('query')
       }
-      UtilTools.emitEvent(this, 'filter-change', [Object.assign({ $grid: this }, params)])
+      this.$emit('filter-change', Object.assign({ $grid: this }, params))
     },
     submitEvent (params, evnt) {
       const { proxyConfig } = this
       if (proxyConfig) {
         this.commitProxy('reload')
       }
-      UtilTools.emitEvent(this, 'form-submit', [Object.assign({ $grid: this }, params), evnt])
+      this.$emit('form-submit', Object.assign({ $grid: this }, params), evnt)
     },
     resetEvent (params, evnt) {
       const { proxyConfig } = this
       if (proxyConfig) {
         this.commitProxy('reload')
       }
-      UtilTools.emitEvent(this, 'form-reset', [Object.assign({ $grid: this }, params), evnt])
+      this.$emit('form-reset', Object.assign({ $grid: this }, params), evnt)
     },
     submitInvalidEvent (params, evnt) {
-      UtilTools.emitEvent(this, 'form-submit-invalid', [Object.assign({ $grid: this }, params), evnt])
+      this.$emit('form-submit-invalid', Object.assign({ $grid: this }, params), evnt)
     },
     togglCollapseEvent (params, evnt) {
       this.recalculate(true)
-      UtilTools.emitEvent(this, 'form-toggle-collapse', [Object.assign({ $grid: this }, params), evnt])
+      this.$emit('form-toggle-collapse', Object.assign({ $grid: this }, params), evnt)
     },
     triggerZoomEvent (evnt) {
       this.zoom()

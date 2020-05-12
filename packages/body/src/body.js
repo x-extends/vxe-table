@@ -140,6 +140,8 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const hasValidError = validStore.row === row && validStore.column === column
   const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs = { 'data-colid': column.id }
+  const bindMouseenter = tableListeners['cell-mouseenter']
+  const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
   const params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items }
   // 虚拟滚动不支持动态高度
@@ -147,7 +149,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     showEllipsis = hasEllipsis = true
   }
   // hover 进入事件
-  if (showTitle || showTooltip || enabled || tableListeners['cell-mouseenter']) {
+  if (showTitle || showTooltip || enabled || bindMouseenter) {
     tdOns.mouseenter = evnt => {
       if (isOperateMouse($xetable)) {
         return
@@ -158,11 +160,13 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
         // 如果配置了显示 tooltip
         $xetable.triggerTooltipEvent(evnt, params)
       }
-      UtilTools.emitEvent($xetable, 'cell-mouseenter', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
+      if (bindMouseenter) {
+        $xetable.emitEvent('cell-mouseenter', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+      }
     }
   }
   // hover 退出事件
-  if (showTooltip || enabled || tableListeners['cell-mouseleave']) {
+  if (showTooltip || enabled || tableListeners['cell-bindMouseleave']) {
     tdOns.mouseleave = evnt => {
       if (isOperateMouse($xetable)) {
         return
@@ -170,7 +174,9 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
       if (showTooltip || enabled) {
         $xetable.handleTargetLeaveEvent(evnt)
       }
-      UtilTools.emitEvent($xetable, 'cell-mouseleave', [{ $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
+      if (bindMouseleave) {
+        $xetable.emitEvent('cell-mouseleave', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+      }
     }
   }
   // 按下事件处理
@@ -608,7 +614,7 @@ export default {
       if (scrollYLoad && isY) {
         $xetable.triggerScrollYEvent(evnt)
       }
-      UtilTools.emitEvent($xetable, 'scroll', [{ type: cellType, fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table: $xetable, $event: evnt }, evnt])
+      $xetable.emitEvent('scroll', { type: cellType, fixed: fixedType, scrollTop, scrollLeft, isX, isY }, evnt)
     }
   }
 }

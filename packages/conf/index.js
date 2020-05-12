@@ -21,6 +21,7 @@ const GlobalConfig = {
     // resizable: false,
     // stripe: false,
     // border: false,
+    // round: false,
     // radioConfig: {
     //   trigger: 'default'
     // },

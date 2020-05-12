@@ -146,6 +146,9 @@ const Methods = {
       if (!this.showOverflow) {
         UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
       }
+      if (this.spanMethod) {
+        UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
+      }
     }
     this.handleTableData(true)
     this.updateFooter()
@@ -784,7 +787,7 @@ const Methods = {
         }
       })
     }
-    this.$emit('update:customs', tableFullColumn)
+    this.emitEvent('update:customs', tableFullColumn)
   },
   /**
    * 手动重置列的所有操作，还原到初始状态
@@ -1059,6 +1062,12 @@ const Methods = {
       }
       if (this.showFooter && !this.showFooterOverflow) {
         UtilTools.warn('vxe.error.reqProp', ['show-footer-overflow'])
+      }
+      if (this.spanMethod) {
+        UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
+      }
+      if (this.footerSpanMethod) {
+        UtilTools.warn('vxe.error.scrollErrProp', ['span-span-method'])
       }
       Object.assign(scrollXStore, {
         startIndex: 0,
@@ -1780,7 +1789,7 @@ const Methods = {
             }
           }
         }
-        this.$emit('keydown', { $table: this, $event: evnt }, evnt)
+        this.emitEvent('keydown', {}, evnt)
       })
     }
   },
@@ -2080,9 +2089,9 @@ const Methods = {
       // 在 v3.0 中废弃 select-change
       if (this.$listeners['select-change']) {
         UtilTools.warn('vxe.error.delEvent', ['select-change', 'checkbox-change'])
-        this.$emit('select-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
+        this.emitEvent('select-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value }, params), evnt)
       } else {
-        this.$emit('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, params), evnt)
+        this.emitEvent('checkbox-change', Object.assign({ records, selection: records, reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value }, params), evnt)
       }
     }
   },
@@ -2112,7 +2121,9 @@ const Methods = {
     const { checkField: property, reserve, checkStrictly, checkMethod } = checkboxOpts
     let selectRows = []
     const beforeSelection = treeConfig ? [] : selection.filter(row => afterFullData.indexOf(row) === -1)
-    if (!checkStrictly) {
+    if (checkStrictly) {
+      this.isAllSelected = value
+    } else {
       if (property) {
         const setValFn = (row) => {
           if (!checkMethod || checkMethod({ row })) {
@@ -2215,15 +2226,17 @@ const Methods = {
       }
     }
     // 复选框
-    this.handleReserveByRowid(this.selection, reserveSelection)
     if (checkboxOpts.reserve) {
+      this.handleReserveByRowid(this.selection, reserveSelection)
       XEUtils.each(checkboxReserveRowMap, (item, rowid) => {
         if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
           reserveSelection.push(fullDataRowIdData[rowid].row)
         }
       })
+      this.setCheckboxRow(reserveSelection, true)
+    } else {
+      this.clearCheckboxRow()
     }
-    this.setCheckboxRow(reserveSelection, true)
     // 行展开
     this.handleReserveByRowid(this.rowExpandeds, reserveRowExpandeds)
     this.rowExpandeds = reserveRowExpandeds
@@ -2315,9 +2328,9 @@ const Methods = {
     // 在 v3.0 中废弃 select-all
     if (this.$listeners['select-all']) {
       UtilTools.warn('vxe.error.delEvent', ['select-all', 'checkbox-all'])
-      this.$emit('select-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value, $table: this, $event: evnt }, evnt)
+      this.emitEvent('select-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), checked: value }, evnt)
     } else {
-      this.$emit('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value, $table: this, $event: evnt }, evnt)
+      this.emitEvent('checkbox-all', { records, selection: records, reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value }, evnt)
     }
   },
   // 在 v3.0 中废弃 toggleAllSelection
@@ -2390,7 +2403,7 @@ const Methods = {
       const isChange = this.selectRow !== params.row
       this.setRadioRow(params.row)
       if (isChange) {
-        this.$emit('radio-change', Object.assign({ $event: evnt }, params), evnt)
+        this.emitEvent('radio-change', params, evnt)
       }
     }
   },
@@ -2398,7 +2411,7 @@ const Methods = {
     const isChange = this.currentRow !== params.row
     this.setCurrentRow(params.row)
     if (isChange) {
-      this.$emit('current-change', Object.assign({ $event: evnt }, params), evnt)
+      this.emitEvent('current-change', params, evnt)
     }
   },
   /**
@@ -2493,14 +2506,14 @@ const Methods = {
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
       this.triggerSortEvent(evnt, column, getNextSortOrder(this, column))
     }
-    this.$emit('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell, $event: evnt }, params), evnt)
+    this.emitEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
     if (this.highlightCurrentColumn) {
       return this.setCurrentColumn(column)
     }
     return this.$nextTick()
   },
   triggerHeaderCellDBLClickEvent (evnt, params) {
-    this.$emit('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget, $event: evnt }, params), evnt)
+    this.emitEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
   },
   getCurrentColumn () {
     return this.currentColumn
@@ -2607,7 +2620,7 @@ const Methods = {
         }
       }
     }
-    UtilTools.emitEvent(this, 'cell-click', [Object.assign({ $event: evnt }, params), evnt])
+    this.emitEvent('cell-click', params, evnt)
   },
   /**
    * 列双击点击事件
@@ -2635,7 +2648,7 @@ const Methods = {
         }
       }
     }
-    UtilTools.emitEvent(this, 'cell-dblclick', [Object.assign({ $event: evnt }, params), evnt])
+    this.emitEvent('cell-dblclick', params, evnt)
   },
   handleDefaultSort () {
     const defaultSort = this.sortOpts.defaultSort
@@ -2655,14 +2668,14 @@ const Methods = {
   triggerSortEvent (evnt, column, order) {
     const property = column.property
     if (column.sortable || column.remoteSort) {
-      const evntParams = { column, property, field: property, prop: property, order, $table: this, $event: evnt }
+      const params = { column, property, field: property, prop: property, order, $table: this, $event: evnt }
       if (!order || column.order === order) {
-        evntParams.order = null
+        params.order = null
         this.clearSort()
       } else {
         this.sort(property, order)
       }
-      UtilTools.emitEvent(this, 'sort-change', [evntParams, evnt])
+      this.emitEvent('sort-change', params, evnt)
     }
   },
   sort (field, order) {
@@ -2771,9 +2784,9 @@ const Methods = {
       // 在 v3.0 中废弃 toggle-expand-change
       if ($listeners['toggle-expand-change']) {
         UtilTools.warn('vxe.error.delEvent', ['toggle-expand-change', 'toggle-row-expand'])
-        UtilTools.emitEvent(this, 'toggle-expand-change', [{ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this, $event: evnt }, evnt])
+        this.emitEvent('toggle-expand-change', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) }, evnt)
       } else {
-        UtilTools.emitEvent(this, 'toggle-row-expand', [{ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row), $table: this, $event: evnt }, evnt])
+        this.emitEvent('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) }, evnt)
       }
     }
   },
@@ -2947,9 +2960,9 @@ const Methods = {
       // 在 v3.0 中废弃 toggle-tree-change
       if ($listeners['toggle-tree-change']) {
         UtilTools.warn('vxe.error.delEvent', ['toggle-tree-change', 'toggle-tree-expand'])
-        UtilTools.emitEvent(this, 'toggle-tree-change', [{ expanded, column, columnIndex, $columnIndex, row, $table: this, $event: evnt }, evnt])
+        this.emitEvent('toggle-tree-change', { expanded, column, columnIndex, $columnIndex, row }, evnt)
       } else {
-        UtilTools.emitEvent(this, 'toggle-tree-expand', [{ expanded, column, columnIndex, $columnIndex, row, $table: this, $event: evnt }, evnt])
+        this.emitEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
       }
     }
   },
@@ -3517,6 +3530,11 @@ const Methods = {
     } else if (this.tZindex < UtilTools.getLastZIndex()) {
       this.tZindex = UtilTools.nextZIndex()
     }
+  },
+  emitEvent (type, params, evnt) {
+    const { $xegrid } = this
+    const targetComp = $xegrid || this
+    targetComp.$emit(type, Object.assign({ $table: this, $grid: $xegrid, $event: evnt }, params), evnt)
   },
 
   // 检查触发源是否属于目标节点
