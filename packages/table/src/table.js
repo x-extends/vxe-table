@@ -187,8 +187,10 @@ export default {
     resizable: { type: Boolean, default: () => GlobalConfig.table.resizable },
     // 是否带有斑马纹
     stripe: { type: Boolean, default: () => GlobalConfig.table.stripe },
-    // 是否带有纵向边框
+    // 是否带有边框
     border: { type: [Boolean, String], default: () => GlobalConfig.table.border },
+    // 是否圆角边框
+    round: { type: Boolean, default: () => GlobalConfig.table.round },
     // 表格的尺寸
     size: { type: String, default: () => GlobalConfig.table.size },
     // 列的宽度是否自撑开（可能会被废弃的参数，不要使用）
@@ -772,10 +774,14 @@ export default {
       this.analyColumnWidth()
     },
     showHeader () {
-      this.$nextTick(() => this.recalculate(true))
+      this.$nextTick(() => {
+        this.recalculate(true).then(() => this.refreshScroll())
+      })
     },
     showFooter () {
-      this.$nextTick(() => this.recalculate(true))
+      this.$nextTick(() => {
+        this.recalculate(true).then(() => this.refreshScroll())
+      })
     },
     height () {
       this.$nextTick(() => this.recalculate(true))
@@ -902,6 +908,9 @@ export default {
     const customOpts = this.customOpts
     if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
       UtilTools.error('vxe.error.reqProp', ['id'])
+    }
+    if (this.treeConfig && this.checkboxOpts.range) {
+      UtilTools.warn('vxe.error.noTree', ['checkbox-config.range'])
     }
     ['header', 'body', 'footer'].forEach(name => {
       if (ctxMenuOpts[name] && ctxMenuOpts[name].visibleMethod) {
@@ -1061,6 +1070,7 @@ export default {
         'fixed--left': leftList.length,
         'fixed--right': rightList.length,
         't--animat': !!this.animat,
+        'is--round': this.round,
         't--stripe': stripe,
         't--selected': mouseConfig && mouseOpts.selected,
         't--checked': isMouseChecked,
@@ -1325,6 +1335,9 @@ export default {
         }
         if (!this.showOverflow) {
           UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
+        }
+        if (this.spanMethod) {
+          UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
         }
       }
       this.handleTableData(true)
@@ -2350,6 +2363,12 @@ export default {
         if (this.showFooter && !this.showFooterOverflow) {
           UtilTools.warn('vxe.error.reqProp', ['show-footer-overflow'])
         }
+        if (this.spanMethod) {
+          UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
+        }
+        if (this.footerSpanMethod) {
+          UtilTools.warn('vxe.error.scrollErrProp', ['span-span-method'])
+        }
         Object.assign(scrollXStore, {
           startIndex: 0,
           visibleIndex: 0
@@ -3016,7 +3035,7 @@ export default {
             // target=td|th，直接向上找 table 去匹配即可
             return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === tId
           })
-          const params = { type: layout, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
+          const params = { type: layout, $grid: this.$xegrid, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
             const cell = columnTargetNode.targetElem
             const column = this.getColumnNode(cell).item
@@ -3140,7 +3159,7 @@ export default {
     ctxMenuLinkEvent (evnt, menu) {
       if (!menu.disabled && (!menu.children || !menu.children.length)) {
         const ctxMenuMethod = VXETable.menus.get(menu.code)
-        const params = Object.assign({ menu, $table: this }, this.ctxMenuStore.args)
+        const params = Object.assign({ menu, $grid: this.$xegrid, $table: this, $event: evnt }, this.ctxMenuStore.args)
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)
         }
@@ -3472,7 +3491,9 @@ export default {
       const property = checkboxOpts.checkField || checkboxOpts.checkProp
       let selectRows = []
       const beforeSelection = treeConfig ? [] : selection.filter(row => afterFullData.indexOf(row) === -1)
-      if (!checkStrictly) {
+      if (checkStrictly) {
+        this.isAllSelected = value
+      } else {
         if (property) {
           const setValFn = (row) => {
             if (!checkMethod || checkMethod({ row })) {
@@ -3576,13 +3597,16 @@ export default {
         }
       }
       // 复选框
-      this.handleReserveByRowid(this.selection, reserveSelection)
       if (checkboxOpts.reserve) {
+        this.handleReserveByRowid(this.selection, reserveSelection)
         XEUtils.each(checkboxReserveRowMap, (item, rowid) => {
           if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
             reserveSelection.push(fullDataRowIdData[rowid].row)
           }
         })
+        this.setCheckboxRow(reserveSelection, true)
+      } else {
+        this.clearCheckboxRow()
       }
       this.setCheckboxRow(reserveSelection, true)
       // 行展开
@@ -6026,6 +6050,11 @@ export default {
       } else if (this.tZindex < UtilTools.getLastZIndex()) {
         this.tZindex = UtilTools.nextZIndex()
       }
+    },
+    emitEvent (type, params, evnt) {
+      const { $xegrid } = this
+      const targetComp = $xegrid || this
+      targetComp.$emit(type, Object.assign({ $table: this, $grid: $xegrid, $event: evnt }, params), evnt)
     },
 
     // 检查触发源是否属于目标节点

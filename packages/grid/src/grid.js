@@ -101,7 +101,12 @@ function getPagerSlots (_vm) {
 
 function getTableOns (_vm) {
   const { $listeners, proxyConfig, proxyOpts } = _vm
-  const ons = Object.assign({}, $listeners)
+  const ons = {}
+  XEUtils.each($listeners, (cb, type) => {
+    ons[type] = function (...args) {
+      _vm.$emit(type, ...args)
+    }
+  })
   if (proxyConfig) {
     if (proxyOpts.sort) {
       ons['sort-change'] = _vm.sortChangeEvent

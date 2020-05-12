@@ -62,10 +62,13 @@
           Header,
           Footer,
           Filter,
-          Loading,
-          Grid,
-          Excel,
+          Edit,
           Menu,
+          Export,
+          Keyboard,
+          Validator,
+
+          Grid,
           Toolbar,
           Pager,
           Checkbox,
@@ -78,9 +81,7 @@
           Form,
           Select,
           Switch,
-          List,
-          Export,
-          Resize
+          List
         } from 'vxe-table'
         import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
@@ -95,9 +96,14 @@
         Vue.use(Header)
         Vue.use(Footer)
         Vue.use(Filter)
+        Vue.use(Edit)
+        Vue.use(Menu)
+        Vue.use(Export)
+        Vue.use(Keyboard)
+        Vue.use(Validator)
+
         Vue.use(Tooltip)
         Vue.use(Grid)
-        Vue.use(Menu)
         Vue.use(Toolbar)
         Vue.use(Pager)
         Vue.use(Form)
@@ -108,11 +114,8 @@
         Vue.use(Select)
         Vue.use(Button)
         Vue.use(Modal)
-        Vue.use(Edit)
-        Vue.use(Export)
-        Vue.use(Keyboard)
-        Vue.use(Validator)
-        Vue.use(Resize)
+        Vue.use(List)
+
         // 再安装核心库
         Vue.use(Table)
 

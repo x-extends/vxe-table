@@ -29,6 +29,7 @@ const TableOverflow = () => import(/* webpackChunkName: "base" */ './views/table
 const TableTooltip = () => import(/* webpackChunkName: "base" */ './views/table/base/Tooltip.vue')
 const TableStripe = () => import(/* webpackChunkName: "base" */ './views/table/base/Stripe.vue')
 const TableBorder = () => import(/* webpackChunkName: "base" */ './views/table/base/Border.vue')
+const TableRound = () => import(/* webpackChunkName: "base" */ './views/table/base/Round.vue')
 const TableStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/Style.vue')
 const TableDynamicStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/DynamicStyle.vue')
 const TableScrollStyle = () => import(/* webpackChunkName: "base" */ './views/table/base/ScrollStyle.vue')
@@ -413,6 +414,11 @@ export default new Router({
       path: '/table/base/border',
       name: 'TableBorder',
       component: TableBorder
+    },
+    {
+      path: '/table/base/round',
+      name: 'TableRound',
+      component: TableRound
     },
     {
       path: '/table/base/dynamicStyle',

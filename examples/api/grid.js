@@ -538,7 +538,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
     item.list = [
       {
         name: 'reload',
-        desc: '刷新数据并恢复到初始状态；触发 ajax.query 方法',
+        desc: '刷新数据并清除所有状态；触发 ajax.query 方法',
         version: '',
         type: '',
         enum: '',

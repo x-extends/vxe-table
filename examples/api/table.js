@@ -444,7 +444,7 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.table.resizable',
         list: []
       },
       {
@@ -453,7 +453,7 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.table.stripe',
         list: []
       },
       {
@@ -462,7 +462,16 @@ const apis = [
         version: '1 | 1.15.27',
         type: 'Boolean, String',
         enum: 'default（默认）, full（完整边框）, outer（外边框）, inner（内边框）, none（无边框）',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.table.border',
+        list: []
+      },
+      {
+        name: 'round',
+        descKey: 'app.api.table.desc.round',
+        version: '1.15.29',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.table.round',
         list: []
       },
       {
@@ -2639,7 +2648,7 @@ const apis = [
       },
       {
         name: 'reloadData(data)',
-        desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增的场景中可能会用到）',
+        desc: '加载数据并清除所有状态（对于表格数据需要重载、局部递增的场景中可能会用到）',
         version: '',
         type: 'Promise',
         enum: '',

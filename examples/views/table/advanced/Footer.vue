@@ -54,12 +54,20 @@
 
     <p class="tip">还可以固定列</p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
+        <vxe-button @click="showFooter = !showFooter">显示/隐藏表尾</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       class="mytable-footer"
       border
-      show-footer
       height="400"
       show-overflow
+      :show-header="showHeader"
+      :show-footer="showFooter"
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :data="tableData">
@@ -88,6 +96,8 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      showHeader: true,
+      showFooter: true,
       tableData1: [],
       tableData: [],
       demoCodes: [
@@ -223,12 +233,20 @@ export default {
         }
         `,
         `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
+            <vxe-button @click="showFooter = !showFooter">显示/隐藏表尾</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           class="mytable-footer"
           border
-          show-footer
           height="400"
           show-overflow
+          :show-header="showHeader"
+          :show-footer="showFooter"
           :footer-method="footerMethod"
           :footer-cell-class-name="footerCellClassName"
           :data="tableData">
@@ -245,6 +263,7 @@ export default {
         export default {
           data () {
             return {
+              showFooter: true,
               tableData: []
             }
           },
