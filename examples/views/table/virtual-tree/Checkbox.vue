@@ -199,7 +199,7 @@ export default {
     })
   },
   methods: {
-    checkMethod ({ row }) {
+    checCheckboxkMethod ({ row }) {
       return !['js', 'mp4'].includes(row.type)
     },
     selectChangeEvent ({ records }) {
