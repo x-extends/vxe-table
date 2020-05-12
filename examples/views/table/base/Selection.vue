@@ -50,7 +50,7 @@
       border
       ref="xTable2"
       :data="tableData"
-      :checkbox-config="{labelField: 'name', checkMethod: checkMethod2}">
+      :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod2}">
       <vxe-table-column type="checkbox" title="All"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -69,7 +69,7 @@
     <vxe-table
       border
       :data="tableData"
-      :checkbox-config="{labelField: 'name', strict: true, checkMethod: checkMethod3}">
+      :checkbox-config="{labelField: 'name', strict: true, checkMethod:checCheckboxkMethod3}">
       <vxe-table-column type="checkbox" title="All"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -286,7 +286,7 @@ export default {
           border
           ref="xTable2"
           :data="tableData"
-          :checkbox-config="{labelField: 'name', checkMethod: checkMethod2}">
+          :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod2}">
           <vxe-table-column type="checkbox" title="All"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -304,7 +304,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           },
           methods: {
-            checkMethod2 ({ row }) {
+            checCheckboxkMethod2 ({ row }) {
               return row.age > 26
             }
           }
@@ -314,7 +314,7 @@ export default {
         <vxe-table
           border
           :data="tableData"
-          :checkbox-config="{labelField: 'name', strict: true, checkMethod: checkMethod3}">
+          :checkbox-config="{labelField: 'name', strict: true, checkMethod: checCheckboxkMethod3}">
           <vxe-table-column type="checkbox" title="All"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -332,7 +332,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           },
           methods: {
-            checkMethod3 () {
+            checCheckboxkMethod3 () {
               return false
             }
           }
@@ -499,10 +499,10 @@ export default {
     })
   },
   methods: {
-    checkMethod2 ({ row }) {
+    checCheckboxkMethod2 ({ row }) {
       return row.age > 26
     },
-    checkMethod3 () {
+    checCheckboxkMethod3 () {
       return false
     },
     selectAllEvent ({ checked, records }) {

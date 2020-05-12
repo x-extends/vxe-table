@@ -73,7 +73,7 @@
       resizable
       :data="tableData"
       :tree-config="{children: 'children'}"
-      :checkbox-config="{labelField: 'name', checkMethod}"
+      :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod}"
       @checkbox-change="selectChangeEvent">
       <vxe-table-column type="checkbox" width="180" title="Sex" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -190,7 +190,7 @@ export default {
     })
   },
   methods: {
-    checkMethod ({ row }) {
+    checCheckboxkMethod ({ row }) {
       return !['js', 'mp4'].includes(row.type)
     },
     selectChangeEvent ({ records }) {
