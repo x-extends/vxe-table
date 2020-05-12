@@ -549,6 +549,15 @@ const apis = [
         list: []
       },
       {
+        name: 'getFormItems(index)',
+        desc: '只对 form-config 有效，获取表单项列表',
+        version: '2.9.7',
+        type: 'Array',
+        enum: '',
+        defVal: 'index? number',
+        list: []
+      },
+      {
         name: 'getPendingRecords()',
         desc: '获取已标记删除的数据',
         version: '2.8.0',

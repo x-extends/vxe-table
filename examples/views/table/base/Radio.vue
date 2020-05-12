@@ -51,7 +51,7 @@
       border
       ref="xTable2"
       height="300"
-      :radio-config="{labelField: 'name', checkMethod}"
+      :radio-config="{labelField: 'name', checkMethod: checkRadioMethod}"
       :data="tableData">
       <vxe-table-column type="radio" title="请选择" width="100"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -232,7 +232,7 @@ export default {
           border
           ref="xTable2"
           height="300"
-          :radio-config="{labelField: 'name', checkMethod}"
+          :radio-config="{labelField: 'name', checkMethod: checkRadioMethod}"
           :data="tableData">
           <vxe-table-column type="radio" title="请选择" width="100"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -251,7 +251,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
-            checkMethod ({ row }) {
+            checkRadioMethod ({ row }) {
               return row.age > 26
             }
           }
@@ -377,7 +377,7 @@ export default {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   methods: {
-    checkMethod ({ row }) {
+    checkRadioMethod ({ row }) {
       return row.age > 26
     },
     cellClickEvent () {

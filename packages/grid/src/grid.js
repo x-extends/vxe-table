@@ -641,6 +641,11 @@ export default {
         }
       }
     },
+    getFormItems (index) {
+      const { formConfig } = this
+      const items = formConfig && formConfig.items ? formConfig.items : []
+      return arguments.length ? items[index] : items
+    },
     getPendingRecords () {
       return this.pendingRecords
     },
