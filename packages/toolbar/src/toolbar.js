@@ -72,7 +72,7 @@ function renderCustoms (h, _vm) {
   const checkMethod = $xetable ? $xetable.customOpts.checkMethod : null
   if (customOpts.trigger === 'manual') {
     // 手动触发
-  } if (customOpts.trigger === 'popup') {
+  } else if (customOpts.trigger === 'popup') {
     // 弹窗
     customBtnOns.click = _vm.customPanelEvent
   } else if (customOpts.trigger === 'hover') {
