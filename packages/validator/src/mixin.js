@@ -47,7 +47,7 @@ export default {
      */
     handleValidError (params) {
       if (this.validOpts.autoPos === false) {
-        this.$emit(this, 'valid-error', params)
+        this.emitEvent(this, 'valid-error', params)
       } else {
         this.handleActived(params, { type: 'valid-error', trigger: 'call' })
           .then(() => this.showValidTooltip(params))
@@ -298,7 +298,7 @@ export default {
         if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
           validTip.toVisible(cell, content)
         }
-        this.$emit('valid-error', params)
+        this.emitEvent('valid-error', params)
       })
     }
   }

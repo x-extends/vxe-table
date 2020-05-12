@@ -10,9 +10,6 @@ import './mock'
 import XEUtils from 'xe-utils'
 import moment from 'moment'
 
-import XLSX from 'xlsx'
-window.XLSX = XLSX
-
 // 生成模拟数据
 const list = window.MOCK_DATA_LIST = []
 let currTime = Date.now()

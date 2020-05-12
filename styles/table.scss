@@ -89,7 +89,7 @@
   }
   .vxe-default-input {
     &[type="date"]::-webkit-inner-spin-button {
-      margin-top: 6px;
+      margin-top: 4px;
     }
     &[type="date"]::-webkit-inner-spin-button,
     &[type="number"]::-webkit-inner-spin-button {
@@ -129,96 +129,98 @@
 }
 
 /*圆角*/
-// @if $vxe-table-border-radius {
-//   .vxe-table {
-//     %AllRadius {
-//       border-radius: $vxe-table-border-radius;
-//     }
-//     %TopRadius {
-//       border-radius: $vxe-table-border-radius $vxe-table-border-radius 0 0;
-//     }
-//     %TopLeftRadius {
-//       border-radius: $vxe-table-border-radius 0 0 0;
-//     }
-//     %TopRightRadius {
-//       border-radius: 0 $vxe-table-border-radius 0 0;
-//     }
-//     %BottomRadius {
-//       border-radius: 0 0 $vxe-table-border-radius $vxe-table-border-radius;
-//     }
-//     %BottomLeftRadius {
-//       border-radius: 0 0 0 $vxe-table-border-radius;
-//     }
-//     %BottomRightRadius {
-//       border-radius: 0 0 $vxe-table-border-radius 0;
-//     }
-//     @extend %AllRadius;
-//     .vxe-table--border-line {
-//       @extend %AllRadius;
-//     }
-//     &.show--head {
-//       &:not(.show--foot) {
-//         .vxe-table--body-wrapper {
-//           &.fixed-left--wrapper {
-//             @extend %BottomLeftRadius;
-//           }
-//           &.body--wrapper {
-//             @extend %BottomRadius;
-//           }
-//           &.fixed-right--wrapper {
-//             @extend %BottomRightRadius;
-//           }
-//         }
-//       }
-//       .vxe-table--header-wrapper {
-//         &.fixed-left--wrapper {
-//           @extend %TopLeftRadius;
-//         }
-//         &.body--wrapper {
-//           @extend %TopRadius;
-//         }
-//         &.fixed-right--wrapper {
-//           @extend %TopRightRadius;
-//         }
-//       }
-//     }
-//     &:not(.show--head) {
-//       &:not(.show--foot) {
-//         .vxe-table--body-wrapper {
-//           &.body--wrapper {
-//             @extend %AllRadius;
-//           }
-//         }
-//       }
-//     }
-//     &.show--foot {
-//       &:not(.show--head) {
-//         .vxe-table--body-wrapper {
-//           &.fixed-left--wrapper {
-//             @extend %BottomLeftRadius;
-//           }
-//           &.body--wrapper {
-//             @extend %TopRadius;
-//           }
-//           &.fixed-right--wrapper {
-//             @extend %BottomRightRadius;
-//           }
-//         }
-//       }
-//       .vxe-table--footer-wrapper {
-//         &.fixed-left--wrapper {
-//           @extend %BottomLeftRadius;
-//         }
-//         &.body--wrapper {
-//           @extend %BottomRadius;
-//         }
-//         &.fixed-right--wrapper {
-//           @extend %BottomRightRadius;
-//         }
-//       }
-//     }
-//   }
-// }
+@if $vxe-table-border-radius {
+  .vxe-table {
+    &.is--round {
+      %AllRadius {
+        border-radius: $vxe-table-border-radius;
+      }
+      %TopRadius {
+        border-radius: $vxe-table-border-radius $vxe-table-border-radius 0 0;
+      }
+      %TopLeftRadius {
+        border-radius: $vxe-table-border-radius 0 0 0;
+      }
+      %TopRightRadius {
+        border-radius: 0 $vxe-table-border-radius 0 0;
+      }
+      %BottomRadius {
+        border-radius: 0 0 $vxe-table-border-radius $vxe-table-border-radius;
+      }
+      %BottomLeftRadius {
+        border-radius: 0 0 0 $vxe-table-border-radius;
+      }
+      %BottomRightRadius {
+        border-radius: 0 0 $vxe-table-border-radius 0;
+      }
+      @extend %AllRadius;
+      .vxe-table--border-line {
+        @extend %AllRadius;
+      }
+      &.show--head {
+        &:not(.show--foot) {
+          .vxe-table--body-wrapper {
+            &.fixed-left--wrapper {
+              @extend %BottomLeftRadius;
+            }
+            &.body--wrapper {
+              @extend %BottomRadius;
+            }
+            &.fixed-right--wrapper {
+              @extend %BottomRightRadius;
+            }
+          }
+        }
+        .vxe-table--header-wrapper {
+          &.fixed-left--wrapper {
+            @extend %TopLeftRadius;
+          }
+          &.body--wrapper {
+            @extend %TopRadius;
+          }
+          &.fixed-right--wrapper {
+            @extend %TopRightRadius;
+          }
+        }
+      }
+      &:not(.show--head) {
+        &:not(.show--foot) {
+          .vxe-table--body-wrapper {
+            &.body--wrapper {
+              @extend %AllRadius;
+            }
+          }
+        }
+      }
+      &.show--foot {
+        &:not(.show--head) {
+          .vxe-table--body-wrapper {
+            &.fixed-left--wrapper {
+              @extend %BottomLeftRadius;
+            }
+            &.body--wrapper {
+              @extend %TopRadius;
+            }
+            &.fixed-right--wrapper {
+              @extend %BottomRightRadius;
+            }
+          }
+        }
+        .vxe-table--footer-wrapper {
+          &.fixed-left--wrapper {
+            @extend %BottomLeftRadius;
+          }
+          &.body--wrapper {
+            @extend %BottomRadius;
+          }
+          &.fixed-right--wrapper {
+            @extend %BottomRightRadius;
+          }
+        }
+      }
+    }
+  }
+}
 
 /*table*/
 .vxe-table {
@@ -482,7 +484,7 @@
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
-          margin-top: 4px;
+          margin-top: 3px;
         }
       }
     }
@@ -526,7 +528,7 @@
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
-          margin-top: 0;
+          margin-top: 1px;
         }
       }
     }

@@ -158,7 +158,7 @@ export default {
       })
       item.checked = checked
       this.checkOptions()
-      this.$parent.confirmFilterEvent()
+      this.$parent.confirmFilterEvent(evnt)
     },
     // （多选）筛选发生改变
     changeMultipleOption (evnt, checked, item) {

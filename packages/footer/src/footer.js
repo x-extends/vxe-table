@@ -144,12 +144,12 @@ export default {
             }
             if (tableListeners['footer-cell-click']) {
               tfOns.click = evnt => {
-                $xetable.$emit('footer-cell-click', { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerData, cell: evnt.currentTarget })
+                $xetable.emitEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, params), evnt)
               }
             }
             if (tableListeners['footer-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                $xetable.$emit('footer-cell-dblclick', { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerData, cell: evnt.currentTarget })
+                $xetable.emitEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
               }
             }
             // 合并行或列

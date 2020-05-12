@@ -81,7 +81,7 @@ export default {
      * 当筛选面板中的确定按钮被按下时触发
      * @param {Event} evnt 事件
      */
-    confirmFilterEvent () {
+    confirmFilterEvent (evnt) {
       const { visibleColumn, filterStore, remoteFilter, filterOpts, scrollXLoad, scrollYLoad } = this
       const { column } = filterStore
       const { property } = column
@@ -114,7 +114,7 @@ export default {
           filterList.push({ column, property, values: valueList, datas: dataList })
         }
       })
-      this.$emit('filter-change', { column, property, values, datas, filters: filterList, $table: this })
+      this.emitEvent('filter-change', { column, property, values, datas, filters: filterList }, evnt)
       this.updateFooter()
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()

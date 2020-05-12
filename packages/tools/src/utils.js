@@ -190,12 +190,6 @@ export const UtilTools = {
     const rowId = XEUtils.get(row, UtilTools.getRowkey($xetable))
     return rowId ? encodeURIComponent(rowId) : ''
   },
-  // 触发事件
-  emitEvent (_vm, type, args) {
-    if (_vm.$listeners[type]) {
-      _vm.$emit(...([type].concat(args)))
-    }
-  },
   // 获取所有的列，排除分组
   getColumnList (columns) {
     const result = []

@@ -310,6 +310,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.round',
+              demoUrl: 'https://jsrun.pro/Ua2Kp/edit',
+              locat: {
+                name: 'TableRound'
+              }
+            },
+            {
               label: 'app.aside.nav.style',
               demoUrl: 'https://jsrun.pro/EmXKp/edit',
               locat: {

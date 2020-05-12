@@ -174,7 +174,7 @@ const apis = [
       },
       {
         name: 'reloadData(data)',
-        desc: '加载数据并恢复到初始状态',
+        desc: '加载数据并清除所有状态',
         version: '',
         type: 'Promise',
         enum: '',

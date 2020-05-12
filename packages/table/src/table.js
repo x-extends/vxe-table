@@ -74,8 +74,10 @@ export default {
     resizable: { type: Boolean, default: () => GlobalConfig.table.resizable },
     // 是否带有斑马纹
     stripe: { type: Boolean, default: () => GlobalConfig.table.stripe },
-    // 是否带有纵向边框
+    // 是否带有边框
     border: { type: [Boolean, String], default: () => GlobalConfig.table.border },
+    // 是否圆角边框
+    round: { type: Boolean, default: () => GlobalConfig.table.round },
     // 表格的尺寸
     size: { type: String, default: () => GlobalConfig.table.size || GlobalConfig.size },
     // 列的宽度是否自撑开（可能会被废弃的参数，不要使用）
@@ -570,10 +572,14 @@ export default {
       this.analyColumnWidth()
     },
     showHeader () {
-      this.$nextTick(() => this.recalculate(true))
+      this.$nextTick(() => {
+        this.recalculate(true).then(() => this.refreshScroll())
+      })
     },
     showFooter () {
-      this.$nextTick(() => this.recalculate(true))
+      this.$nextTick(() => {
+        this.recalculate(true).then(() => this.refreshScroll())
+      })
     },
     height () {
       this.$nextTick(() => this.recalculate(true))
@@ -656,6 +662,9 @@ export default {
     const customOpts = this.customOpts
     if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
       UtilTools.error('vxe.error.reqProp', ['id'])
+    }
+    if (this.treeConfig && this.checkboxOpts.range) {
+      UtilTools.warn('vxe.error.noTree', ['checkbox-config.range'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName
@@ -815,6 +824,7 @@ export default {
         'fixed--right': rightList.length,
         'c--highlight': highlightCell,
         't--animat': !!this.animat,
+        'is--round': this.round,
         't--stripe': stripe,
         't--selected': mouseConfig && mouseOpts.selected,
         'row--highlight': highlightHoverRow,

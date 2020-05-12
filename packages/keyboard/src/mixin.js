@@ -25,14 +25,14 @@ function getTargetOffset (targer, container) {
   return { offsetTop, offsetLeft }
 }
 
-function getCheckboxRangeResult ($table, params, targetTrElem, moveRange) {
+function getCheckboxRangeResult (_vm, params, targetTrElem, moveRange) {
   let countHeight = 0
   let rangeRows = []
   const isDown = moveRange > 0
   const moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
-  if ($table.scrollYLoad) {
-    const { afterFullData, scrollYStore } = $table
-    const _rowIndex = $table._getRowIndex(params.row)
+  const { afterFullData, scrollYStore, scrollYLoad } = _vm
+  if (scrollYLoad) {
+    const _rowIndex = _vm._getRowIndex(params.row)
     if (isDown) {
       rangeRows = afterFullData.slice(_rowIndex, _rowIndex + Math.ceil(moveSize / scrollYStore.rowHeight))
     } else {
@@ -41,7 +41,7 @@ function getCheckboxRangeResult ($table, params, targetTrElem, moveRange) {
   } else {
     const siblingProp = isDown ? 'next' : 'previous'
     while (targetTrElem && countHeight < moveSize) {
-      rangeRows.push($table.getRowNode(targetTrElem).item)
+      rangeRows.push(_vm.getRowNode(targetTrElem).item)
       countHeight += targetTrElem.offsetHeight
       targetTrElem = targetTrElem[`${siblingProp}ElementSibling`]
     }
@@ -192,8 +192,8 @@ export default {
         const { elemStore } = this
         const disX = evnt.clientX
         const disY = evnt.clientY
-        const bodyWrapperElem = elemStore[`${column.fixed || 'main'}-body-wrapper`]
-        const checkboxRangeElem = elemStore[`${column.fixed || 'main'}-body-checkRange`]
+        const bodyWrapperElem = elemStore[`${column.fixed || 'main'}-body-wrapper`] || elemStore['main-body-wrapper']
+        const checkboxRangeElem = elemStore[`${column.fixed || 'main'}-body-checkRange`] || elemStore['main-body-checkRange']
         const domMousemove = document.onmousemove
         const domMouseup = document.onmouseup
         const trElem = cell.parentNode
