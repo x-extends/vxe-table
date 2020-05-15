@@ -8,13 +8,15 @@
     "build": "vue-cli-service build",
     "lib:modules": "gulp build",
     "lib:pack": "vue-cli-service build --target lib --name index --dest lib index.js",
-    "lib": "npm run lib:pack && npm run lib:modules"
+    "lib": "npm run lib:pack && npm run lib:modules",
+    "postinstall": "node scripts/postinstall || echo \"ignore\""
   },
   "files": [
     "lib",
     "types",
     "packages",
-    "styles"
+    "styles",
+    "scripts"
   ],
   "main": "lib/vxe-table.js",
   "style": "lib/index.css",

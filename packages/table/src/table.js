@@ -872,10 +872,7 @@ export default {
     }
     if (this.mouseConfig && this.editConfig) {
       if ((mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
-        UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
-      }
-      if (mouseOpts.selected && editOpts.mode !== 'cell') {
-        UtilTools.error('vxe.error.errProp', ['edit-config.mode', 'cell'])
+        UtilTools.warn('vxe.error.errProp', ['mouse-config.range', 'edit-config.trigger=dblclick'])
       }
     }
     if (treeConfig && this.stripe) {
@@ -2367,7 +2364,7 @@ export default {
           UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
         }
         if (this.footerSpanMethod) {
-          UtilTools.warn('vxe.error.scrollErrProp', ['span-span-method'])
+          UtilTools.warn('vxe.error.scrollErrProp', ['footer-span-method'])
         }
         Object.assign(scrollXStore, {
           startIndex: 0,
@@ -2728,7 +2725,7 @@ export default {
             }
           } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
           // 在 v3.0 中废弃 selection
-          // 空格键支持选中复选列
+          // 空格键支持选中复选框
             evnt.preventDefault()
             // 在 v3.0 中废弃 selection
             if (selected.column.type === 'checkbox' || selected.column.type === 'selection') {
@@ -2825,9 +2822,9 @@ export default {
             }
           } else if (keyboardConfig.isEdit && !isCtrlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
             // 启用编辑后，空格键功能将失效
-            if (isSpacebar) {
-              evnt.preventDefault()
-            }
+            // if (isSpacebar) {
+            //   evnt.preventDefault()
+            // }
             // 如果是按下非功能键之外允许直接编辑
             if (selected.row || selected.column) {
               if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {

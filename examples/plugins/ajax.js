@@ -62,7 +62,7 @@ function mockChildData (size, hasChild) {
       id: dataID,
       name: 'Name - ' + dataID,
       nickname: 'Nickname - ' + dataID,
-      role: index % 2 === 0 ? '前端' : '后端'
+      role: index % 4 === 0 ? '前端' : index % 3 === 0 ? '入门到废弃' : '后端'
     }
     if (hasChild) {
       item.children = mockChildData(10)
@@ -87,11 +87,11 @@ function mockData (size, hasChild) {
         children: mockChildData(10, hasChild),
         name: nameList[index % 10] + nameList[index % 5] + index,
         nickname: nickList[index % 10] + nickList[index % 5] + index,
-        role: index % 2 === 0 ? '前端' : '后端',
+        role: index % 4 === 0 ? '前端' : index % 3 === 0 ? '入门到废弃' : '后端',
         role1: index === 1 ? '1' : '',
         key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
         language: index % 2 === 0 ? 'zh_CN' : 'en_US',
-        content: index % 2 === 0 ? '内容' + index : 'Content' + index,
+        content: index % 2 === 0 ? 'vxe-table 从入门到废弃' + index : 'Content' + index,
         checked: false,
         flag: index % 2 === 0,
         date: date,
@@ -133,13 +133,13 @@ function mockData (size, hasChild) {
         rate: index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0,
         rate1: '' + (index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0),
         state: '' + (index % 4 === 0 ? 'value:Washington' : index % 3 === 0 ? 'value:Delaware' : ''),
-        address: '地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址' + index,
-        address2: '地址 地址地址 地址' + index,
+        address: 'vxe-table 从入门到废弃 vxe-table 从入门到废弃 vxe-table 从入门到废弃' + index,
+        address2: 'vxe-table 从入门到废弃' + index,
         img: 'static/other/img' + (index % 3 ? '1' : '2') + '.gif',
         img1: index % 4 === 0 ? 'static/other/img' + (index % 3 ? '1' : '2') + '.gif' : '',
-        html1: index % 3 === 0 ? '<span style="color:red;">我是一段Html代码</span><br><span style="color:blue;">我是一段Html代码' + index + '</span><br><span style="color:green;">绿到你发慌！</span>' : '',
-        html2: index % 3 === 0 ? '<span style="color:red;">我是一段Html代码</span><span style="color:blue;">我是一段Html代码' + index + '</span><span style="color:green;">绿到你发慌！</span>' : '',
-        html3: index + ' -> <span style="color:red;">我是一段Html代码</span><span style="color:blue;">我是一段Html代码' + index + '</span><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码，绿到你发慌！</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span>',
+        html1: index % 3 === 0 ? '<span style="color:red;">我是一段Html代码</span><br><span style="color:blue;">vxe-table 从入门到废弃' + index + '</span><br><span style="color:green;">绿到你发慌！</span>' : '',
+        html2: index % 3 === 0 ? '<span style="color:red;">我是一段Html代码</span><span style="color:blue;">vxe-table 从入门到废弃' + index + '</span><span style="color:green;">绿到你发慌！</span>' : '',
+        html3: index + ' -> <span style="color:red;">我是一段Html代码</span><span style="color:blue;">vxe-table 从入门到废弃' + index + '</span><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码，绿到你发慌！</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span>',
         text: index + ' -> ' + nickList.concat(nameList).join(''),
         updateTime: currTime,
         createTime: currTime,
@@ -150,7 +150,7 @@ function mockData (size, hasChild) {
         attr5: 0,
         loading: false,
         info: {
-          name2: 'name2_' + index,
+          name2: '算了，还是废弃吧' + index,
           more: {
             sex2: index % 3 ? '0' : '1',
             age2: index % 2 === 0 ? 26 : 30
@@ -163,11 +163,11 @@ function mockData (size, hasChild) {
         id: 2000000 + index,
         name: nameList[index % 10] + nameList[index % 5] + index,
         nickname: nickList[index % 10] + nickList[index % 5] + index,
-        role: index % 2 === 0 ? '前端' : '后端',
+        role: index % 4 === 0 ? '前端' : index % 3 === 0 ? '入门到废弃' : '后端',
         role1: index === 1 ? '1' : '',
         key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
         language: index % 2 === 0 ? 'zh_CN' : 'en_US',
-        content: index % 2 === 0 ? '内容' + index : 'Content' + index,
+        content: index % 2 === 0 ? 'vxe-table 入门到废弃' + index : 'Content' + index,
         checked: false,
         flag: index % 2 === 0,
         date: date,
@@ -209,13 +209,13 @@ function mockData (size, hasChild) {
         rate: index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0,
         rate1: '' + (index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0),
         state: '' + (index % 4 === 0 ? 'value:Washington' : index % 3 === 0 ? 'value:Delaware' : ''),
-        address: '地址 地址地址 地址地址 址地址 址地址  址地址 址地址址地址址地址 地址' + index,
-        address2: '地址 地址地址 地址' + index,
+        address: 'vxe-table 从入门到废弃 vxe-table 从入门到废弃 vxe-table 从入门到废弃' + index,
+        address2: 'vxe-table 从入门到废弃' + index,
         img: 'static/other/img' + (index % 3 ? '1' : '2') + '.gif',
         img1: index % 4 === 0 ? 'static/other/img' + (index % 3 ? '1' : '2') + '.gif' : '',
-        html1: index % 3 === 0 ? '<span style="color:red;">我是一段Html代码</span><br><span style="color:blue;">我是一段Html代码' + index + '</span><br><span style="color:green;">绿到你发慌！</span>' : '',
-        html2: index % 3 === 0 ? '<span style="color:red;">我是一段Html代码</span><span style="color:blue;">我是一段Html代码' + index + '</span><span style="color:green;">绿到你发慌！</span>' : '',
-        html3: index + ' -> <span style="color:red;">我是一段Html代码</span><span style="color:blue;">我是一段Html代码' + index + '</span><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码，绿到你发慌！</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span>',
+        html1: index % 3 === 0 ? '<span style="color:red;">我是一段Html代码</span><br><span style="color:blue;">vxe-table 从入门到废弃' + index + '</span><br><span style="color:green;">绿到你发慌！</span>' : '',
+        html2: index % 3 === 0 ? '<span style="color:red;">我是一段Html代码</span><span style="color:blue;">vxe-table 从入门到废弃' + index + '</span><span style="color:green;">绿到你发慌！</span>' : '',
+        html3: index + ' -> <span style="color:red;">我是一段Html代码</span><span style="color:blue;">vxe-table 从入门到废弃' + index + '</span><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码，绿到你发慌！</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span>',
         text: index + ' -> ' + nickList.concat(nameList).join(''),
         updateTime: currTime,
         createTime: currTime,
@@ -226,7 +226,7 @@ function mockData (size, hasChild) {
         attr5: 0,
         loading: false,
         info: {
-          name2: 'name2_' + index,
+          name2: '算了，还是废弃吧' + index,
           more: {
             sex2: index % 3 ? '0' : '1',
             age2: index % 2 === 0 ? 26 : 30

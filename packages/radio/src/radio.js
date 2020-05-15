@@ -26,7 +26,7 @@ export default {
     }
   },
   render (h) {
-    const { $slots, $xegroup, isGroup, disabled, title, vSize, value, label, name, content } = this
+    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, value, label, name, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -34,7 +34,7 @@ export default {
     return h('label', {
       class: ['vxe-radio', {
         [`size--${vSize}`]: vSize,
-        'is--disabled': disabled
+        'is--disabled': isDisabled
       }],
       attrs
     }, [
@@ -43,14 +43,14 @@ export default {
         attrs: {
           type: 'radio',
           name: isGroup ? $xegroup.name : name,
-          disabled
+          disabled: isDisabled
         },
         domProps: {
           checked: isGroup ? $xegroup.value === label : value === label
         },
         on: {
           change: evnt => {
-            if (!disabled) {
+            if (!isDisabled) {
               const params = { label, $event: evnt }
               if (isGroup) {
                 $xegroup.handleChecked(params, evnt)

@@ -184,6 +184,7 @@ const TableScrollForceCellValid = () => import(/* webpackChunkName: "scroll" */ 
 const TableScrollForceRowValid = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ForceRowValid.vue')
 const TableScrollPartialLoad = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/PartialLoad.vue')
 const TableScrollFullPartialLoad = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/FullPartialLoad.vue')
+const TableScrollFooter = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Footer.vue')
 const TableScrollTemplate = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Template.vue')
 const TableScrollTabs = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Tabs.vue')
 const TableScrollKeepAlives = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/KeepAlives.vue')
@@ -1165,6 +1166,11 @@ export default new Router({
       path: '/table/scroll/fullPartialLoad',
       name: 'TableScrollFullPartialLoad',
       component: TableScrollFullPartialLoad
+    },
+    {
+      path: '/table/scroll/footer',
+      name: 'TableScrollFooter',
+      component: TableScrollFooter
     },
     {
       path: '/table/scroll/template',

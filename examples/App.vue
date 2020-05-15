@@ -208,6 +208,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.pulldown',
+              locat: {
+                name: 'ModulePulldown'
+              }
+            },
+            {
               label: 'app.aside.nav.pager',
               locat: {
                 name: 'ModulePager'
@@ -241,12 +247,6 @@ export default {
               label: 'app.aside.nav.modal',
               locat: {
                 name: 'ModuleModal'
-              }
-            },
-            {
-              label: 'app.aside.nav.pulldown',
-              locat: {
-                name: 'ModulePulldown'
               }
             }
           ]
@@ -1456,6 +1456,12 @@ export default {
               demoUrl: 'https://jsrun.pro/sVWKp/edit',
               locat: {
                 name: 'TableScrollFullPartialLoad'
+              }
+            },
+            {
+              label: 'app.aside.nav.footer',
+              locat: {
+                name: 'TableScrollFooter'
               }
             },
             {

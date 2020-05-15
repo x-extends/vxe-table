@@ -77,7 +77,7 @@
       <vxe-modal v-model="value5" :lock-scroll="false" show-footer>
         <vxe-table
           show-overflow
-          height="auto"
+          height="200"
           :sync-resize="value5"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -328,7 +328,7 @@ export default {
           <vxe-modal v-model="value5" :lock-scroll="false" show-footer>
             <vxe-table
               show-overflow
-              height="auto"
+              height="200"
               :sync-resize="value5"
               :data="tableData">
               <vxe-table-column type="seq" width="60"></vxe-table-column>

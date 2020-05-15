@@ -1,4 +1,6 @@
 /**Variable**/
+@import './helpers/mixin.scss';
+@import './base/common.scss';
 
 /*checkbox-group*/
 .vxe-checkbox-group {
@@ -117,6 +119,8 @@
     padding-left: 0.5em;
     vertical-align: middle;
     display: inline-block;
+    max-width: 50em;
+    @extend %TextEllipsis;
   }
 }
 

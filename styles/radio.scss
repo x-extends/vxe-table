@@ -1,10 +1,15 @@
 /**Variable**/
+@import './helpers/mixin.scss';
+@import './base/common.scss';
 
 /*radio-group*/
 .vxe-radio-group {
   display: inline-block;
   vertical-align: middle;
   line-height: 1;
+  &+.vxe-radio-group {
+    margin-left: 10px;
+  }
 }
 
 /*radio*/
@@ -15,9 +20,6 @@
   user-select: none;
   line-height: 1;
   cursor: pointer;
-  &+.vxe-radio {
-    margin-left: 10px;
-  }
   > input {
     &[type="radio"] {
       position: absolute;
@@ -92,9 +94,94 @@
     padding-left: 0.5em;
     vertical-align: middle;
     display: inline-block;
+    max-width: 50em;
+    @extend %TextEllipsis;
   }
-  &+.vxe-radio {
-    margin-left: 10px;
+  &:not(.vxe-radio-button) {
+    &+.vxe-radio {
+      margin-left: 10px;
+    }
+  }
+}
+
+.vxe-radio-button {
+  &:first-child {
+    .vxe-radio--label {
+      border-left: 1px solid $vxe-input-border-color;
+      border-radius: $vxe-border-radius 0 0 $vxe-border-radius;
+    }
+  }
+  &:last-child {
+    .vxe-radio--label {
+      border-radius: 0 $vxe-border-radius $vxe-border-radius 0;
+    }
+  }
+  > input {
+    &:checked+.vxe-radio--label {
+      color: #fff;
+      background-color: $vxe-primary-color;
+      border-color: $vxe-primary-color;
+    }
+  }
+  .vxe-radio--label {
+    padding: 0 1em;
+    line-height: $vxe-button-height-default - 2;
+    display: inline-block;
+    border-style: solid;
+    border-color: $vxe-input-border-color;
+    border-width: 1px 1px 1px 0;
+    max-width: 50em;
+    @extend %TextEllipsis;
+  }
+  &.is--disabled {
+    cursor: not-allowed;
+    > input {
+      &:not(:checked) {
+        &+.vxe-radio--label {
+          color: $vxe-input-disabled-color;
+        }
+      }
+      &:checked {
+        &+.vxe-radio--label {
+          border-color: lighten($vxe-primary-color, 20%);
+          background-color: lighten($vxe-primary-color, 20%);
+        }
+      }
+    }
+  }
+  &:not(.is--disabled) {
+    & > input {
+      &:focus {
+        &+.vxe-radio--label {
+          border-color: $vxe-primary-color;
+          box-shadow: 0 0 0.2em 0 $vxe-primary-color;
+        }
+      }
+    }
+    &:hover {
+      > input {
+        &:not(:checked) {
+          &+.vxe-radio--label {
+            color: $vxe-primary-color;
+          }
+        }
+      }
+    }
+  }
+  &.size--medium {
+    .vxe-radio--label {
+      line-height: $vxe-button-height-medium - 2;
+    }
+  }
+  &.size--small {
+    .vxe-radio--label {
+      line-height: $vxe-button-height-small - 2;
+    }
+  }
+  &.size--mini {
+    .vxe-radio--label {
+      line-height: $vxe-button-height-mini - 2;
+    }
   }
 }
 

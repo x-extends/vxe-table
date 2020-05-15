@@ -5,6 +5,7 @@ export default {
   name: 'VxeRadioGroup',
   props: {
     value: [String, Number],
+    disabled: Boolean,
     size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   provide () {
@@ -15,6 +16,9 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isDisabled () {
+      return this.disabled || (this.isGroup && this.$xegroup.disabled)
     }
   },
   data () {
