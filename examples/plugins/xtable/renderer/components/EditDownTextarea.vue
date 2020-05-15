@@ -63,5 +63,6 @@ export default {
 .edit-down-text {
   width: 600px;
   height: 300px;
+  display: block;
 }
 </style>

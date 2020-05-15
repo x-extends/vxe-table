@@ -2,15 +2,13 @@ import { UtilTools } from '../../tools'
 import GlobalConfig from '../../conf'
 
 export default {
-  name: 'VxeCheckbox',
+  name: 'VxeRadioButton',
   props: {
-    value: Boolean,
     label: [String, Number],
-    indeterminate: Boolean,
     title: [String, Number],
     content: [String, Number],
     disabled: Boolean,
-    size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
+    size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   inject: {
     $xegroup: {
@@ -29,48 +27,40 @@ export default {
     }
   },
   render (h) {
-    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content } = this
+    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, label, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
     }
     return h('label', {
-      class: ['vxe-checkbox', {
+      class: ['vxe-radio', 'vxe-radio-button', {
         [`size--${vSize}`]: vSize,
-        'is--indeterminate': indeterminate,
         'is--disabled': isDisabled
       }],
       attrs
     }, [
       h('input', {
-        class: 'vxe-checkbox--input',
+        class: 'vxe-radio--input',
         attrs: {
-          type: 'checkbox',
+          type: 'radio',
+          name: isGroup ? $xegroup.name : null,
           disabled: isDisabled
         },
         domProps: {
-          checked: isGroup ? ($xegroup.value && $xegroup.value.some(item => item === label)) : value
+          checked: isGroup && $xegroup.value === label
         },
         on: {
           change: evnt => {
             if (!isDisabled) {
-              const checked = evnt.target.checked
-              const params = { checked, label, $event: evnt }
               if (isGroup) {
-                $xegroup.handleChecked(params, evnt)
-              } else {
-                this.$emit('input', checked)
-                this.$emit('change', params, evnt)
+                $xegroup.handleChecked({ label, $event: evnt })
               }
             }
           }
         }
       }),
       h('span', {
-        class: 'vxe-checkbox--icon'
-      }),
-      h('span', {
-        class: 'vxe-checkbox--label'
+        class: 'vxe-radio--label'
       }, $slots.default || [UtilTools.getFuncText(content)])
     ])
   }

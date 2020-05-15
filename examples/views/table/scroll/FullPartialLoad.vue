@@ -205,11 +205,15 @@ export default {
       Promise.all([
         this.findColumnList(200).then(data => {
           this.allColumn = this.allData.concat(data)
-          this.$refs.xGrid.loadColumn(this.allColumn)
+          if (this.$refs.xGrid) {
+            this.$refs.xGrid.loadColumn(this.allColumn)
+          }
         }),
         this.findDataList(600).then(data => {
           this.allData = this.allData.concat(data)
-          this.$refs.xGrid.loadData(this.allData)
+          if (this.$refs.xGrid) {
+            this.$refs.xGrid.loadData(this.allData)
+          }
         })
       ]).then(() => {
         this.loading = false
@@ -218,28 +222,36 @@ export default {
     removeColumn (size) {
       if (this.allColumn.length > size) {
         this.allColumn = this.allColumn.slice(0, this.allColumn.length - size)
-        this.$refs.xGrid.loadColumn(this.allColumn)
+        if (this.$refs.xGrid) {
+          this.$refs.xGrid.loadColumn(this.allColumn)
+        }
       }
     },
     loadColumns (size) {
       this.loading = true
       this.findColumnList(size).then(data => {
         this.allColumn = this.allColumn.concat(data)// 局部追加并保存全量数据
-        this.$refs.xGrid.loadColumn(this.allColumn)
+        if (this.$refs.xGrid) {
+          this.$refs.xGrid.loadColumn(this.allColumn)
+        }
         this.loading = false
       })
     },
     removeList (size) {
       if (this.allData.length > size) {
         this.allData = this.allData.slice(0, this.allData.length - size)
-        this.$refs.xGrid.loadData(this.allData)
+        if (this.$refs.xGrid) {
+          this.$refs.xGrid.loadData(this.allData)
+        }
       }
     },
     loadList (size) {
       this.loading = true
       this.findDataList(size).then(data => {
         this.allData = this.allData.concat(data)// 局部追加并保存全量数据
-        this.$refs.xGrid.loadData(this.allData)
+        if (this.$refs.xGrid) {
+          this.$refs.xGrid.loadData(this.allData)
+        }
         this.loading = false
       })
     },

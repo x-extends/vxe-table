@@ -1067,7 +1067,7 @@ const Methods = {
         UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
       }
       if (this.footerSpanMethod) {
-        UtilTools.warn('vxe.error.scrollErrProp', ['span-span-method'])
+        UtilTools.warn('vxe.error.scrollErrProp', ['footer-span-method'])
       }
       Object.assign(scrollXStore, {
         startIndex: 0,
@@ -1677,7 +1677,7 @@ const Methods = {
           }
         } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
           // 在 v3.0 中废弃 type=selection
-          // 空格键支持选中复选列
+          // 空格键支持选中复选框
           evnt.preventDefault()
           // 在 v3.0 中废弃 type=selection
           if (selected.column.type === 'checkbox' || selected.column.type === 'selection') {
@@ -1776,9 +1776,9 @@ const Methods = {
           }
         } else if (keyboardConfig.isEdit && !isCtrlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           // 启用编辑后，空格键功能将失效
-          if (isSpacebar) {
-            evnt.preventDefault()
-          }
+          // if (isSpacebar) {
+          //   evnt.preventDefault()
+          // }
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && selected.column.editRender) {
             if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {

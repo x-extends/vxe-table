@@ -710,10 +710,7 @@ export default {
     }
     if (this.mouseConfig && this.editConfig) {
       if ((mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
-        UtilTools.error('vxe.error.errProp', ['edit-config.trigger', 'dblclick'])
-      }
-      if (mouseOpts.selected && editOpts.mode !== 'cell') {
-        UtilTools.error('vxe.error.errProp', ['edit-config.mode', 'cell'])
+        UtilTools.warn('vxe.error.errProp', ['mouse-config.range', 'edit-config.trigger=dblclick'])
       }
     }
     if (treeConfig && this.stripe) {
