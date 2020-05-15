@@ -8,13 +8,15 @@
     "build": "vue-cli-service build",
     "lib:modules": "gulp build",
     "lib:pack": "vue-cli-service build --target lib --name index --dest lib index.js",
-    "lib": "npm run lib:pack && npm run lib:modules"
+    "lib": "npm run lib:pack && npm run lib:modules",
+    "postinstall": "node scripts/postinstall || echo \"ignore\""
   },
   "files": [
     "lib",
     "types",
     "packages",
-    "styles"
+    "styles",
+    "scripts"
   ],
   "main": "lib/vxe-table.js",
   "style": "lib/index.css",
@@ -32,7 +34,7 @@
     "@vue/cli-service": "~4.2.0",
     "@vue/eslint-config-standard": "^5.1.0",
     "@vue/eslint-config-typescript": "^5.0.1",
-    "ant-design-vue": "^1.5.3",
+    "ant-design-vue": "^1.5.6",
     "codemirror": "^5.53.2",
     "element-ui": "^2.13.0",
     "eslint": "^6.7.2",

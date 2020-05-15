@@ -602,7 +602,7 @@ export default {
     }
   },
   created () {
-    const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseOpts, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    const { sXOpts, scrollXStore, sYOpts, scrollYStore, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -650,11 +650,6 @@ export default {
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
       UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
-    }
-    if (this.mouseConfig && this.editConfig) {
-      if (mouseOpts.selected && editOpts.mode !== 'cell') {
-        UtilTools.error('vxe.error.errProp', ['edit-config.mode', 'cell'])
-      }
     }
     if (treeConfig && this.stripe) {
       UtilTools.warn('vxe.error.noTree', ['stripe'])

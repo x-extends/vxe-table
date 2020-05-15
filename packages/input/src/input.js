@@ -1430,8 +1430,13 @@ export default {
       if (!disabled && isActivated) {
         this.isActivated = DomTools.getEventTargetNode(evnt, $el).flag || DomTools.getEventTargetNode(evnt, $refs.panel).flag
         if (!this.isActivated) {
-          if (visiblePanel) {
-            this.hidePanel()
+          // 如果是日期类型
+          if (this.isDatePicker) {
+            if (visiblePanel) {
+              this.hidePanel()
+              this.afterCheckValue()
+            }
+          } else {
             this.afterCheckValue()
           }
         }

@@ -27,62 +27,62 @@
 
 👉 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
 
-## Browser Support
+## 浏览器支持
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
-## Features
+## 功能点
 
-* [x] Basic table （基础表格）
-* [x] Grid （高级表格）
-* [x] Striped （斑马线条纹）
-* [x] Table with border （多种边框）
-* [x] Cell style （单元格样式）
-* [x] Column resizable （列宽拖动）
-* [x] Maximum table height （最大高度）
-* [x] Resize height and width （自适应宽高）
-* [x] Fixed column （固定列）
-* [x] Grouping table header （多级表头）
-* [x] Table footer （表尾数据）
-* [x] Highlight row and column （高亮行、列)
-* [x] Table sequence （序号)
-* [x] Radio （单选框)
-* [x] Checkbox （复选框）
-* [x] Select （下拉选项）
-* [x] Switch （开关）
-* [x] Sorting （排序）
-* [x] Filter （筛选）
-* [x] Rowspan and colspan （合并行或列）
-* [x] Import （导入)
-* [x] Export （导出)
-* [x] Print （打印)
-* [x] Show/Hide column （显示/隐藏列）
-* [x] Loading （加载中）
-* [x] Formatted cell （格式化内容）
-* [x] Slot/template （自定义插槽/模板）
-* [x] Context menu（快捷菜单）
-* [x] Expandable row （展开行）
-* [x] Pager（分页）
-* [x] Form（表单）
-* [x] Toolbar（工具栏）
-* [x] Pulldown（下拉容器）
-* [x] List（虚拟列表）
-* [x] Editable CRUD（增删改查)
-* [x] Tree table（树表格)
-* [x] Validate（数据校验）
-* [x] Data Proxy（数据代理）
-* [x] Keyboard navigation（键盘导航）
-* [x] Modal（模态窗口）
-* [x] Renderer（渲染器）
-* [x] Virtual Scroller（虚拟滚动）
+* [x] 基础表格
+* [x] 高级表格
+* [x] 斑马线条纹
+* [x] 多种边框
+* [x] 单元格样式
+* [x] 列宽拖动
+* [x] 最大高度
+* [x] 自适应宽高
+* [x] 固定列
+* [x] 多级表头
+* [x] 表尾数据
+* [x] 高亮行、列
+* [x] 序号
+* [x] 单选框
+* [x] 复选框
+* [x] 下拉选项
+* [x] 开关
+* [x] 排序
+* [x] 筛选
+* [x] 合并行或列
+* [x] 导入
+* [x] 导出
+* [x] 打印
+* [x] 显示/隐藏列
+* [x] 加载中
+* [x] 格式化内容
+* [x] 自定义插槽/模板
+* [x] 快捷菜单
+* [x] 展开行
+* [x] 分页
+* [x] 表单
+* [x] 工具栏
+* [x] 下拉容器
+* [x] 虚拟列表
+* [x] 增删改查
+* [x] 树表格
+* [x] 数据校验
+* [x] 数据代理
+* [x] 键盘导航
+* [x] 模态窗口
+* [x] 渲染器
+* [x] 虚拟滚动
 
-## Modules
+## 模块&组件
 
-* Core (核心)
+* 核心
   * ![Table](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/table.min.js?compression=gzip&label=Table)![Methods](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/src/methods.min.js?compression=gzip&label=Methods)![Body](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/body/src/body.min.js?compression=gzip&label=Body)![Cell](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/cell/src/cell.min.js?compression=gzip&label=Cell)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/table/style/style.css?compression=gzip&label=style&color=green) (表格)
-* Modules （可选模块）
+* 可选模块
   * ![Icon](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/icon/style/style.css?compression=gzip&label=Icon&color=green) （图标）
   * ![Header](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/header/src/header.min.js?compression=gzip&label=Header)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/header/style/style.css?compression=gzip&label=style&color=green) （表头）
   * ![Footer](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/footer/src/footer.min.js?compression=gzip&label=Footer)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/footer/style/style.css?compression=gzip&label=style&color=green) （表尾）
@@ -91,7 +91,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
   * ![Menu](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/src/mixin.min.js?compression=gzip&label=Menu)![Panel](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/src/panel.min.js?compression=gzip&label=Panel)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/menu/style/style.css?compression=gzip&label=style&color=green) （快捷菜单）
   * ![Export](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/export/src/mixin.min.js?compression=gzip&label=Export)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/export/style/style.css?compression=gzip&label=style&color=green) （导出）
   * ![Keyboard](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/keyboard/src/mixin.min.js?compression=gzip&label=Keyboard) （按键导航）
-* Component （可选组件）
+* 可选组件
   * ![Grid](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/src/grid.min.js?compression=gzip&label=Grid)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/grid/style/style.css?compression=gzip&label=style&color=green) （高级表格）
   * ![Column](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/column/src/column.min.js?compression=gzip&label=Column) （静态列）
   * ![List](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/list/src/list.min.js?compression=gzip&label=List)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/list/style/style.css?compression=gzip&label=style&color=green) （虚拟列表）
@@ -106,7 +106,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
   * ![Modal](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/modal/src/modal.min.js?compression=gzip&label=Modal)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/modal/style/style.css?compression=gzip&label=style&color=green) （模态窗口）
   * ![Button](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=Button)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/style/style.css?compression=gzip&label=style&color=green) （按钮）
   * ![Pulldown](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/pulldown/src/pulldown.min.js?compression=gzip&label=Pulldown)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/pulldown/style/style.css?compression=gzip&label=style&color=green) （下拉容器）
-* Plugins（插件）
+* 插件
   * 增强插件
     * [![vxe-table-plugin-export-pdf](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-export-pdf/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20export%20pdf)](https://www.npmjs.org/package/vxe-table-plugin-export-pdf) ([PDF 导出插件](https://www.npmjs.com/package/vxe-table-plugin-export-pdf))
     * [![vxe-table-plugin-export-xlsx](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-export-xlsx/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20export%20xlsx)](https://www.npmjs.org/package/vxe-table-plugin-export-xlsx) ([XLSX 导出插件](https://www.npmjs.com/package/vxe-table-plugin-export-xlsx))
@@ -116,14 +116,14 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
     * [![vxe-table-plugin-iview](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20iview)](https://www.npmjs.org/package/vxe-table-plugin-iview)![style](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/style.min.css?compression=gzip&label=style&color=green) ([iview 适配插件](https://www.npmjs.org/package/vxe-table-plugin-iview))
     * [![vxe-table-plugin-antd](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20antd)](https://www.npmjs.org/package/vxe-table-plugin-antd)![style](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/style.min.css?compression=gzip&label=style&color=green) ([ant-design-vue 适配插件](https://www.npmjs.org/package/vxe-table-plugin-antd))
 
-## Docs
+## 文档
 
 [To view the user guide 使用指南](https://github.com/xuliangzhan/vxe-table-demo)
 
 [To view the example](https://xuliangzhan.github.io/vxe-table/#/table/base/basic) [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic)  
 [To view the document](https://xuliangzhan.github.io/vxe-table/#/table/api) [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)  
 
-## Installing
+## 安装
 
 依赖库：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.4+
 
@@ -155,7 +155,7 @@ Vue.use(VXETable)
 <!-- 建议使用 CDN 方式引入的用户在链接地址上锁定版本，避免受到非兼容性更新的影响 -->
 ```
 
-## Example
+## 示例
 
 ```html
 <template>

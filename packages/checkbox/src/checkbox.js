@@ -23,10 +23,13 @@ export default {
     },
     isGroup () {
       return this.$xegroup
+    },
+    isDisabled () {
+      return this.disabled || (this.isGroup && this.$xegroup.disabled)
     }
   },
   render (h) {
-    const { $slots, $xegroup, isGroup, disabled, title, vSize, indeterminate, value, label, content } = this
+    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -35,7 +38,7 @@ export default {
       class: ['vxe-checkbox', {
         [`size--${vSize}`]: vSize,
         'is--indeterminate': indeterminate,
-        'is--disabled': disabled
+        'is--disabled': isDisabled
       }],
       attrs
     }, [
@@ -43,14 +46,14 @@ export default {
         class: 'vxe-checkbox--input',
         attrs: {
           type: 'checkbox',
-          disabled
+          disabled: isDisabled
         },
         domProps: {
           checked: isGroup ? ($xegroup.value && $xegroup.value.some(item => item === label)) : value
         },
         on: {
           change: evnt => {
-            if (!this.disabled) {
+            if (!isDisabled) {
               const checked = evnt.target.checked
               const params = { checked, label, $event: evnt }
               if (isGroup) {

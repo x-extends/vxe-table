@@ -24,7 +24,7 @@ function mockData () {
       id: 1000000 + index,
       name: nameList[index % 10] + nameList[index % 5] + index,
       nickname: nickList[index % 10] + nickList[index % 5] + index,
-      role: index % 5 === 0 ? '前端' : index % 4 === 0 ? '后端' : index % 3 === 0 ? '测试' : '项目经理',
+      role: index % 5 === 0 ? '前端' : index % 4 === 0 ? '入门到放弃' : index % 3 === 0 ? '测试' : '项目经理',
       role1: index === 1 ? '1' : '',
       key: 'home.label.key' + Math.max(0, index % 2 === 0 ? index - 1 : index),
       language: index % 2 === 0 ? 'zh_CN' : 'en_US',
@@ -120,7 +120,7 @@ window.MOCK_TREE_DATA_LIST = [
       {
         id: '11000',
         parentId: '10000',
-        name: '某 11000.avi',
+        name: 'vxe-table 从入门到放弃.avi',
         size: '11k',
         type: 'avi',
         date: '2019-05-21',

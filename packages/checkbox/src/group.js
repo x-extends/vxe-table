@@ -4,6 +4,7 @@ export default {
   name: 'VxeCheckboxGroup',
   props: {
     value: Array,
+    disabled: Boolean,
     size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
   provide () {

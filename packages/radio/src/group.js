@@ -5,6 +5,7 @@ export default {
   name: 'VxeRadioGroup',
   props: {
     value: [String, Number],
+    disabled: Boolean,
     size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   provide () {
