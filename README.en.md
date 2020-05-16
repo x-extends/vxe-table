@@ -118,12 +118,6 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
     * [![vxe-table-plugin-iview](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20iview)](https://www.npmjs.org/package/vxe-table-plugin-iview)![style](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/style.min.css?compression=gzip&label=style&color=green)
     * [![vxe-table-plugin-antd](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20antd)](https://www.npmjs.org/package/vxe-table-plugin-antd)![style](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/style.min.css?compression=gzip&label=style&color=green)
 
-## Docs
-
-[User guide](https://github.com/xuliangzhan/vxe-table-demo)  
-[View example](https://xuliangzhan.github.io/vxe-table/#/table/base/basic)  
-[View API](https://xuliangzhan.github.io/vxe-table/#/table/api)  
-
 ## Installing
 
 Dependent: [vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.4+
@@ -185,6 +179,12 @@ export default {
 </script>
 ```
 
+## Docs
+
+[💡 User guide](https://github.com/xuliangzhan/vxe-table-demo)  
+[👉 View example](https://xuliangzhan.github.io/vxe-table/#/table/base/basic)  
+[👉 View API](https://xuliangzhan.github.io/vxe-table/#/table/api)
+
 ## Donation
 
 If the open source project is very helpful to you, you can buy the author a cup of coffee.  
@@ -196,4 +196,4 @@ Feel free to leave a comment or ask [Issues](https://github.com/xuliangzhan/vxe-
 
 ## License
 
-MIT License, 2019-present, Xu Liangzhan
+[MIT License](./LICENSE), 2019-present, [Xu Liangzhan](mailto:xu_liangzhan@163.com)
