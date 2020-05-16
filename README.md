@@ -118,12 +118,6 @@
     * [![vxe-table-plugin-iview](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20iview)](https://www.npmjs.org/package/vxe-table-plugin-iview)![style](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-iview/dist/style.min.css?compression=gzip&label=style&color=green) ([iview 适配插件](https://www.npmjs.org/package/vxe-table-plugin-iview))
     * [![vxe-table-plugin-antd](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20antd)](https://www.npmjs.org/package/vxe-table-plugin-antd)![style](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-antd/dist/style.min.css?compression=gzip&label=style&color=green) ([ant-design-vue 适配插件](https://www.npmjs.org/package/vxe-table-plugin-antd))
 
-## 文档
-
-[使用指南](https://github.com/xuliangzhan/vxe-table-demo)  
-[查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic)  
-[查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)
-
 ## 安装
 
 依赖库：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.4+
@@ -185,6 +179,12 @@ export default {
 </script>
 ```
 
+## 文档说明
+
+[💡 使用指南](https://github.com/xuliangzhan/vxe-table-demo)  
+[👉 查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic)  
+[👉 查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)
+
 ## Donation
 
 如果这个开源项目对您有帮助，请作者喝杯咖啡吧。☕  
@@ -196,4 +196,4 @@ export default {
 
 ## License
 
-MIT License, 2019-present, Xu Liangzhan
+[MIT License](./LICENSE), 2019-present, [Xu Liangzhan](mailto:xu_liangzhan@163.com)
