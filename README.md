@@ -1,5 +1,7 @@
 # vxe-table
 
+简体中文 | [English](./README.en.md)
+
 [![gitee star](https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark)](https://gitee.com/xuliangzhan_admin/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.org/package/vxe-table)
 [![npm build](https://travis-ci.org/xuliangzhan/vxe-table.svg?branch=master)](https://travis-ci.org/xuliangzhan/vxe-table)
@@ -106,7 +108,7 @@
   * ![Modal](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/modal/src/modal.min.js?compression=gzip&label=Modal)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/modal/style/style.css?compression=gzip&label=style&color=green) （模态窗口）
   * ![Button](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/src/button.min.js?compression=gzip&label=Button)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/button/style/style.css?compression=gzip&label=style&color=green) （按钮）
   * ![Pulldown](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/pulldown/src/pulldown.min.js?compression=gzip&label=Pulldown)![style](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/pulldown/style/style.css?compression=gzip&label=style&color=green) （下拉容器）
-* 插件
+* 可选插件
   * 增强插件
     * [![vxe-table-plugin-export-pdf](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-export-pdf/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20export%20pdf)](https://www.npmjs.org/package/vxe-table-plugin-export-pdf) ([PDF 导出插件](https://www.npmjs.com/package/vxe-table-plugin-export-pdf))
     * [![vxe-table-plugin-export-xlsx](https://img.badgesize.io/https://unpkg.com/vxe-table-plugin-export-xlsx/dist/index.min.js?compression=gzip&label=vxe%20table%20plugin%20export%20xlsx)](https://www.npmjs.org/package/vxe-table-plugin-export-xlsx) ([XLSX 导出插件](https://www.npmjs.com/package/vxe-table-plugin-export-xlsx))
@@ -118,10 +120,9 @@
 
 ## 文档
 
-[To view the user guide 使用指南](https://github.com/xuliangzhan/vxe-table-demo)
-
-[To view the example](https://xuliangzhan.github.io/vxe-table/#/table/base/basic) [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic)  
-[To view the document](https://xuliangzhan.github.io/vxe-table/#/table/api) [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)  
+[使用指南](https://github.com/xuliangzhan/vxe-table-demo)  
+[查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic)  
+[查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)
 
 ## 安装
 
@@ -186,8 +187,8 @@ export default {
 
 ## Donation
 
-If the open source project is very helpful to you, you can buy the author a cup of coffee.  
-如果这个开源项目对您有帮助，请作者喝杯咖啡吧。☕（如果有问题需要支持可以留言或者提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)）
+如果这个开源项目对您有帮助，请作者喝杯咖啡吧。☕  
+有问题欢迎留言或者提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
 
 [👉 捐赠方式💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
