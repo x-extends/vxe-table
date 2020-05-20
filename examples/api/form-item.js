@@ -167,7 +167,7 @@ const apis = [
           {
             name: 'name',
             desc: '渲染器名称',
-            version: 'input, textarea, select, $input, $textarea, $select',
+            version: 'input, textarea, select, $input, $textarea, $select, $button, $buttons, $radio, $checkbox, $switch',
             type: 'String',
             enum: '',
             defVal: '',

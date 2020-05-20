@@ -169,6 +169,36 @@
     </p>
 
     <p>
+      <vxe-button round>圆角按钮</vxe-button>
+      <vxe-button loading round>圆角按钮</vxe-button>
+      <vxe-button status="primary" round>主要颜色</vxe-button>
+      <vxe-button status="success" round>成功颜色</vxe-button>
+      <vxe-button status="info" round>信息颜色</vxe-button>
+      <vxe-button status="warning" round>警告颜色</vxe-button>
+      <vxe-button status="danger" round>危险颜色</vxe-button>
+    </p>
+
+    <p>
+      <vxe-button icon="fa fa-plus" circle></vxe-button>
+      <vxe-button loading circle></vxe-button>
+      <vxe-button status="primary" icon="fa fa-save" circle></vxe-button>
+      <vxe-button status="success" icon="fa fa-check" circle></vxe-button>
+      <vxe-button status="info" icon="fa fa-info" circle></vxe-button>
+      <vxe-button status="warning" icon="fa fa-warning" circle></vxe-button>
+      <vxe-button status="danger" icon="fa fa-trash-o" circle></vxe-button>
+    </p>
+
+    <p>
+      <vxe-button icon="fa fa-plus"></vxe-button>
+      <vxe-button loading></vxe-button>
+      <vxe-button status="primary" icon="fa fa-save"></vxe-button>
+      <vxe-button status="success" icon="fa fa-check"></vxe-button>
+      <vxe-button status="info" icon="fa fa-info"></vxe-button>
+      <vxe-button status="warning" icon="fa fa-warning"></vxe-button>
+      <vxe-button status="danger" icon="fa fa-trash-o"></vxe-button>
+    </p>
+
+    <p>
       <vxe-button type="text" icon="fa fa-plus">默认图标颜色</vxe-button>
       <vxe-button type="text" status="primary" icon="fa fa-save">主要图标颜色</vxe-button>
       <vxe-button type="text" status="success" icon="fa fa-check">成功图标颜色</vxe-button>
@@ -374,6 +404,36 @@ export default {
           <vxe-button icon="fa fa-info vxe-info-color">信息图标颜色</vxe-button>
           <vxe-button icon="fa fa-warning vxe-warning-color">警告图标颜色</vxe-button>
           <vxe-button icon="fa fa-trash-o vxe-danger-color">危险图标颜色</vxe-button>
+        </p>
+
+        <p>
+          <vxe-button round>圆角按钮</vxe-button>
+          <vxe-button loading round>圆角按钮</vxe-button>
+          <vxe-button status="primary" round>主要颜色</vxe-button>
+          <vxe-button status="success" round>成功颜色</vxe-button>
+          <vxe-button status="info" round>信息颜色</vxe-button>
+          <vxe-button status="warning" round>警告颜色</vxe-button>
+          <vxe-button status="danger" round>危险颜色</vxe-button>
+        </p>
+
+        <p>
+          <vxe-button icon="fa fa-plus" circle></vxe-button>
+          <vxe-button loading circle></vxe-button>
+          <vxe-button status="primary" icon="fa fa-save" circle></vxe-button>
+          <vxe-button status="success" icon="fa fa-check" circle></vxe-button>
+          <vxe-button status="info" icon="fa fa-info" circle></vxe-button>
+          <vxe-button status="warning" icon="fa fa-warning" circle></vxe-button>
+          <vxe-button status="danger" icon="fa fa-trash-o" circle></vxe-button>
+        </p>
+
+        <p>
+          <vxe-button icon="fa fa-plus"></vxe-button>
+          <vxe-button loading></vxe-button>
+          <vxe-button status="primary" icon="fa fa-save"></vxe-button>
+          <vxe-button status="success" icon="fa fa-check"></vxe-button>
+          <vxe-button status="info" icon="fa fa-info"></vxe-button>
+          <vxe-button status="warning" icon="fa fa-warning"></vxe-button>
+          <vxe-button status="danger" icon="fa fa-trash-o"></vxe-button>
         </p>
 
         <p>

@@ -97,15 +97,15 @@
 }
 
 .vxe-icon--menu {
-  $yOffset: 0.38em;
+  $yOffset: 0.36em;
   @extend %DefaultWidthHeight;
   &:before {
     content: "";
     display: inline-block;
-    width: 0.24em;
-    height: 0.24em;
+    width: 0.22em;
+    height: 0.22em;
     box-shadow: 0 -#{$yOffset} 0, -#{$yOffset} -#{$yOffset} 0, #{$yOffset} -#{$yOffset} 0, 0 0 0 1em inset, -#{$yOffset} 0 0, #{$yOffset} 0 0, 0 #{$yOffset} 0, -#{$yOffset} #{$yOffset} 0, #{$yOffset} #{$yOffset} 0;
-    margin: 0.24em;
+    margin: 0.26em;
   }
 }
 
@@ -555,25 +555,25 @@
 
 .vxe-icon--upload {
   &:before {
-    top: 0;
+    top: 0.1em;
     border-top-width: 0.1em;
   }
   &:after {
     content: "\2191";
     left: 0;
-    bottom: -0.1em;
+    top: 0.15em;
   }
 }
 
 .vxe-icon--download {
   &:before {
-    bottom: 0;
+    bottom: 0.05em;
     border-bottom-width: 0.1em;
   }
   &:after {
     content: "\2191";
     left: 0;
-    bottom: 0.1em;
+    bottom: 0.15em;
     transform: rotate(180deg);
   }
 }

@@ -12,7 +12,7 @@
   box-shadow: 3px 3px 4px -2px rgba(0,0,0,.6);
   padding: 0 1px;
   user-select: none;
-  color: $vxe-font-color;
+  color: $vxe-table-font-color;
   font-family: $vxe-font-family;
   background-color: $vxe-table-menu-background-color;
   &.is--show {
@@ -29,7 +29,7 @@
   padding: 0 2.5em;
   width: $vxe-table-menu-item-width;
   line-height: 26px;
-  color: $vxe-font-color;
+  color: $vxe-table-font-color;
   .vxe-context-menu--link-prefix,
   .vxe-context-menu--link-suffix {
     position: absolute;

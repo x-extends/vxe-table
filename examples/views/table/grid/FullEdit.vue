@@ -68,7 +68,7 @@ export default {
             { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
             { code: 'delete', name: '直接删除', icon: 'fa fa-trash-o' },
             { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-trash-o' },
-            { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save' }
+            { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save', status: 'success' }
           ],
           refresh: true,
           import: true,
@@ -211,7 +211,7 @@ export default {
                     { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
                     { code: 'delete', name: '直接删除', icon: 'fa fa-trash-o' },
                     { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-trash-o' },
-                    { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save' }
+                    { code: 'save', name: 'app.body.button.save', icon: 'fa fa-save', status: 'success' }
                   ],
                   refresh: true,
                   import: true,

@@ -2,7 +2,6 @@
 
 .vxe-grid {
   position: relative;
-  color: $vxe-font-color;
   &.is--loading {
     &:before {
       content: "";

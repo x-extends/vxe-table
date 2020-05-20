@@ -53,6 +53,24 @@ const apis = [
         list: []
       },
       {
+        name: 'round',
+        desc: '圆角边框',
+        version: '2.9.8',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'circle',
+        desc: '圆角按钮',
+        version: '2.9.8',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'status',
         descKey: 'app.api.button.desc.status',
         version: '2.8.21',

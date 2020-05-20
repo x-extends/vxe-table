@@ -52,6 +52,11 @@ $btnThemeList: (
   @include animatTransition(border, .2s);
   &.is--disabled {
     color: $vxe-disabled-color;
+    .vxe-button--icon {
+      &.vxe-icon--zoomin {
+        border-color: $vxe-disabled-color;
+      }
+    }
     &:not(.is--loading) {
       cursor: no-drop;
     }
@@ -59,6 +64,11 @@ $btnThemeList: (
   &:not(.is--disabled) {
     color: $vxe-font-color;
     cursor: pointer;
+    .vxe-button--icon {
+      &.vxe-icon--zoomin {
+        border-color: $vxe-font-color;
+      }
+    }
   }
   &.is--loading {
     &:before {
@@ -99,14 +109,31 @@ $btnThemeList: (
     }
   }
   &.type--button {
-    padding: 0 1em;
+    &.is--round {
+      border-radius: $vxe-button-height-default / 2;
+    }
+    &:not(.is--round) {
+      border-radius: $vxe-border-radius;
+    }
+    &.is--circle {
+      padding: 0 0.5em;
+      min-width: $vxe-button-height-default;
+      border-radius: 50%;
+    }
+    &:not(.is--circle) {
+      padding: 0 1em;
+    }
     height: $vxe-button-height-default;
     line-height: 1;
     border: 1px solid $vxe-input-border-color;
-    border-radius: $vxe-border-radius;
     &:not(.is--disabled) {
       &:hover {
         color: lighten($vxe-primary-color, 6%);
+        .vxe-button--icon {
+          &.vxe-icon--zoomin {
+            border-color: lighten($vxe-primary-color, 6%);
+          }
+        }
       }
       &:focus {
         border-color: $vxe-primary-color;
@@ -124,6 +151,11 @@ $btnThemeList: (
       $btnBackground: map-get($item, btnBackground);
       &.theme--#{map-get($item, name)} {
         color: $btnColor;
+        .vxe-button--icon {
+          &.vxe-icon--zoomin {
+            border-color: $btnColor;
+          }
+        }
         &:not(.is--disabled) {
           border-color: $btnBackground;
           background-color: $btnBackground;
@@ -153,18 +185,48 @@ $btnThemeList: (
     font-size: $vxe-font-size-medium;
     &.type--button {
       height: $vxe-button-height-medium;
+      &.is--circle {
+        min-width: $vxe-button-height-medium;
+      }
+      &.is--round {
+        border-radius: $vxe-button-height-medium / 2;
+      }
+    }
+    .vxe-button--loading-icon,
+    .vxe-button--icon {
+      min-width: $vxe-font-size-medium;
     }
   }
   &.size--small {
     font-size: $vxe-font-size-small;
     &.type--button {
       height: $vxe-button-height-small;
+      &.is--circle {
+        min-width: $vxe-button-height-small;
+      }
+      &.is--round {
+        border-radius: $vxe-button-height-small / 2;
+      }
+    }
+    .vxe-button--loading-icon,
+    .vxe-button--icon {
+      min-width: $vxe-font-size-small;
     }
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
     &.type--button {
       height: $vxe-button-height-mini;
+      &.is--circle {
+        min-width: $vxe-button-height-mini;
+      }
+      &.is--round {
+        border-radius: $vxe-button-height-mini / 2;
+      }
+    }
+    .vxe-button--loading-icon,
+    .vxe-button--icon {
+      min-width: $vxe-font-size-mini;
     }
   }
 }
@@ -177,6 +239,7 @@ $btnThemeList: (
 }
 .vxe-button--loading-icon,
 .vxe-button--icon {
+  min-width: $vxe-font-size;
   &+.vxe-button--content {
     margin-left: 0.3em;
   }

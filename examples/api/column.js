@@ -440,7 +440,7 @@ const apis = [
             desc: '渲染器名称',
             version: '',
             type: 'String',
-            enum: 'input, textarea, select, $input, $textarea, $select',
+            enum: 'input, textarea, select, $input, $select, $button, $buttons, $switch',
             defVal: '',
             list: []
           },
@@ -541,7 +541,7 @@ const apis = [
             desc: '渲染器名称',
             version: '',
             type: 'String',
-            enum: 'input, textarea, select, $input, $textarea, $select',
+            enum: 'input, textarea, select, $input, $select, $switch',
             defVal: '',
             list: []
           },

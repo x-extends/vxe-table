@@ -61,6 +61,7 @@
   }
   .vxe-custom--wrapper {
     position: relative;
+    margin-left: 0.8em;
     &.is--active {
       .vxe-tools--operate-custom-btn {
         background-color: #D9DADB;
@@ -69,22 +70,6 @@
       .vxe-custom--option-wrapper {
         display: block;
       }
-    }
-  }
-  .vxe-tools--operate-btn {
-    padding: 8px;
-    text-align: center;
-    user-select: none;
-    cursor: pointer;
-    &:hover {
-      background-color: #F0F0F0;
-      border-radius: 50%;
-      .vxe-icon--zoomin {
-        background-color: #F0F0F0;
-      }
-    }
-    & > i {
-      display: block;
     }
   }
   .vxe-custom--option-wrapper {
@@ -175,9 +160,6 @@
 .vxe-toolbar {
   font-size: $vxe-font-size;
   height: $vxe-toolbar-height-default;
-  .vxe-tools--operate-btn {
-    font-size: $vxe-font-size + 4px;
-  }
   .vxe-custom--option {
     & > .vxe-checkbox--icon {
       font-size: $vxe-checkbox-font-size-default;
@@ -186,9 +168,6 @@
   &.size--medium {
     font-size: $vxe-font-size-medium;
     height: $vxe-toolbar-height-medium;
-    .vxe-tools--operate-btn {
-      font-size: $vxe-font-size-medium + 4px;
-    }
     .vxe-custom--option {
       & > .vxe-checkbox--icon {
         font-size: $vxe-checkbox-font-size-medium;
@@ -198,9 +177,6 @@
   &.size--small {
     font-size: $vxe-font-size-small;
     height: $vxe-toolbar-height-small;
-    .vxe-tools--operate-btn {
-      font-size: $vxe-font-size-small + 4px;
-    }
     .vxe-custom--option {
       & > .vxe-checkbox--icon {
         font-size: $vxe-checkbox-font-size-small;
@@ -210,9 +186,6 @@
   &.size--mini {
     font-size: $vxe-font-size-mini;
     height: $vxe-toolbar-height-mini;
-    .vxe-tools--operate-btn {
-      font-size: $vxe-font-size-mini + 4px;
-    }
     .vxe-custom--option {
       & > .vxe-checkbox--icon {
         font-size: $vxe-checkbox-font-size-mini;

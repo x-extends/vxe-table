@@ -2324,7 +2324,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, triggerRadio, triggerCheckbox, $event }',
         list: []
       },
       {
@@ -2369,7 +2369,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, triggerResizable, triggerSort, triggerFilter, $event }',
+        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, triggerResizable, triggerSort, triggerFilter, triggerTreeNode, triggerExpandNode, $event }',
         list: []
       },
       {

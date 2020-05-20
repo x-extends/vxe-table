@@ -228,6 +228,7 @@ export const UtilTools = {
       const colid = column.id
       const fullAllDataRowMap = $table.fullAllDataRowMap
       const cacheFormat = fullAllDataRowMap.has(row)
+      const formatParams = { cellValue, row, column }
       if (cacheFormat) {
         rest = fullAllDataRowMap.get(row)
         formatData = rest.formatData
@@ -244,7 +245,7 @@ export const UtilTools = {
         if (XEUtils[formatter]) {
           cellLabel = XEUtils[formatter](cellValue)
         } else if (formats.get(formatter)) {
-          cellLabel = formats.get(formatter)({ cellValue, row, column })
+          cellLabel = formats.get(formatter)(formatParams)
         } else {
           cellLabel = ''
         }
@@ -252,12 +253,12 @@ export const UtilTools = {
         if (XEUtils[formatter[0]]) {
           cellLabel = XEUtils[formatter[0]](cellValue, ...formatter.slice(1))
         } else if (formats.get(formatter[0])) {
-          cellLabel = formats.get(formatter[0])({ cellValue, row, column }, ...formatter.slice(1))
+          cellLabel = formats.get(formatter[0])(formatParams, ...formatter.slice(1))
         } else {
           cellLabel = ''
         }
       } else {
-        cellLabel = formatter(Object.assign({ cellValue }, params))
+        cellLabel = formatter(formatParams)
       }
       if (formatData) {
         formatData[colid] = { value: cellValue, label: cellLabel }

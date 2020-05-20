@@ -168,7 +168,7 @@
           //   lockView: true,
           //   mask: true,
           //   duration: 3000,
-          //   marginSize: 5,
+          //   marginSize: 8,
           //   dblclickZoom: true,
           //   showTitleOverflow: true
           //   storage: false

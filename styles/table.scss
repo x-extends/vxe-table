@@ -126,7 +126,7 @@
     outline: 0;
     padding: 0 2px;
     width: 100%;
-    color: $vxe-font-color;
+    color: $vxe-table-font-color;
     border-radius: $vxe-border-radius;
     border: 1px solid $vxe-input-border-color;
     &:focus {
@@ -281,7 +281,7 @@
 .vxe-table {
   position: relative;
   font-size: $vxe-font-size;
-  color: $vxe-font-color;
+  color: $vxe-table-font-color;
   font-family: $vxe-font-family;
   &[x-cloak] {
     .vxe-table--main-wrapper,
@@ -784,9 +784,9 @@
   }
   .vxe-tree--node-btn {
     display: block;
-    color: lighten($vxe-font-color, 20%);
+    color: lighten($vxe-table-font-color, 20%);
     &:hover {
-      color: $vxe-font-color;
+      color: $vxe-table-font-color;
     }
   }
   .vxe-tree-cell {
@@ -814,9 +814,9 @@
       height: 1em;
       text-align: center;
       user-select: none;
-      color: lighten($vxe-font-color, 20%);
+      color: lighten($vxe-table-font-color, 20%);
       &:hover {
-        color: $vxe-font-color;
+        color: $vxe-table-font-color;
       }
     }
   }
