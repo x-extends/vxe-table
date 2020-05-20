@@ -42,6 +42,10 @@
             <div class="first-col-bottom">序号</div>
           </div>
         </template>
+        <template v-slot:footer="{ items, _columnIndex }">
+          <vxe-button status="primary" @click="clickFooterItem(items, _columnIndex)">支持</vxe-button>
+          <vxe-button @click="clickFooterItem(items, _columnIndex)">放弃</vxe-button>
+        </template>
         <template v-slot="{ row }">
           <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
         </template>
@@ -203,6 +207,10 @@ export default {
                 <div class="first-col-bottom">序号</div>
               </div>
             </template>
+            <template v-slot:footer="{ items, _columnIndex }">
+              <vxe-button status="primary" @click="clickFooterItem(items, _columnIndex)">支持</vxe-button>
+              <vxe-button @click="clickFooterItem(items, _columnIndex)">放弃</vxe-button>
+            </template>
             <template v-slot="{ row }">
               <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
             </template>
@@ -334,6 +342,9 @@ export default {
               this.selectRow = row
               this.showDetails = true
             },
+            clickFooterItem (items, _columnIndex) {
+              this.$XModal.alert(\`点击了表尾第\${_columnIndex}列\`)
+            },
             checkboxChangeEvent ({ records }) {
               this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()
               this.isIndeterminate = this.$refs.xTable.isCheckboxIndeterminate()
@@ -415,6 +426,9 @@ export default {
     showDetailEvent (row) {
       this.selectRow = row
       this.showDetails = true
+    },
+    clickFooterItem (items, _columnIndex) {
+      this.$XModal.alert(`点击了表尾第${_columnIndex}列`)
     },
     checkboxChangeEvent ({ records }) {
       this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()

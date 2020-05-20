@@ -223,6 +223,7 @@ export const UtilTools = {
       const colid = column.id
       const fullAllDataRowMap = $table.fullAllDataRowMap
       const cacheFormat = fullAllDataRowMap.has(row)
+      const formatParams = { cellValue, row, column }
       if (cacheFormat) {
         rest = fullAllDataRowMap.get(row)
         formatData = rest.formatData
@@ -237,12 +238,12 @@ export const UtilTools = {
       }
       if (XEUtils.isString(formatter)) {
         const globalFunc = formats.get(formatter)
-        cellLabel = globalFunc ? globalFunc({ cellValue, row, column }) : ''
+        cellLabel = globalFunc ? globalFunc(formatParams) : ''
       } else if (XEUtils.isArray(formatter)) {
         const globalFunc = formats.get(formatter[0])
-        cellLabel = globalFunc ? globalFunc({ cellValue, row, column }, ...formatter.slice(1)) : ''
+        cellLabel = globalFunc ? globalFunc(formatParams, ...formatter.slice(1)) : ''
       } else {
-        cellLabel = formatter(Object.assign({ cellValue }, params))
+        cellLabel = formatter(formatParams)
       }
       if (formatData) {
         formatData[colid] = { value: cellValue, label: cellLabel }

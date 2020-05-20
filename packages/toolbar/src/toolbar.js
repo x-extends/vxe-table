@@ -132,17 +132,16 @@ function renderCustoms (h, _vm) {
     }],
     ref: 'customWrapper'
   }, [
-    h('div', {
-      class: 'vxe-tools--operate-btn vxe-tools--operate-custom-btn',
+    h('vxe-button', {
+      props: {
+        circle: true,
+        icon: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM
+      },
       attrs: {
         title: GlobalConfig.i18n('vxe.toolbar.custom')
       },
       on: customBtnOns
-    }, [
-      h('i', {
-        class: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM
-      })
-    ]),
+    }),
     h('div', {
       class: 'vxe-custom--option-wrapper'
     }, [
@@ -288,58 +287,54 @@ export default {
       h('div', {
         class: 'vxe-tools--operate'
       }, [
-        this.import ? h('div', {
-          class: 'vxe-tools--operate-btn vxe-tools--operate-import-btn',
+        this.import ? h('vxe-button', {
+          props: {
+            circle: true,
+            icon: importOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_IMPORT
+          },
           attrs: {
             title: GlobalConfig.i18n('vxe.toolbar.import')
           },
           on: {
             click: this.importEvent
           }
-        }, [
-          h('i', {
-            class: importOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_IMPORT
-          })
-        ]) : null,
-        this.export ? h('div', {
-          class: 'vxe-tools--operate-btn vxe-tools--operate-export-btn',
+        }) : null,
+        this.export ? h('vxe-button', {
+          props: {
+            circle: true,
+            icon: exportOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_EXPORT
+          },
           attrs: {
             title: GlobalConfig.i18n('vxe.toolbar.export')
           },
           on: {
             click: this.exportEvent
           }
-        }, [
-          h('i', {
-            class: exportOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_EXPORT
-          })
-        ]) : null,
-        refresh ? h('div', {
-          class: 'vxe-tools--operate-btn vxe-tools--operate-refresh-btn',
+        }) : null,
+        refresh ? h('vxe-button', {
+          props: {
+            circle: true,
+            icon: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH_LOADING) : (refreshOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH)
+          },
           attrs: {
             title: GlobalConfig.i18n('vxe.toolbar.refresh')
           },
           on: {
             click: this.refreshEvent
           }
-        }, [
-          h('i', {
-            class: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH_LOADING) : (refreshOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH)
-          })
-        ]) : null,
-        zoom && $xegrid ? h('div', {
-          class: 'vxe-tools--operate-btn vxe-tools--operate-zoom-btn',
+        }) : null,
+        zoom && $xegrid ? h('vxe-button', {
+          props: {
+            circle: true,
+            icon: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_OUT) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_IN)
+          },
           attrs: {
             title: GlobalConfig.i18n(`vxe.toolbar.zoom${$xegrid.isMaximized() ? 'Out' : 'In'}`)
           },
           on: {
             click: $xegrid.triggerZoomEvent
           }
-        }, [
-          h('i', {
-            class: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_OUT) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_IN)
-          })
-        ]) : null,
+        }) : null,
         custom ? renderCustoms(h, this) : null
       ])
     ])

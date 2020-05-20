@@ -12,6 +12,8 @@ export default {
     placement: String,
     status: String,
     icon: String,
+    round: Boolean,
+    circle: Boolean,
     disabled: Boolean,
     loading: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.button.transfer }
@@ -43,7 +45,7 @@ export default {
     }
   },
   created () {
-    GlobalEvent.on(this, 'syncwheel', this.handleSyncwheelEvent)
+    GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
   },
   mounted () {
     const panelElem = this.$refs.panel
@@ -58,7 +60,7 @@ export default {
     }
   },
   destroyed () {
-    GlobalEvent.off(this, 'syncwheel')
+    GlobalEvent.off(this, 'mousewheel')
   },
   render (h) {
     const { $scopedSlots, $listeners, type, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
@@ -73,6 +75,8 @@ export default {
         class: ['vxe-button', `type--${btnType}`, {
           [`size--${vSize}`]: vSize,
           [`theme--${btnStatus}`]: btnStatus,
+          'is--round': this.round,
+          'is--circle': this.circle,
           'is--disabled': disabled || loading,
           'is--loading': loading
         }],
@@ -116,6 +120,8 @@ export default {
       class: ['vxe-button', `type--${btnType}`, {
         [`size--${vSize}`]: vSize,
         [`theme--${btnStatus}`]: btnStatus,
+        'is--round': this.round,
+        'is--circle': this.circle,
         'is--disabled': disabled || loading,
         'is--loading': loading
       }],
@@ -159,7 +165,7 @@ export default {
       }
       return contents
     },
-    handleSyncwheelEvent (evnt) {
+    handleGlobalMousewheelEvent (evnt) {
       if (this.showPanel && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
         console.log(111)
         this.updatePlacement()

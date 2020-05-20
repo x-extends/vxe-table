@@ -487,7 +487,7 @@ module.exports = {
           filterRender: '筛选渲染器配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: '即将废弃，请使用 table.column-key',
-          cellType: '单元格值类型（对于某些场景可能会用到，例如：导出数据类型设置）',
+          cellType: '只对特定功能有效，单元格值类型（例如：导出数据类型设置）',
           cellRender: '默认的渲染器配置项',
           editRender: '可编辑渲染器配置项',
           contentRender: '内容渲染配置项',

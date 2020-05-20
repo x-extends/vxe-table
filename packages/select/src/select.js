@@ -201,7 +201,7 @@ export default {
       this.updateCache()
       this.updateOptComps()
     }
-    GlobalEvent.on(this, 'syncwheel', this.handleSyncwheelEvent)
+    GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
@@ -218,7 +218,7 @@ export default {
     }
   },
   destroyed () {
-    GlobalEvent.off(this, 'syncwheel')
+    GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'keydown')
     GlobalEvent.off(this, 'blur')
@@ -429,7 +429,7 @@ export default {
       this.changeEvent(evnt, selectValue)
       this.hideOptionPanel()
     },
-    handleSyncwheelEvent (evnt) {
+    handleGlobalMousewheelEvent (evnt) {
       const { $refs, $el, disabled, visiblePanel } = this
       if (!disabled) {
         if (visiblePanel) {
