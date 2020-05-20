@@ -39,14 +39,6 @@ function defaultFilterExportColumn (column) {
   return column.property || ['seq', 'index', 'checkbox', 'selection', 'radio'].indexOf(column.type) > -1
 }
 
-/**
- * 判断是否点击了单选框或复选框
- */
-function isTargetRadioOrCheckbox (evnt, column, colType, targetType) {
-  const target = evnt.target
-  return target && column.type === colType && target.tagName.toLowerCase() === 'input' && target.type === (targetType || colType)
-}
-
 function getCustomStorageMap (key) {
   const version = GlobalConfig.version
   const rest = XEUtils.toStringJSON(localStorage.getItem(key))
@@ -4033,39 +4025,45 @@ export default {
      * 如果是双击模式，则单击后选中状态
      */
     triggerCellClickEvent (evnt, params) {
-      const { $el, highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts } = this
+      const { highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts } = this
       const { actived } = editStore
-      const { column, row } = params
+      const { row, column } = params
+      const { type, treeNode } = column
+      const isRadioType = type === 'radio'
+      // 在 v3.0 中废弃 selection
+      const isCheckboxType = type === 'checkbox'
+      const isExpandType = type === 'expand'
       const cell = evnt.currentTarget
-      params.cell = cell
-      // 解决 checkbox 重复触发两次问题
-      if (isTargetRadioOrCheckbox(evnt, column, 'radio') || isTargetRadioOrCheckbox(evnt, column, 'checkbox', 'checkbox') || isTargetRadioOrCheckbox(evnt, column, 'selection', 'checkbox')) {
-        // 在 v3.0 中废弃 selection
-        return
-      }
+      const triggerRadio = isRadioType && DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--radio').flag
+      const triggerCheckbox = isCheckboxType && DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
+      const triggerTreeNode = treeNode && DomTools.getEventTargetNode(evnt, cell, 'vxe-tree--btn-wrapper').flag
+      const triggerExpandNode = isExpandType && DomTools.getEventTargetNode(evnt, cell, 'vxe-table--expanded').flag
+      params = Object.assign({ cell, triggerRadio, triggerCheckbox, triggerTreeNode, triggerExpandNode }, params)
       // 如果是展开行
-      if ((expandOpts.trigger === 'row' || (column.type === 'expand' && expandOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag) {
+      if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
         this.triggerRowExpandEvent(evnt, params)
       }
       // 如果是树形表格
-      if ((treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
+      if ((treeOpts.trigger === 'row' || (treeNode && treeOpts.trigger === 'cell'))) {
         this.triggerTreeExpandEvent(evnt, params)
       }
-      if ((!column.treeNode || !DomTools.getEventTargetNode(evnt, $el, 'vxe-tree--btn-wrapper').flag) && (column.type !== 'expand' || !DomTools.getEventTargetNode(evnt, $el, 'vxe-table--expanded').flag)) {
-        // 如果是高亮行
-        if (highlightCurrentRow) {
-          if (radioOpts.trigger === 'row' || (!DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--checkbox').flag && !DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--radio').flag)) {
-            this.triggerCurrentRowEvent(evnt, params)
+      // 如果点击了树节点
+      if (!triggerTreeNode) {
+        if (!triggerExpandNode) {
+          // 如果是高亮行
+          if (highlightCurrentRow) {
+            if (!triggerCheckbox && !triggerRadio) {
+              this.triggerCurrentRowEvent(evnt, params)
+            }
           }
-        }
-        // 如果是单选框
-        if ((radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--radio').flag) {
-          this.triggerRadioRowEvent(evnt, params)
-        }
-        // 如果是复选框
-        if ((checkboxOpts.trigger === 'row' || ((column.type === 'checkbox' || column.type === 'selection') && checkboxOpts.trigger === 'cell')) && !DomTools.getEventTargetNode(evnt, params.cell, 'vxe-cell--checkbox').flag) {
-          // 在 v3.0 中废弃 selection
-          this.handleToggleCheckRowEvent(params, evnt)
+          // 如果是单选框
+          if (!triggerRadio && (radioOpts.trigger === 'row' || (isRadioType && radioOpts.trigger === 'cell'))) {
+            this.triggerRadioRowEvent(evnt, params)
+          }
+          // 如果是复选框
+          if (!triggerCheckbox && (checkboxOpts.trigger === 'row' || (isCheckboxType && checkboxOpts.trigger === 'cell'))) {
+            this.handleToggleCheckRowEvent(params, evnt)
+          }
         }
         if (editConfig) {
           if (editOpts.trigger === 'click') {
