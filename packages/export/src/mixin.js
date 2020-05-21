@@ -179,13 +179,33 @@ function getFooterCellValue ($xetable, opts, items, column) {
   return cellValue
 }
 
+function getCsvCellTypeLabel (column, cellValue) {
+  if (cellValue) {
+    switch (column.cellType) {
+      case 'string':
+        if (!isNaN(cellValue)) {
+          return '\t' + cellValue
+        }
+        break
+      case 'number':
+        break
+      default:
+        if (cellValue.length >= 12 && !isNaN(cellValue)) {
+          return '\t' + cellValue
+        }
+        break
+    }
+  }
+  return cellValue
+}
+
 function toCsv ($xetable, opts, columns, datas) {
   let content = '\ufeff'
   if (opts.isHeader) {
     content += columns.map(column => `"${getHeaderTitle(opts, column)}"`).join(',') + '\n'
   }
   datas.forEach(row => {
-    content += columns.map(column => `"${row[column.id]}"`).join(',') + '\n'
+    content += columns.map(column => `"${getCsvCellTypeLabel(column, row[column.id])}"`).join(',') + '\n'
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
