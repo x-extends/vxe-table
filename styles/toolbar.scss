@@ -63,7 +63,7 @@
     position: relative;
     margin-left: 0.8em;
     &.is--active {
-      .vxe-tools--operate-custom-btn {
+      & > .vxe-button {
         background-color: #D9DADB;
         border-radius: 50%;
       }

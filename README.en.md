@@ -192,8 +192,6 @@ Feel free to leave a comment or ask [Issues](https://github.com/xuliangzhan/vxe-
 
 [👉 Donation method💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
-[![pay](https://gitee.com/xuliangzhan_admin/vxe-table/raw/master/public/static/donation/pay.jpg)](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)
-
 ## License
 
 [MIT License](./LICENSE), 2019-present, [Xu Liangzhan](mailto:xu_liangzhan@163.com)
