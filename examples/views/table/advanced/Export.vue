@@ -3,6 +3,7 @@
     <p class="tip">
       通过调用 <table-api-link prop="exportData"/> 函数指定 type='csv' 可以直接将表格导出为 CSV/HTML/XML/TXT 格式的文件；<br>
       默认会排除 field 为空和 type 相关的功能列，可以通过自定义 <table-api-link prop="data"/> 和 <table-api-link prop="columns"/> 导出数据<br>
+      对于 csv 等特殊类型，可以通过设置 <table-column-api-link prop="cell-type"/> 将数值类型转为字符串类型<br>
       如果是服务端导出，通过设置 <table-api-link prop="remote"/> 和 <table-api-link prop="exportMethod"/> 开启服务端自定义导出<br>
       <span class="red">（注：只支持基本数据结构，目前不支持分组、合并等；树结构和虚拟滚动只允许导出数据源，前端导出的数据量有限，建议使用后端导出）</span>
     </p>
@@ -21,13 +22,12 @@
       border="inner"
       ref="xTable1"
       height="300"
-      :data="tableData">
+      :data="tableData1">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-table-column field="name" title="自动转换"></vxe-table-column>
+      <vxe-table-column field="amount" title="导出数值" cell-type="number"></vxe-table-column>
+      <vxe-table-column field="num" title="导出字符串" cell-type="string" sortable></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -147,6 +147,15 @@ export default {
     return {
       loading: false,
       tableData: [],
+      tableData1: [
+        { name: 'test1', amount: '12953.6985', num: 1259326 },
+        { name: '154645623546345', amount: '45646464888888654654', num: 4564566456645 },
+        { name: 1231242, amount: '4564564545646.6985', num: 0 },
+        { name: true, amount: '12953.6985', num: 54646646 },
+        { name: '0', amount: '0', num: '645645645665567645234326456' },
+        { name: false, amount: '1231231213123.456', num: '45645645645646456' },
+        { name: 'test2', amount: '99999.08', num: 9999.88 }
+      ],
       tableData4: [],
       tablePage4: {
         currentPage: 1,
@@ -169,24 +178,28 @@ export default {
           border="inner"
           ref="xTable1"
           height="300"
-          :data="tableData">
+          :data="tableData1">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-table-column field="name" title="自动转换"></vxe-table-column>
+          <vxe-table-column field="amount" title="导出数值" cell-type="number"></vxe-table-column>
+          <vxe-table-column field="num" title="导出字符串" cell-type="string" sortable></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
-              tableData: []
+              tableData1: [
+                { name: 'test1', amount: '12953.6985', num: 1259326 },
+                { name: '154645623546345', amount: '45646464888888654654', num: 4564566456645 },
+                { name: 1231242, amount: '4564564545646.6985', num: 0 },
+                { name: true, amount: '12953.6985', num: 54646646 },
+                { name: '0', amount: '0', num: '645645645665567645234326456' },
+                { name: false, amount: '1231231213123.456', num: '45645645645646456' },
+                { name: 'test2', amount: '99999.08', num: 9999.88 }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
             exportDataEvent () {

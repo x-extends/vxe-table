@@ -2218,7 +2218,7 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ tags, versions }) => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ versions }) => {
         const stableVersionList = []
         const betaVersionList = []
         if (versions) {
@@ -2233,7 +2233,7 @@ export default {
         this.stableVersionList = stableVersionList
         this.betaVersionList = betaVersionList
         if (stableVersionList.length) {
-          this.selectStableVersion = tags && tags.latest ? tags.latest : stableVersionList[0].value
+          this.selectStableVersion = stableVersionList[0].value
         }
         if (betaVersionList.length) {
           this.selectBetaVersion = betaVersionList[0].value
