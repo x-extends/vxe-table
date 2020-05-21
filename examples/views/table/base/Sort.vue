@@ -35,19 +35,17 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">配置 <table-column-api-link prop="sort-by"/> 多个字段组合排序</p>
+    <p class="tip">配置 <table-column-api-link prop="sort-by"/> 多个字段排序</p>
 
     <vxe-table
       border
       highlight-hover-row
       height="300"
-      :data="tableData">
+      :data="tableData2">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="time" title="Time" sortable :sort-by="['time', 'name']"></vxe-table-column>
+      <vxe-table-column field="name" title="单个排序 name" sortable></vxe-table-column>
+      <vxe-table-column field="role" title="多字段排序 role+num" :sort-by="['role', 'num']" sortable></vxe-table-column>
+      <vxe-table-column field="num" title="多字段排序 name+role+num" :sort-by="['name', 'role', 'num']" sortable></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -114,6 +112,28 @@ export default {
   data () {
     return {
       tableData: [],
+      tableData2: [
+        { name: '小红', role: '前端', num: 7 },
+        { name: '老王', role: '后端', num: 6 },
+        { name: '小红', role: '后端', num: 1 },
+        { name: '小明', role: '前端', num: 2 },
+        { name: '老徐', role: '测试', num: 3 },
+        { name: '老王', role: '前端', num: 3 },
+        { name: '老徐', role: '测试', num: 4 },
+        { name: '小明', role: '前端', num: 4 },
+        { name: '小明', role: '前端', num: 8 },
+        { name: '小明', role: '测试', num: 6 },
+        { name: '小红', role: '后端', num: 9 },
+        { name: '老徐', role: '前端', num: 5 },
+        { name: '老徐', role: '测试', num: 1 },
+        { name: '小红', role: '前端', num: 4 },
+        { name: '小红', role: '前端', num: 2 },
+        { name: '小明', role: '测试', num: 3 },
+        { name: '老王', role: '前端', num: 6 },
+        { name: '老王', role: '后端', num: 4 },
+        { name: '老徐', role: '前端', num: 8 },
+        { name: '小明', role: '测试', num: 7 }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -155,20 +175,39 @@ export default {
           border
           highlight-hover-row
           height="300"
-          :data="tableData">
+          :data="tableData2">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="time" title="Time" sortable :sort-by="['time', 'name']"></vxe-table-column>
+          <vxe-table-column field="name" title="单个排序 name" sortable></vxe-table-column>
+          <vxe-table-column field="role" title="多字段排序 role+num" :sort-by="['role', 'num']" sortable></vxe-table-column>
+          <vxe-table-column field="num" title="多字段排序 name+role+num" :sort-by="['name', 'role', 'num']" sortable></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
-              tableData: []
+              tableData2: [
+                { name: '小红', role: '前端', num: 7 },
+                { name: '老王', role: '后端', num: 6 },
+                { name: '小红', role: '后端', num: 1 },
+                { name: '小明', role: '前端', num: 2 },
+                { name: '老徐', role: '测试', num: 3 },
+                { name: '老王', role: '前端', num: 3 },
+                { name: '老徐', role: '测试', num: 4 },
+                { name: '小明', role: '前端', num: 4 },
+                { name: '小明', role: '前端', num: 8 },
+                { name: '小明', role: '测试', num: 6 },
+                { name: '小红', role: '后端', num: 9 },
+                { name: '老徐', role: '前端', num: 5 },
+                { name: '老徐', role: '测试', num: 1 },
+                { name: '小红', role: '前端', num: 4 },
+                { name: '小红', role: '前端', num: 2 },
+                { name: '小明', role: '测试', num: 3 },
+                { name: '老王', role: '前端', num: 6 },
+                { name: '老王', role: '后端', num: 4 },
+                { name: '老徐', role: '前端', num: 8 },
+                { name: '小明', role: '测试', num: 7 }
+              ]
             }
           },
           created () {
