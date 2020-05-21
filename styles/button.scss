@@ -143,6 +143,16 @@ $btnThemeList: (
         color: darken($vxe-primary-color, 3%);
         border-color: darken($vxe-primary-color, 3%);
         background-color: darken($vxe-button-default-background-color, 3%);
+        .vxe-button--icon {
+          &.vxe-icon--zoomin {
+            background-color: darken($vxe-button-default-background-color, 3%);
+          }
+          &.vxe-icon--zoomout {
+            &:after {
+              background-color: darken($vxe-button-default-background-color, 3%);
+            }
+          }
+        }
       }
     }
     @for $index from 0 to length($btnThemeList) {
@@ -163,11 +173,24 @@ $btnThemeList: (
             color: $btnColor;
             background-color: lighten($btnBackground, 6%);
             border-color: lighten($btnBackground, 6%);
+            .vxe-button--icon {
+              &.vxe-icon--zoomin {
+                border-color: lighten($btnBackground, 6%);
+              }
+            }
           }
           &:active {
             color: $btnColor;
             background-color: darken($btnBackground, 3%);
             border-color: darken($btnBackground, 3%);
+            &.vxe-icon--zoomin {
+              background-color: darken($btnBackground, 3%);
+            }
+            &.vxe-icon--zoomout {
+              &:after {
+                background-color: darken($btnBackground, 3%);
+              }
+            }
           }
         }
         &.is--disabled {

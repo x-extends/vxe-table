@@ -2006,7 +2006,7 @@ export default {
           if (allSortMethod) {
             tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
           } else {
-            const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.property)
+            const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.sortBy || column.property)
             tableData = column.order === 'desc' ? rest.reverse() : rest
           }
         }
@@ -6047,9 +6047,7 @@ export default {
       }
     },
     emitEvent (type, params, evnt) {
-      const { $xegrid } = this
-      const targetComp = $xegrid || this
-      targetComp.$emit(type, Object.assign({ $table: this, $grid: $xegrid, $event: evnt }, params), evnt)
+      this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))
     },
 
     // 检查触发源是否属于目标节点

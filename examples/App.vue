@@ -2218,20 +2218,22 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(versions => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ tags, versions }) => {
         const stableVersionList = []
         const betaVersionList = []
-        versions.forEach(version => {
-          if (/^1.\d{1,3}.\d{1,3}$/.test(version)) {
-            stableVersionList.push({ label: version, value: version })
-          } else if (/^1.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(version)) {
-            betaVersionList.push({ label: version, value: version })
-          }
-        })
+        if (versions) {
+          versions.forEach(version => {
+            if (/^1.\d{1,3}.\d{1,3}$/.test(version)) {
+              stableVersionList.push({ label: version, value: version })
+            } else if (/^1.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(version)) {
+              betaVersionList.push({ label: version, value: version })
+            }
+          })
+        }
         this.stableVersionList = stableVersionList
         this.betaVersionList = betaVersionList
         if (stableVersionList.length) {
-          this.selectStableVersion = stableVersionList[0].value
+          this.selectStableVersion = tags && tags.latest ? tags.latest : stableVersionList[0].value
         }
         if (betaVersionList.length) {
           this.selectBetaVersion = betaVersionList[0].value
