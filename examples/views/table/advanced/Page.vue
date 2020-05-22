@@ -13,8 +13,8 @@
       show-overflow
       height="200"
       row-id="id"
-      :loading="loading"
-      :data="tableData">
+      :loading="loading1"
+      :data="tableData1">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -24,12 +24,12 @@
     </vxe-table>
 
     <vxe-pager
-      :loading="loading"
-      :current-page="tablePage.currentPage"
-      :page-size="tablePage.pageSize"
-      :total="tablePage.totalResult"
+      :loading="loading1"
+      :current-page="tablePage1.currentPage"
+      :page-size="tablePage1.pageSize"
+      :total="tablePage1.totalResult"
       :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-      @page-change="handlePageChange">
+      @page-change="handlePageChange1">
     </vxe-pager>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -47,8 +47,8 @@
       height="200"
       row-id="id"
       size="medium"
-      :loading="loading"
-      :data="tableData">
+      :loading="loading2"
+      :data="tableData2">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -60,12 +60,12 @@
     <vxe-pager
       border
       size="medium"
-      :loading="loading"
-      :current-page="tablePage.currentPage"
-      :page-size="tablePage.pageSize"
-      :total="tablePage.totalResult"
+      :loading="loading2"
+      :current-page="tablePage2.currentPage"
+      :page-size="tablePage2.pageSize"
+      :total="tablePage2.totalResult"
       :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-      @page-change="handlePageChange">
+      @page-change="handlePageChange2">
     </vxe-pager>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -83,8 +83,8 @@
       height="200"
       row-id="id"
       size="small"
-      :loading="loading"
-      :data="tableData">
+      :loading="loading3"
+      :data="tableData3">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -96,12 +96,12 @@
     <vxe-pager
       background
       size="small"
-      :loading="loading"
-      :current-page="tablePage.currentPage"
-      :page-size="tablePage.pageSize"
-      :total="tablePage.totalResult"
+      :loading="loading3"
+      :current-page="tablePage3.currentPage"
+      :page-size="tablePage3.pageSize"
+      :total="tablePage3.totalResult"
       :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-      @page-change="handlePageChange">
+      @page-change="handlePageChange3">
     </vxe-pager>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -122,14 +122,14 @@
     <vxe-table
       border
       show-overflow
-      ref="xTable"
+      ref="xTable4"
       height="200"
       row-id="id"
       size="mini"
-      :loading="loading"
-      :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
+      :loading="loading4"
+      :seq-config="{startIndex: (tablePage4.currentPage - 1) * tablePage4.pageSize}"
       :checkbox-config="{reserve: true}"
-      :data="tableData">
+      :data="tableData4">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -141,12 +141,12 @@
     <vxe-pager
       perfect
       size="mini"
-      :loading="loading"
-      :current-page="tablePage.currentPage"
-      :page-size="tablePage.pageSize"
-      :total="tablePage.totalResult"
+      :loading="loading4"
+      :current-page="tablePage4.currentPage"
+      :page-size="tablePage4.pageSize"
+      :total="tablePage4.totalResult"
       :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-      @page-change="handlePageChange">
+      @page-change="handlePageChange4">
     </vxe-pager>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -165,9 +165,30 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      loading: false,
-      tableData: [],
-      tablePage: {
+      loading1: false,
+      loading2: false,
+      loading3: false,
+      loading4: false,
+      tableData1: [],
+      tableData2: [],
+      tableData3: [],
+      tableData4: [],
+      tablePage1: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0
+      },
+      tablePage2: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0
+      },
+      tablePage3: {
+        currentPage: 1,
+        pageSize: 10,
+        totalResult: 0
+      },
+      tablePage4: {
         currentPage: 1,
         pageSize: 10,
         totalResult: 0
@@ -178,8 +199,8 @@ export default {
           show-overflow
           height="200"
           row-id="id"
-          :loading="loading"
-          :data="tableData">
+          :loading="loading1"
+          :data="tableData1">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -189,21 +210,21 @@ export default {
         </vxe-table>
 
         <vxe-pager
-          :loading="loading"
-          :current-page="tablePage.currentPage"
-          :page-size="tablePage.pageSize"
-          :total="tablePage.totalResult"
+          :loading="loading1"
+          :current-page="tablePage1.currentPage"
+          :page-size="tablePage1.pageSize"
+          :total="tablePage1.totalResult"
           :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-          @page-change="handlePageChange">
+          @page-change="handlePageChange1">
         </vxe-pager>
         `,
         `
         export default {
           data () {
             return {
-              loading: false,
-              tableData: [],
-              tablePage: {
+              loading1: false,
+              tableData1: [],
+              tablePage1: {
                 currentPage: 1,
                 pageSize: 10,
                 totalResult: 0
@@ -211,23 +232,23 @@ export default {
             }
           },
           created () {
-            this.findList()
+            this.findList1()
           },
           methods: {
-            findList () {
+            findList1 () {
               this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData)then(({ page, result }) => {
-                this.tableData = result
-                this.tablePage.totalResult = page.totalResult
-                this.loading = false
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage1.pageSize}/\${this.tablePage1.currentPage}\`)then(({ page, result }) => {
+                this.tableData1 = result
+                this.tablePage1.totalResult = page.totalResult
+                this.loading1 = false
               }).catch(e => {
-                this.loading = false
+                this.loading1 = false
               })
             },
-            handlePageChange ({ currentPage, pageSize }) {
-              this.tablePage.currentPage = currentPage
-              this.tablePage.pageSize = pageSize
-              this.findList()
+            handlePageChange1 ({ currentPage, pageSize }) {
+              this.tablePage1.currentPage = currentPage
+              this.tablePage1.pageSize = pageSize
+              this.findList1()
             }
           }
         }
@@ -239,8 +260,8 @@ export default {
           height="200"
           row-id="id"
           size="medium"
-          :loading="loading"
-          :data="tableData">
+          :loading="loading2"
+          :data="tableData2">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -252,21 +273,21 @@ export default {
         <vxe-pager
           border
           size="medium"
-          :loading="loading"
-          :current-page="tablePage.currentPage"
-          :page-size="tablePage.pageSize"
-          :total="tablePage.totalResult"
+          :loading="loading2"
+          :current-page="tablePage2.currentPage"
+          :page-size="tablePage2.pageSize"
+          :total="tablePage2.totalResult"
           :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-          @page-change="handlePageChange">
+          @page-change="handlePageChange2">
         </vxe-pager>
         `,
         `
         export default {
           data () {
             return {
-              loading: false,
-              tableData: [],
-              tablePage: {
+              loading2: false,
+              tableData2: [],
+              tablePage2: {
                 currentPage: 1,
                 pageSize: 10,
                 totalResult: 0
@@ -274,23 +295,23 @@ export default {
             }
           },
           created () {
-            this.findList()
+            this.findList2()
           },
           methods: {
-            findList () {
+            findList2 () {
               this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData)then(({ page, result }) => {
-                this.tableData = result
-                this.tablePage.totalResult = page.totalResult
-                this.loading = false
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage2.pageSize}/\${this.tablePage2.currentPage}\`)then(({ page, result }) => {
+                this.tableData2 = result
+                this.tablePage2.totalResult = page.totalResult
+                this.loading2 = false
               }).catch(e => {
-                this.loading = false
+                this.loading2 = false
               })
             },
-            handlePageChange ({ currentPage, pageSize }) {
-              this.tablePage.currentPage = currentPage
-              this.tablePage.pageSize = pageSize
-              this.findList()
+            handlePageChange2 ({ currentPage, pageSize }) {
+              this.tablePage2.currentPage = currentPage
+              this.tablePage2.pageSize = pageSize
+              this.findList2()
             }
           }
         }
@@ -302,8 +323,8 @@ export default {
           height="200"
           row-id="id"
           size="small"
-          :loading="loading"
-          :data="tableData">
+          :loading="loading3"
+          :data="tableData3">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -315,21 +336,21 @@ export default {
         <vxe-pager
           background
           size="small"
-          :loading="loading"
-          :current-page="tablePage.currentPage"
-          :page-size="tablePage.pageSize"
-          :total="tablePage.totalResult"
+          :loading="loading3"
+          :current-page="tablePage3.currentPage"
+          :page-size="tablePage3.pageSize"
+          :total="tablePage3.totalResult"
           :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-          @page-change="handlePageChange">
+          @page-change="handlePageChange3">
         </vxe-pager>
         `,
         `
         export default {
           data () {
             return {
-              loading: false,
-              tableData: [],
-              tablePage: {
+              loading3: false,
+              tableData3: [],
+              tablePage3: {
                 currentPage: 1,
                 pageSize: 10,
                 totalResult: 0
@@ -337,23 +358,23 @@ export default {
             }
           },
           created () {
-            this.findList()
+            this.findList3()
           },
           methods: {
-            findList () {
-              this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData)then(({ page, result }) => {
-                this.tableData = result
-                this.tablePage.totalResult = page.totalResult
-                this.loading = false
+            findList3 () {
+              this.loading3 = true
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage3.pageSize}/\${this.tablePage3.currentPage}\`)then(({ page, result }) => {
+                this.tableData3 = result
+                this.tablePage3.totalResult = page.totalResult
+                this.loading3 = false
               }).catch(e => {
-                this.loading = false
+                this.loading3 = false
               })
             },
-            handlePageChange ({ currentPage, pageSize }) {
-              this.tablePage.currentPage = currentPage
-              this.tablePage.pageSize = pageSize
-              this.findList()
+            handlePageChange3 ({ currentPage, pageSize }) {
+              this.tablePage3.currentPage = currentPage
+              this.tablePage3.pageSize = pageSize
+              this.findList3()
             }
           }
         }
@@ -368,14 +389,14 @@ export default {
         <vxe-table
           border
           show-overflow
-          ref="xTable"
+          ref="xTable4"
           height="200"
           row-id="id"
           size="mini"
-          :loading="loading"
-          :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
+          :loading="loading4"
+          :seq-config="{startIndex: (tablePage4.currentPage - 1) * tablePage4.pageSize}"
           :checkbox-config="{reserve: true}"
-          :data="tableData">
+          :data="tableData4">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -388,20 +409,20 @@ export default {
           perfect
           size="mini"
           :loading="loading"
-          :current-page="tablePage.currentPage"
-          :page-size="tablePage.pageSize"
-          :total="tablePage.totalResult"
+          :current-page="tablePage4.currentPage"
+          :page-size="tablePage4.pageSize"
+          :total="tablePage4.totalResult"
           :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
-          @page-change="handlePageChange">
+          @page-change="handlePageChange4">
         </vxe-pager>
         `,
         `
         export default {
           data () {
             return {
-              loading: false,
-              tableData: [],
-              tablePage: {
+              loading4: false,
+              tableData4: [],
+              tablePage4: {
                 currentPage: 1,
                 pageSize: 10,
                 totalResult: 0
@@ -409,26 +430,26 @@ export default {
             }
           },
           created () {
-            this.findList()
+            this.findList4()
           },
           methods: {
-            findList () {
+            findList4 () {
               this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage.pageSize}/\${this.tablePage.currentPage}\`, this.formData)then(({ page, result }) => {
-                this.tableData = result
-                this.tablePage.totalResult = page.totalResult
-                this.loading = false
+              XEAjax.get(\`/api/user/page/list/\${this.tablePage4.pageSize}/\${this.tablePage4.currentPage}\`)then(({ page, result }) => {
+                this.tableData4 = result
+                this.tablePage4.totalResult = page.totalResult
+                this.loading4 = false
               }).catch(() => {
-                this.loading = false
+                this.loading4 = false
               })
             },
-            handlePageChange ({ currentPage, pageSize }) {
-              this.tablePage.currentPage = currentPage
-              this.tablePage.pageSize = pageSize
-              this.findList()
+            handlePageChange4 ({ currentPage, pageSize }) {
+              this.tablePage4.currentPage = currentPage
+              this.tablePage4.pageSize = pageSize
+              this.findList4()
             },
             getSelectReserveEvent () {
-              const selectReserveRecords = this.$refs.xTable.getCheckboxReserveRecords()
+              const selectReserveRecords = this.$refs.xTable4.getCheckboxReserveRecords()
               this.$XModal.alert(selectReserveRecords.length)
             }
           }
@@ -438,7 +459,10 @@ export default {
     }
   },
   created () {
-    this.findList()
+    this.findList1()
+    this.findList2()
+    this.findList3()
+    this.findList4()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -446,23 +470,68 @@ export default {
     })
   },
   methods: {
-    findList () {
-      this.loading = true
-      XEAjax.get(`/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}`, this.formData).then(({ page, result }) => {
-        this.tableData = result
-        this.tablePage.totalResult = page.totalResult
-        this.loading = false
+    findList1 () {
+      this.loading1 = true
+      XEAjax.get(`/api/user/page/list/${this.tablePage1.pageSize}/${this.tablePage1.currentPage}`).then(({ page, result }) => {
+        this.tableData1 = result
+        this.tablePage1.totalResult = page.totalResult
+        this.loading1 = false
       }).catch(() => {
-        this.loading = false
+        this.loading1 = false
       })
     },
-    handlePageChange ({ currentPage, pageSize }) {
-      this.tablePage.currentPage = currentPage
-      this.tablePage.pageSize = pageSize
-      this.findList()
+    findList2 () {
+      this.loading2 = true
+      XEAjax.get(`/api/user/page/list/${this.tablePage2.pageSize}/${this.tablePage2.currentPage}`).then(({ page, result }) => {
+        this.tableData2 = result
+        this.tablePage2.totalResult = page.totalResult
+        this.loading2 = false
+      }).catch(() => {
+        this.loading2 = false
+      })
+    },
+    findList3 () {
+      this.loading3 = true
+      XEAjax.get(`/api/user/page/list/${this.tablePage3.pageSize}/${this.tablePage3.currentPage}`).then(({ page, result }) => {
+        this.tableData3 = result
+        this.tablePage3.totalResult = page.totalResult
+        this.loading3 = false
+      }).catch(() => {
+        this.loading3 = false
+      })
+    },
+    findList4 () {
+      this.loading4 = true
+      XEAjax.get(`/api/user/page/list/${this.tablePage4.pageSize}/${this.tablePage4.currentPage}`).then(({ page, result }) => {
+        this.tableData4 = result
+        this.tablePage4.totalResult = page.totalResult
+        this.loading4 = false
+      }).catch(() => {
+        this.loading4 = false
+      })
+    },
+    handlePageChange1 ({ currentPage, pageSize }) {
+      this.tablePage1.currentPage = currentPage
+      this.tablePage1.pageSize = pageSize
+      this.findList1()
+    },
+    handlePageChange2 ({ currentPage, pageSize }) {
+      this.tablePage2.currentPage = currentPage
+      this.tablePage2.pageSize = pageSize
+      this.findList2()
+    },
+    handlePageChange3 ({ currentPage, pageSize }) {
+      this.tablePage3.currentPage = currentPage
+      this.tablePage3.pageSize = pageSize
+      this.findList3()
+    },
+    handlePageChange4 ({ currentPage, pageSize }) {
+      this.tablePage4.currentPage = currentPage
+      this.tablePage4.pageSize = pageSize
+      this.findList4()
     },
     getSelectReserveEvent () {
-      const selectReserveRecords = this.$refs.xTable.getCheckboxReserveRecords()
+      const selectReserveRecords = this.$refs.xTable4.getCheckboxReserveRecords()
       this.$XModal.alert(selectReserveRecords.length)
     }
   }

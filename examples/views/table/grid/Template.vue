@@ -200,6 +200,7 @@ export default {
             },
             footer: ({ items, _columnIndex }) => {
               return [
+                <vxe-button status="primary" size="mini">按钮</vxe-button>,
                 <span>累计：{ items[_columnIndex] }</span>
               ]
             },
@@ -463,6 +464,7 @@ export default {
                     },
                     footer: ({ items, _columnIndex }) => {
                       return [
+                        <vxe-button status="primary" size="mini">按钮</vxe-button>,
                         <span>累计：{ items[_columnIndex] }</span>
                       ]
                     },
