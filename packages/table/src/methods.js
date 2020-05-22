@@ -31,6 +31,11 @@ function getCustomStorageMap (key) {
   return rest && rest._v === version ? rest : { _v: version }
 }
 
+function handleReserveRow (_vm, list) {
+  const fullAllDataRowMap = _vm.fullAllDataRowMap
+  return list.filter(row => fullAllDataRowMap.has(row))
+}
+
 const Methods = {
   /**
    * 获取父容器元素
@@ -2205,12 +2210,12 @@ const Methods = {
   },
   // 还原展开、选中等相关状态
   handleReserveStatus () {
-    const { treeConfig, fullDataRowIdData, radioReserveRow, radioOpts, checkboxReserveRowMap, checkboxOpts } = this
-    const reserveSelection = []
-    const reserveRowExpandeds = []
-    const reserveTreeExpandeds = []
-    const reserveTreeIndeterminates = []
+    const { expandColumn, treeConfig, fullDataRowIdData, fullAllDataRowMap, selectRow, radioReserveRow, radioOpts, checkboxReserveRowMap, checkboxOpts, selection, rowExpandeds, treeExpandeds, treeIndeterminates } = this
     // 单选框
+    if (selectRow && !fullAllDataRowMap.has(selectRow)) {
+      this.selectRow = null // 刷新选中状态
+    }
+    // 还原保留选中状态
     if (radioOpts.reserve && radioReserveRow) {
       const rowid = UtilTools.getRowid(this, radioReserveRow)
       if (fullDataRowIdData[rowid]) {
@@ -2218,36 +2223,22 @@ const Methods = {
       }
     }
     // 复选框
+    this.selection = handleReserveRow(this, selection) // 刷新选中状态
+    // 还原保留选中状态
     if (checkboxOpts.reserve) {
-      this.handleReserveByRowid(this.selection, reserveSelection)
+      const reserveSelection = []
       XEUtils.each(checkboxReserveRowMap, (item, rowid) => {
         if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
           reserveSelection.push(fullDataRowIdData[rowid].row)
         }
       })
       this.setCheckboxRow(reserveSelection, true)
-    } else {
-      this.clearCheckboxRow()
     }
     // 行展开
-    this.handleReserveByRowid(this.rowExpandeds, reserveRowExpandeds)
-    this.rowExpandeds = reserveRowExpandeds
+    this.rowExpandeds = expandColumn ? handleReserveRow(this, rowExpandeds) : [] // 刷新行展开状态
     // 树展开
-    if (treeConfig) {
-      this.handleReserveByRowid(this.treeIndeterminates, reserveTreeIndeterminates)
-      this.handleReserveByRowid(this.treeExpandeds, reserveTreeExpandeds)
-    }
-    this.treeExpandeds = reserveTreeExpandeds
-    this.treeIndeterminates = reserveTreeIndeterminates
-  },
-  handleReserveByRowid (list, rest) {
-    const fullDataRowIdData = this.fullDataRowIdData
-    list.forEach(row => {
-      const rowid = UtilTools.getRowid(this, row)
-      if (fullDataRowIdData[rowid]) {
-        rest.push(fullDataRowIdData[rowid].row)
-      }
-    })
+    this.treeExpandeds = treeConfig ? handleReserveRow(this, treeExpandeds) : []
+    this.treeIndeterminates = treeConfig ? handleReserveRow(this, treeIndeterminates) : []
   },
   /**
    * 获取单选框保留选中的行

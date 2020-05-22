@@ -170,7 +170,6 @@ export default {
     },
     handleGlobalMousewheelEvent (evnt) {
       if (this.showPanel && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
-        console.log(111)
         this.updatePlacement()
       }
     },

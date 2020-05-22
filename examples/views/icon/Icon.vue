@@ -127,6 +127,9 @@ export default {
         },
         {
           icon: 'vxe-icon--dot'
+        },
+        {
+          icon: 'vxe-icon--print'
         }
       ],
       demoCodes: [
