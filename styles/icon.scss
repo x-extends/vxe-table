@@ -649,3 +649,28 @@
     border-color: inherit;
   }
 }
+
+.vxe-icon--print {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    height: 0.94em;
+    width: 0.6em;
+    left: 0.18em;
+    top: 0.03em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+    border-radius: 0 0.2em 0 0;
+  }
+  &:after {
+    @extend %PseudoClass;
+    width: 1em;
+    top: 0.4em;
+    left: 0;
+    border-width: 0.35em 0 0 0;
+    border-style: solid;
+    border-color: inherit;
+    border-radius: 0.15em 0.15em 0 0;
+  }
+}
