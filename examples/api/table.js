@@ -2819,6 +2819,15 @@ const apis = [
         list: []
       },
       {
+        name: 'getRadioReserveRecord()',
+        desc: '用于 radio-config.reserve，获取已保留选中的行数据（不包含当前列表）',
+        version: '',
+        type: 'Row',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getCheckboxRecords()',
         desc: '用于 type=checkbox，获取已选中的行数据',
         version: '',
@@ -2828,17 +2837,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getRadioReserveRecord()',
-        desc: '用于 radio-config.reserve，获取已保留选中的行数据',
-        version: '',
-        type: 'Row',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'getCheckboxReserveRecords()',
-        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据',
+        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据（不包含当前列表）',
         version: '',
         type: 'Array<Row>',
         enum: '',
