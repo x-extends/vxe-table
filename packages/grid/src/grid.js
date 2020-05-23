@@ -11,10 +11,6 @@ function getOffsetHeight (elem) {
   return elem ? elem.offsetHeight : 0
 }
 
-function getRefHeight (comp) {
-  return getOffsetHeight(comp ? comp.$el : null)
-}
-
 function renderDefaultForm (h, _vm) {
   const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
   if ($scopedSlots.form) {
@@ -287,24 +283,32 @@ export default {
        * 渲染表单
        */
       $scopedSlots.form || this.formConfig ? h('div', {
-        ref: 'form',
+        ref: 'xForm',
         class: 'vxe-grid--form-wrapper'
-      }, $scopedSlots.form ? $scopedSlots.form.call(this, { $grid: this }, h) : renderDefaultForm(h, this)) : null,
+      }, $scopedSlots.form
+        ? $scopedSlots.form.call(this, { $grid: this }, h)
+        : renderDefaultForm(h, this)
+      ) : null,
       /**
        * 渲染工具栏
        */
-      $scopedSlots.toolbar ? $scopedSlots.toolbar.call(this, { $grid: this }, h) : (
-        this.toolbar ? h('vxe-toolbar', {
-          ref: 'toolbar',
-          props: this.toolbarOpts,
-          scopedSlots: getToolbarSlots(this)
-        }) : null
-      ),
+      $scopedSlots.toolbar || this.toolbar ? h('div', {
+        ref: 'xToolbar',
+        class: 'vxe-grid--toolbar-wrapper'
+      }, $scopedSlots.toolbar
+        ? $scopedSlots.toolbar.call(this, { $grid: this }, h)
+        : [
+          h('vxe-toolbar', {
+            props: this.toolbarOpts,
+            scopedSlots: getToolbarSlots(this)
+          })
+        ]
+      ) : null,
       /**
        * 渲染表格顶部区域
        */
       $scopedSlots.top ? h('div', {
-        ref: 'top',
+        ref: 'xTop',
         class: 'vxe-grid--top-wrapper'
       }, $scopedSlots.top.call(this, { $grid: this }, h)) : null,
       /**
@@ -320,22 +324,27 @@ export default {
        * 渲染表格底部区域
        */
       $scopedSlots.bottom ? h('div', {
-        ref: 'bottom',
+        ref: 'xBottom',
         class: 'vxe-grid--bottom-wrapper'
       }, $scopedSlots.bottom.call(this, { $grid: this }, h)) : null,
       /**
        * 渲染分页
        */
-      $scopedSlots.pager ? $scopedSlots.pager.call(this, { $grid: this }, h) : (
-        this.pagerConfig ? h('vxe-pager', {
-          props: this.pagerProps,
-          on: {
-            'page-change': this.pageChangeEvent
-          },
-          scopedSlots: getPagerSlots(this),
-          ref: 'pager'
-        }) : null
-      )
+      $scopedSlots.pager || this.pagerConfig ? h('div', {
+        ref: 'xPager',
+        class: 'vxe-grid--pager-wrapper'
+      }, $scopedSlots.pager
+        ? $scopedSlots.pager.call(this, { $grid: this }, h)
+        : [
+          h('vxe-pager', {
+            props: this.pagerProps,
+            on: {
+              'page-change': this.pageChangeEvent
+            },
+            scopedSlots: getPagerSlots(this)
+          })
+        ]
+      ) : null
     ])
   },
   methods: {
@@ -348,7 +357,7 @@ export default {
      */
     getExcludeHeight () {
       const { $refs, $el } = this
-      const { form: formElem, toolbar, top, bottom, pager } = $refs
+      const { xForm, xToolbar, xTop, xBottom, xPager } = $refs
       let paddingTop = 0
       let paddingBottom = 0
       if ($el) {
@@ -356,7 +365,7 @@ export default {
         paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
         paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
       }
-      return paddingTop + paddingBottom + getOffsetHeight(formElem) + getRefHeight(toolbar) + getOffsetHeight(top) + getOffsetHeight(bottom) + getRefHeight(pager)
+      return paddingTop + paddingBottom + getOffsetHeight(xForm) + getOffsetHeight(xToolbar) + getOffsetHeight(xTop) + getOffsetHeight(xBottom) + getOffsetHeight(xPager)
     },
     handleRowClassName (params) {
       const rowClassName = this.rowClassName

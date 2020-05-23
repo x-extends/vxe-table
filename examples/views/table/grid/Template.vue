@@ -6,19 +6,17 @@
       <grid-api-link prop="toolbar"/>：自定义工具栏模板<br>
       <grid-api-link prop="top"/>：自定义顶部模板<br>
       <grid-api-link prop="bottom"/>：自定义底部模板<br>
+      <grid-api-link prop="pager"/>：自定义分页模板<br>
     </p>
 
     <vxe-grid
       border
       resizable
-      form-config
       show-footer
       height="600"
       ref="xGrid"
       class="my-grid66"
       :footer-method="footerMethod"
-      :toolbar="tableToolbar"
-      :pager-config="tablePage"
       :columns="tableColumn"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}"
@@ -45,6 +43,25 @@
         </vxe-form>
       </template>
 
+      <!--自定义插槽 toolbar 插槽-->
+      <template v-slot:toolbar>
+        <vxe-toolbar custom>
+          <template v-slot:buttons>
+            <vxe-form>
+              <vxe-form-item>
+                <vxe-input placeholder="搜索"></vxe-input>
+              </vxe-form-item>
+              <vxe-form-item>
+                <vxe-button status="primary">查询</vxe-button>
+              </vxe-form-item>
+            </vxe-form>
+          </template>
+          <template v-slot:tools>
+            <vxe-input placeholder="搜索"></vxe-input>
+          </template>
+        </vxe-toolbar>
+      </template>
+
       <!--使用 top 插槽-->
       <template v-slot:top>
         <div class="alert-message">
@@ -53,18 +70,6 @@
             <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！</marquee>
           </span>
         </div>
-      </template>
-
-      <!--自定义插槽 toolbar_buttons 插槽-->
-      <template v-slot:toolbar_buttons>
-        <vxe-form>
-          <vxe-form-item>
-            <vxe-input placeholder="搜索"></vxe-input>
-          </vxe-form-item>
-          <vxe-form-item>
-            <vxe-button status="primary">查询</vxe-button>
-          </vxe-form-item>
-        </vxe-form>
       </template>
 
       <!--自定义插槽 seq_header-->
@@ -98,25 +103,41 @@
         </div>
       </template>
 
-      <!--自定义插槽 pager_left-->
-      <template v-slot:pager_left>
-        <span class="page-left">
-          <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
-          <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
-          <vxe-button>修改</vxe-button>
-          <vxe-button>管理</vxe-button>
-          <vxe-button>删除</vxe-button>
-          <vxe-button size="small">
-            <template>更多操作</template>
-            <template v-slot:dropdowns>
-              <vxe-button type="text">批量修改</vxe-button>
-              <vxe-button type="text">批量管理</vxe-button>
-              <vxe-button type="text">批量删除</vxe-button>
-            </template>
-          </vxe-button>
-        </span>
+      <!--自定义插槽 pager 插槽-->
+      <template v-slot:pager>
+        <vxe-pager
+          perfect
+          :current-page="tablePage.currentPage"
+          :page-size="tablePage.pageSize"
+          :total="tablePage.totalResult">
+          <template v-slot:left>
+            <span class="page-left">
+              <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+              <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+              <vxe-button>修改</vxe-button>
+              <vxe-button>管理</vxe-button>
+              <vxe-button>删除</vxe-button>
+              <vxe-button size="small">
+                <template>更多操作</template>
+                <template v-slot:dropdowns>
+                  <vxe-button type="text">批量修改</vxe-button>
+                  <vxe-button type="text">批量管理</vxe-button>
+                  <vxe-button type="text">批量删除</vxe-button>
+                </template>
+              </vxe-button>
+            </span>
+          </template>
+          <template v-slot:right>
+            <span>
+              <img src="static/other/img1.gif" style="height: 30px;" />
+              <img src="static/other/img1.gif" style="height: 30px;" />
+              <img src="static/other/img2.gif" style="height: 30px;" />
+              <img src="static/other/img1.gif" style="height: 30px;" />
+              <img src="static/other/img1.gif" style="height: 30px;" />
+            </span>
+          </template>
+        </vxe-pager>
       </template>
-
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
@@ -151,33 +172,29 @@ export default {
         sex: ''
       },
       tablePage: {
-        perfect: true,
         total: 0,
         currentPage: 1,
-        pageSize: 10,
-        slots: {
-          // 使用自定义插槽
-          left: 'pager_left',
-          // 使用 JSX 渲染
-          right: () => {
-            return [
-              <span>
-                <img src="static/other/img1.gif" style="height: 30px;" />
-                <img src="static/other/img1.gif" style="height: 30px;" />
-                <img src="static/other/img2.gif" style="height: 30px;" />
-                <img src="static/other/img1.gif" style="height: 30px;" />
-                <img src="static/other/img1.gif" style="height: 30px;" />
-              </span>
-            ]
-          }
-        }
+        pageSize: 10
       },
       tableData: [],
       tableColumn: [
         { type: 'checkbox', width: 60 },
         // 对应自定义插槽的名称
         { type: 'seq', width: 100, resizable: false, slots: { header: 'seq_header' } },
-        { field: 'name', title: 'Name', slots: { default: 'name_default' } },
+        {
+          field: 'name',
+          title: 'Name',
+          slots: {
+            default: 'name_default',
+            footer: () => {
+              return [
+                <img src="static/other/img1.gif" style="height: 30px;" />,
+                <span>浪里个浪</span>,
+                <img src="static/other/img2.gif" style="height: 30px;" />
+              ]
+            }
+          }
+        },
         {
           field: 'num1',
           title: 'Money',
@@ -270,32 +287,16 @@ export default {
           }
         }
       ],
-      tableToolbar: {
-        custom: true,
-        slots: {
-          // 使用自定义插槽
-          buttons: 'toolbar_buttons',
-          // 使用 JSX 渲染
-          tools: () => {
-            return [
-              <vxe-input placeholder="搜索"></vxe-input>
-            ]
-          }
-        }
-      },
       demoCodes: [
         `
         <vxe-grid
           border
           resizable
-          form-config
           show-footer
           height="600"
           ref="xGrid"
           class="my-grid66"
           :footer-method="footerMethod"
-          :toolbar="tableToolbar"
-          :pager-config="tablePage"
           :columns="tableColumn"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}"
@@ -332,16 +333,23 @@ export default {
             </div>
           </template>
 
-          <!--自定义插槽 toolbar_buttons 插槽-->
-          <template v-slot:toolbar_buttons>
-            <vxe-form>
-              <vxe-form-item>
+          <!--自定义插槽 toolbar 插槽-->
+          <template v-slot:toolbar>
+            <vxe-toolbar custom>
+              <template v-slot:buttons>
+                <vxe-form>
+                  <vxe-form-item>
+                    <vxe-input placeholder="搜索"></vxe-input>
+                  </vxe-form-item>
+                  <vxe-form-item>
+                    <vxe-button status="primary">查询</vxe-button>
+                  </vxe-form-item>
+                </vxe-form>
+              </template>
+              <template v-slot:tools>
                 <vxe-input placeholder="搜索"></vxe-input>
-              </vxe-form-item>
-              <vxe-form-item>
-                <vxe-button status="primary">查询</vxe-button>
-              </vxe-form-item>
-            </vxe-form>
+              </template>
+            </vxe-toolbar>
           </template>
 
           <!--自定义插槽 seq_header-->
@@ -375,25 +383,41 @@ export default {
             </div>
           </template>
 
-          <!--自定义插槽 pager_left-->
-          <template v-slot:pager_left>
-            <span class="page-left">
-              <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
-              <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
-              <vxe-button>修改</vxe-button>
-              <vxe-button>管理</vxe-button>
-              <vxe-button>删除</vxe-button>
-              <vxe-button size="small">
-                <template>更多操作</template>
-                <template v-slot:dropdowns>
-                  <vxe-button type="text">批量修改</vxe-button>
-                  <vxe-button type="text">批量管理</vxe-button>
-                  <vxe-button type="text">批量删除</vxe-button>
-                </template>
-              </vxe-button>
-            </span>
+          <!--自定义插槽 pager 插槽-->
+          <template v-slot:pager>
+            <vxe-pager
+              perfect
+              :current-page="tablePage.currentPage"
+              :page-size="tablePage.pageSize"
+              :total="tablePage.totalResult">
+              <template v-slot:left>
+                <span class="page-left">
+                  <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+                  <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+                  <vxe-button>修改</vxe-button>
+                  <vxe-button>管理</vxe-button>
+                  <vxe-button>删除</vxe-button>
+                  <vxe-button size="small">
+                    <template>更多操作</template>
+                    <template v-slot:dropdowns>
+                      <vxe-button type="text">批量修改</vxe-button>
+                      <vxe-button type="text">批量管理</vxe-button>
+                      <vxe-button type="text">批量删除</vxe-button>
+                    </template>
+                  </vxe-button>
+                </span>
+              </template>
+              <template v-slot:right>
+                <span>
+                  <img src="static/other/img1.gif" style="height: 30px;" />
+                  <img src="static/other/img1.gif" style="height: 30px;" />
+                  <img src="static/other/img2.gif" style="height: 30px;" />
+                  <img src="static/other/img1.gif" style="height: 30px;" />
+                  <img src="static/other/img1.gif" style="height: 30px;" />
+                </span>
+              </template>
+            </vxe-pager>
           </template>
-
         </vxe-grid>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
@@ -415,33 +439,29 @@ export default {
                 sex: ''
               },
               tablePage: {
-                perfect: true,
                 total: 0,
                 currentPage: 1,
-                pageSize: 10,
-                slots: {
-                  // 使用自定义插槽
-                  left: 'pager_left',
-                  // 使用 JSX 渲染
-                  right: () => {
-                    return [
-                      <span>
-                        <img src="static/other/img1.gif" style="height: 30px;" />
-                        <img src="static/other/img1.gif" style="height: 30px;" />
-                        <img src="static/other/img2.gif" style="height: 30px;" />
-                        <img src="static/other/img1.gif" style="height: 30px;" />
-                        <img src="static/other/img1.gif" style="height: 30px;" />
-                      </span>
-                    ]
-                  }
-                }
+                pageSize: 10
               },
               tableData: [],
               tableColumn: [
                 { type: 'checkbox', width: 60 },
                 // 对应自定义插槽的名称
                 { type: 'seq', width: 100, resizable: false, slots: { header: 'seq_header' } },
-                { field: 'name', title: 'Name', slots: { default: 'name_default' } },
+                {
+                  field: 'name',
+                  title: 'Name',
+                  slots: {
+                    default: 'name_default',
+                    footer: () => {
+                      return [
+                        <img src="static/other/img1.gif" style="height: 30px;" />,
+                        <span>浪里个浪</span>,
+                        <img src="static/other/img2.gif" style="height: 30px;" />
+                      ]
+                    }
+                  }
+                },
                 {
                   field: 'num1',
                   title: 'Money',
@@ -533,20 +553,7 @@ export default {
                     }
                   }
                 }
-              ],
-              tableToolbar: {
-                custom: true,
-                slots: {
-                  // 使用自定义插槽
-                  buttons: 'toolbar_buttons',
-                  // 使用 JSX 渲染
-                  tools: () => {
-                    return [
-                      <vxe-input placeholder="搜索"></vxe-input>
-                    ]
-                  }
-                }
-              }
+              ]
             }
           },
           created () {
