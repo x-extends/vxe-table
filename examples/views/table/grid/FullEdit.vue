@@ -365,7 +365,7 @@ export default {
               return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/export', body).then(data => {
                 if (data.id) {
                   this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
-                  // 读取路径，开始下载
+                  // 读取路径，请求文件流 => 开始下载
                   location.href = \`https://api.xuliangzhan.com:10443/api/download/\${data.id}\`
                 }
               }).catch(() => {
@@ -441,7 +441,7 @@ export default {
       return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/export', body).then(data => {
         if (data.id) {
           this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
-          // 读取路径，开始下载
+          // 读取路径，请求文件流 => 开始下载
           location.href = `https://api.xuliangzhan.com:10443/api/download/${data.id}`
         }
       }).catch(() => {

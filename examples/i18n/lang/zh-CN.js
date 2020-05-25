@@ -610,7 +610,7 @@ module.exports = {
           maskClosable: '是否允许点击遮罩层关闭窗口',
           escClosable: '是否允许按 Esc 键关闭窗口',
           resize: '是否允许拖动调整窗口大小',
-          duration: '只对 type=message 有效，自动关闭的延时',
+          duration: '只对 type=message 有效，自动关闭的延时，如果为 -1 禁用自动关闭',
           size: '尺寸',
           width: '窗口的宽度',
           height: '窗口的高度',

@@ -29,8 +29,14 @@ function openModal (opts) {
         el: document.createElement('div'),
         propsData: options
       })
-      setTimeout(() => $modal.open())
       allActivedModals.push($modal)
+      setTimeout(() => {
+        if ($modal.isDestroy) {
+          XEUtils.remove(allActivedModals, item => item === $modal)
+        } else {
+          $modal.open()
+        }
+      })
     }
   })
 }
@@ -72,14 +78,14 @@ export function ModalController (options) {
  * 如果不传则关闭所有窗口
  */
 function closeModal (id) {
-  if (arguments.length) {
-    const modal = getModal(id)
-    if (modal) {
-      modal.close('close')
+  const modals = arguments.length ? [getModal(id)] : allActivedModals
+  modals.forEach($modal => {
+    if ($modal) {
+      $modal.isDestroy = true
+      $modal.close('close')
     }
-  } else {
-    allActivedModals.forEach($modal => $modal.close('close'))
-  }
+  })
+  return Promise.resolve()
 }
 
 function getModal (id) {

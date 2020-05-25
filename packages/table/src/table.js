@@ -3578,10 +3578,10 @@ export default {
     },
     // 还原展开、选中等相关状态
     handleReserveStatus () {
-      const { expandColumn, treeConfig, fullDataRowIdData, fullAllDataRowMap, selectRow, radioReserveRow, radioOpts, checkboxReserveRowMap, checkboxOpts, selection, rowExpandeds, treeExpandeds, treeIndeterminates } = this
+      const { expandColumn, treeConfig, fullDataRowIdData, fullAllDataRowMap, currentRow, selectRow, radioReserveRow, radioOpts, checkboxReserveRowMap, checkboxOpts, selection, rowExpandeds, treeExpandeds, treeIndeterminates } = this
       // 单选框
       if (selectRow && !fullAllDataRowMap.has(selectRow)) {
-        this.selectRow = null // 刷新选中状态
+        this.selectRow = null // 刷新单选行状态
       }
       // 还原保留选中状态
       if (radioOpts.reserve && radioReserveRow) {
@@ -3591,7 +3591,7 @@ export default {
         }
       }
       // 复选框
-      this.selection = handleReserveRow(this, selection) // 刷新选中状态
+      this.selection = handleReserveRow(this, selection) // 刷新多选行状态
       // 还原保留选中状态
       if (checkboxOpts.reserve) {
         const reserveSelection = []
@@ -3601,6 +3601,9 @@ export default {
           }
         })
         this.setCheckboxRow(reserveSelection, true)
+      }
+      if (currentRow && !fullAllDataRowMap.has(currentRow)) {
+        this.currentRow = null // 刷新当前行状态
       }
       // 行展开
       this.rowExpandeds = expandColumn ? handleReserveRow(this, rowExpandeds) : [] // 刷新行展开状态
