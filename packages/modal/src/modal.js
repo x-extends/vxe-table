@@ -319,7 +319,9 @@ export default {
         }, 10)
         if (isMsg) {
           this.addMsgQueue()
-          setTimeout(this.close, XEUtils.toNumber(duration))
+          if (duration !== -1) {
+            setTimeout(this.close, XEUtils.toNumber(duration))
+          }
         } else {
           this.$nextTick(() => {
             const { inited, marginSize, fullscreen } = this

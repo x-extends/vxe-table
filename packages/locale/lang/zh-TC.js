@@ -38,6 +38,7 @@ export default {
       sortDesc: '按高到低進行排序',
       filter: '對所選的列啟用篩選',
       impSuccess: '成功導入 {{0}} 條記錄',
+      expLoading: '正在匯出中',
       expSuccess: '匯出成功',
       expOriginFilename: '匯出_{{0}}',
       expSrcFilename: '匯出_據_{{0}}',

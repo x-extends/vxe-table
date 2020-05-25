@@ -52,10 +52,15 @@ import hljs from 'highlight.js'
 
 export default {
   data () {
+    const typeList = [
+      { value: 'seq', label: '序号' },
+      { value: 'checkbox', label: '复选框' },
+      { value: 'radio', label: '单选框' }
+    ]
     return {
       tablePage: {
-        pageSize: 5,
-        pageSizes: [5, 10, 15, 20, 50]
+        pageSize: 10,
+        pageSizes: [10, 15, 20, 50]
       },
       tableProxy: {
         props: {
@@ -73,8 +78,7 @@ export default {
           { code: 'reload', name: '刷新' },
           { code: 'insert_actived', name: '新增' },
           { code: 'mark_cancel', name: '标记/取消' },
-          { code: 'save', name: '保存' },
-          { code: 'export', name: '导出.csv' }
+          { code: 'save', name: '保存' }
         ],
         refresh: true,
         custom: true
@@ -84,16 +88,16 @@ export default {
         { field: 'seq', title: '排序', width: 80, editRender: { name: 'input' } },
         { field: 'key', title: '列键值', width: 100, editRender: { name: 'input' } },
         { field: 'name', title: '列名称', width: 100, editRender: { name: 'input' } },
-        { field: 'type', title: '列类型', width: 100, editRender: { name: 'input' } },
-        { field: 'width', title: '列宽度', width: 100, editRender: { name: 'input' } },
+        { field: 'type', title: '列类型', width: 120, editRender: { name: '$select', options: typeList, props: { clearable: true } } },
+        { field: 'width', title: '列宽度', width: 100, editRender: { name: 'input', attrs: { placeholder: '*,*px,*%' } } },
         { field: 'link', title: '是否链接', width: 150, editRender: { name: 'input' } },
-        { field: 'isEdit', title: '是否编辑', width: 100, editRender: { name: 'input' } },
-        { field: 'required', title: '是否必填', width: 140, editRender: { name: 'input' } },
+        { field: 'isEdit', title: '是否编辑', width: 100, cellRender: { name: '$switch' } },
+        { field: 'required', title: '是否必填', width: 140, cellRender: { name: '$switch' } },
         { field: 'validator', title: '校验规则', width: 140, editRender: { name: 'input' } },
         { field: 'validMsg', title: '校验提示消息', width: 150, editRender: { name: 'input' } },
         { field: 'describe', title: '描述', width: 200, showOverflow: true, editRender: { name: 'input' } },
-        { field: 'createTime', title: '创建时间', width: 140, showOverflow: true, editRender: { name: '$input', props: { type: 'date' } } },
-        { field: 'updateTime', title: '更新时间', width: 140, showOverflow: true, editRender: { name: '$input', props: { type: 'date' } } }
+        { field: 'createTime', title: '创建时间', width: 140, showOverflow: true },
+        { field: 'updateTime', title: '更新时间', width: 140, showOverflow: true }
       ],
       loading2: false,
       tablePage2: {
@@ -112,12 +116,10 @@ export default {
       },
       tableToolbar2: {
         buttons: [
-          { code: 'reloadColumn', name: '刷新列配置' },
-          { code: 'reload', name: '刷新数据' },
+          { code: 'reloadColumn', name: '刷新列配置', status: 'primary' },
           { code: 'insert_actived', name: '新增' },
           { code: 'mark_cancel', name: '标记/取消' },
-          { code: 'save', name: '保存' },
-          { code: 'export', name: '导出.csv' }
+          { code: 'save', name: '保存' }
         ],
         refresh: true,
         custom: true
@@ -141,10 +143,15 @@ export default {
         `
         export default {
           data () {
+            const typeList = [
+              { value: 'seq', label: '序号' },
+              { value: 'checkbox', label: '复选框' },
+              { value: 'radio', label: '单选框' }
+            ]
             return {
               tablePage: {
-                pageSize: 5,
-                pageSizes: [5, 10, 15, 20, 50]
+                pageSize: 10,
+                pageSizes: [10, 15, 20, 50]
               },
               tableProxy: {
                 props: {
@@ -162,8 +169,7 @@ export default {
                   { code: 'reload', name: '刷新' },
                   { code: 'insert_actived', name: '新增' },
                   { code: 'mark_cancel', name: '标记/取消' },
-                  { code: 'save', name: '保存' },
-                  { code: 'export', name: '导出.csv' }
+                  { code: 'save', name: '保存' }
                 ],
                 refresh: true,
                 custom: true
@@ -173,16 +179,16 @@ export default {
                 { field: 'seq', title: '排序', width: 80, editRender: { name: 'input' } },
                 { field: 'key', title: '列键值', width: 100, editRender: { name: 'input' } },
                 { field: 'name', title: '列名称', width: 100, editRender: { name: 'input' } },
-                { field: 'type', title: '列类型', width: 100, editRender: { name: 'input' } },
-                { field: 'width', title: '列宽度', width: 100, editRender: { name: 'input' } },
+                { field: 'type', title: '列类型', width: 120, editRender: { name: '$select', options: typeList, props: { clearable: true } } },
+                { field: 'width', title: '列宽度', width: 100, editRender: { name: 'input', attrs: { placeholder: '*,*px,*%' } } },
                 { field: 'link', title: '是否链接', width: 150, editRender: { name: 'input' } },
-                { field: 'isEdit', title: '是否编辑', width: 100, editRender: { name: 'input' } },
-                { field: 'required', title: '是否必填', width: 140, editRender: { name: 'input' } },
+                { field: 'isEdit', title: '是否编辑', width: 100, cellRender: { name: '$switch' } },
+                { field: 'required', title: '是否必填', width: 140, cellRender: { name: '$switch' } },
                 { field: 'validator', title: '校验规则', width: 140, editRender: { name: 'input' } },
                 { field: 'validMsg', title: '校验提示消息', width: 150, editRender: { name: 'input' } },
                 { field: 'describe', title: '描述', width: 200, showOverflow: true, editRender: { name: 'input' } },
-                { field: 'createTime', title: '创建时间', width: 140, showOverflow: true, editRender: { name: '$input', props: { type: 'date' } } },
-                { field: 'updateTime', title: '更新时间', width: 140, showOverflow: true, editRender: { name: '$input', props: { type: 'date' } } }
+                { field: 'createTime', title: '创建时间', width: 140, showOverflow: true },
+                { field: 'updateTime', title: '更新时间', width: 140, showOverflow: true }
               ]
             }
           }
@@ -206,11 +212,11 @@ export default {
         export default {
           data () {
             return {
-              loading: false,
-              tablePage: {
+              loading2: false,
+              tablePage2: {
                 pageSize: 10
               },
-              tableProxy: {
+              tableProxy2: {
                 props: {
                   result: 'result',
                   total: 'page.total'
@@ -221,20 +227,18 @@ export default {
                   save: ({ body }) => XEAjax.post('/api/user/save', body)
                 }
               },
-              tableToolbar: {
+              tableToolbar2: {
                 buttons: [
-                  { code: 'reloadColumn', name: '刷新列配置' },
-                  { code: 'reload', name: '刷新数据' },
+                  { code: 'reloadColumn', name: '刷新列配置', status: 'primary' },
                   { code: 'insert_actived', name: '新增' },
                   { code: 'mark_cancel', name: '标记/取消' },
-                  { code: 'save', name: '保存' },
-                  { code: 'export', name: '导出.csv' }
+                  { code: 'save', name: '保存' }
                 ],
                 refresh: true,
                 custom: true
               },
-              validRules: null,
-              tableColumn: [],
+              validRules2: null,
+              tableColumn2: []
             }
           },
           created () {
@@ -242,14 +246,18 @@ export default {
           },
           methods: {
             findColumn () {
-              this.loading = true
+              this.loading2 = true
               XEAjax.get('/api/column/list', { sort: 'seq', order: 'asc' }).then(data => {
-                let validRules = {}
+                const validRules = {}
                 this.tableColumn2 = data.map(item => {
-                  let config = {
+                  const config = {
                     title: item.name,
-                    width: item.width,
-                    slots: {
+                    width: item.width
+                  }
+                  if (item.type) {
+                    config.type = item.type
+                  } else {
+                    config.slots = {
                       default: ({ row, column }) => {
                         // 渲染链接
                         if (item.link) {
@@ -263,33 +271,33 @@ export default {
                         ]
                       }
                     }
-                  }
-                  // 动态生成校验
-                  if (item.required) {
-                    validRules[item.key] = [
-                      { required: true, message: \`请填写\${item.name}\` }
-                    ]
-                  }
-                  if (item.validator) {
-                    if (validRules[item.key]) {
-                      validRules[item.key].push({ pattern: new RegExp(item.validator), message: item.validMsg || \`\${item.name}校验不通过，请重新填写\` })
-                    } else {
+                    // 动态生成校验
+                    if (item.required) {
                       validRules[item.key] = [
-                        { pattern: new RegExp(item.validator), message: item.validMsg || \`\${item.name}校验不通过，请重新填写\` }
+                        { required: true, message: \`请填写\${item.name}\` }
                       ]
                     }
-                  }
-                  if (item.key) {
-                    config.field = item.key
-                  }
-                  if (item.type) {
-                    config.type = item.type
-                  }
-                  if (item.isEdit) {
-                    config.editRender = { name: 'input' }
+                    if (item.validator) {
+                      if (validRules[item.key]) {
+                        validRules[item.key].push({ pattern: new RegExp(item.validator), message: item.validMsg || \`\${item.name}校验不通过，请重新填写\` })
+                      } else {
+                        validRules[item.key] = [
+                          { pattern: new RegExp(item.validator), message: item.validMsg || \`\${item.name}校验不通过，请重新填写\` }
+                        ]
+                      }
+                    }
+                    if (item.key) {
+                      config.field = item.key
+                    }
+                    if (item.isEdit) {
+                      config.editRender = { name: 'input' }
+                    }
                   }
                   return config
                 })
+                this.validRules2 = validRules
+                this.loading2 = false
+              })
             },
             toolbarButtonClickEvent ({ code }, event) {
               switch (code) {
@@ -323,26 +331,22 @@ export default {
             width: item.width
           }
           if (item.type) {
-            Object.assign(config, {
-              type: item.type
-            })
+            config.type = item.type
           } else {
-            Object.assign(config, {
-              slots: {
-                default: ({ row, column }) => {
-                  // 渲染链接
-                  if (item.link) {
-                    return [
-                      <a class="link" href={ item.link }>{ row[column.property] }</a>
-                    ]
-                  }
-                  // 渲染文本
+            config.slots = {
+              default: ({ row, column }) => {
+                // 渲染链接
+                if (item.link) {
                   return [
-                    <span>{ row[column.property] }</span>
+                    <a class="link" href={ item.link }>{ row[column.property] }</a>
                   ]
                 }
+                // 渲染文本
+                return [
+                  <span>{ row[column.property] }</span>
+                ]
               }
-            })
+            }
             // 动态生成校验
             if (item.required) {
               validRules[item.key] = [
