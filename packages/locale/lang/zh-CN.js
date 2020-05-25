@@ -38,6 +38,7 @@ export default {
       sortDesc: '降序：最高到最低',
       filter: '对所选的列启用筛选',
       impSuccess: '成功导入 {{0}} 条记录',
+      expLoading: '正在导出中',
       expSuccess: '导出成功',
       expFilename: '导出_{{0}}',
       expOriginFilename: '导出_源_{{0}}',

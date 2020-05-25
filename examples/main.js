@@ -10,6 +10,9 @@ import './mock'
 import XEUtils from 'xe-utils'
 import moment from 'moment'
 
+import jsPDF from 'jspdf'
+window.jsPDF = jsPDF
+
 // 生成模拟数据
 const list = window.MOCK_DATA_LIST = []
 let currTime = Date.now()
@@ -80,7 +83,7 @@ function mockData () {
       rate1: `${index % 4 === 0 ? 2 : index % 3 === 0 ? 3 : 0}`,
       state: `${index % 4 === 0 ? 'value:Washington' : index % 3 === 0 ? 'value:Delaware' : ''}`,
       address: `vxe-table 从入门到放弃 - ${index}`,
-      address2: `vxe-table 从入门到${index}`,
+      address2: `vxe-table 从入门到放弃${index}`,
       img: `static/other/img${index % 3 ? '1' : '2'}.gif`,
       img1: index % 4 === 0 ? `static/other/img${index % 3 ? '1' : '2'}.gif` : '',
       html1: index % 3 === 0 ? `<span style="color:red;">我是一段Html代码</span><br><span style="color:blue;">vxe-table 从入门到放弃${index}</span><br><span style="color:green;">绿到你发慌！</span>` : '',

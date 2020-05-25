@@ -38,6 +38,7 @@ export default {
       sortDesc: '降順',
       filter: '選択した列をフィルタする',
       impSuccess: '{{0}} レコードが正常にインポートされました',
+      expLoading: '正在导出中',
       expSuccess: 'エクスポートが成功しました',
       expOriginFilename: 'エクスポート_{{0}}',
       expSrcFilename: 'エクスポート_ソース_{{0}}',

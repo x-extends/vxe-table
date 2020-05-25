@@ -611,7 +611,7 @@ module.exports = {
           maskClosable: 'Click the mask layer to close the modal',
           escClosable: 'Whether Esc key is allowed to close the modal',
           resize: 'Allow drag to resize modal window',
-          duration: 'Only valid for type=message, auto-closed delay',
+          duration: 'Only valid for type=message, auto-closed delay, if -1 is disabled automatically closed',
           size: 'Size',
           width: 'The width of the modal window',
           height: 'The height of the modal window',

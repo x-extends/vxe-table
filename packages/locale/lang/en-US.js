@@ -38,6 +38,7 @@ export default {
       sortDesc: 'Descending: highest to lowest',
       filter: 'Enable filtering on selected columns',
       impSuccess: 'Successfully imported {{0}} records',
+      expLoading: 'Exporting',
       expSuccess: 'Export success',
       expFilename: 'Export_{{0}}',
       expOriginFilename: 'Export_original_{{0}}',
