@@ -66,6 +66,9 @@ export default {
         export: {
           icon: 'fa fa-download'
         },
+        print: {
+          icon: 'fa fa-print'
+        },
         zoom: {
           iconIn: 'fa fa-arrows-alt',
           iconOut: 'fa fa-expand'
@@ -135,6 +138,9 @@ export default {
                 },
                 export: {
                   icon: 'fa fa-download'
+                },
+                print: {
+                  icon: 'fa fa-print'
                 },
                 zoom: {
                   iconIn: 'fa fa-arrows-alt',

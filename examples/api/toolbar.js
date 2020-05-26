@@ -154,6 +154,25 @@ const apis = [
         ]
       },
       {
+        name: 'print',
+        descKey: 'app.api.toolbar.desc.print',
+        version: '',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '默认继承 setup.toolbar.print',
+        list: [
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'refresh',
         descKey: 'app.api.toolbar.desc.refresh',
         version: '',

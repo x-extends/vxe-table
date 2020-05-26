@@ -31,7 +31,7 @@
           </span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="amount" title="Amount" formatter="commafy" sortable>
+      <vxe-table-column field="amount" title="Amount" :formatter="formatAmount" sortable>
         <template v-slot:header="{ column }">
           <span>{{ column.title }}</span>
           <span class="custom-sort" :class="{'is-order': column.order}">
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -89,7 +90,7 @@ export default {
               </span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="amount" title="Amount" formatter="commafy" sortable>
+          <vxe-table-column field="amount" title="Amount" :formatter="formatAmount" sortable>
             <template v-slot:header="{ column }">
               <span>{{ column.title }}</span>
               <span class="custom-sort" :class="{'is-order': column.order}">
@@ -98,6 +99,9 @@ export default {
             </template>
           </vxe-table-column>
         </vxe-table>
+        `,
+        `
+        
         `,
         `
         export default {
@@ -121,6 +125,9 @@ export default {
                   this.$refs.xTable.sort(column.property, 'asc')
                 }
               }
+            },
+            formatAmount ({ cellValue }) {
+              return XEUtils.commafy(cellValue)
             },
             filterNameMethod ({ value, row, column }) {
               return row.id >= value
@@ -159,6 +166,9 @@ export default {
           this.$refs.xTable.sort(column.property, 'asc')
         }
       }
+    },
+    formatAmount ({ cellValue }) {
+      return XEUtils.commafy(cellValue)
     },
     filterNameMethod ({ value, row }) {
       return row.id >= value

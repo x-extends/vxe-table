@@ -10,9 +10,9 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
+      <vxe-table-column field="num" title="Type" :formatter="formatterType" sortable></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex" sortable></vxe-table-column>
       <vxe-table-column field="time" title="Time" :formatter="formatTime"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -76,9 +76,9 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
+          <vxe-table-column field="num" title="Type" :formatter="formatterType" sortable></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex" sortable></vxe-table-column>
           <vxe-table-column field="time" title="Time" :formatter="formatTime"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -102,6 +102,9 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
+            formatterType () {
+              return XEUtils.random(1, 100)
+            },
             formatterSex ({ cellValue }) {
               let item = this.sexList.find(item => item.value === cellValue)
               return item ? item.label : ''
@@ -189,6 +192,9 @@ export default {
     })
   },
   methods: {
+    formatterType () {
+      return XEUtils.random(1, 100)
+    },
     formatterSex ({ cellValue }) {
       const item = this.sexList.find(item => item.value === cellValue)
       return item ? item.label : ''

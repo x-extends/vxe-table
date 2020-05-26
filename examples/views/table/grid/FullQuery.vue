@@ -89,6 +89,7 @@ export default {
         },
         toolbar: {
           export: true,
+          print: true,
           custom: true,
           slots: {
             buttons: 'toolbar_buttons'
@@ -194,6 +195,7 @@ export default {
                 },
                 toolbar: {
                   export: true,
+                  print: true,
                   custom: true,
                   slots: {
                     buttons: 'toolbar_buttons'

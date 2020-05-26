@@ -205,6 +205,7 @@ export default {
     refresh: [Boolean, Object],
     import: [Boolean, Object],
     export: [Boolean, Object],
+    print: [Boolean, Object],
     zoom: [Boolean, Object],
     custom: [Boolean, Object],
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
@@ -240,6 +241,9 @@ export default {
     },
     exportOpts () {
       return Object.assign({}, GlobalConfig.toolbar.export, this.export)
+    },
+    printOpts () {
+      return Object.assign({}, GlobalConfig.toolbar.print, this.print)
     },
     zoomOpts () {
       return Object.assign({}, GlobalConfig.toolbar.zoom, this.zoom)
@@ -309,6 +313,18 @@ export default {
           },
           on: {
             click: this.exportEvent
+          }
+        }) : null,
+        this.print ? h('vxe-button', {
+          props: {
+            circle: true,
+            icon: this.printOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_PRINT
+          },
+          attrs: {
+            title: GlobalConfig.i18n('vxe.toolbar.print')
+          },
+          on: {
+            click: this.printEvent
           }
         }) : null,
         refresh ? h('vxe-button', {
@@ -545,6 +561,11 @@ export default {
     exportEvent () {
       if (this.checkTable()) {
         this.$xetable.openExport(this.exportOpts)
+      }
+    },
+    printEvent () {
+      if (this.checkTable()) {
+        this.$xetable.print(this.printOpts)
       }
     }
   }

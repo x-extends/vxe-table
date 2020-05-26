@@ -652,25 +652,26 @@
 
 .vxe-icon--print {
   @extend %DefaultWidthHeight;
+  box-shadow: inset 0 0 0 0.1em;
+  border-width: 0.2em 0;
+  border-style: solid;
+  border-color: transparent !important;
+  border-radius: 0.3em 0.3em 0 0;
   &:before {
     @extend %PseudoClass;
-    height: 0.94em;
     width: 0.6em;
-    left: 0.18em;
-    top: 0.03em;
-    border-width: 0.1em;
-    border-style: solid;
-    border-color: inherit;
-    border-radius: 0 0.2em 0 0;
+    height: 0.3em;
+    top: -0.2em;
+    left: 0.2em;
+    box-shadow: inset 0 0 0 0.1em;
   }
   &:after {
     @extend %PseudoClass;
-    width: 1em;
-    top: 0.4em;
-    left: 0;
-    border-width: 0.35em 0 0 0;
-    border-style: solid;
-    border-color: inherit;
-    border-radius: 0.15em 0.15em 0 0;
+    width: 0.6em;
+    height: 0.6em;
+    left: 0.2em;
+    bottom: -0.2em;
+    box-shadow: inset 0 0 0 0.1em;
+    background-color: #fff;
   }
 }

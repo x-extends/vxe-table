@@ -136,6 +136,7 @@ const GlobalConfig = {
     TOOLBAR_TOOLS_REFRESH_LOADING: iconPrefix + 'refresh roll',
     TOOLBAR_TOOLS_IMPORT: iconPrefix + 'upload',
     TOOLBAR_TOOLS_EXPORT: iconPrefix + 'download',
+    TOOLBAR_TOOLS_PRINT: iconPrefix + 'print',
     TOOLBAR_TOOLS_ZOOM_IN: iconPrefix + 'zoomin',
     TOOLBAR_TOOLS_ZOOM_OUT: iconPrefix + 'zoomout',
     TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'menu',

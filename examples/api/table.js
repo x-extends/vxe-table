@@ -1759,7 +1759,7 @@ const apis = [
         name: 'edit-rules',
         descKey: 'app.api.table.desc.editRules',
         version: '',
-        type: 'Object',
+        type: '{[field: string]: Array<Object>}',
         enum: '',
         defVal: '',
         list: [
