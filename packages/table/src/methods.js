@@ -703,7 +703,8 @@ const Methods = {
         if (allSortMethod) {
           tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
         } else {
-          const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.sortBy || column.property)
+          const params = { $table: this }
+          const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.formatter ? row => UtilTools.getCellLabel(row, column, params) : column.sortBy || column.property)
           tableData = column.order === 'desc' ? rest.reverse() : rest
         }
       }

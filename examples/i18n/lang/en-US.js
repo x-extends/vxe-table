@@ -525,6 +525,7 @@ module.exports = {
           loading: 'Loading',
           import: 'Import button config("import-config" needs to be set)',
           export: 'Export button config("export-config" needs to be set)',
+          print: 'Printing button config',
           refresh: 'Refresh button config',
           resizable: 'Obsolete, please use "custom-config"',
           setting: 'Obsolete, please use "custom"',

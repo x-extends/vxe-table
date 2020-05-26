@@ -92,7 +92,7 @@ const apis = [
         name: 'rules',
         descKey: 'app.api.form.desc.rules',
         version: '',
-        type: 'Object',
+        type: '{[field: string]: Array<Object>}',
         enum: '',
         defVal: '',
         list: [

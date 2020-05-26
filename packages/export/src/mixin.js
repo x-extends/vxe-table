@@ -643,7 +643,7 @@ export default {
         opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
       if (!opts.sheetName) {
-        opts.sheetName = GlobalConfig.i18n('vxe.table.expSheetName')
+        opts.sheetName = document.title
       }
       if (VXETable.exportTypes.indexOf(opts.type) === -1) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))

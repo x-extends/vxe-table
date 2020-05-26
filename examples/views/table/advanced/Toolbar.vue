@@ -5,7 +5,7 @@
       支持显示/隐藏列、列宽拖动状态的保存功能，还可以配合 <table-api-link prop="custom"/> 事件实现显示/隐藏列的服务端保存
     </p>
 
-    <vxe-toolbar custom export></vxe-toolbar>
+    <vxe-toolbar custom print></vxe-toolbar>
 
     <vxe-table
       border
@@ -40,7 +40,7 @@
       <my-div>
         <vxe-toolbar
           custom
-          export
+          print
           ref="xToolbar"
           :buttons="toolbarButtons"
           :refresh="{query: findList}">
@@ -95,7 +95,7 @@ export default {
       ],
       demoCodes: [
         `
-        <vxe-toolbar custom export></vxe-toolbar>
+        <vxe-toolbar custom print></vxe-toolbar>
 
         <vxe-table
           border
@@ -150,7 +150,7 @@ export default {
           <my-div>
             <vxe-toolbar
               custom
-              export
+              print
               ref="xToolbar"
               :buttons="toolbarButtons"
               :refresh="{query: findList}">
