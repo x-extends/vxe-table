@@ -16,7 +16,7 @@
       <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'AButtons', children: [{ content: '查询', props: {type: 'primary', htmlType: 'submit'} }, { content: '重置', props: {htmlType: 'reset'} }]}"></vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar export custom>
+    <vxe-toolbar export print custom>
       <template v-slot:buttons>
         <a-button @click="insertEvent">新增</a-button>
         <a-button @click="saveEvent">保存</a-button>
@@ -158,7 +158,7 @@ export default {
             <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'AButtons', children: [{ content: '查询', props: {type: 'primary', htmlType: 'submit'} }, { content: '重置', props: {htmlType: 'reset'} }]}"></vxe-form-item>
           </vxe-form>
 
-          <vxe-toolbar export custom>
+          <vxe-toolbar export print custom>
             <template v-slot:buttons>
               <a-button @click="insertEvent">新增</a-button>
               <a-button @click="saveEvent">保存</a-button>

@@ -524,6 +524,7 @@ module.exports = {
           loading: '是否加载中',
           import: '导入按钮配置（需要设置 "import-config"）',
           export: '导出按钮配置（需要设置 "export-config"）',
+          print: '打印按钮配置',
           refresh: '刷新按钮配置',
           resizable: '即将废弃，请使用 custom-config',
           setting: '即将废弃，请使用 custom',

@@ -2011,7 +2011,8 @@ export default {
           if (allSortMethod) {
             tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
           } else {
-            const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.sortBy || column.property)
+            const params = { $table: this }
+            const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.formatter ? row => UtilTools.getCellLabel(row, column, params) : column.sortBy || column.property)
             tableData = column.order === 'desc' ? rest.reverse() : rest
           }
         }
@@ -5798,7 +5799,7 @@ export default {
         opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
       if (!opts.sheetName) {
-        opts.sheetName = GlobalConfig.i18n('vxe.table.expSheetName')
+        opts.sheetName = document.title
       }
       if (VXETable.exportTypes.indexOf(opts.type) === -1) {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))

@@ -84,6 +84,7 @@ export default {
         refresh: true,
         import: true,
         export: true,
+        print: true,
         zoom: true,
         custom: true
       },
@@ -172,6 +173,7 @@ export default {
                 refresh: true,
                 import: true,
                 export: true,
+                print: true,
                 zoom: true,
                 custom: true
               },
