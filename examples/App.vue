@@ -645,6 +645,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.groupBy',
+              locat: {
+                name: 'TableGroupBy'
+              }
+            },
+            {
               label: 'app.aside.nav.details',
               locat: {
                 name: 'TableDetails'
@@ -1187,6 +1193,12 @@ export default {
         //       label: 'app.aside.nav.template',
         //       locat: {
         //         name: 'TableVirtualTreeTemplate'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.big',
+        //       locat: {
+        //         name: 'TableVirtualTreeBig'
         //       }
         //     }
         //   ]
