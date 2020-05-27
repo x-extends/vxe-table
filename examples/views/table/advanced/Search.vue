@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">表格搜索功能，非常简单就可以实现表格内容搜索</p>
+    <p class="tip">表格搜索功能，非常简单就可以实现表格内容搜索<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -33,7 +33,7 @@
       <code class="scss">{{ demoCodes[2] }}</code>
     </pre>
 
-    <p class="tip">树表格搜索功能，非常简单就可以实现树表格内容搜索</p>
+    <p class="tip">树表格搜索功能，非常简单就可以实现树表格内容搜索<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

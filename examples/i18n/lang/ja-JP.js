@@ -73,6 +73,7 @@ module.exports = {
         customStorage: '显示/隐藏列 + localStorage',
         customlWidthStorage: '显示/隐藏/列宽 + localStorage',
         search: '全表搜索',
+        groupBy: '行分组',
         details: '弹框显示详情',
         popupEdit: '弹框表单编辑',
         pager: '分页',
@@ -114,6 +115,7 @@ module.exports = {
         full: '完整功能',
 
         virtualTree: '仮想ツリーテーブル',
+        big: '虚拟滚动',
 
         scroll: '大きなデータテーブル',
         bigData: '虚拟滚动',
@@ -334,7 +336,7 @@ module.exports = {
       },
       table: {
         desc: {
-          id: '唯一标识',
+          id: '唯一标识（被某些特定的功能所依赖）',
           data: '表格数据（与 loadData 行为一致，更新数据是不会重置状态）',
           columns: '列配置',
           customs: '即将废弃',

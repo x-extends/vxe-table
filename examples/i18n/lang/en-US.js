@@ -74,6 +74,7 @@ module.exports = {
         customStorage: 'Show/hide column + localStorage',
         customlWidthStorage: 'Show/hide & column width + localStorage',
         search: 'Table search',
+        groupBy: 'Row group',
         details: 'Popup displays details',
         popupEdit: 'Popup form edit',
         pager: 'Pager',
@@ -115,6 +116,7 @@ module.exports = {
         full: 'Full demo',
 
         virtualTree: 'Virtual tree table',
+        big: 'Virtual scroll',
 
         scroll: 'Big table',
         bigData: 'Virtual Scroller',

@@ -169,7 +169,13 @@ export default {
   border: 1px solid #dcdfe6;
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
 }
-.edit-popup-button {
+.edit-down-input {
+   /deep/ .vxe-input--inner {
+    border-radius: 4px 0 0 4px;
+  }
+}
+.edit-popup-button.vxe-button {
   flex-shrink: 0;
+  border-radius: 0 4px 4px 0;
 }
 </style>

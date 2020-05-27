@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现简单的唯一下拉选项列表</p>
+    <p class="tip">实现简单的唯一下拉选项列表<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

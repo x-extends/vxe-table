@@ -657,6 +657,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.groupBy',
+              locat: {
+                name: 'TableGroupBy'
+              }
+            },
+            {
               label: 'app.aside.nav.details',
               locat: {
                 name: 'TableDetails'
@@ -1356,13 +1362,6 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.scrollTree',
-              disabled: true,
-              locat: {
-                name: 'TableScrollTree'
-              }
-            },
-            {
               label: 'app.aside.nav.cellValid',
               locat: {
                 name: 'TableScrollCellValid'
@@ -1462,7 +1461,6 @@ export default {
         // {
         //   label: 'app.aside.nav.virtualTree',
         //   value: 'virtualTree',
-        //   disabled: true,
         //   expand: false,
         //   children: [
         //     {
@@ -1535,6 +1533,12 @@ export default {
         //       label: 'app.aside.nav.template',
         //       locat: {
         //         name: 'TableVirtualTreeTemplate'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.big',
+        //       locat: {
+        //         name: 'TableVirtualTreeBig'
         //       }
         //     }
         //   ]

@@ -73,6 +73,7 @@ module.exports = {
         customStorage: '显示/隐藏列 + localStorage',
         customlWidthStorage: '显示/隐藏/列宽 + localStorage',
         search: '全表搜索',
+        groupBy: '行分组',
         details: '弹框显示详情',
         popupEdit: '弹框表单编辑',
         pager: '分页',
@@ -114,6 +115,7 @@ module.exports = {
         full: '完整功能',
 
         virtualTree: '虚拟树表格',
+        big: '虚拟滚动',
 
         scroll: '大数据表格',
         bigData: '虚拟滚动',
@@ -334,14 +336,14 @@ module.exports = {
       },
       table: {
         desc: {
-          id: '唯一标识',
+          id: '唯一标识（被某些特定的功能所依赖）',
           data: '表格数据（与 loadData 行为一致，更新数据是不会重置状态）',
           columns: '列配置',
           customs: '即将废弃',
           height: '表格的高度；支持铺满父容器或者固定高度，如果设置 auto 为铺满父容器（如果设置自适应时，必须确保存在父节点且不允许存在相邻元素）',
           maxHeight: '表格的最大高度',
-          syncResize: '自动跟随某个属性的变化去重新计算表格，和手动调用 recalculate 方法是一样的效果（对于通过某个属性来控制显示/隐藏切换的场景可能会用到）',
-          autoResize: '自动监听父元素的变化去重新计算表格（对于父元素可能存在动态变化的场景可能会用到）',
+          syncResize: '自动跟随某个属性的变化去重新计算表格，和手动调用 recalculate 方法是一样的效果（对于通过某个属性来控制显示/隐藏切换时可能会用到）',
+          autoResize: '自动监听父元素的变化去重新计算表格（对于父元素可能存在动态变化、显示隐藏的容器中、列宽异常等场景中的可能会用到）',
           resizable: '所有的列是否允许拖动列宽调整大小',
           stripe: '是否带有斑马纹（需要注意的是，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）',
           border: '是否带有边框',

@@ -34,11 +34,11 @@
 
     <p class="tip">如果是根据服务端数据控制显示/隐藏列，在获取到配置信息后动态更改列的 <table-column-api-link prop="visible"/> 属性，然后调用 <table-api-link prop="refreshColumn"/> 属性列即可</p>
 
-    <div>
+    <p>
       <template v-for="(column,index) in columns2">
         <vxe-checkbox v-model="column.visible" :key="index" @change="$refs.xTable2.refreshColumn()">{{ column.title }}</vxe-checkbox>
       </template>
-    </div>
+    </p>
 
     <vxe-table
       border
@@ -62,13 +62,13 @@
 
     <p class="tip">通过 <table-column-api-link prop="visible"/> 属性设置默认是否显示，通过 <table-api-link prop="resetColumn"/> 函数重置全部列为可视状态</p>
 
-    <div>
+    <p>
       <template v-for="(column,index) in columns3">
         <vxe-checkbox v-if="column.title" v-model="column.visible" :key="index">{{ column.title }}</vxe-checkbox>
       </template>
       <vxe-button @click="$refs.xTable3.refreshColumn()">刷新列信息</vxe-button>
       <vxe-button @click="$refs.xTable3.resetColumn()">重置自定义列</vxe-button>
-    </div>
+    </p>
 
     <vxe-table
       border
@@ -142,11 +142,11 @@ export default {
         }
         `,
         `
-        <div>
+        <p>
           <template v-for="(column,index) in columns">
             <vxe-checkbox v-model="column.visible" :key="index" @change="$refs.xTable.refreshColumn()">{{ column.title }}</vxe-checkbox>
           </template>
-        </div>
+        </p>
 
         <vxe-table
           border
@@ -192,13 +192,13 @@ export default {
         }
         `,
         `
-        <div>
+        <p>
           <template v-for="(column,index) in columns">
             <vxe-checkbox v-if="column.title" v-model="column.visible" :key="index">{{ column.title }}</vxe-checkbox>
           </template>
           <vxe-button @click="$refs.xTable.refreshColumn()">刷新列信息</vxe-button>
           <vxe-button @click="$refs.xTable.resetColumn()">重置自定义列</vxe-button>
-        </div>
+        </p>
 
         <vxe-table
           border

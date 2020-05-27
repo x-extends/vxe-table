@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">文件上传，可以通过调用 <table-api-link prop="readFile"/> 读取本地文件</p>
+    <p class="tip">文件上传，可以通过调用 <table-api-link prop="readFile"/> 读取本地文件<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
