@@ -86,17 +86,20 @@ export const DomTools = {
     const bodyElem = $xetable.$refs.tableBody.$el
     const tdElem = bodyElem.querySelector(`.${column.id}`)
     if (tdElem) {
+      const fixedWidthleft = $xetable.$refs?.leftContainer?.clientWidth ?? 0
+      const fixedWidthRight = $xetable.$refs?.rightContainer?.clientWidth ?? 0
       const bodyWidth = bodyElem.clientWidth
       const bodySrcollLeft = bodyElem.scrollLeft
       const tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
       const tdWidth = tdElem.clientWidth
+
       // 检测行是否在可视区中
-      if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
+      if (tdOffsetLeft < bodySrcollLeft + fixedWidthleft) {
         // 向左定位
-        return $xetable.scrollTo(tdOffsetLeft)
-      } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft) {
+        return $xetable.scrollTo(tdOffsetLeft - fixedWidthleft)
+      } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft - fixedWidthRight) {
         // 向右定位
-        return $xetable.scrollTo(bodySrcollLeft + tdWidth)
+        return $xetable.scrollTo(tdOffsetLeft + tdWidth - bodyWidth + fixedWidthRight)
       }
     } else {
       // 如果是虚拟渲染跨行滚动
