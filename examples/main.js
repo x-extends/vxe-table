@@ -52,6 +52,7 @@ function mockData () {
       date11: [],
       date12: index % 3 === 0 ? XEUtils.toDateString(currTime - 666, 'yyyy-MM-dd') : '',
       date13: index % 4 === 0 ? XEUtils.toDateString(currTime - 9999, 'yyyy-MM-dd') : '',
+      date14: index % 9 === 0 ? '2020-05-30' : index % 7 === 0 ? '2020-08-01' : index % 5 === 0 ? '2020-12-22' : index % 3 === 0 ? '2020-11-30' : index % 2 === 0 ? '2020-12-04' : '2020-02-18',
       num: (0.234 * index).toFixed(0),
       num1: (0.185 * index).toFixed(0),
       num2: (0.567 * index).toFixed(1),

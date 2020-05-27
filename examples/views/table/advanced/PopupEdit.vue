@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现弹框表单编辑功能</p>
+    <p class="tip">实现弹框表单编辑功能<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-table
       border
@@ -166,6 +166,7 @@ export default {
                 date3: row.date3,
                 address: row.address
               }
+              this.selectRow = row
               this.showEdit = true
             },
             submitEvent () {

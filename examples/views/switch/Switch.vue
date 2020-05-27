@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.switch') }}</h2>
-    <p class="tip">开关按钮，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'switch'}}">API</router-link></p>
+    <p class="tip">开关按钮</p>
 
     <p>
       <vxe-switch v-model="value1"></vxe-switch>

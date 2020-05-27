@@ -79,6 +79,7 @@ const TableExpandIcon = () => import(/* webpackChunkName: "advanced" */ './views
 const TableExpandLazy = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandLazy.vue')
 const TableExpandAccordion = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/ExpandAccordion.vue')
 const TableSearch = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Search.vue')
+const TableGroupBy = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/GroupBy.vue')
 const TableDetails = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Details.vue')
 const TablePopupEdit = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/PopupEdit.vue')
 const Toolbar = () => import(/* webpackChunkName: "advanced" */ './views/table/advanced/Toolbar.vue')
@@ -193,6 +194,7 @@ const TableVirtualTreeInsert = () => import(/* webpackChunkName: "virtual-tree" 
 const TableVirtualTreeRemove = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Remove.vue')
 const TableVirtualTreeMenu = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Menu.vue')
 const TableVirtualTreeTemplate = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Template.vue')
+const TableVirtualTreeBig = () => import(/* webpackChunkName: "virtual-tree" */ './views/table/virtual-tree/Big.vue')
 
 const TableEditPopupForm = () => import(/* webpackChunkName: "edit" */ './views/table/edit/PopupForm.vue')
 const TableEditManual = () => import(/* webpackChunkName: "edit" */ './views/table/edit/Manual.vue')
@@ -664,6 +666,11 @@ export default new Router({
       component: TableSearch
     },
     {
+      path: '/table/advanced/groupBy',
+      name: 'TableGroupBy',
+      component: TableGroupBy
+    },
+    {
       path: '/table/advanced/details',
       name: 'TableDetails',
       component: TableDetails
@@ -953,6 +960,11 @@ export default new Router({
       path: '/table/virtualTree/template',
       name: 'TableVirtualTreeTemplate',
       component: TableVirtualTreeTemplate
+    },
+    {
+      path: '/table/virtualTree/big',
+      name: 'TableVirtualTreeBig',
+      component: TableVirtualTreeBig
     },
     {
       path: '/table/grid/basic',
