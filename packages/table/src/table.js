@@ -3882,7 +3882,7 @@ export default {
           this.handleCheckboxRangeEvent(evnt, params)
         }
       }
-      this.isActivated = true
+      this.focus()
     },
     /**
      * 边角事件
@@ -3922,7 +3922,7 @@ export default {
           }
         }
       }
-      this.isActivated = true
+      this.focus()
     },
     getCheckboxRangeResult (targetTrElem, moveRange) {
       let countHeight = 0
@@ -4160,7 +4160,7 @@ export default {
             this.handleFocus(params, evnt)
           })
         }
-        this.isActivated = true
+        this.focus()
       }
       return this.$nextTick()
     },
@@ -4238,6 +4238,7 @@ export default {
               const select = DomTools.getCellIndexs(params.cell)
               this.handleChecked(select, select, evnt)
             }
+            this.focus()
           }
         }
         return this.$nextTick()
@@ -6042,6 +6043,14 @@ export default {
     },
     emitEvent (type, params, evnt) {
       this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))
+    },
+    focus () {
+      this.isActivated = false
+      return this.$nextTick()
+    },
+    blur () {
+      this.isActivated = true
+      return this.$nextTick()
     },
 
     // 检查触发源是否属于目标节点
