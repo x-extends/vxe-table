@@ -261,7 +261,7 @@ export default {
           }
         }
       }
-      this.isActivated = true
+      this.focus()
       this.closeMenu()
     },
     /**
@@ -369,7 +369,7 @@ export default {
           }
         }
       }
-      this.isActivated = true
+      this.focus()
       this.closeFilter()
       this.closeMenu()
     },

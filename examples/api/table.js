@@ -4004,6 +4004,24 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'focus()',
+        desc: '使表格获取焦点',
+        version: '2.9.10',
+        type: 'Promise<>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'blur()',
+        desc: '使表格失去焦点',
+        version: '2.9.10',
+        type: 'Promise<>',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   }

@@ -6,7 +6,7 @@
       对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
       还可以通过 <table-api-link prop="checkMethod"/> 设置个性化列禁止勾选<br>
       由 <grid-api-link name="vxe-grid"/> 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格，从重复写冗余的代码中解放出来<br>
-      <span class="red">（注：使用后端导出才算最优的做法）</span>
+      <span class="red">（注：使用后端导出才是最优的做法）</span>
     </p>
 
     <vxe-grid ref='xGrid' v-bind="gridOptions"></vxe-grid>

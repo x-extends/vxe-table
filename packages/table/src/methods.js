@@ -3522,6 +3522,14 @@ const Methods = {
   emitEvent (type, params, evnt) {
     this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params), evnt)
   },
+  focus () {
+    this.isActivated = false
+    return this.$nextTick()
+  },
+  blur () {
+    this.isActivated = true
+    return this.$nextTick()
+  },
 
   // 检查触发源是否属于目标节点
   getEventTargetNode: DomTools.getEventTargetNode,

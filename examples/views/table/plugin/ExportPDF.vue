@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-export-pdf" target="_blank">vxe-table-plugin-export-pdf</a> 插件的 API<br>
-      <span class="red">（注：默认是不支持中文字体的，可以通过安装 <a class="link" href="https://github.com/xuliangzhan/vxe-table-plugin-export-pdf#font" target="_blank">字体库</a> 解决，具体看文档）</span>
+      具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-export-pdf" target="_blank">vxe-table-plugin-export-pdf</a> 插件的 API<span class="red">（建议使用后端导出）</span><br>
+      <span class="red">（注：默认是不支持中文字体的，可以通过安装 <a class="link" href="https://github.com/xuliangzhan/vxe-table-plugin-export-pdf#font" target="_blank">字体库</a> 解决）</span>
     </p>
 
     <vxe-toolbar custom export>
@@ -101,10 +101,10 @@ export default {
                   { name: 'name3', role: 'role3', sex: '1', age: 26, rate: 1 },
                   { name: 'name4', role: 'role4', sex: '0', age: 28, rate: 4 },
                   { name: 'name5', role: 'role5', sex: '1', age: 24, rate: 3 },
-                  { name: 'name6', role: 'role6', sex: '1', age: 19, rate: 3 },
-                  { name: 'name7', role: 'role7', sex: '1', age: 18, rate: 3 },
-                  { name: 'name8', role: 'role8', sex: '2', age: 29, rate: 3 },
-                  { name: 'name9', role: 'role9', sex: '1', age: 21, rate: 3 }
+                  { name: 'name6', role: 'role6', sex: '0', age: 19, rate: 3 },
+                  { name: 'name7', role: 'role7', sex: '0', age: 18, rate: 3 },
+                  { name: 'name8', role: 'role8', sex: '0', age: 29, rate: 3 },
+                  { name: 'name9', role: 'role9', sex: '0', age: 21, rate: 3 }
                 ]
                 this.loading = false
               }, 100)
@@ -139,10 +139,10 @@ export default {
           { name: 'name3', role: 'role3', sex: '1', age: 26, rate: 1 },
           { name: 'name4', role: 'role4', sex: '0', age: 28, rate: 4 },
           { name: 'name5', role: 'role5', sex: '1', age: 24, rate: 3 },
-          { name: 'name6', role: 'role6', sex: '1', age: 19, rate: 3 },
-          { name: 'name7', role: 'role7', sex: '1', age: 18, rate: 3 },
-          { name: 'name8', role: 'role8', sex: '2', age: 29, rate: 3 },
-          { name: 'name9', role: 'role9', sex: '1', age: 21, rate: 3 }
+          { name: 'name6', role: 'role6', sex: '0', age: 19, rate: 3 },
+          { name: 'name7', role: 'role7', sex: '0', age: 18, rate: 3 },
+          { name: 'name8', role: 'role8', sex: '0', age: 29, rate: 3 },
+          { name: 'name9', role: 'role9', sex: '0', age: 21, rate: 3 }
         ]
         this.loading = false
       }, 100)

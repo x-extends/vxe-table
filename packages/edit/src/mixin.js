@@ -251,7 +251,7 @@ export default {
             this.handleFocus(params, evnt)
           })
         }
-        this.isActivated = true
+        this.focus()
       }
       return this.$nextTick()
     },
@@ -427,6 +427,7 @@ export default {
               }
               this.handleIndexChecked([[cell.parentNode.querySelector('.col--seq')]])
             }
+            this.focus()
           }
         }
         return this.$nextTick()
