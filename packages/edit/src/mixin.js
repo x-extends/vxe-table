@@ -240,7 +240,7 @@ export default {
             this.handleFocus(params, evnt)
           })
         }
-        this.isActivated = true
+        this.focus()
       }
       return this.$nextTick()
     },
@@ -392,6 +392,7 @@ export default {
             if (isMouseSelected) {
               this.addColSdCls()
             }
+            this.focus()
           }
         }
         return this.$nextTick()

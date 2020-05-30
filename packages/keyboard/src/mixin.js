@@ -182,7 +182,7 @@ export default {
           handleSelected(params, evnt)
         }
       }
-      this.isActivated = true
+      this.focus()
       this.closeFilter()
       this.closeMenu()
     },

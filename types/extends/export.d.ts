@@ -84,6 +84,8 @@ export interface ExportOptons {
    * 只对 remote=true 有效，用于自定义导出逻辑
    */
   exportMethod?(params: { $table: Table, $grid: Grid, options: ExportOptons }): Promise<any>;
+
+  [name: string]: any;
 }
 
 /**

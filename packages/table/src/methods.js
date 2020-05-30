@@ -3304,6 +3304,14 @@ const Methods = {
   emitEvent (type, params, evnt) {
     this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))
   },
+  focus () {
+    this.isActivated = false
+    return this.$nextTick()
+  },
+  blur () {
+    this.isActivated = true
+    return this.$nextTick()
+  },
 
   /*************************
    * Publish methods
