@@ -653,9 +653,13 @@ const Methods = {
           if (valueList.length && !filterOpts.remote) {
             const { filterRender, property } = column
             let { filterMethod } = column
+            const allFilterMethod = filterOpts.filterMethod
             const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
             if (!filterMethod && compConf && compConf.renderFilter) {
               filterMethod = compConf.filterMethod
+            }
+            if (allFilterMethod && !filterMethod) {
+              return allFilterMethod({ options: itemList, values: valueList, row, column })
             }
             return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
           }
@@ -664,15 +668,16 @@ const Methods = {
       })
     }
     if (column && column.order) {
+      const { remoteSort, sortMethod, property, order } = column
       const allSortMethod = sortOpts.sortMethod
-      const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : sortOpts.remote
+      const isRemote = XEUtils.isBoolean(remoteSort) ? remoteSort : sortOpts.remote
       if (!isRemote) {
-        if (allSortMethod) {
-          tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
+        if (allSortMethod && !sortMethod) {
+          tableData = allSortMethod({ data: tableData, column, property, order, $table: this }) || tableData
         } else {
           const params = { $table: this }
-          const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.formatter ? row => UtilTools.getCellLabel(row, column, params) : column.sortBy || column.property)
-          tableData = column.order === 'desc' ? rest.reverse() : rest
+          const rest = sortMethod ? tableData.sort(sortMethod) : XEUtils.sortBy(tableData, column.formatter ? row => UtilTools.getCellLabel(row, column, params) : column.sortBy || property)
+          tableData = order === 'desc' ? rest.reverse() : rest
         }
       }
     }
@@ -2778,8 +2783,9 @@ const Methods = {
     }
   },
   handleAsyncTreeExpandChilds (row) {
-    const { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds } = this
+    const { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds, checkboxOpts } = this
     const { loadMethod, children } = treeOpts
+    const { checkStrictly } = checkboxOpts
     const rest = fullAllDataRowMap.get(row)
     return new Promise(resolve => {
       treeLazyLoadeds.push(row)
@@ -2796,7 +2802,7 @@ const Methods = {
             treeExpandeds.push(row)
           }
           // 如果当前节点已选中，则展开后子节点也被选中
-          if (this.isCheckedByCheckboxRow(row)) {
+          if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
             this.setCheckboxRow(childs, true)
           }
         }

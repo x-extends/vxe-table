@@ -95,13 +95,7 @@ export default {
               filters.forEach(({ property, values }) => {
                 queryParams[property] = values.join(',')
               })
-              return XEAjax.get(`https://api.xuliangzhan.com:10443/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams).then(data => {
-                // 在 vue 数据绑定之前对原始数据进行动态定义属性（风险提示：如果数据已被 vue 监听过则不能使用该方式）
-                data.result.forEach(item => {
-                  item.checked = false // 该属性对应 checkbox.checkField 值，保证大数据量的复选框渲染非常流畅，当然如果是少量数据就没什么意义了，差别不大
-                })
-                return data
-              })
+              return XEAjax.get(`https://api.xuliangzhan.com:10443/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
             },
             delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body),
             save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body)
@@ -143,7 +137,6 @@ export default {
           modes: ['current', 'selected', 'all']
         },
         checkboxConfig: {
-          checkField: 'checked',
           labelField: 'id',
           reserve: true,
           highlight: true,
@@ -239,13 +232,7 @@ export default {
                       filters.forEach(({ property, values }) => {
                         queryParams[property] = values.join(',')
                       })
-                      return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams).then(data => {
-                        // 在 vue 数据绑定之前对原始数据进行动态定义属性（风险提示：如果数据已被 vue 监听过则不能使用该方式）
-                        data.result.forEach(item => {
-                          item.checked = false // 该属性对应 checkbox.checkField 值，保证大数据量的复选框渲染非常流畅，当然如果是少量数据就没什么意义了，差别不大
-                        })
-                        return data
-                      })
+                      return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                     },
                     delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body),
                     save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body)
@@ -287,7 +274,6 @@ export default {
                   modes: ['current', 'selected', 'all']
                 },
                 checkboxConfig: {
-                  checkField: 'checked',
                   labelField: 'id',
                   reserve: true,
                   highlight: true,

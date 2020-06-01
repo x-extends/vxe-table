@@ -871,7 +871,7 @@ const apis = [
           },
           {
             name: 'sortMethod',
-            desc: '自定义所有列的排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的结果',
+            desc: '全局排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的列表',
             version: '',
             type: 'Function',
             enum: '',
@@ -938,6 +938,15 @@ const apis = [
             desc: '所有列是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
             version: '',
             type: 'Boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'filterMethod',
+            desc: '全局筛选方法，当触发筛选时会调用该函数 Function({value, row, column}) 返回是否有效',
+            version: '',
+            type: 'Function',
             enum: '',
             defVal: '',
             list: []

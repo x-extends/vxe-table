@@ -95,7 +95,7 @@
         </template>
         <template v-slot:footer>
           <span>
-            <img src="static/other/img1.gif" style="width: 36px;">就是这么强大<img src="static/other/img2.gif" style="width: 30px;">
+            <img src="static/other/img1.gif" style="width: 36px;">门槛较高，放弃吧<img src="static/other/img2.gif" style="width: 30px;">
           </span>
         </template>
       </vxe-table-column>
@@ -260,7 +260,7 @@ export default {
             </template>
             <template v-slot:footer>
               <span>
-                <img src="static/other/img1.gif" style="width: 36px;">就是这么强大<img src="static/other/img2.gif" style="width: 30px;">
+                <img src="static/other/img1.gif" style="width: 36px;">门槛较高，放弃吧<img src="static/other/img2.gif" style="width: 30px;">
               </span>
             </template>
           </vxe-table-column>
