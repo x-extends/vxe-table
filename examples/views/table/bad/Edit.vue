@@ -32,32 +32,6 @@
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
-
-    <p class="tip">
-      <span class="red">Warning 2：将全表的可单元格设为可视类型，该方式将无法兼容 v3</span><br>
-      <span class="red">（注：由于不符合 vxe-table 单行编辑的设计原则，使用这个方式的所有兼容问题都应该自行处理）</span>
-    </p>
-
-    <vxe-table
-      border
-      resizable
-      show-overflow
-      :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', type: 'visible', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', type: 'visible', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', type: 'visible', props: {type: 'number'}}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', type: 'visible', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="date3" title="Date" :edit-render="{name: '$input', type: 'visible', props: {type: 'date'}}"></vxe-table-column>
-    </vxe-table>
-
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
-
-    <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
-    </pre>
   </div>
 </template>
 
@@ -103,33 +77,6 @@ export default {
               <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
             </template>
           </vxe-table-column>
-        </vxe-table>
-        `,
-        `
-        export default {
-          data () {
-            return {
-              tableData: []
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 2)
-          }
-        }
-        `,
-        `
-        <vxe-table
-          border
-          resizable
-          show-overflow
-          :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', type: 'visible', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', type: 'visible', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', type: 'visible', props: {type: 'number'}}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', type: 'visible', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="date3" title="Date" :edit-render="{name: '$input', type: 'visible', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
         `

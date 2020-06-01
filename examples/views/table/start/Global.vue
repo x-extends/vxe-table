@@ -32,10 +32,12 @@
           //   sortConfig: {
           //     remote: false,
           //     trigger: 'default',
-          //     orders: ['asc', 'desc', null]
+          //     orders: ['asc', 'desc', null],
+          //     sortMethod: null
           //   },
           //   filterConfig: {
-          //     remote: false
+          //     remote: false,
+          //     filterMethod: null
           //   },
           //   expandConfig: {
           //     trigger: 'default'

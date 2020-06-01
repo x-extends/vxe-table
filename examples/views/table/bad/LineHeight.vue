@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      <span class="red">Warning 1：动态行高与虚拟滚动的取舍</span><br>
-      <span class="red">（注：‘关闭高性能的虚拟滚动来换取支持动态行高’ 或者 ‘通过任意方式去动态改变行高’，使用这个方式的所有问题都应该自行处理）</span>
+      <span>Warning 1：动态行高与虚拟滚动的取舍，通过关闭高性能的虚拟滚动可以支持动态行高</span><br>
+      <span class="red">（注：如果是通过任意方式去动态改变行高，使用这个方式的所有兼容问题都应该自行处理）</span>
     </p>
 
     <vxe-table
@@ -10,8 +10,8 @@
       resizable
       height="400"
       :data="tableData"
-      :scroll-x="{gt: 500}"
-      :scroll-y="{gt: 50000}">
+      :scroll-x="{gt: -1}"
+      :scroll-y="{gt: -1}">
       <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name">
         <template v-slot="{ row, rowIndex }">

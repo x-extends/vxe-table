@@ -67,7 +67,7 @@
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
-            <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！</marquee>
+            <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">建议：深入门槛极高，从入门到放弃</marquee>
           </span>
         </div>
       </template>
@@ -98,7 +98,7 @@
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
-            <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">前方高能！！！ 底部模板！！！ 底部模板！！！ 底部模板！！！前方高能！！！ 底部模板！！！ 底部模板！！！ 底部模板！！！</marquee>
+            <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">弃放到门入从，高极槛门入深：议建</marquee>
           </span>
         </div>
       </template>
@@ -328,7 +328,7 @@ export default {
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
-                <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！前方高能！！！ 顶部模板！！！ 顶部模板！！！ 顶部模板！！！</marquee>
+                <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">建议：深入门槛极高，从入门到放弃</marquee>
               </span>
             </div>
           </template>
@@ -378,7 +378,7 @@ export default {
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
-                <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">前方高能！！！ 底部模板！！！ 底部模板！！！ 底部模板！！！前方高能！！！ 底部模板！！！ 底部模板！！！ 底部模板！！！</marquee>
+                <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">弃放到门入从，高极槛门入深：议建</marquee>
               </span>
             </div>
           </template>
