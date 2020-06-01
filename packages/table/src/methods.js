@@ -686,9 +686,13 @@ const Methods = {
           if (valueList.length && !(filterOpts.remote || remoteFilter)) {
             const { filterRender, property } = column
             let { filterMethod } = column
+            const allFilterMethod = filterOpts.filterMethod
             const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
             if (!filterMethod && compConf && compConf.renderFilter) {
               filterMethod = compConf.filterMethod
+            }
+            if (allFilterMethod && !filterMethod) {
+              return allFilterMethod({ options: itemList, values: valueList, row, column })
             }
             return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
           }
@@ -2983,8 +2987,9 @@ const Methods = {
     }
   },
   handleAsyncTreeExpandChilds (row) {
-    const { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds } = this
+    const { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds, checkboxOpts } = this
     const { loadMethod, children } = treeOpts
+    const { checkStrictly } = checkboxOpts
     const rest = fullAllDataRowMap.get(row)
     return new Promise(resolve => {
       treeLazyLoadeds.push(row)
@@ -3001,7 +3006,7 @@ const Methods = {
             treeExpandeds.push(row)
           }
           // 如果当前节点已选中，则展开后子节点也被选中
-          if (this.isCheckedByCheckboxRow(row)) {
+          if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
             this.setCheckboxRow(childs, true)
           }
         }
