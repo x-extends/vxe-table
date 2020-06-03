@@ -6054,7 +6054,7 @@ export default {
       return this.$nextTick()
     },
     blur () {
-      this.isActivated = true
+      this.isActivated = false
       return this.$nextTick()
     },
 
