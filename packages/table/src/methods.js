@@ -3528,11 +3528,11 @@ const Methods = {
     this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params), evnt)
   },
   focus () {
-    this.isActivated = false
+    this.isActivated = true
     return this.$nextTick()
   },
   blur () {
-    this.isActivated = true
+    this.isActivated = false
     return this.$nextTick()
   },
 
