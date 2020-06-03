@@ -513,7 +513,7 @@ export default {
     if (height) {
       customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - $table.getExcludeHeight())
       if (showFooter) {
-        customHeight += scrollbarHeight + 1
+        customHeight += scrollbarHeight
       }
     }
     if (maxHeight) {

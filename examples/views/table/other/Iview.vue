@@ -94,7 +94,6 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -208,14 +207,32 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+            this.loading = true
+            setTimeout(() => {
+              this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+              this.loading = false
+            }, 500)
+            this.findSexList()
+            this.findRegionList()
           },
           methods: {
+            findSexList () {
+              return XEAjax.get('/api/conf/sex/list').then(data => {
+                this.sexList = data
+                return data
+              })
+            },
+            findRegionList () {
+              return XEAjax.get('/api/conf/region/list').then(data => {
+                this.regionList = data
+                return data
+              })
+            },
             formatDate (value, format) {
               return XEUtils.toDateString(value, format)
             },
             getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-              let item = XEUtils.find(list, item => item[valueProp] === value)
+              const item = XEUtils.find(list, item => item[valueProp] === value)
               return item ? item[labelField] : null
             },
             getSelectMultipleLabel (value, list, valueProp = 'value', labelField = 'label') {
@@ -225,10 +242,10 @@ export default {
               }).join(', ')
             },
             getCascaderLabel (value, list) {
-              let values = value || []
-              let labels = []
-              let matchCascaderData = function (index, list) {
-                let val = values[index]
+              const values = value || []
+              const labels = []
+              const matchCascaderData = function (index, list) {
+                const val = values[index]
                 if (list && values.length > index) {
                   list.forEach(item => {
                     if (item.value === val) {
@@ -268,18 +285,6 @@ export default {
             }
           }
         }
-        `,
-        `
-        /*注意：如果是自行实现，需要自行处理好兼容样式，否则可能会显示错乱，例如：*/
-        /*
-        .my-xtable-iview .vxe-cell > .ivu-input-wrapper,
-        .my-xtable-iview .vxe-cell > .ivu-input-number,
-        .my-xtable-iview .vxe-cell > .ivu-select,
-        .my-xtable-iview .vxe-cell > .ivu-cascader,
-        .my-xtable-iview .vxe-cell > .ivu-date-picker-editor {
-          width: 100%;
-        }
-        */
         `
       ]
     }

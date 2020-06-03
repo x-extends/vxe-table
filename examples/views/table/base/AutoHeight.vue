@@ -43,11 +43,12 @@
         border
         height="60%"
         :data="tableData">
-        <vxe-table-column type="seq" width="60"></vxe-table-column>
-        <vxe-table-column field="name" title="Name"></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-        <vxe-table-column field="age" title="Age"></vxe-table-column>
-        <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
+        <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+        <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
+        <vxe-table-column field="date13" title="Date" width="300"></vxe-table-column>
+        <vxe-table-column field="address" title="Address" width="200" fixed="right" show-overflow></vxe-table-column>
       </vxe-table>
     </div>
 
@@ -62,9 +63,9 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="tableHeight = 200">修改200px</vxe-button>
-        <vxe-button @click="tableHeight = 400">修改400px</vxe-button>
-        <vxe-button @click="tableHeight = 600">修改600px</vxe-button>
+        <vxe-button @click="tableHeight = 300">修改300px</vxe-button>
+        <vxe-button @click="tableHeight = 500">修改500px</vxe-button>
+        <vxe-button @click="tableHeight = 800">修改800px</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -72,13 +73,16 @@
       <vxe-table
         border
         auto-resize
+        show-footer
         height="auto"
+        :footer-method="footerMethod"
         :data="tableData">
-        <vxe-table-column type="seq" width="60"></vxe-table-column>
-        <vxe-table-column field="name" title="Name"></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-        <vxe-table-column field="age" title="Age"></vxe-table-column>
-        <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
+        <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+        <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
+        <vxe-table-column field="date13" title="Date" width="300"></vxe-table-column>
+        <vxe-table-column field="address" title="Address" width="200" fixed="right" show-overflow></vxe-table-column>
       </vxe-table>
     </div>
 
@@ -92,12 +96,13 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
-      tableHeight: 200,
+      tableHeight: 300,
       tableData: [],
       demoCodes: [
         `
@@ -127,7 +132,7 @@ export default {
         }
         `,
         `
-        <div style="height: 600px">
+        <div style="height: 500px">
           <vxe-table
             border
             height="40%"
@@ -142,11 +147,12 @@ export default {
             border
             height="60%"
             :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="Name"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-            <vxe-table-column field="age" title="Age"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+            <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
+            <vxe-table-column field="date13" title="Date" width="300"></vxe-table-column>
+            <vxe-table-column field="address" title="Address" width="200" fixed="right" show-overflow></vxe-table-column>
           </vxe-table>
         </div>
         `,
@@ -165,9 +171,9 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="tableHeight = 200">修改200px</vxe-button>
-            <vxe-button @click="tableHeight = 400">修改400px</vxe-button>
-            <vxe-button @click="tableHeight = 600">修改600px</vxe-button>
+            <vxe-button @click="tableHeight = 300">修改300px</vxe-button>
+            <vxe-button @click="tableHeight = 500">修改500px</vxe-button>
+            <vxe-button @click="tableHeight = 800">修改800px</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -175,13 +181,16 @@ export default {
           <vxe-table
             border
             auto-resize
+            show-footer
             height="auto"
+            :footer-method="footerMethod"
             :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="Name"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-            <vxe-table-column field="age" title="Age"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+            <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
+            <vxe-table-column field="date13" title="Date" width="300"></vxe-table-column>
+            <vxe-table-column field="address" title="Address" width="200" fixed="right" show-overflow></vxe-table-column>
           </vxe-table>
         </div>
         `,
@@ -189,13 +198,39 @@ export default {
         export default {
           data () {
             return {
-              tableHeight: 200,
+              tableHeight: 300,
               tableData: []
             }
           },
           created () {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
-          }
+          },
+          methods: {
+            footerMethod ({ columns, data }) {
+              const means = []
+              const sums = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  means.push('平均')
+                  sums.push('和值')
+                } else {
+                  let meanCell = null
+                  let sumCell = null
+                  switch (column.property) {
+                    case 'age':
+                    case 'rate':
+                      meanCell = parseInt(XEUtils.mean(data, column.property))
+                      sumCell = XEUtils.sum(data, column.property)
+                      break
+                  }
+                  means.push(meanCell)
+                  sums.push(sumCell)
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [means, sums]
+            }
+  }
         }
         `
       ]
@@ -208,6 +243,32 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    footerMethod ({ columns, data }) {
+      const means = []
+      const sums = []
+      columns.forEach((column, columnIndex) => {
+        if (columnIndex === 0) {
+          means.push('平均')
+          sums.push('和值')
+        } else {
+          let meanCell = null
+          let sumCell = null
+          switch (column.property) {
+            case 'age':
+            case 'rate':
+              meanCell = parseInt(XEUtils.mean(data, column.property))
+              sumCell = XEUtils.sum(data, column.property)
+              break
+          }
+          means.push(meanCell)
+          sums.push(sumCell)
+        }
+      })
+      // 返回一个二维数组的表尾合计
+      return [means, sums]
+    }
   }
 }
 </script>
