@@ -112,6 +112,8 @@ export interface ImportOptons {
    * 只对 remote=true 有效，用于自定义导入逻辑
    */
   importMethod?(params: { $table: Table, $grid: Grid, file: File, options: ExportOptons }): Promise<any>;
+
+  [name: string]: any;
 }
 
 /**
@@ -162,6 +164,8 @@ export interface PrintOptons {
    * 表尾过滤方法
    */
   footerFilterMethod?(cells: any[], $rowIndex: number, footerData: any[][]): boolean;
+
+  [name: string]: any;
 }
 
 export interface ReadFileOptions {
