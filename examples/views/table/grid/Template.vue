@@ -199,7 +199,7 @@ export default {
           field: 'num1',
           title: 'Money',
           showHeaderOverflow: true,
-          editRender: { type: 'default', autofocus: '.my-input' },
+          editRender: { autofocus: '.my-input' },
           slots: {
             // 使用 JSX 渲染
             default: ({ row }) => {
@@ -466,7 +466,7 @@ export default {
                   field: 'num1',
                   title: 'Money',
                   showHeaderOverflow: true,
-                  editRender: { type: 'default', autofocus: '.my-input' },
+                  editRender: { autofocus: '.my-input' },
                   slots: {
                     // 使用 JSX 渲染
                     default: ({ row }) => {

@@ -44,7 +44,7 @@
           <template v-slot="{ row }">￥{{ row.num }}</template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{type: 'default'}">
+      <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
         <template v-slot:edit="{ row, rowIndex }">
           <template v-if="rowIndex === 0">
             <vxe-input type="date" v-model="row.attr1" placeholder="请选择日期" transfer></vxe-input>
@@ -156,7 +156,7 @@ export default {
               <template v-slot="{ row }">￥{{ row.num }}</template>
             </vxe-table-column>
           </vxe-table-column>
-          <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{type: 'default'}">
+          <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
             <template v-slot:edit="{ row, rowIndex }">
               <template v-if="rowIndex === 0">
                 <vxe-input type="date" v-model="row.attr1" placeholder="请选择日期" transfer></vxe-input>

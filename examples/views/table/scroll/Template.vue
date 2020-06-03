@@ -60,7 +60,7 @@ export default {
           showHeaderOverflow: true,
           filters: [{ data: '' }],
           filterMethod: this.filterSexMethod,
-          editRender: { type: 'default' },
+          editRender: {},
           slots: {
             default: ({ row }) => {
               return [
@@ -188,7 +188,7 @@ export default {
                   showHeaderOverflow: true,
                   filters: [{ data: '' }],
                   filterMethod: this.filterSexMethod,
-                  editRender: { type: 'default' },
+                  editRender: {},
                   slots: {
                     default: ({ row, column }) => {
                       return [
