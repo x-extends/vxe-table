@@ -72,13 +72,13 @@
         </template>
         <template v-slot="{ row }">{{ formatDate(row.date7, 'YYYY/MM/DD hh:mm:ss') }}</template>
       </vxe-table-column>
-      <vxe-table-column field="rate" title="ARate" width="200" :edit-render="{type: 'visible'}">
-        <template v-slot:edit="{ row }">
+      <vxe-table-column field="rate" title="ARate" width="200">
+        <template v-slot="{ row }">
           <a-rate v-model="row.rate"></a-rate>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{type: 'visible'}">
-        <template v-slot:edit="{ row }">
+      <vxe-table-column field="flag" title="ElSwitch" width="100">
+        <template v-slot="{ row }">
           <a-switch v-model="row.flag"></a-switch>
         </template>
       </vxe-table-column>
@@ -89,7 +89,6 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -179,13 +178,13 @@ export default {
             </template>
             <template v-slot="{ row }">{{ formatDate(row.date7, 'YYYY/MM/DD hh:mm:ss') }}</template>
           </vxe-table-column>
-          <vxe-table-column field="rate" title="ARate" width="200" :edit-render="{type: 'visible'}">
-            <template v-slot:edit="{ row }">
+          <vxe-table-column field="rate" title="ARate" width="200">
+            <template v-slot="{ row }">
               <a-rate v-model="row.rate"></a-rate>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{type: 'visible'}">
-            <template v-slot:edit="{ row }">
+          <vxe-table-column field="flag" title="ElSwitch" width="100">
+            <template v-slot="{ row }">
               <a-switch v-model="row.flag"></a-switch>
             </template>
           </vxe-table-column>
@@ -232,7 +231,7 @@ export default {
               return value ? value.format(format) : null
             },
             getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-              let item = XEUtils.find(list, item => item[valueProp] === value)
+              const item = XEUtils.find(list, item => item[valueProp] === value)
               return item ? item[labelField] : null
             },
             getSelectMultipleLabel (value, list, valueProp = 'value', labelField = 'label') {
@@ -242,10 +241,10 @@ export default {
               }).join(', ')
             },
             getCascaderLabel (value, list) {
-              let values = value || []
-              let labels = []
-              let matchCascaderData = function (index, list) {
-                let val = values[index]
+              const values = value || []
+              const labels = []
+              const matchCascaderData = function (index, list) {
+                const val = values[index]
                 if (list && values.length > index) {
                   list.forEach(item => {
                     if (item.value === val) {
@@ -297,18 +296,6 @@ export default {
             }
           }
         }
-        `,
-        `
-        /*注意：如果是自行实现，需要自行处理好兼容样式，否则可能会显示错乱，例如：*/
-        /*
-        .my-xtable-antd .vxe-cell > .ant-input,
-        .my-xtable-antd .vxe-cell > .ant-input-number,
-        .my-xtable-antd .vxe-cell > .ant-select,
-        .my-xtable-antd .vxe-cell > .ant-cascader-picker,
-        .my-xtable-antd .vxe-cell > .ant-calendar-picker {
-          width: 100%;
-        }
-        */
         `
       ]
     }
