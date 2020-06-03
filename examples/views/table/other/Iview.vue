@@ -25,17 +25,17 @@
           <Icon type="md-help-circle" />
         </template>
       </vxe-table-column>
-      <vxe-table-column field="name" title="Input"  min-width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="name" title="Input"  min-width="140" :edit-render="{}">
         <template v-slot:edit="scope">
           <Input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"/>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="role" title="Input"  min-width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="role" title="Input"  min-width="140" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <AutoComplete v-model="row.role" :data="restaurants" :filterMethod="roleFilterMethod" transfer></AutoComplete>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="age" title="InputNumber" width="150" :edit-render="{type: 'default'}">
+      <vxe-table-column field="age" title="InputNumber" width="150" :edit-render="{}">
         <template v-slot:header="{ column }">
           <span>{{ column.title }}</span>
           <Icon type="md-alert" />
@@ -44,7 +44,7 @@
           <InputNumber v-model="row.age" :max="35" :min="18"></InputNumber>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="sex" title="Select" width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="sex" title="Select" width="140" :edit-render="{}">
         <template v-slot:edit="scope">
           <Select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)" transfer>
             <Option v-for="item in sexList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -52,7 +52,7 @@
         </template>
         <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
       </vxe-table-column>
-      <vxe-table-column field="sex1" title="Select" width="180" :edit-render="{type: 'default'}">
+      <vxe-table-column field="sex1" title="Select" width="180" :edit-render="{}">
         <template v-slot:edit="scope">
           <Select v-model="scope.row.sex1" @change="$refs.xTable.updateStatus(scope)" multiple transfer>
             <Option v-for="item in sexList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -60,19 +60,19 @@
         </template>
         <template v-slot="{ row }">{{ getSelectMultipleLabel(row.sex1, sexList) }}</template>
       </vxe-table-column>
-      <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <Cascader v-model="row.region" :data="regionList" transfer></Cascader>
         </template>
         <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
       </vxe-table-column>
-      <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <DatePicker v-model="row.date" type="date" format="yyyy/MM/dd" transfer></DatePicker>
         </template>
         <template v-slot="{ row }">{{ formatDate(row.date, 'yyyy/MM/dd') }}</template>
       </vxe-table-column>
-      <vxe-table-column field="date2" title="TimePicker" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date2" title="TimePicker" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <TimePicker v-model="row.date2" type="time" transfer></TimePicker>
         </template>
@@ -132,17 +132,17 @@ export default {
               <Icon type="md-help-circle" />
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name" title="Input"  min-width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="name" title="Input"  min-width="140" :edit-render="{}">
             <template v-slot:edit="scope">
               <Input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"/>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="role" title="Input"  min-width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="role" title="Input"  min-width="140" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <AutoComplete v-model="row.role" :data="restaurants" :filterMethod="roleFilterMethod" transfer></AutoComplete>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="age" title="InputNumber" width="150" :edit-render="{type: 'default'}">
+          <vxe-table-column field="age" title="InputNumber" width="150" :edit-render="{}">
             <template v-slot:header="{ column }">
               <span>{{ column.title }}</span>
               <Icon type="md-alert" />
@@ -151,7 +151,7 @@ export default {
               <InputNumber v-model="row.age" :max="35" :min="18"></InputNumber>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="sex" title="Select" width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="sex" title="Select" width="140" :edit-render="{}">
             <template v-slot:edit="scope">
               <Select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)" transfer>
                 <Option v-for="item in sexList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -159,7 +159,7 @@ export default {
             </template>
             <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
           </vxe-table-column>
-          <vxe-table-column field="sex1" title="Select" width="180" :edit-render="{type: 'default'}">
+          <vxe-table-column field="sex1" title="Select" width="180" :edit-render="{}">
             <template v-slot:edit="scope">
               <Select v-model="scope.row.sex1" @change="$refs.xTable.updateStatus(scope)" multiple transfer>
                 <Option v-for="item in sexList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -167,19 +167,19 @@ export default {
             </template>
             <template v-slot="{ row }">{{ getSelectMultipleLabel(row.sex1, sexList) }}</template>
           </vxe-table-column>
-          <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <Cascader v-model="row.region" :data="regionList" transfer></Cascader>
             </template>
             <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
           </vxe-table-column>
-          <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <DatePicker v-model="row.date" type="date" format="yyyy/MM/dd" transfer></DatePicker>
             </template>
             <template v-slot="{ row }">{{ formatDate(row.date, 'yyyy/MM/dd') }}</template>
           </vxe-table-column>
-          <vxe-table-column field="date2" title="TimePicker" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date2" title="TimePicker" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <TimePicker v-model="row.date2" type="time" transfer></TimePicker>
             </template>
