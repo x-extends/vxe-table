@@ -25,17 +25,17 @@
           <i class="el-icon-question"></i>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{}">
         <template v-slot:edit="scope">
           <el-input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></el-input>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{type: 'default'}">
+      <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <el-autocomplete v-model="row.role" :fetch-suggestions="roleFetchSuggestions"></el-autocomplete>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="age" title="ElInputNumber"  width="160" :edit-render="{type: 'default'}">
+      <vxe-table-column field="age" title="ElInputNumber"  width="160" :edit-render="{}">
         <template v-slot:header="{ column }">
           <span>{{ column.title }}</span>
           <i class="el-icon-warning"></i>
@@ -44,7 +44,7 @@
           <el-input-number v-model="row.age" :max="35" :min="18"></el-input-number>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{}">
         <template v-slot:edit="scope">
           <el-select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
             <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -52,7 +52,7 @@
         </template>
         <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
       </vxe-table-column>
-      <vxe-table-column field="sex1" title="ElSelect" width="180" :edit-render="{type: 'default'}">
+      <vxe-table-column field="sex1" title="ElSelect" width="180" :edit-render="{}">
         <template v-slot:edit="scope">
           <el-select v-model="scope.row.sex1" multiple>
             <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -60,25 +60,25 @@
         </template>
         <template v-slot="{ row }">{{ getSelectMultipleLabel(row.sex1, sexList) }}</template>
       </vxe-table-column>
-      <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <el-cascader v-model="row.region" :options="regionList"></el-cascader>
         </template>
         <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
       </vxe-table-column>
-      <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <el-date-picker v-model="row.date" type="date" format="yyyy/MM/dd"></el-date-picker>
         </template>
         <template v-slot="{ row }">{{ formatDate(row.date, 'yyyy/MM/dd') }}</template>
       </vxe-table-column>
-      <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <el-date-picker v-model="row.date1" type="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
         </template>
         <template v-slot="{ row }">{{ formatDate(row.date1, 'yyyy-MM-dd HH:mm:ss') }}</template>
       </vxe-table-column>
-      <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}">
         </el-time-select>
@@ -142,17 +142,17 @@ export default {
               <i class="el-icon-question"></i>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{}">
             <template v-slot:edit="scope">
               <el-input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></el-input>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{type: 'default'}">
+          <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <el-autocomplete v-model="row.role" :fetch-suggestions="roleFetchSuggestions"></el-autocomplete>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="age" title="ElInputNumber"  width="160" :edit-render="{type: 'default'}">
+          <vxe-table-column field="age" title="ElInputNumber"  width="160" :edit-render="{}">
             <template v-slot:header="{ column }">
               <span>{{ column.title }}</span>
               <i class="el-icon-warning"></i>
@@ -161,7 +161,7 @@ export default {
               <el-input-number v-model="row.age" :max="35" :min="18"></el-input-number>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{}">
             <template v-slot:edit="scope">
               <el-select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
                 <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -169,7 +169,7 @@ export default {
             </template>
             <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
           </vxe-table-column>
-          <vxe-table-column field="sex1" title="ElSelect" width="180" :edit-render="{type: 'default'}">
+          <vxe-table-column field="sex1" title="ElSelect" width="180" :edit-render="{}">
             <template v-slot:edit="scope">
               <el-select v-model="scope.row.sex1" multiple>
                 <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -177,25 +177,25 @@ export default {
             </template>
             <template v-slot="{ row }">{{ getSelectMultipleLabel(row.sex1, sexList) }}</template>
           </vxe-table-column>
-          <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <el-cascader v-model="row.region" :options="regionList"></el-cascader>
             </template>
             <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
           </vxe-table-column>
-          <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <el-date-picker v-model="row.date" type="date" format="yyyy/MM/dd"></el-date-picker>
             </template>
             <template v-slot="{ row }">{{ formatDate(row.date, 'yyyy/MM/dd') }}</template>
           </vxe-table-column>
-          <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <el-date-picker v-model="row.date1" type="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </template>
             <template v-slot="{ row }">{{ formatDate(row.date1, 'yyyy-MM-dd HH:mm:ss') }}</template>
           </vxe-table-column>
-          <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}">
             </el-time-select>
