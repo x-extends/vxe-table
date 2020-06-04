@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Import 完整引入</h2>
+    <h2>{{ $t('app.aside.nav.use') }}</h2>
     <p class="tip">
       <a class="link" href="https://github.com/xuliangzhan/vxe-table-demo" target="_blank">安装指南</a><br>
       推荐使用 npm 的方式安装，它能更好地和 <a class="link" href="https://webpack.js.org/">webpack</a> 打包工具配合使用。<br>

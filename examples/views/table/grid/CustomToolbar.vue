@@ -9,19 +9,18 @@
       ref="xGrid"
       height="530"
       id="toolbar_demo_2"
+      :loading="loading"
       :custom-config="tableCustom"
-      :pager-config="tablePage"
-      :proxy-config="tableProxy"
+      :data="tableData"
       :columns="tableColumn"
       :toolbar="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <template v-slot:toolbar_buttons>
         <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
-        <vxe-button status="primary">搜索</vxe-button>
-        <vxe-button @click="$refs.xGrid.commitProxy('reload')">刷新</vxe-button>
-        <vxe-button @click="$refs.xGrid.commitProxy('insert_actived')">新增</vxe-button>
-        <vxe-button @click="$refs.xGrid.commitProxy('mark_cancel')">标记/取消</vxe-button>
-        <vxe-button @click="$refs.xGrid.commitProxy('save')">保存</vxe-button>
+        <vxe-button status="primary" @click="loadData">搜索</vxe-button>
+        <vxe-button @click="loadData">刷新</vxe-button>
+        <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="saveEvent">保存</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导出.csv</vxe-button>
       </template>
     </vxe-grid>
@@ -36,35 +35,18 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
       searchName: '',
-      tablePage: {
-        pageSize: 15
-      },
-      tableProxy: {
-        props: {
-          result: 'result',
-          total: 'page.total'
-        },
-        ajax: {
-          // page 对象： { pageSize, currentPage }
-          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
-          // body 对象： { removeRecords }
-          delete: ({ body }) => XEAjax.post('/api/user/save', body),
-          // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-          save: ({ body }) => XEAjax.post('/api/user/save', body)
-        }
-      },
+      loading: false,
+      tableData: [],
       tableCustom: {
         storage: true
       },
       tableToolbar: {
-        refresh: true,
         custom: true,
         slots: {
           buttons: 'toolbar_buttons'
@@ -97,19 +79,18 @@ export default {
           ref="xGrid"
           height="530"
           id="toolbar_demo_2"
+          :loading="loading"
           :custom-config="tableCustom"
-          :pager-config="tablePage"
-          :proxy-config="tableProxy"
+          :data="tableData"
           :columns="tableColumn"
           :toolbar="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <template v-slot:toolbar_buttons>
             <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
-            <vxe-button status="primary">搜索</vxe-button>
-            <vxe-button @click="$refs.xGrid.commitProxy('reload')">刷新</vxe-button>
-            <vxe-button @click="$refs.xGrid.commitProxy('insert_actived')">新增</vxe-button>
-            <vxe-button @click="$refs.xGrid.commitProxy('mark_cancel')">标记/取消</vxe-button>
-            <vxe-button @click="$refs.xGrid.commitProxy('save')">保存</vxe-button>
+            <vxe-button status="primary" @click="loadData">搜索</vxe-button>
+            <vxe-button @click="loadData">刷新</vxe-button>
+            <vxe-button @click="insertEvent">新增</vxe-button>
+            <vxe-button @click="saveEvent">保存</vxe-button>
             <vxe-button @click="$refs.xGrid.exportData()">导出.csv</vxe-button>
           </template>
         </vxe-grid>
@@ -119,29 +100,12 @@ export default {
           data () {
             return {
               searchName: '',
-              tablePage: {
-                pageSize: 15
-              },
-              tableProxy: {
-                // 配置响应的数据属性
-                props: {
-                  result: 'result',
-                  total: 'page.total'
-                },
-                ajax: {
-                  // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
-                  // body 对象： { removeRecords }
-                  delete: ({ body }) => XEAjax.post('/api/user/save', body),
-                  // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-                  save: ({ body }) => XEAjax.post('/api/user/save', body)
-                }
-              },
+              loading: false,
+              tableData: [],
               tableCustom: {
                 storage: true
               },
               tableToolbar: {
-                refresh: true,
                 custom: true,
                 slots: {
                   buttons: 'toolbar_buttons'
@@ -166,16 +130,64 @@ export default {
                 { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
               ]
             }
+          },
+          created () {
+            this.loadData()
+          },
+          methods: {
+            loadData () {
+              this.loading = true
+              setTimeout(() => {
+                this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
+                this.loading = false
+              }, 100)
+            },
+            insertEvent () {
+              this.$refs.xGrid.insert({
+                name: 'xxx'
+              })
+            },
+            saveEvent () {
+              setTimeout(() => {
+                const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+                this.$XModal.message({ message: \`新增 \${insertRecords.length} 条，删除 \${removeRecords.length} 条，更新 \${updateRecords.length} 条\`, status: 'success' })
+                this.loadData()
+              }, 100)
+            }
           }
         }
         `
       ]
     }
   },
+  created () {
+    this.loadData()
+  },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    loadData () {
+      this.loading = true
+      setTimeout(() => {
+        this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
+        this.loading = false
+      }, 100)
+    },
+    insertEvent () {
+      this.$refs.xGrid.insert({
+        name: 'xxx'
+      })
+    },
+    saveEvent () {
+      setTimeout(() => {
+        const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+        this.$XModal.message({ message: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
+        this.loadData()
+      }, 100)
+    }
   }
 }
 </script>

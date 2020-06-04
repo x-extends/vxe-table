@@ -4120,7 +4120,7 @@ const apis = [
         name: 'focus()',
         desc: '使表格获取焦点',
         version: '1.15.30',
-        type: 'Promise<>',
+        type: 'Promise',
         enum: '',
         defVal: '',
         list: []
@@ -4129,7 +4129,7 @@ const apis = [
         name: 'blur()',
         desc: '使表格失去焦点',
         version: '1.15.30',
-        type: 'Promise<>',
+        type: 'Promise',
         enum: '',
         defVal: '',
         list: []

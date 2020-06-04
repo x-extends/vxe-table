@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Internationalization 国际化</h2>
+    <h2>{{ $t('app.aside.nav.i18n') }}</h2>
     <p class="tip">目前支持的 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/packages/locale/lang" target="_blank">国际化列表</a>，若希望使用指定语言，则需要进行多语言设置。以中/英文为例<br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-i18n" target="_blank">项目示例</a></p>
     <pre>
       <code class="shell">
