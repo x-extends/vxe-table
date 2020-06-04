@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">自定义分页按钮图标，例如：<a class="link" href="https://github.com/FortAwesome/Font-Awesome" target="_blank">font-awesome</a></p>
+    <p class="tip">自定义分页按钮图标，例如第三方图标库：<a class="link" href="https://github.com/FortAwesome/Font-Awesome" target="_blank">font-awesome</a></p>
 
     <vxe-table
       border

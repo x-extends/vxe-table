@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Default Global Props</h2>
+    <h2>{{ $t('app.aside.nav.global') }}</h2>
     <pre>
       <code class="javascript">
         import VXETable from 'vxe-table'

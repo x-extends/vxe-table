@@ -67,7 +67,7 @@
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
-            <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">建议：深入门槛极高，从入门到放弃</marquee>
+            <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">建议：深入门槛极高，还是放弃吧</marquee>
           </span>
         </div>
       </template>
@@ -98,7 +98,7 @@
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
-            <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">弃放到门入从，高极槛门入深：议建</marquee>
+            <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">深入门槛极高，还是放弃吧</marquee>
           </span>
         </div>
       </template>
@@ -328,7 +328,7 @@ export default {
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
-                <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">建议：深入门槛极高，从入门到放弃</marquee>
+                <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">建议：深入门槛极高，还是放弃吧</marquee>
               </span>
             </div>
           </template>
@@ -378,7 +378,7 @@ export default {
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
-                <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">弃放到门入从，高极槛门入深：议建</marquee>
+                <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">深入门槛极高，还是放弃吧</marquee>
               </span>
             </div>
           </template>
@@ -583,6 +583,7 @@ export default {
             },
             changeAllEvent () {
               this.$refs.xGrid.setAllCheckboxRow(this.isAllChecked)
+              this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
             },
             footerMethod ({ columns, data }) {
               return [
@@ -691,6 +692,7 @@ export default {
     },
     changeAllEvent () {
       this.$refs.xGrid.setAllCheckboxRow(this.isAllChecked)
+      this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
     },
     footerMethod ({ columns, data }) {
       return [

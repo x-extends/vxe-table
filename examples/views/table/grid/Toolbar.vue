@@ -8,12 +8,12 @@
       export-config
       import-config
       keep-source
+      ref="xGrid"
       id="toolbar_demo_1"
       height="530"
-      :pager-config="tablePage"
-      :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="tableToolbar"
+      :data="tableData"
       :custom-config="{storage: true}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
@@ -28,49 +28,17 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
-      tablePage: {
-        pageSize: 15
-      },
-      tableProxy: {
-        props: {
-          result: 'result',
-          total: 'page.total'
-        },
-        ajax: {
-          // page 对象： { pageSize, currentPage }
-          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
-          // body 对象： { removeRecords }
-          delete: ({ body }) => XEAjax.post('/api/user/save', body),
-          // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-          save: ({ body }) => XEAjax.post('/api/user/save', body)
-        }
-      },
+      tableData: [],
       tableToolbar: {
         buttons: [
-          { code: 'insert_actived', name: '新增' },
-          {
-            code: 'mark_cancel',
-            name: 'app.body.button.markCancel',
-            dropdowns: [
-              { code: 'delete', name: 'app.body.button.deleteSelectedRecords', type: 'text' },
-              { code: 'remove', name: '移除数据', type: 'text' }
-            ]
-          },
-          { code: 'save', name: 'app.body.button.save', status: 'success' },
-          {
-            name: '数据导出',
-            dropdowns: [
-              { code: 'open_import', name: '高级导入', type: 'text' },
-              { code: 'open_export', name: '高级导出', type: 'text' }
-            ]
-          },
-          { code: 'exportData111', name: '自定义按钮', type: 'text', status: 'warning' },
+          { code: 'myInsert', name: '新增' },
+          { code: 'mySave', name: 'app.body.button.save', status: 'success' },
+          { code: 'myExport', name: '导出数据', type: 'text', status: 'warning' },
           {
             name: '禁用按钮',
             disabled: false,
@@ -109,12 +77,12 @@ export default {
           export-config
           import-config
           keep-source
+          ref="xGrid"
           id="toolbar_demo_1"
           height="530"
-          :pager-config="tablePage"
-          :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="tableToolbar"
+          :data="tableData"
           :custom-config="{storage: true}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
@@ -123,43 +91,12 @@ export default {
         export default {
           data () {
             return {
-              tablePage: {
-                pageSize: 15
-              },
-              tableProxy: {
-                props: {
-                  result: 'result',
-                  total: 'page.total'
-                },
-                ajax: {
-                  // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
-                  // body 对象： { removeRecords }
-                  delete: ({ body }) => XEAjax.post('/api/user/save', body),
-                  // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-                  save: ({ body }) => XEAjax.post('/api/user/save', body)
-                }
-              },
+              tableData: [],
               tableToolbar: {
                 buttons: [
-                  { code: 'insert_actived', name: '新增' },
-                  {
-                    code: 'mark_cancel',
-                    name: 'app.body.button.markCancel',
-                    dropdowns: [
-                      { code: 'delete', name: 'app.body.button.deleteSelectedRecords', type: 'text' },
-                      { code: 'remove', name: '移除数据', type: 'text' }
-                    ]
-                  },
-                  { code: 'save', name: 'app.body.button.save', status: 'success' },
-                  {
-                    name: '数据导出',
-                    dropdowns: [
-                      { code: 'open_import', name: '高级导入', type: 'text' },
-                      { code: 'open_export', name: '高级导出', type: 'text' }
-                    ]
-                  },
-                  { code: 'exportData111', name: '自定义按钮', type: 'text', status: 'warning' },
+                  { code: 'myInsert', name: '新增' },
+                  { code: 'mySave', name: 'app.body.button.save', status: 'success' },
+                  { code: 'myExport', name: '导出数据', type: 'text', status: 'warning' },
                   {
                     name: '禁用按钮',
                     disabled: false,
@@ -192,11 +129,31 @@ export default {
               ]
             }
           },
+          created () {
+            this.loadData()
+          },
           methods: {
-            toolbarButtonClickEvent ({ code }, event) {
+            loadData () {
+              this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
+            },
+            toolbarButtonClickEvent ({ code }) {
               switch (code) {
-                case 'myBtn':
-                  this.$XModal.alert(code)
+                case 'myInsert':
+                  this.$refs.xGrid.insert({
+                    name: 'xxx'
+                  })
+                  break
+                case 'mySave':
+                  setTimeout(() => {
+                    const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+                    this.$XModal.message({ message: \`新增 \${insertRecords.length} 条，删除 \${removeRecords.length} 条，更新 \${updateRecords.length} 条\`, status: 'success' })
+                    this.loadData()
+                  }, 100)
+                  break
+                case 'myExport':
+                  this.$refs.xGrid.exportData({
+                    type: 'csv'
+                  })
                   break
               }
             }
@@ -206,16 +163,36 @@ export default {
       ]
     }
   },
+  created () {
+    this.loadData()
+  },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
   },
   methods: {
+    loadData () {
+      this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
+    },
     toolbarButtonClickEvent ({ code }) {
       switch (code) {
-        case 'myBtn':
-          this.$XModal.alert(code)
+        case 'myInsert':
+          this.$refs.xGrid.insert({
+            name: 'xxx'
+          })
+          break
+        case 'mySave':
+          setTimeout(() => {
+            const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+            this.$XModal.message({ message: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
+            this.loadData()
+          }, 100)
+          break
+        case 'myExport':
+          this.$refs.xGrid.exportData({
+            type: 'csv'
+          })
           break
       }
     }

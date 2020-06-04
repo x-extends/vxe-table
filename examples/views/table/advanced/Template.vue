@@ -116,7 +116,7 @@
       <template v-slot:left>
         <span class="page-left">
           <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
-          <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+          <span class="select-count">深入门槛极高，还是放弃吧 {{ selectRecords.length }} 条</span>
           <vxe-button>修改</vxe-button>
           <vxe-button>管理</vxe-button>
           <vxe-button>删除</vxe-button>
@@ -281,7 +281,7 @@ export default {
           <template v-slot:left>
             <span class="page-left">
               <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
-              <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
+              <span class="select-count">深入门槛极高，还是放弃吧 {{ selectRecords.length }} 条</span>
               <vxe-button>修改</vxe-button>
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
@@ -352,6 +352,7 @@ export default {
             },
             changeAllEvent () {
               this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
+              this.selectRecords = this.$refs.xTable.getCheckboxRecords()
             },
             footerMethod ({ columns, data }) {
               return [
@@ -437,6 +438,7 @@ export default {
     },
     changeAllEvent () {
       this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
+      this.selectRecords = this.$refs.xTable.getCheckboxRecords()
     },
     footerMethod ({ columns, data }) {
       return [

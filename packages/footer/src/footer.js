@@ -117,7 +117,6 @@ export default {
             let hasEllipsis = showTitle || showTooltip || showEllipsis
             const attrs = { 'data-colid': column.id }
             const tfOns = {}
-            // 确保任何情况下 columnIndex 都精准指向真实列索引
             const columnIndex = $xetable.getColumnIndex(column)
             const _columnIndex = $xetable._getColumnIndex(column)
             const itemIndex = _columnIndex

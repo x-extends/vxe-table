@@ -535,9 +535,9 @@ export default {
       if (type === 'integer') {
         return XEUtils.toInteger(step) || 1
       } else if (type === 'float') {
-        return XEUtils.toNumber(step || ('0.' + '1'.padStart(this.digits, '0')))
+        return XEUtils.toNumber(step) || (1 / Math.pow(10, XEUtils.toInteger(this.digits) || 1))
       }
-      return 1
+      return XEUtils.toNumber(step) || 1
     },
     isClearable () {
       return this.clearable && (this.isPassword || this.isNumber || this.isDatePicker || this.type === 'text' || this.type === 'search')

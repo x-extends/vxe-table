@@ -91,7 +91,7 @@ function renderBorder (h, type) {
 /**
  * 渲染列
  */
-function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, columns, items) {
+function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, $columnIndex, columns, items) {
   const {
     _e,
     $listeners: tableListeners,
@@ -125,6 +125,8 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
   const { enabled } = tooltipOpts
+  const columnIndex = $xetable.getColumnIndex(column)
+  const _columnIndex = $xetable._getColumnIndex(column)
   const isMouseSelected = mouseConfig && mouseOpts.selected
   // 在 v3.0 中废弃 mouse-config.checked
   const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
@@ -143,7 +145,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const bindMouseenter = tableListeners['cell-mouseenter']
   const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  const params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items }
+  const params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -292,8 +294,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     rowExpandeds,
     radioOpts,
     checkboxOpts,
-    expandColumn,
-    getColumnIndex
+    expandColumn
   } = $xetable
   const rows = []
   tableData.forEach((row, $rowIndex) => {
@@ -321,6 +322,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
       }
     }
     const rowid = UtilTools.getRowid($xetable, row)
+    const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: cellType, rowLevel, row, rowIndex, $rowIndex }
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
@@ -328,21 +330,20 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
           'is--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $xetable.selectRow === row,
           'row--cheched': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
-        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName({ $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: cellType, rowLevel, row, rowIndex, $rowIndex }) : rowClassName : ''],
+        }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid
         },
-        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: cellType, rowLevel, row, rowIndex, $rowIndex }) : rowStyle) : null,
+        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
         key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
-        const columnIndex = getColumnIndex(column)
-        return renderColumn(h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, tableColumn, tableData)
+        return renderColumn(h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, $columnIndex, tableColumn, tableData)
       }))
     )
     // 如果行被展开了
     if (expandColumn && rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
-      const expandColumnIndex = getColumnIndex(expandColumn)
+      const expandColumnIndex = $xetable.getColumnIndex(expandColumn)
       let cellStyle
       if (treeConfig) {
         cellStyle = {
@@ -351,11 +352,12 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
       }
       const { showOverflow } = expandColumn
       const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
+      const expandParams = { $table: $xetable, $seq, seq, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, type: cellType, level: rowLevel, row, rowIndex, $rowIndex }
       rows.push(
         h('tr', {
           class: 'vxe-body--expanded-row',
           key: `expand_${rowid}`,
-          style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle({ $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: cellType, rowLevel, row, rowIndex, $rowIndex, isExpanded: true }) : rowStyle) : null,
+          style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(expandParams) : rowStyle) : null,
           on: trOn
         }, [
           h('td', {
@@ -371,7 +373,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
               class: 'vxe-body--expanded-cell',
               style: cellStyle
             }, [
-              expandColumn.renderData(h, { $table: $xetable, seq, rowid, row, rowIndex, column: expandColumn, columnIndex: expandColumnIndex, fixed: fixedType, type: cellType, level: rowLevel })
+              expandColumn.renderData(h, expandParams)
             ])
           ])
         ])
