@@ -365,7 +365,7 @@ export default {
     },
     loadColumn (columns) {
       const $scopedSlots = this.$scopedSlots
-      columns.forEach(column => {
+      XEUtils.eachTree(columns, column => {
         if (column.slots) {
           XEUtils.each(column.slots, (func, name, slots) => {
             if (!XEUtils.isFunction(func)) {

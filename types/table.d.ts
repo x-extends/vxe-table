@@ -838,6 +838,14 @@ export declare class Table extends VXETableModule {
    * @param options 参数
    */
   print(options: PrintOptons): Promise<any>;
+  /**
+   * 使表格获取焦点
+   */
+  focus(): Promise<any>;
+  /**
+   * 使表格失去焦点
+   */
+  blur(): Promise<any>;
 }
 
 /**

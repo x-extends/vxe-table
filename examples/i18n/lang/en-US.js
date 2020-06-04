@@ -4,10 +4,10 @@ module.exports = {
       nav: {
         start: 'Development',
         install: 'Install',
-        global: 'Global props',
         use: 'Quick start',
-        icons: 'Custom icon',
-        theme: 'Custom theme',
+        global: 'Global props',
+        icons: 'Global icon',
+        theme: 'Global theme',
         i18n: 'Internationalization',
 
         icon: 'Icon',

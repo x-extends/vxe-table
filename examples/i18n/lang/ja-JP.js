@@ -4,10 +4,10 @@ module.exports = {
       nav: {
         start: '開発ガイド',
         install: 'インストール',
-        global: 'グローバルパラメータ',
         use: '手っ取り早い',
-        icons: 'カスタムアイコン',
-        theme: 'テーマをカスタマイズ',
+        global: 'グローバルパラメータ',
+        icons: 'グローバルアイコン',
+        theme: 'グローバルテーマ',
         i18n: '国際化',
 
         icon: 'アイコン',
