@@ -19,7 +19,7 @@
         Vue.use(VXETable)
 
         // 给 vue 实例挂载全局窗口对象
-        Vue.prototype.$XModal = VXETable.modal
+        // Vue.prototype.$XModal = VXETable.modal
       </code>
     </pre>
     <h2>CDN</h2>
