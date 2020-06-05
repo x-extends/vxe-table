@@ -190,6 +190,7 @@ export default {
 If the open source project is very helpful to you, you can buy the author a cup of coffee.  
 Feel free to leave a comment or ask [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
 
+If you are using the project, your donation will help keep the project going.  
 [👉 Donation method💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
 ## License

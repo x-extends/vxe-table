@@ -51,9 +51,9 @@ export default {
       },
       tableToolbar: {
         buttons: [
-          { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus vxe-primary-color' },
-          { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o vxe-danger-color' },
-          { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save vxe-success-color' }
+          { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus' },
+          { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o' },
+          { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save' }
         ],
         perfect: true,
         refresh: {
@@ -124,9 +124,9 @@ export default {
               },
               tableToolbar: {
                 buttons: [
-                  { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus vxe-primary-color' },
-                  { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o vxe-danger-color' },
-                  { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save vxe-success-color' }
+                  { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus' },
+                  { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o' },
+                  { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save' }
                 ],
                 perfect: true,
                 refresh: {

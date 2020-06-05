@@ -55,6 +55,11 @@
         <div class="body">
           <template v-if="apiList.length">
             <ul class="nav-menu">
+              <li class="is-donation">
+                <router-link class="nav-link" :to="{name: 'Donation'}" :title="$t('app.footer.donationDesc')">
+                  <span>☕{{ $t('app.footer.donation') }}</span>
+                </router-link>
+              </li>
               <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
                 <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
                   <i class="vxe-icon--arrow-right nav-link-icon"></i>
