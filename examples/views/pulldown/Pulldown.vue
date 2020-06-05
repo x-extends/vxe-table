@@ -6,15 +6,17 @@
     <p>
       <vxe-pulldown ref="xDown1">
         <template>
-          <vxe-input v-model="value1" placeholder="实现下拉列表" @focus="focusEvent1"></vxe-input>
+          <vxe-input v-model="value1" placeholder="实现虚拟下拉列表" @focus="focusEvent1"></vxe-input>
         </template>
         <template v-slot:dropdown>
-          <ul class="my-dropdown1">
-            <li v-for="item in list1" :key="item.value">
-              <i class="fa fa-user-o"></i>
-              <span>{{ item.label }}</span>
-            </li>
-          </ul>
+          <vxe-list height="200" class="my-dropdown1" :data="list1" auto-resize>
+            <template v-slot="{ items }">
+              <div v-for="item in items" :key="item.value">
+                <i class="fa fa-user-o"></i>
+                <span>{{ item.label }}</span>
+              </div>
+            </template>
+          </vxe-list>
         </template>
       </vxe-pulldown>
 
@@ -72,13 +74,7 @@ export default {
   data () {
     return {
       value1: '',
-      list1: [
-        { label: '选项1', value: 1 },
-        { label: '选项2', value: 2 },
-        { label: '选项3', value: 3 },
-        { label: '选项4', value: 4 },
-        { label: '选项5', value: 5 }
-      ],
+      list1: [],
       tableData2: [
         { name: 'Test1', role: '前端', sex: '男' },
         { name: 'Test2', role: '后端', sex: '男' },
@@ -112,15 +108,17 @@ export default {
         <p>
           <vxe-pulldown ref="xDown1">
             <template>
-              <vxe-input v-model="value1" placeholder="实现下拉列表" @focus="focusEvent1"></vxe-input>
+              <vxe-input v-model="value1" placeholder="实现虚拟下拉列表" @focus="focusEvent1"></vxe-input>
             </template>
             <template v-slot:dropdown>
-              <ul class="my-dropdown1">
-                <li v-for="item in list1" :key="item.value">
-                  <i class="fa fa-user-o"></i>
-                  <span>{{ item.label }}</span>
-                </li>
-              </ul>
+              <vxe-list height="200" class="my-dropdown1" :data="list1" auto-resize>
+                <template v-slot="{ items }">
+                  <div v-for="item in items" :key="item.value">
+                    <i class="fa fa-user-o"></i>
+                    <span>{{ item.label }}</span>
+                  </div>
+                </template>
+              </vxe-list>
             </template>
           </vxe-pulldown>
 
@@ -204,7 +202,12 @@ export default {
             }
           },
           created () {
-            this.inputEvent3()
+            const list1 = []
+            for (let index = 0; index < 1000; index++) {
+              list1.push({ label: \`选项\${index}\`, value: index })
+            }
+            this.list1 = list1
+            this.keyupEvent3()
           },
           methods: {
             focusEvent1 () {
@@ -236,7 +239,6 @@ export default {
         `,
         `
         .my-dropdown1 {
-          padding: 5px;
           border-radius: 4px;
           background-color: #fff;
           border: 1px solid #dcdfe6;
@@ -259,6 +261,11 @@ export default {
     }
   },
   created () {
+    const list1 = []
+    for (let index = 0; index < 1000; index++) {
+      list1.push({ label: `选项${index}`, value: index })
+    }
+    this.list1 = list1
     this.keyupEvent3()
   },
   mounted () {
@@ -297,7 +304,6 @@ export default {
 
 <style lang="css" scoped>
 .my-dropdown1 {
-  padding: 5px;
   border-radius: 4px;
   background-color: #fff;
   border: 1px solid #dcdfe6;

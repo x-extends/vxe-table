@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.button') }}</h2>
-    <p class="tip">按钮，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
+    <p class="tip">按钮，还可以设置 icon 字体图标，例如第三方图标库：<a class="link" href="https://github.com/FortAwesome/Font-Awesome" target="_blank">font-awesome</a></p>
 
     <p>
       <vxe-button>默认尺寸</vxe-button>
@@ -161,11 +161,11 @@
 
     <p>
       <vxe-button icon="fa fa-download">默认图标颜色</vxe-button>
-      <vxe-button icon="fa fa-save vxe-primary-color">主要图标颜色</vxe-button>
-      <vxe-button icon="fa fa-check vxe-success-color">成功图标颜色</vxe-button>
-      <vxe-button icon="fa fa-info vxe-info-color">信息图标颜色</vxe-button>
-      <vxe-button icon="fa fa-warning vxe-warning-color">警告图标颜色</vxe-button>
-      <vxe-button icon="fa fa-trash-o vxe-danger-color">危险图标颜色</vxe-button>
+      <vxe-button icon="fa fa-save my-primary">主要图标颜色</vxe-button>
+      <vxe-button icon="fa fa-check my-success">成功图标颜色</vxe-button>
+      <vxe-button icon="fa fa-info my-info">信息图标颜色</vxe-button>
+      <vxe-button icon="fa fa-warning my-warning">警告图标颜色</vxe-button>
+      <vxe-button icon="fa fa-trash-o my-danger">危险图标颜色</vxe-button>
     </p>
 
     <p>
@@ -399,11 +399,11 @@ export default {
 
         <p>
           <vxe-button icon="fa fa-download">默认图标颜色</vxe-button>
-          <vxe-button icon="fa fa-save vxe-primary-color">主要图标颜色</vxe-button>
-          <vxe-button icon="fa fa-check vxe-success-color">成功图标颜色</vxe-button>
-          <vxe-button icon="fa fa-info vxe-info-color">信息图标颜色</vxe-button>
-          <vxe-button icon="fa fa-warning vxe-warning-color">警告图标颜色</vxe-button>
-          <vxe-button icon="fa fa-trash-o vxe-danger-color">危险图标颜色</vxe-button>
+          <vxe-button icon="fa fa-save my-primary">主要图标颜色</vxe-button>
+          <vxe-button icon="fa fa-check my-success">成功图标颜色</vxe-button>
+          <vxe-button icon="fa fa-info my-info">信息图标颜色</vxe-button>
+          <vxe-button icon="fa fa-warning my-warning">警告图标颜色</vxe-button>
+          <vxe-button icon="fa fa-trash-o my-danger">危险图标颜色</vxe-button>
         </p>
 
         <p>
@@ -467,6 +467,21 @@ export default {
         .my-green {
           color: #008000;
         }
+        .my-primary {
+          color: #3196ff;
+        }
+        .my-success {
+          color: #67c23a;
+        }
+        .my-info {
+          color: #909399;
+        }
+        .my-warning {
+          color: #e6a23c;
+        }
+        .my-danger {
+          color: #f56c6c;
+        }
         `
       ]
     }
@@ -492,5 +507,20 @@ export default {
 }
 .my-green {
   color: #008000;
+}
+.my-primary {
+  color: #3196ff;
+}
+.my-success {
+  color: #67c23a;
+}
+.my-info {
+  color: #909399;
+}
+.my-warning {
+  color: #e6a23c;
+}
+.my-danger {
+  color: #f56c6c;
 }
 </style>

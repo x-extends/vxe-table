@@ -28,7 +28,19 @@
       </vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
         <template v-slot:edit="{ row }">
-          <input type="text" v-model="row.name" class="custom-input">
+          <vxe-pulldown ref="xDown1" transfer>
+            <template>
+              <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
+            </template>
+            <template v-slot:dropdown>
+              <ul class="my-downpanel1">
+                <li v-for="item in downList" :key="item.value" @click="changeNameEvent(item, row)">
+                  <i class="fa fa-user-o"></i>
+                  <span>{{ item.label }}</span>
+                </li>
+              </ul>
+            </template>
+          </vxe-pulldown>
         </template>
       </vxe-table-column>
       <vxe-table-column title="分组">
@@ -116,6 +128,13 @@ export default {
       isIndeterminate: false,
       selectRecords: [],
       tableData: [],
+      downList: [
+        { label: '选项1', value: 1 },
+        { label: '选项2', value: 2 },
+        { label: '选项3', value: 3 },
+        { label: '选项4', value: 4 },
+        { label: '选项5', value: 5 }
+      ],
       tablePage: {
         total: 0,
         currentPage: 1,
@@ -140,7 +159,19 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
             <template v-slot:edit="{ row }">
-              <input type="text" v-model="row.name" class="custom-input">
+              <vxe-pulldown ref="xDown1" transfer>
+                <template>
+                  <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
+                </template>
+                <template v-slot:dropdown>
+                  <ul class="my-downpanel1">
+                    <li v-for="item in downList" :key="item.value" @click="changeNameEvent(item, row)">
+                      <i class="fa fa-user-o"></i>
+                      <span>{{ item.label }}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-pulldown>
             </template>
           </vxe-table-column>
           <vxe-table-column title="分组">
@@ -216,6 +247,13 @@ export default {
               isIndeterminate: false,
               selectRecords: [],
               tableData: [],
+              downList: [
+                { label: '选项1', value: 1 },
+                { label: '选项2', value: 2 },
+                { label: '选项3', value: 3 },
+                { label: '选项4', value: 4 },
+                { label: '选项5', value: 5 }
+              ],
               tablePage: {
                 total: 0,
                 currentPage: 1,
@@ -235,11 +273,26 @@ export default {
             changeAllEvent () {
               this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
               this.selectRecords = this.$refs.xTable.getCheckboxRecords()
+            },
+            clickDownEvent () {
+              if (this.$refs.xDown1) {
+                this.$refs.xDown1.showPanel()
+              }
+            },
+            changeNameEvent (item, row) {
+              row.name = item.label
+              if (this.$refs.xDown1) {
+                this.$refs.xDown1.hidePanel()
+              }
             }
           }
         }
         `,
         `
+        .my-downpanel1 {
+          background-color: #fff;
+          border: 1px solid #e8eaec;
+        }
         .page-left {
           position: absolute;
           left: 10px;
@@ -268,12 +321,27 @@ export default {
     changeAllEvent () {
       this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
       this.selectRecords = this.$refs.xTable.getCheckboxRecords()
+    },
+    clickDownEvent () {
+      if (this.$refs.xDown1) {
+        this.$refs.xDown1.showPanel()
+      }
+    },
+    changeNameEvent (item, row) {
+      row.name = item.label
+      if (this.$refs.xDown1) {
+        this.$refs.xDown1.hidePanel()
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+.my-downpanel1 {
+  background-color: #fff;
+  border: 1px solid #e8eaec;
+}
 .page-left {
   position: absolute;
   left: 10px;
