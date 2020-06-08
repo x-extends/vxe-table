@@ -2811,7 +2811,7 @@ const apis = [
       },
       {
         name: 'getCurrentRecord()',
-        desc: '用于 highlight-current-row，获取当前行的行数据',
+        desc: '用于 highlight-current-row，获取高亮的当前行数据',
         version: '',
         type: 'Row',
         enum: '',

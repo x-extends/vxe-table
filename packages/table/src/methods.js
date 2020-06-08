@@ -2281,7 +2281,7 @@ const Methods = {
    * 用于当前行，获取当前行的数据
    */
   getCurrentRecord () {
-    return this.currentRow
+    return this.highlightCurrentRow ? this.currentRow : null
   },
   /**
    * 用于单选行，获取当已选中的数据
@@ -2325,7 +2325,7 @@ const Methods = {
     this.emitEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
   },
   getCurrentColumn () {
-    return this.currentColumn
+    return this.highlightCurrentColumn ? this.currentColumn : null
   },
   /**
    * 用于当前列，设置某列行为高亮状态

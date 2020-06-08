@@ -450,9 +450,12 @@
       display: none;
     }
   }
-
+  
   &.t--selected {
-    user-select: none;
+    .vxe-body--column,
+    .vxe-footer--column {
+      user-select: none;
+    }
   }
   &.size--medium {
     font-size: $vxe-font-size-medium;

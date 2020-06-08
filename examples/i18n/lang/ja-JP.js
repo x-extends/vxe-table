@@ -360,7 +360,7 @@ module.exports = {
           highlightHoverRow: '鼠标移到行是否要高亮显示',
           highlightCurrentColumn: '是否要高亮当前列',
           highlightHoverColumn: '鼠标移到列是否要高亮显示',
-          highlightCell: '只对 edit-config 配置时有效，是否在编辑时高亮单元格边框',
+          highlightCell: '只对 edit-config 配置时有效，是否在编辑时高亮单元格边框（只支持部分）',
           rowClassName: '给行附加 className，也可以是函数 Function({row, rowIndex, $rowIndex})',
           cellClassName: '给单元格附加 className，也可以是函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})',
           headerRowClassName: '给表头的行附加 className，也可以是函数 Function({$rowIndex})',
