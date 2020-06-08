@@ -10,6 +10,8 @@ import './mock'
 import XEUtils from 'xe-utils'
 import moment from 'moment'
 
+Vue.config.productionTip = false
+
 // 生成模拟数据
 const list = window.MOCK_DATA_LIST = []
 let currTime = Date.now()
