@@ -3,16 +3,16 @@ module.exports = {
   env: {
     node: true
   },
-  'extends': [
+  extends: [
     "plugin:vue/essential",
-      "@vue/standard",
-      "@vue/typescript/recommended"
+    "@vue/standard",
+    "@vue/typescript/recommended"
   ],
+  parserOptions: {
+    "ecmaVersion": 2020
+  },
   rules: {
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-  },
-  parserOptions: {
-    "ecmaVersion": 2020
   }
 }
