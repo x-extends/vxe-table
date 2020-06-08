@@ -116,7 +116,7 @@
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
+      <vxe-table-column type="html" field="html1" title="Html片段"></vxe-table-column>
     </vxe-table>
 
     <vxe-pager
@@ -340,7 +340,7 @@ export default {
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
+          <vxe-table-column type="html" field="html1" title="Html片段"></vxe-table-column>
         </vxe-table>
 
         <vxe-pager
@@ -421,10 +421,9 @@ export default {
                 isFooter: true,
                 // 自定义导出的数据源
                 data: [
-                  { name: 'Name1', sex: '男', age: 26, role: '前端' },
-                  { name: 'Name2', sex: '女', age: 20, role: '测试' },
-                  { name: 'Name3', sex: '男', age: 32, role: '后端' },
-                  { name: 'Name4', sex: '女', age: 22, role: '设计师' }
+                  { name: 'Name1', sex: '男', age: 26, role: '前端', html1: '<a>xxx1</a>' },
+                  { name: 'Name2', sex: '女', age: 20, role: '测试', html1: '<a>xxx2</a>' },
+                  { name: 'Name4', sex: '女', age: 22, role: '设计师', html1: '<a>xxx3</a>' }
                 ]
               })
             },
@@ -439,7 +438,7 @@ export default {
                   data
                 })
                 this.loading = false
-              }).catch(e => {
+              }).catch(() => {
                 this.loading = false
               })
             }
@@ -535,10 +534,9 @@ export default {
         isFooter: true,
         // 自定义导出的数据源
         data: [
-          { name: 'Name1', sex: '男', age: 26, role: '前端' },
-          { name: 'Name2', sex: '女', age: 20, role: '测试' },
-          { name: 'Name3', sex: '男', age: 32, role: '后端' },
-          { name: 'Name4', sex: '女', age: 22, role: '设计师' }
+          { name: 'Name1', sex: '男', age: 26, role: '前端', html1: '<a>xxx1</a>' },
+          { name: 'Name2', sex: '女', age: 20, role: '测试', html1: '<a>xxx2</a>' },
+          { name: 'Name4', sex: '女', age: 22, role: '设计师', html1: '<a>xxx3</a>' }
         ]
       })
     },

@@ -3809,7 +3809,7 @@ export default {
      * 用于当前行，获取当前行的数据
      */
     getCurrentRecord () {
-      return this.currentRow
+      return this.highlightCurrentRow ? this.currentRow : null
     },
     // 在 v3.0 中废弃 getRadioRow
     getRadioRow () {
@@ -4005,7 +4005,7 @@ export default {
       this.$emit('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget, $event: evnt }, params), evnt)
     },
     getCurrentColumn () {
-      return this.currentColumn
+      return this.highlightCurrentColumn ? this.currentColumn : null
     },
     setCurrentColumn (column) {
       if (this.highlightCurrentColumn) {

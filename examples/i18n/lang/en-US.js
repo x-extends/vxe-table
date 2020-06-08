@@ -361,7 +361,7 @@ module.exports = {
           highlightHoverRow: 'Mouse over a row to highlight',
           highlightCurrentColumn: 'Whether to highlight the current column',
           highlightHoverColumn: 'Mouse over whether to highlight a column',
-          highlightCell: 'Only valid for edit-config configuration, whether to highlight cell borders during editing',
+          highlightCell: 'Only valid for edit-config configuration, whether to highlight cell borders during editing(Partial support only)',
           rowClassName: 'Append a className to the row, It could be a function, Function({row, rowIndex, $rowIndex})',
           cellClassName: 'Append a className to the cell, It could be a function, Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})',
           headerRowClassName: 'Append a className to the row in the header, It could be a function, Function({$rowIndex})',

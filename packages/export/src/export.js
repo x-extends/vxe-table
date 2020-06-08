@@ -6,6 +6,8 @@ import VXETable from '../../v-x-e-table'
 // 默认导出或打印的 HTML 样式
 const defaultHtmlStyle = 'body{margin:0;}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;text-align:left;font-size:14px;border-spacing:0}.vxe-table:not(.is--print ){table-layout:fixed;}.vxe-table.is--print{width:100%}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-top:1px solid #e8eaec;}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-left:1px solid #e8eaec;}.vxe-table.border--outer,.vxe-table.border--default th,.vxe-table.border--default td,.vxe-table.border--full th,.vxe-table.border--full td,.vxe-table.border--outer th,.vxe-table.border--inner th,.vxe-table.border--inner td{border-bottom:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--outer,.vxe-table.border--full th,.vxe-table.border--full td{border-right:1px solid #e8eaec}.vxe-table.border--default th,.vxe-table.border--full th,.vxe-table.border--outer th{background-color:#f8f8f9;}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.vxe-table:not(.is--print ) .col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}.vxe-table input[type="checkbox"],.vxe-table input[type="radio"],.vxe-table input[type="checkbox"]+span,.vxe-table input[type="radio"]+span{vertical-align:middle;}'
 
+let htmlCellElem
+
 function hasTreeChildren ($xetable, row) {
   const treeOpts = $xetable.treeOpts
   return row[treeOpts.children] && row[treeOpts.children].length
@@ -30,6 +32,9 @@ function toTableBorder (border) {
 
 function getLabelData ($xetable, opts, columns, datas) {
   const { treeConfig, treeOpts, scrollXLoad, scrollYLoad, radioOpts, checkboxOpts } = $xetable
+  if (!htmlCellElem) {
+    htmlCellElem = document.createElement('div')
+  }
   if (treeConfig) {
     // 如果是树表格只允许导出数据源
     const rest = []
@@ -75,7 +80,15 @@ function getLabelData ($xetable, opts, columns, datas) {
                   exportLabelMethod = compConf.cellExportMethod
                 }
               }
-              cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+              if (exportLabelMethod) {
+                cellValue = exportLabelMethod({ $table: $xetable, row, column })
+              } else {
+                cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+                if (column.type === 'html') {
+                  htmlCellElem.innerHTML = cellValue
+                  cellValue = htmlCellElem.innerText.trim()
+                }
+              }
             }
         }
         item[column.id] = XEUtils.toString(cellValue)
@@ -124,7 +137,15 @@ function getLabelData ($xetable, opts, columns, datas) {
                 exportLabelMethod = compConf.cellExportMethod
               }
             }
-            cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, row, column }) : UtilTools.getCellLabel(row, column, { $table: $xetable })
+            if (exportLabelMethod) {
+              cellValue = exportLabelMethod({ $table: $xetable, row, column })
+            } else {
+              cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+              if (column.type === 'html') {
+                htmlCellElem.innerHTML = cellValue
+                cellValue = htmlCellElem.innerText.trim()
+              }
+            }
           } else {
             const cell = DomTools.getCell($xetable, { row, column })
             cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
