@@ -35,18 +35,19 @@
 
     <pre>
       <code>
-        | Arrow Up ↑ | （isArrow）移动到当前活动单元格上面的单元格 |
-        | Arrow Down ↓ | （isArrow）移动到当前活动单元格下面的单元格 |
-        | Arrow Left ← | （isArrow）移动到当前活动单元格左边的单元格 |
-        | Arrow Right → | （isArrow）移动到当前活动单元格右边的单元格 |
-        | Tab | （isTab）移动到当前选中或活动单元格的右侧单元格，如果到最后一列且存在下一行，则从下一行开始移动 |
-        | Tab + Shift | （isTab）移动到当前选中或活动单元格的左侧单元格，如果到第一列且存在上一行，则从上一行开始移动 |
+        | Arrow Up ↑ | （isArrow）如果存在，则移动到上面的单元格 |
+        | Arrow Down ↓ | （isArrow）如果存在，则移动到下面的单元格 |
+        | Arrow Left ← | （isArrow）如果存在，则移动到左边的单元格 |
+        | Arrow Right → | （isArrow）如果存在，则移动到右边的单元格 |
+        | Tab | （isTab）如果存在，则移动到右边单元格；如果到最后一列且存在下一行，则从下一行开始移动 |
+        | Tab + Shift | （isTab）如果存在，则移动到左边单元格；如果到第一列且存在上一行，则从上一行开始移动 |
         | Spacebar | 如果单元格是复选框或单选框则切换勾选状态 |
-        | Enter | （isEnter）取消单元格编辑并移动到当前活动单元格下面的单元格 |
-        | Delete | （isDel）清空内容 |
-        | Backspace | （isDel）清空内容并激活选中单元格为编辑状态 |
-        | F2 | 激活单元格编辑 |
-        | Esc | 取消单元格编辑 |
+        | Enter | （isEnter）如果存在，取消单元格编辑并移动到下面的单元格 |
+        | Enter + Shift | （isEnter）如果存在，取消单元格编辑并移动到上面的单元格 |
+        | Delete | （isDel）清空单元格内容 |
+        | Backspace | （isDel）清空单元格内容并激活为编辑状态 |
+        | F2 | 如果存在，激活单元格为编辑状态 |
+        | Esc | 如果存在，取消单元格编辑状态 |
         | * | （isEdit）按下除功能键之外的任意键激活覆盖式单元格编辑 |
       </code>
     </pre>
