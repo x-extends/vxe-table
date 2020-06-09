@@ -15,6 +15,7 @@ export default {
     status: String,
     iconStatus: String,
     top: { type: [Number, String], default: 15 },
+    position: Object,
     title: String,
     duration: { type: [Number, String], default: () => GlobalConfig.modal.duration },
     message: [String, Function],
@@ -299,16 +300,25 @@ export default {
           }
         } else {
           this.$nextTick(() => {
-            const { inited, marginSize, fullscreen } = this
+            const { inited, marginSize, fullscreen, position = {} } = this
             if (!remember || !inited) {
               const modalBoxElem = this.getBox()
               const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
               const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
-              modalBoxElem.style.top = ''
-              modalBoxElem.style.left = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
-              if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
-                modalBoxElem.style.top = `${marginSize}px`
+              let posTop = ''
+              let posLeft = ''
+              if (position.left) {
+                posLeft = `${XEUtils.toNumber(position.left)}PX`
+              } else {
+                posLeft = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
               }
+              if (position.top) {
+                posTop = `${XEUtils.toNumber(position.top)}PX`
+              } else if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
+                posTop = `${marginSize}px`
+              }
+              modalBoxElem.style.top = posTop
+              modalBoxElem.style.left = posLeft
             }
             if (!inited) {
               this.inited = true
@@ -430,6 +440,30 @@ export default {
         }
       })
     },
+    getPosition () {
+      if (!this.isMsg) {
+        const modalBoxElem = this.getBox()
+        if (modalBoxElem) {
+          return {
+            top: modalBoxElem.offsetTop,
+            left: modalBoxElem.offsetLeft
+          }
+        }
+      }
+      return null
+    },
+    setPosition (top, left) {
+      if (!this.isMsg) {
+        const modalBoxElem = this.getBox()
+        if (XEUtils.isNumber(top)) {
+          modalBoxElem.style.top = `${top}px`
+        }
+        if (XEUtils.isNumber(left)) {
+          modalBoxElem.style.left = `${left}px`
+        }
+      }
+      return this.$nextTick()
+    },
     boxMousedownEvent () {
       const { modalZindex } = this
       if (activeModals.some(_vm => _vm.visible && _vm.modalZindex > modalZindex)) {
@@ -441,8 +475,8 @@ export default {
       const modalBoxElem = this.getBox()
       if (!zoomLocat && evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
         evnt.preventDefault()
-        const demMousemove = document.onmousemove
-        const demMouseup = document.onmouseup
+        const domMousemove = document.onmousemove
+        const domMouseup = document.onmouseup
         const disX = evnt.clientX - modalBoxElem.offsetLeft
         const disY = evnt.clientY - modalBoxElem.offsetTop
         const { visibleHeight, visibleWidth } = DomTools.getDomNode()
@@ -472,8 +506,8 @@ export default {
           modalBoxElem.style.top = `${top}px`
         }
         document.onmouseup = () => {
-          document.onmousemove = demMousemove
-          document.onmouseup = demMouseup
+          document.onmousemove = domMousemove
+          document.onmouseup = domMouseup
           if (remember && storage) {
             this.$nextTick(() => {
               this.savePosStorage()
@@ -492,8 +526,8 @@ export default {
       const maxWidth = visibleWidth - 20
       const maxHeight = visibleHeight - 20
       const modalBoxElem = this.getBox()
-      const demMousemove = document.onmousemove
-      const demMouseup = document.onmouseup
+      const domMousemove = document.onmousemove
+      const domMouseup = document.onmouseup
       const clientWidth = modalBoxElem.clientWidth
       const clientHeight = modalBoxElem.clientHeight
       const disX = evnt.clientX
@@ -627,8 +661,8 @@ export default {
       }
       document.onmouseup = () => {
         this.zoomLocat = null
-        document.onmousemove = demMousemove
-        document.onmouseup = demMouseup
+        document.onmousemove = domMousemove
+        document.onmouseup = domMouseup
         setTimeout(() => {
           modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '')
         }, 50)

@@ -13,7 +13,7 @@ import myJAJP from './lang/ja-JP'
 
 Vue.use(VueI18n)
 
-const languageList = ['zh_CN', 'zh_TC', 'en-US', 'ja_JP']
+const languageList = ['zh_CN', 'zh_TC', 'en-US']
 const customLanguage = localStorage.getItem('language')
 
 const i18n = new VueI18n({

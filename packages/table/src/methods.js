@@ -676,7 +676,7 @@ const Methods = {
           tableData = allSortMethod({ data: tableData, column, property, order, $table: this }) || tableData
         } else {
           const params = { $table: this }
-          const rest = sortMethod ? tableData.sort(sortMethod) : XEUtils.sortBy(tableData, column.formatter ? row => UtilTools.getCellLabel(row, column, params) : column.sortBy || property)
+          const rest = sortMethod ? tableData.sort(sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => UtilTools.getCellLabel(row, column, params) : property)))
           tableData = order === 'desc' ? rest.reverse() : rest
         }
       }
