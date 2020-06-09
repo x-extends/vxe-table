@@ -34,6 +34,13 @@ export declare class Modal extends VXETableModule {
    */
   top?: number | string;
   /**
+   * 只对 type=modal 有效，窗口的默认位置
+   */
+  position?: {
+    top?: number;
+    left?: number;
+  };
+  /**
    * 窗口的标题
    */
   title?: string;
@@ -142,6 +149,17 @@ export declare class Modal extends VXETableModule {
    */
   getBox(): HTMLElement;
   /**
+   * 获取窗口位置
+   */
+  getPosition(): {
+    top?: number;
+    left?: number;
+  } | null;
+  /**
+   * 设置窗口位置
+   */
+  setPosition(top?: number, left?: number): Promise<any>;
+  /**
    * 判断是否最大化显示
    */
   isMaximized(): boolean;
@@ -166,6 +184,10 @@ export interface ModalOptions {
   status?: string;
   iconStatus?: string;
   top?: number | string;
+  position?: {
+    top?: number;
+    left?: number;
+  };
   title?: string;
   duration?: number | string;
   message?: string | Function;

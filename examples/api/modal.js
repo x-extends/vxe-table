@@ -215,6 +215,34 @@ const apis = [
         list: []
       },
       {
+        name: 'position',
+        descKey: 'app.api.modal.desc.position',
+        version: '2.9.12',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'top',
+            desc: '距离顶部的偏移',
+            version: '',
+            type: 'Number, String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'left',
+            desc: '距离左侧的偏移',
+            version: '',
+            type: 'Number, String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'zIndex',
         descKey: 'app.api.modal.desc.zIndex',
         version: '',
@@ -440,6 +468,24 @@ const apis = [
         type: 'Promise<status>',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'getPosition()',
+        desc: '只对 type=modal 有效，获取窗口位置',
+        version: '2.9.12',
+        type: '{top,left}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'setPosition(top, left)',
+        desc: '只对 type=modal 有效，设置窗口位置',
+        version: '2.9.12',
+        type: 'Promise',
+        enum: '',
+        defVal: 'top?: number, left?: number',
         list: []
       },
       {

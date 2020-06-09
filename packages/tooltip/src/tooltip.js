@@ -21,6 +21,7 @@ export default {
       isHover: false,
       visible: false,
       message: '',
+      tipTarget: null,
       tipZindex: 0,
       tipStore: {
         style: {},
@@ -123,6 +124,7 @@ export default {
       return this.toVisible(this.target)
     },
     close () {
+      this.tipTarget = null
       Object.assign(this.tipStore, {
         style: {},
         placement: '',
@@ -148,11 +150,8 @@ export default {
     toVisible (target, message) {
       this.targetActive = true
       if (target) {
-        const { $el, tipStore, zIndex } = this
-        const { top, left } = DomTools.getAbsolutePos(target)
-        const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+        const { $el, tipStore } = this
         const parentNode = $el.parentNode
-        let tipLeft = left
         tipStore.placement = 'top'
         tipStore.style = { width: 'auto' }
         tipStore.arrowStyle = { left: '50%' }
@@ -162,24 +161,29 @@ export default {
         if (message) {
           this.message = message
         }
+        this.tipTarget = target
         this.update(true)
         this.updateZindex()
-        return this.$nextTick().then(() => {
-          const wrapperElem = $el
-          if (wrapperElem) {
-            const offsetHeight = wrapperElem.offsetHeight
-            const offsetWidth = wrapperElem.offsetWidth
-            tipLeft = left + Math.floor((target.offsetWidth - offsetWidth) / 2)
-            tipStore.style = {
-              zIndex: zIndex || this.tipZindex,
-              top: `${top - offsetHeight - 6}px`,
-              left: `${tipLeft}px`
-            }
-            return this.$nextTick()
+        return this.updatePlacement()
+      }
+      return this.$nextTick()
+    },
+    updatePlacement () {
+      return this.$nextTick().then(() => {
+        const { $el: wrapperElem, tipTarget, tipStore, zIndex } = this
+        if (tipTarget && wrapperElem) {
+          const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+          const { top, left } = DomTools.getAbsolutePos(tipTarget)
+          let tipLeft = left
+          const offsetHeight = wrapperElem.offsetHeight
+          const offsetWidth = wrapperElem.offsetWidth
+          tipLeft = left + Math.floor((tipTarget.offsetWidth - offsetWidth) / 2)
+          tipStore.style = {
+            zIndex: zIndex || this.tipZindex,
+            top: `${top - offsetHeight - 6}px`,
+            left: `${tipLeft}px`
           }
-        }).then(() => {
-          const wrapperElem = $el
-          if (wrapperElem) {
+          return this.$nextTick().then(() => {
             const offsetHeight = wrapperElem.offsetHeight
             const offsetWidth = wrapperElem.offsetWidth
             Object.assign(tipStore.style, {
@@ -188,7 +192,7 @@ export default {
             })
             if (top - offsetHeight < scrollTop + 6) {
               tipStore.placement = 'bottom'
-              tipStore.style.top = `${top + target.offsetHeight + 6}px`
+              tipStore.style.top = `${top + tipTarget.offsetHeight + 6}px`
             }
             if (tipLeft < scrollLeft + 6) {
               // 超出左边界
@@ -201,10 +205,9 @@ export default {
               tipStore.arrowStyle.left = `${offsetWidth - Math.max(Math.floor((tipLeft + offsetWidth - left) / 2), 22)}px`
               tipStore.style.left = `${tipLeft}px`
             }
-          }
-        })
-      }
-      return this.$nextTick()
+          })
+        }
+      })
     },
     clickEvent () {
       this[this.visible ? 'close' : 'show']()

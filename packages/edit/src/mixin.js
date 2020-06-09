@@ -70,7 +70,7 @@ export default {
      */
     _remove (rows) {
       const { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
-      const { removeList, insertList } = editStore
+      const { actived, removeList, insertList } = editStore
       const { checkField: property } = checkboxOpts
       let rest = []
       const nowData = afterFullData
@@ -100,6 +100,10 @@ export default {
       } else {
         rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
         XEUtils.remove(nowData, row => rows.indexOf(row) > -1)
+      }
+      // 如果当前行被激活编辑，则清除激活状态
+      if (actived.row && rows.indexOf(actived.row) > -1) {
+        this.clearActived()
       }
       // 从新增中移除已删除的数据
       XEUtils.remove(insertList, row => rows.indexOf(row) > -1)

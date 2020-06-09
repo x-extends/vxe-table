@@ -205,10 +205,10 @@ export default {
     scrollEvent (evnt) {
       const { $parent: $xetable, fixedType } = this
       const { $refs, scrollXLoad, triggerScrollXEvent, lastScrollLeft } = $xetable
-      const tableHeader = $refs.tableHeader
+      const { tableHeader, tableBody, tableFooter, validTip } = $refs
       const headerElem = tableHeader ? tableHeader.$el : null
-      const bodyElem = $refs.tableBody.$el
-      const footerElem = $refs.tableFooter.$el
+      const footerElem = tableFooter ? tableFooter.$el : null
+      const bodyElem = tableBody.$el
       const scrollLeft = footerElem.scrollLeft
       const isX = scrollLeft !== lastScrollLeft
       $xetable.lastScrollLeft = scrollLeft
@@ -221,6 +221,9 @@ export default {
       }
       if (scrollXLoad && isX) {
         triggerScrollXEvent(evnt)
+      }
+      if (isX && validTip && validTip.visible) {
+        validTip.updatePlacement()
       }
       $xetable.emitEvent('scroll', { type: cellType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false }, evnt)
     }

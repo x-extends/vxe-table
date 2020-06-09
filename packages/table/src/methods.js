@@ -708,7 +708,7 @@ const Methods = {
           tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
         } else {
           const params = { $table: this }
-          const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.formatter ? row => UtilTools.getCellLabel(row, column, params) : column.sortBy || column.property)
+          const rest = column.sortMethod ? tableData.sort(column.sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => UtilTools.getCellLabel(row, column, params) : column.property)))
           tableData = column.order === 'desc' ? rest.reverse() : rest
         }
       }
