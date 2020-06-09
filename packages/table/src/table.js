@@ -1649,7 +1649,7 @@ export default {
      */
     remove (rows) {
       const { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
-      const { removeList, insertList } = editStore
+      const { actived, removeList, insertList } = editStore
       const property = checkboxOpts.checkField || checkboxOpts.checkProp
       let rest = []
       const nowData = afterFullData
@@ -1679,6 +1679,10 @@ export default {
       } else {
         rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
         XEUtils.remove(nowData, row => rows.indexOf(row) > -1)
+      }
+      // 如果当前行被激活编辑，则清除激活状态
+      if (actived.row && rows.indexOf(actived.row) > -1) {
+        this.clearActived()
       }
       // 从新增中移除已删除的数据
       XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
@@ -2016,7 +2020,7 @@ export default {
             tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
           } else {
             const params = { $table: this }
-            const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.sortBy(tableData, column.formatter ? row => UtilTools.getCellLabel(row, column, params) : column.sortBy || column.property)
+            const rest = column.sortMethod ? tableData.sort(column.sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => UtilTools.getCellLabel(row, column, params) : column.property)))
             tableData = column.order === 'desc' ? rest.reverse() : rest
           }
         }

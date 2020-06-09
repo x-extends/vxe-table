@@ -24,7 +24,7 @@
             <vxe-option value="zh_CN" label="中文"></vxe-option>
             <vxe-option value="zh_TC" label="繁體中文"></vxe-option>
             <vxe-option value="en_US" label="English"></vxe-option>
-            <vxe-option value="ja_JP" label="ジャパン"></vxe-option>
+            <!-- <vxe-option value="ja_JP" label="ジャパン"></vxe-option> -->
           </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">

@@ -625,7 +625,7 @@ export default {
     scrollEvent (evnt) {
       const { $parent: $table, fixedType, lastScrollTop, lastScrollLeft } = this
       const { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
-      const { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $refs
+      const { tableHeader, tableBody, leftBody, rightBody, tableFooter, validTip } = $refs
       const headerElem = tableHeader ? tableHeader.$el : null
       const footerElem = tableFooter ? tableFooter.$el : null
       const bodyElem = tableBody.$el
@@ -667,6 +667,9 @@ export default {
       $table.lastScrollTop = scrollTop
       $table.lastScrollLeft = scrollLeft
       $table.lastScrollTime = Date.now()
+      if (validTip && validTip.visible) {
+        validTip.updatePlacement()
+      }
       UtilTools.emitEvent($table, 'scroll', [{ type: cellType, fixed: fixedType, scrollTop, scrollLeft, isX, isY, $table, $event: evnt }, evnt])
     }
   }
