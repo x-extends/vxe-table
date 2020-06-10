@@ -16,7 +16,7 @@
       <template v-slot:buttons>
         <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-        <vxe-button @click="$refs.xTree1.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-virtual-tree>
@@ -136,7 +136,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-            <vxe-button @click="$refs.xTree1.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-virtual-tree>

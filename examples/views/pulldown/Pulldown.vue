@@ -6,12 +6,12 @@
     <p>
       <vxe-pulldown ref="xDown1">
         <template>
-          <vxe-input v-model="value1" placeholder="实现虚拟下拉列表" @focus="focusEvent1"></vxe-input>
+          <vxe-input v-model="value1" placeholder="可搜索的虚拟下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
         </template>
         <template v-slot:dropdown>
           <vxe-list height="200" class="my-dropdown1" :data="list1" auto-resize>
             <template v-slot="{ items }">
-              <div v-for="item in items" :key="item.value">
+              <div class="list-item1" v-for="item in items" :key="item.value" @click="selectEvent1(item)">
                 <i class="fa fa-user-o"></i>
                 <span>{{ item.label }}</span>
               </div>
@@ -50,7 +50,8 @@
               :loading="loading3"
               :pager-config="tablePage3"
               :data="tableData3"
-              :columns="tableColumn3">
+              :columns="tableColumn3"
+              @cell-click="cellClickEvent3">
             </vxe-grid>
           </div>
         </template>
@@ -108,12 +109,12 @@ export default {
         <p>
           <vxe-pulldown ref="xDown1">
             <template>
-              <vxe-input v-model="value1" placeholder="实现虚拟下拉列表" @focus="focusEvent1"></vxe-input>
+              <vxe-input v-model="value1" placeholder="可搜索的虚拟下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
             </template>
             <template v-slot:dropdown>
               <vxe-list height="200" class="my-dropdown1" :data="list1" auto-resize>
                 <template v-slot="{ items }">
-                  <div v-for="item in items" :key="item.value">
+                  <div class="list-item1" v-for="item in items" :key="item.value" @click="selectEvent1(item)">
                     <i class="fa fa-user-o"></i>
                     <span>{{ item.label }}</span>
                   </div>
@@ -152,7 +153,8 @@ export default {
                   :loading="loading3"
                   :pager-config="tablePage3"
                   :data="tableData3"
-                  :columns="tableColumn3">
+                  :columns="tableColumn3"
+                  @cell-click="cellClickEvent3">
                 </vxe-grid>
               </div>
             </template>
@@ -206,12 +208,22 @@ export default {
             for (let index = 0; index < 1000; index++) {
               list1.push({ label: \`选项\${index}\`, value: index })
             }
+            this.data1 = list1
             this.list1 = list1
             this.keyupEvent3()
           },
           methods: {
             focusEvent1 () {
               this.$refs.xDown1.showPanel()
+            },
+            keyupEvent1 () {
+              const { value1 } = this
+              this.list1 = value1 ? this.data1.filter(item => item.label.indexOf(value1) > -1) : this.data1
+            },
+            selectEvent1 (item) {
+              this.value1 = item.label
+              this.list1 = this.data1
+              this.$refs.xDown1.hidePanel()
             },
             clickEvent2 () {
               this.$refs.xDown2.togglePanel()
@@ -233,6 +245,10 @@ export default {
             },
             suffixClick3 () {
               this.$refs.xDown3.togglePanel()
+            },
+            cellClickEvent3 ({ row }) {
+              this.value3 = row.name
+              this.$refs.xDown3.hidePanel()
             }
           }
         }
@@ -242,6 +258,9 @@ export default {
           border-radius: 4px;
           background-color: #fff;
           border: 1px solid #dcdfe6;
+        }
+        .list-item1:hover {
+          background-color: #f5f7fa;
         }
         .my-dropdown2 {
           width: 400px;
@@ -265,6 +284,7 @@ export default {
     for (let index = 0; index < 1000; index++) {
       list1.push({ label: `选项${index}`, value: index })
     }
+    this.data1 = list1
     this.list1 = list1
     this.keyupEvent3()
   },
@@ -276,6 +296,15 @@ export default {
   methods: {
     focusEvent1 () {
       this.$refs.xDown1.showPanel()
+    },
+    keyupEvent1 () {
+      const { value1 } = this
+      this.list1 = value1 ? this.data1.filter(item => item.label.indexOf(value1) > -1) : this.data1
+    },
+    selectEvent1 (item) {
+      this.value1 = item.label
+      this.list1 = this.data1
+      this.$refs.xDown1.hidePanel()
     },
     clickEvent2 () {
       this.$refs.xDown2.togglePanel()
@@ -297,6 +326,10 @@ export default {
     },
     suffixClick3 () {
       this.$refs.xDown3.togglePanel()
+    },
+    cellClickEvent3 ({ row }) {
+      this.value3 = row.name
+      this.$refs.xDown3.hidePanel()
     }
   }
 }
@@ -307,6 +340,9 @@ export default {
   border-radius: 4px;
   background-color: #fff;
   border: 1px solid #dcdfe6;
+}
+.list-item1:hover {
+  background-color: #f5f7fa;
 }
 .my-dropdown2 {
   width: 400px;

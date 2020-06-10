@@ -319,7 +319,7 @@ export default {
           })
           break
         case 'allExpand':
-          xTable.setAllTreeExpansion(true)
+          xTable.setAllTreeExpand(true)
           break
         case 'allShrink':
           xTable.clearTreeExpand()
@@ -352,14 +352,14 @@ export default {
         this.apiList = rest
         this.$nextTick(() => {
           if (this.$refs.xTable) {
-            this.$refs.xTable.setAllTreeExpansion(true)
+            this.$refs.xTable.setAllTreeExpand(true)
           }
         })
       } else {
         this.apiList = this.tableData
         this.$nextTick(() => {
           if (this.$refs.xTable) {
-            this.$refs.xTable.setTreeExpansion(this.defaultExpandRows, true)
+            this.$refs.xTable.setTreeExpand(this.defaultExpandRows, true)
           }
         })
       }

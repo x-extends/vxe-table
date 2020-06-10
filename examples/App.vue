@@ -79,10 +79,8 @@
           </template>
         </div>
       </div>
-      <div class="oper-wrapper" @click="showLeft = !showLeft" v-show="['VXEAPI', 'Donation', 'Run'].includes($route.name)">
-        <div class="oper-btn">
-          <i :class="showLeft ? 'vxe-icon--arrow-left' : 'vxe-icon--arrow-right'"></i>
-        </div>
+      <div class="oper-wrapper" @click="showLeft = !showLeft" v-show="showOperBtn">
+        <vxe-button class="oper-btn" :icon="showLeft ? 'vxe-icon--arrow-left' : 'vxe-icon--arrow-right'"></vxe-button>
       </div>
       <div class="body">
         <div class="content" :class="{full: ['VXEAPI', 'Donation', 'Run'].includes($route.name)}">
@@ -1801,6 +1799,18 @@ export default {
               locat: {
                 name: 'TablePluginMenus'
               }
+            },
+            {
+              label: 'app.aside.nav.treeRowPlugin',
+              locat: {
+                name: 'TablePluginTreeRows'
+              }
+            },
+            {
+              label: 'app.aside.nav.treeColPlugin',
+              locat: {
+                name: 'TablePluginTreeCols'
+              }
             }
           ]
         },
@@ -2182,6 +2192,9 @@ export default {
     },
     pageKey () {
       return this.$route.path.split('/')[2]
+    },
+    showOperBtn () {
+      return ['StartInstall', 'StartUse', 'StartGlobal', 'StartIcons', 'StartTheme', 'StartI18n', 'VXEAPI', 'Donation', 'Run'].includes(this.$route.name)
     }
   },
   watch: {

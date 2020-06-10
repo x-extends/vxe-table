@@ -190,7 +190,7 @@ export default {
                 }, options)
                 // 搜索之后默认展开所有子节点
                 this.$nextTick(() => {
-                  this.$refs.xTree.setAllTreeExpansion(true)
+                  this.$refs.xTree.setAllTreeExpand(true)
                 })
                 return rest
               }
@@ -241,7 +241,7 @@ export default {
         }, options)
         // 搜索之后默认展开所有子节点
         this.$nextTick(() => {
-          this.$refs.xTree.setAllTreeExpansion(true)
+          this.$refs.xTree.setAllTreeExpand(true)
         })
         return rest
       }
