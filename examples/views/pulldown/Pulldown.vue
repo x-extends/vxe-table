@@ -222,8 +222,9 @@ export default {
             },
             selectEvent1 (item) {
               this.value1 = item.label
-              this.list1 = this.data1
-              this.$refs.xDown1.hidePanel()
+              this.$refs.xDown1.hidePanel().then(() => {
+                this.list1 = this.data1
+              })
             },
             clickEvent2 () {
               this.$refs.xDown2.togglePanel()
@@ -303,8 +304,9 @@ export default {
     },
     selectEvent1 (item) {
       this.value1 = item.label
-      this.list1 = this.data1
-      this.$refs.xDown1.hidePanel()
+      this.$refs.xDown1.hidePanel().then(() => {
+        this.list1 = this.data1
+      })
     },
     clickEvent2 () {
       this.$refs.xDown2.togglePanel()
