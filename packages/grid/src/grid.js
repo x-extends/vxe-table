@@ -720,7 +720,8 @@ export default {
           field: property,
           // v3 废弃 prop
           prop: property,
-          order: params.order
+          order: params.order,
+          sortBy: params.sortBy
         } : {}
         if (proxyConfig) {
           this.commitProxy('query')

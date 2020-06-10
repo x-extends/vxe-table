@@ -7,9 +7,9 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
-        <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
-        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree.toggleTreeExpand(tableData[0], true)">切换第一个</vxe-button>
+        <vxe-button @click="$refs.xTree.setTreeExpand(tableData[2], true)">展开第三个</vxe-button>
+        <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-toolbar>
@@ -51,9 +51,9 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
-            <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
-            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree.toggleTreeExpand(tableData[0], true)">切换第一个</vxe-button>
+            <vxe-button @click="$refs.xTree.setTreeExpand(tableData[2], true)">展开第三个</vxe-button>
+            <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-toolbar>

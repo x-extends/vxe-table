@@ -173,6 +173,7 @@ body,
     padding-top: 10px;
     border-right: 1px solid #dcdfe6;
     overflow: hidden;
+    transition: width 0.3s;
     &.visible {
       width: 300px;
     }
@@ -183,6 +184,7 @@ body,
     & > .header {
       flex-shrink: 0;
       text-align: center;
+      width: 300px;
       .version-list {
         font-size: 12px;
         margin-bottom: 10px;
@@ -204,6 +206,7 @@ body,
       }
     }
     & > .body {
+      width: 300px;
       flex-grow: 1;
       overflow-y: scroll;
       overflow-x: hidden;
@@ -307,11 +310,15 @@ body,
       position: absolute;
       left: 0;
       top: 50%;
-      line-height: 50px;
+      height: 60px;
       user-select: none;
+      padding: 0;
       cursor: pointer;
       border: 1px solid #e4e4e4;
       background: #ffffff;
+      &:active {
+        outline: 0;
+      }
     }
   }
   > .body {

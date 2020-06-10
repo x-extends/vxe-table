@@ -206,10 +206,10 @@ export default {
                   this.insertAtEvent(row, column)
                   break
                 case 'expand':
-                  xTree.setTreeExpansion(row, true)
+                  xTree.setTreeExpand(row, true)
                   break
                 case 'contract':
-                  xTree.setTreeExpansion(row, false)
+                  xTree.setTreeExpand(row, false)
                   break
               }
             }
@@ -272,10 +272,10 @@ export default {
           this.insertAtEvent(row, column)
           break
         case 'expand':
-          xTree.setTreeExpansion(row, true)
+          xTree.setTreeExpand(row, true)
           break
         case 'contract':
-          xTree.setTreeExpansion(row, false)
+          xTree.setTreeExpand(row, false)
           break
       }
     }

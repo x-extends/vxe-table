@@ -3347,8 +3347,18 @@ const apis = [
       },
       {
         name: 'setRowExpansion(rows, checked)',
-        desc: '用于 expand-config，设置展开行，二个参数设置这一行展开与否',
+        disabled: true,
+        desc: '即将废弃，请使用 setRowExpand',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows: Row | Array<Row>, checked: boolean',
+        list: []
+      },
+      {
+        name: 'setRowExpand(rows, checked)',
+        desc: '用于 expand-config，设置展开行，二个参数设置这一行展开与否',
+        version: '2.9.12',
         type: 'Promise',
         enum: '',
         defVal: 'rows: Row | Array<Row>, checked: boolean',
@@ -3356,7 +3366,8 @@ const apis = [
       },
       {
         name: 'setAllRowExpansion(checked)',
-        desc: '用于 expand-config，设置所有行的展开与否（如果是关闭所有行，可以使用 clearRowExpand 快速清除）',
+        disabled: true,
+        desc: '即将废弃，请使用 setAllRowExpand',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3364,8 +3375,18 @@ const apis = [
         list: []
       },
       {
+        name: 'setAllRowExpand(checked)',
+        desc: '用于 expand-config，设置所有行的展开与否（如果是关闭所有行，可以使用 clearRowExpand 快速清除）',
+        version: '2.9.12',
+        type: 'Promise',
+        enum: '',
+        defVal: 'checked: boolean',
+        list: []
+      },
+      {
         name: 'setTreeExpansion(rows, checked)',
-        desc: '用于 tree-config，设置展开树形节点，二个参数设置这一行展开与否',
+        disabled: true,
+        desc: '即将废弃，请使用 setTreeExpand',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3373,9 +3394,28 @@ const apis = [
         list: []
       },
       {
+        name: 'setTreeExpand(rows, checked)',
+        desc: '用于 tree-config，设置展开树形节点，二个参数设置这一行展开与否',
+        version: '2.9.12',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows: Row | Array<Row>, checked: boolean',
+        list: []
+      },
+      {
         name: 'setAllTreeExpansion(checked)',
-        desc: '用于 tree-config，设置所有树节点的展开与否（如果是关闭所有树节点，可以使用 clearTreeExpand 快速清除）',
+        disabled: true,
+        desc: '即将废弃，请使用 setAllTreeExpand',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'checked: boolean',
+        list: []
+      },
+      {
+        name: 'setAllTreeExpand(checked)',
+        desc: '用于 tree-config，设置所有树节点的展开与否（如果是关闭所有树节点，可以使用 clearTreeExpand 快速清除）',
+        version: '2.9.12',
         type: 'Promise',
         enum: '',
         defVal: 'checked: boolean',
@@ -3486,7 +3526,8 @@ const apis = [
       },
       {
         name: 'toggleRowExpansion(row)',
-        desc: '用于 type=expand，切换展开行的状态',
+        disabled: true,
+        desc: '即将废弃，请使用 toggleRowExpand',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3494,9 +3535,28 @@ const apis = [
         list: []
       },
       {
+        name: 'toggleRowExpand(row)',
+        desc: '用于 type=expand，切换展开行的状态',
+        version: '2.9.12',
+        type: 'Promise',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
         name: 'toggleTreeExpansion(row)',
-        desc: '用于 tree-config，切换展开树形节点的状态',
+        disabled: true,
+        desc: '即将废弃，请使用 toggleTreeExpand',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'toggleTreeExpand(row)',
+        desc: '用于 tree-config，切换展开树形节点的状态',
+        version: '2.9.12',
         type: 'Promise',
         enum: '',
         defVal: 'row: Row',

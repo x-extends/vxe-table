@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-export-xlsx" target="_blank">vxe-table-plugin-export-xlsx</a> 插件的 API<span class="red">（建议使用后端导出）</span></p>
+    <p class="tip">具体兼容请查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table-plugin-export-xlsx" target="_blank">vxe-table-plugin-export-xlsx</a> 插件的 API<span class="red">（建议使用后端导出）</span></p>
 
     <vxe-toolbar custom export>
       <template v-slot:buttons>
