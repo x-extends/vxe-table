@@ -167,7 +167,6 @@ const TableScrollKeyboard = () => import(/* webpackChunkName: "scroll" */ './vie
 const TableScrollMaxHeight = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/MaxHeight.vue')
 const TableScrollGroup = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Group.vue')
 const TableScrollEdit = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Edit.vue')
-const TableScrollTree = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/Tree.vue')
 const TableScrollCellValid = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/CellValid.vue')
 const TableScrollRowValid = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/RowValid.vue')
 const TableScrollForceCellValid = () => import(/* webpackChunkName: "scroll" */ './views/table/scroll/ForceCellValid.vue')
@@ -273,6 +272,8 @@ const TablePluginExportPDF = () => import(/* webpackChunkName: "excel" */ './vie
 const TablePluginRenderer = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Renderer.vue')
 const TablePluginMenus = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Menus.vue')
 const TablePluginExcel = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/Excel.vue')
+const TablePluginTreeRows = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/TreeRows')
+const TablePluginTreeCols = () => import(/* webpackChunkName: "excel" */ './views/table/plugin/TreeCols')
 
 const VXEAPI = () => import(/* webpackChunkName: "api" */ './views/api/API.vue')
 const Donation = () => import(/* webpackChunkName: "api" */ './views/api/Donation.vue')
@@ -1158,11 +1159,6 @@ export default new Router({
       component: TableScrollEdit
     },
     {
-      path: '/table/scroll/tree',
-      name: 'TableScrollTree',
-      component: TableScrollTree
-    },
-    {
       path: '/table/scroll/cellValid',
       name: 'TableScrollCellValid',
       component: TableScrollCellValid
@@ -1592,6 +1588,16 @@ export default new Router({
       path: '/table/plugin/excel',
       name: 'TablePluginExcel',
       component: TablePluginExcel
+    },
+    {
+      path: '/table/plugin/treeRows',
+      name: 'TablePluginTreeRows',
+      component: TablePluginTreeRows
+    },
+    {
+      path: '/table/plugin/treeCols',
+      name: 'TablePluginTreeCols',
+      component: TablePluginTreeCols
     },
     {
       path: '/donation/api',

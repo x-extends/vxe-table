@@ -1604,7 +1604,7 @@ const Methods = {
                 evnt.preventDefault()
                 const targetRow = childrens[0]
                 params = { $table: this, row: targetRow }
-                this.setTreeExpansion(currentRow, true)
+                this.setTreeExpand(currentRow, true)
                   .then(() => this.scrollToRow(targetRow))
                   .then(() => this.triggerCurrentRowEvent(evnt, params))
               }
@@ -1652,7 +1652,7 @@ const Methods = {
             if (parentRow) {
               evnt.preventDefault()
               params = { $table: this, row: parentRow }
-              this.setTreeExpansion(parentRow, false)
+              this.setTreeExpand(parentRow, false)
                 .then(() => this.scrollToRow(parentRow))
                 .then(() => this.triggerCurrentRowEvent(evnt, params))
             }
@@ -2473,7 +2473,7 @@ const Methods = {
   triggerSortEvent (evnt, column, order) {
     const property = column.property
     if (column.sortable || column.remoteSort) {
-      const params = { column, property, order }
+      const params = { column, property, order, sortBy: column.sortBy }
       if (!order || column.order === order) {
         params.order = null
         this.clearSort()
@@ -2585,15 +2585,15 @@ const Methods = {
       const expanded = !this.isExpandByRow(row)
       const columnIndex = this.getColumnIndex(column)
       const $columnIndex = this.$getColumnIndex(column)
-      this.setRowExpansion(row, expanded)
+      this.setRowExpand(row, expanded)
       this.emitEvent('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) }, evnt)
     }
   },
   /**
    * 切换展开行
    */
-  toggleRowExpansion (row) {
-    return this.setRowExpansion(row, !this.isExpandByRow(row))
+  toggleRowExpand (row) {
+    return this.setRowExpand(row, !this.isExpandByRow(row))
   },
   /**
    * 处理默认展开行
@@ -2602,7 +2602,7 @@ const Methods = {
     const { expandOpts, fullDataRowIdData } = this
     const { expandAll, expandRowKeys } = expandOpts
     if (expandAll) {
-      this.setAllRowExpansion(true)
+      this.setAllRowExpand(true)
     } else if (expandRowKeys) {
       const defExpandeds = []
       expandRowKeys.forEach(rowid => {
@@ -2610,15 +2610,15 @@ const Methods = {
           defExpandeds.push(fullDataRowIdData[rowid].row)
         }
       })
-      this.setRowExpansion(defExpandeds, true)
+      this.setRowExpand(defExpandeds, true)
     }
   },
   /**
    * 设置所有行的展开与否
    * @param {Boolean} expanded 是否展开
    */
-  setAllRowExpansion (expanded) {
-    return this.setRowExpansion(this.expandOpts.lazy ? this.tableData : this.tableFullData, expanded)
+  setAllRowExpand (expanded) {
+    return this.setRowExpand(this.expandOpts.lazy ? this.tableData : this.tableFullData, expanded)
   },
   handleAsyncRowExpand (row) {
     const rest = this.fullAllDataRowMap.get(row)
@@ -2639,7 +2639,7 @@ const Methods = {
    * @param {Array/Row} rows 行数据
    * @param {Boolean} expanded 是否展开
    */
-  setRowExpansion (rows, expanded) {
+  setRowExpand (rows, expanded) {
     const { fullAllDataRowMap, expandLazyLoadeds, expandOpts, expandColumn: column } = this
     let { rowExpandeds } = this
     const { lazy, accordion, toggleMethod } = expandOpts
@@ -2750,15 +2750,15 @@ const Methods = {
       const expanded = !this.isTreeExpandByRow(row)
       const columnIndex = this.getColumnIndex(column)
       const $columnIndex = this.$getColumnIndex(column)
-      this.setTreeExpansion(row, expanded)
+      this.setTreeExpand(row, expanded)
       this.emitEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
     }
   },
   /**
    * 切换/展开树节点
    */
-  toggleTreeExpansion (row) {
-    return this.setTreeExpansion(row, !this.isTreeExpandByRow(row))
+  toggleTreeExpand (row) {
+    return this.setTreeExpand(row, !this.isTreeExpandByRow(row))
   },
   /**
    * 处理默认展开树节点
@@ -2768,7 +2768,7 @@ const Methods = {
     if (treeConfig) {
       const { expandAll, expandRowKeys } = treeOpts
       if (expandAll) {
-        this.setAllTreeExpansion(true)
+        this.setAllTreeExpand(true)
       } else if (expandRowKeys) {
         const defExpandeds = []
         const rowkey = UtilTools.getRowkey(this)
@@ -2778,7 +2778,7 @@ const Methods = {
             defExpandeds.push(matchObj.item)
           }
         })
-        this.setTreeExpansion(defExpandeds, true)
+        this.setTreeExpand(defExpandeds, true)
       }
     }
   },
@@ -2814,7 +2814,7 @@ const Methods = {
    * 设置所有树节点的展开与否
    * @param {Boolean} expanded 是否展开
    */
-  setAllTreeExpansion (expanded) {
+  setAllTreeExpand (expanded) {
     const { tableFullData, treeOpts } = this
     const { lazy, children } = treeOpts
     const expandeds = []
@@ -2824,7 +2824,7 @@ const Methods = {
         expandeds.push(row)
       }
     }, treeOpts)
-    return this.setTreeExpansion(expandeds, expanded)
+    return this.setTreeExpand(expandeds, expanded)
   },
   /**
    * 设置展开树形节点，二个参数设置这一行展开与否
@@ -2833,7 +2833,7 @@ const Methods = {
    * @param {Array/Row} rows 行数据
    * @param {Boolean} expanded 是否展开
    */
-  setTreeExpansion (rows, expanded) {
+  setTreeExpand (rows, expanded) {
     const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, expandColumn: column } = this
     const { lazy, hasChild, children, accordion, toggleMethod } = treeOpts
     const result = []
@@ -3231,7 +3231,7 @@ const Methods = {
         const nodes = matchObj.nodes
         nodes.forEach((row, index) => {
           if (index < nodes.length - 1 && !this.isTreeExpandByRow(row)) {
-            this.setTreeExpansion(row, true)
+            this.setTreeExpand(row, true)
           }
         })
       }

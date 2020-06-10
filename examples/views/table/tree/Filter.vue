@@ -88,7 +88,7 @@ export default {
                 this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toString(item[key]).indexOf(filterName) > -1), options)
                 // 搜索之后默认展开所有子节点
                 this.$nextTick(() => {
-                  this.$refs.xTree.setAllTreeExpansion(true)
+                  this.$refs.xTree.setAllTreeExpand(true)
                 })
               } else {
                 this.tableData = this.originData
@@ -125,7 +125,7 @@ export default {
         this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toString(item[key]).indexOf(filterName) > -1), options)
         // 搜索之后默认展开所有子节点
         this.$nextTick(() => {
-          this.$refs.xTree.setAllTreeExpansion(true)
+          this.$refs.xTree.setAllTreeExpand(true)
         })
       } else {
         this.tableData = this.originData

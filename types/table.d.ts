@@ -564,19 +564,19 @@ export declare class Table extends VXETableModule {
    * 用于 type=expand，切换展开行的状态
    * @param row 指定行
    */
-  toggleRowExpansion(row: any): Promise<any>;
+  toggleRowExpand(row: any): Promise<any>;
   /**
    * 用于 expand-config，设置所有行的展开与否
    * 如果是关闭所有行，可以使用 clearRowExpand 快速清除
    * @param checked 是否选中
    */
-  setAllRowExpansion(checked: boolean): Promise<any>;
+  setAllRowExpand(checked: boolean): Promise<any>;
   /**
    * 用于 expand-config，设置展开行，二个参数设置这一行展开与否
    * @param rows 指定行
    * @param checked 是否选中
    */
-  setRowExpansion(rows: any, checked: boolean): Promise<any>;
+  setRowExpand(rows: any, checked: boolean): Promise<any>;
   /**
    * 用于 expand-config，判断行是否为展开状态
    * @param row 指定行
@@ -612,19 +612,19 @@ export declare class Table extends VXETableModule {
    * 用于 tree-config，切换展开树形节点的状态
    * @param row 指定行
    */
-  toggleTreeExpansion(row: any): Promise<any>;
+  toggleTreeExpand(row: any): Promise<any>;
   /**
    * 用于 tree-config，设置所有树节点的展开与否
    * 如果是关闭所有树节点，可以使用 clearTreeExpand 快速清除
    * @param checked 是否选中
    */
-  setAllTreeExpansion(checked: boolean): Promise<any>;
+  setAllTreeExpand(checked: boolean): Promise<any>;
   /**
    * 用于 tree-config，设置展开树形节点，二个参数设置这一行展开与否
    * @param rows 指定行
    * @param checked 是否选中
    */
-  setTreeExpansion(rows: any, checked: boolean): Promise<any>;
+  setTreeExpand(rows: any, checked: boolean): Promise<any>;
   /**
    * 用于 tree-config，判断行是否为树形节点展开状态
    * @param row 指定行

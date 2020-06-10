@@ -18,8 +18,8 @@
         <vxe-button @click="loadData(1000)">加载1k节点</vxe-button>
         <vxe-button @click="loadData(5000)">加载5k节点</vxe-button>
         <vxe-button @click="loadData(10000)">加载1w节点</vxe-button>
-        <vxe-button @click="$refs.xVTree.setAllTreeExpansion(true)">展开所有</vxe-button>
-        <vxe-button @click="$refs.xVTree.setAllTreeExpansion(false)">收起所有</vxe-button>
+        <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
       </template>
     </vxe-virtual-tree>
 
@@ -60,8 +60,8 @@ export default {
           :tree-config="{children: 'children'}"
           :columns="tableColumn">
           <template v-slot:toolbar_buttons>
-            <vxe-button @click="$refs.xVTree.setAllTreeExpansion(true)">展开所有</vxe-button>
-            <vxe-button @click="$refs.xVTree.setAllTreeExpansion(false)">收起所有</vxe-button>
+            <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,

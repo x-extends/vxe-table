@@ -177,10 +177,10 @@ export default {
                   xGrid.reloadTreeChilds(row)
                   break
                 case 'expand':
-                  xGrid.setTreeExpansion(row, true)
+                  xGrid.setTreeExpand(row, true)
                   break
                 case 'contract':
-                  xGrid.setTreeExpansion(row, false)
+                  xGrid.setTreeExpand(row, false)
                   break
               }
             }
@@ -237,10 +237,10 @@ export default {
           xGrid.reloadTreeChilds(row)
           break
         case 'expand':
-          xGrid.setTreeExpansion(row, true)
+          xGrid.setTreeExpand(row, true)
           break
         case 'contract':
-          xGrid.setTreeExpansion(row, false)
+          xGrid.setTreeExpand(row, false)
           break
       }
     }

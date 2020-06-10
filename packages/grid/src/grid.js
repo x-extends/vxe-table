@@ -690,7 +690,8 @@ export default {
       if (isRemote) {
         this.sortData = property ? {
           property,
-          order: params.order
+          order: params.order,
+          sortBy: params.sortBy
         } : {}
         if (proxyConfig) {
           this.commitProxy('query')

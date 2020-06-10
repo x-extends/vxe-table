@@ -14,7 +14,7 @@
       :columns="tableColumn"
       :data="tableData">
       <template v-slot:buttons>
-        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-virtual-tree>
@@ -56,7 +56,7 @@ export default {
           :columns="tableColumn"
           :data="tableData">
           <template v-slot:buttons>
-            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-virtual-tree>
