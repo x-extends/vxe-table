@@ -25,6 +25,7 @@
         <vxe-button @click="loadData(50000)">加载5w节点</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
+        <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
       </template>
     </vxe-virtual-tree>
 
@@ -72,6 +73,7 @@ export default {
             <vxe-button @click="loadData(50000)">加载5w节点</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
+            <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,
@@ -187,6 +189,10 @@ export default {
                   resolve(result)
                 }, 300)
               })
+            },
+            getSelectionEvent () {
+              const selectRecords = this.$refs.xVTree.getCheckboxRecords()
+              this.$XModal.alert(selectRecords.length)
             }
           }
         }
@@ -298,6 +304,10 @@ export default {
           resolve(result)
         }, 300)
       })
+    },
+    getSelectionEvent () {
+      const selectRecords = this.$refs.xVTree.getCheckboxRecords()
+      this.$XModal.alert(selectRecords.length)
     }
   }
 }

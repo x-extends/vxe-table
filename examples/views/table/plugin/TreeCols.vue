@@ -28,6 +28,7 @@
         <vxe-button @click="loadColumnAndData(5000, 20000)">5k列2w条</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
+        <vxe-button @click="getRadioEvent">获取选中</vxe-button>
       </template>
     </vxe-virtual-tree>
 
@@ -66,11 +67,15 @@ export default {
           :columns="tableColumn">
           <template v-slot:toolbar_buttons>
             <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(2000, 5000)">2k列5k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 10000)">5w列1w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 20000)">5w列2w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(1000, 20000)">1k列2w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(2000, 10000)">2k列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 5000)">5k列5k条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 10000)">5k列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 20000)">5k列2w条</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
+            <vxe-button @click="getRadioEvent">获取选中</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,
@@ -184,6 +189,10 @@ export default {
                   resolve(result)
                 }, 300)
               })
+            },
+            getRadioEvent () {
+              const selectRow = this.$refs.xVTree.getRadioRecord()
+              this.$XModal.alert(selectRow ? selectRow.name : null)
             }
           }
         }
@@ -300,6 +309,10 @@ export default {
           resolve(result)
         }, 300)
       })
+    },
+    getRadioEvent () {
+      const selectRow = this.$refs.xVTree.getRadioRecord()
+      this.$XModal.alert(selectRow ? selectRow.name : null)
     }
   }
 }
