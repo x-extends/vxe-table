@@ -360,7 +360,7 @@ export const Cell = {
   renderSelectionCellByProp (h, params) {
     const { $table, row, column, isHidden } = params
     const { treeConfig, treeIndeterminates } = $table
-    const { labelField, checkField: property, checkMethod } = $table.checkboxOpts
+    const { labelField, checkField: property, halfField, checkMethod } = $table.checkboxOpts
     const { slots } = column
     let indeterminate = false
     let isChecked = false
@@ -387,7 +387,7 @@ export const Cell = {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
           'is--disabled': isDisabled,
-          'is--indeterminate': indeterminate
+          'is--indeterminate': halfField && !isChecked ? row[halfField] : indeterminate
         }],
         on
       }, [

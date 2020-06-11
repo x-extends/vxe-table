@@ -2,7 +2,6 @@
   <div>
     <p class="tip">
       树形虚拟滚动渲染<span class="orange">（最大可以支撑 1w 列、10w 行）</span>，具体兼容请查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table-plugin-virtual-tree" target="_blank">vxe-table-plugin-virtual-tree</a> 插件的 API<br>
-      复选框不支持父子关联，...具体请看相关文档！<br>
       <span class="red">（注：启用纵向虚拟滚的后不支持动态行高）</span>
     </p>
 
@@ -15,7 +14,7 @@
       :loading="loading"
       :data="tableData"
       :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
-      :radio-config="{labelField: 'name'}"
+      :checkbox-config="{labelField: 'name', checkField: 'checked', halfField: 'indeterminate'}"
       :tree-config="{children: 'children'}"
       :columns="tableColumn">
       <template v-slot:toolbar_buttons>
@@ -48,7 +47,7 @@ export default {
       tableData: [],
       tableColumn: [
         { type: 'seq', title: '序号', width: 100 },
-        { type: 'radio', title: 'Name', treeNode: true },
+        { type: 'checkbox', title: 'Name', treeNode: true },
         { field: 'id', title: 'ID' }
       ],
       demoCodes: [
@@ -62,7 +61,7 @@ export default {
           :loading="loading"
           :data="tableData"
           :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
-          :radio-config="{labelField: 'name'}"
+          :checkbox-config="{labelField: 'name', checkField: 'checked', halfField: 'indeterminate'}"
           :tree-config="{children: 'children'}"
           :columns="tableColumn">
           <template v-slot:toolbar_buttons>
@@ -84,7 +83,7 @@ export default {
               tableData: [],
               tableColumn: [
                 { type: 'seq', title: '序号', width: 100 },
-                { type: 'radio', title: 'Name', treeNode: true },
+                { type: 'checkbox', title: 'Name', treeNode: true },
                 { field: 'id', title: 'ID' }
               ]
             }
@@ -143,6 +142,8 @@ export default {
                             const item5 = {
                               id: startIndex + ketIndex++,
                               name: \`name\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              checked: false,
+                              indeterminate: false,
                               children: []
                             }
                             children4.push(item5)
@@ -150,6 +151,8 @@ export default {
                           const item4 = {
                             id: startIndex + ketIndex++,
                             name: \`name\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            checked: false,
+                            indeterminate: false,
                             children: children4
                           }
                           children3.push(item4)
@@ -157,6 +160,8 @@ export default {
                         const item3 = {
                           id: startIndex + ketIndex++,
                           name: \`name\${index1}_\${index2}_\${index3}\`,
+                          checked: false,
+                          indeterminate: false,
                           children: children3
                         }
                         children2.push(item3)
@@ -164,6 +169,8 @@ export default {
                       const item2 = {
                         id: startIndex + ketIndex++,
                         name: \`name\${index1}_\${index2}\`,
+                        checked: false,
+                        indeterminate: false,
                         children: children2
                       }
                       children1.push(item2)
@@ -171,6 +178,8 @@ export default {
                     const item1 = {
                       id: startIndex + ketIndex++,
                       name: \`name\${index1}\`,
+                      checked: false,
+                      indeterminate: false,
                       children: children1
                     }
                     result.push(item1)
@@ -244,6 +253,8 @@ export default {
                     const item5 = {
                       id: startIndex + ketIndex++,
                       name: `name${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      checked: false,
+                      indeterminate: false,
                       children: []
                     }
                     children4.push(item5)
@@ -251,6 +262,8 @@ export default {
                   const item4 = {
                     id: startIndex + ketIndex++,
                     name: `name${index1}_${index2}_${index3}_${index4}`,
+                    checked: false,
+                    indeterminate: false,
                     children: children4
                   }
                   children3.push(item4)
@@ -258,6 +271,8 @@ export default {
                 const item3 = {
                   id: startIndex + ketIndex++,
                   name: `name${index1}_${index2}_${index3}`,
+                  checked: false,
+                  indeterminate: false,
                   children: children3
                 }
                 children2.push(item3)
@@ -265,6 +280,8 @@ export default {
               const item2 = {
                 id: startIndex + ketIndex++,
                 name: `name${index1}_${index2}`,
+                checked: false,
+                indeterminate: false,
                 children: children2
               }
               children1.push(item2)
@@ -272,6 +289,8 @@ export default {
             const item1 = {
               id: startIndex + ketIndex++,
               name: `name${index1}`,
+              checked: false,
+              indeterminate: false,
               children: children1
             }
             result.push(item1)
