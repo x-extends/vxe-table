@@ -98,25 +98,6 @@ function getPagerSlots (_vm) {
   return slots
 }
 
-function getTableOns (_vm) {
-  const { $listeners, proxyConfig, proxyOpts } = _vm
-  const ons = {}
-  XEUtils.each($listeners, (cb, type) => {
-    ons[type] = function (...args) {
-      _vm.$emit(type, ...args)
-    }
-  })
-  if (proxyConfig) {
-    if (proxyOpts.sort) {
-      ons['sort-change'] = _vm.sortChangeEvent
-    }
-    if (proxyOpts.filter) {
-      ons['filter-change'] = _vm.filterChangeEvent
-    }
-  }
-  return ons
-}
-
 Object.keys(Table.methods).forEach(name => {
   methods[name] = function (...args) {
     return this.$refs.xTable && this.$refs.xTable[name](...args)
@@ -316,7 +297,7 @@ export default {
        */
       h('vxe-table', {
         props: this.tableProps,
-        on: getTableOns(this),
+        on: this.getTableOns(),
         scopedSlots: $scopedSlots,
         ref: 'xTable'
       }, this.$slots.default),
@@ -400,6 +381,24 @@ export default {
     reloadColumn (columns) {
       this.clearAll()
       return this.loadColumn(columns)
+    },
+    getTableOns () {
+      const { $listeners, proxyConfig, proxyOpts } = this
+      const ons = {}
+      XEUtils.each($listeners, (cb, type) => {
+        ons[type] = function (...args) {
+          this.$emit(type, ...args)
+        }
+      })
+      if (proxyConfig) {
+        if (proxyOpts.sort) {
+          ons['sort-change'] = this.sortChangeEvent
+        }
+        if (proxyOpts.filter) {
+          ons['filter-change'] = this.filterChangeEvent
+        }
+      }
+      return ons
     },
     initPages () {
       if (this.pagerConfig && this.pagerOpts.pageSize) {
