@@ -2,7 +2,6 @@
   <div>
     <p class="tip">
       树形虚拟滚动渲染<span class="orange">（最大可以支撑 1w 列、10w 行）</span>，具体兼容请查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table-plugin-virtual-tree" target="_blank">vxe-table-plugin-virtual-tree</a> 插件的 API<br>
-      复选框不支持父子关联，...具体请看相关文档！<br>
       <span class="red">（注：启用纵向虚拟滚的后不支持动态行高）</span>
     </p>
 

@@ -368,7 +368,7 @@ export const Cell = {
   renderSelectionCellByProp (h, params) {
     const { $table, row, column, isHidden } = params
     const { treeConfig, treeIndeterminates, checkboxOpts } = $table
-    const { checkMethod } = checkboxOpts
+    const { halfField, checkMethod } = checkboxOpts
     const { slots } = column
     // 在 v2.0 中废弃 labelProp
     const labelField = checkboxOpts.labelField || checkboxOpts.labelProp
@@ -399,7 +399,7 @@ export const Cell = {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
           'is--disabled': isDisabled,
-          'is--indeterminate': indeterminate
+          'is--indeterminate': halfField && !isChecked ? row[halfField] : indeterminate
         }],
         on
       }, [
