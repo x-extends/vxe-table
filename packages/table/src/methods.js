@@ -1678,7 +1678,7 @@ const Methods = {
   },
   handleGlobalResizeEvent () {
     this.closeMenu()
-    this.recalculate()
+    this.recalculate(true)
   },
   handleTooltipLeaveEvent () {
     const tooltipOpts = this.tooltipOpts
