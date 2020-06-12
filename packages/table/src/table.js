@@ -3016,7 +3016,7 @@ export default {
     },
     handleGlobalResizeEvent () {
       this.closeMenu()
-      this.recalculate()
+      this.recalculate(true)
     },
     /**
      * 快捷菜单事件处理
