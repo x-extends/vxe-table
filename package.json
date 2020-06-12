@@ -87,7 +87,7 @@
     "xe-ajax": "^4.0.3",
     "xe-ajax-mock": "^1.9.4",
     "xe-clipboard": "^1.7.2",
-    "xe-utils": "^2.4.6",
+    "xe-utils": "^2.4.7",
     "xlsx": "^0.15.6"
   },
   "peerDependencies": {
