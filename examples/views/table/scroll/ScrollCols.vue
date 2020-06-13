@@ -128,7 +128,10 @@ export default {
         // 使用函数式加载，阻断 vue 对大数组的双向绑定
         if (xGrid) {
           Promise.all([
-            xGrid.reloadColumn(columns),
+            xGrid.reloadColumn(columns.map(conf => {
+              conf.fixed = null
+              return conf
+            })),
             xGrid.reloadData(data)
           ]).then(() => {
             this.$XModal.message({ message: `渲染 ${colSize} 列 ${rowSize} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })

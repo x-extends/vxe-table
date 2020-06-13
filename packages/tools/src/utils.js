@@ -150,9 +150,9 @@ class ColumnConfig {
     // 不支持双向的属性
     if (name !== 'filters') {
       this[name] = value
-      // if (name === 'field') {
-      //   handleColumnField(this)
-      // }
+      if (name === 'field') {
+        this.property = value
+      }
     }
   }
 }
