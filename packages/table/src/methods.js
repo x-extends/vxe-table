@@ -2048,24 +2048,44 @@ const Methods = {
     this.checkSelectionStatus()
   },
   checkSelectionStatus () {
-    const { afterFullData, selection, treeIndeterminates, checkboxOpts } = this
-    const { checkField: property, checkStrictly, checkMethod } = checkboxOpts
+    const { afterFullData, selection, treeIndeterminates, checkboxOpts, treeConfig } = this
+    const { checkField, halfField, checkStrictly, checkMethod } = checkboxOpts
     if (!checkStrictly) {
-      if (property) {
-        this.isAllSelected = afterFullData.length && afterFullData.every(
+      let isAllSelected = false
+      let isIndeterminate = false
+      if (checkField) {
+        isAllSelected = afterFullData.length && afterFullData.every(
           checkMethod
-            ? (row) => !checkMethod({ row }) || XEUtils.get(row, property)
-            : row => XEUtils.get(row, property)
+            ? (row) => !checkMethod({ row }) || XEUtils.get(row, checkField)
+            : row => XEUtils.get(row, checkField)
         )
-        this.isIndeterminate = !this.isAllSelected && afterFullData.some(row => XEUtils.get(row, property) || treeIndeterminates.indexOf(row) > -1)
+        if (treeConfig) {
+          if (halfField) {
+            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || XEUtils.get(row, halfField) || treeIndeterminates.indexOf(row) > -1)
+          } else {
+            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || treeIndeterminates.indexOf(row) > -1)
+          }
+        } else {
+          if (halfField) {
+            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || XEUtils.get(row, halfField))
+          } else {
+            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField))
+          }
+        }
       } else {
-        this.isAllSelected = afterFullData.length && afterFullData.every(
+        isAllSelected = afterFullData.length && afterFullData.every(
           checkMethod
             ? (row) => !checkMethod({ row }) || selection.indexOf(row) > -1
             : row => selection.indexOf(row) > -1
         )
-        this.isIndeterminate = !this.isAllSelected && afterFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
+        if (treeConfig) {
+          isIndeterminate = !isAllSelected && afterFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
+        } else {
+          isIndeterminate = !isAllSelected && afterFullData.some(row => selection.indexOf(row) > -1)
+        }
       }
+      this.isAllSelected = isAllSelected
+      this.isIndeterminate = isIndeterminate
     }
   },
   // 还原展开、选中等相关状态
