@@ -5,6 +5,7 @@
     <vxe-grid
       border
       show-overflow
+      keep-source
       ref="xGrid"
       height="460"
       :loading="loading"
@@ -68,6 +69,7 @@ export default {
         <vxe-grid
           border
           show-overflow
+          keep-source
           ref="xGrid"
           height="460"
           :loading="loading"
