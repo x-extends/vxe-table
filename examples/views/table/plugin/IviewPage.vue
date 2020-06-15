@@ -38,6 +38,7 @@
       border
       resizable
       show-overflow
+      keep-source
       highlight-hover-row
       export-config
       ref="xTable"
@@ -183,6 +184,7 @@ export default {
           border
           resizable
           show-overflow
+          keep-source
           highlight-hover-row
           export-config
           ref="xTable"
