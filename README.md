@@ -190,7 +190,7 @@ export default {
 如果这个开源项目对您有帮助，请作者喝杯咖啡吧。☕  
 有问题欢迎留言或者提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
 
-如果您正在使用该项目，您的捐赠会帮助该项目能持续发展下去  
+由于维护一个开源项目需要花费非常大的精力与时间，如果您正在使用该项目，您的捐赠会帮助该项目能持续发展下去  
 [👉 捐赠方式💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
 ## License
