@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">与 <a class="link" href="https://github.com/xuliangzhan/ant-design-vue">ant-design-vue</a> 组合渲染 + 使用分页</p>
+    <p class="tip">
+      与 <a class="link" href="https://github.com/xuliangzhan/ant-design-vue">ant-design-vue</a> 组合渲染 + 使用分页<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
+    </p>
 
     <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent" @reset="searchEvent">
       <vxe-form-item field="name" title="AInput" span="8" :title-prefix="{ message: '帮助信息！！！', icon: 'fa fa-exclamation-circle' }" :item-render="{name: 'AInput'}"></vxe-form-item>

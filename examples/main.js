@@ -13,7 +13,7 @@ import moment from 'moment'
 Vue.config.productionTip = false
 
 // 生成模拟数据
-const list = window.MOCK_DATA_LIST = []
+const list = []
 let currTime = Date.now()
 const nameList = XEUtils.shuffle(['a', 'T', 'b', 'v', 'G', 'k', 'r', 'H', 'x', 'z', 'c', 'd', 'e', 'p', 'U', 'f', 's', 'N'])
 const nickList = XEUtils.shuffle(['徐', '李', '雷', '赵', '马', '孙', '钱', '蒋', '老', '蔡', '吕', '项', '徐', '杨', '胡', '杜', '嬴', '叼'])
@@ -109,7 +109,7 @@ function mockData () {
   }
 }
 
-window.MOCK_TREE_DATA_LIST = [
+const treeList = [
   {
     id: '10000',
     parentId: null,
@@ -526,6 +526,25 @@ window.MOCK_TREE_DATA_LIST = [
     children: []
   }
 ]
+
+Object.defineProperties(window, {
+  MOCK_DATA_LIST: {
+    get () {
+      list.forEach(item => {
+        item.checked = false
+      })
+      return list
+    }
+  },
+  MOCK_TREE_DATA_LIST: {
+    get () {
+      XEUtils.eachTree(treeList, item => {
+        item.checked = false
+      })
+      return treeList
+    }
+  }
+})
 
 mockData()
 

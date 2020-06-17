@@ -79,8 +79,8 @@
           </template>
         </div>
       </div>
-      <div class="oper-wrapper" @click="showLeft = !showLeft" v-show="showOperBtn">
-        <vxe-button class="oper-btn" :icon="showLeft ? 'vxe-icon--arrow-left' : 'vxe-icon--arrow-right'"></vxe-button>
+      <div class="oper-wrapper" v-show="showOperBtn">
+        <vxe-button class="oper-btn" :icon="showLeft ? 'vxe-icon--arrow-left' : 'vxe-icon--arrow-right'" @click="showLeft = !showLeft"></vxe-button>
       </div>
       <div class="body">
         <div class="content" :class="{full: ['VXEAPI', 'Donation', 'Run'].includes($route.name)}">

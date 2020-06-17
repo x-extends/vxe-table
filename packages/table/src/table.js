@@ -825,7 +825,6 @@ export default {
     }
     this.closeFilter()
     this.closeMenu()
-    this.clearAll()
     this.preventEvent(null, 'beforeDestroy')
   },
   destroyed () {

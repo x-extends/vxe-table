@@ -36,7 +36,7 @@
       show-footer
       height="400"
       :footer-method="footerMethod"
-      :footer-cell-class-name="footerCellClassName"
+      :footer-cell-class-name="footerCellClassName2"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -50,6 +50,7 @@
     <pre>
       <code class="xml">{{ demoCodes[2] }}</code>
       <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="css">{{ demoCodes[4] }}</code>
     </pre>
 
     <p class="tip">还可以固定列</p>
@@ -69,7 +70,7 @@
       :show-header="showHeader"
       :show-footer="showFooter"
       :footer-method="footerMethod"
-      :footer-cell-class-name="footerCellClassName"
+      :footer-cell-class-name="footerCellClassName3"
       :data="tableData">
       <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column title="基本信息">
@@ -83,8 +84,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <code class="xml">{{ demoCodes[5] }}</code>
+      <code class="javascript">{{ demoCodes[6] }}</code>
+      <code class="javascript">{{ demoCodes[7] }}</code>
     </pre>
   </div>
 </template>
@@ -169,7 +171,7 @@ export default {
           show-footer
           height="400"
           :footer-method="footerMethod"
-          :footer-cell-class-name="footerCellClassName"
+          :footer-cell-class-name="footerCellClassName2"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -189,7 +191,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            footerCellClassName ({ $rowIndex, column, columnIndex }) {
+            footerCellClassName2 ({ $rowIndex, column, columnIndex }) {
               if (columnIndex === 0) {
                 if ($rowIndex === 0) {
                   return 'col-blue'
@@ -233,6 +235,16 @@ export default {
         }
         `,
         `
+        .mytable-footer .col-blue {
+          background-color: #2db7f5;
+          color: #fff;
+        }
+        .mytable-footer .col-red {
+          background-color: red;
+          color: #fff;
+        }
+        `,
+        `
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
@@ -248,7 +260,7 @@ export default {
           :show-header="showHeader"
           :show-footer="showFooter"
           :footer-method="footerMethod"
-          :footer-cell-class-name="footerCellClassName"
+          :footer-cell-class-name="footerCellClassName3"
           :data="tableData">
           <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column title="基本信息">
@@ -271,11 +283,15 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            footerCellClassName ({ $rowIndex, columnIndex }) {
-              if (columnIndex === 0) {
+            footerCellClassName3 ({ $rowIndex, column }) {
+              if (column.type === 'seq') {
                 if ($rowIndex === 0) {
                   return 'col-blue'
                 } else {
+                  return 'col-red'
+                }
+              } else if (column.property === 'age') {
+                if ($rowIndex === 1) {
                   return 'col-red'
                 }
               }
@@ -313,6 +329,16 @@ export default {
             }
           }
         }
+        `,
+        `
+        .mytable-footer .col-blue {
+          background-color: #2db7f5;
+          color: #fff;
+        }
+        .mytable-footer .col-red {
+          background-color: red;
+          color: #fff;
+        }
         `
       ]
     }
@@ -327,11 +353,24 @@ export default {
     })
   },
   methods: {
-    footerCellClassName ({ $rowIndex, columnIndex }) {
+    footerCellClassName2 ({ $rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         if ($rowIndex === 0) {
           return 'col-blue'
         } else {
+          return 'col-red'
+        }
+      }
+    },
+    footerCellClassName3 ({ $rowIndex, column }) {
+      if (column.type === 'seq') {
+        if ($rowIndex === 0) {
+          return 'col-blue'
+        } else {
+          return 'col-red'
+        }
+      } else if (column.property === 'age') {
+        if ($rowIndex === 1) {
           return 'col-red'
         }
       }
@@ -371,12 +410,12 @@ export default {
 }
 </script>
 
-<style>
-.mytable-footer .vxe-footer--column.col-blue {
+<style scoped>
+.mytable-footer >>> .col-blue {
   background-color: #2db7f5;
   color: #fff;
 }
-.mytable-footer .vxe-footer--column.col-red {
+.mytable-footer >>> .col-red {
   background-color: red;
   color: #fff;
 }

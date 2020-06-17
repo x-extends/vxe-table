@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       具体兼容请查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table-plugin-export-pdf" target="_blank">vxe-table-plugin-export-pdf</a> 插件的 API<span class="red">（建议使用后端导出）</span><br>
-      <span class="red">（注：默认是不支持中文字体的，可以通过安装 <a class="link" href="https://github.com/xuliangzhan/vxe-table-plugin-export-pdf#font" target="_blank">字体库</a> 解决）</span>
+      <span class="red">（注：该示例仅供参考，默认是不支持中文字体的，可以通过安装 <a class="link" href="https://github.com/xuliangzhan/vxe-table-plugin-export-pdf#font" target="_blank">字体库</a> 解决）</span>
     </p>
 
     <vxe-toolbar custom export>
