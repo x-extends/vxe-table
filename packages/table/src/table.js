@@ -980,7 +980,6 @@ export default {
     }
     this.closeFilter()
     this.closeMenu()
-    this.clearAll()
     this.preventEvent(null, 'beforeDestroy')
   },
   destroyed () {
@@ -3391,8 +3390,10 @@ export default {
             return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
           }
         } else {
-          XEUtils.set(row, property, value)
-          this.handleCheckboxReserveRow(row, value)
+          if (!checkMethod || checkMethod({ row })) {
+            XEUtils.set(row, property, value)
+            this.handleCheckboxReserveRow(row, value)
+          }
         }
       } else {
         if (treeConfig && !checkStrictly) {
@@ -3430,14 +3431,16 @@ export default {
             return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
           }
         } else {
-          if (value) {
-            if (selection.indexOf(row) === -1) {
-              selection.push(row)
+          if (!checkMethod || checkMethod({ row })) {
+            if (value) {
+              if (selection.indexOf(row) === -1) {
+                selection.push(row)
+              }
+            } else {
+              XEUtils.remove(selection, item => item === row)
             }
-          } else {
-            XEUtils.remove(selection, item => item === row)
+            this.handleCheckboxReserveRow(row, value)
           }
-          this.handleCheckboxReserveRow(row, value)
         }
       }
       this.checkSelectionStatus()

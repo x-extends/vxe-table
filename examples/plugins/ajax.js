@@ -256,7 +256,11 @@ XEAjax.mixin({
         if (dataCacheList.length < size) {
           mockData(size)
         }
-        resolve(dataCacheList.slice(0, size))
+        const rest = dataCacheList.slice(0, size)
+        rest.forEach(item => {
+          item.checked = false
+        })
+        resolve(rest)
       }, 100)
     })
   },
@@ -266,7 +270,11 @@ XEAjax.mixin({
         if (treeCacheList.length < size) {
           mockData(size, true)
         }
-        resolve(treeCacheList.slice(0, size))
+        const rest = treeCacheList.slice(0, size)
+        XEUtils.eachTree(rest, item => {
+          item.checked = false
+        })
+        resolve(rest)
       }, 100)
     })
   }
