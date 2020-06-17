@@ -271,8 +271,9 @@ function hasEllipsis ($xetable, column, property, allColumnOverflow) {
 }
 
 function toHtml ($xetable, opts, columns, datas) {
-  const { id, border, treeConfig, treeOpts, isAllSelected, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow } = $xetable
+  const { id, border, treeConfig, treeOpts, isAllSelected, isIndeterminate, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow } = $xetable
   const isPrint = opts.print
+  const allCls = 'check-all'
   const clss = [
     'vxe-table',
     `border--${toTableBorder(border)}`,
@@ -298,7 +299,7 @@ function toHtml ($xetable, opts, columns, datas) {
         classNames.push(`col--${headAlign}`)
       }
       if (column.type === 'checkbox') {
-        return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></td>`
+        return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></td>`
       }
       return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><span>${cellTitle}</span></div></th>`
     }).join('')}</tr></thead>`
@@ -374,7 +375,9 @@ function toHtml ($xetable, opts, columns, datas) {
       html += '</tfoot>'
     }
   }
-  return html + '</table></body></html>'
+  // 是否半选状态
+  const script = !isAllSelected && isIndeterminate ? `<script>(function(){var a=document.querySelector(".${allCls}");if(a){a.indeterminate=true}})()</script>` : ''
+  return html + `</table>${script}</body></html>`
 }
 
 function toXML ($xetable, opts, columns, datas) {

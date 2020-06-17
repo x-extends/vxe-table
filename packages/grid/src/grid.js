@@ -370,7 +370,7 @@ export default {
       const { $listeners, proxyConfig, proxyOpts } = this
       const ons = {}
       XEUtils.each($listeners, (cb, type) => {
-        ons[type] = function (...args) {
+        ons[type] = (...args) => {
           this.$emit(type, ...args)
         }
       })

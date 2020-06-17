@@ -2525,7 +2525,7 @@ const apis = [
         name: 'createRow(records)',
         desc: '创建 Row|Rows 对象（对于某些特殊场景需要对数据进行手动插入时可能会用到）',
         version: '',
-        type: 'Promise<Row|Rows>',
+        type: 'Promise<row|rows>',
         enum: '',
         defVal: 'records: object | array',
         list: []
@@ -2541,20 +2541,20 @@ const apis = [
       },
       {
         name: 'insert(records)',
-        desc: '往表格插入临时数据，从第一行新增一行或多行新数据',
+        desc: '往表格插入临时数据（不支持树结构），从第一行插入一行或多行新数据',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
-        defVal: 'records?: object | array',
+        defVal: 'records?: object | Array<object>',
         list: []
       },
       {
         name: 'insertAt(records, row)',
-        desc: '往表格插入临时数据，从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null从第一行插入、-1 从最后插入',
+        desc: '往表格插入临时数据（不支持树结构），从指定位置插入一行或多行；第二个参数：row 指定位置、null从第一行插入、-1 从最后插入',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
-        defVal: 'records: Array<object>, row?: Row',
+        defVal: 'records: object | Array<object>, row?: Row',
         list: []
       },
       {
@@ -2568,7 +2568,7 @@ const apis = [
       },
       {
         name: 'remove(rows)',
-        desc: '删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据',
+        desc: '删除指定行数据（不支持树结构），指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2577,7 +2577,7 @@ const apis = [
       },
       {
         name: 'removeCheckboxRow()',
-        desc: '删除复选框选中的行数据',
+        desc: '删除复选框选中的行数据（不支持树结构）',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2586,7 +2586,7 @@ const apis = [
       },
       {
         name: 'removeRadioRow()',
-        desc: '删除单选框选中的行数据',
+        desc: '删除单选框选中的行数据（不支持树结构）',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2595,7 +2595,7 @@ const apis = [
       },
       {
         name: 'removeCurrentRow()',
-        desc: '删除当前行选中的行数据',
+        desc: '删除当前行选中的行数据（不支持树结构）',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2766,7 +2766,7 @@ const apis = [
       },
       {
         name: 'getRecordset()',
-        desc: '获取表格数据集（获取新增、删除、更改的数据，对于增删改查表格非常方便）',
+        desc: '获取表格数据集（获取插入、删除、更改的数据，对于增删改查表格非常方便）',
         version: '',
         type: '{insertRecords, removeRecords, updateRecords}',
         enum: '',
@@ -2775,7 +2775,7 @@ const apis = [
       },
       {
         name: 'getInsertRecords()',
-        desc: '用于 edit-config，获取新增的临时数据',
+        desc: '用于 edit-config，获取插入的临时数据',
         version: '',
         type: 'Array',
         enum: '',
@@ -2919,7 +2919,7 @@ const apis = [
       },
       {
         name: 'isInsertByRow(row)',
-        desc: '用于 edit-config，判断行是否为新增的临时数据',
+        desc: '用于 edit-config，判断行是否为插入的临时数据',
         version: '',
         type: 'Boolean',
         enum: '',

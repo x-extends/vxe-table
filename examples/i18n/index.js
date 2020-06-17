@@ -9,7 +9,6 @@ import tableJAJP from '../../packages/locale/lang/ja-JP'
 import myZhCN from './lang/zh-CN'
 import myZhTC from './lang/zh-TC'
 import myEnUS from './lang/en-US'
-import myJAJP from './lang/ja-JP'
 
 Vue.use(VueI18n)
 
@@ -34,7 +33,7 @@ const i18n = new VueI18n({
     },
     ja_JP: {
       ...tableJAJP,
-      ...myJAJP
+      ...myZhCN
     }
   }
 })
