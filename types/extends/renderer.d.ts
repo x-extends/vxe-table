@@ -76,6 +76,10 @@ export class RenderOptions {
    * 目标组件渲染的事件
    */
   events?: { [key: string]: Function };
+  /**
+   * 目标组件渲染的原生事件
+   */
+  nativeEvents?: { [key: string]: Function };
   [key: string]: any;
 }
 

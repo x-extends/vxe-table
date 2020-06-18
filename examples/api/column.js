@@ -408,6 +408,15 @@ const apis = [
             list: []
           },
           {
+            name: 'nativeEvents',
+            desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+            version: '2.9.13',
+            type: 'Object',
+            enum: '',
+            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
             name: 'content',
             desc: '渲染组件的内容（仅用于特殊组件）',
             version: '',
@@ -502,6 +511,15 @@ const apis = [
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',
             version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'nativeEvents',
+            desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+            version: '2.9.13',
             type: 'Object',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
@@ -603,6 +621,15 @@ const apis = [
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',
             version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'nativeEvents',
+            desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+            version: '2.9.13',
             type: 'Object',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
@@ -730,6 +757,15 @@ const apis = [
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',
             version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '{data, property}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'nativeEvents',
+            desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+            version: '2.9.13',
             type: 'Object',
             enum: '',
             defVal: '{data, property}, ...[目标渲染的 arguments]',

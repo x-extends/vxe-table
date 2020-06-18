@@ -36,7 +36,7 @@ export declare class Modal extends VXETableModule {
   /**
    * 只对 type=modal 有效，窗口的默认位置
    */
-  position?: {
+  position?: 'center' | {
     top?: number;
     left?: number;
   };
@@ -184,7 +184,7 @@ export interface ModalOptions {
   status?: string;
   iconStatus?: string;
   top?: number | string;
-  position?: {
+  position?: 'center' | {
     top?: number;
     left?: number;
   };

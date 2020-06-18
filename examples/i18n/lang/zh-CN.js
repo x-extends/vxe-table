@@ -624,7 +624,7 @@ module.exports = {
           minWidth: '窗口的最小宽度',
           minHeight: '窗口的最小高度',
           top: '只对 type=message 有效，消息距离顶部的位置',
-          position: '只对 type=modal 有效，窗口的默认位置',
+          position: '只对 type=modal 有效，窗口的默认位置，可以设置为 center 居中显示',
           zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
           showTitleOverflow: '设置标题内容过长时显示为省略号',
           fullscreen: '默认最大化显示',

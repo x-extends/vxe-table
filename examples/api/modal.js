@@ -218,7 +218,7 @@ const apis = [
         name: 'position',
         descKey: 'app.api.modal.desc.position',
         version: '2.9.12',
-        type: 'Object',
+        type: 'String, Object',
         enum: '',
         defVal: '',
         list: [

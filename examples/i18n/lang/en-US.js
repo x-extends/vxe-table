@@ -625,7 +625,7 @@ module.exports = {
           minWidth: 'The minimum width of the modal window',
           minHeight: 'The minimum height of the modal window',
           top: 'Valid only for type=message, message from top',
-          position: '只对 type=modal 有效，窗口的默认位置',
+          position: '只对 type=modal 有效，窗口的默认位置，可以设置为 center 居中显示',
           zIndex: 'Custom style z-index (may be used for special situations, such as occlusion)',
           showTitleOverflow: 'Set the title content to appear as an ellipsis when it is too long',
           fullscreen: 'Default maximized display',

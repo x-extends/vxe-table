@@ -15,7 +15,7 @@ export default {
     status: String,
     iconStatus: String,
     top: { type: [Number, String], default: 15 },
-    position: Object,
+    position: [String, Object],
     title: String,
     duration: { type: [Number, String], default: () => GlobalConfig.modal.duration },
     message: [String, Function],
@@ -300,20 +300,26 @@ export default {
           }
         } else {
           this.$nextTick(() => {
-            const { inited, marginSize, fullscreen, position = {} } = this
+            const { inited, marginSize, fullscreen, position } = this
             if (!remember || !inited) {
               const modalBoxElem = this.getBox()
               const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
               const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
+              const isPosCenter = position === 'center'
+              const { top, left } = isPosCenter ? { top: position, left: position } : Object.assign({}, position)
+              const topCenter = isPosCenter || top === 'center'
+              const leftCenter = isPosCenter || left === 'center'
               let posTop = ''
               let posLeft = ''
-              if (position.left) {
-                posLeft = `${XEUtils.toNumber(position.left)}PX`
+              if (left && !leftCenter) {
+                posLeft = isNaN(left) ? left : `${left}px`
               } else {
                 posLeft = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
               }
-              if (position.top) {
-                posTop = `${XEUtils.toNumber(position.top)}PX`
+              if (topCenter) {
+                posTop = `${clientVisibleHeight / 2 - modalBoxElem.offsetHeight / 2}px`
+              } else if (top && !topCenter) {
+                posTop = isNaN(top) ? top : `${top}px`
               } else if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
                 posTop = `${marginSize}px`
               }
