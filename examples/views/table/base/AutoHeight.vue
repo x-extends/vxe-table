@@ -63,13 +63,16 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="tableHeight = 300">修改300px</vxe-button>
-        <vxe-button @click="tableHeight = 500">修改500px</vxe-button>
-        <vxe-button @click="tableHeight = 800">修改800px</vxe-button>
+        <vxe-button @click="tableWidth = '600px'">宽600px</vxe-button>
+        <vxe-button @click="tableWidth = '700px'">宽700px</vxe-button>
+        <vxe-button @click="tableWidth = '800px'">宽800px</vxe-button>
+        <vxe-button @click="tableHeight = '300px'">高300px</vxe-button>
+        <vxe-button @click="tableHeight = '500px'">高500px</vxe-button>
+        <vxe-button @click="tableHeight = '800px'">高800px</vxe-button>
       </template>
     </vxe-toolbar>
 
-    <div :style="{height: `${tableHeight}px`}">
+    <div :style="{width: tableWidth, height: tableHeight}">
       <vxe-table
         border
         auto-resize
@@ -102,7 +105,8 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      tableHeight: 300,
+      tableWidth: null,
+      tableHeight: '300px',
       tableData: [],
       demoCodes: [
         `
@@ -171,13 +175,16 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="tableHeight = 300">修改300px</vxe-button>
-            <vxe-button @click="tableHeight = 500">修改500px</vxe-button>
-            <vxe-button @click="tableHeight = 800">修改800px</vxe-button>
+            <vxe-button @click="tableWidth = '600px'">宽600px</vxe-button>
+            <vxe-button @click="tableWidth = '700px'">宽700px</vxe-button>
+            <vxe-button @click="tableWidth = '800px'">宽800px</vxe-button>
+            <vxe-button @click="tableHeight = '300px'">高300px</vxe-button>
+            <vxe-button @click="tableHeight = '500px'">高500px</vxe-button>
+            <vxe-button @click="tableHeight = '800px'">高800px</vxe-button>
           </template>
         </vxe-toolbar>
 
-        <div :style="{height: \`\${tableHeight}px\`}">
+        <div :style="{width: tableWidth, height: tableHeight}">
           <vxe-table
             border
             auto-resize
@@ -198,7 +205,8 @@ export default {
         export default {
           data () {
             return {
-              tableHeight: 300,
+              tableWidth: null,
+              tableHeight: '300px',
               tableData: []
             }
           },
@@ -230,7 +238,7 @@ export default {
               // 返回一个二维数组的表尾合计
               return [means, sums]
             }
-  }
+          }
         }
         `
       ]
