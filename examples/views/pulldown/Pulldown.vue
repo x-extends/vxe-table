@@ -6,13 +6,27 @@
     <p>
       <vxe-pulldown ref="xDown1">
         <template>
-          <vxe-input v-model="value1" placeholder="可搜索的虚拟下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
+          <vxe-input v-model="value1" placeholder="可搜索的下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
         </template>
         <template v-slot:dropdown>
-          <vxe-list height="200" class="my-dropdown1" :data="list1" auto-resize>
+          <div class="my-dropdown1">
+            <div class="list-item1" v-for="item in list1" :key="item.value" @click="selectEvent1(item)">
+              <i class="fa fa-user-o"></i>
+              <span>{{ item.label }}</span>
+            </div>
+          </div>
+        </template>
+      </vxe-pulldown>
+
+      <vxe-pulldown ref="xDown2">
+        <template>
+          <vxe-input v-model="value2" placeholder="可搜索的大数据下拉框" @focus="focusEvent2" @keyup="keyupEvent2"></vxe-input>
+        </template>
+        <template v-slot:dropdown>
+          <vxe-list height="200" class="my-dropdown2" :data="list2" auto-resize>
             <template v-slot="{ items }">
-              <div class="list-item1" v-for="item in items" :key="item.value" @click="selectEvent1(item)">
-                <i class="fa fa-user-o"></i>
+              <div class="list-item2" v-for="item in items" :key="item.value" @click="selectEvent2(item)">
+                <i class="fa fa-envelope-o"></i>
                 <span>{{ item.label }}</span>
               </div>
             </template>
@@ -20,15 +34,15 @@
         </template>
       </vxe-pulldown>
 
-      <vxe-pulldown ref="xDown2">
+      <vxe-pulldown ref="xDown3">
         <template>
-          <vxe-button icon="fa fa-table" @click="clickEvent2">切换下拉表格</vxe-button>
+          <vxe-button icon="fa fa-table" @click="clickEvent3">切换下拉表格</vxe-button>
         </template>
         <template v-slot:dropdown>
-          <div class="my-dropdown2">
+          <div class="my-dropdown3">
             <vxe-table
               auto-resize
-              :data="tableData2">
+              :data="tableData3">
               <vxe-table-column field="name" title="Name"></vxe-table-column>
               <vxe-table-column field="role" title="Role"></vxe-table-column>
               <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -37,21 +51,21 @@
         </template>
       </vxe-pulldown>
 
-      <vxe-pulldown ref="xDown3">
+      <vxe-pulldown ref="xDown4">
         <template>
-          <vxe-input v-model="value3" suffix-icon="fa fa-search" placeholder="实现下拉分页表格" @keyup="keyupEvent3" @focus="focusEvent3" @suffix-click="suffixClick3"></vxe-input>
+          <vxe-input v-model="value4" suffix-icon="fa fa-search" placeholder="实现下拉分页表格" @keyup="keyupEvent4" @focus="focusEvent4" @suffix-click="suffixClick4"></vxe-input>
         </template>
         <template v-slot:dropdown>
-          <div class="my-dropdown3">
+          <div class="my-dropdown4">
             <vxe-grid
               highlight-hover-row
               auto-resize
               height="auto"
-              :loading="loading3"
-              :pager-config="tablePage3"
-              :data="tableData3"
-              :columns="tableColumn3"
-              @cell-click="cellClickEvent3">
+              :loading="loading4"
+              :pager-config="tablePage4"
+              :data="tableData4"
+              :columns="tableColumn4"
+              @cell-click="cellClickEvent4">
             </vxe-grid>
           </div>
         </template>
@@ -76,21 +90,23 @@ export default {
     return {
       value1: '',
       list1: [],
-      tableData2: [
+      value2: '',
+      list2: [],
+      tableData3: [
         { name: 'Test1', role: '前端', sex: '男' },
         { name: 'Test2', role: '后端', sex: '男' },
         { name: 'Test3', role: '测试', sex: '男' },
         { name: 'Test4', role: '设计师', sex: '女' }
       ],
-      value3: '',
-      tableColumn3: [
+      value4: '',
+      tableColumn4: [
         { field: 'name', title: 'Name' },
         { field: 'role', title: 'Role' },
         { field: 'sex', title: 'Sex' }
       ],
-      loading3: false,
-      tableData3: [],
-      tableList3: [
+      loading4: false,
+      tableData4: [],
+      tableList4: [
         { name: 'Test1', role: '前端', sex: '男' },
         { name: 'Test2', role: '后端', sex: '男' },
         { name: 'Test3', role: '测试', sex: '男' },
@@ -99,7 +115,7 @@ export default {
         { name: 'Test6', role: '前端', sex: '男' },
         { name: 'Test7', role: '前端', sex: '男' }
       ],
-      tablePage3: {
+      tablePage4: {
         total: 0,
         currentPage: 1,
         pageSize: 10
@@ -109,13 +125,27 @@ export default {
         <p>
           <vxe-pulldown ref="xDown1">
             <template>
-              <vxe-input v-model="value1" placeholder="可搜索的虚拟下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
+              <vxe-input v-model="value1" placeholder="可搜索的下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
             </template>
             <template v-slot:dropdown>
-              <vxe-list height="200" class="my-dropdown1" :data="list1" auto-resize>
+              <div class="my-dropdown1">
+                <div class="list-item1" v-for="item in list1" :key="item.value" @click="selectEvent1(item)">
+                  <i class="fa fa-user-o"></i>
+                  <span>{{ item.label }}</span>
+                </div>
+              </div>
+            </template>
+          </vxe-pulldown>
+
+          <vxe-pulldown ref="xDown2">
+            <template>
+              <vxe-input v-model="value2" placeholder="可搜索的大数据下拉框" @focus="focusEvent2" @keyup="keyupEvent2"></vxe-input>
+            </template>
+            <template v-slot:dropdown>
+              <vxe-list height="200" class="my-dropdown2" :data="list2" auto-resize>
                 <template v-slot="{ items }">
-                  <div class="list-item1" v-for="item in items" :key="item.value" @click="selectEvent1(item)">
-                    <i class="fa fa-user-o"></i>
+                  <div class="list-item2" v-for="item in items" :key="item.value" @click="selectEvent2(item)">
+                    <i class="fa fa-envelope-o"></i>
                     <span>{{ item.label }}</span>
                   </div>
                 </template>
@@ -123,15 +153,15 @@ export default {
             </template>
           </vxe-pulldown>
 
-          <vxe-pulldown ref="xDown2">
+          <vxe-pulldown ref="xDown3">
             <template>
-              <vxe-button icon="fa fa-table" @click="clickEvent2">切换下拉表格</vxe-button>
+              <vxe-button icon="fa fa-table" @click="clickEvent3">切换下拉表格</vxe-button>
             </template>
             <template v-slot:dropdown>
-              <div class="my-dropdown2">
+              <div class="my-dropdown3">
                 <vxe-table
                   auto-resize
-                  :data="tableData2">
+                  :data="tableData3">
                   <vxe-table-column field="name" title="Name"></vxe-table-column>
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
                   <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -140,21 +170,21 @@ export default {
             </template>
           </vxe-pulldown>
 
-          <vxe-pulldown ref="xDown3">
+          <vxe-pulldown ref="xDown4">
             <template>
-              <vxe-input v-model="value3" suffix-icon="fa fa-search" placeholder="实现下拉分页表格" @keyup="keyupEvent3" @focus="focusEvent3" @suffix-click="suffixClick3"></vxe-input>
+              <vxe-input v-model="value4" suffix-icon="fa fa-search" placeholder="实现下拉分页表格" @keyup="keyupEvent4" @focus="focusEvent4" @suffix-click="suffixClick4"></vxe-input>
             </template>
             <template v-slot:dropdown>
-              <div class="my-dropdown3">
+              <div class="my-dropdown4">
                 <vxe-grid
                   highlight-hover-row
                   auto-resize
                   height="auto"
-                  :loading="loading3"
-                  :pager-config="tablePage3"
-                  :data="tableData3"
-                  :columns="tableColumn3"
-                  @cell-click="cellClickEvent3">
+                  :loading="loading4"
+                  :pager-config="tablePage4"
+                  :data="tableData4"
+                  :columns="tableColumn4"
+                  @cell-click="cellClickEvent4">
                 </vxe-grid>
               </div>
             </template>
@@ -166,28 +196,24 @@ export default {
           data () {
             return {
               value1: '',
-              list1: [
-                { label: '选项1', value: 1 },
-                { label: '选项2', value: 2 },
-                { label: '选项3', value: 3 },
-                { label: '选项4', value: 4 },
-                { label: '选项5', value: 5 }
-              ],
-              tableData2: [
+              list1: [],
+              value2: '',
+              list2: [],
+              tableData3: [
                 { name: 'Test1', role: '前端', sex: '男' },
                 { name: 'Test2', role: '后端', sex: '男' },
                 { name: 'Test3', role: '测试', sex: '男' },
                 { name: 'Test4', role: '设计师', sex: '女' }
               ],
-              value3: '',
-              tableColumn3: [
+              value4: '',
+              tableColumn4: [
                 { field: 'name', title: 'Name' },
                 { field: 'role', title: 'Role' },
                 { field: 'sex', title: 'Sex' }
               ],
-              loading3: false,
-              tableData3: [],
-              tableList3: [
+              loading4: false,
+              tableData4: [],
+              tableList4: [
                 { name: 'Test1', role: '前端', sex: '男' },
                 { name: 'Test2', role: '后端', sex: '男' },
                 { name: 'Test3', role: '测试', sex: '男' },
@@ -196,7 +222,7 @@ export default {
                 { name: 'Test6', role: '前端', sex: '男' },
                 { name: 'Test7', role: '前端', sex: '男' }
               ],
-              tablePage3: {
+              tablePage4: {
                 total: 0,
                 currentPage: 1,
                 pageSize: 10
@@ -205,12 +231,18 @@ export default {
           },
           created () {
             const list1 = []
-            for (let index = 0; index < 1000; index++) {
+            const list2 = []
+            for (let index = 0; index < 20; index++) {
               list1.push({ label: \`选项\${index}\`, value: index })
+            }
+            for (let index = 0; index < 2000; index++) {
+              list2.push({ label: \`选项\${index}\`, value: index })
             }
             this.data1 = list1
             this.list1 = list1
-            this.keyupEvent3()
+            this.data2 = list2
+            this.list2 = list2
+            this.keyupEvent4()
           },
           methods: {
             focusEvent1 () {
@@ -226,36 +258,51 @@ export default {
                 this.list1 = this.data1
               })
             },
-            clickEvent2 () {
-              this.$refs.xDown2.togglePanel()
+            focusEvent2 () {
+              this.$refs.xDown2.showPanel()
             },
-            focusEvent3 () {
-              this.$refs.xDown3.showPanel()
+            keyupEvent2 () {
+              const { value2 } = this
+              this.list2 = value2 ? this.data2.filter(item => item.label.indexOf(value2) > -1) : this.data2
             },
-            keyupEvent3 () {
-              const { value3 } = this
-              this.loading3 = true
+            selectEvent2 (item) {
+              this.value2 = item.label
+              this.$refs.xDown2.hidePanel().then(() => {
+                this.list2 = this.data2
+              })
+            },
+            clickEvent3 () {
+              this.$refs.xDown3.togglePanel()
+            },
+            focusEvent4 () {
+              this.$refs.xDown4.showPanel()
+            },
+            keyupEvent4 () {
+              const { value4 } = this
+              this.loading4 = true
               setTimeout(() => {
-                this.loading3 = false
-                if (value3) {
-                  this.tableData3 = this.tableList3.filter(row => row.name.indexOf(value3) > -1)
+                this.loading4 = false
+                if (value4) {
+                  this.tableData4 = this.tableList4.filter(row => row.name.indexOf(value4) > -1)
                 } else {
-                  this.tableData3 = this.tableList3.slice(0)
+                  this.tableData4 = this.tableList4.slice(0)
                 }
               }, 100)
             },
-            suffixClick3 () {
-              this.$refs.xDown3.togglePanel()
+            suffixClick4 () {
+              this.$refs.xDown4.togglePanel()
             },
-            cellClickEvent3 ({ row }) {
-              this.value3 = row.name
-              this.$refs.xDown3.hidePanel()
+            cellClickEvent4 ({ row }) {
+              this.value4 = row.name
+              this.$refs.xDown4.hidePanel()
             }
           }
         }
         `,
         `
         .my-dropdown1 {
+          height: 200px;
+          overflow: auto;
           border-radius: 4px;
           background-color: #fff;
           border: 1px solid #dcdfe6;
@@ -264,12 +311,20 @@ export default {
           background-color: #f5f7fa;
         }
         .my-dropdown2 {
+          border-radius: 4px;
+          background-color: #fff;
+          border: 1px solid #dcdfe6;
+        }
+        .list-item2:hover {
+          background-color: #f5f7fa;
+        }
+        .my-dropdown3 {
           width: 400px;
           background-color: #fff;
           border: 1px solid #dcdfe6;
           box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
         }
-        .my-dropdown3 {
+        .my-dropdown4 {
           width: 600px;
           height: 300px;
           background-color: #fff;
@@ -282,12 +337,18 @@ export default {
   },
   created () {
     const list1 = []
-    for (let index = 0; index < 1000; index++) {
+    const list2 = []
+    for (let index = 0; index < 20; index++) {
       list1.push({ label: `选项${index}`, value: index })
+    }
+    for (let index = 0; index < 2000; index++) {
+      list2.push({ label: `选项${index}`, value: index })
     }
     this.data1 = list1
     this.list1 = list1
-    this.keyupEvent3()
+    this.data2 = list2
+    this.list2 = list2
+    this.keyupEvent4()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -308,30 +369,43 @@ export default {
         this.list1 = this.data1
       })
     },
-    clickEvent2 () {
-      this.$refs.xDown2.togglePanel()
+    focusEvent2 () {
+      this.$refs.xDown2.showPanel()
     },
-    focusEvent3 () {
-      this.$refs.xDown3.showPanel()
+    keyupEvent2 () {
+      const { value2 } = this
+      this.list2 = value2 ? this.data2.filter(item => item.label.indexOf(value2) > -1) : this.data2
     },
-    keyupEvent3 () {
-      const { value3 } = this
-      this.loading3 = true
+    selectEvent2 (item) {
+      this.value2 = item.label
+      this.$refs.xDown2.hidePanel().then(() => {
+        this.list2 = this.data2
+      })
+    },
+    clickEvent3 () {
+      this.$refs.xDown3.togglePanel()
+    },
+    focusEvent4 () {
+      this.$refs.xDown4.showPanel()
+    },
+    keyupEvent4 () {
+      const { value4 } = this
+      this.loading4 = true
       setTimeout(() => {
-        this.loading3 = false
-        if (value3) {
-          this.tableData3 = this.tableList3.filter(row => row.name.indexOf(value3) > -1)
+        this.loading4 = false
+        if (value4) {
+          this.tableData4 = this.tableList4.filter(row => row.name.indexOf(value4) > -1)
         } else {
-          this.tableData3 = this.tableList3.slice(0)
+          this.tableData4 = this.tableList4.slice(0)
         }
       }, 100)
     },
-    suffixClick3 () {
-      this.$refs.xDown3.togglePanel()
+    suffixClick4 () {
+      this.$refs.xDown4.togglePanel()
     },
-    cellClickEvent3 ({ row }) {
-      this.value3 = row.name
-      this.$refs.xDown3.hidePanel()
+    cellClickEvent4 ({ row }) {
+      this.value4 = row.name
+      this.$refs.xDown4.hidePanel()
     }
   }
 }
@@ -339,6 +413,8 @@ export default {
 
 <style lang="css" scoped>
 .my-dropdown1 {
+  height: 200px;
+  overflow: auto;
   border-radius: 4px;
   background-color: #fff;
   border: 1px solid #dcdfe6;
@@ -347,12 +423,20 @@ export default {
   background-color: #f5f7fa;
 }
 .my-dropdown2 {
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #dcdfe6;
+}
+.list-item2:hover {
+  background-color: #f5f7fa;
+}
+.my-dropdown3 {
   width: 400px;
   background-color: #fff;
   border: 1px solid #dcdfe6;
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
 }
-.my-dropdown3 {
+.my-dropdown4 {
   width: 600px;
   height: 300px;
   background-color: #fff;
