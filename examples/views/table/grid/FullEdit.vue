@@ -103,7 +103,7 @@ export default {
         },
         columns: [
           { type: 'checkbox', title: 'ID', width: 120 },
-          { field: 'name', title: 'Name', remoteSort: true, editRender: { name: '$input' } },
+          { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
           {
             field: 'role',
             title: 'Role',
@@ -115,9 +115,9 @@ export default {
               { label: '程序员鼓励师', value: '程序员鼓励师' }
             ],
             filterMultiple: false,
-            editRender: { name: '$input' }
+            editRender: { name: 'input' }
           },
-          { field: 'nickname', title: 'Nickname', editRender: { name: '$input' } },
+          { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
           { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
           { field: 'age', title: 'Age', remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
           { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
@@ -240,7 +240,7 @@ export default {
                 },
                 columns: [
                   { type: 'checkbox', title: 'ID', width: 120 },
-                  { field: 'name', title: 'Name', remoteSort: true, editRender: { name: '$input' } },
+                  { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
                   {
                     field: 'role',
                     title: 'Role',
@@ -252,9 +252,9 @@ export default {
                       { label: '程序员鼓励师', value: '程序员鼓励师' }
                     ],
                     filterMultiple: false,
-                    editRender: { name: '$input' }
+                    editRender: { name: 'input' }
                   },
-                  { field: 'nickname', title: 'Nickname', editRender: { name: '$input' } },
+                  { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                   { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
                   { field: 'age', title: 'Age', remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
                   { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
