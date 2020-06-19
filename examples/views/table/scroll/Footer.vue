@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">显示表尾，服务端计算合计</p>
+    <p class="tip">显示表尾，服务端计算表尾合计</p>
 
     <vxe-grid
       border

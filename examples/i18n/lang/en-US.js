@@ -677,14 +677,17 @@ module.exports = {
           transfer: 'Whether to insert the popup container into the body（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
-      selectGroup: {
+      optgroup: {
         desc: {
+          label: 'display content',
           disabled: 'Whether to disable',
           size: 'Size'
         }
       },
-      selectOption: {
+      option: {
         desc: {
+          value: 'Binding values',
+          label: 'display content',
           disabled: 'Whether to disable',
           size: 'Size'
         }

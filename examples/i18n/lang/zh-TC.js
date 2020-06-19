@@ -676,14 +676,17 @@ module.exports = {
           transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
-      selectGroup: {
+      optgroup: {
         desc: {
+          label: '显示内容',
           disabled: '是否禁用',
           size: '尺寸'
         }
       },
-      selectOption: {
+      option: {
         desc: {
+          value: '绑定值',
+          label: '显示内容',
           disabled: '是否禁用',
           size: '尺寸'
         }
