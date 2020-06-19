@@ -5,7 +5,7 @@ const contextMenuAPI = [
     name: 'disabled',
     desc: '是否禁用右键',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'false',
     list: []
@@ -14,7 +14,7 @@ const contextMenuAPI = [
     name: 'options',
     desc: '菜单配置',
     version: '',
-    type: 'Array<Array>',
+    type: 'any[][]',
     enum: '',
     defVal: '',
     list: [
@@ -22,7 +22,7 @@ const contextMenuAPI = [
         name: 'code',
         desc: '菜单键值',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -31,7 +31,7 @@ const contextMenuAPI = [
         name: 'name',
         desc: '菜单名称（支持开启国际化）',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -40,7 +40,7 @@ const contextMenuAPI = [
         name: 'prefixIcon',
         desc: '前缀图标 className',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -49,7 +49,7 @@ const contextMenuAPI = [
         name: 'suffixIcon',
         desc: '后缀图标 className',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -58,7 +58,7 @@ const contextMenuAPI = [
         name: 'className',
         desc: '菜单项的 className',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -67,7 +67,7 @@ const contextMenuAPI = [
         name: 'visible',
         desc: '是否可视',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -76,7 +76,7 @@ const contextMenuAPI = [
         name: 'disabled',
         desc: '是否禁用',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -85,7 +85,7 @@ const contextMenuAPI = [
         name: 'children',
         desc: '二级菜单（最多只允许有二级）',
         version: '',
-        type: 'Array',
+        type: 'any[]',
         enum: '',
         defVal: '',
         list: [
@@ -93,7 +93,7 @@ const contextMenuAPI = [
             name: 'code',
             desc: '菜单键值',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -102,7 +102,7 @@ const contextMenuAPI = [
             name: 'name',
             desc: '菜单名称',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -111,7 +111,7 @@ const contextMenuAPI = [
             name: 'prefixIcon',
             desc: '前缀图标 className',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -120,7 +120,7 @@ const contextMenuAPI = [
             name: 'visible ',
             desc: '是否可视',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -129,7 +129,7 @@ const contextMenuAPI = [
             name: 'disabled ',
             desc: '是否禁用',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -145,7 +145,7 @@ const exportDataAPI = [
     name: 'filename',
     desc: '文件名',
     version: '',
-    type: 'String',
+    type: 'string',
     enum: '',
     defVal: '',
     list: []
@@ -154,7 +154,7 @@ const exportDataAPI = [
     name: 'sheetName',
     desc: '表名（只对支持的文档类型有效）',
     version: '',
-    type: 'String',
+    type: 'string',
     enum: '',
     defVal: '',
     list: []
@@ -163,7 +163,7 @@ const exportDataAPI = [
     name: 'type',
     desc: '文件类型',
     version: '',
-    type: 'String',
+    type: 'string',
     enum: 'csv, html, xml, txt',
     defVal: 'csv',
     list: []
@@ -172,7 +172,7 @@ const exportDataAPI = [
     name: 'types',
     desc: '可选文件类型列表',
     version: '',
-    type: 'Array',
+    type: 'string[]',
     enum: 'csv, html, xml, txt',
     defVal: '[\'csv\', \'html\', \'xml\', \'txt\']',
     list: []
@@ -181,7 +181,7 @@ const exportDataAPI = [
     name: 'mode',
     desc: '输出数据的方式',
     version: '',
-    type: 'String',
+    type: 'string',
     enum: 'current, selected, all',
     defVal: 'current',
     list: []
@@ -190,7 +190,7 @@ const exportDataAPI = [
     name: 'modes',
     desc: '输出数据的方式列表',
     version: '',
-    type: 'Array',
+    type: 'string[]',
     enum: 'current, selected, all',
     defVal: '[\'current\', \'selected\', \'all\']',
     list: []
@@ -199,7 +199,7 @@ const exportDataAPI = [
     name: 'original',
     desc: '是否为源数据（某些场景下支持 true， 比如虚拟滚动、优化的固定列..，如果需要支持导入，则必须设置为 true）',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'false',
     list: []
@@ -208,7 +208,7 @@ const exportDataAPI = [
     name: 'message',
     desc: '是否显示内置的消息提示',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'false',
     list: []
@@ -217,7 +217,7 @@ const exportDataAPI = [
     name: 'isHeader',
     desc: '是否需要表头',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'true',
     list: []
@@ -226,7 +226,7 @@ const exportDataAPI = [
     name: 'isFooter',
     desc: '是否需要表尾',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'true',
     list: []
@@ -235,7 +235,7 @@ const exportDataAPI = [
     name: 'download',
     desc: '是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'true',
     list: []
@@ -244,7 +244,7 @@ const exportDataAPI = [
     name: 'data',
     desc: '自定义数据',
     version: '',
-    type: 'Array',
+    type: 'any[]',
     enum: '',
     defVal: '',
     list: []
@@ -253,7 +253,7 @@ const exportDataAPI = [
     name: 'columns',
     desc: '自定义列（如果指定了 columns 则 columnFilterMethod 默认为空）',
     version: '',
-    type: 'Array',
+    type: 'any[]',
     enum: '',
     defVal: '',
     list: []
@@ -289,7 +289,7 @@ const exportDataAPI = [
     name: 'remote',
     desc: '是否服务端导出',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'false',
     list: []
@@ -310,7 +310,7 @@ const importDataAPI = [
     name: 'mode',
     desc: '导入数据的方式',
     version: '',
-    type: 'String',
+    type: 'string',
     enum: 'covering, insert',
     defVal: 'covering',
     list: []
@@ -319,7 +319,7 @@ const importDataAPI = [
     name: 'message',
     desc: '是否显示内置的消息提示',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'false',
     list: []
@@ -328,7 +328,7 @@ const importDataAPI = [
     name: 'types',
     desc: '导入的文件类型列表',
     version: '',
-    type: 'Array',
+    type: 'string[]',
     enum: 'csv, html, xml, txt',
     defVal: '[\'csv\', \'html\', \'xml\', \'txt\']',
     list: []
@@ -337,7 +337,7 @@ const importDataAPI = [
     name: 'remote',
     desc: '是否服务端导入',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'false',
     list: []
@@ -368,7 +368,7 @@ const apis = [
         name: 'id',
         descKey: 'app.api.table.desc.id',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -377,7 +377,7 @@ const apis = [
         name: 'data',
         descKey: 'app.api.table.desc.data',
         version: '',
-        type: 'Array',
+        type: 'any[]',
         enum: '',
         defVal: '',
         list: []
@@ -386,7 +386,7 @@ const apis = [
         name: 'height',
         descKey: 'app.api.table.desc.height',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: 'auto, %, px',
         defVal: '',
         list: []
@@ -395,7 +395,7 @@ const apis = [
         name: 'max-height',
         descKey: 'app.api.table.desc.maxHeight',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '%, px',
         defVal: '',
         list: []
@@ -404,7 +404,7 @@ const apis = [
         name: 'auto-resize',
         descKey: 'app.api.table.desc.autoResize',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -413,7 +413,7 @@ const apis = [
         name: 'sync-resize',
         descKey: 'app.api.table.desc.syncResize',
         version: '',
-        type: 'Boolean, String, Number',
+        type: 'boolean | string | number',
         enum: '',
         defVal: '',
         list: []
@@ -422,7 +422,7 @@ const apis = [
         name: 'resizable',
         descKey: 'app.api.table.desc.resizable',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.table.resizable',
         list: []
@@ -431,7 +431,7 @@ const apis = [
         name: 'stripe',
         descKey: 'app.api.table.desc.stripe',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.table.stripe',
         list: []
@@ -440,7 +440,7 @@ const apis = [
         name: 'border',
         descKey: 'app.api.table.desc.border',
         version: '',
-        type: 'Boolean, String',
+        type: 'boolean | string',
         enum: 'default（默认）, full（完整边框）, outer（外边框）, inner（内边框）, none（无边框）',
         defVal: '默认 false，继承 setup.table.border',
         list: []
@@ -449,7 +449,7 @@ const apis = [
         name: 'round',
         descKey: 'app.api.table.desc.round',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.table.round',
         list: []
@@ -458,7 +458,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.table.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium, small, mini',
         defVal: '继承上下文',
         list: []
@@ -467,7 +467,7 @@ const apis = [
       //   name: 'fit',
       //   descKey: 'app.api.table.desc.fit',
       //   version: '',
-      //   type: 'Boolean',
+      //   type: 'boolean',
       //   enum: '',
       //   defVal: 'true',
       //   list: []
@@ -476,7 +476,7 @@ const apis = [
         name: 'loading',
         descKey: 'app.api.table.desc.loading',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -485,7 +485,7 @@ const apis = [
         name: 'align',
         descKey: 'app.api.table.desc.align',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: 'left',
         list: []
@@ -494,7 +494,7 @@ const apis = [
         name: 'header-align',
         descKey: 'app.api.table.desc.headerAlign',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 align',
         list: []
@@ -503,7 +503,7 @@ const apis = [
         name: 'footer-align',
         descKey: 'app.api.table.desc.footerAlign',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 align',
         list: []
@@ -512,7 +512,7 @@ const apis = [
         name: 'show-header',
         descKey: 'app.api.table.desc.showHeader',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -521,7 +521,7 @@ const apis = [
         name: 'highlight-current-row',
         descKey: 'app.api.table.desc.highlightCurrentRow',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -530,7 +530,7 @@ const apis = [
         name: 'highlight-hover-row',
         descKey: 'app.api.table.desc.highlightHoverRow',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -539,7 +539,7 @@ const apis = [
         name: 'highlight-current-column',
         descKey: 'app.api.table.desc.highlightCurrentColumn',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -548,7 +548,7 @@ const apis = [
         name: 'highlight-hover-column',
         descKey: 'app.api.table.desc.highlightHoverColumn',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -557,7 +557,7 @@ const apis = [
         name: 'highlight-cell',
         descKey: 'app.api.table.desc.highlightCell',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -566,7 +566,7 @@ const apis = [
         name: 'row-class-name',
         descKey: 'app.api.table.desc.rowClassName',
         version: '',
-        type: 'String, Function',
+        type: 'string | Function',
         enum: '',
         defVal: '',
         list: []
@@ -575,7 +575,7 @@ const apis = [
         name: 'cell-class-name',
         descKey: 'app.api.table.desc.cellClassName',
         version: '',
-        type: 'String, Function',
+        type: 'string | Function',
         enum: '',
         defVal: '',
         list: []
@@ -584,7 +584,7 @@ const apis = [
         name: 'header-row-class-name',
         descKey: 'app.api.table.desc.headerRowClassName',
         version: '',
-        type: 'String, Function',
+        type: 'string | Function',
         enum: '',
         defVal: '',
         list: []
@@ -593,7 +593,7 @@ const apis = [
         name: 'header-cell-class-name',
         descKey: 'app.api.table.desc.headerCellClassName',
         version: '',
-        type: 'String, Function',
+        type: 'string | Function',
         enum: '',
         defVal: '',
         list: []
@@ -602,7 +602,7 @@ const apis = [
         name: 'footer-row-class-name',
         descKey: 'app.api.table.desc.footerRowClassName',
         version: '',
-        type: 'String, Function',
+        type: 'string | Function',
         enum: '',
         defVal: '',
         list: []
@@ -611,7 +611,7 @@ const apis = [
         name: 'footer-cell-class-name',
         descKey: 'app.api.table.desc.footerCellClassName',
         version: '',
-        type: 'String, Function',
+        type: 'string | Function',
         enum: '',
         defVal: '',
         list: []
@@ -620,7 +620,7 @@ const apis = [
         name: 'cell-style',
         descKey: 'app.api.table.desc.cellStyle',
         version: '',
-        type: 'Object, Function',
+        type: 'any | Function',
         enum: '',
         defVal: '',
         list: []
@@ -629,7 +629,7 @@ const apis = [
         name: 'header-cell-style',
         descKey: 'app.api.table.desc.headerCellStyle',
         version: '',
-        type: 'Object, Function',
+        type: 'any | Function',
         enum: '',
         defVal: '',
         list: []
@@ -638,7 +638,7 @@ const apis = [
         name: 'footer-cell-style',
         descKey: 'app.api.table.desc.footerCellStyle',
         version: '',
-        type: 'Object, Function',
+        type: 'any | Function',
         enum: '',
         defVal: '',
         list: []
@@ -647,7 +647,7 @@ const apis = [
         name: 'row-style',
         descKey: 'app.api.table.desc.rowStyle',
         version: '',
-        type: 'Object, Function',
+        type: 'any | Function',
         enum: '',
         defVal: '',
         list: []
@@ -656,7 +656,7 @@ const apis = [
         name: 'header-row-style',
         descKey: 'app.api.table.desc.headerRowStyle',
         version: '',
-        type: 'Object, Function',
+        type: 'any | Function',
         enum: '',
         defVal: '',
         list: []
@@ -665,7 +665,7 @@ const apis = [
         name: 'footer-row-style',
         descKey: 'app.api.table.desc.footerRowStyle',
         version: '',
-        type: 'Object, Function',
+        type: 'any | Function',
         enum: '',
         defVal: '',
         list: []
@@ -674,7 +674,7 @@ const apis = [
         name: 'show-footer',
         descKey: 'app.api.table.desc.showFooter',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -692,7 +692,7 @@ const apis = [
         name: 'span-method',
         descKey: 'app.api.table.desc.spanMethod',
         version: '',
-        type: 'Object',
+        type: 'Function',
         enum: '',
         defVal: '{ rowspan: 1, colspan: 1}',
         list: []
@@ -701,7 +701,7 @@ const apis = [
         name: 'footer-span-method',
         descKey: 'app.api.table.desc.footerSpanMethod',
         version: '',
-        type: 'Object',
+        type: 'Function',
         enum: '',
         defVal: '{ rowspan: 1, colspan: 1}',
         list: []
@@ -710,7 +710,7 @@ const apis = [
         name: 'show-overflow',
         descKey: 'app.api.table.desc.showOverflow',
         version: '',
-        type: 'Boolean, String',
+        type: 'boolean | string',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
         list: []
@@ -719,7 +719,7 @@ const apis = [
         name: 'show-header-overflow',
         descKey: 'app.api.table.desc.showHeaderOverflow',
         version: '',
-        type: 'Boolean, String',
+        type: 'boolean | string',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
         list: []
@@ -728,7 +728,7 @@ const apis = [
         name: 'show-footer-overflow',
         descKey: 'app.api.table.desc.showFooterOverflow',
         version: '',
-        type: 'Boolean, String',
+        type: 'boolean | string',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '',
         list: []
@@ -737,7 +737,7 @@ const apis = [
         name: 'column-width',
         descKey: 'app.api.table.desc.columnWidth',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: 'auto, px, %',
         defVal: '默认均匀分配',
         list: []
@@ -746,7 +746,7 @@ const apis = [
         name: 'column-min-width',
         descKey: 'app.api.table.desc.columnMinWidth',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: 'auto, px, %',
         defVal: '',
         list: []
@@ -755,7 +755,7 @@ const apis = [
         name: 'column-key',
         descKey: 'app.api.table.desc.columnKey',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -764,7 +764,7 @@ const apis = [
         name: 'row-key',
         descKey: 'app.api.table.desc.rowKey',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -773,7 +773,7 @@ const apis = [
         name: 'row-id',
         descKey: 'app.api.table.desc.rowId',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '默认 _XID，继承 setup.table.rowId',
         list: []
@@ -782,7 +782,7 @@ const apis = [
         name: 'keep-source',
         descKey: 'app.api.table.desc.keepSource',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.table.keepSource',
         list: []
@@ -791,7 +791,7 @@ const apis = [
         name: 'z-index',
         descKey: 'app.api.table.desc.zIndex',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: '继承 setup.table.zIndex',
         list: []
@@ -800,7 +800,7 @@ const apis = [
         name: 'seq-config',
         descKey: 'app.api.table.desc.seqConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.seqConfig',
         list: [
@@ -808,7 +808,7 @@ const apis = [
             name: 'startIndex',
             desc: '设置序号的起始值',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '0',
             list: []
@@ -828,7 +828,7 @@ const apis = [
         name: 'sort-config',
         descKey: 'app.api.table.desc.sortConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.sortConfig',
         list: [
@@ -836,7 +836,7 @@ const apis = [
             name: 'defaultSort',
             desc: '默认排序（只会在初始化时被触发一次）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: [
@@ -844,7 +844,7 @@ const apis = [
                 name: 'field',
                 desc: '列字段名',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: '',
                 defVal: '',
                 list: []
@@ -853,7 +853,7 @@ const apis = [
                 name: 'order',
                 desc: '排序方式',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: 'asc（升序）,desc（降序）, null',
                 defVal: '',
                 list: []
@@ -864,7 +864,7 @@ const apis = [
             name: 'orders',
             desc: '自定义轮转顺序',
             version: '',
-            type: 'Array',
+            type: 'string[]',
             enum: 'asc, desc, null',
             defVal: '[\'asc\', \'desc\', \'null\']',
             list: []
@@ -882,7 +882,7 @@ const apis = [
             name: 'remote',
             desc: '所有列是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: '',
             list: []
@@ -891,7 +891,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'default（点击按钮触发）, cell（点击表头触发）',
             defVal: 'default',
             list: []
@@ -900,7 +900,7 @@ const apis = [
             name: 'showIcon',
             desc: '是否显示列头排序图标',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -909,7 +909,7 @@ const apis = [
             name: 'iconAsc',
             desc: '自定义升序的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -918,7 +918,7 @@ const apis = [
             name: 'iconDesc',
             desc: '自定义降序的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -929,7 +929,7 @@ const apis = [
         name: 'filter-config',
         descKey: 'app.api.table.desc.filterConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.filterConfig',
         list: [
@@ -937,7 +937,7 @@ const apis = [
             name: 'remote',
             desc: '所有列是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: '',
             list: []
@@ -955,7 +955,7 @@ const apis = [
             name: 'showIcon',
             desc: '是否显示列头筛选图标',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -964,7 +964,7 @@ const apis = [
             name: 'iconNone',
             desc: '自定义无条件时显示的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -973,7 +973,7 @@ const apis = [
             name: 'iconMatch',
             desc: '自定义带条件时显示的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -984,7 +984,7 @@ const apis = [
         name: 'export-config',
         descKey: 'app.api.table.desc.exportConfig',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.exportConfig',
         list: XEUtils.clone(exportDataAPI, true)
@@ -993,7 +993,7 @@ const apis = [
         name: 'import-config',
         descKey: 'app.api.table.desc.importConfig',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.importConfig',
         list: XEUtils.clone(importDataAPI, true)
@@ -1002,7 +1002,7 @@ const apis = [
         name: 'print-config',
         descKey: 'app.api.table.desc.printConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.printConfig',
         list: XEUtils.clone(printAPI, true)
@@ -1011,7 +1011,7 @@ const apis = [
         name: 'radio-config',
         descKey: 'app.api.table.desc.radioConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.radioConfig',
         list: [
@@ -1019,7 +1019,7 @@ const apis = [
             name: 'reserve',
             desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1028,7 +1028,7 @@ const apis = [
             name: 'labelField',
             desc: '单选框显示的字段名，可以直接显示在单选框中',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1037,7 +1037,7 @@ const apis = [
             name: 'checkRowKey',
             desc: '默认选中开指定行（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
-            type: 'Row.rowId',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1055,7 +1055,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
@@ -1064,7 +1064,7 @@ const apis = [
             name: 'highlight',
             desc: '高亮选中行',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1075,7 +1075,7 @@ const apis = [
         name: 'checkbox-config',
         descKey: 'app.api.table.desc.checkboxConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.checkboxConfig',
         list: [
@@ -1083,7 +1083,7 @@ const apis = [
             name: 'reserve',
             desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1092,7 +1092,7 @@ const apis = [
             name: 'labelField',
             desc: '复选框显示的字段名，可以直接显示在复选框中',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1101,7 +1101,7 @@ const apis = [
             name: 'checkField',
             desc: '绑定选中属性，如果设置了该属性渲染速度更快（建议数据量大时使用，行数据中必须存在该字段，否则无效）',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1110,7 +1110,7 @@ const apis = [
             name: 'showHeader',
             desc: '是否显示全选按钮（如果 checkStrictly=true 则默认为 false）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -1119,7 +1119,7 @@ const apis = [
             name: 'checkAll',
             desc: '默认勾选所有（只会在初始化时被触发一次）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1128,7 +1128,7 @@ const apis = [
             name: 'checkRowKeys',
             desc: '默认勾选开指定行（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
-            type: 'Array<Row.rowId>',
+            type: 'string[]',
             enum: '',
             defVal: '',
             list: []
@@ -1137,7 +1137,7 @@ const apis = [
             name: 'checkStrictly',
             desc: '是否严格的遵循父子不互相关联的做法',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1146,7 +1146,7 @@ const apis = [
             name: 'strict',
             desc: '严格模式，当数据为空或全部禁用时，列表为禁用状态',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1164,7 +1164,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
@@ -1173,7 +1173,7 @@ const apis = [
             name: 'highlight',
             desc: '高亮勾选行',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1182,7 +1182,7 @@ const apis = [
             name: 'range',
             desc: '开启复选框范围勾选功能（启用后通过鼠标在复选框的列圈选指定行）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1193,7 +1193,7 @@ const apis = [
         name: 'tooltip-config',
         descKey: 'app.api.table.desc.tooltipConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.tooltipConfig',
         list: [
@@ -1201,7 +1201,7 @@ const apis = [
             name: 'enabled',
             desc: '所有单元格开启 tooltip 显示',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1210,7 +1210,7 @@ const apis = [
             name: 'theme',
             desc: 'tooltip 的主题颜色',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'dark,light',
             defVal: 'dark',
             list: []
@@ -1219,7 +1219,7 @@ const apis = [
             name: 'enterable',
             desc: '鼠标是否可进入到 tooltip 中',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1228,7 +1228,7 @@ const apis = [
             name: 'leaveDelay',
             desc: '鼠标移出后延时多少才隐藏 tooltip',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '300',
             list: []
@@ -1248,7 +1248,7 @@ const apis = [
         name: 'expand-config',
         descKey: 'app.api.table.desc.expandConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.expandConfig',
         list: [
@@ -1256,7 +1256,7 @@ const apis = [
             name: 'labelField',
             desc: '展开列显示的字段名，可以直接显示在单元格中',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1265,7 +1265,7 @@ const apis = [
             name: 'expandAll',
             desc: '默认展开所有行（只会在初始化时被触发一次）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1274,7 +1274,7 @@ const apis = [
             name: 'expandRowKeys',
             desc: '默认展开指定行（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
-            type: 'Array<Row.rowId>',
+            type: 'string[]',
             enum: '',
             defVal: '',
             list: []
@@ -1283,7 +1283,7 @@ const apis = [
             name: 'accordion',
             desc: '每次只能展开一行',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1292,7 +1292,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'default（点击按钮触发）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
@@ -1301,7 +1301,7 @@ const apis = [
             name: 'lazy',
             desc: '是否使用懒加载',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1337,7 +1337,7 @@ const apis = [
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1346,7 +1346,7 @@ const apis = [
             name: 'iconClose',
             desc: '自定义收起后显示的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1355,7 +1355,7 @@ const apis = [
             name: 'iconLoaded',
             desc: '自定义懒加载中显示的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1366,7 +1366,7 @@ const apis = [
         name: 'tree-config',
         descKey: 'app.api.table.desc.treeConfig',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.treeConfig',
         list: [
@@ -1374,7 +1374,7 @@ const apis = [
             name: 'children',
             desc: '树子节点的属性',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: 'children',
             list: []
@@ -1383,7 +1383,7 @@ const apis = [
             name: 'indent',
             desc: '树节点的缩进',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '20',
             list: []
@@ -1392,7 +1392,7 @@ const apis = [
             name: 'line',
             desc: '树节点的连接线（启用连接线会降低渲染性能）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1401,7 +1401,7 @@ const apis = [
             name: 'expandAll',
             desc: '默认展开所有子孙树节点（只会在初始化时被触发一次）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1410,7 +1410,7 @@ const apis = [
             name: 'expandRowKeys',
             desc: '默认展开指定树节点（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
-            type: 'Array<Row.rowId>',
+            type: 'string[]',
             enum: '',
             defVal: '',
             list: []
@@ -1419,7 +1419,7 @@ const apis = [
             name: 'accordion',
             desc: '对于同一级的节点，每次只能展开一个',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1428,7 +1428,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'default（点击按钮触发）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
@@ -1437,7 +1437,7 @@ const apis = [
             name: 'lazy',
             desc: '是否使用懒加载（启用后只有指定 hasChild 的节点才允许被点击）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1446,7 +1446,7 @@ const apis = [
             name: 'hasChild',
             desc: '只对 lazy 启用后有效，标识是否存在子节点，从而控制是否允许被点击',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: 'hasChild',
             list: []
@@ -1473,7 +1473,7 @@ const apis = [
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1482,7 +1482,7 @@ const apis = [
             name: 'iconClose',
             desc: '自定义收起后显示的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1491,7 +1491,7 @@ const apis = [
             name: 'iconLoaded',
             desc: '自定义懒加载中显示的图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1502,7 +1502,7 @@ const apis = [
         name: 'context-menu',
         descKey: 'app.api.table.desc.contextMenu',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.contextMenu',
         list: [
@@ -1510,7 +1510,7 @@ const apis = [
             name: 'header',
             desc: '表头的快捷菜单',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: XEUtils.clone(contextMenuAPI, true)
@@ -1519,7 +1519,7 @@ const apis = [
             name: 'body',
             desc: '内容的快捷菜单',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: XEUtils.clone(contextMenuAPI, true)
@@ -1528,7 +1528,7 @@ const apis = [
             name: 'footer',
             desc: '表尾的快捷菜单',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: XEUtils.clone(contextMenuAPI, true)
@@ -1537,7 +1537,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'default（默认触发）, cell（右键单元格触发）',
             defVal: 'default',
             list: []
@@ -1555,7 +1555,7 @@ const apis = [
             name: 'className',
             desc: '菜单面板的 className',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1566,7 +1566,7 @@ const apis = [
         name: 'mouse-config',
         descKey: 'app.api.table.desc.mouseConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -1574,7 +1574,7 @@ const apis = [
             name: 'selected',
             desc: '开启单元格选中功能',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1585,7 +1585,7 @@ const apis = [
         name: 'keyboard-config',
         descKey: 'app.api.table.desc.keyboardConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -1593,7 +1593,7 @@ const apis = [
             name: 'isArrow',
             desc: '开启方向键功能',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1602,7 +1602,7 @@ const apis = [
             name: 'isDel',
             desc: '开启删除键功能',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1611,7 +1611,7 @@ const apis = [
             name: 'isEnter',
             desc: '开启回车键功能',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1620,7 +1620,7 @@ const apis = [
             name: 'isTab',
             desc: '开启 Tab 键功能',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1628,7 +1628,7 @@ const apis = [
           // {
           //   name: 'isCut',
           //   desc: '开启复制粘贴功能',
-          //   type: 'Boolean',
+          //   type: 'boolean',
           //   enum: '',
           //   defVal: 'false',
           //   list: []
@@ -1637,7 +1637,7 @@ const apis = [
             name: 'isEdit',
             desc: '开启任意键进入编辑（功能键除外）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1657,7 +1657,7 @@ const apis = [
         name: 'edit-config',
         descKey: 'app.api.table.desc.editConfig',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.editConfig',
         list: [
@@ -1665,7 +1665,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'manual（手动触发方式，只能用于 mode=row）,click（点击触发编辑）,dblclick（双击触发编辑）',
             defVal: 'click',
             list: []
@@ -1674,7 +1674,7 @@ const apis = [
             name: 'mode',
             desc: '编辑模式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'cell（单元格编辑模式）,row（行编辑模式）',
             defVal: 'cell',
             list: []
@@ -1683,7 +1683,7 @@ const apis = [
             name: 'showIcon',
             desc: '是否显示列头编辑图标',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -1692,7 +1692,7 @@ const apis = [
             name: 'showStatus',
             desc: '只对 keep-source 开启有效，是否显示单元格值的修改状态',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1701,7 +1701,7 @@ const apis = [
             name: 'autoClear',
             desc: '当点击非编辑列之后，是否自动清除单元格的激活状态',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -1719,7 +1719,7 @@ const apis = [
             name: 'icon',
             desc: '自定义可编辑列的状态图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1730,7 +1730,7 @@ const apis = [
         name: 'valid-config',
         descKey: 'app.api.table.desc.validConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -1738,7 +1738,7 @@ const apis = [
             name: 'autoPos',
             desc: '是否自动定位到校验不通过的单元格',
             version: '',
-            type: 'Boolean',
+            type: 'bolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -1748,7 +1748,7 @@ const apis = [
             abandoned: true,
             desc: '校验提示框的方式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'default（如果不设置高度，则默认第一行使用 tooltip，之后使用 inline）, none（关闭提示）, inline（强制使用内联的提示）, tooltip（强制使用 tooltip 提示）',
             defVal: 'default',
             list: []
@@ -1757,7 +1757,7 @@ const apis = [
             name: 'maxWidth',
             desc: '校验提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
-            type: 'String, Number',
+            type: 'string | number',
             enum: '',
             defVal: '320',
             list: []
@@ -1768,7 +1768,7 @@ const apis = [
         name: 'edit-rules',
         descKey: 'app.api.table.desc.editRules',
         version: '',
-        type: '{[field: string]: Array<Object>}',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -1776,7 +1776,7 @@ const apis = [
             name: 'required',
             desc: '是否必填',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -1785,7 +1785,7 @@ const apis = [
             name: 'min',
             desc: '校验值最小长度（如果 type=number 则比较值大小）',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '',
             list: []
@@ -1794,7 +1794,7 @@ const apis = [
             name: 'max',
             desc: '校验值最大长度（如果 type=number 则比较值大小）',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '',
             list: []
@@ -1803,7 +1803,7 @@ const apis = [
             name: 'type',
             desc: '数据校验的类型',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'number, string',
             defVal: 'string',
             list: []
@@ -1812,7 +1812,7 @@ const apis = [
             name: 'pattern',
             desc: '正则校验',
             version: '',
-            type: 'RegExp, String',
+            type: 'RegExp | string',
             enum: '',
             defVal: '',
             list: []
@@ -1821,7 +1821,7 @@ const apis = [
             name: 'validator',
             desc: '自定义校验方法 Function({ cellValue, rule, rules, row, rowIndex，column, columnIndex }) 返回一个 Promise<new Error("提示消息")>',
             version: '',
-            type: 'Promise<e?: Error>',
+            type: 'Function',
             enum: '',
             defVal: '',
             list: []
@@ -1830,7 +1830,7 @@ const apis = [
             name: 'message',
             desc: '校验提示内容（支持开启国际化）',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1839,7 +1839,7 @@ const apis = [
             name: 'trigger',
             desc: '触发校验方式（如果为空，则为常规校验方式； 如果指定触发方式，则只会在匹配情况下进行校验）',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'blur,change',
             defVal: '',
             list: []
@@ -1848,7 +1848,7 @@ const apis = [
             name: 'maxWidth',
             desc: '提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '320',
             list: []
@@ -1859,7 +1859,7 @@ const apis = [
         name: 'empty-render',
         descKey: 'app.api.table.desc.emptyRender',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.emptyRender',
         list: [
@@ -1867,7 +1867,7 @@ const apis = [
             name: 'name',
             desc: '渲染器名称',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -1876,7 +1876,7 @@ const apis = [
             name: 'props',
             desc: '渲染的参数（请查看目标渲染的 Props）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -1885,7 +1885,7 @@ const apis = [
             name: 'attrs',
             desc: '渲染的属性（请查看目标渲染的 Attribute）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -1894,7 +1894,7 @@ const apis = [
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{}, ...[目标渲染的 arguments]',
             list: []
@@ -1903,7 +1903,7 @@ const apis = [
             name: 'nativeEvents',
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{}, ...[目标渲染的 arguments]',
             list: []
@@ -1914,7 +1914,7 @@ const apis = [
         name: 'custom-config',
         descKey: 'app.api.table.desc.customConfig',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.customConfig',
         list: [
@@ -1922,7 +1922,7 @@ const apis = [
             name: 'storage',
             desc: '是否启用 localStorage 本地保存，会将列操作状态保留在本地',
             version: '',
-            type: 'Boolean, Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: [
@@ -1930,7 +1930,7 @@ const apis = [
                 name: 'visible',
                 desc: '启用显示/隐藏列状态',
                 version: '',
-                type: 'Boolean',
+                type: 'boolean',
                 enum: '',
                 defVal: '',
                 list: []
@@ -1939,7 +1939,7 @@ const apis = [
                 name: 'resizable',
                 desc: '启用列宽状态',
                 version: '',
-                type: 'Boolean',
+                type: 'boolean',
                 enum: '',
                 defVal: '',
                 list: []
@@ -1961,7 +1961,7 @@ const apis = [
         name: 'animat',
         desc: '表格动画效果开关（关闭后视觉效果更快）',
         version: '',
-        type: 'Object',
+        type: 'boolean',
         enum: '',
         defVal: '默认 true，继承 setup.table.animat',
         list: []
@@ -1970,7 +1970,7 @@ const apis = [
         name: 'cloak',
         desc: '可以设置为 true 来避免初始化渲染时的闪动',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.table.cloak',
         list: []
@@ -1979,7 +1979,7 @@ const apis = [
         name: 'delay-hover',
         desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: '默认 250，继承 setup.table.delayHover',
         list: []
@@ -1988,7 +1988,7 @@ const apis = [
         name: 'scroll-x',
         desc: '横向虚拟滚动配置（tree-config 启用后无效）',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.scrollX',
         list: [
@@ -1996,7 +1996,7 @@ const apis = [
             name: 'gt',
             desc: '指定大于指定列时自动启动横向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用横向虚拟滚动之后将不能支持分组表头）',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '40',
             list: []
@@ -2005,7 +2005,7 @@ const apis = [
             name: 'oSize',
             desc: '当剩余数据少于指定列时触发重新渲染',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '默认自动计算',
             list: []
@@ -2014,7 +2014,7 @@ const apis = [
             name: 'rSize',
             desc: '每次渲染条数',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '默认自动计算',
             list: []
@@ -2023,7 +2023,7 @@ const apis = [
             name: 'vSize',
             desc: '指定可视区域条数',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '默认自动计算',
             list: []
@@ -2034,7 +2034,7 @@ const apis = [
         name: 'scroll-y',
         desc: '纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.scrollY',
         list: [
@@ -2042,7 +2042,7 @@ const apis = [
             name: 'gt',
             desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用纵向虚拟滚动之后将不能支持动态行高）',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '50',
             list: []
@@ -2051,7 +2051,7 @@ const apis = [
             name: 'oSize',
             desc: '当剩余数据少于指定行时触发重新渲染',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '默认自动计算',
             list: []
@@ -2060,7 +2060,7 @@ const apis = [
             name: 'rSize',
             desc: '每次渲染条数',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '默认自动计算',
             list: []
@@ -2069,7 +2069,7 @@ const apis = [
             name: 'vSize',
             desc: '指定可视区域条数',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '默认自动计算',
             list: []
@@ -2078,7 +2078,7 @@ const apis = [
           //   name: 'rHeight',
           //   desc: '指定行高',
           //   version: '',
-          //   type: 'Number',
+          //   type: 'number',
           //   enum: '',
           //   defVal: '默认自动计算',
           //   list: []
@@ -2087,7 +2087,7 @@ const apis = [
             name: 'adaptive',
             desc: '自动适配最优的渲染方式',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -2098,7 +2098,7 @@ const apis = [
       //   name: 'rHeights',
       //   desc: '重写表格默认高度,必须和 scss 中的变量一致（用于重写表格默认行高的场景，谨慎使用，99%场景不需要更改）',
       //   version: '',
-      //   type: 'Object',
+      //   type: 'any',
       //   enum: '',
       //   defVal: '',
       //   list: [
@@ -2106,7 +2106,7 @@ const apis = [
       //       name: 'default',
       //       desc: '表格 default size',
       //       version: '',
-      //       type: 'Number',
+      //       type: 'number',
       //       enum: '',
       //       defVal: '48',
       //       list: []
@@ -2115,7 +2115,7 @@ const apis = [
       //       name: 'medium',
       //       desc: '表格 medium size',
       //       version: '',
-      //       type: 'Number',
+      //       type: 'number',
       //       enum: '',
       //       defVal: '44',
       //       list: []
@@ -2124,7 +2124,7 @@ const apis = [
       //       name: 'small',
       //       desc: '表格 small size',
       //       version: '',
-      //       type: 'Number',
+      //       type: 'number',
       //       enum: '',
       //       defVal: '40',
       //       list: []
@@ -2133,7 +2133,7 @@ const apis = [
       //       name: 'mini',
       //       desc: '表格 mini size',
       //       version: '',
-      //       type: 'Number',
+      //       type: 'number',
       //       enum: '',
       //       defVal: '36',
       //       list: []
@@ -2144,7 +2144,7 @@ const apis = [
         name: 'params',
         descKey: 'app.api.table.desc.params',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: []

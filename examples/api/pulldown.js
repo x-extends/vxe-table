@@ -11,7 +11,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.pulldown.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'disabled',
         descKey: 'app.api.pulldown.desc.disabled',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'placement',
         descKey: 'app.api.pulldown.desc.placement',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'top, bottom',
         defVal: 'bottom',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'transfer',
         descKey: 'app.api.pulldown.desc.transfer',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []

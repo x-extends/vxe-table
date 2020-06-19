@@ -11,7 +11,7 @@ const apis = [
         name: 'value,v-model',
         descKey: 'app.api.tooltip.desc.value',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'content',
         descKey: 'app.api.tooltip.desc.content',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'trigger',
         descKey: 'app.api.tooltip.desc.trigger',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'manual, hover, click',
         defVal: 'hover',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'theme',
         descKey: 'app.api.tooltip.desc.theme',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'dark, light',
         defVal: 'dark',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'zIndex',
         descKey: 'app.api.tooltip.desc.zIndex',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: '继承 setup.zIndex',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'isArrow',
         descKey: 'app.api.tooltip.desc.isArrow',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'enterable',
         descKey: 'app.api.tooltip.desc.enterable',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -74,7 +74,7 @@ const apis = [
         name: 'leaveDelay',
         descKey: 'app.api.tooltip.desc.leaveDelay',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: '300',
         list: []

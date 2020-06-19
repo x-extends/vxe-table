@@ -11,7 +11,7 @@ const apis = [
         name: 'content',
         descKey: 'app.api.button.desc.content',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'type',
         descKey: 'app.api.button.desc.type',
         version: '',
-        type: '',
+        type: 'string',
         enum: 'text,submit,reset,button',
         defVal: 'button',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.button.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'name',
         descKey: 'app.api.button.desc.name',
         version: '',
-        type: 'String, Number',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'icon',
         descKey: 'app.api.button.desc.icon',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'round',
         desc: '圆角边框',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'circle',
         desc: '圆角按钮',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -74,7 +74,7 @@ const apis = [
         name: 'status',
         descKey: 'app.api.button.desc.status',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'perfect, primary, success, info, warning, danger',
         defVal: '',
         list: []
@@ -83,7 +83,7 @@ const apis = [
         name: 'disabled',
         descKey: 'app.api.button.desc.disabled',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -92,7 +92,7 @@ const apis = [
         name: 'loading',
         descKey: 'app.api.button.desc.loading',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -101,7 +101,7 @@ const apis = [
         name: 'placement',
         descKey: 'app.api.button.desc.placement',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'top, bottom',
         defVal: 'bottom',
         list: []
@@ -110,7 +110,7 @@ const apis = [
         name: 'transfer',
         descKey: 'app.api.button.desc.transfer',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.button.transfer',
         list: []

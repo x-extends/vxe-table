@@ -11,7 +11,7 @@ const apis = [
         name: 'data',
         descKey: 'app.api.list.desc.data',
         version: '',
-        type: 'Array',
+        type: 'any[]',
         enum: '',
         defVal: '',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.list.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'loading',
         desc: '是否加载中',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'height',
         desc: '列表高度',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '',
         defVal: '',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'auto-resize',
         desc: '自动监听父元素的变化去重新计算列表（对于父元素可能存在动态变化的场景可能会用到）',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'sync-resize',
         desc: '自动跟随某个属性的变化去重新计算列表，和手动调用 recalculate 方法是一样的效果（对于通过某个属性来控制显示/隐藏切换的场景可能会用到）',
         version: '',
-        type: 'Boolean, String, Number',
+        type: 'boolean | string | number',
         enum: '',
         defVal: '',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'scrollY',
         desc: '纵向虚拟滚动配置',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -73,7 +73,7 @@ const apis = [
             name: 'item',
             desc: '指定行元素的选择器',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -82,7 +82,7 @@ const apis = [
             name: 'gt',
             desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '100',
             list: []
@@ -91,7 +91,7 @@ const apis = [
             name: 'oSize',
             desc: '当剩余数据少于指定行时触发重新渲染',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '默认自动计算',
             list: []
@@ -100,7 +100,7 @@ const apis = [
             name: 'rSize',
             desc: '每次渲染条数',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '默认自动计算',
             list: []
@@ -109,7 +109,7 @@ const apis = [
             name: 'vSize',
             desc: '指定可视区域条数',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '默认自动计算',
             list: []
@@ -118,7 +118,7 @@ const apis = [
           //   name: 'rHeight',
           //   desc: '指定行高',
           //   version: '',
-          //   type: 'Number',
+          //   type: 'number',
           //   enum: '',
           //   defVal: '默认自动计算',
           //   list: []

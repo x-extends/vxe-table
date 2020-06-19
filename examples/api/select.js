@@ -11,7 +11,7 @@ const apis = [
         name: 'value,v-model',
         descKey: 'app.api.select.desc.value',
         version: '',
-        type: '',
+        type: 'any',
         enum: '',
         defVal: '',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.select.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'clearable',
         descKey: 'app.api.select.desc.clearable',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: 'false',
         defVal: '',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'placeholder',
         descKey: 'app.api.select.desc.placeholder',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'disabled',
         descKey: 'app.api.select.desc.disabled',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'prefix-icon',
         descKey: 'app.api.select.desc.prefixIcon',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'placement',
         descKey: 'app.api.select.desc.placement',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'top, bottom',
         defVal: 'bottom',
         list: []
@@ -74,7 +74,7 @@ const apis = [
         name: 'options',
         desc: '下拉选项列表',
         version: '',
-        type: 'Array',
+        type: 'any[]',
         enum: '',
         defVal: '',
         list: []
@@ -83,7 +83,7 @@ const apis = [
         name: 'option-props',
         desc: '下拉选项属性参数配置',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '{ value, label, disabled }',
         list: []
@@ -92,7 +92,7 @@ const apis = [
         name: 'option-groups',
         desc: '下拉分组选项列表',
         version: '',
-        type: 'Array',
+        type: 'any[]',
         enum: '',
         defVal: '',
         list: []
@@ -101,7 +101,7 @@ const apis = [
         name: 'option-group-props',
         desc: '下拉分组选项属性参数配置',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '{ options, label }',
         list: []
@@ -110,7 +110,7 @@ const apis = [
         name: 'optId',
         desc: '自定义选项唯一主键的字段名（选项必须要有唯一主键，默认自动生成）',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '默认 _XID，继承 setup.select.rowId',
         list: []
@@ -119,7 +119,7 @@ const apis = [
         name: 'optKey',
         desc: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -128,7 +128,7 @@ const apis = [
         name: 'transfer',
         descKey: 'app.api.select.desc.transfer',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.select.transfer',
         list: []

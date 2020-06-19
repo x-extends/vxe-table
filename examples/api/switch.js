@@ -11,7 +11,7 @@ const apis = [
         name: 'value,v-model',
         descKey: 'app.api.switch.desc.value',
         version: '',
-        type: 'String, Number, Boolean',
+        type: 'string | number | boolean',
         enum: '',
         defVal: '',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'disabled',
         descKey: 'app.api.switch.desc.disabled',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.switch.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'on-label',
         descKey: 'app.api.switch.desc.onLabel',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'off-label',
         descKey: 'app.api.switch.desc.offLabel',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'on-value',
         descKey: 'app.api.switch.desc.onValue',
         version: '',
-        type: 'String, Number, Boolean',
+        type: 'string | number | boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'off-value',
         descKey: 'app.api.switch.desc.offValue',
         version: '',
-        type: 'String, Number, Boolean',
+        type: 'string | number | boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -74,7 +74,7 @@ const apis = [
         name: 'on-icon',
         descKey: 'app.api.switch.desc.onIcon',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -83,7 +83,7 @@ const apis = [
         name: 'off-icon',
         descKey: 'app.api.switch.desc.offIcon',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []

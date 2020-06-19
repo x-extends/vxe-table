@@ -11,7 +11,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.pager.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'loading',
         descKey: 'app.api.pager.desc.loading',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'layouts',
         descKey: 'app.api.pager.desc.layouts',
         version: '',
-        type: 'Array',
+        type: 'string[]',
         enum: 'PrevJump,PrevPage,Number,JumpNumber,NextPage,NextJump,Sizes,Jump,FullJump,PageCount,Total',
         defVal: '默认 [PrevPage,NextPage,FullJump,Sizes,Total]，继承 setup.pager.layouts',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'current-page',
         descKey: 'app.api.pager.desc.currentPage',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: '1',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'page-size',
         descKey: 'app.api.pager.desc.pageSize',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: '默认 10，继承 setup.pager.pageSize',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'total',
         descKey: 'app.api.pager.desc.total',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: '0',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'pager-count',
         descKey: 'app.api.pager.desc.pagerCount',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: '默认 7，继承 setup.pager.pagerCount',
         list: []
@@ -74,7 +74,7 @@ const apis = [
         name: 'page-sizes',
         descKey: 'app.api.pager.desc.pageSizes',
         version: '',
-        type: 'Array',
+        type: 'number[]',
         enum: '',
         defVal: '默认 [10,15,20,50,100]，继承 setup.pager.pageSizes',
         list: []
@@ -83,7 +83,7 @@ const apis = [
         name: 'align',
         descKey: 'app.api.pager.desc.align',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'left（左对其）, center（居中对其）, right（右对齐）',
         defVal: '默认 right，继承 setup.pager.align',
         list: []
@@ -92,7 +92,7 @@ const apis = [
         name: 'border',
         descKey: 'app.api.pager.desc.border',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.pager.border',
         list: []
@@ -101,7 +101,7 @@ const apis = [
         name: 'background',
         descKey: 'app.api.pager.desc.background',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.pager.background',
         list: []
@@ -110,7 +110,7 @@ const apis = [
         name: 'perfect',
         desc: '配套的样式',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.pager.perfect',
         list: []
@@ -119,7 +119,7 @@ const apis = [
         name: 'auto-hidden',
         desc: '当只有一页时自动隐藏',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.pager.autoHidden',
         list: []
@@ -128,7 +128,7 @@ const apis = [
         name: 'icon-prev-page',
         descKey: 'app.api.pager.desc.iconPrevPage',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -137,7 +137,7 @@ const apis = [
         name: 'icon-jump-prev',
         descKey: 'app.api.pager.desc.iconJumpPrev',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -146,7 +146,7 @@ const apis = [
         name: 'icon-jump-next',
         descKey: 'app.api.pager.desc.iconJumpNext',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -155,7 +155,7 @@ const apis = [
         name: 'iconnext-page',
         descKey: 'app.api.pager.desc.iconNextPage',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -164,7 +164,7 @@ const apis = [
         name: 'icon-jump-more',
         descKey: 'app.api.pager.desc.iconJumpMore',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []

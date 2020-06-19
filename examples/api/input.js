@@ -11,7 +11,7 @@ const apis = [
         name: 'value,v-model',
         descKey: 'app.api.input.desc.value',
         version: '',
-        type: '',
+        type: 'any',
         enum: '',
         defVal: '',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.input.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'type',
         desc: '渲染类型',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'text, number, integer, float, password, date, datetime, week, month, year',
         defVal: 'text',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'name',
         desc: '原生 name 属性',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'form',
         desc: '原生 form 属性',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'clearable',
         desc: '当有值时，是否在右侧显示清除按钮',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.input.clearable',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'placeholder',
         desc: '当值为空时，显示的占位符',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -74,7 +74,7 @@ const apis = [
         name: 'autocomplete',
         desc: '原生 autocomplete 属性',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: 'off',
         list: []
@@ -83,7 +83,7 @@ const apis = [
         name: 'maxlength',
         desc: '原生 maxlength 属性',
         version: '',
-        type: 'String, Number',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []
@@ -92,7 +92,7 @@ const apis = [
         name: 'readonly',
         desc: '是否只读',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -101,7 +101,7 @@ const apis = [
         name: 'disabled',
         descKey: 'app.api.input.desc.disabled',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -110,7 +110,7 @@ const apis = [
         name: 'prefix-icon',
         descKey: 'app.api.input.desc.prefixIcon',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -119,7 +119,7 @@ const apis = [
         name: 'suffix-icon',
         descKey: 'app.api.input.desc.suffixIcon',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -128,7 +128,7 @@ const apis = [
         name: 'min',
         desc: '只对 type=number|integer|float 有效，最小值',
         version: '',
-        type: 'String, Number',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []
@@ -137,7 +137,7 @@ const apis = [
         name: 'max',
         desc: '只对 type=number|integer|float 有效，最大值',
         version: '',
-        type: 'String, Number',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []
@@ -146,7 +146,7 @@ const apis = [
         name: 'step',
         desc: '只对 type=number|integer|float 有效，数字间隔',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '',
         defVal: '1',
         list: []
@@ -155,7 +155,7 @@ const apis = [
         name: 'digits',
         desc: '只对 type=float 有效，小数位数',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '',
         defVal: '默认 2，继承 setup.input.digits',
         list: []
@@ -164,7 +164,7 @@ const apis = [
         name: 'startWeek',
         desc: '只对 type=week 有效，设置起始周',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '0, 1, 2, 3, 4, 5, 6',
         defVal: '默认 1，继承 setup.input.startWeek',
         list: []
@@ -173,7 +173,7 @@ const apis = [
         name: 'labelFormat',
         desc: '只对 type=date|datetime|week|month|year 有效，输入框中显示的日期格式',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '继承 setup.input.labelFormat',
         list: []
@@ -182,7 +182,7 @@ const apis = [
         name: 'parseFormat',
         desc: '只对 type=date|datetime|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '继承 setup.input.parseFormat',
         list: []
@@ -191,7 +191,7 @@ const apis = [
         name: 'valueFormat',
         desc: '只对 type=date|datetime|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '继承 setup.input.valueFormat',
         list: []
@@ -200,7 +200,7 @@ const apis = [
         name: 'editable',
         desc: '只对 type=date|datetime|week|month|year 有效，文本框是否允许输入',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 true，继承 setup.input.editable',
         list: []
@@ -218,7 +218,7 @@ const apis = [
         name: 'transfer',
         desc: '只对 type=date|datetime|week|month|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.input.transfer',
         list: []

@@ -14,7 +14,7 @@ const titleTooltip = [
     name: 'enterable',
     desc: '只对 message 设置后有效，鼠标是否可进入到 tooltip 中',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'false',
     list: []
@@ -23,7 +23,7 @@ const titleTooltip = [
     name: 'theme',
     desc: '只对 message 设置后有效，设置 tooltip 的主题样式',
     version: '',
-    type: 'String',
+    type: 'string',
     enum: 'dark, light',
     defVal: 'dark',
     list: []
@@ -32,7 +32,7 @@ const titleTooltip = [
     name: 'icon',
     desc: '自定义图标',
     version: '',
-    type: 'String',
+    type: 'string',
     enum: '',
     defVal: '',
     list: []
@@ -52,7 +52,7 @@ const apis = [
         name: 'field',
         descKey: 'app.api.formItem.desc.field',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -61,7 +61,7 @@ const apis = [
         name: 'title',
         descKey: 'app.api.formItem.desc.title',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -70,7 +70,7 @@ const apis = [
         name: 'span',
         descKey: 'app.api.formItem.desc.span',
         version: '',
-        type: 'String, Number',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []
@@ -79,7 +79,7 @@ const apis = [
         name: 'align',
         descKey: 'app.api.formItem.desc.align',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -88,7 +88,7 @@ const apis = [
         name: 'title-align',
         descKey: 'app.api.formItem.desc.titleAlign',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -97,7 +97,7 @@ const apis = [
         name: 'title-width',
         descKey: 'app.api.formItem.desc.titleWidth',
         version: '',
-        type: 'String, Number',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []
@@ -115,7 +115,7 @@ const apis = [
         name: 'folding',
         descKey: 'app.api.formItem.desc.folding',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -124,7 +124,7 @@ const apis = [
         name: 'collapse-node',
         descKey: 'app.api.formItem.desc.collapseNode',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -133,7 +133,7 @@ const apis = [
         name: 'title-prefix',
         descKey: 'app.api.formItem.desc.titlePrefix',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: XEUtils.clone(titleTooltip, true)
@@ -142,7 +142,7 @@ const apis = [
         name: 'title-suffix',
         descKey: 'app.api.formItem.desc.titleSuffix',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: XEUtils.clone(titleTooltip, true)
@@ -151,7 +151,7 @@ const apis = [
         name: 'reset-value',
         descKey: 'app.api.formItem.desc.resetValue',
         version: '',
-        type: 'Any',
+        type: 'any',
         enum: '',
         defVal: 'null',
         list: []
@@ -160,7 +160,7 @@ const apis = [
         name: 'item-render',
         descKey: 'app.api.formItem.desc.itemRender',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -168,7 +168,7 @@ const apis = [
             name: 'name',
             desc: '渲染器名称',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'input, textarea, select, $input, $textarea, $select, $button, $buttons, $radio, $checkbox, $switch',
             defVal: '',
             list: []
@@ -177,7 +177,7 @@ const apis = [
             name: 'props',
             desc: '渲染的参数（请查看目标渲染的 Props）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -186,7 +186,7 @@ const apis = [
             name: 'attrs',
             desc: '渲染的属性（请查看目标渲染的 Attribute）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -195,7 +195,7 @@ const apis = [
             name: 'options',
             desc: '只对 name=select 有效，下拉选项列表',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: []
@@ -204,7 +204,7 @@ const apis = [
             name: 'optionProps',
             desc: '只对 name=select 有效，下拉选项属性参数配置',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{ value, label, disabled }',
             list: []
@@ -213,7 +213,7 @@ const apis = [
             name: 'optionGroups',
             desc: '只对 name=select 有效，下拉分组选项列表',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: []
@@ -222,7 +222,7 @@ const apis = [
             name: 'optionGroupProps',
             desc: '只对 name=select 有效，下拉分组选项属性参数配置',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{ options, label }',
             list: []
@@ -231,7 +231,7 @@ const apis = [
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{data, property}, ...[目标渲染的 arguments]',
             list: []
@@ -240,7 +240,7 @@ const apis = [
             name: 'content',
             desc: '渲染组件的内容（仅用于特殊组件）',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -249,7 +249,7 @@ const apis = [
             name: 'defaultValue',
             desc: '项默认值',
             version: '',
-            type: 'Any',
+            type: 'any',
             enum: '',
             defVal: 'null',
             list: []

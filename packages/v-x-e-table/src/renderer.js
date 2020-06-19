@@ -48,6 +48,17 @@ function getItemProps (renderOpts, params, value, defaultProps) {
   return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { value })
 }
 
+function getNativeOns (renderOpts, params) {
+  const { nativeEvents } = renderOpts
+  const nativeOns = {}
+  XEUtils.objectEach(nativeEvents, (func, key) => {
+    nativeOns[key] = function (...args) {
+      func(params, ...args)
+    }
+  })
+  return nativeOns
+}
+
 function getOns (renderOpts, params, inputFunc, changeFunc) {
   const { events } = renderOpts
   const modelEvent = 'input'
@@ -183,7 +194,8 @@ function defaultEditRender (h, renderOpts, params) {
   return [
     h(getDefaultComponentName(renderOpts), {
       props: getCellEditFilterProps(renderOpts, params, cellValue),
-      on: getEditOns(renderOpts, params)
+      on: getEditOns(renderOpts, params),
+      nativeOn: getNativeOns(renderOpts, params)
     })
   ]
 }
@@ -192,7 +204,8 @@ function defaultButtonEditRender (h, renderOpts, params) {
   return [
     h('vxe-button', {
       props: getCellEditFilterProps(renderOpts, params),
-      on: getOns(renderOpts, params)
+      on: getOns(renderOpts, params),
+      nativeOn: getNativeOns(renderOpts, params)
     })
   ]
 }
@@ -348,7 +361,8 @@ function defaultItemRender (h, renderOpts, params) {
   return [
     h(getDefaultComponentName(renderOpts), {
       props: getItemProps(renderOpts, params, itemValue),
-      on: getItemOns(renderOpts, params)
+      on: getItemOns(renderOpts, params),
+      nativeOn: getNativeOns(renderOpts, params)
     })
   ]
 }
@@ -357,7 +371,8 @@ function defaultButtonItemRender (h, renderOpts, params) {
   return [
     h('vxe-button', {
       props: getItemProps(renderOpts, params),
-      on: getOns(renderOpts, params)
+      on: getOns(renderOpts, params),
+      nativeOn: getNativeOns(renderOpts, params)
     })
   ]
 }
@@ -413,7 +428,8 @@ function defaultFormItemRadioAndCheckboxRender (h, renderOpts, params) {
   return [
     h(`${name}-group`, {
       props: getItemProps(renderOpts, params, itemValue),
-      on: getItemOns(renderOpts, params)
+      on: getItemOns(renderOpts, params),
+      nativeOn: getNativeOns(renderOpts, params)
     }, options.map((item, index) => {
       return h(name, {
         key: index,
@@ -525,12 +541,14 @@ const renderMap = {
     renderFilter (h, renderOpts, params) {
       const { column } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
+      const nativeOn = getNativeOns(renderOpts, params)
       return column.filters.map((option, oIndex) => {
         const optionValue = option.data
         return h(getDefaultComponentName(renderOpts), {
           key: oIndex,
           props: getCellEditFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
-          on: getFilterOns(renderOpts, params, option)
+          on: getFilterOns(renderOpts, params, option),
+          nativeOn
         })
       })
     },
@@ -542,7 +560,8 @@ const renderMap = {
       return [
         h(getDefaultComponentName(renderOpts), {
           props: getItemProps(renderOpts, params, itemValue, { options, optionProps, optionGroups, optionGroupProps }),
-          on: getItemOns(renderOpts, params)
+          on: getItemOns(renderOpts, params),
+          nativeOn: getNativeOns(renderOpts, params)
         })
       ]
     },

@@ -11,7 +11,7 @@ const apis = [
         name: 'data',
         descKey: 'app.api.form.desc.data',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'loading',
         descKey: 'app.api.form.desc.loading',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'span',
         descKey: 'app.api.form.desc.span',
         version: '',
-        type: 'String, Number',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'align',
         descKey: 'app.api.form.desc.align',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.form.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium, small, mini',
         defVal: '继承上下文',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'title-align',
         descKey: 'app.api.form.desc.titleAlign',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'title-width',
         descKey: 'app.api.form.desc.titleWidth',
         version: '',
-        type: 'String, Number',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []
@@ -74,7 +74,7 @@ const apis = [
         name: 'title-colon',
         descKey: 'app.api.form.desc.titleColon',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.form.titleColon',
         list: []
@@ -83,7 +83,7 @@ const apis = [
         name: 'items',
         desc: '项列表',
         version: '',
-        type: 'Array',
+        type: 'any[]',
         enum: '',
         defVal: '',
         list: []
@@ -92,7 +92,7 @@ const apis = [
         name: 'rules',
         descKey: 'app.api.form.desc.rules',
         version: '',
-        type: '{[field: string]: Array<Object>}',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -100,7 +100,7 @@ const apis = [
             name: 'required',
             desc: '是否必填',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -109,7 +109,7 @@ const apis = [
             name: 'min',
             desc: '校验值最小长度（如果 type=number 则比较值大小）',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '',
             list: []
@@ -118,7 +118,7 @@ const apis = [
             name: 'max',
             desc: '校验值最大长度（如果 type=number 则比较值大小）',
             version: '',
-            type: 'Number',
+            type: 'number',
             enum: '',
             defVal: '',
             list: []
@@ -127,8 +127,8 @@ const apis = [
             name: 'type',
             desc: '数据校验的类型',
             version: '',
-            type: 'String',
-            enum: 'number, string',
+            type: 'string',
+            enum: 'number | string',
             defVal: 'string',
             list: []
           },
@@ -136,7 +136,7 @@ const apis = [
             name: 'pattern',
             desc: '正则校验',
             version: '',
-            type: 'RegExp, String',
+            type: 'RegExp | string',
             enum: '',
             defVal: '',
             list: []
@@ -145,7 +145,7 @@ const apis = [
             name: 'validator',
             desc: '自定义校验方法 Function({ itemValue, rule, rules, data, property }) 返回一个 Promise<new Error("提示消息")>',
             version: '',
-            type: 'Promise<e?: Error>',
+            type: 'Function',
             enum: '',
             defVal: '',
             list: []
@@ -154,7 +154,7 @@ const apis = [
             name: 'message',
             desc: '校验提示内容（支持开启国际化）',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -163,7 +163,7 @@ const apis = [
             name: 'trigger',
             desc: '触发校验方式（如果为空，则为常规校验方式； 如果指定触发方式，则只会在匹配情况下进行校验）',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'change',
             defVal: '',
             list: []
@@ -172,7 +172,7 @@ const apis = [
             name: 'maxWidth',
             desc: '提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
-            type: 'String, Number',
+            type: 'string | number',
             enum: '',
             defVal: '',
             list: []

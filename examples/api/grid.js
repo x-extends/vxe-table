@@ -41,7 +41,7 @@ const apis = [
         name: 'form-config',
         descKey: 'app.api.grid.desc.formConfig',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.grid.formConfig',
         list: XEUtils.clone(formAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
@@ -49,7 +49,7 @@ const apis = [
             name: 'items',
             desc: '项配置',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: XEUtils.clone(formItemAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
@@ -62,14 +62,14 @@ const apis = [
         name: 'toolbar',
         descKey: 'app.api.grid.desc.toolbar',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.grid.toolbar',
         list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
           name: 'zoom',
           desc: '是否允许最大化显示',
           version: '',
-          type: 'Boolean, Object',
+          type: 'any',
           enum: '',
           defVal: '',
           list: [
@@ -77,7 +77,7 @@ const apis = [
               name: 'iconIn',
               desc: '自定义最大化图标',
               version: '',
-              type: 'String',
+              type: 'string',
               enum: '',
               defVal: '',
               list: []
@@ -86,7 +86,7 @@ const apis = [
               name: 'iconOut',
               desc: '自定义还原图标',
               version: '',
-              type: 'String',
+              type: 'string',
               enum: '',
               defVal: '',
               list: []
@@ -98,7 +98,7 @@ const apis = [
         name: 'pager-config',
         descKey: 'app.api.grid.desc.pagerConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.grid.pagerConfig',
         list: XEUtils.mapTree(pagerAPI.find(item => item.name === 'Props').list.filter(item => !['size', 'loading'].includes(item.name)), item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
@@ -109,7 +109,7 @@ const apis = [
         name: 'proxy-config',
         descKey: 'app.api.grid.desc.proxyConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.grid.proxyConfig',
         list: [
@@ -117,7 +117,7 @@ const apis = [
             name: 'autoLoad',
             desc: '是否自动加载查询数据',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -126,7 +126,7 @@ const apis = [
             name: 'message',
             desc: '是否显示内置的消息提示（可以设为 false 关闭内置的消息提示）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -135,7 +135,7 @@ const apis = [
             name: 'seq',
             desc: '存在 type=index 列时有效，是否代理动态序号（根据分页动态变化）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -144,7 +144,7 @@ const apis = [
             name: 'sort',
             desc: '是否代理排序',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -153,7 +153,7 @@ const apis = [
             name: 'filter',
             desc: '是否代理筛选',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -162,7 +162,7 @@ const apis = [
             name: 'form',
             desc: '是否代理表单',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -171,7 +171,7 @@ const apis = [
             name: 'props',
             desc: '获取的属性配置',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: [
@@ -179,7 +179,7 @@ const apis = [
                 name: 'list',
                 desc: '响应结果中获取数据列表的属性',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: '',
                 defVal: '',
                 list: []
@@ -188,7 +188,7 @@ const apis = [
                 name: 'result',
                 desc: '只对 pager-config 配置了有效，响应结果中获取数据列表的属性',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: '',
                 defVal: 'result',
                 list: []
@@ -197,7 +197,7 @@ const apis = [
                 name: 'total',
                 desc: '只对 pager-config 配置了有效，响应结果中获取分页的属性',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: '',
                 defVal: 'page.total',
                 list: []
@@ -208,7 +208,7 @@ const apis = [
             name: 'ajax',
             desc: '代理配置（任何使用 Promise API 的任何库都可以对接数据代理）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: [
@@ -216,7 +216,7 @@ const apis = [
                 name: 'query',
                 desc: '查询方法 Function({ page, sort, filters, form }, ...arguments)，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息；如果使用了表单，form 属性可以获取相关信息',
                 version: '',
-                type: 'Function / Promise',
+                type: 'Function / Promise<any[]>',
                 enum: '',
                 defVal: '',
                 list: []
@@ -243,7 +243,7 @@ const apis = [
                 name: 'delete',
                 desc: '删除方法 Function({ body }, ...arguments)，提交的参数 { removeRecords }',
                 version: '',
-                type: 'Function / Promise',
+                type: 'Function / Promise<any>',
                 enum: '',
                 defVal: '',
                 list: []
@@ -252,7 +252,7 @@ const apis = [
               //   name: 'beforeDelete',
               //   desc: '删除之前触发该 Function({ body }, ...arguments) 方法',
               //   version: '',
-              //   type: 'Function / Promise',
+              //   type: 'Function / Promise<any>',
               //   enum: '',
               //   defVal: '',
               //   list: []
@@ -270,7 +270,7 @@ const apis = [
                 name: 'save',
                 desc: '保存方法 Function({ body }, ...arguments)，提交的参数 { insertRecords, updateRecords, removeRecords, pendingRecords}',
                 version: '',
-                type: 'Function / Promise',
+                type: 'Function / Promise<any>',
                 enum: '',
                 defVal: '',
                 list: []
@@ -279,7 +279,7 @@ const apis = [
               //   name: 'beforeSave',
               //   desc: '保存之前触发该 Function({ body }, ...arguments) 方法',
               //   version: '',
-              //   type: 'Function / Promise',
+              //   type: 'Function / Promise<any>',
               //   enum: '',
               //   defVal: '',
               //   list: []
@@ -301,7 +301,7 @@ const apis = [
         name: 'zoom-config',
         descKey: 'app.api.grid.desc.zoomConfig',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.grid.zoomConfig',
         list: [
@@ -309,7 +309,7 @@ const apis = [
             name: 'escRestore',
             desc: '是否允许通过按下 ESC 键还原',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []

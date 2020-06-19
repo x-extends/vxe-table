@@ -10,15 +10,9 @@ const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
 
 const components = [
-  'icon',
   'table',
   'column',
-  'cell',
-  'header',
   'body',
-  'footer',
-  'filter',
-  'menu',
   'toolbar',
   'grid',
   'pager',
@@ -35,6 +29,12 @@ const components = [
   'list',
   'pulldown',
 
+  'icon',
+  'cell',
+  'header',
+  'footer',
+  'filter',
+  'menu',
   'edit',
   'export',
   'custom',

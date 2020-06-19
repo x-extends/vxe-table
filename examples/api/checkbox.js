@@ -11,7 +11,7 @@ const apis = [
         name: 'value,v-model',
         descKey: 'app.api.checkbox.desc.value',
         version: '',
-        type: '',
+        type: 'any',
         enum: '',
         defVal: '',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'label',
         descKey: 'app.api.checkbox.desc.label',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'content',
         desc: '内容（支持开启国际化）',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.checkbox.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'disabled',
         descKey: 'app.api.checkbox.desc.disabled',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'title',
         descKey: 'app.api.checkbox.desc.title',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'indeterminate',
         descKey: 'app.api.checkbox.desc.indeterminate',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []

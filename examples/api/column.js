@@ -11,7 +11,7 @@ const apis = [
         name: 'type',
         descKey: 'app.api.tableColumn.desc.type',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: [
@@ -66,7 +66,7 @@ const apis = [
         name: 'field',
         descKey: 'app.api.tableColumn.desc.field',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -75,7 +75,7 @@ const apis = [
         name: 'title',
         descKey: 'app.api.tableColumn.desc.title',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -84,7 +84,7 @@ const apis = [
         name: 'width',
         descKey: 'app.api.tableColumn.desc.width',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: 'px, %',
         defVal: '继承 table.column-width',
         list: []
@@ -93,7 +93,7 @@ const apis = [
         name: 'min-width',
         descKey: 'app.api.tableColumn.desc.minWidth',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: 'px, %',
         defVal: '继承 table.column-min-width',
         list: []
@@ -102,7 +102,7 @@ const apis = [
         name: 'resizable',
         descKey: 'app.api.tableColumn.desc.resizable',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '继承 table.resizable',
         list: []
@@ -111,7 +111,7 @@ const apis = [
         name: 'visible',
         descKey: 'app.api.tableColumn.desc.visible',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '',
         list: []
@@ -120,7 +120,7 @@ const apis = [
         name: 'fixed',
         descKey: 'app.api.tableColumn.desc.fixed',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'left（固定左侧）, right（固定右侧）',
         defVal: '',
         list: []
@@ -129,7 +129,7 @@ const apis = [
         name: 'align',
         descKey: 'app.api.tableColumn.desc.align',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 table.align',
         list: []
@@ -138,7 +138,7 @@ const apis = [
         name: 'header-align',
         descKey: 'app.api.tableColumn.desc.headerAlign',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 align > 继承 table.header-align',
         list: []
@@ -147,7 +147,7 @@ const apis = [
         name: 'footer-align',
         descKey: 'app.api.tableColumn.desc.footerAlign',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'left（左对齐）, center（居中对齐）, right（右对齐）',
         defVal: '继承 align > 继承 table.footer-align',
         list: []
@@ -156,7 +156,7 @@ const apis = [
         name: 'show-overflow',
         descKey: 'app.api.tableColumn.desc.showOverflow',
         version: '',
-        type: 'String,Boolean',
+        type: 'string | boolean',
         enum: 'ellipsis（只显示省略号）, title（并且显示为原生 title）, tooltip（并且显示为 tooltip 提示）',
         defVal: '继承 table.show-overflow',
         list: []
@@ -165,7 +165,7 @@ const apis = [
         name: 'show-header-overflow',
         descKey: 'app.api.tableColumn.desc.showHeaderOverflow',
         version: '',
-        type: 'String,Boolean',
+        type: 'string | boolean',
         enum: 'ellipsis（只显示省略号）, title（并且显示为原生 title）, tooltip（并且显示为 tooltip 提示）',
         defVal: '继承 table.show-header-overflow',
         list: []
@@ -174,7 +174,7 @@ const apis = [
         name: 'show-footer-overflow',
         descKey: 'app.api.tableColumn.desc.showFooterOverflow',
         version: '',
-        type: 'Boolean, String',
+        type: 'boolean | string',
         enum: 'ellipsis（只显示省略号）,title（并且显示为原生 title）,tooltip（并且显示为 tooltip 提示）',
         defVal: '继承 table.show-footer-overflow',
         list: []
@@ -183,7 +183,7 @@ const apis = [
         name: 'class-name',
         descKey: 'app.api.tableColumn.desc.className',
         version: '',
-        type: 'String, Function',
+        type: 'string | Function',
         enum: '',
         defVal: '',
         list: []
@@ -192,7 +192,7 @@ const apis = [
         name: 'header-class-name',
         descKey: 'app.api.tableColumn.desc.headerClassName',
         version: '',
-        type: 'String, Function',
+        type: 'string | Function',
         enum: '',
         defVal: '',
         list: []
@@ -201,7 +201,7 @@ const apis = [
         name: 'footer-class-name',
         descKey: 'app.api.tableColumn.desc.footerClassName',
         version: '',
-        type: 'String, Function',
+        type: 'string | Function',
         enum: '',
         defVal: '',
         list: []
@@ -210,7 +210,7 @@ const apis = [
         name: 'formatter',
         descKey: 'app.api.tableColumn.desc.formatter',
         version: '',
-        type: 'Function, Array, String',
+        type: 'Function | any[] | string',
         enum: '',
         defVal: '',
         list: []
@@ -228,7 +228,7 @@ const apis = [
         name: 'sortable',
         descKey: 'app.api.tableColumn.desc.sortable',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -237,7 +237,7 @@ const apis = [
         name: 'sort-by',
         descKey: 'app.api.tableColumn.desc.sortBy',
         version: '',
-        type: 'String, Array',
+        type: 'string | string[]',
         enum: '',
         defVal: '',
         list: []
@@ -255,7 +255,7 @@ const apis = [
         name: 'remote-sort',
         descKey: 'app.api.tableColumn.desc.remoteSort',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '继承 table.remote-sort',
         list: []
@@ -264,7 +264,7 @@ const apis = [
         name: 'filters',
         descKey: 'app.api.tableColumn.desc.filters',
         version: '',
-        type: 'Array',
+        type: 'any[]',
         enum: '',
         defVal: '',
         list: [
@@ -272,7 +272,7 @@ const apis = [
             name: 'label',
             desc: '显示的值',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -281,7 +281,7 @@ const apis = [
             name: 'value',
             desc: '实际的值',
             version: '',
-            type: 'Any',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -290,7 +290,7 @@ const apis = [
             name: 'checked',
             desc: '默认是否选中',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -299,7 +299,7 @@ const apis = [
             name: 'resetValue',
             desc: '重置时的默认值',
             version: '',
-            type: 'Any',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -308,7 +308,7 @@ const apis = [
             name: 'data',
             desc: '自定义渲染的数据值（当使用自定义模板时可能会用到）',
             version: '',
-            type: 'Any',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -319,7 +319,7 @@ const apis = [
         name: 'filter-multiple',
         descKey: 'app.api.tableColumn.desc.filterMultiple',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -337,7 +337,7 @@ const apis = [
         name: 'filter-render',
         descKey: 'app.api.tableColumn.desc.filterRender',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -401,7 +401,7 @@ const apis = [
         name: 'cell-type',
         descKey: 'app.api.tableColumn.desc.cellType',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'auto（默认自动转换），number（数值）, string（字符串）',
         defVal: 'auto',
         list: []
@@ -410,7 +410,7 @@ const apis = [
         name: 'cell-render',
         descKey: 'app.api.tableColumn.desc.cellRender',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -418,7 +418,7 @@ const apis = [
             name: 'name',
             desc: '渲染器名称',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'input, textarea, select, $input, $select, $button, $buttons, $switch',
             defVal: '',
             list: []
@@ -427,7 +427,7 @@ const apis = [
             name: 'props',
             desc: '渲染的参数（请查看目标渲染的 Props）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -436,7 +436,7 @@ const apis = [
             name: 'attrs',
             desc: '渲染的属性（请查看目标渲染的 Attribute）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -445,7 +445,7 @@ const apis = [
             name: 'options',
             desc: '只对 name=select 有效，下拉选项列表',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: []
@@ -454,7 +454,7 @@ const apis = [
             name: 'optionProps',
             desc: '只对 name=select 有效，下拉选项属性参数配置',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{ value, label, disabled }',
             list: []
@@ -463,7 +463,7 @@ const apis = [
             name: 'optionGroups',
             desc: '只对 name=select 有效，下拉分组选项列表',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: []
@@ -472,7 +472,7 @@ const apis = [
             name: 'optionGroupProps',
             desc: '只对 name=select 有效，下拉分组选项属性参数配置',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{ options, label }',
             list: []
@@ -481,7 +481,7 @@ const apis = [
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
             list: []
@@ -490,7 +490,7 @@ const apis = [
             name: 'nativeEvents',
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
             list: []
@@ -499,7 +499,7 @@ const apis = [
             name: 'content',
             desc: '渲染组件的内容（仅用于特殊组件）',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -510,7 +510,7 @@ const apis = [
         name: 'edit-render',
         descKey: 'app.api.tableColumn.desc.editRender',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -518,7 +518,7 @@ const apis = [
             name: 'name',
             desc: '渲染器名称',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'input, textarea, select, $input, $select, $switch',
             defVal: '',
             list: []
@@ -527,7 +527,7 @@ const apis = [
             name: 'props',
             desc: '渲染的参数（请查看目标渲染的 Props）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -536,7 +536,7 @@ const apis = [
             name: 'attrs',
             desc: '渲染的属性（请查看目标渲染的 Attribute）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -545,7 +545,7 @@ const apis = [
             name: 'options',
             desc: '只对 name=select 有效，下拉选项列表',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: []
@@ -554,7 +554,7 @@ const apis = [
             name: 'optionProps',
             desc: '只对 name=select 有效，下拉选项属性参数配置',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{ value, label, disabled }',
             list: []
@@ -563,7 +563,7 @@ const apis = [
             name: 'optionGroups',
             desc: '只对 name=select 有效，下拉分组选项列表',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: []
@@ -572,7 +572,7 @@ const apis = [
             name: 'optionGroupProps',
             desc: '只对 name=select 有效，下拉分组选项属性参数配置',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{ options, label }',
             list: []
@@ -581,7 +581,7 @@ const apis = [
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
             list: []
@@ -590,7 +590,7 @@ const apis = [
             name: 'nativeEvents',
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
             list: []
@@ -599,7 +599,7 @@ const apis = [
             name: 'content',
             desc: '渲染组件的内容（仅用于特殊组件）',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -617,7 +617,7 @@ const apis = [
             name: 'autoselect',
             desc: '是否在激活编辑之后自动选中输入框内容',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -626,7 +626,7 @@ const apis = [
             name: 'defaultValue',
             desc: '默认值（插入数据时列的默认值）',
             version: '',
-            type: 'Any',
+            type: 'any',
             enum: '',
             defVal: 'null',
             list: []
@@ -635,7 +635,7 @@ const apis = [
             name: 'immediate',
             desc: '输入值实时同步更新（如果设置为 true，但可编辑时性能将会直线下降）',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -646,7 +646,7 @@ const apis = [
         name: 'content-render',
         descKey: 'app.api.tableColumn.desc.contentRender',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -654,7 +654,7 @@ const apis = [
             name: 'name',
             desc: '渲染器名称',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'input, textarea, select, $input, $textarea, $select',
             defVal: '',
             list: []
@@ -663,7 +663,7 @@ const apis = [
             name: 'props',
             desc: '渲染的参数（请查看目标渲染的 Props）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -672,7 +672,7 @@ const apis = [
             name: 'attrs',
             desc: '渲染的属性（请查看目标渲染的 Attribute）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: []
@@ -681,7 +681,7 @@ const apis = [
             name: 'options',
             desc: '只对 name=select 有效，下拉选项列表',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: []
@@ -690,7 +690,7 @@ const apis = [
             name: 'optionProps',
             desc: '只对 name=select 有效，下拉选项属性参数配置',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{ value, label, disabled }',
             list: []
@@ -699,7 +699,7 @@ const apis = [
             name: 'optionGroups',
             desc: '只对 name=select 有效，下拉分组选项列表',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: []
@@ -708,7 +708,7 @@ const apis = [
             name: 'optionGroupProps',
             desc: '只对 name=select 有效，下拉分组选项属性参数配置',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{ options, label }',
             list: []
@@ -717,7 +717,7 @@ const apis = [
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{data, property}, ...[目标渲染的 arguments]',
             list: []
@@ -726,7 +726,7 @@ const apis = [
             name: 'nativeEvents',
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '{data, property}, ...[目标渲染的 arguments]',
             list: []
@@ -737,7 +737,7 @@ const apis = [
         name: 'tree-node',
         descKey: 'app.api.tableColumn.desc.treeNode',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -746,7 +746,7 @@ const apis = [
         name: 'params',
         descKey: 'app.api.tableColumn.desc.params',
         version: '',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: []

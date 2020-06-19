@@ -11,7 +11,7 @@ const apis = [
         name: 'value,v-model',
         descKey: 'app.api.modal.desc.value',
         version: '',
-        type: '',
+        type: 'any',
         enum: '',
         defVal: '',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.modal.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium, small, mini',
         defVal: '继承上下文',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'loading',
         descKey: 'app.api.modal.desc.loading',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'id',
         descKey: 'app.api.modal.desc.id',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'title',
         descKey: 'app.api.modal.desc.title',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '消息提示',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'type',
         descKey: 'app.api.modal.desc.type',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'alert, confirm, message',
         defVal: '',
         list: []
@@ -65,7 +65,7 @@ const apis = [
         name: 'status',
         descKey: 'app.api.modal.desc.status',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'info, success, warning, error, loading',
         defVal: '',
         list: []
@@ -74,7 +74,7 @@ const apis = [
         name: 'iconStatus',
         descKey: 'app.api.modal.desc.iconStatus',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -83,7 +83,7 @@ const apis = [
         name: 'message',
         descKey: 'app.api.modal.desc.message',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -92,7 +92,7 @@ const apis = [
         name: 'showHeader',
         descKey: 'app.api.modal.desc.showHeader',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -101,7 +101,7 @@ const apis = [
         name: 'showFooter',
         descKey: 'app.api.modal.desc.showFooter',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -110,7 +110,7 @@ const apis = [
         name: 'lock-view',
         descKey: 'app.api.modal.desc.lockView',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -119,7 +119,7 @@ const apis = [
         name: 'lock-scroll',
         descKey: 'app.api.modal.desc.lockScroll',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -128,7 +128,7 @@ const apis = [
         name: 'mask',
         descKey: 'app.api.modal.desc.mask',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -137,7 +137,7 @@ const apis = [
         name: 'mask-closable',
         descKey: 'app.api.modal.desc.maskClosable',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -146,7 +146,7 @@ const apis = [
         name: 'esc-closable',
         descKey: 'app.api.modal.desc.escClosable',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -155,7 +155,7 @@ const apis = [
         name: 'resize',
         descKey: 'app.api.modal.desc.resize',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -164,7 +164,7 @@ const apis = [
         name: 'duration',
         descKey: 'app.api.modal.desc.duration',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '',
         defVal: '3000',
         list: []
@@ -173,7 +173,7 @@ const apis = [
         name: 'width',
         descKey: 'app.api.modal.desc.width',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '',
         defVal: '',
         list: []
@@ -182,7 +182,7 @@ const apis = [
         name: 'height',
         descKey: 'app.api.modal.desc.height',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '',
         defVal: '',
         list: []
@@ -191,7 +191,7 @@ const apis = [
         name: 'min-width',
         descKey: 'app.api.modal.desc.minWidth',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '',
         defVal: '',
         list: []
@@ -200,7 +200,7 @@ const apis = [
         name: 'min-height',
         descKey: 'app.api.modal.desc.minHeight',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '',
         defVal: '',
         list: []
@@ -209,7 +209,7 @@ const apis = [
         name: 'top',
         descKey: 'app.api.modal.desc.top',
         version: '',
-        type: 'Number, String',
+        type: 'number | string',
         enum: '',
         defVal: '15',
         list: []
@@ -218,7 +218,7 @@ const apis = [
         name: 'position',
         descKey: 'app.api.modal.desc.position',
         version: '',
-        type: 'String, Object',
+        type: 'any',
         enum: '',
         defVal: '',
         list: [
@@ -226,7 +226,7 @@ const apis = [
             name: 'top',
             desc: '距离顶部的偏移',
             version: '',
-            type: 'Number, String',
+            type: 'number | string',
             enum: '',
             defVal: '',
             list: []
@@ -235,7 +235,7 @@ const apis = [
             name: 'left',
             desc: '距离左侧的偏移',
             version: '',
-            type: 'Number, String',
+            type: 'number | string',
             enum: '',
             defVal: '',
             list: []
@@ -246,7 +246,7 @@ const apis = [
         name: 'zIndex',
         descKey: 'app.api.modal.desc.zIndex',
         version: '',
-        type: 'Number',
+        type: 'number',
         enum: '',
         defVal: '继承 setup.zIndex',
         list: []
@@ -255,7 +255,7 @@ const apis = [
         name: 'show-title-overflow',
         descKey: 'app.api.modal.desc.showTitleOverflow',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -264,7 +264,7 @@ const apis = [
         name: 'transfer',
         desc: '是否将弹框容器插入于 body 内',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.modal.transfer',
         list: []
@@ -273,7 +273,7 @@ const apis = [
         name: 'fullscreen',
         descKey: 'app.api.modal.desc.fullscreen',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -282,7 +282,7 @@ const apis = [
         name: 'dblclickZoom',
         descKey: 'app.api.modal.desc.dblclickZoom',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'true',
         list: []
@@ -291,7 +291,7 @@ const apis = [
         name: 'remember',
         descKey: 'app.api.modal.desc.remember',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -300,7 +300,7 @@ const apis = [
         name: 'destroy-on-close',
         descKey: 'app.api.modal.desc.destroyOnClose',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -309,7 +309,7 @@ const apis = [
         name: 'storage',
         descKey: 'app.api.modal.desc.storage',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []

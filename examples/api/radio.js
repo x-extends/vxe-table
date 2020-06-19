@@ -11,7 +11,7 @@ const apis = [
         name: 'value,v-model',
         descKey: 'app.api.radio.desc.value',
         version: '',
-        type: '',
+        type: 'any',
         enum: '',
         defVal: '',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'label',
         descKey: 'app.api.radio.desc.label',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'content',
         desc: '内容（支持开启国际化）',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.radio.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -47,7 +47,7 @@ const apis = [
         name: 'disabled',
         descKey: 'app.api.radio.desc.disabled',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -56,7 +56,7 @@ const apis = [
         name: 'name',
         descKey: 'app.api.radio.desc.name',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []

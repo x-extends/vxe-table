@@ -11,7 +11,7 @@ const apis = [
         name: 'size',
         descKey: 'app.api.toolbar.desc.size',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: 'medium,small,mini',
         defVal: '继承上下文',
         list: []
@@ -20,7 +20,7 @@ const apis = [
         name: 'loading',
         descKey: 'app.api.toolbar.desc.loading',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'false',
         list: []
@@ -29,7 +29,7 @@ const apis = [
         name: 'perfect',
         desc: '配套的样式',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '默认 false，继承 setup.toolbar.perfect',
         list: []
@@ -38,7 +38,7 @@ const apis = [
         name: 'import',
         descKey: 'app.api.toolbar.desc.import',
         version: '',
-        type: 'Boolean, Object',
+        type: 'boolean | object',
         enum: '',
         defVal: '默认继承 setup.toolbar.import',
         list: [
@@ -46,7 +46,7 @@ const apis = [
           //   name: 'mode',
           //   desc: '默认导入数据的方式',
           //   version: '',
-          //   type: 'String',
+          //   type: 'string',
           //   enum: 'covering, append',
           //   defVal: 'covering',
           //   list: []
@@ -55,7 +55,7 @@ const apis = [
           //   name: 'message',
           //   desc: '默认显示内置的消息提示',
           //   version: '',
-          //   type: 'Boolean',
+          //   type: 'boolean',
           //   enum: '',
           //   defVal: 'true',
           //   list: []
@@ -64,7 +64,7 @@ const apis = [
           //   name: 'types',
           //   desc: '导入的文件类型列表',
           //   version: '',
-          //   type: 'Array',
+          //   type: 'string[]',
           //   enum: 'csv, html, xml, txt',
           //   defVal: '支持所有类型',
           //   list: []
@@ -73,7 +73,7 @@ const apis = [
             name: 'icon',
             desc: '自定义图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -84,7 +84,7 @@ const apis = [
         name: 'export',
         descKey: 'app.api.toolbar.desc.export',
         version: '',
-        type: 'Boolean, Object',
+        type: 'boolean | object',
         enum: '',
         defVal: '默认继承 setup.toolbar.export',
         list: [
@@ -92,7 +92,7 @@ const apis = [
           //   name: 'filename',
           //   desc: '默认的文件名',
           //   version: '',
-          //   type: 'String',
+          //   type: 'string',
           //   enum: '',
           //   defVal: '',
           //   list: []
@@ -101,7 +101,7 @@ const apis = [
           //   name: 'sheetName',
           //   desc: '默认的表名（只对支持的文档类型有效）',
           //   version: '',
-          //   type: 'String',
+          //   type: 'string',
           //   enum: '',
           //   defVal: '',
           //   list: []
@@ -110,7 +110,7 @@ const apis = [
           //   name: 'original',
           //   desc: '默认是否导出源数据（如果需要支持导入，则必须设置为 true）',
           //   version: '',
-          //   type: 'Boolean',
+          //   type: 'boolean',
           //   enum: '',
           //   defVal: 'true',
           //   list: []
@@ -119,7 +119,7 @@ const apis = [
           //   name: 'type',
           //   desc: '默认选中的类型',
           //   version: '',
-          //   type: 'String',
+          //   type: 'string',
           //   enum: '',
           //   defVal: '默认选中 types 第一个值',
           //   list: []
@@ -128,7 +128,7 @@ const apis = [
           //   name: 'types',
           //   desc: '导出的文件类型列表',
           //   version: '',
-          //   type: 'Array',
+          //   type: 'string[]',
           //   enum: 'csv, html, xml, txt',
           //   defVal: '',
           //   list: []
@@ -137,7 +137,7 @@ const apis = [
           //   name: 'message',
           //   desc: '默认显示内置的消息提示',
           //   version: '',
-          //   type: 'Boolean',
+          //   type: 'boolean',
           //   enum: '',
           //   defVal: 'true',
           //   list: []
@@ -146,7 +146,7 @@ const apis = [
             name: 'icon',
             desc: '自定义图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -157,7 +157,7 @@ const apis = [
         name: 'print',
         descKey: 'app.api.toolbar.desc.print',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '默认继承 setup.toolbar.print',
         list: [
@@ -165,7 +165,7 @@ const apis = [
             name: 'icon',
             desc: '自定义图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -176,7 +176,7 @@ const apis = [
         name: 'refresh',
         descKey: 'app.api.toolbar.desc.refresh',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '默认继承 setup.toolbar.refresh',
         list: [
@@ -184,7 +184,7 @@ const apis = [
             name: 'query',
             desc: '查询的方法',
             version: '',
-            type: 'Function / Promise',
+            type: 'Function | Promise<any>',
             enum: '',
             defVal: '',
             list: []
@@ -193,7 +193,7 @@ const apis = [
             name: 'icon',
             desc: '自定义图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -202,7 +202,7 @@ const apis = [
             name: 'iconLoading',
             desc: '自定义加载中图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -213,7 +213,7 @@ const apis = [
         name: 'custom',
         descKey: 'app.api.toolbar.desc.custom',
         version: '',
-        type: 'Boolean, Object',
+        type: 'any',
         enum: '',
         defVal: '默认继承 setup.toolbar.custom',
         list: [
@@ -221,7 +221,7 @@ const apis = [
             name: 'trigger',
             desc: '触发方式',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'manual,click,hover',
             defVal: 'click',
             list: []
@@ -230,7 +230,7 @@ const apis = [
             name: 'immediate',
             desc: '列勾选之后是否实时同步',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -239,7 +239,7 @@ const apis = [
             name: 'isFooter',
             desc: '是否显示底部操作按钮',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -248,7 +248,7 @@ const apis = [
             name: 'icon',
             desc: '自定义图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -259,7 +259,7 @@ const apis = [
         name: 'buttons',
         desc: '按钮列表',
         version: '',
-        type: 'Array',
+        type: 'any[]',
         enum: '',
         defVal: '默认继承 setup.toolbar.buttons',
         list: [
@@ -267,7 +267,7 @@ const apis = [
             name: 'name',
             desc: '按钮名称（支持开启国际化）',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -276,7 +276,7 @@ const apis = [
             name: 'type',
             desc: '按钮类型',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'text,submit,reset,button',
             defVal: 'button',
             list: []
@@ -285,7 +285,7 @@ const apis = [
             name: 'status',
             desc: '按钮状态',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: 'primary, success, info, warning, danger',
             defVal: '',
             list: []
@@ -294,7 +294,7 @@ const apis = [
             name: 'code',
             desc: '指令编码',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -303,7 +303,7 @@ const apis = [
             name: 'visible ',
             desc: '是否可视',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -312,7 +312,7 @@ const apis = [
             name: 'disabled ',
             desc: '是否禁用',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -321,7 +321,7 @@ const apis = [
             name: 'icon ',
             desc: '按钮图标',
             version: '',
-            type: 'String',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -330,7 +330,7 @@ const apis = [
             name: 'dropdowns',
             desc: '下拉按钮列表',
             version: '',
-            type: 'Array',
+            type: 'any[]',
             enum: '',
             defVal: '',
             list: [
@@ -338,7 +338,7 @@ const apis = [
                 name: 'name',
                 desc: '按钮名称（支持开启国际化）',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: '',
                 defVal: '',
                 list: []
@@ -347,7 +347,7 @@ const apis = [
                 name: 'type',
                 desc: '按钮类型',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: 'text,submit,reset,button',
                 defVal: 'button',
                 list: []
@@ -356,7 +356,7 @@ const apis = [
                 name: 'status',
                 desc: '按钮状态',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: 'primary, success, info, warning, danger',
                 defVal: '',
                 list: []
@@ -365,7 +365,7 @@ const apis = [
                 name: 'code',
                 desc: '按钮编码',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: '',
                 defVal: '',
                 list: []
@@ -374,7 +374,7 @@ const apis = [
                 name: 'visible ',
                 desc: '是否可视',
                 version: '',
-                type: 'Boolean',
+                type: 'boolean',
                 enum: '',
                 defVal: 'true',
                 list: []
@@ -383,7 +383,7 @@ const apis = [
                 name: 'disabled ',
                 desc: '是否禁用',
                 version: '',
-                type: 'Boolean',
+                type: 'boolean',
                 enum: '',
                 defVal: 'false',
                 list: []
@@ -392,7 +392,7 @@ const apis = [
                 name: 'icon ',
                 desc: '按钮图标',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: '',
                 defVal: '',
                 list: []
@@ -403,7 +403,7 @@ const apis = [
             name: 'buttonRender ',
             desc: '按钮渲染器配置项',
             version: '',
-            type: 'Object',
+            type: 'any',
             enum: '',
             defVal: '',
             list: [
@@ -411,7 +411,7 @@ const apis = [
                 name: 'name',
                 desc: '渲染器名称',
                 version: '',
-                type: 'String',
+                type: 'string',
                 enum: '',
                 defVal: '',
                 list: []
@@ -420,7 +420,7 @@ const apis = [
                 name: 'props',
                 desc: '渲染的参数（请查看目标渲染的 Props）',
                 version: '',
-                type: 'Object',
+                type: 'any',
                 enum: '',
                 defVal: '',
                 list: []
@@ -429,7 +429,7 @@ const apis = [
                 name: 'attrs',
                 desc: '渲染的属性（请查看目标渲染的 Attribute）',
                 version: '',
-                type: 'Object',
+                type: 'any',
                 enum: '',
                 defVal: '',
                 list: []
@@ -438,7 +438,16 @@ const apis = [
                 name: 'events',
                 desc: '渲染组件的事件（请查看目标渲染的 Events）',
                 version: '',
-                type: 'Object',
+                type: 'any',
+                enum: '',
+                defVal: '{button}, ...[目标渲染的 arguments]',
+                list: []
+              },
+              {
+                name: 'nativeEvents',
+                desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+                version: '',
+                type: 'any',
                 enum: '',
                 defVal: '{button}, ...[目标渲染的 arguments]',
                 list: []
