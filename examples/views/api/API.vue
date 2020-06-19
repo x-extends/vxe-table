@@ -60,6 +60,7 @@ import radioAPI from '../../api/radio'
 import checkboxAPI from '../../api/checkbox'
 import inputAPI from '../../api/input'
 import selectAPI from '../../api/select'
+import optgroupAPI from '../../api/optgroup'
 import optionAPI from '../../api/option'
 import textareaAPI from '../../api/textarea'
 import buttonAPI from '../../api/button'
@@ -70,6 +71,46 @@ import formItemAPI from '../../api/form-item'
 import switchAPI from '../../api/switch'
 import listAPI from '../../api/list'
 import pulldownAPI from '../../api/pulldown'
+
+// import i18n from '../../i18n'
+// const attributes = window.attributes = {}
+// const tags = window.tags = {}
+
+// const tagMaps = [
+//   ['vxe-table', tableAPI, { subtags: ['vxe-table-column'], description: '基础表格' }],
+//   ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
+//   ['vxe-grid', gridAPI, { description: '高级表格' }],
+//   ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
+//   ['vxe-pager', pagerAPI, { description: '分页' }],
+//   ['vxe-radio', radioAPI, { description: '单选框' }],
+//   ['vxe-checkbox', checkboxAPI, { description: '复选框' }],
+//   ['vxe-switch', switchAPI, { description: '开关按钮' }],
+//   ['vxe-input', inputAPI, { description: '输入框' }],
+//   ['vxe-select', selectAPI, { subtags: ['vxe-optgroup', 'vxe-option'], description: '下拉框' }],
+//   ['vxe-optgroup', optgroupAPI, { subtags: ['vxe-option'], description: '下拉框 - 分组' }],
+//   ['vxe-option', optionAPI, { description: '下拉框 - 选项' }],
+//   ['vxe-button', buttonAPI, { description: '按钮' }],
+//   ['vxe-tooltip', tooltipAPI, { description: '工具提示' }],
+//   ['vxe-modal', modalAPI, { description: '模态窗口' }],
+//   ['vxe-form', formAPI, { subtags: ['vxe-form-item'], description: '表单' }],
+//   ['vxe-form-item', formItemAPI, { description: '表单 - 项' }],
+//   ['vxe-list', listAPI, { description: '列表' }],
+//   ['vxe-pulldown', pulldownAPI, { description: '下拉容器' }]
+// ]
+
+// tagMaps.forEach(confs => {
+//   const props = confs[1].find(item => item.name === 'Props').list
+//   const keys = []
+//   props.forEach(item => {
+//     const name = XEUtils.kebabCase(item.name)
+//     attributes[`${confs[0]}/${name}`] = {
+//       type: XEUtils.toString(item.type).toLowerCase(),
+//       description: item.descKey ? i18n.t(item.descKey) : item.desc
+//     }
+//     keys.push(name)
+//   })
+//   tags[confs[0]] = Object.assign({ attributes: keys }, confs[2])
+// })
 
 export default {
   data () {
@@ -204,6 +245,9 @@ export default {
               break
             case 'select':
               apis = selectAPI
+              break
+            case 'optgroup':
+              apis = optgroupAPI
               break
             case 'option':
               apis = optionAPI

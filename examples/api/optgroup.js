@@ -8,17 +8,8 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'value,v-model',
-        descKey: 'app.api.option.desc.value',
-        version: '',
-        type: 'any',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'size',
-        descKey: 'app.api.option.desc.size',
+        descKey: 'app.api.optgroup.desc.size',
         version: '',
         type: 'string',
         enum: '',
@@ -27,7 +18,7 @@ const apis = [
       },
       {
         name: 'label',
-        descKey: 'app.api.option.desc.label',
+        descKey: 'app.api.optgroup.desc.label',
         version: '',
         type: 'string | number | boolean',
         enum: '',
@@ -36,7 +27,7 @@ const apis = [
       },
       {
         name: 'disabled',
-        descKey: 'app.api.option.desc.disabled',
+        descKey: 'app.api.optgroup.desc.disabled',
         version: '',
         type: 'boolean',
         enum: '',
