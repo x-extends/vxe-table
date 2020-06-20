@@ -149,9 +149,10 @@ class ColumnConfig {
   update (name, value) {
     // 不支持双向的属性
     if (name !== 'filters') {
-      this[name] = value
       if (name === 'field') {
         this.property = value
+      } else {
+        this[name] = value
       }
     }
   }
