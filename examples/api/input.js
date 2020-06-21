@@ -30,7 +30,7 @@ const apis = [
         desc: '渲染类型',
         version: '',
         type: 'string',
-        enum: 'text, number, integer, float, password, date, datetime, week, month, year',
+        enum: 'text, search, number, integer, float, password, date, datetime, week, month, year',
         defVal: 'text',
         list: []
       },
@@ -254,6 +254,42 @@ const apis = [
       {
         name: 'clear',
         desc: '在点击右侧清除按钮时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'search-click',
+        desc: '只对 type=search 有效，在点击右侧搜索按钮时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'toggle-visible',
+        desc: '只对 type=password 有效，在点击右侧切换按钮时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ visible, $event }',
+        list: []
+      },
+      {
+        name: 'prev-number',
+        desc: '只对 type=number 有效，在点击右侧向上按钮时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'next-number',
+        desc: '只对 type=number 有效，在点击右侧向下按钮时触发该事件',
         version: '',
         type: '',
         enum: '',

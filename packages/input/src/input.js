@@ -404,6 +404,19 @@ function renderDatePickerIcon (h, _vm) {
   ])
 }
 
+function renderSearchIcon (h, _vm) {
+  return h('span', {
+    class: 'vxe-input--search-suffix',
+    on: {
+      click: _vm.searchEvent
+    }
+  }, [
+    h('i', {
+      class: ['vxe-input--search-icon', GlobalConfig.icon.INPUT_SEARCH]
+    })
+  ])
+}
+
 function renderPasswordIcon (h, _vm) {
   const { showPwd } = _vm
   return h('span', {
@@ -413,7 +426,7 @@ function renderPasswordIcon (h, _vm) {
     }
   }, [
     h('i', {
-      class: ['vxe-input--pwd-icon', showPwd ? GlobalConfig.icon.INPUT_SHOW_PWD : GlobalConfig.icon.INPUT_PWD]
+      class: ['vxe-input--password-icon', showPwd ? GlobalConfig.icon.INPUT_SHOW_PWD : GlobalConfig.icon.INPUT_PWD]
     })
   ])
 }
@@ -452,14 +465,20 @@ function renderSuffixIcon (h, _vm) {
 }
 
 function renderExtraSuffixIcon (h, _vm) {
-  const { isPassword, isNumber, isDatePicker } = _vm
-  return isPassword || isNumber || isDatePicker ? h('span', {
+  const { isPassword, isNumber, isDatePicker, isSearch } = _vm
+  let icons
+  if (isPassword) {
+    icons = renderPasswordIcon(h, _vm)
+  } else if (isNumber) {
+    icons = renderNumberIcon(h, _vm)
+  } else if (isDatePicker) {
+    icons = renderDatePickerIcon(h, _vm)
+  } else if (isSearch) {
+    icons = renderSearchIcon(h, _vm)
+  }
+  return icons ? h('span', {
     class: 'vxe-input--extra-suffix'
-  }, [
-    isPassword ? renderPasswordIcon(h, _vm) : null,
-    isNumber ? renderNumberIcon(h, _vm) : null,
-    isDatePicker ? renderDatePickerIcon(h, _vm) : null
-  ]) : null
+  }, [icons]) : null
 }
 
 export default {
@@ -529,6 +548,9 @@ export default {
     },
     isPassword () {
       return this.type === 'password'
+    },
+    isSearch () {
+      return this.type === 'search'
     },
     stepValue () {
       const { type, step } = this
@@ -966,13 +988,20 @@ export default {
     },
 
     // 密码
-    passwordToggleEvent () {
+    passwordToggleEvent (evnt) {
       const { disabled, readonly, showPwd } = this
       if (!disabled && !readonly) {
         this.showPwd = !showPwd
       }
+      this.$emit('toggle-visible', { visible: this.showPwd, $event: evnt })
     },
     // 密码
+
+    // 搜索
+    searchEvent (evnt) {
+      this.$emit('search-click', { $event: evnt })
+    },
+    // 搜索
 
     // 数值
     vaildMinNum (num) {
@@ -1033,6 +1062,7 @@ export default {
       if (!disabled && !readonly) {
         this.numberChange(true, evnt)
       }
+      this.$emit('prev-number', { $event: evnt })
     },
     numberNextEvent (evnt) {
       const { disabled, readonly } = this
@@ -1040,6 +1070,7 @@ export default {
       if (!disabled && !readonly) {
         this.numberChange(false, evnt)
       }
+      this.$emit('next-number', { $event: evnt })
     },
     numberChange (isPlus, evnt) {
       const { type, digits, value, stepValue } = this
