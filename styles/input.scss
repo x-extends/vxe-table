@@ -40,6 +40,7 @@ $iconWidth: 1.6em;
   width: 180px;
   &.is--disabled {
     .vxe-input--date-picker-suffix,
+    .vxe-input--search-suffix,
     .vxe-input--suffix,
     .vxe-input--password-suffix,
     .vxe-input--number-suffix {
@@ -48,6 +49,7 @@ $iconWidth: 1.6em;
   }
   &:not(.is--disabled) {
     .vxe-input--date-picker-suffix,
+    .vxe-input--search-suffix,
     .vxe-input--clear-icon,
     .vxe-input--password-suffix,
     .vxe-input--number-suffix {
@@ -182,14 +184,16 @@ $iconWidth: 1.6em;
 
 .vxe-input--password-suffix,
 .vxe-input--number-suffix,
-.vxe-input--date-picker-suffix {
+.vxe-input--date-picker-suffix,
+.vxe-input--search-suffix {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
 .vxe-input--date-picker-icon,
-.vxe-input--pwd-icon {
+.vxe-input--search-icon,
+.vxe-input--password-icon {
   position: absolute;
   left: 50%;
   top: 50%;
