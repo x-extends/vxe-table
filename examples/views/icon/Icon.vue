@@ -130,6 +130,9 @@ export default {
         },
         {
           icon: 'vxe-icon--print'
+        },
+        {
+          icon: 'vxe-icon--search'
         }
       ],
       demoCodes: [

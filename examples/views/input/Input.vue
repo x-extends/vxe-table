@@ -3,7 +3,7 @@
     <h2>{{ $t('app.aside.nav.input') }}</h2>
     <p class="tip">
       支持多种类型的输入框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link><br>
-      支持类型：text 文本、password 密码、number 数值、integer 整数、float 小数、date 日期、datetime 时间选择、week 周、month 月份、year 年份
+      支持类型：text 文本、search 搜索、password 密码、number 数值、integer 整数、float 小数、date 日期、datetime 时间选择、week 周、month 月份、year 年份
     </p>
 
     <p>
@@ -21,7 +21,8 @@
     </p>
 
     <p>
-      <vxe-input v-model="value300" placeholder="密码类型" type="password"></vxe-input>
+      <vxe-input v-model="value300" placeholder="搜索类型" type="search"></vxe-input>
+      <vxe-input v-model="value301" placeholder="密码类型" type="password"></vxe-input>
     </p>
 
     <p>
@@ -83,6 +84,7 @@ export default {
       value202: '',
       value203: '',
       value300: '',
+      value301: '',
       value400: '2018-01-09',
       value401: '',
       value402: '',
@@ -115,7 +117,8 @@ export default {
         </p>
 
         <p>
-          <vxe-input v-model="value300" placeholder="密码类型" type="password"></vxe-input>
+          <vxe-input v-model="value300" placeholder="搜索类型" type="search"></vxe-input>
+          <vxe-input v-model="value301" placeholder="密码类型" type="password"></vxe-input>
         </p>
 
         <p>
@@ -152,6 +155,7 @@ export default {
               value202: '',
               value203: '',
               value300: '',
+              value301: '',
               value400: '2018-01-09',
               value401: '',
               value402: '',

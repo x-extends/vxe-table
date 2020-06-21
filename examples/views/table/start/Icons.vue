@@ -43,6 +43,7 @@
         //   INPUT_PREV_NUM: 'vxe-icon--caret-top',
         //   INPUT_NEXT_NUM: 'vxe-icon--caret-bottom',
         //   INPUT_DATE: 'vxe-icon--calendar',
+        //   INPUT_SEARCH: 'vxe-icon--search',
 
         //   // modal
         //   MODAL_ZOOM_IN: 'vxe-icon--square',

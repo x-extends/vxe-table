@@ -675,3 +675,29 @@
     background-color: #fff;
   }
 }
+
+.vxe-icon--search {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0;
+    left: 0;
+    width: 0.8em;
+    height: 0.8em;
+    border-width: 0.15em;
+    border-style: solid;
+    border-color: inherit;
+    border-radius: 50%;
+  }
+  &:after {
+    @extend %PseudoClass;
+    top: 0.75em;
+    left: 0.6em;
+    width: 0.35em;
+    height: 0;
+    border-width: 0.15em 0 0 0;
+    border-style: solid;
+    border-color: inherit;
+    transform: rotate(45deg);
+  }
+}

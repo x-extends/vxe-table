@@ -120,6 +120,7 @@ const GlobalConfig = {
     INPUT_PREV_NUM: iconPrefix + 'caret-top',
     INPUT_NEXT_NUM: iconPrefix + 'caret-bottom',
     INPUT_DATE: iconPrefix + 'calendar',
+    INPUT_SEARCH: iconPrefix + 'search',
 
     // modal
     MODAL_ZOOM_IN: iconPrefix + 'square',
