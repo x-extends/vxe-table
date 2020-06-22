@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       可以设置大小尺寸：medium / small / mini<br>
-      默认大小：Table 48px 、Button 34px、Input 34px、Checkbox 16px、Radio 16px，可以通过 scss 变量修改，<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a><br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-custom-theme" target="_blank">（项目示例）</a>
+      默认大小：Table 48px 、Button 34px、Input 34px、Checkbox 16px、Radio 16px，可以通过 scss 变量修改，<a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a><br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-theme" target="_blank">（项目示例）</a>
     </p>
 
     <vxe-toolbar>

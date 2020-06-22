@@ -50,7 +50,7 @@
               <vxe-select class="latest-select" v-model="selectBetaVersion" size="mini" :options="newBetsVersionList"></vxe-select>
             </template>
           </div>
-          <vxe-input clearable v-model="filterName" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
+          <vxe-input clearable v-model="filterName" type="search" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
         </div>
         <div class="body">
           <template v-if="apiList.length">

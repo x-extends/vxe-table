@@ -22,7 +22,9 @@
 
     <p>
       <vxe-input v-model="value300" placeholder="搜索类型" type="search"></vxe-input>
-      <vxe-input v-model="value301" placeholder="密码类型" type="password"></vxe-input>
+      <vxe-input v-model="value301" placeholder="可清除" type="search" clearable></vxe-input>
+      <vxe-input v-model="value302" placeholder="密码类型" type="password"></vxe-input>
+      <vxe-input v-model="value303" placeholder="可清除" type="password" clearable></vxe-input>
     </p>
 
     <p>
@@ -85,6 +87,8 @@ export default {
       value203: '',
       value300: '',
       value301: '',
+      value302: '',
+      value303: '',
       value400: '2018-01-09',
       value401: '',
       value402: '',
@@ -118,7 +122,9 @@ export default {
 
         <p>
           <vxe-input v-model="value300" placeholder="搜索类型" type="search"></vxe-input>
-          <vxe-input v-model="value301" placeholder="密码类型" type="password"></vxe-input>
+          <vxe-input v-model="value301" placeholder="可清除" type="search" clearable></vxe-input>
+          <vxe-input v-model="value302" placeholder="密码类型" type="password"></vxe-input>
+          <vxe-input v-model="value303" placeholder="可清除" type="password" clearable></vxe-input>
         </p>
 
         <p>
@@ -156,6 +162,8 @@ export default {
               value203: '',
               value300: '',
               value301: '',
+              value302: '',
+              value303: '',
               value400: '2018-01-09',
               value401: '',
               value402: '',
