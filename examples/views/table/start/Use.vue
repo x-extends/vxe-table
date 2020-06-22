@@ -22,7 +22,7 @@
       </code>
     </pre>
     <h2>Import on demand 按需引入</h2>
-    <p class="tip">借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import" target="_blank">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。然后在文件 .babelrc 中配置</p>
+    <p class="tip">借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import" target="_blank">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。修改 .babelrc 或 babel.config.js 配置文件</p>
     <pre>
       <code class="shell">
         npm install babel-plugin-import -D

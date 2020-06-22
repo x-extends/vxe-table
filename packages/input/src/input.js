@@ -869,8 +869,7 @@ export default {
         const isShiftKey = evnt.shiftKey
         const isAltKey = evnt.altKey
         const keyCode = evnt.keyCode
-        const value = evnt.target.value
-        if (value && !isCtrlKey && !isShiftKey && !isAltKey && (keyCode === 32 || (keyCode >= 65 && keyCode <= 90))) {
+        if (!isCtrlKey && !isShiftKey && !isAltKey && (keyCode === 32 || (keyCode >= 65 && keyCode <= 90))) {
           evnt.preventDefault()
         }
         this.numberKeydownEvent(evnt)

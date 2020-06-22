@@ -99,6 +99,7 @@ $iconWidth: 1.6em;
   }
   &.is--suffix,
   &.type--password,
+  &.type--search,
   &.type--number,
   &.type--integer,
   &.type--float,
@@ -112,6 +113,7 @@ $iconWidth: 1.6em;
     }
   }
   &.type--password,
+  &.type--search,
   &.type--number,
   &.type--integer,
   &.type--float,
@@ -126,6 +128,7 @@ $iconWidth: 1.6em;
   }
   &.is--suffix {
     &.type--password,
+    &.type--search,
     &.type--number,
     &.type--integer,
     &.type--float,
