@@ -313,7 +313,10 @@ const Methods = {
     }
     fullColumnMap.clear()
     if (isGroup) {
-      XEUtils.eachTree(collectColumn, handleFunc)
+      XEUtils.eachTree(collectColumn, (column, index, items, path, parent, nodes) => {
+        column.level = nodes.length
+        handleFunc(column, index)
+      })
     } else {
       tableFullColumn.forEach(handleFunc)
     }

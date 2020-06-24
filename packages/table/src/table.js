@@ -441,7 +441,7 @@ export default {
     },
     // 是否使用了分组表头
     isGroup () {
-      return this.collectColumn.some(column => UtilTools.hasChildrenList(column))
+      return this.collectColumn.some(UtilTools.hasChildrenList)
     },
     hasTip () {
       return VXETable._tooltip
