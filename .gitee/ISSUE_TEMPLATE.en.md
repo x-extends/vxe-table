@@ -1,22 +1,15 @@
-### (required) Describe the bug
+**(Required) Describe the bug or screenshots**
+?
 
- ?
+**(Required) Reproduction link (How to create links?)**
+?
 
-### (required) Reproduction link（[jsfiddle](https://jsfiddle.net/04Ldpsy8/)、[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsrun](https://jsrun.pro//vIyKp/edit)）
+**(Required) Expected behavior**
+?
 
- ?
+**(Required) Please fill in the version information**
 
-### Error message or screenshots
-
- ?
-
-### (required) Expected behavior
-
- ?
-
-### (required) Please fill in the version information
-
-- os: ?
-- browser: ?
+- OS: ?
+- Browser: ?
 - vue: ?
 - vxe-table: ?
