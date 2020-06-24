@@ -2,7 +2,7 @@
 name: Feature request
 about: 功能需求：这个需求解决了什么问题？
 title: ''
-labels: enhancement 功能需求
+labels: enhancement
 assignees: ''
 
 ---

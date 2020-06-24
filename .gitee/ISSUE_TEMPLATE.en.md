@@ -1,7 +1,7 @@
 **(Required) Describe the bug or screenshots**
 ?
 
-**(Required) Reproduction link (How to create links?)**
+**(Required) Reproduction link**
 ?
 
 **(Required) Expected behavior**
