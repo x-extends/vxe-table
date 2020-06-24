@@ -10,10 +10,10 @@
       :data="tableData"
       :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input', attrs: { type: 'date' }}"></vxe-table-column>
-      <vxe-table-column field="num" title="Num" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input', immediate: true, attrs: { type: 'date' }}"></vxe-table-column>
+      <vxe-table-column field="num" title="Num" :edit-render="{name: 'input', immediate: true, attrs: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
       <vxe-table-column title="操作">
         <template v-slot="{ row }">
@@ -56,10 +56,10 @@ export default {
           :data="tableData"
           :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input', attrs: { type: 'date' }}"></vxe-table-column>
-          <vxe-table-column field="num" title="Num" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input', immediate: true, attrs: { type: 'date' }}"></vxe-table-column>
+          <vxe-table-column field="num" title="Num" :edit-render="{name: 'input', immediate: true, attrs: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
           <vxe-table-column title="操作">
             <template v-slot="{ row }">
