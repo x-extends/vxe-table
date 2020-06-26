@@ -2,10 +2,10 @@
   <div>
     <p class="tip">{{ $t('app.footer.donationDesc') }}</p>
     <div class="upgrade">
-      <a class="link" href="https://github.com/xuliangzhan/vxe-table/issues/712">
+      <a class="link" href="https://github.com/x-extends/vxe-table/issues/712">
         <span>😱{{ $t('app.body.other.compatibility') }}</span>
       </a>
-      <a class="link" href="https://github.com/xuliangzhan/vxe-table/releases">
+      <a class="link" href="https://github.com/x-extends/vxe-table/releases">
         <span>👀{{ $t('app.body.other.releases') }}</span>
       </a>
     </div>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div style="display: inline-block;margin-left: 20em;">
-        <div><span style="font-size: 22px;font-weight: 700;">QQ群</span><br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">👉New issues</a></div>
+        <div><span style="font-size: 22px;font-weight: 700;">QQ群</span><br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/x-extends/vxe-table/issues/390" target="_blank">👉New issues</a></div>
         <img src="static/donation/qq.png">
       </div>
     </div>

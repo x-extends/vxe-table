@@ -2,14 +2,14 @@
   <div id="app" @click="clickEvent">
     <header class="page-header">
       <div class="left">
-        <a href="https://github.com/xuliangzhan/vxe-table">
+        <a href="https://github.com/x-extends/vxe-table">
           <img src="logo.png" width="18">
           <span class="title">vxe-table</span>
         </a>
         <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
           <img src='https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark' alt='star'>
         </a>
-        <a href="https://github.com/xuliangzhan/vxe-table/stargazers">
+        <a href="https://github.com/x-extends/vxe-table/stargazers">
           <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg">
         </a>
         <a href="http://npm-stat.com/charts.html?package=vxe-table">

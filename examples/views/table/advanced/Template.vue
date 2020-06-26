@@ -52,7 +52,7 @@
       </vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name" sortable>
         <template v-slot="{ row }">
-          <a href="https://github.com/xuliangzhan/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
+          <a href="https://github.com/x-extends/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
@@ -86,7 +86,7 @@
           <select v-if="rowIndex === 1">
             <option value="1">还可以这样</option>
           </select>
-          <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
+          <a href="https://github.com/x-extends/vxe-table">{{ row.name }}</a>
         </template>
       </vxe-table-column>
       <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>
@@ -217,7 +217,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name" sortable>
             <template v-slot="{ row }">
-              <a href="https://github.com/xuliangzhan/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
+              <a href="https://github.com/x-extends/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
@@ -251,7 +251,7 @@ export default {
               <select v-if="rowIndex === 1">
                 <option value="1">还可以这样</option>
               </select>
-              <a href="https://github.com/xuliangzhan/vxe-table">{{ row.name }}</a>
+              <a href="https://github.com/x-extends/vxe-table">{{ row.name }}</a>
             </template>
           </vxe-table-column>
           <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>

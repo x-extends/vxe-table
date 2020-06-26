@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      具体兼容请查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table-plugin-menus" target="_blank">vxe-table-plugin-menus</a> 插件的 API<br>
+      具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-menus" target="_blank">vxe-table-plugin-menus</a> 插件的 API<br>
       <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 
