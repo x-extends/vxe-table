@@ -76,7 +76,7 @@ export default {
           },
           methods: {
             formatRole ({ cellValue }) {
-              return \`<a href="https://github.com/xuliangzhan/vxe-table" class="link" target="_black" style="color: orange">链接 \${cellValue}</a>\`
+              return \`<a href="https://github.com/x-extends/vxe-table" class="link" target="_black" style="color: orange">链接 \${cellValue}</a>\`
             },
             sortDescribeMethod (a, b) {
               // 由于 HTML 是无法排序的，使用自定义排序
@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     formatRole ({ cellValue }) {
-      return `<a href="https://github.com/xuliangzhan/vxe-table" class="link" target="_black" style="color: orange">链接 ${cellValue}</a>`
+      return `<a href="https://github.com/x-extends/vxe-table" class="link" target="_black" style="color: orange">链接 ${cellValue}</a>`
     },
     sortDescribeMethod (a, b) {
       // 由于 HTML 是无法排序的，使用自定义排序

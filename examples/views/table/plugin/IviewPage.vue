@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      与 <a class="link" href="https://github.com/xuliangzhan/iview">iview</a> 组合渲染 + 使用分页<br>
+      与 <a class="link" href="https://github.com/x-extends/iview">iview</a> 组合渲染 + 使用分页<br>
       <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 

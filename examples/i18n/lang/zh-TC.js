@@ -309,7 +309,7 @@ module.exports = {
         compatibility: '相容性變動',
         releases: '更新日誌',
         donation: '捐贈',
-        donationTitle: '捐贈管道<span class="red">（如果有無法解决的問題可以留言或者提 <a class="link" href="https://github.com/xuliangzhan/vxe-table/issues/390" target="_blank">Issues</a>）</span>：',
+        donationTitle: '捐贈管道<span class="red">（如果有無法解决的問題可以留言或者提 <a class="link" href="https://github.com/x-extends/vxe-table/issues/390" target="_blank">Issues</a>）</span>：',
         issuesTitle: '如何迴響問題？  ',
         newFunc: '由於作者比較忙，後續有時間可能會支持該功能！',
         newDevelopment: '由於作者比較忙，該版本正在重構中，敬請期待！'
