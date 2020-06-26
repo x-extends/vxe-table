@@ -182,8 +182,8 @@ export default {
 ## Docs
 
 [💡 User guide](https://github.com/xuliangzhan/vxe-table-demo)  
-[👉 View example](https://xuliangzhan.github.io/vxe-table/#/table/base/basic)  
-[👉 View API](https://xuliangzhan.github.io/vxe-table/#/table/api)
+[👉 View example](https://x-extends.github.io/vxe-table/#/table/base/basic)  
+[👉 View API](https://x-extends.github.io/vxe-table/#/table/api)
 
 ## Donation
 
