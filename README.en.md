@@ -1,6 +1,6 @@
 # vxe-table
 
-[简体中文](README.md) | English
+[简体中文](README.md) | [繁體中文](README.zh-TW.md) | English  
 
 [![gitee star](https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark)](https://gitee.com/xuliangzhan_admin/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.org/package/vxe-table)
@@ -190,7 +190,7 @@ export default {
 If the open source project is very helpful to you, you can buy the author a cup of coffee.  
 
 Because maintaining an open source project takes a lot of effort and time, if you are using the project, your donation will help keep the project going.  
-[👉 Donation method💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
+[👉 Donation method💰](https://x-extends.github.io/vxe-table/#/donation/api)
 
 ## License
 
