@@ -64,7 +64,7 @@ export default {
           slots: {
             default: ({ row }) => {
               return [
-                <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
+                <a class="link" href="https://x-extends.github.io/vxe-table/">我是超链接：{ row.sex }</a>
               ]
             },
             header: ({ column }) => {
@@ -192,7 +192,7 @@ export default {
                   slots: {
                     default: ({ row, column }) => {
                       return [
-                        <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
+                        <a class="link" href="https://x-extends.github.io/vxe-table/">我是超链接：{ row.sex }</a>
                       ]
                     },
                     header: ({ column }) => {

@@ -1,6 +1,6 @@
 # vxe-table
 
-简体中文 | [English](./README.en.md)
+简体中文 | [English](README.en.md)
 
 [![gitee star](https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark)](https://gitee.com/xuliangzhan_admin/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.org/package/vxe-table)
@@ -8,11 +8,11 @@
 [![npm downloads](https://img.shields.io/npm/dt/vxe-table.svg?style=flat-square)](https://npm-stat.com/charts.html?package=vxe-table)
 [![gzip size: JS](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/index.min.js?compression=gzip&label=gzip%20size:%20JS)](https://unpkg.com/vxe-table/lib/index.min.js)
 [![gzip size: CSS](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/index.css?compression=gzip&label=gzip%20size:%20CSS&color=green)](https://unpkg.com/vxe-table/lib/index.css)  
-[![issues](https://img.shields.io/github/issues/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/issues)
-[![issues closed](https://img.shields.io/github/issues-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/issues?q=is%3Aissue+is%3Aclosed)
-[![pull requests](https://img.shields.io/github/issues-pr/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls)
-[![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/xuliangzhan/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
-[![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE)
+[![issues](https://img.shields.io/github/issues/xuliangzhan/vxe-table.svg)](https://github.com/x-extends/vxe-table/issues)
+[![issues closed](https://img.shields.io/github/issues-closed/xuliangzhan/vxe-table.svg)](https://github.com/x-extends/vxe-table/issues?q=is%3Aissue+is%3Aclosed)
+[![pull requests](https://img.shields.io/github/issues-pr/xuliangzhan/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls)
+[![pull requests closed](https://img.shields.io/github/issues-pr-closed/xuliangzhan/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
+[![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
 一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...  
 
@@ -27,7 +27,7 @@
   * [x] v3.0 &nbsp;&nbsp;60% 基于 vue2.6+，只支持 H5 浏览器，不支持 IE，渲染性能大幅提升
   * [ ] v4.0 &nbsp;&nbsp;0% 基于 vue3+，只支持 H5 浏览器，不支持 IE，渲染性能大幅提升
 
-👉 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
+👉 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/x-extends/vxe-table/issues/390)
 
 ## 浏览器支持
 
@@ -188,11 +188,10 @@ export default {
 ## Donation
 
 如果这个开源项目对您有帮助，请作者喝杯咖啡吧。☕  
-有问题欢迎留言或者提 [Issues](https://github.com/xuliangzhan/vxe-table/issues/390)
 
 由于维护一个开源项目需要花费非常大的精力与时间，如果您正在使用该项目，您的捐赠会帮助该项目能持续发展下去  
 [👉 捐赠方式💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
 ## License
 
-[MIT License](./LICENSE), 2019-present, [Xu Liangzhan](mailto:xu_liangzhan@163.com)
+[MIT](LICENSE) © 2019-present, Xu Liangzhan
