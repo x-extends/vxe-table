@@ -192,6 +192,8 @@ export default {
 由於維護一個開源項目需要花費非常大的精力與時間，如果您正在使用該項目，您的捐贈會幫助該項目能持續發展下去  
 [👉 捐贈管道💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
+![pay](https://gitee.com/xuliangzhan_admin/vxe-table/raw/master/public/static/donation/pay.jpg)  
+
 ## License
 
 [MIT](LICENSE) © 2019-present, Xu Liangzhan

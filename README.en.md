@@ -192,6 +192,8 @@ If the open source project is very helpful to you, you can buy the author a cup 
 Because maintaining an open source project takes a lot of effort and time, if you are using the project, your donation will help keep the project going.  
 [👉 Donation method💰](https://x-extends.github.io/vxe-table/#/donation/api)
 
+![pay](https://gitee.com/xuliangzhan_admin/vxe-table/raw/master/public/static/donation/pay.jpg)  
+
 ## License
 
 [MIT](LICENSE) © 2019-present, Xu Liangzhan
