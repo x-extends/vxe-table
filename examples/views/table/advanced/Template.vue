@@ -77,16 +77,29 @@
         <template v-slot:header>
           <vxe-input v-model="value1" placeholder="放个输入框" size="mini"></vxe-input>
         </template>
-        <template v-slot="{ row }">
-          <span>{{ formatDate(row.time) }}</span>
+        <template v-slot="{ row, rowIndex }">
+          <template v-if="rowIndex === 2">
+            <vxe-switch v-model="row.flag"></vxe-switch>
+          </template>
+          <template v-else-if="rowIndex === 3">
+            <vxe-switch v-model="row.flag" on-label="开" off-label="关"></vxe-switch>
+          </template>
+          <template v-else>
+            <span>{{ formatDate(row.time) }}</span>
+          </template>
         </template>
       </vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow>
         <template v-slot="{ row, rowIndex }">
-          <select v-if="rowIndex === 1">
-            <option value="1">还可以这样</option>
-          </select>
-          <a href="https://github.com/x-extends/vxe-table">{{ row.name }}</a>
+          <template v-if="rowIndex === 1">
+            <vxe-select v-model="row.flag1" transfer>
+              <vxe-option value="Y" label="是"></vxe-option>
+              <vxe-option value="N" label="否"></vxe-option>
+            </vxe-select>
+          </template>
+          <template v-else>
+            <a href="https://github.com/x-extends/vxe-table">{{ row.name }}</a>
+          </template>
         </template>
       </vxe-table-column>
       <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>
@@ -242,16 +255,29 @@ export default {
             <template v-slot:header>
               <vxe-input v-model="value1" placeholder="放个输入框" size="mini"></vxe-input>
             </template>
-            <template v-slot="{ row }">
-              <span>{{ formatDate(row.time) }}</span>
+            <template v-slot="{ row, rowIndex }">
+              <template v-if="rowIndex === 2">
+                <vxe-switch v-model="row.flag"></vxe-switch>
+              </template>
+              <template v-else-if="rowIndex === 3">
+                <vxe-switch v-model="row.flag" on-label="开" off-label="关"></vxe-switch>
+              </template>
+              <template v-else>
+                <span>{{ formatDate(row.time) }}</span>
+              </template>
             </template>
           </vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow>
             <template v-slot="{ row, rowIndex }">
-              <select v-if="rowIndex === 1">
-                <option value="1">还可以这样</option>
-              </select>
-              <a href="https://github.com/x-extends/vxe-table">{{ row.name }}</a>
+              <template v-if="rowIndex === 1">
+                <vxe-select v-model="row.flag1" transfer>
+                  <vxe-option value="Y" label="是"></vxe-option>
+                  <vxe-option value="N" label="否"></vxe-option>
+                </vxe-select>
+              </template>
+              <template v-else>
+                <a href="https://github.com/x-extends/vxe-table">{{ row.name }}</a>
+              </template>
             </template>
           </vxe-table-column>
           <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>
