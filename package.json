@@ -83,7 +83,7 @@
     "vxe-table-plugin-virtual-tree": "0.3.1",
     "xe-ajax": "^4.0.4",
     "xe-ajax-mock": "^1.10.0",
-    "xe-clipboard": "^1.8.0",
+    "xe-clipboard": "^1.9.0",
     "xe-utils": "^2.5.0",
     "xlsx": "^0.15.6"
   },

@@ -80,7 +80,18 @@
         </div>
       </template>
 
-      <!--自定义插槽 num_footer-->
+      <!--自定义插槽 Number-->
+      <template v-slot:num_default="{ row, rowIndex }">
+        <template v-if="rowIndex === 2">
+          <vxe-switch v-model="row.flag"></vxe-switch>
+        </template>
+        <template v-else-if="rowIndex === 3">
+          <vxe-switch v-model="row.flag" on-label="开" off-label="关"></vxe-switch>
+        </template>
+        <template v-else>
+          <span>{{ row.num1 }}</span>
+        </template>
+      </template>
       <template v-slot:num_footer="{ items, _columnIndex }">
         <span style="color: red">合计：{{ items[_columnIndex] }}</span>
       </template>
@@ -91,6 +102,19 @@
           <span style="color: red;">{{ row.name }}</span>
           <button @click="showDetailEvent(row, column)">弹框</button>
         </span>
+      </template>
+
+      <!--自定义插槽 html1-->
+      <template v-slot:html1_default="{ row, rowIndex }">
+        <template v-if="rowIndex === 1">
+          <vxe-select v-model="row.flag1" transfer>
+            <vxe-option value="Y" label="是"></vxe-option>
+            <vxe-option value="N" label="否"></vxe-option>
+          </vxe-select>
+        </template>
+        <template v-else>
+          <span v-html="row.html1"></span>
+        </template>
       </template>
 
       <!--使用 bottom 插槽-->
@@ -238,6 +262,7 @@ export default {
           title: 'Number',
           slots: {
             // 对应自定义插槽的名称
+            default: 'num_default',
             footer: 'num_footer'
           }
         },
@@ -266,12 +291,8 @@ export default {
           title: 'Html片段',
           showOverflow: true,
           slots: {
-            // 使用 JSX 渲染
-            default: ({ row }) => {
-              return [
-                <span domPropsInnerHTML={ row.html1 }></span>
-              ]
-            }
+            // 对应自定义插槽的名称
+            default: 'html1_default'
           }
         },
         {
@@ -360,7 +381,18 @@ export default {
             </div>
           </template>
 
-          <!--自定义插槽 num_footer-->
+          <!--自定义插槽 Number-->
+          <template v-slot:num_default="{ row, rowIndex }">
+            <template v-if="rowIndex === 2">
+              <vxe-switch v-model="row.flag"></vxe-switch>
+            </template>
+            <template v-else-if="rowIndex === 3">
+              <vxe-switch v-model="row.flag" on-label="开" off-label="关"></vxe-switch>
+            </template>
+            <template v-else>
+              <span>{{ row.num1 }}</span>
+            </template>
+          </template>
           <template v-slot:num_footer="{ items, _columnIndex }">
             <span style="color: red">合计：{{ items[_columnIndex] }}</span>
           </template>
@@ -371,6 +403,19 @@ export default {
               <span style="color: red;">{{ row.name }}</span>
               <button @click="showDetailEvent(row, column)">弹框</button>
             </span>
+          </template>
+
+          <!--自定义插槽 html1-->
+          <template v-slot:html1_default="{ row, rowIndex }">
+            <template v-if="rowIndex === 1">
+              <vxe-select v-model="row.flag1" transfer>
+                <vxe-option value="Y" label="是"></vxe-option>
+                <vxe-option value="N" label="否"></vxe-option>
+              </vxe-select>
+            </template>
+            <template v-else>
+              <span v-html="row.html1"></span>
+            </template>
           </template>
 
           <!--使用 bottom 插槽-->
@@ -505,6 +550,7 @@ export default {
                   title: 'Number',
                   slots: {
                     // 对应自定义插槽的名称
+                    default: 'num_default',
                     footer: 'num_footer'
                   }
                 },
@@ -533,12 +579,8 @@ export default {
                   title: 'Html片段',
                   showOverflow: true,
                   slots: {
-                    // 使用 JSX 渲染
-                    default: ({ row }) => {
-                      return [
-                        <span domPropsInnerHTML={ row.html1 }></span>
-                      ]
-                    }
+                    // 对应自定义插槽的名称
+                    default: 'html1_default'
                   }
                 },
                 {
