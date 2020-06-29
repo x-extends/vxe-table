@@ -79,6 +79,7 @@ export default {
         export default {
           data () {
             return {
+              tableData: [],
               tableColumn: [
                 { field: 'name', title: 'Name' },
                 { field: 'role', title: 'Role' },
@@ -132,14 +133,15 @@ export default {
           class="reverse-table"
           height="400"
           :show-header="false"
-          :columns="tableColumn"
-          :data="tableData"></vxe-grid>
+          :columns="tableColumn2"
+          :data="tableData2"></vxe-grid>
         `,
         `
         export default {
           data () {
             return {
-              tableColumn: [
+              tableData2: [],
+              tableColumn2: [
                 { field: 'name', title: 'Name' },
                 { field: 'role', title: 'Role' },
                 { field: 'sex', title: 'Sex' },
