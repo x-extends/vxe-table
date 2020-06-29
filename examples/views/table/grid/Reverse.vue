@@ -14,7 +14,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="scss">{{ demoCodes[2] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
 
     <p class="tip">更多配置<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
@@ -33,7 +33,7 @@
     <pre>
       <code class="xml">{{ demoCodes[3] }}</code>
       <code class="javascript">{{ demoCodes[4] }}</code>
-      <code class="scss">{{ demoCodes[5] }}</code>
+      <code class="css">{{ demoCodes[5] }}</code>
     </pre>
   </div>
 </template>
@@ -51,6 +51,7 @@ export default {
         { field: 'age', title: 'Age' },
         { field: 'date3', title: 'Date' }
       ],
+      tableData: [],
       tableColumn2: [
         { field: 'name', title: 'Name' },
         { field: 'role', title: 'Role' },
@@ -63,7 +64,6 @@ export default {
         { field: 'updateTime', title: 'UpdateTime' },
         { field: 'createTime', title: 'CreateTime' }
       ],
-      tableData: [],
       tableData2: [],
       demoCodes: [
         `
@@ -90,30 +90,31 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
-            this.reverseTable()
+            this.reverseTable(window.MOCK_DATA_LIST.slice(0, 6))
           },
           methods: {
             // 反转函数
-            reverseTable () {
-              let tableData = this.tableData
-              this.tableData = this.tableColumn.map(column => {
-                let item = { 0: column.title }
-                tableData.forEach((row, rowIndex) => {
-                  item[rowIndex + 1] = row[column.field]
+            reverseTable (list) {
+              const data = this.tableColumn.map(column => {
+                const item = { col0: column.title }
+                list.forEach((row, index) => {
+                  item[\`col\${index + 1}\`] = row[column.field]
                 })
                 return item
               })
-              this.tableColumn = [{
-                field: '0',
+              const columns = [{
+                field: 'col0',
                 fixed: 'left',
                 width: 80
-              }].concat(tableData.map((item, index) => {
-                return {
-                  field: \`\${index + 1}\`,
-                  width: 120
-                }
-              }))
+              }]
+              list.forEach((item, index) => {
+                columns.push({
+                  field: \`col\${index + 1}\`,
+                  minWidth: 120
+                })
+              })
+              this.tableData = data
+              this.tableColumn = columns
             }
           }
         }
@@ -153,30 +154,31 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 200)
-            this.reverseTable()
+            this.reverseTable2(window.MOCK_DATA_LIST.slice(0, 200))
           },
           methods: {
             // 反转函数
-            reverseTable () {
-              let tableData = this.tableData
-              this.tableData = this.tableColumn.map(column => {
-                let item = { 0: column.title }
-                tableData.forEach((row, rowIndex) => {
-                  item[rowIndex + 1] = row[column.field]
+            reverseTable2 (list) {
+              const data = this.tableColumn2.map(column => {
+                const item = { col0: column.title }
+                list.forEach((row, index) => {
+                  item[\`col\${index + 1}\`] = row[column.field]
                 })
                 return item
               })
-              this.tableColumn = [{
-                field: '0',
+              const columns = [{
+                field: 'col0',
                 fixed: 'left',
                 width: 80
-              }].concat(tableData.map((item, index) => {
-                return {
-                  field: \`\${index + 1}\`,
-                  width: 120
-                }
-              }))
+              }]
+              list.forEach((item, index) => {
+                columns.push({
+                  field: \`col\${index + 1}\`,
+                  minWidth: 120
+                })
+              })
+              this.tableData2 = data
+              this.tableColumn2 = columns
             }
           }
         }
@@ -190,10 +192,8 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-    this.tableData2 = window.MOCK_DATA_LIST.slice(0, 200)
-    this.reverseTable()
-    this.reverseTable2()
+    this.reverseTable(window.MOCK_DATA_LIST.slice(0, 6))
+    this.reverseTable2(window.MOCK_DATA_LIST.slice(0, 200))
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -202,45 +202,49 @@ export default {
   },
   methods: {
     // 反转函数
-    reverseTable () {
-      const tableData = this.tableData
-      this.tableData = this.tableColumn.map(column => {
-        const item = { 0: column.title }
-        tableData.forEach((row, rowIndex) => {
-          item[rowIndex + 1] = row[column.field]
+    reverseTable (list) {
+      const data = this.tableColumn.map(column => {
+        const item = { col0: column.title }
+        list.forEach((row, index) => {
+          item[`col${index + 1}`] = row[column.field]
         })
         return item
       })
-      this.tableColumn = [{
-        field: '0',
+      const columns = [{
+        field: 'col0',
         fixed: 'left',
         width: 80
-      }].concat(tableData.map((item, index) => {
-        return {
-          field: `${index + 1}`,
+      }]
+      list.forEach((item, index) => {
+        columns.push({
+          field: `col${index + 1}`,
           minWidth: 120
-        }
-      }))
+        })
+      })
+      this.tableData = data
+      this.tableColumn = columns
     },
-    reverseTable2 () {
-      const tableData = this.tableData2
-      this.tableData2 = this.tableColumn2.map(column => {
-        const item = { 0: column.title }
-        tableData.forEach((row, rowIndex) => {
-          item[rowIndex + 1] = row[column.field]
+    reverseTable2 (list) {
+      const data = this.tableColumn2.map(column => {
+        const item = { col0: column.title }
+        list.forEach((row, index) => {
+          item[`col${index + 1}`] = row[column.field]
         })
         return item
       })
-      this.tableColumn2 = [{
-        field: '0',
+      const columns = [{
+        field: 'col0',
         fixed: 'left',
         width: 80
-      }].concat(tableData.map((item, index) => {
-        return {
-          field: `${index + 1}`,
+      }]
+      list.forEach((item, index) => {
+        columns.push({
+          field: `col${index + 1}`,
           minWidth: 120
-        }
-      }))
+        })
+      })
+      this.tableData2 = data
+      this.tableColumn2 = columns
     }
   }
 }

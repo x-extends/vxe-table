@@ -187,7 +187,7 @@ export default {
 
 ## Donation
 
-If the open source project is very helpful to you, you can buy the author a cup of coffee.  
+If you feel that our open source software is helpful to you, please scan the QR code below to enjoy a cup of coffee.☕  
 
 Because maintaining an open source project takes a lot of effort and time, if you are using the project, your donation will help keep the project going.  
 [👉 Donation method💰](https://x-extends.github.io/vxe-table/#/donation/api)

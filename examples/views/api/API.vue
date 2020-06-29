@@ -115,7 +115,7 @@ import pulldownAPI from '../../api/pulldown'
 export default {
   data () {
     return {
-      filterName: this.$route.query.filterName ? decodeURIComponent(this.$route.query.filterName) : '',
+      filterName: (this.$route.query.q || this.$route.query.filterName) ? decodeURIComponent(this.$route.query.q || this.$route.query.filterName) : '',
       apiList: [],
       defaultExpandRowKeys: [],
       loading: false,

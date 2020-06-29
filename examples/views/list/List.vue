@@ -126,8 +126,6 @@
 import hljs from 'highlight.js'
 import XEUtils from 'xe-utils'
 
-const mockList = []
-
 export default {
   data () {
     return {
@@ -139,6 +137,7 @@ export default {
       list4: [],
       list5: [],
       list6: [],
+      mockList: [],
       demoCodes: [
         `
         <p>
@@ -244,7 +243,8 @@ export default {
               list3: [],
               list4: [],
               list5: [],
-              list6: []
+              list6: [],
+              mockList: []
             }
           },
           created () {
@@ -257,6 +257,7 @@ export default {
           },
           methods: {
             getList (size) {
+              const mockList = this.mockList
               if (size > mockList.length) {
                 for (let index = mockList.length; index < size; index++) {
                   mockList.push({
@@ -507,6 +508,7 @@ export default {
   },
   methods: {
     getList (size) {
+      const mockList = this.mockList
       if (size > mockList.length) {
         for (let index = mockList.length; index < size; index++) {
           mockList.push({
