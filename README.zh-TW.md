@@ -179,7 +179,7 @@ export default {
 </script>
 ```
 
-## 檔案說明
+## 檔案
 
 [💡 使用指南](https://github.com/xuliangzhan/vxe-table-demo)  
 [👉 查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic)  
