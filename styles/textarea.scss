@@ -11,6 +11,7 @@
   outline: 0;
   padding: 0 0.6em;
   color: $vxe-font-color;
+  line-height: inherit;
   border: 1px solid $vxe-input-border-color;
   background-color: #FFF;
   &:focus {

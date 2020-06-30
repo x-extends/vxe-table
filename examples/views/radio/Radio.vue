@@ -76,11 +76,11 @@ import hljs from 'highlight.js'
 export default {
   data  () {
     return {
-      value1: '1',
+      value1: null,
       value2: '2',
       value3: '3',
-      value4: '1',
-      value5: '1',
+      value4: null,
+      value5: null,
       value6: '1',
       value7: '1',
       demoCodes: [
@@ -135,11 +135,11 @@ export default {
         export default {
           data () {
             return {
-              value1: '1',
+              value1: null,
               value2: '2',
               value3: '3',
-              value4: '1',
-              value5: '1',
+              value4: null,
+              value5: null,
               value6: '1',
               value7: '1'
             }
