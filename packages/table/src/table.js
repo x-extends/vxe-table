@@ -3785,14 +3785,10 @@ export default {
      * 单选，行选中事件
      */
     triggerRadioRowEvent (evnt, params) {
-      const { radioOpts } = this
-      const { checkMethod } = radioOpts
-      if (!checkMethod || checkMethod({ row: params.row })) {
-        const isChange = this.selectRow !== params.row
-        this.setRadioRow(params.row)
-        if (isChange) {
-          this.$emit('radio-change', Object.assign({ $event: evnt }, params), evnt)
-        }
+      const isChange = this.selectRow !== params.row
+      this.setRadioRow(params.row)
+      if (isChange) {
+        this.$emit('radio-change', Object.assign({ $event: evnt }, params), evnt)
       }
     },
     triggerCurrentRowEvent (evnt, params) {
@@ -3816,8 +3812,12 @@ export default {
       return this.selectRow === row
     },
     setRadioRow (row) {
-      this.selectRow = row
-      this.handleRadioReserveRow(row)
+      const { radioOpts } = this
+      const { checkMethod } = radioOpts
+      if (row && (!checkMethod || checkMethod({ row }))) {
+        this.selectRow = row
+        this.handleRadioReserveRow(row)
+      }
       return this.$nextTick()
     },
     clearCurrentRow () {

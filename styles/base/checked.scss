@@ -73,6 +73,9 @@
         border-color: $vxe-input-disabled-color;
         background-color: $vxe-input-disabled-background-color;
       }
+      &:after {
+        background-color: #c0c4cc;
+      }
     }
   }
 }
