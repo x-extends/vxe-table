@@ -146,7 +146,8 @@ export default {
           const borderTopWidth = XEUtils.toNumber(textStyle.borderTopWidth)
           const borderBottomWidth = XEUtils.toNumber(textStyle.borderBottomWidth)
           const intervalHeight = paddingTop + paddingBottom + borderTopWidth + borderBottomWidth
-          const textRows = Math.floor((sizeHeight - intervalHeight) / lineHeight) + 1
+          const rowNum = (sizeHeight - intervalHeight) / lineHeight
+          const textRows = rowNum && /[0-9]/.test(rowNum) ? rowNum : Math.floor(rowNum) + 1
           let vaildRows = textRows
           if (textRows < minRows) {
             vaildRows = minRows
