@@ -4,7 +4,7 @@
     <p class="tip">
       <a class="link" href="https://github.com/x-extends/vxe-table-demo" target="_blank">项目实例</a><br>
       推荐使用 npm 的方式安装，它能更好地和 <a class="link" href="https://webpack.js.org/">webpack</a> 打包工具配合使用。<br>
-      依赖库： <a class="link" href="https://www.npmjs.com/package/xe-utils">xe-utils2.4+</a>&nbsp;&nbsp;<a class="link" href="https://cn.vuejs.org/v2/guide/components-slots.html#%E5%8A%A8%E6%80%81%E6%8F%92%E6%A7%BD%E5%90%8D" style="font-size: 20px;font-weight: 700;">vue2.6+</a><br>
+      依赖库： <a class="link" href="https://www.npmjs.com/package/xe-utils">xe-utils2.6+</a>&nbsp;&nbsp;<a class="link" href="https://cn.vuejs.org/v2/guide/components-slots.html#%E5%8A%A8%E6%80%81%E6%8F%92%E6%A7%BD%E5%90%8D" style="font-size: 20px;font-weight: 700;">vue2.6+</a><br>
     </p>
     <pre>
       <code class="shell">

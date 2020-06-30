@@ -4,24 +4,24 @@
     <p class="tip">复选框</p>
 
     <p>
-      <vxe-checkbox>默认尺寸</vxe-checkbox>
-      <vxe-checkbox size="medium">中等尺寸</vxe-checkbox>
-      <vxe-checkbox size="small">小型尺寸</vxe-checkbox>
-      <vxe-checkbox size="mini">超小尺寸</vxe-checkbox>
-      <vxe-checkbox indeterminate>默认尺寸</vxe-checkbox>
-      <vxe-checkbox size="medium" indeterminate>中等尺寸</vxe-checkbox>
-      <vxe-checkbox size="small" indeterminate>小型尺寸</vxe-checkbox>
-      <vxe-checkbox size="mini" indeterminate>超小尺寸</vxe-checkbox>
+      <vxe-checkbox v-model="value1">默认尺寸</vxe-checkbox>
+      <vxe-checkbox v-model="value2" size="medium">中等尺寸</vxe-checkbox>
+      <vxe-checkbox v-model="value3" size="small">小型尺寸</vxe-checkbox>
+      <vxe-checkbox v-model="value4" size="mini">超小尺寸</vxe-checkbox>
+      <vxe-checkbox v-model="value5" indeterminate>默认尺寸</vxe-checkbox>
+      <vxe-checkbox v-model="value6" size="medium" indeterminate>中等尺寸</vxe-checkbox>
+      <vxe-checkbox v-model="value7" size="small" indeterminate>小型尺寸</vxe-checkbox>
+      <vxe-checkbox v-model="value8" size="mini" indeterminate>超小尺寸</vxe-checkbox>
     </p>
 
     <p>
-      <vxe-checkbox v-model="value1">复选1</vxe-checkbox>
-      <vxe-checkbox v-model="value2" disabled>复选2</vxe-checkbox>
-      <vxe-checkbox>复选3</vxe-checkbox>
+      <vxe-checkbox v-model="value9">复选1</vxe-checkbox>
+      <vxe-checkbox v-model="value10" disabled>复选2</vxe-checkbox>
+      <vxe-checkbox v-model="value11">复选3</vxe-checkbox>
     </p>
 
     <p>
-      <vxe-checkbox-group v-model="value3">
+      <vxe-checkbox-group v-model="value12">
         <vxe-checkbox label="1">HTML</vxe-checkbox>
         <vxe-checkbox label="2">CSS</vxe-checkbox>
         <vxe-checkbox label="3">Javascript</vxe-checkbox>
@@ -53,30 +53,39 @@ import hljs from 'highlight.js'
 export default {
   data  () {
     return {
-      value1: true,
-      value2: true,
-      value3: ['3'],
+      value1: null,
+      value2: null,
+      value3: null,
+      value4: null,
+      value5: false,
+      value6: false,
+      value7: false,
+      value8: false,
+      value9: true,
+      value10: true,
+      value11: false,
+      value12: ['3'],
       demoCodes: [
         `
         <p>
-          <vxe-checkbox>默认尺寸</vxe-checkbox>
-          <vxe-checkbox size="medium">中等尺寸</vxe-checkbox>
-          <vxe-checkbox size="small">小型尺寸</vxe-checkbox>
-          <vxe-checkbox size="mini">超小尺寸</vxe-checkbox>
-          <vxe-checkbox indeterminate>默认尺寸</vxe-checkbox>
-          <vxe-checkbox size="medium" indeterminate>中等尺寸</vxe-checkbox>
-          <vxe-checkbox size="small" indeterminate>小型尺寸</vxe-checkbox>
-          <vxe-checkbox size="mini" indeterminate>超小尺寸</vxe-checkbox>
+          <vxe-checkbox v-model="value1">默认尺寸</vxe-checkbox>
+          <vxe-checkbox v-model="value2" size="medium">中等尺寸</vxe-checkbox>
+          <vxe-checkbox v-model="value3" size="small">小型尺寸</vxe-checkbox>
+          <vxe-checkbox v-model="value4" size="mini">超小尺寸</vxe-checkbox>
+          <vxe-checkbox v-model="value5" indeterminate>默认尺寸</vxe-checkbox>
+          <vxe-checkbox v-model="value6" size="medium" indeterminate>中等尺寸</vxe-checkbox>
+          <vxe-checkbox v-model="value7" size="small" indeterminate>小型尺寸</vxe-checkbox>
+          <vxe-checkbox v-model="value8" size="mini" indeterminate>超小尺寸</vxe-checkbox>
         </p>
 
         <p>
-          <vxe-checkbox v-model="value1">复选1</vxe-checkbox>
-          <vxe-checkbox v-model="value2" disabled>复选2</vxe-checkbox>
-          <vxe-checkbox>复选3</vxe-checkbox>
+          <vxe-checkbox v-model="value9">复选1</vxe-checkbox>
+          <vxe-checkbox v-model="value10" disabled>复选2</vxe-checkbox>
+          <vxe-checkbox v-model="value11">复选3</vxe-checkbox>
         </p>
 
         <p>
-          <vxe-checkbox-group v-model="value3">
+          <vxe-checkbox-group v-model="value12">
             <vxe-checkbox label="1">HTML</vxe-checkbox>
             <vxe-checkbox label="2">CSS</vxe-checkbox>
             <vxe-checkbox label="3">Javascript</vxe-checkbox>
@@ -89,9 +98,18 @@ export default {
         export default {
           data () {
             return {
-              value1: true,
-              value2: true,
-              value3: ['3']
+              value1: null,
+              value2: null,
+              value3: null,
+              value4: null,
+              value5: false,
+              value6: false,
+              value7: false,
+              value8: false,
+              value9: true,
+              value10: true,
+              value11: false,
+              value12: ['3']
             }
           }
         }
