@@ -66,20 +66,6 @@
       <code class="xml">{{ demoCodes[4] }}</code>
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
-
-    <!-- <p class="tip">还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性，禁止用户手动勾选，但是可以通过函数式调用强制勾选，该功能对于某些场景需要强制勾选指定行时非常有用</p>
-
-    <vxe-table
-      resizable
-      :data="tableData"
-      :tree-config="{children: 'children'}"
-      :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod}"
-      @checkbox-change="selectChangeEvent">
-      <vxe-table-column type="checkbox" width="180" title="Sex" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
-    </vxe-table> -->
   </div>
 </template>
 

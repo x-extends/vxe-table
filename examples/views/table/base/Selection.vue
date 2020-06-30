@@ -38,6 +38,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
+        <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
         <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
@@ -114,18 +115,21 @@
       <code class="javascript">{{ demoCodes[7] }}</code>
     </pre>
 
-    <p class="tip">默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/>，通过 <table-api-link prop="highlight"/> 设置高亮选中行</p>
+    <p class="tip">
+      默认选中，通过指定 <table-api-link prop="checkRowKeys"/> 设置默认选中的行，指定默认值需要有 <table-api-link prop="row-id"/>，通过 <table-api-link prop="highlight"/> 设置高亮选中行<br>
+      <span class="red">（注：默认行为只会在 reload 之后触发一次）</span>
+    </p>
 
     <vxe-table
       border
       highlight-hover-row
       row-id="id"
       :data="tableData"
-      :checkbox-config="{checkRowKeys: ['2', '3'], highlight: true}"
+      :checkbox-config="{checkRowKeys: defaultSelecteRows, highlight: true}"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+      <vxe-table-column field="id" title="ID"></vxe-table-column>
       <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
     </vxe-table>
@@ -219,6 +223,7 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      defaultSelecteRows: [],
       isCheckboxStrict: false,
       isAllCheckboxDisabled: false,
       tableData: [],
@@ -274,6 +279,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
+            <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
             <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable2.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xTable2.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
@@ -379,11 +385,11 @@ export default {
           highlight-hover-row
           row-id="id"
           :data="tableData"
-          :checkbox-config="{checkRowKeys: ['2', '3'], highlight: true}"
+          :checkbox-config="{checkRowKeys: defaultSelecteRows, highlight: true}"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+          <vxe-table-column field="id" title="ID"></vxe-table-column>
           <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
         </vxe-table>
@@ -392,10 +398,12 @@ export default {
         export default {
           data () {
             return {
+              defaultSelecteRows: [],
               tableData: []
             }
           },
           created () {
+            this.defaultSelecteRows = ['1000002', '1000003']
             this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
           }
         }
@@ -490,6 +498,7 @@ export default {
     }
   },
   created () {
+    this.defaultSelecteRows = ['1000002', '1000003']
     this.tableData = window.MOCK_DATA_LIST.slice(0, 5)
   },
   mounted () {
