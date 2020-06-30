@@ -2243,14 +2243,10 @@ const Methods = {
    * 单选，行选中事件
    */
   triggerRadioRowEvent (evnt, params) {
-    const { radioOpts } = this
-    const { checkMethod } = radioOpts
-    if (!checkMethod || checkMethod({ row: params.row })) {
-      const isChange = this.selectRow !== params.row
-      this.setRadioRow(params.row)
-      if (isChange) {
-        this.emitEvent('radio-change', params, evnt)
-      }
+    const isChange = this.selectRow !== params.row
+    this.setRadioRow(params.row)
+    if (isChange) {
+      this.emitEvent('radio-change', params, evnt)
     }
   },
   triggerCurrentRowEvent (evnt, params) {
@@ -2281,11 +2277,12 @@ const Methods = {
    * @param {Row} row 行对象
    */
   setRadioRow (row) {
-    if (this.selectRow !== row) {
-      this.clearRadioRow()
+    const { radioOpts } = this
+    const { checkMethod } = radioOpts
+    if (row && (!checkMethod || checkMethod({ row }))) {
+      this.selectRow = row
+      this.handleRadioReserveRow(row)
     }
-    this.selectRow = row
-    this.handleRadioReserveRow(row)
     return this.$nextTick()
   },
   /**
