@@ -5,6 +5,7 @@
     <vxe-table
       border
       height="600"
+      :scroll-y="{gt: -1}"
       :span-method="rowspanMethod"
       :data="tableData">
       <vxe-table-column field="name1" title="功能模块">
@@ -51,6 +52,7 @@ export default {
         <vxe-table
           border
           height="600"
+          :scroll-y="{gt: -1}"
           :span-method="rowspanMethod"
           :data="tableData">
           <vxe-table-column field="name1" title="功能模块">
