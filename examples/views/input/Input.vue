@@ -48,6 +48,29 @@
       <vxe-input v-model="value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
     </p>
 
+    <p>
+      <vxe-input v-model="value600" placeholder="自定义前缀图标">
+        <template v-slot:prefix>
+          <i class="fa fa-search my-red"></i>
+        </template>
+      </vxe-input>
+      <vxe-input v-model="value601" placeholder="自定义后缀图标">
+        <template v-slot:suffix>
+          <i class="fa fa-search my-green"></i>
+        </template>
+      </vxe-input>
+      <vxe-input v-model="value602" class="my-domain" placeholder="自定义前缀模板">
+        <template v-slot:prefix>
+          <span>Http://</span>
+        </template>
+      </vxe-input>
+      <vxe-input v-model="value603" class="my-search" placeholder="自定义后缀模板">
+        <template v-slot:suffix>
+          <i class="fa fa-search"></i>
+        </template>
+      </vxe-input>
+    </p>
+
     <pre>
       <code>
         | Tab | 切换到上一个 |
@@ -67,6 +90,7 @@
     <pre>
       <code class="html">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -104,6 +128,10 @@ export default {
       value506: '44',
       value507: '',
       value508: '',
+      value600: '',
+      value601: '',
+      value602: '',
+      value603: '',
       demoCodes: [
         `
         <p>
@@ -147,6 +175,29 @@ export default {
           <vxe-input v-model="value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
           <vxe-input v-model="value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
         </p>
+
+        <p>
+          <vxe-input v-model="value600" placeholder="自定义前缀图标">
+            <template v-slot:prefix>
+              <i class="fa fa-search my-red"></i>
+            </template>
+          </vxe-input>
+          <vxe-input v-model="value601" placeholder="自定义后缀图标">
+            <template v-slot:suffix>
+              <i class="fa fa-search my-green"></i>
+            </template>
+          </vxe-input>
+          <vxe-input v-model="value602" class="my-domain" placeholder="自定义前缀模板">
+            <template v-slot:prefix>
+              <span>Http://</span>
+            </template>
+          </vxe-input>
+          <vxe-input v-model="value603" class="my-search" placeholder="自定义后缀模板">
+            <template v-slot:suffix>
+              <i class="fa fa-search"></i>
+            </template>
+          </vxe-input>
+        </p>
         `,
         `
         export default {
@@ -178,7 +229,11 @@ export default {
               value505: '',
               value506: '44',
               value507: '',
-              value508: ''
+              value508: '',
+              value600: '',
+              value601: '',
+              value602: '',
+              value603: ''
             }
           },
           methods: {
@@ -187,6 +242,47 @@ export default {
               return dd > 15
             }
           }
+        }
+        `,
+        `
+        .my-red {
+          color: red;
+        }
+        .my-green {
+          color: green;
+        }
+        .my-domain {
+          height: 34px;
+          width: 300px;
+        }
+        .my-domain >>> .vxe-input--prefix {
+          width: 60px;
+          height: 32px;
+          top: 1px;
+          text-align: center;
+          border-right: 1px solid #dcdfe6;
+          background-color: #f5f7fa;
+        }
+        .my-domain >>> .vxe-input--inner {
+          padding-left: 75px;
+          border: 1px solid #dcdfe6;
+        }
+        .my-search {
+          height: 34px;
+          width: 300px;
+        }
+        .my-search >>> .vxe-input--suffix {
+          width: 60px;
+          height: 32px;
+          top: 1px;
+          text-align: center;
+          border-left: 1px solid #dcdfe6;
+          background-color: #f5f7fa;
+          cursor: pointer;
+        }
+        .my-search >>> .vxe-input--inner {
+          padding-right: 75px;
+          border: 1px solid #dcdfe6;
         }
         `
       ]
@@ -205,3 +301,45 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.my-red {
+  color: red;
+}
+.my-green {
+  color: green;
+}
+.my-domain {
+  height: 34px;
+  width: 300px;
+}
+.my-domain >>> .vxe-input--prefix {
+  width: 60px;
+  height: 32px;
+  top: 1px;
+  text-align: center;
+  border-right: 1px solid #dcdfe6;
+  background-color: #f5f7fa;
+}
+.my-domain >>> .vxe-input--inner {
+  padding-left: 75px;
+  border: 1px solid #dcdfe6;
+}
+.my-search {
+  height: 34px;
+  width: 300px;
+}
+.my-search >>> .vxe-input--suffix {
+  width: 60px;
+  height: 32px;
+  top: 1px;
+  text-align: center;
+  border-left: 1px solid #dcdfe6;
+  background-color: #f5f7fa;
+  cursor: pointer;
+}
+.my-search >>> .vxe-input--inner {
+  padding-right: 75px;
+  border: 1px solid #dcdfe6;
+}
+</style>
