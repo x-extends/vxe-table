@@ -432,36 +432,60 @@ function renderPasswordIcon (h, _vm) {
 }
 
 function rendePrefixIcon (h, _vm) {
-  const { prefixIcon } = _vm
-  return prefixIcon ? h('span', {
+  const { $scopedSlots, prefixIcon } = _vm
+  const icons = []
+  if ($scopedSlots.prefix) {
+    icons.push(
+      h('span', {
+        class: 'vxe-input--prefix-icon'
+      }, $scopedSlots.prefix.call(this, {}, h))
+    )
+  } else if (prefixIcon) {
+    icons.push(
+      h('i', {
+        class: ['vxe-input--prefix-icon', prefixIcon]
+      })
+    )
+  }
+  return icons.length ? h('span', {
     class: 'vxe-input--prefix',
     on: {
       click: _vm.clickPrefixEvent
     }
-  }, [
-    h('i', {
-      class: ['vxe-input--prefix-icon', prefixIcon]
-    })
-  ]) : null
+  }, icons) : null
 }
 
 function renderSuffixIcon (h, _vm) {
-  const { value, isClearable, disabled, suffixIcon } = _vm
-  return isClearable || suffixIcon ? h('span', {
+  const { $scopedSlots, value, isClearable, disabled, suffixIcon } = _vm
+  const icons = []
+  if ($scopedSlots.suffix) {
+    icons.push(
+      h('span', {
+        class: 'vxe-input--suffix-icon'
+      }, $scopedSlots.suffix.call(this, {}, h))
+    )
+  } else if (suffixIcon) {
+    icons.push(
+      h('i', {
+        class: ['vxe-input--suffix-icon', suffixIcon]
+      })
+    )
+  }
+  if (isClearable) {
+    icons.push(
+      h('i', {
+        class: ['vxe-input--clear-icon', GlobalConfig.icon.INPUT_CLEAR]
+      })
+    )
+  }
+  return icons.length ? h('span', {
     class: ['vxe-input--suffix', {
       'is--clear': isClearable && !disabled && !(value === '' || XEUtils.eqNull(value))
     }],
     on: {
       click: _vm.clickSuffixEvent
     }
-  }, [
-    suffixIcon ? h('i', {
-      class: ['vxe-input--suffix-icon', suffixIcon]
-    }) : null,
-    isClearable ? h('i', {
-      class: ['vxe-input--clear-icon', GlobalConfig.icon.INPUT_CLEAR]
-    }) : null
-  ]) : null
+  }, icons) : null
 }
 
 function renderExtraSuffixIcon (h, _vm) {
@@ -813,24 +837,37 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { isClearable, isDatePicker, visiblePanel, isActivated, vSize, type, readonly, disabled, prefixIcon, suffixIcon } = this
+    const { isDatePicker, visiblePanel, isActivated, vSize, type, readonly, disabled } = this
+    const childs = []
+    const prefix = rendePrefixIcon(h, this)
+    const suffix = renderSuffixIcon(h, this)
+    // 前缀图标
+    if (prefix) {
+      childs.push(prefix)
+    }
+    // 输入框
+    childs.push(isDatePicker ? renderDateInput(h, this) : renderDefaultInput(h, this))
+    // 后缀图标
+    if (suffix) {
+      childs.push(suffix)
+    }
+    // 特殊功能图标
+    childs.push(renderExtraSuffixIcon(h, this))
+    // 面板容器
+    if (isDatePicker) {
+      childs.push(renderPanel(h, this))
+    }
     return h('div', {
       class: ['vxe-input', `type--${type}`, {
         [`size--${vSize}`]: vSize,
-        'is--prefix': prefixIcon,
-        'is--suffix': isClearable || suffixIcon,
+        'is--prefix': !!prefix,
+        'is--suffix': !!suffix,
         'is--readonly': readonly,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,
         'is--active': isActivated
       }]
-    }, [
-      rendePrefixIcon(h, this),
-      isDatePicker ? renderDateInput(h, this) : renderDefaultInput(h, this),
-      renderSuffixIcon(h, this),
-      renderExtraSuffixIcon(h, this),
-      renderPanel(h, this)
-    ])
+    }, childs)
   },
   methods: {
     focus () {

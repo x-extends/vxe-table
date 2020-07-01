@@ -5798,7 +5798,7 @@ export default {
         UtilTools.emitEvent(this, 'valid-error', [params])
       } else {
         this.handleActived(params, { type: 'valid-error', trigger: 'call' })
-          .then(() => this.showValidTooltip(params))
+          .then(() => setTimeout(() => this.showValidTooltip(params), 10))
       }
     },
     /**
