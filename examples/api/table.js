@@ -4048,12 +4048,12 @@ const apis = [
         list: []
       },
       {
-        name: 'recalculate()',
-        desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、重新计算列宽...等）',
+        name: 'recalculate(refull)',
+        desc: '重新计算表格，如果传 true 则进行完整计算（对于某些特殊场景可能会用到，比如隐藏的表格、重新计算列宽...等）',
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: '',
+        defVal: 'refull?: boolean',
         list: []
       },
       {
