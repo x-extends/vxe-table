@@ -73,17 +73,17 @@ export default {
       }
       const rowValids = []
       this.lastCallTime = Date.now()
+      this.validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
       this.clearValidate()
       if (editRules) {
         const columns = this.getColumns()
         const handleVaild = row => {
-          const colVailds = []
-          columns.forEach((column) => {
-            if (XEUtils.has(editRules, column.property)) {
-              colVailds.push(
-                new Promise((resolve, reject) => {
+          if (!this.validRuleErr) {
+            const colVailds = []
+            columns.forEach((column) => {
+              if (!this.validRuleErr && XEUtils.has(editRules, column.property)) {
+                colVailds.push(
                   this.validCellRules('all', row, column)
-                    .then(resolve)
                     .catch(({ rule, rules }) => {
                       const rest = { rule, rules, rowIndex: this.getRowIndex(row), row, columnIndex: this.getColumnIndex(column), column, $table: this }
                       if (isAll) {
@@ -91,15 +91,16 @@ export default {
                           validRest[column.property] = []
                         }
                         validRest[column.property].push(rest)
-                        return resolve()
+                      } else {
+                        this.validRuleErr = true
+                        return Promise.reject(rest)
                       }
-                      return reject(rest)
                     })
-                })
-              )
-            }
-          })
-          rowValids.push(Promise.all(colVailds))
+                )
+              }
+            })
+            rowValids.push(Promise.all(colVailds))
+          }
         }
         if (treeConfig) {
           XEUtils.eachTree(vaildDatas, handleVaild, treeOpts)
@@ -127,6 +128,7 @@ export default {
             }
             const posAndFinish = () => {
               params.cell = DomTools.getCell(this, params)
+              DomTools.toView(params.cell)
               this.handleValidError(params)
               finish()
             }
@@ -138,7 +140,6 @@ export default {
             const row = params.row
             const rowIndex = afterFullData.indexOf(row)
             const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
-            DomTools.toView(this.$el)
             if (this.validOpts.autoPos === false) {
               finish()
             } else {
@@ -183,54 +184,56 @@ export default {
       const { editRules } = this
       const { property } = column
       const errorRules = []
-      const cellVailds = []
+      const syncVailds = []
       if (property && editRules) {
         const rules = XEUtils.get(editRules, property)
         if (rules) {
           const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
           rules.forEach(rule => {
-            cellVailds.push(
-              new Promise(resolve => {
-                if (type === 'all' || !rule.trigger || type === rule.trigger) {
-                  if (XEUtils.isFunction(rule.validator)) {
-                    Promise.resolve(rule.validator({
-                      cellValue,
-                      rule,
-                      rules,
-                      row,
-                      rowIndex: this.getRowIndex(row),
-                      column,
-                      columnIndex: this.getColumnIndex(column),
-                      $table: this
-                    })).catch(e => {
+            if (type === 'all' || !rule.trigger || type === rule.trigger) {
+              if (XEUtils.isFunction(rule.validator)) {
+                const customValid = rule.validator({
+                  cellValue,
+                  rule,
+                  rules,
+                  row,
+                  rowIndex: this.getRowIndex(row),
+                  column,
+                  columnIndex: this.getColumnIndex(column),
+                  $table: this
+                })
+                // 如果为异步校验（注：异步校验是并发无序的）
+                if (customValid && customValid.catch) {
+                  syncVailds.push(
+                    customValid.catch(e => {
+                      this.validRuleErr = true
                       errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
-                    }).then(resolve)
-                  } else {
-                    const isNumber = rule.type === 'number'
-                    const numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
-                    if (cellValue === null || cellValue === undefined || cellValue === '') {
-                      if (rule.required) {
-                        errorRules.push(new Rule(rule))
-                      }
-                    } else if (
-                      (isNumber && isNaN(cellValue)) ||
-                      (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
-                      (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
-                      (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue))
-                    ) {
-                      errorRules.push(new Rule(rule))
-                    }
-                    resolve()
-                  }
-                } else {
-                  resolve()
+                    })
+                  )
                 }
-              })
-            )
+              } else {
+                const isNumber = rule.type === 'number'
+                const numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+                if (cellValue === null || cellValue === undefined || cellValue === '') {
+                  if (rule.required) {
+                    this.validRuleErr = true
+                    errorRules.push(new Rule(rule))
+                  }
+                } else if (
+                  (isNumber && isNaN(cellValue)) ||
+                  (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
+                  (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
+                  (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue))
+                ) {
+                  this.validRuleErr = true
+                  errorRules.push(new Rule(rule))
+                }
+              }
+            }
           })
         }
       }
-      return Promise.all(cellVailds).then(() => {
+      return Promise.all(syncVailds).then(() => {
         if (errorRules.length) {
           const rest = { rules: errorRules, rule: errorRules[0] }
           return Promise.reject(rest)
