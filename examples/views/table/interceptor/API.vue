@@ -139,18 +139,18 @@ export default {
           list: []
         },
         {
-          name: 'event.clearFilter',
+          name: 'event.clearActived',
           desc: '清除激活单元格之前触发，允许返回 false 阻止默认行为',
-          version: '2.1',
+          version: '',
           type: 'Boolean',
           enum: '',
           defVal: '',
           list: []
         },
         {
-          name: 'event.clearActived',
+          name: 'event.clearFilter',
           desc: '清除筛选面板之前触发，允许返回 false 阻止默认行为',
-          version: '',
+          version: '2.1',
           type: 'Boolean',
           enum: '',
           defVal: '',
