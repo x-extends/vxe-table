@@ -25,7 +25,10 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 和 <a class="link" href="https://www.npmjs.com/package/file-saver" target="_blank">file-saver</a> 实现导出 xlsx 文件</p>
+    <p class="tip">
+      使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 和 <a class="link" href="https://www.npmjs.com/package/file-saver" target="_blank">file-saver</a> 实现导出 xlsx 文件<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -62,7 +65,7 @@ export default {
         { type: 'checkbox', width: 60 },
         { field: 'name', title: 'Name' },
         { field: 'role', title: 'Role' },
-        { field: 'sex', title: 'Sex' },
+        { field: 'sex', title: 'Sex', formatter: this.formatterSex },
         { field: 'date3', title: 'Date' },
         { field: 'address', title: 'Address', showOverflow: true }
       ],
@@ -91,7 +94,7 @@ export default {
                 { type: 'checkbox', width: 60 },
                 { field: 'name', title: 'Name' },
                 { field: 'role', title: 'Role' },
-                { field: 'sex', title: 'Sex' },
+                { field: 'sex', title: 'Sex', formatter: this.formatterSex },
                 { field: 'date3', title: 'Date' },
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
@@ -99,6 +102,14 @@ export default {
             }
           },
           methods: {
+            formatterSex ({ cellValue }) {
+              if (cellValue === '1') {
+                return '男'
+              } else if (cellValue === '0') {
+                return '女'
+              }
+              return ''
+            },
             impotEvent (evnt) {
               let files = evnt.target.files
               let fileReader = new FileReader()
@@ -151,7 +162,7 @@ export default {
                 { type: 'checkbox', width: 60 },
                 { field: 'name', title: 'Name' },
                 { field: 'role', title: 'Role' },
-                { field: 'sex', title: 'Sex' },
+                { field: 'sex', title: 'Sex', formatter: this.formatterSex },
                 { field: 'date3', title: 'Date' },
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
@@ -162,6 +173,14 @@ export default {
             this.tableData2 = window.MOCK_DATA_LIST.slice(0, 20)
           },
           methods: {
+            formatterSex ({ cellValue }) {
+              if (cellValue === '1') {
+                return '男'
+              } else if (cellValue === '0') {
+                return '女'
+              }
+              return ''
+            },
             // 通用行合并函数（将相同多列数据合并为一行）
             rowspanMethod ({ row, $rowIndex, column, data }) {
               let fields = ['sex']
@@ -182,20 +201,20 @@ export default {
                 }
               }
             },
-            toBuffer (wbout) {
-              let buf = new ArrayBuffer(wbout.length)
-              let view = new Uint8Array(buf)
-              for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
-              return buf
-            },
             exportEvent () {
+              const toBuffer = (wbout) => {
+                const buf = new ArrayBuffer(wbout.length)
+                const view = new Uint8Array(buf)
+                for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
+                return buf
+              }
               // 转换数据
-              let table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
-              let book = XLSX.utils.book_new()
-              let sheet = XLSX.utils.table_to_sheet(table)
+              const table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
+              const book = XLSX.utils.book_new()
+              const sheet = XLSX.utils.table_to_sheet(table)
               XLSX.utils.book_append_sheet(book, sheet)
-              let wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
-              let blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
+              const wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
+              const blob = new Blob([toBuffer(wbout)], { type: 'application/octet-stream' })
               // 保存导出
               FileSaver.saveAs(blob, '数据导出.xlsx')
             }
@@ -214,6 +233,14 @@ export default {
     })
   },
   methods: {
+    formatterSex ({ cellValue }) {
+      if (cellValue === '1') {
+        return '男'
+      } else if (cellValue === '0') {
+        return '女'
+      }
+      return ''
+    },
     impotEvent (evnt) {
       const files = evnt.target.files
       const fileReader = new FileReader()
@@ -260,20 +287,20 @@ export default {
         }
       }
     },
-    toBuffer (wbout) {
-      const buf = new ArrayBuffer(wbout.length)
-      const view = new Uint8Array(buf)
-      for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
-      return buf
-    },
     exportEvent () {
+      const toBuffer = (wbout) => {
+        const buf = new ArrayBuffer(wbout.length)
+        const view = new Uint8Array(buf)
+        for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
+        return buf
+      }
       // 转换数据
       const table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
       const book = XLSX.utils.book_new()
       const sheet = XLSX.utils.table_to_sheet(table)
       XLSX.utils.book_append_sheet(book, sheet)
       const wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
-      const blob = new Blob([this.toBuffer(wbout)], { type: 'application/octet-stream' })
+      const blob = new Blob([toBuffer(wbout)], { type: 'application/octet-stream' })
       // 保存导出
       FileSaver.saveAs(blob, '数据导出.xlsx')
     }
