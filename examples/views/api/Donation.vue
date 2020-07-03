@@ -36,7 +36,11 @@
         </div>
       </div>
       <div style="display: inline-block;margin-left: 20em;">
-        <div><span style="font-size: 22px;font-weight: 700;">QQ群</span><br>{{ $t('app.body.other.issuesTitle') }}<a href="https://github.com/x-extends/vxe-table/issues/390" target="_blank">👉New issues</a></div>
+        <div>
+          <span style="font-size: 22px;font-weight: 700;">QQ群</span>
+          <br>
+          <span v-html="$t('app.body.other.issuesTitle')"></span>
+        </div>
         <img src="static/donation/qq.png">
       </div>
     </div>

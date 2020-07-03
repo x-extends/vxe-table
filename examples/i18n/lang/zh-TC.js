@@ -309,8 +309,8 @@ module.exports = {
         compatibility: '相容性變動',
         releases: '更新日誌',
         donation: '捐贈',
-        donationTitle: '捐贈管道<span class="red">（如果有無法解决的問題可以留言或者提 <a class="link" href="https://github.com/x-extends/vxe-table/issues/390" target="_blank">Issues</a>）</span>：',
-        issuesTitle: '如何迴響問題？  ',
+        donationTitle: '捐贈管道：',
+        issuesTitle: '該群供大家交流問題，由於作者比較忙基本沒時間去看群，<br>如果有問題請通過<a class="link" href="https://github.com/x-extends/vxe-table/issues/390" target="_blank">👉issues</a>',
         newFunc: '由於作者比較忙，後續有時間可能會支持該功能！',
         newDevelopment: '由於作者比較忙，該版本正在重構中，敬請期待！'
       },

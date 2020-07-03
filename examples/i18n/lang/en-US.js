@@ -310,8 +310,8 @@ module.exports = {
         compatibility: 'Compatibility',
         releases: 'Releases',
         donation: 'Donation',
-        donationTitle: 'Donation method<span class="red"> (you can leave a message or raise <a class="link" href="https://github.com/x-extends/vxe-table/issues/390" target="_blank">Issues</a> if you have problems that cannot be solved and need support)</span>：',
-        issuesTitle: 'How to issues feedback?  ',
+        donationTitle: 'Donation method：',
+        issuesTitle: '该群供大家交流问题，由于作者比较忙基本没时间去看群，<br>如果有问题请通过<a class="link" href="https://github.com/x-extends/vxe-table/issues/390" target="_blank">👉issues</a>',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
       },

@@ -422,10 +422,10 @@ export declare class Table extends VXETableModule {
    */
   refreshScroll(): Promise<any>;
   /**
-   * 重新计算表格
+   * 重新计算表格，如果传 true 则进行完整计算
    * 对于某些特殊场景可能会用到，比如隐藏的表格、重新计算列宽...等
    */
-  recalculate(): Promise<any>;
+  recalculate(refull?: boolean): Promise<any>;
   /**
    * 手动关闭 tooltip 提示
    */
