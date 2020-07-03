@@ -43,7 +43,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-toolbar id="toolbar_demo3" custom>
+        <vxe-toolbar custom>
           <template v-slot:buttons>
             <vxe-button>按钮1</vxe-button>
             <vxe-button>按钮2</vxe-button>
