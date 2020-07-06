@@ -114,6 +114,10 @@
           //   layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
           // },
           // form: {
+          //   preventSubmit: false
+          //   validConfig: {
+          //     autoPos: true
+          //   },
           //   size: null,
           //   colon: false
           // },

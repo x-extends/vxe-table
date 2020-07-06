@@ -47,7 +47,7 @@ export default {
      */
     handleValidError (params) {
       if (this.validOpts.autoPos === false) {
-        this.emitEvent(this, 'valid-error', params)
+        this.emitEvent('valid-error', params)
       } else {
         this.handleActived(params, { type: 'valid-error', trigger: 'call' })
           .then(() => setTimeout(() => this.showValidTooltip(params), 10))
@@ -202,14 +202,19 @@ export default {
                   columnIndex: this.getColumnIndex(column),
                   $table: this
                 })
-                // 如果为异步校验（注：异步校验是并发无序的）
-                if (customValid && customValid.catch) {
-                  syncVailds.push(
-                    customValid.catch(e => {
-                      this.validRuleErr = true
-                      errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
-                    })
-                  )
+                if (customValid) {
+                  if (XEUtils.isError(customValid)) {
+                    this.validRuleErr = true
+                    errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: customValid.message, rule: new Rule(rule) }))
+                  } else if (customValid.catch) {
+                    // 如果为异步校验（注：异步校验是并发无序的）
+                    syncVailds.push(
+                      customValid.catch(e => {
+                        this.validRuleErr = true
+                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
+                      })
+                    )
+                  }
                 }
               } else {
                 const isNumber = rule.type === 'number'
