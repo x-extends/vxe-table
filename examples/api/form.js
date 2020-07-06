@@ -178,6 +178,34 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'prevent-submit',
+        desc: '是否阻止默认提交方式',
+        version: '1.15.31',
+        type: 'boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'valid-config',
+        desc: '检验配置项',
+        version: '1.15.31',
+        type: 'any',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'autoPos',
+            desc: '是否自动定位到校验不通过的项',
+            version: '',
+            type: 'bolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          }
+        ]
       }
     ]
   },
