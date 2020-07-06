@@ -22,6 +22,9 @@ const GlobalConfig = {
     // stripe: false,
     // border: false,
     // round: false,
+    // emptyRender: {
+    //   name: ''
+    // },
     // radioConfig: {
     //   trigger: 'default'
     // },
@@ -195,6 +198,10 @@ const GlobalConfig = {
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
   form: {
+    // preventSubmit: false
+    // validConfig: {
+    //   autoPos: true
+    // },
     // size: null,
     // colon: false
   },

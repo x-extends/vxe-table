@@ -186,7 +186,7 @@ export default {
     },
     /**
      * 校验数据
-     * 按表格行、列顺序依次校验（同步或异步）
+     * 按表格行、同步列顺序校验/异步并发校验
      * 校验规则根据索引顺序依次校验，如果是异步则会等待校验完成才会继续校验下一列
      * 如果校验失败则，触发回调或者Promise<不通过列的错误消息>
      * 如果是传回调方式这返回一个校验不通过列的错误消息
@@ -234,14 +234,19 @@ export default {
                     $table: this
                   })
                 }
-                // 如果为异步校验（注：异步校验是并发无序的）
-                if (customValid && customValid.catch) {
-                  syncVailds.push(
-                    customValid.catch(e => {
-                      this.validRuleErr = true
-                      errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
-                    })
-                  )
+                if (customValid) {
+                  if (XEUtils.isError(customValid)) {
+                    this.validRuleErr = true
+                    errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: customValid.message, rule: new Rule(rule) }))
+                  } else if (customValid.catch) {
+                    // 如果为异步校验（注：异步校验是并发无序的）
+                    syncVailds.push(
+                      customValid.catch(e => {
+                        this.validRuleErr = true
+                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
+                      })
+                    )
+                  }
                 }
               } else {
                 const isNumber = rule.type === 'number'
