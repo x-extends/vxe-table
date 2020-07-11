@@ -258,7 +258,7 @@ const GlobalConfig = {
     lockView: true,
     mask: true,
     duration: 3000,
-    marginSize: 8,
+    marginSize: 0,
     dblclickZoom: true,
     showTitleOverflow: true,
     animat: true,

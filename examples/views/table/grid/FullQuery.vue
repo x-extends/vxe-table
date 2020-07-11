@@ -83,7 +83,7 @@ export default {
               filters.forEach(({ field, values }) => {
                 queryParams[field] = values.join(',')
               })
-              return XEAjax.get(`https://api.xuliangzhan.com:10443/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+              return XEAjax.get(`https://api.xuliangzhan.com:10443/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
             }
           }
         },
@@ -189,7 +189,7 @@ export default {
                       filters.forEach(({ field, values }) => {
                         queryParams[field] = values.join(',')
                       })
-                      return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                      return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                     }
                   }
                 },

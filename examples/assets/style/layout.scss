@@ -71,7 +71,8 @@ body,
   border-bottom: 1px solid #dcdfe6;
   box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.12);
   display: flex;
-  background-color: #fbfbfb;
+  color: #fff;
+  background-color: #24292e;
   &:after {
     content: "";
     display: block;
@@ -88,7 +89,7 @@ body,
   .title {
     padding: 0 0.4em;
     font-weight: 700;
-    color: #5A5A5A;
+    color: #fff;
   }
   .left {
     font-size: 22px;
@@ -148,10 +149,30 @@ body,
   .version-switch {
     width: 50px;
   }
+  .donation,
+  .support {
+    padding: 3px 15px;
+    border-radius: 15px;
+  }
   .donation {
-    font-size: 15px;
-    font-weight: 700;
-    color: green;
+    color: #fff;
+    background-color: green;
+  }
+  .support {
+    position: relative;
+    color: #333;
+    margin-left: 10px;
+    background-color: #f6ca9d;
+    &:after {
+      content: "";
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: red;
+    }
   }
   .desc {
     font-size: 14px;
@@ -427,5 +448,66 @@ body,
     padding: 2px 8px;
     color: #fff;
     font-size: 12px;
+  }
+}
+
+.support-declare {
+  color: red;
+  padding: 10px 0 10px 15px;
+}
+.support-question {
+  padding-left: 20px;
+  & > li {
+    line-height: 24px;
+  }
+}
+.support-group {
+  width: 250px;
+  margin: 20px auto 15px auto;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.support-group-item {
+  border-right: 1px solid #ddd;
+  padding: 15px 0 20px 0;
+  &:last-child {
+    border-right: 0;
+  }
+}
+.support-name {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 32px;
+}
+.support-price {
+  line-height: 36px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff6700;
+}
+.support-original-price {
+  font-weight: normal;
+  padding-left: 10px;
+  text-decoration: line-through;
+}
+.support-btn {
+  width: 80%;
+}
+.support-describe {
+  margin: 0;
+  padding: 5px 0 5px 40px;
+  list-style: none;
+  text-align: left;
+  & > li {
+    padding: 0;
+  }
+}
+.support-pay-step {
+  text-align: center;
+  & > .title {
+    font-size: 16px;
+    font-weight: 700;
+    color: red;
   }
 }

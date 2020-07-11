@@ -163,7 +163,7 @@ const apis = [
       {
         name: 'date-config',
         disabled: true,
-        desc: '只对 type=date|datetime|week|month|year 有效，日期配置项',
+        desc: '即将废弃',
         version: '2.8.12',
         type: 'Object',
         enum: '',
@@ -171,7 +171,7 @@ const apis = [
         list: [
           {
             name: 'startWeek',
-            desc: '只对 type=week 有效，设置起始周',
+            desc: '即将废弃，请使用 start-week',
             version: '',
             type: 'Number, String',
             enum: '0, 1, 2, 3, 4, 5, 6',
@@ -180,7 +180,7 @@ const apis = [
           },
           {
             name: 'labelFormat',
-            desc: '只对 type=date|week|month|year 有效，输入框中显示的日期格式',
+            desc: '即将废弃，请使用 label-format',
             version: '',
             type: 'String',
             enum: '',
@@ -189,7 +189,7 @@ const apis = [
           },
           {
             name: 'parseFormat',
-            desc: '只对 type=date|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
+            desc: '即将废弃，请使用 parse-format',
             version: '',
             type: 'String',
             enum: '',
@@ -198,7 +198,7 @@ const apis = [
           },
           {
             name: 'valueFormat',
-            desc: '只对 type=date|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
+            desc: '即将废弃，请使用 value-format',
             version: '',
             type: 'String',
             enum: '',
@@ -207,7 +207,7 @@ const apis = [
           },
           {
             name: 'editable',
-            desc: '文本框是否允许输入',
+            desc: '即将废弃，请使用 editable',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -216,7 +216,7 @@ const apis = [
           },
           {
             name: 'disabledMethod',
-            desc: '该方法 Function({date}) 的返回值用来决定该日期是否允许选中',
+            desc: '即将废弃，请使用 disabled-method',
             version: '',
             type: 'Function',
             enum: '',
@@ -226,7 +226,7 @@ const apis = [
         ]
       },
       {
-        name: 'startWeek',
+        name: 'start-week',
         desc: '只对 type=week 有效，设置起始周',
         version: '2.8.32',
         type: 'Number, String',
@@ -235,7 +235,7 @@ const apis = [
         list: []
       },
       {
-        name: 'labelFormat',
+        name: 'label-format',
         desc: '只对 type=date|datetime|week|month|year 有效，输入框中显示的日期格式',
         version: '2.8.32',
         type: 'String',
@@ -244,7 +244,7 @@ const apis = [
         list: []
       },
       {
-        name: 'parseFormat',
+        name: 'parse-format',
         desc: '只对 type=date|datetime|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
         version: '2.8.32',
         type: 'String',
@@ -253,7 +253,7 @@ const apis = [
         list: []
       },
       {
-        name: 'valueFormat',
+        name: 'value-format',
         desc: '只对 type=date|datetime|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',
         version: '2.8.32',
         type: 'String',
@@ -271,9 +271,18 @@ const apis = [
         list: []
       },
       {
-        name: 'disabledMethod',
+        name: 'disabled-method',
         desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中',
         version: '2.8.32',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'festival-method',
+        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({date}) 用于返回对应日期显示的节日',
+        version: '2.9.15',
         type: 'Function',
         enum: '',
         defVal: '',

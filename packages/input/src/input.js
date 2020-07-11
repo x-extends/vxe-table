@@ -31,9 +31,31 @@ function renderDateInput (h, _vm) {
   })
 }
 
+function renderDateLabel (h, _vm, item, label) {
+  const festivalMethod = _vm.festivalMethod
+  if (festivalMethod) {
+    const festivalRest = festivalMethod({ date: item.date })
+    const labels = [
+      h('span', {
+        class: 'vxe-input--date-label'
+      }, label)
+    ]
+    if (festivalRest) {
+      const festivalItem = XEUtils.isObject(festivalRest) ? festivalRest : { label: festivalRest }
+      labels.push(
+        h('span', {
+          class: ['vxe-input--date-festival', festivalItem.className]
+        }, festivalItem.label)
+      )
+    }
+    return labels
+  }
+  return label
+}
+
 function isDateDisabled (_vm, item) {
   const disabledMethod = _vm.disabledMethod || _vm.dateOpts.disabledMethod
-  return disabledMethod && disabledMethod({ date: item.date, $input: _vm })
+  return disabledMethod && disabledMethod({ date: item.date })
 }
 
 function renderDateDayTable (h, _vm) {
@@ -69,7 +91,7 @@ function renderDateDayTable (h, _vm) {
               click: () => _vm.dateSelectEvent(item),
               mouseenter: () => _vm.dateMouseenterEvent(item)
             }
-          }, item.label)
+          }, renderDateLabel(h, _vm, item, item.label))
         }))
       }))
     ])
@@ -111,7 +133,7 @@ function renderDateWeekTable (h, _vm) {
               click: () => _vm.dateSelectEvent(item),
               mouseenter: () => _vm.dateMouseenterEvent(item)
             }
-          }, item.label)
+          }, renderDateLabel(h, _vm, item, item.label))
         }))
       }))
     ])
@@ -145,7 +167,7 @@ function renderDateMonthTable (h, _vm) {
               click: () => _vm.dateSelectEvent(item),
               mouseenter: () => _vm.dateMouseenterEvent(item)
             }
-          }, GlobalConfig.i18n(`vxe.input.date.months.m${item.month}`))
+          }, renderDateLabel(h, _vm, item, GlobalConfig.i18n(`vxe.input.date.months.m${item.month}`)))
         }))
       }))
     ])
@@ -176,7 +198,7 @@ function renderDateYearTable (h, _vm) {
               click: () => _vm.dateSelectEvent(item),
               mouseenter: () => _vm.dateMouseenterEvent(item)
             }
-          }, item.year)
+          }, renderDateLabel(h, _vm, item, item.year))
         }))
       }))
     ])
@@ -535,7 +557,8 @@ export default {
     parseFormat: { type: String, default: () => GlobalConfig.input.parseFormat },
     valueFormat: { type: String, default: () => GlobalConfig.input.valueFormat },
     editable: { type: Boolean, default: true },
-    disabledMethod: Function,
+    festivalMethod: { type: Function, default: () => GlobalConfig.input.festivalMethod },
+    disabledMethod: { type: Function, default: () => GlobalConfig.input.disabledMethod },
 
     prefixIcon: String,
     suffixIcon: String,
@@ -883,8 +906,8 @@ export default {
       this.$emit(evnt.type, { $panel: $refs.panel, value, $event: evnt }, evnt)
     },
     emitUpdate (value, evnt) {
-      this.$emit('input', value)
       if (this.value !== value) {
+        this.$emit('input', value)
         this.$emit('change', { value, $event: evnt })
       }
     },
@@ -1251,7 +1274,7 @@ export default {
     updateTimePos (liElem) {
       if (liElem) {
         const height = liElem.offsetHeight
-        liElem.parentNode.scrollTop = liElem.offsetTop - height * 3
+        liElem.parentNode.scrollTop = liElem.offsetTop - height * 4
       }
     },
     dateMoveDay (offsetDay) {
@@ -1424,7 +1447,7 @@ export default {
       this.visiblePanel = false
       this.hidePanelTimeout = setTimeout(() => {
         this.animatVisible = false
-      }, 250)
+      }, 350)
     },
     updatePlacement () {
       return this.$nextTick().then(() => {

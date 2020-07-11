@@ -33,9 +33,8 @@
             <vxe-option value="3" label="3.x"></vxe-option>
             <vxe-option value="4" label="4.x"></vxe-option>
           </vxe-select>
-          <vxe-tooltip :content="$t('app.footer.donationDesc')" enterable>
-            <router-link class="donation" :to="{name: 'Donation'}">{{ $t('app.footer.donation') }}☕</router-link>
-          </vxe-tooltip>
+          <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
+          <a class="support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
         </div>
       </div>
     </header>
@@ -55,11 +54,6 @@
         <div class="body">
           <template v-if="apiList.length">
             <ul class="nav-menu">
-              <li class="is-donation">
-                <router-link class="nav-link" :to="{name: 'Donation'}" :title="$t('app.footer.donationDesc')">
-                  <span>☕{{ $t('app.footer.donation') }}</span>
-                </router-link>
-              </li>
               <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
                 <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
                   <i class="vxe-icon--arrow-right nav-link-icon"></i>
@@ -91,6 +85,37 @@
         </div>
       </div>
     </div>
+
+    <vxe-modal v-model="supportVisible" :loading="supportLoading" title="技术支持" width="800" position="center">
+      <div class="support-declare">考虑到很多用户有需要支持的需求，提供该付费技术群用于快速解决使用过程中遇到的各种问题，同时也能支撑该项目可以持续的维护下去。若非必要建议先查阅相关的文档！</div>
+      <div>
+        <ul class="vxe-row support-question">
+          <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
+            <i :class="item.icon || 'fa fa-question-circle'"></i>
+            <span>{{ item.label }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="vxe-row support-group">
+        <div class="vxe-col--24 support-group-item">
+          <div class="support-name">技术支持群</div>
+          <div v-if="discountPrice" class="support-price">¥ {{ discountPrice }}<span v-if="discountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span></div>
+          <div v-else class="support-price">¥ {{ supportGroupPrice }}</div>
+          <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请加入</vxe-button>
+        </div>
+      </div>
+    </vxe-modal>
+    <vxe-modal v-model="supportGroupVisible" title="申请加入" width="600" position="center">
+      <template>
+        <div class="support-pay-step">
+          <p class="title">有问题咨询QQ <a href="tencent://message/?uin=405294094">405294094</a>，邮件 <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
+          <p class="title">1. 扫码申请加入群<br><img src="static/support/qq.png"></p>
+          <p class="title">2. 通过支付宝或微信付款：¥{{ discountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
+          <p class="title">3. 付款完成后点击联系收款方，留言QQ号即可</p>
+          <p class="title">4. 一般10分钟内通过</p>
+        </div>
+      </template>
+    </vxe-modal>
   </div>
 </template>
 
@@ -101,6 +126,54 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
+      discountPrice: 188,
+      supportGroupPrice: 299,
+      supportLoading: false,
+      supportVisible: false,
+      supportQuestion: '',
+      supportGroupVisible: false,
+      supportQuestionList: [
+        {
+          label: '安装/按需/报错/国际化/版本升级'
+        },
+        {
+          label: '主题/样式/图标相关问题'
+        },
+        {
+          label: '增删改查/数据校验/键盘导航实现'
+        },
+        {
+          label: '列错乱/列权限/动态列/自定义列实现支持'
+        },
+        {
+          label: '数据联动/分组汇总/合并与列实现支持'
+        },
+        {
+          label: '数据代理/Grid配置式扩展支持'
+        },
+        {
+          label: '高级筛选/可编辑/下拉容器/渲染器扩展支持'
+        },
+        {
+          label: '虚拟列表/虚拟树/虚拟下拉框扩展支持'
+        },
+        {
+          label: '打印/导入/导出/数据格式化等问题'
+        },
+        {
+          label: '动态表单/表单权限/配置式扩展支持'
+        },
+        {
+          label: '日历节日/工具栏/分页/模态窗口相关问题'
+        },
+        {
+          label: '第三方 UI 库集成渲染问题'
+        },
+        {
+          label: '特殊需求的定制（需咨询）',
+          icon: 'fa fa-exclamation-triangle'
+        }
+      ],
       showLeft: true,
       selected: null,
       filterName: '',
@@ -497,7 +570,7 @@ export default {
             },
             {
               label: 'app.aside.nav.dynamic',
-              demoUrl: 'https://jsrun.pro/SIWKp/edit',
+              // demoUrl: 'https://jsrun.pro/SIWKp/edit',
               locat: {
                 name: 'TableDynamic'
               }
@@ -592,7 +665,7 @@ export default {
             },
             {
               label: 'app.aside.nav.contextMenu',
-              demoUrl: 'https://jsrun.net/VjXKp/edit',
+              // demoUrl: 'https://jsrun.net/VjXKp/edit',
               locat: {
                 name: 'TableMenu'
               }
@@ -605,7 +678,7 @@ export default {
             },
             {
               label: 'app.aside.nav.expandRow',
-              demoUrl: 'https://jsrun.net/eRXKp/edit',
+              // demoUrl: 'https://jsrun.net/eRXKp/edit',
               locat: {
                 name: 'TableExpand'
               }
@@ -636,7 +709,7 @@ export default {
             },
             {
               label: 'app.aside.nav.customs',
-              demoUrl: 'https://jsrun.net/PrXKp/edit',
+              // demoUrl: 'https://jsrun.net/PrXKp/edit',
               locat: {
                 name: 'TableCustom'
               }
@@ -747,7 +820,7 @@ export default {
             },
             {
               label: 'app.aside.nav.radio',
-              demoUrl: 'https://jsrun.pro/kfWKp/edit',
+              // demoUrl: 'https://jsrun.pro/kfWKp/edit',
               locat: {
                 name: 'TableTreeRadio'
               }
@@ -760,14 +833,14 @@ export default {
             },
             {
               label: 'app.aside.nav.checkbox',
-              demoUrl: 'https://jsrun.pro/B6bKp/edit',
+              // demoUrl: 'https://jsrun.pro/B6bKp/edit',
               locat: {
                 name: 'TableTreeSelection'
               }
             },
             {
               label: 'app.aside.nav.fixed',
-              demoUrl: 'https://jsrun.pro/ifWKp/edit',
+              // demoUrl: 'https://jsrun.pro/ifWKp/edit',
               locat: {
                 name: 'TableTreeFixed'
               }
@@ -780,7 +853,7 @@ export default {
             },
             {
               label: 'app.aside.nav.treeSearch',
-              demoUrl: 'https://jsrun.pro/CDWKp/edit',
+              // demoUrl: 'https://jsrun.pro/CDWKp/edit',
               locat: {
                 name: 'TableTreeFilter'
               }
@@ -793,14 +866,14 @@ export default {
             },
             {
               label: 'app.aside.nav.groupSummary',
-              demoUrl: 'https://jsrun.pro/KVWKp/edit',
+              // demoUrl: 'https://jsrun.pro/KVWKp/edit',
               locat: {
                 name: 'TableTreeGroupSummary'
               }
             },
             {
               label: 'app.aside.nav.groupSummaryCount',
-              demoUrl: 'https://jsrun.pro/GTWKp/edit',
+              // demoUrl: 'https://jsrun.pro/GTWKp/edit',
               locat: {
                 name: 'TableTreeGroupSummaryCount'
               }
@@ -967,14 +1040,14 @@ export default {
             },
             {
               label: 'app.aside.nav.insert',
-              demoUrl: 'https://jsrun.pro/vcWKp',
+              // demoUrl: 'https://jsrun.pro/vcWKp',
               locat: {
                 name: 'TableEditInsert'
               }
             },
             {
               label: 'app.aside.nav.delete',
-              demoUrl: 'https://jsrun.pro/6cWKp',
+              // demoUrl: 'https://jsrun.pro/6cWKp',
               locat: {
                 name: 'TableEditRemove'
               }
@@ -1017,20 +1090,20 @@ export default {
                 name: 'TableEditRowValid'
               }
             },
-            {
-              label: 'app.aside.nav.forceCellValid',
-              disabled: true,
-              locat: {
-                name: 'TableEditForceCellValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.forceRowValid',
-              disabled: true,
-              locat: {
-                name: 'TableEditForceRowValid'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.forceCellValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableEditForceCellValid'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.forceRowValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableEditForceRowValid'
+            //   }
+            // },
             {
               label: 'app.aside.nav.highlightCell',
               locat: {
@@ -1118,7 +1191,7 @@ export default {
             },
             {
               label: 'app.aside.nav.events',
-              demoUrl: 'https://jsrun.pro/QIWKp/edit',
+              // demoUrl: 'https://jsrun.pro/QIWKp/edit',
               locat: {
                 name: 'TableEditEvents'
               }
@@ -1190,14 +1263,14 @@ export default {
             },
             {
               label: 'app.aside.nav.proxy',
-              demoUrl: 'https://jsrun.pro/XwWKp/edit',
+              // demoUrl: 'https://jsrun.pro/XwWKp/edit',
               locat: {
                 name: 'GridProxy'
               }
             },
             {
               label: 'app.aside.nav.proxyPage',
-              demoUrl: 'https://jsrun.pro/ywWKp/edit',
+              // demoUrl: 'https://jsrun.pro/ywWKp/edit',
               locat: {
                 name: 'GridPageProxy'
               }
@@ -1258,7 +1331,7 @@ export default {
             },
             {
               label: 'app.aside.nav.contextMenu',
-              demoUrl: 'https://jsrun.pro/m6WKp/edit',
+              // demoUrl: 'https://jsrun.pro/m6WKp/edit',
               locat: {
                 name: 'GridMenu'
               }
@@ -1308,7 +1381,7 @@ export default {
             },
             {
               label: 'app.aside.nav.full',
-              demoUrl: 'https://jsrun.pro/r6WKp/edit',
+              // demoUrl: 'https://jsrun.pro/r6WKp/edit',
               locat: {
                 name: 'GridFullEdit'
               }
@@ -1359,7 +1432,7 @@ export default {
             },
             {
               label: 'app.aside.nav.edit',
-              demoUrl: 'https://jsrun.pro/MIWKp/edit',
+              // demoUrl: 'https://jsrun.pro/MIWKp/edit',
               locat: {
                 name: 'TableScrollEdit'
               }
@@ -1399,14 +1472,14 @@ export default {
             // },
             {
               label: 'app.aside.nav.partialLoad',
-              demoUrl: 'https://jsrun.pro/EVWKp/edit',
+              // demoUrl: 'https://jsrun.pro/EVWKp/edit',
               locat: {
                 name: 'TableScrollPartialLoad'
               }
             },
             {
               label: 'app.aside.nav.fullPartialLoad',
-              demoUrl: 'https://jsrun.pro/sVWKp/edit',
+              // demoUrl: 'https://jsrun.pro/sVWKp/edit',
               locat: {
                 name: 'TableScrollFullPartialLoad'
               }
@@ -1554,32 +1627,32 @@ export default {
         //     }
         //   ]
         // },
-        {
-          label: 'app.aside.nav.bad',
-          value: 'bad',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.badEdit',
-              demoUrl: 'https://jsrun.pro/uIWKp/edit',
-              locat: {
-                name: 'TableBadEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.badLineHeight',
-              locat: {
-                name: 'TableBadLineHeight'
-              }
-            },
-            {
-              label: 'app.aside.nav.badNonsupport',
-              locat: {
-                name: 'TableBadNonsupport'
-              }
-            }
-          ]
-        },
+        // {
+        //   label: 'app.aside.nav.bad',
+        //   value: 'bad',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.badEdit',
+        //       demoUrl: 'https://jsrun.pro/uIWKp/edit',
+        //       locat: {
+        //         name: 'TableBadEdit'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.badLineHeight',
+        //       locat: {
+        //         name: 'TableBadLineHeight'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.badNonsupport',
+        //       locat: {
+        //         name: 'TableBadNonsupport'
+        //       }
+        //     }
+        //   ]
+        // },
         {
           label: 'app.aside.nav.other',
           value: 'other',
@@ -1857,12 +1930,12 @@ export default {
           value: 'api',
           expand: false,
           children: [
-            {
-              label: 'app.footer.donation',
-              locat: {
-                name: 'Donation'
-              }
-            },
+            // {
+            //   label: 'app.footer.donation',
+            //   locat: {
+            //     name: 'Donation'
+            //   }
+            // },
             {
               label: 'app.aside.nav.vxeTable',
               locat: {
@@ -2229,6 +2302,16 @@ export default {
       if (!item.disabled) {
         item.expand = !item.expand
       }
+    },
+    supportEvent () {
+      this.supportVisible = true
+    },
+    addQQGroup () {
+      this.supportLoading = true
+      setTimeout(() => {
+        this.supportLoading = false
+        this.supportGroupVisible = true
+      }, 300)
     },
     vChangeEvent () {
       switch (this.version) {

@@ -33,7 +33,7 @@
       <vxe-input v-model="value402" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
       <vxe-input v-model="value403" placeholder="年" type="year" clearable></vxe-input>
       <vxe-input v-model="value404" placeholder="时间选择" type="datetime" transfer></vxe-input>
-      <vxe-input v-model="value405" placeholder="禁用日期" type="date" :disabledMethod="disabledDateMethod" transfer></vxe-input>
+      <vxe-input v-model="value405" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
     </p>
 
     <p>
@@ -161,7 +161,7 @@ export default {
           <vxe-input v-model="value402" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
           <vxe-input v-model="value403" placeholder="年" type="year" clearable></vxe-input>
           <vxe-input v-model="value404" placeholder="时间选择" type="datetime" transfer></vxe-input>
-          <vxe-input v-model="value405" placeholder="禁用日期" type="date" :disabledMethod="disabledDateMethod" transfer></vxe-input>
+          <vxe-input v-model="value405" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
         </p>
 
         <p>

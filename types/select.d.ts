@@ -18,6 +18,10 @@ export declare class Select extends VXETableModule {
    */
   placeholder?: string;
   /**
+   * 是否多选
+   */
+  multiple?: boolean;
+  /**
    * 是否禁用
    */
   disabled?: boolean;

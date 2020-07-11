@@ -1019,6 +1019,10 @@
     "type": "function",
     "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中"
   },
+  "vxe-input/festival-method": {
+    "type": "function",
+    "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({date}) 用于返回对应日期显示的节日"
+  },
   "vxe-input/transfer": {
     "type": "boolean",
     "description": "只对 type=date|datetime|week|month|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）"
@@ -1030,6 +1034,10 @@
   "vxe-select/size": {
     "type": "string",
     "description": "尺寸"
+  },
+  "vxe-select/multiple": {
+    "type": "boolean",
+    "description": "是否多选"
   },
   "vxe-select/clearable": {
     "type": "boolean",
@@ -1354,6 +1362,14 @@
   "vxe-form/rules": {
     "type": "any",
     "description": "校验规则配置项"
+  },
+  "vxe-form/prevent-submit": {
+    "type": "boolean",
+    "description": "是否阻止默认提交方式"
+  },
+  "vxe-form/valid-config": {
+    "type": "any",
+    "description": "检验配置项"
   },
   "vxe-form-item/field": {
     "type": "string",

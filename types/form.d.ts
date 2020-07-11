@@ -14,6 +14,10 @@ export declare class Form extends VXETableModule {
   titleColon?: boolean;
   items?: FormItemOptions[];
   rules?: FormVaildRules;
+  preventSubmit?: boolean;
+  validConfig?: {
+    autoPos?: boolean;
+  };
 
   // computed
   vSize?: string;
@@ -106,4 +110,8 @@ export interface FormOptions {
   titleColon?: boolean;
   items?: FormItemOptions[];
   rules?: FormVaildRules;
+  preventSubmit?: boolean;
+  validConfig?: {
+    autoPos?: boolean;
+  };
 }

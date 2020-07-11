@@ -2004,10 +2004,10 @@ const Methods = {
           XEUtils.eachTree([row], (item) => {
             if (row === item || (!checkMethod || checkMethod({ row: item }))) {
               XEUtils.set(item, property, value)
+              XEUtils.remove(treeIndeterminates, half => half === item)
               this.handleCheckboxReserveRow(row, value)
             }
           }, treeOpts)
-          XEUtils.remove(treeIndeterminates, item => item === row)
         }
         // 如果存在父节点，更新父节点状态
         const matchObj = XEUtils.findTree(afterFullData, item => item === row, treeOpts)
@@ -2045,10 +2045,10 @@ const Methods = {
               } else {
                 XEUtils.remove(selection, select => select === item)
               }
+              XEUtils.remove(treeIndeterminates, half => half === item)
               this.handleCheckboxReserveRow(row, value)
             }
           }, treeOpts)
-          XEUtils.remove(treeIndeterminates, item => item === row)
         }
         // 如果存在父节点，更新父节点状态
         const matchObj = XEUtils.findTree(afterFullData, item => item === row, treeOpts)
