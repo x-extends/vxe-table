@@ -56,10 +56,10 @@ module.exports = {
         span: 'Rowspan and colspan',
         spanRow: 'Merge the list of horizontal trees',
         mergeCell: 'Consolidate complex reports',
-        footer: 'Footer',
+        footer: '表尾数据',
         footerSpan: 'Footer rowspan and colspan',
-        import: 'Import data',
-        export: 'Export data',
+        import: 'Import',
+        export: 'Export',
         print: 'Print',
         fixedType: 'Fixed type + import/export',
         contextMenu: 'Context menu',
@@ -68,11 +68,11 @@ module.exports = {
         expandRow: 'Expandable row',
         expandRowIcon: 'Expandable row + More customizations',
         expandRowLazy: 'Expandable row + lazy loading',
-        accordion: 'Accordion expandable',
+        accordion: '展开行 + 手风琴效果',
         toolbar: 'Toolbar',
         customs: 'Show/hide column',
-        customStorage: 'Show/hide column + localStorage',
-        customlWidthStorage: 'Show/hide & column width + localStorage',
+        customStorage: '自定义列 + localStorage',
+        customlWidthStorage: '完整自定义列 + localStorage',
         search: 'Table search',
         groupBy: 'Row group',
         details: 'Popup displays details',
@@ -81,7 +81,7 @@ module.exports = {
         pageIcon: 'Pagination + custom icon',
         rangeSelect: 'The range of the checkbox is checked',
         tabs: 'Switch tabs',
-        keepAlives: 'Switch keep-alive',
+        keepAlives: '显示隐藏 + keep-alive',
 
         grid: 'Advanced table',
         reverse: 'Reverse table',
@@ -144,11 +144,11 @@ module.exports = {
         insert: 'Insert',
         delete: 'Delete',
         revert: 'Revert',
-        status: 'Update',
-        cellDisable: 'Disable edit cell',
-        rowDisable: 'Disable edit row',
-        cellValid: 'Validate call',
-        rowValid: 'Validate row',
+        status: '数据状态',
+        cellDisable: '禁用编辑 + 单元格',
+        rowDisable: '禁用编辑 + 行',
+        cellValid: '数据校验 + 单元格',
+        rowValid: '数据校验 + 行',
         forceCellValid: 'Validate cell + lock',
         forceRowValid: 'Validate row + lock',
         highlightCell: 'Highlighting the editor',
@@ -254,6 +254,12 @@ module.exports = {
         vxePulldown: 'vxe-pulldown'
       }
     },
+    header: {
+      label: {
+        donation: 'Donation',
+        support: 'Getting support'
+      }
+    },
     body: {
       button: {
         viewCode: 'View code',
@@ -305,13 +311,13 @@ module.exports = {
         ways: {
           wechat: 'Donate via the following wechat code scanning',
           alipay: 'Through the following Alipay sweep code donation',
-          gitee: 'Donation through <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee</a> (<a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">donation records</a> can be viewed in the project)'
+          gitee: 'Donation through <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee</a>'
         },
         compatibility: 'Compatibility',
         releases: 'Releases',
         donation: 'Donation',
         donationTitle: 'Donation method：',
-        issuesTitle: '该群供大家交流问题，由于作者比较忙基本没时间去看群，<br>如果有问题请通过<a class="link" href="https://github.com/x-extends/vxe-table/issues/390" target="_blank">👉issues</a>',
+        issuesTitle: '该群供大家交流问题，作者很忙基本没有时间去看群，<br>如果有问题请通过 issues 反馈',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
       },
@@ -319,11 +325,14 @@ module.exports = {
         searchPlaceholder: 'Document search',
         noDataPrefix: 'No results related to "',
         noDataSuffix: '" can be found!'
+      },
+      support: {
+        title: '该付费技术群用于快速解决使用过程中遇到的各种问题。'
       }
     },
     footer: {
       donation: 'Donation',
-      donationDesc: 'vxe-table is a MIT licensed open source project, which is free of charge. In order to make the project healthy and sustainable, you can support the author through donation 😊'
+      donationDesc: 'vxe-table is completely free to use.To keep the project healthy and sustainable, you can support the author with a donation.'
     },
     api: {
       apiSearch: 'API Search',
@@ -669,6 +678,7 @@ module.exports = {
         desc: {
           value: 'Binding values',
           size: 'Size',
+          multiple: 'Whether alternative',
           placeholder: 'Placeholder for null value empty',
           clearable: 'Whether to display the clear button on the right when there is a value',
           disabled: 'Whether to disable',

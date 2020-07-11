@@ -33,7 +33,7 @@
   display: none;
   position: absolute;
   left: 0;
-  padding: 0.2em 0;
+  padding: 4px 0;
   color: $vxe-font-color;
   text-align: left;
   &:not(.is--transfer) {
@@ -46,10 +46,10 @@
     display: block;
     opacity: 0;
     transform: scaleY(0.5);
-    transition: transform 0.2s, opacity 0.2s;
-    transform-origin: 0% 0%;
+    transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
+    transform-origin: center top;
     &[data-placement="top"] {
-      transform-origin: 0% 100%;
+      transform-origin: center bottom;
     }
   }
   &.animat--enter {
@@ -61,8 +61,8 @@
 .vxe-select-option--wrapper {
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 0.2em 0;
-  max-height: 15em;
+  padding: 4px 0;
+  max-height: 200px;
   border-radius: $vxe-border-radius;
   background-color: #fff;
   border: 1px solid $vxe-table-popup-border-color;
@@ -72,26 +72,26 @@
 
 .vxe-optgroup {
   .vxe-optgroup--title {
-    padding: 0 0.6em;
+    padding: 0 6px;
     color: $vxe-optgroup-title-color;
-    font-size: 0.8em;
+    font-size: 12px;
   }
 }
 
 .vxe-optgroup--wrapper {
   .vxe-select-option {
-    padding: 0 1.6em;
+    padding: 0 20px;
   }
 }
 
 .vxe-select-option {
-  padding: 0 0.8em;
-  max-width: 800px;
+  padding: 0 10px;
+  max-width: 400px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  &.is--checked {
+  &.is--selected {
     font-weight: 700;
     color: $vxe-primary-color;
   }

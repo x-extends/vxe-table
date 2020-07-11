@@ -95,10 +95,10 @@ export default {
               filters.forEach(({ property, values }) => {
                 queryParams[property] = values.join(',')
               })
-              return XEAjax.get(`https://api.xuliangzhan.com:10443/api/user/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+              return XEAjax.get(`https://api.xuliangzhan.com:10443/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
             },
-            delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body),
-            save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body)
+            delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/save', body),
+            save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/save', body)
           }
         },
         columns: [
@@ -232,10 +232,10 @@ export default {
                       filters.forEach(({ property, values }) => {
                         queryParams[property] = values.join(',')
                       })
-                      return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                      return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                     },
-                    delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body),
-                    save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/user/save', body)
+                    delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/save', body),
+                    save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/save', body)
                   }
                 },
                 columns: [
@@ -325,7 +325,7 @@ export default {
             importMethod ({ file }) {
               const formBody = new FormData()
               formBody.append('file', file)
-              return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/import', formBody).then(data => {
+              return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
                 this.$XModal.message({ message: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
                 // 导入完成，刷新表格
                 this.$refs.xGrid.commitProxy('query')
@@ -351,7 +351,7 @@ export default {
                 })
               }
               // 开始服务端导出
-              return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/export', body).then(data => {
+              return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/export', body).then(data => {
                 if (data.id) {
                   this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
                   // 读取路径，请求文件流 => 开始下载
@@ -401,7 +401,7 @@ export default {
     importMethod ({ file }) {
       const formBody = new FormData()
       formBody.append('file', file)
-      return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/import', formBody).then(data => {
+      return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
         this.$XModal.message({ message: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
         // 导入完成，刷新表格
         this.$refs.xGrid.commitProxy('query')
@@ -427,7 +427,7 @@ export default {
         })
       }
       // 开始服务端导出
-      return XEAjax.post('https://api.xuliangzhan.com:10443/api/user/export', body).then(data => {
+      return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/export', body).then(data => {
         if (data.id) {
           this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
           // 读取路径，请求文件流 => 开始下载

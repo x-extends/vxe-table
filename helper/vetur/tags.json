@@ -299,6 +299,7 @@
       "value-format",
       "editable",
       "disabled-method",
+      "festival-method",
       "transfer"
     ],
     "description": "输入框"
@@ -307,6 +308,7 @@
     "attributes": [
       "value,v-model",
       "size",
+      "multiple",
       "clearable",
       "placeholder",
       "disabled",
@@ -424,7 +426,9 @@
       "title-width",
       "title-colon",
       "items",
-      "rules"
+      "rules",
+      "prevent-submit",
+      "valid-config"
     ],
     "subtags": [
       "vxe-form-item"

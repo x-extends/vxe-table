@@ -60,11 +60,8 @@
           Header,
           Footer,
           Filter,
-          Edit,
           Menu,
           Export,
-          Keyboard,
-          Validator,
 
           Grid,
           Toolbar,
@@ -94,11 +91,8 @@
         Vue.use(Header)
         Vue.use(Footer)
         Vue.use(Filter)
-        Vue.use(Edit)
         Vue.use(Menu)
         Vue.use(Export)
-        Vue.use(Keyboard)
-        Vue.use(Validator)
 
         Vue.use(Tooltip)
         Vue.use(Grid)

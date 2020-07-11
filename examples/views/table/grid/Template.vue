@@ -67,7 +67,7 @@
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
-            <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">建议：深入门槛极高，还是放弃吧</marquee>
+            <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">自定义模板</marquee>
           </span>
         </div>
       </template>
@@ -122,7 +122,7 @@
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
-            <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">深入门槛极高，还是放弃吧</marquee>
+            <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">自定义模板</marquee>
           </span>
         </div>
       </template>
@@ -349,7 +349,7 @@ export default {
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
-                <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">建议：深入门槛极高，还是放弃吧</marquee>
+                <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">自定义模板</marquee>
               </span>
             </div>
           </template>
@@ -423,7 +423,7 @@ export default {
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
-                <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">深入门槛极高，还是放弃吧</marquee>
+                <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">自定义模板</marquee>
               </span>
             </div>
           </template>

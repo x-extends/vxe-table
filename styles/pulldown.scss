@@ -13,7 +13,7 @@
   display: none;
   position: absolute;
   left: 0;
-  padding: 0.2em 0;
+  padding: 4px 0;
   color: $vxe-font-color;
   text-align: left;
   &:not(.is--transfer) {
@@ -26,10 +26,10 @@
     display: block;
     opacity: 0;
     transform: scaleY(0.5);
-    transition: transform 0.2s, opacity 0.2s;
-    transform-origin: 0% 0%;
+    transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
+    transform-origin: center top;
     &[data-placement="top"] {
-      transform-origin: 0% 100%;
+      transform-origin: center bottom;
     }
   }
   &.animat--enter {

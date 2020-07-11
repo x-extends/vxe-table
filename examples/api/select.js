@@ -26,6 +26,15 @@ const apis = [
         list: []
       },
       {
+        name: 'multiple',
+        descKey: 'app.api.select.desc.multiple',
+        version: '1.15.31',
+        type: 'boolean',
+        enum: 'false',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'clearable',
         descKey: 'app.api.select.desc.clearable',
         version: '',

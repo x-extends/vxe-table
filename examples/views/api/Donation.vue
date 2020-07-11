@@ -11,8 +11,7 @@
     </div>
     <div class="desc">
       <div class="title">
-        <img src="logo.png" width="18">
-        <span style="vertical-align: middle;padding-left: 0.4em;">{{ $t('app.body.label.plan') }}</span>
+        <span style="vertical-align: middle;padding-left: 0.4em;">🔥{{ $t('app.body.label.plan') }}</span>
       </div>
       <ul class="plan">
         <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v1') }}</li>

@@ -1,137 +1,19 @@
-import Vue from 'vue';
-import { Table } from './table';
-import { Icon } from './icon';
-import { Column } from './column';
-import { Header } from './header';
-import { Body } from './body';
-import { Footer } from './footer';
-import { Filter } from './filter';
-import { Loading } from './loading';
-import { Grid } from './grid';
-import { Excel } from './excel';
-import { Menu } from './menu';
-import { Toolbar } from './toolbar';
-import { Pager } from './pager';
-import { Checkbox } from './checkbox';
-import { Radio } from './radio';
-import { Input } from './input';
-import { Button } from './button';
-import { Select } from './select';
-import { Modal, XModal } from './modal';
-import { Tooltip } from './tooltip';
-import { Form } from './form';
-import { Export } from './export';
-import { Resize } from './resize';
+import Vue from 'vue'
+
+import { ModalController } from './modal'
+
+import { renderer } from './extends/renderer'
+import { interceptor } from './extends/interceptor'
+import { commands } from './extends/commands'
+import { formats } from './extends/formats'
+import { menus } from './extends/menus'
 
 export interface VXETableOptions {
-  showOverflow?: boolean;
-  showHeaderOverflow?: boolean;
-  resizeInterval?: number;
-  size?: string;
-  validConfig?: object;
-  resizable?: boolean;
-  stripe?: boolean;
-  border?: boolean;
-  fit?: boolean;
-  emptyCell?: string;
-  showHeader?: boolean;
-  rowId?: string;
-  version?: string | number;
-  optimization?: object;
-  icon?: object;
-  grid?: object;
-  menu?: object;
-  tooltip?: object;
-  pager?: object;
-  toolbar?: object;
-  message?: object;
   i18n?(key: string, value: any): any;
+  [key: string]: any;
 }
-
-export interface Interceptor {
-  mixin(map: object): Interceptor;
-  get(type: string): any;
-  add(type: string, callback: Function): Interceptor;
-  delete(type: object): Interceptor;
-}
-
-export interface Renderer {
-  mixin(map: object): Renderer;
-  get(name: string): any;
-  add(name: string, options: object): Renderer;
-  delete(name: object): Renderer;
-}
-
-export interface Menus {
-  mixin(map: object): Menus;
-  get(type: string): Function;
-  add(type: string, callback: Function): Menus;
-  delete(type: object): Menus;
-}
-
-export interface Commands {
-  mixin(map: object): Commands;
-  get(type: string): Function;
-  add(type: string, callback: Function): Commands;
-  delete(type: object): Commands;
-}
-
-export interface Formats {
-  mixin(map: object): Formats;
-  get(type: string): Function;
-  add(type: string, callback: Function): Formats;
-  delete(type: object): Formats;
-}
-
-export interface PluginObject<T> {
-  install(xTable: typeof VXETable): any;
-}
-
-export function install(vue: typeof Vue): void;
-export function t(obj: object, key: string): string | number;
-export function setup(options?: VXETableOptions): any;
-export function use(plugin: PluginObject<any>, ...options: any[]): VXETableStatic;
-
-export const interceptor: Interceptor;
-export const renderer: Renderer;
-export const menus: Menus;
-export const buttons: Commands;
-export const commands: Commands;
-export const formats: Formats;
 
 export interface VXETableStatic {
-  install(vue: typeof Vue): void;
-  Vue: typeof Vue;
-  Table: any;
-  Grid: any;
-  /**
-   * Filter 模块的安装状态
-   */
-  _filter: number;
-  /**
-   * Menu 模块的安装状态
-   */
-  _menu: number;
-  /**
-   * Export 模块的安装状态
-   */
-  _export: number;
-  /**
-   * Resize 模块的安装状态
-   */
-  _resize: number;
-  /**
-   * Modal 模块的安装状态
-   */
-  _modal: number;
-  /**
-   * Tooltip 模块的安装状态
-   */
-  _tooltip: number;
-  /**
-   * 全局的模态窗口
-   */
-  $modal: XModal;
   /**
    * 版本号
    */
@@ -140,7 +22,7 @@ export interface VXETableStatic {
    * 导出/导出文件类型设置
    * 0只支持导出 1 支持导入导出
    */
-  types: any;
+  types: { [type: string]: any };
   /**
    * 获取导出的所有文件类型
    */
@@ -155,68 +37,89 @@ export interface VXETableStatic {
   t(key: string): any;
   /**
    * 设置全局参数/获取所有参数
-   * @param options
+   * @param options 参数
    */
   setup(options?: VXETableOptions): any;
   /**
-   * Installing a plug-in
-   * @param plugin 
-   * @param options
+   * 全局事件拦截器
    */
-  use(plugin: PluginObject<any>, ...options: any[]): VXETableStatic;
+  interceptor: interceptor;
   /**
-   * 事件冲突拦截器
+   * 全局渲染器
    */
-  interceptor: Interceptor;
-  /**
-   * 渲染器
-   */
-  renderer: Renderer;
-  buttons: Commands;
+  renderer: renderer;
   /**
    * 全局指令
    */
-  commands: Commands;
+  commands: commands;
   /**
    * 全局格式化
    */
-  formats: Formats;
+  formats: formats;
   /**
    * 全局快捷菜单
    */
-  menus: Menus;
+  menus: menus;
+  /**
+   * 全局的模态窗口
+   */
+  modal: typeof ModalController;
+  /**
+   * 安装插件
+   * @param plugin 插件
+   * @param options 参数
+   */
+  use(plugin: PluginObject, ...options: any[]): VXETableStatic;
+  install(vue: typeof Vue, options?: VXETableOptions): void;
 }
 
 /**
- * A fully functional Vue table component.
+ * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...  
  */
-declare const VXETable: VXETableStatic;
+export declare const VXETable: VXETableStatic
 
-export {
-  VXETable,
-  Table,
-  Icon,
-  Column,
-  Header,
-  Body,
-  Footer,
-  Filter,
-  Loading,
-  Grid,
-  Excel,
-  Menu,
-  Toolbar,
-  Pager,
-  Checkbox,
-  Radio,
-  Input,
-  Button,
-  Select,
-  Modal,
-  Tooltip,
-  Form,
-  Export,
-  Resize
+export interface PluginObject {
+  install(xTable: typeof VXETable): void;
+  [key: string]: any;
 }
+
+declare global {
+  interface Window {
+    VXETable: VXETableStatic;
+  }
+}
+
+export * from './table'
+export * from './column'
+export * from './grid'
+export * from './toolbar'
+export * from './pager'
+export * from './checkbox'
+export * from './radio'
+export * from './input'
+export * from './textarea'
+export * from './button'
+export * from './select'
+export * from './modal'
+export * from './tooltip'
+export * from './form'
+export * from './form-item'
+export * from './switch'
+export * from './list'
+
+export * from './extends/renderer'
+export * from './extends/interceptor'
+export * from './extends/commands'
+export * from './extends/formats'
+export * from './extends/menus'
+export * from './extends/header'
+export * from './extends/footer'
+export * from './extends/icon'
+export * from './extends/filter'
+export * from './extends/menu'
+export * from './extends/edit'
+export * from './extends/export'
+export * from './extends/keyboard'
+export * from './extends/validator'
 
 export default VXETable

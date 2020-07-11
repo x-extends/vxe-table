@@ -9,6 +9,6 @@ function is(it) {
 
 if (!ADBLOCK && !CI && !DISABLE_OPENCOLLECTIVE) {
   console.log('\n\x1B[89m>\x1B[93m ✌ 感谢使用 vxe-table ◕‿◕ \x1B[0m');
-  console.log('\x1B[89m>\x1B[93m 由于维护一个开源项目需要花费非常大的精力与时间，如果该项目对您有帮助，可以通过以下捐赠来帮助该项目能持续发展下去:  \x1B[0m');
+  console.log('\x1B[89m>\x1B[93m 如果该项目对您有帮助，可以通过以下捐赠来帮助该项目能持续维护下去:  \x1B[0m');
   console.log('\x1B[89m>\x1B[96m https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api \x1B[0m\n\n');
 }
