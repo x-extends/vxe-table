@@ -6,15 +6,15 @@
       border
       resizable
       :data="tableData"
-      :edit-config="{trigger: 'dblclick', mode: 'cell'}"
-      @edit-actived="editActivedEvent"
-      @edit-closed="editClosedEvent">
+      :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="sex6" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value2', label: 'label'}}"></vxe-table-column>
+      <vxe-table-column field="sex1" title="多选下拉" :edit-render="{name: '$select', options: sexList, props: {multiple: true}}"></vxe-table-column>
       <vxe-table-column field="num1" title="Amount" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
       <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -69,9 +69,11 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="sex6" title="Sex" :edit-render="{name: '$select', options: sexList, optionProps: {value: 'value2', label: 'label'}}"></vxe-table-column>
+          <vxe-table-column field="sex1" title="多选下拉" :edit-render="{name: '$select', options: sexList, props: {multiple: true}}"></vxe-table-column>
           <vxe-table-column field="num1" title="Amount" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
           <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -91,12 +93,6 @@ export default {
               return XEAjax.get('/api/conf/sex/list').then(data => {
                 this.sexList = data
               })
-            },
-            editActivedEvent ({ row, column }, event) {
-              console.log(\`打开 \${column.title} 列编辑\`)
-            },
-            editClosedEvent ({ row, column }, event) {
-              console.log(\`关闭 \${column.title} 列编辑\`)
             }
           }
         }
@@ -155,12 +151,6 @@ export default {
       return XEAjax.get('/api/conf/sex/list').then(data => {
         this.sexList = data
       })
-    },
-    editActivedEvent ({ column }) {
-      console.log(`打开 ${column.title} 列编辑`)
-    },
-    editClosedEvent ({ column }) {
-      console.log(`关闭 ${column.title} 列编辑`)
     }
   }
 }
