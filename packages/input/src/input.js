@@ -35,13 +35,15 @@ function renderDateLabel (h, _vm, item, label) {
   const festivalMethod = _vm.festivalMethod
   if (festivalMethod) {
     const festivalRest = festivalMethod({ date: item.date })
+    const festivalItem = festivalRest && XEUtils.isObject(festivalRest) ? festivalRest : { label: festivalRest }
     const labels = [
       h('span', {
-        class: 'vxe-input--date-label'
+        class: ['vxe-input--date-label', {
+          'vxe-input--date-important': festivalItem.important
+        }]
       }, label)
     ]
-    if (festivalRest) {
-      const festivalItem = XEUtils.isObject(festivalRest) ? festivalRest : { label: festivalRest }
+    if (festivalItem.label) {
       labels.push(
         h('span', {
           class: ['vxe-input--date-festival', festivalItem.className]
