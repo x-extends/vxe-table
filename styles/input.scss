@@ -335,7 +335,7 @@ $iconWidth: 1.6em;
   &.type--week {
     .vxe-input--date-picker-body {
       td {
-        height: 2.4em;
+        height: 2.5em;
       }
     }
   }
@@ -491,6 +491,11 @@ $iconWidth: 1.6em;
         .vxe-input--date-festival {
           color: #fff;
         }
+        .vxe-input--date-important {
+          &:before {
+            background-color: #fff;
+          }
+        }
       }
       &:not(.is--disabled) {
         cursor: pointer;
@@ -530,6 +535,19 @@ $iconWidth: 1.6em;
     height: 1.15em;
     line-height: 1.15em;
     transform: scale(0.8);
+  }
+  .vxe-input--date-important {
+    position: relative;
+    &:before {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      right: 0.4em;
+      top: 0.2em;
+      border-radius: 100%;
+      background-color: $vxe-primary-color;
+    }
   }
 }
 
