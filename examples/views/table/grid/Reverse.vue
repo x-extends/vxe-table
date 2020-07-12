@@ -44,15 +44,18 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      tableColumn: [
+      tableColumn: [],
+      tableData: [],
+      myColumns: [
         { field: 'name', title: 'Name' },
         { field: 'role', title: 'Role' },
         { field: 'sex', title: 'Sex' },
         { field: 'age', title: 'Age' },
         { field: 'date3', title: 'Date' }
       ],
-      tableData: [],
-      tableColumn2: [
+      tableColumn2: [],
+      tableData2: [],
+      myColumns2: [
         { field: 'name', title: 'Name' },
         { field: 'role', title: 'Role' },
         { field: 'sex', title: 'Sex' },
@@ -64,7 +67,6 @@ export default {
         { field: 'updateTime', title: 'UpdateTime' },
         { field: 'createTime', title: 'CreateTime' }
       ],
-      tableData2: [],
       demoCodes: [
         `
         <vxe-grid
@@ -80,7 +82,8 @@ export default {
           data () {
             return {
               tableData: [],
-              tableColumn: [
+              tableColumn: [],
+              myColumns: [
                 { field: 'name', title: 'Name' },
                 { field: 'role', title: 'Role' },
                 { field: 'sex', title: 'Sex' },
@@ -96,26 +99,26 @@ export default {
           methods: {
             // 反转函数
             reverseTable (list) {
-              const data = this.tableColumn.map(column => {
+              const buildData = this.myColumns.map(column => {
                 const item = { col0: column.title }
                 list.forEach((row, index) => {
                   item[\`col\${index + 1}\`] = row[column.field]
                 })
                 return item
               })
-              const columns = [{
+              const buildColumns = [{
                 field: 'col0',
                 fixed: 'left',
                 width: 80
               }]
               list.forEach((item, index) => {
-                columns.push({
+                buildColumns.push({
                   field: \`col\${index + 1}\`,
                   minWidth: 120
                 })
               })
-              this.tableData = data
-              this.tableColumn = columns
+              this.tableData = buildData
+              this.tableColumn = buildColumns
             }
           }
         }
@@ -141,7 +144,8 @@ export default {
           data () {
             return {
               tableData2: [],
-              tableColumn2: [
+              tableColumn2: [],
+              myColumns2: [
                 { field: 'name', title: 'Name' },
                 { field: 'role', title: 'Role' },
                 { field: 'sex', title: 'Sex' },
@@ -161,26 +165,26 @@ export default {
           methods: {
             // 反转函数
             reverseTable2 (list) {
-              const data = this.tableColumn2.map(column => {
+              const buildData = this.myColumns2.map(column => {
                 const item = { col0: column.title }
                 list.forEach((row, index) => {
                   item[\`col\${index + 1}\`] = row[column.field]
                 })
                 return item
               })
-              const columns = [{
+              const buildColumns = [{
                 field: 'col0',
                 fixed: 'left',
                 width: 80
               }]
               list.forEach((item, index) => {
-                columns.push({
+                buildColumns.push({
                   field: \`col\${index + 1}\`,
                   minWidth: 120
                 })
               })
-              this.tableData2 = data
-              this.tableColumn2 = columns
+              this.tableData2 = buildData
+              this.tableColumn2 = buildColumns
             }
           }
         }
@@ -203,50 +207,50 @@ export default {
     })
   },
   methods: {
-    // 反转函数
+    // 将行与列进行反转
     reverseTable (list) {
-      const data = this.tableColumn.map(column => {
+      const buildData = this.myColumns.map(column => {
         const item = { col0: column.title }
         list.forEach((row, index) => {
           item[`col${index + 1}`] = row[column.field]
         })
         return item
       })
-      const columns = [{
+      const buildColumns = [{
         field: 'col0',
         fixed: 'left',
         width: 80
       }]
       list.forEach((item, index) => {
-        columns.push({
+        buildColumns.push({
           field: `col${index + 1}`,
           minWidth: 120
         })
       })
-      this.tableData = data
-      this.tableColumn = columns
+      this.tableData = buildData
+      this.tableColumn = buildColumns
     },
     reverseTable2 (list) {
-      const data = this.tableColumn2.map(column => {
+      const buildData = this.myColumns2.map(column => {
         const item = { col0: column.title }
         list.forEach((row, index) => {
           item[`col${index + 1}`] = row[column.field]
         })
         return item
       })
-      const columns = [{
+      const buildColumns = [{
         field: 'col0',
         fixed: 'left',
         width: 80
       }]
       list.forEach((item, index) => {
-        columns.push({
+        buildColumns.push({
           field: `col${index + 1}`,
           minWidth: 120
         })
       })
-      this.tableData2 = data
-      this.tableColumn2 = columns
+      this.tableData2 = buildData
+      this.tableColumn2 = buildColumns
     }
   }
 }
