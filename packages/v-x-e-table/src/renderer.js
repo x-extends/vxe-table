@@ -5,6 +5,10 @@ import { UtilTools } from '../../tools'
 const inputEventTypes = ['input', 'textarea', '$input', '$textarea']
 const defaultCompProps = { transfer: true }
 
+function isEmptyValue (cellValue) {
+  return cellValue === null || cellValue === undefined || cellValue === ''
+}
+
 function getChangeEvent (renderOpts) {
   return inputEventTypes.indexOf(renderOpts.name) > -1 ? 'input' : 'change'
 }
@@ -313,25 +317,29 @@ function defaultSelectEditRender (h, renderOpts, params) {
 }
 
 function getSelectCellValue (renderOpts, { row, column }) {
-  const { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
+  const { props = {}, options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
   const cellValue = XEUtils.get(row, column.property)
   let selectItem
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
-  if (optionGroups) {
-    const groupOptions = optionGroupProps.options || 'options'
-    for (let index = 0; index < optionGroups.length; index++) {
-      /* eslint-disable eqeqeq */
-      selectItem = XEUtils.find(optionGroups[index][groupOptions], item => item[valueProp] == cellValue)
-      if (selectItem) {
-        break
+  if (!isEmptyValue(cellValue)) {
+    return XEUtils.map(props.multiple ? cellValue : [cellValue], optionGroups ? (value) => {
+      const groupOptions = optionGroupProps.options || 'options'
+      for (let index = 0; index < optionGroups.length; index++) {
+        /* eslint-disable eqeqeq */
+        selectItem = XEUtils.find(optionGroups[index][groupOptions], item => item[valueProp] == value)
+        if (selectItem) {
+          break
+        }
       }
-    }
-    return selectItem ? selectItem[labelProp] : cellValue
+      return selectItem ? selectItem[labelProp] : value
+    } : (value) => {
+      /* eslint-disable eqeqeq */
+      selectItem = XEUtils.find(options, item => item[valueProp] == value)
+      return selectItem ? selectItem[labelProp] : value
+    }).join(', ')
   }
-  /* eslint-disable eqeqeq */
-  selectItem = XEUtils.find(options, item => item[valueProp] == cellValue)
-  return selectItem ? selectItem[labelProp] : cellValue
+  return null
 }
 
 /**

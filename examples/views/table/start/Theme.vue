@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.theme') }}</h2>
-    <p class="tip">Case 1.使用默认的主题样式（<a class="link" href="https://github.com/x-extends/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）<br><a class="link" href="https://github.com/x-extends/vxe-table-demo/tree/master/vxe-table-by-theme" target="_blank">项目示例</a></p>
+    <p class="tip">Case 1.使用默认的主题样式（<a class="link" href="https://github.com/x-extends/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）</p>
     <pre>
       <code class="scss">
         @import 'vxe-table/lib/index.css';

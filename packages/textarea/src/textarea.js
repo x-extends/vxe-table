@@ -112,8 +112,8 @@ export default {
       this.$emit(evnt.type, { value, $event: evnt })
     },
     emitUpdate (value, evnt) {
-      this.$emit('input', value)
       if (this.value !== value) {
+        this.$emit('input', value)
         this.$emit('change', { value, $event: evnt })
       }
     },

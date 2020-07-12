@@ -28,7 +28,7 @@
   .vxe-custom--panel-column {
     border: 1px solid $vxe-input-border-color;
     margin: 3px 0;
-    border-radius: 4px;
+    border-radius: $vxe-border-radius;
     user-select: none;
     & .vxe-custom--panel-column-header,
     & .vxe-custom--panel-column-body {

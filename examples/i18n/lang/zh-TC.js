@@ -55,10 +55,10 @@ module.exports = {
         span: '合并行或列',
         spanRow: '合并横向树列表',
         mergeCell: '合并复杂的报表',
-        footer: '表尾',
+        footer: '表尾数据',
         footerSpan: '表尾合并行或列',
-        import: '导入数据',
-        export: '导出数据',
+        import: '导入',
+        export: '导出',
         print: '打印',
         fixedType: '固定类型 + 导入/导出',
         contextMenu: '快捷菜单',
@@ -67,11 +67,11 @@ module.exports = {
         expandRow: '展开行',
         expandRowIcon: '展开行 + 更多自定义',
         expandRowLazy: '展开行 + 懒加载',
-        accordion: '手风琴展开效果',
+        accordion: '展开行 + 手风琴效果',
         toolbar: '工具栏',
         customs: '显示/隐藏列',
-        customStorage: '显示/隐藏列 + localStorage',
-        customlWidthStorage: '显示/隐藏/列宽 + localStorage',
+        customStorage: '自定义列 + localStorage',
+        customlWidthStorage: '完整自定义列 + localStorage',
         search: '全表搜索',
         groupBy: '行分组',
         details: '弹框显示详情',
@@ -80,7 +80,7 @@ module.exports = {
         pageIcon: '分页 + 自定义图标',
         rangeSelect: '复选框的范围选中',
         tabs: '多页签切换',
-        keepAlives: 'keep-alive 切换',
+        keepAlives: '显示隐藏 + keep-alive',
 
         grid: '高級表格',
         reverse: '反转表格',
@@ -143,11 +143,11 @@ module.exports = {
         insert: '插入数据',
         delete: '删除数据',
         revert: '还原数据',
-        status: '数据更新',
-        cellDisable: '禁用编辑 cell',
-        rowDisable: '禁用编辑 row',
-        cellValid: '数据校验 call',
-        rowValid: '数据校验 row',
+        status: '数据状态',
+        cellDisable: '禁用编辑 + 单元格',
+        rowDisable: '禁用编辑 + 行',
+        cellValid: '数据校验 + 单元格',
+        rowValid: '数据校验 + 行',
         forceCellValid: '数据校验 cell + 强制锁定',
         forceRowValid: '数据校验 row + 强制锁定',
         highlightCell: '高亮编辑',
@@ -253,6 +253,12 @@ module.exports = {
         vxePulldown: 'vxe-pulldown'
       }
     },
+    header: {
+      label: {
+        donation: '捐贈',
+        support: '獲取支持'
+      }
+    },
     body: {
       button: {
         viewCode: '查看代码',
@@ -304,25 +310,28 @@ module.exports = {
         ways: {
           wechat: '通過以下 微信掃碼 捐贈',
           alipay: '通過以下 支付寶掃碼 捐贈',
-          gitee: '通過 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee 捐贈</a> （該管道可以在項目中查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">捐贈記錄</a>）'
+          gitee: '通過 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee 捐贈</a>'
         },
         compatibility: '相容性變動',
         releases: '更新日誌',
         donation: '捐贈',
         donationTitle: '捐贈管道：',
-        issuesTitle: '該群供大家交流問題，由於作者比較忙基本沒時間去看群，<br>如果有問題請通過<a class="link" href="https://github.com/x-extends/vxe-table/issues/390" target="_blank">👉issues</a>',
-        newFunc: '由於作者比較忙，後續有時間可能會支持該功能！',
-        newDevelopment: '由於作者比較忙，該版本正在重構中，敬請期待！'
+        issuesTitle: '該群供大家交流問題，作者很忙基本沒有時間去看群，<br>如果有問題請通過 issues 迴響',
+        newFunc: '由於作者很忙，後續有時間可能會支持該功能！',
+        newDevelopment: '由於作者很較忙，該版本正在重構中，敬請期待！'
       },
       search: {
         searchPlaceholder: '檔案蒐索',
         noDataPrefix: '找不到與 “',
         noDataSuffix: '” 相關的結果！'
+      },
+      support: {
+        title: '該付費科技群用於快速解决使用過程中遇到的各種問題。'
       }
     },
     footer: {
       donation: '捐贈',
-      donationDesc: 'vxe-table 採用MIT許可的開源項目，使用完全免費。為了使項目能够健康持續的發展下去，您可以通過捐贈來支持作者 😊'
+      donationDesc: 'vxe-table 使用完全免費。為了使項目能够健康持續的發展下去，您可以通過捐贈來支持作者。'
     },
     api: {
       apiSearch: 'API 蒐索',
@@ -668,6 +677,7 @@ module.exports = {
         desc: {
           value: '绑定值',
           size: '尺寸',
+          multiple: '是否多选',
           placeholder: '空值显示的占位符',
           clearable: '当有值时，是否在右侧显示清除按钮',
           disabled: '是否禁用',

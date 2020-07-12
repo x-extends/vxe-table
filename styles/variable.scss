@@ -1,11 +1,13 @@
-/*font-family*/
+/*font*/
 $vxe-font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
 $vxe-font-color: #606266;
 $vxe-font-size: 14px;
 $vxe-font-size-medium: 14px;
 $vxe-font-size-small: 13px;
 $vxe-font-size-mini: 12px;
-$vxe-border-radius: 0.25em;
+
+/*size*/
+$vxe-border-radius: 4px;
 
 /*icon*/
 $vxe-icon-font-family: Verdana,Arial,Tahoma;
@@ -114,7 +116,7 @@ $vxe-checkbox-checked-height: 0.64em;
 $vxe-checkbox-indeterminate-width: 0.6em;
 $vxe-checkbox-indeterminate-height: 2px;
 $vxe-checkbox-border-width: 2px;
-$vxe-checkbox-border-radius: 0.15em;
+$vxe-checkbox-border-radius: 2px;
 
 /*radio*/
 $vxe-radio-font-size-default: $vxe-checkbox-font-size-default;

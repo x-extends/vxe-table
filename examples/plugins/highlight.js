@@ -1,1 +1,1 @@
-import 'highlight.js/styles/default.css'
+import 'highlight.js/styles/agate.css'

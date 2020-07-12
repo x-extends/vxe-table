@@ -186,7 +186,7 @@ export default {
           if (wrapperElem.dataset.active !== 'Y') {
             this.animatVisible = false
           }
-        }, 200)
+        }, 350)
         this.$emit('dropdown-click', { name: targetElem.getAttribute('name'), $event: evnt })
       }
     },
@@ -212,9 +212,9 @@ export default {
             if (wrapperElem.dataset.active !== 'Y') {
               this.animatVisible = false
             }
-          }, 200)
+          }, 350)
         }
-      }, 200)
+      }, 100)
     },
     updatePlacement () {
       return this.$nextTick().then(() => {

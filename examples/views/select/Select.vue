@@ -4,31 +4,31 @@
     <p class="tip">下拉选项，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'select'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
 
     <p>
-      <vxe-select v-model="value1" placeholder="默认尺寸">
+      <vxe-select v-model="value10" placeholder="默认尺寸">
         <vxe-option v-for="num in 15" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value2" placeholder="中等尺寸" size="medium">
+      <vxe-select v-model="value11" placeholder="中等尺寸" size="medium">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value3" placeholder="小型尺寸" size="small">
+      <vxe-select v-model="value12" placeholder="小型尺寸" size="small">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value4" placeholder="超小尺寸" size="mini">
+      <vxe-select v-model="value13" placeholder="超小尺寸" size="mini">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
     </p>
 
     <p>
-      <vxe-select v-model="value5" placeholder="请选择" prefix-icon="fa fa-user-o">
+      <vxe-select v-model="value20" placeholder="请选择" prefix-icon="fa fa-user-o">
         <vxe-option v-for="num in 3" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value6" placeholder="可清除" clearable>
+      <vxe-select v-model="value21" placeholder="可清除" clearable>
         <vxe-option v-for="num in 5" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value7" placeholder="请选择" clearable>
+      <vxe-select v-model="value22" placeholder="请选择" clearable>
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value8" placeholder="分组" clearable transfer>
+      <vxe-select v-model="value23" placeholder="分组" clearable transfer>
         <vxe-optgroup label="选项2">
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -42,17 +42,17 @@
     </p>
 
     <p>
-      <vxe-select v-model="value9" placeholder="禁用" disabled>
+      <vxe-select v-model="value30" placeholder="禁用" disabled>
         <vxe-option value="1" label="选项1"></vxe-option>
         <vxe-option value="2" label="选项2"></vxe-option>
         <vxe-option value="3" label="选项3"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value10" placeholder="禁用选项" clearable>
+      <vxe-select v-model="value31" placeholder="禁用选项" clearable>
         <vxe-option value="1" label="选项1"></vxe-option>
         <vxe-option value="2" label="选项2" disabled></vxe-option>
         <vxe-option value="3" label="选项3"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value11" placeholder="禁用分组" clearable transfer>
+      <vxe-select v-model="value32" placeholder="禁用分组" clearable transfer>
         <vxe-optgroup label="选项2" disabled>
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -75,13 +75,37 @@
           <vxe-option value="5-4" label="选项5-4"></vxe-option>
         </vxe-optgroup>
       </vxe-select>
+      <vxe-select v-model="value33" placeholder="多选" multiple>
+        <vxe-option value="1" label="选项1"></vxe-option>
+        <vxe-option value="2" label="选项2"></vxe-option>
+        <vxe-option value="3" label="选项3"></vxe-option>
+        <vxe-option value="4" label="选项4"></vxe-option>
+        <vxe-option value="5" label="选项5"></vxe-option>
+      </vxe-select>
+      <vxe-select v-model="value34" placeholder="多选可清除" multiple clearable>
+        <vxe-option value="1" label="选项1"></vxe-option>
+        <vxe-option value="2" label="选项2"></vxe-option>
+        <vxe-option value="3" label="选项3"></vxe-option>
+        <vxe-option value="4" label="选项4"></vxe-option>
+        <vxe-option value="5" label="选项5"></vxe-option>
+        <vxe-option value="6" label="选项6"></vxe-option>
+        <vxe-option value="7" label="选项7"></vxe-option>
+        <vxe-option value="8" label="选项8"></vxe-option>
+        <vxe-option value="9" label="选项9"></vxe-option>
+        <vxe-option value="10" label="选项10"></vxe-option>
+        <vxe-option value="11" label="选项11"></vxe-option>
+        <vxe-option value="12" label="选项12"></vxe-option>
+        <vxe-option value="13" label="选项13"></vxe-option>
+        <vxe-option value="14" label="选项14"></vxe-option>
+      </vxe-select>
     </p>
 
     <p>
-      <vxe-select v-model="value12" placeholder="配置式" :options="list12"></vxe-select>
-      <vxe-select v-model="value13" placeholder="分组配置式" :option-groups="list13"></vxe-select>
-      <vxe-select v-model="value14" placeholder="禁用选项" :options="list14"></vxe-select>
-      <vxe-select v-model="value15" placeholder="禁用分组" :option-groups="list15" transfer></vxe-select>
+      <vxe-select v-model="value40" placeholder="配置式" :options="list40"></vxe-select>
+      <vxe-select v-model="value41" placeholder="分组配置式" :option-groups="list41"></vxe-select>
+      <vxe-select v-model="value42" placeholder="禁用选项" :options="list42"></vxe-select>
+      <vxe-select v-model="value43" placeholder="禁用分组" :option-groups="list43" transfer></vxe-select>
+      <vxe-select v-model="value44" placeholder="多选" :options="list44" multiple clearable transfer></vxe-select>
     </p>
 
     <pre>
@@ -110,24 +134,26 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      value1: 12,
-      value2: null,
-      value3: null,
-      value4: null,
-      value5: null,
-      value6: null,
-      value7: 2,
-      value8: null,
-      value9: null,
-      value10: null,
+      value10: 12,
       value11: null,
       value12: null,
-      list12: [
+      value13: null,
+      value20: null,
+      value21: null,
+      value22: 2,
+      value23: null,
+      value30: null,
+      value31: null,
+      value32: null,
+      value33: null,
+      value34: ['9', '11'],
+      value40: null,
+      list40: [
         { label: '男', value: '1' },
         { label: '女', value: '0' }
       ],
-      value13: null,
-      list13: [
+      value41: null,
+      list41: [
         {
           label: '组1',
           options: [
@@ -143,8 +169,8 @@ export default {
           ]
         }
       ],
-      value14: null,
-      list14: [
+      value42: null,
+      list42: [
         { label: '1111', value: '1', disabled: true },
         { label: '2222', value: '2', disabled: false },
         { label: '3333', value: '3', disabled: false },
@@ -157,8 +183,8 @@ export default {
         { label: '1010', value: '10', disabled: false },
         { label: '1111', value: '11', disabled: false }
       ],
-      value15: null,
-      list15: [
+      value43: null,
+      list43: [
         {
           label: '组1',
           disabled: true,
@@ -184,34 +210,48 @@ export default {
           ]
         }
       ],
+      value44: ['9', '10'],
+      list44: [
+        { label: '1111', value: '1', disabled: true },
+        { label: '2222', value: '2', disabled: false },
+        { label: '3333', value: '3', disabled: false },
+        { label: '4444', value: '4', disabled: false },
+        { label: '5555', value: '5', disabled: true },
+        { label: '6666', value: '6', disabled: true },
+        { label: '7777', value: '7', disabled: false },
+        { label: '8888', value: '8', disabled: false },
+        { label: '9999', value: '9', disabled: false },
+        { label: '1010', value: '10', disabled: false },
+        { label: '1111', value: '11', disabled: false }
+      ],
       demoCodes: [
         `
         <p>
-          <vxe-select v-model="value1" placeholder="默认尺寸">
+          <vxe-select v-model="value10" placeholder="默认尺寸">
             <vxe-option v-for="num in 15" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value2" placeholder="中等尺寸" size="medium">
+          <vxe-select v-model="value11" placeholder="中等尺寸" size="medium">
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value3" placeholder="小型尺寸" size="small">
+          <vxe-select v-model="value12" placeholder="小型尺寸" size="small">
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value4" placeholder="超小尺寸" size="mini">
+          <vxe-select v-model="value13" placeholder="超小尺寸" size="mini">
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
         </p>
 
         <p>
-          <vxe-select v-model="value5" placeholder="请选择" prefix-icon="fa fa-user-o">
+          <vxe-select v-model="value20" placeholder="请选择" prefix-icon="fa fa-user-o">
             <vxe-option v-for="num in 3" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value6" placeholder="可清除" clearable>
+          <vxe-select v-model="value21" placeholder="可清除" clearable>
             <vxe-option v-for="num in 5" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value7" placeholder="请选择" clearable>
+          <vxe-select v-model="value22" placeholder="请选择" clearable>
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value8" placeholder="分组" clearable transfer>
+          <vxe-select v-model="value23" placeholder="分组" clearable transfer>
             <vxe-optgroup label="选项2">
               <vxe-option value="2-1" label="选项2-1"></vxe-option>
               <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -225,17 +265,17 @@ export default {
         </p>
 
         <p>
-          <vxe-select v-model="value9" placeholder="禁用" disabled>
+          <vxe-select v-model="value30" placeholder="禁用" disabled>
             <vxe-option value="1" label="选项1"></vxe-option>
             <vxe-option value="2" label="选项2"></vxe-option>
             <vxe-option value="3" label="选项3"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value10" placeholder="禁用选项" clearable>
+          <vxe-select v-model="value31" placeholder="禁用选项" clearable>
             <vxe-option value="1" label="选项1"></vxe-option>
             <vxe-option value="2" label="选项2" disabled></vxe-option>
             <vxe-option value="3" label="选项3"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value11" placeholder="禁用分组" clearable transfer>
+          <vxe-select v-model="value32" placeholder="禁用分组" clearable transfer>
             <vxe-optgroup label="选项2" disabled>
               <vxe-option value="2-1" label="选项2-1"></vxe-option>
               <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -258,37 +298,63 @@ export default {
               <vxe-option value="5-4" label="选项5-4"></vxe-option>
             </vxe-optgroup>
           </vxe-select>
+          <vxe-select v-model="value33" placeholder="多选" multiple>
+            <vxe-option value="1" label="选项1"></vxe-option>
+            <vxe-option value="2" label="选项2"></vxe-option>
+            <vxe-option value="3" label="选项3"></vxe-option>
+            <vxe-option value="4" label="选项4"></vxe-option>
+            <vxe-option value="5" label="选项5"></vxe-option>
+          </vxe-select>
+          <vxe-select v-model="value34" placeholder="多选可清除" multiple clearable>
+            <vxe-option value="1" label="选项1"></vxe-option>
+            <vxe-option value="2" label="选项2"></vxe-option>
+            <vxe-option value="3" label="选项3"></vxe-option>
+            <vxe-option value="4" label="选项4"></vxe-option>
+            <vxe-option value="5" label="选项5"></vxe-option>
+            <vxe-option value="6" label="选项6"></vxe-option>
+            <vxe-option value="7" label="选项7"></vxe-option>
+            <vxe-option value="8" label="选项8"></vxe-option>
+            <vxe-option value="9" label="选项9"></vxe-option>
+            <vxe-option value="10" label="选项10"></vxe-option>
+            <vxe-option value="11" label="选项11"></vxe-option>
+            <vxe-option value="12" label="选项12"></vxe-option>
+            <vxe-option value="13" label="选项13"></vxe-option>
+            <vxe-option value="14" label="选项14"></vxe-option>
+          </vxe-select>
         </p>
 
         <p>
-          <vxe-select v-model="value12" placeholder="配置式" :options="list12"></vxe-select>
-          <vxe-select v-model="value13" placeholder="分组配置式" :option-groups="list13"></vxe-select>
-          <vxe-select v-model="value14" placeholder="禁用选项" :options="list14"></vxe-select>
-          <vxe-select v-model="value15" placeholder="禁用分组" :option-groups="list15" transfer></vxe-select>
+          <vxe-select v-model="value40" placeholder="配置式" :options="list40"></vxe-select>
+          <vxe-select v-model="value41" placeholder="分组配置式" :option-groups="list41"></vxe-select>
+          <vxe-select v-model="value42" placeholder="禁用选项" :options="list42"></vxe-select>
+          <vxe-select v-model="value43" placeholder="禁用分组" :option-groups="list43" transfer></vxe-select>
+          <vxe-select v-model="value44" placeholder="多选" :options="list44" multiple clearable transfer></vxe-select>
         </p>
         `,
         `
         export default {
           data () {
             return {
-              value1: 12,
-              value2: null,
-              value3: null,
-              value4: null,
-              value5: null,
-              value6: null,
-              value7: 2,
-              value8: null,
-              value9: null,
-              value10: null,
+              value10: 12,
               value11: null,
               value12: null,
-              list12: [
+              value13: null,
+              value20: null,
+              value21: null,
+              value22: 2,
+              value23: null,
+              value30: null,
+              value31: null,
+              value32: null,
+              value33: null,
+              value34: ['9', '11'],
+              value40: null,
+              list40: [
                 { label: '男', value: '1' },
                 { label: '女', value: '0' }
               ],
-              value13: null,
-              list13: [
+              value41: null,
+              list41: [
                 {
                   label: '组1',
                   options: [
@@ -304,8 +370,8 @@ export default {
                   ]
                 }
               ],
-              value14: null,
-              list14: [
+              value42: null,
+              list42: [
                 { label: '1111', value: '1', disabled: true },
                 { label: '2222', value: '2', disabled: false },
                 { label: '3333', value: '3', disabled: false },
@@ -318,8 +384,8 @@ export default {
                 { label: '1010', value: '10', disabled: false },
                 { label: '1111', value: '11', disabled: false }
               ],
-              value15: null,
-              list15: [
+              value43: null,
+              list43: [
                 {
                   label: '组1',
                   disabled: true,
@@ -344,6 +410,20 @@ export default {
                     { label: '3-2', value: '32', disabled: false }
                   ]
                 }
+              ],
+              value44: ['9', '10'],
+              list44: [
+                { label: '1111', value: '1', disabled: true },
+                { label: '2222', value: '2', disabled: false },
+                { label: '3333', value: '3', disabled: false },
+                { label: '4444', value: '4', disabled: false },
+                { label: '5555', value: '5', disabled: true },
+                { label: '6666', value: '6', disabled: true },
+                { label: '7777', value: '7', disabled: false },
+                { label: '8888', value: '8', disabled: false },
+                { label: '9999', value: '9', disabled: false },
+                { label: '1010', value: '10', disabled: false },
+                { label: '1111', value: '11', disabled: false }
               ]
             }
           }

@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils/methods/xe-utils'
 import VxeInput from '../../input/src/input'
 import GlobalConfig from '../../conf'
 import { getOptkey, getOptid, getOptUniqueId } from './util'
@@ -69,8 +70,13 @@ function findOption (groupList, optionValue) {
   }
 }
 
+function getSelectLabel (options, value) {
+  const selectOption = findOption(options, value)
+  return XEUtils.toString(selectOption ? selectOption.label : value)
+}
+
 export function renderOption (h, _vm, options, group) {
-  const { optkey, value, currentValue, optionGroupProps = {}, optionProps = {} } = _vm
+  const { optkey, value, multiple, currentValue, optionGroupProps = {}, optionProps = {} } = _vm
   const groupDisabled = optionGroupProps.disabled || 'disabled'
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
@@ -83,7 +89,7 @@ export function renderOption (h, _vm, options, group) {
       key: optkey ? optid : cIndex,
       class: ['vxe-select-option', {
         'is--disabled': isDisabled,
-        'is--checked': value === optionValue,
+        'is--selected': multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue,
         'is--hover': currentValue === optionValue
       }],
       attrs: {
@@ -138,6 +144,7 @@ export default {
     clearable: Boolean,
     placeholder: String,
     disabled: Boolean,
+    multiple: Boolean,
     prefixIcon: String,
     placement: String,
     options: Array,
@@ -176,11 +183,17 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     selectLabel () {
-      const selectOption = findOption(this.allOptList, this.value)
-      if (selectOption) {
-        return selectOption.label
+      const { value, multiple, allOptList } = this
+      if (value && multiple) {
+        return value.map(val => {
+          const label = getSelectLabel(allOptList, val)
+          if (label.length > 8) {
+            return `${label.substring(0, 8)}...`
+          }
+          return label
+        }).join(', ')
       }
-      return this.value
+      return getSelectLabel(allOptList, value)
     }
   },
   watch: {
@@ -399,7 +412,7 @@ export default {
                   optWrapperElem.scrollTop = optElem.offsetTop + optElem.offsetHeight - wrapperHeight
                 }
               } else {
-                if (optElem.offsetTop - offsetPadding < optWrapperElem.scrollTop) {
+                if (optElem.offsetTop + offsetPadding < optWrapperElem.scrollTop || optElem.offsetTop + offsetPadding > optWrapperElem.scrollTop + optWrapperElem.clientHeight) {
                   optWrapperElem.scrollTop = optElem.offsetTop - offsetPadding
                 }
               }
@@ -426,8 +439,23 @@ export default {
       }
     },
     changeOptionEvent (evnt, selectValue) {
-      this.changeEvent(evnt, selectValue)
-      this.hideOptionPanel()
+      const { value, multiple } = this
+      if (multiple) {
+        let multipleValue
+        if (value) {
+          if (value.indexOf(selectValue) === -1) {
+            multipleValue = value.concat([selectValue])
+          } else {
+            multipleValue = value.filter(val => val !== selectValue)
+          }
+        } else {
+          multipleValue = [selectValue]
+        }
+        this.changeEvent(evnt, multipleValue)
+      } else {
+        this.changeEvent(evnt, selectValue)
+        this.hideOptionPanel()
+      }
     },
     handleGlobalMousewheelEvent (evnt) {
       const { $refs, $el, disabled, visiblePanel } = this
@@ -526,7 +554,8 @@ export default {
         this.isActivated = true
         this.animatVisible = true
         setTimeout(() => {
-          const currOption = findOption(this.allOptList, this.value)
+          const { value, multiple, allOptList } = this
+          const currOption = findOption(allOptList, multiple && value ? value[0] : value)
           this.visiblePanel = true
           if (currOption) {
             this.setCurrentOption(currOption)
@@ -541,7 +570,7 @@ export default {
       this.visiblePanel = false
       this.hidePanelTimeout = setTimeout(() => {
         this.animatVisible = false
-      }, 200)
+      }, 350)
     },
     updatePlacement () {
       return this.$nextTick().then(() => {

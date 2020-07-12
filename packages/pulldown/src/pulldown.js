@@ -154,7 +154,7 @@ export default {
         this.hidePanelTimeout = setTimeout(() => {
           this.animatVisible = false
           resolve(this.$nextTick())
-        }, 200)
+        }, 350)
       })
     },
     /**

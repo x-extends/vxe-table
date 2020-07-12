@@ -314,10 +314,10 @@ export default {
               if (left && !leftCenter) {
                 posLeft = isNaN(left) ? left : `${left}px`
               } else {
-                posLeft = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
+                posLeft = `${Math.max(marginSize, clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2)}px`
               }
               if (topCenter) {
-                posTop = `${clientVisibleHeight / 2 - modalBoxElem.offsetHeight / 2}px`
+                posTop = `${Math.max(marginSize, clientVisibleHeight / 2 - modalBoxElem.offsetHeight / 2)}px`
               } else if (top && !topCenter) {
                 posTop = isNaN(top) ? top : `${top}px`
               } else if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
@@ -491,9 +491,9 @@ export default {
           const offsetWidth = modalBoxElem.offsetWidth
           const offsetHeight = modalBoxElem.offsetHeight
           const minX = marginSize
-          const maxX = visibleWidth - offsetWidth - marginSize
+          const maxX = visibleWidth - offsetWidth - marginSize - 1
           const minY = marginSize
-          const maxY = visibleHeight - offsetHeight - marginSize
+          const maxY = visibleHeight - offsetHeight - marginSize - 1
           let left = evnt.clientX - disX
           let top = evnt.clientY - disY
           if (left > maxX) {
@@ -529,8 +529,8 @@ export default {
       const type = evnt.target.dataset.type
       const minWidth = XEUtils.toNumber(this.minWidth)
       const minHeight = XEUtils.toNumber(this.minHeight)
-      const maxWidth = visibleWidth - 20
-      const maxHeight = visibleHeight - 20
+      const maxWidth = visibleWidth
+      const maxHeight = visibleHeight
       const modalBoxElem = this.getBox()
       const domMousemove = document.onmousemove
       const domMouseup = document.onmouseup

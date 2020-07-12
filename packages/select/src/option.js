@@ -51,7 +51,7 @@ export default {
     return h('div', {
       class: ['vxe-select-option', {
         'is--disabled': isDisabled,
-        'is--checked': $xeselect.value === value,
+        'is--selected': $xeselect.multiple ? ($xeselect.value && $xeselect.value.indexOf(value) > -1) : $xeselect.value === value,
         'is--hover': $xeselect.currentValue === value
       }],
       attrs: {

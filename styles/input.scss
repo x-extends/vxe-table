@@ -236,7 +236,7 @@ $iconWidth: 1.6em;
   display: none;
   position: absolute;
   left: 0;
-  padding: 0.2em 0;
+  padding: 4px 0;
   color: $vxe-font-color;
   font-size: $vxe-font-size;
   text-align: left;
@@ -250,10 +250,10 @@ $iconWidth: 1.6em;
     display: block;
     opacity: 0;
     transform: scaleY(0.5);
-    transition: transform 0.2s, opacity 0.2s;
-    transform-origin: 0% 0%;
+    transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
+    transform-origin: center top;
     &[data-placement="top"] {
-      transform-origin: 0% 100%;
+      transform-origin: center bottom;
     }
   }
   &.animat--enter {
@@ -273,7 +273,7 @@ $iconWidth: 1.6em;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 0.2em 0;
-  max-height: 22em;
+  max-height: 24em;
   border-radius: $vxe-border-radius;
 }
 
@@ -290,17 +290,17 @@ $iconWidth: 1.6em;
     user-select: none;
     .vxe-input--panel-wrapper {
       padding: 0.8em;
-      width: 22em;
+      width: 23em;
     }
   }
   &.type--week {
     .vxe-input--panel-wrapper {
-      width: 24em;
+      width: 26em;
     }
   }
   &.type--datetime {
     .vxe-input--panel-left-wrapper {
-      width: 20em;
+      width: 22em;
       padding: 0.8em;
     }
     .vxe-input--panel-right-wrapper {
@@ -330,11 +330,23 @@ $iconWidth: 1.6em;
       }
     }
   }
+  &.type--date,
+  &.type--datetime,
+  &.type--week {
+    .vxe-input--date-picker-body {
+      td {
+        height: 2.5em;
+      }
+    }
+  }
   &.type--month,
   &.type--year {
     .vxe-input--date-picker-body {
       td {
         width: 25%;
+      }
+      td {
+        height: 3.6em;
       }
     }
   }
@@ -342,10 +354,10 @@ $iconWidth: 1.6em;
 
 .vxe-input--time-picker-title {
   display: inline-block;
-  height: 2em;
-  line-height: 2em;
+  height: 2.2em;
+  line-height: 2.2em;
   text-align: center;
-  padding: 0 0.6em;
+  padding: 0 0.8em;
   border: 1px solid $vxe-input-border-color;
   border-radius: $vxe-border-radius;
 }
@@ -353,7 +365,7 @@ $iconWidth: 1.6em;
   position: absolute;
   right: 0;
   top: 0;
-  height: 2em;
+  height: 2.2em;
   outline: 0;
   padding: 0 0.6em;
   border: 1px solid $vxe-input-border-color;
@@ -379,7 +391,7 @@ $iconWidth: 1.6em;
 
 .vxe-input--time-picker-header,
 .vxe-input--date-picker-header {
-  padding-bottom: 0.8em;
+  padding-bottom: 0.5em;
 }
 
 .vxe-input--date-picker-header {
@@ -405,15 +417,15 @@ $iconWidth: 1.6em;
   display: flex;
   flex-direction: row;
   .vxe-input--date-picker-btn {
-    width: 2em;
+    width: 2.2em;
     margin-left: 0.5em;
   }
 }
 .vxe-input--date-picker-label,
 .vxe-input--date-picker-btn {
   display: inline-block;
-  height: 2em;
-  line-height: 2em;
+  height: 2.2em;
+  line-height: 2.2em;
   display: flex;
   border-radius: $vxe-border-radius;
   border: 1px solid $vxe-input-border-color;
@@ -437,31 +449,35 @@ $iconWidth: 1.6em;
   table {
     border: 0;
     width: 100%;
-    height: 14em;
     border-spacing: 0;
     border-collapse: separate;
     text-align: center;
-    th {
-      height: 2.2em;
-    }
     th,
     td {
-      font-size: 0.9em;
       font-weight: normal;
     }
     th {
+      height: 2.4em;
       box-shadow: inset 0 -1px 0 0 $vxe-table-popup-border-color;
     }
     td {
       &.is--prev,
       &.is--next {
         color: $vxe-disabled-color;
+        .vxe-input--date-label,
+        .vxe-input--date-festival {
+          color: $vxe-disabled-color;
+        }
       }
       &.is--today {
         box-shadow: inset 0 0 0 1px $vxe-table-popup-border-color;
         &:not(.is--selected) {
           &.is--current {
             color: $vxe-primary-color;
+            .vxe-input--date-label,
+            .vxe-input--date-festival {
+              color: $vxe-primary-color;
+            }
           }
         }
       }
@@ -471,6 +487,15 @@ $iconWidth: 1.6em;
       &.is--selected {
         color: #fff;
         background-color: $vxe-primary-color;
+        .vxe-input--date-label,
+        .vxe-input--date-festival {
+          color: #fff;
+        }
+        .vxe-input--date-important {
+          &:before {
+            background-color: #fff;
+          }
+        }
       }
       &:not(.is--disabled) {
         cursor: pointer;
@@ -479,6 +504,10 @@ $iconWidth: 1.6em;
         cursor: no-drop;
         color: $vxe-input-disabled-color;
         background-color: $vxe-input-disabled-background-color;
+        .vxe-input--date-label,
+        .vxe-input--date-festival {
+          color: $vxe-input-disabled-color;
+        }
       }
     }
   }
@@ -494,18 +523,45 @@ $iconWidth: 1.6em;
       }
     }
   }
+  .vxe-input--date-label,
+  .vxe-input--date-festival {
+    display: block;
+  }
+  .vxe-input--date-label {
+    line-height: 1.25em;
+  }
+  .vxe-input--date-festival {
+    color: #999;
+    height: 1.15em;
+    line-height: 1.15em;
+    transform: scale(0.8);
+  }
+  .vxe-input--date-important {
+    position: relative;
+    &:before {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      right: 0.4em;
+      top: 0.2em;
+      border-radius: 100%;
+      background-color: $vxe-primary-color;
+    }
+  }
 }
 
 .vxe-input--time-picker-body {
   position: relative;
   display: flex;
   flex-direction: row;
+  height: 16.8em;
   border: 1px solid $vxe-table-popup-border-color;
   flex-grow: 1;
   border-radius: $vxe-border-radius;
   user-select: none;
   & > ul {
-    height: 13.6em;
+    height: 100%;
     overflow: hidden;
     width: 3.4em;
     margin: 0;
@@ -515,7 +571,7 @@ $iconWidth: 1.6em;
     &:after {
       content: " ";
       display: block;
-      height: #{22 * 5}px;
+      height: 8.7em;
     }
     &:hover {
       overflow-y: auto;
@@ -595,7 +651,7 @@ $iconWidth: 1.6em;
   }
 }
 
-.vxe-dropdown--panel {
+.vxe-input--panel {
   font-size: $vxe-font-size;
   &.size--medium {
     font-size: $vxe-font-size-medium;

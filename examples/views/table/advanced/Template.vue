@@ -108,7 +108,7 @@
         </template>
         <template v-slot:footer>
           <span>
-            <img src="static/other/img1.gif" style="width: 36px;">门槛较高，放弃吧<img src="static/other/img2.gif" style="width: 30px;">
+            <img src="static/other/img1.gif" style="width: 36px;">自定义模板<img src="static/other/img2.gif" style="width: 30px;">
           </span>
         </template>
       </vxe-table-column>
@@ -129,7 +129,7 @@
       <template v-slot:left>
         <span class="page-left">
           <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
-          <span class="select-count">深入门槛极高，还是放弃吧 {{ selectRecords.length }} 条</span>
+          <span class="select-count">自定义模板 {{ selectRecords.length }} 条</span>
           <vxe-button>修改</vxe-button>
           <vxe-button>管理</vxe-button>
           <vxe-button>删除</vxe-button>
@@ -286,7 +286,7 @@ export default {
             </template>
             <template v-slot:footer>
               <span>
-                <img src="static/other/img1.gif" style="width: 36px;">门槛较高，放弃吧<img src="static/other/img2.gif" style="width: 30px;">
+                <img src="static/other/img1.gif" style="width: 36px;">自定义模板<img src="static/other/img2.gif" style="width: 30px;">
               </span>
             </template>
           </vxe-table-column>
@@ -307,7 +307,7 @@ export default {
           <template v-slot:left>
             <span class="page-left">
               <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
-              <span class="select-count">深入门槛极高，还是放弃吧 {{ selectRecords.length }} 条</span>
+              <span class="select-count">自定义模板 {{ selectRecords.length }} 条</span>
               <vxe-button>修改</vxe-button>
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>

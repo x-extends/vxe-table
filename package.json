@@ -58,7 +58,7 @@
     "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
-    "highlight.js": "^9.18.1",
+    "highlight.js": "^10.1.1",
     "jspdf": "^1.5.3",
     "moment": "^2.24.0",
     "node-sass": "^4.14.0",
@@ -84,7 +84,7 @@
     "xe-ajax": "^4.0.4",
     "xe-ajax-mock": "^1.10.0",
     "xe-clipboard": "^1.9.0",
-    "xe-utils": "^2.6.3",
+    "xe-utils": "^2.6.5",
     "xlsx": "^0.15.6"
   },
   "peerDependencies": {

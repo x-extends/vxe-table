@@ -257,14 +257,19 @@ $btnThemeList: (
 .vxe-button {
   &+.vxe-button,
   &+.vxe-button--dropdown {
-    margin-left: 0.8em;
+    margin-left: 12px;
   }
+}
+.vxe-button--loading-icon,
+.vxe-button--icon,
+.vxe-button--content {
+  vertical-align: middle;
 }
 .vxe-button--loading-icon,
 .vxe-button--icon {
   min-width: $vxe-font-size;
   &+.vxe-button--content {
-    margin-left: 0.3em;
+    margin-left: 6px;
   }
 }
 .vxe-button--wrapper,
@@ -275,7 +280,7 @@ $btnThemeList: (
   position: relative;
   &+.vxe-button,
   &+.vxe-button--dropdown {
-    margin-left: 0.8em;
+    margin-left: 12px;
   }
   & > .vxe-button {
     &.type--button {
@@ -323,7 +328,7 @@ $btnThemeList: (
 
 .vxe-button--dropdown-arrow {
   font-size: 12px;
-  margin: -0.18em 0 0 0.3em;
+  margin-left: 4px;
   @include animatTransition(transform, .2s);
 }
 
@@ -331,15 +336,15 @@ $btnThemeList: (
   display: none;
   position: absolute;
   left: 0;
-  padding: 0.2em 0;
+  padding: 4px 0;
   &.animat--leave {
     display: block;
     opacity: 0;
     transform: scaleY(0.5);
-    transition: transform 0.2s, opacity 0.2s;
-    transform-origin: 0% 0%;
+    transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
+    transform-origin: center top;
     &[data-placement="top"] {
-      transform-origin: 0% 100%;
+      transform-origin: center bottom;
     }
   }
   &.animat--enter {
@@ -354,7 +359,7 @@ $btnThemeList: (
   border: 1px solid $vxe-input-border-color;
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   & > .vxe-button {
-    margin: 0.2em 0;
+    margin: 2px 0;
     display: block;
     width: 100%;
     border: 0;

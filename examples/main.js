@@ -313,7 +313,7 @@ const treeList = [
           {
             id: '32100',
             parentId: '32000',
-            name: 'vxe-table 从入门到废弃 32100.mp4',
+            name: 'vxe-table 从入门到放弃 32100.mp4',
             size: '35k',
             type: 'mp4',
             date: '2019-05-28',
@@ -517,7 +517,7 @@ const treeList = [
   {
     id: '50000',
     parentId: null,
-    name: 'vxe-table 从入门到废弃 50000.avi',
+    name: 'vxe-table 从入门到放弃 50000.avi',
     size: '498k',
     type: 'avi',
     date: '2019-12-02',
