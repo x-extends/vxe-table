@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入临时数据，还可以通过 <table-api-link prop="icon"/> 自定义编辑状态的图标，例如第三方图标库：<a class="link" href="https://github.com/FortAwesome/Font-Awesome" target="_blank">font-awesome</a><br></p>
+    <p class="tip">调用 <table-api-link prop="insert"/>、<table-api-link prop="insertAt"/> 函数插入临时数据，还可以通过 <table-api-link prop="icon"/> 自定义编辑状态的图标，例如第三方图标库：font-awesome、inconfont<br></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

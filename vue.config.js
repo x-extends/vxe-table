@@ -19,9 +19,10 @@ module.exports = {
       entry: 'examples/main.js',
       template: 'public/index.html',
       filename: 'index.html',
-      title: 'vxe-table 表格'
+      title: 'vxe-table 1.x (LTS)'
     }
   },
+  transpileDependencies: ['highlight.js'],
   chainWebpack (config) {
     config.resolve.alias
       .set('@', resolve('examples'))

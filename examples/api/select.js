@@ -107,7 +107,7 @@ const apis = [
         list: []
       },
       {
-        name: 'optId',
+        name: 'opt-id',
         desc: '自定义选项唯一主键的字段名（选项必须要有唯一主键，默认自动生成）',
         version: '1.15.27',
         type: 'String',
@@ -116,7 +116,7 @@ const apis = [
         list: []
       },
       {
-        name: 'optKey',
+        name: 'opt-key',
         desc: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
         version: '1.15.27',
         type: 'Boolean',
@@ -154,11 +154,11 @@ const apis = [
     list: [
       {
         name: 'change',
-        desc: '在点击右侧清除按钮时触发该事件',
+        desc: '在值发生改变时触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       },
       {

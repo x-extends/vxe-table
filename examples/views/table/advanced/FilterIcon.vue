@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">改变图标，通过设置 <table-api-link prop="filter-config"/>={<table-api-link prop="iconMatch"/>, <table-api-link prop="iconMatch"/>} 局部替换默认的图标，例如第三方图标库：<a class="link" href="https://github.com/FortAwesome/Font-Awesome" target="_blank">font-awesome</a></p>
+    <p class="tip">改变图标，通过设置 <table-api-link prop="filter-config"/>={<table-api-link prop="iconMatch"/>, <table-api-link prop="iconMatch"/>} 局部替换默认的图标，例如第三方图标库：font-awesome、inconfont</p>
 
     <vxe-table
       border

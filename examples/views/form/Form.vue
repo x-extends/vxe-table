@@ -193,7 +193,7 @@
 </template>
 
 <script>
-// import hljs from 'highlight.js'
+import hljs from 'highlight.js'
 
 export default {
   data  () {
@@ -507,11 +507,11 @@ export default {
       ]
     }
   },
-  // mounted () {
-  //   Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-  //     hljs.highlightBlock(block)
-  //   })
-  // },
+  mounted () {
+    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
+      hljs.highlightBlock(block)
+    })
+  },
   methods: {
     submitEvent2 () {
       this.loading2 = true

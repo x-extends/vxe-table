@@ -17,6 +17,7 @@ $vxe-info-color: #909399;
 $vxe-warning-color: #e6a23c;
 $vxe-danger-color: #f56c6c;
 $vxe-disabled-color: #BFBFBF;
+$vxe-primary-disabled-color: #c0c4cc;
 
 /*input/radio/checkbox*/
 $vxe-input-border-color: #dcdfe6;
@@ -141,6 +142,23 @@ $vxe-button-height-small: 30px;
 $vxe-button-height-mini: 28px;
 
 /*input*/
+$vxe-input-date-festival-color: #999999;
+$vxe-input-date-festival-important-color: $vxe-primary-color;
+$vxe-input-date-notice-background-color: #FF0000;
+$vxe-input-date-extra-color: #67c23a;
+$vxe-input-date-extra-important-color: #fd2222;
+$vxe-input-date-title-height-default: 30px;
+$vxe-input-date-title-height-medium: 29px;
+$vxe-input-date-title-height-small: 28px;
+$vxe-input-date-title-height-mini: 26px;
+$vxe-input-date-time-week-row-height-default: 38px;
+$vxe-input-date-time-week-row-height-medium: 36px;
+$vxe-input-date-time-week-row-height-small: 34px;
+$vxe-input-date-time-week-row-height-mini: 32px;
+$vxe-input-date-month-year-row-height-default: 48px;
+$vxe-input-date-month-year-row-height-medium: 46px;
+$vxe-input-date-month-year-row-height-small: 44px;
+$vxe-input-date-month-year-row-height-mini: 42px;
 $vxe-input-height-default: $vxe-button-height-default;
 $vxe-input-height-medium: $vxe-button-height-medium;
 $vxe-input-height-small: $vxe-button-height-small;
@@ -157,7 +175,7 @@ $vxe-form-item-min-height-small: 32px;
 $vxe-form-item-min-height-mini: 30px;
 $vxe-form-background-color: #fff;
 $vxe-form-validate-error-color: $vxe-table-validate-error-color;
-$vxe-form-validate-error-background-color: $vxe-form-background-color;
+$vxe-form-validate-error-background-color: inherit;
 
 /*select*/
 $vxe-select-option-height-default: 30px;

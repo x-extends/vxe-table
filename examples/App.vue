@@ -87,7 +87,7 @@
     </div>
 
     <vxe-modal v-model="supportVisible" :loading="supportLoading" title="技术支持" width="800" position="center">
-      <div class="support-declare">考虑到很多用户有需要支持的需求，提供该付费技术群用于快速解决使用过程中遇到的各种问题，同时也能支撑该项目可以持续的维护下去。若非必要建议先查阅相关的文档！</div>
+      <div class="support-declare">考虑到很多用户有需要支持的需求，提供该付费技术群用于快速解决使用过程中遇到的各种问题，同时也能支撑该项目可以持续的维护下去。若非必要建议先查阅相关的文档！，如果确实需要支持请先通过邮件描述一下问题！</div>
       <div>
         <ul class="vxe-row support-question">
           <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
@@ -105,14 +105,13 @@
         </div>
       </div>
     </vxe-modal>
-    <vxe-modal v-model="supportGroupVisible" title="申请加入" width="600" position="center">
+    <vxe-modal v-model="supportGroupVisible" title="申请加入付费群" width="600" position="center">
       <template>
         <div class="support-pay-step">
-          <p class="title">有问题咨询QQ <a href="tencent://message/?uin=405294094">405294094</a>，邮件 <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
-          <p class="title">1. 扫码申请加入群<br><img src="static/support/qq.png"></p>
-          <p class="title">2. 通过支付宝或微信付款：¥{{ discountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
-          <p class="title">3. 付款完成后点击联系收款方，留言QQ号即可</p>
-          <p class="title">4. 一般10分钟内通过</p>
+          <p style="font-size: 12px;">联系邮件： <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
+          <p class="title">1. 扫码申请加入<br><img src="static/support/qq.png"></p>
+          <p class="title">2. 通过支付宝或微信付费：¥{{ discountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
+          <p class="title">3. 付费完成后点击“联系收款方”，留言QQ号即可</p>
         </div>
       </template>
     </vxe-modal>
@@ -183,7 +182,7 @@ export default {
       betaVersionList: [],
       selectStableVersion: null,
       stableVersionList: [],
-      version: '2',
+      version: '1',
       usedJSHeapSize: 0,
       tableList: [
         {
@@ -1603,19 +1602,19 @@ export default {
             }
           ]
         },
-        {
-          label: 'app.aside.nav.excel',
-          value: 'excel',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.cell',
-              locat: {
-                name: 'TableExcelCell'
-              }
-            }
-          ]
-        },
+        // {
+        //   label: 'app.aside.nav.excel',
+        //   value: 'excel',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.cell',
+        //       locat: {
+        //         name: 'TableExcelCell'
+        //       }
+        //     }
+        //   ]
+        // },
         // {
         //   label: 'app.aside.nav.bad',
         //   value: 'bad',
