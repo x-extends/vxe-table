@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-excel" target="_blank">vxe-table-plugin-excel</a> 插件的 API<br>
-      <span class="red">（注：实验功能，仅供参考！vue 的渲染机制决定无法很好的实现 Excel 类型的表格，只能支持少量数据且实现少部分的功能，所以不建议用于生产）</span>
+      <span class="red">（注：实验功能，该示例仅供参考！不可用于生产）</span>
     </p>
 
     <vxe-toolbar>

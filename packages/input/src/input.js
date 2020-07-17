@@ -35,19 +35,36 @@ function renderDateLabel (h, _vm, item, label) {
   const festivalMethod = _vm.festivalMethod
   if (festivalMethod) {
     const festivalRest = festivalMethod({ date: item.date })
-    const festivalItem = festivalRest && XEUtils.isObject(festivalRest) ? festivalRest : { label: festivalRest }
+    const festivalItem = festivalRest ? (XEUtils.isString(festivalRest) ? { label: festivalRest } : festivalRest) : {}
+    const extraItem = festivalItem.extra ? (XEUtils.isString(festivalItem.extra) ? { label: festivalItem.extra } : festivalItem.extra) : null
     const labels = [
       h('span', {
         class: ['vxe-input--date-label', {
-          'vxe-input--date-important': festivalItem.important
+          'is-notice': festivalItem.notice
         }]
-      }, label)
+      }, extraItem && extraItem.label ? [
+        h('span', label),
+        h('span', {
+          class: ['vxe-input--date-label--extra', extraItem.important ? 'is-important' : '', extraItem.className],
+          style: extraItem.style
+        }, XEUtils.toString(extraItem.label))
+      ] : label)
     ]
-    if (festivalItem.label) {
+    const festivalLabel = festivalItem.label
+    if (festivalLabel) {
+      // 默认最多支持两个节日重叠
+      const festivalLabels = festivalLabel.split(',')
       labels.push(
         h('span', {
-          class: ['vxe-input--date-festival', festivalItem.className]
-        }, festivalItem.label)
+          class: ['vxe-input--date-festival', festivalItem.important ? 'is-important' : '', festivalItem.className],
+          style: festivalItem.style
+        }, [
+          festivalLabels.length > 1 ? h('span', {
+            class: 'vxe-input--date-festival--overlap'
+          }, festivalLabels.map(label => h('span', label))) : h('span', {
+            class: 'vxe-input--date-festival--label'
+          }, festivalLabels[0])
+        ])
       )
     }
     return labels
@@ -819,6 +836,7 @@ export default {
       }
       evnts.input = this.inputEvent
       evnts.focus = this.focusEvent
+      evnts.blur = this.blurEvent
       return evnts
     }
   },
@@ -923,6 +941,10 @@ export default {
     },
     focusEvent (evnt) {
       this.isActivated = true
+      this.triggerEvent(evnt)
+    },
+    blurEvent (evnt) {
+      this.afterCheckValue()
       this.triggerEvent(evnt)
     },
     keydownEvent (evnt) {
@@ -1165,7 +1187,7 @@ export default {
       }
       this.datePanelType = datePanelType
     },
-    datePrevEvent () {
+    datePrevEvent (evnt) {
       const { type, datePanelType } = this
       if (type === 'year') {
         this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
@@ -1184,13 +1206,15 @@ export default {
           this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, -1, 'first')
         }
       }
+      this.$emit('date-prev', { type, $event: evnt })
     },
-    dateTodayMonthEvent () {
+    dateTodayMonthEvent (evnt) {
       this.dateNowHandle()
       this.dateChange(this.currentDate)
       this.hidePanel()
+      this.$emit('date-today', { type: this.type, $event: evnt })
     },
-    dateNextEvent () {
+    dateNextEvent (evnt) {
       const { type, datePanelType } = this
       if (type === 'year') {
         this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
@@ -1209,6 +1233,7 @@ export default {
           this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
         }
       }
+      this.$emit('date-prev', { type, $event: evnt })
     },
     dateSelectEvent (item) {
       if (!isDateDisabled(this, item)) {

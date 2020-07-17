@@ -168,7 +168,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // hover 退出事件
-  if (showTooltip || enabled || tableListeners['cell-bindMouseleave']) {
+  if (showTooltip || enabled || bindMouseleave) {
     tdOns.mouseleave = evnt => {
       if (isOperateMouse($xetable)) {
         return
