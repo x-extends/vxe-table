@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-charts" target="_blank">vxe-table-plugin-charts</a> 插件的 API<br>
-      <span class="red">（注：实验功能！仅支持简单的图表功能，不建议用于生产）</span>
+      <span class="red">（注：实验功能，该示例仅供参考！不可用于生产）</span>
     </p>
 
     <vxe-table

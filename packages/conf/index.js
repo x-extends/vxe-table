@@ -19,6 +19,7 @@ const GlobalConfig = {
     // size: null,
     // zIndex: null,
     // resizable: false,
+    // autoResize: false,
     // stripe: false,
     // border: false,
     // round: false,

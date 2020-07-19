@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.button') }}</h2>
-    <p class="tip">按钮，还可以设置 icon 字体图标，例如第三方图标库：<a class="link" href="https://github.com/FortAwesome/Font-Awesome" target="_blank">font-awesome</a></p>
+    <p class="tip">按钮，还可以设置 icon 字体图标，例如第三方图标库：font-awesome、inconfont</p>
 
     <p>
       <vxe-button>默认尺寸</vxe-button>

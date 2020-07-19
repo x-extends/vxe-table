@@ -5,6 +5,9 @@ import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 const browse = DomTools.browse
 const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 
+const yearSize = 20
+const monthSize = 20
+
 function renderDefaultInput (h, _vm) {
   const { inpAttrs, inpEvents, value } = _vm
   return h('input', {
@@ -34,20 +37,37 @@ function renderDateInput (h, _vm) {
 function renderDateLabel (h, _vm, item, label) {
   const festivalMethod = _vm.festivalMethod
   if (festivalMethod) {
-    const festivalRest = festivalMethod({ date: item.date })
-    const festivalItem = festivalRest && XEUtils.isObject(festivalRest) ? festivalRest : { label: festivalRest }
+    const festivalRest = festivalMethod({ date: item.date, type: _vm.datePanelType })
+    const festivalItem = festivalRest ? (XEUtils.isString(festivalRest) ? { label: festivalRest } : festivalRest) : {}
+    const extraItem = festivalItem.extra ? (XEUtils.isString(festivalItem.extra) ? { label: festivalItem.extra } : festivalItem.extra) : null
     const labels = [
       h('span', {
         class: ['vxe-input--date-label', {
-          'vxe-input--date-important': festivalItem.important
+          'is-notice': festivalItem.notice
         }]
-      }, label)
+      }, extraItem && extraItem.label ? [
+        h('span', label),
+        h('span', {
+          class: ['vxe-input--date-label--extra', extraItem.important ? 'is-important' : '', extraItem.className],
+          style: extraItem.style
+        }, XEUtils.toString(extraItem.label))
+      ] : label)
     ]
-    if (festivalItem.label) {
+    const festivalLabel = festivalItem.label
+    if (festivalLabel) {
+      // 默认最多支持两个节日重叠
+      const festivalLabels = festivalLabel.split(',')
       labels.push(
         h('span', {
-          class: ['vxe-input--date-festival', festivalItem.className]
-        }, festivalItem.label)
+          class: ['vxe-input--date-festival', festivalItem.important ? 'is-important' : '', festivalItem.className],
+          style: festivalItem.style
+        }, [
+          festivalLabels.length > 1 ? h('span', {
+            class: 'vxe-input--date-festival--overlap'
+          }, festivalLabels.map(label => h('span', label))) : h('span', {
+            class: 'vxe-input--date-festival--label'
+          }, festivalLabels[0])
+        ])
       )
     }
     return labels
@@ -83,7 +103,7 @@ function renderDateDayTable (h, _vm) {
             class: {
               'is--prev': item.isPrev,
               'is--current': item.isCurrent,
-              'is--today': item.isToday,
+              'is--now': item.isNow,
               'is--next': item.isNext,
               'is--disabled': isDateDisabled(_vm, item),
               'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
@@ -125,7 +145,7 @@ function renderDateWeekTable (h, _vm) {
             class: {
               'is--prev': item.isPrev,
               'is--current': item.isCurrent,
-              'is--today': item.isToday,
+              'is--now': item.isNow,
               'is--next': item.isNext,
               'is--disabled': isDateDisabled(_vm, item),
               'is--selected': isSelected,
@@ -160,6 +180,7 @@ function renderDateMonthTable (h, _vm) {
             class: {
               'is--prev': item.isPrev,
               'is--current': item.isCurrent,
+              'is--now': item.isNow,
               'is--next': item.isNext,
               'is--disabled': isDateDisabled(_vm, item),
               'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
@@ -193,6 +214,8 @@ function renderDateYearTable (h, _vm) {
           return h('td', {
             class: {
               'is--disabled': isDateDisabled(_vm, item),
+              'is--current': item.isCurrent,
+              'is--now': item.isNow,
               'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
               'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
             },
@@ -677,14 +700,19 @@ export default {
       return [{ label: GlobalConfig.i18n('vxe.input.date.weeks.w') }].concat(this.dateHeaders)
     },
     yearList () {
-      const { selectMonth } = this
+      const { selectMonth, currentDate } = this
       const months = []
-      if (selectMonth) {
-        for (let index = 0; index < 16; index++) {
-          const date = XEUtils.getWhatYear(selectMonth, index, 'first')
+      if (selectMonth && currentDate) {
+        const currFullYear = currentDate.getFullYear()
+        const startYear = new Date(('' + selectMonth.getFullYear()).replace(/\d{1}$/, '0'), 0, 1)
+        for (let index = -10; index < yearSize - 10; index++) {
+          const date = XEUtils.getWhatYear(startYear, index, 'first')
+          const itemFullYear = date.getFullYear()
           months.push({
             date,
-            year: date.getFullYear()
+            isCurrent: true,
+            isNow: currFullYear === itemFullYear,
+            year: itemFullYear
           })
         }
       }
@@ -694,21 +722,24 @@ export default {
       return XEUtils.chunk(this.yearList, 4)
     },
     monthList () {
-      const { selectMonth } = this
+      const { selectMonth, currentDate } = this
       const months = []
-      if (selectMonth) {
-        const currFullYear = XEUtils.getWhatYear(selectMonth, 0, 'first').getFullYear()
-        for (let index = 0; index < 16; index++) {
+      if (selectMonth && currentDate) {
+        const currFullYear = currentDate.getFullYear()
+        const currMonth = currentDate.getMonth()
+        const selFullYear = XEUtils.getWhatYear(selectMonth, 0, 'first').getFullYear()
+        for (let index = -4; index < monthSize - 4; index++) {
           const date = XEUtils.getWhatYear(selectMonth, 0, index)
-          const month = date.getMonth()
-          const fullYear = date.getFullYear()
-          const isPrev = fullYear < currFullYear
+          const itemFullYear = date.getFullYear()
+          const itemMonth = date.getMonth()
+          const isPrev = itemFullYear < selFullYear
           months.push({
             date,
             isPrev,
-            isCurrent: fullYear === currFullYear,
-            isNext: !isPrev && fullYear > currFullYear,
-            month
+            isCurrent: itemFullYear === selFullYear,
+            isNow: itemFullYear === currFullYear && itemMonth === currMonth,
+            isNext: !isPrev && itemFullYear > selFullYear,
+            month: itemMonth
           })
         }
       }
@@ -721,20 +752,27 @@ export default {
       const { weekDatas, selectMonth, currentDate, hmsTime } = this
       const days = []
       if (selectMonth && currentDate) {
-        const currentMonth = selectMonth.getMonth()
-        const selectDay = selectMonth.getDay()
-        const prevOffsetDay = -weekDatas.indexOf(selectDay)
-        const startDay = new Date(XEUtils.getWhatDay(selectMonth, prevOffsetDay).getTime() + hmsTime)
+        const currFullYear = currentDate.getFullYear()
+        const currMonth = currentDate.getMonth()
+        const currDate = currentDate.getDate()
+        const selFullYear = selectMonth.getFullYear()
+        const selMonth = selectMonth.getMonth()
+        const selDay = selectMonth.getDay()
+        const prevOffsetDate = -weekDatas.indexOf(selDay)
+        const startDate = new Date(XEUtils.getWhatDay(selectMonth, prevOffsetDate).getTime() + hmsTime)
         for (let index = 0; index < 42; index++) {
-          const date = XEUtils.getWhatDay(startDay, index)
+          const date = XEUtils.getWhatDay(startDate, index)
+          const itemFullYear = date.getFullYear()
+          const itemMonth = date.getMonth()
+          const itemDate = date.getDate()
           const isPrev = date < selectMonth
           days.push({
             date,
             isPrev,
-            isCurrent: date.getFullYear() === selectMonth.getFullYear() && date.getMonth() === selectMonth.getMonth(),
-            isToday: date.getFullYear() === currentDate.getFullYear() && date.getMonth() === currentDate.getMonth() && date.getDate() === currentDate.getDate(),
-            isNext: !isPrev && currentMonth !== date.getMonth(),
-            label: date.getDate()
+            isCurrent: itemFullYear === selFullYear && itemMonth === selMonth,
+            isNow: itemFullYear === currFullYear && itemMonth === currMonth && itemDate === currDate,
+            isNext: !isPrev && selMonth !== itemMonth,
+            label: itemDate
           })
         }
       }
@@ -750,7 +788,7 @@ export default {
           date: firstItem.date,
           isPrev: false,
           isCurrent: false,
-          isToday: false,
+          isNow: false,
           isNext: false,
           label: XEUtils.getYearWeek(firstItem.date)
         }
@@ -819,6 +857,7 @@ export default {
       }
       evnts.input = this.inputEvent
       evnts.focus = this.focusEvent
+      evnts.blur = this.blurEvent
       return evnts
     }
   },
@@ -923,6 +962,10 @@ export default {
     },
     focusEvent (evnt) {
       this.isActivated = true
+      this.triggerEvent(evnt)
+    },
+    blurEvent (evnt) {
+      this.afterCheckValue()
       this.triggerEvent(evnt)
     },
     keydownEvent (evnt) {
@@ -1165,50 +1208,53 @@ export default {
       }
       this.datePanelType = datePanelType
     },
-    datePrevEvent () {
+    datePrevEvent (evnt) {
       const { type, datePanelType } = this
       if (type === 'year') {
-        this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
+        this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -yearSize, 'first')
       } else if (type === 'month') {
         if (datePanelType === 'year') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -yearSize, 'first')
         } else {
           this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
         }
       } else {
         if (datePanelType === 'year') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -yearSize, 'first')
         } else if (datePanelType === 'month') {
           this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
         } else {
           this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, -1, 'first')
         }
       }
+      this.$emit('date-prev', { type, $event: evnt })
     },
-    dateTodayMonthEvent () {
+    dateTodayMonthEvent (evnt) {
       this.dateNowHandle()
       this.dateChange(this.currentDate)
       this.hidePanel()
+      this.$emit('date-today', { type: this.type, $event: evnt })
     },
-    dateNextEvent () {
+    dateNextEvent (evnt) {
       const { type, datePanelType } = this
       if (type === 'year') {
-        this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
+        this.selectMonth = XEUtils.getWhatYear(this.selectMonth, yearSize, 'first')
       } else if (type === 'month') {
         if (datePanelType === 'year') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, yearSize, 'first')
         } else {
           this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
         }
       } else {
         if (datePanelType === 'year') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, yearSize, 'first')
         } else if (datePanelType === 'month') {
           this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
         } else {
           this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
         }
       }
+      this.$emit('date-prev', { type, $event: evnt })
     },
     dateSelectEvent (item) {
       if (!isDateDisabled(this, item)) {

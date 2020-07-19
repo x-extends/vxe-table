@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">自定义工具栏按钮图标，例如第三方图标库：<a class="link" href="https://github.com/FortAwesome/Font-Awesome" target="_blank">font-awesome</a>，可以局部替换也可以 <router-link :to="{name: 'StartIcons'}">全部替换</router-link></p>
+    <p class="tip">自定义工具栏按钮图标，例如第三方图标库：font-awesome、inconfont，可以局部替换也可以 <router-link :to="{name: 'StartIcons'}">全部替换</router-link></p>
 
     <vxe-grid
       border

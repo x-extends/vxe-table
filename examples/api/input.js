@@ -207,7 +207,7 @@ const apis = [
       },
       {
         name: 'disabled-method',
-        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中',
+        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({ date }) 的返回值用来决定该日期是否允许选中',
         version: '',
         type: 'Function',
         enum: '',
@@ -216,7 +216,7 @@ const apis = [
       },
       {
         name: 'festival-method',
-        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({date}) 用于返回对应日期显示的节日',
+        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({ date, type }) 用于返回对应日期显示的节日',
         version: '',
         type: 'Function',
         enum: '',

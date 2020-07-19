@@ -105,7 +105,7 @@ export default {
     // 是否显示表尾合计
     showFooter: Boolean,
     // 表尾合计的计算方法
-    footerMethod: Function,
+    footerMethod: { type: Function, default: () => GlobalConfig.table.footerMethod },
     // 给行附加 className
     rowClassName: [String, Function],
     // 给单元格附加 className
@@ -153,7 +153,7 @@ export default {
     zIndex: Number,
     keepSource: { type: Boolean, default: () => GlobalConfig.table.keepSource },
     // 是否自动监听父容器变化去更新响应式表格宽高
-    autoResize: Boolean,
+    autoResize: { type: Boolean, default: () => GlobalConfig.table.autoResize },
     // 是否自动根据状态属性去更新响应式表格宽高
     syncResize: [Boolean, String, Number],
     // 序号配置项
