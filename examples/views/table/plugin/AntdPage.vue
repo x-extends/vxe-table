@@ -51,7 +51,7 @@
       :loading="loading"
       :data="tableData"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'row'}">
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="seq" title="Number" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="AInput" min-width="140" fixed="left" :edit-render="{name: 'AInput'}"></vxe-table-column>
@@ -194,7 +194,7 @@ export default {
             :loading="loading"
             :data="tableData"
             :edit-rules="validRules"
-            :edit-config="{trigger: 'click', mode: 'row'}">
+            :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
             <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column type="seq" title="Number" width="80" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>

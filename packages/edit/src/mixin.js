@@ -22,9 +22,6 @@ export default {
      */
     _insertAt (records, row) {
       const { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
-      if (treeConfig) {
-        throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
-      }
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
@@ -38,6 +35,9 @@ export default {
           nowData.push(...newRecords)
           tableFullData.push(...newRecords)
         } else {
+          if (treeConfig) {
+            throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
+          }
           const targetIndex = nowData.indexOf(row)
           if (targetIndex === -1) {
             throw new Error(UtilTools.error('vxe.error.unableInsert'))
@@ -69,14 +69,11 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows) {
-      const { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
+      const { afterFullData, tableFullData, editStore, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
       const { actived, removeList, insertList } = editStore
       const { checkField: property } = checkboxOpts
       let rest = []
       const nowData = afterFullData
-      if (treeConfig) {
-        throw new Error(UtilTools.getLog('vxe.error.noTree', ['remove']))
-      }
       if (!rows) {
         rows = tableFullData
       } else if (!XEUtils.isArray(rows)) {

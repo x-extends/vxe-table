@@ -126,7 +126,7 @@ const apis = [
       },
       {
         name: 'min',
-        desc: '只对 type=number|integer 有效，最小值',
+        desc: '只对 type=number|integer|float 有效，最小值',
         version: '2.8.15',
         type: 'String, Number',
         enum: '',
@@ -135,7 +135,7 @@ const apis = [
       },
       {
         name: 'max',
-        desc: '只对 type=number|integer 有效，最大值',
+        desc: '只对 type=number|integer|float 有效，最大值',
         version: '2.8.15',
         type: 'String, Number',
         enum: '',
@@ -144,7 +144,7 @@ const apis = [
       },
       {
         name: 'step',
-        desc: '只对 type=number|integer 有效，数字间隔',
+        desc: '只对 type=number|integer|float 有效，数字间隔',
         version: '2.8.9',
         type: 'Number, String',
         enum: '',
@@ -158,6 +158,15 @@ const apis = [
         type: 'Number, String',
         enum: '',
         defVal: '默认 2，继承 setup.input.digits',
+        list: []
+      },
+      {
+        name: 'controls',
+        desc: '只对 type=number|integer|float 有效，是否显示控制按钮',
+        version: '2.9.16',
+        type: 'boolean',
+        enum: '',
+        defVal: '默认 true，继承 setup.input.controls',
         list: []
       },
       {
@@ -224,6 +233,24 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'min-date',
+        desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最小值',
+        version: '2.9.16',
+        type: 'number | string | Date',
+        enum: '',
+        defVal: '默认 1900，继承 setup.input.minDate',
+        list: []
+      },
+      {
+        name: 'max-date',
+        desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最大值',
+        version: '2.9.16',
+        type: 'number | string | Date',
+        enum: '',
+        defVal: '默认 2100，继承 setup.input.maxDate',
+        list: []
       },
       {
         name: 'start-week',

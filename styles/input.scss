@@ -21,6 +21,7 @@ $iconWidth: 1.6em;
     -moz-appearance: textfield;
   }
   &[type="search"],
+  &[type="search"]::-webkit-search-cancel-button,
   &[type="number"]::-webkit-outer-spin-button,
   &[type="number"]::-webkit-inner-spin-button {
     appearance: none;
@@ -95,38 +96,14 @@ $iconWidth: 1.6em;
   .vxe-input--extra-suffix {
     right: 0.2em;
   }
-  &.is--suffix,
-  &.type--password,
-  &.type--search,
-  &.type--number,
-  &.type--integer,
-  &.type--float,
-  &.type--date,
-  &.type--datetime,
-  &.type--week,
-  &.type--month,
-  &.type--year {
+  &.is--suffix {
     .vxe-input--inner {
       padding-right: #{$iconWidth + 0.2em};
     }
   }
-  &.type--password,
-  &.type--search,
-  &.type--number,
-  &.type--integer,
-  &.type--float,
-  &.type--date,
-  &.type--datetime,
-  &.type--week,
-  &.type--month,
-  &.type--year   {
-    .vxe-input--suffix {
-      right: $iconWidth;
-    }
-  }
-  &.is--suffix {
-    &.type--password,
+  &.is--controls {
     &.type--search,
+    &.type--password,
     &.type--number,
     &.type--integer,
     &.type--float,
@@ -136,7 +113,28 @@ $iconWidth: 1.6em;
     &.type--month,
     &.type--year {
       .vxe-input--inner {
-        padding-right: #{$iconWidth * 2};
+        padding-right: #{$iconWidth + 0.2em};
+      }
+      .vxe-input--suffix {
+        right: $iconWidth;
+      }
+    }
+  }
+  &.is--suffix {
+    &.is--controls {
+      &.type--search,
+      &.type--password,
+      &.type--number,
+      &.type--integer,
+      &.type--float,
+      &.type--date,
+      &.type--datetime,
+      &.type--week,
+      &.type--month,
+      &.type--year {
+        .vxe-input--inner {
+          padding-right: #{$iconWidth * 2};
+        }
       }
     }
   }
@@ -427,12 +425,18 @@ $iconWidth: 1.6em;
   background-color: $vxe-button-default-background-color;
 }
 .vxe-input--date-picker-btn {
-  cursor: pointer;
-  &:hover {
-    background-color: lighten($vxe-button-default-background-color, 6%);
+  &.is--disabled {
+    color: $vxe-disabled-color;
+    cursor: no-drop;
   }
-  &:active {
-    background-color: darken($vxe-button-default-background-color, 3%);
+  &:not(.is--disabled) {
+    cursor: pointer;
+    &:hover {
+      background-color: lighten($vxe-button-default-background-color, 6%);
+    }
+    &:active {
+      background-color: darken($vxe-button-default-background-color, 3%);
+    }
   }
 }
 .vxe-input--date-picker-body {
@@ -528,8 +532,8 @@ $iconWidth: 1.6em;
 
 .vxe-input--date-label {
   position: relative;
-  height: 50%;
-  padding-top: 5%;
+  line-height: 1;
+  padding-top: 8%;
   &.is-notice {
     &:before {
       content: "";
@@ -560,8 +564,7 @@ $iconWidth: 1.6em;
 .vxe-input--date-festival {
   color: $vxe-input-date-festival-color;
   height: 14px;
-  padding-bottom: 5%;
-  line-height: 14px;
+  line-height: 1;
   overflow: hidden;
   &.is-important {
     color: $vxe-input-date-festival-important-color;
@@ -573,7 +576,7 @@ $iconWidth: 1.6em;
   transform: scale(0.9);
 }
 
-@keyframes festivalOverlap {
+@keyframes festivalOverlap2 {
   0%, 45%, 100% {
     transform: translateY(0);
   }
@@ -582,14 +585,31 @@ $iconWidth: 1.6em;
   }
 }
 
+@keyframes festivalOverlap3 {
+  0%, 20%, 100% {
+    transform: translateY(0);
+  }
+  25%, 45%, 75%, 95% {
+    transform: translateY(-14px);
+  }
+  50%, 70% {
+    transform: translateY(-28px);
+  }
+}
+
 .vxe-input--date-festival--overlap {
   display: block;
   font-size: 12px;
-  animation: festivalOverlap 6s infinite ease-in-out;
-  transform: scale(0.9);
+  &.overlap--2 {
+    animation: festivalOverlap2 6s infinite ease-in-out;
+  }
+  &.overlap--3 {
+    animation: festivalOverlap3 9s infinite ease-in-out;
+  }
   & > span {
     height: 14px;
     display: block;
+    transform: scale(0.9);
   }
 }
 

@@ -37,7 +37,7 @@ function renderDateInput (h, _vm) {
 function renderDateLabel (h, _vm, item, label) {
   const festivalMethod = _vm.festivalMethod
   if (festivalMethod) {
-    const festivalRest = festivalMethod({ date: item.date, type: _vm.datePanelType })
+    const festivalRest = festivalMethod({ type: _vm.datePanelType, ...item })
     const festivalItem = festivalRest ? (XEUtils.isString(festivalRest) ? { label: festivalRest } : festivalRest) : {}
     const extraItem = festivalItem.extra ? (XEUtils.isString(festivalItem.extra) ? { label: festivalItem.extra } : festivalItem.extra) : null
     const labels = [
@@ -55,18 +55,18 @@ function renderDateLabel (h, _vm, item, label) {
     ]
     const festivalLabel = festivalItem.label
     if (festivalLabel) {
-      // 默认最多支持两个节日重叠
-      const festivalLabels = festivalLabel.split(',')
+      // 默认最多支持3个节日重叠
+      const festivalLabels = XEUtils.toString(festivalLabel).split(',')
       labels.push(
         h('span', {
           class: ['vxe-input--date-festival', festivalItem.important ? 'is-important' : '', festivalItem.className],
           style: festivalItem.style
         }, [
           festivalLabels.length > 1 ? h('span', {
-            class: 'vxe-input--date-festival--overlap'
-          }, festivalLabels.map(label => h('span', label))) : h('span', {
+            class: ['vxe-input--date-festival--overlap', `overlap--${festivalLabels.length}`]
+          }, festivalLabels.map(label => h('span', label.substring(0, 3)))) : h('span', {
             class: 'vxe-input--date-festival--label'
-          }, festivalLabels[0])
+          }, festivalLabels[0].substring(0, 3))
         ])
       )
     }
@@ -244,7 +244,7 @@ function renderDateTable (h, _vm) {
 }
 
 function rendeDatePanel (h, _vm) {
-  const { datePanelType, selectDatePanelLabel } = _vm
+  const { datePanelType, selectDatePanelLabel, isDisabledPrevDateBtn, isDisabledNextDateBtn } = _vm
   return [
     h('div', {
       class: 'vxe-input--date-picker-header'
@@ -265,10 +265,9 @@ function rendeDatePanel (h, _vm) {
         class: 'vxe-input--date-picker-btn-wrapper'
       }, [
         h('span', {
-          class: 'vxe-input--date-picker-btn vxe-input--date-picker-prev-btn',
-          attrs: {
-            title: GlobalConfig.i18n('vxe.input.date.prevMonth')
-          },
+          class: ['vxe-input--date-picker-btn vxe-input--date-picker-prev-btn', {
+            'is--disabled': isDisabledPrevDateBtn
+          }],
           on: {
             click: _vm.datePrevEvent
           }
@@ -279,9 +278,6 @@ function rendeDatePanel (h, _vm) {
         ]),
         h('span', {
           class: 'vxe-input--date-picker-btn vxe-input--date-picker-current-btn',
-          attrs: {
-            title: GlobalConfig.i18n('vxe.input.date.today')
-          },
           on: {
             click: _vm.dateTodayMonthEvent
           }
@@ -291,10 +287,9 @@ function rendeDatePanel (h, _vm) {
           })
         ]),
         h('span', {
-          class: 'vxe-input--date-picker-btn vxe-input--date-picker-next-btn',
-          attrs: {
-            title: GlobalConfig.i18n('vxe.input.date.nextMonth')
-          },
+          class: ['vxe-input--date-picker-btn vxe-input--date-picker-next-btn', {
+            'is--disabled': isDisabledNextDateBtn
+          }],
           on: {
             click: _vm.dateNextEvent
           }
@@ -536,16 +531,18 @@ function renderSuffixIcon (h, _vm) {
 }
 
 function renderExtraSuffixIcon (h, _vm) {
-  const { isPassword, isNumber, isDatePicker, isSearch } = _vm
+  const { controls, isPassword, isNumber, isDatePicker, isSearch } = _vm
   let icons
-  if (isPassword) {
-    icons = renderPasswordIcon(h, _vm)
-  } else if (isNumber) {
-    icons = renderNumberIcon(h, _vm)
-  } else if (isDatePicker) {
-    icons = renderDatePickerIcon(h, _vm)
-  } else if (isSearch) {
-    icons = renderSearchIcon(h, _vm)
+  if (controls) {
+    if (isPassword) {
+      icons = renderPasswordIcon(h, _vm)
+    } else if (isNumber) {
+      icons = renderNumberIcon(h, _vm)
+    } else if (isDatePicker) {
+      icons = renderDatePickerIcon(h, _vm)
+    } else if (isSearch) {
+      icons = renderSearchIcon(h, _vm)
+    }
   }
   return icons ? h('span', {
     class: 'vxe-input--extra-suffix'
@@ -572,11 +569,16 @@ export default {
     max: { type: [String, Number], default: null },
     step: [String, Number],
 
+    // number、integer、float、password
+    controls: { type: Boolean, default: () => GlobalConfig.input.controls },
+
     // float
     digits: { type: [String, Number], default: () => GlobalConfig.input.digits },
 
     // date、week、month、year
     dateConfig: Object,
+    minDate: { type: [String, Number, Date], default: () => GlobalConfig.input.minDate },
+    maxDate: { type: [String, Number, Date], default: () => GlobalConfig.input.maxDate },
     startWeek: { type: Number, default: () => GlobalConfig.input.startWeek },
     labelFormat: { type: String, default: () => GlobalConfig.input.labelFormat },
     parseFormat: { type: String, default: () => GlobalConfig.input.parseFormat },
@@ -635,6 +637,26 @@ export default {
     },
     isClearable () {
       return this.clearable && (this.isPassword || this.isNumber || this.isDatePicker || this.type === 'text' || this.type === 'search')
+    },
+    isDisabledPrevDateBtn () {
+      const { selectMonth, dateMinTime } = this
+      if (selectMonth) {
+        return selectMonth <= dateMinTime
+      }
+      return false
+    },
+    isDisabledNextDateBtn () {
+      const { selectMonth, dateMaxTime } = this
+      if (selectMonth) {
+        return selectMonth >= dateMaxTime
+      }
+      return false
+    },
+    dateMinTime () {
+      return this.minDate ? XEUtils.toStringDate(this.minDate) : null
+    },
+    dateMaxTime () {
+      return this.maxDate ? XEUtils.toStringDate(this.maxDate) : null
     },
     dateValue () {
       const { value } = this
@@ -786,6 +808,7 @@ export default {
         const firstItem = list[0]
         const item = {
           date: firstItem.date,
+          isWeekNumber: true,
           isPrev: false,
           isCurrent: false,
           isNow: false,
@@ -901,7 +924,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { isDatePicker, visiblePanel, isActivated, vSize, type, readonly, disabled } = this
+    const { controls, isDatePicker, visiblePanel, isActivated, vSize, type, readonly, disabled } = this
     const childs = []
     const prefix = rendePrefixIcon(h, this)
     const suffix = renderSuffixIcon(h, this)
@@ -924,6 +947,7 @@ export default {
     return h('div', {
       class: ['vxe-input', `type--${type}`, {
         [`size--${vSize}`]: vSize,
+        'is--controls': controls,
         'is--prefix': !!prefix,
         'is--suffix': !!suffix,
         'is--readonly': readonly,
@@ -982,7 +1006,7 @@ export default {
       this.triggerEvent(evnt)
     },
     mousewheelEvent (evnt) {
-      if (this.isNumber) {
+      if (this.isNumber && this.controls) {
         if (this.isActivated) {
           const delta = -evnt.wheelDelta || evnt.detail
           if (delta > 0) {
@@ -1209,25 +1233,27 @@ export default {
       this.datePanelType = datePanelType
     },
     datePrevEvent (evnt) {
-      const { type, datePanelType } = this
-      if (type === 'year') {
-        this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
-      } else if (type === 'month') {
-        if (datePanelType === 'year') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
+      const { isDisabledPrevDateBtn, type, datePanelType } = this
+      if (!isDisabledPrevDateBtn) {
+        if (type === 'year') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -yearSize, 'first')
+        } else if (type === 'month') {
+          if (datePanelType === 'year') {
+            this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -yearSize, 'first')
+          } else {
+            this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
+          }
         } else {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
+          if (datePanelType === 'year') {
+            this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -yearSize, 'first')
+          } else if (datePanelType === 'month') {
+            this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
+          } else {
+            this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, -1, 'first')
+          }
         }
-      } else {
-        if (datePanelType === 'year') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -16, 'first')
-        } else if (datePanelType === 'month') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -1, 'first')
-        } else {
-          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, -1, 'first')
-        }
+        this.$emit('date-prev', { type, $event: evnt })
       }
-      this.$emit('date-prev', { type, $event: evnt })
     },
     dateTodayMonthEvent (evnt) {
       this.dateNowHandle()
@@ -1236,25 +1262,27 @@ export default {
       this.$emit('date-today', { type: this.type, $event: evnt })
     },
     dateNextEvent (evnt) {
-      const { type, datePanelType } = this
-      if (type === 'year') {
-        this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
-      } else if (type === 'month') {
-        if (datePanelType === 'year') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
+      const { isDisabledNextDateBtn, type, datePanelType } = this
+      if (!isDisabledNextDateBtn) {
+        if (type === 'year') {
+          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, yearSize, 'first')
+        } else if (type === 'month') {
+          if (datePanelType === 'year') {
+            this.selectMonth = XEUtils.getWhatYear(this.selectMonth, yearSize, 'first')
+          } else {
+            this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
+          }
         } else {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
+          if (datePanelType === 'year') {
+            this.selectMonth = XEUtils.getWhatYear(this.selectMonth, yearSize, 'first')
+          } else if (datePanelType === 'month') {
+            this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
+          } else {
+            this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
+          }
         }
-      } else {
-        if (datePanelType === 'year') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 16, 'first')
-        } else if (datePanelType === 'month') {
-          this.selectMonth = XEUtils.getWhatYear(this.selectMonth, 1, 'first')
-        } else {
-          this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
-        }
+        this.$emit('date-prev', { type, $event: evnt })
       }
-      this.$emit('date-prev', { type, $event: evnt })
     },
     dateSelectEvent (item) {
       if (!isDateDisabled(this, item)) {

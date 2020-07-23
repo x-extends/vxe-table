@@ -129,7 +129,8 @@
           //   labelFormat: '',
           //   valueFormat: '',
           //   startWeek: 1,
-          //   digits: 2
+          //   digits: 2,
+          //   controls: true
           // },
           // textarea: {
           //   size: null

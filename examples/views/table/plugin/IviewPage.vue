@@ -49,7 +49,7 @@
       :loading="loading"
       :data="tableData"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @edit-actived="editActivedEvent"
       @edit-closed="editClosedEvent">
       <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
@@ -195,7 +195,7 @@ export default {
           :loading="loading"
           :data="tableData"
           :edit-rules="validRules"
-          :edit-config="{trigger: 'click', mode: 'row'}"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @edit-actived="editActivedEvent"
           @edit-closed="editClosedEvent">
           <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>

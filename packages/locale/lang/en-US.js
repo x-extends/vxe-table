@@ -153,9 +153,6 @@ export default {
         m10: 'October',
         m11: 'November',
         m12: 'December',
-        today: 'Today',
-        prevMonth: 'Previous Month',
-        nextMonth: 'Next Month',
         monthLabel: '{{0}}',
         dayLabel: '{{1}} {{0}}',
         labelFormat: {
