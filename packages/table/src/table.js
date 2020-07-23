@@ -28,6 +28,16 @@ function getRowUniqueId () {
   return XEUtils.uniqueId('row_')
 }
 
+function eqCellValue (row1, row2, field) {
+  const val1 = XEUtils.get(row1, field)
+  const val2 = XEUtils.get(row2, field)
+  if (XEUtils.isString(val1) || XEUtils.isNumber(val1)) {
+    /* eslint-disable eqeqeq */
+    return val1 == val2
+  }
+  return XEUtils.isEqual(val1, val2)
+}
+
 function getNextSortOrder (_vm, column) {
   const orders = _vm.sortOpts.orders
   const currOrder = column.order || null
@@ -1565,9 +1575,6 @@ export default {
      */
     insertAt (records, row) {
       const { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
-      if (treeConfig) {
-        throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
-      }
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
@@ -1581,6 +1588,9 @@ export default {
           nowData.push(...newRecords)
           tableFullData.push(...newRecords)
         } else {
+          if (treeConfig) {
+            throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
+          }
           const targetIndex = nowData.indexOf(row)
           if (targetIndex === -1) {
             throw new Error(UtilTools.error('vxe.error.unableInsert'))
@@ -1650,14 +1660,11 @@ export default {
      * 如果传 rows 则删除多行
      */
     remove (rows) {
-      const { afterFullData, tableFullData, editStore, treeConfig, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
+      const { afterFullData, tableFullData, editStore, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
       const { actived, removeList, insertList } = editStore
       const property = checkboxOpts.checkField || checkboxOpts.checkProp
       let rest = []
       const nowData = afterFullData
-      if (treeConfig) {
-        throw new Error(UtilTools.getLog('vxe.error.noTree', ['remove']))
-      }
       if (!rows) {
         rows = tableFullData
       } else if (!XEUtils.isArray(rows)) {
@@ -1834,11 +1841,11 @@ export default {
         }
         if (oRow) {
           if (arguments.length > 1) {
-            return !XEUtils.isEqual(XEUtils.get(oRow, field), XEUtils.get(row, field))
+            return !eqCellValue(oRow, row, field)
           }
           for (let index = 0, len = visibleColumn.length; index < len; index++) {
             property = visibleColumn[index].property
-            if (property && !XEUtils.isEqual(XEUtils.get(oRow, property), XEUtils.get(row, property))) {
+            if (property && !eqCellValue(oRow, row, property)) {
               return true
             }
           }
@@ -5845,7 +5852,30 @@ export default {
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
     exportData (options) {
-      const { visibleColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
+      const { visibleColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
+      const columns = options && options.columns
+      let expColumns = []
+      if (columns && columns.length) {
+        columns.forEach(item => {
+          let column
+          if (UtilTools.isColumn(item)) {
+            column = item
+          } else {
+            const type = item.type
+            const field = item.property || item.field
+            if (field) {
+              column = this.getColumnByField(field)
+            } else if (type) {
+              column = tableFullColumn.find(item => item.type === type)
+            }
+          }
+          if (column) {
+            expColumns.push(column)
+          }
+        })
+      } else {
+        expColumns = visibleColumn
+      }
       const opts = Object.assign({
         // filename: '',
         // sheetName: '',
@@ -5858,13 +5888,13 @@ export default {
         mode: 'current',
         // data: null,
         // remote: false,
-        columns: visibleColumn,
         // dataFilterMethod: null,
         // footerFilterMethod: null,
         // exportMethod: null,
-        // 在 v3.0 中废弃 type=selection
-        columnFilterMethod: options && options.columns ? null : column => defaultFilterExportColumn(column)
-      }, exportOpts, options)
+        columnFilterMethod: columns && columns.length ? null : column => defaultFilterExportColumn(column)
+      }, exportOpts, options, {
+        columns: expColumns
+      })
       if (!opts.filename) {
         opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
@@ -5976,7 +6006,7 @@ export default {
     print (options) {
       const opts = Object.assign({
         original: false
-      }, options, {
+      }, this.printOpts, options, {
         type: 'html',
         download: false,
         remote: false,

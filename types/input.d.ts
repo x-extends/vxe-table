@@ -45,6 +45,14 @@ export declare class Input extends VXETableModule {
    */
   form?: string;
   /**
+   * 只对 type=date|week|month|year 有效，有效，设置日期可选范围的最小值
+   */
+  minDate?: string | number | Date;
+  /**
+   * 只对 type=date|week|month|year 有效，有效，设置日期可选范围的最大值
+   */
+  maxDate?: string | number | Date;
+  /**
    * 只对 type=week 有效，设置起始周
    */
   startWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -64,6 +72,10 @@ export declare class Input extends VXETableModule {
    * 只对 type=date|week|month|year 有效，文本框是否允许输入
    */
   editable?: string;
+  /**
+   * 只对 type=date|week|month|year 有效，该方法 Function({ date, type }) 用于返回对应日期显示的节日
+   */
+  festivalMethod?(params: { date: Date, type: string }): DateFestival | void;
   /**
    * 只对 type=date|week|month|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中
    */
@@ -109,4 +121,35 @@ export declare class Input extends VXETableModule {
    * 失去焦点
    */
   blur(): Promise<any>;
+}
+
+/**
+ * 日期节日对象
+ */
+export interface DateFestival {
+  /**
+   * 节日名称，如果重叠使用逗号隔开
+   */
+  label?: string;
+  /**
+   * 标记为重要节日
+   */
+  important?: boolean;
+  /**
+   * 显示左上角小圆点通知
+   */
+  notice?: boolean;
+  /**
+   * 显示右上角信息
+   */
+  extra?: string | {
+    /**
+     * 显示名称
+     */
+    label?: string;
+    /**
+     * 标记为重要信息
+     */
+    important?: boolean;
+  };
 }

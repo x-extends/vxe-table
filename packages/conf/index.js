@@ -211,8 +211,11 @@ const GlobalConfig = {
     // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
     // labelFormat: '',
     // valueFormat: '',
+    minDate: new Date(1900, 0, 1),
+    maxDate: new Date(2100, 0, 1),
     startWeek: 1,
-    digits: 2
+    digits: 2,
+    controls: true
   },
   textarea: {
     // size: null,

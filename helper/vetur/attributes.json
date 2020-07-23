@@ -995,6 +995,18 @@
     "type": "number | string",
     "description": "只对 type=float 有效，小数位数"
   },
+  "vxe-input/controls": {
+    "type": "boolean",
+    "description": "只对 type=number|integer|float 有效，是否显示控制按钮"
+  },
+  "vxe-input/min-date": {
+    "type": "number | string | date",
+    "description": "只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最小值"
+  },
+  "vxe-input/max-date": {
+    "type": "number | string | date",
+    "description": "只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最大值"
+  },
   "vxe-input/start-week": {
     "type": "number | string",
     "description": "只对 type=week 有效，设置起始周"
@@ -1017,11 +1029,11 @@
   },
   "vxe-input/disabled-method": {
     "type": "function",
-    "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中"
+    "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({ date }) 的返回值用来决定该日期是否允许选中"
   },
   "vxe-input/festival-method": {
     "type": "function",
-    "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({date}) 用于返回对应日期显示的节日"
+    "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({ date, type }) 用于返回对应日期显示的节日"
   },
   "vxe-input/transfer": {
     "type": "boolean",
