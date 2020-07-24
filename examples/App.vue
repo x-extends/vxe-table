@@ -92,15 +92,15 @@
         <ul class="vxe-row support-question">
           <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
             <i :class="item.icon || 'fa fa-question-circle'"></i>
-            <span>{{ item.label }}</span>
+            <span>&nbsp;{{ item.label }}</span>
           </li>
         </ul>
       </div>
       <div class="vxe-row support-group">
         <div class="vxe-col--24 support-group-item">
           <div class="support-name">技术支持群</div>
-          <div v-if="discountPrice" class="support-price">¥ {{ discountPrice }}<span v-if="discountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span></div>
-          <div v-else class="support-price">¥ {{ supportGroupPrice }}</div>
+          <div v-if="discountPrice" class="support-price">¥ {{ discountPrice }}<span v-if="discountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span></div>
+          <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span></div>
           <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请加入</vxe-button>
         </div>
       </div>
@@ -142,25 +142,25 @@ export default {
           label: '增删改查/数据校验/键盘导航实现'
         },
         {
-          label: '列错乱/列权限/动态列/自定义列实现支持'
+          label: '列错乱/列权限/动态列/自定义列问题'
         },
         {
-          label: '数据联动/分组显示/合并与列实现支持'
+          label: '数据联动/分组显示/合并与列问题'
         },
         {
-          label: '数据代理/Grid配置式扩展支持'
+          label: '数据代理/Grid配置式使用问题'
         },
         {
-          label: '高级筛选/可编辑/下拉容器/渲染器扩展支持'
+          label: '高级筛选/可编辑/下拉容器/渲染器使用问题'
         },
         {
-          label: '虚拟列表/虚拟树/虚拟下拉框扩展支持'
+          label: '虚拟列表/虚拟树/虚拟下拉框使用问题'
         },
         {
           label: '打印/导入/导出/数据格式化等问题'
         },
         {
-          label: '动态表单/表单权限/配置式扩展支持'
+          label: '动态表单/表单权限/配置式使用问题'
         },
         {
           label: '输入框日期节日/工具栏/分页/模态窗口等模块'
@@ -169,7 +169,7 @@ export default {
           label: '第三方 UI 库集成渲染问题'
         },
         {
-          label: '特殊需求的定制（需咨询）',
+          label: '额外需求的定制（不包括，需咨询）',
           icon: 'fa fa-exclamation-triangle'
         }
       ],

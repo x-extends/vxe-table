@@ -274,7 +274,7 @@ const exportDataAPI = [
     version: '',
     type: 'Function',
     enum: '',
-    defVal: '默认过滤掉 type=index,checkbox,radio 和 field 为空的列',
+    defVal: '默认过滤掉 type=seq,checkbox,radio 和 field 为空的列',
     list: []
   },
   {
@@ -4109,11 +4109,11 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options',
-        list: XEUtils.clone(exportDataAPI, true).concat([
+        list: XEUtils.clone(exportDataAPI.filter(item => !['columns', 'data', 'download', 'columnFilterMethod', 'dataFilterMethod', 'footerFilterMethod'].includes(item.name)), true).concat([
           {
             name: 'isPrint',
             desc: '是否需要打印按钮',
-            version: '1.15.27',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'true',
