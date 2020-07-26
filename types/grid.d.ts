@@ -86,6 +86,7 @@ export interface GridProxyConfig {
     list?: string;
     result?: string;
     total?: string;
+    message?: string;
   };
   ajax?: {
     query?(params: { page: GridProxyQueryPageParams, sort: GridProxyQuerySortParams, filters: GridProxyQueryFiltersParams[], form: any }, ...args: any[]): Promise<any>;

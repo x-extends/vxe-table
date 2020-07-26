@@ -1,13 +1,21 @@
-import { getOptUniqueId } from './util'
-import { UtilTools } from '../../tools'
+import { createOption, destroyOption, assemOption } from './util'
+
+const props = {
+  label: { type: [String, Number, Boolean], default: '' },
+  visible: { type: Boolean, default: null },
+  disabled: Boolean
+}
+
+const watch = {}
+Object.keys(props).forEach(name => {
+  watch[name] = function (value) {
+    this.optionConfig.update(name, value)
+  }
+})
 
 export default {
   name: 'VxeOptgroup',
-  props: {
-    label: { type: [String, Number, Boolean], default: '' },
-    disabled: Boolean,
-    size: String
-  },
+  props,
   provide () {
     return {
       $xeoptgroup: this
@@ -18,31 +26,22 @@ export default {
       default: null
     }
   },
-  data () {
-    return {
-      id: getOptUniqueId()
-    }
-  },
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     }
   },
+  watch,
+  mounted () {
+    assemOption(this)
+  },
+  created () {
+    this.optionConfig = createOption(this.$xeselect, this)
+  },
+  destroyed () {
+    destroyOption(this)
+  },
   render (h) {
-    return h('div', {
-      class: ['vxe-optgroup', {
-        'is--disabled': this.disabled
-      }],
-      attrs: {
-        'data-optid': this.id
-      }
-    }, [
-      h('div', {
-        class: 'vxe-optgroup--title'
-      }, UtilTools.getFuncText(this.label)),
-      h('div', {
-        class: 'vxe-optgroup--wrapper'
-      }, this.$slots.default)
-    ])
+    return h('div', this.$slots.default)
   }
 }

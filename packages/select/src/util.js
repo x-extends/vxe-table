@@ -1,14 +1,50 @@
 import XEUtils from 'xe-utils'
 
-export function getOptkey (_vm) {
-  return _vm.optId || '_XID'
+class OptionConfig {
+  constructor ($xeselect, _vm) {
+    Object.assign(this, {
+      value: _vm.value,
+      label: _vm.label,
+      visible: _vm.visible,
+      disabled: _vm.disabled
+    })
+  }
+
+  update (name, value) {
+    this[name] = value
+  }
 }
 
-export function getOptid (_vm, option) {
-  const optid = option[getOptkey(_vm)]
-  return optid ? encodeURIComponent(optid) : ''
+export function isOption (option) {
+  return option instanceof OptionConfig
 }
 
-export function getOptUniqueId () {
-  return XEUtils.uniqueId('opt_')
+export function getOptionConfig ($xeselect, _vm, options) {
+  return isOption(_vm) ? _vm : new OptionConfig($xeselect, _vm, options)
+}
+
+export function createOption ($xeselect, _vm) {
+  return getOptionConfig($xeselect, _vm)
+}
+
+export function destroyOption (_vm) {
+  const { $xeselect, optionConfig } = _vm
+  const matchObj = XEUtils.findTree($xeselect.collectOption, option => option === optionConfig)
+  if (matchObj) {
+    matchObj.items.splice(matchObj.index, 1)
+  }
+}
+
+export function assemOption (_vm) {
+  const { $el, $xeselect, $xeoptgroup, optionConfig } = _vm
+  const groupConfig = $xeoptgroup ? $xeoptgroup.optionConfig : null
+  optionConfig.slots = _vm.$scopedSlots
+  if (groupConfig && $xeoptgroup.$children.length > 0) {
+    if (!groupConfig.options) {
+      groupConfig.options = []
+    }
+    groupConfig.options.splice([].indexOf.call($xeoptgroup.$el.children, $el), 0, optionConfig)
+  } else {
+    $xeselect.collectOption.splice([].indexOf.call($xeselect.$refs.hideOption.children, $el), 0, optionConfig)
+  }
 }
