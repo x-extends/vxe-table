@@ -649,7 +649,30 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      const { visibleColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
+      const { visibleColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
+      const columns = options && options.columns
+      let expColumns = []
+      if (columns && columns.length) {
+        columns.forEach(item => {
+          let column
+          if (UtilTools.isColumn(item)) {
+            column = item
+          } else {
+            const type = item.type
+            const field = item.property || item.field
+            if (field) {
+              column = this.getColumnByField(field)
+            } else if (type) {
+              column = tableFullColumn.find(item => item.type === type)
+            }
+          }
+          if (column) {
+            expColumns.push(column)
+          }
+        })
+      } else {
+        expColumns = visibleColumn
+      }
       const opts = Object.assign({
         // filename: '',
         // sheetName: '',
@@ -662,12 +685,13 @@ export default {
         mode: 'current',
         // data: null,
         // remote: false,
-        columns: visibleColumn,
         // dataFilterMethod: null,
         // footerFilterMethod: null,
         // exportMethod: null,
-        columnFilterMethod: options && options.columns ? null : column => defaultFilterExportColumn(column)
-      }, exportOpts, options)
+        columnFilterMethod: columns && columns.length ? null : column => defaultFilterExportColumn(column)
+      }, exportOpts, options, {
+        columns: expColumns
+      })
       if (!opts.filename) {
         opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
@@ -779,7 +803,7 @@ export default {
     _print (options) {
       const opts = Object.assign({
         original: false
-      }, options, {
+      }, this.printOpts, options, {
         type: 'html',
         download: false,
         remote: false,

@@ -264,7 +264,7 @@ const exportDataAPI = [
     version: '',
     type: 'Function',
     enum: '',
-    defVal: '默认过滤掉 type=index,checkbox,radio 和 field 为空的列',
+    defVal: '默认过滤掉 type=seq,checkbox,radio 和 field 为空的列',
     list: []
   },
   {
@@ -2550,7 +2550,7 @@ const apis = [
       },
       {
         name: 'insert(records)',
-        desc: '往表格插入临时数据（不支持树结构），从第一行插入一行或多行新数据',
+        desc: '往表格插入临时数据（不支持深层结构），从第一行插入一行或多行新数据',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2559,7 +2559,7 @@ const apis = [
       },
       {
         name: 'insertAt(records, row)',
-        desc: '往表格插入临时数据（不支持树结构），从指定位置插入一行或多行；第二个参数：row 指定位置、null从第一行插入、-1 从最后插入',
+        desc: '往表格插入临时数据（不支持深层结构），从指定位置插入一行或多行；第二个参数：row 指定位置、null从第一行插入、-1 从最后插入',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2577,7 +2577,7 @@ const apis = [
       },
       {
         name: 'remove(rows)',
-        desc: '删除指定行数据（不支持树结构），指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据',
+        desc: '删除指定行数据（不支持深层结构），指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2586,7 +2586,7 @@ const apis = [
       },
       {
         name: 'removeCheckboxRow()',
-        desc: '删除复选框选中的行数据（不支持树结构）',
+        desc: '删除复选框选中的行数据（不支持深层结构）',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2595,7 +2595,7 @@ const apis = [
       },
       {
         name: 'removeRadioRow()',
-        desc: '删除单选框选中的行数据（不支持树结构）',
+        desc: '删除单选框选中的行数据（不支持深层结构）',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2604,7 +2604,7 @@ const apis = [
       },
       {
         name: 'removeCurrentRow()',
-        desc: '删除当前行选中的行数据（不支持树结构）',
+        desc: '删除当前行选中的行数据（不支持深层结构）',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -3527,7 +3527,7 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
-        list: XEUtils.clone(exportDataAPI, true).concat([
+        list: XEUtils.clone(exportDataAPI.filter(item => !['columns', 'data', 'download', 'columnFilterMethod', 'dataFilterMethod', 'footerFilterMethod'].includes(item.name)), true).concat([
           {
             name: 'isPrint',
             desc: '是否需要打印按钮',

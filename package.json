@@ -74,7 +74,7 @@
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
     "vxe-table-plugin-antd": "^1.8.10",
-    "vxe-table-plugin-element": "^1.8.9",
+    "vxe-table-plugin-element": "^1.8.10",
     "vxe-table-plugin-export-pdf": "^1.6.0",
     "vxe-table-plugin-export-xlsx": "^1.6.0",
     "vxe-table-plugin-iview": "^1.8.8",
@@ -84,7 +84,7 @@
     "xe-ajax": "^4.0.4",
     "xe-ajax-mock": "^1.10.0",
     "xe-clipboard": "^1.9.0",
-    "xe-utils": "^2.6.5",
+    "xe-utils": "^2.6.6",
     "xlsx": "^0.15.6"
   },
   "peerDependencies": {

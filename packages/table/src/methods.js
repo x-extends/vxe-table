@@ -18,6 +18,16 @@ function getRowUniqueId () {
   return XEUtils.uniqueId('row_')
 }
 
+function eqCellValue (row1, row2, field) {
+  const val1 = XEUtils.get(row1, field)
+  const val2 = XEUtils.get(row2, field)
+  if (XEUtils.isString(val1) || XEUtils.isNumber(val1)) {
+    /* eslint-disable eqeqeq */
+    return val1 == val2
+  }
+  return XEUtils.isEqual(val1, val2)
+}
+
 function getNextSortOrder (_vm, column) {
   const orders = _vm.sortOpts.orders
   const currOrder = column.order || null
@@ -550,11 +560,11 @@ const Methods = {
       }
       if (oRow) {
         if (arguments.length > 1) {
-          return !XEUtils.isEqual(XEUtils.get(oRow, field), XEUtils.get(row, field))
+          return !eqCellValue(oRow, row, field)
         }
         for (let index = 0, len = visibleColumn.length; index < len; index++) {
           property = visibleColumn[index].property
-          if (property && !XEUtils.isEqual(XEUtils.get(oRow, property), XEUtils.get(row, property))) {
+          if (property && !eqCellValue(oRow, row, property)) {
             return true
           }
         }

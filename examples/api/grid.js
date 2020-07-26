@@ -201,6 +201,15 @@ const apis = [
                 enum: '',
                 defVal: 'page.total',
                 list: []
+              },
+              {
+                name: 'message',
+                desc: '只对 pager-config 配置了有效，响应结果中获取提示消息的属性',
+                version: '',
+                type: 'string',
+                enum: '',
+                defVal: 'message',
+                list: []
               }
             ]
           },

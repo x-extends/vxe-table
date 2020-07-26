@@ -1,22 +1,22 @@
-import { getOptUniqueId } from './util'
-import { UtilTools } from '../../tools'
+import { createOption, destroyOption, assemOption } from './util'
+
+const props = {
+  value: null,
+  label: { type: [String, Number, Boolean], default: '' },
+  visible: { type: Boolean, default: null },
+  disabled: Boolean
+}
 
 const watch = {}
-const wProps = ['value', 'label', 'disabled']
-wProps.forEach(name => {
-  watch[name] = function () {
-    this.$xeselect.updateOptions()
+Object.keys(props).forEach(name => {
+  watch[name] = function (value) {
+    this.optionConfig.update(name, value)
   }
 })
 
 export default {
   name: 'VxeOption',
-  props: {
-    value: null,
-    label: { type: [String, Number, Boolean], default: '' },
-    disabled: Boolean,
-    size: String
-  },
+  props,
   inject: {
     $xeselect: {
       default: null
@@ -25,54 +25,17 @@ export default {
       default: null
     }
   },
-  data () {
-    return {
-      id: getOptUniqueId()
-    }
-  },
-  computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
-    isDisabled () {
-      const { $xeoptgroup, disabled } = this
-      return ($xeoptgroup && $xeoptgroup.disabled) || disabled
-    }
-  },
   watch,
   mounted () {
-    this.$xeselect.updateOptions()
+    assemOption(this)
+  },
+  created () {
+    this.optionConfig = createOption(this.$xeselect, this)
   },
   destroyed () {
-    this.$xeselect.updateOptions()
+    destroyOption(this)
   },
   render (h) {
-    const { $slots, $xeselect, id, isDisabled, value } = this
-    return h('div', {
-      class: ['vxe-select-option', {
-        'is--disabled': isDisabled,
-        'is--selected': $xeselect.multiple ? ($xeselect.value && $xeselect.value.indexOf(value) > -1) : $xeselect.value === value,
-        'is--hover': $xeselect.currentValue === value
-      }],
-      attrs: {
-        'data-optid': id
-      },
-      on: {
-        click: this.optionEvent,
-        mouseenter: this.opeionMouseenterEvent
-      }
-    }, $slots.default || UtilTools.formatText(UtilTools.getFuncText(this.label)))
-  },
-  methods: {
-    optionEvent (evnt) {
-      if (!this.isDisabled) {
-        this.$xeselect.changeOptionEvent(evnt, this.value)
-      }
-    },
-    opeionMouseenterEvent () {
-      if (!this.isDisabled) {
-        this.$xeselect.setCurrentOption(this)
-      }
-    }
+    return h('div')
   }
 }

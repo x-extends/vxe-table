@@ -215,6 +215,7 @@
   font-size: $vxe-font-size;
   color: $vxe-table-font-color;
   font-family: $vxe-font-family;
+  background-color: $vxe-table-background-color;
   &[x-cloak] {
     .vxe-table--main-wrapper,
     .vxe-table--fixed-left-wrapper,
@@ -245,7 +246,6 @@
     }
   }
   .vxe-body--row {
-    background-color: $vxe-table-background-color;
     &.row--stripe {
       background-color: $vxe-table-row-striped-background-color;
     }
@@ -567,7 +567,7 @@
     top: 0;
     z-index: 1;
     overflow: hidden;
-    background-color: $vxe-table-background-color;
+    background-color: inherit;
     .vxe-table--body-wrapper {
       overflow-x: hidden;
     }
@@ -919,7 +919,7 @@
         transform: translateX(-50%);
         text-align: center;
         pointer-events: none;
-        z-index: 1;
+        z-index: 2;
         .vxe-cell--valid-msg {
           display: inline-block;
           border-radius: $vxe-border-radius;

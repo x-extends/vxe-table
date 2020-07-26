@@ -80,8 +80,12 @@
       </vxe-table-column>
       <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
-          <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}">
-        </el-time-select>
+          <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}"></el-time-select>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="color1" title="ElColorPicker" width="140" :edit-render="{}">
+        <template v-slot:edit="{ row }">
+          <el-color-picker v-model="row.color1"></el-color-picker>
         </template>
       </vxe-table-column>
       <vxe-table-column field="rate" title="ElRate" width="200">
@@ -137,7 +141,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="80">
-            <template v-slot:header="{ column }">
+            <template v-slot:header>
               <span>序号</span>
               <i class="el-icon-question"></i>
             </template>
@@ -197,8 +201,12 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
-              <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}">
-            </el-time-select>
+              <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}"></el-time-select>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="color1" title="ElColorPicker" width="140" :edit-render="{}">
+            <template v-slot:edit="{ row }">
+              <el-color-picker v-model="row.color1"></el-color-picker>
             </template>
           </vxe-table-column>
           <vxe-table-column field="rate" title="ElRate" width="200">

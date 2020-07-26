@@ -105,6 +105,9 @@ export default {
                 .then(() => this.handleSelected(params, evnt))
             }
           }
+        } else {
+          this.scrollToRow(params.row, params.column)
+            .then(() => this.handleSelected(params, evnt))
         }
       }
     },

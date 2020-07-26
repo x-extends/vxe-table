@@ -153,9 +153,6 @@ export default {
         m10: '10 月',
         m11: '11 月',
         m12: '12 月',
-        today: '今天',
-        prevMonth: '上個月',
-        nextMonth: '下個月',
         monthLabel: '{{0}} 年',
         dayLabel: '{{0}} 年 {{1}}',
         labelFormat: {

@@ -48,12 +48,13 @@ export default {
   },
   data () {
     return {
+      inited: false,
       visible: false,
       contentVisible: false,
       modalTop: 0,
       modalZindex: 0,
       zoomLocat: null,
-      inited: false
+      firstOpen: false
     }
   },
   computed: {
@@ -112,7 +113,7 @@ export default {
     XEUtils.remove(activeModals, $modal => $modal === this)
   },
   render (h) {
-    const { $scopedSlots, slots = {}, vSize, type, resize, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
+    const { $scopedSlots, slots = {}, inited, vSize, type, resize, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
     const headerSlot = $scopedSlots.header || slots.header
@@ -154,7 +155,7 @@ export default {
         this.showHeader ? h('div', {
           class: ['vxe-modal--header', !isMsg && showTitleOverflow ? 'is--ellipsis' : ''],
           on: headerOns
-        }, headerSlot ? headerSlot.call(this, { $modal: this }, h) : [
+        }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : headerSlot.call(this, { $modal: this }, h)) : [
           titleSlot ? titleSlot.call(this, { $modal: this }, h) : h('span', {
             class: 'vxe-modal--title'
           }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
@@ -189,7 +190,7 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, destroyOnClose && !visible ? [] : (defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message))),
+          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : (XEUtils.isFunction(message) ? message.call(this, h) : message)),
           !isMsg ? h('div', {
             class: ['vxe-loading', {
               'is--visible': loading
@@ -202,7 +203,7 @@ export default {
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
-        }, destroyOnClose && !visible ? [] : (footerSlot ? footerSlot.call(this, { $modal: this }, h) : [
+        }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : footerSlot.call(this, { $modal: this }, h)) : [
           type === 'confirm' ? h('vxe-button', {
             on: {
               click: this.cancelEvent
@@ -216,7 +217,7 @@ export default {
               click: this.confirmEvent
             }
           }, GlobalConfig.i18n('vxe.button.confirm'))
-        ])) : null,
+        ]) : null,
         !isMsg && resize ? h('span', {
           class: 'vxe-modal--resize'
         }, ['wl', 'wr', 'swst', 'sest', 'st', 'swlb', 'selb', 'sb'].map(type => {
@@ -271,7 +272,10 @@ export default {
       this.close(type)
     },
     open () {
-      const { events = {}, duration, visible, isMsg, remember } = this
+      const { events = {}, inited, duration, visible, isMsg, remember } = this
+      if (!inited) {
+        this.inited = true
+      }
       if (!visible) {
         const type = 'show'
         const params = { type, $modal: this, $event: { type } }
@@ -300,34 +304,14 @@ export default {
           }
         } else {
           this.$nextTick(() => {
-            const { inited, marginSize, fullscreen, position } = this
-            if (!remember || !inited) {
-              const modalBoxElem = this.getBox()
-              const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
-              const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
-              const isPosCenter = position === 'center'
-              const { top, left } = isPosCenter ? { top: position, left: position } : Object.assign({}, position)
-              const topCenter = isPosCenter || top === 'center'
-              const leftCenter = isPosCenter || left === 'center'
-              let posTop = ''
-              let posLeft = ''
-              if (left && !leftCenter) {
-                posLeft = isNaN(left) ? left : `${left}px`
-              } else {
-                posLeft = `${Math.max(marginSize, clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2)}px`
-              }
-              if (topCenter) {
-                posTop = `${Math.max(marginSize, clientVisibleHeight / 2 - modalBoxElem.offsetHeight / 2)}px`
-              } else if (top && !topCenter) {
-                posTop = isNaN(top) ? top : `${top}px`
-              } else if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
-                posTop = `${marginSize}px`
-              }
-              modalBoxElem.style.top = posTop
-              modalBoxElem.style.left = posLeft
+            const { firstOpen, fullscreen } = this
+            if (!remember || !firstOpen) {
+              this.updatePosition().then(() => {
+                setTimeout(() => this.updatePosition(), 20)
+              })
             }
-            if (!inited) {
-              this.inited = true
+            if (!firstOpen) {
+              this.firstOpen = true
               if (this.hasPosStorage()) {
                 this.restorePosStorage()
               } else if (fullscreen) {
@@ -358,6 +342,32 @@ export default {
           comp.modalTop = offsetTop
           offsetTop += comp.$refs.modalBox.clientHeight
         })
+      })
+    },
+    updatePosition () {
+      return this.$nextTick().then(() => {
+        const { marginSize, position } = this
+        const modalBoxElem = this.getBox()
+        const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
+        const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
+        const isPosCenter = position === 'center'
+        const { top, left } = isPosCenter ? { top: position, left: position } : Object.assign({}, position)
+        const topCenter = isPosCenter || top === 'center'
+        const leftCenter = isPosCenter || left === 'center'
+        let posTop = ''
+        let posLeft = ''
+        if (left && !leftCenter) {
+          posLeft = isNaN(left) ? left : `${left}px`
+        } else {
+          posLeft = `${Math.max(marginSize, clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2)}px`
+        }
+        if (top && !topCenter) {
+          posTop = isNaN(top) ? top : `${top}px`
+        } else {
+          posTop = `${Math.max(marginSize, clientVisibleHeight / 2 - modalBoxElem.offsetHeight / 2)}px`
+        }
+        modalBoxElem.style.top = posTop
+        modalBoxElem.style.left = posLeft
       })
     },
     close (type) {

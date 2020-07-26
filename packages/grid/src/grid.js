@@ -11,11 +11,15 @@ function getOffsetHeight (elem) {
   return elem ? elem.offsetHeight : 0
 }
 
+function getPaddingTopBottomSize (elem) {
+  const computedStyle = getComputedStyle(elem)
+  const paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
+  const paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
+  return paddingTop + paddingBottom
+}
+
 function renderDefaultForm (h, _vm) {
-  const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
-  if ($scopedSlots.form) {
-    return $scopedSlots.form.call(_vm, { $grid: _vm }, h)
-  }
+  const { proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
   if (formOpts.items && formOpts.items.length) {
     if (!formOpts.inited) {
       formOpts.inited = true
@@ -156,15 +160,6 @@ export default {
     zoomOpts () {
       return Object.assign({}, GlobalConfig.grid.zoomConfig, this.zoomConfig)
     },
-    renderClass () {
-      const { vSize, isZMax } = this
-      return ['vxe-grid', {
-        [`size--${vSize}`]: vSize,
-        't--animat': !!this.animat,
-        'is--maximize': isZMax,
-        'is--loading': this.isCloak || this.loading || this.tableLoading
-      }]
-    },
     renderStyle () {
       return this.isZMax ? { zIndex: this.tZindex } : null
     },
@@ -239,15 +234,26 @@ export default {
     GlobalEvent.off(this, 'keydown')
   },
   render (h) {
-    const { $scopedSlots } = this
+    const { $scopedSlots, vSize, isZMax } = this
+    const hasForm = !!($scopedSlots.form || this.formConfig)
+    const hasToolbar = !!($scopedSlots.toolbar || this.toolbar)
+    const hasTop = !!$scopedSlots.top
+    const hasBottom = !!$scopedSlots.bottom
+    const hasPager = !!($scopedSlots.pager || this.pagerConfig)
     return h('div', {
-      class: this.renderClass,
+      class: ['vxe-grid', {
+        [`size--${vSize}`]: vSize,
+        't--animat': !!this.animat,
+        'is--round': this.round,
+        'is--maximize': isZMax,
+        'is--loading': this.isCloak || this.loading || this.tableLoading
+      }],
       style: this.renderStyle
     }, [
       /**
        * 渲染表单
        */
-      $scopedSlots.form || this.formConfig ? h('div', {
+      hasForm ? h('div', {
         ref: 'xForm',
         class: 'vxe-grid--form-wrapper'
       }, $scopedSlots.form
@@ -257,7 +263,7 @@ export default {
       /**
        * 渲染工具栏
        */
-      $scopedSlots.toolbar || this.toolbar ? h('div', {
+      hasToolbar ? h('div', {
         ref: 'xToolbar',
         class: 'vxe-grid--toolbar-wrapper'
       }, $scopedSlots.toolbar
@@ -272,7 +278,7 @@ export default {
       /**
        * 渲染表格顶部区域
        */
-      $scopedSlots.top ? h('div', {
+      hasTop ? h('div', {
         ref: 'xTop',
         class: 'vxe-grid--top-wrapper'
       }, $scopedSlots.top.call(this, { $grid: this }, h)) : null,
@@ -288,14 +294,14 @@ export default {
       /**
        * 渲染表格底部区域
        */
-      $scopedSlots.bottom ? h('div', {
+      hasBottom ? h('div', {
         ref: 'xBottom',
         class: 'vxe-grid--bottom-wrapper'
       }, $scopedSlots.bottom.call(this, { $grid: this }, h)) : null,
       /**
        * 渲染分页
        */
-      $scopedSlots.pager || this.pagerConfig ? h('div', {
+      hasPager ? h('div', {
         ref: 'xPager',
         class: 'vxe-grid--pager-wrapper'
       }, $scopedSlots.pager
@@ -321,16 +327,10 @@ export default {
      * 获取需要排除的高度
      */
     getExcludeHeight () {
-      const { $refs, $el } = this
+      const { $refs, $el, isZMax } = this
       const { xForm, xToolbar, xTop, xBottom, xPager } = $refs
-      let paddingTop = 0
-      let paddingBottom = 0
-      if ($el) {
-        const computedStyle = getComputedStyle($el)
-        paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
-        paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
-      }
-      return paddingTop + paddingBottom + getOffsetHeight(xForm) + getOffsetHeight(xToolbar) + getOffsetHeight(xTop) + getOffsetHeight(xBottom) + getOffsetHeight(xPager)
+      const parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize($el.parentNode)
+      return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(xForm) + getOffsetHeight(xToolbar) + getOffsetHeight(xTop) + getOffsetHeight(xBottom) + getOffsetHeight(xPager)
     },
     handleRowClassName (params) {
       const rowClassName = this.rowClassName
@@ -528,11 +528,11 @@ export default {
               if (removeRecords.length) {
                 this.tableLoading = true
                 return Promise.resolve((beforeDelete || ajaxMethods).apply(this, applyArgs))
-                  .then(() => {
+                  .then(rest => {
                     this.tableLoading = false
                     this.pendingRecords = this.pendingRecords.filter(row => removeRecords.indexOf(row) === -1)
                     if (isMsg) {
-                      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.grid.delSuccess'), status: 'success' })
+                      VXETable.modal.message({ message: this.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                     }
                     if (afterDelete) {
                       afterDelete(...applyArgs)
@@ -540,10 +540,10 @@ export default {
                       this.commitProxy('query')
                     }
                   })
-                  .catch(() => {
+                  .catch(rest => {
                     this.tableLoading = false
                     if (isMsg) {
-                      VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.operError'), status: 'error' })
+                      VXETable.modal.message({ id: code, message: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                   })
               } else {
@@ -576,11 +576,11 @@ export default {
               if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                 this.tableLoading = true
                 return Promise.resolve((beforeSave || ajaxMethods).apply(this, applyArgs))
-                  .then(() => {
+                  .then(rest => {
                     this.tableLoading = false
                     this.pendingRecords = []
                     if (isMsg) {
-                      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
+                      VXETable.modal.message({ message: this.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                     }
                     if (afterSave) {
                       afterSave(...applyArgs)
@@ -588,10 +588,10 @@ export default {
                       this.commitProxy('query')
                     }
                   })
-                  .catch(() => {
+                  .catch(rest => {
                     this.tableLoading = false
                     if (isMsg) {
-                      VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.operError'), status: 'error' })
+                      VXETable.modal.message({ id: code, message: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                   })
               } else {
@@ -613,6 +613,14 @@ export default {
         }
       }
       return this.$nextTick()
+    },
+    getRespMsg (rest, defaultMsg) {
+      const { props = {} } = this.proxyOpts
+      let msg
+      if (rest && props.message) {
+        msg = XEUtils.get(rest, props.message)
+      }
+      return msg || GlobalConfig.i18n(defaultMsg)
     },
     handleDeleteRow (code, alertKey, callback) {
       const selectRecords = this.getCheckboxRecords()

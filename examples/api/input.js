@@ -161,6 +161,33 @@ const apis = [
         list: []
       },
       {
+        name: 'controls',
+        desc: '只对 type=number|integer|float 有效，是否显示控制按钮',
+        version: '',
+        type: 'boolean',
+        enum: '',
+        defVal: '默认 true，继承 setup.input.controls',
+        list: []
+      },
+      {
+        name: 'min-date',
+        desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最小值',
+        version: '',
+        type: 'number | string | Date',
+        enum: '',
+        defVal: '默认 1900，继承 setup.input.minDate',
+        list: []
+      },
+      {
+        name: 'max-date',
+        desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最大值',
+        version: '',
+        type: 'number | string | Date',
+        enum: '',
+        defVal: '默认 2100，继承 setup.input.maxDate',
+        list: []
+      },
+      {
         name: 'start-week',
         desc: '只对 type=week 有效，设置起始周',
         version: '',
