@@ -855,7 +855,7 @@ export default {
         form,
         type: inputType,
         placeholder,
-        maxlength: isNumber ? 16 : maxlength, // 数值最大长度限制 16 位，包含小数
+        maxlength: isNumber && !XEUtils.toNumber(maxlength) ? 16 : maxlength, // 数值最大长度限制 16 位，包含小数
         readonly: readonly || type === 'week' || !editable || this.dateOpts.editable === false,
         disabled,
         autocomplete

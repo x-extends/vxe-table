@@ -53,6 +53,15 @@ const apis = [
         list: []
       },
       {
+        name: 'visible',
+        desc: '是否显示',
+        version: '2.9.16',
+        type: 'boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'disabled',
         descKey: 'app.api.select.desc.disabled',
         version: '',
@@ -85,7 +94,7 @@ const apis = [
         version: '2.8.11',
         type: 'Object',
         enum: '',
-        defVal: '{ value, label, disabled }',
+        defVal: '{ value, label }',
         list: []
       },
       {
@@ -193,6 +202,15 @@ const apis = [
         name: 'blur()',
         desc: '使下拉框失去焦点',
         version: '2.8.9',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'refreshOption()',
+        desc: '刷新选项（对于动态修改显示/隐藏选项等场景下可能会用到）',
+        version: '2.9.16',
         type: 'Promise',
         enum: '',
         defVal: '',

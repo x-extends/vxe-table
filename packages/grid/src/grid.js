@@ -19,10 +19,7 @@ function getPaddingTopBottomSize (elem) {
 }
 
 function renderDefaultForm (h, _vm) {
-  const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
-  if ($scopedSlots.form) {
-    return $scopedSlots.form.call(_vm, { $grid: _vm }, h)
-  }
+  const { proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
   if (formOpts.items && formOpts.items.length) {
     if (!formOpts.inited) {
       formOpts.inited = true
@@ -548,11 +545,11 @@ export default {
               if (removeRecords.length) {
                 this.tableLoading = true
                 return Promise.resolve((beforeDelete || ajaxMethods).apply(this, applyArgs))
-                  .then(() => {
+                  .then(rest => {
                     this.tableLoading = false
                     this.pendingRecords = this.pendingRecords.filter(row => removeRecords.indexOf(row) === -1)
                     if (isMsg) {
-                      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.grid.delSuccess'), status: 'success' })
+                      VXETable.modal.message({ message: this.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                     }
                     if (afterDelete) {
                       afterDelete(...applyArgs)
@@ -560,10 +557,10 @@ export default {
                       this.commitProxy('query')
                     }
                   })
-                  .catch(() => {
+                  .catch(rest => {
                     this.tableLoading = false
                     if (isMsg) {
-                      VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.operError'), status: 'error' })
+                      VXETable.modal.message({ id: code, message: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                   })
               } else {
@@ -596,11 +593,11 @@ export default {
               if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                 this.tableLoading = true
                 return Promise.resolve((beforeSave || ajaxMethods).apply(this, applyArgs))
-                  .then(() => {
+                  .then(rest => {
                     this.tableLoading = false
                     this.pendingRecords = []
                     if (isMsg) {
-                      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.grid.saveSuccess'), status: 'success' })
+                      VXETable.modal.message({ message: this.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                     }
                     if (afterSave) {
                       afterSave(...applyArgs)
@@ -608,10 +605,10 @@ export default {
                       this.commitProxy('query')
                     }
                   })
-                  .catch(() => {
+                  .catch(rest => {
                     this.tableLoading = false
                     if (isMsg) {
-                      VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.operError'), status: 'error' })
+                      VXETable.modal.message({ id: code, message: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                   })
               } else {
@@ -633,6 +630,14 @@ export default {
         }
       }
       return this.$nextTick()
+    },
+    getRespMsg (rest, defaultMsg) {
+      const { props = {} } = this.proxyOpts
+      let msg
+      if (rest && props.message) {
+        msg = XEUtils.get(rest, props.message)
+      }
+      return msg || GlobalConfig.i18n(defaultMsg)
     },
     handleDeleteRow (code, alertKey, callback) {
       const selectRecords = this.getCheckboxRecords()
