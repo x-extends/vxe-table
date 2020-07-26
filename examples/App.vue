@@ -97,11 +97,24 @@
         </ul>
       </div>
       <div class="vxe-row support-group">
-        <div class="vxe-col--24 support-group-item">
+        <div class="vxe-col--12 support-group-item">
           <div class="support-name">技术支持群</div>
-          <div v-if="discountPrice" class="support-price">¥ {{ discountPrice }}<span v-if="discountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span></div>
-          <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span></div>
+          <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+          <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
           <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请加入</vxe-button>
+          <ul class="support-describe">
+            <li>快速解决问题</li>
+          </ul>
+        </div>
+        <div class="vxe-col--12 support-group-item">
+          <div class="template-name">项目模板</div>
+          <div class="support-price">¥ {{ templatePrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供该模板的相关问题修复及版本更新，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+          <vxe-button class="template-btn" status="primary" @click="openEvent('vxe-tmpl-1')">查看模板1</vxe-button>
+          <ul class="support-describe">
+            <li>技术支持群</li>
+            <li>丰富的业务渲染器</li>
+            <li>更多高级用法实例</li>
+          </ul>
         </div>
       </div>
     </vxe-modal>
@@ -110,7 +123,7 @@
         <div class="support-pay-step">
           <p style="font-size: 12px;">联系邮件： <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
           <p class="title">1. 扫码申请加入<br><img src="static/support/qq.png"></p>
-          <p class="title">2. 通过支付宝或微信付费：¥{{ discountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
+          <p class="title">2. 通过支付宝或微信付费：¥{{ supportDiscountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
           <p class="title">3. 付费完成后点击“联系收款方”，留言QQ号即可</p>
         </div>
       </template>
@@ -125,7 +138,8 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
-      discountPrice: 188,
+      templatePrice: '-',
+      supportDiscountPrice: 188,
       supportGroupPrice: 299,
       supportLoading: false,
       supportVisible: false,
