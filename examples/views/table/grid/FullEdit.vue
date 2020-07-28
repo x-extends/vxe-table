@@ -311,7 +311,7 @@ export default {
               sexItem.itemRender.options = sexList
             },
             formatAmount ({ cellValue }) {
-              return cellValue ? \`$\${XEUtils.commafy(XEUtils.toFixedString(cellValue, 2))}\` : ''
+              return cellValue ? \`$\${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}\` : ''
             },
             formatDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -387,7 +387,7 @@ export default {
       sexItem.itemRender.options = sexList
     },
     formatAmount ({ cellValue }) {
-      return cellValue ? `$${XEUtils.commafy(XEUtils.toFixedString(cellValue, 2))}` : ''
+      return cellValue ? `$${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''
     },
     formatDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')

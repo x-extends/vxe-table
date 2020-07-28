@@ -208,6 +208,11 @@ export default {
     columns (value) {
       this.$nextTick(() => this.loadColumn(value))
     },
+    toolbar (value) {
+      if (value) {
+        this.$nextTick(() => this.$refs.xTable.connect(this.$refs.xToolbar))
+      }
+    },
     proxyConfig () {
       this.initProxy()
     },
@@ -271,7 +276,7 @@ export default {
        * 渲染表单
        */
       hasForm ? h('div', {
-        ref: 'xForm',
+        ref: 'formWrapper',
         class: 'vxe-grid--form-wrapper'
       }, $scopedSlots.form
         ? $scopedSlots.form.call(this, { $grid: this }, h)
@@ -281,13 +286,14 @@ export default {
        * 渲染工具栏
        */
       hasToolbar ? h('div', {
-        ref: 'xToolbar',
+        ref: 'toolbarWrapper',
         class: 'vxe-grid--toolbar-wrapper'
       }, $scopedSlots.toolbar
         ? $scopedSlots.toolbar.call(this, { $grid: this }, h)
         : [
           h('vxe-toolbar', {
             props: this.toolbarOpts,
+            ref: 'xToolbar',
             scopedSlots: getToolbarSlots(this)
           })
         ]
@@ -296,7 +302,7 @@ export default {
        * 渲染表格顶部区域
        */
       hasTop ? h('div', {
-        ref: 'xTop',
+        ref: 'topWrapper',
         class: 'vxe-grid--top-wrapper'
       }, $scopedSlots.top.call(this, { $grid: this }, h)) : null,
       /**
@@ -312,14 +318,14 @@ export default {
        * 渲染表格底部区域
        */
       hasBottom ? h('div', {
-        ref: 'xBottom',
+        ref: 'bottomWrapper',
         class: 'vxe-grid--bottom-wrapper'
       }, $scopedSlots.bottom.call(this, { $grid: this }, h)) : null,
       /**
        * 渲染分页
        */
       hasPager ? h('div', {
-        ref: 'xPager',
+        ref: 'pagerWrapper',
         class: 'vxe-grid--pager-wrapper'
       }, $scopedSlots.pager
         ? $scopedSlots.pager.call(this, { $grid: this }, h)
@@ -345,9 +351,9 @@ export default {
      */
     getExcludeHeight () {
       const { $refs, $el, isZMax } = this
-      const { xForm, xToolbar, xTop, xBottom, xPager } = $refs
+      const { formWrapper, toolbarWrapper, topWrapper, bottomWrapper, pagerWrapper } = $refs
       const parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize($el.parentNode)
-      return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(xForm) + getOffsetHeight(xToolbar) + getOffsetHeight(xTop) + getOffsetHeight(xBottom) + getOffsetHeight(xPager)
+      return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
     },
     handleRowClassName (params) {
       const rowClassName = this.rowClassName

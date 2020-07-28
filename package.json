@@ -85,11 +85,11 @@
     "xe-ajax": "^4.0.4",
     "xe-ajax-mock": "^1.10.0",
     "xe-clipboard": "^1.9.0",
-    "xe-utils": "^2.6.6",
+    "xe-utils": "^2.7.1",
     "xlsx": "^0.15.6"
   },
   "peerDependencies": {
-    "vue": ">= 2.6.0 < 3",
+    "vue": ">= 2.7.0 < 3",
     "xe-utils": ">= 2.6.0 < 3"
   },
   "vetur": {
