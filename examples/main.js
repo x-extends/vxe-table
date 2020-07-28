@@ -10,6 +10,12 @@ import './mock'
 import XEUtils from 'xe-utils'
 import moment from 'moment'
 
+// **************** （注意：该全局变量仅用于开发环境调试） ****************
+if (process.env.NODE_ENV === 'development') {
+  window.XEUtils = XEUtils
+}
+// **************** （注意：该全局变量仅用于开发环境调试） ****************
+
 Vue.config.productionTip = false
 
 // 生成模拟数据

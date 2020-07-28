@@ -91,7 +91,9 @@
       <div>
         <ul class="vxe-row support-question">
           <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
-            <i :class="item.icon || 'fa fa-question-circle'"></i>
+            <vxe-tooltip :content="item.message || item.label">
+              <i :class="item.icon || 'fa fa-question-circle'"></i>
+            </vxe-tooltip>
             <span>&nbsp;{{ item.label }}</span>
           </li>
         </ul>
@@ -107,22 +109,22 @@
           </ul>
         </div>
         <div class="vxe-col--12 support-group-item">
-          <div class="template-name">项目模板</div>
-          <div class="support-price">¥ {{ templatePrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供该模板的相关问题修复及版本更新，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
-          <vxe-button class="template-btn" status="primary" @click="openEvent('vxe-tmpl-1')">查看模板1</vxe-button>
+          <div class="template-name">项目实例</div>
+          <div class="support-price">¥ {{ templatePrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供该模板的相关问题修复及版本更新（如果已加入付费支持群，则补差价即可），有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+          <vxe-button class="template-btn" status="primary" @click="openEvent('vxe-tmpl-1')">查看演示 PC-1</vxe-button>
           <ul class="support-describe">
             <li>技术支持群</li>
-            <li>丰富的业务渲染器</li>
-            <li>更多高级用法实例</li>
+            <li>更多实用的组件</li>
+            <li>丰富的渲染器实例</li>
           </ul>
         </div>
       </div>
     </vxe-modal>
-    <vxe-modal v-model="supportGroupVisible" title="申请加入付费群" width="600" position="center">
+    <vxe-modal v-model="supportGroupVisible" title="申请加入付费群" width="600" height="680" position="center">
       <template>
         <div class="support-pay-step">
           <p style="font-size: 12px;">联系邮件： <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
-          <p class="title">1. 扫码申请加入<br><img src="static/support/qq.png"></p>
+          <p class="title">1. QQ 扫码申请加入<br><img src="static/support/qq.png"></p>
           <p class="title">2. 通过支付宝或微信付费：¥{{ supportDiscountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
           <p class="title">3. 付费完成后点击“联系收款方”，留言QQ号即可</p>
         </div>
@@ -147,43 +149,56 @@ export default {
       supportGroupVisible: false,
       supportQuestionList: [
         {
-          label: '安装/按需/报错/国际化/版本升级'
+          label: '安装/按需/报错/国际化/版本升级',
+          message: '安装报错、版本升级报错、版本升级兼容性如何解决、国际化如果使用'
         },
         {
-          label: '主题/样式/图标相关问题'
+          label: '主题/样式/图标相关问题',
+          message: '修改行高、样式、背景，自定义图标，比如 font-awesome、iconfont 等'
         },
         {
-          label: '增删改查/数据校验/键盘导航实现'
+          label: '增删改查/数据校验/键盘导航实现',
+          message: '实现 Grid 的增删改查、新增保存的数据校验、服务端校验、按键导航事件监听等'
         },
         {
-          label: '列错乱/列权限/动态列/自定义列问题'
+          label: '列错乱/列权限/动态列/自定义列问题',
+          message: '在 Tabs 页签中列宽显示错乱、弹出框中列显示错乱、在弹出框下拉框被遮挡、日期选择被遮挡等'
         },
         {
-          label: '数据联动/分组显示/合并与列问题'
+          label: '数据联动/分组显示/合并与列问题',
+          message: '单元格的数据联动、单元格中下拉框级联关系、分组表格实现方式、合并行或列的实现'
         },
         {
-          label: '数据代理/Grid配置式使用问题'
+          label: '数据代理/Grid配置式使用问题',
+          message: '使用 Grid 数据代理，自定义返回数据结构、使用 json 动态渲染 Grid'
         },
         {
-          label: '高级筛选/可编辑/下拉容器/渲染器使用问题'
+          label: '高级筛选/可编辑/下拉容器/渲染器使用问题',
+          message: '实现高级筛选模板、自定义单元格可编辑渲染器、复用业务渲染器、下拉容器使用方法、自定义下拉容器实现'
         },
         {
-          label: '虚拟列表/虚拟树/虚拟下拉框使用问题'
+          label: '虚拟列表/虚拟树/虚拟下拉框使用问题',
+          message: '实现大数据虚拟表格、大数据虚拟树表格、大数据虚拟列表、大数据虚拟下拉框、大数据虚拟下拉容器'
         },
         {
-          label: '打印/导入/导出/数据格式化等问题'
+          label: '打印/导入/导出/数据格式化等问题',
+          message: '打印自定义数据、打印指定行货列、打印数据格式化、服务端导出、服务端导入'
         },
         {
-          label: '动态表单/表单权限/配置式使用问题'
+          label: '动态表单/表单权限/配置式使用问题',
+          message: '使用 json 动态生成表单、自定义表单渲染、禁用编辑、事件绑定'
         },
         {
-          label: '输入框日期节日/工具栏/分页/模态窗口等模块'
+          label: '输入框/日期选择/工具栏/分页/模态窗口等模块',
+          message: '日期带节日、自定义日期节日提醒、工具栏自定义位置、前端分页、后端分页、窗口居中、多窗口、窗口放大与缩小等'
         },
         {
-          label: '第三方 UI 库集成渲染问题'
+          label: '第三方 UI 库集成渲染问题',
+          message: '例如集成 element-ui、view-ui、nt-design-vue 或者其他自定义组件集成用户，比如在单元格中无法选中、事件绑定等'
         },
         {
-          label: '额外需求的定制（不包括，需咨询）',
+          label: '额外需求的定制（需咨询）',
+          message: '如果需要定制特殊需求，请先需咨询',
           icon: 'fa fa-exclamation-triangle'
         }
       ],
@@ -2331,6 +2346,9 @@ export default {
         this.supportLoading = false
         this.supportGroupVisible = true
       }, 300)
+    },
+    openEvent (tmplName) {
+      open(`https://xuliangzhan_admin.gitee.io/vxe-template/${tmplName}/`)
     },
     vChangeEvent () {
       switch (this.version) {
