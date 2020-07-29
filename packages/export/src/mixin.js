@@ -447,6 +447,13 @@ function downloadFile ($xetable, opts, content) {
 }
 
 function handleExport ($xetable, opts) {
+  if (opts.remote) {
+    const params = { options: opts, $table: $xetable, $grid: $xetable.$xegrid }
+    if (opts.exportMethod) {
+      return opts.exportMethod(params)
+    }
+    return Promise.resolve(params)
+  }
   const { columns, datas } = getExportData($xetable, opts)
   return Promise.resolve(
     $xetable.preventEvent(null, 'event.export', { options: opts, columns, datas }, () => {
@@ -643,7 +650,7 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      const { visibleColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
+      const { $xegrid, visibleColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
       const columns = options && options.columns
       let expColumns = []
       if (columns && columns.length) {
@@ -704,14 +711,24 @@ export default {
           } else {
             opts.data = selectRecords
           }
+        } else if (opts.mode === 'all') {
+          if ($xegrid && !opts.remote) {
+            const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = $xegrid.proxyOpts
+            const ajaxMethods = ajax.queryAll
+            const params = { options: opts, $table: this, $grid: $xegrid }
+            if (ajaxMethods) {
+              return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
+                .catch(e => e)
+                .then(rest => {
+                  opts.data = (props.list ? XEUtils.get(rest, props.list) : rest) || []
+                  if (afterQueryAll) {
+                    afterQueryAll(params)
+                  }
+                  return handleExport(this, opts)
+                })
+            }
+          }
         }
-      }
-      if (opts.remote) {
-        const params = { options: opts, $table: this, $grid: this.$xegrid }
-        if (opts.exportMethod) {
-          return opts.exportMethod(params)
-        }
-        return Promise.resolve(params)
       }
       return handleExport(this, opts)
     },

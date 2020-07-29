@@ -28,6 +28,7 @@ $iconWidth: 1.6em;
   }
   &[disabled] {
     cursor: not-allowed;
+    color: $vxe-disabled-color;
     background-color: $vxe-input-disabled-background-color;
   }
 }

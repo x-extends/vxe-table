@@ -654,6 +654,7 @@ module.exports = {
           titleAlign: 'All title align',
           titleWidth: 'All title width',
           titleColon: 'Whether to display the title colon',
+          titleAsterisk: '是否显示必填字段的红色星号',
           rules: 'Checksum rule configuration entries'
         }
       },

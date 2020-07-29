@@ -653,6 +653,7 @@ module.exports = {
           titleAlign: '所有项的标题对齐方式',
           titleWidth: '所有项的标题宽度',
           titleColon: '是否显示标题冒号',
+          titleAsterisk: '是否显示必填字段的红色星号',
           rules: '校验规则配置项'
         }
       },

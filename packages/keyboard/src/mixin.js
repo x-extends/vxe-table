@@ -444,6 +444,9 @@ export default {
         let mouseScrollTimeout = null
         let isMouseScrollDown = false
         let mouseScrollSpaceSize = 1
+        const triggerEvent = (type, evnt) => {
+          this.emitEvent(`checkbox-range-${type}`, { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords() }, evnt)
+        }
         // 处理复选框选中
         const handleChecked = (evnt) => {
           const { clientX, clientY } = evnt
@@ -492,6 +495,7 @@ export default {
               this.setAllCheckboxRow(false)
               this.setCheckboxRow(rangeRows, true)
             }
+            triggerEvent('change', evnt)
           }
         }
         // 停止鼠标滚动
@@ -549,12 +553,14 @@ export default {
           }
           handleChecked(evnt)
         }
-        document.onmouseup = () => {
+        document.onmouseup = (evnt) => {
           stopMouseScroll()
           checkboxRangeElem.removeAttribute('style')
           document.onmousemove = domMousemove
           document.onmouseup = domMouseup
+          triggerEvent('end', evnt)
         }
+        triggerEvent('start', evnt)
       }
     },
     /**

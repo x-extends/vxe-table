@@ -52,13 +52,14 @@
           //     theme: 'dark',
           //     enterable: false
           //   },
-          //   editConfig: {
-          //     mode: 'cell'
-          //   },
           //   contextMenu: {
           //     visibleMethod () {}
           //   },
           //   rowId: '_XID', // 行数据的唯一主键字段名
+          //   editConfig: {
+          //     mode: 'cell',
+          //     showAsterisk: true
+          //   },
           //   importConfig: {
           //     modes: ['insert', 'covering']
           //   },
@@ -120,7 +121,8 @@
           //     autoPos: true
           //   },
           //   size: null,
-          //   colon: false
+          //   colon: false,
+          //   titleAsterisk: true
           // },
           // input: {
           //   size: null,

@@ -240,7 +240,7 @@ const apis = [
         version: '2.9.16',
         type: 'number | string | Date',
         enum: '',
-        defVal: '默认 1900，继承 setup.input.minDate',
+        defVal: '默认 new Date(1900, 0, 1)，继承 setup.input.minDate',
         list: []
       },
       {
@@ -249,7 +249,7 @@ const apis = [
         version: '2.9.16',
         type: 'number | string | Date',
         enum: '',
-        defVal: '默认 2100，继承 setup.input.maxDate',
+        defVal: '默认 new Date(2100, 0, 1)，继承 setup.input.maxDate',
         list: []
       },
       {

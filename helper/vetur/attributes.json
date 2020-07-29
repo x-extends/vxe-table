@@ -1059,6 +1059,10 @@
     "type": "string",
     "description": "空值显示的占位符"
   },
+  "vxe-select/visible": {
+    "type": "boolean",
+    "description": "是否显示"
+  },
   "vxe-select/disabled": {
     "type": "boolean",
     "description": "是否禁用"
@@ -1366,6 +1370,10 @@
   "vxe-form/title-colon": {
     "type": "boolean",
     "description": "是否显示标题冒号"
+  },
+  "vxe-form/title-asterisk": {
+    "type": "boolean",
+    "description": "是否显示必填字段的红色星号"
   },
   "vxe-form/items": {
     "type": "any[]",

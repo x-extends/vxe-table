@@ -87,12 +87,12 @@
     </div>
 
     <vxe-modal v-model="supportVisible" :loading="supportLoading" title="技术支持" width="800" position="center">
-      <div class="support-declare">考虑到很多用户有需要支持的需求，提供该付费技术群用于快速解决使用过程中遇到的各种问题，同时也能支撑该项目可以持续的维护下去。若非必要建议先查阅相关的文档！，如果确实需要支持请先通过邮件描述一下问题！</div>
+      <div class="support-declare">考虑到很多用户有需要支持的需求，提供该付费技术群用于快速解决使用过程中遇到的各种问题，同时也能支撑该项目可以持续的维护下去。若非必要建议先查阅相关的文档！</div>
       <div>
         <ul class="vxe-row support-question">
           <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
             <vxe-tooltip :content="item.message || item.label">
-              <i :class="item.icon || 'fa fa-question-circle'"></i>
+              <i class="support-help-icon" :class="item.icon || 'fa fa-question-circle'"></i>
             </vxe-tooltip>
             <span>&nbsp;{{ item.label }}</span>
           </li>
@@ -101,21 +101,22 @@
       <div class="vxe-row support-group">
         <div class="vxe-col--12 support-group-item">
           <div class="support-name">技术支持群</div>
-          <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
-          <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+          <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持以及项目模板的更新和维护，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+          <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持以及项目模板的更新和维护，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
           <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请加入</vxe-button>
           <ul class="support-describe">
-            <li>快速解决问题</li>
+            <li>1. 快速解决遇到的问题</li>
+            <li>2. 包含项目模板及实例<i class="fa fa-hand-o-right red"></i></li>
           </ul>
         </div>
         <div class="vxe-col--12 support-group-item">
-          <div class="template-name">项目实例</div>
-          <div class="support-price">¥ {{ templatePrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供该模板的相关问题修复及版本更新（如果已加入付费支持群，则补差价即可），有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
-          <vxe-button class="template-btn" status="primary" @click="openEvent('vxe-tmpl-1')">查看演示 PC-1</vxe-button>
-          <ul class="support-describe">
-            <li>技术支持群</li>
-            <li>更多实用的组件</li>
-            <li>丰富的渲染器实例</li>
+          <div class="template-name">项目模板</div>
+          <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-1')">查看演示 PC-1</vxe-button>
+          <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-2')" disabled>查看演示 PC-2</vxe-button>
+          <ul class="template-describe">
+            <li>工程：<a class="link" href="https://cli.vuejs.org/" target="_blank">vue-cli4</a></li>
+            <li>依赖：<a class="link" href="https://www.npmjs.com/package/vue" target="_blank">vue2.6</a>, <a class="link" href="https://www.npmjs.com/package/vxe-table" target="_blank">vxe-table</a>, <a class="link" href="https://www.npmjs.com/package/xe-utils" target="_blank">xe-utils</a>, <a class="link" href="https://www.npmjs.com/package/axios" target="_blank">axios</a></li>
+            <li>描述：丰富的增删改查实例及常用的业务组件封装，演示的组件都可以直接使用，也可以直接移植到任何项目中，使开发效率翻倍提升。</li>
           </ul>
         </div>
       </div>
@@ -140,9 +141,8 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
-      templatePrice: '-',
-      supportDiscountPrice: 188,
-      supportGroupPrice: 299,
+      supportDiscountPrice: 288,
+      supportGroupPrice: 499,
       supportLoading: false,
       supportVisible: false,
       supportQuestion: '',
