@@ -56,9 +56,6 @@ const GlobalConfig = {
     // validConfig: {
     //   message: 'default'
     // },
-    // editConfig: {
-    //   mode: 'cell'
-    // },
     // contextMenu: {
     //   visibleMethod () {}
     // },
@@ -67,6 +64,10 @@ const GlobalConfig = {
     //  checkMethod () {}
     // },
     // rowId: '_XID', // 行数据的唯一主键字段名
+    editConfig: {
+      // mode: 'cell',
+      showAsterisk: true
+    },
     importConfig: {
       modes: ['insert', 'covering']
     },
@@ -198,12 +199,13 @@ const GlobalConfig = {
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
   form: {
-    // preventSubmit: false
+    // preventSubmit: false,
     // validConfig: {
     //   autoPos: true
     // },
     // size: null,
-    // colon: false
+    // colon: false,
+    titleAsterisk: true
   },
   input: {
     // size: null,

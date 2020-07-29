@@ -80,6 +80,15 @@ const apis = [
         list: []
       },
       {
+        name: 'title-asterisk',
+        descKey: 'app.api.form.desc.titleAsterisk',
+        version: '1.15.31',
+        type: 'boolean',
+        enum: '',
+        defVal: '默认 true，继承 setup.form.titleAsterisk',
+        list: []
+      },
+      {
         name: 'items',
         desc: '项列表',
         version: '2.8.24',

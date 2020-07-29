@@ -452,7 +452,6 @@ body,
 }
 
 .support-declare {
-  color: red;
   padding: 10px 0 10px 15px;
 }
 .support-question {
@@ -460,6 +459,9 @@ body,
   & > li {
     line-height: 24px;
   }
+}
+.support-help-icon {
+  cursor: help;
 }
 .support-group {
   width: 500px;
@@ -522,11 +524,13 @@ body,
   font-weight: 700;
   line-height: 32px;
 }
-.template-desc {
-  font-size: 12px;
+.template-describe {
+  margin: 0;
+  padding: 5px;
+  list-style: none;
   text-align: left;
-  padding: 0 15px;
-}
-.template-btn {
-  width: 80%;
+  font-size: 12px;
+  & > li {
+    padding: 0 5px 0 25px;
+  }
 }

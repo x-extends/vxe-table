@@ -28,9 +28,16 @@ function getRowUniqueId () {
   return XEUtils.uniqueId('row_')
 }
 
+function eqCellNull (cellValue) {
+  return cellValue === '' || XEUtils.eqNull(cellValue)
+}
+
 function eqCellValue (row1, row2, field) {
   const val1 = XEUtils.get(row1, field)
   const val2 = XEUtils.get(row2, field)
+  if (eqCellNull(val1) && eqCellNull(val2)) {
+    return true
+  }
   if (XEUtils.isString(val1) || XEUtils.isNumber(val1)) {
     /* eslint-disable eqeqeq */
     return val1 == val2
@@ -2652,6 +2659,13 @@ export default {
                 }
                 if (!isClear) {
                   isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
+                }
+                // 如果固定了高度且点击了行之外的空白处，则清除激活状态
+                if (!isClear && this.height && !this.overflowY) {
+                  const bodyWrapperElem = evnt.target
+                  if (DomTools.hasClass(bodyWrapperElem, 'vxe-table--body-wrapper')) {
+                    isClear = evnt.offsetY < bodyWrapperElem.clientHeight
+                  }
                 }
                 if (
                   isClear ||
@@ -5852,7 +5866,7 @@ export default {
      * 如果是启用了可视渲染，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
      */
     exportData (options) {
-      const { visibleColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
+      const { $xegrid, visibleColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
       const columns = options && options.columns
       let expColumns = []
       if (columns && columns.length) {
@@ -5913,14 +5927,24 @@ export default {
           } else {
             opts.data = selectRecords
           }
+        } else if (opts.mode === 'all') {
+          if ($xegrid && !opts.remote) {
+            const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = $xegrid.proxyOpts
+            const ajaxMethods = ajax.queryAll
+            const params = { options: opts, $table: this, $grid: $xegrid }
+            if (ajaxMethods) {
+              return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
+                .catch(e => e)
+                .then(rest => {
+                  opts.data = (props.list ? XEUtils.get(rest, props.list) : rest) || []
+                  if (afterQueryAll) {
+                    afterQueryAll(params)
+                  }
+                  return ExportTools.handleExport(this, opts)
+                })
+            }
+          }
         }
-      }
-      if (opts.remote) {
-        const params = { options: opts, $table: this, $grid: this.$xegrid }
-        if (opts.exportMethod) {
-          return opts.exportMethod(params)
-        }
-        return Promise.resolve(params)
       }
       return ExportTools.handleExport(this, opts)
     },

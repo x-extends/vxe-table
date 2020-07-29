@@ -95,9 +95,9 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
-        current: '当前数据',
-        selected: '选中数据',
-        all: '全部数据'
+        current: '当前数据（当前页的数据）',
+        selected: '选中数据（当前页选中的数据）',
+        all: '全量数据（包括所有分页的数据）'
       },
       expTitle: '导出参数设置',
       expName: '文件名',

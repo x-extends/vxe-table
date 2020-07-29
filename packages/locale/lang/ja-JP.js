@@ -95,9 +95,9 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
-        current: '現在のデータ',
-        selected: '選択したデータ',
-        all: '全てのデータ'
+        current: '現在のデータ(現在のページのデータ)',
+        selected: '選択したデータ(現在のページで選択したデータ)',
+        all: '全量データ（全ページ分のデータを含む）'
       },
       expTitle: 'エクスポートパラメータ設定',
       expName: 'ファイル名',

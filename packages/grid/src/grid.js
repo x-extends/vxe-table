@@ -352,8 +352,11 @@ export default {
     getExcludeHeight () {
       const { $refs, $el, isZMax } = this
       const { formWrapper, toolbarWrapper, topWrapper, bottomWrapper, pagerWrapper } = $refs
-      const parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize($el.parentNode)
-      return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
+      if ($el) {
+        const parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize($el.parentNode)
+        return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
+      }
+      return 0
     },
     handleRowClassName (params) {
       const rowClassName = this.rowClassName

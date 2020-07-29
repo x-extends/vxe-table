@@ -565,6 +565,13 @@ function checkImportData (columns, fields) {
 
 export default {
   handleExport ($xetable, opts) {
+    if (opts.remote) {
+      const params = { options: opts, $table: $xetable, $grid: $xetable.$xegrid }
+      if (opts.exportMethod) {
+        return opts.exportMethod(params)
+      }
+      return Promise.resolve(params)
+    }
     const { columns, datas } = getExportData($xetable, opts)
     return Promise.resolve(
       $xetable.preventEvent(null, 'event.export', { options: opts, columns, datas }, () => {

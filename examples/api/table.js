@@ -1301,7 +1301,7 @@ const apis = [
           },
           {
             name: 'range',
-            desc: '开启复选框范围勾选功能（启用后通过鼠标在复选框的列圈选指定行）',
+            desc: '开启复选框范围选择功能（启用后通过鼠标在复选框的列内滑动选中或取消指定行）',
             version: '1.15.17',
             type: 'Boolean',
             enum: '',
@@ -1864,6 +1864,15 @@ const apis = [
             type: 'Boolean',
             enum: '',
             defVal: 'false',
+            list: []
+          },
+          {
+            name: 'showAsterisk',
+            desc: '是否显示必填字段的红色星号',
+            version: '1.15.31',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {

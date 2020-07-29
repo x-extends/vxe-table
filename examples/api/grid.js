@@ -243,9 +243,18 @@ const apis = [
             list: [
               {
                 name: 'query',
-                desc: '查询方法 Function({ page, sort, filters, form }, ...arguments)，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息；如果使用了表单，form 属性可以获取相关信息',
+                desc: '查询方法 Function({ page, sort, filters, form }, ...arguments)，可以通过 proxy-config.props 配置读取响应结构的字段；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息；如果使用了表单，form 属性可以获取相关信息',
                 version: '',
-                type: 'Function / Promise',
+                type: 'Function / Promise<any[]>',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'queryAll',
+                desc: '全量查询方法 Function({})，和 query 同样属于查询方法，区别是 queryAll 只会被特殊行为触发，例如导出模式 export-config.mode=all 时会触发该方法并将返回值进行导出',
+                version: '1.15.31',
+                type: 'Function / Promise<any[]>',
                 enum: '',
                 defVal: '',
                 list: []
