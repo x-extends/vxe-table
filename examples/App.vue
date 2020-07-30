@@ -106,7 +106,7 @@
           <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请加入</vxe-button>
           <ul class="support-describe">
             <li>1. 快速解决遇到的问题</li>
-            <li>2. 包含项目模板及实例<i class="fa fa-hand-o-right red"></i></li>
+            <li>2. 包含项目模板及实例</li>
           </ul>
         </div>
         <div class="vxe-col--12 support-group-item">
