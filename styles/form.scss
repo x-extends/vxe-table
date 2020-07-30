@@ -37,6 +37,7 @@
   padding-right: 0.8em;
   .vxe-form--item-title-prefix,
   .vxe-form--item-title-suffix {
+    cursor: help;
     & > [class*="vxe-icon--"] {
       margin-top: -0.2em;
     }
