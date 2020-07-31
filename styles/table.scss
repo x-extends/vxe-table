@@ -1037,6 +1037,15 @@
       }
     }
   }
+  .vxe-body--column {
+    &:first-child {
+      .vxe-cell--valid {
+        left: 10px;
+        transform: translateX(0);
+        text-align: left;
+      }
+    }
+  }
 
   /*可编辑*/
   &.vxe-editable {
