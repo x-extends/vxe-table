@@ -282,6 +282,15 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'reset()',
+        desc: '重置表单',
+        version: '',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'validate(callback)',
         desc: '对表单进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
         version: '1.15.27',

@@ -996,6 +996,15 @@ select.vxe-select,
     }
   }
   .vxe-body--column {
+    &:first-child {
+      .vxe-cell--valid {
+        left: 10px;
+        transform: translateX(0);
+        text-align: left;
+      }
+    }
+  }
+  .vxe-body--column {
     &.col--selected {
       box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
     }

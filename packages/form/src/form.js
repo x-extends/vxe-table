@@ -133,8 +133,7 @@ export default {
         })
       }
     },
-    resetEvent (evnt) {
-      evnt.preventDefault()
+    reset () {
       const { data } = this
       if (data) {
         this.$children.forEach(({ field, resetValue, itemRender }) => {
@@ -147,8 +146,12 @@ export default {
           }
         })
       }
-      this.clearValidate()
-      this.$emit('reset', { data, $form: this, $event: evnt }, evnt)
+      return this.clearValidate()
+    },
+    resetEvent (evnt) {
+      evnt.preventDefault()
+      this.reset()
+      this.$emit('reset', { data: this.this, $form: this, $event: evnt }, evnt)
     },
     clearValidate (field) {
       if (field) {

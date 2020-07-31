@@ -5576,13 +5576,16 @@ export default {
       const validRest = {}
       let status = true
       const { editRules, afterFullData, treeConfig, treeOpts } = this
-      let vaildDatas = afterFullData
+      let vaildDatas
       if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
         } else {
           vaildDatas = XEUtils.isArray(rows) ? rows : [rows]
         }
+      }
+      if (!vaildDatas) {
+        vaildDatas = this.getInsertRecords().concat(this.getUpdateRecords())
       }
       const rowValids = []
       this.lastCallTime = Date.now()
