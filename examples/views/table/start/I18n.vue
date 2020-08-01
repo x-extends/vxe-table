@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.i18n') }}</h2>
-    <p class="tip">若希望使用指定语言，则需要进行多语言设置。以中/英文为例</p>
+    <p class="tip">如果希望使用指定语言，则需要进行多语言设置。以中/英文为例</p>
     <pre>
       <code class="shell">
         npm install vue-i18n

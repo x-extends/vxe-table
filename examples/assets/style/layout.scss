@@ -452,7 +452,6 @@ body,
 }
 
 .support-declare {
-  color: red;
   padding: 10px 0 10px 15px;
 }
 .support-question {
@@ -461,18 +460,21 @@ body,
     line-height: 24px;
   }
 }
+.support-help-icon {
+  cursor: help;
+}
 .support-group {
-  width: 250px;
+  width: 600px;
   margin: 20px auto 15px auto;
   text-align: center;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 .support-group-item {
-  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
   padding: 15px 0 20px 0;
-  &:last-child {
-    border-right: 0;
+  &:first-child {
+    border-left: 0;
   }
 }
 .support-name {
@@ -496,9 +498,9 @@ body,
 }
 .support-describe {
   margin: 0;
-  padding: 5px 0 5px 40px;
+  padding: 5px;
   list-style: none;
-  text-align: left;
+  text-align: center;
   & > li {
     padding: 0;
   }
@@ -509,5 +511,26 @@ body,
     font-size: 16px;
     font-weight: 700;
     color: red;
+  }
+}
+.price-help-icon {
+  font-size: 14px;
+  color: #606266;
+  margin-left: 5px;
+  cursor: help;
+}
+.template-name {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 32px;
+}
+.template-describe {
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  text-align: left;
+  font-size: 12px;
+  & > li {
+    padding: 0 5px 0 20px;
   }
 }

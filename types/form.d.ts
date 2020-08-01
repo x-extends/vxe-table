@@ -24,6 +24,10 @@ export declare class Form extends VXETableModule {
 
   // methods
   /**
+   * 重置表单
+   */
+  reset(): Promise<any>;
+  /**
    * 对表单进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
    * @param callback 回调函数
    */

@@ -95,9 +95,9 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
-        current: '當前數據',
-        selected: '選中數據',
-        all: '全部數據'
+        current: '當前數據（當前頁的數據）',
+        selected: '選中數據（當前頁選中的數據）',
+        all: '全量數據（包括所有分頁的數據）'
       },
       expTitle: '匯出參數設置',
       expName: '檔名',

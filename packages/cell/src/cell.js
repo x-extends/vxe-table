@@ -585,7 +585,7 @@ export const Cell = {
       }
     }
     return [
-      isRequired ? h('i', {
+      isRequired && editOpts.showAsterisk ? h('i', {
         class: 'vxe-required-icon'
       }) : null,
       editOpts.showIcon === false ? null : h('i', {

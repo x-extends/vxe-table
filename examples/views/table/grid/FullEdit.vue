@@ -305,13 +305,15 @@ export default {
               // 异步更新下拉选项
               this.sexList = sexList
               const xGrid = this.$refs.xGrid
-              const sexColumn = xGrid.getColumnByField('sex')
-              sexColumn.editRender.options = sexList
-              const sexItem = xGrid.getFormItems(3)
-              sexItem.itemRender.options = sexList
+              if (xGrid) {
+                const sexColumn = xGrid.getColumnByField('sex')
+                sexColumn.editRender.options = sexList
+                const sexItem = xGrid.getFormItems(3)
+                sexItem.itemRender.options = sexList
+              }
             },
             formatAmount ({ cellValue }) {
-              return cellValue ? \`$\${XEUtils.commafy(XEUtils.toFixedString(cellValue, 2))}\` : ''
+              return cellValue ? \`$\${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}\` : ''
             },
             formatDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -335,6 +337,7 @@ export default {
             },
             exportMethod ({ options }) {
               const proxyInfo = this.$refs.xGrid.getProxyInfo()
+              // 传给服务端的参数
               const body = {
                 filename: options.filename,
                 sheetName: options.sheetName,
@@ -355,7 +358,7 @@ export default {
                 if (data.id) {
                   this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
                   // 读取路径，请求文件流 => 开始下载
-                  location.href = \`https://api.xuliangzhan.com:10443/api/download/\${data.id}\`
+                  location.href = \`https://api.xuliangzhan.com:10443/api/pub/export/download/\${data.id}\`
                 }
               }).catch(() => {
                 this.$XModal.message({ message: '导出失败！', status: 'error' })
@@ -381,13 +384,15 @@ export default {
       // 异步更新下拉选项
       this.sexList = sexList
       const xGrid = this.$refs.xGrid
-      const sexColumn = xGrid.getColumnByField('sex')
-      sexColumn.editRender.options = sexList
-      const sexItem = xGrid.getFormItems(3)
-      sexItem.itemRender.options = sexList
+      if (xGrid) {
+        const sexColumn = xGrid.getColumnByField('sex')
+        sexColumn.editRender.options = sexList
+        const sexItem = xGrid.getFormItems(3)
+        sexItem.itemRender.options = sexList
+      }
     },
     formatAmount ({ cellValue }) {
-      return cellValue ? `$${XEUtils.commafy(XEUtils.toFixedString(cellValue, 2))}` : ''
+      return cellValue ? `$${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''
     },
     formatDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -411,6 +416,7 @@ export default {
     },
     exportMethod ({ options }) {
       const proxyInfo = this.$refs.xGrid.getProxyInfo()
+      // 传给服务端的参数
       const body = {
         filename: options.filename,
         sheetName: options.sheetName,
@@ -431,7 +437,7 @@ export default {
         if (data.id) {
           this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
           // 读取路径，请求文件流 => 开始下载
-          location.href = `https://api.xuliangzhan.com:10443/api/download/${data.id}`
+          location.href = `https://api.xuliangzhan.com:10443/api/pub/export/download/${data.id}`
         }
       }).catch(() => {
         this.$XModal.message({ message: '导出失败！', status: 'error' })

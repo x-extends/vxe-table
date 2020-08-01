@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">列选中高亮，通过设置 <table-api-link prop="highlight-current-column"/> 参数</p>
+    <p class="tip">高亮当前列，当前列是唯一的，通过设置 <table-api-link prop="highlight-current-column"/> 参数</p>
 
     <vxe-table
       border

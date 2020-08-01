@@ -2,7 +2,7 @@
   <div>
     <h2>{{ $t('app.aside.nav.input') }}</h2>
     <p class="tip">
-      支持多种类型的输入框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link><br>
+      文本输入、密码输入、数值输入、日期选择，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link><br>
       支持类型：text 文本、search 搜索、password 密码、number 数值、integer 整数、float 小数、date 日期、datetime 时间选择、week 周、month 月份、year 年份
     </p>
 

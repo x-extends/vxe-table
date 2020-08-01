@@ -506,6 +506,7 @@ const renderMap = {
     renderCell (h, renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
+      const digits = props.digits || GlobalConfig.input.digits
       let cellValue = XEUtils.get(row, column.property)
       if (cellValue) {
         switch (props.type) {
@@ -516,7 +517,7 @@ const renderMap = {
             cellValue = getLabelFormatDate(cellValue, props)
             break
           case 'float':
-            cellValue = XEUtils.toFixedString(cellValue, XEUtils.toNumber(props.digits || GlobalConfig.input.digits))
+            cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
             break
         }
       }

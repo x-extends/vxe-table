@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2>{{ $t('app.aside.nav.input') }}</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'textarea'}}">API</router-link></p>
+    <h2>{{ $t('app.aside.nav.textarea') }}</h2>
+    <p class="tip">支持多行文本，自动弹性高度，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'textarea'}}">API</router-link></p>
 
     <p>
       <vxe-textarea v-model="value1" placeholder="默认尺寸"></vxe-textarea>

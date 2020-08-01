@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">数据代理、固定列、服务端排序、服务端筛选、服务端分页，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="radio-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
+    <p class="tip">数据代理、固定列、服务端排序、服务端筛选、服务端分页，导出不分页的所有数据，对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="radio-config"/> 的 <table-api-link prop="reserve"/> 属性</p>
 
     <vxe-grid ref="xGrid" v-bind="gridOptions">
 
@@ -44,7 +44,6 @@ export default {
       gridOptions: {
         resizable: true,
         showOverflow: true,
-        exportConfig: true,
         border: 'inner',
         height: 548,
         rowId: 'id',
@@ -61,6 +60,14 @@ export default {
         pagerConfig: {
           pageSize: 15,
           pageSizes: [5, 15, 20, 50, 100, 200, 500, 1000]
+        },
+        exportConfig: {
+          // 默认选中类型
+          type: 'xlsx',
+          // 自定义类型
+          types: ['xlsx', 'csv', 'html', 'xml', 'txt'],
+          // 自定义数据量列表
+          modes: ['current', 'all']
         },
         radioConfig: {
           labelField: 'id',
@@ -84,7 +91,9 @@ export default {
                 queryParams[field] = values.join(',')
               })
               return XEAjax.get(`https://api.xuliangzhan.com:10443/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
-            }
+            },
+            // 被某些特殊功能所触发，例如：导出数据 mode=all 时，会触发该方法并对返回的数据进行导出
+            queryAll: () => XEAjax.get('https://api.xuliangzhan.com:10443/api/pub/all')
           }
         },
         toolbar: {
@@ -150,7 +159,6 @@ export default {
               gridOptions: {
                 resizable: true,
                 showOverflow: true,
-                exportConfig: true,
                 border: 'inner',
                 height: 548,
                 rowId: 'id',
@@ -167,6 +175,14 @@ export default {
                 pagerConfig: {
                   pageSize: 15,
                   pageSizes: [5, 15, 20, 50, 100, 200, 500, 1000]
+                },
+                exportConfig: {
+                  // 默认选中类型
+                  type: 'xlsx',
+                  // 自定义类型
+                  types: ['xlsx', 'csv', 'html', 'xml', 'txt'],
+                  // 自定义数据量列表
+                  modes: ['current', 'all']
                 },
                 radioConfig: {
                   labelField: 'id',
@@ -190,7 +206,9 @@ export default {
                         queryParams[field] = values.join(',')
                       })
                       return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
-                    }
+                    },
+                    // 被某些特殊功能所触发，例如：导出数据 mode=all 时，会触发该方法并对返回的数据进行导出
+                    queryAll: () => XEAjax.get('https://api.xuliangzhan.com:10443/api/pub/all')
                   }
                 },
                 toolbar: {
@@ -232,7 +250,7 @@ export default {
               this.$refs.xGrid.commitProxy('reload')
             },
             formatAmount ({ cellValue }) {
-              return cellValue ? \`$\${XEUtils.commafy(XEUtils.toFixedString(cellValue, 2))}\` : ''
+              return cellValue ? \`￥\${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}\` : ''
             },
             formatDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -253,7 +271,7 @@ export default {
       this.$refs.xGrid.commitProxy('reload')
     },
     formatAmount ({ cellValue }) {
-      return cellValue ? `$${XEUtils.commafy(XEUtils.toFixedString(cellValue, 2))}` : ''
+      return cellValue ? `￥${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''
     },
     formatDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')

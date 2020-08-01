@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{ $t('app.aside.nav.commands') }}</h1>
-    <p class="tip">你可以很简单的将工具栏按钮或数据代理中常用的指令注册成全局可复用</p>
+    <p class="tip">将工具栏按钮或数据代理中常用的指令注册成全局可复用</p>
     <vxe-table
       resizable
       highlight-current-row

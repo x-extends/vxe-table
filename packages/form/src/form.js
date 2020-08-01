@@ -68,6 +68,7 @@ export default {
     titleAlign: String,
     titleWidth: [String, Number],
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
+    titleAsterisk: { type: Boolean, default: () => GlobalConfig.form.titleAsterisk },
     items: Array,
     rules: Object,
     preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
@@ -93,11 +94,12 @@ export default {
     }
   },
   render (h) {
-    const { $slots, titleColon, loading, vSize } = this
+    const { $slots, loading, vSize } = this
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
         [`size--${vSize}`]: vSize,
-        'is--colon': titleColon,
+        'is--colon': this.titleColon,
+        'is--asterisk': this.titleAsterisk,
         'is--loading': loading
       }],
       on: {
@@ -131,8 +133,7 @@ export default {
         })
       }
     },
-    resetEvent (evnt) {
-      evnt.preventDefault()
+    reset () {
       const { data } = this
       if (data) {
         this.$children.forEach(({ field, resetValue, itemRender }) => {
@@ -145,8 +146,12 @@ export default {
           }
         })
       }
-      this.clearValidate()
-      this.$emit('reset', { data, $form: this, $event: evnt })
+      return this.clearValidate()
+    },
+    resetEvent (evnt) {
+      evnt.preventDefault()
+      this.reset()
+      this.$emit('reset', { data: this.this, $form: this, $event: evnt })
     },
     clearValidate (field) {
       if (field) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.checkbox') }}</h2>
-    <p class="tip">复选框</p>
+    <p class="tip">复选框、复选组</p>
 
     <p>
       <vxe-checkbox v-model="value1">默认尺寸</vxe-checkbox>

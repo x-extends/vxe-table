@@ -1180,7 +1180,7 @@ const apis = [
           },
           {
             name: 'range',
-            desc: '开启复选框范围勾选功能（启用后通过鼠标在复选框的列圈选指定行）',
+            desc: '开启复选框范围选择功能（启用后通过鼠标在复选框的列内滑动选中或取消指定行）',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1698,6 +1698,15 @@ const apis = [
             list: []
           },
           {
+            name: 'showAsterisk',
+            desc: '是否显示必填字段的红色星号',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'autoClear',
             desc: '当点击非编辑列之后，是否自动清除单元格的激活状态',
             version: '',
@@ -1768,7 +1777,7 @@ const apis = [
         name: 'edit-rules',
         descKey: 'app.api.table.desc.editRules',
         version: '',
-        type: 'any',
+        type: '{ [field: string]: ColumnEditRule[] }',
         enum: '',
         defVal: '',
         list: [
@@ -2221,6 +2230,33 @@ const apis = [
         type: '',
         enum: '',
         defVal: '{ records, reserves, indeterminates, checked, $event }',
+        list: []
+      },
+      {
+        name: 'checkbox-range-start',
+        desc: '只对 checkbox-config.range 有效，当鼠标范围选择开始时会触发的事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ records, reserves, $event }',
+        list: []
+      },
+      {
+        name: 'checkbox-range-change',
+        desc: '只对 checkbox-config.range 有效，当鼠标范围选择内的行数发生变化时会触发的事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ records, reserves, $event }',
+        list: []
+      },
+      {
+        name: 'checkbox-range-end',
+        desc: '只对 checkbox-config.range 有效，当鼠标范围选择结束时会触发的事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ records, reserves, $event }',
         list: []
       },
       {

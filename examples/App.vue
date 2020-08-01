@@ -87,30 +87,46 @@
     </div>
 
     <vxe-modal v-model="supportVisible" :loading="supportLoading" title="技术支持" width="800" position="center">
-      <div class="support-declare">考虑到很多用户有需要支持的需求，提供该付费技术群用于快速解决使用过程中遇到的各种问题，同时也能支撑该项目可以持续的维护下去。若非必要建议先查阅相关的文档！，如果确实需要支持请先通过邮件描述一下问题！</div>
+      <div class="support-declare">考虑到很多用户有需要支持的需求，提供该付费技术群用于快速解决使用过程中遇到的各种问题，同时也能支撑该项目可以持续的维护下去。若非必要建议先查阅相关的文档！</div>
       <div>
         <ul class="vxe-row support-question">
           <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
-            <i :class="item.icon || 'fa fa-question-circle'"></i>
+            <vxe-tooltip :content="item.message || item.label">
+              <i class="support-help-icon" :class="item.icon || 'fa fa-question-circle'"></i>
+            </vxe-tooltip>
             <span>&nbsp;{{ item.label }}</span>
           </li>
         </ul>
       </div>
       <div class="vxe-row support-group">
-        <div class="vxe-col--24 support-group-item">
+        <div class="vxe-col--12 support-group-item">
           <div class="support-name">技术支持群</div>
-          <div v-if="discountPrice" class="support-price">¥ {{ discountPrice }}<span v-if="discountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span></div>
-          <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span></div>
+          <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持以及项目模板的更新和维护，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+          <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持以及项目模板的更新和维护，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
           <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请加入</vxe-button>
+          <ul class="support-describe">
+            <li>1. 快速解决遇到的问题</li>
+            <li>2. 包含项目模板及实例</li>
+          </ul>
+        </div>
+        <div class="vxe-col--12 support-group-item">
+          <div class="template-name">真实项目模板</div>
+          <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-1')">查看演示 PC-1</vxe-button>
+          <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-2')" disabled>查看演示 PC-2</vxe-button>
+          <ul class="template-describe">
+            <li>工程：<a class="link" href="https://cli.vuejs.org/" target="_blank">vue-cli4</a>, <a class="link" href="https://www.npmjs.com/package/vue" target="_blank">vue2.6</a></li>
+            <li>使用库：<a class="link" href="https://www.npmjs.com/package/vxe-table" target="_blank">vxe-table</a>, <a class="link" href="https://www.npmjs.com/package/xe-utils" target="_blank">xe-utils</a>, <a class="link" href="https://www.npmjs.com/package/axios" target="_blank">axios</a>, <a class="link" href="https://www.npmjs.com/package/axios" target="_blank">echarts</a></li>
+            <li>描述：丰富的增删改查实例及常用的业务组件封装，演示的组件都可以直接使用，也可以直接移植到任何 vue 项目中，使开发效率翻倍提升。</li>
+          </ul>
         </div>
       </div>
     </vxe-modal>
-    <vxe-modal v-model="supportGroupVisible" title="申请加入付费群" width="600" position="center">
+    <vxe-modal v-model="supportGroupVisible" title="申请加入付费群" width="600" height="680" position="center">
       <template>
         <div class="support-pay-step">
           <p style="font-size: 12px;">联系邮件： <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
-          <p class="title">1. 扫码申请加入<br><img src="static/support/qq.png"></p>
-          <p class="title">2. 通过支付宝或微信付费：¥{{ discountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
+          <p class="title">1. QQ 扫码申请加入<br><img src="static/support/qq.png"></p>
+          <p class="title">2. 通过支付宝或微信付费：¥{{ supportDiscountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
           <p class="title">3. 付费完成后点击“联系收款方”，留言QQ号即可</p>
         </div>
       </template>
@@ -125,51 +141,64 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
-      discountPrice: 188,
-      supportGroupPrice: 299,
+      supportDiscountPrice: 266,
+      supportGroupPrice: 499,
       supportLoading: false,
       supportVisible: false,
       supportQuestion: '',
       supportGroupVisible: false,
       supportQuestionList: [
         {
-          label: '安装/按需/报错/国际化/版本升级'
+          label: '安装/按需/报错/国际化/版本升级',
+          message: '安装报错、版本升级报错、版本升级兼容性如何解决、国际化如果使用'
         },
         {
-          label: '主题/样式/图标相关问题'
+          label: '主题/样式/图标相关问题',
+          message: '修改行高、样式、背景，自定义图标，比如 font-awesome、iconfont 等'
         },
         {
-          label: '增删改查/数据校验/键盘导航实现'
+          label: '增删改查/数据校验/键盘导航实现',
+          message: '实现 Grid 的增删改查、新增保存的数据校验、服务端校验、按键导航事件监听等'
         },
         {
-          label: '列错乱/列权限/动态列/自定义列问题'
+          label: '列错乱/列权限/动态列/自定义列问题',
+          message: '在 Tabs 页签中列宽显示错乱、弹出框中列显示错乱、在弹出框下拉框被遮挡、日期选择被遮挡等'
         },
         {
-          label: '数据联动/分组显示/合并与列问题'
+          label: '数据联动/分组显示/合并与列问题',
+          message: '单元格的数据联动、单元格中下拉框级联关系、分组表格实现方式、合并行或列的实现'
         },
         {
-          label: '数据代理/Grid配置式使用问题'
+          label: '数据代理/Grid配置式使用问题',
+          message: '使用 Grid 数据代理，自定义返回数据结构、使用 json 动态渲染 Grid'
         },
         {
-          label: '高级筛选/可编辑/下拉容器/渲染器使用问题'
+          label: '高级筛选/可编辑/下拉容器/渲染器使用问题',
+          message: '实现高级筛选模板、自定义单元格可编辑渲染器、复用业务渲染器、下拉容器使用方法、自定义下拉容器实现'
         },
         {
-          label: '虚拟列表/虚拟树/虚拟下拉框使用问题'
+          label: '虚拟列表/虚拟树/虚拟下拉框使用问题',
+          message: '实现大数据虚拟表格、大数据虚拟树表格、大数据虚拟列表、大数据虚拟下拉框、大数据虚拟下拉容器'
         },
         {
-          label: '打印/导入/导出/数据格式化等问题'
+          label: '打印/导入/导出/数据格式化等问题',
+          message: '打印自定义数据、打印指定行货列、打印数据格式化、服务端导出、服务端导入'
         },
         {
-          label: '动态表单/表单权限/配置式使用问题'
+          label: '动态表单/表单权限/配置式使用问题',
+          message: '使用 json 动态生成表单、自定义表单渲染、禁用编辑、事件绑定'
         },
         {
-          label: '输入框日期节日/工具栏/分页/模态窗口等模块'
+          label: '输入框/日期选择/工具栏/分页/模态窗口等模块',
+          message: '日期带节日、自定义日期节日提醒、工具栏自定义位置、前端分页、后端分页、窗口居中、多窗口、窗口放大与缩小等'
         },
         {
-          label: '第三方 UI 库集成渲染问题'
+          label: '第三方 UI 库集成渲染问题',
+          message: '例如集成 element-ui、view-ui、nt-design-vue 或者其他自定义组件集成用户，比如在单元格中无法选中、事件绑定等'
         },
         {
-          label: '额外需求的定制（不包括，需咨询）',
+          label: '额外需求的定制（需咨询）',
+          message: '如果需要定制特殊需求，请先需咨询',
           icon: 'fa fa-exclamation-triangle'
         }
       ],
@@ -1998,11 +2027,38 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.vxeRadioGroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'radio-group'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeRadioButton',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'radio-button'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeCheckbox',
               locat: {
                 name: 'VXEAPI',
                 params: {
                   name: 'checkbox'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeCheckboxGroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'checkbox-group'
                 }
               }
             },
@@ -2030,6 +2086,24 @@ export default {
                 name: 'VXEAPI',
                 params: {
                   name: 'select'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeOptgroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'optgroup'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeOption',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'option'
                 }
               }
             },
@@ -2205,7 +2279,7 @@ export default {
       setInterval(() => {
         const performance = window.performance || window.webkitPerformance
         if (performance && performance.memory) {
-          this.usedJSHeapSize = XEUtils.toFixedNumber(performance.memory.usedJSHeapSize / 1048576, 2)
+          this.usedJSHeapSize = XEUtils.toFixed(XEUtils.floor(performance.memory.usedJSHeapSize / 1048576, 2), 2)
         }
       }, 3000)
     }
@@ -2310,6 +2384,9 @@ export default {
         this.supportLoading = false
         this.supportGroupVisible = true
       }, 300)
+    },
+    openEvent (tmplName) {
+      open(`https://xuliangzhan_admin.gitee.io/vxe-template/${tmplName}/`)
     },
     vChangeEvent () {
       switch (this.version) {

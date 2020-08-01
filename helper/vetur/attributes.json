@@ -252,7 +252,7 @@
     "description": "校验配置项"
   },
   "vxe-table/edit-rules": {
-    "type": "any",
+    "type": "{ [field: string]: columneditrule[] }",
     "description": "校验规则配置项"
   },
   "vxe-table/empty-render": {
@@ -676,7 +676,7 @@
     "description": "校验配置项"
   },
   "vxe-grid/edit-rules": {
-    "type": "any",
+    "type": "{ [field: string]: columneditrule[] }",
     "description": "校验规则配置项"
   },
   "vxe-grid/empty-render": {
@@ -863,6 +863,26 @@
     "type": "string",
     "description": "原生 name 属性"
   },
+  "vxe-radio-group/label": {
+    "type": "string | number",
+    "description": "绑定值"
+  },
+  "vxe-radio-group/disabled": {
+    "type": "boolean",
+    "description": "是否禁用"
+  },
+  "vxe-radio-button/label": {
+    "type": "string | number",
+    "description": "绑定值"
+  },
+  "vxe-radio-button/content": {
+    "type": "string | number",
+    "description": "显示内容"
+  },
+  "vxe-radio-button/disabled": {
+    "type": "boolean",
+    "description": "是否禁用"
+  },
   "vxe-checkbox/value,v-model": {
     "type": "any",
     "description": "绑定值"
@@ -890,6 +910,14 @@
   "vxe-checkbox/indeterminate": {
     "type": "boolean",
     "description": "是否不确定状态"
+  },
+  "vxe-checkbox-group/label": {
+    "type": "any[]",
+    "description": "绑定值"
+  },
+  "vxe-checkbox-group/disabled": {
+    "type": "boolean",
+    "description": "是否禁用"
   },
   "vxe-switch/value,v-model": {
     "type": "string | number | boolean",
@@ -1059,6 +1087,10 @@
     "type": "string",
     "description": "空值显示的占位符"
   },
+  "vxe-select/visible": {
+    "type": "boolean",
+    "description": "是否显示"
+  },
   "vxe-select/disabled": {
     "type": "boolean",
     "description": "是否禁用"
@@ -1099,29 +1131,29 @@
     "type": "boolean",
     "description": "是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）"
   },
-  "vxe-optgroup/size": {
-    "type": "string",
-    "description": "尺寸"
-  },
   "vxe-optgroup/label": {
     "type": "string | number | boolean",
     "description": "显示内容"
+  },
+  "vxe-optgroup/visible": {
+    "type": "boolean",
+    "description": "是否显示"
   },
   "vxe-optgroup/disabled": {
     "type": "boolean",
     "description": "是否禁用"
   },
-  "vxe-option/value,v-model": {
+  "vxe-option/value": {
     "type": "any",
     "description": "绑定值"
-  },
-  "vxe-option/size": {
-    "type": "string",
-    "description": "尺寸"
   },
   "vxe-option/label": {
     "type": "string | number | boolean",
     "description": "显示内容"
+  },
+  "vxe-option/visible": {
+    "type": "boolean",
+    "description": "是否显示"
   },
   "vxe-option/disabled": {
     "type": "boolean",
@@ -1367,12 +1399,16 @@
     "type": "boolean",
     "description": "是否显示标题冒号"
   },
+  "vxe-form/title-asterisk": {
+    "type": "boolean",
+    "description": "是否显示必填字段的红色星号"
+  },
   "vxe-form/items": {
     "type": "any[]",
     "description": "项列表"
   },
   "vxe-form/rules": {
-    "type": "any",
+    "type": "{ [field: string]: formrule[] }",
     "description": "校验规则配置项"
   },
   "vxe-form/prevent-submit": {

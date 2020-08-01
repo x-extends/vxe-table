@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{ $t('app.aside.nav.menus') }}</h1>
-    <p class="tip">你可以很简单的将常用的快捷菜单注册成全局可复用的</p>
+    <p class="tip">将快捷菜单注册成全局可复用的</p>
     <vxe-table
       resizable
       highlight-current-row

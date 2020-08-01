@@ -95,9 +95,9 @@ export default {
         pdf: 'PDF (*.pdf)'
       },
       modes: {
-        current: 'Current data',
-        selected: 'Selected Data',
-        all: 'All data'
+        current: 'Current data (data of current page)',
+        selected: 'Selected data (data selected on the current page)',
+        all: 'Full data (including all paging data)'
       },
       expTitle: 'Export parameter settings',
       expName: 'Filename',

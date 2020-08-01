@@ -22,7 +22,10 @@
       </code>
     </pre>
     <h2>CDN</h2>
-    <p class="tip">可以通过 <a class="link" href="https://unpkg.com/vxe-table/">unpkg</a> 或 <a class="link" href="https://cdn.jsdelivr.net/npm/vxe-table/">cdnjs</a> 获取到最新版本的资源，并在页面上引入即可</p>
+    <p class="tip">
+      可以通过 <a class="link" href="https://unpkg.com/vxe-table/">unpkg</a> 或 <a class="link" href="https://cdn.jsdelivr.net/npm/vxe-table/">cdnjs</a> 获取到最新版本的资源，并在页面上引入即可<br>
+      <span class="red">（注：使用 cdn 引用方式需要注意是否锁定版本，默认指向最新版本）</span>
+    </p>
     <pre>
       <code class="xml">
         &lt;!-- 引入样式 --&gt;

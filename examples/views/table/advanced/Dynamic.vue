@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      配合 v-for 动态生成，动态改变宽度、固定列..等<span class="green">（如果是全动态的数据源建议使用 <grid-api-link name="vxe-grid"/>）</span><br>
-      如果是列发生变动，则需要通过调用 <table-api-link prop="refreshColumn"/> 方法刷新列信息<br>
+      使用 v-for 去循环列是不建议的<span class="green">（建议动态列使用 <grid-api-link name="vxe-grid"/> 进行渲染）</span><br>
+      如果列信息发生变动，则需要通过调用 <table-api-link prop="refreshColumn"/> 方法刷新列信息<br>
       <span class="red">（注：动态更新属性必须要先定义，否则将失去自动响应）</span>
     </p>
 

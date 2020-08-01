@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{ $t('app.aside.nav.formats') }}</h1>
-    <p class="tip">你可以很简单的将单元格的格式化函数注册成全局可复用，通过 <table-column-api-link prop="formatter"/> 调用</p>
+    <p class="tip">将列的格式化函数注册成全局可复用，通过 <table-column-api-link prop="formatter"/> 调用</p>
     <vxe-table
       resizable
       highlight-current-row

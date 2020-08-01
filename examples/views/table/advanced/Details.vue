@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现点击行弹出窗口显示详情<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
+    <p class="tip">实现点击行弹出窗口并显示详情信息<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-table
       border

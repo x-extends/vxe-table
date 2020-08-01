@@ -5,6 +5,7 @@ import assign from 'xe-utils/methods/object/assign'
 import objectEach from 'xe-utils/methods/object/objectEach'
 // import lastObjectEach from 'xe-utils/methods/object/lastObjectEach'
 import objectMap from 'xe-utils/methods/object/objectMap'
+import merge from 'xe-utils/methods/object/merge'
 
 // array
 import map from 'xe-utils/methods/array/map'
@@ -113,8 +114,10 @@ import destructuring from 'xe-utils/methods/base/destructuring'
 // import max from 'xe-utils/methods/number/max'
 // import min from 'xe-utils/methods/number/min'
 // import commafy from 'xe-utils/methods/number/commafy'
-import toFixedString from 'xe-utils/methods/number/toFixedString'
-import toFixedNumber from 'xe-utils/methods/number/toFixedNumber'
+import round from 'xe-utils/methods/number/round'
+import ceil from 'xe-utils/methods/number/ceil'
+import floor from 'xe-utils/methods/number/floor'
+import toFixed from 'xe-utils/methods/number/toFixed'
 import toInteger from 'xe-utils/methods/number/toInteger'
 import toNumber from 'xe-utils/methods/number/toNumber'
 import add from 'xe-utils/methods/number/add'
@@ -184,6 +187,7 @@ export default {
   objectEach,
   // lastObjectEach,
   objectMap,
+  merge,
 
   // array
   map,
@@ -294,8 +298,10 @@ export default {
   // max,
   // min,
   // commafy,
-  toFixedString,
-  toFixedNumber,
+  round,
+  ceil,
+  floor,
+  toFixed,
   toInteger,
   toNumber,
   add,

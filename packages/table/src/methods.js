@@ -4,7 +4,9 @@ import Cell from '../../cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
-const browse = DomTools.browse
+const { getRowid, getRowkey, setCellValue, getCellLabel, hasChildrenList } = UtilTools
+const { browse, hasClass, addClass, removeClass, triggerEvent, getEventTargetNode } = DomTools
+
 const isWebkit = browse['-webkit'] && !browse.edge
 const debounceScrollYDuration = browse.msie ? 40 : 20
 
@@ -18,9 +20,19 @@ function getRowUniqueId () {
   return XEUtils.uniqueId('row_')
 }
 
+/**
+ * 单元格的值为：'' | null | undefined 时都属于空值
+ */
+function eqCellNull (cellValue) {
+  return cellValue === '' || XEUtils.eqNull(cellValue)
+}
+
 function eqCellValue (row1, row2, field) {
   const val1 = XEUtils.get(row1, field)
   const val2 = XEUtils.get(row2, field)
+  if (eqCellNull(val1) && eqCellNull(val2)) {
+    return true
+  }
   if (XEUtils.isString(val1) || XEUtils.isNumber(val1)) {
     /* eslint-disable eqeqeq */
     return val1 == val2
@@ -237,10 +249,10 @@ const Methods = {
   updateCache (source) {
     const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap } = this
     let { fullDataRowIdData, fullAllDataRowIdData } = this
-    const rowkey = UtilTools.getRowkey(this)
+    const rowkey = getRowkey(this)
     const isLazy = treeConfig && treeOpts.lazy
     const handleCache = (row, index) => {
-      let rowid = UtilTools.getRowid(this, row)
+      let rowid = getRowid(this, row)
       if (!rowid) {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
@@ -271,14 +283,14 @@ const Methods = {
   appendTreeCache (row, childs) {
     const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
     const { children, hasChild } = treeOpts
-    const rowkey = UtilTools.getRowkey(this)
-    const rowid = UtilTools.getRowid(this, row)
+    const rowkey = getRowkey(this)
+    const rowid = getRowid(this, row)
     let matchObj
     if (keepSource) {
-      matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+      matchObj = XEUtils.findTree(tableSourceData, item => rowid === getRowid(this, item), treeOpts)
     }
     XEUtils.eachTree(childs, (row, index) => {
-      let rowid = UtilTools.getRowid(this, row)
+      let rowid = getRowid(this, row)
       if (!rowid) {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
@@ -344,7 +356,7 @@ const Methods = {
       const { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData } = this
       const rowid = tr.getAttribute('data-rowid')
       if (treeConfig) {
-        const matchObj = XEUtils.findTree(tableFullData, row => UtilTools.getRowid(this, row) === rowid, treeOpts)
+        const matchObj = XEUtils.findTree(tableFullData, row => getRowid(this, row) === rowid, treeOpts)
         if (matchObj) {
           return matchObj
         }
@@ -425,7 +437,7 @@ const Methods = {
    */
   defineField (record) {
     const { treeConfig, treeOpts } = this
-    const rowkey = UtilTools.getRowkey(this)
+    const rowkey = getRowkey(this)
     this.visibleColumn.forEach(({ property, editRender }) => {
       if (property && !XEUtils.has(record, property)) {
         XEUtils.set(record, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
@@ -446,7 +458,7 @@ const Methods = {
    * @param {Array} records 新数据
    */
   createData (records) {
-    const rowkey = UtilTools.getRowkey(this)
+    const rowkey = getRowkey(this)
     const rows = records.map(record => this.defineField(Object.assign({}, record, { [rowkey]: null })))
     return this.$nextTick().then(() => rows)
   },
@@ -519,7 +531,7 @@ const Methods = {
       rows.forEach(row => {
         visibleColumn.forEach(column => {
           if (column.property) {
-            UtilTools.setCellValue(row, column, null)
+            setCellValue(row, column, null)
           }
         })
       })
@@ -542,14 +554,14 @@ const Methods = {
     const { visibleColumn, keepSource, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
     if (keepSource) {
       let oRow, property
-      const rowid = UtilTools.getRowid(this, row)
+      const rowid = getRowid(this, row)
       // 新增的数据不需要检测
       if (!fullDataRowIdData[rowid]) {
         return false
       }
       if (treeConfig) {
         const children = treeOpts.children
-        const matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
+        const matchObj = XEUtils.findTree(tableSourceData, item => rowid === getRowid(this, item), treeOpts)
         row = Object.assign({}, row, { [children]: null })
         if (matchObj) {
           oRow = Object.assign({}, matchObj.item, { [children]: null })
@@ -689,7 +701,7 @@ const Methods = {
           tableData = allSortMethod({ data: tableData, column, property, order, $table: this }) || tableData
         } else {
           const params = { $table: this }
-          const rest = sortMethod ? tableData.sort(sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => UtilTools.getCellLabel(row, column, params) : property)))
+          const rest = sortMethod ? tableData.sort(sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => getCellLabel(row, column, params) : property)))
           tableData = order === 'desc' ? rest.reverse() : rest
         }
       }
@@ -931,7 +943,7 @@ const Methods = {
       const centerGroupList = []
       const rightGroupList = []
       XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
-        const isColGroup = UtilTools.hasChildrenList(column)
+        const isColGroup = hasChildrenList(column)
         // 如果是分组，必须按组设置固定列，不允许给子列设置固定
         if (parent && parent.fixed) {
           column.fixed = parent.fixed
@@ -940,7 +952,7 @@ const Methods = {
           UtilTools.error('vxe.error.groupFixed')
         }
         if (isColGroup) {
-          column.visible = !!XEUtils.findTree(column.children, subColumn => UtilTools.hasChildrenList(subColumn) ? null : subColumn.visible)
+          column.visible = !!XEUtils.findTree(column.children, subColumn => hasChildrenList(subColumn) ? null : subColumn.visible)
         } else if (column.visible) {
           if (column.fixed === 'left') {
             leftList.push(column)
@@ -1470,12 +1482,12 @@ const Methods = {
     const { actived } = editStore
     const { filterWrapper, validTip } = $refs
     if (filterWrapper) {
-      if (DomTools.getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
+      if (getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
         // 如果点击了筛选按钮
-      } else if (DomTools.getEventTargetNode(evnt, filterWrapper.$el).flag) {
+      } else if (getEventTargetNode(evnt, filterWrapper.$el).flag) {
         // 如果点击筛选容器
       } else {
-        if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
+        if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
           this.preventEvent(evnt, 'event.clearFilter', filterStore.args, this.closeFilter)
         }
       }
@@ -1483,32 +1495,41 @@ const Methods = {
     // 如果已激活了编辑状态
     if (actived.row) {
       if (!(editOpts.autoClear === false)) {
-        if (validTip && DomTools.getEventTargetNode(evnt, validTip.$el).flag) {
+        if (validTip && getEventTargetNode(evnt, validTip.$el).flag) {
           // 如果是激活状态，且点击了校验提示框
         } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
           // 如果是激活状态，且点击了下拉选项
-          if (!DomTools.getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
+          if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
             // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
             this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
               let isClear
               if (editOpts.mode === 'row') {
-                const rowNode = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--row')
+                const rowNode = getEventTargetNode(evnt, $el, 'vxe-body--row')
                 // row 方式，如果点击了不同行
                 isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== actived.args.row : false
               } else {
                 // cell 方式，如果是非编辑列
-                isClear = !DomTools.getEventTargetNode(evnt, $el, 'col--edit').flag
+                isClear = !getEventTargetNode(evnt, $el, 'col--edit').flag
               }
+              // 如果点击表头行，则清除激活状态
               if (!isClear) {
-                isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-header--row').flag
+                isClear = getEventTargetNode(evnt, $el, 'vxe-header--row').flag
               }
+              // 如果点击表尾行，则清除激活状态
               if (!isClear) {
-                isClear = DomTools.getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
+                isClear = getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
+              }
+              // 如果固定了高度且点击了行之外的空白处，则清除激活状态
+              if (!isClear && this.height && !this.overflowY) {
+                const bodyWrapperElem = evnt.target
+                if (hasClass(bodyWrapperElem, 'vxe-table--body-wrapper')) {
+                  isClear = evnt.offsetY < bodyWrapperElem.clientHeight
+                }
               }
               if (
                 isClear ||
                   // 如果点击了当前表格之外
-                  !DomTools.getEventTargetNode(evnt, $el).flag
+                  !getEventTargetNode(evnt, $el).flag
               ) {
                 setTimeout(() => this.clearActived(evnt))
               }
@@ -1517,16 +1538,16 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!DomTools.getEventTargetNode(evnt, $el).flag && !DomTools.getEventTargetNode(evnt, $refs.tableWrapper).flag) {
+      if (!getEventTargetNode(evnt, $el).flag && !getEventTargetNode(evnt, $refs.tableWrapper).flag) {
         this.clearSelected()
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
-    if (ctxMenuStore.visible && this.$refs.ctxWrapper && !DomTools.getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+    if (ctxMenuStore.visible && this.$refs.ctxWrapper && !getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
       this.closeMenu()
     }
     // 最后激活的表格
-    this.isActivated = DomTools.getEventTargetNode(evnt, (this.$xegrid || this).$el).flag
+    this.isActivated = getEventTargetNode(evnt, (this.$xegrid || this).$el).flag
   },
   /**
    * 窗口失焦事件处理
@@ -1626,7 +1647,7 @@ const Methods = {
         } else if (operCtxMenu) {
           // 如果配置了右键菜单; 支持方向键操作、回车
           evnt.preventDefault()
-          if (ctxMenuStore.showChild && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
+          if (ctxMenuStore.showChild && hasChildrenList(ctxMenuStore.selected)) {
             this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
           } else {
             this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
@@ -1655,7 +1676,7 @@ const Methods = {
         } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
           // 如果是删除键
           if (keyboardConfig.isDel && (selected.row || selected.column)) {
-            UtilTools.setCellValue(selected.row, selected.column, null)
+            setCellValue(selected.row, selected.column, null)
             if (isBack) {
               this.handleActived(selected.args, evnt)
             }
@@ -1679,7 +1700,7 @@ const Methods = {
           if (selected.column && selected.row && selected.column.editRender) {
             if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
               if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
-                UtilTools.setCellValue(selected.row, selected.column, null)
+                setCellValue(selected.row, selected.column, null)
                 this.handleActived(selected.args, evnt)
               }
             }
@@ -1836,7 +1857,7 @@ const Methods = {
       this.setAllCheckboxRow(true)
     } else if (checkRowKeys) {
       const defSelection = []
-      const rowkey = UtilTools.getRowkey(this)
+      const rowkey = getRowkey(this)
       checkRowKeys.forEach(rowid => {
         if (fullDataRowIdData[rowid]) {
           defSelection.push(fullDataRowIdData[rowid].row)
@@ -2048,11 +2069,11 @@ const Methods = {
       if (reserve) {
         if (value) {
           selectRows.forEach(row => {
-            checkboxReserveRowMap[UtilTools.getRowid(this, row)] = row
+            checkboxReserveRowMap[getRowid(this, row)] = row
           })
         } else {
           afterFullData.forEach(row => {
-            const rowid = UtilTools.getRowid(this, row)
+            const rowid = getRowid(this, row)
             if (checkboxReserveRowMap[rowid]) {
               delete checkboxReserveRowMap[rowid]
             }
@@ -2114,7 +2135,7 @@ const Methods = {
     }
     // 还原保留选中状态
     if (radioOpts.reserve && radioReserveRow) {
-      const rowid = UtilTools.getRowid(this, radioReserveRow)
+      const rowid = getRowid(this, radioReserveRow)
       if (fullDataRowIdData[rowid]) {
         this.setRadioRow(fullDataRowIdData[rowid].row)
       }
@@ -2146,7 +2167,7 @@ const Methods = {
   getRadioReserveRecord () {
     const { fullDataRowIdData, radioReserveRow, radioOpts } = this
     if (radioOpts.reserve && radioReserveRow) {
-      if (!fullDataRowIdData[UtilTools.getRowid(this, radioReserveRow)]) {
+      if (!fullDataRowIdData[getRowid(this, radioReserveRow)]) {
         return radioReserveRow
       }
     }
@@ -2184,7 +2205,7 @@ const Methods = {
   handleCheckboxReserveRow (row, checked) {
     const { checkboxReserveRowMap, checkboxOpts } = this
     if (checkboxOpts.reserve) {
-      const rowid = UtilTools.getRowid(this, row)
+      const rowid = getRowid(this, row)
       if (checked) {
         checkboxReserveRowMap[rowid] = row
       } else if (checkboxReserveRowMap[rowid]) {
@@ -2221,7 +2242,7 @@ const Methods = {
     }
     if (reserve) {
       tableFullData.forEach(row => {
-        const rowid = UtilTools.getRowid(this, row)
+        const rowid = getRowid(this, row)
         if (checkboxReserveRowMap[rowid]) {
           delete checkboxReserveRowMap[rowid]
         }
@@ -2244,7 +2265,7 @@ const Methods = {
         this.setRadioRow(fullDataRowIdData[rowid].row)
       }
       if (reserve) {
-        const rowkey = UtilTools.getRowkey(this)
+        const rowkey = getRowkey(this)
         this.radioReserveRow = { [rowkey]: rowid }
       }
     }
@@ -2275,7 +2296,7 @@ const Methods = {
     this.clearCurrentColumn()
     this.currentRow = row
     if (this.highlightCurrentRow) {
-      XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${UtilTools.getRowid(this, row)}"]`), elem => DomTools.addClass(elem, 'row--current'))
+      XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${getRowid(this, row)}"]`), elem => addClass(elem, 'row--current'))
     }
     return this.$nextTick()
   },
@@ -2301,7 +2322,7 @@ const Methods = {
   clearCurrentRow () {
     this.currentRow = null
     this.hoverRow = null
-    XEUtils.arrayEach(this.$el.querySelectorAll('.row--current'), elem => DomTools.removeClass(elem, 'row--current'))
+    XEUtils.arrayEach(this.$el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
     return this.$nextTick()
   },
   /**
@@ -2330,13 +2351,13 @@ const Methods = {
     this.setHoverRow(row)
   },
   setHoverRow (row) {
-    const rowid = UtilTools.getRowid(this, row)
+    const rowid = getRowid(this, row)
     this.clearHoverRow()
-    XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowid}"]`), elem => DomTools.addClass(elem, 'row--hover'))
+    XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
     this.hoverRow = row
   },
   clearHoverRow () {
-    XEUtils.arrayEach(this.$el.querySelectorAll('.vxe-body--row.row--hover'), elem => DomTools.removeClass(elem, 'row--hover'))
+    XEUtils.arrayEach(this.$el.querySelectorAll('.vxe-body--row.row--hover'), elem => removeClass(elem, 'row--hover'))
     this.hoverRow = null
   },
   triggerHeaderCellClickEvent (evnt, params) {
@@ -2344,8 +2365,8 @@ const Methods = {
     const { column } = params
     const cell = evnt.currentTarget
     const triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
-    const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
-    const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
+    const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
+    const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
     if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
       this.triggerSortEvent(evnt, column, getNextSortOrder(this, column))
     }
@@ -2411,10 +2432,10 @@ const Methods = {
     const isCheckboxType = type === 'checkbox'
     const isExpandType = type === 'expand'
     const cell = evnt.currentTarget
-    const triggerRadio = isRadioType && DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--radio').flag
-    const triggerCheckbox = isCheckboxType && DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
-    const triggerTreeNode = treeNode && DomTools.getEventTargetNode(evnt, cell, 'vxe-tree--btn-wrapper').flag
-    const triggerExpandNode = isExpandType && DomTools.getEventTargetNode(evnt, cell, 'vxe-table--expanded').flag
+    const triggerRadio = isRadioType && getEventTargetNode(evnt, cell, 'vxe-cell--radio').flag
+    const triggerCheckbox = isCheckboxType && getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
+    const triggerTreeNode = treeNode && getEventTargetNode(evnt, cell, 'vxe-tree--btn-wrapper').flag
+    const triggerExpandNode = isExpandType && getEventTargetNode(evnt, cell, 'vxe-table--expanded').flag
     params = Object.assign({ cell, triggerRadio, triggerCheckbox, triggerTreeNode, triggerExpandNode }, params)
     // 如果是展开行
     if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
@@ -2805,7 +2826,7 @@ const Methods = {
         this.setAllTreeExpand(true)
       } else if (expandRowKeys) {
         const defExpandeds = []
-        const rowkey = UtilTools.getRowkey(this)
+        const rowkey = getRowkey(this)
         expandRowKeys.forEach(rowid => {
           const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeOpts)
           if (matchObj) {
@@ -3201,7 +3222,7 @@ const Methods = {
       const footerElem = $refs.tableFooter ? $refs.tableFooter.$el : null
       if (footerElem) {
         footerElem.scrollLeft = scrollLeft
-        DomTools.triggerEvent(footerElem, 'scroll')
+        triggerEvent(footerElem, 'scroll')
       } else {
         istriggerBody = true
         bodyElem.scrollLeft = scrollLeft
@@ -3211,14 +3232,14 @@ const Methods = {
       const rightBodyElem = $refs.rightBody ? $refs.rightBody.$el : null
       if (rightBodyElem) {
         rightBodyElem.scrollTop = scrollTop
-        DomTools.triggerEvent(rightBodyElem, 'scroll')
+        triggerEvent(rightBodyElem, 'scroll')
       } else {
         istriggerBody = true
         bodyElem.scrollTop = scrollTop
       }
     }
     if (istriggerBody) {
-      DomTools.triggerEvent(bodyElem, 'scroll')
+      triggerEvent(bodyElem, 'scroll')
     }
     if (this.scrollXLoad || this.scrollYLoad) {
       return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
@@ -3319,13 +3340,13 @@ const Methods = {
             return this.validCellRules(type, row, column, cellValue)
               .then(() => {
                 if (customVal && validStore.visible) {
-                  UtilTools.setCellValue(row, column, cellValue)
+                  setCellValue(row, column, cellValue)
                 }
                 this.clearValidate()
               })
               .catch(({ rule }) => {
                 if (customVal) {
-                  UtilTools.setCellValue(row, column, cellValue)
+                  setCellValue(row, column, cellValue)
                 }
                 this.showValidTooltip({ rule, row, column, cell })
               })
