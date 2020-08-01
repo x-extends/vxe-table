@@ -631,9 +631,12 @@ export default {
       if (type === 'integer') {
         return XEUtils.toInteger(step) || 1
       } else if (type === 'float') {
-        return XEUtils.toNumber(step) || (1 / Math.pow(10, XEUtils.toInteger(this.digits) || 1))
+        return XEUtils.toNumber(step) || (1 / Math.pow(10, this.digitsValue))
       }
       return XEUtils.toNumber(step) || 1
+    },
+    digitsValue () {
+      return XEUtils.toInteger(this.digits) || 1
     },
     isClearable () {
       return this.clearable && (this.isPassword || this.isNumber || this.isDatePicker || this.type === 'text' || this.type === 'search')
@@ -1056,12 +1059,12 @@ export default {
      * 检查初始值
      */
     initValue () {
-      const { type, isDatePicker, value, digits } = this
+      const { type, isDatePicker, value, digitsValue } = this
       if (isDatePicker) {
         this.changeValue()
       } else if (type === 'float') {
         if (value) {
-          const validValue = XEUtils.toFixedString(value, XEUtils.toNumber(digits))
+          const validValue = XEUtils.toFixedString(value, digitsValue)
           if (value !== validValue) {
             this.emitUpdate(validValue, { type: 'init' })
           }
@@ -1078,7 +1081,7 @@ export default {
       }
     },
     afterCheckValue () {
-      const { type, inpAttrs, value, isDatePicker, isNumber, datetimePanelValue, dateLabelFormat, min, max, digits } = this
+      const { type, inpAttrs, value, isDatePicker, isNumber, datetimePanelValue, dateLabelFormat, min, max, digitsValue } = this
       if (!inpAttrs.readonly) {
         if (isNumber) {
           if (value) {
@@ -1088,7 +1091,7 @@ export default {
             } else if (!this.vaildMaxNum(inpVal)) {
               inpVal = max
             }
-            this.emitUpdate(type === 'float' ? XEUtils.toFixedString(inpVal, XEUtils.toNumber(digits)) : '' + inpVal, { type: 'check' })
+            this.emitUpdate(type === 'float' ? XEUtils.toFixedString(inpVal, digitsValue) : '' + inpVal, { type: 'check' })
           }
         } else if (isDatePicker) {
           let inpVal = this.inputValue
@@ -1201,11 +1204,11 @@ export default {
       this.$emit('next-number', { $event: evnt })
     },
     numberChange (isPlus, evnt) {
-      const { type, digits, value, stepValue } = this
+      const { type, digitsValue, value, stepValue } = this
       const inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
       const newValue = isPlus ? XEUtils.add(inputValue, stepValue) : XEUtils.subtract(inputValue, stepValue)
       if (this.vaildMinNum(newValue) && this.vaildMaxNum(newValue)) {
-        this.emitUpdate(type === 'float' ? XEUtils.toFixedString(newValue, XEUtils.toNumber(digits)) : '' + newValue, evnt)
+        this.emitUpdate(type === 'float' ? XEUtils.toFixedString(newValue, digitsValue) : '' + newValue, evnt)
       }
     },
     // 数值

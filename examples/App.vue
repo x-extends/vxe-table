@@ -114,8 +114,8 @@
           <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-1')">查看演示 PC-1</vxe-button>
           <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-2')" disabled>查看演示 PC-2</vxe-button>
           <ul class="template-describe">
-            <li>工程：<a class="link" href="https://cli.vuejs.org/" target="_blank">vue-cli4</a></li>
-            <li>依赖：<a class="link" href="https://www.npmjs.com/package/vue" target="_blank">vue2.6</a>, <a class="link" href="https://www.npmjs.com/package/vxe-table" target="_blank">vxe-table</a>, <a class="link" href="https://www.npmjs.com/package/xe-utils" target="_blank">xe-utils</a>, <a class="link" href="https://www.npmjs.com/package/axios" target="_blank">axios</a></li>
+            <li>工程：<a class="link" href="https://cli.vuejs.org/" target="_blank">vue-cli4</a>, <a class="link" href="https://www.npmjs.com/package/vue" target="_blank">vue2.6</a></li>
+            <li>使用库：<a class="link" href="https://www.npmjs.com/package/vxe-table" target="_blank">vxe-table</a>, <a class="link" href="https://www.npmjs.com/package/xe-utils" target="_blank">xe-utils</a>, <a class="link" href="https://www.npmjs.com/package/axios" target="_blank">axios</a>, <a class="link" href="https://www.npmjs.com/package/axios" target="_blank">echarts</a></li>
             <li>描述：丰富的增删改查实例及常用的业务组件封装，演示的组件都可以直接使用，也可以直接移植到任何 vue 项目中，使开发效率翻倍提升。</li>
           </ul>
         </div>
@@ -2313,7 +2313,7 @@ export default {
       setInterval(() => {
         const performance = window.performance || window.webkitPerformance
         if (performance && performance.memory) {
-          this.usedJSHeapSize = XEUtils.toFixedNumber(performance.memory.usedJSHeapSize / 1048576, 2)
+          this.usedJSHeapSize = XEUtils.toFixed(XEUtils.floor(performance.memory.usedJSHeapSize / 1048576, 2), 2)
         }
       }, 3000)
     }
