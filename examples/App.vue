@@ -2106,11 +2106,38 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.vxeRadioGroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'radio-group'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeRadioButton',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'radio-button'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeCheckbox',
               locat: {
                 name: 'VXEAPI',
                 params: {
                   name: 'checkbox'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeCheckboxGroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'checkbox-group'
                 }
               }
             },
@@ -2138,6 +2165,24 @@ export default {
                 name: 'VXEAPI',
                 params: {
                   name: 'select'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeOptgroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'optgroup'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeOption',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'option'
                 }
               }
             },

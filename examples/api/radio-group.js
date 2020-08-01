@@ -9,25 +9,16 @@ const apis = [
     list: [
       {
         name: 'label',
-        descKey: 'app.api.optgroup.desc.label',
+        desc: '绑定值',
         version: '',
-        type: 'string | number | boolean',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []
       },
       {
-        name: 'visible',
-        desc: '是否显示',
-        version: '',
-        type: 'boolean',
-        enum: '',
-        defVal: 'true',
-        list: []
-      },
-      {
         name: 'disabled',
-        descKey: 'app.api.optgroup.desc.disabled',
+        desc: '是否禁用',
         version: '',
         type: 'boolean',
         enum: '',

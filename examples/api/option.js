@@ -8,19 +8,10 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'value,v-model',
+        name: 'value',
         descKey: 'app.api.option.desc.value',
         version: '',
         type: 'any',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'size',
-        descKey: 'app.api.option.desc.size',
-        version: '',
-        type: 'string',
         enum: '',
         defVal: '',
         list: []
@@ -32,6 +23,15 @@ const apis = [
         type: 'string | number | boolean',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'visible',
+        desc: '是否显示',
+        version: '',
+        type: 'boolean',
+        enum: '',
+        defVal: 'true',
         list: []
       },
       {
