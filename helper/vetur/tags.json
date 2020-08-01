@@ -248,6 +248,21 @@
     ],
     "description": "单选框"
   },
+  "vxe-radio-group": {
+    "attributes": [
+      "label",
+      "disabled"
+    ],
+    "description": "单选组"
+  },
+  "vxe-radio-button": {
+    "attributes": [
+      "label",
+      "content",
+      "disabled"
+    ],
+    "description": "单选按钮"
+  },
   "vxe-checkbox": {
     "attributes": [
       "value,v-model",
@@ -259,6 +274,13 @@
       "indeterminate"
     ],
     "description": "复选框"
+  },
+  "vxe-checkbox-group": {
+    "attributes": [
+      "label",
+      "disabled"
+    ],
+    "description": "复选组"
   },
   "vxe-switch": {
     "attributes": [
@@ -334,8 +356,8 @@
   },
   "vxe-optgroup": {
     "attributes": [
-      "size",
       "label",
+      "visible",
       "disabled"
     ],
     "subtags": [
@@ -345,9 +367,9 @@
   },
   "vxe-option": {
     "attributes": [
-      "value,v-model",
-      "size",
+      "value",
       "label",
+      "visible",
       "disabled"
     ],
     "description": "下拉框 - 选项"
