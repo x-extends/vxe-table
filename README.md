@@ -190,7 +190,7 @@ export default {
 如果您觉得我们的开源软件对你有所帮助，请扫下方二维码打赏我们一杯咖啡。☕  
 
 由于维护一个开源项目需要花费非常大的精力与时间，如果您正在使用该项目，您的捐赠会帮助该项目能持续发展下去  
-[👉 捐赠方式💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
+[👉 该组件对我有帮助，我要捐赠💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
 ## License
 

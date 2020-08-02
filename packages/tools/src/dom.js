@@ -1,6 +1,8 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import UtilTools from './utils'
 
+const { getRowid } = UtilTools
+
 const browse = XEUtils.browse()
 const htmlElem = browse.isDoc ? document.querySelector('html') : 0
 const bodyElem = browse.isDoc ? document.body : 0
@@ -29,25 +31,42 @@ function getNodeOffset (elem, container, rest) {
   return rest
 }
 
+function isScale (val) {
+  return val && /^\d+%$/.test(val)
+}
+
+function hasClass (elem, cls) {
+  return elem && elem.className && elem.className.match && elem.className.match(getClsRE(cls))
+}
+
+function removeClass (elem, cls) {
+  if (elem && hasClass(elem, cls)) {
+    elem.className = elem.className.replace(getClsRE(cls), '')
+  }
+}
+
+function getDomNode () {
+  const documentElement = document.documentElement
+  const bodyElem = document.body
+  return {
+    scrollTop: documentElement.scrollTop || bodyElem.scrollTop,
+    scrollLeft: documentElement.scrollLeft || bodyElem.scrollLeft,
+    visibleHeight: documentElement.clientHeight || bodyElem.clientHeight,
+    visibleWidth: documentElement.clientWidth || bodyElem.clientWidth
+  }
+}
+
 export const DomTools = {
   browse,
   isPx (val) {
     return val && /^\d+(px)?$/.test(val)
   },
-  isScale (val) {
-    return val && /^\d+%$/.test(val)
-  },
-  hasClass (elem, cls) {
-    return elem && elem.className && elem.className.match && elem.className.match(getClsRE(cls))
-  },
-  removeClass (elem, cls) {
-    if (elem && DomTools.hasClass(elem, cls)) {
-      elem.className = elem.className.replace(getClsRE(cls), '')
-    }
-  },
+  isScale,
+  hasClass,
+  removeClass,
   addClass (elem, cls) {
-    if (elem && !DomTools.hasClass(elem, cls)) {
-      DomTools.removeClass(elem, cls)
+    if (elem && !hasClass(elem, cls)) {
+      removeClass(elem, cls)
       elem.className = `${elem.className} ${cls}`
     }
   },
@@ -60,7 +79,7 @@ export const DomTools = {
   },
   rowToVisible ($xetable, row) {
     const bodyElem = $xetable.$refs.tableBody.$el
-    const trElem = bodyElem.querySelector(`[data-rowid="${UtilTools.getRowid($xetable, row)}"]`)
+    const trElem = bodyElem.querySelector(`[data-rowid="${getRowid($xetable, row)}"]`)
     if (trElem) {
       const bodyHeight = bodyElem.clientHeight
       const bodySrcollTop = bodyElem.scrollTop
@@ -114,16 +133,7 @@ export const DomTools = {
     }
     return Promise.resolve()
   },
-  getDomNode () {
-    const documentElement = document.documentElement
-    const bodyElem = document.body
-    return {
-      scrollTop: documentElement.scrollTop || bodyElem.scrollTop,
-      scrollLeft: documentElement.scrollLeft || bodyElem.scrollLeft,
-      visibleHeight: documentElement.clientHeight || bodyElem.clientHeight,
-      visibleWidth: documentElement.clientWidth || bodyElem.clientWidth
-    }
-  },
+  getDomNode,
   /**
    * 检查触发源是否属于目标节点
    */
@@ -131,7 +141,7 @@ export const DomTools = {
     let targetElem
     let target = evnt.target
     while (target && target.nodeType && target !== document) {
-      if (queryCls && DomTools.hasClass(target, queryCls) && (!queryMethod || queryMethod(target))) {
+      if (queryCls && hasClass(target, queryCls) && (!queryMethod || queryMethod(target))) {
         targetElem = target
       } else if (target === container) {
         return { flag: queryCls ? !!targetElem : true, container, targetElem: targetElem }
@@ -150,11 +160,11 @@ export const DomTools = {
     const bounding = elem.getBoundingClientRect()
     const boundingTop = bounding.top
     const boundingLeft = bounding.left
-    const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
+    const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
     return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
   },
   getCell ($xetable, { row, column }) {
-    const rowid = UtilTools.getRowid($xetable, row)
+    const rowid = getRowid($xetable, row)
     const bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`] || $xetable.$refs.tableBody
     if (bodyElem && bodyElem.$el) {
       return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
@@ -181,6 +191,24 @@ export const DomTools = {
       evnt.initEvent(type, true, true)
     }
     targetElem.dispatchEvent(evnt)
+  },
+  calcHeight ($xetable, key) {
+    const val = $xetable[key]
+    let num = 0
+    if (val) {
+      if (val === 'auto') {
+        num = $xetable.parentHeight
+      } else {
+        const excludeHeight = $xetable.getExcludeHeight()
+        if (isScale(val)) {
+          num = Math.floor((XEUtils.toInteger(val) || 1) / 100 * $xetable.parentHeight)
+        } else {
+          num = XEUtils.toNumber(val)
+        }
+        num = Math.max(40, num - excludeHeight)
+      }
+    }
+    return num
   }
 }
 

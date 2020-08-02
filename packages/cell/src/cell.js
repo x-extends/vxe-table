@@ -183,7 +183,7 @@ export const Cell = {
       return slots.default.call($table, params, h)
     }
     const { $seq, seq, level } = params
-    const seqMethod = seqOpts.seqMethod || column.seqMethod
+    const seqMethod = seqOpts.seqMethod
     return [UtilTools.formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex) + seq, 1)]
   },
   renderTreeIndexCell (h, params) {

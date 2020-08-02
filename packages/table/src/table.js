@@ -5,6 +5,9 @@ import VxeTableBody from '../../body'
 import { UtilTools, DomTools, GlobalEvent, ResizeEvent } from '../../tools'
 import methods from './methods'
 
+const { getColumnList, hasChildrenList } = UtilTools
+const { browse, calcHeight } = DomTools
+
 /**
  * 渲染浮固定列
  * 分别渲染左边固定列和右边固定列
@@ -249,6 +252,8 @@ export default {
       scrollbarHeight: 0,
       // 行高
       rowHeight: 0,
+      // 表格父容器的高度
+      parentHeight: 0,
       // 复选框属性，是否全选
       isAllSelected: false,
       // 复选框属性，有选中且非全选状态
@@ -441,7 +446,7 @@ export default {
     },
     // 是否使用了分组表头
     isGroup () {
-      return this.collectColumn.some(UtilTools.hasChildrenList)
+      return this.collectColumn.some(hasChildrenList)
     },
     hasTip () {
       return VXETable._tooltip
@@ -514,6 +519,12 @@ export default {
       }
       return 'default'
     },
+    customHeight () {
+      return calcHeight(this, 'height')
+    },
+    customMaxHeight () {
+      return calcHeight(this, 'maxHeight')
+    },
     /**
      * 判断列全选的复选框是否禁用
      */
@@ -549,7 +560,7 @@ export default {
       })
     },
     collectColumn (value) {
-      const tableFullColumn = UtilTools.getColumnList(value)
+      const tableFullColumn = getColumnList(value)
       this.tableFullColumn = tableFullColumn
       this.cacheColumnMap()
       this.restoreCustomStorage()
@@ -584,6 +595,9 @@ export default {
     height () {
       this.$nextTick(() => this.recalculate(true))
     },
+    maxHeight () {
+      this.$nextTick(() => this.recalculate(true))
+    },
     syncResize (value) {
       if (value) {
         const { $el } = this
@@ -611,8 +625,6 @@ export default {
       scrollYStore: {},
       // 存放 tooltip 相关信息
       tooltipStore: {},
-      // 表格父容器的高度
-      parentHeight: 0,
       // 表格宽度
       tableWidth: 0,
       // 表格高度
@@ -692,7 +704,7 @@ export default {
       this.isCloak = true
       setTimeout(() => {
         this.isCloak = false
-      }, DomTools.browse ? 500 : 300)
+      }, browse ? 500 : 300)
     }
     this.loadTableData(data).then(() => {
       if (data && data.length) {

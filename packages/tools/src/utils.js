@@ -9,26 +9,6 @@ function getColFuncWidth (isExists, defaultWidth = 16) {
   return isExists ? defaultWidth : 0
 }
 
-// function buildField (column) {
-//   const { property } = column
-//   return 'row' + (/^\d+/.test(property) ? `[${property}]` : (/^\[/.test(property) ? property : `.${property}`))
-// }
-
-// function buildGetField (column) {
-//   /* eslint-disable no-new-func */
-//   return new Function('row', 'return ' + (column.property ? buildField(column) : 'null'))
-// }
-
-// function buildSetField (column) {
-//   /* eslint-disable no-new-func */
-//   return new Function('row,value', column.property ? buildField(column) + '=value' : '')
-// }
-
-// function handleColumnField (column) {
-//   column.gVal = buildGetField(column)
-//   column.sVal = buildSetField(column)
-// }
-
 class ColumnConfig {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xetable, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
@@ -72,10 +52,9 @@ class ColumnConfig {
       showOverflow: _vm.showOverflow,
       showHeaderOverflow: _vm.showHeaderOverflow,
       showFooterOverflow: _vm.showFooterOverflow,
-      className: _vm.class || _vm.className,
+      className: _vm.className,
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,
-      seqMethod: _vm.seqMethod,
       formatter: formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
@@ -90,6 +69,8 @@ class ColumnConfig {
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
       contentRender: _vm.contentRender,
+      exportMethod: _vm.exportMethod,
+      footerExportMethod: _vm.footerExportMethod,
       // 自定义参数
       params: _vm.params,
       // 渲染属性
@@ -122,16 +103,7 @@ class ColumnConfig {
     if (proxyOpts && proxyOpts.beforeColumn) {
       proxyOpts.beforeColumn({ $grid: $xegrid, column: this })
     }
-    // handleColumnField(this)
   }
-
-  // getValueByRow (row) {
-  //   return this.gVal(row)
-  // }
-
-  // setValueByRow (row) {
-  //   this.sVal(row)
-  // }
 
   getTitle () {
     return UtilTools.getFuncText(this.own.title || (this.type === 'seq' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))

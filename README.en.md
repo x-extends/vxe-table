@@ -190,7 +190,7 @@ export default {
 If you feel that our open source software is helpful to you, please scan the QR code below to enjoy a cup of coffee.☕  
 
 Because maintaining an open source project takes a lot of effort and time, if you are using the project, your donation will help keep the project going.  
-[👉 Donation method💰](https://x-extends.github.io/vxe-table/#/donation/api)  
+[👉 This component is helpful to me and I would like to donate it💰](https://x-extends.github.io/vxe-table/#/donation/api)  
 
 ## License
 

@@ -61,6 +61,64 @@ function getLabelData ($xetable, opts, columns, datas) {
       }
       columns.forEach((column, columnIndex) => {
         let cellValue = ''
+        const renderOpts = column.editRender || column.cellRender
+        let exportLabelMethod = column.exportMethod
+        if (!exportLabelMethod && renderOpts && renderOpts.name) {
+          const compConf = VXETable.renderer.get(renderOpts.name)
+          if (compConf) {
+            exportLabelMethod = compConf.exportMethod || compConf.cellExportMethod
+          }
+        }
+        if (exportLabelMethod) {
+          cellValue = exportLabelMethod({ $table: $xetable, row, column })
+        } else {
+          switch (column.type) {
+            case 'seq':
+              cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
+              break
+            case 'checkbox':
+              cellValue = $xetable.isCheckedByCheckboxRow(row)
+              item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
+              item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
+              break
+            case 'radio':
+              cellValue = $xetable.isCheckedByRadioRow(row)
+              item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
+              item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
+              break
+            default:
+              if (opts.original) {
+                cellValue = UtilTools.getCellValue(row, column)
+              } else {
+                cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+                if (column.type === 'html') {
+                  htmlCellElem.innerHTML = cellValue
+                  cellValue = htmlCellElem.innerText.trim()
+                }
+              }
+          }
+        }
+        item[column.id] = XEUtils.toString(cellValue)
+      })
+      rest.push(Object.assign(item, row))
+    }, treeOpts)
+    return rest
+  }
+  return datas.map((row, rowIndex) => {
+    const item = {}
+    columns.forEach((column, columnIndex) => {
+      let cellValue = ''
+      const renderOpts = column.editRender || column.cellRender
+      let exportLabelMethod = column.exportMethod
+      if (!exportLabelMethod && renderOpts && renderOpts.name) {
+        const compConf = VXETable.renderer.get(renderOpts.name)
+        if (compConf) {
+          exportLabelMethod = compConf.exportMethod || compConf.cellExportMethod
+        }
+      }
+      if (exportLabelMethod) {
+        cellValue = exportLabelMethod({ $table: $xetable, row, column })
+      } else {
         switch (column.type) {
           case 'seq':
             cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
@@ -78,86 +136,18 @@ function getLabelData ($xetable, opts, columns, datas) {
           default:
             if (opts.original) {
               cellValue = UtilTools.getCellValue(row, column)
-            } else {
-              const { cellRender, editRender } = column
-              let exportLabelMethod
-              if (editRender && editRender.name) {
-                const compConf = VXETable.renderer.get(editRender.name)
-                if (compConf) {
-                  exportLabelMethod = compConf.editCellExportMethod
-                }
-              } else if (cellRender && cellRender.name) {
-                const compConf = VXETable.renderer.get(cellRender.name)
-                if (compConf) {
-                  exportLabelMethod = compConf.cellExportMethod
-                }
-              }
-              if (exportLabelMethod) {
-                cellValue = exportLabelMethod({ $table: $xetable, row, column })
-              } else {
-                cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
-                if (column.type === 'html') {
-                  htmlCellElem.innerHTML = cellValue
-                  cellValue = htmlCellElem.innerText.trim()
-                }
-              }
-            }
-        }
-        item[column.id] = XEUtils.toString(cellValue)
-      })
-      rest.push(Object.assign(item, row))
-    }, treeOpts)
-    return rest
-  }
-  return datas.map((row, rowIndex) => {
-    const item = {}
-    columns.forEach((column, columnIndex) => {
-      let cellValue = ''
-      switch (column.type) {
-        case 'seq':
-          cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
-          break
-        case 'checkbox':
-          cellValue = $xetable.isCheckedByCheckboxRow(row)
-          item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
-          item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
-          break
-        case 'radio':
-          cellValue = $xetable.isCheckedByRadioRow(row)
-          item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
-          item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
-          break
-        default:
-          if (opts.original) {
-            cellValue = UtilTools.getCellValue(row, column)
-          } else if (scrollXLoad || scrollYLoad) {
-            // 如果是虚拟滚动
-            const { cellRender, editRender } = column
-            let exportLabelMethod
-            if (editRender && editRender.name) {
-              const compConf = VXETable.renderer.get(editRender.name)
-              if (compConf) {
-                exportLabelMethod = compConf.editCellExportMethod
-              }
-            } else if (cellRender && cellRender.name) {
-              const compConf = VXETable.renderer.get(cellRender.name)
-              if (compConf) {
-                exportLabelMethod = compConf.cellExportMethod
-              }
-            }
-            if (exportLabelMethod) {
-              cellValue = exportLabelMethod({ $table: $xetable, row, column })
-            } else {
+            } else if (scrollXLoad || scrollYLoad) {
+              // 如果是虚拟滚动
               cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
               if (column.type === 'html') {
                 htmlCellElem.innerHTML = cellValue
                 cellValue = htmlCellElem.innerText.trim()
               }
+            } else {
+              const cell = DomTools.getCell($xetable, { row, column })
+              cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
             }
-          } else {
-            const cell = DomTools.getCell($xetable, { row, column })
-            cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
-          }
+        }
       }
       item[column.id] = XEUtils.toString(cellValue)
     })
@@ -182,17 +172,12 @@ function getHeaderTitle (opts, column) {
 }
 
 function getFooterCellValue ($xetable, opts, items, column) {
-  const { cellRender, editRender } = column
-  let exportLabelMethod
-  if (editRender && editRender.name) {
-    const compConf = VXETable.renderer.get(editRender.name)
+  const renderOpts = column.editRender || column.cellRender
+  let exportLabelMethod = column.footerExportMethod
+  if (!exportLabelMethod && renderOpts && renderOpts.name) {
+    const compConf = VXETable.renderer.get(renderOpts.name)
     if (compConf) {
-      exportLabelMethod = compConf.footerCellExportMethod
-    }
-  } else if (cellRender && cellRender.name) {
-    const compConf = VXETable.renderer.get(cellRender.name)
-    if (compConf) {
-      exportLabelMethod = compConf.footerCellExportMethod
+      exportLabelMethod = compConf.footerExportMethod || compConf.footerCellExportMethod
     }
   }
   const _columnIndex = $xetable._getColumnIndex(column)
@@ -721,8 +706,16 @@ export default {
           if ($xegrid && !opts.remote) {
             const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = $xegrid.proxyOpts
             const ajaxMethods = ajax.queryAll
-            const params = { options: opts, $table: this, $grid: $xegrid }
             if (ajaxMethods) {
+              const params = {
+                $table: this,
+                $grid: $xegrid,
+                sort: $xegrid.sortData,
+                filters: $xegrid.filterData,
+                form: $xegrid.formData,
+                target: ajaxMethods,
+                options: opts
+              }
               return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
                 .catch(e => e)
                 .then(rest => {

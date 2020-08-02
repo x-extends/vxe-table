@@ -3535,7 +3535,7 @@ const apis = [
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: Row | Array<Row>, callback?: Function',
+        defVal: 'rows?: Row | Row[], callback?: Function',
         list: []
       },
       {
@@ -3544,7 +3544,7 @@ const apis = [
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: Row | Array<Row>, callback?: Function',
+        defVal: 'rows?: Row | Row[], callback?: Function',
         list: []
       },
       {

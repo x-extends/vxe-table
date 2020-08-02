@@ -1216,12 +1216,13 @@ const Methods = {
    * 放弃 vue 的双向 dom 绑定，使用原生的方式更新 Dom，性能翻倍提升
    */
   updateStyle () {
-    const {
+    let {
       $refs,
       isGroup,
       fullColumnIdData,
-      height,
-      parentHeight,
+      tableColumn,
+      customHeight,
+      customMaxHeight,
       border,
       headerHeight,
       showFooter,
@@ -1242,20 +1243,17 @@ const Methods = {
       currentRow,
       mouseConfig
     } = this
-    let { maxHeight, tableColumn } = this
     const containerList = ['main', 'left', 'right']
-    let customHeight = 0
-    if (height) {
-      customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - this.getExcludeHeight())
-      if (showFooter) {
-        customHeight += scrollbarHeight
-      }
-    }
     const emptyPlaceholderElem = $refs.emptyPlaceholder
     const bodyWrapperElem = elemStore['main-body-wrapper']
     if (emptyPlaceholderElem) {
       emptyPlaceholderElem.style.top = `${headerHeight}px`
       emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - scrollbarHeight}px` : ''
+    }
+    if (customHeight > 0) {
+      if (showFooter) {
+        customHeight += scrollbarHeight
+      }
     }
     containerList.forEach((name, index) => {
       const fixedType = index > 0 ? name : ''
@@ -1316,9 +1314,8 @@ const Methods = {
         } else if (layout === 'body') {
           const emptyBlockElem = elemStore[`${name}-${layout}-emptyBlock`]
           if (wrapperElem) {
-            if (maxHeight) {
-              maxHeight = maxHeight === 'auto' ? parentHeight : (DomTools.isScale(maxHeight) ? Math.floor(parseInt(maxHeight) / 100 * parentHeight) : XEUtils.toNumber(maxHeight))
-              wrapperElem.style.maxHeight = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : maxHeight - headerHeight}px`
+            if (customMaxHeight) {
+              wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight}px`
             } else {
               if (customHeight > 0) {
                 wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`

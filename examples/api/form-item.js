@@ -206,7 +206,7 @@ const apis = [
             version: '',
             type: 'any',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {

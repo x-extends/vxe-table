@@ -36,8 +36,6 @@ const props = {
   footerClassName: [String, Function],
   // 格式化显示内容
   formatter: [Function, Array, String],
-  // 自定义索引方法
-  seqMethod: Function,
   // 是否允许排序
   sortable: Boolean,
   // 是否服务端排序
@@ -58,6 +56,10 @@ const props = {
   treeNode: Boolean,
   // 是否可视
   visible: { type: Boolean, default: null },
+  // 单元格数据导出方法
+  exportMethod: Function,
+  // 表尾单元格数据导出方法
+  footerExportMethod: Function,
   // 单元格值类型
   cellType: String,
   // 单元格渲染配置项
