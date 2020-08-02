@@ -448,6 +448,24 @@ const apis = [
         ]
       },
       {
+        name: 'export-method',
+        desc: '自定义的单元格数据导出方法，该方法 Function({ row, column }) 的返回值将会被导出',
+        version: '1.15.31',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'footer-export-method',
+        desc: '自定义的表尾单元格数据导出方法，该方法 Function({ items, _columnIndex }) 的返回值将会被导出',
+        version: '1.15.31',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'cell-type',
         descKey: 'app.api.tableColumn.desc.cellType',
         version: '1.15.29',
@@ -506,7 +524,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {
@@ -616,7 +634,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {
@@ -743,7 +761,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {

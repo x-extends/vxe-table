@@ -98,14 +98,13 @@ class Rule {
  * 渲染浮固定列
  */
 function renderFixed (h, $table, fixedType) {
-  const {
+  let {
     tableData,
     tableColumn,
     visibleColumn,
     tableGroupColumn,
     isGroup,
-    height,
-    parentHeight,
+    customHeight,
     vSize,
     headerHeight,
     footerHeight,
@@ -121,9 +120,7 @@ function renderFixed (h, $table, fixedType) {
   } = $table
   const isRightFixed = fixedType === 'right'
   const fixedColumn = columnStore[`${fixedType}List`]
-  let customHeight = 0
-  if (height) {
-    customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - $table.getExcludeHeight())
+  if (customHeight > 0) {
     if (showFooter) {
       customHeight += scrollbarHeight
     }
@@ -704,6 +701,12 @@ export default {
       }
       return 'default'
     },
+    customHeight () {
+      return DomTools.calcHeight(this, 'height')
+    },
+    customMaxHeight () {
+      return DomTools.calcHeight(this, 'maxHeight')
+    },
     /**
      * 判断列全选的复选框是否禁用
      */
@@ -798,6 +801,9 @@ export default {
       })
     },
     height () {
+      this.$nextTick(() => this.recalculate(true))
+    },
+    maxHeight () {
       this.$nextTick(() => this.recalculate(true))
     },
     syncResize (value) {
@@ -5934,8 +5940,16 @@ export default {
           if ($xegrid && !opts.remote) {
             const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = $xegrid.proxyOpts
             const ajaxMethods = ajax.queryAll
-            const params = { options: opts, $table: this, $grid: $xegrid }
             if (ajaxMethods) {
+              const params = {
+                $table: this,
+                $grid: $xegrid,
+                sort: $xegrid.sortData,
+                filters: $xegrid.filterData,
+                form: $xegrid.formData,
+                target: ajaxMethods,
+                options: opts
+              }
               return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
                 .catch(e => e)
                 .then(rest => {

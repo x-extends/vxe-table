@@ -66,6 +66,10 @@ const props = {
   visible: { type: Boolean, default: null },
   // 列的 key
   columnKey: [String, Number],
+  // 单元格数据导出方法
+  exportMethod: Function,
+  // 表尾单元格数据导出方法
+  footerExportMethod: Function,
   // 单元格值类型
   cellType: String,
   // 单元格渲染配置项

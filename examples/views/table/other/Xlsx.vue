@@ -7,7 +7,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <input type="file" @change="impotEvent" accept=".xls,.xlsx">
+        <vxe-button @click="impotEvent">选择文件</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -75,7 +75,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <input type="file" @change="impotEvent" accept=".xls,.xlsx">
+            <vxe-button @click="impotEvent">选择文件</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -110,31 +110,35 @@ export default {
               }
               return ''
             },
-            impotEvent (evnt) {
-              let files = evnt.target.files
-              let fileReader = new FileReader()
-              fileReader.onload = (ev) => {
-                let data = ev.target.result
-                let workbook = XLSX.read(data, { type: 'binary' })
-                let csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
-                let tableData = []
-                // 解析数据
-                csvData.split('\\n').forEach((vRow, rIndex) => {
-                  if (vRow) {
-                    let vCols = vRow.split(',')
-                    let item = {}
-                    vCols.forEach((val, cIndex) => {
-                      let column = this.tableColumn[cIndex]
-                      if (column.field) {
-                        item[column.field] = val
-                      }
-                    })
-                    tableData.push(item)
-                  }
-                })
-                this.tableData1 = tableData
-              }
-              fileReader.readAsBinaryString(files[0])
+            impotEvent () {
+              this.$refs.xGrid1.readFile({
+                types: ['xls', 'xlsx']
+              }).then(evnt => {
+                const files = evnt.target.files
+                const fileReader = new FileReader()
+                fileReader.onload = (ev) => {
+                  const data = ev.target.result
+                  const workbook = XLSX.read(data, { type: 'binary' })
+                  const csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+                  const tableData = []
+                  // 解析数据
+                  csvData.split('\\n').forEach((vRow) => {
+                    if (vRow) {
+                      const vCols = vRow.split(',')
+                      const item = {}
+                      vCols.forEach((val, cIndex) => {
+                        const column = this.tableColumn[cIndex]
+                        if (column.field) {
+                          item[column.field] = val
+                        }
+                      })
+                      tableData.push(item)
+                    }
+                  })
+                  this.tableData1 = tableData
+                }
+                fileReader.readAsBinaryString(files[0])
+              })
             }
           }
         }
@@ -241,31 +245,35 @@ export default {
       }
       return ''
     },
-    impotEvent (evnt) {
-      const files = evnt.target.files
-      const fileReader = new FileReader()
-      fileReader.onload = (ev) => {
-        const data = ev.target.result
-        const workbook = XLSX.read(data, { type: 'binary' })
-        const csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
-        const tableData = []
-        // 解析数据
-        csvData.split('\n').forEach((vRow) => {
-          if (vRow) {
-            const vCols = vRow.split(',')
-            const item = {}
-            vCols.forEach((val, cIndex) => {
-              const column = this.tableColumn[cIndex]
-              if (column.field) {
-                item[column.field] = val
-              }
-            })
-            tableData.push(item)
-          }
-        })
-        this.tableData1 = tableData
-      }
-      fileReader.readAsBinaryString(files[0])
+    impotEvent () {
+      this.$refs.xGrid1.readFile({
+        types: ['xls', 'xlsx']
+      }).then(evnt => {
+        const files = evnt.target.files
+        const fileReader = new FileReader()
+        fileReader.onload = (ev) => {
+          const data = ev.target.result
+          const workbook = XLSX.read(data, { type: 'binary' })
+          const csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+          const tableData = []
+          // 解析数据
+          csvData.split('\n').forEach((vRow) => {
+            if (vRow) {
+              const vCols = vRow.split(',')
+              const item = {}
+              vCols.forEach((val, cIndex) => {
+                const column = this.tableColumn[cIndex]
+                if (column.field) {
+                  item[column.field] = val
+                }
+              })
+              tableData.push(item)
+            }
+          })
+          this.tableData1 = tableData
+        }
+        fileReader.readAsBinaryString(files[0])
+      })
     },
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, $rowIndex, column, data }) {

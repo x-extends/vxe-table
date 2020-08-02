@@ -485,9 +485,8 @@ export default {
     let {
       $scopedSlots,
       tId,
-      maxHeight,
-      height,
-      parentHeight,
+      customHeight,
+      customMaxHeight,
       tableData,
       tableColumn,
       headerHeight,
@@ -510,17 +509,14 @@ export default {
     } = $table
     // v2.0 废弃属性，保留兼容
     const allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-    let customHeight = 0
     const style = {}
-    if (height) {
-      customHeight = height === 'auto' ? parentHeight : ((DomTools.isScale(height) ? Math.floor(parseInt(height) / 100 * parentHeight) : XEUtils.toNumber(height)) - $table.getExcludeHeight())
+    if (customHeight > 0) {
       if (showFooter) {
         customHeight += scrollbarHeight
       }
     }
-    if (maxHeight) {
-      maxHeight = maxHeight === 'auto' ? parentHeight : (DomTools.isScale(maxHeight) ? Math.floor(parseInt(maxHeight) / 100 * parentHeight) : XEUtils.toNumber(maxHeight))
-      style.maxHeight = `${fixedType ? maxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : maxHeight - headerHeight}px`
+    if (customMaxHeight > 0) {
+      style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight}px`
     } else {
       if (customHeight > 0) {
         style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`

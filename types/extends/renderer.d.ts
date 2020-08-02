@@ -30,14 +30,13 @@ export interface RendererMapOptions {
   renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
   renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
   renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): VNode[] | string[];
-  cellExportMethod?(params: ColumnExportCellRenderParams): string;
-  footerCellExportMethod?(params: ColumnExportFooterRenderParams): string;
+  exportMethod?(params: ColumnExportCellRenderParams): string;
+  footerExportMethod?(params: ColumnExportFooterRenderParams): string;
 
   // 编辑渲染
   autofocus?: string;
   renderEdit?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
   renderCell?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
-  editCellExportMethod?(params: ColumnExportCellRenderParams): string;
 
   // 内容渲染
   renderExpand?(h: CreateElement, renderOpts: ColumnContentRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
@@ -94,7 +93,6 @@ export class RenderParams {}
 export interface OptionProps extends RenderParams {
   value?: string;
   label?: string;
-  disabled?: string;
 }
 
 /**
@@ -103,5 +101,4 @@ export interface OptionProps extends RenderParams {
 export interface OptionGroupProps extends RenderParams {
   options?: string;
   label?: string;
-  disabled?: boolean;
 }

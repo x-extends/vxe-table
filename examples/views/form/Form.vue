@@ -120,7 +120,7 @@
     </p>
 
     <p>
-      <vxe-form :data="formData3" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent" title-colon>
+      <vxe-form :data="formData3" title-align="right" title-width="100" prevent-submit title-colon>
         <vxe-form-item title="名称" field="name" span="8">
           <vxe-input v-model="formData3.name" placeholder="请输入名称" clearable></vxe-input>
         </vxe-form-item>
@@ -165,8 +165,8 @@
           </vxe-checkbox-group>
         </vxe-form-item>
         <vxe-form-item align="center" span="24" collapse-node>
-          <vxe-button type="submit" status="primary">折叠式表单</vxe-button>
-          <vxe-button type="reset">重置</vxe-button>
+          <vxe-button status="primary" @click="searchEvent">手动提交方式</vxe-button>
+          <vxe-button @click="resetEvent">重置</vxe-button>
         </vxe-form-item>
       </vxe-form>
     </p>
@@ -371,7 +371,7 @@ export default {
         </p>
 
         <p>
-          <vxe-form :data="formData3" title-align="right" title-width="100" @submit="searchEvent" @reset="resetEvent" title-colon>
+          <vxe-form :data="formData3" title-align="right" title-width="100" prevent-submit title-colon>
             <vxe-form-item title="名称" field="name" span="8">
               <vxe-input v-model="formData3.name" placeholder="请输入名称" clearable></vxe-input>
             </vxe-form-item>
@@ -416,10 +416,14 @@ export default {
               </vxe-checkbox-group>
             </vxe-form-item>
             <vxe-form-item align="center" span="24" collapse-node>
-              <vxe-button type="submit" status="primary">折叠式表单</vxe-button>
-              <vxe-button type="reset">重置</vxe-button>
+              <vxe-button status="primary" @click="searchEvent">手动提交方式</vxe-button>
+              <vxe-button @click="resetEvent">重置</vxe-button>
             </vxe-form-item>
           </vxe-form>
+        </p>
+
+        <p>
+          <vxe-form :data="formData4" :items="formItems4"></vxe-form>
         </p>
         `,
         `

@@ -46,6 +46,10 @@ $btnThemeList: (
   background-color: $vxe-button-default-background-color;
   outline: 0;
   font-size: $vxe-font-size;
+  max-width: $vxe-button-max-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   white-space: nowrap;
   user-select: none;
   appearance: none;

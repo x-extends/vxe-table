@@ -492,7 +492,7 @@ export default {
               sort: sortData,
               filters: filterData,
               form: formData,
-              options: ajaxMethods
+              target: ajaxMethods
             }
             if (pagerConfig) {
               params.page = tablePage
@@ -547,7 +547,7 @@ export default {
             if (ajaxMethods) {
               const removeRecords = this.getCheckboxRecords()
               const body = { removeRecords }
-              const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+              const applyArgs = [{ $grid: this, code, button, body, target: ajaxMethods }].concat(args)
               if (removeRecords.length) {
                 this.tableLoading = true
                 return Promise.resolve((beforeDelete || ajaxMethods).apply(this, applyArgs))
@@ -585,7 +585,7 @@ export default {
           if (ajaxMethods) {
             const body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
             const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-            const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+            const applyArgs = [{ $grid: this, code, button, body, target: ajaxMethods }].concat(args)
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
               body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
