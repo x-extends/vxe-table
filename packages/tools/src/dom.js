@@ -217,6 +217,23 @@ export const DomTools = {
       evnt.initEvent(type, true, true)
     }
     targetElem.dispatchEvent(evnt)
+  },
+  calcHeight ($xetable, key) {
+    const val = $xetable[key]
+    let num = 0
+    if (val) {
+      if (val === 'auto') {
+        num = $xetable.parentHeight
+      } else {
+        if (DomTools.isScale(val)) {
+          num = Math.floor(parseInt(val) / 100 * $xetable.parentHeight)
+        } else {
+          num = XEUtils.toNumber(val)
+        }
+        num -= $xetable.getExcludeHeight()
+      }
+    }
+    return num
   }
 }
 

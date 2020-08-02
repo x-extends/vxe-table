@@ -31,6 +31,10 @@ class ColumnConfig {
     if (_vm.label) {
       UtilTools.warn('vxe.error.delProp', ['column.label', 'column.title'])
     }
+    // 在 v3.0 中废弃 class
+    if (_vm.class) {
+      UtilTools.warn('vxe.error.delProp', ['column.class', 'column.className'])
+    }
     // 在 v3.0 中废弃 type=index
     if (_vm.type === 'index') {
       UtilTools.warn('vxe.error.delProp', ['column.type=index', 'column.type=seq'])
@@ -106,6 +110,8 @@ class ColumnConfig {
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
       contentRender: _vm.contentRender,
+      exportMethod: _vm.exportMethod,
+      footerExportMethod: _vm.footerExportMethod,
       // 自定义参数
       params: _vm.params,
       // 渲染属性

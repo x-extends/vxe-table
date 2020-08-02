@@ -64,6 +64,10 @@ const props = {
   treeNode: Boolean,
   // 是否可视
   visible: { type: Boolean, default: null },
+  // 单元格数据导出方法
+  exportMethod: Function,
+  // 表尾单元格数据导出方法
+  footerExportMethod: Function,
   // 单元格值类型
   cellType: String,
   // 单元格渲染配置项

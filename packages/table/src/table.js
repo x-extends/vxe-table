@@ -263,6 +263,8 @@ export default {
       scrollbarHeight: 0,
       // 行高
       rowHeight: 0,
+      // 表格父容器的高度
+      parentHeight: 0,
       // 复选框属性，是否全选
       isAllSelected: false,
       // 复选框属性，有选中且非全选状态
@@ -527,6 +529,12 @@ export default {
       }
       return 'default'
     },
+    customHeight () {
+      return DomTools.calcHeight(this, 'height')
+    },
+    customMaxHeight () {
+      return DomTools.calcHeight(this, 'maxHeight')
+    },
     /**
      * 判断列全选的复选框是否禁用
      */
@@ -617,6 +625,9 @@ export default {
     height () {
       this.$nextTick(() => this.recalculate(true))
     },
+    maxHeight () {
+      this.$nextTick(() => this.recalculate(true))
+    },
     syncResize (value) {
       if (value) {
         const { $el } = this
@@ -644,8 +655,6 @@ export default {
       scrollYStore: {},
       // 存放 tooltip 相关信息
       tooltipStore: {},
-      // 表格父容器的高度
-      parentHeight: 0,
       // 表格宽度
       tableWidth: 0,
       // 表格高度

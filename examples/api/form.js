@@ -190,7 +190,7 @@ const apis = [
       },
       {
         name: 'prevent-submit',
-        desc: '是否阻止默认提交方式',
+        desc: '禁用默认提交方式，禁用后配合 validate() 方法可以更加自由的控制提交逻辑',
         version: '2.9.15',
         type: 'boolean',
         enum: '',
@@ -237,7 +237,7 @@ const apis = [
     list: [
       {
         name: 'submit',
-        desc: '表单提交时会触发该事件',
+        desc: '只对 prevent-submit=false 有效，表单提交时会触发该事件',
         version: '',
         type: '',
         enum: '',
@@ -246,7 +246,7 @@ const apis = [
       },
       {
         name: 'submit-invalid',
-        desc: '表单提交时如果校验不通过会触发该事件',
+        desc: '只对 prevent-submit=false 有效，表单提交时如果校验不通过会触发该事件',
         version: '',
         type: '',
         enum: '',
@@ -296,7 +296,7 @@ const apis = [
         version: '2.8.32',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'callback: Function',
+        defVal: 'callback?: Function',
         list: []
       },
       {
