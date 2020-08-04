@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动渲染，全键盘操作</p>
+    <p class="tip">全键盘操作</p>
 
     <vxe-toolbar :refresh="{query: findList}">
       <template v-slot:buttons>

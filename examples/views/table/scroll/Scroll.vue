@@ -4,7 +4,7 @@
       虚拟滚动<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
       如果列较多建议使用 <grid-api-link name="vxe-grid"/>，使渲染性能达到最优，虚拟滚动只会渲染可视区域的数据，对于海量数据的性能提升非常大<br>
       数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数<br>
-      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高，如果要支持动态行高，将虚拟滚动关闭即可）</span>
+      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高、合并行或列，如果需要支持，将虚拟滚动关闭即可）</span>
     </p>
 
     <vxe-table
