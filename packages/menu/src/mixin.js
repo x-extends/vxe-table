@@ -61,6 +61,28 @@ export default {
             return
           }
         }
+
+        if (this.isActivated && evnt.target === document.body && this.currentRow) {
+          const params = { type: 'body', $grid: this.$xegrid, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
+          let _row = this.currentRow
+          let _column = this.visibleColumn[0]
+          if (this.editStore.selected.row) {
+            _row = this.editStore.selected.row
+          }
+          if (this.editStore.selected.column) {
+            _column = this.editStore.selected.column
+          }
+          const _rowIndex = this.getRowIndex(this._row)
+          const _columnIndex = this.getColumnIndex(_column)
+          const domParams = { $table: this, rowIndex: _rowIndex, row: _row, column: _column, columnIndex: _columnIndex }
+          const cell = DomTools.getCell(this, domParams)
+          const absolutePos = DomTools.getAbsolutePos(cell)
+          const position = { clientX: absolutePos.left, clientY: absolutePos.top + 20 }
+          Object.assign(params, { row: _row, rowIndex: _rowIndex, column: _column, columnIndex: _columnIndex, cell })
+          this.openContextMenu(evnt, 'body', params, position)
+          return
+        }
+
         // 分别匹配表尾、内容、表尾的快捷菜单
         for (let index = 0; index < layoutList.length; index++) {
           const layout = layoutList[index]
@@ -79,6 +101,7 @@ export default {
               typePrefix = ''
               params.row = row
               params.rowIndex = this.getRowIndex(row)
+              this.triggerCurrentRowEvent(evnt, params)
             }
             this.openContextMenu(evnt, layout, params)
             this.emitEvent(`${typePrefix}cell-context-menu`, params, evnt)
@@ -101,10 +124,18 @@ export default {
     /**
      * 显示快捷菜单
      */
-    openContextMenu (evnt, type, params) {
+    openContextMenu (evnt, type, params, position) {
       const { ctxMenuStore, ctxMenuOpts } = this
       const config = ctxMenuOpts[type]
       const visibleMethod = ctxMenuOpts.visibleMethod
+      let clientX = evnt.clientX
+      let clientY = evnt.clientY
+      if (position && position.clientX) {
+        clientX = position.clientX
+      }
+      if (position && position.clientY) {
+        clientY = position.clientY
+      }
       if (config) {
         const { options, disabled } = config
         if (disabled) {
@@ -116,8 +147,8 @@ export default {
               evnt.preventDefault()
               this.updateZindex()
               const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-              const top = evnt.clientY + scrollTop
-              const left = evnt.clientX + scrollLeft
+              const top = clientY + scrollTop
+              const left = clientX + scrollLeft
               Object.assign(ctxMenuStore, {
                 args: params,
                 visible: true,
@@ -136,8 +167,8 @@ export default {
                 const ctxElem = this.$refs.ctxWrapper.$el
                 const clientHeight = ctxElem.clientHeight
                 const clientWidth = ctxElem.clientWidth
-                const offsetTop = evnt.clientY + clientHeight - visibleHeight
-                const offsetLeft = evnt.clientX + clientWidth - visibleWidth
+                const offsetTop = clientY + clientHeight - visibleHeight
+                const offsetLeft = clientX + clientWidth - visibleWidth
                 if (offsetTop > -10) {
                   ctxMenuStore.style.top = `${Math.max(scrollTop + 2, top - clientHeight - 2)}px`
                 }

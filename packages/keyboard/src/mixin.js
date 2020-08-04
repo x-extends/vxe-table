@@ -185,7 +185,7 @@ export default {
           }
         }
       }
-      this.scrollToRow(params.row, params.column).then(() => {
+      this.scrollToRow(params.row, params.column).then(() => this.triggerCurrentRowEvent(evnt, params)).then(() => {
         params.cell = DomTools.getCell(this, params)
         this.handleSelected(params, evnt)
       })
