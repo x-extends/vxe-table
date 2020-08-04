@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动渲染，键盘移动高亮行，设置 <table-api-link prop="keyboard-config"/>={isArrow: true} 启用方向键功能</p>
+    <p class="tip">键盘移动高亮行，设置 <table-api-link prop="keyboard-config"/>={isArrow: true} 启用方向键功能</p>
 
     <vxe-table
       border

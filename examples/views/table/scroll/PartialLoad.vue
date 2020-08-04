@@ -1,8 +1,6 @@
 <template>
   <div>
-    <p class="tip">
-      虚拟滚动渲染，局部递增数据<br>
-    </p>
+    <p class="tip">局部递增数据</p>
 
     <vxe-toolbar :loading="loading">
       <template v-slot:buttons>
