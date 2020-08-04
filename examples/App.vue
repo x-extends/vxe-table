@@ -142,7 +142,7 @@ export default {
   data () {
     return {
       supportDiscountPrice: 266,
-      supportGroupPrice: 499,
+      supportGroupPrice: 599,
       supportLoading: false,
       supportVisible: false,
       supportQuestion: '',
