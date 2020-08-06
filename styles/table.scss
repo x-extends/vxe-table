@@ -593,17 +593,6 @@ select.vxe-select,
     padding-left: 1.2em;
   }
 
-  .vxe-header--column,
-  .vxe-body--column,
-  .vxe-footer--column {
-    &.col--ellipsis {
-      &:not(.col--actived) {
-        .vxe-cell {
-          @extend %TextEllipsis;
-        }
-      }
-    }
-  }
   .vxe-input,
   .vxe-textarea {
     width: 100%;
@@ -843,12 +832,12 @@ select.vxe-select,
   .vxe-footer--column {
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
-    }
-  }
-  &.virtual--x,
-  &.virtual--y {
-    .col--ellipsis {
-      .vxe-cell {
+      &:not(.col--actived) {
+        & > .vxe-cell {
+          @extend %TextEllipsis;
+        }
+      }
+      & > .vxe-cell {
         max-height: $vxe-table-row-height-default;
       }
     }
@@ -859,12 +848,7 @@ select.vxe-select,
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
-      }
-    }
-    &.virtual--x,
-    &.virtual--y {
-      .col--ellipsis {
-        .vxe-cell {
+        & > .vxe-cell {
           max-height: $vxe-table-row-height-medium;
         }
       }
@@ -880,12 +864,7 @@ select.vxe-select,
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
-      }
-    }
-    &.virtual--x,
-    &.virtual--y {
-      .col--ellipsis {
-        .vxe-cell {
+        & > .vxe-cell {
           max-height: $vxe-table-row-height-small;
         }
       }
@@ -901,12 +880,7 @@ select.vxe-select,
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
-      }
-    }
-    &.virtual--x,
-    &.virtual--y {
-      .col--ellipsis {
-        .vxe-cell {
+        & > .vxe-cell {
           max-height: $vxe-table-row-height-mini;
         }
       }

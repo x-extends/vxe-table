@@ -2,15 +2,14 @@
   <div>
     <p class="tip">
       插入数据，简单的实现示例<br>
-      <span class="red">（注：树形结构默认不支持 insert、remove 相关方法，如果要往子节点插入或删除节点数据，直接操作数据源即可）</span>
+      <span class="red">（注：内置的 CRUD 管理器是不支持插入子节点的，如果要往子节点插入或删除节点数据，可以直接操作数据源）</span>
     </p>
 
-    <vxe-toolbar :data="tableData" custom>
+    <vxe-toolbar custom>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent()">插入第一行</vxe-button>
-        <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
-        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
-        <vxe-button @click="getSelectEvent">获取选中</vxe-button>
+        <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
+        <vxe-button @click="saveEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -18,6 +17,7 @@
       resizable
       keep-source
       ref="xTree"
+      class="my_treetable_insert"
       :tree-config="treeConfig"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="tableData">
@@ -33,6 +33,7 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -50,12 +51,11 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-toolbar :data="tableData" custom>
+        <vxe-toolbar custom>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent()">插入第一行</vxe-button>
-            <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
-            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
-            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
+            <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
+            <vxe-button @click="saveEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -63,6 +63,7 @@ export default {
           resizable
           keep-source
           ref="xTree"
+          class="my_treetable_insert"
           :tree-config="treeConfig"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="tableData">
@@ -88,41 +89,27 @@ export default {
           },
           methods: {
             insertEvent () {
-              let xTree = this.$refs.xTree
-              xTree.createRow({
+              const xTree = this.$refs.xTree
+              const newRow = {
                 name: '新数据',
-                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
-                isNew: true
-              }).then(newRow => {
-                // 插入到第一行
-                this.tableData.unshift(newRow)
-                xTree.syncData().then(() => xTree.setActiveRow(newRow))
-              })
+                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+              }
+              xTree.insert(newRow).then(() => xTree.setActiveRow(newRow))
             },
-            insertAtEvent () {
-              let xTree = this.$refs.xTree
-              xTree.createRow({
-                name: '新数据',
-                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
-                isNew: true
-              }).then(newRow => {
-                // 插入到 id 为 11000 的节点位置中
-                let rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
-                if (rowNode) {
-                  rowNode.items.splice(rowNode.index, 0, newRow)
-                  xTree.syncData().then(() => xTree.setActiveRow(newRow))
-                }
-              })
-            },
-            getInsertEvent () {
-              let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
-              this.$XModal.alert(insertRecords.length)
-            },
-            getSelectEvent () {
-              let selectRecords = this.$refs.xTree.getCheckboxRecords()
+            getSelectionEvent () {
+              const selectRecords = this.$refs.xTree.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
+            },
+            saveEvent () {
+              const { insertRecords, updateRecords } = this.$refs.xTree.getRecordset()
+              this.$XModal.alert(\`insertRecords=\${insertRecords.length} updateRecords=\${updateRecords.length}\`)
             }
           }
+        }
+        `,
+        `
+        .my_treetable_insert .vxe-body--row.is--new {
+          background-color: #f1fdf1;
         }
         `
       ]
@@ -139,39 +126,26 @@ export default {
   methods: {
     insertEvent () {
       const xTree = this.$refs.xTree
-      xTree.createRow({
+      const newRow = {
         name: '新数据',
-        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
-        isNew: true
-      }).then(newRow => {
-        // 插入到第一行
-        this.tableData.unshift(newRow)
-        xTree.syncData().then(() => xTree.setActiveRow(newRow))
-      })
+        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+      }
+      xTree.insert(newRow).then(({ row }) => xTree.setActiveRow(row))
     },
-    insertAtEvent () {
-      const xTree = this.$refs.xTree
-      xTree.createRow({
-        name: '新数据',
-        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
-        isNew: true
-      }).then(newRow => {
-        // 插入到 id 为 11000 的节点位置中
-        const rowNode = XEUtils.findTree(this.tableData, item => item.id === '11000', this.treeConfig)
-        if (rowNode) {
-          rowNode.items.splice(rowNode.index, 0, newRow)
-          xTree.syncData().then(() => xTree.setActiveRow(newRow))
-        }
-      })
-    },
-    getInsertEvent () {
-      const insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
-      this.$XModal.alert(insertRecords.length)
-    },
-    getSelectEvent () {
+    getSelectionEvent () {
       const selectRecords = this.$refs.xTree.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
+    },
+    saveEvent () {
+      const { insertRecords, updateRecords } = this.$refs.xTree.getRecordset()
+      this.$XModal.alert(`insertRecords=${insertRecords.length} updateRecords=${updateRecords.length}`)
     }
   }
 }
 </script>
+
+<style lang="scss">
+.my_treetable_insert .vxe-body--row.is--new {
+  background-color: #f1fdf1;
+}
+</style>

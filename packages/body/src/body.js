@@ -113,7 +113,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   } = $table
   // v2.0 废弃属性，保留兼容
   const allColumnOverflow = XEUtils.isBoolean(oldShowAllOverflow) ? oldShowAllOverflow : allShowOverflow
-  const { editRender, align, showOverflow, renderWidth, columnKey, className, treeNode } = column
+  const { cellRender, editRender, align, showOverflow, renderWidth, columnKey, className, treeNode } = column
   const { checked, selected, actived, copyed } = editStore
   const { enabled } = tooltipOpts
   const columnIndex = $table.getColumnIndex(column)
@@ -150,7 +150,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
         return
       }
       if (showTitle) {
-        DomTools.updateCellTitle(evnt, column)
+        DomTools.updateCellTitle(evnt.currentTarget, column)
       } else if (showTooltip || enabled) {
         // 如果配置了显示 tooltip
         $table.triggerTooltipEvent(evnt, params)
@@ -209,7 +209,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
     }
   }
   // 如果编辑列开启显示状态
-  if (!fixedHiddenColumn && editRender && editConfig && editOpts.showStatus) {
+  if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && editOpts.showStatus) {
     isDirty = $table.isUpdateByRow(row, column.property)
   }
   // 批量选中处理

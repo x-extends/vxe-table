@@ -131,7 +131,7 @@ export default {
             if (showTitle || showTooltip || enabled) {
               tfOns.mouseenter = evnt => {
                 if (showTitle) {
-                  DomTools.updateCellTitle(evnt, column)
+                  DomTools.updateCellTitle(evnt.currentTarget, column)
                 } else if (showTooltip || enabled) {
                   $xetable.triggerFooterTooltipEvent(evnt, params)
                 }

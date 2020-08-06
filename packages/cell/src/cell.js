@@ -604,10 +604,10 @@ export const Cell = {
     }
     return [
       isRequired && editOpts.showAsterisk ? h('i', {
-        class: 'vxe-required-icon'
+        class: 'vxe-cell--required-icon'
       }) : null,
       editOpts.showIcon === false ? null : h('i', {
-        class: ['vxe-edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
+        class: ['vxe-cell--edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
       })
     ].concat(Cell.renderDefaultHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])

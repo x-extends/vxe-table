@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">表单</p>
+    <p class="tip">表格与表单的组合使用</p>
 
     <vxe-form :data="formData" @submit="findList">
       <vxe-form-item title="app.body.label.name" field="name">

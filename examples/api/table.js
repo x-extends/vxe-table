@@ -1088,7 +1088,7 @@ const apis = [
         list: [
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
             version: '1.15.27',
             type: 'Boolean',
             enum: '',
@@ -1182,7 +1182,7 @@ const apis = [
           },
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -1265,7 +1265,7 @@ const apis = [
           },
           {
             name: 'strict',
-            desc: '严格模式，当数据为空或全部禁用时，列表为禁用状态',
+            desc: '严格模式，当数据为空或全部禁用时，列头的复选框为禁用状态',
             version: '2.6',
             type: 'Boolean',
             enum: '',

@@ -330,6 +330,16 @@ module.exports = {
       },
       support: {
         title: '該付費科技群用於快速解决使用過程中遇到的各種問題。'
+      },
+      demo: {
+        start: {
+          i18n: {
+            i18nTitle: '如果希望使用指定語言，則需要進行多語言設定。以中/英文為例',
+            translate: '集成國際化',
+            translateTitle: '若希望在項目中支持全域自動翻譯，可以通過全域參數開啟（將對列頭、校驗提示..進行自動翻譯）',
+            findError: '發現錯誤？想參與翻譯？'
+          }
+        }
       }
     },
     footer: {

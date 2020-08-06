@@ -142,7 +142,7 @@ export default {
             if (showTitle || showTooltip || enabled) {
               thOns.mouseenter = evnt => {
                 if (showTitle) {
-                  DomTools.updateCellTitle(evnt, column)
+                  DomTools.updateCellTitle(evnt.currentTarget, column)
                 } else if (showTooltip || enabled) {
                   $table.triggerHeaderTooltipEvent(evnt, params)
                 }

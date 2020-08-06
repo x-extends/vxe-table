@@ -331,6 +331,16 @@ module.exports = {
       },
       support: {
         title: '该付费技术群用于快速解决使用过程中遇到的各种问题。'
+      },
+      demo: {
+        start: {
+          i18n: {
+            i18nTitle: 'If you want to use the specified language, you need to make Multilingual Settings. Take Chinese / English as an example',
+            translate: 'Integration internationalization',
+            translateTitle: 'If you want to support global automatic translation in the project, you can turn it on through global parameters (automatic translation will be performed for column header, verification prompt, etc.)',
+            findError: 'Errors found? Want to participate in translation?'
+          }
+        }
       }
     },
     footer: {

@@ -2819,7 +2819,7 @@ export default {
             // 如果按下了方向键
             if (selected.row && selected.column) {
               this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-            } else if ((isUpArrow || isDwArrow) && highlightCurrentRow && currentRow) {
+            } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
             // 当前行按键上下移动
               this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
             }
@@ -2955,20 +2955,24 @@ export default {
       const { currentRow, treeConfig, treeOpts, afterFullData } = this
       let targetRow
       evnt.preventDefault()
-      if (treeConfig) {
-        const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
-        if (isUpArrow && index > 0) {
-          targetRow = items[index - 1]
-        } else if (isDwArrow && index < items.length - 1) {
-          targetRow = items[index + 1]
+      if (currentRow) {
+        if (treeConfig) {
+          const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
+          if (isUpArrow && index > 0) {
+            targetRow = items[index - 1]
+          } else if (isDwArrow && index < items.length - 1) {
+            targetRow = items[index + 1]
+          }
+        } else {
+          const _rowIndex = this._getRowIndex(currentRow)
+          if (isUpArrow && _rowIndex > 0) {
+            targetRow = afterFullData[_rowIndex - 1]
+          } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
+            targetRow = afterFullData[_rowIndex + 1]
+          }
         }
       } else {
-        const _rowIndex = this._getRowIndex(currentRow)
-        if (isUpArrow && _rowIndex > 0) {
-          targetRow = afterFullData[_rowIndex - 1]
-        } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
-          targetRow = afterFullData[_rowIndex + 1]
-        }
+        targetRow = afterFullData[0]
       }
       if (targetRow) {
         const params = { $table: this, row: targetRow }
