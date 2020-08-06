@@ -122,7 +122,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     editStore,
     validStore
   } = $xetable
-  const { editRender, align, showOverflow, className, treeNode } = column
+  const { cellRender, editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
   const { enabled } = tooltipOpts
   const columnIndex = $xetable.getColumnIndex(column)
@@ -157,7 +157,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
         return
       }
       if (showTitle) {
-        DomTools.updateCellTitle(evnt, column)
+        DomTools.updateCellTitle(evnt.currentTarget, column)
       } else if (showTooltip || enabled) {
         // 如果配置了显示 tooltip
         $xetable.triggerTooltipEvent(evnt, params)
@@ -221,7 +221,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 如果编辑列开启显示状态
-  if (!fixedHiddenColumn && editRender && editConfig && editOpts.showStatus) {
+  if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && editOpts.showStatus) {
     isDirty = $xetable.isUpdateByRow(row, column.property)
   }
   const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type

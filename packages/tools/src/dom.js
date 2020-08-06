@@ -51,11 +51,10 @@ export const DomTools = {
       elem.className = `${elem.className} ${cls}`
     }
   },
-  updateCellTitle (evnt, column) {
-    const cellElem = evnt.currentTarget.querySelector('.vxe-cell')
-    const content = column.type === 'html' ? cellElem.innerText : cellElem.textContent
-    if (cellElem.getAttribute('title') !== content) {
-      cellElem.setAttribute('title', content)
+  updateCellTitle (overflowElem, column) {
+    const content = column.type === 'html' ? overflowElem.innerText : overflowElem.textContent
+    if (overflowElem.getAttribute('title') !== content) {
+      overflowElem.setAttribute('title', content)
     }
   },
   rowToVisible ($xetable, row) {

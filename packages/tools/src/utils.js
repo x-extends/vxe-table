@@ -112,6 +112,7 @@ class ColumnConfig {
       contentRender: _vm.contentRender,
       exportMethod: _vm.exportMethod,
       footerExportMethod: _vm.footerExportMethod,
+      titleHelp: _vm.titleHelp,
       // 自定义参数
       params: _vm.params,
       // 渲染属性

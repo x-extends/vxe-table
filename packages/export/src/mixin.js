@@ -48,7 +48,7 @@ function toTableBorder (border) {
 }
 
 function getLabelData ($xetable, opts, columns, datas) {
-  const { treeConfig, treeOpts, scrollXLoad, scrollYLoad, radioOpts, checkboxOpts } = $xetable
+  const { treeConfig, treeOpts, radioOpts, checkboxOpts } = $xetable
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
   }
@@ -145,16 +145,12 @@ function getLabelData ($xetable, opts, columns, datas) {
           default:
             if (opts.original) {
               cellValue = UtilTools.getCellValue(row, column)
-            } else if (scrollXLoad || scrollYLoad) {
-              // 如果是虚拟滚动
+            } else {
               cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
               if (column.type === 'html') {
                 htmlCellElem.innerHTML = cellValue
                 cellValue = htmlCellElem.innerText.trim()
               }
-            } else {
-              const cell = DomTools.getCell($xetable, { row, column })
-              cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
             }
         }
       }

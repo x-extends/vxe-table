@@ -64,7 +64,6 @@ export default {
       overflowX,
       scrollbarWidth,
       getColumnIndex,
-      tooltipOpts,
       sortOpts
     } = $xetable
     const isMouseSelected = mouseConfig && mouseOpts.selected
@@ -126,7 +125,6 @@ export default {
             style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
             const { showHeaderOverflow, headerAlign, align, headerClassName } = column
-            const { enabled } = tooltipOpts
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -144,28 +142,6 @@ export default {
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
-            }
-            if (showTitle || showTooltip || enabled) {
-              thOns.mouseenter = evnt => {
-                if ($xetable._isResize) {
-                  return
-                }
-                if (showTitle) {
-                  DomTools.updateCellTitle(evnt, column)
-                } else if (showTooltip || enabled) {
-                  $xetable.triggerHeaderTooltipEvent(evnt, params)
-                }
-              }
-            }
-            if (showTooltip || enabled) {
-              thOns.mouseleave = evnt => {
-                if ($xetable._isResize) {
-                  return
-                }
-                if (showTooltip || enabled) {
-                  $xetable.handleTargetLeaveEvent(evnt)
-                }
-              }
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || isMouseChecked || sortOpts.trigger === 'cell') {
               thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, params)

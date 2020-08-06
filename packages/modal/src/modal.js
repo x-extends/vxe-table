@@ -19,6 +19,8 @@ export default {
     title: String,
     duration: { type: [Number, String], default: () => GlobalConfig.modal.duration },
     message: [String, Function],
+    cancelButtonText: String,
+    confirmButtonText: String,
     lockView: { type: Boolean, default: () => GlobalConfig.modal.lockView },
     lockScroll: Boolean,
     mask: { type: Boolean, default: () => GlobalConfig.modal.mask },
@@ -208,7 +210,7 @@ export default {
             on: {
               click: this.cancelEvent
             }
-          }, GlobalConfig.i18n('vxe.button.cancel')) : null,
+          }, this.cancelButtonText || GlobalConfig.i18n('vxe.button.cancel')) : null,
           h('vxe-button', {
             props: {
               status: 'primary'
@@ -216,7 +218,7 @@ export default {
             on: {
               click: this.confirmEvent
             }
-          }, GlobalConfig.i18n('vxe.button.confirm'))
+          }, this.confirmButtonText || GlobalConfig.i18n('vxe.button.confirm'))
         ]) : null,
         !isMsg && resize ? h('span', {
           class: 'vxe-modal--resize'

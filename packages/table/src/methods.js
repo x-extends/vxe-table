@@ -1295,9 +1295,6 @@ const Methods = {
       this.checkScrolling()
     }
   },
-  /**
-   * 放弃 vue 的双向 dom 绑定，使用原生的方式更新 Dom，性能翻倍提升
-   */
   updateStyle () {
     let {
       $refs,
@@ -1415,7 +1412,9 @@ const Methods = {
           if (fixedWrapperElem) {
             const isRightFixed = fixedType === 'right'
             const fixedColumn = columnStore[`${fixedType}List`]
-            wrapperElem.style.top = `${headerHeight}px`
+            if (wrapperElem) {
+              wrapperElem.style.top = `${headerHeight}px`
+            }
             fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
             fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isRightFixed ? scrollbarWidth : 0)}px`
           }
@@ -1764,7 +1763,7 @@ const Methods = {
           // 如果按下了方向键
           if (selected.row && selected.column) {
             this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-          } else if ((isUpArrow || isDwArrow) && highlightCurrentRow && currentRow) {
+          } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
             // 当前行按键上下移动
             this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
           }
@@ -1851,16 +1850,30 @@ const Methods = {
       this.clostTooltip()
     }
   },
+  triggerHeaderHelpEvent (evnt, params) {
+    const { column } = params
+    const { titleHelp } = column
+    if (titleHelp.message) {
+      const { $refs, tooltipStore } = this
+      const tooltip = $refs.tooltip
+      const content = UtilTools.getFuncText(titleHelp.message)
+      this.handleTargetEnterEvent()
+      tooltipStore.visible = true
+      if (tooltip) {
+        tooltip.toVisible(evnt.currentTarget, content)
+      }
+    }
+  },
   /**
    * 触发表头 tooltip 事件
    */
   triggerHeaderTooltipEvent (evnt, params) {
     const { tooltipStore } = this
     const { column } = params
-    const cell = evnt.currentTarget
+    const titleElem = evnt.currentTarget
     this.handleTargetEnterEvent()
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--title'), params)
+      this.handleTooltip(evnt, titleElem, titleElem, params)
     }
   },
   /**
@@ -2156,31 +2169,44 @@ const Methods = {
     if (checkStrictly) {
       this.isAllSelected = value
     } else {
+      /**
+       * 绑定属性方式（高性能，有污染）
+       * 必须在行数据存在对应的属性，否则将不响应
+       */
       if (property) {
-        const setValFn = (row) => {
+        const checkValFn = (row) => {
           if (!checkMethod || checkMethod({ row })) {
             XEUtils.set(row, property, value)
           }
         }
-        const clearValFn = (row) => {
-          if (!checkMethod || (checkMethod({ row }) ? 0 : selection.indexOf(row) > -1)) {
-            XEUtils.set(row, property, value)
-          }
-        }
+        // 如果存在选中方法
+        // 如果方法成立，则更新值，否则忽略该数据
         if (treeConfig) {
-          XEUtils.eachTree(afterFullData, value ? setValFn : clearValFn, treeOpts)
+          XEUtils.eachTree(afterFullData, checkValFn, treeOpts)
         } else {
-          afterFullData.forEach(value ? setValFn : clearValFn)
+          afterFullData.forEach(checkValFn)
         }
       } else {
+        /**
+         * 默认方式（低性能，无污染）
+         * 无需任何属性，直接绑定
+         */
         if (treeConfig) {
           if (value) {
+            /**
+             * 如果是树勾选
+             * 如果方法成立，则添加到临时集合中
+             */
             XEUtils.eachTree(afterFullData, (row) => {
               if (!checkMethod || checkMethod({ row })) {
                 selectRows.push(row)
               }
             }, treeOpts)
           } else {
+            /**
+             * 如果是树取消
+             * 如果方法成立，则不添加到临时集合中
+             */
             if (checkMethod) {
               XEUtils.eachTree(afterFullData, (row) => {
                 if (checkMethod({ row }) ? 0 : selection.indexOf(row) > -1) {
@@ -2191,12 +2217,22 @@ const Methods = {
           }
         } else {
           if (value) {
+            /**
+             * 如果是行勾选
+             * 如果存在选中方法且成立或者本身已勾选，则添加到临时集合中
+             * 如果不存在选中方法，则添加所有数据到临时集合中
+             */
             if (checkMethod) {
               selectRows = afterFullData.filter((row) => selection.indexOf(row) > -1 || checkMethod({ row }))
             } else {
               selectRows = afterFullData.slice(0)
             }
           } else {
+            /**
+             * 如果是行取消
+             * 如果方法成立，则不添加到临时集合中；如果方法不成立则判断当前是否已勾选，如果已被勾选则添加到新集合中
+             * 如果不存在选中方法，无需处理，临时集合默认为空
+             */
             if (checkMethod) {
               selectRows = afterFullData.filter((row) => checkMethod({ row }) ? 0 : selection.indexOf(row) > -1)
             }
@@ -2393,6 +2429,7 @@ const Methods = {
   },
   /**
    * 用于多选行，手动清空用户的选择
+   * 清空行为不管是否被禁用，将彻底清空选中状态
    */
   clearCheckboxRow () {
     const { tableFullData, treeConfig, treeOpts, checkboxOpts, checkboxReserveRowMap } = this

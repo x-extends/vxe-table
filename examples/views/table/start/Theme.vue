@@ -16,6 +16,7 @@
         $vxe-font-size: 14px;
         $vxe-font-color: #666;
         $vxe-primary-color: #409eff;
+        $vxe-table-font-color: $vxe-font-color;
         $vxe-table-border-radius: 4px;
         // ...
 
@@ -31,6 +32,7 @@
         $vxe-font-size: 14px;
         $vxe-font-color: #666;
         $vxe-primary-color: #409eff;
+        $vxe-table-font-color: $vxe-font-color;
         $vxe-table-border-radius: 4px;
         // ...
 
