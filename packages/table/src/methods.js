@@ -50,9 +50,20 @@ function getCustomStorageMap (key) {
   return rest && rest._v === version ? rest : { _v: version }
 }
 
-function handleReserveRow (_vm, list) {
-  const fullAllDataRowMap = _vm.fullAllDataRowMap
+function getRecoverRow (_vm, list) {
+  const { fullAllDataRowMap } = _vm
   return list.filter(row => fullAllDataRowMap.has(row))
+}
+
+function handleReserveRow (_vm, reserveRowMap) {
+  const { fullDataRowIdData } = _vm
+  const reserveList = []
+  XEUtils.each(reserveRowMap, (item, rowid) => {
+    if (fullDataRowIdData[rowid] && reserveList.indexOf(fullDataRowIdData[rowid].row) === -1) {
+      reserveList.push(fullDataRowIdData[rowid].row)
+    }
+  })
+  return reserveList
 }
 
 const Methods = {
@@ -89,7 +100,9 @@ const Methods = {
     this.clearCheckboxRow()
     this.clearCheckboxReserve()
     this.clearRowExpand()
+    this.clearRowExpandReserve()
     this.clearTreeExpand()
+    this.clearTreeExpandReserve()
     if (VXETable._edit) {
       this.clearActived()
     }
@@ -322,10 +335,11 @@ const Methods = {
     const { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
     const fullColumnIdData = this.fullColumnIdData = {}
     const fullColumnFieldData = this.fullColumnFieldData = {}
+    let treeNodeColumn
     let expandColumn
     let hasFixed
     const handleFunc = (column, index) => {
-      const { id: colid, property, fixed, type } = column
+      const { id: colid, property, fixed, type, treeNode } = column
       const rest = { column, colid, index }
       if (property) {
         fullColumnFieldData[property] = rest
@@ -333,7 +347,9 @@ const Methods = {
       if (!hasFixed && fixed) {
         hasFixed = fixed
       }
-      if (!expandColumn && type === 'expand') {
+      if (!treeNodeColumn && treeNode) {
+        treeNodeColumn = column
+      } else if (!expandColumn && type === 'expand') {
         expandColumn = column
       }
       fullColumnIdData[colid] = rest
@@ -351,6 +367,7 @@ const Methods = {
     if (hasFixed && expandColumn) {
       UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
     }
+    this.treeNodeColumn = treeNodeColumn
     this.expandColumn = expandColumn
   },
   /**
@@ -1975,19 +1992,15 @@ const Methods = {
    * 处理默认勾选
    */
   handleDefaultSelectionChecked () {
-    const { fullDataRowIdData, checkboxOpts, checkboxReserveRowMap } = this
+    const { fullDataRowIdData, checkboxOpts } = this
     const { checkAll, checkRowKeys } = checkboxOpts
     if (checkAll) {
       this.setAllCheckboxRow(true)
     } else if (checkRowKeys) {
       const defSelection = []
-      const rowkey = getRowkey(this)
       checkRowKeys.forEach(rowid => {
         if (fullDataRowIdData[rowid]) {
           defSelection.push(fullDataRowIdData[rowid].row)
-        }
-        if (checkboxOpts.reserve) {
-          checkboxReserveRowMap[rowid] = { [rowkey]: rowid }
         }
       })
       this.setCheckboxRow(defSelection, true)
@@ -2245,12 +2258,7 @@ const Methods = {
             checkboxReserveRowMap[getRowid(this, row)] = row
           })
         } else {
-          afterFullData.forEach(row => {
-            const rowid = getRowid(this, row)
-            if (checkboxReserveRowMap[rowid]) {
-              delete checkboxReserveRowMap[rowid]
-            }
-          })
+          afterFullData.forEach(row => this.handleCheckboxReserveRow(row, false))
         }
       }
       this.selection = beforeSelection.concat(selectRows)
@@ -2301,7 +2309,7 @@ const Methods = {
   },
   // 还原展开、选中等相关状态
   handleReserveStatus () {
-    const { expandColumn, treeConfig, fullDataRowIdData, fullAllDataRowMap, currentRow, selectRow, radioReserveRow, radioOpts, checkboxReserveRowMap, checkboxOpts, selection, rowExpandeds, treeExpandeds, treeIndeterminates } = this
+    const { expandColumn, treeOpts, treeConfig, fullDataRowIdData, fullAllDataRowMap, currentRow, selectRow, radioReserveRow, radioOpts, checkboxOpts, selection, rowExpandeds, treeExpandeds, expandOpts } = this
     // 单选框
     if (selectRow && !fullAllDataRowMap.has(selectRow)) {
       this.selectRow = null // 刷新单选行状态
@@ -2314,25 +2322,25 @@ const Methods = {
       }
     }
     // 复选框
-    this.selection = handleReserveRow(this, selection) // 刷新多选行状态
+    this.selection = getRecoverRow(this, selection) // 刷新多选行状态
     // 还原保留选中状态
     if (checkboxOpts.reserve) {
-      const reserveSelection = []
-      XEUtils.each(checkboxReserveRowMap, (item, rowid) => {
-        if (fullDataRowIdData[rowid] && reserveSelection.indexOf(fullDataRowIdData[rowid].row) === -1) {
-          reserveSelection.push(fullDataRowIdData[rowid].row)
-        }
-      })
-      this.setCheckboxRow(reserveSelection, true)
+      this.setCheckboxRow(handleReserveRow(this, this.checkboxReserveRowMap), true)
     }
     if (currentRow && !fullAllDataRowMap.has(currentRow)) {
       this.currentRow = null // 刷新当前行状态
     }
     // 行展开
-    this.rowExpandeds = expandColumn ? handleReserveRow(this, rowExpandeds) : [] // 刷新行展开状态
+    this.rowExpandeds = expandColumn ? getRecoverRow(this, rowExpandeds) : [] // 刷新行展开状态
+    // 还原保留状态
+    if (expandColumn && expandOpts.reserve) {
+      this.setRowExpand(handleReserveRow(this, this.rowExpandedReserveRowMap), true)
+    }
     // 树展开
-    this.treeExpandeds = treeConfig ? handleReserveRow(this, treeExpandeds) : []
-    this.treeIndeterminates = treeConfig ? handleReserveRow(this, treeIndeterminates) : []
+    this.treeExpandeds = treeConfig ? getRecoverRow(this, treeExpandeds) : [] // 刷新树展开状态
+    if (treeConfig && treeOpts.reserve) {
+      this.setTreeExpand(handleReserveRow(this, this.treeExpandedReserveRowMap), true)
+    }
   },
   /**
    * 获取单选框保留选中的行
@@ -2429,10 +2437,10 @@ const Methods = {
   },
   /**
    * 用于多选行，手动清空用户的选择
-   * 清空行为不管是否被禁用，将彻底清空选中状态
+   * 清空行为不管是否被禁用还是保留记录，都将彻底清空选中状态
    */
   clearCheckboxRow () {
-    const { tableFullData, treeConfig, treeOpts, checkboxOpts, checkboxReserveRowMap } = this
+    const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
     const { checkField: property, reserve } = checkboxOpts
     if (property) {
       if (treeConfig) {
@@ -2442,12 +2450,7 @@ const Methods = {
       }
     }
     if (reserve) {
-      tableFullData.forEach(row => {
-        const rowid = getRowid(this, row)
-        if (checkboxReserveRowMap[rowid]) {
-          delete checkboxReserveRowMap[rowid]
-        }
-      })
+      tableFullData.forEach(row => this.handleCheckboxReserveRow(row, false))
     }
     this.isAllSelected = false
     this.isIndeterminate = false
@@ -2931,7 +2934,7 @@ const Methods = {
   setRowExpand (rows, expanded) {
     const { fullAllDataRowMap, expandLazyLoadeds, expandOpts, expandColumn: column } = this
     let { rowExpandeds } = this
-    const { lazy, accordion, toggleMethod } = expandOpts
+    const { reserve, lazy, accordion, toggleMethod } = expandOpts
     const lazyRests = []
     const columnIndex = this.getColumnIndex(column)
     const $columnIndex = this.$getColumnIndex(column)
@@ -2944,9 +2947,9 @@ const Methods = {
         rowExpandeds = []
         rows = rows.slice(rows.length - 1, rows.length)
       }
-      const removeRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) : rows
+      const validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) : rows
       if (expanded) {
-        removeRows.forEach(row => {
+        validRows.forEach(row => {
           if (rowExpandeds.indexOf(row) === -1) {
             const rest = fullAllDataRowMap.get(row)
             const isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
@@ -2958,7 +2961,10 @@ const Methods = {
           }
         })
       } else {
-        XEUtils.remove(rowExpandeds, row => removeRows.indexOf(row) > -1)
+        XEUtils.remove(rowExpandeds, row => validRows.indexOf(row) > -1)
+      }
+      if (reserve) {
+        validRows.forEach(row => this.handleRowExpandReserve(row, expanded))
       }
     }
     this.rowExpandeds = rowExpandeds
@@ -2980,9 +2986,33 @@ const Methods = {
    * 手动清空展开行状态，数据会恢复成未展开的状态
    */
   clearRowExpand () {
-    const isExists = this.rowExpandeds.length
+    const { expandOpts, rowExpandeds, tableFullData } = this
+    const { reserve } = expandOpts
+    const isExists = rowExpandeds.length
     this.rowExpandeds = []
-    return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
+    if (reserve) {
+      tableFullData.forEach(row => this.handleRowExpandReserve(row, false))
+    }
+    return this.$nextTick().then(() => {
+      if (isExists) {
+        this.recalculate()
+      }
+    })
+  },
+  clearRowExpandReserve () {
+    this.rowExpandedReserveRowMap = {}
+    return this.$nextTick()
+  },
+  handleRowExpandReserve (row, expanded) {
+    const { rowExpandedReserveRowMap, expandOpts } = this
+    if (expandOpts.reserve) {
+      const rowid = getRowid(this, row)
+      if (expanded) {
+        rowExpandedReserveRowMap[rowid] = row
+      } else if (rowExpandedReserveRowMap[rowid]) {
+        delete rowExpandedReserveRowMap[rowid]
+      }
+    }
   },
   getRowExpandRecords () {
     return this.rowExpandeds.slice(0)
@@ -3037,8 +3067,8 @@ const Methods = {
    * 展开树节点事件
    */
   triggerTreeExpandEvent (evnt, params) {
-    const { $listeners, treeOpts, treeLazyLoadeds, expandColumn: column } = this
-    const { row } = params
+    const { $listeners, treeOpts, treeLazyLoadeds } = this
+    const { row, column } = params
     const { lazy } = treeOpts
     if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
       const expanded = !this.isTreeExpandByRow(row)
@@ -3146,11 +3176,11 @@ const Methods = {
    * @param {Boolean} expanded 是否展开
    */
   setTreeExpand (rows, expanded) {
-    const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, expandColumn: column } = this
-    const { lazy, hasChild, children, accordion, toggleMethod } = treeOpts
+    const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, treeNodeColumn } = this
+    const { reserve, lazy, hasChild, children, accordion, toggleMethod } = treeOpts
     const result = []
-    const columnIndex = this.getColumnIndex(column)
-    const $columnIndex = this.$getColumnIndex(column)
+    const columnIndex = this.getColumnIndex(treeNodeColumn)
+    const $columnIndex = this.$getColumnIndex(treeNodeColumn)
     if (rows) {
       if (!XEUtils.isArray(rows)) {
         rows = [rows]
@@ -3162,9 +3192,9 @@ const Methods = {
           const matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeOpts)
           XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
         }
-        const removeRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row })) : rows
+        const validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
         if (expanded) {
-          removeRows.forEach(row => {
+          validRows.forEach(row => {
             if (treeExpandeds.indexOf(row) === -1) {
               const rest = fullAllDataRowMap.get(row)
               const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
@@ -3179,7 +3209,10 @@ const Methods = {
             }
           })
         } else {
-          XEUtils.remove(treeExpandeds, row => removeRows.indexOf(row) > -1)
+          XEUtils.remove(treeExpandeds, row => validRows.indexOf(row) > -1)
+        }
+        if (reserve) {
+          validRows.forEach(row => this.handleTreeExpandReserve(row, expanded))
         }
         return Promise.all(result).then(this.recalculate)
       }
@@ -3202,9 +3235,33 @@ const Methods = {
    * 手动清空树形节点的展开状态，数据会恢复成未展开的状态
    */
   clearTreeExpand () {
-    const isExists = this.treeExpandeds.length
+    const { treeOpts, treeExpandeds, tableFullData } = this
+    const { reserve } = treeOpts
+    const isExists = treeExpandeds.length
     this.treeExpandeds = []
-    return this.$nextTick().then(() => isExists ? this.recalculate() : 0)
+    if (reserve) {
+      XEUtils.eachTree(tableFullData, row => this.handleTreeExpandReserve(row, false), treeOpts)
+    }
+    return this.$nextTick().then(() => {
+      if (isExists) {
+        this.recalculate()
+      }
+    })
+  },
+  clearTreeExpandReserve () {
+    this.treeExpandedReserveRowMap = {}
+    return this.$nextTick()
+  },
+  handleTreeExpandReserve (row, expanded) {
+    const { treeExpandedReserveRowMap, treeOpts } = this
+    if (treeOpts.reserve) {
+      const rowid = getRowid(this, row)
+      if (expanded) {
+        treeExpandedReserveRowMap[rowid] = row
+      } else if (treeExpandedReserveRowMap[rowid]) {
+        delete treeExpandedReserveRowMap[rowid]
+      }
+    }
   },
   getVirtualScroller () {
     UtilTools.warn('vxe.error.delFunc', ['getVirtualScroller', 'getScroll'])
