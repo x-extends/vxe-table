@@ -62,7 +62,7 @@ function getCustomStorageMap (key) {
   return rest && rest._v === version ? rest : { _v: version }
 }
 
-function handleReserveRow (_vm, list) {
+function getRecoverRow (_vm, list) {
   const fullAllDataRowMap = _vm.fullAllDataRowMap
   return list.filter(row => fullAllDataRowMap.has(row))
 }
@@ -424,6 +424,8 @@ export default {
       footerData: [],
       // 展开列信息
       expandColumn: null,
+      // 树节点列信息
+      treeNodeColumn: null,
       // 已展开的行
       rowExpandeds: [],
       // 懒加载中的展开行的列表
@@ -1481,10 +1483,11 @@ export default {
       const { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
       const fullColumnIdData = this.fullColumnIdData = {}
       const fullColumnFieldData = this.fullColumnFieldData = {}
+      let treeNodeColumn
       let expandColumn
       let hasFixed
       const handleFunc = (column, index) => {
-        const { id: colid, property, fixed, type } = column
+        const { id: colid, property, fixed, type, treeNode } = column
         const rest = { column, colid, index }
         if (property) {
           fullColumnFieldData[property] = rest
@@ -1492,7 +1495,9 @@ export default {
         if (!hasFixed && fixed) {
           hasFixed = fixed
         }
-        if (!expandColumn && type === 'expand') {
+        if (!treeNodeColumn && treeNode) {
+          treeNodeColumn = column
+        } else if (!expandColumn && type === 'expand') {
           expandColumn = column
         }
         fullColumnIdData[colid] = rest
@@ -1510,6 +1515,7 @@ export default {
       if (hasFixed && expandColumn) {
         UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
       }
+      this.treeNodeColumn = treeNodeColumn
       this.expandColumn = expandColumn
     },
     getRowNode (tr) {
@@ -3338,19 +3344,15 @@ export default {
      * 处理复选框默认勾选
      */
     handleDefaultSelectionChecked () {
-      const { fullDataRowIdData, checkboxOpts, checkboxReserveRowMap } = this
+      const { fullDataRowIdData, checkboxOpts } = this
       const { checkAll, checkRowKeys } = checkboxOpts
       if (checkAll) {
         this.setAllCheckboxRow(true)
       } else if (checkRowKeys) {
         const defSelection = []
-        const rowkey = UtilTools.getRowkey(this)
         checkRowKeys.forEach(rowid => {
           if (fullDataRowIdData[rowid]) {
             defSelection.push(fullDataRowIdData[rowid].row)
-          }
-          if (checkboxOpts.reserve) {
-            checkboxReserveRowMap[rowid] = { [rowkey]: rowid }
           }
         })
         this.setCheckboxRow(defSelection, true)
@@ -3656,7 +3658,7 @@ export default {
         }
       }
       // 复选框
-      this.selection = handleReserveRow(this, selection) // 刷新多选行状态
+      this.selection = getRecoverRow(this, selection) // 刷新多选行状态
       // 还原保留选中状态
       if (checkboxOpts.reserve) {
         const reserveSelection = []
@@ -3671,10 +3673,10 @@ export default {
         this.currentRow = null // 刷新当前行状态
       }
       // 行展开
-      this.rowExpandeds = expandColumn ? handleReserveRow(this, rowExpandeds) : [] // 刷新行展开状态
+      this.rowExpandeds = expandColumn ? getRecoverRow(this, rowExpandeds) : [] // 刷新行展开状态
       // 树展开
-      this.treeExpandeds = treeConfig ? handleReserveRow(this, treeExpandeds) : []
-      this.treeIndeterminates = treeConfig ? handleReserveRow(this, treeIndeterminates) : []
+      this.treeExpandeds = treeConfig ? getRecoverRow(this, treeExpandeds) : []
+      this.treeIndeterminates = treeConfig ? getRecoverRow(this, treeIndeterminates) : []
     },
     /**
      * 获取单选框保留选中的行
@@ -4927,9 +4929,9 @@ export default {
           rowExpandeds = []
           rows = rows.slice(rows.length - 1, rows.length)
         }
-        const removeRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) : rows
+        const validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) : rows
         if (expanded) {
-          removeRows.forEach(row => {
+          validRows.forEach(row => {
             if (rowExpandeds.indexOf(row) === -1) {
               const rest = fullAllDataRowMap.get(row)
               const isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
@@ -4941,7 +4943,7 @@ export default {
             }
           })
         } else {
-          XEUtils.remove(rowExpandeds, row => removeRows.indexOf(row) > -1)
+          XEUtils.remove(rowExpandeds, row => validRows.indexOf(row) > -1)
         }
       }
       this.rowExpandeds = rowExpandeds
@@ -5124,11 +5126,11 @@ export default {
      * @param {Boolean} expanded 是否展开
      */
     setTreeExpand (rows, expanded) {
-      const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, expandColumn: column } = this
+      const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, treeNodeColumn } = this
       const { lazy, hasChild, children, accordion, toggleMethod } = treeOpts
       const result = []
-      const columnIndex = this.getColumnIndex(column)
-      const $columnIndex = this.$getColumnIndex(column)
+      const columnIndex = this.getColumnIndex(treeNodeColumn)
+      const $columnIndex = this.$getColumnIndex(treeNodeColumn)
       if (rows) {
         if (!XEUtils.isArray(rows)) {
           rows = [rows]
@@ -5140,9 +5142,9 @@ export default {
             const matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeOpts)
             XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
           }
-          const removeRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row })) : rows
+          const validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
           if (expanded) {
-            removeRows.forEach(row => {
+            validRows.forEach(row => {
               if (treeExpandeds.indexOf(row) === -1) {
                 const rest = fullAllDataRowMap.get(row)
                 const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
@@ -5157,7 +5159,7 @@ export default {
               }
             })
           } else {
-            XEUtils.remove(treeExpandeds, row => removeRows.indexOf(row) > -1)
+            XEUtils.remove(treeExpandeds, row => validRows.indexOf(row) > -1)
           }
           return Promise.all(result).then(this.recalculate)
         }

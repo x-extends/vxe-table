@@ -2207,7 +2207,7 @@ const apis = [
       },
       {
         name: 'cloak',
-        desc: '可以设置为 true 来避免初始化渲染时的闪动',
+        desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
         version: '1.15.28',
         type: 'Boolean',
         enum: '',

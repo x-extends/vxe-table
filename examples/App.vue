@@ -87,7 +87,7 @@
     </div>
 
     <vxe-modal v-model="supportVisible" :loading="supportLoading" title="技术支持" width="800" position="center">
-      <div class="support-declare">考虑到很多用户有需要支持的需求，提供该付费技术群用于快速解决使用过程中遇到的各种问题，同时也能支撑该项目可以持续的维护下去。若非必要建议先查阅相关的文档！</div>
+      <div class="support-declare">考虑到部分高级用户有需要技术支持的需求，用于快速解决使用过程中遇到的各种问题，同时还可以获取高级演示案例！</div>
       <div>
         <ul class="vxe-row support-question">
           <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
@@ -100,28 +100,26 @@
       </div>
       <div class="vxe-row support-group">
         <div class="vxe-col--12 support-group-item">
-          <div class="support-name">技术支持群</div>
+          <div class="support-name">高级用户</div>
           <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持以及项目模板的更新和维护，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
           <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持以及项目模板的更新和维护，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
-          <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请加入</vxe-button>
+          <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请成为高级用户</vxe-button>
           <ul class="support-describe">
-            <li>1. 快速解决遇到的问题</li>
-            <li>2. 包含项目模板及实例</li>
+            <li>1. 优质的技术支持群</li>
+            <li>2. 包含高级项目演示</li>
           </ul>
         </div>
         <div class="vxe-col--12 support-group-item">
-          <div class="template-name">真实项目模板</div>
+          <div class="template-name">项目演示</div>
           <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-1')">查看演示 PC-1</vxe-button>
           <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-2')" disabled>查看演示 PC-2</vxe-button>
           <ul class="template-describe">
-            <li>工程：<a class="link" href="https://cli.vuejs.org/" target="_blank">vue-cli4</a>, <a class="link" href="https://www.npmjs.com/package/vue" target="_blank">vue2.6</a></li>
-            <li>使用库：<a class="link" href="https://www.npmjs.com/package/vxe-table" target="_blank">vxe-table</a>, <a class="link" href="https://www.npmjs.com/package/xe-utils" target="_blank">xe-utils</a>, <a class="link" href="https://www.npmjs.com/package/axios" target="_blank">axios</a>, <a class="link" href="https://www.npmjs.com/package/axios" target="_blank">echarts</a></li>
-            <li>描述：丰富的增删改查实例及常用的业务组件封装，演示的组件都可以直接使用，也可以直接移植到任何 vue 项目中，使开发效率翻倍提升。</li>
+            <li>极致流畅 vue 演示项目，基于 vxe-table 构建，不依赖其他 UI 库，使用用在对表格依赖较深的项目；丰富的扩展组件，可以直接基于该模板开发，也可以将扩展组件移植到其他 vue 项目中，使开发效率翻倍提升。</li>
           </ul>
         </div>
       </div>
     </vxe-modal>
-    <vxe-modal v-model="supportGroupVisible" title="申请加入付费群" width="600" height="680" position="center">
+    <vxe-modal v-model="supportGroupVisible" title="申请成为高级用户" width="600" height="680" position="center">
       <template>
         <div class="support-pay-step">
           <p style="font-size: 12px;">联系邮件： <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
@@ -142,7 +140,7 @@ export default {
   data () {
     return {
       supportDiscountPrice: 266,
-      supportGroupPrice: 599,
+      supportGroupPrice: 888,
       supportLoading: false,
       supportVisible: false,
       supportQuestion: '',

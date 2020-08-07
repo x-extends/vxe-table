@@ -128,10 +128,16 @@ export default {
               })
             },
             removeList (size) {
-              if (this.allData.length > size) {
-                this.allData = this.allData.slice(0, this.allData.length - size)
-                this.$refs.xGrid.loadData(this.allData)
-              }
+              this.loading = true
+              setTimeout(() => {
+                if (this.allData.length > size) {
+                  this.allData = this.allData.slice(0, this.allData.length - size)
+                  if (this.$refs.xGrid) {
+                    this.$refs.xGrid.loadData(this.allData)
+                  }
+                }
+                this.loading = false
+              }, 100)
             },
             loadList (size) {
               this.loading = true
@@ -238,12 +244,16 @@ export default {
       })
     },
     removeList (size) {
-      if (this.allData.length > size) {
-        this.allData = this.allData.slice(0, this.allData.length - size)
-        if (this.$refs.xGrid) {
-          this.$refs.xGrid.loadData(this.allData)
+      this.loading = true
+      setTimeout(() => {
+        if (this.allData.length > size) {
+          this.allData = this.allData.slice(0, this.allData.length - size)
+          if (this.$refs.xGrid) {
+            this.$refs.xGrid.loadData(this.allData)
+          }
         }
-      }
+        this.loading = false
+      }, 100)
     },
     loadList (size) {
       this.loading = true
