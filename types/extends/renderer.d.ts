@@ -93,6 +93,7 @@ export class RenderParams {}
 export interface OptionProps extends RenderParams {
   value?: string;
   label?: string;
+  [key: string]: any;
 }
 
 /**
@@ -101,4 +102,5 @@ export interface OptionProps extends RenderParams {
 export interface OptionGroupProps extends RenderParams {
   options?: string;
   label?: string;
+  [key: string]: any;
 }

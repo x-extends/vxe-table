@@ -1,10 +1,14 @@
 <template>
   <vxe-form :data="formData" @submit="searchEvent">
     <vxe-form-item field="name" title="名称">
-      <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
+      <template v-slot>
+        <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
+      </template>
     </vxe-form-item>
     <vxe-form-item>
-      <vxe-button type="submit" status="primary">搜索</vxe-button>
+      <template v-slot>
+        <vxe-button type="submit" status="primary">搜索</vxe-button>
+      </template>
     </vxe-form-item>
   </vxe-form>
 </template>

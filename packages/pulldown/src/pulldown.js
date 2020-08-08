@@ -136,10 +136,12 @@ export default {
           this.animatVisible = true
           setTimeout(() => {
             this.visiblePanel = true
-            resolve(this.$nextTick())
+            this.updatePlacement()
+            setTimeout(() => {
+              resolve(this.updatePlacement())
+            }, 40)
           }, 10)
           this.updateZindex()
-          this.updatePlacement()
         } else {
           resolve(this.$nextTick())
         }
@@ -151,10 +153,14 @@ export default {
     hidePanel () {
       this.visiblePanel = false
       return new Promise(resolve => {
-        this.hidePanelTimeout = setTimeout(() => {
-          this.animatVisible = false
+        if (this.animatVisible) {
+          this.hidePanelTimeout = setTimeout(() => {
+            this.animatVisible = false
+            resolve(this.$nextTick())
+          }, 350)
+        } else {
           resolve(this.$nextTick())
-        }, 350)
+        }
       })
     },
     /**
@@ -162,64 +168,68 @@ export default {
      */
     updatePlacement () {
       return this.$nextTick().then(() => {
-        const { $refs, transfer, placement, panelIndex } = this
-        const targetElem = $refs.content
-        const panelElem = $refs.panel
-        const targetHeight = targetElem.offsetHeight
-        const targetWidth = targetElem.offsetWidth
-        const panelHeight = panelElem.offsetHeight
-        const panelWidth = panelElem.offsetWidth
-        const marginSize = 5
-        const panelStyle = {
-          zIndex: panelIndex
+        const { $refs, transfer, placement, panelIndex, visiblePanel } = this
+        if (visiblePanel) {
+          const panelElem = $refs.panel
+          const targetElem = $refs.content
+          if (panelElem && targetElem) {
+            const targetHeight = targetElem.offsetHeight
+            const targetWidth = targetElem.offsetWidth
+            const panelHeight = panelElem.offsetHeight
+            const panelWidth = panelElem.offsetWidth
+            const marginSize = 5
+            const panelStyle = {
+              zIndex: panelIndex
+            }
+            const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
+            let panelPlacement = 'bottom'
+            if (transfer) {
+              let left = boundingLeft
+              let top = boundingTop + targetHeight
+              if (placement === 'top') {
+                panelPlacement = 'top'
+                top = boundingTop - panelHeight
+              } else {
+                // 如果下面不够放，则向上
+                if (top + panelHeight + marginSize > visibleHeight) {
+                  panelPlacement = 'top'
+                  top = boundingTop - panelHeight
+                }
+                // 如果上面不够放，则向下（优先）
+                if (top < marginSize) {
+                  panelPlacement = 'bottom'
+                  top = boundingTop + targetHeight
+                }
+              }
+              // 如果溢出右边
+              if (left + panelWidth + marginSize > visibleWidth) {
+                left -= left + panelWidth + marginSize - visibleWidth
+              }
+              // 如果溢出左边
+              if (left < marginSize) {
+                left = marginSize
+              }
+              Object.assign(panelStyle, {
+                left: `${left}px`,
+                top: `${top}px`,
+                minWidth: `${targetWidth}px`
+              })
+            } else {
+              if (placement === 'top') {
+                panelPlacement = 'top'
+                panelStyle.bottom = `${targetHeight}px`
+              } else {
+                // 如果下面不够放，则向上
+                if (boundingTop + targetHeight + panelHeight > visibleHeight) {
+                  panelPlacement = 'top'
+                  panelStyle.bottom = `${targetHeight}px`
+                }
+              }
+            }
+            this.panelStyle = panelStyle
+            this.panelPlacement = panelPlacement
+          }
         }
-        const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
-        let panelPlacement = 'bottom'
-        if (transfer) {
-          let left = boundingLeft
-          let top = boundingTop + targetHeight
-          if (placement === 'top') {
-            panelPlacement = 'top'
-            top = boundingTop - panelHeight
-          } else {
-            // 如果下面不够放，则向上
-            if (top + panelHeight + marginSize > visibleHeight) {
-              panelPlacement = 'top'
-              top = boundingTop - panelHeight
-            }
-            // 如果上面不够放，则向下（优先）
-            if (top < marginSize) {
-              panelPlacement = 'bottom'
-              top = boundingTop + targetHeight
-            }
-          }
-          // 如果溢出右边
-          if (left + panelWidth + marginSize > visibleWidth) {
-            left -= left + panelWidth + marginSize - visibleWidth
-          }
-          // 如果溢出左边
-          if (left < marginSize) {
-            left = marginSize
-          }
-          Object.assign(panelStyle, {
-            left: `${left}px`,
-            top: `${top}px`,
-            minWidth: `${targetWidth}px`
-          })
-        } else {
-          if (placement === 'top') {
-            panelPlacement = 'top'
-            panelStyle.bottom = `${targetHeight}px`
-          } else {
-            // 如果下面不够放，则向上
-            if (boundingTop + targetHeight + panelHeight > visibleHeight) {
-              panelPlacement = 'top'
-              panelStyle.bottom = `${targetHeight}px`
-            }
-          }
-        }
-        this.panelStyle = panelStyle
-        this.panelPlacement = panelPlacement
         return this.$nextTick()
       })
     }

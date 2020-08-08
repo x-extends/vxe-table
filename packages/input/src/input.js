@@ -1113,7 +1113,7 @@ export default {
           let inpVal = this.inputValue
           if (inpVal) {
             inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
-            if (XEUtils.isDate(inpVal)) {
+            if (XEUtils.isValidDate(inpVal)) {
               if (!XEUtils.isDateSame(value, inpVal, dateLabelFormat)) {
                 if (type === 'datetime') {
                   datetimePanelValue.setHours(inpVal.getHours())
@@ -1400,7 +1400,7 @@ export default {
       const { dateLabelFormat, parseFormat } = this
       let dValue = date ? XEUtils.toStringDate(date, parseFormat || this.dateOpts.parseFormat) : null
       let dLabel = ''
-      if (XEUtils.isDate(dValue)) {
+      if (XEUtils.isValidDate(dValue)) {
         dLabel = XEUtils.toDateString(dValue, dateLabelFormat)
       } else {
         dValue = null

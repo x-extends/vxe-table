@@ -2,6 +2,7 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
+import { createItem } from './util'
 
 class Rule {
   constructor (rule) {
@@ -30,31 +31,137 @@ function getResetValue (value, resetValue) {
   return resetValue
 }
 
-function getItemSlots (_vm, item) {
-  const { $scopedSlots } = _vm
-  const itemSlots = item.slots
-  const slots = {}
-  let $default
-  if (itemSlots) {
-    $default = itemSlots.default
-    if ($default && $scopedSlots[$default]) {
-      $default = $scopedSlots[$default]
-    }
+function renderPrefixIcon (h, titlePrefix) {
+  return h('span', {
+    class: 'vxe-form--item-title-prefix'
+  }, [
+    h('i', {
+      class: titlePrefix.icon || GlobalConfig.icon.FORM_PREFIX
+    })
+  ])
+}
+
+function renderSuffixIcon (h, titleSuffix) {
+  return h('span', {
+    class: 'vxe-form--item-title-suffix'
+  }, [
+    h('i', {
+      class: titleSuffix.icon || GlobalConfig.icon.FORM_SUFFIX
+    })
+  ])
+}
+
+function renderTitle (h, _vm, item) {
+  const { titlePrefix, titleSuffix } = item
+  const tss = []
+  if (titlePrefix) {
+    tss.push(
+      titlePrefix.message
+        ? h('vxe-tooltip', {
+          props: {
+            content: UtilTools.getFuncText(titlePrefix.message),
+            enterable: titlePrefix.enterable,
+            theme: titlePrefix.theme
+          }
+        }, [
+          renderPrefixIcon(h, titlePrefix)
+        ])
+        : renderPrefixIcon(h, titlePrefix)
+    )
   }
-  if ($default) {
-    slots.default = $default
+  tss.push(
+    h('span', {
+      class: 'vxe-form--item-title-label'
+    }, UtilTools.getFuncText(item.title))
+  )
+  if (titleSuffix) {
+    tss.push(
+      titleSuffix.message
+        ? h('vxe-tooltip', {
+          props: {
+            content: UtilTools.getFuncText(titleSuffix.message),
+            enterable: titleSuffix.enterable,
+            theme: titleSuffix.theme
+          }
+        }, [
+          renderSuffixIcon(h, titleSuffix)
+        ])
+        : renderSuffixIcon(h, titleSuffix)
+    )
   }
-  return slots
+  return tss
 }
 
 function renderItems (h, _vm) {
-  const { items } = _vm
-  return items ? items.map(item => {
-    return h('vxe-form-item', {
-      props: item,
-      scopedSlots: getItemSlots(_vm, item)
-    })
-  }) : []
+  const { rules, formItems, data, collapseAll } = _vm
+  return formItems.map((item, index) => {
+    const { slots, title, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
+    const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+    const span = item.span || _vm.span
+    const align = item.align || _vm.align
+    const titleAlign = item.titleAlign || _vm.titleAlign
+    const titleWidth = item.titleWidth || _vm.titleWidth
+    let itemVisibleMethod = visibleMethod
+    const params = { data, property: field, $form: _vm }
+    if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
+      itemVisibleMethod = compConf.itemVisibleMethod
+    }
+    let isRequired
+    if (rules) {
+      const itemRules = rules[field]
+      if (itemRules) {
+        isRequired = itemRules.some(rule => rule.required)
+      }
+    }
+    return h('div', {
+      class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, {
+        'is--title': title,
+        'is--required': isRequired,
+        'is--hidden': folding && collapseAll,
+        'is--active': !itemVisibleMethod || itemVisibleMethod(params),
+        'is--error': showError
+      }],
+      key: index
+    }, [
+      h('div', {
+        class: 'vxe-form--item-inner'
+      }, [
+        title ? h('div', {
+          class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null],
+          style: titleWidth ? {
+            width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
+          } : null
+        }, renderTitle(h, _vm, item)) : null,
+        h('div', {
+          class: ['vxe-form--item-content', align ? `align--${align}` : null]
+        }, (
+          compConf && compConf.renderItem ? compConf.renderItem.call(_vm, h, itemRender, params) : (slots && slots.default ? slots.default.call(_vm, params, h) : [])
+        ).concat(
+          [
+            collapseNode ? h('div', {
+              class: 'vxe-form--item-trigger-node',
+              on: {
+                click: _vm.toggleCollapseEvent
+              }
+            }, [
+              h('span', {
+                class: 'vxe-form--item-trigger-text'
+              }, collapseAll ? GlobalConfig.i18n('vxe.form.unfolding') : GlobalConfig.i18n('vxe.form.folding')),
+              h('i', {
+                class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
+              })
+            ]) : null,
+            errRule ? h('div', {
+              class: 'vxe-form--item-valid',
+              style: errRule.maxWidth ? {
+                width: `${errRule.maxWidth}px`
+              } : null
+            }, errRule.message) : null
+          ])
+        )
+      ])
+    ])
+  })
 }
 
 export default {
@@ -77,12 +184,13 @@ export default {
   data () {
     return {
       collapseAll: true,
-      invalids: []
+      collectItem: [],
+      formItems: []
     }
   },
   provide () {
     return {
-      $vxeform: this
+      $xeform: this
     }
   },
   computed: {
@@ -93,8 +201,22 @@ export default {
       return Object.assign({}, GlobalConfig.form.validConfig, this.validConfig)
     }
   },
+  created () {
+    const { items } = this
+    if (items) {
+      this.loadItem(items)
+    }
+  },
+  watch: {
+    collectItem (value) {
+      this.formItems = value
+    },
+    items (value) {
+      this.loadItem(value)
+    }
+  },
   render (h) {
-    const { $slots, loading, vSize } = this
+    const { loading, vSize } = this
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
         [`size--${vSize}`]: vSize,
@@ -106,7 +228,11 @@ export default {
         submit: this.submitEvent,
         reset: this.resetEvent
       }
-    }, [].concat($slots.default || renderItems(h, this)).concat([
+    }, renderItems(h, this).concat([
+      h('div', {
+        class: 'vxe-form-slots',
+        ref: 'hideItem'
+      }, this.$slots.default),
       h('div', {
         class: ['vxe-loading', {
           'is--visible': loading
@@ -119,9 +245,32 @@ export default {
     ]))
   },
   methods: {
+    loadItem (list) {
+      const { $scopedSlots } = this
+      list.forEach(item => {
+        if (item.slots) {
+          XEUtils.each(item.slots, (func, name, slots) => {
+            if (!XEUtils.isFunction(func)) {
+              if ($scopedSlots[func]) {
+                slots[name] = $scopedSlots[func]
+              } else {
+                slots[name] = null
+                UtilTools.error('vxe.error.notSlot', [func])
+              }
+            }
+          })
+        }
+      })
+      this.collectItem = list.map(item => createItem(this, item))
+      return this.$nextTick()
+    },
     toggleCollapse () {
       this.collapseAll = !this.collapseAll
       return this.$nextTick()
+    },
+    toggleCollapseEvent (evnt) {
+      this.toggleCollapse()
+      this.$emit('toggle-collapse', { collapse: !this.collapseAll, data: this.data, $form: this, $event: evnt }, evnt)
     },
     submitEvent (evnt) {
       evnt.preventDefault()
@@ -134,9 +283,10 @@ export default {
       }
     },
     reset () {
-      const { data } = this
+      const { data, formItems } = this
       if (data) {
-        this.$children.forEach(({ field, resetValue, itemRender }) => {
+        formItems.forEach(item => {
+          const { field, resetValue, itemRender } = item
           if (field) {
             XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
             const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
@@ -154,10 +304,16 @@ export default {
       this.$emit('reset', { data: this.this, $form: this, $event: evnt })
     },
     clearValidate (field) {
+      const { formItems } = this
       if (field) {
-        XEUtils.remove(this.invalids, ({ property }) => property === field)
+        const item = formItems.find(item => item.field === field)
+        if (item) {
+          item.showError = false
+        }
       } else {
-        this.invalids = []
+        formItems.forEach(item => {
+          item.showError = false
+        })
       }
       return this.$nextTick()
     },
@@ -165,26 +321,29 @@ export default {
       return this.beginValidate(callback)
     },
     beginValidate (type, callback) {
-      const { data, rules: formRules, validOpts } = this
+      const { data, rules: formRules, formItems, validOpts } = this
       const validRest = {}
       const validFields = []
       const itemValids = []
       this.clearValidate()
+      clearTimeout(this.showErrTime)
       if (data && formRules) {
-        this.$children.forEach(({ field }) => {
+        formItems.forEach(item => {
+          const { field } = item
           if (field) {
             itemValids.push(
-              this.validItemRules(type || 'all', field)
-                .catch(({ rule, rules }) => {
-                  const rest = { rule, rules, data, property: field, $form: this }
-                  if (!validRest[field]) {
-                    validRest[field] = []
-                  }
-                  validRest[field].push(rest)
-                  validFields.push(field)
-                  this.invalids.push(rest)
-                  return Promise.reject(rest)
-                })
+              this.validItemRules(type || 'all', field).then(() => {
+                item.errRule = null
+              }).catch(({ rule, rules }) => {
+                const rest = { rule, rules, data, property: field, $form: this }
+                if (!validRest[field]) {
+                  validRest[field] = []
+                }
+                validRest[field].push(rest)
+                validFields.push(field)
+                item.errRule = rule
+                return Promise.reject(rest)
+              })
             )
           }
         })
@@ -193,6 +352,13 @@ export default {
             callback()
           }
         }).catch(() => {
+          this.showErrTime = setTimeout(() => {
+            formItems.forEach(item => {
+              if (item.errRule) {
+                item.showError = true
+              }
+            })
+          }, 20)
           if (callback) {
             callback(validRest)
           }
@@ -282,20 +448,20 @@ export default {
       })
     },
     handleFocus (fields) {
-      const { $children } = this
+      const { $el, formItems } = this
       fields.some(property => {
-        const comp = XEUtils.find($children, item => item.field === property)
-        if (comp && comp.itemRender) {
-          const { $el, itemRender } = comp
+        const item = formItems.find(item => item.field === property)
+        if (item && item.itemRender) {
+          const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
           let inputElem
           // 如果指定了聚焦 class
           if (itemRender.autofocus) {
-            inputElem = $el.querySelector(itemRender.autofocus)
+            inputElem = $el.querySelector(`.${item.id} ${itemRender.autofocus}`)
           }
           // 渲染器的聚焦处理
           if (!inputElem && compConf && compConf.autofocus) {
-            inputElem = $el.querySelector(compConf.autofocus)
+            inputElem = $el.querySelector(`.${item.id} ${compConf.autofocus}`)
           }
           if (inputElem) {
             inputElem.focus()
@@ -322,13 +488,11 @@ export default {
           .then(() => {
             this.clearValidate(property)
           })
-          .catch(({ rule, rules }) => {
-            const rest = XEUtils.find(this.invalids, rest => rest.property === property)
-            if (rest) {
-              rest.rule = rule
-              rest.rules = rules
-            } else {
-              this.invalids.push({ rule, rules, property })
+          .catch(({ rule }) => {
+            const item = this.formItems.find(item => item.field === property)
+            if (item) {
+              item.showError = true
+              item.errRule = rule
             }
           })
       }

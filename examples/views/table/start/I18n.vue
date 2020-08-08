@@ -1,27 +1,27 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.i18n') }}</h2>
-    <p class="tip">如果希望使用指定语言，则需要进行多语言设置。以中/英文为例</p>
+    <p class="tip">{{ $t('app.body.demo.start.i18n.i18nTitle') }}</p>
     <pre>
       <code class="shell">
         npm install vue-i18n
       </code>
       <code class="javascript">{{ demoCodes[0] }}</code>
     </pre>
-    <h2>集成国际化</h2>
-    <p class="tip">若希望在项目中支持全局自动翻译，可以通过全局参数开启（将对列头、校验提示..进行自动翻译）</p>
+    <h2>{{ $t('app.body.demo.start.i18n.translate') }}</h2>
+    <p class="tip">{{ $t('app.body.demo.start.i18n.translateTitle') }}</p>
     <pre>
       <code class="javascript">{{ demoCodes[1] }}</code>
       <code class="html">{{ demoCodes[2] }}</code>
     </pre>
-    <h2>发现错误？想参与翻译？</h2>
+    <h2>{{ $t('app.body.demo.start.i18n.findError') }}</h2>
     <p class="tip">通过 <a class="link" href="https://github.com/x-extends/vxe-table/pulls">Pull requests</a> 贡献翻译 -> <a class="link" href="https://github.com/x-extends/vxe-table/tree/master/packages/locale/lang">添加或修改</a></p>
     <div>
       <ul class="lang-list">
         <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/zh-CN.js" target="_blank">简体中文（zh-CN）</a></li>
         <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/zh-TC.js" target="_blank">繁体中文（zh-TC）</a></li>
-        <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/en-US.js" target="_blank">英文（en-US）</a></li>
-        <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/ja-JP.js" target="_blank">日语（ja-JP）</a></li>
+        <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/en-US.js" target="_blank">English（en-US）</a></li>
+        <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/ja-JP.js" target="_blank">ジャパン（ja-JP）</a></li>
       </ul>
     </div>
   </div>

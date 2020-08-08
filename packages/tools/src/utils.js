@@ -71,6 +71,7 @@ class ColumnConfig {
       contentRender: _vm.contentRender,
       exportMethod: _vm.exportMethod,
       footerExportMethod: _vm.footerExportMethod,
+      titleHelp: _vm.titleHelp,
       // 自定义参数
       params: _vm.params,
       // 渲染属性
@@ -238,7 +239,7 @@ export const UtilTools = {
     const { $el, $xetable, $xecolumn, columnConfig } = _vm
     const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
-    if (groupConfig && $xecolumn.$children.length > 0) {
+    if (groupConfig) {
       if (!groupConfig.children) {
         groupConfig.children = []
       }

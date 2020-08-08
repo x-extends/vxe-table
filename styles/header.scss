@@ -62,11 +62,10 @@
       }
     }
   }
-  .vxe-required-icon {
+  .vxe-cell--required-icon {
     display: inline-block;
     color: $vxe-table-validate-error-color;
-    vertical-align: middle;
-    width: 0.85em;
+    width: 0.8em;
     height: 1em;
     line-height: 1em;
     font-family: $vxe-icon-font-family;
@@ -76,11 +75,27 @@
       content: "*";
       position: absolute;
       left: 0;
-      top: 0.05em;
+      top: 0.2em;
     }
   }
-  .vxe-edit-icon {
+  .vxe-cell--required-icon,
+  .vxe-cell--edit-icon,
+  .vxe-cell-help-icon,
+  .vxe-cell--title {
+    vertical-align: middle;
+  }
+  .vxe-cell--required-icon {
+    margin-right: 0.1em;
+  }
+  .vxe-cell--edit-icon,
+  .vxe-cell-help-icon {
     margin-right: 0.2em;
+  }
+  .vxe-cell-help-icon {
+    cursor: help;
+  }
+  .vxe-cell--title {
+    line-height: 1.5;
   }
   .vxe-resizable {
     position: absolute;

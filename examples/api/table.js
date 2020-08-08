@@ -1017,7 +1017,7 @@ const apis = [
         list: [
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1080,15 +1080,6 @@ const apis = [
         defVal: '继承 setup.table.checkboxConfig',
         list: [
           {
-            name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
-            version: '',
-            type: 'boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
             name: 'labelField',
             desc: '复选框显示的字段名，可以直接显示在复选框中',
             version: '',
@@ -1144,7 +1135,7 @@ const apis = [
           },
           {
             name: 'strict',
-            desc: '严格模式，当数据为空或全部禁用时，列表为禁用状态',
+            desc: '严格模式，当数据为空或全部禁用时，列头的复选框为禁用状态',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1172,6 +1163,15 @@ const apis = [
           {
             name: 'highlight',
             desc: '高亮勾选行',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'reserve',
+            desc: '是否保留勾选状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
             version: '',
             type: 'boolean',
             enum: '',
@@ -1334,6 +1334,15 @@ const apis = [
             list: []
           },
           {
+            name: 'reserve',
+            desc: '是否保留展开状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前展开的状态（需要有 row-id）',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '',
@@ -1467,6 +1476,15 @@ const apis = [
             type: 'Function',
             enum: '',
             defVal: '',
+            list: []
+          },
+          {
+            name: 'reserve',
+            desc: '是否保留展开状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前展开的状态（需要有 row-id）',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
             list: []
           },
           {
@@ -1977,7 +1995,7 @@ const apis = [
       },
       {
         name: 'cloak',
-        desc: '可以设置为 true 来避免初始化渲染时的闪动',
+        desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
         version: '',
         type: 'boolean',
         enum: '',

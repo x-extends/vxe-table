@@ -205,7 +205,7 @@ export default {
     },
     toolbar (value) {
       if (value) {
-        this.$nextTick(() => this.$refs.xTable.connect(this.$refs.xToolbar))
+        this.initToolbar()
       }
     },
     proxyConfig () {
@@ -232,6 +232,7 @@ export default {
     if (this.columns && this.columns.length) {
       this.loadColumn(this.columns)
     }
+    this.initToolbar()
     this.initPages()
     this.initProxy()
   },
@@ -351,7 +352,7 @@ export default {
       return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
     },
     loadColumn (columns) {
-      const $scopedSlots = this.$scopedSlots
+      const { $scopedSlots } = this
       XEUtils.eachTree(columns, column => {
         if (column.slots) {
           XEUtils.each(column.slots, (func, name, slots) => {
@@ -389,6 +390,9 @@ export default {
         }
       }
       return ons
+    },
+    initToolbar () {
+      this.$nextTick(() => this.$refs.xTable.connect(this.$refs.xToolbar))
     },
     initPages () {
       if (this.pagerConfig && this.pagerOpts.pageSize) {

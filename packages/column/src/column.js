@@ -60,6 +60,8 @@ const props = {
   exportMethod: Function,
   // 表尾单元格数据导出方法
   footerExportMethod: Function,
+  // 标题帮助图标配置项
+  titleHelp: Object,
   // 单元格值类型
   cellType: String,
   // 单元格渲染配置项

@@ -270,6 +270,8 @@ export default {
       footerData: [],
       // 展开列信息
       expandColumn: null,
+      // 树节点列信息
+      treeNodeColumn: null,
       // 已展开的行
       rowExpandeds: [],
       // 懒加载中的展开行的列表
@@ -642,6 +644,10 @@ export default {
       radioReserveRow: null,
       // 复选框属性，已选中保留的行
       checkboxReserveRowMap: {},
+      // 行数据，已展开保留的行
+      rowExpandedReserveRowMap: {},
+      // 树结构数据，已展开保留的行
+      treeExpandedReserveRowMap: {},
       // 完整数据、条件处理后
       tableFullData: [],
       afterFullData: [],

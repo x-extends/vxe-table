@@ -1,12 +1,61 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools } from '../../tools'
+import { UtilTools, DomTools } from '../../tools'
 
-function renderTitleContent (h, content) {
+function renderHelpIcon (h, params) {
+  const { $table, column } = params
+  const { titleHelp } = column
+  return titleHelp ? [
+    h('i', {
+      class: ['vxe-cell-help-icon', titleHelp.icon || GlobalConfig.icon.TABLE_HELP],
+      on: {
+        mouseenter (evnt) {
+          $table.triggerHeaderHelpEvent(evnt, params)
+        },
+        mouseleave (evnt) {
+          $table.handleTargetLeaveEvent(evnt)
+        }
+      }
+    })
+  ] : []
+}
+
+function renderTitleContent (h, params, content) {
+  const { $table, column } = params
+  const { showHeaderOverflow } = column
+  const { showHeaderOverflow: allColumnHeaderOverflow, tooltipOpts } = $table
+  const { enabled } = tooltipOpts
+  const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+  const showTitle = headOverflow === 'title'
+  const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+  const ons = {}
+  if (showTitle || showTooltip || enabled) {
+    ons.mouseenter = evnt => {
+      if ($table._isResize) {
+        return
+      }
+      if (showTitle) {
+        DomTools.updateCellTitle(evnt.currentTarget, column)
+      } else if (showTooltip || enabled) {
+        $table.triggerHeaderTooltipEvent(evnt, params)
+      }
+    }
+  }
+  if (showTooltip || enabled) {
+    ons.mouseleave = evnt => {
+      if ($table._isResize) {
+        return
+      }
+      if (showTooltip || enabled) {
+        $table.handleTargetLeaveEvent(evnt)
+      }
+    }
+  }
   return [
     h('span', {
-      class: 'vxe-cell--title'
+      class: 'vxe-cell--title',
+      on: ons
     }, content)
   ]
 }
@@ -64,20 +113,23 @@ export const Cell = {
   /**
    * 单元格
    */
-  renderDefaultHeader (h, params) {
+  renderHeaderTitle (h, params) {
     const { $table, column } = params
     const { slots, own } = column
     const renderOpts = own.editRender || own.cellRender
     if (slots && slots.header) {
-      return renderTitleContent(h, slots.header.call($table, params, h))
+      return renderTitleContent(h, params, slots.header.call($table, params, h))
     }
     if (renderOpts) {
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf.renderHeader) {
-        return renderTitleContent(h, compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $table }))
+        return renderTitleContent(h, params, compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $table }))
       }
     }
-    return renderTitleContent(h, UtilTools.formatText(column.getTitle(), 1))
+    return renderTitleContent(h, params, UtilTools.formatText(column.getTitle(), 1))
+  },
+  renderDefaultHeader (h, params) {
+    return renderHelpIcon(h, params).concat(Cell.renderHeaderTitle(h, params))
   },
   renderDefaultCell (h, params) {
     const { $table, row, column } = params
@@ -173,7 +225,7 @@ export const Cell = {
   renderIndexHeader (h, params) {
     const { $table, column } = params
     const { slots } = column
-    return renderTitleContent(h, slots && slots.header ? slots.header.call($table, params, h) : UtilTools.formatText(column.getTitle(), 1))
+    return renderTitleContent(h, params, slots && slots.header ? slots.header.call($table, params, h) : UtilTools.formatText(column.getTitle(), 1))
   },
   renderIndexCell (h, params) {
     const { $table, column } = params
@@ -196,7 +248,7 @@ export const Cell = {
   renderRadioHeader (h, params) {
     const { $table, column } = params
     const { slots } = column
-    return renderTitleContent(h, slots && slots.header ? slots.header.call($table, params, h) : [
+    return renderTitleContent(h, params, slots && slots.header ? slots.header.call($table, params, h) : [
       h('span', {
         class: 'vxe-radio--label'
       }, UtilTools.formatText(column.getTitle(), 1))
@@ -260,7 +312,7 @@ export const Cell = {
     let isChecked = false
     let on
     if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
-      return renderTitleContent(h, slots && slots.header ? slots.header.call($table, params, h) : [
+      return renderTitleContent(h, params, slots && slots.header ? slots.header.call($table, params, h) : [
         h('span', {
           class: 'vxe-checkbox--label'
         }, headerTitle)
@@ -276,7 +328,7 @@ export const Cell = {
         }
       }
     }
-    return renderTitleContent(h, [
+    return renderTitleContent(h, params, [
       h('span', {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
@@ -586,10 +638,10 @@ export const Cell = {
     }
     return [
       isRequired && editOpts.showAsterisk ? h('i', {
-        class: 'vxe-required-icon'
+        class: 'vxe-cell--required-icon'
       }) : null,
       editOpts.showIcon === false ? null : h('i', {
-        class: ['vxe-edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
+        class: ['vxe-cell--edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
       })
     ].concat(Cell.renderDefaultHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])

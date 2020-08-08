@@ -416,6 +416,34 @@ const apis = [
         list: []
       },
       {
+        name: 'title-help',
+        desc: '标题帮助图标配置项',
+        version: '',
+        type: 'any',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'message',
+            desc: '提示消息（支持开启国际化）',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'cell-type',
         descKey: 'app.api.tableColumn.desc.cellType',
         version: '',
@@ -651,7 +679,7 @@ const apis = [
           },
           {
             name: 'immediate',
-            desc: '输入值实时同步更新（如果设置为 true，但可编辑时性能将会直线下降）',
+            desc: '输入值实时同步更新（默认情况下单元格编辑的值只会在被触发时同步，如果需要实时同步可以设置为 true）',
             version: '',
             type: 'boolean',
             enum: '',

@@ -20,14 +20,6 @@
   height: $vxe-table-row-height-mini;
 }
 
-%CellEllipsis {
-  &:not(.col--actived) {
-    .vxe-cell {
-      @extend %TextEllipsis;
-    }
-  }
-}
-
 .vxe-table-slots,
 .vxe-table--file-form {
   display: none;
@@ -215,13 +207,16 @@
   font-size: $vxe-font-size;
   color: $vxe-table-font-color;
   font-family: $vxe-font-family;
-  background-color: $vxe-table-background-color;
   &[x-cloak] {
     .vxe-table--main-wrapper,
     .vxe-table--fixed-left-wrapper,
     .vxe-table--fixed-right-wrapper {
       visibility: hidden;
     }
+  }
+  .vxe-table--body-wrapper,
+  .vxe-table--footer-wrapper {
+    background-color: $vxe-table-background-color;
   }
   .vxe-table--header,
   .vxe-table--body,
@@ -778,18 +773,12 @@
   .vxe-footer--column {
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
-    }
-  }
-  .vxe-body--column,
-  .vxe-footer--column {
-    &.col--ellipsis {
-      @extend %CellEllipsis;
-    }
-  }
-  &.virtual--x,
-  &.virtual--y {
-    .col--ellipsis {
-      .vxe-cell {
+      &:not(.col--actived) {
+        & > .vxe-cell {
+          @extend %TextEllipsis;
+        }
+      }
+      & > .vxe-cell {
         max-height: $vxe-table-row-height-default;
       }
     }
@@ -800,12 +789,7 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
-      }
-    }
-    &.virtual--x,
-    &.virtual--y {
-      .col--ellipsis {
-        .vxe-cell {
+        & > .vxe-cell {
           max-height: $vxe-table-row-height-medium;
         }
       }
@@ -821,15 +805,7 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
-        .vxe-cell {
-          max-height: $vxe-table-row-height-small;
-        }
-      }
-    }
-    &.virtual--x,
-    &.virtual--y {
-      .col--ellipsis {
-        .vxe-cell {
+        & > .vxe-cell {
           max-height: $vxe-table-row-height-small;
         }
       }
@@ -845,15 +821,7 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
-        .vxe-cell {
-          max-height: $vxe-table-row-height-mini;
-        }
-      }
-    }
-    &.virtual--x,
-    &.virtual--y {
-      .col--ellipsis {
-        .vxe-cell {
+        & > .vxe-cell {
           max-height: $vxe-table-row-height-mini;
         }
       }

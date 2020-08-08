@@ -30,17 +30,19 @@
       height="400"
       v-model="modalVisible"
       @confirm="confirmEvent">
-      <vxe-grid
-        highlight-hover-row
-        auto-resize
-        ref="xGrid"
-        height="auto"
-        :loading="loading"
-        :pager-config="tablePage"
-        :data="tableData"
-        :columns="tableColumn"
-        @page-change="pageChangeEvent">
-      </vxe-grid>
+      <template v-slot>
+        <vxe-grid
+          highlight-hover-row
+          auto-resize
+          ref="xGrid"
+          height="auto"
+          :loading="loading"
+          :pager-config="tablePage"
+          :data="tableData"
+          :columns="tableColumn"
+          @page-change="pageChangeEvent">
+        </vxe-grid>
+      </template>
     </vxe-modal>
   </div>
 </template>

@@ -15,27 +15,37 @@
 
     <vxe-form :data="formData">
       <vxe-form-item title="输入框" field="iVal">
-        <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
+        <template v-slot>
+          <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="下拉框" field="sVal">
-        <vxe-select v-model="formData.sVal">
-          <vxe-option value="0" label="女"></vxe-option>
-          <vxe-option value="1" label="男"></vxe-option>
-        </vxe-select>
+        <template v-slot>
+          <vxe-select v-model="formData.sVal">
+            <vxe-option value="0" label="女"></vxe-option>
+            <vxe-option value="1" label="男"></vxe-option>
+          </vxe-select>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
-        <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
-        <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
+        <template v-slot>
+          <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
+          <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
-        <vxe-radio-group v-model="formData.rVal">
-          <vxe-radio label="1">选项1</vxe-radio>
-          <vxe-radio label="2">选项2</vxe-radio>
-        </vxe-radio-group>
+        <template v-slot>
+          <vxe-radio-group v-model="formData.rVal">
+            <vxe-radio label="1">选项1</vxe-radio>
+            <vxe-radio label="2">选项2</vxe-radio>
+          </vxe-radio-group>
+        </template>
       </vxe-form-item>
       <vxe-form-item>
-        <vxe-button type="submit" status="primary">查询</vxe-button>
-        <vxe-button type="reset">重置</vxe-button>
+        <template v-slot>
+          <vxe-button type="submit" status="primary">查询</vxe-button>
+          <vxe-button type="reset">重置</vxe-button>
+        </template>
       </vxe-form-item>
     </vxe-form>
 
@@ -81,27 +91,37 @@
 
     <vxe-form :data="formData" size="medium">
       <vxe-form-item title="输入框" field="iVal">
-        <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
+        <template v-slot>
+          <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="下拉框" field="sVal">
-        <vxe-select v-model="formData.sVal">
-          <vxe-option value="0" label="女"></vxe-option>
-          <vxe-option value="1" label="男"></vxe-option>
-        </vxe-select>
+        <template v-slot>
+          <vxe-select v-model="formData.sVal">
+            <vxe-option value="0" label="女"></vxe-option>
+            <vxe-option value="1" label="男"></vxe-option>
+          </vxe-select>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
-        <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
-        <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
+        <template v-slot>
+          <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
+          <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
-        <vxe-radio-group v-model="formData.rVal">
-          <vxe-radio label="1">选项1</vxe-radio>
-          <vxe-radio label="2">选项2</vxe-radio>
-        </vxe-radio-group>
+        <template v-slot>
+          <vxe-radio-group v-model="formData.rVal">
+            <vxe-radio label="1">选项1</vxe-radio>
+            <vxe-radio label="2">选项2</vxe-radio>
+          </vxe-radio-group>
+        </template>
       </vxe-form-item>
       <vxe-form-item>
-        <vxe-button type="submit" status="primary">查询</vxe-button>
-        <vxe-button type="reset">重置</vxe-button>
+        <template v-slot>
+          <vxe-button type="submit" status="primary">查询</vxe-button>
+          <vxe-button type="reset">重置</vxe-button>
+        </template>
       </vxe-form-item>
     </vxe-form>
 
@@ -149,27 +169,37 @@
 
     <vxe-form :data="formData" size="small">
       <vxe-form-item title="输入框" field="iVal">
-        <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
+        <template v-slot>
+          <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="下拉框" field="sVal">
-        <vxe-select v-model="formData.sVal">
-          <vxe-option value="0" label="女"></vxe-option>
-          <vxe-option value="1" label="男"></vxe-option>
-        </vxe-select>
+        <template v-slot>
+          <vxe-select v-model="formData.sVal">
+            <vxe-option value="0" label="女"></vxe-option>
+            <vxe-option value="1" label="男"></vxe-option>
+          </vxe-select>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
-        <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
-        <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
+        <template v-slot>
+          <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
+          <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
-        <vxe-radio-group v-model="formData.rVal">
-          <vxe-radio label="1">选项1</vxe-radio>
-          <vxe-radio label="2">选项2</vxe-radio>
-        </vxe-radio-group>
+        <template v-slot>
+          <vxe-radio-group v-model="formData.rVal">
+            <vxe-radio label="1">选项1</vxe-radio>
+            <vxe-radio label="2">选项2</vxe-radio>
+          </vxe-radio-group>
+        </template>
       </vxe-form-item>
       <vxe-form-item>
-        <vxe-button type="submit" status="primary">查询</vxe-button>
-        <vxe-button type="reset">重置</vxe-button>
+        <template v-slot>
+          <vxe-button type="submit" status="primary">查询</vxe-button>
+          <vxe-button type="reset">重置</vxe-button>
+        </template>
       </vxe-form-item>
     </vxe-form>
 
@@ -217,27 +247,37 @@
 
     <vxe-form :data="formData" size="mini">
       <vxe-form-item title="输入框" field="iVal">
-        <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
+        <template v-slot>
+          <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="下拉框" field="sVal">
-        <vxe-select v-model="formData.sVal">
-          <vxe-option value="0" label="女"></vxe-option>
-          <vxe-option value="1" label="男"></vxe-option>
-        </vxe-select>
+        <template v-slot>
+          <vxe-select v-model="formData.sVal">
+            <vxe-option value="0" label="女"></vxe-option>
+            <vxe-option value="1" label="男"></vxe-option>
+          </vxe-select>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="复选框" field="cVal">
-        <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
-        <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
+        <template v-slot>
+          <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
+          <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="单选框" field="rVal">
-        <vxe-radio-group v-model="formData.rVal">
-          <vxe-radio label="1">选项1</vxe-radio>
-          <vxe-radio label="2">选项2</vxe-radio>
-        </vxe-radio-group>
+        <template v-slot>
+          <vxe-radio-group v-model="formData.rVal">
+            <vxe-radio label="1">选项1</vxe-radio>
+            <vxe-radio label="2">选项2</vxe-radio>
+          </vxe-radio-group>
+        </template>
       </vxe-form-item>
       <vxe-form-item>
-        <vxe-button type="submit" status="primary">查询</vxe-button>
-        <vxe-button type="reset">重置</vxe-button>
+        <template v-slot>
+          <vxe-button type="submit" status="primary">查询</vxe-button>
+          <vxe-button type="reset">重置</vxe-button>
+        </template>
       </vxe-form-item>
     </vxe-form>
 

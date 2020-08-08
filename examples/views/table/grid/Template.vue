@@ -26,19 +26,27 @@
       <template v-slot:form>
         <vxe-form :data="formData" @submit="searchEvent">
           <vxe-form-item title="名称" field="name">
-            <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
+            <template v-slot>
+              <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
+            </template>
           </vxe-form-item>
           <vxe-form-item title="昵称" field="nickname">
-            <vxe-input v-model="formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
+            <template v-slot>
+              <vxe-input v-model="formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
+            </template>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex">
-            <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
-              <vxe-option value="1" label="女"></vxe-option>
-              <vxe-option value="2" label="男"></vxe-option>
-            </vxe-select>
+            <template v-slot>
+              <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
+                <vxe-option value="1" label="女"></vxe-option>
+                <vxe-option value="2" label="男"></vxe-option>
+              </vxe-select>
+            </template>
           </vxe-form-item>
           <vxe-form-item>
-            <vxe-button status="primary">查询</vxe-button>
+            <template v-slot>
+              <vxe-button status="primary">查询</vxe-button>
+            </template>
           </vxe-form-item>
         </vxe-form>
       </template>
@@ -49,10 +57,14 @@
           <template v-slot:buttons>
             <vxe-form>
               <vxe-form-item>
-                <vxe-input placeholder="搜索"></vxe-input>
+                <template v-slot>
+                  <vxe-input placeholder="搜索"></vxe-input>
+                </template>
               </vxe-form-item>
               <vxe-form-item>
-                <vxe-button status="primary">查询</vxe-button>
+                <template v-slot>
+                  <vxe-button status="primary">查询</vxe-button>
+                </template>
               </vxe-form-item>
             </vxe-form>
           </template>
@@ -142,7 +154,7 @@
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
               <vxe-button size="small">
-                <template>更多操作</template>
+                <template v-slot>更多操作</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
@@ -165,7 +177,9 @@
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-      <div v-if="selectRow" v-html="selectRow.html3"></div>
+      <template v-slot>
+        <div v-if="selectRow" v-html="selectRow.html3"></div>
+      </template>
     </vxe-modal>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -327,21 +341,52 @@ export default {
           <template v-slot:form>
             <vxe-form :data="formData" @submit="searchEvent">
               <vxe-form-item title="名称" field="name">
-                <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
+                <template v-slot>
+                  <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
+                </template>
               </vxe-form-item>
               <vxe-form-item title="昵称" field="nickname">
-                <vxe-input v-model="formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
+                <template v-slot>
+                  <vxe-input v-model="formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
+                </template>
               </vxe-form-item>
               <vxe-form-item title="性别" field="sex">
-                <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
-                  <vxe-option value="1" label="女"></vxe-option>
-                  <vxe-option value="2" label="男"></vxe-option>
-                </vxe-select>
+                <template v-slot>
+                  <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
+                    <vxe-option value="1" label="女"></vxe-option>
+                    <vxe-option value="2" label="男"></vxe-option>
+                  </vxe-select>
+                </template>
               </vxe-form-item>
               <vxe-form-item>
-                <vxe-button status="primary">查询</vxe-button>
+                <template v-slot>
+                  <vxe-button status="primary">查询</vxe-button>
+                </template>
               </vxe-form-item>
             </vxe-form>
+          </template>
+
+          <!--自定义插槽 toolbar 插槽-->
+          <template v-slot:toolbar>
+            <vxe-toolbar custom>
+              <template v-slot:buttons>
+                <vxe-form>
+                  <vxe-form-item>
+                    <template v-slot>
+                      <vxe-input placeholder="搜索"></vxe-input>
+                    </template>
+                  </vxe-form-item>
+                  <vxe-form-item>
+                    <template v-slot>
+                      <vxe-button status="primary">查询</vxe-button>
+                    </template>
+                  </vxe-form-item>
+                </vxe-form>
+              </template>
+              <template v-slot:tools>
+                <vxe-input placeholder="搜索"></vxe-input>
+              </template>
+            </vxe-toolbar>
           </template>
 
           <!--使用 top 插槽-->
@@ -352,25 +397,6 @@ export default {
                 <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">自定义模板</marquee>
               </span>
             </div>
-          </template>
-
-          <!--自定义插槽 toolbar 插槽-->
-          <template v-slot:toolbar>
-            <vxe-toolbar custom>
-              <template v-slot:buttons>
-                <vxe-form>
-                  <vxe-form-item>
-                    <vxe-input placeholder="搜索"></vxe-input>
-                  </vxe-form-item>
-                  <vxe-form-item>
-                    <vxe-button status="primary">查询</vxe-button>
-                  </vxe-form-item>
-                </vxe-form>
-              </template>
-              <template v-slot:tools>
-                <vxe-input placeholder="搜索"></vxe-input>
-              </template>
-            </vxe-toolbar>
           </template>
 
           <!--自定义插槽 seq_header-->
@@ -443,7 +469,7 @@ export default {
                   <vxe-button>管理</vxe-button>
                   <vxe-button>删除</vxe-button>
                   <vxe-button size="small">
-                    <template>更多操作</template>
+                    <template v-slot>更多操作</template>
                     <template v-slot:dropdowns>
                       <vxe-button type="text">批量修改</vxe-button>
                       <vxe-button type="text">批量管理</vxe-button>
@@ -466,7 +492,9 @@ export default {
         </vxe-grid>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-          <div v-if="selectRow" v-html="selectRow.html3"></div>
+          <template v-slot>
+            <div v-if="selectRow" v-html="selectRow.html3"></div>
+          </template>
         </vxe-modal>
         `,
         `

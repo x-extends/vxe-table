@@ -97,6 +97,7 @@ const GlobalConfig = {
     TABLE_FILTER_NONE: iconPrefix + 'funnel',
     TABLE_FILTER_MATCH: iconPrefix + 'funnel',
     TABLE_EDIT: iconPrefix + 'edit-outline',
+    TABLE_HELP: iconPrefix + 'question',
     TABLE_TREE_LOADED: iconPrefix + 'refresh roll',
     TABLE_TREE_OPEN: iconPrefix + 'caret-right rotate90',
     TABLE_TREE_CLOSE: iconPrefix + 'caret-right',
@@ -150,8 +151,8 @@ const GlobalConfig = {
     TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'menu',
 
     // form
-    FORM_PREFIX: iconPrefix + 'info',
-    FORM_SUFFIX: iconPrefix + 'info',
+    FORM_PREFIX: iconPrefix + 'question',
+    FORM_SUFFIX: iconPrefix + 'question',
     FORM_FOLDING: iconPrefix + 'arrow-top rotate180',
     FORM_UNFOLDING: iconPrefix + 'arrow-top'
   },

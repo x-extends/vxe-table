@@ -69,7 +69,7 @@
         :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
         <template v-slot:left>
           <vxe-button size="small">
-            <template>更多操作</template>
+            <template v-slot>更多操作</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
@@ -206,7 +206,7 @@ export default {
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
             <template v-slot:left>
               <vxe-button size="small">
-                <template>更多操作</template>
+                <template v-slot>更多操作</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>

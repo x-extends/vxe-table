@@ -89,6 +89,24 @@ const apis = [
         list: []
       },
       {
+        name: 'cancel-button-text',
+        desc: '只对 type=confirm 有效，取消按钮的文本内容',
+        version: '',
+        type: 'string',
+        enum: '',
+        defVal: '取消',
+        list: []
+      },
+      {
+        name: 'confirm-button-text',
+        desc: '只对 type=alert|confirm 有效，确定按钮的文本内容',
+        version: '',
+        type: 'string',
+        enum: '',
+        defVal: '确定',
+        list: []
+      },
+      {
         name: 'showHeader',
         descKey: 'app.api.modal.desc.showHeader',
         version: '',
