@@ -29,7 +29,7 @@
       <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
         <template v-slot:edit="{ row }">
           <vxe-pulldown ref="xDown1" transfer>
-            <template>
+            <template v-slot>
               <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
             </template>
             <template v-slot:dropdown>
@@ -92,7 +92,7 @@
           <vxe-button>管理</vxe-button>
           <vxe-button>删除</vxe-button>
           <vxe-button size="small">
-            <template>更多操作</template>
+            <template v-slot>更多操作</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
@@ -160,7 +160,7 @@ export default {
           <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
             <template v-slot:edit="{ row }">
               <vxe-pulldown ref="xDown1" transfer>
-                <template>
+                <template v-slot>
                   <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
                 </template>
                 <template v-slot:dropdown>
@@ -223,7 +223,7 @@ export default {
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
               <vxe-button size="small">
-                <template>更多操作</template>
+                <template v-slot>更多操作</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>

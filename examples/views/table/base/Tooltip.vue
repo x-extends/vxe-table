@@ -8,7 +8,7 @@
       :tooltip-config="{enabled: true, contentMethod: showTooltipMethod}"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="名称"></vxe-table-column>
+      <vxe-table-column field="name" title="名称" :title-help="{message: '自定义帮助提示信息'}"></vxe-table-column>
       <vxe-table-column field="role" title="角色"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate">
@@ -50,7 +50,7 @@ export default {
           :tooltip-config="{enabled: true, contentMethod: showTooltipMethod}"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="名称"></vxe-table-column>
+          <vxe-table-column field="name" title="名称" :title-help="{message: '自定义帮助提示信息'}"></vxe-table-column>
           <vxe-table-column field="role" title="角色"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate">

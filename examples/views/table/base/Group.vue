@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">当数据结构比较复杂的时候，可以使用多级表头显示更加直观</p>
+    <p class="tip">当数据结构比较复杂的时候，可以使用多级表头来更加直观的显示数据</p>
 
     <vxe-table
       border

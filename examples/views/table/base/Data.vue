@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">支持多种数据格式：标准结构、深层结构、二维数组</p>
+    <p class="tip">支持多种数据格式：默认标准结构、深层结构、二维数组</p>
 
     <vxe-table
       :data="tableData1">

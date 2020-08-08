@@ -12,7 +12,7 @@
       <template v-slot:buttons>
         <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button>
-          <template>下拉按钮</template>
+          <template v-slot>下拉按钮</template>
           <template v-slot:dropdowns>
             <vxe-button>删除</vxe-button>
             <vxe-button>保存</vxe-button>
@@ -134,7 +134,7 @@
           <vxe-button>管理</vxe-button>
           <vxe-button>删除</vxe-button>
           <vxe-button size="small">
-            <template>更多操作</template>
+            <template v-slot>更多操作</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
@@ -151,7 +151,7 @@
     </vxe-pager>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-      <template>{{ selectRow ? selectRow.text : '' }}</template>
+      <template v-slot>{{ selectRow ? selectRow.text : '' }}</template>
     </vxe-modal>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -190,7 +190,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
             <vxe-button>
-              <template>下拉按钮</template>
+              <template v-slot>下拉按钮</template>
               <template v-slot:dropdowns>
                 <vxe-button>删除</vxe-button>
                 <vxe-button>保存</vxe-button>
@@ -312,7 +312,7 @@ export default {
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
               <vxe-button size="small">
-                <template>更多操作</template>
+                <template v-slot>更多操作</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
@@ -329,7 +329,7 @@ export default {
         </vxe-pager>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-          <template>{{ selectRow ? selectRow.text : '' }}</template>
+          <template v-slot>{{ selectRow ? selectRow.text : '' }}</template>
         </vxe-modal>
         `,
         `

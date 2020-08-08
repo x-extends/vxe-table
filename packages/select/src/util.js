@@ -39,7 +39,7 @@ export function assemOption (_vm) {
   const { $el, $xeselect, $xeoptgroup, optionConfig } = _vm
   const groupConfig = $xeoptgroup ? $xeoptgroup.optionConfig : null
   optionConfig.slots = _vm.$scopedSlots
-  if (groupConfig && $xeoptgroup.$children.length > 0) {
+  if (groupConfig) {
     if (!groupConfig.options) {
       groupConfig.options = []
     }
