@@ -17,7 +17,7 @@
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-      <template>
+      <template v-slot>
         <div v-if="selectRow" v-html="selectRow.html3"></div>
       </template>
     </vxe-modal>
@@ -156,7 +156,7 @@ export default {
         </vxe-grid>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-          <template>
+          <template v-slot>
             <div v-if="selectRow" v-html="selectRow.html3"></div>
           </template>
         </vxe-modal>

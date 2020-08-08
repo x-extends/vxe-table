@@ -290,7 +290,7 @@ export const UtilTools = {
     const { $el, $xetable, $xecolumn, columnConfig } = _vm
     const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
-    if (groupConfig && $xecolumn.$children.length > 0) {
+    if (groupConfig) {
       if (!groupConfig.children) {
         groupConfig.children = []
       }

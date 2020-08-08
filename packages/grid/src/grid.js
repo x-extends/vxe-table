@@ -209,7 +209,7 @@ export default {
     },
     toolbar (value) {
       if (value) {
-        this.$nextTick(() => this.$refs.xTable.connect(this.$refs.xToolbar))
+        this.initToolbar()
       }
     },
     proxyConfig () {
@@ -248,6 +248,7 @@ export default {
     if (this.columns && this.columns.length) {
       this.loadColumn(this.columns)
     }
+    this.initToolbar()
     this.initPages()
     this.initProxy()
   },
@@ -405,6 +406,9 @@ export default {
         }
       }
       return ons
+    },
+    initToolbar () {
+      this.$nextTick(() => this.$refs.xTable.connect(this.$refs.xToolbar))
     },
     initPages () {
       if (this.pagerConfig && this.pagerOpts.pageSize) {

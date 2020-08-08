@@ -1,14 +1,14 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.toolbar') }}</h2>
-    <p class="tip">表格的工具栏模块，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'toolbar'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
+    <p class="tip">工具栏模块，需要与表格组合使用，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'toolbar'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
 
     <p>
       <vxe-toolbar>
         <template v-slot:buttons>
           <vxe-button>默认尺寸</vxe-button>
           <vxe-button>
-            <template>下拉按钮</template>
+            <template v-slot>下拉按钮</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">按钮1</vxe-button>
               <vxe-button type="text">按钮2</vxe-button>
@@ -21,7 +21,7 @@
         <template v-slot:buttons>
           <vxe-button>中等尺寸</vxe-button>
           <vxe-button>
-            <template>下拉按钮</template>
+            <template v-slot>下拉按钮</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">按钮1</vxe-button>
               <vxe-button type="text">按钮2</vxe-button>
@@ -34,7 +34,7 @@
         <template v-slot:buttons>
           <vxe-button>小型尺寸</vxe-button>
           <vxe-button>
-            <template>下拉按钮</template>
+            <template v-slot>下拉按钮</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">按钮1</vxe-button>
               <vxe-button type="text">按钮2</vxe-button>
@@ -47,7 +47,7 @@
         <template v-slot:buttons>
           <vxe-button>超小尺寸</vxe-button>
           <vxe-button>
-            <template>下拉按钮</template>
+            <template v-slot>下拉按钮</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">按钮1</vxe-button>
               <vxe-button type="text">按钮2</vxe-button>
@@ -81,7 +81,7 @@
           <vxe-button>按钮2</vxe-button>
           <vxe-button>按钮3</vxe-button>
           <vxe-button>
-            <template>下拉按钮</template>
+            <template v-slot>下拉按钮</template>
             <template v-slot:dropdowns>
               <vxe-button>按钮1</vxe-button>
               <vxe-button>按钮2</vxe-button>
@@ -120,7 +120,7 @@ export default {
             <template v-slot:buttons>
               <vxe-button>默认尺寸</vxe-button>
               <vxe-button>
-                <template>下拉按钮</template>
+                <template v-slot>下拉按钮</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">按钮1</vxe-button>
                   <vxe-button type="text">按钮2</vxe-button>
@@ -133,7 +133,7 @@ export default {
             <template v-slot:buttons>
               <vxe-button>中等尺寸</vxe-button>
               <vxe-button>
-                <template>下拉按钮</template>
+                <template v-slot>下拉按钮</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">按钮1</vxe-button>
                   <vxe-button type="text">按钮2</vxe-button>
@@ -146,7 +146,7 @@ export default {
             <template v-slot:buttons>
               <vxe-button>小型尺寸</vxe-button>
               <vxe-button>
-                <template>下拉按钮</template>
+                <template v-slot>下拉按钮</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">按钮1</vxe-button>
                   <vxe-button type="text">按钮2</vxe-button>
@@ -159,7 +159,7 @@ export default {
             <template v-slot:buttons>
               <vxe-button>超小尺寸</vxe-button>
               <vxe-button>
-                <template>下拉按钮</template>
+                <template v-slot>下拉按钮</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">按钮1</vxe-button>
                   <vxe-button type="text">按钮2</vxe-button>
@@ -193,7 +193,7 @@ export default {
               <vxe-button>按钮2</vxe-button>
               <vxe-button>按钮3</vxe-button>
               <vxe-button>
-                <template>下拉按钮</template>
+                <template v-slot>下拉按钮</template>
                 <template v-slot:dropdowns>
                   <vxe-button>按钮1</vxe-button>
                   <vxe-button>按钮2</vxe-button>

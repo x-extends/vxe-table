@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现点击行弹出窗口显示详情<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
+    <p class="tip">实现点击行弹出窗口并显示详情信息<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-table
       border
@@ -18,18 +18,20 @@
     </vxe-table>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
-      <vxe-table
-        border="inner"
-        auto-resize
-        show-overflow
-        highlight-hover-row
-        height="auto"
-        :show-header="false"
-        :sync-resize="showDetails"
-        :data="detailData">
-        <vxe-table-column field="label" width="40%"></vxe-table-column>
-        <vxe-table-column field="value"></vxe-table-column>
-      </vxe-table>
+      <template v-slot>
+        <vxe-table
+          border="inner"
+          auto-resize
+          show-overflow
+          highlight-hover-row
+          height="auto"
+          :show-header="false"
+          :sync-resize="showDetails"
+          :data="detailData">
+          <vxe-table-column field="label" width="40%"></vxe-table-column>
+          <vxe-table-column field="value"></vxe-table-column>
+        </vxe-table>
+      </template>
     </vxe-modal>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -68,18 +70,20 @@ export default {
         </vxe-table>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
-          <vxe-table
-            border="inner"
-            auto-resize
-            show-overflow
-            highlight-hover-row
-            height="auto"
-            :show-header="false"
-            :sync-resize="showDetails"
-            :data="detailData">
-            <vxe-table-column field="label" width="40%"></vxe-table-column>
-            <vxe-table-column field="value"></vxe-table-column>
-          </vxe-table>
+          <template v-slot>
+            <vxe-table
+              border="inner"
+              auto-resize
+              show-overflow
+              highlight-hover-row
+              height="auto"
+              :show-header="false"
+              :sync-resize="showDetails"
+              :data="detailData">
+              <vxe-table-column field="label" width="40%"></vxe-table-column>
+              <vxe-table-column field="value"></vxe-table-column>
+            </vxe-table>
+          </template>
         </vxe-modal>
         `,
         `

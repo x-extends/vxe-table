@@ -14,7 +14,7 @@
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
       <vxe-table-column title="操作" fixed="right" width="200">
-        <template>
+        <template v-slot>
           <vxe-button type="text">按钮1</vxe-button>
           <vxe-button type="text">按钮2</vxe-button>
         </template>
@@ -52,7 +52,7 @@
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="300" :fixed="colFixeds.col4"></vxe-table-column>
       <vxe-table-column title="操作" width="200" :fixed="colFixeds.col5">
-        <template>
+        <template v-slot>
           <vxe-button status="primary">按钮1</vxe-button>
           <vxe-button>按钮2</vxe-button>
         </template>
@@ -128,7 +128,7 @@ export default {
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
           <vxe-table-column title="操作" fixed="right" width="200">
-            <template>
+            <template v-slot>
               <vxe-button type="text">按钮1</vxe-button>
               <vxe-button type="text">按钮2</vxe-button>
             </template>
@@ -170,7 +170,7 @@ export default {
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300" :fixed="colFixeds.col4"></vxe-table-column>
           <vxe-table-column title="操作" width="200" :fixed="colFixeds.col5">
-            <template>
+            <template v-slot>
               <vxe-button status="primary">按钮1</vxe-button>
               <vxe-button>按钮2</vxe-button>
             </template>
