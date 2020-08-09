@@ -347,6 +347,8 @@ $btnThemeList: (
     transform: scaleY(0.5);
     transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
     transform-origin: center top;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
     &[data-placement="top"] {
       transform-origin: center bottom;
     }

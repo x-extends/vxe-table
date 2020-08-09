@@ -408,7 +408,12 @@ export default {
       return ons
     },
     initToolbar () {
-      this.$nextTick(() => this.$refs.xTable.connect(this.$refs.xToolbar))
+      this.$nextTick(() => {
+        const { xTable, xToolbar } = this.$refs
+        if (xTable && xToolbar) {
+          xTable.connect(xToolbar)
+        }
+      })
     },
     initPages () {
       if (this.pagerConfig && this.pagerOpts.pageSize) {
