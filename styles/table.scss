@@ -398,7 +398,8 @@ select.vxe-select,
       }
     }
   }
-  .vxe-header--column {
+  .vxe-header--column,
+  .vxe-footer--column {
     &.col--ellipsis {
       &.col--center {
         .vxe-cell{

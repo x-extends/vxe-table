@@ -3,7 +3,21 @@
 .vxe-table--footer-wrapper {
   margin-top: -1px;
   background-color: $vxe-table-background-color;
-  &.footer--wrapper{
+  &.body--wrapper{
     overflow-x: auto;
+  }
+}
+
+.vxe-footer--column {
+  &.col--ellipsis {
+    & > .vxe-cell {
+      display: flex;
+      align-items: center;
+      .vxe-cell--content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
 }
