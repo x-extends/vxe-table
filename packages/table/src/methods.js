@@ -1902,7 +1902,7 @@ const Methods = {
     const cell = evnt.currentTarget
     this.handleTargetEnterEvent()
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      this.handleTooltip(evnt, cell, cell.children[0], params)
+      this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--content') || cell.children[0], params)
     }
   },
   /**

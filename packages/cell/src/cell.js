@@ -60,6 +60,22 @@ function renderTitleContent (h, params, content) {
   ]
 }
 
+function getFooterContent (h, params) {
+  const { $table, column, _columnIndex, items } = params
+  const { slots, own } = column
+  const renderOpts = own.editRender || own.cellRender
+  if (slots && slots.footer) {
+    return slots.footer.call($table, params, h)
+  }
+  if (renderOpts) {
+    const compConf = VXETable.renderer.get(renderOpts.name)
+    if (compConf && compConf.renderFooter) {
+      return compConf.renderFooter.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
+    }
+  }
+  return [UtilTools.formatText(items[_columnIndex], 1)]
+}
+
 export const Cell = {
   createColumn ($xetable, _vm) {
     const { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
@@ -154,19 +170,11 @@ export const Cell = {
     return Cell.renderTreeIcon(h, params, Cell.renderDefaultCell.call(this, h, params))
   },
   renderDefaultFooter (h, params) {
-    const { $table, column, _columnIndex, items } = params
-    const { slots, own } = column
-    const renderOpts = own.editRender || own.cellRender
-    if (slots && slots.footer) {
-      return slots.footer.call($table, params, h)
-    }
-    if (renderOpts) {
-      const compConf = VXETable.renderer.get(renderOpts.name)
-      if (compConf && compConf.renderFooter) {
-        return compConf.renderFooter.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $excel: $table.$parent, $table })
-      }
-    }
-    return [UtilTools.formatText(items[_columnIndex], 1)]
+    return [
+      h('span', {
+        class: 'vxe-cell--content'
+      }, getFooterContent(h, params))
+    ]
   },
 
   /**
