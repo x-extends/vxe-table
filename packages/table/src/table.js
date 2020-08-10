@@ -828,7 +828,6 @@ export default {
     this.preventEvent(null, 'activated')
   },
   deactivated () {
-    this.elemStore = {}
     this.preventEvent(null, 'deactivated')
   },
   beforeDestroy () {

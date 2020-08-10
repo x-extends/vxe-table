@@ -107,14 +107,15 @@ export default {
         columns: [
           { type: 'seq', width: 60, fixed: 'left' },
           { type: 'radio', title: 'ID', width: 120, fixed: 'left' },
-          { field: 'name', title: 'Name', minWidth: 200, remoteSort: true },
-          { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 200 },
-          { field: 'age', title: 'Age', remoteSort: true, width: 100 },
+          { field: 'name', title: 'Name', minWidth: 160, remoteSort: true },
+          { field: 'email', title: 'Email', minWidth: 160, editRender: { name: 'input' } },
+          { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 160 },
+          { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
           {
             field: 'role',
             title: 'Role',
             remoteSort: true,
-            minWidth: 200,
+            minWidth: 160,
             filters: [
               { label: '前端开发', value: '前端' },
               { label: '后端开发', value: '后端' },
@@ -123,9 +124,9 @@ export default {
             ],
             filterMultiple: false
           },
-          { field: 'amount', title: 'Amount', width: 100, formatter: this.formatAmount },
-          { field: 'updateDate', title: 'Update Date', width: 160, remoteSort: true, formatter: this.formatDate },
-          { field: 'createDate', title: 'Create Date', width: 160, remoteSort: true, formatter: this.formatDate }
+          { field: 'amount', title: 'Amount', width: 140, formatter: this.formatAmount },
+          { field: 'updateDate', title: 'Update Date', visible: false, width: 160, remoteSort: true, formatter: this.formatDate },
+          { field: 'createDate', title: 'Create Date', visible: false, width: 160, remoteSort: true, formatter: this.formatDate }
         ]
       },
       demoCodes: [
@@ -222,14 +223,15 @@ export default {
                 columns: [
                   { type: 'seq', width: 60, fixed: 'left' },
                   { type: 'radio', title: 'ID', width: 120, fixed: 'left' },
-                  { field: 'name', title: 'Name', minWidth: 200, remoteSort: true },
-                  { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 200 },
-                  { field: 'age', title: 'Age', remoteSort: true, width: 100 },
+                  { field: 'name', title: 'Name', minWidth: 160, remoteSort: true },
+                  { field: 'email', title: 'Email', minWidth: 160, editRender: { name: 'input' } },
+                  { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 160 },
+                  { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
                   {
                     field: 'role',
                     title: 'Role',
                     remoteSort: true,
-                    minWidth: 200,
+                    minWidth: 160,
                     filters: [
                       { label: '前端开发', value: '前端' },
                       { label: '后端开发', value: '后端' },
@@ -238,9 +240,9 @@ export default {
                     ],
                     filterMultiple: false
                   },
-                  { field: 'amount', title: 'Amount', width: 100, formatter: this.formatAmount },
-                  { field: 'updateDate', title: 'Update Date', width: 160, remoteSort: true, formatter: this.formatDate },
-                  { field: 'createDate', title: 'Create Date', width: 160, remoteSort: true, formatter: this.formatDate }
+                  { field: 'amount', title: 'Amount', width: 140, formatter: this.formatAmount },
+                  { field: 'updateDate', title: 'Update Date', visible: false, width: 160, remoteSort: true, formatter: this.formatDate },
+                  { field: 'createDate', title: 'Create Date', visible: false, width: 160, remoteSort: true, formatter: this.formatDate }
                 ]
               }
             }

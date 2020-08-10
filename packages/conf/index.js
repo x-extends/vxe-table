@@ -173,7 +173,8 @@ const GlobalConfig = {
       props: {
         list: null,
         result: 'result',
-        total: 'page.total'
+        total: 'page.total',
+        message: 'message'
       }
       // beforeItem: null,
       // beforeColumn: null,
