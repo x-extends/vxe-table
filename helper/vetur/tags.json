@@ -318,6 +318,7 @@
       "max",
       "step",
       "digits",
+      "align",
       "controls",
       "min-date",
       "max-date",

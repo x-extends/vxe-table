@@ -102,6 +102,21 @@ $iconWidth: 1.6em;
       padding-right: #{$iconWidth + 0.2em};
     }
   }
+  &.is--left {
+    .vxe-input--inner {
+      text-align: left;
+    }
+  }
+  &.is--center {
+    .vxe-input--inner {
+      text-align: center;
+    }
+  }
+  &.is--right {
+    .vxe-input--inner {
+      text-align: right;
+    }
+  }
   &.is--controls {
     &.type--search,
     &.type--password,

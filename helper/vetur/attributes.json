@@ -1035,6 +1035,10 @@
     "type": "number | string",
     "description": "只对 type=float 有效，小数位数"
   },
+  "vxe-input/align": {
+    "type": "string",
+    "description": "内容对齐方式"
+  },
   "vxe-input/controls": {
     "type": "boolean",
     "description": "只对 type=number|integer|float 有效，是否显示控制按钮"

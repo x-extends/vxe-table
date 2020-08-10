@@ -161,6 +161,15 @@ const apis = [
         list: []
       },
       {
+        name: 'align',
+        desc: '内容对齐方式',
+        version: '1.15.31',
+        type: 'string',
+        enum: 'left, center, right',
+        defVal: 'left',
+        list: []
+      },
+      {
         name: 'controls',
         desc: '只对 type=number|integer|float 有效，是否显示控制按钮',
         version: '1.15.31',
