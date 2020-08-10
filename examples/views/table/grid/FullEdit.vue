@@ -57,8 +57,9 @@ export default {
           titleAlign: 'right',
           items: [
             { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-            { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
+            { field: 'email', title: '邮件', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
             { field: 'nickname', title: '昵称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
+            { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
             { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
             { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: '$input', props: { type: 'number', min: 1, max: 120, placeholder: '请输入年龄' } } },
             { span: 24, align: 'center', collapseNode: true, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] } }
@@ -117,9 +118,10 @@ export default {
             filterMultiple: false,
             editRender: { name: 'input' }
           },
+          { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
           { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
           { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-          { field: 'age', title: 'Age', remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
+          { field: 'age', title: 'Age', visible: false, remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
           { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
           { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
           { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
@@ -146,6 +148,9 @@ export default {
           name: [
             { required: true, message: 'app.body.valid.rName' },
             { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+          ],
+          email: [
+            { required: true, message: '邮件必须填写' }
           ],
           role: [
             { required: true, message: '角色必须填写' }
@@ -194,8 +199,9 @@ export default {
                   titleAlign: 'right',
                   items: [
                     { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-                    { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
+                    { field: 'email', title: '邮件', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
                     { field: 'nickname', title: '昵称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
+                    { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
                     { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
                     { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: '$input', props: { type: 'number', min: 1, max: 120, placeholder: '请输入年龄' } } },
                     { span: 24, align: 'center', collapseNode: true, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] } }
@@ -254,9 +260,10 @@ export default {
                     filterMultiple: false,
                     editRender: { name: 'input' }
                   },
+                  { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
                   { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                   { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-                  { field: 'age', title: 'Age', remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
+                  { field: 'age', title: 'Age', visible: false, remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
                   { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
                   { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
                   { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
@@ -283,6 +290,9 @@ export default {
                   name: [
                     { required: true, message: 'app.body.valid.rName' },
                     { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+                  ],
+                  email: [
+                    { required: true, message: '邮件必须填写' }
                   ],
                   role: [
                     { required: true, message: '角色必须填写' }
