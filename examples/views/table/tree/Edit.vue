@@ -15,6 +15,7 @@
 
     <vxe-table
       resizable
+      show-overflow
       ref="xTree"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
@@ -57,6 +58,7 @@ export default {
 
         <vxe-table
           resizable
+          show-overflow
           ref="xTree"
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"

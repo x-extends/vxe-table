@@ -160,7 +160,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
         DomTools.updateCellTitle(evnt.currentTarget, column)
       } else if (showTooltip || enabled) {
         // 如果配置了显示 tooltip
-        $xetable.triggerTooltipEvent(evnt, params)
+        $xetable.triggerBodyTooltipEvent(evnt, params)
       }
       if (bindMouseenter) {
         $xetable.emitEvent('cell-mouseenter', Object.assign({ cell: evnt.currentTarget }, params), evnt)

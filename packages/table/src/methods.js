@@ -1890,25 +1890,13 @@ const Methods = {
     const titleElem = evnt.currentTarget
     this.handleTargetEnterEvent()
     if (tooltipStore.column !== column || !tooltipStore.visible) {
-      this.handleTooltip(evnt, titleElem, titleElem, params)
+      this.handleTooltip(evnt, titleElem, titleElem, null, params)
     }
   },
   /**
-   * 触发表尾 tooltip 事件
+   * 触发单元格 tooltip 事件
    */
-  triggerFooterTooltipEvent (evnt, params) {
-    const { tooltipStore } = this
-    const { column } = params
-    const cell = evnt.currentTarget
-    this.handleTargetEnterEvent()
-    if (tooltipStore.column !== column || !tooltipStore.visible) {
-      this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--content') || cell.children[0], params)
-    }
-  },
-  /**
-   * 触发 tooltip 事件
-   */
-  triggerTooltipEvent (evnt, params) {
+  triggerBodyTooltipEvent (evnt, params) {
     const { editConfig, editOpts, editStore, tooltipStore } = this
     const { actived } = editStore
     const { row, column } = params
@@ -1920,7 +1908,26 @@ const Methods = {
       }
     }
     if (tooltipStore.column !== column || tooltipStore.row !== row || !tooltipStore.visible) {
-      this.handleTooltip(evnt, cell, column.treeNode ? cell.querySelector('.vxe-tree-cell') : cell.children[0], params)
+      let overflowElem
+      let tipElem
+      if (column.treeNode) {
+        overflowElem = cell.querySelector('.vxe-tree-cell')
+      } else {
+        tipElem = cell.querySelector(column.type === 'html' ? '.vxe-cell--html' : '.vxe-cell--label')
+      }
+      this.handleTooltip(evnt, cell, overflowElem || cell.children[0], tipElem, params)
+    }
+  },
+  /**
+   * 触发表尾 tooltip 事件
+   */
+  triggerFooterTooltipEvent (evnt, params) {
+    const { tooltipStore } = this
+    const { column } = params
+    const cell = evnt.currentTarget
+    this.handleTargetEnterEvent()
+    if (tooltipStore.column !== column || !tooltipStore.visible) {
+      this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--item') || cell.children[0], null, params)
     }
   },
   /**
@@ -1929,7 +1936,7 @@ const Methods = {
    * @param {ColumnConfig} column 列配置
    * @param {Row} row 行对象
    */
-  handleTooltip (evnt, cell, overflowElem, params) {
+  handleTooltip (evnt, cell, overflowElem, tipElem, params) {
     params.cell = cell
     const { $refs, tooltipOpts, tooltipStore } = this
     const { column, row } = params
@@ -1938,14 +1945,15 @@ const Methods = {
     const customContent = contentMethod ? contentMethod(params) : null
     const useCustom = contentMethod && !XEUtils.eqNull(customContent)
     const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
-    if (content && (enabled || useCustom || overflowElem.scrollWidth > overflowElem.clientWidth)) {
+    const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
+    if (content && (enabled || useCustom || isCellOverflow)) {
       Object.assign(tooltipStore, {
         row,
         column,
         visible: true
       })
       if (tooltip) {
-        tooltip.toVisible(overflowElem, UtilTools.formatText(content))
+        tooltip.toVisible(isCellOverflow ? overflowElem : (tipElem || overflowElem), UtilTools.formatText(content))
       }
     }
     return this.$nextTick()

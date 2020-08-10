@@ -337,6 +337,7 @@
       "value,v-model",
       "size",
       "multiple",
+      "multi-char-overflow",
       "clearable",
       "placeholder",
       "visible",

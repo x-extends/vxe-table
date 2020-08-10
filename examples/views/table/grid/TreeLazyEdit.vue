@@ -4,6 +4,7 @@
 
     <vxe-grid
       border
+      show-overflow
       resizable
       keep-source
       ref="xGrid"
@@ -77,6 +78,7 @@ export default {
         `
         <vxe-grid
           border
+          show-overflow
           resizable
           keep-source
           ref="xGrid"

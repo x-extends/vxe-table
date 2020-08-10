@@ -269,7 +269,7 @@
   },
   "vxe-table/cloak": {
     "type": "boolean",
-    "description": "可以设置为 true 来避免初始化渲染时的闪动"
+    "description": "用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动"
   },
   "vxe-table/delay-hover": {
     "type": "number",
@@ -705,7 +705,7 @@
   },
   "vxe-grid/cloak": {
     "type": "boolean",
-    "description": "可以设置为 true 来避免初始化渲染时的闪动"
+    "description": "用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动"
   },
   "vxe-grid/delay-hover": {
     "type": "number",
@@ -1090,6 +1090,10 @@
   "vxe-select/multiple": {
     "type": "boolean",
     "description": "是否多选"
+  },
+  "vxe-select/multi-char-overflow": {
+    "type": "number, string",
+    "description": "只对 multiple 有效，设置多选中每个选项显示值的最大字符数，如果超出显示省略号；如果为 -1 则关闭"
   },
   "vxe-select/clearable": {
     "type": "boolean",

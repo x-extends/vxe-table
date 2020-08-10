@@ -178,6 +178,7 @@ export default {
     placeholder: String,
     disabled: Boolean,
     multiple: Boolean,
+    multiCharOverflow: { type: [Number, String], default: () => GlobalConfig.select.multiCharOverflow },
     prefixIcon: String,
     placement: String,
     options: Array,
@@ -238,13 +239,16 @@ export default {
     isGroup () {
       return this.fullGroupList.some(item => item.options && item.options.length)
     },
+    multiMaxCharNum () {
+      return XEUtils.toNumber(this.multiCharOverflow)
+    },
     selectLabel () {
-      const { value, multiple } = this
+      const { value, multiple, multiMaxCharNum } = this
       if (value && multiple) {
         return value.map(val => {
           const label = getSelectLabel(this, val)
-          if (label.length > 8) {
-            return `${label.substring(0, 8)}...`
+          if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
+            return `${label.substring(0, multiMaxCharNum)}...`
           }
           return label
         }).join(', ')
