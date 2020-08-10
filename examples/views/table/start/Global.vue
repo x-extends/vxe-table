@@ -143,7 +143,8 @@
           // },
           // select: {
           //   size: null,
-          //   transfer: false
+          //   transfer: false,
+          //   multiCharOverflow: 8
           // },
           // toolbar: {
           //   size: null,

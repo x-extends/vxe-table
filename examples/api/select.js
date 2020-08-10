@@ -35,6 +35,15 @@ const apis = [
         list: []
       },
       {
+        name: 'multi-char-overflow',
+        desc: '只对 multiple 有效，设置多选中每个选项显示值的最大字符数，如果超出显示省略号；如果为 -1 则关闭',
+        version: '1.15.31',
+        type: 'number, string',
+        enum: '',
+        defVal: '8',
+        list: []
+      },
+      {
         name: 'clearable',
         descKey: 'app.api.select.desc.clearable',
         version: '',

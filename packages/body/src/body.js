@@ -153,7 +153,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
         DomTools.updateCellTitle(evnt.currentTarget, column)
       } else if (showTooltip || enabled) {
         // 如果配置了显示 tooltip
-        $table.triggerTooltipEvent(evnt, params)
+        $table.triggerBodyTooltipEvent(evnt, params)
       }
       UtilTools.emitEvent($table, 'cell-mouseenter', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
     }

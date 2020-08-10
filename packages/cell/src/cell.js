@@ -27,6 +27,11 @@ function getFooterContent (h, params) {
   return [UtilTools.formatText(items[_columnIndex], 1)]
 }
 
+function getDefaultCellLabel (params) {
+  const { row, column } = params
+  return UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)
+}
+
 export const Cell = {
   createColumn ($table, _vm) {
     const { type, sortable, remoteSort, filters, editRender, treeNode } = _vm
@@ -99,7 +104,7 @@ export const Cell = {
     return renderTitleContent(h, UtilTools.formatText(column.getTitle(), 1))
   },
   renderDefaultCell (h, params) {
-    const { $table, row, column } = params
+    const { $table, column } = params
     const { slots, own } = column
     const renderOpts = own.editRender || own.cellRender
     if (slots && slots.default) {
@@ -112,7 +117,11 @@ export const Cell = {
         return compConf[funName].call($table, h, renderOpts, Object.assign({ isEdit: !!own.editRender }, params), { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$grid, $excel: $table.$parent, $table, $column: column })
       }
     }
-    return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
+    return [
+      h('span', {
+        class: 'vxe-cell--label'
+      }, [getDefaultCellLabel(params)])
+    ]
   },
   renderTreeCell (h, params) {
     return Cell.renderTreeIcon(h, params, Cell.renderDefaultCell.call(this, h, params))
@@ -120,7 +129,7 @@ export const Cell = {
   renderDefaultFooter (h, params) {
     return [
       h('span', {
-        class: 'vxe-cell--content'
+        class: 'vxe-cell--item'
       }, getFooterContent(h, params))
     ]
   },
@@ -495,7 +504,7 @@ export const Cell = {
    * HTML 标签
    */
   renderHTMLCell (h, params) {
-    const { $table, row, column } = params
+    const { $table, column } = params
     const { slots } = column
     if (slots && slots.default) {
       return slots.default.call($table, params, h)
@@ -504,7 +513,7 @@ export const Cell = {
       h('span', {
         class: 'vxe-cell--html',
         domProps: {
-          innerHTML: UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)
+          innerHTML: getDefaultCellLabel(params)
         }
       })
     ]
@@ -640,7 +649,7 @@ export const Cell = {
     return Cell.renderTreeIcon(h, params, Cell.renderCellEdit(h, params))
   },
   runRenderer (h, params, _vm, isEdit) {
-    const { $table, row, column } = params
+    const { $table, column } = params
     const { slots, own, formatter } = column
     const editRender = own.editRender
     const compConf = VXETable.renderer.get(editRender.name)
@@ -654,7 +663,11 @@ export const Cell = {
       return slots.default.call($table, params, h)
     }
     if (formatter) {
-      return [UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)]
+      return [
+        h('span', {
+          class: 'vxe-cell--label'
+        }, [getDefaultCellLabel(params)])
+      ]
     }
     return Cell.renderDefaultCell.call(_vm, h, params)
   }
