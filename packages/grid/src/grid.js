@@ -731,7 +731,7 @@ export default {
       }
     },
     sortChangeEvent (params) {
-      const { proxyConfig, remoteSort } = this
+      const { remoteSort } = this
       const { $table, column } = params
       const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : ($table.sortOpts.remote || remoteSort)
       const property = params.order ? params.property : null
@@ -745,19 +745,22 @@ export default {
           order: params.order,
           sortBy: params.sortBy
         } : {}
-        if (proxyConfig) {
+        if (this.proxyConfig) {
+          this.tablePage.currentPage = 1
           this.commitProxy('query')
         }
       }
       this.$emit('sort-change', Object.assign({ $grid: this }, params))
     },
     filterChangeEvent (params) {
-      const { remoteFilter } = this
       const { $table, filters } = params
       // 如果是服务端过滤
-      if ($table.filterOpts.remote || remoteFilter) {
+      if ($table.filterOpts.remote || this.remoteFilter) {
         this.filterData = filters
-        this.commitProxy('query')
+        if (this.proxyConfig) {
+          this.tablePage.currentPage = 1
+          this.commitProxy('query')
+        }
       }
       this.$emit('filter-change', Object.assign({ $grid: this }, params))
     },
