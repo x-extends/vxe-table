@@ -4,6 +4,7 @@
 
     <vxe-grid
       resizable
+      show-overflow
       highlight-hover-row
       tree-config
       export-config
@@ -62,6 +63,7 @@ export default {
         `
         <vxe-grid
           resizable
+          show-overflow
           highlight-hover-row
           tree-config
           export-config

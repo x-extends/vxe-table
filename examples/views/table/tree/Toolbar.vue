@@ -14,6 +14,7 @@
 
     <vxe-table
       resizable
+      show-overflow
       export-config
       keep-source
       ref="xTree"
@@ -62,6 +63,7 @@ export default {
 
         <vxe-table
           resizable
+          show-overflow
           export-config
           keep-source
           ref="xTree"

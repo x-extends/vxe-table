@@ -57,6 +57,7 @@
 
     <vxe-table
       border
+      show-overflow
       row-id="id"
       :data="tableData"
       :tree-config="{children: 'children', expandAll: true}">
@@ -160,6 +161,7 @@ export default {
         `
         <vxe-table
           border
+          show-overflow
           row-id="id"
           :data="tableData"
           :tree-config="{children: 'children', expandAll: true}">

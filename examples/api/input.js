@@ -21,7 +21,7 @@ const apis = [
         descKey: 'app.api.input.desc.size',
         version: '',
         type: 'string',
-        enum: 'medium,small,mini',
+        enum: 'medium, small, mini',
         defVal: '继承上下文',
         list: []
       },
@@ -158,6 +158,15 @@ const apis = [
         type: 'number | string',
         enum: '',
         defVal: '默认 2，继承 setup.input.digits',
+        list: []
+      },
+      {
+        name: 'align',
+        desc: '内容对齐方式',
+        version: '',
+        type: 'string',
+        enum: 'left, center, right',
+        defVal: 'left',
         list: []
       },
       {

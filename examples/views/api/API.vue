@@ -28,12 +28,12 @@
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" :filters="nameFilters" tree-node></vxe-table-column>
+      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" :title-help="{message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'}" :filters="nameFilters" tree-node></vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" type="html" min-width="200"></vxe-table-column>
       <vxe-table-column field="type" title="app.api.title.type" type="html" min-width="140"></vxe-table-column>
       <vxe-table-column field="enum" :title="$t('app.api.title.enum')" type="html" min-width="150"></vxe-table-column>
-      <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160"></vxe-table-column>
-      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120">
+      <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160" :title-help="{message: '部分参数可支持全局设置，具体请查阅相关说明'}"></vxe-table-column>
+      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120" :title-help="{message: '该文档与最新版本保持同步，如果遇到参数无效时，需要检查当前使用的版本号是否支持该参数'}">
         <template v-slot="{ row }">
           <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
         </template>
@@ -75,48 +75,48 @@ import switchAPI from '../../api/switch'
 import listAPI from '../../api/list'
 import pulldownAPI from '../../api/pulldown'
 
-import i18n from '../../i18n'
-const attributes = window.attributes = {}
-const tags = window.tags = {}
+// import i18n from '../../i18n'
+// const attributes = window.attributes = {}
+// const tags = window.tags = {}
 
-const tagMaps = [
-  ['vxe-table', tableAPI, { subtags: ['vxe-table-column'], description: '基础表格' }],
-  ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
-  ['vxe-grid', gridAPI, { description: '高级表格' }],
-  ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
-  ['vxe-pager', pagerAPI, { description: '分页' }],
-  ['vxe-radio', radioAPI, { description: '单选框' }],
-  ['vxe-radio-group', radioGroupAPI, { description: '单选组' }],
-  ['vxe-radio-button', radioButtonAPI, { description: '单选按钮' }],
-  ['vxe-checkbox', checkboxAPI, { description: '复选框' }],
-  ['vxe-checkbox-group', checkboxGroupAPI, { description: '复选组' }],
-  ['vxe-switch', switchAPI, { description: '开关按钮' }],
-  ['vxe-input', inputAPI, { description: '输入框' }],
-  ['vxe-select', selectAPI, { subtags: ['vxe-optgroup', 'vxe-option'], description: '下拉框' }],
-  ['vxe-optgroup', optgroupAPI, { subtags: ['vxe-option'], description: '下拉框 - 分组' }],
-  ['vxe-option', optionAPI, { description: '下拉框 - 选项' }],
-  ['vxe-button', buttonAPI, { description: '按钮' }],
-  ['vxe-tooltip', tooltipAPI, { description: '工具提示' }],
-  ['vxe-modal', modalAPI, { description: '模态窗口' }],
-  ['vxe-form', formAPI, { subtags: ['vxe-form-item'], description: '表单' }],
-  ['vxe-form-item', formItemAPI, { description: '表单 - 项' }],
-  ['vxe-list', listAPI, { description: '列表' }],
-  ['vxe-pulldown', pulldownAPI, { description: '下拉容器' }]
-]
+// const tagMaps = [
+//   ['vxe-table', tableAPI, { subtags: ['vxe-table-column'], description: '基础表格' }],
+//   ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
+//   ['vxe-grid', gridAPI, { description: '高级表格' }],
+//   ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
+//   ['vxe-pager', pagerAPI, { description: '分页' }],
+//   ['vxe-radio', radioAPI, { description: '单选框' }],
+//   ['vxe-radio-group', radioGroupAPI, { description: '单选组' }],
+//   ['vxe-radio-button', radioButtonAPI, { description: '单选按钮' }],
+//   ['vxe-checkbox', checkboxAPI, { description: '复选框' }],
+//   ['vxe-checkbox-group', checkboxGroupAPI, { description: '复选组' }],
+//   ['vxe-switch', switchAPI, { description: '开关按钮' }],
+//   ['vxe-input', inputAPI, { description: '输入框' }],
+//   ['vxe-select', selectAPI, { subtags: ['vxe-optgroup', 'vxe-option'], description: '下拉框' }],
+//   ['vxe-optgroup', optgroupAPI, { subtags: ['vxe-option'], description: '下拉框 - 分组' }],
+//   ['vxe-option', optionAPI, { description: '下拉框 - 选项' }],
+//   ['vxe-button', buttonAPI, { description: '按钮' }],
+//   ['vxe-tooltip', tooltipAPI, { description: '工具提示' }],
+//   ['vxe-modal', modalAPI, { description: '模态窗口' }],
+//   ['vxe-form', formAPI, { subtags: ['vxe-form-item'], description: '表单' }],
+//   ['vxe-form-item', formItemAPI, { description: '表单 - 项' }],
+//   ['vxe-list', listAPI, { description: '列表' }],
+//   ['vxe-pulldown', pulldownAPI, { description: '下拉容器' }]
+// ]
 
-tagMaps.forEach(confs => {
-  const props = confs[1].find(item => item.name === 'Props').list
-  const keys = []
-  props.forEach(item => {
-    const name = XEUtils.kebabCase(item.name)
-    attributes[`${confs[0]}/${name}`] = {
-      type: XEUtils.toString(item.type).toLowerCase(),
-      description: item.descKey ? i18n.t(item.descKey) : item.desc
-    }
-    keys.push(name)
-  })
-  tags[confs[0]] = Object.assign({ attributes: keys }, confs[2])
-})
+// tagMaps.forEach(confs => {
+//   const props = confs[1].find(item => item.name === 'Props').list
+//   const keys = []
+//   props.forEach(item => {
+//     const name = XEUtils.kebabCase(item.name)
+//     attributes[`${confs[0]}/${name}`] = {
+//       type: XEUtils.toString(item.type).toLowerCase(),
+//       description: item.descKey ? i18n.t(item.descKey) : item.desc
+//     }
+//     keys.push(name)
+//   })
+//   tags[confs[0]] = Object.assign({ attributes: keys }, confs[2])
+// })
 
 export default {
   data () {

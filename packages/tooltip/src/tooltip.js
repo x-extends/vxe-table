@@ -2,6 +2,28 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
 
+function updateTipStyle (_vm) {
+  const { $el: wrapperElem, tipTarget, tipStore } = _vm
+  const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+  const { top, left } = DomTools.getAbsolutePos(tipTarget)
+  const marginSize = 6
+  const offsetHeight = wrapperElem.offsetHeight
+  const offsetWidth = wrapperElem.offsetWidth
+  let tipLeft = left
+  let tipTop = top - offsetHeight - marginSize
+  tipLeft = Math.max(marginSize, left + Math.floor((tipTarget.offsetWidth - offsetWidth) / 2))
+  if (tipLeft + offsetWidth + marginSize > scrollLeft + visibleWidth) {
+    tipLeft = scrollLeft + visibleWidth - offsetWidth - marginSize
+  }
+  if (top - offsetHeight < scrollTop + marginSize) {
+    tipStore.placement = 'bottom'
+    tipTop = top + tipTarget.offsetHeight + marginSize
+  }
+  tipStore.style.top = `${tipTop}px`
+  tipStore.style.left = `${tipLeft}px`
+  tipStore.arrowStyle.left = `${left - tipLeft + tipTarget.offsetWidth / 2}px`
+}
+
 export default {
   name: 'VxeTooltip',
   props: {
@@ -150,11 +172,8 @@ export default {
     toVisible (target, message) {
       this.targetActive = true
       if (target) {
-        const { $el, tipStore } = this
+        const { $el, tipStore, zIndex } = this
         const parentNode = $el.parentNode
-        tipStore.placement = 'top'
-        tipStore.style = { width: 'auto' }
-        tipStore.arrowStyle = { left: '50%' }
         if (!parentNode) {
           document.body.appendChild($el)
         }
@@ -164,48 +183,19 @@ export default {
         this.tipTarget = target
         this.update(true)
         this.updateZindex()
+        tipStore.placement = 'top'
+        tipStore.style = { width: 'auto', left: 0, top: 0, zIndex: zIndex || this.tipZindex }
+        tipStore.arrowStyle = { left: '50%' }
         return this.updatePlacement()
       }
       return this.$nextTick()
     },
     updatePlacement () {
       return this.$nextTick().then(() => {
-        const { $el: wrapperElem, tipTarget, tipStore, zIndex } = this
+        const { $el: wrapperElem, tipTarget } = this
         if (tipTarget && wrapperElem) {
-          const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
-          const { top, left } = DomTools.getAbsolutePos(tipTarget)
-          let tipLeft = left
-          const offsetHeight = wrapperElem.offsetHeight
-          const offsetWidth = wrapperElem.offsetWidth
-          tipLeft = left + Math.floor((tipTarget.offsetWidth - offsetWidth) / 2)
-          tipStore.style = {
-            zIndex: zIndex || this.tipZindex,
-            top: `${top - offsetHeight - 6}px`,
-            left: `${tipLeft}px`
-          }
-          return this.$nextTick().then(() => {
-            const offsetHeight = wrapperElem.offsetHeight
-            const offsetWidth = wrapperElem.offsetWidth
-            Object.assign(tipStore.style, {
-              top: `${top - offsetHeight - 6}px`,
-              left: `${tipLeft}px`
-            })
-            if (top - offsetHeight < scrollTop + 6) {
-              tipStore.placement = 'bottom'
-              tipStore.style.top = `${top + tipTarget.offsetHeight + 6}px`
-            }
-            if (tipLeft < scrollLeft + 6) {
-              // 超出左边界
-              tipLeft = scrollLeft + 6
-              tipStore.arrowStyle.left = `${left > tipLeft + 16 ? left - tipLeft + 16 : 16}px`
-              tipStore.style.left = `${tipLeft}px`
-            } else if (tipLeft + offsetWidth > scrollLeft + visibleWidth) {
-              // 超出右边界
-              tipLeft = scrollLeft + visibleWidth - offsetWidth - 6
-              tipStore.arrowStyle.left = `${offsetWidth - Math.max(Math.floor((tipLeft + offsetWidth - left) / 2), 22)}px`
-              tipStore.style.left = `${tipLeft}px`
-            }
-          })
+          updateTipStyle(this)
+          return this.$nextTick().then(() => updateTipStyle(this))
         }
       })
     },

@@ -1,11 +1,13 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 import { UtilTools } from '../../tools'
 
 let autoTxtElem
 
 export default {
   name: 'VxeTextarea',
+  mixins: [vSize],
   props: {
     value: [String, Number],
     name: String,
@@ -21,9 +23,6 @@ export default {
     size: { type: String, default: () => GlobalConfig.textarea.size || GlobalConfig.size }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     inputCount () {
       return XEUtils.getSize(this.value)
     },

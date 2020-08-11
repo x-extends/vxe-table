@@ -1,10 +1,12 @@
 import { UtilTools, DomTools } from '../../tools'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 
 const browse = DomTools.browse
 
 export default {
   name: 'VxeSwitch',
+  mixins: [vSize],
   props: {
     value: [String, Number, Boolean],
     disabled: Boolean,
@@ -23,9 +25,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     isChecked () {
       return this.value === this.onValue
     },

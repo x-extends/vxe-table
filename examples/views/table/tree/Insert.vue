@@ -15,6 +15,7 @@
 
     <vxe-table
       resizable
+      show-overflow
       keep-source
       ref="xTree"
       class="my_treetable_insert"
@@ -61,6 +62,7 @@ export default {
 
         <vxe-table
           resizable
+          show-overflow
           keep-source
           ref="xTree"
           class="my_treetable_insert"

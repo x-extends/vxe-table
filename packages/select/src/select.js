@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import VxeInput from '../../input/src/input'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 function isOptionVisible (option) {
@@ -172,12 +173,14 @@ export function renderOptgroup (h, _vm) {
 
 export default {
   name: 'VxeSelect',
+  mixins: [vSize],
   props: {
     value: null,
     clearable: Boolean,
     placeholder: String,
     disabled: Boolean,
     multiple: Boolean,
+    multiCharOverflow: { type: [Number, String], default: () => GlobalConfig.select.multiCharOverflow },
     prefixIcon: String,
     placement: String,
     options: Array,
@@ -214,9 +217,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     propsOpts () {
       return this.optionProps || {}
     },
@@ -238,13 +238,16 @@ export default {
     isGroup () {
       return this.fullGroupList.some(item => item.options && item.options.length)
     },
+    multiMaxCharNum () {
+      return XEUtils.toNumber(this.multiCharOverflow)
+    },
     selectLabel () {
-      const { value, multiple } = this
+      const { value, multiple, multiMaxCharNum } = this
       if (value && multiple) {
         return value.map(val => {
           const label = getSelectLabel(this, val)
-          if (label.length > 8) {
-            return `${label.substring(0, 8)}...`
+          if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
+            return `${label.substring(0, multiMaxCharNum)}...`
           }
           return label
         }).join(', ')

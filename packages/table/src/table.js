@@ -2,6 +2,7 @@ import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from '../../body'
+import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent, ResizeEvent } from '../../tools'
 import methods from './methods'
 
@@ -64,6 +65,7 @@ function renderFixed (h, $xetable, fixedType) {
 
 export default {
   name: 'VxeTable',
+  mixins: [vSize],
   props: {
     /** 基本属性 */
     id: String,
@@ -221,7 +223,6 @@ export default {
       default: null
     }
   },
-  mixins: [],
   data () {
     return {
       tId: `${XEUtils.uniqueId()}`,
@@ -399,9 +400,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     validOpts () {
       return Object.assign({ message: 'default' }, GlobalConfig.table.validConfig, this.validConfig)
     },
@@ -742,7 +740,6 @@ export default {
     this.preventEvent(null, 'activated')
   },
   deactivated () {
-    this.elemStore = {}
     this.preventEvent(null, 'deactivated')
   },
   beforeDestroy () {

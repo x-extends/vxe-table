@@ -1,8 +1,10 @@
 import { UtilTools } from '../../tools'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 
 export default {
   name: 'VxeCheckbox',
+  mixins: [vSize],
   props: {
     value: Boolean,
     label: [String, Number],
@@ -18,9 +20,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     isGroup () {
       return this.$xegroup
     },

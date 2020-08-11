@@ -21,7 +21,7 @@ const apis = [
         descKey: 'app.api.select.desc.size',
         version: '',
         type: 'string',
-        enum: 'medium,small,mini',
+        enum: 'medium, small, mini',
         defVal: '继承上下文',
         list: []
       },
@@ -32,6 +32,15 @@ const apis = [
         type: 'boolean',
         enum: 'false',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'multi-char-overflow',
+        desc: '只对 multiple 有效，设置多选中每个选项显示值的最大字符数，如果超出显示省略号；如果为 -1 则关闭',
+        version: '',
+        type: 'number, string',
+        enum: '',
+        defVal: '默认 8，继承 setup.select.multiCharOverflow',
         list: []
       },
       {

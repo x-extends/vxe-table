@@ -1,9 +1,11 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 export default {
   name: 'VxeButton',
+  mixins: [vSize],
   props: {
     type: String,
     size: { type: String, default: () => GlobalConfig.button.size || GlobalConfig.size },
@@ -28,9 +30,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     isText () {
       return this.type === 'text'
     },

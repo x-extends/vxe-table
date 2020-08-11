@@ -29,8 +29,8 @@ module.exports = {
     config.output
       .set('libraryExport', 'default')
       .set('library', 'VXETable')
-    if (process.env.npm_lifecycle_event.indexOf('lib') === 0) {
-      let XEUtils = {
+    if (process.env.npm_lifecycle_event && process.env.npm_lifecycle_event.indexOf('lib') === 0) {
+      const XEUtils = {
         root: 'XEUtils',
         commonjs: 'xe-utils/methods/xe-utils',
         commonjs2: 'xe-utils/methods/xe-utils',

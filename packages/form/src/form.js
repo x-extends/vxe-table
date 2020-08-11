@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 import { createItem } from './util'
@@ -166,6 +167,7 @@ function renderItems (h, _vm) {
 
 export default {
   name: 'VxeForm',
+  mixins: [vSize],
   props: {
     loading: Boolean,
     data: Object,
@@ -194,9 +196,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     validOpts () {
       return Object.assign({}, GlobalConfig.form.validConfig, this.validConfig)
     }

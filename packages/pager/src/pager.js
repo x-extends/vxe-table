@@ -1,8 +1,10 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 
 export default {
   name: 'VxePager',
+  mixins: [vSize],
   props: {
     size: { type: String, default: () => GlobalConfig.pager.size || GlobalConfig.size },
     // 自定义布局
@@ -42,9 +44,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     isSizes () {
       return this.layouts.some(name => name === 'Sizes')
     },

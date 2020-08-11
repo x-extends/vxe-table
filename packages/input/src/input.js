@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 const browse = DomTools.browse
@@ -551,6 +552,7 @@ function renderExtraSuffixIcon (h, _vm) {
 
 export default {
   name: 'VxeInput',
+  mixins: [vSize],
   props: {
     value: [String, Number, Date],
     name: String,
@@ -561,6 +563,7 @@ export default {
     placeholder: String,
     maxlength: [String, Number],
     autocomplete: { type: String, default: 'off' },
+    align: String,
     form: String,
     size: { type: String, default: () => GlobalConfig.input.size || GlobalConfig.size },
 
@@ -611,9 +614,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     isNumber () {
       return ['number', 'integer', 'float'].indexOf(this.type) > -1
     },
@@ -943,7 +943,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { controls, isDatePicker, visiblePanel, isActivated, vSize, type, readonly, disabled } = this
+    const { controls, isDatePicker, visiblePanel, isActivated, vSize, type, align, readonly, disabled } = this
     const childs = []
     const prefix = rendePrefixIcon(h, this)
     const suffix = renderSuffixIcon(h, this)
@@ -966,6 +966,7 @@ export default {
     return h('div', {
       class: ['vxe-input', `type--${type}`, {
         [`size--${vSize}`]: vSize,
+        [`is--${align}`]: align,
         'is--controls': controls,
         'is--prefix': !!prefix,
         'is--suffix': !!suffix,

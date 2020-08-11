@@ -1,8 +1,10 @@
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 export default {
   name: 'VxePulldown',
+  mixins: [vSize],
   props: {
     disabled: Boolean,
     placement: String,
@@ -18,11 +20,6 @@ export default {
       visiblePanel: false,
       animatVisible: false,
       isActivated: false
-    }
-  },
-  computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
     }
   },
   created () {

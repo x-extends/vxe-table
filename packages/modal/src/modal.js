@@ -1,4 +1,5 @@
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 import XEUtils from 'xe-utils/methods/xe-utils'
 import MsgQueue from './queue'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
@@ -7,6 +8,7 @@ const activeModals = []
 
 export default {
   name: 'VxeModal',
+  mixins: [vSize],
   props: {
     value: Boolean,
     id: String,
@@ -60,9 +62,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || (this.$parent && (this.$parent.size || this.$parent.vSize))
-    },
     isMsg () {
       return this.type === 'message'
     }

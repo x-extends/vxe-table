@@ -12,7 +12,7 @@ const apis = [
         descKey: 'app.api.pulldown.desc.size',
         version: '',
         type: 'string',
-        enum: 'medium,small,mini',
+        enum: 'medium, small, mini',
         defVal: '继承上下文',
         list: []
       },

@@ -14,6 +14,7 @@
 
     <vxe-table
       resizable
+      show-overflow
       keep-source
       ref="xTree"
       :edit-rules="validRules"
@@ -68,6 +69,7 @@ export default {
 
         <vxe-table
           resizable
+          show-overflow
           keep-source
           ref="xTree"
           :edit-rules="validRules"

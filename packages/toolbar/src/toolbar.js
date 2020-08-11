@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
+import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 /**
@@ -200,6 +201,7 @@ function renderCustoms (h, _vm) {
 
 export default {
   name: 'VxeToolbar',
+  mixins: [vSize],
   props: {
     loading: Boolean,
     refresh: [Boolean, Object],
@@ -230,9 +232,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     refreshOpts () {
       return Object.assign({}, GlobalConfig.toolbar.refresh, this.refresh)
     },

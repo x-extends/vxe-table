@@ -102,6 +102,21 @@ $iconWidth: 1.6em;
       padding-right: #{$iconWidth + 0.2em};
     }
   }
+  &.is--left {
+    .vxe-input--inner {
+      text-align: left;
+    }
+  }
+  &.is--center {
+    .vxe-input--inner {
+      text-align: center;
+    }
+  }
+  &.is--right {
+    .vxe-input--inner {
+      text-align: right;
+    }
+  }
   &.is--controls {
     &.type--search,
     &.type--password,
@@ -250,6 +265,8 @@ $iconWidth: 1.6em;
     transform: scaleY(0.5);
     transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
     transform-origin: center top;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
     &[data-placement="top"] {
       transform-origin: center bottom;
     }
@@ -271,8 +288,6 @@ $iconWidth: 1.6em;
 .vxe-input--panel-wrapper {
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 0.2em 0;
-  max-height: 26em;
 }
 
 .vxe-input--panel-layout-wrapper {
@@ -286,31 +301,11 @@ $iconWidth: 1.6em;
   &.type--month,
   &.type--year {
     user-select: none;
-    .vxe-input--panel-wrapper {
-      padding: 0.8em;
-    }
-  }
-  &.type--date,
-  &.type--month,
-  &.type--year {
-    .vxe-input--panel-wrapper {
-      width: 24em;
-    }
-  }
-  &.type--week {
-    .vxe-input--panel-wrapper {
-      width: 27.2em;
-    }
   }
   &.type--datetime {
-    .vxe-input--panel-left-wrapper {
-      width: 24em;
-      padding: 0.8em;
-    }
     .vxe-input--panel-right-wrapper {
       display: flex;
       flex-direction: column;
-      padding: 0.8em;
       border-left: 1px solid $vxe-input-border-color;
     }
   }
@@ -346,10 +341,7 @@ $iconWidth: 1.6em;
 
 .vxe-input--time-picker-title {
   display: inline-block;
-  height: 2.2em;
-  line-height: 2.2em;
   text-align: center;
-  padding: 0 0.8em;
   border: 1px solid $vxe-input-border-color;
   border-radius: $vxe-border-radius;
 }
@@ -357,9 +349,7 @@ $iconWidth: 1.6em;
   position: absolute;
   right: 0;
   top: 0;
-  height: 2.2em;
   outline: 0;
-  padding: 0 0.6em;
   border: 1px solid $vxe-input-border-color;
   border-radius: $vxe-border-radius;
   cursor: pointer;
@@ -381,11 +371,6 @@ $iconWidth: 1.6em;
   flex-shrink: 0;
 }
 
-.vxe-input--time-picker-header,
-.vxe-input--date-picker-header {
-  padding-bottom: 0.5em;
-}
-
 .vxe-input--date-picker-header {
   display: flex;
   flex-direction: row;
@@ -401,23 +386,16 @@ $iconWidth: 1.6em;
 .vxe-input--date-picker-type-wrapper {
   .vxe-input--date-picker-label,
   .vxe-input--date-picker-btn {
-    padding: 0 0.6em;
     display: inline-block;
   }
 }
 .vxe-input--date-picker-btn-wrapper {
   display: flex;
   flex-direction: row;
-  .vxe-input--date-picker-btn {
-    width: 2.2em;
-    margin-left: 0.5em;
-  }
 }
 .vxe-input--date-picker-label,
 .vxe-input--date-picker-btn {
   display: inline-block;
-  height: 2.2em;
-  line-height: 2.2em;
   display: flex;
   border-radius: $vxe-border-radius;
   border: 1px solid $vxe-input-border-color;
@@ -450,6 +428,7 @@ $iconWidth: 1.6em;
     border-spacing: 0;
     border-collapse: separate;
     text-align: center;
+    table-layout: fixed
   }
   th,
   td {
@@ -533,7 +512,6 @@ $iconWidth: 1.6em;
 
 .vxe-input--date-label {
   position: relative;
-  line-height: 1;
   padding-top: 8%;
   &.is-notice {
     &:before {
@@ -625,7 +603,6 @@ $iconWidth: 1.6em;
   & > ul {
     height: 100%;
     overflow: hidden;
-    width: 3.4em;
     margin: 0;
     padding: 0;
     background-color: #fff;
@@ -633,15 +610,12 @@ $iconWidth: 1.6em;
     &:after {
       content: " ";
       display: block;
-      height: 8.7em;
     }
     &:hover {
       overflow-y: auto;
     }
     & > li {
       display: block;
-      height: 22px;
-      padding-left: 0.6em;
       &:hover {
         background-color: $vxe-input-date-picker-hover-background-color;
         cursor: pointer;
@@ -653,11 +627,9 @@ $iconWidth: 1.6em;
     }
   }
   .vxe-input--time-picker-minute-list {
-    left: 1.95em;
     border-left: 1px solid $vxe-table-popup-border-color;
   }
   .vxe-input--time-picker-second-list {
-    left: 3.9em;
     border-left: 1px solid $vxe-table-popup-border-color;
   }
 }
@@ -713,99 +685,135 @@ $iconWidth: 1.6em;
   }
 }
 
-.vxe-input--panel {
-  font-size: $vxe-font-size;
+@mixin getPanelStyle ($sizeIndex) {
+  $fontSizeList: $vxe-font-size, $vxe-font-size-medium, $vxe-font-size-small, $vxe-font-size-mini;
+  $timeWeekRowHeightList: $vxe-input-date-time-week-row-height-default, $vxe-input-date-time-week-row-height-medium, $vxe-input-date-time-week-row-height-small, $vxe-input-date-time-week-row-height-mini;
+  $monthYearRowHeightList: $vxe-input-date-month-year-row-height-default, $vxe-input-date-month-year-row-height-medium, $vxe-input-date-month-year-row-height-small, $vxe-input-date-month-year-row-height-mini;
+  $titleRowHeightList: $vxe-input-date-title-height-default, $vxe-input-date-title-height-medium, $vxe-input-date-title-height-small, $vxe-input-date-title-height-mini;
+  
+  font-size: nth($fontSizeList, $sizeIndex);
+  .vxe-input--panel-wrapper {
+    max-height: 400px - $sizeIndex * 20;
+  }
+  &.type--date,
+  &.type--week,
+  &.type--month,
+  &.type--year {
+    .vxe-input--panel-wrapper {
+      padding: 12px - $sizeIndex;
+    }
+  }
+  &.type--date,
+  &.type--month,
+  &.type--year {
+    .vxe-input--panel-wrapper {
+      $widthList: 336px, 336px, 312px, 288px;
+      width: nth($widthList, $sizeIndex);
+    }
+  }
+  &.type--week {
+    .vxe-input--panel-wrapper {
+      $widthList: 380px, 380px, 354px, 326px;
+      width: nth($widthList, $sizeIndex);
+    }
+  }
+  &.type--datetime {
+    .vxe-input--panel-left-wrapper {
+      $widthList: 336px, 336px, 312px, 288px;
+      width: nth($widthList, $sizeIndex);
+    }
+    .vxe-input--panel-left-wrapper,
+    .vxe-input--panel-right-wrapper {
+      padding: 12px - $sizeIndex;
+    }
+  }
+  .vxe-input--time-picker-title {
+    height: 31px - $sizeIndex;
+    line-height: 31px - $sizeIndex;
+    padding: 0 12px - $sizeIndex;
+  }
+  .vxe-input--date-picker-label,
+  .vxe-input--date-picker-btn {
+    height: 31px - $sizeIndex;
+    line-height: 31px - $sizeIndex;
+  }
+  .vxe-input--date-picker-btn-wrapper {
+    .vxe-input--date-picker-btn {
+      width: 31px - $sizeIndex;
+      margin-left: 9px - $sizeIndex;
+    }
+  }
+  .vxe-input--date-picker-type-wrapper {
+    .vxe-input--date-picker-label,
+    .vxe-input--date-picker-btn {
+      padding: 0 10px - $sizeIndex;
+    }
+  }
+  .vxe-input--time-picker-header,
+  .vxe-input--date-picker-header {
+    $paddingBottomList: 8px, 7px, 6px, 5px;
+    padding-bottom: nth($paddingBottomList, $sizeIndex);
+  }
   .vxe-input--date-picker-body table,
   .vxe-input--time-picker-body {
-    height: $vxe-input-date-time-week-row-height-default * 6 + $vxe-input-date-title-height-default;
+    height: nth($timeWeekRowHeightList, $sizeIndex) * 6 + nth($titleRowHeightList, $sizeIndex);
+  }
+  .vxe-input--time-picker-body {
+    $ulWidthList: 48px, 48px, 44px, 42px;
+    & > ul {
+      width: nth($ulWidthList, $sizeIndex);
+      &:before,
+      &:after {
+        $heightList: 120px, 120px, 110px, 100px;
+        height: nth($heightList, $sizeIndex);
+      }
+      & > li {
+        height: 22px;
+        padding-left: 10px - $sizeIndex;
+      }
+    }
+    .vxe-input--time-picker-minute-list {
+      left: nth($ulWidthList, $sizeIndex);
+    }
+    .vxe-input--time-picker-second-list {
+      left: nth($ulWidthList, $sizeIndex) * 2;
+    }
   }
   .vxe-input--date-day-view,
   .vxe-input--date-week-view {
     td {
-      height: $vxe-input-date-time-week-row-height-default;
+      height: nth($timeWeekRowHeightList, $sizeIndex);
     }
   }
   .vxe-input--date-month-view,
   .vxe-input--date-year-view {
     td {
-      height: $vxe-input-date-month-year-row-height-default;
+      height: nth($monthYearRowHeightList, $sizeIndex);
     }
   }
   .vxe-input--date-picker-body {
     th {
-      height: $vxe-input-date-title-height-default;
+      height: nth($titleRowHeightList, $sizeIndex);
     }
   }
+  .vxe-input--time-picker-confirm {
+    height: 31px - $sizeIndex;
+    padding: 0 10px - $sizeIndex;
+  }
+  .vxe-input--date-label {
+    line-height: nth($fontSizeList, $sizeIndex) + 1;
+  }
+}
+
+.vxe-input--panel {
+  @include getPanelStyle(1);
   &.size--medium {
-    font-size: $vxe-font-size-medium;
-    .vxe-input--date-picker-body table,
-    .vxe-input--time-picker-body {
-      height: $vxe-input-date-time-week-row-height-medium * 6 + $vxe-input-date-title-height-medium;
-    }
-    .vxe-input--date-day-view,
-    .vxe-input--date-week-view {
-      td {
-        height: $vxe-input-date-time-week-row-height-medium;
-      }
-    }
-    .vxe-input--date-month-view,
-    .vxe-input--date-year-view {
-      td {
-        height: $vxe-input-date-month-year-row-height-medium;
-      }
-    }
-    .vxe-input--date-picker-body {
-      th {
-        height: $vxe-input-date-title-height-medium;
-      }
-    }
+    @include getPanelStyle(2);
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
-    .vxe-input--date-picker-body table,
-    .vxe-input--time-picker-body {
-      height: $vxe-input-date-time-week-row-height-small * 6 + $vxe-input-date-title-height-small;
-    }
-    .vxe-input--date-day-view,
-    .vxe-input--date-week-view {
-      td {
-        height: $vxe-input-date-time-week-row-height-small;
-      }
-    }
-    .vxe-input--date-month-view,
-    .vxe-input--date-year-view {
-      td {
-        height: $vxe-input-date-month-year-row-height-small;
-      }
-    }
-    .vxe-input--date-picker-body {
-      th {
-        height: $vxe-input-date-title-height-small;
-      }
-    }
+    @include getPanelStyle(3);
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
-    .vxe-input--date-picker-body table,
-    .vxe-input--time-picker-body {
-      height: $vxe-input-date-time-week-row-height-mini * 6 + $vxe-input-date-title-height-mini;
-    }
-    .vxe-input--date-day-view,
-    .vxe-input--date-week-view {
-      td {
-        height: $vxe-input-date-time-week-row-height-mini;
-      }
-    }
-    .vxe-input--date-month-view,
-    .vxe-input--date-year-view {
-      td {
-        height: $vxe-input-date-month-year-row-height-mini;
-      }
-    }
-    .vxe-input--date-picker-body {
-      th {
-        height: $vxe-input-date-title-height-mini;
-      }
-    }
+    @include getPanelStyle(4);
   }
 }
