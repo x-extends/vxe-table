@@ -2821,7 +2821,7 @@ const Methods = {
   isFilter (field) {
     if (field) {
       const column = this.getColumnByField(field)
-      return column.filters && column.filters.some(option => option.checked)
+      return column && column.filters && column.filters.some(option => option.checked)
     }
     return this.visibleColumn.some(column => column.filters && column.filters.some(option => option.checked))
   },

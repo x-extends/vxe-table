@@ -20,7 +20,7 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" :filters="[{data: null}]" :filter-render="{name: 'FilterInput'}"></vxe-table-column>
-      <vxe-table-column field="name" title="实现条件的筛选" :filters="[{data: {type: 'has', isCase: true, name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
+      <vxe-table-column field="name" title="实现条件的筛选" :filters="[{data: {type: 'has', name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
       <vxe-table-column field="age" title="实现内容的筛选" :filters="[{data: {vals: [], sVal: ''}}]" :filter-render="{name: 'FilterContent'}"></vxe-table-column>
       <vxe-table-column field="role" title="实现Excel复杂的筛选" sortable :filters="[{data: {vals: [], sVal: '', fMenu: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]" :filter-render="{name: 'FilterExcel'}"></vxe-table-column>
     </vxe-table>
@@ -67,7 +67,7 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" :filters="[{data: null}]" :filter-render="{name: 'FilterInput'}"></vxe-table-column>
-          <vxe-table-column field="name" title="实现条件的筛选" :filters="[{data: {type: 'has', isCase: true, name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
+          <vxe-table-column field="name" title="实现条件的筛选" :filters="[{data: {type: 'has', name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
           <vxe-table-column field="age" title="实现内容的筛选" :filters="[{data: {vals: [], sVal: ''}}]" :filter-render="{name: 'FilterContent'}"></vxe-table-column>
           <vxe-table-column field="role" title="实现Excel复杂的筛选" sortable :filters="[{data: {vals: [], sVal: '', fMenu: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]" :filter-render="{name: 'FilterExcel'}"></vxe-table-column>
         </vxe-table>

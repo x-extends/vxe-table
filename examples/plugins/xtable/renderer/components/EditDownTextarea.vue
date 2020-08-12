@@ -6,7 +6,7 @@
       </template>
       <template v-slot:dropdown>
         <div class="edit-down-wrapper">
-          <vxe-textarea ref="xText" class="edit-down-text" v-model="row[column.property]" resize="none" maxlength="1000" show-word-count></vxe-textarea>
+          <vxe-textarea class="edit-down-text" v-model="row[column.property]" resize="none"></vxe-textarea>
         </div>
       </template>
     </vxe-pulldown>
@@ -40,9 +40,7 @@ export default {
       this.column = column
     },
     clickEvent () {
-      this.$refs.xDown.showPanel().then(() => {
-        this.$refs.xText.focus()
-      })
+      this.$refs.xDown.showPanel()
     },
     suffixClick () {
       this.$refs.xDown.togglePanel()
@@ -61,8 +59,8 @@ export default {
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
 }
 .edit-down-text {
-  width: 600px;
-  height: 300px;
+  width: 400px;
+  height: 200px;
   display: block;
 }
 </style>

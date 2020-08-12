@@ -26,7 +26,6 @@ export default {
   },
   methods: {
     load () {
-      // filters 可以配置多个，实际只用一个就可以满足需求了
       const { column } = this.params
       const option = column.filters[0]
       this.column = column

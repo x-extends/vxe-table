@@ -2,13 +2,11 @@
   <div class="my-filter-excel">
     <div class="my-fe-top">
       <ul class="my-fe-menu-group">
-        <li class="my-fe-menu-link" @click="sortAscEvent">
-          <i class="fa fa-sort-alpha-asc my-fe-menu-link-left-icon"></i>
+        <li class="my-fe-menu-link">
           <span>升序</span>
         </li>
-        <li class="my-fe-menu-link" @click="sortDescEvent">
-          <i class="fa fa-sort-alpha-desc my-fe-menu-link-left-icon"></i>
-          <span>降序</span>
+        <li class="my-fe-menu-link">
+          <span>倒序</span>
         </li>
       </ul>
       <ul class="my-fe-menu-group">
@@ -81,9 +79,6 @@ export default {
           { value: 'less', label: '小于' },
           { value: 'le', label: '小于或等于' },
           { value: 'between', label: '介于' }
-        ],
-        [
-          { value: 'custom', label: '自定义筛选' }
         ]
       ],
       allCaseList: [
@@ -92,13 +87,7 @@ export default {
         { value: '3', label: '大于' },
         { value: '4', label: '大于或等于' },
         { value: '5', label: '小于' },
-        { value: '6', label: '小于或等于' },
-        { value: '7', label: '开头是' },
-        { value: '8', label: '开头不是' },
-        { value: '9', label: '结尾是' },
-        { value: '10', label: '结尾不是' },
-        { value: '11', label: '包含' },
-        { value: '12', label: '不包含' }
+        { value: '6', label: '小于或等于' }
       ]
     }
   },
@@ -124,22 +113,11 @@ export default {
     load () {
       const { $table, column } = this.params
       const { fullData } = $table.getTableData()
-      // filters 可以配置多个，实际只用一个就可以满足需求了
       const option = column.filters[0]
       const colValList = Object.keys(XEUtils.groupBy(fullData, column.property))
       this.column = column
       this.option = option
       this.colValList = colValList
-    },
-    sortAscEvent () {
-      const { $table, column } = this.params
-      $table.closeFilter()
-      $table.sort(column.property, 'asc')
-    },
-    sortDescEvent () {
-      const { $table, column } = this.params
-      $table.closeFilter()
-      $table.sort(column.property, 'desc')
     },
     sAllEvent () {
       const { data } = this.option
@@ -179,7 +157,7 @@ export default {
       data.fMode = 'and'
       data.f1Val = ''
       data.f2Val = ''
-      switch (cItem.value === 'custom' ? (data.fMenu || cItem.value) : cItem.value) {
+      switch (cItem.value) {
         case 'equal':
           data.f1Type = '1'
           data.f2Type = ''
@@ -208,13 +186,8 @@ export default {
           data.f1Type = '4'
           data.f2Type = '6'
           break
-        case 'custom':
-          break
-        default:
-          return
       }
       $table.closeFilter()
-      // 动态弹出框
       VXETable.modal.open({
         title: '自定义自动筛选方式',
         width: 600,
