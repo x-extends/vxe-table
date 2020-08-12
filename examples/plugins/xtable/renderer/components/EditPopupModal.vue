@@ -4,7 +4,6 @@
     <vxe-button class="edit-popup-button" icon="fa fa-list" type="text" @click="popupEvent"></vxe-button>
     <vxe-modal
       show-footer
-      resize
       class="vxe-table--ignore-clear edit-popup-box"
       width="800"
       height="400"

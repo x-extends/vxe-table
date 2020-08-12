@@ -48,8 +48,7 @@ VXETable.renderer.add('FilterContent', {
   filterMethod ({ option, row, column }) {
     const { vals } = option.data
     const cellValue = XEUtils.get(row, column.property)
-    /* eslint-disable eqeqeq */
-    return vals.some(val => val == cellValue)
+    return vals.some(val => val === cellValue)
   }
 })
 
@@ -66,25 +65,19 @@ VXETable.renderer.add('FilterComplex', {
   // 重置数据方法
   filterResetMethod ({ options }) {
     options.forEach(option => {
-      option.data = { type: 'has', isCase: true, name: '' }
+      option.data = { type: 'has', name: '' }
     })
   },
   // 筛选数据方法
   filterMethod ({ option, row, column }) {
-    let cellValue = XEUtils.get(row, column.property)
-    const { type, isCase } = option.data
-    let { name } = option.data
+    const cellValue = XEUtils.get(row, column.property)
+    const { type, name } = option.data
     if (cellValue) {
-      if (isCase) {
-        cellValue = cellValue.toLowerCase()
-        name = name.toLowerCase()
-      }
       switch (type) {
         case 'has':
           return cellValue.indexOf(name) > -1
         case 'eq':
-          /* eslint-disable eqeqeq */
-          return cellValue == name
+          return cellValue === name
         case 'gt':
           return cellValue > name
         case 'lt':
@@ -114,45 +107,24 @@ VXETable.renderer.add('FilterExcel', {
   // 筛选数据方法
   filterMethod ({ option, row, column }) {
     const cellValue = XEUtils.get(row, column.property)
-    const { vals, f1Type, f1Val, fMode, f2Type, f2Val } = option.data
+    const { vals, f1Type, f1Val } = option.data
     if (cellValue) {
-      if (f1Type || f2Type) {
-        // 通过筛选条件
-        const calculate = (type, val) => {
-          switch (type) {
-            case '1':
-              return cellValue == val
-            case '2':
-              return cellValue != val
-            case '3':
-              return cellValue > val
-            case '4':
-              return cellValue > val || cellValue == val
-            case '5':
-              return cellValue < val
-            case '6':
-              return cellValue < val || cellValue == val
-            case '7':
-              return cellValue.indexOf(val) === 0
-            case '8':
-              return cellValue.indexOf(val) !== 0
-            case '9':
-              return cellValue.lastIndexOf(val) === 0
-            case '10':
-              return cellValue.lastIndexOf(val) === -1
-            case '11':
-              return cellValue.indexOf(val) > -1
-            case '12':
-              return cellValue.indexOf(val) === -1
-          }
-          return true
+      if (f1Type) {
+        switch (f1Type) {
+          case '1':
+            return cellValue === f1Val
+          case '2':
+            return cellValue !== f1Val
+          case '3':
+            return cellValue > f1Val
+          case '4':
+            return cellValue > f1Val || cellValue === f1Val
+          case '5':
+            return cellValue < f1Val
+          case '6':
+            return cellValue < f1Val || cellValue === f1Val
         }
-        const f1Rest = calculate(f1Type, f1Val)
-        const f2Rest = calculate(f2Type, f2Val)
-        if (fMode === 'and') {
-          return f1Rest && f2Rest
-        }
-        return f1Rest || f2Rest
+        return true
       } else if (vals.length) {
         // 通过指定值筛选
         return vals.includes(cellValue)

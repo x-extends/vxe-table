@@ -1,14 +1,17 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 import { DomTools, GlobalEvent, ResizeEvent } from '../../tools'
 
 export default {
   name: 'VxeList',
+  mixins: [vSize],
   props: {
     data: Array,
     height: [Number, String],
     maxHeight: [Number, String],
     loading: Boolean,
+    size: { type: String, default: () => GlobalConfig.list.size || GlobalConfig.size },
     autoResize: Boolean,
     syncResize: [Boolean, String, Number],
     scrollY: Object

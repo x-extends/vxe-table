@@ -464,17 +464,17 @@ body,
   cursor: help;
 }
 .support-group {
-  width: 600px;
+  width: 300px;
   margin: 20px auto 15px auto;
   text-align: center;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 .support-group-item {
-  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
   padding: 15px 0 20px 0;
-  &:first-child {
-    border-left: 0;
+  &:last-child {
+    border-right: 0;
   }
 }
 .support-name {
