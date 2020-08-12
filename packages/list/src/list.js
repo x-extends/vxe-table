@@ -9,6 +9,7 @@ export default {
     height: [Number, String],
     maxHeight: [Number, String],
     loading: Boolean,
+    size: { type: String, default: () => GlobalConfig.list.size || GlobalConfig.size },
     autoResize: Boolean,
     syncResize: [Boolean, String, Number],
     scrollY: Object
@@ -22,6 +23,9 @@ export default {
     }
   },
   computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    },
     sYOpts () {
       return Object.assign({}, GlobalConfig.list.scrollY, this.scrollY)
     },
