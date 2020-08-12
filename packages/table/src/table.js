@@ -180,7 +180,7 @@ export default {
     // 打印配置项
     printConfig: Object,
     // 展开行配置项
-    expandConfig: Object,
+    expandConfig: [Boolean, Object],
     // 树形结构配置项
     treeConfig: [Boolean, Object],
     // 快捷菜单配置项
