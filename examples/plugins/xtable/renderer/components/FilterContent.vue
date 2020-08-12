@@ -8,7 +8,7 @@
         <template v-if="valList.length">
           <ul class="my-fc-search-list my-fc-search-list-head">
             <li class="my-fc-search-item">
-              <vxe-checkbox v-model="isAll" :indeterminate="isIndeterminate" @change="changeAllEvent">全选</vxe-checkbox>
+              <vxe-checkbox v-model="isAll" @change="changeAllEvent">全选</vxe-checkbox>
             </li>
           </ul>
           <ul class="my-fc-search-list my-fc-search-list-body">
@@ -39,9 +39,8 @@ export default {
   },
   data () {
     return {
-      size: 'mini', // 被所有子组件继承 size
+      size: 'mini',
       isAll: false,
-      isIndeterminate: false,
       option: null,
       colValList: [],
       valList: []
@@ -61,7 +60,6 @@ export default {
   },
   methods: {
     load () {
-      // filters 可以配置多个，实际只用一个就可以满足需求了
       const { $table, column } = this.params
       const { fullData } = $table.getTableData()
       const option = column.filters[0]
@@ -86,13 +84,11 @@ export default {
       this.valList.forEach(item => {
         item.checked = isAll
       })
-      this.isIndeterminate = false
     },
     updateCheckStatus () {
       const { valList } = this
       const isAll = valList.every(item => item.checked)
       this.isAll = isAll
-      this.isIndeterminate = !isAll && valList.some(item => item.checked)
     },
     changeItemEvent () {
       this.updateCheckStatus()
