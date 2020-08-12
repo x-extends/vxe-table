@@ -86,9 +86,9 @@
       </div>
     </div>
 
-    <vxe-modal v-model="supportVisible" :loading="supportLoading" title="技术支持" width="800" position="center">
+    <vxe-modal v-model="supportVisible" :loading="supportLoading" title="💡技术支持" width="800" position="center">
       <template v-slot>
-        <div class="support-declare">考虑到部分高级用户有需要技术支持的需求，用于快速解决使用过程中遇到的各种问题，同时还可以获取高级演示案例！</div>
+        <div class="support-declare">考虑到部分用户有需要技术支持的需求，用于快速解决使用过程中遇到的各种问题，您的支持可以帮助该项目持续维护下去！</div>
         <div>
           <ul class="vxe-row support-question">
             <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
@@ -100,22 +100,14 @@
           </ul>
         </div>
         <div class="vxe-row support-group">
-          <div class="vxe-col--12 support-group-item">
+          <div class="vxe-col--24 support-group-item">
             <div class="support-name">高级用户</div>
-            <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持以及项目模板的更新和维护，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
-            <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供相关问题的技术支持以及项目模板的更新和维护，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+            <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供使用过程中相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+            <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供使用过程中相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
             <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请成为高级用户</vxe-button>
             <ul class="support-describe">
               <li>1. 优质的技术支持群</li>
-              <li>2. 包含演示项目模板</li>
-            </ul>
-          </div>
-          <div class="vxe-col--12 support-group-item">
-            <div class="template-name">项目演示</div>
-            <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-1')">查看演示 PC-1</vxe-button>
-            <vxe-button class="template-btn" type="text" status="success" @click="openEvent('vxe-tmpl-2')" disabled>查看演示 PC-2</vxe-button>
-            <ul class="template-describe">
-              <li>极致流畅 vue 演示项目，基于 vxe-table 快速构建，不依赖其他 UI 库；对表格的扩展支持非常丰富，可以直接基于该模板开发，也可以将扩展组件移植到其他 vue 项目中，使开发效率翻倍提升。</li>
+              <li>2. 快速解决问题</li>
             </ul>
           </div>
         </div>
@@ -125,7 +117,7 @@
       <template v-slot>
         <div class="support-pay-step">
           <p style="font-size: 12px;">联系邮件： <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
-          <p class="title">1. QQ 扫码申请加入<br><img src="static/support/qq.png"></p>
+          <p class="title">1. 扫码申请加入 QQ 群<br><img src="static/support/qq.png"></p>
           <p class="title">2. 通过支付宝或微信付费：¥{{ supportDiscountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
           <p class="title">3. 付费完成后点击“联系收款方”，留言QQ号即可</p>
         </div>
@@ -141,8 +133,8 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
-      supportDiscountPrice: 266,
-      supportGroupPrice: 888,
+      supportDiscountPrice: 188,
+      supportGroupPrice: 500,
       supportLoading: false,
       supportVisible: false,
       supportQuestion: '',
