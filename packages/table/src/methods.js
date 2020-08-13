@@ -5,7 +5,7 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 const { getRowid, getRowkey, setCellValue, getCellLabel, hasChildrenList } = UtilTools
-const { browse, hasClass, addClass, removeClass, triggerEvent, getEventTargetNode } = DomTools
+const { browse, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
 
 const isWebkit = browse['-webkit'] && !browse.edge
 const debounceScrollYDuration = browse.msie ? 40 : 20
@@ -3551,30 +3551,17 @@ const Methods = {
    */
   scrollTo (scrollLeft, scrollTop) {
     const { $refs } = this
-    const bodyElem = $refs.tableBody.$el
-    let istriggerBody
+    const { tableBody, rightBody, tableFooter } = $refs
+    const tableBodyElem = tableBody ? tableBody.$el : null
+    const rightBodyElem = rightBody ? rightBody.$el : null
+    const bodyTargetElem = rightBodyElem || tableBodyElem
+    const tableFooterElem = tableFooter ? tableFooter.$el : null
+    const footerTargetElem = tableFooterElem || tableBodyElem
     if (XEUtils.isNumber(scrollLeft)) {
-      const footerElem = $refs.tableFooter ? $refs.tableFooter.$el : null
-      if (footerElem) {
-        footerElem.scrollLeft = scrollLeft
-        triggerEvent(footerElem, 'scroll')
-      } else {
-        istriggerBody = true
-        bodyElem.scrollLeft = scrollLeft
-      }
+      footerTargetElem.scrollLeft = scrollLeft
     }
     if (XEUtils.isNumber(scrollTop)) {
-      const rightBodyElem = $refs.rightBody ? $refs.rightBody.$el : null
-      if (rightBodyElem) {
-        rightBodyElem.scrollTop = scrollTop
-        triggerEvent(rightBodyElem, 'scroll')
-      } else {
-        istriggerBody = true
-        bodyElem.scrollTop = scrollTop
-      }
-    }
-    if (istriggerBody) {
-      triggerEvent(bodyElem, 'scroll')
+      bodyTargetElem.scrollTop = scrollTop
     }
     if (this.scrollXLoad || this.scrollYLoad) {
       return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
@@ -3632,14 +3619,15 @@ const Methods = {
    * 手动清除滚动相关信息，还原到初始状态
    */
   clearScroll () {
-    const $refs = this.$refs
-    const tableBody = $refs.tableBody
+    const { $refs } = this
+    const { tableBody, rightBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
-    const tableFooter = $refs.tableFooter
+    const rightBodyElem = rightBody ? rightBody.$el : null
+    const bodyTargetElem = rightBodyElem || tableBodyElem
     const tableFooterElem = tableFooter ? tableFooter.$el : null
     const footerTargetElem = tableFooterElem || tableBodyElem
-    if (tableBodyElem) {
-      tableBodyElem.scrollTop = 0
+    if (bodyTargetElem) {
+      bodyTargetElem.scrollTop = 0
     }
     if (footerTargetElem) {
       footerTargetElem.scrollLeft = 0
