@@ -24,7 +24,10 @@ VXETable.renderer.add('FilterInput', {
   filterMethod ({ option, row, column }) {
     const { data } = option
     const cellValue = XEUtils.get(row, column.property)
-    return XEUtils.toString(cellValue).indexOf(data) > -1
+    if (cellValue) {
+      return cellValue.indexOf(data) > -1
+    }
+    return false
   }
 })
 
@@ -71,18 +74,9 @@ VXETable.renderer.add('FilterComplex', {
   // 筛选数据方法
   filterMethod ({ option, row, column }) {
     const cellValue = XEUtils.get(row, column.property)
-    const { type, name } = option.data
+    const { name } = option.data
     if (cellValue) {
-      switch (type) {
-        case 'has':
-          return cellValue.indexOf(name) > -1
-        case 'eq':
-          return cellValue === name
-        case 'gt':
-          return cellValue > name
-        case 'lt':
-          return cellValue < name
-      }
+      return cellValue.indexOf(name) > -1
     }
     return false
   }
@@ -110,21 +104,7 @@ VXETable.renderer.add('FilterExcel', {
     const { vals, f1Type, f1Val } = option.data
     if (cellValue) {
       if (f1Type) {
-        switch (f1Type) {
-          case '1':
-            return cellValue === f1Val
-          case '2':
-            return cellValue !== f1Val
-          case '3':
-            return cellValue > f1Val
-          case '4':
-            return cellValue > f1Val || cellValue === f1Val
-          case '5':
-            return cellValue < f1Val
-          case '6':
-            return cellValue < f1Val || cellValue === f1Val
-        }
-        return true
+        return cellValue === f1Val
       } else if (vals.length) {
         // 通过指定值筛选
         return vals.includes(cellValue)

@@ -27,8 +27,7 @@
 export default {
   name: 'EditDownTable',
   props: {
-    params: Object,
-    renderOpts: Object
+    params: Object
   },
   data () {
     return {
@@ -111,9 +110,8 @@ export default {
       })
     },
     selectEvent (params) {
-      const { renderOpts, row, column } = this
-      const { props = {} } = renderOpts
-      row[column.property] = params.row[props.checkField]
+      const { row, column } = this
+      row[column.property] = params.row.name
       this.$refs.xDown.hidePanel()
     }
   }
