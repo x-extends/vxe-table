@@ -619,7 +619,7 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt) {
-      const { $parent: $table, fixedType, lastScrollTop, lastScrollLeft } = this
+      const { $el, $parent: $table, fixedType, lastScrollTop, lastScrollLeft } = this
       const { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, triggerScrollXEvent, triggerScrollYEvent } = $table
       const { tableHeader, tableBody, leftBody, rightBody, tableFooter, validTip } = $refs
       const headerElem = tableHeader ? tableHeader.$el : null
@@ -627,7 +627,7 @@ export default {
       const bodyElem = tableBody.$el
       const leftElem = leftBody ? leftBody.$el : null
       const rightElem = rightBody ? rightBody.$el : null
-      let scrollTop = bodyElem.scrollTop
+      let scrollTop = $el.scrollTop
       const scrollLeft = bodyElem.scrollLeft
       const isX = lastScrollLeft !== scrollLeft
       const isY = lastScrollTop !== scrollTop
