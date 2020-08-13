@@ -4,12 +4,10 @@ import VXETable from '../../../../packages/v-x-e-table'
 import EditDownTable from './components/EditDownTable.vue'
 import EditPopupModal from './components/EditPopupModal.vue'
 import EditDownModal from './components/EditDownModal.vue'
-import EditDownTextarea from './components/EditDownTextarea.vue'
 
 Vue.component(EditDownTable.name, EditDownTable)
 Vue.component(EditPopupModal.name, EditPopupModal)
 Vue.component(EditDownModal.name, EditDownModal)
-Vue.component(EditDownTextarea.name, EditDownTextarea)
 
 // 创建一个简单的输入框渲染
 VXETable.renderer.add('MyInput', {
@@ -34,7 +32,7 @@ VXETable.renderer.add('EditDownTable', {
   autofocus: '.vxe-input--inner',
   renderEdit (h, renderOpts, params) {
     return [
-      <edit-down-table params={ params } renderOpts={ renderOpts }></edit-down-table>
+      <edit-down-table params={ params }></edit-down-table>
     ]
   }
 })
@@ -45,16 +43,6 @@ VXETable.renderer.add('EditPopupModal', {
   renderEdit (h, renderOpts, params) {
     return [
       <edit-popup-modal params={ params }></edit-popup-modal>
-    ]
-  }
-})
-
-// 创建一个文本域渲染
-VXETable.renderer.add('EditDownTextarea', {
-  autofocus: '.vxe-input--inner',
-  renderEdit (h, renderOpts, params) {
-    return [
-      <edit-down-textarea params={ params }></edit-down-textarea>
     ]
   }
 })

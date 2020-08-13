@@ -1,7 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      通过 <table-api-link prop="tooltip-config"/>.<table-api-link prop="enabled"/> 开启全表工具提示，还可以配合 <table-api-link prop="contentMethod"/> 方法重写默认的提示内容，显示逻辑完全自定义控制，可以返回 null 使用默认的提示消息
+      通过 <table-api-link prop="tooltip-config"/>.<table-api-link prop="enabled"/> 开启全表工具提示，还可以配合 <table-api-link prop="contentMethod"/> 方法重写默认的提示内容，显示逻辑完全自定义控制，可以返回 null 使用默认的提示消息<br>
+      还可以通过 <table-column-api-link prop="title-help"/> 设置标题的帮助提示消息
     </p>
 
     <vxe-table
@@ -10,8 +11,8 @@
       :tooltip-config="{enabled: true, contentMethod: showTooltipMethod}"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="名称"></vxe-table-column>
-      <vxe-table-column field="role" title="角色"></vxe-table-column>
+      <vxe-table-column field="name" title="名称" :title-help="{message: '自定义帮助提示信息'}"></vxe-table-column>
+      <vxe-table-column field="role" title="角色" :title-help="{message: '自定义图标', icon: 'fa fa-bell'}"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate">
         <template v-slot:header>
@@ -52,8 +53,8 @@ export default {
           :tooltip-config="{enabled: true, contentMethod: showTooltipMethod}"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="名称"></vxe-table-column>
-          <vxe-table-column field="role" title="角色"></vxe-table-column>
+          <vxe-table-column field="name" title="名称" :title-help="{message: '自定义帮助提示信息'}"></vxe-table-column>
+          <vxe-table-column field="role" title="角色" :title-help="{message: '自定义图标', icon: 'fa fa-bell'}"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate">
             <template v-slot:header>

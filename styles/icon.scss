@@ -332,6 +332,25 @@
   }
 }
 
+.vxe-icon--check {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    left: 0.25em;
+    bottom: 0.2em;
+    width: 0.5em;
+    height: 0.9em;
+    border-width: 0.15em;
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: inherit;
+    border-bottom-color: inherit;
+    border-radius: 0.15em;
+    border-left-color: transparent;
+    transform: rotate(45deg);
+  }
+}
+
 .vxe-icon--close {
   @extend %DefaultWidthHeight;
   &:before {

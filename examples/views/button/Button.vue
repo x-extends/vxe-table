@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.button') }}</h2>
-    <p class="tip">按钮，还可以设置 icon 字体图标，例如第三方图标库：font-awesome、inconfont</p>
+    <p class="tip">按钮，下拉按钮</p>
 
     <p>
       <vxe-button>默认尺寸</vxe-button>
@@ -12,34 +12,34 @@
 
     <p>
       <vxe-button size="mini">
-        <template>超小下拉按钮</template>
+        <template v-slot>超小下拉按钮</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text" status="primary">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
       <vxe-button size="small">
-        <template>小型下拉按钮</template>
+        <template v-slot>小型下拉按钮</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text" status="success">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
       <vxe-button size="medium">
-        <template>中等下拉按钮</template>
+        <template v-slot>中等下拉按钮</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text" status="warning">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
       <vxe-button>
-        <template>默认下拉按钮</template>
+        <template v-slot>默认下拉按钮</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text" status="danger">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
@@ -101,7 +101,7 @@
 
     <p>
       <vxe-button transfer>
-        <template>默认颜色</template>
+        <template v-slot>默认颜色</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
           <vxe-button type="text">下拉按钮2</vxe-button>
@@ -109,42 +109,42 @@
         </template>
       </vxe-button>
       <vxe-button status="primary" transfer>
-        <template>主要颜色</template>
+        <template v-slot>主要颜色</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text" status="primary">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
       <vxe-button status="success" transfer>
-        <template>成功颜色</template>
+        <template v-slot>成功颜色</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text" status="success">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
       <vxe-button status="info" transfer>
-        <template>信息颜色</template>
+        <template v-slot>信息颜色</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text" status="my-purple">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
       <vxe-button status="warning" transfer>
-        <template>警告颜色</template>
+        <template v-slot>警告颜色</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text" status="warning">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
       <vxe-button status="danger" transfer>
-        <template>危险颜色</template>
+        <template v-slot>危险颜色</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text">下拉按钮2</vxe-button>
+          <vxe-button type="text" status="danger">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
@@ -250,7 +250,7 @@ export default {
 
         <p>
           <vxe-button size="mini">
-            <template>超小下拉按钮</template>
+            <template v-slot>超小下拉按钮</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -258,7 +258,7 @@ export default {
             </template>
           </vxe-button>
           <vxe-button size="small">
-            <template>小型下拉按钮</template>
+            <template v-slot>小型下拉按钮</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -266,7 +266,7 @@ export default {
             </template>
           </vxe-button>
           <vxe-button size="medium">
-            <template>中等下拉按钮</template>
+            <template v-slot>中等下拉按钮</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -274,7 +274,7 @@ export default {
             </template>
           </vxe-button>
           <vxe-button>
-            <template>默认下拉按钮</template>
+            <template v-slot>默认下拉按钮</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -339,7 +339,7 @@ export default {
 
         <p>
           <vxe-button transfer>
-            <template>默认颜色</template>
+            <template v-slot>默认颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -347,7 +347,7 @@ export default {
             </template>
           </vxe-button>
           <vxe-button status="primary" transfer>
-            <template>主要颜色</template>
+            <template v-slot>主要颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -355,7 +355,7 @@ export default {
             </template>
           </vxe-button>
           <vxe-button status="success" transfer>
-            <template>成功颜色</template>
+            <template v-slot>成功颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -363,7 +363,7 @@ export default {
             </template>
           </vxe-button>
           <vxe-button status="info" transfer>
-            <template>信息颜色</template>
+            <template v-slot>信息颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -371,7 +371,7 @@ export default {
             </template>
           </vxe-button>
           <vxe-button status="warning" transfer>
-            <template>警告颜色</template>
+            <template v-slot>警告颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -379,7 +379,7 @@ export default {
             </template>
           </vxe-button>
           <vxe-button status="danger" transfer>
-            <template>危险颜色</template>
+            <template v-slot>危险颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text">下拉按钮2</vxe-button>
@@ -504,6 +504,12 @@ export default {
 }
 .vxe-button.type--button.theme--my-purple:active {
   background-color: #a50aa5;
+}
+.vxe-button.type--text.theme--my-purple {
+  color: #800080;
+}
+.vxe-button.type--text.theme--my-purple:not(.is--disabled):hover {
+  color: #a50aa5;
 }
 .my-green {
   color: #008000;
