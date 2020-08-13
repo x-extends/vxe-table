@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用</p>
+    <p class="tip">
+      设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用<br>
+      <span class="red">（具体请自行实现，该示例仅供参考）</span>
+    </p>
 
     <vxe-table
       border

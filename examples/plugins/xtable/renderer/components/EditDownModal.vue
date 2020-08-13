@@ -31,8 +31,7 @@
 export default {
   name: 'EditDownModal',
   props: {
-    params: Object,
-    renderOpts: Object
+    params: Object
   },
   data () {
     return {

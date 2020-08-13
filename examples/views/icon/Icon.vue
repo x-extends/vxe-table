@@ -66,6 +66,9 @@ export default {
           icon: 'vxe-icon--more'
         },
         {
+          icon: 'vxe-icon--check'
+        },
+        {
           icon: 'vxe-icon--close'
         },
         {
