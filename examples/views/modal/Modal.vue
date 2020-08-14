@@ -81,7 +81,7 @@
 
     <p>
       <vxe-button @click="value5 = !value5">基本窗口</vxe-button>
-      <vxe-modal v-model="value5" :lock-scroll="false" width="600" show-footer>
+      <vxe-modal v-model="value5" width="600" show-footer>
         <template v-slot>
           <vxe-table
             show-overflow
@@ -367,7 +367,7 @@ export default {
 
         <p>
           <vxe-button @click="value5 = !value5">基本窗口</vxe-button>
-          <vxe-modal v-model="value5" :lock-scroll="false" width="600" show-footer>
+          <vxe-modal v-model="value5" width="600" show-footer>
             <template v-slot>
               <vxe-table
                 show-overflow

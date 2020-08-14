@@ -229,7 +229,9 @@ export const UtilTools = {
   },
   getFilters (filters) {
     if (filters && XEUtils.isArray(filters)) {
-      return filters.map(({ label, value, data, resetValue, checked }) => ({ label, value, data, resetValue, checked: !!checked }))
+      return filters.map(({ label, value, data, resetValue, checked }) => {
+        return { label, value, data, resetValue, checked: !!checked, _checked: !!checked }
+      })
     }
     return filters
   },
