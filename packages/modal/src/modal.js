@@ -80,7 +80,7 @@ export default {
   },
   created () {
     if (this.storage && !this.id) {
-      UtilTools.error('vxe.error.reqProp', ['id'])
+      UtilTools.error('vxe.error.reqProp', ['modal.id'])
     }
     activeModals.push(this)
   },

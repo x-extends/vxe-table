@@ -133,7 +133,7 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
-      supportDiscountPrice: 188,
+      supportDiscountPrice: 266,
       supportGroupPrice: 500,
       supportLoading: false,
       supportVisible: false,
