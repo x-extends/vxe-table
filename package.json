@@ -75,7 +75,7 @@
     "vuex": "^3.4.0",
     "vxe-table-plugin-antd": "^1.9.1",
     "vxe-table-plugin-element": "^1.9.1",
-    "vxe-table-plugin-export-pdf": "^1.6.0",
+    "vxe-table-plugin-export-pdf": "^1.8.5",
     "vxe-table-plugin-export-xlsx": "^1.6.0",
     "vxe-table-plugin-iview": "^1.9.1",
     "vxe-table-plugin-menus": "^1.4.0",
