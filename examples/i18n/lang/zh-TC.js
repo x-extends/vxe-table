@@ -653,7 +653,7 @@ module.exports = {
           dblclickZoom: '只对 type=modal 有效，是否允许通过双击头部放大或还原窗口',
           remember: '记忆功能，会记住最后操作状态，再次打开窗口时还原窗口状态',
           destroyOnClose: '在窗口关闭时销毁内容',
-          storage: '是否启用 localStorage 本地保存，会将窗口拖动的状态保存到本地（需要设置 id）'
+          storage: '是否启用 localStorage 本地保存，会将窗口拖动的状态保存到本地（需要有 id）'
         }
       },
       form: {

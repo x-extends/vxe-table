@@ -1947,7 +1947,7 @@ const apis = [
         list: [
           {
             name: 'storage',
-            desc: '是否启用 localStorage 本地保存，会将列操作状态保留在本地',
+            desc: '是否启用 localStorage 本地保存，会将列操作状态保留在本地（需要有 id）',
             version: '',
             type: 'any',
             enum: '',

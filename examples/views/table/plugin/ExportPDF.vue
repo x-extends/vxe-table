@@ -5,7 +5,7 @@
       <span class="red">（注：该示例仅供参考，默认是不支持中文字体的，可以通过设置 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-export-pdf#font" target="_blank">字体</a> 解决）</span>
     </p>
 
-    <vxe-toolbar custom export>
+    <vxe-toolbar custom :export="tableExport">
       <template v-slot:buttons>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
       </template>
@@ -18,13 +18,12 @@
       :loading="loading"
       :export-config="tableExport"
       :data="tableData">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate"></vxe-table-column>
+      <vxe-table-column field="orderNo" title="Order NO"></vxe-table-column>
+      <vxe-table-column field="productNo" title="Product NO"></vxe-table-column>
+      <vxe-table-column field="productName" title="Product name"></vxe-table-column>
+      <vxe-table-column field="realNum" title="Real quantity"></vxe-table-column>
+      <vxe-table-column field="plannedNum" title="Planned quantity"></vxe-table-column>
+      <vxe-table-column field="describe" title="Describe"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -65,13 +64,12 @@ export default {
           :loading="loading"
           :export-config="tableExport"
           :data="tableData">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate"></vxe-table-column>
+          <vxe-table-column field="orderNo" title="Order NO"></vxe-table-column>
+          <vxe-table-column field="productNo" title="Product NO"></vxe-table-column>
+          <vxe-table-column field="productName" title="Product name"></vxe-table-column>
+          <vxe-table-column field="realNum" title="Real quantity"></vxe-table-column>
+          <vxe-table-column field="plannedNum" title="Planned quantity"></vxe-table-column>
+          <vxe-table-column field="describe" title="Describe"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -96,22 +94,17 @@ export default {
               this.loading = true
               setTimeout(() => {
                 this.tableData = [
-                  { name: 'name1', role: 'role1', sex: '0', age: 22, rate: 5 },
-                  { name: 'name2', role: 'role2', sex: '1', age: 32, rate: 1 },
-                  { name: 'name3', role: 'role3', sex: '1', age: 26, rate: 1 },
-                  { name: 'name4', role: 'role4', sex: '0', age: 28, rate: 4 },
-                  { name: 'name5', role: 'role5', sex: '1', age: 24, rate: 3 },
-                  { name: 'name6', role: 'role6', sex: '0', age: 19, rate: 3 },
-                  { name: 'name7', role: 'role7', sex: '0', age: 18, rate: 3 },
-                  { name: 'name8', role: 'role8', sex: '0', age: 29, rate: 3 },
-                  { name: 'name9', role: 'role9', sex: '0', age: 21, rate: 3 }
+                  { orderNo: 'X02514645652', productNo: 'SX001', productName: 'XXX', realNum: 34, plannedNum: 20, describe: '' },
+                  { orderNo: 'X02456765765', productNo: 'Sk001', productName: 'Mouse', realNum: 64, plannedNum: 80, describe: 'Account paid' },
+                  { orderNo: 'X05672556765', productNo: 'SX002', productName: 'Keyboard', realNum: 127, plannedNum: 90, describe: '' }
                 ]
                 this.loading = false
               }, 100)
             },
             exportDataEvent () {
               this.$refs.xTable.exportData({
-                filename: '导出',
+                filename: 'Order details',
+                sheetName: 'Order details ( X02514645652 )',
                 type: 'pdf'
               })
             }
@@ -134,22 +127,17 @@ export default {
       this.loading = true
       setTimeout(() => {
         this.tableData = [
-          { name: 'name1', role: 'role1', sex: '0', age: 22, rate: 5 },
-          { name: 'name2', role: 'role2', sex: '1', age: 32, rate: 1 },
-          { name: 'name3', role: 'role3', sex: '1', age: 26, rate: 1 },
-          { name: 'name4', role: 'role4', sex: '0', age: 28, rate: 4 },
-          { name: 'name5', role: 'role5', sex: '1', age: 24, rate: 3 },
-          { name: 'name6', role: 'role6', sex: '0', age: 19, rate: 3 },
-          { name: 'name7', role: 'role7', sex: '0', age: 18, rate: 3 },
-          { name: 'name8', role: 'role8', sex: '0', age: 29, rate: 3 },
-          { name: 'name9', role: 'role9', sex: '0', age: 21, rate: 3 }
+          { orderNo: 'X02514645652', productNo: 'SX001', productName: 'XXX', realNum: 34, plannedNum: 20, describe: '' },
+          { orderNo: 'X02456765765', productNo: 'Sk001', productName: 'Mouse', realNum: 64, plannedNum: 80, describe: 'Account paid' },
+          { orderNo: 'X05672556765', productNo: 'SX002', productName: 'Keyboard', realNum: 127, plannedNum: 90, describe: '' }
         ]
         this.loading = false
       }, 100)
     },
     exportDataEvent () {
       this.$refs.xTable.exportData({
-        filename: '导出',
+        filename: 'Order details',
+        sheetName: 'Order details ( X02514645652 )',
         type: 'pdf'
       })
     }
