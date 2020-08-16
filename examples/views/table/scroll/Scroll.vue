@@ -3,7 +3,7 @@
     <p class="tip">
       虚拟滚动<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
       如果列较多建议使用 <grid-api-link name="vxe-grid"/>，使渲染性能达到最优，虚拟滚动只会渲染可视区域的数据，对于海量数据的性能提升非常大<br>
-      数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数<br>
+      启用虚拟滚动后：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数将自动生效，无法取消<br>
       <span class="red">（注：启用纵向虚拟滚的后不支持动态行高、合并行或列，如果需要支持，将虚拟滚动关闭即可）</span>
     </p>
 
@@ -31,7 +31,7 @@
     <p class="tip">
       手动调优，默认自动优化（<span class="red">注：如果启用横向虚拟滚动，当列不确定列数量时应该设置 <table-api-link prop="scroll-x"/>.<table-api-link prop="rSize"/> 来避免出现左右空白区域</span>）<br>
       通过指定 <table-api-link prop="scroll-x"/>={gt: 20} 或 <table-api-link prop="scroll-y"/>={gt: 40} 适合的参数可以手动调优，如果为 0 则总是启用，如果为 -1 关闭虚拟滚动<br>
-      数据超大情况下必须使用：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数
+      启用虚拟滚动后：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数将自动生效，无法取消
     </p>
 
     <vxe-table
