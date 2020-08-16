@@ -30,8 +30,8 @@ const apis = [
         descKey: 'app.api.pager.desc.layouts',
         version: '',
         type: 'Array',
-        enum: 'PrevJump,PrevPage,Number,JumpNumber,NextPage,NextJump,Sizes,Jump,FullJump,PageCount,Total',
-        defVal: '默认 [PrevPage,NextPage,FullJump,Sizes,Total]，继承 setup.pager.layouts',
+        enum: 'PrevJump, PrevPage, Number, JumpNumber, NextPage, NextJump, Sizes, Jump, FullJump, PageCount, Total',
+        defVal: '默认 [PrevJump, PrevPage, Jump, PageCount, NextPage, NextJump, Sizes, Total]，继承 setup.pager.layouts',
         list: []
       },
       {
@@ -74,7 +74,7 @@ const apis = [
         name: 'page-sizes',
         descKey: 'app.api.pager.desc.pageSizes',
         version: '',
-        type: 'Array',
+        type: 'number[] | Array<{label: string, value: number}>',
         enum: '',
         defVal: '默认 [10,15,20,50,100]，继承 setup.pager.pageSizes',
         list: []

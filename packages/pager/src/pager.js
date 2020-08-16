@@ -62,6 +62,17 @@ export default {
     },
     offsetNumber () {
       return Math.floor((this.pagerCount - 2) / 2)
+    },
+    sizeList () {
+      return this.pageSizes.map(item => {
+        if (XEUtils.isNumber(item)) {
+          return {
+            value: item,
+            label: `${XEUtils.template(GlobalConfig.i18n('vxe.pager.pagesize'), [item])}`
+          }
+        }
+        return { value: '', label: '', ...item }
+      })
     }
   },
   render (h) {
@@ -204,12 +215,7 @@ export default {
         props: {
           value: this.pageSize,
           placement: 'top',
-          options: this.pageSizes.map(num => {
-            return {
-              value: num,
-              label: `${XEUtils.template(GlobalConfig.i18n('vxe.pager.pagesize'), [num])}`
-            }
-          })
+          options: this.sizeList
         },
         on: {
           change: ({ value }) => {

@@ -66,6 +66,7 @@
         :current-page.sync="page6.currentPage"
         :page-size.sync="page6.pageSize"
         :total="page6.totalResult"
+        :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
         :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
         <template v-slot:left>
           <vxe-button size="small">
@@ -203,6 +204,7 @@ export default {
             :current-page.sync="page6.currentPage"
             :page-size.sync="page6.pageSize"
             :total="page6.totalResult"
+            :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
             <template v-slot:left>
               <vxe-button size="small">

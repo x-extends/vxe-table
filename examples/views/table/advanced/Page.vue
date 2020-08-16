@@ -70,7 +70,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">设置分页 background 样式</p>
+    <p class="tip">设置分页 background 样式，自定义每页大小</p>
 
     <vxe-table
       border
@@ -95,6 +95,7 @@
       :current-page="tablePage3.currentPage"
       :page-size="tablePage3.pageSize"
       :total="tablePage3.totalResult"
+      :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
       :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
       @page-change="handlePageChange3">
     </vxe-pager>
@@ -339,6 +340,7 @@ export default {
           :current-page="tablePage3.currentPage"
           :page-size="tablePage3.pageSize"
           :total="tablePage3.totalResult"
+          :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
           :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
           @page-change="handlePageChange3">
         </vxe-pager>
