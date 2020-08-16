@@ -104,7 +104,7 @@ VXETable.renderer.add('FilterExcel', {
     const { vals, f1Type, f1Val } = option.data
     if (cellValue) {
       if (f1Type) {
-        return cellValue === f1Val
+        return cellValue.indexOf(f1Val) > -1
       } else if (vals.length) {
         // 通过指定值筛选
         return vals.includes(cellValue)
