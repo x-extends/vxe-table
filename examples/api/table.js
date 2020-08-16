@@ -1713,7 +1713,7 @@ const apis = [
         list: [
           {
             name: 'selected',
-            desc: '开启左键选中功能',
+            desc: '开启左键选中功能（只对 edit-config.mode=cell 有效）',
             version: '',
             type: 'Boolean',
             enum: '',
