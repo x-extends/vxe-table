@@ -45,7 +45,7 @@ export default {
         }, [
           h('li', {
             class: ['vxe-table--filter-option', {
-              'is--checked': multiple ? filterStore.isAllSelected : !filterStore.options.some(item => item.checked),
+              'is--checked': multiple ? filterStore.isAllSelected : !filterStore.options.some(item => item._checked),
               'is--indeterminate': multiple && filterStore.isIndeterminate
             }],
             attrs: {
@@ -77,14 +77,14 @@ export default {
         }, filterStore.options.map(item => {
           return h('li', {
             class: ['vxe-table--filter-option', {
-              'is--checked': item.checked
+              'is--checked': item._checked
             }],
             attrs: {
               title: item.label
             },
             on: {
               click: evnt => {
-                this.changeOption(evnt, !item.checked, item)
+                this.changeOption(evnt, !item._checked, item)
               }
             }
           }, (multiple ? [
@@ -137,15 +137,11 @@ export default {
     filterCheckAllEvent (evnt, value) {
       const filterStore = this.filterStore
       filterStore.options.forEach(option => {
+        option._checked = value
         option.checked = value
       })
       filterStore.isAllSelected = value
       filterStore.isIndeterminate = false
-    },
-    checkOptions () {
-      const { filterStore } = this
-      filterStore.isAllSelected = filterStore.options.every(option => option.checked)
-      filterStore.isIndeterminate = !filterStore.isAllSelected && filterStore.options.some(option => option.checked)
     },
 
     /*************************
@@ -153,17 +149,19 @@ export default {
      *************************/
     // （单选）筛选发生改变
     changeRadioOption (evnt, checked, item) {
-      this.filterStore.options.forEach(option => {
-        option.checked = false
+      const { $parent: $xetable, filterStore } = this
+      filterStore.options.forEach(option => {
+        option._checked = false
       })
-      item.checked = checked
-      this.checkOptions()
-      this.$parent.confirmFilterEvent()
+      item._checked = checked
+      $xetable.checkFilterOptions()
+      this.confirmFilter(evnt)
     },
     // （多选）筛选发生改变
     changeMultipleOption (evnt, checked, item) {
-      item.checked = checked
-      this.checkOptions()
+      const { $parent: $xetable } = this
+      item._checked = checked
+      $xetable.checkFilterOptions()
     },
     changeAllOption (evnt, checked) {
       if (this.filterStore.multiple) {
@@ -181,12 +179,17 @@ export default {
       }
     },
     // 确认筛选
-    confirmFilter () {
-      this.$parent.confirmFilterEvent()
+    confirmFilter (evnt) {
+      const { $parent: $xetable, filterStore } = this
+      filterStore.options.forEach(option => {
+        option.checked = option._checked
+      })
+      $xetable.confirmFilterEvent(evnt)
     },
     // 重置筛选
     resetFilter () {
-      this.$parent.resetFilterEvent()
+      const { $parent: $xetable } = this
+      $xetable.resetFilterEvent()
     }
     /*************************
      * Publish methods
