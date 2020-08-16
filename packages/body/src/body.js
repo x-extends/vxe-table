@@ -440,7 +440,6 @@ export default {
     elemStore[`${prefix}list`] = $refs.tbody
     elemStore[`${prefix}xSpace`] = $refs.xSpace
     elemStore[`${prefix}ySpace`] = $refs.ySpace
-    elemStore[`${prefix}checkRange`] = $refs.checkRange
     elemStore[`${prefix}emptyBlock`] = $refs.emptyBlock
     this.$el.onscroll = this.scrollEvent
     this.$el._onscroll = this.scrollEvent
@@ -542,8 +541,10 @@ export default {
         keyboardConfig.isCut ? renderBorder(h, 'copy') : null
       ]) : null,
       h('div', {
-        ref: 'checkRange',
         class: 'vxe-table--checkbox-range'
+      }),
+      h('div', {
+        class: 'vxe-table--cell-range'
       }),
       !fixedType ? h('div', {
         class: 'vxe-table--empty-block',

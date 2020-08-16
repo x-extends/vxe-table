@@ -3,21 +3,21 @@ import { UtilTools, DomTools } from '../../tools'
 
 const browse = DomTools.browse
 
-function getTargetOffset (targer, container) {
+function getTargetOffset (target, container) {
   let offsetTop = 0
   let offsetLeft = 0
-  const triggerCheckboxLabel = !browse.firefox && DomTools.hasClass(targer, 'vxe-checkbox--label')
+  const triggerCheckboxLabel = !browse.firefox && DomTools.hasClass(target, 'vxe-checkbox--label')
   if (triggerCheckboxLabel) {
-    const checkboxLabelStyle = getComputedStyle(targer)
+    const checkboxLabelStyle = getComputedStyle(target)
     offsetTop -= XEUtils.toNumber(checkboxLabelStyle.paddingTop)
     offsetLeft -= XEUtils.toNumber(checkboxLabelStyle.paddingLeft)
   }
-  while (targer && targer !== container) {
-    offsetTop += targer.offsetTop
-    offsetLeft += targer.offsetLeft
-    targer = targer.offsetParent
+  while (target && target !== container) {
+    offsetTop += target.offsetTop
+    offsetLeft += target.offsetLeft
+    target = target.offsetParent
     if (triggerCheckboxLabel) {
-      const checkboxStyle = getComputedStyle(targer)
+      const checkboxStyle = getComputedStyle(target)
       offsetTop -= XEUtils.toNumber(checkboxStyle.paddingTop)
       offsetLeft -= XEUtils.toNumber(checkboxStyle.paddingLeft)
     }
@@ -25,7 +25,7 @@ function getTargetOffset (targer, container) {
   return { offsetTop, offsetLeft }
 }
 
-function getCheckboxRangeResult (_vm, params, targetTrElem, moveRange) {
+function getCheckboxRangeRows (_vm, params, targetTrElem, moveRange) {
   let countHeight = 0
   let rangeRows = []
   const isDown = moveRange > 0
@@ -272,6 +272,12 @@ export default {
      * 单元格按下事件
      */
     triggerCellMousedownEvent (evnt, params) {
+      this.handleCellMousedownEvent(evnt, params)
+      this.focus()
+      this.closeFilter()
+      this.closeMenu()
+    },
+    handleCellMousedownEvent (evnt, params) {
       const {
         $el,
         visibleColumn,
@@ -373,47 +379,8 @@ export default {
           }
         }
       }
-      this.focus()
-      this.closeFilter()
-      this.closeMenu()
     },
-    /**
-     * 边角事件
-     */
-    // triggerCornerMousedownEvent (params, evnt) {
-    //   evnt.preventDefault()
-    //   evnt.stopPropagation()
-    //   const { $el, tableData, visibleColumn, editStore, editConfig, editOpts, handleTempChecked } = this
-    //   const { checked } = editStore
-    //   const { button } = evnt
-    //   const isLeftBtn = button === 0
-    //   const isRightBtn = button === 2
-    //   if (isLeftBtn || isRightBtn) {
-    //     if (editConfig && checked.rows.length && editOpts.trigger === 'dblclick') {
-    //       const domMousemove = document.onmousemove
-    //       const domMouseup = document.onmouseup
-    //       const start = {
-    //         rowIndex: tableData.indexOf(checked.rows[0]),
-    //         columnIndex: visibleColumn.indexOf(checked.columns[0])
-    //       }
-    //       const updateEvent = XEUtils.throttle(function (evnt) {
-    //         evnt.preventDefault()
-    //         const { flag, targetElem } = DomTools.getEventTargetNode(evnt, $el, 'vxe-body--column')
-    //         if (flag) {
-    //           handleTempChecked(start, DomTools.getCellIndexs(targetElem), evnt)
-    //         }
-    //       }, browse.msie ? 80 : 40, { leading: true, trailing: true })
-    //       document.onmousemove = updateEvent
-    //       document.onmouseup = function (evnt) {
-    //         document.onmousemove = domMousemove
-    //         document.onmouseup = domMouseup
-    //         checked.rows = checked.tRows
-    //         checked.columns = checked.tColumns
-    //       }
-    //     }
-    //   }
-    // },
-    getCheckboxRangeResult (targetTrElem, moveRange) {
+    getCheckboxRangeRows (targetTrElem, moveRange) {
       let countHeight = 0
       const rangeRows = []
       const siblingProp = moveRange > 0 ? 'next' : 'previous'
@@ -429,11 +396,11 @@ export default {
       const { column, cell } = params
       // 在 v3.0 中废弃 type=selection
       if (['checkbox', 'selection'].indexOf(column.type) > -1) {
-        const { elemStore } = this
+        const { $el, elemStore } = this
         const disX = evnt.clientX
         const disY = evnt.clientY
         const bodyWrapperElem = elemStore[`${column.fixed || 'main'}-body-wrapper`] || elemStore['main-body-wrapper']
-        const checkboxRangeElem = elemStore[`${column.fixed || 'main'}-body-checkRange`] || elemStore['main-body-checkRange']
+        const checkboxRangeElem = bodyWrapperElem.querySelector('.vxe-table--checkbox-range')
         const domMousemove = document.onmousemove
         const domMouseup = document.onmouseup
         const trElem = cell.parentNode
@@ -442,7 +409,7 @@ export default {
         const marginSize = 1
         const offsetRest = getTargetOffset(evnt.target, bodyWrapperElem)
         const startTop = offsetRest.offsetTop + evnt.offsetY
-        const startLet = offsetRest.offsetLeft + evnt.offsetX
+        const startLeft = offsetRest.offsetLeft + evnt.offsetX
         const startScrollTop = bodyWrapperElem.scrollTop
         const rowHeight = trElem.offsetHeight
         let mouseScrollTimeout = null
@@ -451,7 +418,6 @@ export default {
         const triggerEvent = (type, evnt) => {
           this.emitEvent(`checkbox-range-${type}`, { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords() }, evnt)
         }
-        // 处理复选框选中
         const handleChecked = (evnt) => {
           const { clientX, clientY } = evnt
           const offsetLeft = clientX - disX
@@ -459,7 +425,7 @@ export default {
           let rangeHeight = Math.abs(offsetTop)
           let rangeWidth = Math.abs(offsetLeft)
           let rangeTop = startTop
-          let rangeLeft = startLet
+          let rangeLeft = startLeft
           if (offsetTop < marginSize) {
             // 向上
             rangeTop += offsetTop
@@ -474,20 +440,20 @@ export default {
           if (offsetLeft < marginSize) {
             // 向左
             rangeLeft += offsetLeft
-            if (rangeWidth > startLet) {
+            if (rangeWidth > startLeft) {
               rangeLeft = marginSize
-              rangeWidth = startLet
+              rangeWidth = startLeft
             }
           } else {
             // 向右
-            rangeWidth = Math.min(rangeWidth, bodyWrapperElem.clientWidth - startLet - marginSize)
+            rangeWidth = Math.min(rangeWidth, bodyWrapperElem.clientWidth - startLeft - marginSize)
           }
           checkboxRangeElem.style.height = `${rangeHeight}px`
           checkboxRangeElem.style.width = `${rangeWidth}px`
           checkboxRangeElem.style.left = `${rangeLeft}px`
           checkboxRangeElem.style.top = `${rangeTop}px`
           checkboxRangeElem.style.display = 'block'
-          const rangeRows = getCheckboxRangeResult(this, params, trElem, offsetTop < marginSize ? -rangeHeight : rangeHeight)
+          const rangeRows = getCheckboxRangeRows(this, params, trElem, offsetTop < marginSize ? -rangeHeight : rangeHeight)
           // 至少滑动 10px 才能有效匹配
           if (rangeHeight > 10 && rangeRows.length !== lastRangeRows.length) {
             lastRangeRows = rangeRows
@@ -534,6 +500,7 @@ export default {
             }
           }, 50)
         }
+        DomTools.addClass($el, 'drag--range')
         document.onmousemove = evnt => {
           evnt.preventDefault()
           evnt.stopPropagation()
@@ -559,6 +526,7 @@ export default {
         }
         document.onmouseup = (evnt) => {
           stopMouseScroll()
+          DomTools.removeClass($el, 'drag--range')
           checkboxRangeElem.removeAttribute('style')
           document.onmousemove = domMousemove
           document.onmouseup = domMouseup
@@ -737,37 +705,6 @@ export default {
       }
       return this.$nextTick()
     },
-    /**
-     * 处理所有选中的临时选中
-     */
-    // handleTempChecked (start, end, evnt) {
-    //   const { tableData, visibleColumn, editStore } = this
-    //   const { checked } = editStore
-    //   const { rows, tRows, columns, tColumns } = checked
-    //   const { rowIndex: sRowIndex, columnIndex: sColumnIndex } = start
-    //   const { rowIndex: eRowIndex, columnIndex: eColumnIndex } = end
-    //   if (tRows.length > rows.length) {
-    //     eColumnIndex = visibleColumn.indexOf(columns[columns.length - 1])
-    //   } else if (tColumns.length > columns.length) {
-    //     eRowIndex = tableData.indexOf(rows[rows.length - 1])
-    //   }
-    //   if (sRowIndex < eRowIndex) {
-    //     // 向下
-    //     checked.tRows = tableData.slice(sRowIndex, eRowIndex + 1)
-    //   } else {
-    //     // 向上
-    //     sRowIndex += rows.length
-    //     checked.tRows = tableData.slice(eRowIndex, sRowIndex)
-    //   }
-    //   if (sColumnIndex < eColumnIndex) {
-    //     // 向右
-    //     checked.tColumns = visibleColumn.slice(Math.max(sColumnIndex, 1), eColumnIndex + 1)
-    //   } else {
-    //     // 向左
-    //     sColumnIndex += columns.length
-    //     checked.tColumns = visibleColumn.slice(Math.max(eColumnIndex, 1), sColumnIndex)
-    //   }
-    // },
     /**
      * 清空已复制的内容
      */

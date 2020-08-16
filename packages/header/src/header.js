@@ -267,12 +267,16 @@ export default {
           // 右侧固定列（不允许超过左侧固定列、不允许超过左边距）
           dragMinLeft = (leftContainer ? leftContainer.clientWidth : 0) + fixedOffsetWidth + minInterval
           left = Math.min(left, dragPosLeft + cell.clientWidth - minInterval)
+        } else {
+          dragMinLeft = Math.max(tableBodyElem.scrollLeft, dragMinLeft)
+          left = Math.min(left, tableBodyElem.clientWidth + tableBodyElem.scrollLeft - 40)
         }
         dragLeft = Math.max(left, dragMinLeft)
         resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
       }
+
       $xetable._isResize = true
-      DomTools.addClass($xetable.$el, 'c--resize')
+      DomTools.addClass($xetable.$el, 'drag--resize')
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
       document.onmouseup = function () {
@@ -284,7 +288,7 @@ export default {
         $xetable._lastResizeTime = Date.now()
         $xetable.analyColumnWidth()
         $xetable.recalculate(true)
-        DomTools.removeClass($xetable.$el, 'c--resize')
+        DomTools.removeClass($xetable.$el, 'drag--resize')
         $xetable.saveCustomResizable()
         $xetable.emitEvent('resizable-change', params, evnt)
       }

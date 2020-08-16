@@ -432,7 +432,7 @@ module.exports = {
           expandConfig: 'Expand the row configuration',
           treeConfig: 'Tree configuration',
           contextMenu: 'context menu configuration',
-          mouseConfig: 'Mouse configuration (Only valid for edit-config.mode=cell)',
+          mouseConfig: 'Mouse configuration',
           keyboardConfig: 'Keyboard configuration',
           editConfig: 'Editable configuration',
           validConfig: 'Validate configuration',
