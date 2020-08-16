@@ -18,27 +18,27 @@
     text-align: center;
     display: inline-block;
     position: relative;
-    .vxe-sort--asc-btn,
-    .vxe-sort--desc-btn {
-      position: absolute;
-      left: 0.35em;
-      color: $vxe-table-column-icon-border-color;
-      width: 1em;
-      text-align: center;
-      cursor: pointer;
-      &:hover {
-        color: $vxe-table-font-color;
-      }
-      &.sort--active {
-        color: $vxe-primary-color;
-      }
+  }
+  .vxe-sort--asc-btn,
+  .vxe-sort--desc-btn {
+    position: absolute;
+    left: 0.35em;
+    color: $vxe-table-column-icon-border-color;
+    width: 1em;
+    text-align: center;
+    cursor: pointer;
+    &:hover {
+      color: $vxe-table-font-color;
     }
-    .vxe-sort--asc-btn {
-      top: -0.04em;
+    &.sort--active {
+      color: $vxe-primary-color;
     }
-    .vxe-sort--desc-btn {
-      bottom: -0.04em;
-    }
+  }
+  .vxe-sort--asc-btn {
+    top: -0.04em;
+  }
+  .vxe-sort--desc-btn {
+    bottom: -0.04em;
   }
 }
 

@@ -98,13 +98,22 @@
   }
 }
 
-/*复选框-范围选择*/
-.vxe-table--checkbox-range {
+.vxe-table--checkbox-range,
+.vxe-table--cell-range {
   display: none;
   position: absolute;
+  pointer-events: none;
+}
+
+/*复选框-范围选择*/
+.vxe-table--checkbox-range {
   background-color: $vxe-table-checkbox-range-background-color;
   border: 1px solid $vxe-table-checkbox-range-border-color;
-  pointer-events: none;
+}
+
+.vxe-table--cell-range {
+  background-color: $vxe-table-cell-range-background-color;
+  border: 1px solid $vxe-table-cell-range-border-color;
 }
 
 /*圆角*/
@@ -318,9 +327,22 @@
       }
     }
   }
-  &.c--resize {
-    * {
-      cursor: col-resize;
+  &.drag--resize {
+    .vxe-table--main-wrapper,
+    .vxe-table--fixed-left-wrapper,
+    .vxe-table--fixed-right-wrapper {
+      * {
+        cursor: col-resize;
+      }
+    }
+  }
+  &.drag--range {
+    .vxe-table--main-wrapper,
+    .vxe-table--fixed-left-wrapper,
+    .vxe-table--fixed-right-wrapper {
+      * {
+        cursor: default;
+      }
     }
   }
   &.column--highlight {
