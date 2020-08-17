@@ -154,10 +154,12 @@
 }
 
 .vxe-table--checkbox-range,
-.vxe-table--cell-range > span {
+.vxe-table--cell-range-area,
+.vxe-table--cell-range-extend-area {
   display: none;
   position: absolute;
   pointer-events: none;
+  z-index: 9;
 }
 
 /*复选框-范围选择*/
@@ -170,14 +172,32 @@
   height: 0;
   font-size: 0;
   display: none;
-  &.is--multi {
-    & > span {
-      border: 0;
-    }
-  }
-  & > span {
+  & > .vxe-table--cell-range-area {
     background-color: $vxe-table-cell-range-background-color;
     border: 1px solid $vxe-table-cell-range-border-color;
+  }
+  .vxe-table--cell-range-extend-btn {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 7px;
+    height: 7px;
+    border-style: solid;
+    border-color: #fff;
+    border-width: 1px 0 0 1px;
+    background-color: $vxe-table-cell-range-border-color;
+    pointer-events: auto;
+    cursor: crosshair;
+  }
+  .vxe-table--cell-range-extend-area {
+    border: 1px solid $vxe-table-cell-range-extend-border-color;
+  }
+}
+
+.vxe-table--cell-range-multi {
+  & > .vxe-table--cell-range-area {
+    background-color: $vxe-table-cell-range-background-color;
   }
 }
 

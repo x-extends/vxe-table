@@ -540,9 +540,28 @@ export default {
       h('div', {
         class: 'vxe-table--checkbox-range'
       }),
-      h('div', {
-        class: 'vxe-table--cell-range'
-      }),
+      mouseConfig && mouseOpts.range ? h('div', {
+        staticClass: 'vxe-table--cell-range'
+      }, [
+        h('div', {
+          staticClass: 'vxe-table--cell-range-area'
+        }, [
+          h('span', {
+            staticClass: 'vxe-table--cell-range-extend-btn',
+            on: {
+              mousedown (evnt) {
+                $xetable.triggerCellExtendMousedownEvent(evnt)
+              }
+            }
+          })
+        ]),
+        h('span', {
+          staticClass: 'vxe-table--cell-range-extend-area'
+        }),
+        h('div', {
+          staticClass: 'vxe-table--cell-range-multi'
+        })
+      ]) : null,
       !fixedType ? h('div', {
         class: 'vxe-table--empty-block',
         ref: 'emptyBlock'
