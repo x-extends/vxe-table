@@ -531,12 +531,6 @@ export default {
       }
       return 'default'
     },
-    customHeight () {
-      return DomTools.calcHeight(this, 'height')
-    },
-    customMaxHeight () {
-      return DomTools.calcHeight(this, 'maxHeight')
-    },
     /**
      * 判断列全选的复选框是否禁用
      */

@@ -114,7 +114,6 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     treeOpts,
     tooltipOpts,
     mouseConfig,
-    mouseOpts,
     editConfig,
     editOpts,
     editRules,
@@ -127,9 +126,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { enabled } = tooltipOpts
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable._getColumnIndex(column)
-  const isMouseSelected = mouseConfig && mouseOpts.selected
   // 在 v3.0 中废弃 mouse-config.checked
-  const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
   const fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -182,15 +179,15 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 按下事件处理
-  if (checkboxOpts.range || isMouseChecked || isMouseSelected) {
+  if (checkboxOpts.range || mouseConfig) {
     tdOns.mousedown = evnt => {
       $xetable.triggerCellMousedownEvent(evnt, params)
     }
   }
   // 点击事件处理
   if (highlightCurrentRow ||
+    mouseConfig ||
     tableListeners['cell-click'] ||
-    isMouseChecked ||
     (editRender && editConfig) ||
     (expandOpts.trigger === 'row' || (expandOpts.trigger === 'cell')) ||
     (radioOpts.trigger === 'row' || (column.type === 'radio' && radioOpts.trigger === 'cell')) ||

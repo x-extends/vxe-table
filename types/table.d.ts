@@ -266,6 +266,7 @@ export declare class Table extends VXETableModule {
    * @param tr 行节点元素
    */
   getRowNode(trElem: HTMLElement): {
+    rowid: string;
     item: any;
     items: any[];
     index: number;
@@ -276,6 +277,7 @@ export declare class Table extends VXETableModule {
    * @param cell 单元格节点元素
    */
   getColumnNode(cellElem: HTMLElement): {
+    colid: string;
     item: ColumnConfig;
     items: ColumnConfig[];
     index: number;
