@@ -770,8 +770,8 @@ export default {
       if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
         UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
       }
-      if (this.isGroup && this.mouseConfig && (this.mouseOpts.range || this.mouseOpts.checked)) {
-        UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.range'])
+      if (this.isGroup && this.mouseConfig && this.mouseOpts.checked) {
+        UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.checked'])
       }
       this.$nextTick(() => {
         if (this.$toolbar) {
@@ -889,8 +889,8 @@ export default {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
     if (this.mouseConfig && this.editConfig) {
-      if ((mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
-        UtilTools.warn('vxe.error.errProp', ['mouse-config.range', 'edit-config.trigger=dblclick'])
+      if (mouseOpts.checked && editOpts.trigger !== 'dblclick') {
+        UtilTools.warn('vxe.error.errProp', ['mouse-config.checked', 'edit-config.trigger=dblclick'])
       }
     }
     if (treeConfig && this.stripe) {
@@ -1061,7 +1061,7 @@ export default {
     } = this
     const { leftList, rightList } = columnStore
     // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.checked
     let emptyContent
     if ($scopedSlots.empty) {
       emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)
@@ -1508,8 +1508,11 @@ export default {
       } else {
         tableFullColumn.forEach(handleFunc)
       }
-      if (hasFixed && expandColumn) {
+      if (expandColumn && hasFixed) {
         UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
+      }
+      if (expandColumn && this.mouseOpts.range) {
+        UtilTools.error('vxe.error.errConflicts', ['mouse-config.range', 'column.type=expand'])
       }
       this.treeNodeColumn = treeNodeColumn
       this.expandColumn = expandColumn
@@ -2628,7 +2631,7 @@ export default {
       const { actived } = editStore
       const { filterWrapper, validTip } = $refs
       // 在 v3.0 中废弃 mouse-config.checked
-      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && mouseOpts.checked
       if (filterWrapper) {
         if (DomTools.getEventTargetNode(evnt, this.$el, 'vxe-cell--filter').flag) {
           // 如果点击了筛选按钮
@@ -3906,7 +3909,7 @@ export default {
       const isLeftBtn = button === 0
       const isRightBtn = button === 2
       // 在 v3.0 中废弃 mouse-config.checked
-      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && mouseOpts.checked
       params.cell = cell
       if (isLeftBtn || isRightBtn) {
         if (isMouseChecked) {
@@ -4291,7 +4294,7 @@ export default {
       const { row, column } = params
       const isMouseSelected = mouseConfig && mouseOpts.selected
       // 在 v3.0 中废弃 mouse-config.checked
-      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && mouseOpts.checked
       const selectMethod = () => {
         if ((isMouseSelected || isMouseChecked) && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {

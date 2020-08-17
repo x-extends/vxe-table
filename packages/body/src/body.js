@@ -120,7 +120,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   const _columnIndex = $table._getColumnIndex(column)
   const isMouseSelected = mouseConfig && mouseOpts.selected
   // 在 v3.0 中废弃 mouse-config.checked
-  const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+  const isMouseChecked = mouseConfig && mouseOpts.checked
   const isKeyboardCut = keyboardConfig && keyboardConfig.isCut
   const fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow

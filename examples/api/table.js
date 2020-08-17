@@ -1722,21 +1722,13 @@ const apis = [
           // },
           // {
           //   name: 'checked',
-          //   desc: '即将废弃，请使用 range',
+          //   desc: '即将废弃',
           //   version: '',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',
           //   list: []
-          // },
-          // {
-          //   name: 'range',
-          //   desc: '开启鼠标移动单元格批量选中功能',
-          //   version: '1.15.18',
-          //   type: 'Boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
+          // }
           }
         ]
       },
