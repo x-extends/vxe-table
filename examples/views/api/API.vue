@@ -12,6 +12,7 @@
     <vxe-table
       resizable
       auto-resize
+      show-header-overflow
       highlight-current-row
       highlight-hover-row
       highlight-current-column

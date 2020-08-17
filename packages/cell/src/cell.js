@@ -13,8 +13,8 @@ function renderTitleContent (h, content) {
 
 function getFooterContent (h, params) {
   const { $table, column, _columnIndex, items } = params
-  const { slots, own } = column
-  const renderOpts = own.editRender || own.cellRender
+  const { slots, editRender, cellRender } = column
+  const renderOpts = editRender || cellRender
   if (slots && slots.footer) {
     return slots.footer.call($table, params, h)
   }
@@ -90,8 +90,8 @@ export const Cell = {
    */
   renderDefaultHeader (h, params) {
     const { $table, column } = params
-    const { slots, own } = column
-    const renderOpts = own.editRender || own.cellRender
+    const { slots, editRender, cellRender } = column
+    const renderOpts = editRender || cellRender
     if (slots && slots.header) {
       return renderTitleContent(h, slots.header.call($table, params, h))
     }
@@ -105,16 +105,16 @@ export const Cell = {
   },
   renderDefaultCell (h, params) {
     const { $table, column } = params
-    const { slots, own } = column
-    const renderOpts = own.editRender || own.cellRender
+    const { slots, editRender, cellRender } = column
+    const renderOpts = editRender || cellRender
     if (slots && slots.default) {
       return slots.default.call($table, params, h)
     }
     if (renderOpts) {
-      const funName = own.editRender ? 'renderCell' : 'renderDefault'
+      const funName = editRender ? 'renderCell' : 'renderDefault'
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf[funName]) {
-        return compConf[funName].call($table, h, renderOpts, Object.assign({ isEdit: !!own.editRender }, params), { $type: own.editRender ? 'edit' : 'cell', $grid: $table.$grid, $excel: $table.$parent, $table, $column: column })
+        return compConf[funName].call($table, h, renderOpts, Object.assign({ isEdit: !!editRender }, params), { $type: editRender ? 'edit' : 'cell', $grid: $table.$grid, $excel: $table.$parent, $table, $column: column })
       }
     }
     return [
@@ -278,8 +278,8 @@ export const Cell = {
   renderSelectionHeader (h, params) {
     const { $table, column, isHidden } = params
     const { isIndeterminate, isAllCheckboxDisabled, checkboxOpts } = $table
-    const { slots, own } = column
-    const headerTitle = own.title || own.label
+    const { slots, title, label } = column
+    const headerTitle = title || label
     let isChecked = false
     let on
     if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
@@ -650,8 +650,7 @@ export const Cell = {
   },
   runRenderer (h, params, _vm, isEdit) {
     const { $table, column } = params
-    const { slots, own, formatter } = column
-    const editRender = own.editRender
+    const { slots, editRender, formatter } = column
     const compConf = VXETable.renderer.get(editRender.name)
     if (editRender.type === 'visible' || isEdit) {
       if (slots && slots.edit) {

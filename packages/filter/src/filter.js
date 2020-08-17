@@ -10,7 +10,7 @@ export default {
   render (h) {
     const { $parent: $xetable, filterStore } = this
     const { column } = filterStore
-    const filterRender = column ? column.own.filterRender : null
+    const filterRender = column ? column.filterRender : null
     const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
     return h('div', {
       class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
@@ -108,7 +108,7 @@ export default {
     renderFooter (h) {
       const { filterStore } = this
       const { column, multiple } = filterStore
-      const filterRender = column.own.filterRender
+      const filterRender = column ? column.filterRender : null
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
       return multiple && (!compConf || compConf.isFooter !== false) ? [
         h('div', {

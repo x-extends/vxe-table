@@ -380,6 +380,8 @@ export default {
       // afterFullData: [],
       // 渲染中的数据
       tableData: [],
+      customHeight: 0,
+      customMaxHeight: 0,
       // 表格父容器的高度
       parentHeight: 0,
       // 表格宽度
@@ -702,12 +704,6 @@ export default {
         return border
       }
       return 'default'
-    },
-    customHeight () {
-      return DomTools.calcHeight(this, 'height')
-    },
-    customMaxHeight () {
-      return DomTools.calcHeight(this, 'maxHeight')
     },
     /**
      * 判断列全选的复选框是否禁用
@@ -1421,7 +1417,7 @@ export default {
       let { fullDataRowIdData, fullAllDataRowIdData } = this
       const rowkey = UtilTools.getRowkey(this)
       const isLazy = treeConfig && treeOpts.lazy
-      const handleCache = (row, index) => {
+      const handleCache = (row, index, items, path, parent) => {
         let rowid = UtilTools.getRowid(this, row)
         if (!rowid) {
           rowid = getRowUniqueId()
@@ -1430,7 +1426,7 @@ export default {
         if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
           row[treeOpts.children] = null
         }
-        const rest = { row, rowid, index: treeConfig ? -1 : index }
+        const rest = { row, rowid, index, items, parent }
         if (source) {
           fullDataRowIdData[rowid] = rest
           fullDataRowMap.set(row, rest)
@@ -1459,7 +1455,7 @@ export default {
       if (keepSource) {
         matchObj = XEUtils.findTree(tableSourceData, item => rowid === UtilTools.getRowid(this, item), treeOpts)
       }
-      XEUtils.eachTree(childs, (row, index) => {
+      XEUtils.eachTree(childs, (row, index, items, path, parent) => {
         let rowid = UtilTools.getRowid(this, row)
         if (!rowid) {
           rowid = getRowUniqueId()
@@ -1468,7 +1464,7 @@ export default {
         if (row[hasChild] && XEUtils.isUndefined(row[children])) {
           row[children] = null
         }
-        const rest = { row, rowid, index }
+        const rest = { row, rowid, index, items, parent }
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(row, rest)
         fullAllDataRowIdData[rowid] = rest
@@ -1486,9 +1482,9 @@ export default {
       let treeNodeColumn
       let expandColumn
       let hasFixed
-      const handleFunc = (column, index) => {
+      const handleFunc = (column, index, items, path, parent) => {
         const { id: colid, property, fixed, type, treeNode } = column
-        const rest = { column, colid, index }
+        const rest = { column, colid, index, items, parent }
         if (property) {
           fullColumnFieldData[property] = rest
         }
@@ -1507,7 +1503,7 @@ export default {
       if (isGroup) {
         XEUtils.eachTree(collectColumn, (column, index, items, path, parent, nodes) => {
           column.level = nodes.length
-          handleFunc(column, index)
+          handleFunc(column, index, items, path, parent)
         })
       } else {
         tableFullColumn.forEach(handleFunc)
@@ -1520,28 +1516,23 @@ export default {
     },
     getRowNode (tr) {
       if (tr) {
-        const { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData } = this
+        const { fullAllDataRowIdData } = this
         const rowid = tr.getAttribute('data-rowid')
-        if (treeConfig) {
-          const matchObj = XEUtils.findTree(tableFullData, row => UtilTools.getRowid(this, row) === rowid, treeOpts)
-          if (matchObj) {
-            return matchObj
-          }
-        } else {
-          if (fullAllDataRowIdData[rowid]) {
-            const rest = fullAllDataRowIdData[rowid]
-            return { item: rest.row, index: rest.index, items: tableFullData }
-          }
+        const rest = fullAllDataRowIdData[rowid]
+        if (rest) {
+          return { rowid: rest.rowid, item: rest.row, index: rest.index, items: rest.items, parent: rest.parent }
         }
       }
       return null
     },
     getColumnNode (cell) {
       if (cell) {
-        const { fullColumnIdData, tableFullColumn } = this
+        const { fullColumnIdData } = this
         const colid = cell.getAttribute('data-colid')
-        const { column, index } = fullColumnIdData[colid]
-        return { item: column, index, items: tableFullColumn }
+        const rest = fullColumnIdData[colid]
+        if (rest) {
+          return { colid: rest.colid, item: rest.column, index: rest.index, items: rest.items, parent: rest.parent }
+        }
       }
       return null
     },
@@ -2593,6 +2584,8 @@ export default {
         this.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
         this.overflowX = tableWidth > bodyWidth
       }
+      this.customHeight = DomTools.calcHeight(this, 'height')
+      this.customMaxHeight = DomTools.calcHeight(this, 'maxHeight')
       this.parentHeight = Math.max(this.headerHeight + this.footerHeight + 20, this.getParentHeight())
       if (this.overflowX) {
         this.checkScrolling()

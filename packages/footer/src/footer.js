@@ -47,7 +47,7 @@ export default {
       tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
     return h('div', {
-      class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'footer--wrapper'],
+      class: ['vxe-table--footer-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
       attrs: {
         'data-tid': tId
       },
