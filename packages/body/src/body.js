@@ -462,7 +462,7 @@ export default {
       keyboardConfig = {}
     } = $xetable
     // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.checked
     // 如果是固定列与设置了超出隐藏
     if (!spanMethod) {
       if (fixedType && allColumnOverflow) {

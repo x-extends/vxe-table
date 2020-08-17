@@ -217,10 +217,11 @@ export default {
             if (this.keyboardConfig || this.mouseConfig) {
               this.clearCopyed(evnt)
               this.clearChecked()
-              this.clearSelected(evnt)
             }
             this.clostTooltip()
             this.clearActived(evnt)
+            this.clearSelected(evnt)
+            this.clearCellRanges(evnt)
             type = 'edit-actived'
             column.renderHeight = cell.offsetHeight
             actived.args = params
@@ -402,7 +403,7 @@ export default {
       const { row, column, cell } = params
       const isMouseSelected = mouseConfig && mouseOpts.selected
       // 在 v3.0 中废弃 mouse-config.checked
-      const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+      const isMouseChecked = mouseConfig && mouseOpts.checked
       const selectMethod = () => {
         if ((isMouseSelected || isMouseChecked) && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
@@ -410,9 +411,10 @@ export default {
               this.clearChecked(evnt)
               this.clearIndexChecked()
               this.clearHeaderChecked()
-              this.clearSelected(evnt)
             }
             this.clearActived(evnt)
+            this.clearSelected(evnt)
+            this.clearCellRanges(evnt)
             selected.args = params
             selected.row = row
             selected.column = column

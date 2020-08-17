@@ -154,7 +154,7 @@
 }
 
 .vxe-table--checkbox-range,
-.vxe-table--cell-range {
+.vxe-table--cell-range > span {
   display: none;
   position: absolute;
   pointer-events: none;
@@ -167,8 +167,18 @@
 }
 
 .vxe-table--cell-range {
-  background-color: $vxe-table-cell-range-background-color;
-  border: 1px solid $vxe-table-cell-range-border-color;
+  height: 0;
+  font-size: 0;
+  display: none;
+  &.is--multi {
+    & > span {
+      border: 0;
+    }
+  }
+  & > span {
+    background-color: $vxe-table-cell-range-background-color;
+    border: 1px solid $vxe-table-cell-range-border-color;
+  }
 }
 
 /*圆角*/

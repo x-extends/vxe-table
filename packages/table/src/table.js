@@ -590,8 +590,8 @@ export default {
       if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
         UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
       }
-      if (this.isGroup && this.mouseConfig && (this.mouseOpts.range || this.mouseOpts.checked)) {
-        UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.range'])
+      if (this.isGroup && this.mouseConfig && this.mouseOpts.checked) {
+        UtilTools.error('vxe.error.groupMouseRange', ['mouse-config.checked'])
       }
       this.$nextTick(() => {
         if (this.$toolbar) {
@@ -717,9 +717,12 @@ export default {
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
+    if (mouseOpts.checked && mouseOpts.range) {
+      UtilTools.error('vxe.error.errProp', ['mouse-config.checked', 'mouse-config.range'])
+    }
     if (this.mouseConfig && this.editConfig) {
-      if ((mouseOpts.range || mouseOpts.checked) && editOpts.trigger !== 'dblclick') {
-        UtilTools.warn('vxe.error.errProp', ['mouse-config.range', 'edit-config.trigger=dblclick'])
+      if (mouseOpts.checked && editOpts.trigger !== 'dblclick') {
+        UtilTools.warn('vxe.error.errProp', ['mouse-config.checked', 'edit-config.trigger=dblclick'])
       }
     }
     if (treeConfig && this.stripe) {
@@ -754,7 +757,10 @@ export default {
       UtilTools.error('vxe.error.reqProp', ['id'])
     }
     if (this.treeConfig && this.checkboxOpts.range) {
-      UtilTools.warn('vxe.error.noTree', ['checkbox-config.range'])
+      UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
+    }
+    if (this.treeConfig && this.mouseOpts.range) {
+      UtilTools.error('vxe.error.noTree', ['mouse-config.range'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName
@@ -894,7 +900,7 @@ export default {
     } = this
     const { leftList, rightList } = columnStore
     // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.checked
     let emptyContent
     if ($scopedSlots.empty) {
       emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)

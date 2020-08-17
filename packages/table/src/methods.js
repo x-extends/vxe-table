@@ -115,6 +115,7 @@ const Methods = {
       this.clearChecked()
       this.clearSelected()
       this.clearCopyed()
+      this.clearCellRanges()
     }
     return this.clearScroll()
   },
@@ -364,8 +365,11 @@ const Methods = {
     } else {
       tableFullColumn.forEach(handleFunc)
     }
-    if (hasFixed && expandColumn) {
+    if (expandColumn && hasFixed) {
       UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
+    }
+    if (expandColumn && this.mouseOpts.range) {
+      UtilTools.error('vxe.error.errConflicts', ['mouse-config.range', 'column.type=expand'])
     }
     this.treeNodeColumn = treeNodeColumn
     this.expandColumn = expandColumn
@@ -1584,7 +1588,7 @@ const Methods = {
     const { actived } = editStore
     const { filterWrapper, validTip } = $refs
     // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.checked
     if (filterWrapper) {
       if (getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
         // 如果点击了筛选按钮
@@ -1650,6 +1654,7 @@ const Methods = {
           this.clearChecked()
         }
         this.clearSelected()
+        this.clearCellRanges()
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
@@ -2658,7 +2663,7 @@ const Methods = {
     const triggerExpandNode = isExpandType && getEventTargetNode(evnt, cell, 'vxe-table--expanded').flag
     params = Object.assign({ cell, triggerRadio, triggerCheckbox, triggerTreeNode, triggerExpandNode }, params)
     // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && (mouseOpts.range || mouseOpts.checked)
+    const isMouseChecked = mouseConfig && mouseOpts.checked
     // 如果是展开行
     if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
       this.triggerRowExpandEvent(evnt, params)
@@ -3715,7 +3720,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,filter,clearFilter,closeMenu,getMouseSelecteds,getMouseCheckeds,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,filter,clearFilter,closeMenu,getCellRanges,clearCellRanges,getMouseSelecteds,getMouseCheckeds,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

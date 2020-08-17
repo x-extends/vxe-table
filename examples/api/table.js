@@ -1659,7 +1659,7 @@ const apis = [
           // },
           // {
           //   name: 'checked',
-          //   desc: '即将废弃，请使用 range',
+          //   desc: '即将废弃',
           //   version: '',
           //   type: 'Boolean',
           //   enum: '',
@@ -1668,9 +1668,9 @@ const apis = [
           // },
           // {
           //   name: 'range',
-          //   desc: '开启鼠标移动单元格批量选中功能',
-          //   version: '2.7.22',
-          //   type: 'Boolean',
+          //   desc: '如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取',
+          //   version: '',
+          //   type: 'boolean',
           //   enum: '',
           //   defVal: 'false',
           //   list: []
@@ -3194,6 +3194,15 @@ const apis = [
       //   defVal: '',
       //   list: []
       // },
+      // {
+      //   name: 'getCellRanges()',
+      //   desc: '用于 mouse-config.range，用于获取鼠标选择的区域',
+      //   version: '',
+      //   type: 'Array<{cols: anyColumnConfig, rows: any[]}>',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
       {
         name: 'getVirtualScroller()',
         disabled: true,
@@ -3782,6 +3791,15 @@ const apis = [
       // {
       //   name: 'clearCopyed()',
       //   desc: '手动清空已复制的内容',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'clearCellRanges()',
+      //   desc: '用于 mouse-config.range，用于清除鼠标选择的区域',
+      //   version: '',
       //   type: 'Promise',
       //   enum: '',
       //   defVal: '',

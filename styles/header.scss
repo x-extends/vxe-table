@@ -45,6 +45,9 @@
 .vxe-header--column {
   position: relative;
   user-select: none;
+  &.col--title-checked {
+    background-color: $vxe-table-column-header-checked-background-color;
+  }
   &.col--ellipsis {
     & > .vxe-cell {
       display: flex;
