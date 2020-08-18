@@ -5494,7 +5494,7 @@ export default {
     updateFooter () {
       const { showFooter, visibleColumn, footerMethod } = this
       if (showFooter && footerMethod) {
-        this.footerData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData }) : []
+        this.footerData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData, $table: this, $grid: this.$xegrid }) : []
       }
       return this.$nextTick()
     },
