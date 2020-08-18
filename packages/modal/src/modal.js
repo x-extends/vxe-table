@@ -2,6 +2,7 @@ import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import XEUtils from 'xe-utils/methods/xe-utils'
 import MsgQueue from './queue'
+import allActivedModals from './activities'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 const activeModals = []
@@ -286,6 +287,7 @@ export default {
         this.visible = true
         this.contentVisible = false
         this.updateZindex()
+        allActivedModals.push(this)
         this.$emit('activated', params)
         setTimeout(() => {
           this.contentVisible = true
@@ -383,6 +385,7 @@ export default {
           this.zoomLocat = null
         }
         this.$emit('deactivated', params)
+        XEUtils.remove(allActivedModals, item => item === this)
         setTimeout(() => {
           this.visible = false
           if (events.hide) {
@@ -396,7 +399,15 @@ export default {
     },
     handleGlobalKeydownEvent (evnt) {
       if (evnt.keyCode === 27) {
-        this.close()
+        const lastModal = XEUtils.max(allActivedModals, item => item.modalZindex)
+        // 多个时，只关掉最上层的窗口
+        if (lastModal) {
+          setTimeout(() => {
+            if (lastModal === this && lastModal.escClosable) {
+              this.close()
+            }
+          }, 10)
+        }
       }
     },
     getBox () {

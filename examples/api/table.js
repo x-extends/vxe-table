@@ -1035,7 +1035,7 @@ const apis = [
           },
           {
             name: 'checkRowKey',
-            desc: '默认选中开指定行（只会在初始化时被触发一次，需要有 row-id）',
+            desc: '默认选中指定行（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
             type: 'string',
             enum: '',
@@ -1117,7 +1117,7 @@ const apis = [
           },
           {
             name: 'checkRowKeys',
-            desc: '默认勾选开指定行（只会在初始化时被触发一次，需要有 row-id）',
+            desc: '默认勾选指定行（只会在初始化时被触发一次，需要有 row-id）',
             version: '',
             type: 'string[]',
             enum: '',
@@ -1596,6 +1596,15 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
+          // },
+          // {
+          //   name: 'area',
+          //   desc: '如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取',
+          //   version: '',
+          //   type: 'boolean',
+          //   enum: '',
+          //   defVal: 'false',
+          //   list: []
           }
         ]
       },
@@ -2962,6 +2971,15 @@ const apis = [
         defVal: '',
         list: []
       },
+      // {
+      //   name: 'getCellAreas()',
+      //   desc: '用于 mouse-config.area，用于获取鼠标选择的区域',
+      //   version: '',
+      //   type: 'Array<{cols: anyColumnConfig, rows: any[]}>',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
       {
         name: 'getScroll()',
         desc: '获取表格的滚动状态',
@@ -3106,6 +3124,15 @@ const apis = [
         defVal: 'row: Row, field: string',
         list: []
       },
+      // {
+      //   name: 'setCellAreas(areas)',
+      //   desc: '用于 mouse-config.area，选择指定区域的单元格',
+      //   version: '',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: 'areas: CellAreaOptions',
+      //   list: []
+      // },
       {
         name: 'setRowExpand(rows, checked)',
         desc: '用于 expand-config，设置展开行，二个参数设置这一行展开与否',
@@ -3352,6 +3379,15 @@ const apis = [
       // {
       //   name: 'clearCopyed()',
       //   desc: '手动清空已复制的内容',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'clearCellAreas()',
+      //   desc: '用于 mouse-config.area，用于清除鼠标选择的区域',
+      //   version: '',
       //   type: 'Promise',
       //   enum: '',
       //   defVal: '',

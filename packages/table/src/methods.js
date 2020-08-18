@@ -5,7 +5,7 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 const { getRowid, getRowkey, setCellValue, getCellLabel, hasChildrenList } = UtilTools
-const { browse, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
+const { browse, calcHeight, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
 
 const isWebkit = browse['-webkit'] && !browse.edge
 const debounceScrollYDuration = browse.msie ? 40 : 20
@@ -113,6 +113,7 @@ const Methods = {
     }
     if (this.keyboardConfig || this.mouseConfig) {
       this.clearSelected()
+      this.clearCellAreas()
     }
     return this.clearScroll()
   },
@@ -263,7 +264,7 @@ const Methods = {
     let { fullDataRowIdData, fullAllDataRowIdData } = this
     const rowkey = getRowkey(this)
     const isLazy = treeConfig && treeOpts.lazy
-    const handleCache = (row, index) => {
+    const handleCache = (row, index, items, path, parent) => {
       let rowid = getRowid(this, row)
       if (!rowid) {
         rowid = getRowUniqueId()
@@ -272,7 +273,7 @@ const Methods = {
       if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
         row[treeOpts.children] = null
       }
-      const rest = { row, rowid, index: treeConfig ? -1 : index }
+      const rest = { row, rowid, index, items, parent }
       if (source) {
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(row, rest)
@@ -301,7 +302,7 @@ const Methods = {
     if (keepSource) {
       matchObj = XEUtils.findTree(tableSourceData, item => rowid === getRowid(this, item), treeOpts)
     }
-    XEUtils.eachTree(childs, (row, index) => {
+    XEUtils.eachTree(childs, (row, index, items, path, parent) => {
       let rowid = getRowid(this, row)
       if (!rowid) {
         rowid = getRowUniqueId()
@@ -310,7 +311,7 @@ const Methods = {
       if (row[hasChild] && XEUtils.isUndefined(row[children])) {
         row[children] = null
       }
-      const rest = { row, rowid, index }
+      const rest = { row, rowid, index, items, parent }
       fullDataRowIdData[rowid] = rest
       fullDataRowMap.set(row, rest)
       fullAllDataRowIdData[rowid] = rest
@@ -331,10 +332,13 @@ const Methods = {
     let expandColumn
     let treeNodeColumn
     let hasFixed
-    const handleFunc = (column, index) => {
+    const handleFunc = (column, index, items, path, parent) => {
       const { id: colid, property, fixed, type, treeNode } = column
-      const rest = { column, colid, index }
+      const rest = { column, colid, index, items, parent }
       if (property) {
+        if (fullColumnFieldData[property]) {
+          UtilTools.warn('vxe.error.fieldRepet', [property])
+        }
         fullColumnFieldData[property] = rest
       }
       if (!hasFixed && fixed) {
@@ -352,13 +356,16 @@ const Methods = {
     if (isGroup) {
       XEUtils.eachTree(collectColumn, (column, index, items, path, parent, nodes) => {
         column.level = nodes.length
-        handleFunc(column, index)
+        handleFunc(column, index, items, path, parent)
       })
     } else {
       tableFullColumn.forEach(handleFunc)
     }
-    if (hasFixed && expandColumn) {
+    if (expandColumn && hasFixed) {
       UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
+    }
+    if (expandColumn && this.mouseOpts.area) {
+      UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
     }
     this.treeNodeColumn = treeNodeColumn
     this.expandColumn = expandColumn
@@ -369,18 +376,11 @@ const Methods = {
    */
   getRowNode (tr) {
     if (tr) {
-      const { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData } = this
+      const { fullAllDataRowIdData } = this
       const rowid = tr.getAttribute('data-rowid')
-      if (treeConfig) {
-        const matchObj = XEUtils.findTree(tableFullData, row => getRowid(this, row) === rowid, treeOpts)
-        if (matchObj) {
-          return matchObj
-        }
-      } else {
-        if (fullAllDataRowIdData[rowid]) {
-          const rest = fullAllDataRowIdData[rowid]
-          return { item: rest.row, index: rest.index, items: tableFullData }
-        }
+      const rest = fullAllDataRowIdData[rowid]
+      if (rest) {
+        return { rowid: rest.rowid, item: rest.row, index: rest.index, items: rest.items, parent: rest.parent }
       }
     }
     return null
@@ -391,10 +391,12 @@ const Methods = {
    */
   getColumnNode (cell) {
     if (cell) {
-      const { fullColumnIdData, tableFullColumn } = this
+      const { fullColumnIdData } = this
       const colid = cell.getAttribute('data-colid')
-      const { column, index } = fullColumnIdData[colid]
-      return { item: column, index, items: tableFullColumn }
+      const rest = fullColumnIdData[colid]
+      if (rest) {
+        return { colid: rest.colid, item: rest.column, index: rest.index, items: rest.items, parent: rest.parent }
+      }
     }
     return null
   },
@@ -1223,6 +1225,8 @@ const Methods = {
       this.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
       this.overflowX = tableWidth > bodyWidth
     }
+    this.customHeight = calcHeight(this, 'height')
+    this.customMaxHeight = calcHeight(this, 'maxHeight')
     this.parentHeight = Math.max(this.headerHeight + this.footerHeight + 20, this.getParentHeight())
     if (this.overflowX) {
       this.checkScrolling()
@@ -1552,6 +1556,7 @@ const Methods = {
     } else if (mouseConfig) {
       if (!getEventTargetNode(evnt, $el).flag && !getEventTargetNode(evnt, $refs.tableWrapper).flag) {
         this.clearSelected()
+        this.clearCellAreas()
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
@@ -3435,13 +3440,12 @@ const Methods = {
   updateStatus (scope, cellValue) {
     const customVal = !XEUtils.isUndefined(cellValue)
     return this.$nextTick().then(() => {
-      const { $refs, tableData, editRules, validStore } = this
+      const { $refs, editRules, validStore } = this
       if (scope && $refs.tableBody && editRules) {
         const { row, column } = scope
         const type = 'change'
         if (this.hasCellRules(type, row, column)) {
-          const rowIndex = tableData.indexOf(row)
-          const cell = DomTools.getCell(this, { row, rowIndex, column })
+          const cell = this.getCell(column, row)
           if (cell) {
             return this.validCellRules(type, row, column, cellValue)
               .then(() => {
@@ -3483,6 +3487,15 @@ const Methods = {
   /*************************
    * Publish methods
    *************************/
+  getCell (column, row) {
+    const { $refs } = this
+    const rowid = getRowid(this, row)
+    const bodyElem = $refs[`${column.fixed || 'table'}Body`] || $refs.tableBody
+    if (bodyElem && bodyElem.$el) {
+      return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+    }
+    return null
+  },
   // 与工具栏对接
   connect ($toolbar) {
     if ($toolbar && $toolbar.syncUpdate) {
@@ -3498,7 +3511,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,clearFilter,closeMenu,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
+const funcs = 'setFilter,clearFilter,closeMenu,getCellAreas,clearCellAreas,setCellAreas,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

@@ -49,7 +49,6 @@
       <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
       <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
       <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
       <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
       <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
       <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
@@ -127,6 +126,15 @@ export default {
           <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
           <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
           <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
+          <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
+          <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
+          <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
+          <vxe-table-column field="attr4" title="Attr4" width="200"></vxe-table-column>
+          <vxe-table-column field="attr5" title="Attr5" width="200"></vxe-table-column>
+          <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
+          <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
+          <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
+          <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
           <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
         </vxe-table>
         `,

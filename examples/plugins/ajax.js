@@ -5,6 +5,8 @@ import XEAjax from 'xe-ajax'
 // 挂载到 vue 实例中
 Vue.prototype.$ajax = XEAjax
 
+/* eslint-disable @typescript-eslint/camelcase */
+
 /**
  * 生成模拟数据
  */
@@ -19,7 +21,7 @@ function mockColumns (size) {
   let index = colIndex
   for (; index < size; index++) {
     const colItem = {
-      field: index % 2 === 0 ? 'age' : (index % 3 === 0 ? 'rate' : 'name'),
+      field: 'col_' + index,
       title: 'col_' + index,
       width: index % 6 === 0 ? 340 : index % 4 === 0 ? 260 : index % 3 === 0 ? 120 : 160,
       resizable: true
@@ -29,8 +31,7 @@ function mockColumns (size) {
       colItem.fixed = 'left'
       colItem.type = 'seq'
       colItem.title = '序号'
-    }
-    if (index === 1) {
+    } else if (index === 1) {
       colItem.fixed = 'left'
       colItem.type = 'checkbox'
       colItem.title = '多选'
@@ -231,7 +232,67 @@ function mockData (size, hasChild) {
             sex2: index % 3 ? '0' : '1',
             age2: index % 2 === 0 ? 26 : 30
           }
-        }
+        },
+        col_4: 'col_4_' + index,
+        col_6: 'col_6_' + index,
+        col_8: 'col_8_' + index,
+        col_10: 'col_10_' + index,
+        col_20: 'col_20_' + index,
+        col_30: 'col_30_' + index,
+        col_40: 'col_40_' + index,
+        col_41: 'col_41_' + index,
+        col_50: 'col_50_' + index,
+        col_60: 'col_60_' + index,
+        col_61: 'col_61_' + index,
+        col_62: 'col_62_' + index,
+        col_63: 'col_63_' + index,
+        col_64: 'col_64_' + index,
+        col_65: 'col_65_' + index,
+        col_100: 'col_100_' + index,
+        col_110: 'col_110_' + index,
+        col_111: 'col_111_' + index,
+        col_112: 'col_112_' + index,
+        col_113: 'col_113_' + index,
+        col_114: 'col_114_' + index,
+        col_115: 'col_115_' + index,
+        col_116: 'col_116_' + index,
+        col_117: 'col_117_' + index,
+        col_118: 'col_118_' + index,
+        col_119: 'col_119_' + index,
+        col_120: 'col_120_' + index,
+        col_500: 'col_500_' + index,
+        col_501: 'col_501_' + index,
+        col_502: 'col_502_' + index,
+        col_503: 'col_503_' + index,
+        col_504: 'col_504_' + index,
+        col_510: 'col_510_' + index,
+        col_520: 'col_520_' + index,
+        col_521: 'col_521_' + index,
+        col_522: 'col_522_' + index,
+        col_523: 'col_523_' + index,
+        col_524: 'col_524_' + index,
+        col_525: 'col_525_' + index,
+        col_526: 'col_526_' + index,
+        col_527: 'col_527_' + index,
+        col_528: 'col_528_' + index,
+        col_529: 'col_529_' + index,
+        col_530: 'col_530_' + index,
+        col_1000: 'col_1000_' + index,
+        col_1500: 'col_1500_' + index,
+        col_2000: 'col_2000_' + index,
+        col_2001: 'col_2001_' + index,
+        col_2002: 'col_2002_' + index,
+        col_2003: 'col_2003_' + index,
+        col_2004: 'col_2004_' + index,
+        col_2005: 'col_2005_' + index,
+        col_2006: 'col_2006_' + index,
+        col_2007: 'col_2007_' + index,
+        col_2008: 'col_2008_' + index,
+        col_2009: 'col_2009_' + index,
+        col_2010: 'col_2010_' + index,
+        col_2011: 'col_2011_' + index,
+        col_2012: 'col_2012_' + index,
+        col_2013: 'col_2013_' + index
       }
       dataCacheList.push(item)
     }

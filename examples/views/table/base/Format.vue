@@ -36,8 +36,8 @@
       <vxe-table-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-table-column>
       <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-table-column>
       <vxe-table-column field="num7" title="数值"></vxe-table-column>
-      <vxe-table-column field="num7" title="截取2位数" formatter="formatCutNumber"></vxe-table-column>
-      <vxe-table-column field="num7" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-table-column>
+      <vxe-table-column field="num8" title="截取2位数" formatter="formatCutNumber"></vxe-table-column>
+      <vxe-table-column field="num9" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-table-column>
       <vxe-table-column field="sex" title="格式化性别" formatter="formatSex"></vxe-table-column>
     </vxe-table>
 
@@ -163,8 +163,8 @@ export default {
           <vxe-table-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-table-column>
           <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-table-column>
           <vxe-table-column field="num7" title="数值"></vxe-table-column>
-          <vxe-table-column field="num7" title="截取2位数" formatter="formatCutNumber"></vxe-table-column>
-          <vxe-table-column field="num7" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-table-column>
+          <vxe-table-column field="num8" title="截取2位数" formatter="formatCutNumber"></vxe-table-column>
+          <vxe-table-column field="num9" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-table-column>
           <vxe-table-column field="sex" title="格式化性别" formatter="formatSex"></vxe-table-column>
         </vxe-table>
         `,

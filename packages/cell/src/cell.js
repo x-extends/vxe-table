@@ -62,8 +62,8 @@ function renderTitleContent (h, params, content) {
 
 function getFooterContent (h, params) {
   const { $table, column, _columnIndex, items } = params
-  const { slots, own } = column
-  const renderOpts = own.editRender || own.cellRender
+  const { slots, editRender, cellRender } = column
+  const renderOpts = editRender || cellRender
   if (slots && slots.footer) {
     return slots.footer.call($table, params, h)
   }
@@ -136,8 +136,8 @@ export const Cell = {
    */
   renderHeaderTitle (h, params) {
     const { $table, column } = params
-    const { slots, own } = column
-    const renderOpts = own.editRender || own.cellRender
+    const { slots, editRender, cellRender } = column
+    const renderOpts = editRender || cellRender
     if (slots && slots.header) {
       return renderTitleContent(h, params, slots.header.call($table, params, h))
     }
@@ -154,16 +154,16 @@ export const Cell = {
   },
   renderDefaultCell (h, params) {
     const { $table, column } = params
-    const { slots, own } = column
-    const renderOpts = own.editRender || own.cellRender
+    const { slots, editRender, cellRender } = column
+    const renderOpts = editRender || cellRender
     if (slots && slots.default) {
       return slots.default.call($table, params, h)
     }
     if (renderOpts) {
-      const funName = own.editRender ? 'renderCell' : 'renderDefault'
+      const funName = editRender ? 'renderCell' : 'renderDefault'
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf[funName]) {
-        return compConf[funName].call($table, h, renderOpts, Object.assign({ $type: own.editRender ? 'edit' : 'cell' }, params), { $grid: $table.$xegrid, $table })
+        return compConf[funName].call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params), { $grid: $table.$xegrid, $table })
       }
     }
     return [
@@ -684,8 +684,7 @@ export const Cell = {
   },
   runRenderer (h, params, _vm, isEdit) {
     const { $table, column } = params
-    const { slots, own, formatter } = column
-    const editRender = own.editRender
+    const { slots, editRender, formatter } = column
     const compConf = VXETable.renderer.get(editRender.name)
     if (isEdit) {
       if (slots && slots.edit) {

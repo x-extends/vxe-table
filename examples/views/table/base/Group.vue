@@ -55,14 +55,14 @@
       </vxe-table-column>
       <vxe-table-column field="group2" title="更多信息">
         <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
+        <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
         <vxe-table-column title="详细信息">
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
           <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group3" title="分类信息2">
-        <vxe-table-column field="sex" title="Age2" width="120"></vxe-table-column>
+        <vxe-table-column field="attr6" title="Attr6" width="120"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group4" title="额外信息">
         <vxe-table-column field="date3" title="Date" width="140"></vxe-table-column>
@@ -146,14 +146,14 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="group2" title="更多信息">
             <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
+            <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
             <vxe-table-column title="详细信息">
               <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
               <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
             </vxe-table-column>
           </vxe-table-column>
           <vxe-table-column field="group3" title="分类信息2">
-            <vxe-table-column field="sex" title="Age2" width="120"></vxe-table-column>
+            <vxe-table-column field="attr6" title="Attr6" width="120"></vxe-table-column>
           </vxe-table-column>
           <vxe-table-column field="group4" title="额外信息">
             <vxe-table-column field="date3" title="Date" width="140"></vxe-table-column>

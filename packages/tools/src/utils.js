@@ -98,8 +98,7 @@ class ColumnConfig {
       renderFooter: renderFooter || _vm.renderFooter,
       renderData: renderData,
       // 单元格插槽，只对 grid 有效
-      slots: _vm.slots,
-      own: _vm
+      slots: _vm.slots
     })
     if (proxyOpts && proxyOpts.beforeColumn) {
       proxyOpts.beforeColumn({ $grid: $xegrid, column: this })
@@ -107,7 +106,7 @@ class ColumnConfig {
   }
 
   getTitle () {
-    return UtilTools.getFuncText(this.own.title || (this.type === 'seq' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
+    return UtilTools.getFuncText(this.title || (this.type === 'seq' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
   }
 
   getKey () {
@@ -115,8 +114,8 @@ class ColumnConfig {
   }
 
   getMinWidth () {
-    const { type, filters, sortable, remoteSort, editRender } = this
-    return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(filters) + getColFuncWidth(sortable || remoteSort) + getColFuncWidth(editRender, 32)
+    const { type, filters, sortable, remoteSort, editRender, titleHelp } = this
+    return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters) + getColFuncWidth(sortable || remoteSort) + getColFuncWidth(editRender, 32)
   }
 
   update (name, value) {

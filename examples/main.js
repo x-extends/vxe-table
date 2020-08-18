@@ -69,6 +69,8 @@ function mockData () {
       num5: (0.967 * index).toFixed(2),
       num6: `${(0.234 * index).toFixed(0)}`,
       num7: (1.39784 * (index + 1)).toFixed(5),
+      num8: (1.39784 * (index + 1)).toFixed(5),
+      num9: (1.39784 * (index + 1)).toFixed(5),
       color: index % 4 === 0 ? 'rgba(255, 0, 0, 0.8)' : index % 3 === 0 ? 'rgba(0, 255, 0, 0.8)' : '',
       color1: index % 4 === 0 ? '#409EFF' : index % 3 === 0 ? '#22de22' : '',
       slider: index % 5 === 0 ? 40 : index % 4 === 0 ? 20 : index % 3 === 0 ? 60 : 0,

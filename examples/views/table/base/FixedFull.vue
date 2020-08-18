@@ -80,7 +80,7 @@
       </vxe-table-column>
       <vxe-table-column title="更多信息">
         <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
+        <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
         <vxe-table-column title="详细信息">
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
           <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
@@ -215,7 +215,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column title="更多信息">
             <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
+            <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
             <vxe-table-column title="详细信息">
               <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
               <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>

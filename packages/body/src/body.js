@@ -89,7 +89,6 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     treeOpts,
     tooltipOpts,
     mouseConfig,
-    mouseOpts,
     editConfig,
     editOpts,
     editRules,
@@ -102,7 +101,6 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { enabled } = tooltipOpts
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable._getColumnIndex(column)
-  const isMouseSelected = mouseConfig && mouseOpts.selected
   const fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -155,7 +153,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 按下事件处理
-  if (checkboxOpts.range || isMouseSelected) {
+  if (checkboxOpts.range || mouseConfig) {
     tdOns.mousedown = evnt => {
       $xetable.triggerCellMousedownEvent(evnt, params)
     }
@@ -299,7 +297,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
           'row--stripe': stripe && ($xetable._getRowIndex(row) + 1) % 2 === 0,
           'is--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $xetable.selectRow === row,
-          'row--cheched': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
+          'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid
@@ -419,7 +417,7 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, spanMethod, scrollXLoad, emptyRender, emptyOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, spanMethod, scrollXLoad, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
     // 如果是固定列与设置了超出隐藏
     if (!spanMethod) {
       if (fixedType && allColumnOverflow) {
@@ -486,11 +484,30 @@ export default {
         }, renderRows(h, this, $xetable, '', 0, fixedType, tableData, tableColumn))
       ]),
       h('div', {
-        class: 'vxe-table--checkbox-range'
+        staticClass: 'vxe-table--checkbox-range'
       }),
-      h('div', {
-        class: 'vxe-table--cell-range'
-      }),
+      mouseConfig && mouseOpts.area ? h('div', {
+        staticClass: 'vxe-table--cell-area'
+      }, [
+        h('div', {
+          staticClass: 'vxe-table--cell-main-area'
+        }, [
+          h('span', {
+            staticClass: 'vxe-table--cell-main-area-btn',
+            on: {
+              mousedown (evnt) {
+                $xetable.triggerCellExtendMousedownEvent(evnt)
+              }
+            }
+          })
+        ]),
+        h('span', {
+          staticClass: 'vxe-table--cell-extend-area'
+        }),
+        h('div', {
+          staticClass: 'vxe-table--cell-multi-area'
+        })
+      ]) : null,
       !fixedType ? h('div', {
         class: 'vxe-table--empty-block',
         ref: 'emptyBlock'

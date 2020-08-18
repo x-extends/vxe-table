@@ -42,7 +42,7 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedType, headerColumn, fixedColumn } = this
-    const { $listeners: tableListeners, tId, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts } = $xetable
+    const { $listeners: tableListeners, tId, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig } = $xetable
     let { tableColumn } = this
     // 横向滚动渲染
     if (scrollXLoad) {
@@ -123,6 +123,10 @@ export default {
             }
             if (tableListeners['header-cell-dblclick']) {
               thOns.dblclick = evnt => $xetable.triggerHeaderCellDBLClickEvent(evnt, params)
+            }
+            // 按下事件处理
+            if (mouseConfig) {
+              thOns.mousedown = evnt => $xetable.triggerHeaderCellMousedownEvent(evnt, params)
             }
             return h('th', {
               class: ['vxe-header--column', column.id, {
@@ -260,6 +264,9 @@ export default {
         $xetable.recalculate(true)
         DomTools.removeClass($xetable.$el, 'drag--resize')
         $xetable.saveCustomResizable()
+        if ($xetable.mouseConfig && $xetable.mouseOpts.area && $xetable.updateCellAreaEvent) {
+          $xetable.updateCellAreaEvent(evnt)
+        }
         $xetable.emitEvent('resizable-change', params, evnt)
       }
       updateEvent(evnt)

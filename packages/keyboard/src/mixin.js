@@ -95,7 +95,7 @@ export default {
         }
         params.columnIndex = targetColumnIndex
         params.column = targetColumn
-        params.cell = DomTools.getCell(this, params)
+        params.cell = this.getCell(params.column, params.row)
         if (editConfig) {
           if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row') {
@@ -166,33 +166,46 @@ export default {
         params.column = visibleColumn[params.columnIndex]
       }
       this.scrollToRow(params.row, params.column).then(() => {
-        params.cell = DomTools.getCell(this, params)
+        params.cell = this.getCell(params.column, params.row)
         this.handleSelected(params, evnt)
       })
+    },
+    /**
+     * 表头单元格按下事件
+     */
+    triggerHeaderCellMousedownEvent (evnt, params) {
+      const { mouseConfig, mouseOpts } = this
+      if (mouseConfig && mouseOpts.area && this.handleHeaderCellAreaEvent) {
+        const cell = evnt.currentTarget
+        const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
+        const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
+        this.handleHeaderCellAreaEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
+      }
+      this.focus()
+      this.closeMenu()
     },
     /**
      * 单元格按下事件
      */
     triggerCellMousedownEvent (evnt, params) {
+      const cell = evnt.currentTarget
+      params.cell = cell
       this.handleCellMousedownEvent(evnt, params)
       this.focus()
       this.closeFilter()
       this.closeMenu()
     },
     handleCellMousedownEvent (evnt, params) {
-      const { editConfig, editOpts, handleSelected, checkboxOpts, mouseOpts } = this
-      const { button } = evnt
-      const cell = evnt.currentTarget
-      const isLeftBtn = button === 0
-      params.cell = cell
-      if (checkboxOpts.range) {
-        if (isLeftBtn) {
-          this.handleCheckboxRangeEvent(evnt, params)
-        }
-      }
-      if (mouseOpts.selected) {
-        if (!editConfig || editOpts.mode === 'cell') {
-          handleSelected(params, evnt)
+      const { editConfig, editOpts, handleSelected, checkboxOpts, mouseConfig, mouseOpts } = this
+      if (mouseConfig && mouseOpts.area && this.handleCellAreaEvent) {
+        return this.handleCellAreaEvent(evnt, params)
+      } else if (checkboxOpts.range) {
+        return this.handleCheckboxRangeEvent(evnt, params)
+      } else {
+        if (mouseConfig && mouseOpts.selected) {
+          if (!editConfig || editOpts.mode === 'cell') {
+            handleSelected(params, evnt)
+          }
         }
       }
     },

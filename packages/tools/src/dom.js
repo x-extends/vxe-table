@@ -162,14 +162,6 @@ export const DomTools = {
     const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
     return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
   },
-  getCell ($xetable, { row, column }) {
-    const rowid = getRowid($xetable, row)
-    const bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`] || $xetable.$refs.tableBody
-    if (bodyElem && bodyElem.$el) {
-      return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
-    }
-    return null
-  },
   toView (elem) {
     const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
     const scrollIntoView = 'scrollIntoView'

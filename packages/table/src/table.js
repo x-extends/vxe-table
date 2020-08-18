@@ -7,7 +7,7 @@ import { UtilTools, DomTools, GlobalEvent, ResizeEvent } from '../../tools'
 import methods from './methods'
 
 const { getColumnList, hasChildrenList } = UtilTools
-const { browse, calcHeight } = DomTools
+const { browse } = DomTools
 
 /**
  * 渲染浮固定列
@@ -519,12 +519,6 @@ export default {
       }
       return 'default'
     },
-    customHeight () {
-      return calcHeight(this, 'height')
-    },
-    customMaxHeight () {
-      return calcHeight(this, 'maxHeight')
-    },
     /**
      * 判断列全选的复选框是否禁用
      */
@@ -675,7 +669,10 @@ export default {
       UtilTools.error('vxe.error.reqProp', ['id'])
     }
     if (this.treeConfig && this.checkboxOpts.range) {
-      UtilTools.warn('vxe.error.noTree', ['checkbox-config.range'])
+      UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
+    }
+    if (this.treeConfig && this.mouseOpts.area) {
+      UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName
@@ -837,6 +834,7 @@ export default {
         'is--round': this.round,
         't--stripe': stripe,
         't--selected': mouseConfig && mouseOpts.selected,
+        'is--area': mouseConfig && mouseOpts.area,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
         'is--loading': isCloak || loading,

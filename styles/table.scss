@@ -99,10 +99,12 @@
 }
 
 .vxe-table--checkbox-range,
-.vxe-table--cell-range {
+.vxe-table--cell-main-area,
+.vxe-table--cell-extend-area {
   display: none;
   position: absolute;
   pointer-events: none;
+  z-index: 1;
 }
 
 /*复选框-范围选择*/
@@ -111,9 +113,37 @@
   border: 1px solid $vxe-table-checkbox-range-border-color;
 }
 
-.vxe-table--cell-range {
-  background-color: $vxe-table-cell-range-background-color;
-  border: 1px solid $vxe-table-cell-range-border-color;
+.vxe-table--cell-area {
+  height: 0;
+  font-size: 0;
+  display: none;
+  & > .vxe-table--cell-main-area {
+    background-color: $vxe-table-cell-area-background-color;
+    border: 1px solid $vxe-table-cell-area-border-color;
+  }
+  .vxe-table--cell-main-area-btn {
+    display: block;
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 7px;
+    height: 7px;
+    border-style: solid;
+    border-color: #fff;
+    border-width: 1px 0 0 1px;
+    background-color: $vxe-table-cell-area-border-color;
+    pointer-events: auto;
+    cursor: crosshair;
+  }
+  .vxe-table--cell-extend-area {
+    border: 2px solid $vxe-table-cell-area-extend-border-color;
+  }
+}
+
+.vxe-table--cell-multi-area {
+  & > .vxe-table--cell-main-area {
+    background-color: $vxe-table-cell-area-background-color;
+  }
 }
 
 /*圆角*/
@@ -256,8 +286,8 @@
     &.row--radio {
       background-color: $vxe-table-row-radio-background-color;
     }
-    &.row--cheched {
-      background-color: $vxe-table-row-cheched-background-color;
+    &.row--checked {
+      background-color: $vxe-table-row-checked-background-color;
     }
     &.row--current {
       background-color: $vxe-table-row-current-background-color;
@@ -270,8 +300,8 @@
       &.row--radio {
         background-color: $vxe-table-row-hover-radio-background-color;
       }
-      &.row--cheched {
-        background-color: $vxe-table-row-hover-cheched-background-color;
+      &.row--checked {
+        background-color: $vxe-table-row-hover-checked-background-color;
       }
       &.row--current {
         background-color: $vxe-table-row-hover-current-background-color;
@@ -290,9 +320,9 @@
           background-color: $vxe-table-row-radio-background-color;
         }
       }
-      &.row--cheched {
+      &.row--checked {
         .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-cheched-background-color;
+          background-color: $vxe-table-row-checked-background-color;
         }
       }
       &.row--current {
@@ -314,9 +344,9 @@
             background-color: $vxe-table-row-hover-radio-background-color;
           }
         }
-        &.row--cheched {
+        &.row--checked {
           .vxe-tree--btn-wrapper {
-            background-color: $vxe-table-row-hover-cheched-background-color;
+            background-color: $vxe-table-row-hover-checked-background-color;
           }
         }
         &.row--current {
@@ -336,12 +366,22 @@
       }
     }
   }
-  &.drag--range {
+  &.drag--range,
+  &.drag--area {
     .vxe-table--main-wrapper,
     .vxe-table--fixed-left-wrapper,
     .vxe-table--fixed-right-wrapper {
       * {
         cursor: default;
+      }
+    }
+  }
+  &.drag--extend-range {
+    .vxe-table--main-wrapper,
+    .vxe-table--fixed-left-wrapper,
+    .vxe-table--fixed-right-wrapper {
+      * {
+        cursor: crosshair;
       }
     }
   }
@@ -352,6 +392,11 @@
           background-color: $vxe-table-column-hover-background-color;
         }
       }
+    }
+  }
+  &.is--area {
+    .vxe-table--main-wrapper {
+      user-select: none;
     }
   }
   .vxe-header--column,
@@ -649,6 +694,7 @@
     width: 1px;
     height: 100%;
     z-index: 4;
+    cursor: col-resize;
     &:before {
       content: "";
       display: block;

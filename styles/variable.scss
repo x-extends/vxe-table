@@ -53,8 +53,8 @@ $vxe-table-row-striped-background-color: #fafafa;
 $vxe-table-row-hover-striped-background-color: #f5f7fa;
 $vxe-table-row-radio-background-color: #fff3e0;
 $vxe-table-row-hover-radio-background-color: #ffebbc;
-$vxe-table-row-cheched-background-color: #fff3e0;
-$vxe-table-row-hover-cheched-background-color: #ffebbc;
+$vxe-table-row-checked-background-color: #fff3e0;
+$vxe-table-row-hover-checked-background-color: #ffebbc;
 $vxe-table-row-current-background-color: #e6f7ff;
 $vxe-table-row-hover-current-background-color: #d7effb;
 
@@ -73,8 +73,9 @@ $vxe-table-cell-input-height-small: $vxe-table-row-height-small - 6;
 $vxe-table-cell-input-height-mini: $vxe-table-row-height-mini - 6;
 $vxe-table-cell-dirty-width: 5px;
 $vxe-table-cell-dirty-color: #f56c6c;
-$vxe-table-cell-range-border-color: $vxe-primary-color;
-$vxe-table-cell-range-background-color: rgba(64,158,255,0.2);
+$vxe-table-cell-area-border-color: $vxe-primary-color;
+$vxe-table-cell-area-extend-border-color: $vxe-primary-color;
+$vxe-table-cell-area-background-color: rgba(64,158,255,0.2);
 
 /*table checkbox*/
 $vxe-table-checkbox-range-border-color: #006af1;
