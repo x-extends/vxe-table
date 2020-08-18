@@ -188,14 +188,6 @@ export const DomTools = {
     const rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
     return { rowid, rowIndex, columnIndex }
   },
-  getCell ($xetable, { row, column }) {
-    const rowid = UtilTools.getRowid($xetable, row)
-    const bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`] || $xetable.$refs.tableBody
-    if (bodyElem && bodyElem.$el) {
-      return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
-    }
-    return null
-  },
   toView (elem) {
     const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
     const scrollIntoView = 'scrollIntoView'

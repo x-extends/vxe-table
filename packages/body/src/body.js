@@ -326,7 +326,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
           'row--stripe': stripe && ($xetable._getRowIndex(row) + 1) % 2 === 0,
           'is--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $xetable.selectRow === row,
-          'row--cheched': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
+          'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid
@@ -540,14 +540,14 @@ export default {
       h('div', {
         class: 'vxe-table--checkbox-range'
       }),
-      mouseConfig && mouseOpts.range ? h('div', {
-        staticClass: 'vxe-table--cell-range'
+      mouseConfig && mouseOpts.area ? h('div', {
+        staticClass: 'vxe-table--cell-area'
       }, [
         h('div', {
-          staticClass: 'vxe-table--cell-range-area'
+          staticClass: 'vxe-table--cell-main-area'
         }, [
           h('span', {
-            staticClass: 'vxe-table--cell-range-extend-btn',
+            staticClass: 'vxe-table--cell-main-area-btn',
             on: {
               mousedown (evnt) {
                 $xetable.triggerCellExtendMousedownEvent(evnt)
@@ -556,10 +556,10 @@ export default {
           })
         ]),
         h('span', {
-          staticClass: 'vxe-table--cell-range-extend-area'
+          staticClass: 'vxe-table--cell-extend-area'
         }),
         h('div', {
-          staticClass: 'vxe-table--cell-range-multi'
+          staticClass: 'vxe-table--cell-multi-area'
         })
       ]) : null,
       !fixedType ? h('div', {

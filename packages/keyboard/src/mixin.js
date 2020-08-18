@@ -114,7 +114,7 @@ export default {
         }
         params.columnIndex = targetColumnIndex
         params.column = targetColumn
-        params.cell = DomTools.getCell(this, params)
+        params.cell = this.getCell(params.column, params.row)
         if (editConfig) {
           if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row') {
@@ -190,7 +190,7 @@ export default {
         }
       }
       this.scrollToRow(params.row, params.column).then(() => {
-        params.cell = DomTools.getCell(this, params)
+        params.cell = this.getCell(params.column, params.row)
         this.handleSelected(params, evnt)
       })
     },
@@ -198,6 +198,49 @@ export default {
      * 表头按下事件
      */
     triggerHeaderCellMousedownEvent (evnt, params) {
+      const { mouseConfig, mouseOpts } = this
+      const cell = evnt.currentTarget
+      const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
+      const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
+      if (mouseConfig && mouseOpts.area && this.handleHeaderCellAreaEvent) {
+        this.handleHeaderCellAreaEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
+      } else if (mouseConfig && mouseOpts.checked) {
+        this.handleHeaderCellCheckedEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
+      }
+      this.focus()
+      this.closeMenu()
+    },
+    /**
+     * 单元格按下事件
+     */
+    triggerCellMousedownEvent (evnt, params) {
+      const cell = evnt.currentTarget
+      params.cell = cell
+      this.handleCellMousedownEvent(evnt, params)
+      this.focus()
+      this.closeFilter()
+      this.closeMenu()
+    },
+    handleCellMousedownEvent (evnt, params) {
+      const { mouseConfig, mouseOpts, checkboxOpts, editConfig, editOpts } = this
+      const { column } = params
+      if (mouseConfig && mouseOpts.area && this.handleCellAreaEvent) {
+        return this.handleCellAreaEvent(evnt, params)
+      } else if (mouseConfig && mouseOpts.checked) {
+        // 在 v3.0 中废弃 mouse-config.checked
+        this.handleCheckedRangeEvent(evnt, params)
+      } else {
+        if (mouseConfig && mouseOpts.selected) {
+          // v3.0 废弃 type=index
+          if (!(column.type === 'seq' || column.type === 'index') && (!editConfig || editOpts.mode === 'cell')) {
+            this.handleSelected(params, evnt)
+          }
+        } else if (checkboxOpts.range) {
+          this.handleCheckboxRangeEvent(evnt, params)
+        }
+      }
+    },
+    handleHeaderCellCheckedEvent (evnt, params) {
       const { $el, tableData, mouseConfig, mouseOpts, elemStore, handleChecked, handleHeaderChecked } = this
       const { button } = evnt
       const { column } = params
@@ -205,9 +248,8 @@ export default {
       const isLeftBtn = button === 0
       // v3.0 废弃 type=index
       const isIndex = column.type === 'seq' || column.type === 'index'
-      // 在 v3.0 中废弃 mouse-config.checked
-      params.cell = cell
       if (mouseConfig) {
+        // 在 v3.0 中废弃 mouse-config.checked
         if (mouseOpts.checked) {
           const headerList = elemStore['main-header-list'].children
           const bodyList = elemStore['main-body-list'].children
@@ -256,44 +298,12 @@ export default {
               const firstCell = firstTrElem.querySelector('.col--seq')
               params.rowIndex = 0
               params.row = tableData[0]
-              params.cell = DomTools.getCell(this, params)
+              params.cell = this.getCell(params.column, params.row)
               this.handleSelected(params, evnt)
               this.handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector('.col--seq'))))
               this.handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
             }
           }
-        }
-      }
-      this.focus()
-      this.closeMenu()
-    },
-    /**
-     * 单元格按下事件
-     */
-    triggerCellMousedownEvent (evnt, params) {
-      const cell = evnt.currentTarget
-      params.cell = cell
-      this.handleCellMousedownEvent(evnt, params)
-      this.focus()
-      this.closeFilter()
-      this.closeMenu()
-    },
-    handleCellMousedownEvent (evnt, params) {
-      const { mouseConfig, mouseOpts, checkboxOpts, editConfig, editOpts } = this
-      const { column } = params
-      if (mouseConfig && mouseOpts.range && this.handleCellRangeEvent) {
-        return this.handleCellRangeEvent(evnt, params)
-      } else if (mouseConfig && mouseOpts.checked) {
-        // 在 v3.0 中废弃 mouse-config.checked
-        this.handleCheckedRangeEvent(evnt, params)
-      } else {
-        if (mouseConfig && mouseOpts.selected) {
-          // v3.0 废弃 type=index
-          if (!(column.type === 'seq' || column.type === 'index') && (!editConfig || editOpts.mode === 'cell')) {
-            this.handleSelected(params, evnt)
-          }
-        } else if (checkboxOpts.range) {
-          this.handleCheckboxRangeEvent(evnt, params)
         }
       }
     },
@@ -491,7 +501,7 @@ export default {
             }
           }, 50)
         }
-        DomTools.addClass($el, 'drag--range')
+        DomTools.addClass($el, 'drag--area')
         document.onmousemove = evnt => {
           evnt.preventDefault()
           evnt.stopPropagation()
@@ -517,7 +527,7 @@ export default {
         }
         document.onmouseup = (evnt) => {
           stopMouseScroll()
-          DomTools.removeClass($el, 'drag--range')
+          DomTools.removeClass($el, 'drag--area')
           checkboxRangeElem.removeAttribute('style')
           document.onmousemove = domMousemove
           document.onmouseup = domMouseup
@@ -653,7 +663,7 @@ export default {
           column: XEUtils.find(visibleColumn, column => column.property)
         }
         params.columnIndex = this.getColumnIndex(params.column)
-        params.cell = DomTools.getCell(this, params)
+        params.cell = this.getCell(params.column, params.row)
         this.handleSelected(params, evnt)
         this.handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(cell.nextElementSibling), DomTools.getCellNodeIndex(cell.parentNode.lastElementChild)))
         this.handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector(`.${column.id}`))))

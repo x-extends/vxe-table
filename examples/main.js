@@ -69,6 +69,8 @@ function mockData () {
       num5: (0.967 * index).toFixed(2),
       num6: `${(0.234 * index).toFixed(0)}`,
       num7: (1.39784 * (index + 1)).toFixed(5),
+      num8: (1.39784 * (index + 1)).toFixed(5),
+      num9: (1.39784 * (index + 1)).toFixed(5),
       color: index % 4 === 0 ? 'rgba(255, 0, 0, 0.8)' : index % 3 === 0 ? 'rgba(0, 255, 0, 0.8)' : '',
       color1: index % 4 === 0 ? '#409EFF' : index % 3 === 0 ? '#22de22' : '',
       slider: index % 5 === 0 ? 40 : index % 4 === 0 ? 20 : index % 3 === 0 ? 60 : 0,
@@ -320,7 +322,7 @@ const treeList = [
           {
             id: '32100',
             parentId: '32000',
-            name: 'vxe-table 从入门到废弃 32100.mp4',
+            name: 'vxe-table 从入门到放弃 32100.mp4',
             size: '35k',
             type: 'mp4',
             date: '2019-05-28',
@@ -524,7 +526,7 @@ const treeList = [
   {
     id: '50000',
     parentId: null,
-    name: 'vxe-table 从入门到废弃 50000.avi',
+    name: 'vxe-table 从入门到放弃 50000.avi',
     size: '498k',
     type: 'avi',
     date: '2019-12-02',

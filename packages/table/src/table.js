@@ -717,8 +717,8 @@ export default {
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
-    if (mouseOpts.checked && mouseOpts.range) {
-      UtilTools.error('vxe.error.errProp', ['mouse-config.checked', 'mouse-config.range'])
+    if (mouseOpts.checked && mouseOpts.area) {
+      UtilTools.error('vxe.error.errProp', ['mouse-config.checked', 'mouse-config.area'])
     }
     if (this.mouseConfig && this.editConfig) {
       if (mouseOpts.checked && editOpts.trigger !== 'dblclick') {
@@ -759,8 +759,8 @@ export default {
     if (this.treeConfig && this.checkboxOpts.range) {
       UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
     }
-    if (this.treeConfig && this.mouseOpts.range) {
-      UtilTools.error('vxe.error.noTree', ['mouse-config.range'])
+    if (this.treeConfig && this.mouseOpts.area) {
+      UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
     }
     // 检查是否有安装需要的模块
     let errorModuleName
@@ -899,8 +899,6 @@ export default {
       emptyOpts
     } = this
     const { leftList, rightList } = columnStore
-    // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && mouseOpts.checked
     let emptyContent
     if ($scopedSlots.empty) {
       emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)
@@ -927,7 +925,9 @@ export default {
         'is--round': this.round,
         't--stripe': stripe,
         't--selected': mouseConfig && mouseOpts.selected,
-        't--checked': isMouseChecked,
+        // 在 v3.0 中废弃 mouse-config.checked
+        't--checked': mouseConfig && mouseOpts.checked,
+        'is--area': mouseConfig && mouseOpts.area,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
         'is--loading': isCloak || loading,

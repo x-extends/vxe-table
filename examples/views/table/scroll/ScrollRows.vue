@@ -46,9 +46,9 @@
       <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
       <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
       <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
+      <vxe-table-column field="attr11" title="attr11" width="200"></vxe-table-column>
       <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-table-column field="attr10" title="attr10" width="200"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -109,9 +109,9 @@ export default {
           <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
           <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
           <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
+          <vxe-table-column field="attr11" title="attr11" width="200"></vxe-table-column>
           <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-table-column field="attr10" title="attr10" width="200"></vxe-table-column>
         </vxe-table>
         `,
         `

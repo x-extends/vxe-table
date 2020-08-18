@@ -221,7 +221,7 @@ export default {
             this.clostTooltip()
             this.clearActived(evnt)
             this.clearSelected(evnt)
-            this.clearCellRanges(evnt)
+            this.clearCellAreas(evnt)
             type = 'edit-actived'
             column.renderHeight = cell.offsetHeight
             actived.args = params
@@ -368,7 +368,7 @@ export default {
         if (row && field) {
           const column = XEUtils.find(this.visibleColumn, column => column.property === field)
           if (column && column.editRender) {
-            const cell = DomTools.getCell(this, { row, column })
+            const cell = this.getCell(column, row)
             if (cell) {
               this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
               this.lastCallTime = Date.now()
@@ -387,7 +387,7 @@ export default {
         const column = XEUtils.find(visibleColumn, column => column.property === field)
         const rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
-          const cell = DomTools.getCell(this, { row, rowIndex, column })
+          const cell = this.getCell(column, row)
           const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
         }
@@ -414,7 +414,7 @@ export default {
             }
             this.clearActived(evnt)
             this.clearSelected(evnt)
-            this.clearCellRanges(evnt)
+            this.clearCellAreas(evnt)
             selected.args = params
             selected.row = row
             selected.column = column
@@ -465,7 +465,7 @@ export default {
       const { row, column } = selected
       this.reColSdCls()
       if (row && column) {
-        const cell = DomTools.getCell(this, { row, column })
+        const cell = this.getCell(column, row)
         if (cell) {
           DomTools.addClass(cell, 'col--selected')
         }

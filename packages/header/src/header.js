@@ -59,16 +59,12 @@ export default {
       highlightCurrentColumn,
       currentColumn,
       mouseConfig,
-      mouseOpts,
       scrollXLoad,
       overflowX,
       scrollbarWidth,
       getColumnIndex,
       sortOpts
     } = $xetable
-    const isMouseSelected = mouseConfig && mouseOpts.selected
-    // 在 v3.0 中废弃 mouse-config.checked
-    const isMouseChecked = mouseConfig && mouseOpts.checked
     // 横向滚动渲染
     if (scrollXLoad) {
       if (fixedType) {
@@ -143,14 +139,14 @@ export default {
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
             }
-            if (highlightCurrentColumn || tableListeners['header-cell-click'] || isMouseChecked || sortOpts.trigger === 'cell') {
+            if (highlightCurrentColumn || tableListeners['header-cell-click'] || mouseConfig || sortOpts.trigger === 'cell') {
               thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, params)
             }
             if (tableListeners['header-cell-dblclick']) {
               thOns.dblclick = evnt => $xetable.triggerHeaderCellDBLClickEvent(evnt, params)
             }
             // 按下事件处理
-            if (isMouseSelected || isMouseChecked) {
+            if (mouseConfig) {
               thOns.mousedown = evnt => $xetable.triggerHeaderCellMousedownEvent(evnt, params)
             }
             const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
@@ -290,6 +286,9 @@ export default {
         $xetable.recalculate(true)
         DomTools.removeClass($xetable.$el, 'drag--resize')
         $xetable.saveCustomResizable()
+        if ($xetable.mouseConfig && $xetable.mouseOpts.area && $xetable.updateCellAreaEvent) {
+          $xetable.updateCellAreaEvent(evnt)
+        }
         $xetable.emitEvent('resizable-change', params, evnt)
       }
       updateEvent(evnt)

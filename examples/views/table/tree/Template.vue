@@ -28,7 +28,7 @@
           <span>{{ `类型：${row.type || '无'}` }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="type" title="Image" tree-node>
+      <vxe-table-column field="attr3" title="Image" tree-node>
         <template v-slot>
           <img src="static/other/img1.gif" height="50">
         </template>
@@ -82,7 +82,7 @@ export default {
               <span>{{ \`类型：\${row.type || '无'}\` }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="type" title="Image" tree-node>
+          <vxe-table-column field="attr3" title="Image" tree-node>
             <template v-slot>
               <img src="static/other/img1.gif" height="50">
             </template>

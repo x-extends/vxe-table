@@ -143,7 +143,7 @@ export default {
               }
             }
             const posAndFinish = () => {
-              params.cell = DomTools.getCell(this, params)
+              params.cell = this.getCell(params.column, params.row)
               DomTools.toView(params.cell)
               this.handleValidError(params)
               finish()

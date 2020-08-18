@@ -23,7 +23,7 @@
           <vxe-table-column field="f" title="人员经费"></vxe-table-column>
           <vxe-table-column field="g" title="公用经费"></vxe-table-column>
           <vxe-table-column title="其他经费">
-            <vxe-table-column field="d" title="合计"></vxe-table-column>
+            <vxe-table-column field="w" title="合计"></vxe-table-column>
             <vxe-table-column title="其中">
               <vxe-table-column field="h" title="标准化建设"></vxe-table-column>
               <vxe-table-column field="i" title="信息化建设"></vxe-table-column>
@@ -151,7 +151,7 @@ export default {
               <vxe-table-column field="f" title="人员经费"></vxe-table-column>
               <vxe-table-column field="g" title="公用经费"></vxe-table-column>
               <vxe-table-column title="其他经费">
-                <vxe-table-column field="d" title="合计"></vxe-table-column>
+                <vxe-table-column field="w" title="合计"></vxe-table-column>
                 <vxe-table-column title="其中">
                   <vxe-table-column field="h" title="标准化建设"></vxe-table-column>
                   <vxe-table-column field="i" title="信息化建设"></vxe-table-column>
@@ -270,7 +270,8 @@ export default {
                 s: 's' + index,
                 t: 't' + index,
                 u: 'u' + index,
-                v: 'v' + index
+                v: 'v' + index,
+                w: 'w' + index
               })
             }
             this.tableData = list
@@ -338,7 +339,8 @@ export default {
         s: 's' + index,
         t: 't' + index,
         u: 'u' + index,
-        v: 'v' + index
+        v: 'v' + index,
+        w: 'w' + index
       })
     }
     this.tableData = list

@@ -115,7 +115,7 @@ const Methods = {
       this.clearChecked()
       this.clearSelected()
       this.clearCopyed()
-      this.clearCellRanges()
+      this.clearCellAreas()
     }
     return this.clearScroll()
   },
@@ -343,6 +343,9 @@ const Methods = {
       const { id: colid, property, fixed, type, treeNode } = column
       const rest = { column, colid, index, items, parent }
       if (property) {
+        if (fullColumnFieldData[property]) {
+          UtilTools.warn('vxe.error.fieldRepet', [property])
+        }
         fullColumnFieldData[property] = rest
       }
       if (!hasFixed && fixed) {
@@ -368,8 +371,8 @@ const Methods = {
     if (expandColumn && hasFixed) {
       UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
     }
-    if (expandColumn && this.mouseOpts.range) {
-      UtilTools.error('vxe.error.errConflicts', ['mouse-config.range', 'column.type=expand'])
+    if (expandColumn && this.mouseOpts.area) {
+      UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
     }
     this.treeNodeColumn = treeNodeColumn
     this.expandColumn = expandColumn
@@ -1654,7 +1657,7 @@ const Methods = {
           this.clearChecked()
         }
         this.clearSelected()
-        this.clearCellRanges()
+        this.clearCellAreas()
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
@@ -3659,8 +3662,7 @@ const Methods = {
         const { row, column } = scope
         const type = 'change'
         if (this.hasCellRules(type, row, column)) {
-          const rowIndex = tableData.indexOf(row)
-          const cell = DomTools.getCell(this, { row, rowIndex, column })
+          const cell = this.getCell(column, row)
           if (cell) {
             return this.validCellRules(type, row, column, cellValue)
               .then(() => {
@@ -3705,6 +3707,15 @@ const Methods = {
   /*************************
    * Publish methods
    *************************/
+  getCell (column, row) {
+    const { $refs } = this
+    const rowid = getRowid(this, row)
+    const bodyElem = $refs[`${column.fixed || 'table'}Body`] || $refs.tableBody
+    if (bodyElem && bodyElem.$el) {
+      return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+    }
+    return null
+  },
   // 与工具栏对接
   connect ($toolbar) {
     if ($toolbar && $toolbar.syncUpdate) {
@@ -3720,7 +3731,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,filter,clearFilter,closeMenu,getCellRanges,clearCellRanges,getMouseSelecteds,getMouseCheckeds,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,filter,clearFilter,closeMenu,getCellAreas,clearCellAreas,setCellAreas,getMouseSelecteds,getMouseCheckeds,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

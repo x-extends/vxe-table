@@ -14,6 +14,7 @@ export default {
       reqProp: 'Missing the necessary "{{0}}" parameter, which can cause error.',
       emptyProp: 'The property "{{0}}" is not allowed to be empty.',
       errProp: 'Unsupported parameter "{{0}}", possibly "{{1}}".',
+      fieldRepet: 'The column field "{{0}}" is duplicated, which may make some features unusable',
       notFunc: 'method "{{0}}" not exist.',
       notSlot: 'slot "{{0}}" does not exist',
       noTree: 'The tree structure does not support "{{0}}".',

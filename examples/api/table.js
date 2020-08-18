@@ -1659,7 +1659,7 @@ const apis = [
           // },
           // {
           //   name: 'checked',
-          //   desc: '即将废弃',
+          //   desc: '开启单元格选取功能',
           //   version: '',
           //   type: 'Boolean',
           //   enum: '',
@@ -1667,7 +1667,7 @@ const apis = [
           //   list: []
           // },
           // {
-          //   name: 'range',
+          //   name: 'area',
           //   desc: '如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取',
           //   version: '',
           //   type: 'boolean',
@@ -3195,8 +3195,8 @@ const apis = [
       //   list: []
       // },
       // {
-      //   name: 'getCellRanges()',
-      //   desc: '用于 mouse-config.range，用于获取鼠标选择的区域',
+      //   name: 'getCellAreas()',
+      //   desc: '用于 mouse-config.area，用于获取鼠标选择的区域',
       //   version: '',
       //   type: 'Array<{cols: anyColumnConfig, rows: any[]}>',
       //   enum: '',
@@ -3417,6 +3417,15 @@ const apis = [
         defVal: 'row: Row, field: string',
         list: []
       },
+      // {
+      //   name: 'setCellAreas(areas)',
+      //   desc: '用于 mouse-config.area，选择指定区域的单元格',
+      //   version: '',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: 'areas: CellAreaOptions',
+      //   list: []
+      // },
       {
         name: 'setRowExpansion(rows, checked)',
         disabled: true,
@@ -3797,8 +3806,8 @@ const apis = [
       //   list: []
       // },
       // {
-      //   name: 'clearCellRanges()',
-      //   desc: '用于 mouse-config.range，用于清除鼠标选择的区域',
+      //   name: 'clearCellAreas()',
+      //   desc: '用于 mouse-config.area，用于清除鼠标选择的区域',
       //   version: '',
       //   type: 'Promise',
       //   enum: '',

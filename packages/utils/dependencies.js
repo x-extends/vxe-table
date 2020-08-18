@@ -24,6 +24,7 @@ import slice from 'xe-utils/methods/array/slice'
 // import findKey from 'xe-utils/methods/array/findKey'
 // import includes from 'xe-utils/methods/array/includes'
 import find from 'xe-utils/methods/array/find'
+import findLast from 'xe-utils/methods/array/findLast'
 // import reduce from 'xe-utils/methods/array/reduce'
 // import copyWithin from 'xe-utils/methods/array/copyWithin'
 import chunk from 'xe-utils/methods/array/chunk'
@@ -207,6 +208,7 @@ export default {
   // findKey,
   // includes,
   find,
+  findLast,
   // sum,
   // mean,
   // reduce,

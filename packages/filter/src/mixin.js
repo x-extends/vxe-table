@@ -155,6 +155,9 @@ export default {
           this.updateScrollYSpace()
         }
       }
+      if (this.mouseConfig && this.mouseOpts.area && this.updateCellAreaEvent) {
+        this.updateCellAreaEvent(evnt)
+      }
       this.closeFilter()
       this.$nextTick(this.recalculate)
     },
