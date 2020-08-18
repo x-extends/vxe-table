@@ -1,11 +1,13 @@
 import XEUtils from 'xe-utils'
 import VXEModal from './src/modal'
 import queue from './src/queue'
+import allActivedModals from './src/activities'
 import VXETable from '../v-x-e-table'
 import { UtilTools } from '../tools'
 
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
 let ModalClass = null
-const allActivedModals = []
 
 function openModal (opts) {
   const options = Object.assign({}, opts, { transfer: true })
@@ -19,9 +21,7 @@ function openModal (opts) {
           if (events.hide) {
             events.hide.call(this, params)
           }
-          /* eslint-disable @typescript-eslint/no-use-before-define */
           setTimeout(() => $modal.$destroy(), $modal.isMsg ? 500 : 100)
-          XEUtils.remove(allActivedModals, item => item === $modal)
           resolve(params.type)
         }
       })
@@ -29,10 +29,9 @@ function openModal (opts) {
         el: document.createElement('div'),
         propsData: options
       })
-      allActivedModals.push($modal)
       setTimeout(() => {
         if ($modal.isDestroy) {
-          XEUtils.remove(allActivedModals, item => item === $modal)
+          $modal.close()
         } else {
           $modal.open()
         }

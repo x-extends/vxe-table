@@ -252,8 +252,8 @@ select.vxe-select,
     &.row--radio {
       background-color: $vxe-table-row-radio-background-color;
     }
-    &.row--cheched {
-      background-color: $vxe-table-row-cheched-background-color;
+    &.row--checked {
+      background-color: $vxe-table-row-checked-background-color;
     }
     &.row--current {
       background-color: $vxe-table-row-current-background-color;
@@ -266,8 +266,8 @@ select.vxe-select,
       &.row--radio {
         background-color: $vxe-table-row-hover-radio-background-color;
       }
-      &.row--cheched {
-        background-color: $vxe-table-row-hover-cheched-background-color;
+      &.row--checked {
+        background-color: $vxe-table-row-hover-checked-background-color;
       }
       &.row--current {
         background-color: $vxe-table-row-hover-current-background-color;
@@ -286,9 +286,9 @@ select.vxe-select,
           background-color: $vxe-table-row-radio-background-color;
         }
       }
-      &.row--cheched {
+      &.row--checked {
         .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-cheched-background-color;
+          background-color: $vxe-table-row-checked-background-color;
         }
       }
       &.row--current {
@@ -310,9 +310,9 @@ select.vxe-select,
             background-color: $vxe-table-row-hover-radio-background-color;
           }
         }
-        &.row--cheched {
+        &.row--checked {
           .vxe-tree--btn-wrapper {
-            background-color: $vxe-table-row-hover-cheched-background-color;
+            background-color: $vxe-table-row-hover-checked-background-color;
           }
         }
         &.row--current {
@@ -686,6 +686,7 @@ select.vxe-select,
     width: 1px;
     height: 100%;
     z-index: 4;
+    cursor: col-resize;
     &:before {
       content: "";
       display: block;

@@ -1486,6 +1486,9 @@ export default {
         const { id: colid, property, fixed, type, treeNode } = column
         const rest = { column, colid, index, items, parent }
         if (property) {
+          if (fullColumnFieldData[property]) {
+            UtilTools.warn('vxe.error.fieldRepet', [property])
+          }
           fullColumnFieldData[property] = rest
         }
         if (!hasFixed && fixed) {
@@ -1511,8 +1514,8 @@ export default {
       if (expandColumn && hasFixed) {
         UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
       }
-      if (expandColumn && this.mouseOpts.range) {
-        UtilTools.error('vxe.error.errConflicts', ['mouse-config.range', 'column.type=expand'])
+      if (expandColumn && this.mouseOpts.area) {
+        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
       }
       this.treeNodeColumn = treeNodeColumn
       this.expandColumn = expandColumn
@@ -2939,7 +2942,7 @@ export default {
         }
         params.columnIndex = targetColumnIndex
         params.column = targetColumn
-        params.cell = DomTools.getCell(this, params)
+        params.cell = this.getCell(params.column, params.row)
         if (editConfig) {
           if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row') {
@@ -3014,7 +3017,7 @@ export default {
       if (params.rowIndex > -1) {
         params.rowIndex = _rowIndex
       }
-      params.cell = DomTools.getCell(this, params)
+      params.cell = this.getCell(params.column, params.row)
       this.handleSelected(params, evnt)
       this.scrollToRow(params.row, params.column)
     },
@@ -4518,7 +4521,7 @@ export default {
         if (row && field) {
           const column = XEUtils.find(this.visibleColumn, column => column.property === field)
           if (column && column.editRender) {
-            const cell = DomTools.getCell(this, { row, column })
+            const cell = this.getCell(column, row)
             if (cell) {
               this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
               this.lastCallTime = Date.now()
@@ -4537,7 +4540,7 @@ export default {
         const column = XEUtils.find(visibleColumn, column => column.property === field)
         const rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
-          const cell = DomTools.getCell(this, { row, rowIndex, column })
+          const cell = this.getCell(column, row)
           const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
         }
@@ -5503,13 +5506,12 @@ export default {
     updateStatus (scope, cellValue) {
       const customVal = !XEUtils.isUndefined(cellValue)
       return this.$nextTick().then(() => {
-        const { $refs, tableData, editRules, validStore } = this
+        const { $refs, editRules, validStore } = this
         if (scope && $refs.tableBody && editRules) {
           const { row, column } = scope
           const type = 'change'
           if (this.hasCellRules(type, row, column)) {
-            const rowIndex = tableData.indexOf(row)
-            const cell = DomTools.getCell(this, { row, rowIndex, column })
+            const cell = this.getCell(column, row)
             if (cell) {
               return this.validCellRules(type, row, column, cellValue)
                 .then(() => {
@@ -5667,7 +5669,7 @@ export default {
               }
             }
             const posAndFinish = () => {
-              params.cell = DomTools.getCell(this, params)
+              params.cell = this.getCell(params.column, params.row)
               DomTools.toView(params.cell)
               this.handleValidError(params)
               finish()
@@ -5713,7 +5715,7 @@ export default {
     //           this.validCellRules('all', row, column)
     //             .then(resolve)
     //             .catch(rule => {
-    //               const rest = { rule, row, column, cell: DomTools.getCell(this, { row, rowIndex, column }) }
+    //               const rest = { rule, row, column, cell: this.getCell(column, row) }
     //               return reject(rest)
     //             })
     //         }))
@@ -6206,6 +6208,15 @@ export default {
     /*************************
      * Publish methods
      *************************/
+    getCell (column, row) {
+      const { $refs } = this
+      const rowid = UtilTools.getRowid(this, row)
+      const bodyElem = $refs[`${column.fixed || 'table'}Body`] || $refs.tableBody
+      if (bodyElem && bodyElem.$el) {
+        return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+      }
+      return null
+    },
     // 与工具栏对接
     connect ($toolbar) {
       if ($toolbar && $toolbar.syncUpdate) {

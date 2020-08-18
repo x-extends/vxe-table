@@ -11,8 +11,8 @@
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-table-column>
       <vxe-table-column
-        field="role"
-        title="Role"
+        field="nickname"
+        title="Nickname"
         :filters="[{ data: '' }]"
         :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
         :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>
@@ -49,8 +49,8 @@ export default {
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-table-column>
           <vxe-table-column
-            field="role"
-            title="Role"
+            field="nickname"
+            title="Nickname"
             :filters="[{ data: '' }]"
             :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
             :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>

@@ -75,14 +75,14 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
+      <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
       <vxe-table-column field="atrr1" title="atrr1" width="200"></vxe-table-column>
       <vxe-table-column field="atrr2" title="atrr2" width="200"></vxe-table-column>
       <vxe-table-column field="atrr3" title="atrr3" width="200"></vxe-table-column>
       <vxe-table-column field="atrr4" title="atrr4" width="200"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="100" fixed="right"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="100" fixed="right"></vxe-table-column>
+      <vxe-table-column field="atrr6" title="Atrr6" width="100" fixed="right"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="100" fixed="right"></vxe-table-column>
     </vxe-table>
 
@@ -132,7 +132,7 @@
       </vxe-table-column>
       <vxe-table-column title="更多信息">
         <vxe-table-column field="role" title="Role"></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+        <vxe-table-column field="age" title="Age"></vxe-table-column>
         <vxe-table-column title="详细信息">
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="140" show-overflow></vxe-table-column>
@@ -160,7 +160,7 @@
       </vxe-table-column>
       <vxe-table-column title="更多信息">
         <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+        <vxe-table-column field="attr1" title="Attr1" width="300"></vxe-table-column>
         <vxe-table-column title="详细信息">
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
@@ -340,7 +340,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column title="更多信息">
             <vxe-table-column field="role" title="Role"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+            <vxe-table-column field="age" title="Age"></vxe-table-column>
             <vxe-table-column title="详细信息">
               <vxe-table-column field="sex" title="Sex"></vxe-table-column>
               <vxe-table-column field="date" title="Date" width="140" show-overflow></vxe-table-column>
@@ -372,7 +372,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column title="更多信息">
             <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+            <vxe-table-column field="attr1" title="Attr1" width="300"></vxe-table-column>
             <vxe-table-column title="详细信息">
               <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
               <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>

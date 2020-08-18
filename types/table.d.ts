@@ -704,6 +704,10 @@ export declare class Table extends VXETableModule {
     column: ColumnConfig;
   };
   /**
+   * 用于 mouse-config.area，用于获取鼠标选择的区域
+   */
+  getCellAreas(): MouseCellAreas[];
+  /**
    * 手动清除单元格选中状态
    */
   clearSelected(): Promise<any>;
@@ -761,6 +765,10 @@ export declare class Table extends VXETableModule {
    */
   clearActived(): Promise<any>;
   /**
+   * 用于 mouse-config.area，用于清除鼠标选择的区域
+   */
+  clearCellAreas(): Promise<any>;
+  /**
    * 用于 edit-config，获取已激活的行数据
    */
   getActiveRecord(): {
@@ -794,6 +802,11 @@ export declare class Table extends VXETableModule {
    * @param field 字段名
    */
   setSelectCell(row: any, field: string): Promise<any>;
+  /**
+   * 用于 mouse-config.area，选择指定区域的单元格
+   * @param areas 指定区域
+   */
+  setCellAreas(areas: CellAreaOptions): Promise<any>;
   /**
    * 手动清除校验
    */
@@ -981,6 +994,28 @@ export interface ContextMenuConfig {
  */
 export interface MouseConfig {
   selected?: boolean;
+  /**
+   * 如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取
+   */
+  area?: boolean;
+}
+
+export interface MouseCellAreas {
+  main: boolean;
+  rows: any[];
+  cols: ColumnConfig[];
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+export interface CellAreaOptions {
+  main: boolean;
+  startColumn: ColumnConfig;
+  endColumn: ColumnConfig;
+  startRow: any;
+  endRow: any;
 }
 
 /**

@@ -370,7 +370,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
           'row--hover': row === hoverRow,
           'is--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $table.selectRow === row,
-          'row--cheched': checkboxOpts.highlight && $table.isCheckedByCheckboxRow(row)
+          'row--checked': checkboxOpts.highlight && $table.isCheckedByCheckboxRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : ''],
         attrs: {
           'data-rowid': rowid
