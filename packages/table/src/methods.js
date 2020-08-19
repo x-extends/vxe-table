@@ -1123,7 +1123,9 @@ const Methods = {
     this.visibleColumn = visibleColumn
     return this.$nextTick().then(() => {
       this.updateFooter()
-      this.recalculate(true)
+      return this.recalculate(true)
+    }).then(() => {
+      this.updateCellAreas()
     })
   },
   /**
@@ -1657,7 +1659,9 @@ const Methods = {
           this.clearChecked()
         }
         this.clearSelected()
-        this.clearCellAreas()
+        if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
+          this.preventEvent(evnt, 'event.clearAreas', {}, this.clearCellAreas)
+        }
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
@@ -1702,16 +1706,33 @@ const Methods = {
         const isDwArrow = keyCode === 40
         const isDel = keyCode === 46
         const isA = keyCode === 65
-        const isC = keyCode === 67
-        const isV = keyCode === 86
-        const isX = keyCode === 88
         const isF2 = keyCode === 113
         const isCtrlKey = evnt.ctrlKey
         const isShiftKey = evnt.shiftKey
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         let params
-        if (isEsc) {
+        if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
+          // 在 v3.0 中废弃 type=selection
+          // 空格键支持选中复选框
+          evnt.preventDefault()
+          // 在 v3.0 中废弃 type=selection
+          if (selected.column.type === 'checkbox' || selected.column.type === 'selection') {
+            this.handleToggleCheckRowEvent(selected.args, evnt)
+          } else {
+            this.triggerRadioRowEvent(evnt, selected.args)
+          }
+        } else if (operCtxMenu) {
+          // 如果配置了右键菜单; 支持方向键操作、回车
+          evnt.preventDefault()
+          if (ctxMenuStore.showChild && hasChildrenList(ctxMenuStore.selected)) {
+            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
+          } else {
+            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
+          }
+        } else if (keyboardConfig && this.mouseConfig && this.mouseOpts.area && this.handleKeyboardEvent) {
+          this.handleKeyboardEvent(evnt)
+        } else if (isEsc) {
           // 如果按下了 Esc 键，关闭快捷菜单、筛选
           this.closeMenu()
           this.closeFilter()
@@ -1724,15 +1745,11 @@ const Methods = {
               this.$nextTick(() => this.handleSelected(params, evnt))
             }
           }
-        } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
-          // 在 v3.0 中废弃 type=selection
-          // 空格键支持选中复选框
-          evnt.preventDefault()
-          // 在 v3.0 中废弃 type=selection
-          if (selected.column.type === 'checkbox' || selected.column.type === 'selection') {
-            this.handleToggleCheckRowEvent(selected.args, evnt)
-          } else {
-            this.triggerRadioRowEvent(evnt, selected.args)
+        } else if (isF2) {
+          // 如果按下了 F2 键
+          if (selected.row && selected.column) {
+            evnt.preventDefault()
+            this.handleActived(selected.args, evnt)
           }
         } else if (isEnter && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
           // 退出选中
@@ -1767,20 +1784,6 @@ const Methods = {
               }
             }
           }
-        } else if (operCtxMenu) {
-          // 如果配置了右键菜单; 支持方向键操作、回车
-          evnt.preventDefault()
-          if (ctxMenuStore.showChild && hasChildrenList(ctxMenuStore.selected)) {
-            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
-          } else {
-            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
-          }
-        } else if (isF2) {
-          // 如果按下了 F2 键
-          if (selected.row && selected.column) {
-            evnt.preventDefault()
-            this.handleActived(selected.args, evnt)
-          }
         } else if (operArrow && keyboardConfig.isArrow) {
           // 如果按下了方向键
           if (selected.row && selected.column) {
@@ -1814,14 +1817,10 @@ const Methods = {
                 .then(() => this.triggerCurrentRowEvent(evnt, params))
             }
           }
-        } else if (keyboardConfig.isCut && isCtrlKey && (isA || isX || isC || isV)) {
+        } else if (keyboardConfig && isCtrlKey && isA) {
           // 如果开启复制功能
-          if (isA) {
+          if (keyboardConfig.isCut && this.mouseConfig && this.mouseOpts.checked) {
             this.handleAllChecked(evnt)
-          } else if (isX || isC) {
-            this.handleCopyed(isX, evnt)
-          } else {
-            this.handlePaste(evnt)
           }
         } else if (keyboardConfig.isEdit && !isCtrlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           // 启用编辑后，空格键功能将失效
@@ -1840,6 +1839,36 @@ const Methods = {
         }
         this.emitEvent('keydown', {}, evnt)
       })
+    }
+  },
+  handleGlobalPasteEvent (evnt) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
+    if (isActivated) {
+      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
+        this.handlePasteCellAreaEvent(evnt)
+      } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
+        this.handlePaste(evnt)
+      }
+    }
+  },
+  handleGlobalCopyEvent (evnt) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
+    if (isActivated) {
+      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
+        this.handleCopyCellAreaEvent(evnt)
+      } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
+        this.handleCopyed(false, evnt)
+      }
+    }
+  },
+  handleGlobalCutEvent (evnt) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
+    if (isActivated) {
+      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
+        this.handleCutCellAreaEvent(evnt)
+      } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
+        this.handleCopyed(true, evnt)
+      }
     }
   },
   handleGlobalResizeEvent () {
@@ -3657,7 +3686,7 @@ const Methods = {
   updateStatus (scope, cellValue) {
     const customVal = !XEUtils.isUndefined(cellValue)
     return this.$nextTick().then(() => {
-      const { $refs, tableData, editRules, validStore } = this
+      const { $refs, editRules, validStore } = this
       if (scope && $refs.tableBody && editRules) {
         const { row, column } = scope
         const type = 'change'
@@ -3687,6 +3716,11 @@ const Methods = {
       this.tZindex = this.zIndex
     } else if (this.tZindex < UtilTools.getLastZIndex()) {
       this.tZindex = UtilTools.nextZIndex()
+    }
+  },
+  updateCellAreas () {
+    if (this.mouseConfig && this.mouseOpts.area && this.handleUpdateCellAreas) {
+      this.handleUpdateCellAreas()
     }
   },
   emitEvent (type, params, evnt) {
@@ -3731,7 +3765,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,filter,clearFilter,closeMenu,getCellAreas,clearCellAreas,setCellAreas,getMouseSelecteds,getMouseCheckeds,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,filter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,setCellAreas,getMouseSelecteds,getMouseCheckeds,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

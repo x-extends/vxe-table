@@ -802,6 +802,9 @@ export default {
       }
       this.updateStyle()
     })
+    GlobalEvent.on(this, 'paste', this.handleGlobalPasteEvent)
+    GlobalEvent.on(this, 'copy', this.handleGlobalCopyEvent)
+    GlobalEvent.on(this, 'cut', this.handleGlobalCutEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
     GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
@@ -843,6 +846,9 @@ export default {
     this.preventEvent(null, 'beforeDestroy')
   },
   destroyed () {
+    GlobalEvent.off(this, 'paste')
+    GlobalEvent.off(this, 'copy')
+    GlobalEvent.off(this, 'cut')
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'blur')
     GlobalEvent.off(this, 'mousewheel')

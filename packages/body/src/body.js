@@ -543,7 +543,7 @@ export default {
       mouseConfig && mouseOpts.area ? h('div', {
         staticClass: 'vxe-table--cell-area'
       }, [
-        h('div', {
+        h('span', {
           staticClass: 'vxe-table--cell-main-area'
         }, [
           h('span', {
@@ -558,8 +558,11 @@ export default {
         h('span', {
           staticClass: 'vxe-table--cell-extend-area'
         }),
-        h('div', {
+        h('span', {
           staticClass: 'vxe-table--cell-multi-area'
+        }),
+        h('span', {
+          staticClass: 'vxe-table--cell-active-area'
         })
       ]) : null,
       !fixedType ? h('div', {

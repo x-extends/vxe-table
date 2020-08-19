@@ -222,21 +222,22 @@ export default {
       this.closeMenu()
     },
     handleCellMousedownEvent (evnt, params) {
-      const { mouseConfig, mouseOpts, checkboxOpts, editConfig, editOpts } = this
+      const { mouseConfig, mouseOpts, checkboxConfig, checkboxOpts, editConfig, editOpts } = this
       const { column } = params
       if (mouseConfig && mouseOpts.area && this.handleCellAreaEvent) {
-        return this.handleCellAreaEvent(evnt, params)
+        this.handleCellAreaEvent(evnt, params)
       } else if (mouseConfig && mouseOpts.checked) {
         // 在 v3.0 中废弃 mouse-config.checked
         this.handleCheckedRangeEvent(evnt, params)
       } else {
+        if (checkboxConfig && checkboxOpts.range) {
+          this.handleCheckboxRangeEvent(evnt, params)
+        }
         if (mouseConfig && mouseOpts.selected) {
           // v3.0 废弃 type=index
           if (!(column.type === 'seq' || column.type === 'index') && (!editConfig || editOpts.mode === 'cell')) {
             this.handleSelected(params, evnt)
           }
-        } else if (checkboxOpts.range) {
-          this.handleCheckboxRangeEvent(evnt, params)
         }
       }
     },
