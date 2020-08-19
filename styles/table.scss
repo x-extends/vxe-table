@@ -108,7 +108,7 @@ select.vxe-select,
   display: none;
   position: absolute;
   background-color: $vxe-table-checkbox-range-background-color;
-  border: 1px solid $vxe-table-checkbox-range-border-color;
+  border: $vxe-table-checkbox-range-border-width solid $vxe-table-checkbox-range-border-color;
   pointer-events: none;
 }
 
