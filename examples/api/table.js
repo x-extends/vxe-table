@@ -1652,14 +1652,6 @@ const apis = [
             defVal: 'false',
             list: []
           },
-          // {
-          //   name: 'isCut',
-          //   desc: '开启复制粘贴功能',
-          //   type: 'boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
-          // },
           {
             name: 'isEdit',
             desc: '开启任意键进入编辑（功能键除外）',
@@ -1669,6 +1661,14 @@ const apis = [
             defVal: 'false',
             list: []
           },
+          // {
+          //   name: 'isClip',
+          //   desc: '用于 mouse-config.area，开启复制/剪贴/粘贴功能',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'false',
+          //   list: []
+          // },
           {
             name: 'editMethod',
             desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({row, rowIndex, column, columnIndex}) 可以返回 false 来阻止默认行为',
@@ -2973,9 +2973,18 @@ const apis = [
       },
       // {
       //   name: 'getCellAreas()',
-      //   desc: '用于 mouse-config.area，用于获取鼠标选择的区域',
+      //   desc: '用于 mouse-config.area，用于获取鼠标选择的所有区域',
       //   version: '',
-      //   type: 'Array<{cols: anyColumnConfig, rows: any[]}>',
+      //   type: 'Array<{cols: ColumnConfig[], rows: any[]}>',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'getActiveCellArea()',
+      //   desc: '用于 mouse-config.area，用于获取区域中的活动单元格',
+      //   version: '',
+      //   type: '{column: ColumnConfig, row: any}',
       //   enum: '',
       //   defVal: '',
       //   list: []

@@ -74,7 +74,8 @@ $vxe-table-cell-input-height-mini: $vxe-table-row-height-mini - 6;
 $vxe-table-cell-dirty-width: 5px;
 $vxe-table-cell-dirty-color: #f56c6c;
 $vxe-table-cell-area-border-color: $vxe-primary-color;
-$vxe-table-cell-area-extend-border-color: $vxe-primary-color;
+$vxe-table-cell-extend-area-border-color: $vxe-primary-color;
+$vxe-table-cell-active-area-border-color: $vxe-primary-color;
 $vxe-table-cell-area-background-color: rgba(64,158,255,0.2);
 
 /*table checkbox*/

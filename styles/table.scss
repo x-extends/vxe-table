@@ -100,7 +100,8 @@
 
 .vxe-table--checkbox-range,
 .vxe-table--cell-main-area,
-.vxe-table--cell-extend-area {
+.vxe-table--cell-extend-area,
+.vxe-table--cell-active-area {
   display: none;
   position: absolute;
   pointer-events: none;
@@ -136,8 +137,12 @@
     cursor: crosshair;
   }
   .vxe-table--cell-extend-area {
-    border: 2px solid $vxe-table-cell-area-extend-border-color;
+    border: 2px solid $vxe-table-cell-extend-area-border-color;
   }
+}
+
+.vxe-table--cell-active-area {
+  border: 2px solid $vxe-table-cell-active-area-border-color;
 }
 
 .vxe-table--cell-multi-area {

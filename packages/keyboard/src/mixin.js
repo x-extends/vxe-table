@@ -196,12 +196,11 @@ export default {
       this.closeMenu()
     },
     handleCellMousedownEvent (evnt, params) {
-      const { editConfig, editOpts, handleSelected, checkboxOpts, mouseConfig, mouseOpts } = this
+      const { editConfig, editOpts, handleSelected, checkboxConfig, checkboxOpts, mouseConfig, mouseOpts } = this
       if (mouseConfig && mouseOpts.area && this.handleCellAreaEvent) {
         return this.handleCellAreaEvent(evnt, params)
-      } else if (checkboxOpts.range) {
-        return this.handleCheckboxRangeEvent(evnt, params)
-      } else {
+      } else if (checkboxConfig && checkboxOpts.range) {
+        this.handleCheckboxRangeEvent(evnt, params)
         if (mouseConfig && mouseOpts.selected) {
           if (!editConfig || editOpts.mode === 'cell') {
             handleSelected(params, evnt)

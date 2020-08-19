@@ -157,6 +157,15 @@ export default {
           list: []
         },
         {
+          name: 'event.clearAreas',
+          desc: '如果功能被支持，清除单元格区域之前触发，允许返回 false 阻止默认行为',
+          version: '',
+          type: 'Boolean',
+          enum: '',
+          defVal: '',
+          list: []
+        },
+        {
           name: 'event.keydown',
           desc: '键盘按下之前触发，允许返回 false 阻止默认行为',
           version: '',

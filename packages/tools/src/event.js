@@ -26,6 +26,11 @@ export const GlobalEvent = {
 }
 
 if (browse.isDoc) {
+  if (!browse.msie) {
+    document.addEventListener('copy', GlobalEvent.trigger, false)
+    document.addEventListener('cut', GlobalEvent.trigger, false)
+    document.addEventListener('paste', GlobalEvent.trigger, false)
+  }
   document.addEventListener('keydown', GlobalEvent.trigger, false)
   document.addEventListener('contextmenu', GlobalEvent.trigger, false)
   window.addEventListener('mousedown', GlobalEvent.trigger, false)

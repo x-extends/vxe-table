@@ -1039,7 +1039,9 @@ const Methods = {
     this.visibleColumn = visibleColumn
     return this.$nextTick().then(() => {
       this.updateFooter()
-      this.recalculate(true)
+      return this.recalculate(true)
+    }).then(() => {
+      this.updateCellAreas()
     })
   },
   /**
@@ -1556,7 +1558,9 @@ const Methods = {
     } else if (mouseConfig) {
       if (!getEventTargetNode(evnt, $el).flag && !getEventTargetNode(evnt, $refs.tableWrapper).flag) {
         this.clearSelected()
-        this.clearCellAreas()
+        if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
+          this.preventEvent(evnt, 'event.clearAreas', {}, this.clearCellAreas)
+        }
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
@@ -1607,7 +1611,25 @@ const Methods = {
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         let params
-        if (isEsc) {
+        if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
+          // 空格键支持选中复选框
+          evnt.preventDefault()
+          if (selected.column.type === 'checkbox') {
+            this.handleToggleCheckRowEvent(selected.args, evnt)
+          } else {
+            this.triggerRadioRowEvent(evnt, selected.args)
+          }
+        } else if (operCtxMenu) {
+          // 如果配置了右键菜单; 支持方向键操作、回车
+          evnt.preventDefault()
+          if (ctxMenuStore.showChild && hasChildrenList(ctxMenuStore.selected)) {
+            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
+          } else {
+            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
+          }
+        } else if (keyboardConfig && this.mouseConfig && this.mouseOpts.area && this.handleKeyboardEvent) {
+          this.handleKeyboardEvent(evnt)
+        } else if (isEsc) {
           // 如果按下了 Esc 键，关闭快捷菜单、筛选
           this.closeMenu()
           this.closeFilter()
@@ -1620,13 +1642,11 @@ const Methods = {
               this.$nextTick(() => this.handleSelected(params, evnt))
             }
           }
-        } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
-          // 空格键支持选中复选框
-          evnt.preventDefault()
-          if (selected.column.type === 'checkbox') {
-            this.handleToggleCheckRowEvent(selected.args, evnt)
-          } else {
-            this.triggerRadioRowEvent(evnt, selected.args)
+        } else if (isF2) {
+          // 如果按下了 F2 键
+          if (selected.row && selected.column) {
+            evnt.preventDefault()
+            this.handleActived(selected.args, evnt)
           }
         } else if (isEnter && !isAltKey && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
           // 退出选中
@@ -1660,20 +1680,6 @@ const Methods = {
                   .then(() => this.triggerCurrentRowEvent(evnt, params))
               }
             }
-          }
-        } else if (operCtxMenu) {
-          // 如果配置了右键菜单; 支持方向键操作、回车
-          evnt.preventDefault()
-          if (ctxMenuStore.showChild && hasChildrenList(ctxMenuStore.selected)) {
-            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
-          } else {
-            this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
-          }
-        } else if (isF2) {
-          // 如果按下了 F2 键
-          if (selected.row && selected.column) {
-            evnt.preventDefault()
-            this.handleActived(selected.args, evnt)
           }
         } else if (operArrow && keyboardConfig.isArrow) {
           // 如果按下了方向键
@@ -1725,6 +1731,30 @@ const Methods = {
         }
         this.emitEvent('keydown', {}, evnt)
       })
+    }
+  },
+  handleGlobalPasteEvent (evnt) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
+    if (isActivated) {
+      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
+        this.handlePasteCellAreaEvent(evnt)
+      }
+    }
+  },
+  handleGlobalCopyEvent (evnt) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
+    if (isActivated) {
+      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
+        this.handleCopyCellAreaEvent(evnt)
+      }
+    }
+  },
+  handleGlobalCutEvent (evnt) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
+    if (isActivated) {
+      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
+        this.handleCutCellAreaEvent(evnt)
+      }
     }
   },
   handleGlobalResizeEvent () {
@@ -3472,6 +3502,11 @@ const Methods = {
       this.tZindex = UtilTools.nextZIndex()
     }
   },
+  updateCellAreas () {
+    if (this.mouseConfig && this.mouseOpts.area && this.handleUpdateCellAreas) {
+      this.handleUpdateCellAreas()
+    }
+  },
   emitEvent (type, params, evnt) {
     this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))
   },
@@ -3511,7 +3546,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,clearFilter,closeMenu,getCellAreas,clearCellAreas,setCellAreas,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
+const funcs = 'setFilter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,setCellAreas,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {
