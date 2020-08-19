@@ -408,7 +408,7 @@ const apis = [
       },
       {
         name: 'hide',
-        desc: '在窗口关闭时会触发该事件',
+        desc: '在窗口隐藏时会触发该事件',
         version: '',
         type: '{ type, $event }',
         enum: '',

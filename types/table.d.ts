@@ -803,10 +803,15 @@ export declare class Table extends VXETableModule {
    */
   setSelectCell(row: any, field: string): Promise<any>;
   /**
-   * 用于 mouse-config.area，选择指定区域的单元格
+   * 用于 mouse-config.area，选取指定区域的单元格
    * @param areas 指定区域
    */
   setCellAreas(areas: CellAreaOptions): Promise<any>;
+  /**
+   * 用于 mouse-config.area，设置活动的区域的单元格
+   * @param activeArea 
+   */
+  setActiveCellArea(activeArea: ActiveCellAreaOptions): Promise<any>;
   /**
    * 手动清除校验
    */
@@ -1016,6 +1021,13 @@ export interface CellAreaOptions {
   endColumn: ColumnConfig;
   startRow: any;
   endRow: any;
+  [key: string]: any;
+}
+
+export interface ActiveCellAreaOptions {
+  column: ColumnConfig;
+  row: any;
+  [key: string]: any;
 }
 
 /**
@@ -1027,6 +1039,10 @@ export interface KeyboardConfig {
   isEnter?: boolean;
   isTab?: boolean;
   isEdit?: boolean;
+  /**
+   * 用于 mouse-config.area，开启复制/剪贴/粘贴功能
+   */
+  isClip?: boolean;
   /**
    * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
    */

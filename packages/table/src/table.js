@@ -6194,7 +6194,7 @@ export default {
       this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))
     },
     focus () {
-      this.isActivated = false
+      this.isActivated = true
       return this.$nextTick()
     },
     blur () {
