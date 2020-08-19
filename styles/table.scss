@@ -156,7 +156,8 @@
 .vxe-table--checkbox-range,
 .vxe-table--cell-main-area,
 .vxe-table--cell-extend-area,
-.vxe-table--cell-active-area {
+.vxe-table--cell-active-area,
+.vxe-table--cell-copy-area {
   display: none;
   position: absolute;
   pointer-events: none;
@@ -166,7 +167,7 @@
 /*复选框-范围选择*/
 .vxe-table--checkbox-range {
   background-color: $vxe-table-checkbox-range-background-color;
-  border: 1px solid $vxe-table-checkbox-range-border-color;
+  border: $vxe-table-checkbox-range-border-width solid $vxe-table-checkbox-range-border-color;
 }
 
 .vxe-table--cell-area {
@@ -175,7 +176,7 @@
   display: none;
   & > .vxe-table--cell-main-area {
     background-color: $vxe-table-cell-area-background-color;
-    border: 1px solid $vxe-table-cell-area-border-color;
+    border: $vxe-table-cell-area-border-width solid $vxe-table-cell-area-border-color;
   }
   .vxe-table--cell-main-area-btn {
     display: block;
@@ -196,8 +197,26 @@
   }
 }
 
+@keyframes moveCopyCellBorder {
+  from {
+  }
+  to {
+    background-position: 0 -12px, 100% 12px, 12px 0, -12px 100%;
+  }
+}
+
+.vxe-table--cell-copy-area {
+  background: linear-gradient(0deg, transparent 6px, $vxe-table-cell-copy-area-border-color 6px) repeat-y,
+              linear-gradient(0deg, transparent 50%, $vxe-table-cell-copy-area-border-color 0) repeat-y,
+              linear-gradient(90deg, transparent 50%, $vxe-table-cell-copy-area-border-color 0) repeat-x,
+              linear-gradient(90deg, transparent 50%, $vxe-table-cell-copy-area-border-color 0) repeat-x;
+  background-size: $vxe-table-cell-copy-area-border-width 12px, $vxe-table-cell-copy-area-border-width 12px, 12px $vxe-table-cell-copy-area-border-width, 12px $vxe-table-cell-copy-area-border-width;
+  background-position: 0 0, 100% 0, 0 0, 0 100%;
+  animation: moveCopyCellBorder .5s infinite linear;
+}
+
 .vxe-table--cell-active-area {
-  border: 2px solid $vxe-table-cell-active-area-border-color;
+  border: $vxe-table-cell-extend-area-border-width solid $vxe-table-cell-active-area-border-color;
 }
 
 .vxe-table--cell-multi-area {

@@ -556,6 +556,9 @@ export default {
           })
         ]),
         h('span', {
+          staticClass: 'vxe-table--cell-copy-area'
+        }),
+        h('span', {
           staticClass: 'vxe-table--cell-extend-area'
         }),
         h('span', {
