@@ -2769,7 +2769,7 @@ export default {
             evnt.preventDefault()
             // 在 v3.0 中废弃 selection
             if (selected.column.type === 'checkbox' || selected.column.type === 'selection') {
-              this.handleToggleCheckRowEvent(selected.args, evnt)
+              this.handleToggleCheckRowEvent(evnt, selected.args)
             } else {
               this.triggerRadioRowEvent(evnt, selected.args)
             }
@@ -3488,7 +3488,7 @@ export default {
       }
       this.checkSelectionStatus()
     },
-    handleToggleCheckRowEvent (params, evnt) {
+    handleToggleCheckRowEvent (evnt, params) {
       const { selection, checkboxOpts } = this
       const { checkField: property } = checkboxOpts
       const { row } = params
@@ -3522,7 +3522,7 @@ export default {
      * 多选，切换某一行的选中状态
      */
     toggleCheckboxRow (row) {
-      this.handleToggleCheckRowEvent({ row })
+      this.handleToggleCheckRowEvent(null, { row })
       return this.$nextTick()
     },
     // 在 v3.0 中废弃 setAllSelection
@@ -4129,7 +4129,7 @@ export default {
           }
           // 如果是复选框
           if (!triggerCheckbox && (checkboxOpts.trigger === 'row' || (isCheckboxType && checkboxOpts.trigger === 'cell'))) {
-            this.handleToggleCheckRowEvent(params, evnt)
+            this.handleToggleCheckRowEvent(evnt, params)
           }
         }
         if (editConfig) {
