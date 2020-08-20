@@ -1664,6 +1664,16 @@ const apis = [
           // {
           //   name: 'isClip',
           //   desc: '用于 mouse-config.area，开启复制/剪贴/粘贴功能',
+          //   version: '',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'false',
+          //   list: []
+          // },
+          // {
+          //   name: 'isChecked',
+          //   desc: '用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
+          //   version: '',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',
@@ -3396,6 +3406,15 @@ const apis = [
       // {
       //   name: 'clearCellAreas()',
       //   desc: '用于 mouse-config.area，用于清除鼠标选择的区域',
+      //   version: '',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'clearCopyCellArea()',
+      //   desc: '用于 mouse-config.area，用于清除标记为复制粘贴的区域',
       //   version: '',
       //   type: 'Promise',
       //   enum: '',

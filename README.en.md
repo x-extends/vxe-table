@@ -79,8 +79,8 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Modal
 * [x] Renderer
 * [x] Virtual Scroller
-* [x] Cell area selection
-* [x] Cell copy/paste
+* [x] (pro) Cell area selection
+* [x] (pro) Cell copy/paste
 
 ## Modules
 

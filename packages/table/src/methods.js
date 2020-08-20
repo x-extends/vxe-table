@@ -114,6 +114,7 @@ const Methods = {
     if (this.keyboardConfig || this.mouseConfig) {
       this.clearSelected()
       this.clearCellAreas()
+      this.clearCopyCellArea()
     }
     return this.clearScroll()
   },
@@ -148,7 +149,7 @@ const Methods = {
   loadTableData (datas) {
     const { keepSource, treeConfig, editStore, sYOpts, scrollYStore } = this
     const tableFullData = datas ? datas.slice(0) : []
-    const scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
+    const scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt <= tableFullData.length
     scrollYStore.startIndex = 0
     scrollYStore.visibleIndex = 0
     editStore.insertList = []
@@ -1009,7 +1010,7 @@ const Methods = {
     }
     const visibleColumn = leftList.concat(centerList).concat(rightList)
     let tableColumn = visibleColumn
-    let scrollXLoad = sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+    let scrollXLoad = sXOpts.gt > -1 && sXOpts.gt <= tableFullColumn.length
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad && isGroup) {
       scrollXLoad = false
@@ -1559,7 +1560,10 @@ const Methods = {
       if (!getEventTargetNode(evnt, $el).flag && !getEventTargetNode(evnt, $refs.tableWrapper).flag) {
         this.clearSelected()
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
-          this.preventEvent(evnt, 'event.clearAreas', {}, this.clearCellAreas)
+          this.preventEvent(evnt, 'event.clearAreas', {}, () => {
+            this.clearCellAreas()
+            this.clearCopyCellArea()
+          })
         }
       }
     }
@@ -1611,15 +1615,7 @@ const Methods = {
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         let params
-        if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
-          // 空格键支持选中复选框
-          evnt.preventDefault()
-          if (selected.column.type === 'checkbox') {
-            this.handleToggleCheckRowEvent(selected.args, evnt)
-          } else {
-            this.triggerRadioRowEvent(evnt, selected.args)
-          }
-        } else if (operCtxMenu) {
+        if (operCtxMenu) {
           // 如果配置了右键菜单; 支持方向键操作、回车
           evnt.preventDefault()
           if (ctxMenuStore.showChild && hasChildrenList(ctxMenuStore.selected)) {
@@ -1629,6 +1625,14 @@ const Methods = {
           }
         } else if (keyboardConfig && this.mouseConfig && this.mouseOpts.area && this.handleKeyboardEvent) {
           this.handleKeyboardEvent(evnt)
+        } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
+          // 空格键支持选中复选框
+          evnt.preventDefault()
+          if (selected.column.type === 'checkbox') {
+            this.handleToggleCheckRowEvent(evnt, selected.args)
+          } else {
+            this.triggerRadioRowEvent(evnt, selected.args)
+          }
         } else if (isEsc) {
           // 如果按下了 Esc 键，关闭快捷菜单、筛选
           this.closeMenu()
@@ -2047,7 +2051,7 @@ const Methods = {
     }
     this.checkSelectionStatus()
   },
-  handleToggleCheckRowEvent (params, evnt) {
+  handleToggleCheckRowEvent (evnt, params) {
     const { selection, checkboxOpts } = this
     const { checkField: property } = checkboxOpts
     const { row } = params
@@ -2069,7 +2073,7 @@ const Methods = {
    * 多选，切换某一行的选中状态
    */
   toggleCheckboxRow (row) {
-    this.handleToggleCheckRowEvent({ row })
+    this.handleToggleCheckRowEvent(null, { row })
     return this.$nextTick()
   },
   /**
@@ -2539,7 +2543,7 @@ const Methods = {
         }
         // 如果是复选框
         if (!triggerCheckbox && (checkboxOpts.trigger === 'row' || (isCheckboxType && checkboxOpts.trigger === 'cell'))) {
-          this.handleToggleCheckRowEvent(params, evnt)
+          this.handleToggleCheckRowEvent(evnt, params)
         }
       }
       // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
@@ -3546,7 +3550,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,setCellAreas,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
+const funcs = 'setFilter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,clearCopyCellArea,setCellAreas,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

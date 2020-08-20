@@ -496,11 +496,14 @@ export default {
             staticClass: 'vxe-table--cell-main-area-btn',
             on: {
               mousedown (evnt) {
-                $xetable.triggerCellExtendMousedownEvent(evnt)
+                $xetable.triggerCellExtendMousedownEvent(evnt, { $table: $xetable, fixed: fixedType, type: cellType })
               }
             }
           })
         ]),
+        h('span', {
+          staticClass: 'vxe-table--cell-copy-area'
+        }),
         h('span', {
           staticClass: 'vxe-table--cell-extend-area'
         }),

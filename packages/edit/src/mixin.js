@@ -195,7 +195,7 @@ export default {
      * 处理激活编辑
      */
     handleActived (params, evnt) {
-      const { editStore, editOpts, tableColumn } = this
+      const { editStore, editOpts, tableColumn, mouseConfig } = this
       const { mode, activeMethod } = editOpts
       const { actived } = editStore
       const { row, column, cell } = params
@@ -205,10 +205,13 @@ export default {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
           if (!activeMethod || activeMethod(params)) {
+            if (this.mouseConfig) {
+              this.clearSelected(evnt)
+              this.clearCellAreas(evnt)
+              this.clearCopyCellArea(evnt)
+            }
             this.clostTooltip()
             this.clearActived(evnt)
-            this.clearSelected(evnt)
-            this.clearCellAreas(evnt)
             type = 'edit-actived'
             column.renderHeight = cell.offsetHeight
             actived.args = params
@@ -385,6 +388,7 @@ export default {
             this.clearActived(evnt)
             this.clearSelected(evnt)
             this.clearCellAreas(evnt)
+            this.clearCopyCellArea(evnt)
             selected.args = params
             selected.row = row
             selected.column = column
