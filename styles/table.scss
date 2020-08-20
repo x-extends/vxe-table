@@ -193,7 +193,7 @@
     cursor: crosshair;
   }
   .vxe-table--cell-extend-area {
-    border: 2px solid $vxe-table-cell-extend-area-border-color;
+    border: $vxe-table-cell-extend-area-border-width solid $vxe-table-cell-extend-area-border-color;
   }
 }
 
@@ -216,7 +216,7 @@
 }
 
 .vxe-table--cell-active-area {
-  border: $vxe-table-cell-extend-area-border-width solid $vxe-table-cell-active-area-border-color;
+  border: $vxe-table-cell-active-area-border-width solid $vxe-table-cell-active-area-border-color;
 }
 
 .vxe-table--cell-multi-area {

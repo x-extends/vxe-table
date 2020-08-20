@@ -214,14 +214,15 @@ export default {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
           if (!activeMethod || activeMethod(params)) {
-            if (this.keyboardConfig || this.mouseConfig) {
+            if (this.mouseConfig) {
               this.clearCopyed(evnt)
               this.clearChecked()
+              this.clearSelected(evnt)
+              this.clearCellAreas(evnt)
+              this.clearCopyCellArea(evnt)
             }
             this.clostTooltip()
             this.clearActived(evnt)
-            this.clearSelected(evnt)
-            this.clearCellAreas(evnt)
             type = 'edit-actived'
             column.renderHeight = cell.offsetHeight
             actived.args = params
@@ -415,6 +416,7 @@ export default {
             this.clearActived(evnt)
             this.clearSelected(evnt)
             this.clearCellAreas(evnt)
+            this.clearCopyCellArea(evnt)
             selected.args = params
             selected.row = row
             selected.column = column
