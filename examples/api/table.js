@@ -1733,6 +1733,7 @@ const apis = [
           // {
           //   name: 'isCut',
           //   desc: '开启复制粘贴功能',
+          //   version: '',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',
@@ -1741,6 +1742,16 @@ const apis = [
           // {
           //   name: 'isClip',
           //   desc: '用于 mouse-config.area，开启复制/剪贴/粘贴功能',
+          //   version: '',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'false',
+          //   list: []
+          // },
+          // {
+          //   name: 'isChecked',
+          //   desc: '用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
+          //   version: '',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',

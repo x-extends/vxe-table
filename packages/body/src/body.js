@@ -550,7 +550,7 @@ export default {
             staticClass: 'vxe-table--cell-main-area-btn',
             on: {
               mousedown (evnt) {
-                $xetable.triggerCellExtendMousedownEvent(evnt)
+                $xetable.triggerCellExtendMousedownEvent(evnt, { $table: $xetable, fixed: fixedType, type: cellType })
               }
             }
           })
