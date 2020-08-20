@@ -1044,6 +1044,10 @@ export interface KeyboardConfig {
    */
   isClip?: boolean;
   /**
+   * 用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能
+   */
+  isChecked?: boolean;
+  /**
    * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
    */
   editMethod?(params: { row: any, rowIndex: number, column: ColumnConfig, columnIndex: number, cell: HTMLElement }): boolean;
