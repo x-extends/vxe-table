@@ -134,7 +134,9 @@ export default {
     headerRowStyle: [Object, Function],
     // 给表尾行附加样式
     footerRowStyle: [Object, Function],
-    // 合并行或列
+    // 合并指定单元格
+    // merges: Array,
+    // 自定义合并行或列的方法
     spanMethod: Function,
     // 表尾合并行或列
     footerSpanMethod: Function,
@@ -293,6 +295,8 @@ export default {
       treeLazyLoadeds: [],
       // 树节点不确定状态的列表
       treeIndeterminates: [],
+      // 合并指定单元格
+      mergeCells: [],
       // 是否已经加载了筛选
       hasFilterPanel: false,
       // 当前选中的筛选列

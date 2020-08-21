@@ -809,6 +809,9 @@ const Methods = {
     if (this.treeConfig) {
       this.handleDefaultTreeExpand()
     }
+    // if (this.merges) {
+    //   this.handleDefaultMergeCells()
+    // }
     this.$nextTick(() => setTimeout(this.recalculate))
   },
   /**
@@ -3715,6 +3718,45 @@ const Methods = {
       }
     })
   },
+  // handleDefaultMergeCells () {
+  //   this.mergeCells = this.merges
+  // },
+  // getMergeCells () {
+  //   return this.mergeCells.slice(0)
+  // },
+  // addMergeCells (mergeOpts) {
+  //   if (mergeOpts) {
+  //     const { mergeCells } = this
+  //     if (!XEUtils.isArray(mergeOpts)) {
+  //       mergeOpts = [mergeOpts]
+  //     }
+  //     mergeOpts.forEach(item => {
+  //       if (mergeCells.indexOf(item) === -1) {
+  //         mergeCells.push(item)
+  //       }
+  //     })
+  //   }
+  //   return this.$nextTick()
+  // },
+  // removeMergeCells (mergeOpts) {
+  //   if (mergeOpts) {
+  //     const { mergeCells } = this
+  //     if (!XEUtils.isArray(mergeOpts)) {
+  //       mergeOpts = [mergeOpts]
+  //     }
+  //     mergeOpts.forEach(item => {
+  //       const mcIndex = mergeCells.indexOf(item)
+  //       if (mcIndex > -1) {
+  //         mergeCells.splice(mcIndex, 1)
+  //       }
+  //     })
+  //   }
+  //   return this.$nextTick()
+  // },
+  // clearMergeCells () {
+  //   this.mergeCells = []
+  //   return this.$nextTick()
+  // },
   updateZindex () {
     if (this.zIndex) {
       this.tZindex = this.zIndex
