@@ -63,6 +63,19 @@ function renderLine (h, _vm, $xetable, rowLevel, items, params) {
     ] : []
 }
 
+function mergeMethod (mergeCells, _rowIndex, _columnIndex) {
+  for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
+    const { row, col, rowspan, colspan } = mergeCells[mIndex]
+    if (row === _rowIndex && col === _columnIndex) {
+      return { rowspan, colspan }
+    }
+    if (_rowIndex >= row && _rowIndex < row + rowspan && _columnIndex >= col && _columnIndex < col + colspan) {
+      return { rowspan: 0, colspan: 0 }
+    }
+  }
+  return {}
+}
+
 /**
  * 渲染列
  */
@@ -82,6 +95,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     currentColumn,
     cellClassName,
     cellStyle,
+    mergeCells,
     spanMethod,
     radioOpts,
     checkboxOpts,
@@ -177,7 +191,20 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 合并行或列
-  if (spanMethod) {
+  if (mergeCells.length) {
+    const _rowIndex = $xetable._getRowIndex(row)
+    const { rowspan = 1, colspan = 1 } = mergeMethod(mergeCells, _rowIndex, _columnIndex)
+    if (!rowspan || !colspan) {
+      return null
+    }
+    if (rowspan > 1) {
+      attrs.rowspan = rowspan
+    }
+    if (colspan > 1) {
+      attrs.colspan = colspan
+    }
+  } else if (spanMethod) {
+    // 自定义合并行或列的方法
     const { rowspan = 1, colspan = 1 } = spanMethod(params) || {}
     if (!rowspan || !colspan) {
       return null
@@ -417,9 +444,9 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, spanMethod, scrollXLoad, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, mergeCells, spanMethod, scrollXLoad, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
     // 如果是固定列与设置了超出隐藏
-    if (!spanMethod) {
+    if (!mergeCells.length && !spanMethod) {
       if (fixedType && allColumnOverflow) {
         tableColumn = fixedColumn
       } else if (scrollXLoad) {

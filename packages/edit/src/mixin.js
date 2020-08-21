@@ -195,7 +195,7 @@ export default {
      * 处理激活编辑
      */
     handleActived (params, evnt) {
-      const { editStore, editOpts, tableColumn, mouseConfig } = this
+      const { editStore, editOpts, tableColumn } = this
       const { mode, activeMethod } = editOpts
       const { actived } = editStore
       const { row, column, cell } = params

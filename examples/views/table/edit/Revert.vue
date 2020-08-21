@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       设置 <table-api-link prop="keep-source"/> 开启保持原始值状态，通过调用 <table-api-link prop="revertData"/> 还原数据<br>
-      <span class="red">（注：开启 keep-source 将会导致性能直线下降，具体取决于数据量）</span>
+      <span class="red">（注：开启 keep-source 将会影响性能，具体取决于数据量）</span>
     </p>
 
     <vxe-toolbar perfect>

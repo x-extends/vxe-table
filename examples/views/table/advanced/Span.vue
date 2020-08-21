@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      合并列，通过 <table-api-link prop="span-method"/> 方法，使用 $rowIndex 获取渲染中的行索引，rowIndex 指向真实数据的行索引，可以根据不同场景使用<br>
-      <span class="red">（注：<table-api-link prop="span-method"/> 合并的逻辑都是自行实现的，该示例仅供参考）</span>
+      合并列，通过自定义 <table-api-link prop="span-method"/> 合并方法使用 $rowIndex 获取渲染中的行索引，rowIndex 指向真实数据的行索引，可以根据不同场景使用<br>
+      <span class="red">（注：<table-api-link prop="span-method"/> ，不能用于固定列，合并的逻辑都是自行实现的，该示例仅供参考）</span>
     </p>
 
     <vxe-toolbar>
