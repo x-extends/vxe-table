@@ -19,7 +19,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">深层结构，可用于带有复杂结构的场景<span class="red">（缺点深层级数据类型必须先定义，深层结构将导致性能直线下降，具体取决于数据量大小）</span></p>
+    <p class="tip">深层结构，可用于带有复杂结构的场景<span class="red">（缺点深层级数据类型必须先定义，深层结构将影响性能，具体取决于数据量大小）</span></p>
 
     <vxe-table
       :data="tableData2">

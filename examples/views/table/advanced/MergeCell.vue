@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现复杂的报表<br><span class="red">（注：<table-api-link prop="span-method"/> 合并的逻辑都是自行实现的，该示例仅供参考）</span></p>
+    <p class="tip">通过 <table-api-link prop="merge-cells"/> 合并指定单元格</p>
 
     <vxe-table
       border
@@ -10,7 +10,7 @@
       align="center"
       column-width="80"
       :cell-style="cellStyleMethod"
-      :span-method="mergeMethod"
+      :merge-cells="mergeCells"
       :data="tableData">
       <vxe-table-column field="a" title="名称"></vxe-table-column>
       <vxe-table-column field="b" title="教育经费投入">
@@ -138,7 +138,7 @@ export default {
           align="center"
           column-width="80"
           :cell-style="cellStyleMethod"
-          :span-method="mergeMethod"
+          :merge-cells="mergeCells"
           :data="tableData">
           <vxe-table-column field="a" title="名称"></vxe-table-column>
           <vxe-table-column field="b" title="教育经费投入">
@@ -290,23 +290,6 @@ export default {
                 }
               }
               return null
-            },
-            // 通用单元格合并函数（将指定区域进行合并）
-            mergeMethod ({ row, column }) {
-              const { mergeCells } = this
-              const xTable = this.$refs.xTable
-              const _rowIndex = xTable._getRowIndex(row)
-              const _columnIndex = xTable._getColumnIndex(column)
-              for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
-                const { row, col, rowspan, colspan } = mergeCells[mIndex]
-                if (row === _rowIndex && col === _columnIndex) {
-                  return { rowspan, colspan }
-                }
-                if (_rowIndex >= row && _rowIndex < row + rowspan && _columnIndex >= col && _columnIndex < col + colspan) {
-                  return { rowspan: 0, colspan: 0 }
-                }
-              }
-              return { rowspan: 1, colspan: 1 }
             }
           }
         }
@@ -364,23 +347,6 @@ export default {
         }
       }
       return null
-    },
-    // 通用单元格合并函数（将指定区域进行合并）
-    mergeMethod ({ row, column }) {
-      const { mergeCells } = this
-      const xTable = this.$refs.xTable
-      const _rowIndex = xTable._getRowIndex(row)
-      const _columnIndex = xTable._getColumnIndex(column)
-      for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
-        const { row, col, rowspan, colspan } = mergeCells[mIndex]
-        if (row === _rowIndex && col === _columnIndex) {
-          return { rowspan, colspan }
-        }
-        if (_rowIndex >= row && _rowIndex < row + rowspan && _columnIndex >= col && _columnIndex < col + colspan) {
-          return { rowspan: 0, colspan: 0 }
-        }
-      }
-      return { rowspan: 1, colspan: 1 }
     }
   }
 }

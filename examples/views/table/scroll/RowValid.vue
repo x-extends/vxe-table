@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">可编辑表格<br><span class="red">（注：当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时）</span></p>
+    <p class="tip">
+      可编辑表格<br>
+      <span class="red">（不指定数据的情况下，默认只校验状态发生变动的数据，例如：新增、修改...等）</span>
+    </p>
 
     <vxe-toolbar :refresh="{query: findList}">
       <template v-slot:buttons>

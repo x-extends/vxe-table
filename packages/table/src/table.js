@@ -254,7 +254,7 @@ export default {
     headerRowStyle: [Object, Function],
     // 给表尾行附加样式
     footerRowStyle: [Object, Function],
-    // 合并行或列
+    // 自定义合并行或列的方法
     spanMethod: Function,
     // 表尾合并行或列
     footerSpanMethod: Function,

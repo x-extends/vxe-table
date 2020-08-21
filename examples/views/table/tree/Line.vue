@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       树表格，通过配置 <table-api-link prop="tree-config"/>={<table-api-link prop="line"/>: true} 属性来开启树节点连接线<br>
-      <span class="red">（注：连接线只支持基本功能，开启渲染节点线将会下降渲染性能，具体取决于数据量）</span>
+      <span class="red">（注：连接线只支持基本功能，开启渲染节点线将会影响渲染性能，具体取决于数据量）</span>
     </p>
 
     <vxe-table

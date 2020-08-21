@@ -30,7 +30,7 @@
       :loading="loading">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
+      <vxe-table-column field="id" title="ID" width="200"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
       <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
@@ -93,7 +93,7 @@ export default {
           :loading="loading">
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
+          <vxe-table-column field="id" title="ID" width="200"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
           <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>

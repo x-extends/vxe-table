@@ -195,8 +195,8 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       $table.triggerCellDBLClickEvent(evnt, params)
     }
   }
-  // 合并行或列
   if (spanMethod) {
+    // 自定义合并行或列的方法
     const { rowspan = 1, colspan = 1 } = spanMethod(params) || {}
     if (!rowspan || !colspan) {
       return null
@@ -523,14 +523,16 @@ export default {
       }
     }
     // 如果是固定列与设置了超出隐藏
-    if (fixedType && allColumnOverflow && !spanMethod) {
-      tableColumn = fixedColumn
-      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
-    } else if (scrollXLoad) {
-      if (fixedType && !spanMethod) {
+    if (!spanMethod) {
+      if (fixedType && allColumnOverflow) {
         tableColumn = fixedColumn
+        tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+      } else if (scrollXLoad) {
+        if (fixedType) {
+          tableColumn = fixedColumn
+        }
+        tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
       }
-      tableWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
     }
     const tableStyle = {
       width: tableWidth ? `${tableWidth}px` : tableWidth,
