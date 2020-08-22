@@ -1,6 +1,6 @@
 import { VXETableModule } from '../component'
 import { TableRenderParams } from '../table'
-import { ColumnConfig } from '../column'
+import { ColumnInfo } from '../column'
 import { RenderOptions, OptionProps, OptionGroupProps } from './renderer'
 
 /**
@@ -56,7 +56,7 @@ export interface ColumnFilterRenderParams extends TableRenderParams{
   /**
    * 列对象
    */
-  column: ColumnConfig;
+  column: ColumnInfo;
   /**
    * 相对于 columns 中的索引
    */
@@ -90,14 +90,14 @@ export interface ColumnFilterMethodParams {
   /**
    * 列对象
    */
-  column: ColumnConfig;
+  column: ColumnInfo;
 }
 
 export interface ColumnFilterSlotParams extends ColumnFilterRenderParams {}
 
 export interface ColumnFilterResetParams extends TableRenderParams {
   options: ColumnFilterParams[];
-  column: ColumnConfig;
+  column: ColumnInfo;
 }
 
 /**

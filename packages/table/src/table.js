@@ -290,6 +290,8 @@ export default {
     autoResize: { type: Boolean, default: () => GlobalConfig.table.autoResize },
     // 是否自动根据状态属性去更新响应式表格宽高
     syncResize: [Boolean, String, Number],
+    // 设置列的默认参数，仅对部分支持的属性有效
+    columnConfig: Object,
     // 序号配置项
     seqConfig: Object,
     // 排序配置项
@@ -603,6 +605,9 @@ export default {
         mini: 36
       }
     },
+    columnOpts () {
+      return Object.assign({}, this.columnConfig)
+    },
     seqOpts () {
       return Object.assign({ startIndex: 0 }, GlobalConfig.table.seqConfig, this.seqConfig)
     },
@@ -837,6 +842,14 @@ export default {
     })
     if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
       UtilTools.warn('vxe.error.reqProp', ['row-id'])
+    }
+    // 在 v3.0 中废弃 column-width
+    if (this.columnWidth) {
+      UtilTools.warn('vxe.error.delProp', ['column-width', 'column-config.width'])
+    }
+    // 在 v3.0 中废弃 column-min-width
+    if (this.columnMinWidth) {
+      UtilTools.warn('vxe.error.delProp', ['column-min-width', 'column-config.minWidth'])
     }
     // 在 v3.0 中废弃 start-index
     if (this.startIndex) {
@@ -1564,21 +1577,21 @@ export default {
     },
     /**
      * 根据 column 获取相对于当前表格列中的索引
-     * @param {ColumnConfig} column 列配置
+     * @param {ColumnInfo} column 列配置
      */
     _getColumnIndex (column) {
       return this.visibleColumn.indexOf(column)
     },
     /**
      * 根据 column 获取渲染中的虚拟索引
-     * @param {ColumnConfig} column 列配置
+     * @param {ColumnInfo} column 列配置
      */
     $getColumnIndex (column) {
       return this.tableColumn.indexOf(column)
     },
     /**
      * 判断是否为索引列
-     * @param {ColumnConfig} column 列配置
+     * @param {ColumnInfo} column 列配置
      */
     isSeqColumn (column) {
       return column && (column.type === 'seq' || column.type === 'index')
@@ -2127,7 +2140,7 @@ export default {
     },
     /**
      * 隐藏指定列
-     * @param {ColumnConfig} column 列配置
+     * @param {ColumnInfo} column 列配置
      */
     hideColumn (column) {
       column.visible = false
@@ -2135,7 +2148,7 @@ export default {
     },
     /**
      * 显示指定列
-     * @param {ColumnConfig} column 列配置
+     * @param {ColumnInfo} column 列配置
      */
     showColumn (column) {
       column.visible = true
@@ -2415,7 +2428,11 @@ export default {
      * 指定列宽的列进行拆分
      */
     analyColumnWidth () {
-      const { columnWidth, columnMinWidth } = this
+      const { columnWidth, columnMinWidth, columnOpts } = this
+      // 在 v3.0 中废弃 columnWidth
+      const defaultWidth = columnOpts.width || columnWidth
+      // 在 v3.0 中废弃 columnMinWidth
+      const defaultMinWidth = columnOpts.minWidth || columnMinWidth
       const resizeList = []
       const pxList = []
       const pxMinList = []
@@ -2423,22 +2440,22 @@ export default {
       const scaleMinList = []
       const autoList = []
       this.tableFullColumn.forEach(column => {
-        if (columnWidth && !column.width) {
-          column.width = columnWidth
+        if (defaultWidth && !column.width) {
+          column.width = defaultWidth
         }
-        if (columnMinWidth && !column.minWidth) {
-          column.minWidth = columnMinWidth
+        if (defaultMinWidth && !column.minWidth) {
+          column.minWidth = defaultMinWidth
         }
         if (column.visible) {
           if (column.resizeWidth) {
             resizeList.push(column)
-          } else if (DomTools.isPx(column.width || columnWidth)) {
+          } else if (DomTools.isPx(column.width)) {
             pxList.push(column)
-          } else if (DomTools.isScale(column.width || columnWidth)) {
+          } else if (DomTools.isScale(column.width)) {
             scaleList.push(column)
-          } else if (DomTools.isPx(column.minWidth || columnMinWidth)) {
+          } else if (DomTools.isPx(column.minWidth)) {
             pxMinList.push(column)
-          } else if (DomTools.isScale(column.minWidth || columnMinWidth)) {
+          } else if (DomTools.isScale(column.minWidth)) {
             scaleMinList.push(column)
           } else {
             autoList.push(column)
@@ -3286,7 +3303,7 @@ export default {
     /**
      * 处理显示 tooltip
      * @param {Event} evnt 事件
-     * @param {ColumnConfig} column 列配置
+     * @param {ColumnInfo} column 列配置
      * @param {Row} row 行对象
      */
     handleTooltip (evnt, cell, overflowElem, tipElem, params) {
@@ -4625,7 +4642,7 @@ export default {
     },
     /**
      * 修改筛选条件列表
-     * @param {ColumnConfig} column 列
+     * @param {ColumnInfo} column 列
      * @param {Array} options 选项
      */
     setFilter (column, options) {
