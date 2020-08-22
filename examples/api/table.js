@@ -807,7 +807,7 @@ const apis = [
       {
         name: 'column-width',
         disabled: true,
-        descKey: 'app.api.table.desc.columnWidth',
+        desc: '即将废弃，请使用 column-config.width',
         version: '1.13',
         type: 'Number, String',
         enum: 'auto, px, %',
@@ -817,7 +817,7 @@ const apis = [
       {
         name: 'column-min-width',
         disabled: true,
-        descKey: 'app.api.table.desc.columnMinWidth',
+        desc: '即将废弃，请使用 column-config.minWidth',
         version: '1.13',
         type: 'Number, String',
         enum: 'auto, px, %',
