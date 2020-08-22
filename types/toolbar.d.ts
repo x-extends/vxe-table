@@ -1,7 +1,7 @@
 import { CreateElement, VNode } from 'vue'
 import { VXETableModule } from './component'
 import { GridRenderParams } from './grid'
-import { ColumnConfig } from './column'
+import { ColumnInfo } from './column'
 import { RenderOptions } from './extends/renderer'
 
 /**
@@ -51,7 +51,7 @@ export declare class Toolbar extends VXETableModule {
     trigger?: string,
     immediate?: boolean;
     storage?: boolean;
-    checkMethod?(params: { column: ColumnConfig }): boolean;
+    checkMethod?(params: { column: ColumnInfo }): boolean;
     isFooter?: Boolean;
     icon?: string;
     [key: string]: any;
@@ -110,7 +110,7 @@ export interface ToolbarOptions {
     trigger?: string,
     immediate?: boolean;
     storage?: boolean;
-    checkMethod?(params: { column: ColumnConfig }): boolean;
+    checkMethod?(params: { column: ColumnInfo }): boolean;
     isFooter?: Boolean;
     icon?: string;
     [key: string]: any;

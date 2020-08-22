@@ -1,5 +1,5 @@
 import { VXETableModule } from '../component'
-import { ColumnConfig } from '../column'
+import { ColumnInfo } from '../column'
 import { Table } from '../table'
 
 /**
@@ -46,7 +46,7 @@ export interface ColumnEditValidErrParams {
   cellValue: any,
   rule: ColumnEditRule;
   rules: ColumnEditRule[];
-  column: ColumnConfig;
+  column: ColumnInfo;
   columnIndex: number;
   row: any;
   rowIndex: number;

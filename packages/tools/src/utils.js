@@ -9,7 +9,7 @@ function getColFuncWidth (isExists, defaultWidth = 16) {
   return isExists ? defaultWidth : 0
 }
 
-class ColumnConfig {
+class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xetable, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
     const $xegrid = $xetable.$xegrid
@@ -282,10 +282,10 @@ export const UtilTools = {
     return XEUtils.set(row, column.property, value)
   },
   isColumn (column) {
-    return column instanceof ColumnConfig
+    return column instanceof ColumnInfo
   },
   getColumnConfig ($xetable, _vm, options) {
-    return UtilTools.isColumn(_vm) ? _vm : new ColumnConfig($xetable, _vm, options)
+    return UtilTools.isColumn(_vm) ? _vm : new ColumnInfo($xetable, _vm, options)
   },
   // 组装列配置
   assemColumn (_vm) {

@@ -168,6 +168,8 @@ export default {
     autoResize: { type: Boolean, default: () => GlobalConfig.table.autoResize },
     // 是否自动根据状态属性去更新响应式表格宽高
     syncResize: [Boolean, String, Number],
+    // 设置列的默认参数，仅对部分支持的属性有效
+    columnConfig: Object,
     // 序号配置项
     seqConfig: Object,
     // 排序配置项
@@ -433,6 +435,9 @@ export default {
         mini: 36
       }
     },
+    columnOpts () {
+      return Object.assign({}, this.columnConfig)
+    },
     seqOpts () {
       return Object.assign({ startIndex: 0 }, GlobalConfig.table.seqConfig, this.seqConfig)
     },
@@ -690,6 +695,14 @@ export default {
     })
     if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
       UtilTools.warn('vxe.error.reqProp', ['row-id'])
+    }
+    // 在 v3.0 中废弃 column-width
+    if (this.columnWidth) {
+      UtilTools.warn('vxe.error.delProp', ['column-width', 'column-config.width'])
+    }
+    // 在 v3.0 中废弃 column-min-width
+    if (this.columnMinWidth) {
+      UtilTools.warn('vxe.error.delProp', ['column-min-width', 'column-config.minWidth'])
     }
     // 在 v3.0 中废弃 start-index
     if (this.startIndex) {

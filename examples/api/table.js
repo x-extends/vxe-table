@@ -260,7 +260,7 @@ const exportDataAPI = [
   },
   {
     name: 'columnFilterMethod',
-    desc: '列过滤方法，该函数 Function(column,$columnIndex) 的返回值用来决定是否过滤掉列',
+    desc: '列过滤方法，该函数 Function({ column, $columnIndex }) 的返回值用来决定是否过滤掉列',
     version: '',
     type: 'Function',
     enum: '',
@@ -269,7 +269,7 @@ const exportDataAPI = [
   },
   {
     name: 'dataFilterMethod',
-    desc: '数据过滤方法，该函数 Function(row,$rowIndex) 的返回值用来决定是否过滤掉数据行',
+    desc: '数据过滤方法，该函数 Function({ row, $rowIndex }) 的返回值用来决定是否过滤掉数据行',
     version: '',
     type: 'Function',
     enum: '',
@@ -278,7 +278,7 @@ const exportDataAPI = [
   },
   {
     name: 'footerFilterMethod',
-    desc: '表尾过滤方法，该函数 Function(cells,$rowIndex) 的返回值用来决定是否过滤掉表尾行',
+    desc: '表尾过滤方法，该函数 Function({ items, $rowIndex }) 的返回值用来决定是否过滤掉表尾行',
     version: '',
     type: 'Function',
     enum: '',
@@ -794,6 +794,7 @@ const apis = [
       },
       {
         name: 'column-width',
+        disabled: true,
         descKey: 'app.api.table.desc.columnWidth',
         version: '2.3.0',
         type: 'Number, String',
@@ -803,6 +804,7 @@ const apis = [
       },
       {
         name: 'column-min-width',
+        disabled: true,
         descKey: 'app.api.table.desc.columnMinWidth',
         version: '2.3.0',
         type: 'Number, String',
@@ -854,6 +856,34 @@ const apis = [
         enum: '',
         defVal: '继承 setup.table.zIndex',
         list: []
+      },
+      {
+        name: 'column-config',
+        desc: '列的默认参数',
+        version: '2.9.18',
+        type: 'any',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'width',
+            desc: '列的默认宽度',
+            version: '',
+            type: 'Number, String',
+            enum: 'auto, px, %',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'min-width',
+            desc: '列的默认最小宽度',
+            version: '',
+            type: 'Number, String',
+            enum: 'auto, px, %',
+            defVal: '',
+            list: []
+          }
+        ]
       },
       {
         name: 'seq-config',
@@ -1386,7 +1416,7 @@ const apis = [
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({expanded, column, columnIndex, $columnIndex, row, rowIndex?, $rowIndex?}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法 Function({expanded, column, columnIndex, row, rowIndex?}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '2.8.22',
             type: 'Function',
             enum: '',
@@ -1395,7 +1425,7 @@ const apis = [
           },
           {
             name: 'visibleMethod',
-            desc: '该函数 Function({column, columnIndex, $columnIndex, row, rowIndex?, $rowIndex?}) 的返回值用来决定是否允许显示展开按钮',
+            desc: '该函数 Function({column, columnIndex, row, rowIndex?}) 的返回值用来决定是否允许显示展开按钮',
             version: '2.8.24',
             type: 'Function',
             enum: '',
@@ -1540,7 +1570,7 @@ const apis = [
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({expanded, row, column, columnIndex, $columnIndex}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法 Function({expanded, row, column, columnIndex}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '2.8.22',
             type: 'Function',
             enum: '',
@@ -4110,7 +4140,7 @@ const apis = [
       },
       {
         name: 'validate(rows, callback)',
-        desc: '表格快速校验，如果存在记录不通过则返回不再继续校验，如果指定 row 或 rows 则校验指定一行或多行。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise（需要注意：如果不指定数据，默认只校验状态发生变动的数据，例如新增或修改）',
+        desc: '表格快速校验，如果存在记录不通过则返回不再继续校验，如果第一个参数指定 row 或 rows 则校验指定行或多行，如果不指定，则默认校验状态发生变动的数据，例如新增或修改。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
@@ -4119,7 +4149,7 @@ const apis = [
       },
       {
         name: 'fullValidate(rows, callback)',
-        desc: '表格完整校验，和 validate 的区别就是会将有效数据的每一条数据都进行校验',
+        desc: '表格完整校验，和 validate 的区别就是会将有效数据的每一条数据都进行完整校验',
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',

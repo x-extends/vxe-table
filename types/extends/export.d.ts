@@ -1,7 +1,7 @@
 import { VXETableModule } from '../component'
 import { Table } from '../table'
 import { Grid, GridRenderParams } from '../grid'
-import { ColumnConfig } from '../column'
+import { ColumnInfo } from '../column'
 
 /**
  * 导出
@@ -63,11 +63,11 @@ export interface ExportOptons {
   /**
    * 自定义列
    */
-  columns?: ColumnConfig[];
+  columns?: ColumnInfo[];
   /**
    * 列过滤方法
    */
-  columnFilterMethod?(column: ColumnConfig, $columnIndex: number, columns: ColumnConfig[]): boolean;
+  columnFilterMethod?(column: ColumnInfo, $columnIndex: number, columns: ColumnInfo[]): boolean;
   /**
    * 数据过滤方法
    */
@@ -151,19 +151,19 @@ export interface PrintOptons {
   /**
    * 自定义列
    */
-  columns?: ColumnConfig[];
+  columns?: ColumnInfo[];
   /**
    * 列过滤方法
    */
-  columnFilterMethod?(column: ColumnConfig, $columnIndex: number, columns: ColumnConfig[]): boolean;
+  columnFilterMethod?(params: { column: ColumnInfo, $columnIndex: number }): boolean;
   /**
    * 数据过滤方法
    */
-  dataFilterMethod?(row: any, $rowIndex: number, data: any[]): boolean;
+  dataFilterMethod?(params: { row: any, $rowIndex: number }): boolean;
   /**
    * 表尾过滤方法
    */
-  footerFilterMethod?(cells: any[], $rowIndex: number, footerData: any[][]): boolean;
+  footerFilterMethod?(params: { items: any[], $rowIndex: number }): boolean;
 
   [name: string]: any;
 }
@@ -176,11 +176,11 @@ export interface ReadFileOptions {
 
 export interface ColumnExportCellRenderParams extends GridRenderParams {
   row: any;
-  column: ColumnConfig;
+  column: ColumnInfo;
 }
 
 export interface ColumnExportFooterRenderParams extends GridRenderParams {
   items: any[];
   _columnIndex: number;
-  column: ColumnConfig;
+  column: ColumnInfo;
 }

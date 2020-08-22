@@ -1,5 +1,5 @@
 import { VXETableModule } from './component'
-import { ColumnOptions, ColumnConfig, ColumnCellRenderParams } from './column'
+import { ColumnOptions, ColumnInfo, ColumnCellRenderParams } from './column'
 import { RenderParams, RenderOptions } from './extends/renderer'
 import { ExportOptons, ImportOptons, PrintOptons, ReadFileOptions } from './extends/export'
 import { ColumnFilterOption } from './extends/filter'
@@ -87,7 +87,7 @@ export declare class Table extends VXETableModule {
   /**
    * 表尾数据获取的方法
    */
-  footerMethod?(params: { columns: ColumnConfig[], data: any[] }): Array<string | number>[];
+  footerMethod?(params: { columns: ColumnInfo[], data: any[] }): Array<string | number>[];
   /**
    * 给行附加 className
    */
@@ -154,14 +154,6 @@ export declare class Table extends VXETableModule {
    * 设置表尾所有内容过长时显示为省略号
    */
   showFooterOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
-  /**
-   * 所有列宽度
-   */
-  columnWidth?: number | string;
-  /**
-   * 所有列最小宽度，把剩余宽度按比例分配
-   */
-  columnMinWidth?: number | string;
 
   /** 高级属性 */
   // 主键配置
@@ -174,6 +166,8 @@ export declare class Table extends VXETableModule {
   autoResize?: boolean;
   // 是否自动根据状态属性去更新响应式表格宽高
   syncResize?: boolean | string;
+  // 列的默认参数
+  columnConfig?: ColumnDefaultConfig;
   // 序号配置项
   seqConfig?: SeqConfig;
   // 排序配置项
@@ -278,10 +272,10 @@ export declare class Table extends VXETableModule {
    */
   getColumnNode(cellElem: HTMLElement): {
     colid: string;
-    item: ColumnConfig;
-    items: ColumnConfig[];
+    item: ColumnInfo;
+    items: ColumnInfo[];
     index: number;
-    parent: ColumnConfig;
+    parent: ColumnInfo;
   };
   /**
    * 根据 row 获取相对于 data 中的索引
@@ -302,17 +296,17 @@ export declare class Table extends VXETableModule {
    * 根据 column 获取相对于 columns 中的索引
    * @param column 列对象
    */
-  getColumnIndex(column: ColumnConfig): number;
+  getColumnIndex(column: ColumnInfo): number;
   /**
    * 根据 column 获取相对于当前表格列中的索引
    * @param column 列对象
    */
-  _getColumnIndex(column: ColumnConfig): number;
+  _getColumnIndex(column: ColumnInfo): number;
   /**
    * 根据 column 获取渲染中的虚拟索引
    * @param column 列对象
    */
-  $getColumnIndex(column: ColumnConfig): number;
+  $getColumnIndex(column: ColumnInfo): number;
   /**
    * 创建 data 对象
    * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义
@@ -352,27 +346,27 @@ export declare class Table extends VXETableModule {
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
    */
-  getColumns(): ColumnConfig[];
-  getColumns(columnIndex?: number): ColumnConfig;
+  getColumns(): ColumnInfo[];
+  getColumns(columnIndex?: number): ColumnInfo;
   /**
    * 根据列的唯一主键获取列
    * @param colid 列主键
    */
-  getColumnById(colid: string): ColumnConfig;
+  getColumnById(colid: string): ColumnInfo;
   /**
    * 根据列的字段名获取列
    * @param field 字段名
    */
-  getColumnByField(field: string): ColumnConfig;
+  getColumnByField(field: string): ColumnInfo;
   /**
    * 获取当前表格的列
    * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
    */
   getTableColumn(): {
-    collectColumn: ColumnConfig[];
-    fullColumn: ColumnConfig[];
-    visibleColumn: ColumnConfig[];
-    tableColumn: ColumnConfig[];
+    collectColumn: ColumnInfo[];
+    fullColumn: ColumnInfo[];
+    visibleColumn: ColumnInfo[];
+    tableColumn: ColumnInfo[];
   };
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
@@ -401,12 +395,12 @@ export declare class Table extends VXETableModule {
    * 隐藏指定列
    * @param column 列对象
    */
-  hideColumn(column: ColumnConfig): Promise<any>;
+  hideColumn(column: ColumnInfo): Promise<any>;
   /**
    * 显示指定列
    * @param column 列对象
    */
-  showColumn(column: ColumnConfig): Promise<any>;
+  showColumn(column: ColumnInfo): Promise<any>;
   /**
    * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
@@ -520,7 +514,7 @@ export declare class Table extends VXETableModule {
    * 用于 highlight-current-column，设置某列行为高亮状态
    * @param column 列对象
    */
-  setCurrentColumn(column: ColumnConfig): Promise<any>;
+  setCurrentColumn(column: ColumnInfo): Promise<any>;
   /**
    * 用于 highlight-current-column，手动清空当前高亮的状态
    */
@@ -538,7 +532,7 @@ export declare class Table extends VXETableModule {
   /**
    * 获取当前排序的 column 信息
    */
-  getSortColumn(): ColumnConfig;
+  getSortColumn(): ColumnInfo;
   /**
    * 手动关闭筛选面板
    */
@@ -547,7 +541,7 @@ export declare class Table extends VXETableModule {
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param column 列对象
    */
-  isFilter(column: ColumnConfig): boolean;
+  isFilter(column: ColumnInfo): boolean;
   /**
    * 用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成
    * @param row 指定行
@@ -660,7 +654,7 @@ export declare class Table extends VXETableModule {
    * 如果有滚动条，则滚动到对应的列
    * @param column 列对象
    */
-  scrollToColumn(column: ColumnConfig): Promise<any>;
+  scrollToColumn(column: ColumnInfo): Promise<any>;
   /**
    * 手动清除滚动相关信息，还原到初始状态
    */
@@ -676,7 +670,7 @@ export declare class Table extends VXETableModule {
   updateStatus(
     scope: {
       row: any;
-      column: ColumnConfig;
+      column: ColumnInfo;
     }
   ): Promise<any>;
   /**
@@ -685,13 +679,13 @@ export declare class Table extends VXETableModule {
    * @param column 列对象
    * @param options 选项列表
    */
-  setFilter(column: ColumnConfig, options: ColumnFilterOption[]): Promise<any>;
+  setFilter(column: ColumnInfo, options: ColumnFilterOption[]): Promise<any>;
   /**
    * 手动清空筛选条件
    * 如果不传 column 则清空所有筛选条件，数据会恢复成未筛选的状态
    * @param column 字段名
    */
-  clearFilter(column?: ColumnConfig): Promise<any>;
+  clearFilter(column?: ColumnInfo): Promise<any>;
   /**
    * 手动关闭快捷菜单
    */
@@ -701,7 +695,7 @@ export declare class Table extends VXETableModule {
    */
   getSelectedCell(): {
     row: any;
-    column: ColumnConfig;
+    column: ColumnInfo;
   };
   /**
    * 用于 mouse-config.area，用于获取鼠标选择的区域
@@ -779,7 +773,7 @@ export declare class Table extends VXETableModule {
     row: any;
     rowIndex: number;
     $rowIndex: number;
-    column: ColumnConfig;
+    column: ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
     cell: HTMLElement;
@@ -873,6 +867,14 @@ export declare class Table extends VXETableModule {
 }
 
 /**
+ * 列的默认配置
+ */
+export interface ColumnDefaultConfig {
+  width?: number;
+  minWidth?: number;
+}
+
+/**
  * 序号配置项
  */
 export interface SeqConfig {
@@ -889,7 +891,7 @@ export interface SortConfig {
     order: 'asc' | 'desc' | null;
   };
   orders?: ('asc' | 'desc' | null)[];
-  sortMethod?(params: { data: any[], column: ColumnConfig, property: string, order: string }): any[];
+  sortMethod?(params: { data: any[], column: ColumnInfo, property: string, order: string }): any[];
   remote?: boolean;
   trigger?: 'default' | 'cell';
   showIcon: boolean;
@@ -945,7 +947,7 @@ export interface TooltipConfig {
   theme?: 'dark' | 'light';
   enterable?: boolean;
   leaveDelay?: number;
-  contentMethod?(params: { items: any[], row: any, rowIndex: number, $rowIndex: number, column: ColumnConfig, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
+  contentMethod?(params: { items: any[], row: any, rowIndex: number, $rowIndex: number, column: ColumnInfo, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
 }
 
 /**
@@ -959,8 +961,8 @@ export interface ExpandConfig {
   trigger?: 'default' | 'cell' | 'row';
   lazy?: boolean;
   loadMethod?(params: { row: any, rowIndex: number, $rowIndex: number }): Promise<any>;
-  toggleMethod?(params: { expanded: boolean, row: any, column: ColumnConfig, columnIndex: number, $columnIndex: number }): boolean;
-  visibleMethod?(params: { expanded: boolean, row: any, column: ColumnConfig, columnIndex: number, $columnIndex: number }): boolean;
+  toggleMethod?(params: { expanded: boolean, row: any, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
+  visibleMethod?(params: { expanded: boolean, row: any, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   iconOpen?: string;
   iconClose?: string;
   iconLoaded?: string;
@@ -980,7 +982,7 @@ export interface TreeConfig {
   lazy?: boolean;
   hasChild?: string;
   loadMethod?(params: { row: any }): Promise<any[]>;
-  toggleMethod?(params: { expanded: boolean, row: any, column: ColumnConfig, columnIndex: number, $columnIndex: number }): boolean;
+  toggleMethod?(params: { expanded: boolean, row: any, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   iconOpen?: string;
   iconClose?: string;
   iconLoaded?: string;
@@ -994,7 +996,7 @@ export interface ContextMenuConfig {
   body?: MenuOptions;
   footer?: MenuOptions;
   trigger?: 'default' | 'cell';
-  visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnConfig[], row?: any, rowIndex?: number, column?: ColumnConfig, columnIndex?: number }): boolean;
+  visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnInfo[], row?: any, rowIndex?: number, column?: ColumnInfo, columnIndex?: number }): boolean;
   className?: string;
 }
 
@@ -1012,7 +1014,7 @@ export interface MouseConfig {
 export interface MouseCellArea {
   main: boolean;
   rows: any[];
-  cols: ColumnConfig[];
+  cols: ColumnInfo[];
   top: number;
   left: number;
   width: number;
@@ -1021,15 +1023,15 @@ export interface MouseCellArea {
 
 export interface CellAreaOptions {
   main: boolean;
-  startColumn: ColumnConfig;
-  endColumn: ColumnConfig;
+  startColumn: ColumnInfo;
+  endColumn: ColumnInfo;
   startRow: any;
   endRow: any;
   [key: string]: any;
 }
 
 export interface ActiveCellAreaOptions {
-  column: ColumnConfig;
+  column: ColumnInfo;
   row: any;
   [key: string]: any;
 }
@@ -1073,7 +1075,7 @@ export interface KeyboardConfig {
   /**
    * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
    */
-  editMethod?(params: { row: any, rowIndex: number, column: ColumnConfig, columnIndex: number, cell: HTMLElement }): boolean;
+  editMethod?(params: { row: any, rowIndex: number, column: ColumnInfo, columnIndex: number, cell: HTMLElement }): boolean;
 }
 
 /**
@@ -1088,7 +1090,7 @@ export interface EditConfig {
   /**
    * 该方法的返回值用来决定该单元格是否允许编辑
    */
-  activeMethod?(params: { row: any, rowIndex: number, column: ColumnConfig, columnIndex: number }): boolean;
+  activeMethod?(params: { row: any, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
 }
 
 /**

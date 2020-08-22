@@ -161,13 +161,14 @@ function getLabelData ($xetable, opts, columns, datas) {
 }
 
 function getExportData ($xetable, opts) {
+  const { columnFilterMethod, dataFilterMethod } = opts
   let columns = opts.columns
   let datas = opts.data
-  if (opts.columnFilterMethod) {
-    columns = columns.filter(opts.columnFilterMethod)
+  if (columnFilterMethod) {
+    columns = columns.filter((column, index) => columnFilterMethod({ column, $columnIndex: index }))
   }
-  if (opts.dataFilterMethod) {
-    datas = datas.filter(opts.dataFilterMethod)
+  if (dataFilterMethod) {
+    datas = datas.filter((row, index) => dataFilterMethod({ row, $rowIndex: index }))
   }
   return { columns, datas: getLabelData($xetable, opts, columns, datas) }
 }
@@ -190,6 +191,11 @@ function getFooterCellValue ($xetable, opts, items, column) {
   return cellValue
 }
 
+function getFooterData (opts, footerData) {
+  const { footerFilterMethod } = opts
+  return footerFilterMethod ? footerData.filter((items, index) => footerFilterMethod({ items, $rowIndex: index })) : footerData
+}
+
 function toCsv ($xetable, opts, columns, datas) {
   let content = '\ufeff'
   if (opts.isHeader) {
@@ -200,7 +206,7 @@ function toCsv ($xetable, opts, columns, datas) {
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
-    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
       content += columns.map(column => `"${getFooterCellValue($xetable, opts, rows, column)}"`).join(',') + '\n'
     })
@@ -218,7 +224,7 @@ function toTxt ($xetable, opts, columns, datas) {
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
-    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
       content += columns.map(column => `${getFooterCellValue($xetable, opts, rows, column)}`).join(',') + '\n'
     })
@@ -328,7 +334,7 @@ function toHtml ($xetable, opts, columns, datas) {
   }
   if (opts.isFooter) {
     const footerData = $xetable.footerData
-    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    const footers = getFooterData(opts, footerData)
     if (footers.length) {
       html += '<tfoot>'
       footers.forEach(rows => {
@@ -378,7 +384,7 @@ function toXML ($xetable, opts, columns, datas) {
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
-    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
       xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xetable, opts, rows, column)}</Data></Cell>`).join('')}</Row>`
     })
