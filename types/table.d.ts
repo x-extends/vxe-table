@@ -137,11 +137,11 @@ export declare class Table extends VXETableModule {
    */
   footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
   // 合并行或列
-  spanMethod?(params: ColumnCellRenderParams): { rowspan: number, colspan: number};
+  spanMethod?(params: ColumnCellRenderParams): { rowspan: number, colspan: number };
   /**
    * 表尾合并行或列
    */
-  footerSpanMethod?(params: ColumnFooterRenderParams): { rowspan: number, colspan: number};
+  footerSpanMethod?(params: ColumnFooterRenderParams): { rowspan: number, colspan: number };
   /**
    * 设置所有内容过长时显示为省略号
    */
@@ -706,7 +706,11 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 mouse-config.area，用于获取鼠标选择的区域
    */
-  getCellAreas(): MouseCellAreas[];
+  getCellAreas(): MouseCellArea[];
+  /**
+   * 用于 mouse-config.area，将指定区域转成文本格式
+   */
+  toCellAreaText(areaItem: MouseCellArea): string;
   /**
    * 手动清除单元格选中状态
    */
@@ -1005,7 +1009,7 @@ export interface MouseConfig {
   area?: boolean;
 }
 
-export interface MouseCellAreas {
+export interface MouseCellArea {
   main: boolean;
   rows: any[];
   cols: ColumnConfig[];
@@ -1034,10 +1038,25 @@ export interface ActiveCellAreaOptions {
  * 按键配置项
  */
 export interface KeyboardConfig {
+  /**
+   * 是否开启非编辑状态下，上下左右移动功能
+   */
   isArrow?: boolean;
+  /**
+   * 是否开启删除键功能
+   */
   isDel?: boolean;
+  /**
+   * 是否开启回车移动上下行移动
+   */
   isEnter?: boolean;
+  /**
+   * 是否开启TAB键左右移动功能
+   */
   isTab?: boolean;
+  /**
+   * 是否开启单元格选择编辑
+   */
   isEdit?: boolean;
   /**
    * 用于 mouse-config.area，开启复制/剪贴/粘贴功能
@@ -1047,6 +1066,10 @@ export interface KeyboardConfig {
    * 用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能
    */
   isChecked?: boolean;
+  /**
+   * 用于 mouse-config.area，是否将回车键行为改成 Tab 键行为
+   */
+  enterToTab?: boolean;
   /**
    * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
    */
@@ -1108,7 +1131,7 @@ export interface OptimizationConfig {
 /**
  * 空内容渲染配置项
  */
-export class EmptyRender extends RenderOptions {}
+export class EmptyRender extends RenderOptions { }
 
 export class TableRenderParams extends RenderParams {
   /**
@@ -1117,4 +1140,4 @@ export class TableRenderParams extends RenderParams {
   $table: Table;
 }
 
-export class EmptyRenderParams extends TableRenderParams {}
+export class EmptyRenderParams extends TableRenderParams { }

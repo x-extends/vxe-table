@@ -1678,7 +1678,7 @@ const apis = [
           // {
           //   name: 'area',
           //   desc: '如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取',
-          //   version: '',
+          //   version: 'pro',
           //   type: 'boolean',
           //   enum: '',
           //   defVal: 'false',
@@ -1751,7 +1751,7 @@ const apis = [
           // {
           //   name: 'isClip',
           //   desc: '用于 mouse-config.area，开启复制/剪贴/粘贴功能',
-          //   version: '',
+          //   version: 'pro',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',
@@ -1760,7 +1760,16 @@ const apis = [
           // {
           //   name: 'isChecked',
           //   desc: '用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
-          //   version: '',
+          //   version: 'pro',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'false',
+          //   list: []
+          // },
+          // {
+          //   name: 'enterToTab',
+          //   desc: '用于 mouse-config.area，是否将回车键行为改成 Tab 键行为',
+          //   version: 'pro',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',
@@ -3225,7 +3234,7 @@ const apis = [
       // {
       //   name: 'getCellAreas()',
       //   desc: '用于 mouse-config.area，用于获取鼠标选择的所有区域',
-      //   version: '',
+      //   version: 'pro',
       //   type: 'Array<{cols: ColumnConfig[], rows: any[]}>',
       //   enum: '',
       //   defVal: '',
@@ -3234,8 +3243,17 @@ const apis = [
       // {
       //   name: 'getActiveCellArea()',
       //   desc: '用于 mouse-config.area，用于获取区域中的活动单元格',
-      //   version: '',
+      //   version: 'pro',
       //   type: '{column: ColumnConfig, row: any}',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'getCopyCellArea()',
+      //   desc: '用于 mouse-config.area，用于获取被标记为复制状态的区域',
+      //   version: 'pro',
+      //   type: '{cols: ColumnConfig[], rows: any[]}',
       //   enum: '',
       //   defVal: '',
       //   list: []
@@ -3269,6 +3287,15 @@ const apis = [
         defVal: '',
         list: []
       },
+      // {
+      //   name: 'toCellAreaText(areaItem)',
+      //   desc: '用于 mouse-config.area，将指定区域转成文本格式',
+      //   version: 'pro',
+      //   type: 'string',
+      //   enum: '',
+      //   defVal: 'areaItem: MouseCellArea',
+      //   list: []
+      // },
       {
         name: 'hasActiveRow(row)',
         disabled: true,
@@ -3457,7 +3484,7 @@ const apis = [
       // {
       //   name: 'setCellAreas(areas)',
       //   desc: '用于 mouse-config.area，选择指定区域的单元格',
-      //   version: '',
+      //   version: 'pro',
       //   type: 'Promise',
       //   enum: '',
       //   defVal: 'areas: CellAreaOptions',
@@ -3845,7 +3872,7 @@ const apis = [
       // {
       //   name: 'clearCellAreas()',
       //   desc: '用于 mouse-config.area，用于清除鼠标选择的区域',
-      //   version: '',
+      //   version: 'pro',
       //   type: 'Promise',
       //   enum: '',
       //   defVal: '',
