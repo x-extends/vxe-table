@@ -1,6 +1,6 @@
 import { VXETableModule } from '../component'
 import { TableRenderParams } from '../table'
-import { ColumnConfig } from '../column'
+import { ColumnInfo } from '../column'
 
 /**
  * 表头
@@ -16,7 +16,7 @@ export interface ColumnHeaderRenderParams extends TableRenderParams {
   /**
    * 列对象
    */
-  column: ColumnConfig;
+  column: ColumnInfo;
   /**
    * 相对于 columns 中的索引
    */

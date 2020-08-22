@@ -306,7 +306,7 @@ export interface ColumnIconSlotParams extends ColumnIconRenderParams { }
 /**
  * 列对象
  */
-export class ColumnConfig {
+export class ColumnInfo {
   title: string;
   width: number | string;
   minWidth: number | string;
@@ -342,10 +342,12 @@ export class ColumnConfig {
     update: boolean;
     value: any;
   };
-  children: ColumnConfig[];
+  children: ColumnInfo[];
 
   getTitle(): string;
 }
+
+export class ColumnConfig extends ColumnInfo {}
 
 /**
  * 默认的渲染配置项
@@ -402,7 +404,7 @@ export interface ColumnCellRenderParams extends TableRenderParams {
   /**
    * 列对象
    */
-  column: ColumnConfig;
+  column: ColumnInfo;
   /**
    * 相对于 columns 中的索引
    */
@@ -436,7 +438,7 @@ export interface ColumnFormatterMethodParams {
   /**
    * 列对象
    */
-  column: ColumnConfig;
+  column: ColumnInfo;
   /**
    * 行数据对象
    */

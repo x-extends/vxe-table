@@ -249,7 +249,7 @@ const Methods = {
   /**
    * 加载列配置
    * 对于表格列需要重载、局部递增场景下可能会用到
-   * @param {ColumnConfig} columns 列配置
+   * @param {ColumnInfo} columns 列配置
    */
   loadColumn (columns) {
     this.collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column))
@@ -258,7 +258,7 @@ const Methods = {
   /**
    * 加载列配置并恢复到初始状态
    * 对于表格列需要重载、局部递增场景下可能会用到
-   * @param {ColumnConfig} columns 列配置
+   * @param {ColumnInfo} columns 列配置
    */
   reloadColumn (columns) {
     this.clearAll()
@@ -432,28 +432,28 @@ const Methods = {
   },
   /**
    * 根据 column 获取相对于 columns 中的索引
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    */
   getColumnIndex (column) {
     return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1
   },
   /**
    * 根据 column 获取相对于当前表格列中的索引
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    */
   _getColumnIndex (column) {
     return this.visibleColumn.indexOf(column)
   },
   /**
    * 根据 column 获取渲染中的虚拟索引
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    */
   $getColumnIndex (column) {
     return this.tableColumn.indexOf(column)
   },
   /**
    * 判断是否为索引列
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    */
   isSeqColumn (column) {
     return column && column.type === 'seq'
@@ -793,7 +793,7 @@ const Methods = {
   },
   /**
    * 隐藏指定列
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    */
   hideColumn (column) {
     column.visible = false
@@ -801,7 +801,7 @@ const Methods = {
   },
   /**
    * 显示指定列
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    */
   showColumn (column) {
     column.visible = true
@@ -1060,7 +1060,8 @@ const Methods = {
    * 指定列宽的列进行拆分
    */
   analyColumnWidth () {
-    const { columnWidth, columnMinWidth } = this
+    const { columnOpts } = this
+    const { width: defaultWidth, minWidth: defaultMinWidth } = columnOpts
     const resizeList = []
     const pxList = []
     const pxMinList = []
@@ -1068,11 +1069,11 @@ const Methods = {
     const scaleMinList = []
     const autoList = []
     this.tableFullColumn.forEach(column => {
-      if (columnWidth && !column.width) {
-        column.width = columnWidth
+      if (defaultWidth && !column.width) {
+        column.width = defaultWidth
       }
-      if (columnMinWidth && !column.minWidth) {
-        column.minWidth = columnMinWidth
+      if (defaultMinWidth && !column.minWidth) {
+        column.minWidth = defaultMinWidth
       }
       if (column.visible) {
         if (column.resizeWidth) {
@@ -1868,7 +1869,7 @@ const Methods = {
   /**
    * 处理显示 tooltip
    * @param {Event} evnt 事件
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    * @param {Row} row 行对象
    */
   handleTooltip (evnt, cell, overflowElem, tipElem, params) {
@@ -2478,7 +2479,7 @@ const Methods = {
   },
   /**
    * 用于当前列，设置某列行为高亮状态
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    */
   setCurrentColumn (column) {
     this.clearCurrentRow()
@@ -3404,7 +3405,7 @@ const Methods = {
   /**
    * 如果有滚动条，则滚动到对应的行
    * @param {Row} row 行对象
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    */
   scrollToRow (row, column) {
     const rest = []
@@ -3420,7 +3421,7 @@ const Methods = {
   },
   /**
    * 如果有滚动条，则滚动到对应的列
-   * @param {ColumnConfig} column 列配置
+   * @param {ColumnInfo} column 列配置
    */
   scrollToColumn (column) {
     if (column && this.fullColumnMap.has(column)) {
@@ -3600,7 +3601,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,clearCopyCellArea,setCellAreas,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
+const funcs = 'setFilter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,toCellAreaText,clearCellAreas,getCopyCellArea,clearCopyCellArea,setCellAreas,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

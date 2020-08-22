@@ -147,10 +147,6 @@ export default {
     showHeaderOverflow: { type: [Boolean, String], default: () => GlobalConfig.table.showHeaderOverflow },
     // 设置表尾所有内容过长时显示为省略号
     showFooterOverflow: { type: [Boolean, String], default: () => GlobalConfig.table.showFooterOverflow },
-    // 所有列宽度
-    columnWidth: [Number, String],
-    // 所有列最小宽度，把剩余宽度按比例分配
-    columnMinWidth: [Number, String],
 
     /** 高级属性 */
     // 主键配置
@@ -163,6 +159,8 @@ export default {
     autoResize: { type: Boolean, default: () => GlobalConfig.table.autoResize },
     // 是否自动根据状态属性去更新响应式表格宽高
     syncResize: [Boolean, String, Number],
+    // 设置列的默认参数，仅对部分支持的属性有效
+    columnConfig: Object,
     // 序号配置项
     seqConfig: Object,
     // 排序配置项
@@ -420,6 +418,9 @@ export default {
         small: 40,
         mini: 36
       }
+    },
+    columnOpts () {
+      return Object.assign({}, this.columnConfig)
     },
     seqOpts () {
       return Object.assign({ startIndex: 0 }, GlobalConfig.table.seqConfig, this.seqConfig)

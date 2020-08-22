@@ -6,7 +6,7 @@ export default {
   methods: {
     /**
      * 修改筛选条件列表
-     * @param {ColumnConfig} column 列
+     * @param {ColumnInfo} column 列
      * @param {Array} options 选项
      */
     _setFilter (column, options) {
@@ -26,7 +26,7 @@ export default {
      * 更新选项是否全部状态
      * 打开筛选面板
      * @param {Event} evnt 事件
-     * @param {ColumnConfig} column 列配置
+     * @param {ColumnInfo} column 列配置
      * @param {Object} params 参数
      */
     triggerFilterEvent (evnt, column, params) {
