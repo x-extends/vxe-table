@@ -3,6 +3,18 @@ import { UtilTools, DomTools } from '../../tools'
 
 const cellType = 'footer'
 
+function mergeFooterMethod (mergeFooterIndexs, $rowIndex, _columnIndex) {
+  for (let mIndex = 0; mIndex < mergeFooterIndexs.length; mIndex++) {
+    const { $rowIndex: startRowIndex, _columnIndex: startColIndex, rowspan, colspan } = mergeFooterIndexs[mIndex]
+    if (startRowIndex === $rowIndex && startColIndex === _columnIndex) {
+      return { rowspan, colspan }
+    }
+    if ($rowIndex >= startRowIndex && $rowIndex < startRowIndex + rowspan && _columnIndex >= startColIndex && _columnIndex < startColIndex + colspan) {
+      return { rowspan: 0, colspan: 0 }
+    }
+  }
+}
+
 export default {
   name: 'VxeTableFooter',
   props: {
@@ -33,6 +45,7 @@ export default {
       footerRowStyle,
       footerCellStyle,
       footerAlign: allFooterAlign,
+      mergeFooterIndexs,
       footerSpanMethod,
       align: allAlign,
       scrollXLoad,
@@ -44,7 +57,7 @@ export default {
       tooltipOpts
     } = $xetable
     // 如果是使用优化模式
-    if (!footerSpanMethod) {
+    if (!mergeFooterIndexs.length || !footerSpanMethod) {
       if (fixedType && allColumnFooterOverflow) {
         tableColumn = fixedColumn
       } else if (scrollXLoad) {
@@ -152,7 +165,22 @@ export default {
               }
             }
             // 合并行或列
-            if (footerSpanMethod) {
+            if (mergeFooterIndexs.length) {
+              const spanRest = mergeFooterMethod(mergeFooterIndexs, $rowIndex, _columnIndex)
+              if (spanRest) {
+                const { rowspan, colspan } = spanRest
+                if (!rowspan || !colspan) {
+                  return null
+                }
+                if (rowspan > 1) {
+                  attrs.rowspan = rowspan
+                }
+                if (colspan > 1) {
+                  attrs.colspan = colspan
+                }
+              }
+            } else if (footerSpanMethod) {
+              // 自定义合并函数
               const { rowspan = 1, colspan = 1 } = footerSpanMethod(params) || {}
               if (!rowspan || !colspan) {
                 return null

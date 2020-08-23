@@ -93,6 +93,8 @@ const Methods = {
   clearAll () {
     this.inited = false
     this.clearSort()
+    this.clearMergeCells()
+    this.clearMergeFooterItems()
     this.clearCurrentRow()
     this.clearCurrentColumn()
     this.clearRadioRow()
@@ -809,9 +811,12 @@ const Methods = {
     if (this.treeConfig) {
       this.handleDefaultTreeExpand()
     }
-    // if (this.merges) {
-    //   this.handleDefaultMergeCells()
-    // }
+    if (this.mergeCells) {
+      this.handleDefaultMergeCells()
+    }
+    if (this.mergeFooterItems) {
+      this.handleDefaultMergeFooterItems()
+    }
     this.$nextTick(() => setTimeout(this.recalculate))
   },
   /**
@@ -3722,45 +3727,160 @@ const Methods = {
       }
     })
   },
-  // handleDefaultMergeCells () {
-  //   this.mergeCells = this.merges
-  // },
-  // getMergeCells () {
-  //   return this.mergeCells.slice(0)
-  // },
-  // addMergeCells (mergeOpts) {
-  //   if (mergeOpts) {
-  //     const { mergeCells } = this
-  //     if (!XEUtils.isArray(mergeOpts)) {
-  //       mergeOpts = [mergeOpts]
-  //     }
-  //     mergeOpts.forEach(item => {
-  //       if (mergeCells.indexOf(item) === -1) {
-  //         mergeCells.push(item)
-  //       }
-  //     })
-  //   }
-  //   return this.$nextTick()
-  // },
-  // removeMergeCells (mergeOpts) {
-  //   if (mergeOpts) {
-  //     const { mergeCells } = this
-  //     if (!XEUtils.isArray(mergeOpts)) {
-  //       mergeOpts = [mergeOpts]
-  //     }
-  //     mergeOpts.forEach(item => {
-  //       const mcIndex = mergeCells.indexOf(item)
-  //       if (mcIndex > -1) {
-  //         mergeCells.splice(mcIndex, 1)
-  //       }
-  //     })
-  //   }
-  //   return this.$nextTick()
-  // },
-  // clearMergeCells () {
-  //   this.mergeCells = []
-  //   return this.$nextTick()
-  // },
+  handleDefaultMergeCells () {
+    this.setMergeCells(this.mergeCells)
+  },
+  /**
+   * 设置合并单元格
+   * @param {MergeOptions[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
+   */
+  setMergeCells (merges) {
+    if (merges) {
+      const { mergeIndexs, mergeList, afterFullData, visibleColumn } = this
+      if (!XEUtils.isArray(merges)) {
+        merges = [merges]
+      }
+      merges.forEach(item => {
+        let { row, col, rowspan, colspan } = item
+        if (XEUtils.isNumber(row)) {
+          row = afterFullData[row]
+        }
+        if (XEUtils.isNumber(col)) {
+          col = visibleColumn[col]
+        }
+        if (row && col && (rowspan || colspan)) {
+          rowspan = XEUtils.toNumber(rowspan) || 1
+          colspan = XEUtils.toNumber(colspan) || 1
+          if (rowspan > 1 || colspan > 1) {
+            const mcIndex = XEUtils.findIndexOf(mergeList, item => item.row === row && item.col === col)
+            const mergeCell = mergeList[mcIndex]
+            const mergeItem = mergeIndexs[mcIndex]
+            if (mergeCell) {
+              mergeCell.rowspan = rowspan
+              mergeCell.colspan = colspan
+              mergeItem.rowspan = rowspan
+              mergeItem.colspan = colspan
+            } else {
+              mergeIndexs.push({ _rowIndex: afterFullData.indexOf(row), _columnIndex: visibleColumn.indexOf(col), rowspan, colspan })
+              mergeList.push({ row, col, rowspan, colspan })
+            }
+          }
+        }
+      })
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 移除单元格合并
+   * @param {MergeOptions[]} merges 多个或数组 [{row:Row|number, col:ColumnInfo|number}]
+   */
+  removeMergeCells (merges) {
+    if (merges) {
+      const { mergeIndexs, mergeList, afterFullData, visibleColumn } = this
+      if (!XEUtils.isArray(merges)) {
+        merges = [merges]
+      }
+      merges.forEach(item => {
+        let { row, col } = item
+        if (XEUtils.isNumber(row)) {
+          row = afterFullData[row]
+        }
+        if (XEUtils.isNumber(col)) {
+          col = visibleColumn[col]
+        }
+        const mcIndex = XEUtils.findIndexOf(mergeList, item => item.row === row && item.col === col)
+        if (mcIndex > -1) {
+          mergeIndexs.splice(mcIndex, 1)
+          mergeList.splice(mcIndex, 1)
+        }
+      })
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 获取所有被合并的单元格
+   */
+  getMergeCells () {
+    return this.mergeList.slice(0)
+  },
+  /**
+   * 清除所有单元格合并
+   */
+  clearMergeCells () {
+    this.mergeIndexs = []
+    this.mergeList = []
+    return this.$nextTick()
+  },
+  handleDefaultMergeFooterItems () {
+    this.setMergeFooterItems(this.mergeFooterItems)
+  },
+  setMergeFooterItems (merges) {
+    if (merges) {
+      const { mergeFooterIndexs, mergeFooterList, visibleColumn } = this
+      if (!XEUtils.isArray(merges)) {
+        merges = [merges]
+      }
+      merges.forEach(item => {
+        let { row, col, rowspan, colspan } = item
+        if (XEUtils.isNumber(col)) {
+          col = visibleColumn[col]
+        }
+        if (XEUtils.isNumber(row) && col && (rowspan || colspan)) {
+          rowspan = XEUtils.toNumber(rowspan) || 1
+          colspan = XEUtils.toNumber(colspan) || 1
+          if (rowspan > 1 || colspan > 1) {
+            const mcIndex = XEUtils.findIndexOf(mergeFooterList, item => item.row === row && item.col === col)
+            const mergeCell = mergeFooterList[mcIndex]
+            const mergeItem = mergeFooterIndexs[mcIndex]
+            if (mergeCell) {
+              mergeCell.rowspan = rowspan
+              mergeCell.colspan = colspan
+              mergeItem.rowspan = rowspan
+              mergeItem.colspan = colspan
+            } else {
+              mergeFooterIndexs.push({ $rowIndex: row, _columnIndex: visibleColumn.indexOf(col), rowspan, colspan })
+              mergeFooterList.push({ row, col, rowspan, colspan })
+            }
+          }
+        }
+      })
+    }
+    return this.$nextTick()
+  },
+  removeMergeFooterItems (merges) {
+    if (merges) {
+      const { mergeFooterIndexs, mergeFooterList, visibleColumn } = this
+      if (!XEUtils.isArray(merges)) {
+        merges = [merges]
+      }
+      merges.forEach(item => {
+        let { row, col } = item
+        if (XEUtils.isNumber(col)) {
+          col = visibleColumn[col]
+        }
+        const mcIndex = XEUtils.findIndexOf(mergeFooterList, item => item.row === row && item.col === col)
+        if (mcIndex > -1) {
+          mergeFooterIndexs.splice(mcIndex, 1)
+          mergeFooterList.splice(mcIndex, 1)
+        }
+      })
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 获取所有被合并的单元格
+   */
+  getMergeFooterItems () {
+    return this.mergeFooterList.slice(0)
+  },
+  /**
+   * 清除所有单元格合并
+   */
+  clearMergeFooterItems () {
+    this.mergeFooterIndexs = []
+    this.mergeFooterList = []
+    return this.$nextTick()
+  },
   updateZindex () {
     if (this.zIndex) {
       this.tZindex = this.zIndex

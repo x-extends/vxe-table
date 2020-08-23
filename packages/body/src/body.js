@@ -88,17 +88,16 @@ function renderBorder (h, type) {
   ])
 }
 
-function mergeMethod (mergeCells, _rowIndex, _columnIndex) {
-  for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
-    const { row, col, rowspan, colspan } = mergeCells[mIndex]
-    if (row === _rowIndex && col === _columnIndex) {
+function mergeMethod (mergeIndexs, _rowIndex, _columnIndex) {
+  for (let mIndex = 0; mIndex < mergeIndexs.length; mIndex++) {
+    const { _rowIndex: startRowIndex, _columnIndex: startColIndex, rowspan, colspan } = mergeIndexs[mIndex]
+    if (startRowIndex === _rowIndex && startColIndex === _columnIndex) {
       return { rowspan, colspan }
     }
-    if (_rowIndex >= row && _rowIndex < row + rowspan && _columnIndex >= col && _columnIndex < col + colspan) {
+    if (_rowIndex >= startRowIndex && _rowIndex < startRowIndex + rowspan && _columnIndex >= startColIndex && _columnIndex < startColIndex + colspan) {
       return { rowspan: 0, colspan: 0 }
     }
   }
-  return {}
 }
 
 /**
@@ -120,7 +119,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     currentColumn,
     cellClassName,
     cellStyle,
-    mergeCells,
+    mergeIndexs,
     spanMethod,
     radioOpts,
     checkboxOpts,
@@ -219,17 +218,20 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 合并行或列
-  if (mergeCells.length) {
+  if (mergeIndexs.length) {
     const _rowIndex = $xetable._getRowIndex(row)
-    const { rowspan = 1, colspan = 1 } = mergeMethod(mergeCells, _rowIndex, _columnIndex)
-    if (!rowspan || !colspan) {
-      return null
-    }
-    if (rowspan > 1) {
-      attrs.rowspan = rowspan
-    }
-    if (colspan > 1) {
-      attrs.colspan = colspan
+    const spanRest = mergeMethod(mergeIndexs, _rowIndex, _columnIndex)
+    if (spanRest) {
+      const { rowspan, colspan } = spanRest
+      if (!rowspan || !colspan) {
+        return null
+      }
+      if (rowspan > 1) {
+        attrs.rowspan = rowspan
+      }
+      if (colspan > 1) {
+        attrs.colspan = colspan
+      }
     }
   } else if (spanMethod) {
     // 自定义合并行或列的方法
@@ -480,7 +482,7 @@ export default {
       tableData,
       tableColumn,
       showOverflow: allColumnOverflow,
-      mergeCells,
+      mergeIndexs,
       spanMethod,
       scrollXLoad,
       mouseConfig,
@@ -492,7 +494,7 @@ export default {
     // 在 v3.0 中废弃 mouse-config.checked
     const isMouseChecked = mouseConfig && mouseOpts.checked
     // 如果是固定列与设置了超出隐藏
-    if (!mergeCells.length && !spanMethod) {
+    if (!mergeIndexs.length && !spanMethod) {
       if (fixedType && allColumnOverflow) {
         tableColumn = fixedColumn
       } else if (scrollXLoad) {

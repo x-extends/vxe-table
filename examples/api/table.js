@@ -708,17 +708,27 @@ const apis = [
         defVal: '',
         list: []
       },
-      // {
-      //   name: 'merges',
-      //   descKey: 'app.api.table.desc.merges',
-      //   version: '2.9.18',
-      //   type: 'Array<{ row: number | any, col: number | ColumnConfig, rowspan: number, colspan: number }>',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
+      {
+        name: 'merge-cells',
+        descKey: 'app.api.table.desc.mergeCells',
+        version: '2.9.18',
+        type: 'Array<{ row: number, col: number, rowspan: number, colspan: number }>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'merge-footer-items',
+        descKey: 'app.api.table.desc.mergeFooterItems',
+        version: '2.9.18',
+        type: 'Array<{ row: number, col: number, rowspan: number, colspan: number }>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
       {
         name: 'span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.spanMethod',
         version: '',
         type: 'Object',
@@ -728,6 +738,7 @@ const apis = [
       },
       {
         name: 'footer-span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerSpanMethod',
         version: '2.6',
         type: 'Object',
@@ -2201,6 +2212,7 @@ const apis = [
       },
       {
         name: 'cloak',
+        abandoned: true,
         desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
         version: '2.9.4',
         type: 'Boolean',
@@ -2210,6 +2222,7 @@ const apis = [
       },
       {
         name: 'delay-hover',
+        abandoned: true,
         desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
         version: '2.9.4',
         type: 'Number',
@@ -2896,6 +2909,24 @@ const apis = [
         list: []
       },
       {
+        name: 'removeMergeCells(merges)',
+        desc: '取消指定单元格合并状态，如果为数组，则取消多个合并',
+        version: '2.9.18',
+        type: 'Promise<merges>',
+        enum: '',
+        defVal: 'merges: {row: Row, col: ColumnInfo} | {row: Row, col: ColumnInfo}[]',
+        list: []
+      },
+      {
+        name: 'removeMergeFooterItems(merges)',
+        desc: '取消指定表尾合并状态，如果为数组，则取消多个合并',
+        version: '2.9.18',
+        type: 'Promise<merges>',
+        enum: '',
+        defVal: 'merges: {row: Row, col: ColumnInfo} | {row: Row, col: ColumnInfo}[]',
+        list: []
+      },
+      {
         name: 'getRowIndex(row)',
         desc: '根据 row 获取相对于 data 中的索引',
         version: '',
@@ -3089,6 +3120,24 @@ const apis = [
         desc: '只对 keep-source 开启有效，获取已修改的数据',
         version: '',
         type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getMergeCells()',
+        desc: '获取所有被合并的单元格',
+        version: '2.9.18',
+        type: 'Array<{row: any, col: ColumnInfo, rowspan: number, colspan: number}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getMergeFooterItems()',
+        desc: '获取所有被合并的表尾',
+        version: '2.9.18',
+        type: 'Array<{row: any, col: ColumnInfo, rowspan: number, colspan: number}>',
         enum: '',
         defVal: '',
         list: []
@@ -3521,6 +3570,24 @@ const apis = [
       //   list: []
       // },
       {
+        name: 'setMergeCells(merges)',
+        desc: '合并指定单元格，如果为数组则合并多个',
+        version: '2.9.18',
+        type: 'Promise',
+        enum: '',
+        defVal: 'merges: MergeOptions | MergeOptions[]',
+        list: []
+      },
+      {
+        name: 'setMergeFooterItems(merges)',
+        desc: '合并指定表尾，如果为数组则合并多个',
+        version: '2.9.18',
+        type: 'Promise',
+        enum: '',
+        defVal: 'merges: MergeOptions | MergeOptions[]',
+        list: []
+      },
+      {
         name: 'setRowExpansion(rows, checked)',
         disabled: true,
         desc: '即将废弃，请使用 setRowExpand',
@@ -3735,6 +3802,24 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'clearMergeCells()',
+        desc: '手动清除所有被合并的单元格',
+        version: '2.9.18',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearMergeFooterItems()',
+        desc: '手动清除所有被合并的表尾',
+        version: '2.9.18',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
         list: []
       },
       {

@@ -135,7 +135,9 @@ export default {
     // 给表尾行附加样式
     footerRowStyle: [Object, Function],
     // 合并指定单元格
-    // merges: Array,
+    mergeCells: Array,
+    // 合并指定的表尾数据
+    mergeFooterItems: Array,
     // 自定义合并行或列的方法
     spanMethod: Function,
     // 表尾合并行或列
@@ -297,8 +299,10 @@ export default {
       treeLazyLoadeds: [],
       // 树节点不确定状态的列表
       treeIndeterminates: [],
-      // 合并指定单元格
-      mergeCells: [],
+      // 合并的索引集
+      mergeIndexs: [],
+      // 合并表尾数据的索引集
+      mergeFooterIndexs: [],
       // 是否已经加载了筛选
       hasFilterPanel: false,
       // 当前选中的筛选列
@@ -681,6 +685,10 @@ export default {
       rowExpandedReserveRowMap: {},
       // 树结构数据，已展开保留的行
       treeExpandedReserveRowMap: {},
+      // 合并单元格的对象集
+      mergeList: [],
+      // 合并表尾数据的对象集
+      mergeFooterList: [],
       // 完整数据、条件处理后
       tableFullData: [],
       afterFullData: [],
