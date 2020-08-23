@@ -711,6 +711,7 @@ const apis = [
       },
       {
         name: 'span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.spanMethod',
         version: '',
         type: 'Object',
@@ -720,6 +721,7 @@ const apis = [
       },
       {
         name: 'footer-span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerSpanMethod',
         version: '1.15',
         type: 'Object',
@@ -2229,6 +2231,7 @@ const apis = [
       },
       {
         name: 'cloak',
+        abandoned: true,
         desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
         version: '1.15.28',
         type: 'Boolean',
@@ -2238,6 +2241,7 @@ const apis = [
       },
       {
         name: 'delay-hover',
+        abandoned: true,
         desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
         version: '1.15.28',
         type: 'Number',
