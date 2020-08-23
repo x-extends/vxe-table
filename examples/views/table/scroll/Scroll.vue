@@ -29,7 +29,7 @@
     </pre>
 
     <p class="tip">
-      手动调优，默认自动优化（<span class="red">注：如果启用横向虚拟滚动，当列不确定列数量时应该设置 <table-api-link prop="scroll-x"/>.<table-api-link prop="rSize"/> 来避免出现左右空白区域</span>）<br>
+      手动调优，对于低性能的浏览器可以通过设置 <table-api-link prop="oSize"/> 偏移量来缓解渲染次数，偏移量越大渲染次数就越少，但是每次渲染的耗时就越久<br>
       通过指定 <table-api-link prop="scroll-x"/>={gt: 20} 或 <table-api-link prop="scroll-y"/>={gt: 40} 适合的参数可以手动调优，如果为 0 则总是启用，如果为 -1 关闭虚拟滚动<br>
       启用虚拟滚动后：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数将自动生效，无法取消
     </p>

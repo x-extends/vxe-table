@@ -136,10 +136,20 @@ export declare class Table extends VXETableModule {
    * 给表尾行附加样式
    */
   footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  // 合并行或列
+  /**
+   * 合并指定单元格
+   */
+  mergeCells: MergeOptions[];
+  /**
+   * 合并指定的表尾
+   */
+  mergeFooterItems: MergeOptions[];
+  /**
+   * 自定义单元格合并方法
+   */
   spanMethod?(params: ColumnCellRenderParams): { rowspan: number, colspan: number };
   /**
-   * 表尾合并行或列
+   * 自定义表尾合并方法
    */
   footerSpanMethod?(params: ColumnFooterRenderParams): { rowspan: number, colspan: number };
   /**
@@ -495,6 +505,14 @@ export declare class Table extends VXETableModule {
    */
   setRadioRow(row: any): Promise<any>;
   /**
+   * 手动清除所有被合并的单元格
+   */
+  clearMergeCells(): Promise<any>;
+  /**
+   * 手动清除所有被合并的表尾
+   */
+  clearMergeCells(): Promise<any>;
+  /**
    * 用于 highlight-current-row，手动清空当前高亮的状态
    */
   clearCurrentRow(): Promise<any>;
@@ -502,6 +520,18 @@ export declare class Table extends VXETableModule {
    * 用于 type=radio，手动清空用户的选择
    */
   clearRadioRow(): Promise<any>;
+  /**
+   * 获取所有被合并的单元格
+   */
+  getMergeCells(): MergeItem[];
+  /**
+   * 获取所有被合并的表尾
+   */
+  getMergeFooterItems(): MergeItem[];
+  /**
+   * 用于 highlight-current-column，获取当前列
+   */
+  getCurrentColumn(): ColumnInfo | null;
   /**
    * 用于 highlight-current-row，获取当前行的行数据
    */
@@ -738,6 +768,14 @@ export declare class Table extends VXETableModule {
    */
   removeCurrentRow(): Promise<{ row: any, rows: any[] }>;
   /**
+   * 取消指定单元格合并状态，如果为数组，则取消多个合并
+   */
+  removeMergeCells(merges: MergeOptions | MergeOptions[]): Promise<MergeItem[]>;
+  /**
+   * 取消指定表尾合并状态，如果为数组，则取消多个合并
+   */
+  removeMergeFooterItems(merges: MergeOptions | MergeOptions[]): Promise<MergeItem[]>;
+  /**
    * 获取表格数据集
    * 获取新增、删除、更改的数据
    */
@@ -805,6 +843,14 @@ export declare class Table extends VXETableModule {
    * @param areas 指定区域
    */
   setCellAreas(areas: CellAreaOptions): Promise<any>;
+  /**
+   * 合并指定单元格，如果为数组则合并多个
+   */
+  setMergeCells(merges: MergeOptions | MergeOptions[]): Promise<any>;
+  /**
+   * 合并指定表尾，如果为数组则合并多个
+   */
+  setMergeFooterItems(merges: MergeOptions | MergeOptions[]): Promise<any>;
   /**
    * 用于 mouse-config.area，设置活动的区域的单元格
    * @param activeArea 
@@ -1028,6 +1074,21 @@ export interface CellAreaOptions {
   startRow: any;
   endRow: any;
   [key: string]: any;
+}
+
+export interface MergeOptions {
+  row: any | number;
+  col: ColumnInfo | number;
+  rowspan: number;
+  colspan: number;
+  [key: string]: any;
+}
+
+export interface MergeItem {
+  row: any;
+  col: ColumnInfo;
+  rowspan: number;
+  colspan: number;
 }
 
 export interface ActiveCellAreaOptions {

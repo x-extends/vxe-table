@@ -9,12 +9,10 @@ export default {
   props: {
     tableData: Array,
     tableColumn: Array,
-    visibleColumn: Array,
     tableGroupColumn: Array,
     fixedColumn: Array,
     size: String,
-    fixedType: String,
-    isGroup: Boolean
+    fixedType: String
   },
   data () {
     return {
@@ -188,7 +186,8 @@ export default {
   },
   methods: {
     uploadColumn () {
-      this.headerColumn = this.isGroup ? convertToRows(this.tableGroupColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
+      const { $parent: $xetable } = this
+      this.headerColumn = $xetable.isGroup ? convertToRows(this.tableGroupColumn) : [$xetable.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
     },
     resizeMousedown (evnt, params) {
       const { column } = params

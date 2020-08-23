@@ -688,17 +688,27 @@ const apis = [
         defVal: '',
         list: []
       },
-      // {
-      //   name: 'merges',
-      //   descKey: 'app.api.table.desc.merges',
-      //   version: '',
-      //   type: 'Array<{ row: number | any, col: number | ColumnConfig, rowspan: number, colspan: number }>',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
+      {
+        name: 'merge-cells',
+        descKey: 'app.api.table.desc.mergeCells',
+        version: '',
+        type: 'Array<{ row: number, col: number, rowspan: number, colspan: number }>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'merge-footer-items',
+        descKey: 'app.api.table.desc.mergeFooterItems',
+        version: '',
+        type: 'Array<{ row: number, col: number, rowspan: number, colspan: number }>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
       {
         name: 'span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.spanMethod',
         version: '',
         type: 'Function',
@@ -708,6 +718,7 @@ const apis = [
       },
       {
         name: 'footer-span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerSpanMethod',
         version: '',
         type: 'Function',
@@ -2042,6 +2053,7 @@ const apis = [
       },
       {
         name: 'cloak',
+        abandoned: true,
         desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
         version: '',
         type: 'boolean',
@@ -2051,6 +2063,7 @@ const apis = [
       },
       {
         name: 'delay-hover',
+        abandoned: true,
         desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
         version: '',
         type: 'number',
@@ -2077,29 +2090,11 @@ const apis = [
           },
           {
             name: 'oSize',
-            desc: '当剩余数据少于指定列时触发重新渲染',
+            desc: '指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久（对于古董级的低性能浏览器可以设置大一点）',
             version: '',
             type: 'number',
             enum: '',
-            defVal: '默认自动计算',
-            list: []
-          },
-          {
-            name: 'rSize',
-            desc: '每次渲染条数',
-            version: '',
-            type: 'number',
-            enum: '',
-            defVal: '默认自动计算',
-            list: []
-          },
-          {
-            name: 'vSize',
-            desc: '指定可视区域条数',
-            version: '',
-            type: 'number',
-            enum: '',
-            defVal: '默认自动计算',
+            defVal: '0',
             list: []
           }
         ]
@@ -2123,31 +2118,13 @@ const apis = [
           },
           {
             name: 'oSize',
-            desc: '当剩余数据少于指定行时触发重新渲染',
+            desc: '指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久（对于古董级的低性能浏览器可以设置大一点）',
             version: '',
             type: 'number',
             enum: '',
-            defVal: '默认自动计算',
+            defVal: '0',
             list: []
-          },
-          {
-            name: 'rSize',
-            desc: '每次渲染条数',
-            version: '',
-            type: 'number',
-            enum: '',
-            defVal: '默认自动计算',
-            list: []
-          },
-          {
-            name: 'vSize',
-            desc: '指定可视区域条数',
-            version: '',
-            type: 'number',
-            enum: '',
-            defVal: '默认自动计算',
-            list: []
-          },
+          }
           // {
           //   name: 'rHeight',
           //   desc: '指定行高',
@@ -2157,15 +2134,15 @@ const apis = [
           //   defVal: '默认自动计算',
           //   list: []
           // },
-          {
-            name: 'adaptive',
-            desc: '自动适配最优的渲染方式',
-            version: '',
-            type: 'boolean',
-            enum: '',
-            defVal: 'true',
-            list: []
-          }
+          // {
+          //   name: 'adaptive',
+          //   desc: '自动适配最优的渲染方式',
+          //   version: '',
+          //   type: 'boolean',
+          //   enum: '',
+          //   defVal: 'true',
+          //   list: []
+          // }
         ]
       // },
       // {
@@ -2713,6 +2690,24 @@ const apis = [
         list: []
       },
       {
+        name: 'removeMergeCells(merges)',
+        desc: '取消指定单元格合并状态，如果为数组，则取消多个合并',
+        version: '',
+        type: 'Promise<merges>',
+        enum: '',
+        defVal: 'merges: {row: Row, col: ColumnInfo} | {row: Row, col: ColumnInfo}[]',
+        list: []
+      },
+      {
+        name: 'removeMergeFooterItems(merges)',
+        desc: '取消指定表尾合并状态，如果为数组，则取消多个合并',
+        version: '',
+        type: 'Promise<merges>',
+        enum: '',
+        defVal: 'merges: {row: Row, col: ColumnInfo} | {row: Row, col: ColumnInfo}[]',
+        list: []
+      },
+      {
         name: 'getRowIndex(row)',
         desc: '根据 row 获取相对于 data 中的索引',
         version: '',
@@ -2906,6 +2901,24 @@ const apis = [
         desc: '只对 keep-source 开启有效，获取已修改的数据',
         version: '',
         type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getMergeCells()',
+        desc: '获取所有被合并的单元格',
+        version: '',
+        type: 'Array<{row: any, col: ColumnInfo, rowspan: number, colspan: number}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getMergeFooterItems()',
+        desc: '获取所有被合并的表尾',
+        version: '',
+        type: 'Array<{row: any, col: ColumnInfo, rowspan: number, colspan: number}>',
         enum: '',
         defVal: '',
         list: []
@@ -3199,6 +3212,24 @@ const apis = [
       //   list: []
       // },
       {
+        name: 'setMergeCells(merges)',
+        desc: '合并指定单元格，如果为数组则合并多个',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'merges: MergeOptions | MergeOptions[]',
+        list: []
+      },
+      {
+        name: 'setMergeFooterItems(merges)',
+        desc: '合并指定表尾，如果为数组则合并多个',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'merges: MergeOptions | MergeOptions[]',
+        list: []
+      },
+      {
         name: 'setRowExpand(rows, checked)',
         desc: '用于 expand-config，设置展开行，二个参数设置这一行展开与否',
         version: '',
@@ -3313,6 +3344,24 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'clearMergeCells()',
+        desc: '手动清除所有被合并的单元格',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearMergeFooterItems()',
+        desc: '手动清除所有被合并的表尾',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
         list: []
       },
       {

@@ -1445,6 +1445,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.merge',
+              locat: {
+                name: 'TableScrollMerge'
+              }
+            },
+            {
               label: 'app.aside.nav.keyboard',
               locat: {
                 name: 'TableScrollKeyboard'

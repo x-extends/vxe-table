@@ -246,13 +246,13 @@ export const UtilTools = {
       }
       groupConfig.children.splice([].indexOf.call($xecolumn.$el.children, $el), 0, columnConfig)
     } else {
-      $xetable.collectColumn.splice([].indexOf.call($xetable.$refs.hideColumn.children, $el), 0, columnConfig)
+      $xetable.staticColumns.splice([].indexOf.call($xetable.$refs.hideColumn.children, $el), 0, columnConfig)
     }
   },
   // 销毁列
   destroyColumn (_vm) {
     const { $xetable, columnConfig } = _vm
-    const matchObj = XEUtils.findTree($xetable.collectColumn, column => column === columnConfig)
+    const matchObj = XEUtils.findTree($xetable.staticColumns, column => column === columnConfig)
     if (matchObj) {
       matchObj.items.splice(matchObj.index, 1)
     }

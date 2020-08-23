@@ -78,16 +78,11 @@ const GlobalConfig = {
     },
     scrollX: {
       gt: 60
-      // oSize: 0,
-      // rSize: 0
-      // vSize: 0
+      // oSize: 0
     },
     scrollY: {
       gt: 100
-      // oSize: 0,
-      // rSize: 0
-      // vSize: 0,
-      // rHeight: 0
+      // oSize: 0
     }
   },
   icon: {

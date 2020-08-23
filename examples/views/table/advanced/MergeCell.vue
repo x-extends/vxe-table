@@ -1,16 +1,18 @@
 <template>
   <div>
-    <p class="tip">实现复杂的报表<br><span class="red">（注：<table-api-link prop="span-method"/> 合并的逻辑都是自行实现的，该示例仅供参考）</span></p>
+    <p class="tip">单元格与表尾数据合并，可以通过绑定参数 <table-api-link prop="merge-cells"/> 或调用函数 <table-api-link prop="setMergeCells"/>、<table-api-link prop="setMergeCells"/> 来控制单元格合并状态</p>
 
     <vxe-table
       border
       resizable
+      show-footer
       ref="xTable"
       height="800"
       align="center"
       column-width="80"
-      :cell-style="cellStyleMethod"
-      :span-method="mergeMethod"
+      :merge-cells="mergeCells"
+      :merge-footer-items="mergeFooterItems"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column field="a" title="名称"></vxe-table-column>
       <vxe-table-column field="b" title="教育经费投入">
@@ -89,7 +91,7 @@ export default {
         { row: 0, col: 7, rowspan: 2, colspan: 1 },
         { row: 0, col: 8, rowspan: 2, colspan: 1 },
         { row: 0, col: 9, rowspan: 2, colspan: 1 },
-        { row: 0, col: 15, rowspan: 10, colspan: 1, style: { color: '#DD001B', fontWeight: 700, fontSize: '40px' } },
+        { row: 0, col: 15, rowspan: 10, colspan: 1 },
         { row: 0, col: 16, rowspan: 10, colspan: 1 },
         { row: 0, col: 18, rowspan: 2, colspan: 1 },
         { row: 0, col: 19, rowspan: 2, colspan: 1 },
@@ -97,7 +99,7 @@ export default {
         { row: 0, col: 21, rowspan: 2, colspan: 1 },
         { row: 1, col: 11, rowspan: 1, colspan: 4 },
 
-        { row: 2, col: 0, rowspan: 4, colspan: 2, style: { color: '#ffffff', backgroundColor: '#008000' } },
+        { row: 2, col: 0, rowspan: 4, colspan: 2 },
         { row: 2, col: 2, rowspan: 4, colspan: 1 },
         { row: 2, col: 3, rowspan: 4, colspan: 1 },
         { row: 2, col: 6, rowspan: 4, colspan: 1 },
@@ -108,8 +110,8 @@ export default {
         { row: 2, col: 18, rowspan: 3, colspan: 1 },
         { row: 2, col: 19, rowspan: 3, colspan: 1 },
         { row: 2, col: 20, rowspan: 3, colspan: 2 },
-        { row: 3, col: 4, rowspan: 2, colspan: 2, style: { color: '#ffffff', backgroundColor: '#F5680B', fontSize: '40px' } },
-        { row: 4, col: 11, rowspan: 2, colspan: 4, style: { color: '#ffffff', backgroundColor: '#409eff' } },
+        { row: 3, col: 4, rowspan: 2, colspan: 2 },
+        { row: 4, col: 11, rowspan: 2, colspan: 4 },
         { row: 5, col: 18, rowspan: 1, colspan: 4 },
 
         { row: 6, col: 0, rowspan: 3, colspan: 1 },
@@ -126,19 +128,29 @@ export default {
         { row: 6, col: 21, rowspan: 3, colspan: 1 },
         { row: 6, col: 2, rowspan: 1, colspan: 2 },
         { row: 8, col: 2, rowspan: 1, colspan: 2 },
-        { row: 9, col: 0, rowspan: 1, colspan: 15 }
+        { row: 9, col: 0, rowspan: 1, colspan: 15 },
+
+        { row: 11, col: 5, rowspan: 4, colspan: 12 }
+      ],
+      mergeFooterItems: [
+        { row: 0, col: 1, rowspan: 1, colspan: 2 },
+        { row: 0, col: 6, rowspan: 1, colspan: 2 },
+        { row: 0, col: 14, rowspan: 2, colspan: 5 },
+        { row: 1, col: 4, rowspan: 1, colspan: 8 }
       ],
       demoCodes: [
         `
         <vxe-table
           border
           resizable
+          show-footer
           ref="xTable"
           height="800"
           align="center"
           column-width="80"
-          :cell-style="cellStyleMethod"
-          :span-method="mergeMethod"
+          :merge-cells="mergeCells"
+          :merge-footer-items="mergeFooterItems"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column field="a" title="名称"></vxe-table-column>
           <vxe-table-column field="b" title="教育经费投入">
@@ -206,14 +218,15 @@ export default {
                 { row: 0, col: 7, rowspan: 2, colspan: 1 },
                 { row: 0, col: 8, rowspan: 2, colspan: 1 },
                 { row: 0, col: 9, rowspan: 2, colspan: 1 },
-                { row: 0, col: 15, rowspan: 10, colspan: 1, style: { color: '#DD001B', fontWeight: 700, fontSize: '40px' } },
+                { row: 0, col: 15, rowspan: 10, colspan: 1 },
                 { row: 0, col: 16, rowspan: 10, colspan: 1 },
                 { row: 0, col: 18, rowspan: 2, colspan: 1 },
                 { row: 0, col: 19, rowspan: 2, colspan: 1 },
                 { row: 0, col: 20, rowspan: 2, colspan: 1 },
                 { row: 0, col: 21, rowspan: 2, colspan: 1 },
                 { row: 1, col: 11, rowspan: 1, colspan: 4 },
-                { row: 2, col: 0, rowspan: 4, colspan: 2, style: { color: '#ffffff', backgroundColor: '#008000' } },
+
+                { row: 2, col: 0, rowspan: 4, colspan: 2 },
                 { row: 2, col: 2, rowspan: 4, colspan: 1 },
                 { row: 2, col: 3, rowspan: 4, colspan: 1 },
                 { row: 2, col: 6, rowspan: 4, colspan: 1 },
@@ -224,9 +237,10 @@ export default {
                 { row: 2, col: 18, rowspan: 3, colspan: 1 },
                 { row: 2, col: 19, rowspan: 3, colspan: 1 },
                 { row: 2, col: 20, rowspan: 3, colspan: 2 },
-                { row: 3, col: 4, rowspan: 2, colspan: 2, style: { color: '#ffffff', backgroundColor: '#F5680B', fontSize: '40px' } },
-                { row: 4, col: 11, rowspan: 2, colspan: 4, style: { color: '#ffffff', backgroundColor: '#409eff' } },
+                { row: 3, col: 4, rowspan: 2, colspan: 2 },
+                { row: 4, col: 11, rowspan: 2, colspan: 4 },
                 { row: 5, col: 18, rowspan: 1, colspan: 4 },
+
                 { row: 6, col: 0, rowspan: 3, colspan: 1 },
                 { row: 6, col: 1, rowspan: 3, colspan: 1 },
                 { row: 6, col: 4, rowspan: 3, colspan: 1 },
@@ -241,7 +255,15 @@ export default {
                 { row: 6, col: 21, rowspan: 3, colspan: 1 },
                 { row: 6, col: 2, rowspan: 1, colspan: 2 },
                 { row: 8, col: 2, rowspan: 1, colspan: 2 },
-                { row: 9, col: 0, rowspan: 1, colspan: 15 }
+                { row: 9, col: 0, rowspan: 1, colspan: 15 },
+
+                { row: 11, col: 5, rowspan: 4, colspan: 12 }
+              ],
+              mergeFooterItems: [
+                { row: 0, col: 1, rowspan: 1, colspan: 2 },
+                { row: 0, col: 6, rowspan: 1, colspan: 2 },
+                { row: 0, col: 14, rowspan: 2, colspan: 5 },
+                { row: 1, col: 4, rowspan: 1, colspan: 8 }
               ]
             }
           },
@@ -277,36 +299,11 @@ export default {
             this.tableData = list
           },
           methods: {
-            // 通过单元格样式渲染函数
-            cellStyleMethod ({ row, column }) {
-              const { mergeCells } = this
-              const xTable = this.$refs.xTable
-              const _rowIndex = xTable._getRowIndex(row)
-              const _columnIndex = xTable._getColumnIndex(column)
-              for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
-                const { row, col, style } = mergeCells[mIndex]
-                if (style && row === _rowIndex && col === _columnIndex) {
-                  return style
-                }
-              }
-              return null
-            },
-            // 通用单元格合并函数（将指定区域进行合并）
-            mergeMethod ({ row, column }) {
-              const { mergeCells } = this
-              const xTable = this.$refs.xTable
-              const _rowIndex = xTable._getRowIndex(row)
-              const _columnIndex = xTable._getColumnIndex(column)
-              for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
-                const { row, col, rowspan, colspan } = mergeCells[mIndex]
-                if (row === _rowIndex && col === _columnIndex) {
-                  return { rowspan, colspan }
-                }
-                if (_rowIndex >= row && _rowIndex < row + rowspan && _columnIndex >= col && _columnIndex < col + colspan) {
-                  return { rowspan: 0, colspan: 0 }
-                }
-              }
-              return { rowspan: 1, colspan: 1 }
+            footerMethod ({ columns }) {
+              return [
+                columns.map((column, index) => index),
+                columns.map((column, index) => 1000 + index)
+              ]
             }
           }
         }
@@ -351,36 +348,11 @@ export default {
     })
   },
   methods: {
-    // 通过单元格样式渲染函数
-    cellStyleMethod ({ row, column }) {
-      const { mergeCells } = this
-      const xTable = this.$refs.xTable
-      const _rowIndex = xTable._getRowIndex(row)
-      const _columnIndex = xTable._getColumnIndex(column)
-      for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
-        const { row, col, style } = mergeCells[mIndex]
-        if (style && row === _rowIndex && col === _columnIndex) {
-          return style
-        }
-      }
-      return null
-    },
-    // 通用单元格合并函数（将指定区域进行合并）
-    mergeMethod ({ row, column }) {
-      const { mergeCells } = this
-      const xTable = this.$refs.xTable
-      const _rowIndex = xTable._getRowIndex(row)
-      const _columnIndex = xTable._getColumnIndex(column)
-      for (let mIndex = 0; mIndex < mergeCells.length; mIndex++) {
-        const { row, col, rowspan, colspan } = mergeCells[mIndex]
-        if (row === _rowIndex && col === _columnIndex) {
-          return { rowspan, colspan }
-        }
-        if (_rowIndex >= row && _rowIndex < row + rowspan && _columnIndex >= col && _columnIndex < col + colspan) {
-          return { rowspan: 0, colspan: 0 }
-        }
-      }
-      return { rowspan: 1, colspan: 1 }
+    footerMethod ({ columns }) {
+      return [
+        columns.map((column, index) => index),
+        columns.map((column, index) => 1000 + index)
+      ]
     }
   }
 }

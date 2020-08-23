@@ -166,6 +166,7 @@ import TableScrollHighlight from './views/table/scroll/Highlight.vue'
 import TableScrollKeyboard from './views/table/scroll/Keyboard.vue'
 import TableScrollMaxHeight from './views/table/scroll/MaxHeight.vue'
 import TableScrollGroup from './views/table/scroll/Group.vue'
+import TableScrollMerge from './views/table/scroll/Merge.vue'
 import TableScrollEdit from './views/table/scroll/Edit.vue'
 import TableScrollCellValid from './views/table/scroll/CellValid.vue'
 import TableScrollRowValid from './views/table/scroll/RowValid.vue'
@@ -1147,6 +1148,11 @@ export default new Router({
       path: '/table/scroll/group',
       name: 'TableScrollGroup',
       component: TableScrollGroup
+    },
+    {
+      path: '/table/scroll/merge',
+      name: 'TableScrollMerge',
+      component: TableScrollMerge
     },
     {
       path: '/table/scroll/keyboard',

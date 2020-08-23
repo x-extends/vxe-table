@@ -1,45 +1,29 @@
 <template>
   <div>
-    <p class="tip">
-      虚拟滚动渲染，左右固定列<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
-      大数据不建议使用双向绑定的 data 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
-      对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
-      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高；如果需要支持，将虚拟滚动关闭即可）</span>
-    </p>
-
-    <vxe-toolbar>
-      <template v-slot:buttons>
-        <vxe-button @click="loadList(10000)">1w条</vxe-button>
-        <vxe-button @click="loadList(50000)">5w条</vxe-button>
-        <vxe-button @click="loadList(100000)">10w条</vxe-button>
-        <vxe-button @click="loadList(200000)">20w条</vxe-button>
-        <vxe-button @click="$refs.xTable.setAllCheckboxRow(true)">所有选中</vxe-button>
-        <vxe-button @click="$refs.xTable.clearCheckboxRow()">清除选中</vxe-button>
-        <vxe-button @click="getSelectEvent">获取选中</vxe-button>
-      </template>
-    </vxe-toolbar>
+    <p class="tip">虚拟渲染与单元格合并，可以通过设置参数 <table-api-link prop="merge-cells"/> 或调用函数 <table-api-link prop="setMergeCells"/>、<table-api-link prop="setMergeCells"/> 来控制单元格合并状态</p>
 
     <vxe-table
       border
       resizable
       show-overflow
       show-header-overflow
-      highlight-hover-row
-      highlight-current-row
       export-config
+      show-footer
       ref="xTable"
-      height="600"
-      :loading="loading"
+      height="500"
+      :merge-cells="mergeCells"
       :sort-config="{trigger: 'cell'}"
-      :checkbox-config="{checkField: 'checked'}">
-      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
+      :merge-footer-items="mergeFooterItems"
+      :footer-method="footerMethod"
+      :loading="loading">
+      <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
+      <vxe-table-column field="id" title="ID" width="200"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
       <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
       <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="300"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
       <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
       <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
       <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
@@ -50,24 +34,10 @@
       <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
       <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
       <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
+      <vxe-table-column field="attr11" title="attr11" width="200"></vxe-table-column>
       <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-      <vxe-table-column field="attr10" title="Attr10" width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="200" fixed="right"></vxe-table-column>
+      <vxe-table-column field="attr10" title="attr10" width="200"></vxe-table-column>
     </vxe-table>
-
-    <pre>
-      <code>
-        | Arrow Up ↑ | 匀速向上滚动数据 |
-        | Arrow Down ↓ | 匀速向下滚动数据 |
-        | Arrow Left ← | 匀速向左滚动数据 |
-        | Arrow Right → | 匀速向右滚动数据 |
-        | Page Up | 向上翻页滚动 |
-        | Page Down | 向下翻页滚动 |
-        | Spacebar | 翻页滚动 |
-        | Home | 滚动到顶部 |
-        | End | 滚动到底部 |
-      </code>
-    </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -86,41 +56,41 @@ export default {
   data () {
     return {
       loading: false,
+      mergeCells: [
+        { row: 4, col: 2, rowspan: 2, colspan: 5 },
+        { row: 30, col: 3, rowspan: 10, colspan: 1 },
+        { row: 80, col: 4, rowspan: 30, colspan: 3 }
+      ],
+      mergeFooterItems: [
+        { row: 0, col: 1, rowspan: 1, colspan: 2 },
+        { row: 0, col: 6, rowspan: 1, colspan: 2 },
+        { row: 0, col: 14, rowspan: 2, colspan: 5 },
+        { row: 1, col: 4, rowspan: 1, colspan: 8 }
+      ],
       demoCodes: [
         `
-        <vxe-toolbar export>
-          <template v-slot:buttons>
-            <vxe-button @click="loadList(10000)">1w条</vxe-button>
-            <vxe-button @click="loadList(50000)">5w条</vxe-button>
-            <vxe-button @click="loadList(100000)">10w条</vxe-button>
-            <vxe-button @click="loadList(200000)">20w条</vxe-button>
-            <vxe-button @click="$refs.xTable.setAllCheckboxRow(true)">所有选中</vxe-button>
-            <vxe-button @click="$refs.xTable.clearCheckboxRow()">清除选中</vxe-button>
-            <vxe-button @click="getSelectEvent">获取选中</vxe-button>
-          </template>
-        </vxe-toolbar>
-
         <vxe-table
           border
           resizable
           show-overflow
           show-header-overflow
-          highlight-hover-row
-          highlight-current-row
           export-config
+          show-footer
           ref="xTable"
-          height="600"
-          :loading="loading"
+          height="500"
+          :merge-cells="mergeCells"
           :sort-config="{trigger: 'cell'}"
-          :checkbox-config="{checkField: 'checked'}">
-          <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
+          :merge-footer-items="mergeFooterItems"
+          :footer-method="footerMethod"
+          :loading="loading">
+          <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
+          <vxe-table-column field="id" title="ID" width="200"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
           <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
           <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="300"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
           <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
           <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
           <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
@@ -131,16 +101,27 @@ export default {
           <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
           <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
           <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
+          <vxe-table-column field="attr11" title="attr11" width="200"></vxe-table-column>
           <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="200" fixed="right"></vxe-table-column>
+          <vxe-table-column field="attr10" title="attr10" width="200"></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
-              loading: false
+              loading: false,
+              mergeCells: [
+                { row: 4, col: 2, rowspan: 2, colspan: 5 },
+                { row: 30, col: 3, rowspan: 10, colspan: 1 },
+                { row: 80, col: 4, rowspan: 30, colspan: 3 }
+              ],
+              mergeFooterItems: [
+                { row: 0, col: 1, rowspan: 1, colspan: 2 },
+                { row: 0, col: 6, rowspan: 1, colspan: 2 },
+                { row: 0, col: 14, rowspan: 2, colspan: 5 },
+                { row: 1, col: 4, rowspan: 1, colspan: 8 }
+              ]
             }
           },
           created () {
@@ -161,9 +142,11 @@ export default {
                 }
               })
             },
-            getSelectEvent () {
-              let selectRecords = this.$refs.xTable.getCheckboxRecords()
-              this.$XModal.alert(selectRecords.length)
+            footerMethod ({ columns }) {
+              return [
+                columns.map((column, index) => index),
+                columns.map((column, index) => 1000 + index)
+              ]
             }
           }
         }
@@ -194,9 +177,11 @@ export default {
         }
       })
     },
-    getSelectEvent () {
-      const selectRecords = this.$refs.xTable.getCheckboxRecords()
-      this.$XModal.alert(selectRecords.length)
+    footerMethod ({ columns }) {
+      return [
+        columns.map((column, index) => index),
+        columns.map((column, index) => 1000 + index)
+      ]
     }
   }
 }

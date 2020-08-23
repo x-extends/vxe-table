@@ -66,7 +66,7 @@ function renderRightTools (h, _vm) {
 }
 
 function renderCustoms (h, _vm) {
-  const { $xetable, customStore, customOpts, collectColumn } = _vm
+  const { $xetable, customStore, customOpts, columns } = _vm
   const cols = []
   const customBtnOns = {}
   const customWrapperOns = {}
@@ -86,7 +86,7 @@ function renderCustoms (h, _vm) {
     // 点击触发
     customBtnOns.click = _vm.handleClickSettingEvent
   }
-  XEUtils.eachTree(collectColumn, (column) => {
+  XEUtils.eachTree(columns, (column) => {
     const colTitle = UtilTools.formatText(column.getTitle(), 1)
     const colKey = column.getKey()
     const isColGroup = column.children && column.children.length
@@ -223,7 +223,7 @@ export default {
     return {
       $xetable: null,
       isRefresh: false,
-      collectColumn: [],
+      columns: [],
       customStore: {
         isAll: false,
         isIndeterminate: false,
@@ -358,7 +358,7 @@ export default {
     syncUpdate (params) {
       const { collectColumn, $table } = params
       this.$xetable = $table
-      this.collectColumn = collectColumn
+      this.columns = collectColumn
     },
     fintTable () {
       const { $children } = this.$parent
@@ -405,9 +405,9 @@ export default {
       }
     },
     resetCustomEvent (evnt) {
-      const { $xetable, collectColumn } = this
+      const { $xetable, columns } = this
       const checkMethod = $xetable.customOpts.checkMethod
-      XEUtils.eachTree(collectColumn, column => {
+      XEUtils.eachTree(columns, column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = column.defaultVisible
           column.halfVisible = false
@@ -436,7 +436,7 @@ export default {
       this.checkCustomStatus()
     },
     handleOptionCheck (column) {
-      const matchObj = XEUtils.findTree(this.collectColumn, item => item === column)
+      const matchObj = XEUtils.findTree(this.columns, item => item === column)
       if (matchObj && matchObj.parent) {
         const { parent } = matchObj
         if (parent.children && parent.children.length) {
@@ -453,16 +453,16 @@ export default {
       $xetable.refreshColumn()
     },
     checkCustomStatus () {
-      const { $xetable, collectColumn } = this
+      const { $xetable, columns } = this
       const checkMethod = $xetable.customOpts.checkMethod
-      this.customStore.isAll = collectColumn.every(column => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
-      this.customStore.isIndeterminate = !this.customStore.isAll && collectColumn.some(column => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
+      this.customStore.isAll = columns.every(column => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
+      this.customStore.isIndeterminate = !this.customStore.isAll && columns.some(column => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
     },
     allCustomEvent () {
-      const { $xetable, collectColumn, customStore } = this
+      const { $xetable, columns, customStore } = this
       const checkMethod = $xetable.customOpts.checkMethod
       const isAll = !customStore.isAll
-      XEUtils.eachTree(collectColumn, column => {
+      XEUtils.eachTree(columns, column => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = isAll
           column.halfVisible = false

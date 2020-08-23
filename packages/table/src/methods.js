@@ -4,7 +4,7 @@ import Cell from '../../cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
-const { getRowid, getRowkey, setCellValue, getCellLabel, hasChildrenList } = UtilTools
+const { getRowid, getRowkey, setCellValue, getCellLabel, hasChildrenList, getColumnList } = UtilTools
 const { browse, calcHeight, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
 
 const isWebkit = browse['-webkit'] && !browse.edge
@@ -69,6 +69,78 @@ function handleReserveRow (_vm, reserveRowMap) {
   return reserveList
 }
 
+function computeVirtualX (_vm) {
+  const { $refs, visibleColumn } = _vm
+  const tableBodyElem = $refs.tableBody.$el
+  const { scrollLeft, clientWidth } = tableBodyElem
+  const endWidth = scrollLeft + clientWidth
+  let toVisibleIndex = -1
+  let cWidth = 0
+  let visibleSize = 0
+  for (let colIndex = 0, colLen = visibleColumn.length; colIndex < colLen; colIndex++) {
+    cWidth += visibleColumn[colIndex].renderWidth
+    if (toVisibleIndex === -1 && scrollLeft < cWidth) {
+      toVisibleIndex = colIndex
+    }
+    if (toVisibleIndex >= 0) {
+      visibleSize++
+      if (cWidth > endWidth) {
+        break
+      }
+    }
+  }
+  return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(8, visibleSize) }
+}
+
+function computeVirtualY (_vm) {
+  const { $refs, vSize, rowHeightMaps } = _vm
+  const { tableHeader, tableBody } = $refs
+  const tableBodyElem = tableBody.$el
+  let rowHeight = _vm.c
+  let firstTrElem = tableBodyElem.querySelector('tr')
+  if (!firstTrElem && tableHeader) {
+    firstTrElem = tableHeader.$el.querySelector('tr')
+  }
+  if (firstTrElem) {
+    rowHeight = firstTrElem.clientHeight
+  }
+  if (!rowHeight) {
+    rowHeight = rowHeightMaps[vSize || 'default']
+  }
+  const visibleSize = Math.max(8, Math.ceil(tableBodyElem.clientHeight / rowHeight) + 2)
+  return { rowHeight, visibleSize }
+}
+
+function handleMergerXOffserIndex (list, offsetItem) {
+  const { startIndex, endIndex } = offsetItem
+  for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
+    const mergeItem = list[mcIndex]
+    const { _columnIndex } = mergeItem
+    const endColSpanIndex = mergeItem.colspan + _columnIndex
+    if (_columnIndex < startIndex && startIndex <= endColSpanIndex) {
+      offsetItem.startIndex = _columnIndex
+    }
+    if (_columnIndex < endIndex && endIndex <= endColSpanIndex) {
+      offsetItem.endIndex = endColSpanIndex
+    }
+  }
+}
+
+function handleMergerYOffserIndex (list, offsetItem) {
+  const { startIndex, endIndex } = offsetItem
+  for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
+    const mergeItem = list[mcIndex]
+    const { _rowIndex } = mergeItem
+    const endRowSpanIndex = mergeItem.rowspan + _rowIndex
+    if (_rowIndex < startIndex && startIndex <= endRowSpanIndex) {
+      offsetItem.startIndex = _rowIndex
+    }
+    if (_rowIndex < endIndex && endIndex <= endRowSpanIndex) {
+      offsetItem.endIndex = endRowSpanIndex
+    }
+  }
+}
+
 const Methods = {
   /**
    * 获取父容器元素
@@ -96,6 +168,8 @@ const Methods = {
   clearAll () {
     this.inited = false
     this.clearSort()
+    this.clearMergeCells()
+    this.clearMergeFooterItems()
     this.clearCurrentRow()
     this.clearCurrentColumn()
     this.clearRadioRow()
@@ -139,15 +213,7 @@ const Methods = {
   handleTableData (force) {
     const { scrollYLoad, scrollYStore } = this
     const fullData = force ? this.updateAfterFullData() : this.afterFullData
-    let tableData = []
-    if (scrollYLoad) {
-      const startRowIndex = scrollYStore.startIndex
-      const endRowIndex = scrollYStore.startIndex + scrollYStore.renderSize
-      tableData = fullData.slice(Math.max(0, startRowIndex), Math.max(endRowIndex, 1))
-    } else {
-      tableData = fullData.slice(0)
-    }
-    this.tableData = tableData
+    this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullData.slice(0)
     return this.$nextTick()
   },
   /**
@@ -155,11 +221,11 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas) {
-    const { keepSource, treeConfig, editStore, sYOpts, scrollYStore } = this
+    const { keepSource, treeConfig, editStore, sYOpts, scrollYStore, scrollXStore } = this
     const tableFullData = datas ? datas.slice(0) : []
     const scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt <= tableFullData.length
     scrollYStore.startIndex = 0
-    scrollYStore.visibleIndex = 0
+    scrollXStore.startIndex = 0
     editStore.insertList = []
     editStore.removeList = []
     // 全量数据
@@ -187,8 +253,10 @@ const Methods = {
     this.updateFooter()
     return this.computeScrollLoad().then(() => {
       // 是否加载了数据
+      if (scrollYLoad) {
+        scrollYStore.endIndex = scrollYStore.visibleSize
+      }
       this.isLoadData = true
-      this.computeRowHeight()
       this.handleReserveStatus()
       this.checkSelectionStatus()
       return this.$nextTick().then(this.recalculate).then(this.refreshScroll)
@@ -252,7 +320,8 @@ const Methods = {
    * @param {ColumnInfo} columns 列配置
    */
   loadColumn (columns) {
-    this.collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column))
+    const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column))
+    this.handleColumn(collectColumn)
     return this.$nextTick()
   },
   /**
@@ -263,6 +332,27 @@ const Methods = {
   reloadColumn (columns) {
     this.clearAll()
     return this.loadColumn(columns)
+  },
+  handleColumn (collectColumn) {
+    this.collectColumn = collectColumn
+    const tableFullColumn = getColumnList(collectColumn)
+    this.tableFullColumn = tableFullColumn
+    this.cacheColumnMap()
+    this.restoreCustomStorage()
+    this.refreshColumn().then(() => {
+      if (this.scrollXLoad) {
+        this.loadScrollXData(true)
+      }
+    })
+    this.handleTableData(true)
+    if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
+      UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+    }
+    this.$nextTick(() => {
+      if (this.$toolbar) {
+        this.$toolbar.syncUpdate({ collectColumn, $table: this })
+      }
+    })
   },
   /**
    * 更新数据行的 Map
@@ -335,9 +425,10 @@ const Methods = {
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
   cacheColumnMap () {
-    const { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
+    const { tableFullColumn, collectColumn, fullColumnMap } = this
     const fullColumnIdData = this.fullColumnIdData = {}
     const fullColumnFieldData = this.fullColumnFieldData = {}
+    const isGroup = collectColumn.some(hasChildrenList)
     let expandColumn
     let treeNodeColumn
     let hasFixed
@@ -376,6 +467,7 @@ const Methods = {
     if (expandColumn && this.mouseOpts.area) {
       UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
     }
+    this.isGroup = isGroup
     this.treeNodeColumn = treeNodeColumn
     this.expandColumn = expandColumn
   },
@@ -786,9 +878,12 @@ const Methods = {
     if (this.treeConfig) {
       this.handleDefaultTreeExpand()
     }
-    // if (this.merges) {
-    //   this.handleDefaultMergeCells()
-    // }
+    if (this.mergeCells) {
+      this.handleDefaultMergeCells()
+    }
+    if (this.mergeFooterItems) {
+      this.handleDefaultMergeFooterItems()
+    }
     this.$nextTick(() => setTimeout(this.recalculate))
   },
   /**
@@ -1020,7 +1115,6 @@ const Methods = {
       })
     }
     const visibleColumn = leftList.concat(centerList).concat(rightList)
-    let tableColumn = visibleColumn
     let scrollXLoad = sXOpts.gt > -1 && sXOpts.gt <= tableFullColumn.length
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad && isGroup) {
@@ -1040,15 +1134,14 @@ const Methods = {
       if (this.footerSpanMethod) {
         UtilTools.warn('vxe.error.scrollErrProp', ['footer-span-method'])
       }
-      Object.assign(scrollXStore, {
-        startIndex: 0,
-        visibleIndex: 0
-      })
-      tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
+      const { visibleSize } = computeVirtualX(this)
+      scrollXStore.startIndex = 0
+      scrollXStore.endIndex = visibleSize
+      scrollXStore.visibleSize = visibleSize
     }
     this.scrollXLoad = scrollXLoad
-    this.tableColumn = tableColumn
     this.visibleColumn = visibleColumn
+    this.handleTableColumn()
     return this.$nextTick().then(() => {
       this.updateFooter()
       return this.recalculate(true)
@@ -1898,15 +1991,18 @@ const Methods = {
    * 关闭 tooltip
    */
   clostTooltip () {
-    const tooltip = this.$refs.tooltip
-    Object.assign(this.tooltipStore, {
-      row: null,
-      column: null,
-      content: null,
-      visible: false
-    })
-    if (tooltip) {
-      tooltip.close()
+    const { $refs, tooltipStore } = this
+    const tooltip = $refs.tooltip
+    if (tooltipStore.visible) {
+      Object.assign(tooltipStore, {
+        row: null,
+        column: null,
+        content: null,
+        visible: false
+      })
+      if (tooltip) {
+        tooltip.close()
+      }
     }
     return this.$nextTick()
   },
@@ -3112,43 +3208,23 @@ const Methods = {
   triggerScrollXEvent () {
     this.loadScrollXData()
   },
-  loadScrollXData (force) {
-    const { $refs, visibleColumn, scrollXStore } = this
-    const { startIndex, renderSize, offsetSize, visibleSize } = scrollXStore
-    const scrollBodyElem = $refs.tableBody.$el
-    const scrollLeft = scrollBodyElem.scrollLeft
-    let toVisibleIndex = 0
-    let width = 0
-    let preload = force || false
-    const colLen = visibleColumn.length
-    for (let colIndex = 0; colIndex < colLen; colIndex++) {
-      width += visibleColumn[colIndex].renderWidth
-      if (scrollLeft < width) {
-        toVisibleIndex = colIndex
-        break
+  loadScrollXData () {
+    const { mergeIndexs, mergeFooterIndexs, scrollXStore } = this
+    const { startIndex, endIndex, offsetSize } = scrollXStore
+    const { toVisibleIndex, visibleSize } = computeVirtualX(this)
+    if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
+      const offsetItem = {
+        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
+        endIndex: toVisibleIndex + visibleSize + offsetSize
       }
-    }
-    if (force || scrollXStore.visibleIndex !== toVisibleIndex) {
-      const marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
-      if (scrollXStore.visibleIndex === toVisibleIndex) {
-        scrollXStore.startIndex = toVisibleIndex
-      } else if (scrollXStore.visibleIndex > toVisibleIndex) {
-        // 向左
-        preload = toVisibleIndex - offsetSize <= startIndex
-        if (preload) {
-          scrollXStore.startIndex = Math.max(0, Math.max(0, toVisibleIndex - marginSize))
-        }
-      } else {
-        // 向右
-        preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
-        if (preload) {
-          scrollXStore.startIndex = Math.max(0, Math.min(visibleColumn.length - renderSize, toVisibleIndex - marginSize))
-        }
-      }
-      if (preload) {
+      handleMergerXOffserIndex(mergeIndexs, offsetItem)
+      handleMergerXOffserIndex(mergeFooterIndexs, offsetItem)
+      const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
+      scrollXStore.startIndex = offsetStartIndex
+      scrollXStore.endIndex = offsetEndIndex
+      if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
         this.updateScrollXData()
       }
-      scrollXStore.visibleIndex = toVisibleIndex
     }
     this.clostTooltip()
   },
@@ -3170,130 +3246,56 @@ const Methods = {
    * 纵向 Y 可视渲染处理
    */
   loadScrollYData (evnt) {
-    const { afterFullData, scrollYStore, isLoadData } = this
-    const { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
+    const { mergeIndexs, scrollYStore } = this
+    const { startIndex, endIndex, visibleSize, offsetSize, rowHeight } = scrollYStore
     const scrollBodyElem = evnt.target
     const scrollTop = scrollBodyElem.scrollTop
-    const toVisibleIndex = Math.ceil(scrollTop / rowHeight)
-    let preload = false
-    if (isLoadData || scrollYStore.visibleIndex !== toVisibleIndex) {
-      const marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
-      if (scrollYStore.visibleIndex > toVisibleIndex) {
-        // 向上
-        preload = toVisibleIndex - offsetSize <= startIndex
-        if (preload) {
-          scrollYStore.startIndex = Math.max(0, toVisibleIndex - Math.max(marginSize, renderSize - visibleSize))
-        }
-      } else {
-        // 向下
-        preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
-        if (preload) {
-          scrollYStore.startIndex = Math.max(0, Math.min(afterFullData.length - renderSize, toVisibleIndex - marginSize))
-        }
+    const toVisibleIndex = Math.floor(scrollTop / rowHeight)
+    if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
+      const offsetItem = {
+        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
+        endIndex: toVisibleIndex + visibleSize + offsetSize
       }
-      if (preload) {
+      handleMergerYOffserIndex(mergeIndexs, offsetItem)
+      const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
+      scrollYStore.startIndex = offsetStartIndex
+      scrollYStore.endIndex = offsetEndIndex
+      if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
         this.updateScrollYData()
       }
-      scrollYStore.visibleIndex = toVisibleIndex
-      this.isLoadData = false
     }
-  },
-  computeRowHeight () {
-    const tableBody = this.$refs.tableBody
-    const tableBodyElem = tableBody ? tableBody.$el : null
-    const tableHeader = this.$refs.tableHeader
-    let rowHeight
-    if (tableBodyElem) {
-      let firstTrElem = tableBodyElem.querySelector('tbody>tr')
-      if (!firstTrElem && tableHeader) {
-        firstTrElem = tableHeader.$el.querySelector('thead>tr')
-      }
-      if (firstTrElem) {
-        rowHeight = firstTrElem.clientHeight
-      }
-    }
-    // 默认的行高
-    if (!rowHeight) {
-      rowHeight = this.rowHeightMaps[this.vSize || 'default']
-    }
-    this.rowHeight = rowHeight
   },
   // 计算可视渲染相关数据
   computeScrollLoad () {
     return this.$nextTick().then(() => {
-      const { vSize, scrollXLoad, scrollYLoad, sXOpts, scrollYStore, sYOpts, scrollXStore, visibleColumn, rowHeightMaps } = this
-      const tableBody = this.$refs.tableBody
-      const tableBodyElem = tableBody ? tableBody.$el : null
-      const tableHeader = this.$refs.tableHeader
-      if (tableBodyElem) {
-        // 计算 X 逻辑
-        if (scrollXLoad) {
-          const bodyWidth = tableBodyElem.clientWidth
-          let visibleXSize = XEUtils.toNumber(sXOpts.vSize)
-          if (!sXOpts.vSize) {
-            const len = visibleXSize = visibleColumn.length
-            let countWidth = 0
-            let column
-            for (let colIndex = 0; colIndex < len; colIndex++) {
-              column = visibleColumn[colIndex]
-              countWidth += column.renderWidth
-              if (countWidth > bodyWidth) {
-                visibleXSize = colIndex + 1
-                break
-              }
-            }
-          }
-          scrollXStore.visibleSize = visibleXSize
-          // 自动优化
-          if (!sXOpts.oSize) {
-            scrollXStore.offsetSize = visibleXSize
-          }
-          if (!sXOpts.rSize) {
-            scrollXStore.renderSize = Math.max(8, visibleXSize + 6)
-          }
-          this.updateScrollXData()
-        } else {
-          this.updateScrollXSpace()
-        }
-        // 计算 Y 逻辑
-        if (scrollYLoad) {
-          let rHeight
-          if (sYOpts.rHeight) {
-            rHeight = sYOpts.rHeight
-          } else {
-            let firstTrElem = tableBodyElem.querySelector('tbody>tr')
-            if (!firstTrElem && tableHeader) {
-              firstTrElem = tableHeader.$el.querySelector('thead>tr')
-            }
-            if (firstTrElem) {
-              rHeight = firstTrElem.clientHeight
-            }
-          }
-          // 默认的行高
-          if (!rHeight) {
-            rHeight = rowHeightMaps[vSize || 'default']
-          }
-          const visibleYSize = XEUtils.toNumber(sYOpts.vSize || Math.ceil(tableBodyElem.clientHeight / rHeight))
-          scrollYStore.visibleSize = visibleYSize
-          scrollYStore.rowHeight = rHeight
-          // 自动优化
-          if (!sYOpts.oSize) {
-            scrollYStore.offsetSize = visibleYSize
-          }
-          if (!sYOpts.rSize) {
-            scrollYStore.renderSize = Math.max(6, browse.edge ? visibleYSize * 10 : (isWebkit ? visibleYSize + 2 : visibleYSize * 6))
-          }
-          this.updateScrollYData()
-        } else {
-          this.updateScrollYSpace()
-        }
+      const { sYOpts, sXOpts, scrollXLoad, scrollYLoad, scrollXStore, scrollYStore } = this
+      // 计算 X 逻辑
+      if (scrollXLoad) {
+        scrollXStore.offsetSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : browse.msie ? 10 : (browse.edge ? 5 : 0)
+        this.updateScrollXData()
+      } else {
+        this.updateScrollXSpace()
       }
+      // 计算 Y 逻辑
+      const { rowHeight, visibleSize } = computeVirtualY(this)
+      if (scrollYLoad) {
+        scrollYStore.offsetSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : browse.msie ? 20 : (browse.edge ? 10 : 0)
+        scrollYStore.visibleSize = visibleSize
+        scrollYStore.rowHeight = rowHeight
+        this.updateScrollYData()
+      } else {
+        this.updateScrollYSpace()
+      }
+      this.rowHeight = rowHeight
       this.$nextTick(this.updateStyle)
     })
   },
+  handleTableColumn () {
+    const { scrollXLoad, visibleColumn, scrollXStore } = this
+    this.tableColumn = scrollXLoad ? visibleColumn.slice(scrollXStore.startIndex, scrollXStore.endIndex) : visibleColumn.slice(0)
+  },
   updateScrollXData () {
-    const { visibleColumn, scrollXStore } = this
-    this.tableColumn = visibleColumn.slice(scrollXStore.startIndex, scrollXStore.startIndex + scrollXStore.renderSize)
+    this.handleTableColumn()
     this.updateScrollXSpace()
   },
   // 更新横向 X 可视渲染上下剩余空间大小
@@ -3334,8 +3336,9 @@ const Methods = {
   // 更新纵向 Y 可视渲染上下剩余空间大小
   updateScrollYSpace () {
     const { elemStore, scrollYStore, scrollYLoad, afterFullData } = this
-    const bodyHeight = afterFullData.length * scrollYStore.rowHeight
-    const topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0)
+    const { startIndex, rowHeight } = scrollYStore
+    const bodyHeight = afterFullData.length * rowHeight
+    const topSpaceHeight = Math.max(0, startIndex * rowHeight)
     const containerList = ['main', 'left', 'right']
     let marginTop = ''
     let ySpaceHeight = ''
@@ -3371,32 +3374,12 @@ const Methods = {
     const bodyTargetElem = rightBodyElem || tableBodyElem
     const tableFooterElem = tableFooter ? tableFooter.$el : null
     const footerTargetElem = tableFooterElem || tableBodyElem
-    // let istriggerBody
     if (XEUtils.isNumber(scrollLeft)) {
-      // const footerElem = tableFooter ? tableFooter.$el : null
-      // if (footerElem) {
-      //   footerElem.scrollLeft = scrollLeft
-      //   // triggerEvent(footerElem, 'scroll')
-      // } else {
-      //   // istriggerBody = true
-      //   tableBodyElem.scrollLeft = scrollLeft
-      // }
       footerTargetElem.scrollLeft = scrollLeft
     }
     if (XEUtils.isNumber(scrollTop)) {
-      // const rightBodyElem = $refs.rightBody ? $refs.rightBody.$el : null
-      // if (rightBodyElem) {
-      //   rightBodyElem.scrollTop = scrollTop
-      //   // triggerEvent(rightBodyElem, 'scroll')
-      // } else {
-      //   // istriggerBody = true
-      //   bodyTargetElem.scrollTop = scrollTop
-      // }
       bodyTargetElem.scrollTop = scrollTop
     }
-    // if (istriggerBody) {
-    //   triggerEvent(bodyElem, 'scroll')
-    // }
     if (this.scrollXLoad || this.scrollYLoad) {
       return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
     }
@@ -3511,45 +3494,160 @@ const Methods = {
       }
     })
   },
-  // handleDefaultMergeCells () {
-  //   this.mergeCells = this.merges
-  // },
-  // getMergeCells () {
-  //   return this.mergeCells.slice(0)
-  // },
-  // addMergeCells (mergeOpts) {
-  //   if (mergeOpts) {
-  //     const { mergeCells } = this
-  //     if (!XEUtils.isArray(mergeOpts)) {
-  //       mergeOpts = [mergeOpts]
-  //     }
-  //     mergeOpts.forEach(item => {
-  //       if (mergeCells.indexOf(item) === -1) {
-  //         mergeCells.push(item)
-  //       }
-  //     })
-  //   }
-  //   return this.$nextTick()
-  // },
-  // removeMergeCells (mergeOpts) {
-  //   if (mergeOpts) {
-  //     const { mergeCells } = this
-  //     if (!XEUtils.isArray(mergeOpts)) {
-  //       mergeOpts = [mergeOpts]
-  //     }
-  //     mergeOpts.forEach(item => {
-  //       const mcIndex = mergeCells.indexOf(item)
-  //       if (mcIndex > -1) {
-  //         mergeCells.splice(mcIndex, 1)
-  //       }
-  //     })
-  //   }
-  //   return this.$nextTick()
-  // },
-  // clearMergeCells () {
-  //   this.mergeCells = []
-  //   return this.$nextTick()
-  // },
+  handleDefaultMergeCells () {
+    this.setMergeCells(this.mergeCells)
+  },
+  /**
+   * 设置合并单元格
+   * @param {MergeOptions[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
+   */
+  setMergeCells (merges) {
+    if (merges) {
+      const { mergeIndexs, mergeList, afterFullData, visibleColumn } = this
+      if (!XEUtils.isArray(merges)) {
+        merges = [merges]
+      }
+      merges.forEach(item => {
+        let { row, col, rowspan, colspan } = item
+        if (XEUtils.isNumber(row)) {
+          row = afterFullData[row]
+        }
+        if (XEUtils.isNumber(col)) {
+          col = visibleColumn[col]
+        }
+        if (row && col && (rowspan || colspan)) {
+          rowspan = XEUtils.toNumber(rowspan) || 1
+          colspan = XEUtils.toNumber(colspan) || 1
+          if (rowspan > 1 || colspan > 1) {
+            const mcIndex = XEUtils.findIndexOf(mergeList, item => item.row === row && item.col === col)
+            const mergeCell = mergeList[mcIndex]
+            const mergeItem = mergeIndexs[mcIndex]
+            if (mergeCell) {
+              mergeCell.rowspan = rowspan
+              mergeCell.colspan = colspan
+              mergeItem.rowspan = rowspan
+              mergeItem.colspan = colspan
+            } else {
+              mergeIndexs.push({ _rowIndex: afterFullData.indexOf(row), _columnIndex: visibleColumn.indexOf(col), rowspan, colspan })
+              mergeList.push({ row, col, rowspan, colspan })
+            }
+          }
+        }
+      })
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 移除单元格合并
+   * @param {MergeOptions[]} merges 多个或数组 [{row:Row|number, col:ColumnInfo|number}]
+   */
+  removeMergeCells (merges) {
+    if (merges) {
+      const { mergeIndexs, mergeList, afterFullData, visibleColumn } = this
+      if (!XEUtils.isArray(merges)) {
+        merges = [merges]
+      }
+      merges.forEach(item => {
+        let { row, col } = item
+        if (XEUtils.isNumber(row)) {
+          row = afterFullData[row]
+        }
+        if (XEUtils.isNumber(col)) {
+          col = visibleColumn[col]
+        }
+        const mcIndex = XEUtils.findIndexOf(mergeList, item => item.row === row && item.col === col)
+        if (mcIndex > -1) {
+          mergeIndexs.splice(mcIndex, 1)
+          mergeList.splice(mcIndex, 1)
+        }
+      })
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 获取所有被合并的单元格
+   */
+  getMergeCells () {
+    return this.mergeList.slice(0)
+  },
+  /**
+   * 清除所有单元格合并
+   */
+  clearMergeCells () {
+    this.mergeIndexs = []
+    this.mergeList = []
+    return this.$nextTick()
+  },
+  handleDefaultMergeFooterItems () {
+    this.setMergeFooterItems(this.mergeFooterItems)
+  },
+  setMergeFooterItems (merges) {
+    if (merges) {
+      const { mergeFooterIndexs, mergeFooterList, visibleColumn } = this
+      if (!XEUtils.isArray(merges)) {
+        merges = [merges]
+      }
+      merges.forEach(item => {
+        let { row, col, rowspan, colspan } = item
+        if (XEUtils.isNumber(col)) {
+          col = visibleColumn[col]
+        }
+        if (XEUtils.isNumber(row) && col && (rowspan || colspan)) {
+          rowspan = XEUtils.toNumber(rowspan) || 1
+          colspan = XEUtils.toNumber(colspan) || 1
+          if (rowspan > 1 || colspan > 1) {
+            const mcIndex = XEUtils.findIndexOf(mergeFooterList, item => item.row === row && item.col === col)
+            const mergeCell = mergeFooterList[mcIndex]
+            const mergeItem = mergeFooterIndexs[mcIndex]
+            if (mergeCell) {
+              mergeCell.rowspan = rowspan
+              mergeCell.colspan = colspan
+              mergeItem.rowspan = rowspan
+              mergeItem.colspan = colspan
+            } else {
+              mergeFooterIndexs.push({ $rowIndex: row, _columnIndex: visibleColumn.indexOf(col), rowspan, colspan })
+              mergeFooterList.push({ row, col, rowspan, colspan })
+            }
+          }
+        }
+      })
+    }
+    return this.$nextTick()
+  },
+  removeMergeFooterItems (merges) {
+    if (merges) {
+      const { mergeFooterIndexs, mergeFooterList, visibleColumn } = this
+      if (!XEUtils.isArray(merges)) {
+        merges = [merges]
+      }
+      merges.forEach(item => {
+        let { row, col } = item
+        if (XEUtils.isNumber(col)) {
+          col = visibleColumn[col]
+        }
+        const mcIndex = XEUtils.findIndexOf(mergeFooterList, item => item.row === row && item.col === col)
+        if (mcIndex > -1) {
+          mergeFooterIndexs.splice(mcIndex, 1)
+          mergeFooterList.splice(mcIndex, 1)
+        }
+      })
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 获取所有被合并的单元格
+   */
+  getMergeFooterItems () {
+    return this.mergeFooterList.slice(0)
+  },
+  /**
+   * 清除所有单元格合并
+   */
+  clearMergeFooterItems () {
+    this.mergeFooterIndexs = []
+    this.mergeFooterList = []
+    return this.$nextTick()
+  },
   updateZindex () {
     if (this.zIndex) {
       this.tZindex = this.zIndex
