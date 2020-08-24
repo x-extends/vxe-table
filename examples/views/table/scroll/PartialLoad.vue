@@ -96,7 +96,10 @@ export default {
               this.loading = true
               this.findList(size).then(data => {
                 this.allData = this.allData.concat(data)// 局部追加并保存所有数据
-                this.$refs.xTable.loadData(this.allData)
+                const xTable = this.$refs.xTable
+                if (xTable) {
+                  xTable.loadData(this.allData)
+                }
                 this.loading = false
               })
             },
@@ -139,7 +142,10 @@ export default {
       this.loading = true
       this.findList(size).then(data => {
         this.allData = this.allData.concat(data)// 局部追加并保存所有数据
-        this.$refs.xTable.loadData(this.allData)
+        const xTable = this.$refs.xTable
+        if (xTable) {
+          xTable.loadData(this.allData)
+        }
         this.loading = false
       })
     },

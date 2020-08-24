@@ -83,6 +83,21 @@ export interface PluginObject {
   [key: string]: any;
 }
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    $vxe: {
+      /**
+       * 读取内置国际化
+       */
+      t(key: string): any;
+      /**
+       * 全局的模态窗口
+       */
+      modal: typeof ModalController;
+    };
+  }
+}
+
 declare global {
   interface Window {
     VXETable: VXETableStatic;

@@ -28,6 +28,49 @@ export default {
       impFields: '導入失敗，請檢查欄位名和數據格式是否正確',
       treeNotImp: '樹狀表格不支持導入'
     },
+    renderer: {
+      search: '蒐索',
+      cases: {
+        equal: '等於',
+        unequal: '不等於',
+        gt: '大於',
+        ge: '大於或等於',
+        lt: '小於',
+        le: '小於或等於',
+        begin: '開頭是',
+        notbegin: '開頭不是',
+        endin: '結尾是',
+        notendin: '結尾不是',
+        include: '包含',
+        exclude: '不包含',
+        between: '介於',
+        custom: '自定義篩選',
+        insensitive: '不區分大小寫'
+      },
+      combination: {
+        menus: {
+          sortAsc: '昇冪',
+          sortDesc: '降序',
+          fixedColumn: '鎖定列',
+          fixedGroup: '鎖定組',
+          cancelFixed: '取消鎖定',
+          fixedLeft: '鎖定左側',
+          fixedRight: '鎖定右側',
+          clearFilter: '清除篩選',
+          textOption: '文字篩選',
+          numberOption: '數值篩選'
+        },
+        popup: {
+          title: '自定義篩選的管道',
+          currColumnTitle: '當前列：',
+          and: '與',
+          or: '或',
+          describeHtml: '用 ? 代表單個字元<br/>用 * 代表任意多個字元'
+        },
+        empty: '(空白)',
+        notData: '無匹配項'
+      }
+    },
     table: {
       emptyText: '暫無資料',
       allTitle: '全選/取消',

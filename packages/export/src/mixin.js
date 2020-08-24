@@ -676,7 +676,7 @@ export default {
         // dataFilterMethod: null,
         // footerFilterMethod: null,
         // exportMethod: null,
-        columnFilterMethod: columns && columns.length ? null : column => defaultFilterExportColumn(column)
+        columnFilterMethod: columns && columns.length ? null : ({ column }) => defaultFilterExportColumn(column)
       }, exportOpts, options, {
         columns: expColumns
       })

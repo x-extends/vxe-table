@@ -299,10 +299,10 @@ export default {
       treeLazyLoadeds: [],
       // 树节点不确定状态的列表
       treeIndeterminates: [],
-      // 合并的索引集
-      mergeIndexs: [],
-      // 合并表尾数据的索引集
-      mergeFooterIndexs: [],
+      // 合并单元格的对象集
+      mergeList: [],
+      // 合并表尾数据的对象集
+      mergeFooterList: [],
       // 是否已经加载了筛选
       hasFilterPanel: false,
       // 当前选中的筛选列
@@ -587,6 +587,8 @@ export default {
     collectColumn (value) {
       const tableFullColumn = UtilTools.getColumnList(value)
       this.tableFullColumn = tableFullColumn
+      this.clearMergeCells()
+      this.clearMergeFooterItems()
       this.cacheColumnMap()
       if (this.customs) {
         this.mergeCustomColumn(this.customs)
@@ -685,10 +687,6 @@ export default {
       rowExpandedReserveRowMap: {},
       // 树结构数据，已展开保留的行
       treeExpandedReserveRowMap: {},
-      // 合并单元格的对象集
-      mergeList: [],
-      // 合并表尾数据的对象集
-      mergeFooterList: [],
       // 完整数据、条件处理后
       tableFullData: [],
       afterFullData: [],
