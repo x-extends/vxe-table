@@ -47,6 +47,15 @@ export default {
         border: 'inner',
         height: 548,
         rowId: 'id',
+        printConfig: {
+          columns: [
+            { field: 'name' },
+            { field: 'email' },
+            { field: 'nickname' },
+            { field: 'age' },
+            { field: 'amount' }
+          ]
+        },
         sortConfig: {
           trigger: 'cell',
           defaultSort: {
