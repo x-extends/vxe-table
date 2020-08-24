@@ -1,13 +1,6 @@
 <template>
   <div>
-    <p class="tip">虚拟渲染与单元格合并，可以通过设置参数 <table-api-link prop="merge-cells"/> 或调用函数 <table-api-link prop="setMergeCells"/>、<table-api-link prop="setMergeCells"/> 来控制单元格合并状态</p>
-
-    <vxe-toolbar>
-      <template v-slot:buttons>
-        <vxe-button @click="loadList(5000)">5k条</vxe-button>
-        <vxe-button @click="loadList(10000)">1w条</vxe-button>
-      </template>
-    </vxe-toolbar>
+    <p class="tip">虚拟渲染与单元格合并，可以通过设置参数 <table-api-link prop="merge-cells"/> 或调用函数 <table-api-link prop="setMergeCells"/>、<table-api-link prop="setMergeCells"/> 来控制单元格的临时合并状态</p>
 
     <vxe-table
       border
@@ -76,13 +69,6 @@ export default {
       ],
       demoCodes: [
         `
-        <vxe-toolbar>
-          <template v-slot:buttons>
-            <vxe-button @click="loadList(5000)">5k条</vxe-button>
-            <vxe-button @click="loadList(10000)">1w条</vxe-button>
-          </template>
-        </vxe-toolbar>
-
         <vxe-table
           border
           resizable
@@ -156,9 +142,6 @@ export default {
                 }
               })
             },
-            mergeEvent (opts) {
-              this.$refs.xTable.setMergeCells(opts)
-            },
             footerMethod ({ columns }) {
               return [
                 columns.map((column, index) => index),
@@ -193,9 +176,6 @@ export default {
           })
         }
       })
-    },
-    mergeEvent (opts) {
-      this.$refs.xTable.setMergeCells(opts)
     },
     footerMethod ({ columns }) {
       return [

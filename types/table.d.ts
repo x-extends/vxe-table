@@ -137,11 +137,11 @@ export declare class Table extends VXETableModule {
    */
   footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
   /**
-   * 合并指定单元格
+   * 临时合并单元格
    */
   mergeCells: MergeOptions[];
   /**
-   * 合并指定的表尾
+   * 临时合并表尾
    */
   mergeFooterItems: MergeOptions[];
   /**
@@ -505,11 +505,11 @@ export declare class Table extends VXETableModule {
    */
   setRadioRow(row: any): Promise<any>;
   /**
-   * 手动清除所有被合并的单元格
+   * 手动清除临时合并的单元格
    */
   clearMergeCells(): Promise<any>;
   /**
-   * 手动清除所有被合并的表尾
+   * 手动清除临时合并的表尾
    */
   clearMergeCells(): Promise<any>;
   /**
@@ -521,11 +521,11 @@ export declare class Table extends VXETableModule {
    */
   clearRadioRow(): Promise<any>;
   /**
-   * 获取所有被合并的单元格
+   * 获取临时合并的单元格
    */
   getMergeCells(): MergeItem[];
   /**
-   * 获取所有被合并的表尾
+   * 获取临时合并的表尾
    */
   getMergeFooterItems(): MergeItem[];
   /**
@@ -768,11 +768,11 @@ export declare class Table extends VXETableModule {
    */
   removeCurrentRow(): Promise<{ row: any, rows: any[] }>;
   /**
-   * 取消指定单元格合并状态，如果为数组，则取消多个合并
+   * 取消单元格的临时合并状态，如果为数组，则取消多个合并
    */
   removeMergeCells(merges: MergeOptions | MergeOptions[]): Promise<MergeItem[]>;
   /**
-   * 取消指定表尾合并状态，如果为数组，则取消多个合并
+   * 取消表尾的临时合并状态，如果为数组，则取消多个合并
    */
   removeMergeFooterItems(merges: MergeOptions | MergeOptions[]): Promise<MergeItem[]>;
   /**
@@ -844,11 +844,11 @@ export declare class Table extends VXETableModule {
    */
   setCellAreas(areas: CellAreaOptions): Promise<any>;
   /**
-   * 合并指定单元格，如果为数组则合并多个
+   * 临时合并单元格，如果为数组则合并多个
    */
   setMergeCells(merges: MergeOptions | MergeOptions[]): Promise<any>;
   /**
-   * 合并指定表尾，如果为数组则合并多个
+   * 临时合并表尾，如果为数组则合并多个
    */
   setMergeFooterItems(merges: MergeOptions | MergeOptions[]): Promise<any>;
   /**

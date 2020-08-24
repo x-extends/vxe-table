@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">可编辑表格<br><span class="red">（注：当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时）</span></p>
+    <p class="tip">可编辑表格</p>
 
     <vxe-toolbar export :refresh="{query: findList}">
       <template v-slot:buttons>
@@ -10,7 +10,7 @@
             <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
             <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
             <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-            <vxe-button type="text" @click="insertEvent($refs.xTable.getData(500))">插入到 500 行</vxe-button>
+            <vxe-button type="text" @click="insertEvent($refs.xTable.getData(300))">插入到 300 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button>
@@ -35,7 +35,7 @@
       export-config
       keep-source
       ref="xTable"
-      height="300"
+      height="400"
       :loading="loading"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :checkbox-config="{checkField: 'checked'}">
@@ -87,7 +87,7 @@ export default {
                 <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
                 <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
                 <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-                <vxe-button type="text" @click="insertEvent($refs.xTable.getData(500))">插入到 500 行</vxe-button>
+                <vxe-button type="text" @click="insertEvent($refs.xTable.getData(300))">插入到 300 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button>
