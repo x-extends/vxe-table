@@ -3,14 +3,16 @@ import { UtilTools, DomTools } from '../../tools'
 
 const cellType = 'footer'
 
-function mergeFooterMethod (mergeFooterIndexs, $rowIndex, _columnIndex) {
-  for (let mIndex = 0; mIndex < mergeFooterIndexs.length; mIndex++) {
-    const { $rowIndex: startRowIndex, _columnIndex: startColIndex, rowspan, colspan } = mergeFooterIndexs[mIndex]
-    if (startRowIndex === $rowIndex && startColIndex === _columnIndex) {
-      return { rowspan, colspan }
-    }
-    if ($rowIndex >= startRowIndex && $rowIndex < startRowIndex + rowspan && _columnIndex >= startColIndex && _columnIndex < startColIndex + colspan) {
-      return { rowspan: 0, colspan: 0 }
+function mergeFooterMethod (mergeFooterList, _rowIndex, _columnIndex) {
+  for (let mIndex = 0; mIndex < mergeFooterList.length; mIndex++) {
+    const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeFooterList[mIndex]
+    if (mergeColIndex > -1 && mergeRowIndex > -1 && mergeRowspan && mergeColspan) {
+      if (mergeRowIndex === _rowIndex && mergeColIndex === _columnIndex) {
+        return { rowspan: mergeRowspan, colspan: mergeColspan }
+      }
+      if (_rowIndex >= mergeRowIndex && _rowIndex < mergeRowIndex + mergeRowspan && _columnIndex >= mergeColIndex && _columnIndex < mergeColIndex + mergeColspan) {
+        return { rowspan: 0, colspan: 0 }
+      }
     }
   }
 }
@@ -44,7 +46,7 @@ export default {
       footerRowStyle,
       footerCellStyle,
       footerAlign: allFooterAlign,
-      mergeFooterIndexs,
+      mergeFooterList,
       footerSpanMethod,
       align: allAlign,
       scrollXLoad,
@@ -56,7 +58,7 @@ export default {
       tooltipOpts
     } = $xetable
     // 如果是使用优化模式
-    if (!mergeFooterIndexs.length || !footerSpanMethod) {
+    if (!mergeFooterList.length || !footerSpanMethod) {
       if (fixedType && allColumnFooterOverflow) {
         tableColumn = fixedColumn
       } else if (scrollXLoad) {
@@ -112,10 +114,11 @@ export default {
          */
         h('tfoot', {
           ref: 'tfoot'
-        }, footerData.map((list, $rowIndex) => {
+        }, footerData.map((list, _rowIndex) => {
+          const $rowIndex = _rowIndex
           return h('tr', {
-            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : footerRowClassName : ''],
-            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : footerRowStyle) : null
+            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: cellType }) : footerRowClassName : ''],
+            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: cellType }) : footerRowStyle) : null
           }, tableColumn.map((column, $columnIndex) => {
             const { type, showFooterOverflow, footerAlign, align, footerClassName } = column
             const { enabled } = tooltipOpts
@@ -132,7 +135,7 @@ export default {
             const columnIndex = $xetable.getColumnIndex(column)
             const _columnIndex = $xetable._getColumnIndex(column)
             const itemIndex = _columnIndex
-            const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerData }
+            const params = { $table: $xetable, _rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerData }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
@@ -164,8 +167,8 @@ export default {
               }
             }
             // 合并行或列
-            if (mergeFooterIndexs.length) {
-              const spanRest = mergeFooterMethod(mergeFooterIndexs, $rowIndex, _columnIndex)
+            if (mergeFooterList.length) {
+              const spanRest = mergeFooterMethod(mergeFooterList, _rowIndex, _columnIndex)
               if (spanRest) {
                 const { rowspan, colspan } = spanRest
                 if (!rowspan || !colspan) {

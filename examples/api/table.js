@@ -2691,7 +2691,7 @@ const apis = [
       },
       {
         name: 'removeMergeCells(merges)',
-        desc: '取消指定单元格合并状态，如果为数组，则取消多个合并',
+        desc: '取消单元格的临时合并状态，如果为数组，则取消多个合并',
         version: '',
         type: 'Promise<merges>',
         enum: '',
@@ -2700,7 +2700,7 @@ const apis = [
       },
       {
         name: 'removeMergeFooterItems(merges)',
-        desc: '取消指定表尾合并状态，如果为数组，则取消多个合并',
+        desc: '取消表尾的临时合并状态，如果为数组，则取消多个合并',
         version: '',
         type: 'Promise<merges>',
         enum: '',
@@ -2907,7 +2907,7 @@ const apis = [
       },
       {
         name: 'getMergeCells()',
-        desc: '获取所有被合并的单元格',
+        desc: '获取临时合并的单元格',
         version: '',
         type: 'Array<{row: any, col: ColumnInfo, rowspan: number, colspan: number}>',
         enum: '',
@@ -2916,7 +2916,7 @@ const apis = [
       },
       {
         name: 'getMergeFooterItems()',
-        desc: '获取所有被合并的表尾',
+        desc: '获取临时合并的表尾',
         version: '',
         type: 'Array<{row: any, col: ColumnInfo, rowspan: number, colspan: number}>',
         enum: '',
@@ -3213,7 +3213,7 @@ const apis = [
       // },
       {
         name: 'setMergeCells(merges)',
-        desc: '合并指定单元格，如果为数组则合并多个',
+        desc: '临时合并单元格，如果为数组则合并多个',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3222,7 +3222,7 @@ const apis = [
       },
       {
         name: 'setMergeFooterItems(merges)',
-        desc: '合并指定表尾，如果为数组则合并多个',
+        desc: '临时合并表尾，如果为数组则合并多个',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3348,7 +3348,7 @@ const apis = [
       },
       {
         name: 'clearMergeCells()',
-        desc: '手动清除所有被合并的单元格',
+        desc: '手动清除临时合并的单元格',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3357,7 +3357,7 @@ const apis = [
       },
       {
         name: 'clearMergeFooterItems()',
-        desc: '手动清除所有被合并的表尾',
+        desc: '手动清除临时合并的表尾',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3500,7 +3500,7 @@ const apis = [
       // },
       // {
       //   name: 'clearCellAreas()',
-      //   desc: '用于 mouse-config.area，用于清除鼠标选择的区域',
+      //   desc: '用于 mouse-config.area，手动清除鼠标选择的区域',
       //   version: 'pro',
       //   type: 'Promise',
       //   enum: '',
@@ -3509,7 +3509,7 @@ const apis = [
       // },
       // {
       //   name: 'clearCopyCellArea()',
-      //   desc: '用于 mouse-config.area，用于清除标记为复制粘贴的区域',
+      //   desc: '用于 mouse-config.area，手动清除标记为复制粘贴的区域',
       //   version: 'pro',
       //   type: 'Promise',
       //   enum: '',

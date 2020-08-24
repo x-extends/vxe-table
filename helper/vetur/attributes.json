@@ -139,13 +139,21 @@
     "type": "function",
     "description": "表尾的数据获取方法 Function({columns, data}) 返回一个二维数组"
   },
+  "vxe-table/merge-cells": {
+    "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
+    "description": "临时合并指定的单元格，不能用于固定列"
+  },
+  "vxe-table/merge-footer-items": {
+    "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
+    "description": "临时合并表尾，不能用于固定列"
+  },
   "vxe-table/span-method": {
     "type": "function",
-    "description": "合并行或列，该函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值"
+    "description": "自定义合并函数，该方法 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于固定列"
   },
   "vxe-table/footer-span-method": {
     "type": "function",
-    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值"
+    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于固定列"
   },
   "vxe-table/show-overflow": {
     "type": "boolean | string",
@@ -158,14 +166,6 @@
   "vxe-table/show-footer-overflow": {
     "type": "boolean | string",
     "description": "设置表尾所有内容过长时显示为省略号"
-  },
-  "vxe-table/column-width": {
-    "type": "number | string",
-    "description": "所有列宽度"
-  },
-  "vxe-table/column-min-width": {
-    "type": "number | string",
-    "description": "所有最小列宽度；会自动将剩余空间按比例分配"
   },
   "vxe-table/column-key": {
     "type": "boolean",
@@ -181,11 +181,15 @@
   },
   "vxe-table/keep-source": {
     "type": "boolean",
-    "description": "保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等（开启后性能直线下降，具体取决于数据量）"
+    "description": "保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等（开启后影响性能，具体取决于数据量）"
   },
   "vxe-table/z-index": {
     "type": "number",
     "description": "自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）"
+  },
+  "vxe-table/column-config": {
+    "type": "any",
+    "description": "列的默认参数"
   },
   "vxe-table/seq-config": {
     "type": "any",
@@ -237,7 +241,7 @@
   },
   "vxe-table/mouse-config": {
     "type": "any",
-    "description": "鼠标配置项（只对 edit-config.mode=cell 有效）"
+    "description": "鼠标配置项"
   },
   "vxe-table/keyboard-config": {
     "type": "any",
@@ -293,7 +297,7 @@
   },
   "vxe-table-column/field": {
     "type": "string",
-    "description": "列字段名（注：属性层级越深，渲染性能将直线下降，例如：aa.bb.cc）"
+    "description": "列字段名（注：属性层级越深，渲染性能就越差，例如：aa.bb.cc.dd.ee）"
   },
   "vxe-table-column/title": {
     "type": "string",
@@ -575,13 +579,21 @@
     "type": "function",
     "description": "表尾的数据获取方法 Function({columns, data}) 返回一个二维数组"
   },
+  "vxe-grid/merge-cells": {
+    "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
+    "description": "临时合并指定的单元格，不能用于固定列"
+  },
+  "vxe-grid/merge-footer-items": {
+    "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
+    "description": "临时合并表尾，不能用于固定列"
+  },
   "vxe-grid/span-method": {
     "type": "function",
-    "description": "合并行或列，该函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值"
+    "description": "自定义合并函数，该方法 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于固定列"
   },
   "vxe-grid/footer-span-method": {
     "type": "function",
-    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值"
+    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于固定列"
   },
   "vxe-grid/show-overflow": {
     "type": "boolean | string",
@@ -594,14 +606,6 @@
   "vxe-grid/show-footer-overflow": {
     "type": "boolean | string",
     "description": "设置表尾所有内容过长时显示为省略号"
-  },
-  "vxe-grid/column-width": {
-    "type": "number | string",
-    "description": "所有列宽度"
-  },
-  "vxe-grid/column-min-width": {
-    "type": "number | string",
-    "description": "所有最小列宽度；会自动将剩余空间按比例分配"
   },
   "vxe-grid/column-key": {
     "type": "boolean",
@@ -617,11 +621,15 @@
   },
   "vxe-grid/keep-source": {
     "type": "boolean",
-    "description": "保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等（开启后性能直线下降，具体取决于数据量）"
+    "description": "保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等（开启后影响性能，具体取决于数据量）"
   },
   "vxe-grid/z-index": {
     "type": "number",
     "description": "自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）"
+  },
+  "vxe-grid/column-config": {
+    "type": "any",
+    "description": "列的默认参数"
   },
   "vxe-grid/seq-config": {
     "type": "any",
@@ -673,7 +681,7 @@
   },
   "vxe-grid/mouse-config": {
     "type": "any",
-    "description": "鼠标配置项（只对 edit-config.mode=cell 有效）"
+    "description": "鼠标配置项"
   },
   "vxe-grid/keyboard-config": {
     "type": "any",
@@ -808,7 +816,7 @@
     "description": "显示页码按钮的数量"
   },
   "vxe-pager/page-sizes": {
-    "type": "number[]",
+    "type": "number[] | array<{label: string, value: number}>",
     "description": "每页大小选项列表"
   },
   "vxe-pager/align": {
@@ -1393,7 +1401,7 @@
   },
   "vxe-modal/storage": {
     "type": "boolean",
-    "description": "是否启用 localStorage 本地保存，会将窗口拖动的状态保存到本地（需要设置 id）"
+    "description": "是否启用 localStorage 本地保存，会将窗口拖动的状态保存到本地（需要有 id）"
   },
   "vxe-form/data": {
     "type": "any",

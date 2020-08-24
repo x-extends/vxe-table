@@ -98,6 +98,11 @@ VXEModal.install = function (Vue) {
   Vue.component(VXEModal.name, VXEModal)
   ModalClass = Vue.extend(VXEModal)
   VXETable.modal = ModalController
+  if (!Vue.prototype.$vxe) {
+    Vue.prototype.$vxe = { modal: ModalController }
+  } else {
+    Vue.prototype.$vxe.modal = ModalController
+  }
 }
 
 export const Modal = VXEModal

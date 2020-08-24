@@ -63,14 +63,16 @@ function renderLine (h, _vm, $xetable, rowLevel, items, params) {
     ] : []
 }
 
-function mergeMethod (mergeIndexs, _rowIndex, _columnIndex) {
-  for (let mIndex = 0; mIndex < mergeIndexs.length; mIndex++) {
-    const { _rowIndex: startRowIndex, _columnIndex: startColIndex, rowspan, colspan } = mergeIndexs[mIndex]
-    if (startRowIndex === _rowIndex && startColIndex === _columnIndex) {
-      return { rowspan, colspan }
-    }
-    if (_rowIndex >= startRowIndex && _rowIndex < startRowIndex + rowspan && _columnIndex >= startColIndex && _columnIndex < startColIndex + colspan) {
-      return { rowspan: 0, colspan: 0 }
+function mergeMethod (mergeList, _rowIndex, _columnIndex) {
+  for (let mIndex = 0; mIndex < mergeList.length; mIndex++) {
+    const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeList[mIndex]
+    if (mergeColIndex > -1 && mergeRowIndex > -1 && mergeRowspan && mergeColspan) {
+      if (mergeRowIndex === _rowIndex && mergeColIndex === _columnIndex) {
+        return { rowspan: mergeRowspan, colspan: mergeColspan }
+      }
+      if (_rowIndex >= mergeRowIndex && _rowIndex < mergeRowIndex + mergeRowspan && _columnIndex >= mergeColIndex && _columnIndex < mergeColIndex + mergeColspan) {
+        return { rowspan: 0, colspan: 0 }
+      }
     }
   }
 }
@@ -94,7 +96,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     currentColumn,
     cellClassName,
     cellStyle,
-    mergeIndexs,
+    mergeList,
     spanMethod,
     radioOpts,
     checkboxOpts,
@@ -190,9 +192,9 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 合并行或列
-  if (mergeIndexs.length) {
+  if (mergeList.length) {
     const _rowIndex = $xetable._getRowIndex(row)
-    const spanRest = mergeMethod(mergeIndexs, _rowIndex, _columnIndex)
+    const spanRest = mergeMethod(mergeList, _rowIndex, _columnIndex)
     if (spanRest) {
       const { rowspan, colspan } = spanRest
       if (!rowspan || !colspan) {
@@ -444,9 +446,9 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, mergeIndexs, spanMethod, scrollXLoad, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, mergeList, spanMethod, scrollXLoad, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
     // 如果是固定列与设置了超出隐藏
-    if (!mergeIndexs.length && !spanMethod) {
+    if (!mergeList.length && !spanMethod) {
       if (fixedType && allColumnOverflow) {
         tableColumn = fixedColumn
       } else if (scrollXLoad) {

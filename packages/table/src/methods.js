@@ -71,57 +71,66 @@ function handleReserveRow (_vm, reserveRowMap) {
 
 function computeVirtualX (_vm) {
   const { $refs, visibleColumn } = _vm
-  const tableBodyElem = $refs.tableBody.$el
-  const { scrollLeft, clientWidth } = tableBodyElem
-  const endWidth = scrollLeft + clientWidth
-  let toVisibleIndex = -1
-  let cWidth = 0
-  let visibleSize = 0
-  for (let colIndex = 0, colLen = visibleColumn.length; colIndex < colLen; colIndex++) {
-    cWidth += visibleColumn[colIndex].renderWidth
-    if (toVisibleIndex === -1 && scrollLeft < cWidth) {
-      toVisibleIndex = colIndex
-    }
-    if (toVisibleIndex >= 0) {
-      visibleSize++
-      if (cWidth > endWidth) {
-        break
+  const { tableBody } = $refs
+  const tableBodyElem = tableBody ? tableBody.$el : null
+  if (tableBodyElem) {
+    const { scrollLeft, clientWidth } = tableBodyElem
+    const endWidth = scrollLeft + clientWidth
+    let toVisibleIndex = -1
+    let cWidth = 0
+    let visibleSize = 0
+    for (let colIndex = 0, colLen = visibleColumn.length; colIndex < colLen; colIndex++) {
+      cWidth += visibleColumn[colIndex].renderWidth
+      if (toVisibleIndex === -1 && scrollLeft < cWidth) {
+        toVisibleIndex = colIndex
+      }
+      if (toVisibleIndex >= 0) {
+        visibleSize++
+        if (cWidth > endWidth) {
+          break
+        }
       }
     }
+    return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(8, visibleSize) }
   }
-  return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(8, visibleSize) }
+  return { toVisibleIndex: 0, visibleSize: 8 }
 }
 
 function computeVirtualY (_vm) {
   const { $refs, vSize, rowHeightMaps } = _vm
   const { tableHeader, tableBody } = $refs
-  const tableBodyElem = tableBody.$el
-  let rowHeight = _vm.c
-  let firstTrElem = tableBodyElem.querySelector('tr')
-  if (!firstTrElem && tableHeader) {
-    firstTrElem = tableHeader.$el.querySelector('tr')
+  const tableBodyElem = tableBody ? tableBody.$el : null
+  if (tableBodyElem) {
+    const tableHeaderElem = tableHeader ? tableHeader.$el : null
+    let rowHeight = 0
+    let firstTrElem
+    firstTrElem = tableBodyElem.querySelector('tr')
+    if (!firstTrElem && tableHeaderElem) {
+      firstTrElem = tableHeaderElem.querySelector('tr')
+    }
+    if (firstTrElem) {
+      rowHeight = firstTrElem.clientHeight
+    }
+    if (!rowHeight) {
+      rowHeight = rowHeightMaps[vSize || 'default']
+    }
+    const visibleSize = Math.max(8, Math.ceil(tableBodyElem.clientHeight / rowHeight) + 2)
+    return { rowHeight, visibleSize }
   }
-  if (firstTrElem) {
-    rowHeight = firstTrElem.clientHeight
-  }
-  if (!rowHeight) {
-    rowHeight = rowHeightMaps[vSize || 'default']
-  }
-  const visibleSize = Math.max(8, Math.ceil(tableBodyElem.clientHeight / rowHeight) + 2)
-  return { rowHeight, visibleSize }
+  return { rowHeight: 0, visibleSize: 8 }
 }
 
 function handleMergerXOffserIndex (list, offsetItem) {
   const { startIndex, endIndex } = offsetItem
   for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
     const mergeItem = list[mcIndex]
-    const { _columnIndex } = mergeItem
-    const endColSpanIndex = mergeItem.colspan + _columnIndex
-    if (_columnIndex < startIndex && startIndex <= endColSpanIndex) {
-      offsetItem.startIndex = _columnIndex
+    const { col: mergeColIndex, colspan: mergeColspan } = mergeItem
+    const mergeEndColIndex = mergeColIndex + mergeColspan
+    if (mergeColIndex < startIndex && startIndex <= mergeEndColIndex) {
+      offsetItem.startIndex = mergeColIndex
     }
-    if (_columnIndex < endIndex && endIndex <= endColSpanIndex) {
-      offsetItem.endIndex = endColSpanIndex
+    if (mergeColIndex < endIndex && endIndex <= mergeEndColIndex) {
+      offsetItem.endIndex = mergeEndColIndex
     }
   }
 }
@@ -130,15 +139,91 @@ function handleMergerYOffserIndex (list, offsetItem) {
   const { startIndex, endIndex } = offsetItem
   for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
     const mergeItem = list[mcIndex]
-    const { _rowIndex } = mergeItem
-    const endRowSpanIndex = mergeItem.rowspan + _rowIndex
-    if (_rowIndex < startIndex && startIndex <= endRowSpanIndex) {
-      offsetItem.startIndex = _rowIndex
+    const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+    const mergeEndRowIndex = mergeRowIndex + mergeRowspan
+    if (mergeRowIndex < startIndex && startIndex <= mergeEndRowIndex) {
+      offsetItem.startIndex = mergeRowIndex
     }
-    if (_rowIndex < endIndex && endIndex <= endRowSpanIndex) {
-      offsetItem.endIndex = endRowSpanIndex
+    if (mergeRowIndex < endIndex && endIndex <= mergeEndRowIndex) {
+      offsetItem.endIndex = mergeEndRowIndex
     }
   }
+}
+
+function setMerges (_vm, merges, mList, rowList) {
+  if (merges) {
+    const { treeConfig, visibleColumn } = _vm
+    if (treeConfig) {
+      throw new Error(UtilTools.getLog('vxe.error.noTree', ['merge-footer-items']))
+    }
+    if (!XEUtils.isArray(merges)) {
+      merges = [merges]
+    }
+    merges.forEach(item => {
+      let { row, col, rowspan, colspan } = item
+      if (rowList && XEUtils.isNumber(row)) {
+        row = rowList[row]
+      }
+      if (XEUtils.isNumber(col)) {
+        col = visibleColumn[col]
+      }
+      if ((rowList ? row : XEUtils.isNumber(row)) && col && (rowspan || colspan)) {
+        rowspan = XEUtils.toNumber(rowspan) || 1
+        colspan = XEUtils.toNumber(colspan) || 1
+        if (rowspan > 1 || colspan > 1) {
+          const mcIndex = XEUtils.findIndexOf(mList, item => item._row === row && item._col === col)
+          const mergeItem = mList[mcIndex]
+          if (mergeItem) {
+            mergeItem.rowspan = rowspan
+            mergeItem.colspan = colspan
+            mergeItem._rowspan = rowspan
+            mergeItem._colspan = colspan
+          } else {
+            const mergeRowIndex = rowList ? rowList.indexOf(row) : row
+            const mergeColIndex = visibleColumn.indexOf(col)
+            mList.push({
+              row: mergeRowIndex,
+              col: mergeColIndex,
+              rowspan,
+              colspan,
+              _row: row,
+              _col: col,
+              _rowspan: rowspan,
+              _colspan: colspan
+            })
+          }
+        }
+      }
+    })
+  }
+}
+
+function removeMerges (_vm, merges, mList, rowList) {
+  const rest = []
+  if (merges) {
+    const { treeConfig, visibleColumn } = _vm
+    if (treeConfig) {
+      throw new Error(UtilTools.getLog('vxe.error.noTree', ['merge-cells']))
+    }
+    if (!XEUtils.isArray(merges)) {
+      merges = [merges]
+    }
+    merges.forEach(item => {
+      let { row, col } = item
+      if (rowList && XEUtils.isNumber(row)) {
+        row = rowList[row]
+      }
+      if (XEUtils.isNumber(col)) {
+        col = visibleColumn[col]
+      }
+      const mcIndex = XEUtils.findIndexOf(mList, item => item._row === row && item._col === col)
+      if (mcIndex > -1) {
+        const rItems = mList.splice(mcIndex, 1)
+        rest.push(rItems[0])
+      }
+    })
+  }
+  return rest
 }
 
 const Methods = {
@@ -168,8 +253,6 @@ const Methods = {
   clearAll () {
     this.inited = false
     this.clearSort()
-    this.clearMergeCells()
-    this.clearMergeFooterItems()
     this.clearCurrentRow()
     this.clearCurrentColumn()
     this.clearRadioRow()
@@ -249,6 +332,8 @@ const Methods = {
         UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
       }
     }
+    this.clearMergeCells()
+    this.clearMergeFooterItems()
     this.handleTableData(true)
     this.updateFooter()
     return this.computeScrollLoad().then(() => {
@@ -267,8 +352,13 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadData (datas) {
-    this.inited = true
-    return this.loadTableData(datas).then(this.recalculate)
+    return this.loadTableData(datas).then(() => {
+      if (!this.inited) {
+        this.inited = true
+        this.handleDefaults()
+      }
+      this.recalculate()
+    })
   },
   /**
    * 重新加载数据，会清空表格状态
@@ -344,6 +434,8 @@ const Methods = {
         this.loadScrollXData(true)
       }
     })
+    this.clearMergeCells()
+    this.clearMergeFooterItems()
     this.handleTableData(true)
     if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
       UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
@@ -862,8 +954,7 @@ const Methods = {
    * 默认行为只允许执行一次，除非被重置
    */
   handleDefaults () {
-    const checkboxConfig = this.checkboxConfig
-    if (checkboxConfig) {
+    if (this.checkboxConfig) {
       this.handleDefaultSelectionChecked()
     }
     if (this.radioConfig) {
@@ -1138,6 +1229,12 @@ const Methods = {
       scrollXStore.startIndex = 0
       scrollXStore.endIndex = visibleSize
       scrollXStore.visibleSize = visibleSize
+    }
+    // 如果列被显示/隐藏，则清除合并状态
+    // 如果列被设置为固定，则清除合并状态
+    if (visibleColumn.length !== this.visibleColumn.length || !this.visibleColumn.every((column, index) => column === visibleColumn[index])) {
+      this.clearMergeCells()
+      this.clearMergeFooterItems()
     }
     this.scrollXLoad = scrollXLoad
     this.visibleColumn = visibleColumn
@@ -3209,7 +3306,7 @@ const Methods = {
     this.loadScrollXData()
   },
   loadScrollXData () {
-    const { mergeIndexs, mergeFooterIndexs, scrollXStore } = this
+    const { mergeList, mergeFooterList, scrollXStore } = this
     const { startIndex, endIndex, offsetSize } = scrollXStore
     const { toVisibleIndex, visibleSize } = computeVirtualX(this)
     if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
@@ -3217,8 +3314,7 @@ const Methods = {
         startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
         endIndex: toVisibleIndex + visibleSize + offsetSize
       }
-      handleMergerXOffserIndex(mergeIndexs, offsetItem)
-      handleMergerXOffserIndex(mergeFooterIndexs, offsetItem)
+      handleMergerXOffserIndex(mergeList.concat(mergeFooterList), offsetItem)
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
       scrollXStore.startIndex = offsetStartIndex
       scrollXStore.endIndex = offsetEndIndex
@@ -3246,7 +3342,7 @@ const Methods = {
    * 纵向 Y 可视渲染处理
    */
   loadScrollYData (evnt) {
-    const { mergeIndexs, scrollYStore } = this
+    const { mergeList, scrollYStore } = this
     const { startIndex, endIndex, visibleSize, offsetSize, rowHeight } = scrollYStore
     const scrollBodyElem = evnt.target
     const scrollTop = scrollBodyElem.scrollTop
@@ -3256,7 +3352,7 @@ const Methods = {
         startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
         endIndex: toVisibleIndex + visibleSize + offsetSize
       }
-      handleMergerYOffserIndex(mergeIndexs, offsetItem)
+      handleMergerYOffserIndex(mergeList, offsetItem)
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
       scrollYStore.startIndex = offsetStartIndex
       scrollYStore.endIndex = offsetEndIndex
@@ -3302,32 +3398,37 @@ const Methods = {
   updateScrollXSpace () {
     const { $refs, elemStore, visibleColumn, scrollXStore, scrollXLoad, tableWidth, scrollbarWidth } = this
     const { tableHeader, tableBody, tableFooter } = $refs
-    const headerElem = tableHeader ? tableHeader.$el.querySelector('.vxe-table--header') : null
-    const bodyElem = tableBody.$el.querySelector('.vxe-table--body')
-    const footerElem = tableFooter ? tableFooter.$el.querySelector('.vxe-table--footer') : null
-    const leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
-    let marginLeft = ''
-    if (scrollXLoad) {
-      marginLeft = `${leftSpaceWidth}px`
-    }
-    if (headerElem) {
-      headerElem.style.marginLeft = marginLeft
-    }
-    bodyElem.style.marginLeft = marginLeft
-    if (footerElem) {
-      footerElem.style.marginLeft = marginLeft
-    }
-    const containerList = ['main']
-    containerList.forEach(name => {
-      const layoutList = ['header', 'body', 'footer']
-      layoutList.forEach(layout => {
-        const xSpaceElem = elemStore[`${name}-${layout}-xSpace`]
-        if (xSpaceElem) {
-          xSpaceElem.style.width = scrollXLoad ? `${tableWidth + (layout === 'header' ? scrollbarWidth : 0)}px` : ''
-        }
+    const tableBodyElem = tableBody ? tableBody.$el : null
+    if (tableBodyElem) {
+      const tableHeaderElem = tableHeader ? tableHeader.$el : null
+      const tableFooterElem = tableFooter ? tableFooter.$el : null
+      const headerElem = tableHeaderElem ? tableHeaderElem.querySelector('.vxe-table--header') : null
+      const bodyElem = tableBodyElem.querySelector('.vxe-table--body')
+      const footerElem = tableFooterElem ? tableFooterElem.querySelector('.vxe-table--footer') : null
+      const leftSpaceWidth = visibleColumn.slice(0, scrollXStore.startIndex).reduce((previous, column) => previous + column.renderWidth, 0)
+      let marginLeft = ''
+      if (scrollXLoad) {
+        marginLeft = `${leftSpaceWidth}px`
+      }
+      if (headerElem) {
+        headerElem.style.marginLeft = marginLeft
+      }
+      bodyElem.style.marginLeft = marginLeft
+      if (footerElem) {
+        footerElem.style.marginLeft = marginLeft
+      }
+      const containerList = ['main']
+      containerList.forEach(name => {
+        const layoutList = ['header', 'body', 'footer']
+        layoutList.forEach(layout => {
+          const xSpaceElem = elemStore[`${name}-${layout}-xSpace`]
+          if (xSpaceElem) {
+            xSpaceElem.style.width = scrollXLoad ? `${tableWidth + (layout === 'header' ? scrollbarWidth : 0)}px` : ''
+          }
+        })
       })
-    })
-    this.$nextTick(this.updateStyle)
+      this.$nextTick(this.updateStyle)
+    }
   },
   updateScrollYData () {
     this.handleTableData()
@@ -3502,39 +3603,7 @@ const Methods = {
    * @param {MergeOptions[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
    */
   setMergeCells (merges) {
-    if (merges) {
-      const { mergeIndexs, mergeList, afterFullData, visibleColumn } = this
-      if (!XEUtils.isArray(merges)) {
-        merges = [merges]
-      }
-      merges.forEach(item => {
-        let { row, col, rowspan, colspan } = item
-        if (XEUtils.isNumber(row)) {
-          row = afterFullData[row]
-        }
-        if (XEUtils.isNumber(col)) {
-          col = visibleColumn[col]
-        }
-        if (row && col && (rowspan || colspan)) {
-          rowspan = XEUtils.toNumber(rowspan) || 1
-          colspan = XEUtils.toNumber(colspan) || 1
-          if (rowspan > 1 || colspan > 1) {
-            const mcIndex = XEUtils.findIndexOf(mergeList, item => item.row === row && item.col === col)
-            const mergeCell = mergeList[mcIndex]
-            const mergeItem = mergeIndexs[mcIndex]
-            if (mergeCell) {
-              mergeCell.rowspan = rowspan
-              mergeCell.colspan = colspan
-              mergeItem.rowspan = rowspan
-              mergeItem.colspan = colspan
-            } else {
-              mergeIndexs.push({ _rowIndex: afterFullData.indexOf(row), _columnIndex: visibleColumn.indexOf(col), rowspan, colspan })
-              mergeList.push({ row, col, rowspan, colspan })
-            }
-          }
-        }
-      })
-    }
+    setMerges(this, merges, this.mergeList, this.afterFullData)
     return this.$nextTick()
   },
   /**
@@ -3542,27 +3611,8 @@ const Methods = {
    * @param {MergeOptions[]} merges 多个或数组 [{row:Row|number, col:ColumnInfo|number}]
    */
   removeMergeCells (merges) {
-    if (merges) {
-      const { mergeIndexs, mergeList, afterFullData, visibleColumn } = this
-      if (!XEUtils.isArray(merges)) {
-        merges = [merges]
-      }
-      merges.forEach(item => {
-        let { row, col } = item
-        if (XEUtils.isNumber(row)) {
-          row = afterFullData[row]
-        }
-        if (XEUtils.isNumber(col)) {
-          col = visibleColumn[col]
-        }
-        const mcIndex = XEUtils.findIndexOf(mergeList, item => item.row === row && item.col === col)
-        if (mcIndex > -1) {
-          mergeIndexs.splice(mcIndex, 1)
-          mergeList.splice(mcIndex, 1)
-        }
-      })
-    }
-    return this.$nextTick()
+    const rest = removeMerges(this, merges, this.mergeList, this.afterFullData)
+    return this.$nextTick().then(() => rest)
   },
   /**
    * 获取所有被合并的单元格
@@ -3574,7 +3624,6 @@ const Methods = {
    * 清除所有单元格合并
    */
   clearMergeCells () {
-    this.mergeIndexs = []
     this.mergeList = []
     return this.$nextTick()
   },
@@ -3582,69 +3631,23 @@ const Methods = {
     this.setMergeFooterItems(this.mergeFooterItems)
   },
   setMergeFooterItems (merges) {
-    if (merges) {
-      const { mergeFooterIndexs, mergeFooterList, visibleColumn } = this
-      if (!XEUtils.isArray(merges)) {
-        merges = [merges]
-      }
-      merges.forEach(item => {
-        let { row, col, rowspan, colspan } = item
-        if (XEUtils.isNumber(col)) {
-          col = visibleColumn[col]
-        }
-        if (XEUtils.isNumber(row) && col && (rowspan || colspan)) {
-          rowspan = XEUtils.toNumber(rowspan) || 1
-          colspan = XEUtils.toNumber(colspan) || 1
-          if (rowspan > 1 || colspan > 1) {
-            const mcIndex = XEUtils.findIndexOf(mergeFooterList, item => item.row === row && item.col === col)
-            const mergeCell = mergeFooterList[mcIndex]
-            const mergeItem = mergeFooterIndexs[mcIndex]
-            if (mergeCell) {
-              mergeCell.rowspan = rowspan
-              mergeCell.colspan = colspan
-              mergeItem.rowspan = rowspan
-              mergeItem.colspan = colspan
-            } else {
-              mergeFooterIndexs.push({ $rowIndex: row, _columnIndex: visibleColumn.indexOf(col), rowspan, colspan })
-              mergeFooterList.push({ row, col, rowspan, colspan })
-            }
-          }
-        }
-      })
-    }
+    setMerges(this, merges, this.mergeFooterList, null)
     return this.$nextTick()
   },
   removeMergeFooterItems (merges) {
-    if (merges) {
-      const { mergeFooterIndexs, mergeFooterList, visibleColumn } = this
-      if (!XEUtils.isArray(merges)) {
-        merges = [merges]
-      }
-      merges.forEach(item => {
-        let { row, col } = item
-        if (XEUtils.isNumber(col)) {
-          col = visibleColumn[col]
-        }
-        const mcIndex = XEUtils.findIndexOf(mergeFooterList, item => item.row === row && item.col === col)
-        if (mcIndex > -1) {
-          mergeFooterIndexs.splice(mcIndex, 1)
-          mergeFooterList.splice(mcIndex, 1)
-        }
-      })
-    }
-    return this.$nextTick()
+    const rest = removeMerges(this, merges, this.mergeFooterList, null)
+    return this.$nextTick().then(() => rest)
   },
   /**
-   * 获取所有被合并的单元格
+   * 获取所有被合并的表尾
    */
   getMergeFooterItems () {
     return this.mergeFooterList.slice(0)
   },
   /**
-   * 清除所有单元格合并
+   * 清除所有表尾合并
    */
   clearMergeFooterItems () {
-    this.mergeFooterIndexs = []
     this.mergeFooterList = []
     return this.$nextTick()
   },

@@ -21,29 +21,51 @@ export default {
      * @param {Row} row 指定行
      */
     _insertAt (records, row) {
-      const { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      const { mergeList, afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      const nowData = afterFullData
       const newRecords = records.map(record => this.defineField(Object.assign({}, record)))
       if (!row) {
-        nowData.unshift(...newRecords)
+        afterFullData.unshift(...newRecords)
         tableFullData.unshift(...newRecords)
+        // 刷新单元格合并
+        mergeList.forEach(mergeItem => {
+          const { row: mergeRowIndex } = mergeItem
+          if (mergeRowIndex > 0) {
+            mergeItem.row = mergeRowIndex + newRecords.length
+          }
+        })
       } else {
         if (row === -1) {
-          nowData.push(...newRecords)
+          afterFullData.push(...newRecords)
           tableFullData.push(...newRecords)
+          // 刷新单元格合并
+          mergeList.forEach(mergeItem => {
+            const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+            if (mergeRowIndex + mergeRowspan > afterFullData.length) {
+              mergeItem.rowspan = mergeRowspan + newRecords.length
+            }
+          })
         } else {
           if (treeConfig) {
             throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
           }
-          const targetIndex = nowData.indexOf(row)
-          if (targetIndex === -1) {
+          const afIndex = afterFullData.indexOf(row)
+          if (afIndex === -1) {
             throw new Error(UtilTools.error('vxe.error.unableInsert'))
           }
-          nowData.splice(...([targetIndex, 0].concat(newRecords)))
+          afterFullData.splice(...([afIndex, 0].concat(newRecords)))
           tableFullData.splice(...([tableFullData.indexOf(row), 0].concat(newRecords)))
+          // 刷新单元格合并
+          mergeList.forEach(mergeItem => {
+            const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+            if (mergeRowIndex > afIndex) {
+              mergeItem.row = mergeRowIndex + newRecords.length
+            } else if (mergeRowIndex + mergeRowspan > afIndex) {
+              mergeItem.rowspan = mergeRowspan + newRecords.length
+            }
+          })
         }
       }
       editStore.insertList.unshift(...newRecords)
@@ -69,11 +91,10 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows) {
-      const { afterFullData, tableFullData, editStore, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
+      const { afterFullData, tableFullData, mergeList, editStore, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
       const { actived, removeList, insertList } = editStore
       const { checkField: property } = checkboxOpts
       let rest = []
-      const nowData = afterFullData
       if (!rows) {
         rows = tableFullData
       } else if (!XEUtils.isArray(rows)) {
@@ -87,23 +108,52 @@ export default {
       })
       // 如果绑定了多选属性，则更新状态
       if (!property) {
-        XEUtils.remove(selection, row => rows.indexOf(row) > -1)
+        rows.forEach(row => {
+          const sIndex = selection.indexOf(row)
+          if (sIndex > -1) {
+            selection.splice(sIndex, 1)
+          }
+        })
       }
       // 从数据源中移除
       if (tableFullData === rows) {
         rows = rest = tableFullData.slice(0)
-        tableFullData.length = 0
-        nowData.length = 0
+        this.tableFullData = []
+        this.afterFullData = []
+        this.clearMergeCells()
       } else {
-        rest = XEUtils.remove(tableFullData, row => rows.indexOf(row) > -1)
-        XEUtils.remove(nowData, row => rows.indexOf(row) > -1)
+        rows.forEach(row => {
+          const tfIndex = tableFullData.indexOf(row)
+          if (tfIndex > -1) {
+            const rItems = tableFullData.splice(tfIndex, 1)
+            rest.push(rItems[0])
+          }
+          const afIndex = afterFullData.indexOf(row)
+          if (afIndex > -1) {
+            // 刷新单元格合并
+            mergeList.forEach(mergeItem => {
+              const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+              if (mergeRowIndex > afIndex) {
+                mergeItem.row = mergeRowIndex - 1
+              } else if (mergeRowIndex + mergeRowspan > afIndex) {
+                mergeItem.rowspan = mergeRowspan - 1
+              }
+            })
+            afterFullData.splice(afIndex, 1)
+          }
+        })
       }
       // 如果当前行被激活编辑，则清除激活状态
       if (actived.row && rows.indexOf(actived.row) > -1) {
         this.clearActived()
       }
       // 从新增中移除已删除的数据
-      XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
+      rows.forEach(row => {
+        const iIndex = insertList.indexOf(row)
+        if (iIndex > -1) {
+          insertList.splice(iIndex, 1)
+        }
+      })
       this.handleTableData()
       this.updateFooter()
       this.updateCache()

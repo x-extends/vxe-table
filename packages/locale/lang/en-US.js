@@ -28,6 +28,49 @@ export default {
       impFields: 'Import failed, please check that the field name and data format are correct.',
       treeNotImp: 'Tree table does not support import.'
     },
+    renderer: {
+      search: 'Search',
+      cases: {
+        equal: 'Equal',
+        unequal: 'Not equal',
+        gt: 'Greater than',
+        ge: 'Greater than or equal',
+        lt: 'Less than',
+        le: 'Less than or equal',
+        begin: 'Beginning is',
+        notbegin: 'Beginning is not',
+        endin: 'End is',
+        notendin: 'End is not',
+        include: 'Include',
+        exclude: 'Exclusive',
+        between: 'Betweenness',
+        custom: 'Custom filter',
+        insensitive: 'Case insensitive'
+      },
+      combination: {
+        menus: {
+          sortAsc: 'Ascending order',
+          sortDesc: 'Descending order',
+          fixedColumn: 'Fixed column',
+          fixedGroup: 'Fixed group',
+          cancelFixed: 'Clear fixed',
+          fixedLeft: 'Fixed the left',
+          fixedRight: 'Fixed the right',
+          clearFilter: 'Clear filter',
+          textOption: 'Text filter',
+          numberOption: 'Number filter'
+        },
+        popup: {
+          title: 'Custom filtering',
+          currColumnTitle: 'Current column:',
+          and: 'And',
+          or: 'Or',
+          describeHtml: 'Use ? To represent a single character <br/> use * to represent any number of characters'
+        },
+        empty: '(Empty)',
+        notData: 'No data'
+      }
+    },
     table: {
       emptyText: 'No Data',
       allTitle: 'Select all / cancel',
