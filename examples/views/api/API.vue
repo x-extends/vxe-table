@@ -26,10 +26,11 @@
       :custom-config="{storage: true, checkMethod: checkColumnMethod}"
       :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod: menuVisibleMethod}"
+      :tooltip-config="{enterable: true, contentMethod: showTooltipMethod}"
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" :title-help="{message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'}" :filters="nameFilters" tree-node></vxe-table-column>
+      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" show-overflow :title-help="{message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'}" :filters="nameFilters" tree-node></vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" type="html" min-width="200"></vxe-table-column>
       <vxe-table-column field="type" title="app.api.title.type" type="html" min-width="140"></vxe-table-column>
       <vxe-table-column field="enum" :title="$t('app.api.title.enum')" type="html" min-width="150"></vxe-table-column>
@@ -317,7 +318,7 @@ export default {
       return {
         'api-disabled': row.disabled,
         'api-abandoned': row.abandoned,
-        'disabled-line-through': (row.disabled || row.abandoned) && column.property === 'name'
+        'disabled-line-through': (row.disabled) && column.property === 'name'
       }
     },
     checkColumnMethod ({ column }) {
@@ -325,6 +326,18 @@ export default {
         return false
       }
       return true
+    },
+    showTooltipMethod ({ type, row, column }) {
+      if (type === 'body') {
+        if (column.property === 'name') {
+          if (row.disabled) {
+            return '该参数已经被废弃了，除非不打算更新版本，否则不应该被使用'
+          } else if (row.abandoned) {
+            return '该参数属于评估阶段，不建议继续使用，后续有可能会被废弃的风险'
+          }
+        }
+      }
+      return null
     },
     headerCellContextMenuEvent ({ column }) {
       this.$refs.xTable.setCurrentColumn(column)

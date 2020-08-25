@@ -41,14 +41,6 @@ const GlobalConfig = {
     //   remote: false,
     //   filterMethod: null
     // },
-    // expandConfig: {
-    //   trigger: 'default'
-    // },
-    // treeConfig: {
-    //   children: 'children',
-    //   hasChild: 'hasChild',
-    //   indent: 20
-    // },
     // tooltipConfig: {
     //   theme: 'dark',
     //   enterable: false
@@ -64,6 +56,16 @@ const GlobalConfig = {
     //  checkMethod () {}
     // },
     // rowId: '_XID', // 行数据的唯一主键字段名
+    treeConfig: {
+      // children: 'children',
+      // hasChild: 'hasChild',
+      // indent: 20,
+      showIcon: true
+    },
+    expandConfig: {
+      // trigger: 'default',
+      showIcon: true
+    },
     editConfig: {
       // mode: 'cell',
       showAsterisk: true
