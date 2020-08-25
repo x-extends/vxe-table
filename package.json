@@ -78,7 +78,7 @@
     "vxe-table-plugin-export-pdf": "^1.8.5",
     "vxe-table-plugin-export-xlsx": "^1.6.0",
     "vxe-table-plugin-iview": "^1.9.1",
-    "vxe-table-plugin-menus": "^1.4.1",
+    "vxe-table-plugin-menus": "^1.4.2",
     "vxe-table-plugin-shortcut-key": "^1.3.0",
     "vxe-table-plugin-virtual-tree": "0.3.3",
     "xe-ajax": "^4.0.4",

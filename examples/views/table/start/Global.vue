@@ -41,7 +41,8 @@
           //     filterMethod: null
           //   },
           //   expandConfig: {
-          //     trigger: 'default'
+          //     trigger: 'default',
+          //     showIcon: true
           //   },
           //   treeConfig: {
           //     children: 'children',
