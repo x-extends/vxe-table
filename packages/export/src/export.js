@@ -258,9 +258,9 @@ function toHtml ($xetable, opts, columns, datas) {
         classNames.push(`col--${headAlign}`)
       }
       if (column.type === 'checkbox' || column.type === 'selection') {
-        return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></td>`
+        return `<th class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${UtilTools.formatText(cellTitle, true)}</span></div></th>`
       }
-      return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><span>${cellTitle}</span></div></th>`
+      return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><span>${UtilTools.formatText(cellTitle, true)}</span></div></th>`
     }).join('')}</tr></thead>`
   }
   if (datas.length) {
@@ -292,7 +292,7 @@ function toHtml ($xetable, opts, columns, datas) {
           } else if (column.type === 'checkbox' || column.type === 'selection') {
             return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
           }
-          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${cellValue}</div></td>`
+          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${UtilTools.formatText(cellValue, true)}</div></td>`
         }).join('') + '</tr>'
       })
     } else {
@@ -309,7 +309,7 @@ function toHtml ($xetable, opts, columns, datas) {
           } else if (column.type === 'checkbox' || column.type === 'selection') {
             return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
           }
-          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${cellValue}</div></td>`
+          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${UtilTools.formatText(cellValue, true)}</div></td>`
         }).join('') + '</tr>'
       })
     }
@@ -328,7 +328,7 @@ function toHtml ($xetable, opts, columns, datas) {
           if (footAlign) {
             classNames.push(`col--${footAlign}`)
           }
-          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${cellValue}</div></td>`
+          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${UtilTools.formatText(cellValue, true)}</div></td>`
         }).join('')}</tr>`
       })
       html += '</tfoot>'

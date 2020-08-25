@@ -4102,7 +4102,7 @@ const apis = [
       },
       {
         name: 'validate(rows, callback)',
-        desc: '表格快速校验，如果存在记录不通过则返回不再继续校验，如果第一个参数指定 row 或 rows 则校验指定行或多行，如果不指定，则默认校验状态发生变动的数据，例如新增或修改。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
+        desc: '快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；如果第一个参数为 true 则校验当前表格数据，如果指定 row 或 rows 则校验指定行或多行，如果不指定，则默认校验状态发生变动的数据，例如新增或修改。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
@@ -4111,7 +4111,7 @@ const apis = [
       },
       {
         name: 'fullValidate(rows, callback)',
-        desc: '表格完整校验，和 validate 的区别就是会将有效数据的每一条数据都进行完整校验',
+        desc: '完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验',
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
