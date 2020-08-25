@@ -4,7 +4,7 @@
       虚拟滚动渲染<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
       <table-api-link prop="data"/> 和 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 不应该同时使用，请根据数据量决定使用哪种方式，保证一致性<br>
-      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高、合并行或列；如果需要支持，将虚拟滚动关闭即可）</span>
+      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高；如果需要支持，将虚拟滚动关闭即可）</span>
     </p>
 
     <vxe-toolbar>

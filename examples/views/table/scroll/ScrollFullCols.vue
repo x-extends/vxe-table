@@ -4,7 +4,7 @@
       虚拟滚动渲染，左右固定列<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数<br>
       对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
-      <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头、合并行或列)</span>
+      <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头)</span>
     </p>
 
     <vxe-grid
