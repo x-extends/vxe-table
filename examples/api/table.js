@@ -1453,6 +1453,15 @@ const apis = [
             list: []
           },
           {
+            name: 'showIcon',
+            desc: '是否显示图标按钮',
+            version: '2.9.18',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '2.7',
@@ -1595,6 +1604,15 @@ const apis = [
             type: 'boolean',
             enum: '',
             defVal: 'false',
+            list: []
+          },
+          {
+            name: 'showIcon',
+            desc: '是否显示图标按钮',
+            version: '2.9.18',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {

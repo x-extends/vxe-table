@@ -2044,6 +2044,9 @@ const Methods = {
       let tipElem
       if (column.treeNode) {
         overflowElem = cell.querySelector('.vxe-tree-cell')
+        if (column.type === 'html') {
+          tipElem = cell.querySelector('.vxe-cell--html')
+        }
       } else {
         tipElem = cell.querySelector(column.type === 'html' ? '.vxe-cell--html' : '.vxe-cell--label')
       }

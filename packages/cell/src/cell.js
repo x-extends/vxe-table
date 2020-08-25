@@ -194,7 +194,7 @@ export const Cell = {
     const { treeOpts, treeExpandeds, treeLazyLoadeds } = $table
     const { row, column, level } = params
     const { slots } = column
-    const { children, hasChild, indent, lazy, trigger, iconLoaded, iconOpen, iconClose } = treeOpts
+    const { children, hasChild, indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
     const rowChilds = row[children]
     let hasLazyChilds = false
     let isAceived = false
@@ -222,7 +222,7 @@ export const Cell = {
           paddingLeft: `${level * indent}px`
         }
       }, [
-        (rowChilds && rowChilds.length) || hasLazyChilds ? [
+        showIcon && ((rowChilds && rowChilds.length) || hasLazyChilds) ? [
           h('div', {
             class: 'vxe-tree--btn-wrapper',
             on
@@ -492,7 +492,7 @@ export const Cell = {
   renderExpandCell (h, params) {
     const { $table, isHidden, row, column } = params
     const { expandOpts, rowExpandeds, expandLazyLoadeds } = $table
-    const { lazy, labelField, iconLoaded, iconOpen, iconClose, visibleMethod } = expandOpts
+    const { lazy, labelField, iconLoaded, showIcon, iconOpen, iconClose, visibleMethod } = expandOpts
     const { slots } = column
     let isAceived = false
     let isLazyLoaded = false
@@ -506,7 +506,7 @@ export const Cell = {
       }
     }
     return [
-      !visibleMethod || visibleMethod(params) ? h('span', {
+      showIcon && (!visibleMethod || visibleMethod(params)) ? h('span', {
         class: ['vxe-table--expanded', {
           'is--active': isAceived
         }],
