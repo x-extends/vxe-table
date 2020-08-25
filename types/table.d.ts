@@ -188,6 +188,7 @@ export declare class Table extends VXETableModule {
   radioConfig?: RadioConfig;
   // 复选框配置项
   checkboxConfig?: CheckboxConfig;
+  checkboxOpts: CheckboxConfig;
   // 提示信息配置项
   tooltipConfig?: TooltipConfig;
   // 导出配置项
@@ -200,22 +201,55 @@ export declare class Table extends VXETableModule {
   expandConfig?: ExpandConfig;
   // 树形结构配置项
   treeConfig?: boolean | TreeConfig;
+  treeOpts?: TreeConfig;
   // 快捷菜单配置项
   contextMenu?: boolean | ContextMenuConfig;
   // 鼠标配置项
   mouseConfig?: MouseConfig;
+  mouseOpts: MouseConfig;
   // 按键配置项
   keyboardConfig?: KeyboardConfig;
+  keyboardOpts: KeyboardConfig;
   // 编辑配置项
   editConfig?: boolean | EditConfig;
+  editOpts: EditConfig;
   // 校验配置项
   validConfig?: ValidConfig;
   // 校验规则配置项
   editRules?: EditVaildRules;
   // 空内容渲染配置项
   emptyRender?: boolean | EmptyRender;
-  // 优化配置项
-  optimization?: OptimizationConfig;
+  animat?: boolean;
+  cloak?: boolean;
+  delayHover?: number;
+  /**
+   * 横向虚拟滚动配置
+   */
+  scrollX?: {
+    /**
+     * 指定大于指定列时自动启动横向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭
+     */
+    gt?: number;
+    /**
+     * 指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久
+     */
+    oSize?: number;
+    [key: string]: any;
+  };
+  /**
+   * 纵向虚拟滚动配置
+   */
+  scrollY?: {
+    /**
+     * 指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭
+     */
+    gt?: number;
+    /**
+     * 指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久
+     */
+    oSize?: number;
+    [key: string]: any;
+  };
   // 额外的参数
   params?: any;
 
@@ -861,17 +895,17 @@ export declare class Table extends VXETableModule {
    */
   clearValidate(): Promise<any>;
   /**
-   * 表格完整校验函数，和 validate 的区别就是会对全量数据的所有规则进行完整校验
+   * 完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验
    * @param rows 指定行
    * @param callback 回调函数
    */
-  fullValidate(rows?: any, callback?: (errMap: ColumnEditValidErrMapParams) => void): Promise<any>;
+  fullValidate(rows?: any, callback?: (errMap: ColumnEditValidErrMapParams) => void): Promise<ColumnEditValidErrMapParams>;
   /**
-   * 表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
+   * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；如果第一个参数为 true 则校验当前表格数据，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
    * @param rows 指定行
    * @param callback 回调函数
    */
-  validate(rows?: any, callback?: (errMap?: ColumnEditValidErrMapParams) => void): Promise<any>;
+  validate(rows?: any, callback?: (errMap?: ColumnEditValidErrMapParams) => void): Promise<ColumnEditValidErrMapParams>;
   /**
    * 打开高级导出
    * @param options 参数
@@ -1168,27 +1202,6 @@ export interface ValidConfig {
  */
 export interface EditVaildRules {
   [field: string]: ColumnEditRule[];
-}
-
-/**
- * 优化配置项
- */
-export interface OptimizationConfig {
-  animat?: boolean;
-  cloak?: boolean;
-  delayHover?: boolean;
-  scrollX?: {
-    gt?: number;
-    oSize?: number;
-    rSize?: number;
-    vSize?: number;
-  };
-  scrollY?: {
-    gt?: number;
-    oSize?: number;
-    rSize?: number;
-    vSize?: number;
-  };
 }
 
 /**

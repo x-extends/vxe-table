@@ -3818,7 +3818,7 @@ const Methods = {
    */
   setMergeCells (merges) {
     setMerges(this, merges, this.mergeList, this.afterFullData)
-    return this.$nextTick()
+    return this.$nextTick().then(() => this.updateCellAreas())
   },
   /**
    * 移除单元格合并
@@ -3826,7 +3826,10 @@ const Methods = {
    */
   removeMergeCells (merges) {
     const rest = removeMerges(this, merges, this.mergeList, this.afterFullData)
-    return this.$nextTick().then(() => rest)
+    return this.$nextTick().then(() => {
+      this.updateCellAreas()
+      return rest
+    })
   },
   /**
    * 获取所有被合并的单元格
@@ -3846,11 +3849,14 @@ const Methods = {
   },
   setMergeFooterItems (merges) {
     setMerges(this, merges, this.mergeFooterList, null)
-    return this.$nextTick()
+    return this.$nextTick().then(() => this.updateCellAreas())
   },
   removeMergeFooterItems (merges) {
     const rest = removeMerges(this, merges, this.mergeFooterList, null)
-    return this.$nextTick().then(() => rest)
+    return this.$nextTick().then(() => {
+      this.updateCellAreas()
+      return rest
+    })
   },
   /**
    * 获取所有被合并的表尾

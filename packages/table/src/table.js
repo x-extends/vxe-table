@@ -469,6 +469,9 @@ export default {
     mouseOpts () {
       return Object.assign({}, GlobalConfig.table.mouseConfig, this.mouseConfig)
     },
+    keyboardOpts () {
+      return Object.assign({}, this.keyboardConfig)
+    },
     // 是否使用了分组表头
     isGroup () {
       return this.collectColumn.some(UtilTools.hasChildrenList)

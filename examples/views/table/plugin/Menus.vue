@@ -92,16 +92,16 @@ export default {
               }
             ],
             [
-              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
-              { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { type: 'csv' } }
+              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print', params: { columns: [{ field: 'name' }, { field: 'age' }, { field: 'rate' }] } },
+              { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { columns: [{ field: 'name' }, { field: 'age' }, { field: 'rate' }], type: 'csv' } }
             ]
           ]
         },
         footer: {
           options: [
             [
-              { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { type: 'xml' } },
-              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' }
+              { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { columns: [{ field: 'name' }, { field: 'role' }, { field: 'sex' }], type: 'xml' } },
+              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print', params: { columns: [{ field: 'name' }, { field: 'role' }, { field: 'sex' }] } }
             ]
           ]
         }
@@ -183,16 +183,16 @@ export default {
                       }
                     ],
                     [
-                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
-                      { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { type: 'csv' } }
+                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print', params: { columns: [{ field: 'name' }, { field: 'age' }, { field: 'rate' }] } },
+                      { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { columns: [{ field: 'name' }, { field: 'age' }, { field: 'rate' }], type: 'csv' } }
                     ]
                   ]
                 },
                 footer: {
                   options: [
                     [
-                      { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { type: 'xml' } },
-                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' }
+                      { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { columns: [{ field: 'name' }, { field: 'role' }, { field: 'sex' }], type: 'xml' } },
+                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print', params: { columns: [{ field: 'name' }, { field: 'role' }, { field: 'sex' }] } }
                     ]
                   ]
                 }

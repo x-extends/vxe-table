@@ -32,13 +32,13 @@ class Rule {
 export default {
   methods: {
     /**
-     * 与 validate 一致行为，区别就是会校验所有并返回所有不通过的所有列
+     * 完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验
      */
     _fullValidate (rows, cb) {
       return this.beginValidate(rows, cb, true)
     },
     /**
-     * 对表格数据进行校验
+     * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；
      */
     _validate (rows, cb) {
       return this.beginValidate(rows, cb)
@@ -56,17 +56,20 @@ export default {
     },
     /**
      * 对表格数据进行校验
+     * 默认只校验变动的数据，新增或修改
+     * 如果传 true 则校验当前表格数据
      * 如果传 row 指定行记录，则只验证传入的行
      * 如果传 rows 为多行记录，则只验证传入的行
      * 如果只传 callback 否则默认验证整个表格数据
      * 返回 Promise 对象，或者使用回调方式
      */
-    beginValidate (rows, cb, isAll) {
+    beginValidate (rows, cb, isFull) {
       const validRest = {}
-      let status = true
       const { editRules, afterFullData, treeConfig, treeOpts } = this
       let vaildDatas
-      if (rows) {
+      if (rows === true) {
+        vaildDatas = afterFullData
+      } else if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
         } else {
@@ -76,6 +79,7 @@ export default {
       if (!vaildDatas) {
         vaildDatas = this.getInsertRecords().concat(this.getUpdateRecords())
       }
+      let status = true
       const rowValids = []
       this.lastCallTime = Date.now()
       this.validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
@@ -83,20 +87,19 @@ export default {
       if (editRules) {
         const columns = this.getColumns()
         const handleVaild = row => {
-          if (!this.validRuleErr) {
+          if (isFull || !this.validRuleErr) {
             const colVailds = []
             columns.forEach((column) => {
-              if (!this.validRuleErr && XEUtils.has(editRules, column.property)) {
+              if ((isFull || !this.validRuleErr) && XEUtils.has(editRules, column.property)) {
                 colVailds.push(
                   this.validCellRules('all', row, column)
                     .catch(({ rule, rules }) => {
                       const rest = { rule, rules, rowIndex: this.getRowIndex(row), row, columnIndex: this.getColumnIndex(column), column, $table: this }
-                      if (isAll) {
-                        if (!validRest[column.property]) {
-                          validRest[column.property] = []
-                        }
-                        validRest[column.property].push(rest)
-                      } else {
+                      if (!validRest[column.property]) {
+                        validRest[column.property] = []
+                      }
+                      validRest[column.property].push(rest)
+                      if (!isFull) {
                         this.validRuleErr = true
                         return Promise.reject(rest)
                       }
@@ -125,27 +128,26 @@ export default {
               cb()
             }
           }
-        }).catch(params => {
-          const args = isAll ? validRest : { [params.column.property]: params }
+        }).catch(firstErrParams => {
           return new Promise((resolve, reject) => {
             const finish = () => {
               status = false
               if (cb) {
                 // 在 v3.0 中废弃 setup.validArgs
                 if (GlobalConfig.validArgs === 'obsolete') {
-                  cb(status, args)
+                  cb(status, validRest)
                 } else {
-                  cb(args)
+                  cb(validRest)
                 }
                 resolve()
               } else {
-                reject(args)
+                reject(validRest)
               }
             }
             const posAndFinish = () => {
-              params.cell = this.getCell(params.column, params.row)
-              DomTools.toView(params.cell)
-              this.handleValidError(params)
+              firstErrParams.cell = this.getCell(firstErrParams.column, firstErrParams.row)
+              DomTools.toView(firstErrParams.cell)
+              this.handleValidError(firstErrParams)
               finish()
             }
             /**
@@ -153,7 +155,7 @@ export default {
              * 将表格滚动到可视区
              * 由于提示信息至少需要占一行，定位向上偏移一行
              */
-            const row = params.row
+            const row = firstErrParams.row
             const rowIndex = afterFullData.indexOf(row)
             const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
             if (this.validOpts.autoPos === false) {
@@ -254,11 +256,9 @@ export default {
               } else {
                 const isNumber = rule.type === 'number'
                 const numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
-                if (cellValue === null || cellValue === undefined || cellValue === '') {
-                  if (rule.required) {
-                    this.validRuleErr = true
-                    errorRules.push(new Rule(rule))
-                  }
+                if (rule.required && (cellValue === null || cellValue === undefined || cellValue === '')) {
+                  this.validRuleErr = true
+                  errorRules.push(new Rule(rule))
                 } else if (
                   (isNumber && isNaN(cellValue)) ||
                   (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
