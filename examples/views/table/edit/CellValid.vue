@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置<br>
+      通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置，如果第一个参数为 true 则全量校验<br>
       <span class="red">（不指定数据的情况下，默认只校验状态发生变动的数据，例如：新增、修改...等）</span>
     </p>
 
@@ -9,8 +9,9 @@
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
-        <vxe-button @click="validEvent">校验</vxe-button>
+        <vxe-button @click="validEvent">快速校验</vxe-button>
         <vxe-button @click="fullValidEvent">完整校验</vxe-button>
+        <vxe-button @click="validAllEvent">全量校验</vxe-button>
         <vxe-button @click="selectValidEvent">选中校验</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -36,7 +37,7 @@
       </vxe-table-column>
       <vxe-table-column title="分组2">
         <vxe-table-column title="分组21">
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table-column>
@@ -81,7 +82,7 @@ export default {
         role: [
           { validator: roleValid }
         ],
-        sex: [
+        sex2: [
           { required: true, message: '性别必须填写' },
           { pattern: /^[0,1]{1}$/, message: '格式不正确' }
         ],
@@ -94,8 +95,10 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
-            <vxe-button @click="validEvent">校验</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+            <vxe-button @click="validEvent">快速校验</vxe-button>
             <vxe-button @click="fullValidEvent">完整校验</vxe-button>
+            <vxe-button @click="validAllEvent">全量校验</vxe-button>
             <vxe-button @click="selectValidEvent">选中校验</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -121,7 +124,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column title="分组2">
             <vxe-table-column title="分组21">
-              <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
               <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-table-column>
               <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
             </vxe-table-column>
@@ -155,7 +158,7 @@ export default {
                 role: [
                   { validator: roleValid }
                 ],
-                sex: [
+                sex2: [
                   { required: true, message: '性别必须填写' },
                   { pattern: /^[0,1]{1}$/, message: '格式不正确' }
                 ],
@@ -201,6 +204,14 @@ export default {
                     ]
                   }
                 })
+              } else {
+                this.$XModal.message({ status: 'success', message: '校验成功！' })
+              }
+            },
+            async validAllEvent () {
+              const errMap = await this.$refs.xTable.validate(true).catch(errMap => errMap)
+              if (errMap) {
+                this.$XModal.message({ status: 'error', message: '校验不通过！' })
               } else {
                 this.$XModal.message({ status: 'success', message: '校验成功！' })
               }
@@ -289,6 +300,14 @@ export default {
             ]
           }
         })
+      } else {
+        this.$XModal.message({ status: 'success', message: '校验成功！' })
+      }
+    },
+    async validAllEvent () {
+      const errMap = await this.$refs.xTable.validate(true).catch(errMap => errMap)
+      if (errMap) {
+        this.$XModal.message({ status: 'error', message: '校验不通过！' })
       } else {
         this.$XModal.message({ status: 'success', message: '校验成功！' })
       }
