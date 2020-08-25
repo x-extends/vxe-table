@@ -545,7 +545,7 @@ export declare class Table extends VXETableModule {
   /**
    * 手动清除临时合并的表尾
    */
-  clearMergeCells(): Promise<any>;
+  clearMergeFooterItems(): Promise<any>;
   /**
    * 用于 highlight-current-row，手动清空当前高亮的状态
    */
@@ -769,6 +769,18 @@ export declare class Table extends VXETableModule {
    * 用于 mouse-config.area，将指定区域转成文本格式
    */
   toCellAreaText(areaItem: MouseCellArea): string;
+  /**
+   * 用于 mouse-config.area，复制指定区域，返回转换后的文本
+   */
+  copyCellArea(): string;
+  /**
+   * 用于 mouse-config.area，剪贴指定区域，返回转换后的文本
+   */
+  cutCellArea(): string;
+  /**
+   * 用于 mouse-config.area，粘贴从表格中被复制的数据，如果不是从表格中操作，则无法粘贴
+   */
+  pasteCellArea(): string;
   /**
    * 手动清除单元格选中状态
    */
@@ -1115,14 +1127,14 @@ export interface MergeOptions {
   col: ColumnInfo | number;
   rowspan: number;
   colspan: number;
-  [key: string]: any;
 }
 
 export interface MergeItem {
-  row: any;
-  col: ColumnInfo;
+  row: number;
+  col: number;
   rowspan: number;
   colspan: number;
+  [key: string]: any;
 }
 
 export interface ActiveCellAreaOptions {

@@ -2,9 +2,9 @@
   <div>
     <p class="tip">
       虚拟滚动<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
+      高性能的虚拟渲染，通过设置 <table-api-link prop="height"/>、<table-api-link prop="max-height"/> 即可启用虚拟渲染，只会渲染可指定范围内的可视区数据，其他的数据将被卷去收起，当滚动到可视区时才显示出来<br>
       如果列较多建议使用 <grid-api-link name="vxe-grid"/>，使渲染性能达到最优，虚拟滚动只会渲染可视区域的数据，对于海量数据的性能提升非常大<br>
-      启用虚拟滚动后：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数将自动生效，无法取消<br>
-      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高、合并行或列，如果需要支持，将虚拟滚动关闭即可）</span>
+      <span class="red">（注：启用虚拟滚动后：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数将根据不同场景各自触发生效，无法取消；如果需要支持，将虚拟滚动关闭即可）</span>
     </p>
 
     <vxe-table
@@ -31,7 +31,6 @@
     <p class="tip">
       手动调优，对于低性能的浏览器可以通过设置 <table-api-link prop="oSize"/> 偏移量来缓解渲染次数，偏移量越大渲染次数就越少，但是每次渲染的耗时就越久<br>
       通过指定 <table-api-link prop="scroll-x"/>={gt: 20} 或 <table-api-link prop="scroll-y"/>={gt: 40} 适合的参数可以手动调优，如果为 0 则总是启用，如果为 -1 关闭虚拟滚动<br>
-      启用虚拟滚动后：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数将自动生效，无法取消
     </p>
 
     <vxe-table
