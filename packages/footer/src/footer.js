@@ -254,7 +254,7 @@ export default {
       if (isX && validTip && validTip.visible) {
         validTip.updatePlacement()
       }
-      $xetable.$emit('scroll', { type: cellType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false, $table: $xetable, $event: evnt })
+      $xetable.emitEvent('scroll', { type: cellType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false }, evnt)
     }
   }
 }

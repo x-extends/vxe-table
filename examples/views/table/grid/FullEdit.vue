@@ -193,6 +193,15 @@ export default {
                   storage: true,
                   checkMethod: this.checkColumnMethod
                 },
+                printConfig: {
+                  columns: [
+                    { field: 'name' },
+                    { field: 'email' },
+                    { field: 'nickname' },
+                    { field: 'age' },
+                    { field: 'amount' }
+                  ]
+                },
                 sortConfig: {
                   trigger: 'cell'
                 },

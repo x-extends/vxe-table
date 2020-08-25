@@ -199,8 +199,10 @@ export default {
       const { editConfig, editOpts, handleSelected, checkboxConfig, checkboxOpts, mouseConfig, mouseOpts } = this
       if (mouseConfig && mouseOpts.area && this.handleCellAreaEvent) {
         return this.handleCellAreaEvent(evnt, params)
-      } else if (checkboxConfig && checkboxOpts.range) {
-        this.handleCheckboxRangeEvent(evnt, params)
+      } else {
+        if (checkboxConfig && checkboxOpts.range) {
+          this.handleCheckboxRangeEvent(evnt, params)
+        }
         if (mouseConfig && mouseOpts.selected) {
           if (!editConfig || editOpts.mode === 'cell') {
             handleSelected(params, evnt)

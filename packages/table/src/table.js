@@ -445,6 +445,9 @@ export default {
     mouseOpts () {
       return Object.assign({}, GlobalConfig.table.mouseConfig, this.mouseConfig)
     },
+    keyboardOpts () {
+      return Object.assign({}, this.keyboardConfig)
+    },
     hasTip () {
       return VXETable._tooltip
     },

@@ -3604,7 +3604,7 @@ const Methods = {
    */
   setMergeCells (merges) {
     setMerges(this, merges, this.mergeList, this.afterFullData)
-    return this.$nextTick()
+    return this.$nextTick().then(() => this.updateCellAreas())
   },
   /**
    * 移除单元格合并
@@ -3612,7 +3612,10 @@ const Methods = {
    */
   removeMergeCells (merges) {
     const rest = removeMerges(this, merges, this.mergeList, this.afterFullData)
-    return this.$nextTick().then(() => rest)
+    return this.$nextTick().then(() => {
+      this.updateCellAreas()
+      return rest
+    })
   },
   /**
    * 获取所有被合并的单元格
@@ -3632,11 +3635,14 @@ const Methods = {
   },
   setMergeFooterItems (merges) {
     setMerges(this, merges, this.mergeFooterList, null)
-    return this.$nextTick()
+    return this.$nextTick().then(() => this.updateCellAreas())
   },
   removeMergeFooterItems (merges) {
     const rest = removeMerges(this, merges, this.mergeFooterList, null)
-    return this.$nextTick().then(() => rest)
+    return this.$nextTick().then(() => {
+      this.updateCellAreas()
+      return rest
+    })
   },
   /**
    * 获取所有被合并的表尾
@@ -3702,7 +3708,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,toCellAreaText,clearCellAreas,getCopyCellArea,clearCopyCellArea,setCellAreas,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
+const funcs = 'setFilter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,toCellAreaText,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,clearCopyCellArea,setCellAreas,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {
