@@ -1,6 +1,7 @@
 import { CreateElement, VNode } from 'vue'
-import { EmptyRender, EmptyRenderParams } from '../table'
-import { ColumnCellRenderOptions, ColumnContentRenderOptions, ColumnCellRenderParams } from '../column'
+import { RowInfo } from '../component'
+import { Table } from '../table'
+import { ColumnInfo, ColumnCellRenderOptions, ColumnContentRenderOptions } from '../column'
 import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
 import { ColumnEditRenderOptions, ColumnEditRenderParams } from './edit'
 import { ColumnFooterRenderParams } from './footer'
@@ -104,3 +105,54 @@ export interface OptionGroupProps extends RenderParams {
   label?: string;
   [key: string]: any;
 }
+
+/**
+ * 单元格渲染参数
+ */
+export interface ColumnCellRenderParams extends TableRenderParams {
+  /**
+   * 列对象
+   */
+  column: ColumnInfo;
+  /**
+   * 相对于 columns 中的索引
+   */
+  columnIndex: number;
+  /**
+   * 相对于可视区渲染中的列索引
+   */
+  $columnIndex: number;
+  /**
+   * 行数据对象
+   */
+  row: RowInfo;
+  /**
+   * 相对于 data 中的索引
+   */
+  rowIndex: number;
+  /**
+   * 相对于当前表格数据的索引
+   */
+  $rowIndex: number;
+}
+
+/**
+ * 空内容渲染配置项
+ */
+export class EmptyRender extends RenderOptions { }
+
+export class TableRenderParams extends RenderParams {
+  /**
+   * 表格实例对象
+   */
+  $table: Table;
+}
+
+export class EmptyRenderParams extends TableRenderParams { }
+
+export interface ColumnDefaultSlotParams extends ColumnCellRenderParams { }
+export interface ColumnContentSlotParams extends ColumnContentRenderParams { }
+export interface ColumnIconSlotParams extends ColumnIconRenderParams { }
+
+export interface ColumnContentRenderParams extends ColumnCellRenderParams { }
+export interface ColumnIconRenderParams extends ColumnCellRenderParams { }

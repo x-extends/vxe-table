@@ -1865,9 +1865,17 @@ const Methods = {
             // 如果是激活状态，退则出到上一行/下一行
             if (selected.row || actived.row) {
               if (isShiftKey) {
-                this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, true, isRightArrow, false, evnt)
+                if (keyboardConfig.enterToTab) {
+                  this.moveTabSelected(selected.args, isShiftKey, evnt)
+                } else {
+                  this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, true, isRightArrow, false, evnt)
+                }
               } else {
-                this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, false, isRightArrow, true, evnt)
+                if (keyboardConfig.enterToTab) {
+                  this.moveTabSelected(selected.args, isShiftKey, evnt)
+                } else {
+                  this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, false, isRightArrow, true, evnt)
+                }
               }
             } else if (treeConfig && highlightCurrentRow && currentRow) {
               // 如果是树形表格当前行回车移动到子节点

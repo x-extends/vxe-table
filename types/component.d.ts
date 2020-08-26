@@ -10,3 +10,14 @@ export declare class VXETableModule extends Vue {
 
   static install(vue: typeof Vue): void;
 }
+
+export interface RecordInfo {
+  [key: string]: any;
+}
+
+/**
+ * 行对象
+ */
+export interface RowInfo {
+  [key: string]: any;
+}
