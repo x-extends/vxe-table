@@ -1,102 +1,98 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.button') }}</h2>
-    <p class="tip">按钮，下拉按钮</p>
+    <p class="tip">标准按钮，文本按钮、下拉按钮</p>
 
     <p>
-      <vxe-button>默认尺寸</vxe-button>
-      <vxe-button size="medium">中等尺寸</vxe-button>
-      <vxe-button size="small">小型尺寸</vxe-button>
-      <vxe-button size="mini">超小尺寸</vxe-button>
+      <vxe-button content="默认尺寸"></vxe-button>
+      <vxe-button size="medium" content="中等尺寸"></vxe-button>
+      <vxe-button size="small" content="小型尺寸"></vxe-button>
+      <vxe-button size="mini" content="超小尺寸"></vxe-button>
     </p>
 
     <p>
-      <vxe-button size="mini">
-        <template v-slot>超小下拉按钮</template>
+      <vxe-button size="mini" content="超小下拉按钮">
         <template v-slot:dropdowns>
-          <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text" status="primary">下拉按钮2</vxe-button>
-          <vxe-button type="text">下拉按钮3</vxe-button>
+          <vxe-button type="text" content="下拉按钮1"></vxe-button>
+          <vxe-button type="text" status="primary" content="下拉按钮2"></vxe-button>
+          <vxe-button type="text" content="下拉按钮3"></vxe-button>
         </template>
       </vxe-button>
-      <vxe-button size="small">
-        <template v-slot>小型下拉按钮</template>
+      <vxe-button size="small" content="小型下拉按钮">
         <template v-slot:dropdowns>
-          <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text" status="success">下拉按钮2</vxe-button>
-          <vxe-button type="text">下拉按钮3</vxe-button>
+          <vxe-button type="text" content="下拉按钮1"></vxe-button>
+          <vxe-button type="text" status="success" content="下拉按钮2"></vxe-button>
+          <vxe-button type="text" content="下拉按钮3"></vxe-button>
         </template>
       </vxe-button>
-      <vxe-button size="medium">
-        <template v-slot>中等下拉按钮</template>
+      <vxe-button size="medium" content="中等下拉按钮">
         <template v-slot:dropdowns>
-          <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text" status="warning">下拉按钮2</vxe-button>
-          <vxe-button type="text">下拉按钮3</vxe-button>
+          <vxe-button type="text" content="下拉按钮1"></vxe-button>
+          <vxe-button type="text" status="warning" content="下拉按钮2"></vxe-button>
+          <vxe-button type="text" content="下拉按钮3"></vxe-button>
         </template>
       </vxe-button>
-      <vxe-button>
-        <template v-slot>默认下拉按钮</template>
+      <vxe-button content="默认下拉按钮">
         <template v-slot:dropdowns>
-          <vxe-button type="text">下拉按钮1</vxe-button>
-          <vxe-button type="text" status="danger">下拉按钮2</vxe-button>
-          <vxe-button type="text">下拉按钮3</vxe-button>
+          <vxe-button type="text" content="下拉按钮1"></vxe-button>
+          <vxe-button type="text" status="danger" content="下拉按钮2"></vxe-button>
+          <vxe-button type="text" content="下拉按钮3"></vxe-button>
         </template>
       </vxe-button>
     </p>
 
     <p>
-      <vxe-button type="text">默认颜色</vxe-button>
-      <vxe-button type="text" status="primary">主要颜色</vxe-button>
-      <vxe-button type="text" status="success">成功颜色</vxe-button>
-      <vxe-button type="text" status="info">信息颜色</vxe-button>
-      <vxe-button type="text" status="warning">警告颜色</vxe-button>
-      <vxe-button type="text" status="danger">危险颜色</vxe-button>
+      <vxe-button type="text" content="默认颜色"></vxe-button>
+      <vxe-button type="text" status="primary" content="主要颜色"></vxe-button>
+      <vxe-button type="text" status="success" content="信息颜色">x</vxe-button>
+      <vxe-button type="text" status="info" content="信息颜色"></vxe-button>
+      <vxe-button type="text" status="warning" content="警告颜色"></vxe-button>
+      <vxe-button type="text" status="danger" content="危险颜色"></vxe-button>
     </p>
 
     <p>
-      <vxe-button type="text" disabled>默认禁用颜色</vxe-button>
-      <vxe-button type="text" status="primary" disabled>主要禁用颜色</vxe-button>
-      <vxe-button type="text" status="success" disabled>成功禁用颜色</vxe-button>
-      <vxe-button type="text" status="info" disabled>信息禁用颜色</vxe-button>
-      <vxe-button type="text" status="warning" disabled>警告禁用颜色</vxe-button>
-      <vxe-button type="text" status="danger" disabled>危险禁用颜色</vxe-button>
+      <vxe-button type="text" content="默认禁用颜色" disabled></vxe-button>
+      <vxe-button type="text" status="primary" content="主要禁用颜色" disabled></vxe-button>
+      <vxe-button type="text" status="success" content="成功禁用颜色" disabled></vxe-button>
+      <vxe-button type="text" status="info" content="信息禁用颜色" disabled></vxe-button>
+      <vxe-button type="text" status="warning" content="警告禁用颜色" disabled></vxe-button>
+      <vxe-button type="text" status="danger" content="危险禁用颜色" disabled></vxe-button>
     </p>
 
     <p>
-      <vxe-button type="text" loading>默认颜色</vxe-button>
-      <vxe-button type="text" status="primary" loading>主要颜色</vxe-button>
-      <vxe-button type="text" status="success" loading>成功颜色</vxe-button>
-      <vxe-button type="text" status="info" loading>信息颜色</vxe-button>
-      <vxe-button type="text" status="warning" loading>警告颜色</vxe-button>
-      <vxe-button type="text" status="danger" loading>危险颜色</vxe-button>
+      <vxe-button type="text" content="默认颜色" loading></vxe-button>
+      <vxe-button type="text" status="primary" content="主要颜色" loading></vxe-button>
+      <vxe-button type="text" status="success" content="成功颜色" loading></vxe-button>
+      <vxe-button type="text" status="info" content="信息颜色" loading></vxe-button>
+      <vxe-button type="text" status="warning" content="警告颜色" loading></vxe-button>
+      <vxe-button type="text" status="danger" content="危险颜色" loading></vxe-button>
     </p>
 
     <p>
-      <vxe-button>默认颜色</vxe-button>
-      <vxe-button status="primary">主要颜色</vxe-button>
-      <vxe-button status="success">成功颜色</vxe-button>
-      <vxe-button status="info">信息颜色</vxe-button>
-      <vxe-button status="warning">警告颜色</vxe-button>
-      <vxe-button status="danger">危险颜色</vxe-button>
+      <vxe-button content="默认颜色"></vxe-button>
+      <vxe-button status="primary" content="主要颜色"></vxe-button>
+      <vxe-button status="success" content="成功颜色"></vxe-button>
+      <vxe-button status="info" content="信息颜色"></vxe-button>
+      <vxe-button status="warning" content="警告颜色"></vxe-button>
+      <vxe-button status="danger" content="危险颜色"></vxe-button>
     </p>
 
     <p>
-      <vxe-button disabled>默认禁用颜色</vxe-button>
-      <vxe-button status="primary" disabled>主要禁用颜色</vxe-button>
-      <vxe-button status="success" disabled>成功禁用颜色</vxe-button>
-      <vxe-button status="info" disabled>信息禁用颜色</vxe-button>
-      <vxe-button status="warning" disabled>警告禁用颜色</vxe-button>
-      <vxe-button status="danger" disabled>危险禁用颜色</vxe-button>
+      <vxe-button content="默认禁用颜色" disabled></vxe-button>
+      <vxe-button status="primary" content="主要禁用颜色" disabled></vxe-button>
+      <vxe-button status="success" content="成功禁用颜色" disabled></vxe-button>
+      <vxe-button status="info" content="信息禁用颜色" disabled></vxe-button>
+      <vxe-button status="warning" content="警告禁用颜色" disabled></vxe-button>
+      <vxe-button status="danger" content="危险禁用颜色" disabled></vxe-button>
     </p>
 
     <p>
-      <vxe-button loading>默认颜色</vxe-button>
-      <vxe-button status="primary" loading>主要颜色</vxe-button>
-      <vxe-button status="success" loading>成功颜色</vxe-button>
-      <vxe-button status="info" loading>信息颜色</vxe-button>
-      <vxe-button status="warning" loading>警告颜色</vxe-button>
-      <vxe-button status="danger" loading>危险颜色</vxe-button>
+      <vxe-button content="默认颜色" loading></vxe-button>
+      <vxe-button status="primary" content="主要颜色" loading></vxe-button>
+      <vxe-button status="success" content="成功颜色" loading></vxe-button>
+      <vxe-button status="info" content="信息颜色" loading></vxe-button>
+      <vxe-button status="warning" content="警告颜色" loading></vxe-button>
+      <vxe-button status="danger" content="危险颜色" loading></vxe-button>
     </p>
 
     <p>
@@ -242,99 +238,95 @@ export default {
       demoCodes: [
         `
         <p>
-          <vxe-button>默认尺寸</vxe-button>
-          <vxe-button size="medium">中等尺寸</vxe-button>
-          <vxe-button size="small">小型尺寸</vxe-button>
-          <vxe-button size="mini">超小尺寸</vxe-button>
+          <vxe-button content="默认尺寸"></vxe-button>
+          <vxe-button size="medium" content="中等尺寸"></vxe-button>
+          <vxe-button size="small" content="小型尺寸"></vxe-button>
+          <vxe-button size="mini" content="超小尺寸"></vxe-button>
         </p>
 
         <p>
-          <vxe-button size="mini">
-            <template v-slot>超小下拉按钮</template>
+          <vxe-button size="mini" content="超小下拉按钮">
             <template v-slot:dropdowns>
-              <vxe-button type="text">下拉按钮1</vxe-button>
-              <vxe-button type="text">下拉按钮2</vxe-button>
-              <vxe-button type="text">下拉按钮3</vxe-button>
+              <vxe-button type="text" content="下拉按钮1"></vxe-button>
+              <vxe-button type="text" status="primary" content="下拉按钮2"></vxe-button>
+              <vxe-button type="text" content="下拉按钮3"></vxe-button>
             </template>
           </vxe-button>
-          <vxe-button size="small">
-            <template v-slot>小型下拉按钮</template>
+          <vxe-button size="small" content="小型下拉按钮">
             <template v-slot:dropdowns>
-              <vxe-button type="text">下拉按钮1</vxe-button>
-              <vxe-button type="text">下拉按钮2</vxe-button>
-              <vxe-button type="text">下拉按钮3</vxe-button>
+              <vxe-button type="text" content="下拉按钮1"></vxe-button>
+              <vxe-button type="text" status="success" content="下拉按钮2"></vxe-button>
+              <vxe-button type="text" content="下拉按钮3"></vxe-button>
             </template>
           </vxe-button>
-          <vxe-button size="medium">
-            <template v-slot>中等下拉按钮</template>
+          <vxe-button size="medium" content="中等下拉按钮">
             <template v-slot:dropdowns>
-              <vxe-button type="text">下拉按钮1</vxe-button>
-              <vxe-button type="text">下拉按钮2</vxe-button>
-              <vxe-button type="text">下拉按钮3</vxe-button>
+              <vxe-button type="text" content="下拉按钮1"></vxe-button>
+              <vxe-button type="text" status="warning" content="下拉按钮2"></vxe-button>
+              <vxe-button type="text" content="下拉按钮3"></vxe-button>
             </template>
           </vxe-button>
-          <vxe-button>
-            <template v-slot>默认下拉按钮</template>
+          <vxe-button content="默认下拉按钮">
             <template v-slot:dropdowns>
-              <vxe-button type="text">下拉按钮1</vxe-button>
-              <vxe-button type="text">下拉按钮2</vxe-button>
-              <vxe-button type="text">下拉按钮3</vxe-button>
+              <vxe-button type="text" content="下拉按钮1"></vxe-button>
+              <vxe-button type="text" status="danger" content="下拉按钮2"></vxe-button>
+              <vxe-button type="text" content="下拉按钮3"></vxe-button>
             </template>
           </vxe-button>
         </p>
 
         <p>
-          <vxe-button type="text">默认颜色</vxe-button>
-          <vxe-button type="text" status="primary">主要颜色</vxe-button>
-          <vxe-button type="text" status="success">成功颜色</vxe-button>
-          <vxe-button type="text" status="info">信息颜色</vxe-button>
-          <vxe-button type="text" status="warning">警告颜色</vxe-button>
-          <vxe-button type="text" status="danger">危险颜色</vxe-button>
+          <vxe-button type="text" content="默认颜色"></vxe-button>
+          <vxe-button type="text" status="primary" content="主要颜色"></vxe-button>
+          <vxe-button type="text" status="success" content="信息颜色">x</vxe-button>
+          <vxe-button type="text" status="info" content="信息颜色"></vxe-button>
+          <vxe-button type="text" status="warning" content="警告颜色"></vxe-button>
+          <vxe-button type="text" status="danger" content="危险颜色"></vxe-button>
         </p>
 
         <p>
-          <vxe-button type="text" disabled>默认禁用颜色</vxe-button>
-          <vxe-button type="text" status="primary" disabled>主要禁用颜色</vxe-button>
-          <vxe-button type="text" status="success" disabled>成功禁用颜色</vxe-button>
-          <vxe-button type="text" status="info" disabled>信息禁用颜色</vxe-button>
-          <vxe-button type="text" status="warning" disabled>警告禁用颜色</vxe-button>
-          <vxe-button type="text" status="danger" disabled>危险禁用颜色</vxe-button>
+          <vxe-button type="text" content="默认禁用颜色" disabled></vxe-button>
+          <vxe-button type="text" status="primary" content="主要禁用颜色" disabled></vxe-button>
+          <vxe-button type="text" status="success" content="成功禁用颜色" disabled></vxe-button>
+          <vxe-button type="text" status="info" content="信息禁用颜色" disabled></vxe-button>
+          <vxe-button type="text" status="warning" content="警告禁用颜色" disabled></vxe-button>
+          <vxe-button type="text" status="danger" content="危险禁用颜色" disabled></vxe-button>
         </p>
 
         <p>
-          <vxe-button type="text" loading>默认颜色</vxe-button>
-          <vxe-button type="text" status="primary" loading>主要颜色</vxe-button>
-          <vxe-button type="text" status="success" loading>成功颜色</vxe-button>
-          <vxe-button type="text" status="info" loading>信息颜色</vxe-button>
-          <vxe-button type="text" status="warning" loading>警告颜色</vxe-button>
-          <vxe-button type="text" status="danger" loading>危险颜色</vxe-button>
+          <vxe-button type="text" content="默认颜色" loading></vxe-button>
+          <vxe-button type="text" status="primary" content="主要颜色" loading></vxe-button>
+          <vxe-button type="text" status="success" content="成功颜色" loading></vxe-button>
+          <vxe-button type="text" status="info" content="信息颜色" loading></vxe-button>
+          <vxe-button type="text" status="warning" content="警告颜色" loading></vxe-button>
+          <vxe-button type="text" status="danger" content="危险颜色" loading></vxe-button>
         </p>
 
         <p>
-          <vxe-button>默认颜色</vxe-button>
-          <vxe-button status="primary">主要颜色</vxe-button>
-          <vxe-button status="success">成功颜色</vxe-button>
-          <vxe-button status="info">信息颜色</vxe-button>
-          <vxe-button status="warning">警告颜色</vxe-button>
-          <vxe-button status="danger">危险颜色</vxe-button>
+          <vxe-button content="默认颜色"></vxe-button>
+          <vxe-button status="primary" content="主要颜色"></vxe-button>
+          <vxe-button status="success" content="成功颜色"></vxe-button>
+          <vxe-button status="info" content="信息颜色"></vxe-button>
+          <vxe-button status="warning" content="警告颜色"></vxe-button>
+          <vxe-button status="danger" content="危险颜色"></vxe-button>
         </p>
 
         <p>
-          <vxe-button disabled>默认禁用颜色</vxe-button>
-          <vxe-button status="primary" disabled>主要禁用颜色</vxe-button>
-          <vxe-button status="success" disabled>成功禁用颜色</vxe-button>
-          <vxe-button status="info" disabled>信息禁用颜色</vxe-button>
-          <vxe-button status="warning" disabled>警告禁用颜色</vxe-button>
-          <vxe-button status="danger" disabled>危险禁用颜色</vxe-button>
+          <vxe-button content="默认禁用颜色" disabled></vxe-button>
+          <vxe-button status="primary" content="主要禁用颜色" disabled></vxe-button>
+          <vxe-button status="success" content="成功禁用颜色" disabled></vxe-button>
+          <vxe-button status="info" content="信息禁用颜色" disabled></vxe-button>
+          <vxe-button status="warning" content="警告禁用颜色" disabled></vxe-button>
+          <vxe-button status="danger" content="危险禁用颜色" disabled></vxe-button>
         </p>
 
         <p>
-          <vxe-button loading>默认颜色</vxe-button>
-          <vxe-button status="primary" loading>主要颜色</vxe-button>
-          <vxe-button status="success" loading>成功颜色</vxe-button>
-          <vxe-button status="info" loading>信息颜色</vxe-button>
-          <vxe-button status="warning" loading>警告颜色</vxe-button>
-          <vxe-button status="danger" loading>危险颜色</vxe-button>
+          <vxe-button content="默认颜色" loading></vxe-button>
+          <vxe-button status="primary" content="主要颜色" loading></vxe-button>
+          <vxe-button status="success" content="成功颜色" loading></vxe-button>
+          <vxe-button status="info" content="信息颜色" loading></vxe-button>
+          <vxe-button status="warning" content="警告颜色" loading></vxe-button>
+          <vxe-button status="danger" content="危险颜色" loading></vxe-button>
         </p>
 
         <p>
@@ -350,7 +342,7 @@ export default {
             <template v-slot>主要颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
-              <vxe-button type="text">下拉按钮2</vxe-button>
+              <vxe-button type="text" status="primary">下拉按钮2</vxe-button>
               <vxe-button type="text">下拉按钮3</vxe-button>
             </template>
           </vxe-button>
@@ -358,7 +350,7 @@ export default {
             <template v-slot>成功颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
-              <vxe-button type="text">下拉按钮2</vxe-button>
+              <vxe-button type="text" status="success">下拉按钮2</vxe-button>
               <vxe-button type="text">下拉按钮3</vxe-button>
             </template>
           </vxe-button>
@@ -366,7 +358,7 @@ export default {
             <template v-slot>信息颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
-              <vxe-button type="text">下拉按钮2</vxe-button>
+              <vxe-button type="text" status="my-purple">下拉按钮2</vxe-button>
               <vxe-button type="text">下拉按钮3</vxe-button>
             </template>
           </vxe-button>
@@ -374,7 +366,7 @@ export default {
             <template v-slot>警告颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
-              <vxe-button type="text">下拉按钮2</vxe-button>
+              <vxe-button type="text" status="warning">下拉按钮2</vxe-button>
               <vxe-button type="text">下拉按钮3</vxe-button>
             </template>
           </vxe-button>
@@ -382,7 +374,7 @@ export default {
             <template v-slot>危险颜色</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
-              <vxe-button type="text">下拉按钮2</vxe-button>
+              <vxe-button type="text" status="danger">下拉按钮2</vxe-button>
               <vxe-button type="text">下拉按钮3</vxe-button>
             </template>
           </vxe-button>

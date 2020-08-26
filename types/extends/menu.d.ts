@@ -1,5 +1,5 @@
 import { VXETableModule } from '../component'
-import { ColumnCellRenderParams } from '../column'
+import { ColumnCellRenderParams } from './renderer'
 
 /**
  * 快捷菜单

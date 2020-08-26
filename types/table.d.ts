@@ -1,6 +1,6 @@
-import { VXETableModule } from './component'
-import { ColumnOptions, ColumnInfo, ColumnCellRenderParams } from './column'
-import { RenderParams, RenderOptions } from './extends/renderer'
+import { VXETableModule, RowInfo, RecordInfo } from './component'
+import { ColumnOptions, ColumnInfo } from './column'
+import { ColumnCellRenderParams, EmptyRender } from './extends/renderer'
 import { ExportOptons, ImportOptons, PrintOptons, ReadFileOptions } from './extends/export'
 import { ColumnFilterOption } from './extends/filter'
 import { ColumnEditRule, ColumnEditValidErrMapParams } from './extends/validator'
@@ -276,19 +276,19 @@ export declare class Table extends VXETableModule {
    * 加载数据
    * @param data 数据
    */
-  loadData(data: any[]): Promise<any>;
+  loadData(data: RecordInfo[]): Promise<any>;
   /**
    * 加载数据并恢复到初始状态
    * @param data 数据
    */
-  reloadData(data: any[]): Promise<any>;
+  reloadData(data: RecordInfo[]): Promise<any>;
   /**
    * 局部加载行数据并恢复到初始状态
    * @param rows 行对象
    * @param record 新数据
    * @param field 指定字段名
    */
-  reloadRow(rows: any, record?: any, field?: string): Promise<any>;
+  reloadRow(rows: RowInfo | RowInfo[], record?: RecordInfo, field?: string): Promise<any>;
   /**
    * 加载列配置
    * @param columns 列对象
@@ -305,10 +305,10 @@ export declare class Table extends VXETableModule {
    */
   getRowNode(trElem: HTMLElement): {
     rowid: string;
-    item: any;
-    items: any[];
+    item: RowInfo;
+    items: RowInfo[];
     index: number;
-    parent: any;
+    parent?: RowInfo;
   };
   /**
    * 根据 th/td 元素获取对应的 column 信息
@@ -319,23 +319,23 @@ export declare class Table extends VXETableModule {
     item: ColumnInfo;
     items: ColumnInfo[];
     index: number;
-    parent: ColumnInfo;
+    parent?: ColumnInfo;
   };
   /**
    * 根据 row 获取相对于 data 中的索引
    * @param row 行对象
    */
-  getRowIndex(row: any): number;
+  getRowIndex(row: RowInfo): number;
   /**
    * 根据 row 获取相对于当前数据中的索引
    * @param row 行对象
    */
-  _getRowIndex(row: any): number;
+  _getRowIndex(row: RowInfo): number;
   /**
    * 根据 row 获取渲染中的虚拟索引
    * @param row 行对象
    */
-  $getRowIndex(row: any): number;
+  $getRowIndex(row: RowInfo): number;
   /**
    * 根据 column 获取相对于 columns 中的索引
    * @param column 列对象
@@ -369,23 +369,23 @@ export declare class Table extends VXETableModule {
    * @param rows 指定行
    * @param field 字段名
    */
-  revertData(rows?: any, field?: string): Promise<any>;
+  revertData(rows?: RowInfo | RowInfo[], field?: string): Promise<any>;
   /**
    * 手动清空单元格内容，如果不传参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容
    * @param rows 指定行
    * @param field 字段名
    */
-  clearData(rows?: any, field?: string): Promise<any>;
+  clearData(rows?: RowInfo | RowInfo[], field?: string): Promise<any>;
   /**
    * 用于 edit-config，判断行是否为新增的临时数据
    * @param row 指定行
    */
-  isInsertByRow(row: any): boolean;
+  isInsertByRow(row: RowInfo): boolean;
   /**
    * 只对 keep-source 开启有效，判断行数据是否发生改变
    * @param row 指定行
    */
-  isUpdateByRow(row: any): boolean;
+  isUpdateByRow(row: RowInfo): boolean;
   /**
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
@@ -415,25 +415,25 @@ export declare class Table extends VXETableModule {
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
-  getData(rowIndex?: number): any;
+  getData(rowIndex?: number): RowInfo[];
   /**
    * 用于 type=checkbox，获取已选中的行数据
    */
-  getCheckboxRecords(): any[];
+  getCheckboxRecords(): RowInfo[];
   /**
    * 根据行的唯一主键获取行
    * @param rowid 行主键
    */
-  getRowById(rowid: string | number): any;
+  getRowById(rowid: string | number): RowInfo;
   /**
    * 获取当前表格的数据
    * 完整的全量表体数据、处理条件之后的全量表体数据、当前渲染中的表体数据、当前渲染中的表尾数据
    */
   getTableData(): {
-    fullData: any[];
-    visibleData: any[];
-    tableData: any[];
-    footerData: any[][];
+    fullData: RowInfo[];
+    visibleData: RowInfo[];
+    tableData: RowInfo[];
+    footerData: RowInfo[][];
   };
   /**
    * 隐藏指定列
@@ -475,7 +475,7 @@ export declare class Table extends VXETableModule {
    * @param rows 指定行
    * @param checked 是否选中
    */
-  setCheckboxRow(rows: any, checked: boolean): Promise<any>;
+  setCheckboxRow(rows: RowInfo | RowInfo[], checked: boolean): Promise<any>;
   /**
    * 用于 type=checkbox，判断复选行是否被全部选中
    */
@@ -484,12 +484,12 @@ export declare class Table extends VXETableModule {
    * 用于 type=checkbox，判断复选行数据是否勾选
    * @param row 指定行
    */
-  isCheckedByCheckboxRow(row: any): boolean;
+  isCheckedByCheckboxRow(row: RowInfo): boolean;
   /**
    * 用于 type=checkbox，切换某一行的选中状态
    * @param row 指定行
    */
-  toggleCheckboxRow(row: any): Promise<any>;
+  toggleCheckboxRow(row: RowInfo): Promise<any>;
   /**
    * 用于 type=checkbox，设置所有行的选中状态
    * @param checked 是否选中
@@ -498,7 +498,7 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 radio-config.reserve，获取已保留选中的行数据
    */
-  getRadioReserveRecord(): any[];
+  getRadioReserveRecord(): RowInfo[];
   /**
    * 用于 radio-config.reserve，手动清空用户保留选中的行数据
    */
@@ -506,11 +506,11 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 checkbox-config.reserve，获取已保留选中的行数据
    */
-  getCheckboxReserveRecords(): any[];
+  getCheckboxReserveRecords(): RowInfo[];
   /**
    * 用于 type=checkbox，获取半选状态的行数据
    */
-  getCheckboxIndeterminateRecords(): any[]
+  getCheckboxIndeterminateRecords(): RowInfo[]
   /**
    * 用于 checkbox-config.reserve，手动清空用户保留选中的行数据
    */
@@ -527,17 +527,17 @@ export declare class Table extends VXETableModule {
    * 用于 highlight-current-row，设置某一行为高亮状态
    * @param row 指定行
    */
-  setCurrentRow(row: any): Promise<any>;
+  setCurrentRow(row: RowInfo): Promise<any>;
   /**
    * 用于 type=radio，判断单选行数据是否勾选
    * @param row 指定行
    */
-  isCheckedByRadioRow(row: any): boolean;
+  isCheckedByRadioRow(row: RowInfo): boolean;
   /**
    * 用于 type=radio，设置某一行为选中状态
    * @param row 指定行
    */
-  setRadioRow(row: any): Promise<any>;
+  setRadioRow(row: RowInfo): Promise<any>;
   /**
    * 手动清除临时合并的单元格
    */
@@ -569,11 +569,11 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 highlight-current-row，获取当前行的行数据
    */
-  getCurrentRecord(): any;
+  getCurrentRecord(): RowInfo;
   /**
    * 用于 type=radio，获取当已选中的行数据
    */
-  getRadioRecord(): any;
+  getRadioRecord(): RowInfo;
   /**
    * 用于 highlight-current-column，设置某列行为高亮状态
    * @param column 列对象
@@ -610,7 +610,7 @@ export declare class Table extends VXETableModule {
    * 用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成
    * @param row 指定行
    */
-  isRowExpandLoaded(row: any): boolean;
+  isRowExpandLoaded(row: RowInfo): boolean;
   /**
    * 用于 expand-config.lazy，手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
@@ -619,12 +619,12 @@ export declare class Table extends VXETableModule {
    * 用于懒加载展开行，重新加载展开行的内容
    * @param rows 指定行
    */
-  reloadExpandContent(rows: any[]): Promise<any>;
+  reloadExpandContent(rows: RowInfo | RowInfo[]): Promise<any>;
   /**
    * 用于 type=expand，切换展开行的状态
    * @param row 指定行
    */
-  toggleRowExpand(row: any): Promise<any>;
+  toggleRowExpand(row: RowInfo): Promise<any>;
   /**
    * 用于 expand-config，设置所有行的展开与否
    * 如果是关闭所有行，可以使用 clearRowExpand 快速清除
@@ -636,12 +636,12 @@ export declare class Table extends VXETableModule {
    * @param rows 指定行
    * @param checked 是否选中
    */
-  setRowExpand(rows: any, checked: boolean): Promise<any>;
+  setRowExpand(rows: RowInfo | RowInfo[], checked: boolean): Promise<any>;
   /**
    * 用于 expand-config，判断行是否为展开状态
    * @param row 指定行
    */
-  isExpandByRow(row: any): boolean;
+  isExpandByRow(row: RowInfo): boolean;
   /**
    * 用于 type=expand，手动清空展开行状态，数据会恢复成未展开的状态
    */
@@ -649,16 +649,16 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 expand-config，用于展开行，获取已展开的行数据
    */
-  getRowExpandRecords(): any[];
+  getRowExpandRecords(): RowInfo[];
   /**
    * 用于 tree-config，用于树表格，获取已展开的节点
    * 注意，即使父节点被收起，只要该节点还处于展开状态都能获取到
    */
-  getTreeExpandRecords(): any[];
+  getTreeExpandRecords(): RowInfo[];
   /**
    * 用于 tree-config.lazy，用于懒加载树表格，判断树节点是否懒加载完成
    */
-  isTreeExpandLoaded(row: any): boolean;
+  isTreeExpandLoaded(row: RowInfo): boolean;
   /**
    * 用于 tree-config.lazy，手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
@@ -667,12 +667,12 @@ export declare class Table extends VXETableModule {
    * 用于懒加载树表格，重新加载子节点
    * @param rows 指定行
    */
-  reloadTreeChilds(rows: any[]): Promise<any>;
+  reloadTreeChilds(rows: RowInfo | RowInfo[]): Promise<any>;
   /**
    * 用于 tree-config，切换展开树形节点的状态
    * @param row 指定行
    */
-  toggleTreeExpand(row: any): Promise<any>;
+  toggleTreeExpand(row: RowInfo): Promise<any>;
   /**
    * 用于 tree-config，设置所有树节点的展开与否
    * 如果是关闭所有树节点，可以使用 clearTreeExpand 快速清除
@@ -684,12 +684,12 @@ export declare class Table extends VXETableModule {
    * @param rows 指定行
    * @param checked 是否选中
    */
-  setTreeExpand(rows: any, checked: boolean): Promise<any>;
+  setTreeExpand(rows: RowInfo | RowInfo, checked: boolean): Promise<any>;
   /**
    * 用于 tree-config，判断行是否为树形节点展开状态
    * @param row 指定行
    */
-  isTreeExpandByRow(row: any): boolean;
+  isTreeExpandByRow(row: RowInfo): boolean;
   /**
    * 用于 tree-config，手动清空树形节点的展开状态，数据会恢复成未展开的状态
    */
@@ -713,7 +713,7 @@ export declare class Table extends VXETableModule {
    * 如果有滚动条，则滚动到对应的行
    * @param row 指定行
    */
-  scrollToRow(row: any): Promise<any>;
+  scrollToRow(row: RowInfo): Promise<any>;
   /**
    * 如果有滚动条，则滚动到对应的列
    * @param column 列对象
@@ -729,11 +729,11 @@ export declare class Table extends VXETableModule {
   updateFooter(): Promise<any>;
   /**
    * 更新单元格状态
-   * @param scope 插槽对象
+   * @param params 插槽对象
    */
   updateStatus(
-    scope: {
-      row: any;
+    params: {
+      row: RowInfo;
       column: ColumnInfo;
     }
   ): Promise<any>;
@@ -758,7 +758,7 @@ export declare class Table extends VXETableModule {
    * 用于 mouse-config.selected，获取选中的单元格信息
    */
   getSelectedCell(): {
-    row: any;
+    row: RowInfo;
     column: ColumnInfo;
   };
   /**
@@ -789,30 +789,30 @@ export declare class Table extends VXETableModule {
    * 往表格插入临时数据，从第一行新增一行或多行新数据
    * @param records 新数据
    */
-  insert(records: any): Promise<{ row: any, rows: any[] }>;
+  insert(records: RecordInfo | RecordInfo[]): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
    * 往表格插入临时数据，从指定位置插入一行或多行；第二个参数：row 指定位置、null从第一行插入、-1 从最后插入
    * @param records 新数据
    * @param row 指定行
    */
-  insertAt(records: any, row: any): Promise<{ row: any, rows: any[] }>;
+  insertAt(records: RecordInfo | RecordInfo[], row: RowInfo): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
    * 删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据
    * @param rows 指定行
    */
-  remove(rows?: any): Promise<{ row: any, rows: any[] }>;
+  remove(rows?: RowInfo | RowInfo[]): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
    * 删除复选框选中的行数据
    */
-  removeCheckboxRow(): Promise<{ row: any, rows: any[] }>;
+  removeCheckboxRow(): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
    * 删除单选框选中的行数据
    */
-  removeRadioRow(): Promise<{ row: any, rows: any[] }>;
+  removeRadioRow(): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
    * 删除当前行选中的行数据
    */
-  removeCurrentRow(): Promise<{ row: any, rows: any[] }>;
+  removeCurrentRow(): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
    * 取消单元格的临时合并状态，如果为数组，则取消多个合并
    */
@@ -826,22 +826,22 @@ export declare class Table extends VXETableModule {
    * 获取新增、删除、更改的数据
    */
   getRecordset(): {
-    insertRecords: any[];
-    removeRecords: any[];
-    updateRecords: any[];
+    insertRecords: RowInfo[];
+    removeRecords: RowInfo[];
+    updateRecords: RowInfo[];
   };
   /**
    * 用于 edit-config，获取新增的临时数据
    */
-  getInsertRecords(): any[];
+  getInsertRecords(): RowInfo[];
   /**
    * 获取已删除的数据
    */
-  getRemoveRecords(): any[];
+  getRemoveRecords(): RowInfo[];
   /**
    * 用于 edit-config，获取已修改的数据
    */
-  getUpdateRecords(): any[];
+  getUpdateRecords(): RowInfo[];
   /**
    * 手动清除单元格激活状态
    */
@@ -854,7 +854,7 @@ export declare class Table extends VXETableModule {
    * 用于 edit-config，获取已激活的行数据
    */
   getActiveRecord(): {
-    row: any;
+    row: RowInfo;
     rowIndex: number;
     $rowIndex: number;
     column: ColumnInfo;
@@ -866,24 +866,24 @@ export declare class Table extends VXETableModule {
    * 用于 edit-config，判断行是否为激活编辑状态
    * @param row 指定行
    */
-  isActiveByRow(row: any): boolean;
+  isActiveByRow(row: RowInfo): boolean;
   /**
    * 用于 edit-config，激活行编辑，如果是 mode=cell 则默认激活第一个单元格
    * @param row 指定行
    */
-  setActiveRow(row: any): Promise<any>;
+  setActiveRow(row: RowInfo): Promise<any>;
   /**
    * 用于 edit-config，激活单元格编辑
    * @param row 指定行
    * @param field 字段名
    */
-  setActiveCell(row: any, field: string): Promise<any>;
+  setActiveCell(row: RowInfo, field: string): Promise<any>;
   /**
    * 用于 mouse-config.mouse-config，选中某个单元格
    * @param row 指定行
    * @param field 字段名
    */
-  setSelectCell(row: any, field: string): Promise<any>;
+  setSelectCell(row: RowInfo, field: string): Promise<any>;
   /**
    * 用于 mouse-config.area，选取指定区域的单元格
    * @param areas 指定区域
@@ -911,13 +911,13 @@ export declare class Table extends VXETableModule {
    * @param rows 指定行
    * @param callback 回调函数
    */
-  fullValidate(rows?: any, callback?: (errMap: ColumnEditValidErrMapParams) => void): Promise<ColumnEditValidErrMapParams>;
+  fullValidate(rows?: boolean | RowInfo | RowInfo[], callback?: (errMap: ColumnEditValidErrMapParams) => void): Promise<ColumnEditValidErrMapParams>;
   /**
    * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；如果第一个参数为 true 则校验当前表格数据，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
    * @param rows 指定行
    * @param callback 回调函数
    */
-  validate(rows?: any, callback?: (errMap?: ColumnEditValidErrMapParams) => void): Promise<ColumnEditValidErrMapParams>;
+  validate(rows?: boolean | RowInfo | RowInfo[], callback?: (errMap?: ColumnEditValidErrMapParams) => void): Promise<ColumnEditValidErrMapParams>;
   /**
    * 打开高级导出
    * @param options 参数
@@ -1008,7 +1008,7 @@ export interface RadioConfig {
   reserve?: boolean;
   labelField?: string;
   checkRowKey?: string | number;
-  checkMethod?(params: { row: any }): boolean;
+  checkMethod?(params: { row: RowInfo }): boolean;
   trigger?: 'default' | 'cell' | 'row';
   highlight?: boolean;
 }
@@ -1025,7 +1025,7 @@ export interface CheckboxConfig {
   checkRowKeys?: string[] | number[];
   checkStrictly?: boolean;
   strict?: boolean;
-  checkMethod?(params: { row: any }): boolean;
+  checkMethod?(params: { row: RowInfo }): boolean;
   trigger?: 'default' | 'cell' | 'row';
   highlight?: boolean;
   range?: boolean;
@@ -1039,7 +1039,7 @@ export interface TooltipConfig {
   theme?: 'dark' | 'light';
   enterable?: boolean;
   leaveDelay?: number;
-  contentMethod?(params: { items: any[], row: any, rowIndex: number, $rowIndex: number, column: ColumnInfo, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
+  contentMethod?(params: { items: any[], row: RowInfo, rowIndex: number, $rowIndex: number, column: ColumnInfo, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
 }
 
 /**
@@ -1052,9 +1052,9 @@ export interface ExpandConfig {
   accordion?: boolean;
   trigger?: 'default' | 'cell' | 'row';
   lazy?: boolean;
-  loadMethod?(params: { row: any, rowIndex: number, $rowIndex: number }): Promise<any>;
-  toggleMethod?(params: { expanded: boolean, row: any, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
-  visibleMethod?(params: { expanded: boolean, row: any, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
+  loadMethod?(params: { row: RowInfo, rowIndex: number, $rowIndex: number }): Promise<any>;
+  toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
+  visibleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   iconOpen?: string;
   iconClose?: string;
   iconLoaded?: string;
@@ -1073,8 +1073,8 @@ export interface TreeConfig {
   trigger?: 'default' | 'cell' | 'row';
   lazy?: boolean;
   hasChild?: string;
-  loadMethod?(params: { row: any }): Promise<any[]>;
-  toggleMethod?(params: { expanded: boolean, row: any, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
+  loadMethod?(params: { row: RowInfo }): Promise<any[]>;
+  toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   iconOpen?: string;
   iconClose?: string;
   iconLoaded?: string;
@@ -1088,7 +1088,7 @@ export interface ContextMenuConfig {
   body?: MenuOptions;
   footer?: MenuOptions;
   trigger?: 'default' | 'cell';
-  visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnInfo[], row?: any, rowIndex?: number, column?: ColumnInfo, columnIndex?: number }): boolean;
+  visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnInfo[], row?: RowInfo, rowIndex?: number, column?: ColumnInfo, columnIndex?: number }): boolean;
   className?: string;
 }
 
@@ -1105,7 +1105,7 @@ export interface MouseConfig {
 
 export interface MouseCellArea {
   main: boolean;
-  rows: any[];
+  rows: RowInfo[];
   cols: ColumnInfo[];
   top: number;
   left: number;
@@ -1117,13 +1117,13 @@ export interface CellAreaOptions {
   main: boolean;
   startColumn: ColumnInfo;
   endColumn: ColumnInfo;
-  startRow: any;
-  endRow: any;
+  startRow: RowInfo;
+  endRow: RowInfo;
   [key: string]: any;
 }
 
 export interface MergeOptions {
-  row: any | number;
+  row: RowInfo | number;
   col: ColumnInfo | number;
   rowspan: number;
   colspan: number;
@@ -1139,7 +1139,7 @@ export interface MergeItem {
 
 export interface ActiveCellAreaOptions {
   column: ColumnInfo;
-  row: any;
+  row: RowInfo;
   [key: string]: any;
 }
 
@@ -1182,7 +1182,7 @@ export interface KeyboardConfig {
   /**
    * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
    */
-  editMethod?(params: { row: any, rowIndex: number, column: ColumnInfo, columnIndex: number, cell: HTMLElement }): boolean;
+  editMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number, cell: HTMLElement }): boolean;
 }
 
 /**
@@ -1197,7 +1197,7 @@ export interface EditConfig {
   /**
    * 该方法的返回值用来决定该单元格是否允许编辑
    */
-  activeMethod?(params: { row: any, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
+  activeMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
 }
 
 /**
@@ -1215,17 +1215,3 @@ export interface ValidConfig {
 export interface EditVaildRules {
   [field: string]: ColumnEditRule[];
 }
-
-/**
- * 空内容渲染配置项
- */
-export class EmptyRender extends RenderOptions { }
-
-export class TableRenderParams extends RenderParams {
-  /**
-   * 表格实例对象
-   */
-  $table: Table;
-}
-
-export class EmptyRenderParams extends TableRenderParams { }
