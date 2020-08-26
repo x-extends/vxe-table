@@ -743,6 +743,9 @@ export default {
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
+    if (this.mouseOpts.area && !this.handleUpdateCellAreas) {
+      return UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+    }
     if (mouseOpts.checked && mouseOpts.area) {
       UtilTools.error('vxe.error.errProp', ['mouse-config.checked', 'mouse-config.area'])
     }

@@ -18,6 +18,7 @@ export default {
       notFunc: 'method "{{0}}" はありません',
       notSlot: 'slot "{{0}}" はありません',
       noTree: 'Tree structureは "{{0}}" をサポートしていません',
+      notProp: 'サポートされていないパラメータ "{{0}}"',
       delFunc: '"{{0}}" functionは非推奨です、"{{1}}"を使用してください',
       delProp: '"{{0}}" propertyは非推奨です、"{{1}}"を使用してください',
       delEvent: 'イベント "{{0}}" は廃止されました。 "{{1}}" を使用してください',
