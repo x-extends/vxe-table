@@ -331,15 +331,15 @@ export default {
       return Math.max(Math.ceil(total / size), 1)
     },
     prevPage () {
-      const currentPage = this.currentPage
+      const { currentPage, pageCount } = this
       if (currentPage > 1) {
-        this.jumpPage(Math.max(currentPage - 1, 1))
+        this.jumpPage(Math.min(pageCount, Math.max(currentPage - 1, 1)))
       }
     },
     nextPage () {
       const { currentPage, pageCount } = this
       if (currentPage < pageCount) {
-        this.jumpPage(Math.min(currentPage + 1, pageCount))
+        this.jumpPage(Math.min(pageCount, currentPage + 1))
       }
     },
     prevJump () {

@@ -23,6 +23,7 @@
       :data="tableData"
       :mouse-config="{selected: true}"
       :checkbox-config="{range: true}"
+      :context-menu="tableMenu"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -68,6 +69,17 @@ export default {
   data () {
     return {
       tableData: [],
+      tableMenu: {
+        body: {
+          options: [
+            [
+              { code: 'copy', name: '复制', prefixIcon: 'fa fa-copy', disabled: false },
+              { code: 'remove', name: '删除', disabled: false },
+              { code: 'save', name: '保存', prefixIcon: 'fa fa-save', disabled: false }
+            ]
+          ]
+        }
+      },
       demoCodes: [
         `
         <vxe-toolbar>
@@ -87,6 +99,7 @@ export default {
           :data="tableData"
           :mouse-config="{selected: true}"
           :checkbox-config="{range: true}"
+          :context-menu="tableMenu"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -101,7 +114,18 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [],
+              tableMenu: {
+                body: {
+                  options: [
+                    [
+                      { code: 'copy', name: '复制', prefixIcon: 'fa fa-copy', disabled: false },
+                      { code: 'remove', name: '删除', disabled: false },
+                      { code: 'save', name: '保存', prefixIcon: 'fa fa-save', disabled: false }
+                    ]
+                  ]
+                }
+              }
             }
           },
           created () {

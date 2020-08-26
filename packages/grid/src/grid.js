@@ -416,17 +416,20 @@ export default {
       })
     },
     initPages () {
-      if (this.pagerConfig && this.pagerOpts.pageSize) {
-        this.tablePage.pageSize = this.pagerOpts.pageSize
+      const { tablePage, pagerConfig, pagerOpts } = this
+      const { currentPage, pageSize } = pagerOpts
+      if (pagerConfig) {
+        if (currentPage) {
+          tablePage.currentPage = currentPage
+        }
+        if (pageSize) {
+          tablePage.pageSize = pageSize
+        }
       }
     },
     initProxy () {
       const { proxyInited, proxyConfig, proxyOpts, formConfig, formOpts } = this
       if (proxyConfig) {
-        if (!proxyInited && proxyOpts.autoLoad !== false) {
-          this.proxyInited = true
-          this.$nextTick(() => this.commitProxy('reload'))
-        }
         if (formConfig && proxyOpts.form && formOpts.items) {
           const formData = {}
           formOpts.items.forEach(({ field, itemRender }) => {
@@ -436,7 +439,28 @@ export default {
           })
           this.formData = formData
         }
+        if (!proxyInited && proxyOpts.autoLoad !== false) {
+          this.proxyInited = true
+          this.$nextTick(() => this.initLoad())
+        }
       }
+    },
+    initLoad () {
+      const { $refs } = this
+      const $xetable = $refs.xTable
+      const defaultSort = $xetable.sortOpts.defaultSort
+      let sortParams = {}
+      // 如果使用默认排序
+      if (defaultSort) {
+        sortParams = {
+          property: defaultSort.field,
+          order: defaultSort.order
+        }
+      }
+      this.sortData = sortParams
+      this.filterData = []
+      this.pendingRecords = []
+      this.commitProxy('query')
     },
     handleGlobalKeydownEvent (evnt) {
       const isEsc = evnt.keyCode === 27
