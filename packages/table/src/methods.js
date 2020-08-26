@@ -1790,7 +1790,7 @@ const Methods = {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
-        const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
+        const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
         const { selected, actived } = editStore
         const keyCode = evnt.keyCode
         const isBack = keyCode === 8
@@ -1805,6 +1805,7 @@ const Methods = {
         const isDel = keyCode === 46
         const isA = keyCode === 65
         const isF2 = keyCode === 113
+        const isContextMenu = keyCode === 93
         const isCtrlKey = evnt.ctrlKey
         const isShiftKey = evnt.shiftKey
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
@@ -1820,7 +1821,7 @@ const Methods = {
           }
         } else if (keyboardConfig && this.mouseConfig && this.mouseOpts.area && this.handleKeyboardEvent) {
           this.handleKeyboardEvent(evnt)
-        } if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
+        } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
           // 在 v3.0 中废弃 type=selection
           // 空格键支持选中复选框
           evnt.preventDefault()
@@ -1849,6 +1850,13 @@ const Methods = {
             evnt.preventDefault()
             this.handleActived(selected.args, evnt)
           }
+        } else if (isContextMenu) {
+          // 如果按下上下文键
+          this._keyCtx = selected.row && selected.column && bodyCtxMenu.length
+          clearTimeout(this.keyCtxTimeout)
+          this.keyCtxTimeout = setTimeout(() => {
+            this._keyCtx = false
+          }, 1000)
         } else if (isEnter && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
           // 退出选中
           if (isCtrlKey) {
