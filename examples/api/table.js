@@ -1727,15 +1727,15 @@ const apis = [
           //   defVal: 'false',
           //   list: []
           // },
-          // {
-          //   name: 'enterToTab',
-          //   desc: '用于 mouse-config.area，是否将回车键行为改成 Tab 键行为',
-          //   version: 'pro',
-          //   type: 'Boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
-          // },
+          {
+            name: 'enterToTab',
+            desc: '用于 mouse-config.area，是否将回车键行为改成 Tab 键行为',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
           {
             name: 'editMethod',
             desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({ row, rowIndex, column, columnIndex }) 可以返回 false 来阻止默认行为',

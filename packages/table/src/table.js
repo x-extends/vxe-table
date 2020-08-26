@@ -657,6 +657,9 @@ export default {
     if (this.treeConfig && this.checkboxOpts.range) {
       UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
     }
+    if (this.mouseOpts.area && !this.handleUpdateCellAreas) {
+      return UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+    }
     if (this.treeConfig && this.mouseOpts.area) {
       UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
     }

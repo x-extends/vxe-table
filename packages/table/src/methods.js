@@ -120,32 +120,21 @@ function computeVirtualY (_vm) {
   return { rowHeight: 0, visibleSize: 8 }
 }
 
-function handleMergerXOffserIndex (list, offsetItem) {
-  const { startIndex, endIndex } = offsetItem
+function calculateMergerOffserIndex (list, offsetItem, type) {
   for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
     const mergeItem = list[mcIndex]
-    const { col: mergeColIndex, colspan: mergeColspan } = mergeItem
-    const mergeEndColIndex = mergeColIndex + mergeColspan
-    if (mergeColIndex < startIndex && startIndex <= mergeEndColIndex) {
-      offsetItem.startIndex = mergeColIndex
+    const { startIndex, endIndex } = offsetItem
+    const mergeStartIndex = mergeItem[type]
+    const mergeSpanNumber = mergeItem[type + 'span']
+    const mergeEndIndex = mergeStartIndex + mergeSpanNumber
+    if (mergeStartIndex < startIndex && startIndex < mergeEndIndex) {
+      offsetItem.startIndex = mergeStartIndex
     }
-    if (mergeColIndex < endIndex && endIndex <= mergeEndColIndex) {
-      offsetItem.endIndex = mergeEndColIndex
+    if (mergeStartIndex < endIndex && endIndex < mergeEndIndex) {
+      offsetItem.endIndex = mergeEndIndex
     }
-  }
-}
-
-function handleMergerYOffserIndex (list, offsetItem) {
-  const { startIndex, endIndex } = offsetItem
-  for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
-    const mergeItem = list[mcIndex]
-    const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
-    const mergeEndRowIndex = mergeRowIndex + mergeRowspan
-    if (mergeRowIndex < startIndex && startIndex <= mergeEndRowIndex) {
-      offsetItem.startIndex = mergeRowIndex
-    }
-    if (mergeRowIndex < endIndex && endIndex <= mergeEndRowIndex) {
-      offsetItem.endIndex = mergeEndRowIndex
+    if (offsetItem.startIndex !== startIndex || offsetItem.endIndex !== endIndex) {
+      mcIndex = -1
     }
   }
 }
@@ -344,7 +333,7 @@ const Methods = {
       this.isLoadData = true
       this.handleReserveStatus()
       this.checkSelectionStatus()
-      return this.$nextTick().then(this.recalculate).then(this.refreshScroll)
+      return this.$nextTick().then(() => this.recalculate()).then(() => this.refreshScroll())
     })
   },
   /**
@@ -1797,7 +1786,7 @@ const Methods = {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
-        const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
+        const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
         const { selected, actived } = editStore
         const keyCode = evnt.keyCode
         const isBack = keyCode === 8
@@ -1811,6 +1800,7 @@ const Methods = {
         const isDwArrow = keyCode === 40
         const isDel = keyCode === 46
         const isF2 = keyCode === 113
+        const isContextMenu = keyCode === 93
         const isCtrlKey = evnt.ctrlKey
         const isShiftKey = evnt.shiftKey
         const isAltKey = evnt.altKey
@@ -1854,6 +1844,13 @@ const Methods = {
             evnt.preventDefault()
             this.handleActived(selected.args, evnt)
           }
+        } else if (isContextMenu) {
+          // 如果按下上下文键
+          this._keyCtx = selected.row && selected.column && bodyCtxMenu.length
+          clearTimeout(this.keyCtxTimeout)
+          this.keyCtxTimeout = setTimeout(() => {
+            this._keyCtx = false
+          }, 1000)
         } else if (isEnter && !isAltKey && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
           // 退出选中
           if (isCtrlKey) {
@@ -1870,9 +1867,17 @@ const Methods = {
             // 如果是激活状态，退则出到上一行/下一行
             if (selected.row || actived.row) {
               if (isShiftKey) {
-                this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, true, isRightArrow, false, evnt)
+                if (keyboardConfig.enterToTab) {
+                  this.moveTabSelected(selected.args, isShiftKey, evnt)
+                } else {
+                  this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, true, isRightArrow, false, evnt)
+                }
               } else {
-                this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, false, isRightArrow, true, evnt)
+                if (keyboardConfig.enterToTab) {
+                  this.moveTabSelected(selected.args, isShiftKey, evnt)
+                } else {
+                  this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, false, isRightArrow, true, evnt)
+                }
               }
             } else if (treeConfig && highlightCurrentRow && currentRow) {
               // 如果是树形表格当前行回车移动到子节点
@@ -3312,15 +3317,15 @@ const Methods = {
     const { mergeList, mergeFooterList, scrollXStore } = this
     const { startIndex, endIndex, offsetSize } = scrollXStore
     const { toVisibleIndex, visibleSize } = computeVirtualX(this)
+    const offsetItem = {
+      startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
+      endIndex: toVisibleIndex + visibleSize + offsetSize
+    }
+    calculateMergerOffserIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
+    const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
+    scrollXStore.startIndex = offsetStartIndex
+    scrollXStore.endIndex = offsetEndIndex
     if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
-      const offsetItem = {
-        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
-        endIndex: toVisibleIndex + visibleSize + offsetSize
-      }
-      handleMergerXOffserIndex(mergeList.concat(mergeFooterList), offsetItem)
-      const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
-      scrollXStore.startIndex = offsetStartIndex
-      scrollXStore.endIndex = offsetEndIndex
       if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
         this.updateScrollXData()
       }
@@ -3350,15 +3355,15 @@ const Methods = {
     const scrollBodyElem = evnt.target
     const scrollTop = scrollBodyElem.scrollTop
     const toVisibleIndex = Math.floor(scrollTop / rowHeight)
+    const offsetItem = {
+      startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
+      endIndex: toVisibleIndex + visibleSize + offsetSize
+    }
+    calculateMergerOffserIndex(mergeList, offsetItem, 'row')
+    const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
+    scrollYStore.startIndex = offsetStartIndex
+    scrollYStore.endIndex = offsetEndIndex
     if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
-      const offsetItem = {
-        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
-        endIndex: toVisibleIndex + visibleSize + offsetSize
-      }
-      handleMergerYOffserIndex(mergeList, offsetItem)
-      const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
-      scrollYStore.startIndex = offsetStartIndex
-      scrollYStore.endIndex = offsetEndIndex
       if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
         this.updateScrollYData()
       }
@@ -3371,6 +3376,7 @@ const Methods = {
       // 计算 X 逻辑
       if (scrollXLoad) {
         scrollXStore.offsetSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : browse.msie ? 10 : (browse.edge ? 5 : 0)
+        scrollXStore.endIndex = Math.max(scrollXStore.visibleSize, scrollXStore.endIndex)
         this.updateScrollXData()
       } else {
         this.updateScrollXSpace()
@@ -3381,6 +3387,7 @@ const Methods = {
         scrollYStore.offsetSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : browse.msie ? 20 : (browse.edge ? 10 : 0)
         scrollYStore.visibleSize = visibleSize
         scrollYStore.rowHeight = rowHeight
+        scrollYStore.endIndex = Math.max(visibleSize, scrollYStore.endIndex)
         this.updateScrollYData()
       } else {
         this.updateScrollYSpace()
@@ -3668,9 +3675,11 @@ const Methods = {
     }
   },
   updateCellAreas () {
-    if (this.mouseConfig && this.mouseOpts.area && this.handleUpdateCellAreas) {
-      this.handleUpdateCellAreas()
-    }
+    this.recalculate().then(() => this.refreshScroll()).then(() => {
+      if (this.mouseConfig && this.mouseOpts.area && this.handleUpdateCellAreas) {
+        this.handleUpdateCellAreas()
+      }
+    })
   },
   emitEvent (type, params, evnt) {
     this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))

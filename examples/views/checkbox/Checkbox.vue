@@ -4,29 +4,29 @@
     <p class="tip">复选框、复选组</p>
 
     <p>
-      <vxe-checkbox v-model="value1">默认尺寸</vxe-checkbox>
-      <vxe-checkbox v-model="value2" size="medium">中等尺寸</vxe-checkbox>
-      <vxe-checkbox v-model="value3" size="small">小型尺寸</vxe-checkbox>
-      <vxe-checkbox v-model="value4" size="mini">超小尺寸</vxe-checkbox>
-      <vxe-checkbox v-model="value5" indeterminate>默认尺寸</vxe-checkbox>
-      <vxe-checkbox v-model="value6" size="medium" indeterminate>中等尺寸</vxe-checkbox>
-      <vxe-checkbox v-model="value7" size="small" indeterminate>小型尺寸</vxe-checkbox>
-      <vxe-checkbox v-model="value8" size="mini" indeterminate>超小尺寸</vxe-checkbox>
+      <vxe-checkbox v-model="value1" content="默认尺寸"></vxe-checkbox>
+      <vxe-checkbox v-model="value2" size="medium" content="中等尺寸"></vxe-checkbox>
+      <vxe-checkbox v-model="value3" size="small" content="小型尺寸"></vxe-checkbox>
+      <vxe-checkbox v-model="value4" size="mini" content="超小尺寸"></vxe-checkbox>
+      <vxe-checkbox v-model="value5" content="默认尺寸" indeterminate></vxe-checkbox>
+      <vxe-checkbox v-model="value6" size="medium" content="中等尺寸" indeterminate></vxe-checkbox>
+      <vxe-checkbox v-model="value7" size="small" content="小型尺寸" indeterminate></vxe-checkbox>
+      <vxe-checkbox v-model="value8" size="mini" content="超小尺寸" indeterminate></vxe-checkbox>
     </p>
 
     <p>
-      <vxe-checkbox v-model="value9">复选1</vxe-checkbox>
-      <vxe-checkbox v-model="value10" disabled>复选2</vxe-checkbox>
-      <vxe-checkbox v-model="value11">复选3</vxe-checkbox>
+      <vxe-checkbox v-model="value9" content="复选1"></vxe-checkbox>
+      <vxe-checkbox v-model="value10" content="复选2" disabled></vxe-checkbox>
+      <vxe-checkbox v-model="value11" content="复选3"></vxe-checkbox>
     </p>
 
     <p>
       <vxe-checkbox-group v-model="value12">
-        <vxe-checkbox label="1">HTML</vxe-checkbox>
-        <vxe-checkbox label="2">CSS</vxe-checkbox>
-        <vxe-checkbox label="3">Javascript</vxe-checkbox>
-        <vxe-checkbox label="4">SASS</vxe-checkbox>
-        <vxe-checkbox label="5">LESS</vxe-checkbox>
+        <vxe-checkbox label="1" content="HTML"></vxe-checkbox>
+        <vxe-checkbox label="2" content="CSS"></vxe-checkbox>
+        <vxe-checkbox label="3" content="Javascript"></vxe-checkbox>
+        <vxe-checkbox label="4" content="SASS"></vxe-checkbox>
+        <vxe-checkbox label="5" content="LESS"></vxe-checkbox>
       </vxe-checkbox-group>
     </p>
 
@@ -68,29 +68,29 @@ export default {
       demoCodes: [
         `
         <p>
-          <vxe-checkbox v-model="value1">默认尺寸</vxe-checkbox>
-          <vxe-checkbox v-model="value2" size="medium">中等尺寸</vxe-checkbox>
-          <vxe-checkbox v-model="value3" size="small">小型尺寸</vxe-checkbox>
-          <vxe-checkbox v-model="value4" size="mini">超小尺寸</vxe-checkbox>
-          <vxe-checkbox v-model="value5" indeterminate>默认尺寸</vxe-checkbox>
-          <vxe-checkbox v-model="value6" size="medium" indeterminate>中等尺寸</vxe-checkbox>
-          <vxe-checkbox v-model="value7" size="small" indeterminate>小型尺寸</vxe-checkbox>
-          <vxe-checkbox v-model="value8" size="mini" indeterminate>超小尺寸</vxe-checkbox>
+          <vxe-checkbox v-model="value1" content="默认尺寸"></vxe-checkbox>
+          <vxe-checkbox v-model="value2" size="medium" content="中等尺寸"></vxe-checkbox>
+          <vxe-checkbox v-model="value3" size="small" content="小型尺寸"></vxe-checkbox>
+          <vxe-checkbox v-model="value4" size="mini" content="超小尺寸"></vxe-checkbox>
+          <vxe-checkbox v-model="value5" content="默认尺寸" indeterminate></vxe-checkbox>
+          <vxe-checkbox v-model="value6" size="medium" content="中等尺寸" indeterminate></vxe-checkbox>
+          <vxe-checkbox v-model="value7" size="small" content="小型尺寸" indeterminate></vxe-checkbox>
+          <vxe-checkbox v-model="value8" size="mini" content="超小尺寸" indeterminate></vxe-checkbox>
         </p>
 
         <p>
-          <vxe-checkbox v-model="value9">复选1</vxe-checkbox>
-          <vxe-checkbox v-model="value10" disabled>复选2</vxe-checkbox>
-          <vxe-checkbox v-model="value11">复选3</vxe-checkbox>
+          <vxe-checkbox v-model="value9" content="复选1"></vxe-checkbox>
+          <vxe-checkbox v-model="value10" content="复选2" disabled></vxe-checkbox>
+          <vxe-checkbox v-model="value11" content="复选3"></vxe-checkbox>
         </p>
 
         <p>
           <vxe-checkbox-group v-model="value12">
-            <vxe-checkbox label="1">HTML</vxe-checkbox>
-            <vxe-checkbox label="2">CSS</vxe-checkbox>
-            <vxe-checkbox label="3">Javascript</vxe-checkbox>
-            <vxe-checkbox label="4">SASS</vxe-checkbox>
-            <vxe-checkbox label="5">LESS</vxe-checkbox>
+            <vxe-checkbox label="1" content="HTML"></vxe-checkbox>
+            <vxe-checkbox label="2" content="CSS"></vxe-checkbox>
+            <vxe-checkbox label="3" content="Javascript"></vxe-checkbox>
+            <vxe-checkbox label="4" content="SASS"></vxe-checkbox>
+            <vxe-checkbox label="5" content="LESS"></vxe-checkbox>
           </vxe-checkbox-group>
         </p>
         `,

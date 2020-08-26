@@ -18,6 +18,7 @@ export default {
       notFunc: 'method "{{0}}" not exist.',
       notSlot: 'slot "{{0}}" does not exist',
       noTree: 'The tree structure does not support "{{0}}".',
+      notProp: 'Unsupported parameters "{{0}}"',
       delFunc: 'The function "{{0}}" is deprecated, please use "{{1}}".',
       delProp: 'The property "{{0}}" is deprecated, please use "{{1}}".',
       delEvent: 'The event "{{0}}" is deprecated, please use "{{1}}"',

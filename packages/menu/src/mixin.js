@@ -52,13 +52,34 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      const { $refs, tId, contextMenu, ctxMenuStore, ctxMenuOpts } = this
+      const { $refs, tId, editStore, contextMenu, ctxMenuStore, ctxMenuOpts, mouseConfig, mouseOpts } = this
+      const { selected } = editStore
       const layoutList = ['header', 'body', 'footer']
       if (contextMenu) {
-        if (ctxMenuStore.visible) {
-          if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
-            evnt.preventDefault()
-            return
+        if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
+          evnt.preventDefault()
+          return
+        }
+        if (this._keyCtx) {
+          const type = 'body'
+          const params = { type, $grid: this.$xegrid, $table: this, keyboard: true, columns: this.visibleColumn.slice(0), $event: evnt }
+          // 如果开启单元格区域
+          if (mouseConfig && mouseOpts.area) {
+            const activeArea = this.getActiveCellArea()
+            if (activeArea && activeArea.row && activeArea.column) {
+              params.row = activeArea.row
+              params.column = activeArea.column
+              this.openContextMenu(evnt, type, params)
+              return
+            }
+          } else if (mouseConfig && mouseOpts.selected) {
+            // 如果启用键盘导航且已选中单元格
+            if (selected.row && selected.column) {
+              params.row = selected.row
+              params.column = selected.column
+              this.openContextMenu(evnt, type, params)
+              return
+            }
           }
         }
         // 分别匹配表尾、内容、表尾的快捷菜单
@@ -116,38 +137,53 @@ export default {
               evnt.preventDefault()
               this.updateZindex()
               const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
-              const top = evnt.clientY + scrollTop
-              const left = evnt.clientX + scrollLeft
-              Object.assign(ctxMenuStore, {
-                args: params,
-                visible: true,
-                list: options,
-                selected: null,
-                selectChild: null,
-                showChild: false,
-                childPos: null,
-                style: {
-                  zIndex: this.tZindex,
-                  top: `${top}px`,
-                  left: `${left}px`
-                }
-              })
-              this.$nextTick(() => {
-                const ctxElem = this.$refs.ctxWrapper.$el
-                const clientHeight = ctxElem.clientHeight
-                const clientWidth = ctxElem.clientWidth
-                const offsetTop = evnt.clientY + clientHeight - visibleHeight
-                const offsetLeft = evnt.clientX + clientWidth - visibleWidth
-                if (offsetTop > -10) {
-                  ctxMenuStore.style.top = `${Math.max(scrollTop + 2, top - clientHeight - 2)}px`
-                }
-                if (offsetLeft > -10) {
-                  ctxMenuStore.style.left = `${Math.max(scrollLeft + 2, left - clientWidth - 2)}px`
-                }
-                if (offsetLeft > -220) {
-                  ctxMenuStore.childPos = 'left'
-                }
-              })
+              let top = evnt.clientY + scrollTop
+              let left = evnt.clientX + scrollLeft
+              const handleVisible = () => {
+                Object.assign(ctxMenuStore, {
+                  args: params,
+                  visible: true,
+                  list: options,
+                  selected: null,
+                  selectChild: null,
+                  showChild: false,
+                  childPos: null,
+                  style: {
+                    zIndex: this.tZindex,
+                    top: `${top}px`,
+                    left: `${left}px`
+                  }
+                })
+                this.$nextTick(() => {
+                  const ctxElem = this.$refs.ctxWrapper.$el
+                  const clientHeight = ctxElem.clientHeight
+                  const clientWidth = ctxElem.clientWidth
+                  const { boundingTop, boundingLeft } = DomTools.getAbsolutePos(ctxElem)
+                  const offsetTop = boundingTop + clientHeight - visibleHeight
+                  const offsetLeft = boundingLeft + clientWidth - visibleWidth
+                  if (offsetTop > -10) {
+                    ctxMenuStore.style.top = `${Math.max(scrollTop + 2, top - clientHeight - 2)}px`
+                  }
+                  if (offsetLeft > -10) {
+                    ctxMenuStore.style.left = `${Math.max(scrollLeft + 2, left - clientWidth - 2)}px`
+                  }
+                  if (offsetLeft > -220) {
+                    ctxMenuStore.childPos = 'left'
+                  }
+                })
+              }
+              const { keyboard, row, column } = params
+              if (keyboard && row && column) {
+                this.scrollToRow(row, column).then(() => {
+                  const cell = this.getCell(column, row)
+                  const { boundingTop, boundingLeft } = DomTools.getAbsolutePos(cell)
+                  top = boundingTop + scrollTop + Math.floor(cell.offsetHeight / 2)
+                  left = boundingLeft + scrollLeft + Math.floor(cell.offsetWidth / 2)
+                  handleVisible()
+                })
+              } else {
+                handleVisible()
+              }
             } else {
               this.closeMenu()
             }

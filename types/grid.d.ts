@@ -1,9 +1,10 @@
 import { VNode } from 'vue'
-import { Table, TableRenderParams } from './table'
+import { Table } from './table'
 import { ColumnOptions } from './column'
 import { FormOptions } from './form'
 import { ToolbarOptions } from './toolbar'
 import { PagerOptions } from './pager'
+import { TableRenderParams } from './extends/renderer'
 
 /**
  * 高级表格
