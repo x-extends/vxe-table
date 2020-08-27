@@ -40,6 +40,12 @@
           <template v-if="row.version === 'pro'">
             <span class="pro">{{  row.version }}</span>
           </template>
+           <template v-else-if="row.disabled">
+            <span class="disabled">已废弃</span>
+          </template>
+           <template v-else-if="row.abandoned">
+            <span class="abandoned">评估阶段</span>
+          </template>
           <template v-else>
             <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
           </template>

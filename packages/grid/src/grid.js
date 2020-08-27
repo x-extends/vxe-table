@@ -514,8 +514,11 @@ export default {
         case 'reset_custom':
           this.resetColumn(true)
           break
+        case 'init':
         case 'reload':
         case 'query': {
+          const isInited = code === 'init'
+          const isReload = code === 'reload'
           const ajaxMethods = ajax.query
           if (ajaxMethods) {
             const params = {
@@ -528,12 +531,15 @@ export default {
               options: ajaxMethods
             }
             if (pagerConfig) {
+              if (isReload) {
+                tablePage.currentPage = 1
+              }
               params.page = tablePage
             }
-            if (code === 'reload') {
+            if (isInited || isReload) {
               const defaultSort = $xetable.sortOpts.defaultSort
               let sortParams = {}
-              if (pagerConfig) {
+              if (isReload) {
                 tablePage.currentPage = 1
               }
               // 如果使用默认排序
