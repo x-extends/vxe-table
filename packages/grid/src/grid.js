@@ -424,26 +424,9 @@ export default {
         }
         if (!proxyInited && proxyOpts.autoLoad !== false) {
           this.proxyInited = true
-          this.$nextTick(() => this.initLoad())
+          this.$nextTick(() => this.commitProxy('init'))
         }
       }
-    },
-    initLoad () {
-      const { $refs } = this
-      const $xetable = $refs.xTable
-      const defaultSort = $xetable.sortOpts.defaultSort
-      let sortParams = {}
-      // 如果使用默认排序
-      if (defaultSort) {
-        sortParams = {
-          property: defaultSort.field,
-          order: defaultSort.order
-        }
-      }
-      this.sortData = sortParams
-      this.filterData = []
-      this.pendingRecords = []
-      this.commitProxy('query')
     },
     handleGlobalKeydownEvent (evnt) {
       const isEsc = evnt.keyCode === 27
@@ -496,8 +479,11 @@ export default {
         case 'reset_custom':
           this.resetColumn(true)
           break
+        case 'init':
         case 'reload':
         case 'query': {
+          const isInited = code === 'init'
+          const isReload = code === 'reload'
           const ajaxMethods = ajax.query
           if (ajaxMethods) {
             const params = {
@@ -510,12 +496,12 @@ export default {
               options: ajaxMethods
             }
             if (pagerConfig) {
-              params.page = tablePage
-            }
-            if (code === 'reload') {
-              if (pagerConfig) {
+              if (isReload) {
                 tablePage.currentPage = 1
               }
+              params.page = tablePage
+            }
+            if (isInited || isReload) {
               const defaultSort = $xetable.sortOpts.defaultSort
               let sortParams = {}
               // 如果使用默认排序
