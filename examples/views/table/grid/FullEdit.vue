@@ -336,7 +336,7 @@ export default {
               if (xGrid) {
                 const sexColumn = xGrid.getColumnByField('sex')
                 sexColumn.editRender.options = sexList
-                const sexItem = xGrid.getFormItems(3)
+                const sexItem = xGrid.getFormItems(4)
                 sexItem.itemRender.options = sexList
               }
             },
@@ -415,7 +415,7 @@ export default {
       if (xGrid) {
         const sexColumn = xGrid.getColumnByField('sex')
         sexColumn.editRender.options = sexList
-        const sexItem = xGrid.getFormItems(3)
+        const sexItem = xGrid.getFormItems(4)
         sexItem.itemRender.options = sexList
       }
     },

@@ -110,6 +110,16 @@
               <li>2. 快速解决问题</li>
             </ul>
           </div>
+          <!-- <div class="vxe-col--12 support-group-item">
+            <div class="support-name">pro</div>
+            <div class="support-price">¥ 900<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供技术支持及版本更新，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+            <ul class="support-describe">
+              <li>1. 单元格鼠标选取、多区域</li>
+              <li>2. 单元格复制、粘贴操作</li>
+              <li>3. 全功能快捷键、查找替换</li>
+              <li>...</li>
+            </ul>
+          </div> -->
         </div>
       </template>
     </vxe-modal>
@@ -141,24 +151,20 @@ export default {
       supportGroupVisible: false,
       supportQuestionList: [
         {
-          label: '安装/按需/报错/国际化/版本升级',
-          message: '安装报错、版本升级报错、版本升级兼容性如何解决、国际化如果使用'
+          label: '安装/报错/主题/样式/国际化/版本升级',
+          message: '安装报错、版本升级报错、版本升级兼容性如何解决、国际化如果使用，修改行高、样式、背景，自定义图标'
         },
         {
-          label: '主题/样式/图标相关问题',
-          message: '修改行高、样式、背景，自定义图标，比如 font-awesome、iconfont 等'
-        },
-        {
-          label: '增删改查/数据校验/键盘导航实现',
+          label: '增删改查/数据校验/键盘导航使用',
           message: '实现 Grid 的增删改查、新增保存的数据校验、服务端校验、按键导航事件监听等'
         },
         {
-          label: '列错乱/列权限/动态列/自定义列问题',
+          label: '列控制/动态列/列分组/自定义列问题',
           message: '在 Tabs 页签中列宽显示错乱、弹出框中列显示错乱、在弹出框下拉框被遮挡、日期选择被遮挡等'
         },
         {
-          label: '数据联动/分组显示/合并与列问题',
-          message: '单元格的数据联动、单元格中下拉框级联关系、分组表格实现方式、合并行或列的实现'
+          label: '数据联动/合并与列问题',
+          message: '单元格的数据联动、单元格合并使用'
         },
         {
           label: '数据代理/Grid配置式使用问题',
@@ -169,7 +175,7 @@ export default {
           message: '实现高级筛选模板、自定义单元格可编辑渲染器、复用业务渲染器、下拉容器使用方法、自定义下拉容器实现'
         },
         {
-          label: '虚拟列表/虚拟树/虚拟下拉框使用问题',
+          label: '虚拟列表/虚拟树/虚拟下拉/虚拟合并/虚拟滚动',
           message: '实现大数据虚拟表格、大数据虚拟树表格、大数据虚拟列表、大数据虚拟下拉框、大数据虚拟下拉容器'
         },
         {
@@ -190,7 +196,7 @@ export default {
         },
         {
           label: '额外需求的定制（需咨询）',
-          message: '如果需要定制特殊需求，请先需咨询',
+          message: '如果需要定制特殊需求，购买 pro 版本等，请先需咨询',
           icon: 'fa fa-exclamation-triangle'
         }
       ],
