@@ -436,17 +436,28 @@ body,
           background-color: #cb2431;
         }
       }
+      &.api-pro {
+        color: #409eff;
+        font-weight: 700;
+      }
     }
   }
   .disabled-line-through {
     text-decoration: line-through;
   }
+  .pro,
   .compatibility {
-    background-color: #1081C2;
     border-radius: 10px;
     padding: 2px 8px;
     color: #fff;
     font-size: 12px;
+  }
+  .pro {
+    color: #333;
+    background-color: #f6ca9d;
+  }
+  .compatibility {
+    background-color: #1081C2;
   }
 }
 

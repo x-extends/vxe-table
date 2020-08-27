@@ -117,7 +117,8 @@
       "edit-render",
       "content-render",
       "tree-node",
-      "params"
+      "params",
+      "col-id"
     ],
     "description": "基础表格 - 列"
   },

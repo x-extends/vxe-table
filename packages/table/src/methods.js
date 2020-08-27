@@ -423,7 +423,7 @@ const Methods = {
       const rest = { column, colid, index, items, parent }
       if (property) {
         if (fullColumnFieldData[property]) {
-          UtilTools.warn('vxe.error.fieldRepet', [property])
+          UtilTools.warn('vxe.error.fieldRepet', ['field', property])
         }
         fullColumnFieldData[property] = rest
       }
@@ -434,6 +434,9 @@ const Methods = {
         treeNodeColumn = column
       } else if (!expandColumn && type === 'expand') {
         expandColumn = column
+      }
+      if (fullColumnIdData[colid]) {
+        UtilTools.error('vxe.error.fieldRepet', ['colId', colid])
       }
       fullColumnIdData[colid] = rest
       fullColumnMap.set(column, rest)
