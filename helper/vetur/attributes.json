@@ -435,6 +435,10 @@
     "type": "any",
     "description": "额外的参数（可以用来存放一些私有参数）"
   },
+  "vxe-table-column/col-id": {
+    "type": "string | number",
+    "description": "自定义列的唯一主键（注：非必要不需要设置，操作不正确将导致出现问题）"
+  },
   "vxe-grid/id": {
     "type": "string",
     "description": "唯一标识（被某些特定的功能所依赖）"

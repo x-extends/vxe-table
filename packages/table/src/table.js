@@ -1503,7 +1503,7 @@ export default {
         const rest = { column, colid, index, items, parent }
         if (property) {
           if (fullColumnFieldData[property]) {
-            UtilTools.warn('vxe.error.fieldRepet', [property])
+            UtilTools.warn('vxe.error.fieldRepet', ['field', property])
           }
           fullColumnFieldData[property] = rest
         }
@@ -5605,7 +5605,7 @@ export default {
     },
     /**
      * 对表格数据进行校验
-     * 默认只校验变动的数据，新增或修改
+     * 如果不指定数据，则默认只校验临时变动的数据，例如新增或修改
      * 如果传 true 则校验当前表格数据
      * 如果传 row 指定行记录，则只验证传入的行
      * 如果传 rows 为多行记录，则只验证传入的行
@@ -5626,7 +5626,12 @@ export default {
         }
       }
       if (!vaildDatas) {
-        vaildDatas = this.getInsertRecords().concat(this.getUpdateRecords())
+        // 在 v3.0 中废弃 setup.validFullData
+        if (GlobalConfig.validFullData === 'obsolete') {
+          vaildDatas = afterFullData
+        } else {
+          vaildDatas = this.getInsertRecords().concat(this.getUpdateRecords())
+        }
       }
       let status = true
       const rowValids = []

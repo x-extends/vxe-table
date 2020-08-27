@@ -126,7 +126,7 @@ const apis = [
         version: '',
         type: 'Number, String',
         enum: 'px, %',
-        defVal: '继承 table.column-width',
+        defVal: '继承 table.column-config.width',
         list: []
       },
       {
@@ -135,7 +135,7 @@ const apis = [
         version: '',
         type: 'Number, String',
         enum: 'px, %',
-        defVal: '继承 table.column-min-width',
+        defVal: '继承 table.column-config.minWidth',
         list: []
       },
       {

@@ -37,7 +37,12 @@
       <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160" :title-help="{message: '部分参数可支持全局设置，具体请查阅相关说明'}"></vxe-table-column>
       <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120" :title-help="{message: '该文档与最新版本保持同步，如果遇到参数无效时，需要检查当前使用的版本号是否支持该参数'}">
         <template v-slot="{ row }">
-          <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+          <template v-if="row.version === 'pro'">
+            <span class="pro">{{  row.version }}</span>
+          </template>
+          <template v-else>
+            <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+          </template>
         </template>
       </vxe-table-column>
       <template v-slot:empty>
@@ -316,6 +321,7 @@ export default {
     },
     cellClassNameFunc ({ row, column }) {
       return {
+        'api-pro': row.version === 'pro',
         'api-disabled': row.disabled,
         'api-abandoned': row.abandoned,
         'disabled-line-through': (row.disabled) && column.property === 'name'
@@ -334,6 +340,8 @@ export default {
             return '该参数已经被废弃了，除非不打算更新版本，否则不应该被使用'
           } else if (row.abandoned) {
             return '该参数属于评估阶段，不建议继续使用，后续有可能会被废弃的风险'
+          } else if (row.version === 'pro') {
+            return '该参数属于 pro 版本功能，开源版本不支持该功能，如有需要可联系邮件：xu_liangzhan@163.com'
           }
         }
       }
