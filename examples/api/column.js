@@ -86,7 +86,7 @@ const apis = [
         version: '',
         type: 'number | string',
         enum: 'px, %',
-        defVal: '继承 table.column-width',
+        defVal: '继承 table.column-config.width',
         list: []
       },
       {
@@ -95,7 +95,7 @@ const apis = [
         version: '',
         type: 'number | string',
         enum: 'px, %',
-        defVal: '继承 table.column-min-width',
+        defVal: '继承 table.column-config.minWidth',
         list: []
       },
       {
@@ -793,6 +793,15 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.params',
         version: '',
         type: 'any',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'colId',
+        desc: '自定义列的唯一主键（注：非必要不需要设置，操作不正确将导致出现问题）',
+        version: '',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []

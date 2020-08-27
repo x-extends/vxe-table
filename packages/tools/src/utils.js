@@ -75,7 +75,7 @@ class ColumnInfo {
       // 自定义参数
       params: _vm.params,
       // 渲染属性
-      id: XEUtils.uniqueId('col_'),
+      id: _vm.colId || XEUtils.uniqueId('col_'),
       parentId: null,
       visible,
       halfVisible: false,

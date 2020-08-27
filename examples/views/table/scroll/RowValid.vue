@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       虚拟滚动行校验，如果第一个参数为 true 则全量校验<br>
-      <span class="red">（不指定数据的情况下，默认只校验状态发生变动的数据，例如：新增、修改...等）</span>
+      <span class="red">（如果不指定数据，则默认只校验临时变动的数据，例如新增或修改...等）</span>
     </p>
 
     <vxe-toolbar :refresh="{query: findList}">

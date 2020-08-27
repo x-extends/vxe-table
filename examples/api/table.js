@@ -1644,15 +1644,15 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
-          // },
-          // {
-          //   name: 'area',
-          //   desc: '如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取',
-          //   version: 'pro',
-          //   type: 'boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
+          },
+          {
+            name: 'area',
+            desc: '如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
           }
         ]
       },
@@ -1709,27 +1709,27 @@ const apis = [
             defVal: 'false',
             list: []
           },
-          // {
-          //   name: 'isClip',
-          //   desc: '用于 mouse-config.area，开启复制/剪贴/粘贴功能',
-          //   version: 'pro',
-          //   type: 'Boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
-          // },
-          // {
-          //   name: 'isChecked',
-          //   desc: '用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
-          //   version: 'pro',
-          //   type: 'Boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
-          // },
+          {
+            name: 'isClip',
+            desc: '如果功能被支持，用于 mouse-config.area，开启复制/剪贴/粘贴功能',
+            version: 'pro',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isChecked',
+            desc: '如果功能被支持，用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
+            version: 'pro',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
           {
             name: 'enterToTab',
-            desc: '用于 mouse-config.area，是否将回车键行为改成 Tab 键行为',
+            desc: '是否将回车键行为改成 Tab 键行为',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -3040,33 +3040,33 @@ const apis = [
         defVal: '',
         list: []
       },
-      // {
-      //   name: 'getCellAreas()',
-      //   desc: '用于 mouse-config.area，用于获取鼠标选择的所有区域',
-      //   version: 'pro',
-      //   type: 'Array<{cols: ColumnConfig[], rows: any[]}>',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
-      // {
-      //   name: 'getActiveCellArea()',
-      //   desc: '用于 mouse-config.area，用于获取区域中的活动单元格',
-      //   version: 'pro',
-      //   type: '{column: ColumnConfig, row: any}',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
-      // {
-      //   name: 'getCopyCellArea()',
-      //   desc: '用于 mouse-config.area，用于获取被标记为复制状态的区域',
-      //   version: 'pro',
-      //   type: '{cols: ColumnConfig[], rows: any[]}',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
+      {
+        name: 'getCellAreas()',
+        desc: '如果功能被支持，用于 mouse-config.area，用于获取鼠标选择的所有区域',
+        version: 'pro',
+        type: 'Array<{cols: ColumnConfig[], rows: any[]}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getActiveCellArea()',
+        desc: '如果功能被支持，用于 mouse-config.area，用于获取区域中的活动单元格',
+        version: 'pro',
+        type: '{column: ColumnConfig, row: any}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getCopyCellArea()',
+        desc: '如果功能被支持，用于 mouse-config.area，用于获取被标记为复制状态的区域',
+        version: 'pro',
+        type: '{cols: ColumnConfig[], rows: any[]}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
       {
         name: 'getScroll()',
         desc: '获取表格的滚动状态',
@@ -3076,15 +3076,15 @@ const apis = [
         defVal: '',
         list: []
       },
-      // {
-      //   name: 'toCellAreaText(areaItem)',
-      //   desc: '用于 mouse-config.area，将指定区域转成文本格式',
-      //   version: 'pro',
-      //   type: 'string',
-      //   enum: '',
-      //   defVal: 'areaItem: MouseCellArea',
-      //   list: []
-      // },
+      {
+        name: 'toCellAreaText(areaItem)',
+        desc: '如果功能被支持，用于 mouse-config.area，将指定区域转成文本格式',
+        version: 'pro',
+        type: 'string',
+        enum: '',
+        defVal: 'areaItem: MouseCellArea',
+        list: []
+      },
       {
         name: 'isActiveByRow(row)',
         desc: '用于 edit-config，判断行是否为激活编辑状态',
@@ -3220,15 +3220,15 @@ const apis = [
         defVal: 'row: Row, field: string',
         list: []
       },
-      // {
-      //   name: 'setCellAreas(areas)',
-      //   desc: '用于 mouse-config.area，选择指定区域的单元格',
-      //   version: 'pro',
-      //   type: 'Promise',
-      //   enum: '',
-      //   defVal: 'areas: CellAreaOptions',
-      //   list: []
-      // },
+      {
+        name: 'setCellAreas(areas)',
+        desc: '如果功能被支持，用于 mouse-config.area，选择指定区域的单元格',
+        version: 'pro',
+        type: 'Promise',
+        enum: '',
+        defVal: 'areas: CellAreaOptions',
+        list: []
+      },
       {
         name: 'setMergeCells(merges)',
         desc: '临时合并单元格，如果为数组则合并多个',
@@ -3516,24 +3516,24 @@ const apis = [
       //   defVal: '',
       //   list: []
       // },
-      // {
-      //   name: 'clearCellAreas()',
-      //   desc: '用于 mouse-config.area，手动清除鼠标选择的区域',
-      //   version: 'pro',
-      //   type: 'Promise',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
-      // {
-      //   name: 'clearCopyCellArea()',
-      //   desc: '用于 mouse-config.area，手动清除标记为复制粘贴的区域',
-      //   version: 'pro',
-      //   type: 'Promise',
-      //   enum: '',
-      //   defVal: '',
-      //   list: []
-      // },
+      {
+        name: 'clearCellAreas()',
+        desc: '如果功能被支持，用于 mouse-config.area，手动清除鼠标选择的区域',
+        version: 'pro',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearCopyCellArea()',
+        desc: '如果功能被支持，用于 mouse-config.area，手动清除标记为复制粘贴的区域',
+        version: 'pro',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
       {
         name: 'clearData(rows, field)',
         desc: '手动清空单元格内容，如果不创参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容',
@@ -3726,7 +3726,7 @@ const apis = [
       },
       {
         name: 'validate(rows, callback)',
-        desc: '快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；如果第一个参数为 true 则校验当前表格数据，如果指定 row 或 rows 则校验指定行或多行，如果不指定，则默认校验状态发生变动的数据，例如新增或修改。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
+        desc: '快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；如果第一个参数为 true 则校验当前表格数据，如果指定 row 或 rows 则校验指定行或多行，如果不指定数据，则默认只校验临时变动的数据，例如新增或修改。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
