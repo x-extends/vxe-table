@@ -766,21 +766,17 @@ export declare class Table extends VXETableModule {
    */
   getCellAreas(): MouseCellArea[];
   /**
-   * 用于 mouse-config.area，将指定区域转成文本格式
-   */
-  toCellAreaText(areaItem: MouseCellArea): string;
-  /**
    * 用于 mouse-config.area，复制指定区域，返回转换后的文本
    */
-  copyCellArea(): string;
+  copyCellArea(): { text: string, html: string };
   /**
    * 用于 mouse-config.area，剪贴指定区域，返回转换后的文本
    */
-  cutCellArea(): string;
+  cutCellArea(): { text: string, html: string };
   /**
    * 用于 mouse-config.area，粘贴从表格中被复制的数据，如果不是从表格中操作，则无法粘贴
    */
-  pasteCellArea(): string;
+  pasteCellArea(): Promise<any>;
   /**
    * 手动清除单元格选中状态
    */

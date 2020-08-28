@@ -72,6 +72,11 @@ export default {
         notData: 'No data'
       }
     },
+    pro: {
+      area: {
+        multiErr: 'You cannot operate on multiple selection areas'
+      }
+    },
     table: {
       emptyText: 'No Data',
       allTitle: 'Select all / cancel',

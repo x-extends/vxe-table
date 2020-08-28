@@ -639,6 +639,7 @@ const apis = [
       },
       {
         name: 'cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.cellStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -648,6 +649,7 @@ const apis = [
       },
       {
         name: 'header-cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.headerCellStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -657,6 +659,7 @@ const apis = [
       },
       {
         name: 'footer-cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerCellStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -666,6 +669,7 @@ const apis = [
       },
       {
         name: 'row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.rowStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -675,6 +679,7 @@ const apis = [
       },
       {
         name: 'header-row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.headerRowStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -684,6 +689,7 @@ const apis = [
       },
       {
         name: 'footer-row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerRowStyle',
         version: '1.5.13',
         type: 'Object, Function',

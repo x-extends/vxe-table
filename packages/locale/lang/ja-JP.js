@@ -72,6 +72,11 @@ export default {
         notData: '无匹配项'
       }
     },
+    pro: {
+      area: {
+        multiErr: '多重選択領域を操作することはできない'
+      }
+    },
     table: {
       emptyText: 'データがありません',
       allTitle: '全て選択/取消',
