@@ -586,7 +586,7 @@ export const Cell = {
   renderSortIcon (h, params) {
     const { $table, column } = params
     const { showIcon, iconAsc, iconDesc } = $table.sortOpts
-    return showIcon === false ? [] : [
+    return showIcon ? [
       h('span', {
         class: 'vxe-cell--sort'
       }, [
@@ -617,7 +617,7 @@ export const Cell = {
           }
         })
       ])
-    ]
+    ] : []
   },
 
   /**
@@ -630,7 +630,7 @@ export const Cell = {
     const { $table, column, hasFilter } = params
     const { filterStore, filterOpts } = $table
     const { showIcon, iconNone, iconMatch } = filterOpts
-    return showIcon === false ? [] : [
+    return showIcon ? [
       h('span', {
         class: ['vxe-cell--filter', {
           'is--active': filterStore.visible && filterStore.column === column
@@ -648,7 +648,7 @@ export const Cell = {
           }
         })
       ])
-    ]
+    ] : []
   },
 
   /**
@@ -669,9 +669,9 @@ export const Cell = {
       isRequired && editOpts.showAsterisk ? h('i', {
         class: 'vxe-cell--required-icon'
       }) : null,
-      editOpts.showIcon === false ? null : h('i', {
+      editOpts.showIcon ? h('i', {
         class: ['vxe-cell--edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
-      })
+      }) : null
     ].concat(Cell.renderDefaultHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])
       .concat(filters ? Cell.renderFilterIcon(h, params) : [])

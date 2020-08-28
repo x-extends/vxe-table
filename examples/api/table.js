@@ -638,6 +638,7 @@ const apis = [
       },
       {
         name: 'cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.cellStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -647,6 +648,7 @@ const apis = [
       },
       {
         name: 'header-cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.headerCellStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -656,6 +658,7 @@ const apis = [
       },
       {
         name: 'footer-cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerCellStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -665,6 +668,7 @@ const apis = [
       },
       {
         name: 'row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.rowStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -674,6 +678,7 @@ const apis = [
       },
       {
         name: 'header-row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.headerRowStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -683,6 +688,7 @@ const apis = [
       },
       {
         name: 'footer-row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerRowStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -3382,15 +3388,6 @@ const apis = [
         type: '{virtualX, virtualY, scrollTop, scrollLeft}',
         enum: '',
         defVal: '',
-        list: []
-      },
-      {
-        name: 'toCellAreaText(areaItem)',
-        desc: '如果功能被支持，用于 mouse-config.area，将指定区域转成文本格式',
-        version: 'pro',
-        type: 'string',
-        enum: '',
-        defVal: 'areaItem: MouseCellArea',
         list: []
       },
       {

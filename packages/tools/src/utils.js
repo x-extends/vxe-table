@@ -157,8 +157,8 @@ class ColumnInfo {
   }
 
   getMinWidth () {
-    const { type, filters, sortable, remoteSort, editRender, titleHelp } = this
-    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters) + getColFuncWidth(sortable || remoteSort) + getColFuncWidth(editRender, 32)
+    const { type, filters, sortable, remoteSort, sortOpts, editRender, editOpts, titleHelp } = this
+    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(editRender && editOpts.showIcon, 32)
   }
 
   update (name, value) {
@@ -311,6 +311,11 @@ export const UtilTools = {
   },
   hasChildrenList (item) {
     return item && item.children && item.children.length > 0
+  },
+  getColMinWidth (_vm, column) {
+    const { sortOpts, filterOpts, editOpts } = _vm
+    const { type, filters, sortable, remoteSort, editRender, titleHelp } = column
+    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(editRender && editOpts.showIcon, 32)
   },
   parseFile (file) {
     const name = file.name
