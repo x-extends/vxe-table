@@ -114,7 +114,7 @@ export default {
         }
         params.columnIndex = targetColumnIndex
         params.column = targetColumn
-        params.cell = this.getCell(params.column, params.row)
+        params.cell = this.getCell(params.row, params.column)
         if (editConfig) {
           if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row') {
@@ -190,7 +190,7 @@ export default {
         }
       }
       this.scrollToRow(params.row, params.column).then(() => {
-        params.cell = this.getCell(params.column, params.row)
+        params.cell = this.getCell(params.row, params.column)
         this.handleSelected(params, evnt)
       })
     },
@@ -299,7 +299,7 @@ export default {
               const firstCell = firstTrElem.querySelector('.col--seq')
               params.rowIndex = 0
               params.row = tableData[0]
-              params.cell = this.getCell(params.column, params.row)
+              params.cell = this.getCell(params.row, params.column)
               this.handleSelected(params, evnt)
               this.handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector('.col--seq'))))
               this.handleChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(startCell), DomTools.getCellNodeIndex(endCell)))
@@ -664,7 +664,7 @@ export default {
           column: XEUtils.find(visibleColumn, column => column.property)
         }
         params.columnIndex = this.getColumnIndex(params.column)
-        params.cell = this.getCell(params.column, params.row)
+        params.cell = this.getCell(params.row, params.column)
         this.handleSelected(params, evnt)
         this.handleHeaderChecked(DomTools.getRowNodes(headerList, DomTools.getCellNodeIndex(cell.nextElementSibling), DomTools.getCellNodeIndex(cell.parentNode.lastElementChild)))
         this.handleIndexChecked(DomTools.getRowNodes(bodyList, DomTools.getCellNodeIndex(firstCell), DomTools.getCellNodeIndex(lastTrElem.querySelector(`.${column.id}`))))
