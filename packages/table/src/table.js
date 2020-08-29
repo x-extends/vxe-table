@@ -2962,7 +2962,7 @@ export default {
         }
         params.columnIndex = targetColumnIndex
         params.column = targetColumn
-        params.cell = this.getCell(params.column, params.row)
+        params.cell = this.getCell(params.row, params.column)
         if (editConfig) {
           if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row') {
@@ -3037,7 +3037,7 @@ export default {
       if (params.rowIndex > -1) {
         params.rowIndex = _rowIndex
       }
-      params.cell = this.getCell(params.column, params.row)
+      params.cell = this.getCell(params.row, params.column)
       this.handleSelected(params, evnt)
       this.scrollToRow(params.row, params.column)
     },
@@ -4544,7 +4544,7 @@ export default {
         if (row && field) {
           const column = XEUtils.find(this.visibleColumn, column => column.property === field)
           if (column && column.editRender) {
-            const cell = this.getCell(column, row)
+            const cell = this.getCell(row, column)
             if (cell) {
               this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
               this.lastCallTime = Date.now()
@@ -4563,7 +4563,7 @@ export default {
         const column = XEUtils.find(visibleColumn, column => column.property === field)
         const rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
-          const cell = this.getCell(column, row)
+          const cell = this.getCell(row, column)
           const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
         }
@@ -5534,7 +5534,7 @@ export default {
           const { row, column } = scope
           const type = 'change'
           if (this.hasCellRules(type, row, column)) {
-            const cell = this.getCell(column, row)
+            const cell = this.getCell(row, column)
             if (cell) {
               return this.validCellRules(type, row, column, cellValue)
                 .then(() => {
@@ -5699,7 +5699,7 @@ export default {
               }
             }
             const posAndFinish = () => {
-              firstErrParams.cell = this.getCell(firstErrParams.column, firstErrParams.row)
+              firstErrParams.cell = this.getCell(firstErrParams.row, firstErrParams.column)
               DomTools.toView(firstErrParams.cell)
               this.handleValidError(firstErrParams)
               finish()
@@ -5745,7 +5745,7 @@ export default {
     //           this.validCellRules('all', row, column)
     //             .then(resolve)
     //             .catch(rule => {
-    //               const rest = { rule, row, column, cell: this.getCell(column, row) }
+    //               const rest = { rule, row, column, cell: this.getCell(row, column) }
     //               return reject(rest)
     //             })
     //         }))
@@ -6236,7 +6236,7 @@ export default {
     /*************************
      * Publish methods
      *************************/
-    getCell (column, row) {
+    getCell (row, column) {
       const { $refs } = this
       const rowid = UtilTools.getRowid(this, row)
       const bodyElem = $refs[`${column.fixed || 'table'}Body`] || $refs.tableBody
