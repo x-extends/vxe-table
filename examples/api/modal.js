@@ -71,6 +71,15 @@ const apis = [
         list: []
       },
       {
+        name: 'className',
+        desc: '给窗口附加 className',
+        version: '2.9.19',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'iconStatus',
         descKey: 'app.api.modal.desc.iconStatus',
         version: '2.7.0',

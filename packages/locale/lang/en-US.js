@@ -74,7 +74,8 @@ export default {
     },
     pro: {
       area: {
-        multiErr: 'You cannot operate on multiple selection areas'
+        mergeErr: 'The operation cannot be performed on merged cells',
+        multiErr: 'The operation cannot be performed on multiple selection areas'
       }
     },
     table: {

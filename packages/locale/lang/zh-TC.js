@@ -74,7 +74,8 @@ export default {
     },
     pro: {
       area: {
-        multiErr: '不能對多重選擇區域進行操作'
+        mergeErr: '無法對合併儲存格進行該操作',
+        multiErr: '無法對多重選擇區域進行該操作'
       }
     },
     table: {

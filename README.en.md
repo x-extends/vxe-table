@@ -82,6 +82,7 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
 * [x] Virtual Scroller
 * [x] (pro) Cell area selection
 * [x] (pro) Cell copy & paste
+* [x] (pro) Cell find and replace
 
 ## Modules
 

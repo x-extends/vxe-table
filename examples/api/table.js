@@ -1814,8 +1814,26 @@ const apis = [
           //   list: []
           // },
           {
+            name: 'isMerge',
+            desc: '如果功能被支持，用于 mouse-config.area，开启合并和取消合并功能',
+            version: 'pro',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'isClip',
             desc: '如果功能被支持，用于 mouse-config.area，开启复制/剪贴/粘贴功能',
+            version: 'pro',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isFNR',
+            desc: '如果功能被支持，用于 mouse-config.area，开启查找和替换功能',
             version: 'pro',
             type: 'Boolean',
             enum: '',
