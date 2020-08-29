@@ -76,6 +76,33 @@ export default {
       area: {
         mergeErr: '無法對合併儲存格進行該操作',
         multiErr: '無法對多重選擇區域進行該操作'
+      },
+      fnr: {
+        title: '查找和替換',
+        findLabel: '查找',
+        replaceLabel: '替換',
+        findTitle: '查找內容：',
+        replaceTitle: '替換為：',
+        tabs: {
+          find: '查找',
+          replace: '替換'
+        },
+        btns: {
+          findNext: '查找下一個',
+          findAll: '查找全部',
+          replace: '替换',
+          replaceAll: '替换全部',
+          cancel: '取消'
+        },
+        header: {
+          seq: '#',
+          cell: '儲存格',
+          value: '值'
+        },
+        empty: '(空值)',
+        recordCount: '已找到 {{0}} 個儲存格',
+        notCell: '找不到匹配的儲存格',
+        replaceSuccess: '成功替換 {{0}} 個儲存格'
       }
     },
     table: {

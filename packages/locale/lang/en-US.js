@@ -76,6 +76,33 @@ export default {
       area: {
         mergeErr: 'The operation cannot be performed on merged cells',
         multiErr: 'The operation cannot be performed on multiple selection areas'
+      },
+      fnr: {
+        title: 'Find and replace',
+        findLabel: 'Find',
+        replaceLabel: 'Replace',
+        findTitle: 'What to find:',
+        replaceTitle: 'Replace with:',
+        tabs: {
+          find: 'Find',
+          replace: 'Replace'
+        },
+        btns: {
+          findNext: 'Find next',
+          findAll: 'Find all',
+          replace: 'Replace',
+          replaceAll: 'Replace all',
+          cancel: 'Cancel'
+        },
+        header: {
+          seq: '#',
+          cell: 'Cell',
+          value: 'Value'
+        },
+        empty: '(Empty)',
+        recordCount: 'Found {{0}} cells',
+        notCell: 'No matching cells were found',
+        replaceSuccess: 'Successfully replaced {{0}} cells'
       }
     },
     table: {
