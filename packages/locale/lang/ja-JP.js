@@ -74,7 +74,8 @@ export default {
     },
     pro: {
       area: {
-        multiErr: '多重選択領域を操作することはできない'
+        mergeErr: 'この操作は、結合されたセルに適用できませんでした',
+        multiErr: '複数選択領域を操作できませんでした'
       }
     },
     table: {

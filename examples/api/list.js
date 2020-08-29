@@ -62,7 +62,7 @@ const apis = [
         list: []
       },
       {
-        name: 'scrollY',
+        name: 'scroll-y',
         desc: '纵向虚拟滚动配置',
         version: '',
         type: 'Object',

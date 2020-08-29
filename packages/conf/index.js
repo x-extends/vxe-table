@@ -265,7 +265,7 @@ const GlobalConfig = {
   modal: {
     // size: null,
     minWidth: 340,
-    minHeight: 200,
+    minHeight: 140,
     lockView: true,
     mask: true,
     duration: 3000,

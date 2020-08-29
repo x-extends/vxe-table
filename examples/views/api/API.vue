@@ -26,7 +26,7 @@
       :custom-config="{storage: true, checkMethod: checkColumnMethod}"
       :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod: menuVisibleMethod}"
-      :tooltip-config="{enterable: true, contentMethod: showTooltipMethod}"
+      :tooltip-config="{contentMethod: showTooltipMethod}"
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
