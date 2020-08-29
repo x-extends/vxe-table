@@ -72,6 +72,12 @@ export default {
         notData: 'No data'
       }
     },
+    pro: {
+      area: {
+        mergeErr: 'The operation cannot be performed on merged cells',
+        multiErr: 'The operation cannot be performed on multiple selection areas'
+      }
+    },
     table: {
       emptyText: 'No Data',
       allTitle: 'Select all / cancel',

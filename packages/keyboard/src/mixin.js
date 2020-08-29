@@ -95,7 +95,7 @@ export default {
         }
         params.columnIndex = targetColumnIndex
         params.column = targetColumn
-        params.cell = this.getCell(params.column, params.row)
+        params.cell = this.getCell(params.row, params.column)
         if (editConfig) {
           if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row') {
@@ -166,7 +166,7 @@ export default {
         params.column = visibleColumn[params.columnIndex]
       }
       this.scrollToRow(params.row, params.column).then(() => {
-        params.cell = this.getCell(params.column, params.row)
+        params.cell = this.getCell(params.row, params.column)
         this.handleSelected(params, evnt)
       })
     },

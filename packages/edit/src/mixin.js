@@ -398,7 +398,7 @@ export default {
         if (row && field) {
           const column = XEUtils.find(this.visibleColumn, column => column.property === field)
           if (column && column.editRender) {
-            const cell = this.getCell(column, row)
+            const cell = this.getCell(row, column)
             if (cell) {
               this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
               this.lastCallTime = Date.now()
@@ -417,7 +417,7 @@ export default {
         const column = XEUtils.find(visibleColumn, column => column.property === field)
         const rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
-          const cell = this.getCell(column, row)
+          const cell = this.getCell(row, column)
           const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
         }
@@ -490,7 +490,7 @@ export default {
       const { row, column } = selected
       this.reColSdCls()
       if (row && column) {
-        const cell = this.getCell(column, row)
+        const cell = this.getCell(row, column)
         if (cell) {
           DomTools.addClass(cell, 'col--selected')
         }

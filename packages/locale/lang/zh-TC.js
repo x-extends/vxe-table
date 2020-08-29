@@ -72,6 +72,12 @@ export default {
         notData: '無匹配項'
       }
     },
+    pro: {
+      area: {
+        mergeErr: '無法對合併儲存格進行該操作',
+        multiErr: '無法對多重選擇區域進行該操作'
+      }
+    },
     table: {
       emptyText: '暫無資料',
       allTitle: '全選/取消',

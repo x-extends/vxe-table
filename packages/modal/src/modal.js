@@ -17,6 +17,7 @@ export default {
     loading: { type: Boolean, default: null },
     status: String,
     iconStatus: String,
+    className: String,
     top: { type: [Number, String], default: 15 },
     position: [String, Object],
     title: String,
@@ -115,7 +116,7 @@ export default {
     XEUtils.remove(activeModals, $modal => $modal === this)
   },
   render (h) {
-    const { $scopedSlots, slots = {}, inited, vSize, type, resize, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
+    const { $scopedSlots, slots = {}, inited, vSize, className, type, resize, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
     const headerSlot = $scopedSlots.header || slots.header
@@ -127,7 +128,7 @@ export default {
       headerOns.dblclick = this.toggleZoomEvent
     }
     return h('div', {
-      class: ['vxe-modal--wrapper', `type--${type}`, {
+      class: ['vxe-modal--wrapper', `type--${type}`, className || '', {
         [`size--${vSize}`]: vSize,
         [`status--${status}`]: status,
         'is--animat': animat,

@@ -132,7 +132,7 @@ export default {
               }
             }
             const posAndFinish = () => {
-              firstErrParams.cell = this.getCell(firstErrParams.column, firstErrParams.row)
+              firstErrParams.cell = this.getCell(firstErrParams.row, firstErrParams.column)
               DomTools.toView(firstErrParams.cell)
               this.handleValidError(firstErrParams)
               finish()

@@ -82,6 +82,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 虚拟滚动
 * [x] (pro) 单元格区域选取
 * [x] (pro) 单元格复制/粘贴
+* [x] (pro) 单元格查找和替换
 
 ## 模块&组件
 
@@ -123,7 +124,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## 安装
 
-依赖库：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.6+
+依赖库：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.7+
 
 ```shell
 npm install xe-utils vxe-table

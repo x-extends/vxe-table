@@ -82,6 +82,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Virtual Scroller
 * [x] (pro) Cell area selection
 * [x] (pro) Cell copy & paste
+* [x] (pro) Cell find and replace
 
 ## Modules
 
@@ -123,7 +124,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## Installing
 
-Dependent: [vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.6+
+Dependent: [vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.7+
 
 ```shell
 npm install xe-utils vxe-table

@@ -75,9 +75,11 @@ export default {
       demoCodes: [
         `
         <p>
-          <vxe-radio v-model="selectTab" name="xtabs" label="tab1">页签1</vxe-radio>
-          <vxe-radio v-model="selectTab" name="xtabs" label="tab2">页签2</vxe-radio>
-          <vxe-radio v-model="selectTab" name="xtabs" label="tab3">页签3</vxe-radio>
+          <vxe-radio-group v-model="selectTab">
+            <vxe-radio-button label="tab1" content="页签1"></vxe-radio-button>
+            <vxe-radio-button label="tab2" content="页签2"></vxe-radio-button>
+            <vxe-radio-button label="tab3" content="页签3"></vxe-radio-button>
+          </vxe-radio-group>
         </p>
 
         <div v-show="selectTab === 'tab1'">

@@ -72,6 +72,12 @@ export default {
         notData: '无匹配项'
       }
     },
+    pro: {
+      area: {
+        mergeErr: 'この操作は、結合されたセルに適用できませんでした',
+        multiErr: '複数選択領域を操作できませんでした'
+      }
+    },
     table: {
       emptyText: 'データがありません',
       allTitle: '全て選択/取消',

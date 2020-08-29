@@ -82,6 +82,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 虛擬滾動
 * [x] (pro) 儲存格區域選取
 * [x] (pro) 儲存格複製/粘貼
+* [x] (pro) 儲存格查找和替換
 
 ## 模塊&組件
 
@@ -123,7 +124,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## 安裝
 
-依賴庫：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.6+
+依賴庫：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.7+
 
 ```shell
 npm install xe-utils vxe-table
