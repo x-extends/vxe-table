@@ -1299,6 +1299,10 @@
     "type": "string",
     "description": "只对 type=alert | confirm | message 有效，消息状态"
   },
+  "vxe-modal/class-name": {
+    "type": "string",
+    "description": "给窗口附加 className"
+  },
   "vxe-modal/icon-status": {
     "type": "string",
     "description": "自定义状态图标"

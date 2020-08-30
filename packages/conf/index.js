@@ -81,6 +81,9 @@ const GlobalConfig = {
       isPrint: true,
       modes: ['current', 'selected']
     },
+    mouseConfig: {
+      extension: true
+    },
     scrollX: {
       gt: 60
       // oSize: 0,
