@@ -1,9 +1,6 @@
 <template>
   <div>
-    <p class="tip">
-      进阶封装实现，只需要一个 json 数据就可以非常简单的渲染一个支持 CRUD 功能完整的表格 <a class="link" href="https://github.com/x-extends/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">查看简单的实现示例</a><br>
-      <span class="red">（注：实现难度较高，需要熟练运用渲染器及 <grid-api-link name="vxe-grid"/> 高阶用法）</span>
-    </p>
+    <p class="tip">数据代理简单示例</p>
 
     <vxe-grid
       resizable

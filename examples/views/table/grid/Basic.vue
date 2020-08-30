@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       <grid-api-link name="vxe-grid"/> 高级表格：一个包含表单、工具栏、基础表格、分页...等全功能的组件<br>
-      通过 <grid-api-link prop="columns"/> json化配置列信息，这非常适用于动态渲染的场景，再配合 <router-link class="link" :to="{name: 'GridConfigProxy'}">数据代理</router-link> ，甚至可以非常简单的用一个 json 数据就能渲染完整表格
+      通过 <grid-api-link prop="columns"/> 可配置化，适用于动态渲染的场景，再配合 <router-link class="link" :to="{name: 'GridConfigProxy'}">数据代理</router-link> ，甚至可以非常简单的用一个 json 数据就能渲染一个完整表格
     </p>
 
     <vxe-grid

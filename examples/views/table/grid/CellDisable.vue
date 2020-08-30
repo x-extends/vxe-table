@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用</p>
+    <p class="tip">通过 <table-api-link prop="edit-config"/>.<table-api-link prop="activeMethod"/> 方法来判断单元格是否禁用，禁用后不可编辑</p>
 
     <vxe-grid
       border
