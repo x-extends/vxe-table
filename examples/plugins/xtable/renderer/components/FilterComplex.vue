@@ -3,8 +3,6 @@
     <div class="my-fc-type">
       <vxe-radio v-model="option.data.type" name="fType" label="has">包含</vxe-radio>
       <vxe-radio v-model="option.data.type" name="fType" label="eq">等于</vxe-radio>
-      <vxe-radio v-model="option.data.type" name="fType" label="gt">大于</vxe-radio>
-      <vxe-radio v-model="option.data.type" name="fType" label="lt">小于</vxe-radio>
     </div>
     <div class="my-fc-name">
       <vxe-input v-model="option.data.name" type="text" placeholder="请输入名称" @input="changeOptionEvent()"></vxe-input>

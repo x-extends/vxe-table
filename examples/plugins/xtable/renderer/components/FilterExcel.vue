@@ -19,8 +19,7 @@
           <i class="fa fa-caret-right my-fe-menu-link-right-icon"></i>
           <div class="my-fe-menu-child-list">
             <ul class="my-fe-child-menu-group-list" v-for="(cList, gIndex) in caseGroups" :key="gIndex">
-              <li v-for="(cItem, cIndex) in cList" :key="cIndex" :class="[option.data.fMenu === cItem.value ? 'my-fe-child-menu-item active' : 'my-fe-child-menu-item']" @click="childMenuClickEvent(cItem)">
-                <i class="fa fa-check my-fe-child-menu-left-icon"></i>
+              <li v-for="(cItem, cIndex) in cList" :key="cIndex" class="my-fe-child-menu-item" @click="childMenuClickEvent(cItem)">
                 <span>{{ cItem.label }}</span>
               </li>
             </ul>
@@ -33,9 +32,9 @@
         <input v-model="option.data.sVal" placeholder="搜索"/>
         <i class="fa fa-search my-fe-search-icon"></i>
       </div>
-      <ul class="my-fe-search-list" v-if="searchList.length">
+      <ul class="my-fe-search-list">
         <li class="my-fe-search-item" @click="sAllEvent">
-          <i :class="[isAllSearch ? 'fa fa-check-square-o my-fe-search-item-icon' : 'fa fa-square-o my-fe-search-item-icon']"></i>
+          <i class="fa fa-square-o my-fe-search-item-icon"></i>
           <span>(全选)</span>
         </li>
         <li class="my-fe-search-item" v-for="(val, sIndex) in searchList" :key="sIndex" @click="sItemEvent(val)">
@@ -43,9 +42,6 @@
           <span>{{ val }}</span>
         </li>
       </ul>
-      <div v-else class="body">
-        <div class="my-fe-search-empty">无匹配项</div>
-      </div>
     </div>
     <div class="my-fe-footer">
       <vxe-button status="primary" @click="confirmFilterEvent">确认</vxe-button>
@@ -77,8 +73,7 @@ export default {
           { value: 'greater', label: '大于' },
           { value: 'ge', label: '大于或等于' },
           { value: 'less', label: '小于' },
-          { value: 'le', label: '小于或等于' },
-          { value: 'between', label: '介于' }
+          { value: 'le', label: '小于或等于' }
         ]
       ],
       allCaseList: [
@@ -92,10 +87,6 @@ export default {
     }
   },
   computed: {
-    isAllSearch () {
-      const { option, searchList } = this
-      return searchList.every(val => option.data.vals.indexOf(val) > -1)
-    },
     searchList () {
       const { option, colValList } = this
       return option.data.sVal ? colValList.filter(val => val.indexOf(option.data.sVal) > -1) : colValList
@@ -121,10 +112,10 @@ export default {
     },
     sAllEvent () {
       const { data } = this.option
-      if (this.isAllSearch) {
+      if (data.vals.length > 0) {
         data.vals = []
       } else {
-        data.vals = this.searchList
+        data.vals = this.colValList
       }
     },
     sItemEvent (val) {
@@ -136,13 +127,13 @@ export default {
         data.vals.splice(vIndex, 1)
       }
     },
-    confirmFilterEvent () {
+    confirmFilterEvent (evnt) {
       const { params, option } = this
       const { data } = option
       const { $panel } = params
       data.f1 = ''
       data.f2 = ''
-      option.checked = true
+      $panel.changeOption(evnt, true, option)
       $panel.confirmFilter()
     },
     resetFilterEvent () {
@@ -182,10 +173,6 @@ export default {
           data.f1Type = '6'
           data.f2Type = ''
           break
-        case 'between':
-          data.f1Type = '4'
-          data.f2Type = '6'
-          break
       }
       $table.closeFilter()
       VXETable.modal.open({
@@ -195,7 +182,6 @@ export default {
           default: ({ $modal }) => {
             return [
               <div class="my-fe-popup">
-                <div class="my-fe-popup-title">显示行</div>
                 <div class="my-fe-popup-filter my-fe-popup-f1">
                   <vxe-select class="my-fe-popup-filter-select" v-model={ data.f1Type } transfer clearable>
                     {
@@ -319,15 +305,6 @@ export default {
 .my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item:hover {
   background-color: #C5C5C5;
 }
-.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item .my-fe-child-menu-left-icon {
-  display: none;
-  position: absolute;
-  left: 10px;
-  top: 6px;
-}
-.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item.active .my-fe-child-menu-left-icon {
-  display: block;
-}
 .my-filter-excel .my-fe-search {
   padding: 0 10px 0 30px;
 }
@@ -353,10 +330,6 @@ export default {
   padding: 2px 10px;
   overflow: auto;
   height: 140px;
-}
-.my-filter-excel .my-fe-search .my-fe-search-list .my-fe-search-empty {
-  text-align: center;
-  padding-top: 20px;
 }
 .my-filter-excel .my-fe-search .my-fe-search-list .my-fe-search-item {
   cursor: pointer;

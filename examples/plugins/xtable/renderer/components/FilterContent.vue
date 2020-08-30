@@ -2,7 +2,7 @@
   <div class="my-filter-content">
     <div class="my-fc-search">
       <div class="my-fc-search-top">
-        <vxe-input v-model="option.data.sVal" placeholder="搜索" suffix-icon="fa fa-search" @keyup="searchEvent"></vxe-input>
+        <vxe-input v-model="option.data.sVal" placeholder="搜索" suffix-icon="fa fa-search"></vxe-input>
       </div>
       <div class="my-fc-search-content">
         <template v-if="valList.length">
@@ -13,7 +13,7 @@
           </ul>
           <ul class="my-fc-search-list my-fc-search-list-body">
             <li class="my-fc-search-item" v-for="(item, sIndex) in valList" :key="sIndex">
-              <vxe-checkbox v-model="item.checked" @change="changeItemEvent">{{ item.value }}</vxe-checkbox>
+              <vxe-checkbox v-model="item.checked">{{ item.value }}</vxe-checkbox>
             </li>
           </ul>
         </template>
@@ -49,9 +49,6 @@ export default {
   watch: {
     params () {
       this.load()
-    },
-    colValList () {
-      this.searchEvent()
     }
   },
   created () {
@@ -77,21 +74,12 @@ export default {
     searchEvent () {
       const { option, colValList } = this
       this.valList = option.data.sVal ? colValList.filter(item => item.value.indexOf(option.data.sVal) > -1) : colValList
-      this.updateCheckStatus()
     },
     changeAllEvent () {
       const { isAll } = this
       this.valList.forEach(item => {
         item.checked = isAll
       })
-    },
-    updateCheckStatus () {
-      const { valList } = this
-      const isAll = valList.every(item => item.checked)
-      this.isAll = isAll
-    },
-    changeItemEvent () {
-      this.updateCheckStatus()
     },
     confirmFilterEvent () {
       const { params, option, valList } = this
@@ -126,7 +114,6 @@ export default {
   line-height: 22px;
 }
 .my-filter-content .my-fc-search .my-fc-search-content {
-  border: 1px solid #E2E4E7;
   padding: 2px 10px;
 }
 .my-filter-content .my-fc-search-empty {
