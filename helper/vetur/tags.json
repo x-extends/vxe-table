@@ -421,6 +421,7 @@
       "title",
       "type",
       "status",
+      "class-name",
       "icon-status",
       "message",
       "cancel-button-text",

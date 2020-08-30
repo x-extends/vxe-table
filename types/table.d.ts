@@ -945,6 +945,14 @@ export declare class Table extends VXETableModule {
    */
   print(options: PrintOptons): Promise<any>;
   /**
+   * 用于 mouse-config.area，打开单元格查找功能
+   */
+  openFind(): Promise<any>;
+  /**
+   * 用于 mouse-config.area，打开单元格替换功能
+   */
+  openReplace(): Promise<any>;
+  /**
    * 使表格获取焦点
    */
   focus(): Promise<any>;
