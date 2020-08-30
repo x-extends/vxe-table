@@ -575,6 +575,7 @@ const apis = [
       },
       {
         name: 'highlight-cell',
+        abandoned: true,
         descKey: 'app.api.table.desc.highlightCell',
         version: '',
         type: 'Boolean',
