@@ -1,8 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      普通树<br>
-      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+      普通树
     </p>
 
     <vxe-toolbar>

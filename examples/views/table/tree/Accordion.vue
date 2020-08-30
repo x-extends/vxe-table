@@ -1,8 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      手风琴展开效果，通过配置 tree-config={<table-api-link prop="accordion"/>} 属性来开启同一级的节点，限制只能展开一个<br>
-      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+      手风琴展开效果，通过配置 tree-config={<table-api-link prop="accordion"/>} 属性来开启同一级的节点，限制只能展开一个
     </p>
 
     <vxe-table
