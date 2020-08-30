@@ -182,9 +182,7 @@ export default {
     confirmFilter (evnt) {
       const { $parent: $xetable, filterStore } = this
       filterStore.options.forEach(option => {
-        if (option._checked) {
-          option.checked = option._checked
-        }
+        option.checked = option._checked
       })
       $xetable.confirmFilterEvent(evnt)
     },
