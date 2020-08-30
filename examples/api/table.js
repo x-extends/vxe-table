@@ -1659,6 +1659,15 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
+          },
+          {
+            name: 'extension',
+            desc: '只对 area 启用后有效，是否开启区域延伸选取功能，开启后可以通过鼠标点击区域右下角延伸扩大选取范围',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
           }
         ]
       },
@@ -3848,6 +3857,24 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'openFind()',
+        desc: '如果功能被支持，用于 mouse-config.area，打开单元格查找功能',
+        version: 'pro',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'openReplace()',
+        desc: '如果功能被支持，用于 mouse-config.area，打开单元格替换功能',
+        version: 'pro',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
       },
       {
         name: 'focus()',

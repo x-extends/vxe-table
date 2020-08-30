@@ -36,20 +36,30 @@
 
     <pre>
       <code>
-        | Arrow Up ↑ | （isArrow）如果存在，则移动到上面的单元格 |
-        | Arrow Down ↓ | （isArrow）如果存在，则移动到下面的单元格 |
-        | Arrow Left ← | （isArrow）如果存在，则移动到左边的单元格 |
-        | Arrow Right → | （isArrow）如果存在，则移动到右边的单元格 |
-        | Tab | （isTab）如果存在，则移动到右边单元格；如果到最后一列且存在下一行，则从下一行开始移动 |
-        | Tab + Shift | （isTab）如果存在，则移动到左边单元格；如果到第一列且存在上一行，则从上一行开始移动 |
-        | Spacebar | 如果单元格是复选框或单选框则切换勾选状态 |
-        | Enter | （isEnter）如果存在，取消单元格编辑并移动到下面的单元格 |
-        | Enter + Shift | （isEnter）如果存在，取消单元格编辑并移动到上面的单元格 |
-        | Delete | （isDel）清空单元格内容 |
-        | Backspace | （isDel）清空单元格内容并激活为编辑状态 |
-        | F2 | 如果存在，激活单元格为编辑状态 |
-        | Esc | 如果存在，取消单元格编辑状态 |
-        | * | （isEdit）按下除功能键之外的任意键激活覆盖式单元格编辑 |
+        mouse-config 鼠标配置：
+          | Mouse | (area) 鼠标选取指定区域 |
+          | Mouse + Ctrl | (area) 鼠标选取多重区域 |
+        keyboard-config 按键配置：
+          | Ctrl + X | (isClip) 将单元格标记为剪贴状态并将内容复制到剪贴板，支持 Excel 和 WPS |
+          | Ctrl + C | (isClip) 将单元格标记为复制状态并将内容复制到剪贴板，支持 Excel 和 WPS |
+          | Ctrl + V | (isClip) 将剪贴板的内容粘贴到指定区域中，支持 Excel 和 WPS |
+          | Ctrl + M | (isMerge) 将选取的单元格合并或取消合并 |
+          | Ctrl + F | (isFNR) 查找数据，全表或查找指定区域数据 |
+          | Ctrl + H | (isFNR) 替换数据，全表或替换指定区域数据 |
+          | Arrow Up ↑ | （isArrow）如果存在，则移动到上面的单元格 |
+          | Arrow Down ↓ | （isArrow）如果存在，则移动到下面的单元格 |
+          | Arrow Left ← | （isArrow）如果存在，则移动到左边的单元格 |
+          | Arrow Right → | （isArrow）如果存在，则移动到右边的单元格 |
+          | Tab | （isTab）如果存在，则移动到右边单元格；如果存在区域，则在指定区域内移动；如果移动到最后一列，则从下一行开始移到，以此循环 |
+          | Tab + Shift | （isTab）如果存在，则移动到左边单元格，则在指定区域内移动；如果移动到第一列，则从上一行开始移到，以此循环 |
+          | Spacebar | (isChecked) 如果选取的区域存在复选框，则切换勾选状态 |
+          | Enter | （isEnter）如果存在，取消单元格编辑并移动到下面的单元格，则在指定区域内移动；如果移动到最后一行，则从下一列开始移到，以此循环 |
+          | Enter + Shift | （isEnter）如果存在，取消单元格编辑并移动到上面的单元格，则在指定区域内移动；如果移动到第一行，则从上一列开始移到，以此循环 |
+          | Delete | （isDel）清空单元格内容 |
+          | Backspace | （isDel）清空单元格内容并激活为编辑状态 |
+          | F2 | 如果存在，激活单元格为编辑状态 |
+          | Esc | 如果存在，取消单元格编辑状态 |
+          | * | （isEdit）按下除功能键之外的任意键激活覆盖式单元格编辑 |
       </code>
     </pre>
 

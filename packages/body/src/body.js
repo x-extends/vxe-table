@@ -520,7 +520,7 @@ export default {
       }, [
         h('span', {
           staticClass: 'vxe-table--cell-main-area'
-        }, [
+        }, mouseOpts.extension ? [
           h('span', {
             staticClass: 'vxe-table--cell-main-area-btn',
             on: {
@@ -529,7 +529,7 @@ export default {
               }
             }
           })
-        ]),
+        ] : null),
         h('span', {
           staticClass: 'vxe-table--cell-copy-area'
         }),
