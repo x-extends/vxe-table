@@ -186,18 +186,18 @@ export default {
               return ''
             },
             // 通用行合并函数（将相同多列数据合并为一行）
-            rowspanMethod ({ row, $rowIndex, column, data }) {
+            rowspanMethod ({ row, _rowIndex, column, visibleData }) {
               let fields = ['sex']
               let cellValue = row[column.property]
               if (cellValue && fields.includes(column.property)) {
-                let prevRow = data[$rowIndex - 1]
-                let nextRow = data[$rowIndex + 1]
+                let prevRow = visibleData[_rowIndex - 1]
+                let nextRow = visibleData[_rowIndex + 1]
                 if (prevRow && prevRow[column.property] === cellValue) {
                   return { rowspan: 0, colspan: 0 }
                 } else {
                   let countRowspan = 1
                   while (nextRow && nextRow[column.property] === cellValue) {
-                    nextRow = data[++countRowspan + $rowIndex]
+                    nextRow = visibleData[++countRowspan + _rowIndex]
                   }
                   if (countRowspan > 1) {
                     return { rowspan: countRowspan, colspan: 1 }
@@ -276,18 +276,18 @@ export default {
       })
     },
     // 通用行合并函数（将相同多列数据合并为一行）
-    rowspanMethod ({ row, $rowIndex, column, data }) {
+    rowspanMethod ({ row, _rowIndex, column, visibleData }) {
       const fields = ['sex']
       const cellValue = row[column.property]
       if (cellValue && fields.includes(column.property)) {
-        const prevRow = data[$rowIndex - 1]
-        let nextRow = data[$rowIndex + 1]
+        const prevRow = visibleData[_rowIndex - 1]
+        let nextRow = visibleData[_rowIndex + 1]
         if (prevRow && prevRow[column.property] === cellValue) {
           return { rowspan: 0, colspan: 0 }
         } else {
           let countRowspan = 1
           while (nextRow && nextRow[column.property] === cellValue) {
-            nextRow = data[++countRowspan + $rowIndex]
+            nextRow = visibleData[++countRowspan + _rowIndex]
           }
           if (countRowspan > 1) {
             return { rowspan: countRowspan, colspan: 1 }
