@@ -334,7 +334,6 @@ export default {
         showChild: false,
         selectChild: null,
         list: [],
-        childPos: null,
         style: null
       },
       // 存放可编辑相关信息
