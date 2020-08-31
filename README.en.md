@@ -58,9 +58,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Filter
 * [x] Merged cells
 * [x] Merged footer items
-* [x] Import
-* [x] Export
-* [x] Print
+* [x] Import/Export/Print
 * [x] Show/Hide column
 * [x] Loading
 * [x] Formatted cell
