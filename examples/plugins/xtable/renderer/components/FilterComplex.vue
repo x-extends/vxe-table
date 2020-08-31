@@ -27,11 +27,6 @@ export default {
       option: null
     }
   },
-  watch: {
-    params () {
-      this.load()
-    }
-  },
   created () {
     this.load()
   },

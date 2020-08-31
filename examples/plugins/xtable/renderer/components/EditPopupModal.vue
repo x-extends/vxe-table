@@ -52,11 +52,6 @@ export default {
       }
     }
   },
-  watch: {
-    params () {
-      this.load()
-    }
-  },
   created () {
     this.load()
   },
