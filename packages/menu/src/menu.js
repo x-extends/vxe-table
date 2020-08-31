@@ -11,8 +11,7 @@ export default {
     const { _e, ctxMenuOpts, ctxMenuStore } = this
     return h('div', {
       class: ['vxe-table--context-menu-wrapper', ctxMenuOpts.className, {
-        'is--show': ctxMenuStore.visible,
-        [`child-pos--${ctxMenuStore.childPos}`]: ctxMenuStore.childPos
+        'is--show': ctxMenuStore.visible
       }],
       style: ctxMenuStore.style
     }, ctxMenuStore.list.map((options, gIndex) => {

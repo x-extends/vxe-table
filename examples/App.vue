@@ -88,7 +88,7 @@
 
     <vxe-modal v-model="supportVisible" :loading="supportLoading" title="💡技术支持" width="800" position="center">
       <template v-slot>
-        <div class="support-declare">考虑到部分用户有需要技术支持的需求，用于快速解决使用过程中遇到的各种问题，您的支持可以帮助该项目持续维护下去！</div>
+        <div class="support-declare">考虑到部分用户有需要技术支持的需求，用于快速解决使用过程中遇到的各种问题，同时您的支持也可以帮助该项目持续维护下去！</div>
         <div>
           <ul class="vxe-row support-question">
             <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">

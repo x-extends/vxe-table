@@ -18,11 +18,6 @@
   &.is--show {
     display: block;
   }
-  &.child-pos--left {
-    .vxe-table--context-menu-clild-wrapper {
-      left: -100%;
-    }
-  }
 }
 .vxe-context-menu--link {
   display: block;
