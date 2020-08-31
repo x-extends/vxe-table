@@ -362,8 +362,7 @@ export declare class Table extends VXETableModule {
    * 对于某些特殊场景需要对数据进行手动插入时可能会用到
    * @param records 数据
    */
-  createRow(records: any[]): Promise<any[]>;
-  createRow(records: any): Promise<any>;
+  createRow(records: any | any[]): Promise<any | any[]>;
   /**
    * 只对 keep-source 开启有效，还原指定行 row 或者整个表格的数据
    * @param rows 指定行
@@ -390,8 +389,7 @@ export declare class Table extends VXETableModule {
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
    */
-  getColumns(): ColumnInfo[];
-  getColumns(columnIndex?: number): ColumnInfo;
+  getColumns(columnIndex?: number): ColumnInfo | ColumnInfo[];
   /**
    * 根据列的唯一主键获取列
    * @param colid 列主键
@@ -895,7 +893,7 @@ export declare class Table extends VXETableModule {
   setMergeFooterItems(merges: MergeOptions | MergeOptions[]): Promise<any>;
   /**
    * 用于 mouse-config.area，设置活动的区域的单元格
-   * @param activeArea 
+   * @param activeArea
    */
   setActiveCellArea(activeArea: ActiveCellAreaOptions): Promise<any>;
   /**

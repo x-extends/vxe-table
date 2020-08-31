@@ -1,7 +1,7 @@
-import { GridRenderParams } from '../grid'
 import { ColumnInfo } from '../column'
 import { ExportOptons } from './export'
 import { MenuFirstOption } from './menu'
+import { GridRenderParams } from './renderer'
 
 declare function interceptorFunc(params: any, event: any): any;
 

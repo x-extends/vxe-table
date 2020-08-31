@@ -11,7 +11,6 @@ export default {
       Object.assign(this.ctxMenuStore, {
         visible: false,
         selected: null,
-        childPos: null,
         selectChild: null,
         showChild: false
       })
@@ -147,7 +146,6 @@ export default {
                   selected: null,
                   selectChild: null,
                   showChild: false,
-                  childPos: null,
                   style: {
                     zIndex: this.tZindex,
                     top: `${top}px`,
@@ -166,9 +164,6 @@ export default {
                   }
                   if (offsetLeft > -10) {
                     ctxMenuStore.style.left = `${Math.max(scrollLeft + 2, left - clientWidth - 2)}px`
-                  }
-                  if (offsetLeft > -220) {
-                    ctxMenuStore.childPos = 'left'
                   }
                 })
               }
@@ -193,6 +188,7 @@ export default {
       this.closeFilter()
     },
     ctxMenuMouseoverEvent (evnt, item, child) {
+      const menuElem = evnt.currentTarget
       const ctxMenuStore = this.ctxMenuStore
       evnt.preventDefault()
       evnt.stopPropagation()
@@ -200,6 +196,34 @@ export default {
       ctxMenuStore.selectChild = child
       if (!child) {
         ctxMenuStore.showChild = UtilTools.hasChildrenList(item)
+        if (ctxMenuStore.showChild) {
+          this.$nextTick(() => {
+            const childWrapperElem = menuElem.nextElementSibling
+            if (childWrapperElem) {
+              const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(menuElem)
+              const posTop = boundingTop + menuElem.offsetHeight
+              const posLeft = boundingLeft + menuElem.offsetWidth
+              let left = ''
+              let right = ''
+              // 是否超出右侧
+              if (posLeft + childWrapperElem.offsetWidth > visibleWidth - 10) {
+                left = 'auto'
+                right = `${menuElem.offsetWidth}px`
+              }
+              // 是否超出底部
+              let top = ''
+              let bottom = ''
+              if (posTop + childWrapperElem.offsetHeight > visibleHeight - 10) {
+                top = 'auto'
+                bottom = '0'
+              }
+              childWrapperElem.style.left = left
+              childWrapperElem.style.right = right
+              childWrapperElem.style.top = top
+              childWrapperElem.style.bottom = bottom
+            }
+          })
+        }
       }
     },
     ctxMenuMouseoutEvent (evnt, item) {

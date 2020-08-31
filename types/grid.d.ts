@@ -4,7 +4,6 @@ import { ColumnOptions } from './column'
 import { FormOptions } from './form'
 import { ToolbarOptions } from './toolbar'
 import { PagerOptions } from './pager'
-import { TableRenderParams } from './extends/renderer'
 
 /**
  * 高级表格
@@ -115,10 +114,3 @@ export interface GridToolbarOptions extends ToolbarOptions {
 }
 
 export interface GridFormOptions extends FormOptions {}
-
-export class GridRenderParams extends TableRenderParams {
-  /**
-   * 高级表格实例对象
-   */
-  $grid: Grid;
-}
