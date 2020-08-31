@@ -46,14 +46,8 @@ export default {
       valList: []
     }
   },
-  watch: {
-    params () {
-      this.load()
-    }
-  },
   created () {
     this.load()
-    this.searchEvent()
   },
   methods: {
     load () {

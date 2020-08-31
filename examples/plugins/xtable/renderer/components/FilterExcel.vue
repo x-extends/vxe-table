@@ -92,11 +92,6 @@ export default {
       return option.data.sVal ? colValList.filter(val => val.indexOf(option.data.sVal) > -1) : colValList
     }
   },
-  watch: {
-    params () {
-      this.load()
-    }
-  },
   created () {
     this.load()
   },
