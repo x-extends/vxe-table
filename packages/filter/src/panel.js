@@ -7,6 +7,12 @@ export default {
   props: {
     filterStore: Object
   },
+  computed: {
+    hasCheckOption () {
+      const { filterStore } = this
+      return filterStore && filterStore.options.some(option => option.checked)
+    }
+  },
   render (h) {
     const { $parent: $xetable, filterStore } = this
     const { column } = filterStore
@@ -106,20 +112,21 @@ export default {
       ]
     },
     renderFooter (h) {
-      const { filterStore } = this
+      const { hasCheckOption, filterStore } = this
       const { column, multiple } = filterStore
       const filterRender = column.filterRender
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+      const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
       return multiple && (!compConf || compConf.isFooter !== false) ? [
         h('div', {
           class: 'vxe-table--filter-footer'
         }, [
           h('button', {
             class: {
-              'is--disabled': !filterStore.isAllSelected && !filterStore.isIndeterminate
+              'is--disabled': isDisabled
             },
             attrs: {
-              disabled: !filterStore.isAllSelected && !filterStore.isIndeterminate
+              disabled: isDisabled
             },
             on: {
               click: this.confirmFilter
