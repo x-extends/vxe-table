@@ -82,6 +82,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   const {
     _e,
     $listeners: tableListeners,
+    afterFullData,
     tableData,
     height,
     overflowX,
@@ -138,7 +139,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
   const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs = { 'data-colid': column.id }
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  const params = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, level: rowLevel, isHidden: fixedHiddenColumn, data: tableData, items }
+  const params = { $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, level: rowLevel, isHidden: fixedHiddenColumn, visibleData: afterFullData, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -155,7 +156,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
         // 如果配置了显示 tooltip
         $table.triggerBodyTooltipEvent(evnt, params)
       }
-      UtilTools.emitEvent($table, 'cell-mouseenter', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseenter', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
     }
   }
   // hover 退出事件
@@ -167,7 +168,7 @@ function renderColumn (h, _vm, $table, $seq, seq, rowid, fixedType, rowLevel, ro
       if (showTooltip || enabled) {
         $table.handleTargetLeaveEvent()
       }
-      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
+      UtilTools.emitEvent($table, 'cell-mouseleave', [{ $table, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items, cell: evnt.currentTarget, $event: evnt }, evnt])
     }
   }
   // 按下事件处理
