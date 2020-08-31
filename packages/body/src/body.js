@@ -80,10 +80,11 @@ function mergeMethod (mergeList, _rowIndex, _columnIndex) {
 /**
  * 渲染列
  */
-function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, $columnIndex, columns, items) {
+function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, columns, items) {
   const {
     _e,
     $listeners: tableListeners,
+    afterFullData,
     tableData,
     height,
     columnKey,
@@ -131,7 +132,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const bindMouseenter = tableListeners['cell-mouseenter']
   const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  const params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, data: tableData, items }
+  const params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -193,7 +194,6 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   }
   // 合并行或列
   if (mergeList.length) {
-    const _rowIndex = $xetable._getRowIndex(row)
     const spanRest = mergeMethod(mergeList, _rowIndex, _columnIndex)
     if (spanRest) {
       const { rowspan, colspan } = spanRest
@@ -303,6 +303,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     if (scrollYLoad) {
       seq += scrollYStore.startIndex
     }
+    const _rowIndex = $xetable._getRowIndex(row)
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
     rowIndex = $xetable.getRowIndex(row)
     // 事件绑定
@@ -337,7 +338,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
         key: rowKey || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
-        return renderColumn(h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, column, $columnIndex, tableColumn, tableData)
+        return renderColumn(h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
       }))
     )
     // 如果行被展开了

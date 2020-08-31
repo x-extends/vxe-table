@@ -80,6 +80,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 模态窗口
 * [x] 渲染器
 * [x] 虚拟滚动
+* [x] 虚拟合并
 * [x] (pro) 单元格区域选取
 * [x] (pro) 单元格复制/粘贴
 * [x] (pro) 单元格查找和替换

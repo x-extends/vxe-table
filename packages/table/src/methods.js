@@ -3616,6 +3616,9 @@ const Methods = {
    * @param {MergeOptions[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
    */
   setMergeCells (merges) {
+    if (this.spanMethod) {
+      UtilTools.error('vxe.error.errConflicts', ['merge-cells', 'span-method'])
+    }
     setMerges(this, merges, this.mergeList, this.afterFullData)
     return this.$nextTick().then(() => this.updateCellAreas())
   },
@@ -3624,6 +3627,9 @@ const Methods = {
    * @param {MergeOptions[]} merges 多个或数组 [{row:Row|number, col:ColumnInfo|number}]
    */
   removeMergeCells (merges) {
+    if (this.spanMethod) {
+      UtilTools.error('vxe.error.errConflicts', ['merge-cells', 'span-method'])
+    }
     const rest = removeMerges(this, merges, this.mergeList, this.afterFullData)
     return this.$nextTick().then(() => {
       this.updateCellAreas()
@@ -3647,10 +3653,16 @@ const Methods = {
     this.setMergeFooterItems(this.mergeFooterItems)
   },
   setMergeFooterItems (merges) {
+    if (this.footerSpanMethod) {
+      UtilTools.error('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
+    }
     setMerges(this, merges, this.mergeFooterList, null)
     return this.$nextTick().then(() => this.updateCellAreas())
   },
   removeMergeFooterItems (merges) {
+    if (this.footerSpanMethod) {
+      UtilTools.error('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
+    }
     const rest = removeMerges(this, merges, this.mergeFooterList, null)
     return this.$nextTick().then(() => {
       this.updateCellAreas()

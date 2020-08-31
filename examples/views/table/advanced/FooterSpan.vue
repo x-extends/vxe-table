@@ -90,8 +90,8 @@ export default {
           methods: {
             footerMethod ({ columns, data }) {
               const footerData = [
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
+                columns.map((column, _columnIndex) => {
+                  if (_columnIndex === 0) {
                     return '平均'
                   }
                   // 合并为一列显示
@@ -100,8 +100,8 @@ export default {
                   }
                   return null
                 }),
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
+                columns.map((column, _columnIndex) => {
+                  if (_columnIndex === 0) {
                     return '和值'
                   }
                   // 合并为一列显示
@@ -113,14 +113,14 @@ export default {
               ]
               return footerData
             },
-            colspanMethod ({ rowIndex, columnIndex }) {
-              if (rowIndex % 2 === 0) {
-                if (columnIndex === 2) {
+            colspanMethod ({ _rowIndex, _columnIndex }) {
+              if (_rowIndex % 2 === 0) {
+                if (_columnIndex === 2) {
                   return {
                     rowspan: 1,
                     colspan: 2
                   }
-                } else if (columnIndex === 3) {
+                } else if (_columnIndex === 3) {
                   return {
                     rowspan: 0,
                     colspan: 0
@@ -128,13 +128,13 @@ export default {
                 }
               }
             },
-            footerColspanMethod ({ columnIndex }) {
-              if (columnIndex === 3) {
+            footerColspanMethod ({ _columnIndex }) {
+              if (_columnIndex === 3) {
                 return {
                   rowspan: 1,
                   colspan: 2
                 }
-              } else if (columnIndex === 4) {
+              } else if (_columnIndex === 4) {
                 return {
                   rowspan: 0,
                   colspan: 0
@@ -172,8 +172,8 @@ export default {
           methods: {
             footerMethod ({ columns, data }) {
               const footerData = [
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
+                columns.map((column, _columnIndex) => {
+                  if (_columnIndex === 0) {
                     return '平均'
                   }
                   if (['content'].includes(column.property)) {
@@ -181,8 +181,8 @@ export default {
                   }
                   return null
                 }),
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
+                columns.map((column, _columnIndex) => {
+                  if (_columnIndex === 0) {
                     return '和值'
                   }
                   if (['content'].includes(column.property)) {
@@ -194,18 +194,18 @@ export default {
               return footerData
             },
             // 通用行合并函数（将相同多列数据合并为一行）
-            rowspanMethod ({ row, $rowIndex, column, data }) {
+            rowspanMethod ({ row, _rowIndex, column, visibleData }) {
               let fields = ['key']
               let cellValue = row[column.property]
               if (cellValue && fields.includes(column.property)) {
-                let prevRow = data[$rowIndex - 1]
-                let nextRow = data[$rowIndex + 1]
+                let prevRow = visibleData[_rowIndex - 1]
+                let nextRow = visibleData[_rowIndex + 1]
                 if (prevRow && prevRow[column.property] === cellValue) {
                   return { rowspan: 0, colspan: 0 }
                 } else {
                   let countRowspan = 1
                   while (nextRow && nextRow[column.property] === cellValue) {
-                    nextRow = data[++countRowspan + $rowIndex]
+                    nextRow = visibleData[++countRowspan + _rowIndex]
                   }
                   if (countRowspan > 1) {
                     return { rowspan: countRowspan, colspan: 1 }
@@ -213,13 +213,13 @@ export default {
                 }
               }
             },
-            footerRowspanMethod ({ $rowIndex, columnIndex }) {
-              if ($rowIndex === 0) {
-                if (columnIndex === 2) {
+            footerRowspanMethod ({ _rowIndex, _columnIndex }) {
+              if (_rowIndex === 0) {
+                if (_columnIndex === 2) {
                   return { rowspan: 2, colspan: 1 }
                 }
-              } else if ($rowIndex === 1) {
-                if (columnIndex === 2) {
+              } else if (_rowIndex === 1) {
+                if (_columnIndex === 2) {
                   return { rowspan: 0, colspan: 0 }
                 }
               }
@@ -241,8 +241,8 @@ export default {
   methods: {
     footerMethod ({ columns, data }) {
       const footerData = [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
+        columns.map((column, _columnIndex) => {
+          if (_columnIndex === 0) {
             return '平均'
           }
           // 合并为一列显示
@@ -254,8 +254,8 @@ export default {
           }
           return null
         }),
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
+        columns.map((column, _columnIndex) => {
+          if (_columnIndex === 0) {
             return '和值'
           }
           // 合并为一列显示
@@ -270,14 +270,14 @@ export default {
       ]
       return footerData
     },
-    colspanMethod ({ rowIndex, columnIndex }) {
-      if (rowIndex % 2 === 0) {
-        if (columnIndex === 2) {
+    colspanMethod ({ _rowIndex, _columnIndex }) {
+      if (_rowIndex % 2 === 0) {
+        if (_columnIndex === 2) {
           return {
             rowspan: 1,
             colspan: 2
           }
-        } else if (columnIndex === 3) {
+        } else if (_columnIndex === 3) {
           return {
             rowspan: 0,
             colspan: 0
@@ -285,13 +285,13 @@ export default {
         }
       }
     },
-    footerColspanMethod ({ columnIndex }) {
-      if (columnIndex === 3) {
+    footerColspanMethod ({ _columnIndex }) {
+      if (_columnIndex === 3) {
         return {
           rowspan: 1,
           colspan: 2
         }
-      } else if (columnIndex === 4) {
+      } else if (_columnIndex === 4) {
         return {
           rowspan: 0,
           colspan: 0
@@ -299,18 +299,18 @@ export default {
       }
     },
     // 通用行合并函数（将相同多列数据合并为一行）
-    rowspanMethod ({ row, $rowIndex, column, data }) {
+    rowspanMethod ({ row, _rowIndex, column, visibleData }) {
       const fields = ['key']
       const cellValue = row[column.property]
       if (cellValue && fields.includes(column.property)) {
-        const prevRow = data[$rowIndex - 1]
-        let nextRow = data[$rowIndex + 1]
+        const prevRow = visibleData[_rowIndex - 1]
+        let nextRow = visibleData[_rowIndex + 1]
         if (prevRow && prevRow[column.property] === cellValue) {
           return { rowspan: 0, colspan: 0 }
         } else {
           let countRowspan = 1
           while (nextRow && nextRow[column.property] === cellValue) {
-            nextRow = data[++countRowspan + $rowIndex]
+            nextRow = visibleData[++countRowspan + _rowIndex]
           }
           if (countRowspan > 1) {
             return { rowspan: countRowspan, colspan: 1 }
@@ -318,13 +318,13 @@ export default {
         }
       }
     },
-    footerRowspanMethod ({ $rowIndex, columnIndex }) {
-      if ($rowIndex === 0) {
-        if (columnIndex === 2) {
+    footerRowspanMethod ({ _rowIndex, _columnIndex }) {
+      if (_rowIndex === 0) {
+        if (_columnIndex === 2) {
           return { rowspan: 2, colspan: 1 }
         }
-      } else if ($rowIndex === 1) {
-        if (columnIndex === 2) {
+      } else if (_rowIndex === 1) {
+        if (_columnIndex === 2) {
           return { rowspan: 0, colspan: 0 }
         }
       }

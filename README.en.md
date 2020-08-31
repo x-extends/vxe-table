@@ -79,7 +79,8 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Keyboard navigation
 * [x] Modal
 * [x] Renderer
-* [x] Virtual Scroller
+* [x] Virtual scroller
+* [x] Virtual merger
 * [x] (pro) Cell area selection
 * [x] (pro) Cell copy & paste
 * [x] (pro) Cell find and replace
