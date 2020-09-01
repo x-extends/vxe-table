@@ -1130,12 +1130,12 @@ export default {
             //     name: 'TableEditForceRowValid'
             //   }
             // },
-            {
-              label: 'app.aside.nav.highlightCell',
-              locat: {
-                name: 'TableEditHighlightCell'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.highlightCell',
+            //   locat: {
+            //     name: 'TableEditHighlightCell'
+            //   }
+            // },
             {
               label: 'app.aside.nav.keyboard',
               locat: {
