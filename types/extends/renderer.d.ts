@@ -1,6 +1,7 @@
 import { CreateElement, VNode } from 'vue'
 import { RowInfo } from '../component'
 import { Table } from '../table'
+import { Grid } from '../grid'
 import { ColumnInfo, ColumnCellRenderOptions, ColumnContentRenderOptions } from '../column'
 import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
 import { ColumnEditRenderOptions, ColumnEditRenderParams } from './edit'
@@ -146,6 +147,13 @@ export class TableRenderParams extends RenderParams {
    * 表格实例对象
    */
   $table: Table;
+}
+
+export class GridRenderParams extends TableRenderParams {
+  /**
+   * 高级表格实例对象
+   */
+  $grid: Grid;
 }
 
 export class EmptyRenderParams extends TableRenderParams { }

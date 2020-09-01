@@ -1,7 +1,8 @@
-import { VXETableModule } from '../component'
+import { VXETableModule, RowInfo } from '../component'
 import { Table } from '../table'
-import { Grid, GridRenderParams } from '../grid'
+import { Grid } from '../grid'
 import { ColumnInfo } from '../column'
+import { GridRenderParams } from './renderer'
 
 /**
  * 导出
@@ -67,15 +68,15 @@ export interface ExportOptons {
   /**
    * 列过滤方法
    */
-  columnFilterMethod?(column: ColumnInfo, $columnIndex: number, columns: ColumnInfo[]): boolean;
+  columnFilterMethod?(params: { column: ColumnInfo, $columnIndex: number }): boolean;
   /**
    * 数据过滤方法
    */
-  dataFilterMethod?(row: any, $rowIndex: number, data: any[]): boolean;
+  dataFilterMethod?(params: { row: RowInfo, $rowIndex: number }): boolean;
   /**
    * 表尾过滤方法
    */
-  footerFilterMethod?(cells: any[], $rowIndex: number, footerData: any[][]): boolean;
+  footerFilterMethod?(params: { items: any[], $rowIndex: number }): boolean;
   /**
    * 是否服务端导出
    */
@@ -83,7 +84,7 @@ export interface ExportOptons {
   /**
    * 只对 remote=true 有效，用于自定义导出逻辑
    */
-  exportMethod?(params: { $table: Table, $grid: Grid, options: ExportOptons }): Promise<any>;
+  exportMethod?(params: { $table: Table, $grid?: Grid, options: ExportOptons }): Promise<any>;
 
   [name: string]: any;
 }
@@ -159,7 +160,7 @@ export interface PrintOptons {
   /**
    * 数据过滤方法
    */
-  dataFilterMethod?(params: { row: any, $rowIndex: number }): boolean;
+  dataFilterMethod?(params: { row: RowInfo, $rowIndex: number }): boolean;
   /**
    * 表尾过滤方法
    */
@@ -175,7 +176,7 @@ export interface ReadFileOptions {
 }
 
 export interface ColumnExportCellRenderParams extends GridRenderParams {
-  row: any;
+  row: RowInfo;
   column: ColumnInfo;
 }
 

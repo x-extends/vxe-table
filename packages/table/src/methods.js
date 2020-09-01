@@ -1959,8 +1959,9 @@ const Methods = {
     }
   },
   handleGlobalPasteEvent (evnt) {
-    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
-    if (isActivated) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
+    const { actived } = editStore
+    if (isActivated && !(actived.row || actived.column)) {
       if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
         this.handlePasteCellAreaEvent(evnt)
       } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
@@ -1969,8 +1970,9 @@ const Methods = {
     }
   },
   handleGlobalCopyEvent (evnt) {
-    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
-    if (isActivated) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
+    const { actived } = editStore
+    if (isActivated && !(actived.row || actived.column)) {
       if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
         this.handleCopyCellAreaEvent(evnt)
       } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
@@ -1979,8 +1981,9 @@ const Methods = {
     }
   },
   handleGlobalCutEvent (evnt) {
-    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
-    if (isActivated) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
+    const { actived } = editStore
+    if (isActivated && !(actived.row || actived.column)) {
       if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
         this.handleCutCellAreaEvent(evnt)
       } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {

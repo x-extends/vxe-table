@@ -1,8 +1,7 @@
 import { CreateElement, VNode } from 'vue'
 import { VXETableModule } from './component'
-import { GridRenderParams } from './grid'
 import { ColumnInfo } from './column'
-import { RenderOptions } from './extends/renderer'
+import { GridRenderParams, RenderOptions } from './extends/renderer'
 
 /**
  * 工具栏

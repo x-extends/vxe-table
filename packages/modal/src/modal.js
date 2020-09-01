@@ -87,16 +87,13 @@ export default {
     activeModals.push(this)
   },
   mounted () {
-    const { $listeners, $el, events = {}, transfer } = this
+    const { $listeners, events = {} } = this
     if (this.value) {
       this.open()
     }
     this.recalculate()
     if (this.escClosable) {
       GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
-    }
-    if (transfer) {
-      document.body.appendChild($el)
     }
     // 触发 inserted 事件
     const type = 'inserted'
@@ -279,6 +276,9 @@ export default {
       const { events = {}, inited, duration, visible, isMsg, remember } = this
       if (!inited) {
         this.inited = true
+        if (this.transfer) {
+          document.body.appendChild(this.$el)
+        }
       }
       if (!visible) {
         const type = 'show'

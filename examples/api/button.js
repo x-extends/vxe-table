@@ -107,6 +107,15 @@ const apis = [
         list: []
       },
       {
+        name: 'destroy-on-close',
+        desc: '在下拉容器关闭时销毁内容',
+        version: '2.9.20',
+        type: 'boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'transfer',
         descKey: 'app.api.button.desc.transfer',
         version: '2.8.31',
