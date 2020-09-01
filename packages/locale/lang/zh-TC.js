@@ -75,7 +75,8 @@ export default {
     pro: {
       area: {
         mergeErr: '無法對合併儲存格進行該操作',
-        multiErr: '無法對多重選擇區域進行該操作'
+        multiErr: '無法對多重選擇區域進行該操作',
+        extendErr: '如果延伸的區域包含被合併的儲存格，所有合併的儲存格需大小相同'
       },
       fnr: {
         title: '查找和替換',
