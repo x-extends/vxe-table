@@ -75,7 +75,8 @@ export default {
     pro: {
       area: {
         mergeErr: '无法对合并单元格进行该操作',
-        multiErr: '无法对多重选择区域进行该操作'
+        multiErr: '无法对多重选择区域进行该操作',
+        extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同'
       },
       fnr: {
         title: '查找和替换',
