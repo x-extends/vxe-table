@@ -75,7 +75,8 @@ export default {
     pro: {
       area: {
         mergeErr: 'The operation cannot be performed on merged cells',
-        multiErr: 'The operation cannot be performed on multiple selection areas'
+        multiErr: 'The operation cannot be performed on multiple selection areas',
+        extendErr: 'If the extended area contains merged cells, all merged cells need to be the same size'
       },
       fnr: {
         title: 'Find and replace',
