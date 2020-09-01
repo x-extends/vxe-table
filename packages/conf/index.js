@@ -281,10 +281,7 @@ const GlobalConfig = {
     // size: null,
     scrollY: {
       gt: 100
-      // oSize: 0,
-      // rSize: 0
-      // vSize: 0,
-      // rHeight: 0
+      // oSize: 0
     }
   },
   i18n: key => key

@@ -181,7 +181,7 @@ export interface ModalOptions {
   id?: string;
   type?: string;
   loading?: boolean;
-  status?: string;
+  status?: 'info' | 'success' | 'warning' | 'error' | 'loading';
   iconStatus?: string;
   top?: number | string;
   position?: 'center' | {
@@ -214,7 +214,7 @@ export interface ModalOptions {
   storage?: boolean;
   storageKey?: string;
   animat?: boolean;
-  size?: string;
+  size?: 'medium' | 'small' | 'mini';
 
   slots?: {
     default?(params: ModalDefaultSlotParams, h: CreateElement): VNode[] | string[];

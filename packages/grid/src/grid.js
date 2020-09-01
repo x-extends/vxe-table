@@ -761,7 +761,7 @@ export default {
       this.$emit('form-submit-invalid', Object.assign({ $grid: this }, params))
     },
     togglCollapseEvent (params) {
-      this.recalculate(true)
+      this.$nextTick(() => this.recalculate(true))
       this.$emit('form-toggle-collapse', Object.assign({ $grid: this }, params))
     },
     triggerZoomEvent (evnt) {

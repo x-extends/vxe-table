@@ -122,7 +122,7 @@ export default {
      * 显示快捷菜单
      */
     openContextMenu (evnt, type, params) {
-      const { ctxMenuStore, ctxMenuOpts } = this
+      const { initStore, ctxMenuStore, ctxMenuOpts } = this
       const config = ctxMenuOpts[type]
       const visibleMethod = ctxMenuOpts.visibleMethod
       if (config) {
@@ -139,6 +139,7 @@ export default {
               let top = evnt.clientY + scrollTop
               let left = evnt.clientX + scrollLeft
               const handleVisible = () => {
+                initStore.menu = true
                 Object.assign(ctxMenuStore, {
                   args: params,
                   visible: true,

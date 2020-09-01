@@ -58,7 +58,7 @@
           <template v-slot="{ items }">
             <table>
               <tbody>
-                <tr class="my-tr" v-for="(item, index) in items" :key="index">
+                <tr class="my-tr" v-for="item in items" :key="item.id">
                   <td>{{ item.label }} - 列1</td>
                   <td>{{ item.label }} - 列2</td>
                   <td>{{ item.label }} - 列3</td>

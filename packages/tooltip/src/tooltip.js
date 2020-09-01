@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import GlobalConfig from '../../conf'
+import vSize from '../../mixins/size'
 import { UtilTools, DomTools } from '../../tools'
 
 function updateTipStyle (_vm) {
@@ -26,6 +27,7 @@ function updateTipStyle (_vm) {
 
 export default {
   name: 'VxeTooltip',
+  mixins: [vSize],
   props: {
     value: Boolean,
     size: { type: String, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
@@ -50,11 +52,6 @@ export default {
         placement: '',
         arrowStyle: null
       }
-    }
-  },
-  computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
     }
   },
   watch: {

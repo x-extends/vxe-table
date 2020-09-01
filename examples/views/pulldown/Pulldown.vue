@@ -34,7 +34,7 @@
         </template>
       </vxe-pulldown>
 
-      <vxe-pulldown ref="xDown3">
+      <vxe-pulldown ref="xDown3" destroy-on-close>
         <template v-slot>
           <vxe-button icon="fa fa-table" @click="clickEvent3">切换下拉表格</vxe-button>
         </template>
@@ -51,7 +51,7 @@
         </template>
       </vxe-pulldown>
 
-      <vxe-pulldown ref="xDown4">
+      <vxe-pulldown ref="xDown4" transfer>
         <template v-slot>
           <vxe-input v-model="value4" suffix-icon="fa fa-search" placeholder="实现下拉分页表格" @keyup="keyupEvent4" @focus="focusEvent4" @suffix-click="suffixClick4"></vxe-input>
         </template>
@@ -153,7 +153,7 @@ export default {
             </template>
           </vxe-pulldown>
 
-          <vxe-pulldown ref="xDown3">
+          <vxe-pulldown ref="xDown3" destroy-on-close>
             <template v-slot>
               <vxe-button icon="fa fa-table" @click="clickEvent3">切换下拉表格</vxe-button>
             </template>
@@ -170,7 +170,7 @@ export default {
             </template>
           </vxe-pulldown>
 
-          <vxe-pulldown ref="xDown4">
+          <vxe-pulldown ref="xDown4" transfer>
             <template v-slot>
               <vxe-input v-model="value4" suffix-icon="fa fa-search" placeholder="实现下拉分页表格" @keyup="keyupEvent4" @focus="focusEvent4" @suffix-click="suffixClick4"></vxe-input>
             </template>

@@ -6,7 +6,7 @@ import { UtilTools, DomTools } from '../../tools'
 const { formatText } = UtilTools
 
 // 默认导出或打印的 HTML 样式
-const defaultHtmlStyle = 'body{margin:0;}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;text-align:left;font-size:14px;border-spacing:0}.vxe-table:not(.is--print ){table-layout:fixed;}.vxe-table.is--print{width:100%}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-top:1px solid #e8eaec;}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-left:1px solid #e8eaec;}.vxe-table.border--outer,.vxe-table.border--default th,.vxe-table.border--default td,.vxe-table.border--full th,.vxe-table.border--full td,.vxe-table.border--outer th,.vxe-table.border--inner th,.vxe-table.border--inner td{border-bottom:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--outer,.vxe-table.border--full th,.vxe-table.border--full td{border-right:1px solid #e8eaec}.vxe-table.border--default th,.vxe-table.border--full th,.vxe-table.border--outer th{background-color:#f8f8f9;}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.vxe-table:not(.is--print ) .col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}.vxe-table input[type="checkbox"],.vxe-table input[type="radio"],.vxe-table input[type="checkbox"]+span,.vxe-table input[type="radio"]+span{vertical-align:middle;}'
+const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;text-align:left;font-size:14px;border-spacing:0}.vxe-table:not(.is--print){table-layout:fixed}.vxe-table.is--print{width:100%}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-top:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-left:1px solid #e8eaec}.vxe-table.border--outer,.vxe-table.border--default th,.vxe-table.border--default td,.vxe-table.border--full th,.vxe-table.border--full td,.vxe-table.border--outer th,.vxe-table.border--inner th,.vxe-table.border--inner td{border-bottom:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--outer,.vxe-table.border--full th,.vxe-table.border--full td{border-right:1px solid #e8eaec}.vxe-table.border--default th,.vxe-table.border--full th,.vxe-table.border--outer th{background-color:#f8f8f9}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.vxe-table:not(.is--print) .col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}.vxe-table input[type="checkbox"]{margin:0}.vxe-table input[type="checkbox"],.vxe-table input[type="radio"],.vxe-table input[type="checkbox"]+span,.vxe-table input[type="radio"]+span{vertical-align:middle}'
 
 let htmlCellElem
 
@@ -288,7 +288,7 @@ function toHtml ($xetable, opts, columns, datas) {
         classNames.push(`col--${headAlign}`)
       }
       if (column.type === 'checkbox') {
-        return `<th class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${formatText(cellTitle, true)}</span></div></th>`
+        return `<th class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
       }
       return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><span>${formatText(cellTitle, true)}</span></div></th>`
     }).join('')}</tr></thead>`
@@ -650,20 +650,26 @@ export default {
       let expColumns = []
       if (columns && columns.length) {
         columns.forEach(item => {
-          let column
-          if (UtilTools.isColumn(item)) {
-            column = item
-          } else {
-            const type = item.type
-            const field = item.property || item.field
-            if (field) {
-              column = this.getColumnByField(field)
-            } else if (type) {
-              column = tableFullColumn.find(item => item.type === type)
+          let targetColumn
+          if (item) {
+            if (UtilTools.isColumn(item)) {
+              targetColumn = item
+            } else if (XEUtils.isString(item)) {
+              targetColumn = this.getColumnByField(item)
+            } else {
+              const type = item.type
+              const field = item.property || item.field
+              if (field && type) {
+                targetColumn = tableFullColumn.find(column => column.property === field && column.type === type)
+              } else if (field) {
+                targetColumn = this.getColumnByField(field)
+              } else if (type) {
+                targetColumn = tableFullColumn.find(column => column.type === type)
+              }
             }
-          }
-          if (column) {
-            expColumns.push(column)
+            if (targetColumn) {
+              expColumns.push(targetColumn)
+            }
           }
         })
       } else {
@@ -888,6 +894,7 @@ export default {
         visible: true
       })
       Object.assign(this.importParams, defOpts)
+      this.initStore.import = true
     },
     _openExport (options) {
       const { exportConfig, customOpts, exportOpts, collectColumn, footerData } = this
@@ -942,6 +949,7 @@ export default {
         isFooter: hasFooter,
         isPrint: defOpts.isPrint
       })
+      this.initStore.export = true
       return this.$nextTick()
     }
   }

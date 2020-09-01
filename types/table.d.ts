@@ -191,17 +191,22 @@ export declare class Table extends VXETableModule {
   checkboxOpts: CheckboxConfig;
   // 提示信息配置项
   tooltipConfig?: TooltipConfig;
+  tooltipOpts: TooltipConfig;
   // 导出配置项
   exportConfig?: boolean | ExportOptons;
+  exportOpts: ExportOptons;
   // 导入配置项
   importConfig?: boolean | ImportOptons;
+  importOpts: ImportOptons;
   // 打印配置项
   printConfig?: PrintOptons;
+  printOpts: PrintOptons;
   // 展开行配置项
   expandConfig?: ExpandConfig;
+  expandOpts: ExpandConfig;
   // 树形结构配置项
   treeConfig?: boolean | TreeConfig;
-  treeOpts?: TreeConfig;
+  treeOpts: TreeOpts;
   // 快捷菜单配置项
   contextMenu?: boolean | ContextMenuConfig;
   // 鼠标配置项
@@ -431,7 +436,7 @@ export declare class Table extends VXETableModule {
     fullData: RowInfo[];
     visibleData: RowInfo[];
     tableData: RowInfo[];
-    footerData: RowInfo[][];
+    footerData: any[][];
   };
   /**
    * 隐藏指定列
@@ -789,7 +794,7 @@ export declare class Table extends VXETableModule {
    * @param records 新数据
    * @param row 指定行
    */
-  insertAt(records: RecordInfo | RecordInfo[], row: RowInfo): Promise<{ row: RowInfo, rows: RowInfo[] }>;
+  insertAt(records: RecordInfo | RecordInfo[], row: RowInfo | number | null): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
    * 删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据
    * @param rows 指定行
@@ -1080,6 +1085,23 @@ export interface TreeConfig {
   iconOpen?: string;
   iconClose?: string;
   iconLoaded?: string;
+}
+
+export interface TreeOpts {
+  children: string;
+  indent: number;
+  line?: boolean;
+  expandAll?: boolean;
+  expandRowKeys?: string[] | number[];
+  accordion?: boolean;
+  trigger?: 'default' | 'cell' | 'row';
+  lazy?: boolean;
+  hasChild: string;
+  loadMethod?(params: { row: RowInfo }): Promise<any[]>;
+  toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
+  iconOpen: string;
+  iconClose: string;
+  iconLoaded: string;
 }
 
 /**

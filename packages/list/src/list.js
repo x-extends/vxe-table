@@ -3,6 +3,8 @@ import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import { DomTools, GlobalEvent, ResizeEvent } from '../../tools'
 
+const { browse } = DomTools
+
 export default {
   name: 'VxeList',
   mixins: [vSize],
@@ -58,8 +60,8 @@ export default {
       lastScrollTop: 0,
       scrollYStore: {
         startIndex: 0,
-        visibleIndex: 0,
-        renderSize: 0
+        endIndex: 0,
+        visibleSize: 0
       }
     })
     this.loadData(this.data)
@@ -137,7 +139,7 @@ export default {
       scrollYStore.startIndex = 0
       scrollYStore.visibleIndex = 0
       this.fullData = fullData
-      this.scrollYLoad = sYOpts.gt > -1 && fullData.length > sYOpts.gt
+      this.scrollYLoad = sYOpts.gt > -1 && sYOpts.gt <= fullData.length
       this.handleData()
       return this.computeScrollLoad().then(() => {
         this.refreshScroll()
@@ -153,7 +155,7 @@ export default {
     },
     handleData () {
       const { fullData, scrollYLoad, scrollYStore } = this
-      this.items = scrollYLoad ? fullData.slice(scrollYStore.startIndex, Math.max(scrollYStore.startIndex + scrollYStore.renderSize, 1)) : fullData.slice(0)
+      this.items = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullData.slice(0)
       return this.$nextTick()
     },
     /**
@@ -211,35 +213,31 @@ export default {
     computeScrollLoad () {
       return this.$nextTick().then(() => {
         const { $refs, sYOpts, scrollYLoad, scrollYStore } = this
+        let rowHeight = 0
+        let firstItemElem
+        if (sYOpts.sItem) {
+          firstItemElem = $refs.body.querySelector(sYOpts.sItem)
+        }
+        if (!firstItemElem) {
+          firstItemElem = $refs.body.children[0]
+        }
+        if (firstItemElem) {
+          rowHeight = firstItemElem.offsetHeight
+        }
+        rowHeight = Math.max(20, rowHeight)
+        scrollYStore.rowHeight = rowHeight
+        // 计算 Y 逻辑
         if (scrollYLoad) {
-          let rHeight = 48
-          if (sYOpts.rHeight) {
-            rHeight = sYOpts.rHeight
-          } else {
-            let firstItemElem
-            if (sYOpts.sItem) {
-              firstItemElem = $refs.body.querySelector(sYOpts.sItem)
-            }
-            if (!firstItemElem) {
-              firstItemElem = $refs.body.children[0]
-            }
-            if (firstItemElem) {
-              rHeight = firstItemElem.offsetHeight
-            }
-          }
-          const visibleYSize = XEUtils.toNumber(sYOpts.vSize || Math.ceil($refs.virtualWrapper.clientHeight / rHeight))
+          const visibleYSize = Math.max(8, Math.ceil($refs.virtualWrapper.clientHeight / rowHeight))
+          const offsetYSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : browse.msie ? 20 : (browse.edge ? 10 : 0)
+          scrollYStore.offsetSize = offsetYSize
           scrollYStore.visibleSize = visibleYSize
-          scrollYStore.rowHeight = rHeight
-          if (!sYOpts.oSize) {
-            scrollYStore.offsetSize = visibleYSize
-          }
-          if (!sYOpts.rSize) {
-            scrollYStore.renderSize = Math.max(6, visibleYSize + 2)
-          }
+          scrollYStore.endIndex = Math.max(scrollYStore.startIndex, visibleYSize + offsetYSize, scrollYStore.endIndex)
           this.updateYData()
         } else {
           this.updateYSpace()
         }
+        this.rowHeight = rowHeight
       })
     },
     scrollEvent (evnt) {
@@ -256,30 +254,19 @@ export default {
       this.$emit('scroll', { scrollLeft, scrollTop, isX, isY, $event: evnt })
     },
     loadYData (evnt) {
-      const { fullData, scrollYStore, isLoadData } = this
-      const { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore
+      const { scrollYStore } = this
+      const { startIndex, endIndex, visibleSize, offsetSize, rowHeight } = scrollYStore
       const scrollBodyElem = evnt.target
       const scrollTop = scrollBodyElem.scrollTop
-      const toVisibleIndex = Math.ceil(scrollTop / rowHeight)
-      let preload = false
-      if (isLoadData || scrollYStore.visibleIndex !== toVisibleIndex) {
-        const marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize)
-        if (scrollYStore.visibleIndex > toVisibleIndex) {
-          preload = toVisibleIndex - offsetSize <= startIndex
-          if (preload) {
-            scrollYStore.startIndex = Math.max(0, toVisibleIndex - Math.max(marginSize, renderSize - visibleSize))
-          }
-        } else {
-          preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize
-          if (preload) {
-            scrollYStore.startIndex = Math.max(0, Math.min(fullData.length - renderSize, toVisibleIndex - marginSize))
-          }
-        }
-        if (preload) {
+      const toVisibleIndex = Math.floor(scrollTop / rowHeight)
+      const offsetStartIndex = Math.max(0, toVisibleIndex - 1 - offsetSize)
+      const offsetEndIndex = toVisibleIndex + visibleSize + offsetSize
+      if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
+        if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
+          scrollYStore.startIndex = offsetStartIndex
+          scrollYStore.endIndex = offsetEndIndex
           this.updateYData()
         }
-        scrollYStore.visibleIndex = toVisibleIndex
-        this.isLoadData = false
       }
     },
     updateYData () {

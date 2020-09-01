@@ -281,8 +281,14 @@ export default {
       mergeList: [],
       // 合并表尾数据的对象集
       mergeFooterList: [],
-      // 是否已经加载了筛选
-      hasFilterPanel: false,
+      // 初始化标识
+      initStore: {
+        filter: false,
+        import: false,
+        export: false,
+        custom: false,
+        menu: false
+      },
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -359,6 +365,7 @@ export default {
       },
       // 导入相关信息
       importStore: {
+        inited: false,
         file: null,
         type: '',
         modeList: [],
@@ -373,6 +380,7 @@ export default {
       },
       // 导出相关信息
       exportStore: {
+        inited: false,
         name: '',
         modeList: [],
         typeList: [],
@@ -392,6 +400,7 @@ export default {
       },
       // 自定义列相关信息
       customStore: {
+        inited: false,
         visible: false
       }
     }
@@ -718,7 +727,6 @@ export default {
       resizeObserver.observe(this.getParentElem())
       this.$resize = resizeObserver
     }
-    document.body.appendChild(this.$refs.tableWrapper)
     this.preventEvent(null, 'mounted')
   },
   activated () {
@@ -729,10 +737,6 @@ export default {
     this.preventEvent(null, 'deactivated')
   },
   beforeDestroy () {
-    const tableWrapper = this.$refs.tableWrapper
-    if (tableWrapper && tableWrapper.parentNode) {
-      tableWrapper.parentNode.removeChild(tableWrapper)
-    }
     if (this.$resize) {
       this.$resize.disconnect()
     }
@@ -761,7 +765,6 @@ export default {
       tableColumn,
       tableGroupColumn,
       isGroup,
-      isCtxMenu,
       loading,
       isCloak,
       stripe,
@@ -785,9 +788,9 @@ export default {
       highlightHoverRow,
       highlightHoverColumn,
       editConfig,
-      checkboxOpts,
       vaildTipOpts,
       tooltipOpts,
+      initStore,
       columnStore,
       filterStore,
       ctxMenuStore,
@@ -883,14 +886,16 @@ export default {
           ref: 'tableFooter'
         }) : null
       ]),
-      /**
-       * 左侧固定列
-       */
-      leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : _e(),
-      /**
-       * 右侧固定列
-       */
-      rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e(),
+      h('div', [
+        /**
+         * 左侧固定列
+         */
+        leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : null,
+        /**
+         * 右侧固定列
+         */
+        rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : null
+      ]),
       /**
        * 空数据
        */
@@ -930,62 +935,42 @@ export default {
           class: 'vxe-loading--spinner'
         })
       ]),
-      /**
-       * 筛选
-       */
-      this.hasFilterPanel ? h('vxe-table-filter', {
-        props: {
-          filterStore
-        },
-        ref: 'filterWrapper'
-      }) : _e(),
-      /**
-       * 导入
-       */
-      this.importConfig ? h('vxe-import-panel', {
-        props: {
-          defaultOptions: this.importParams,
-          storeData: this.importStore
-        }
-      }) : _e(),
-      /**
-       * 导出
-       */
-      this.exportConfig ? h('vxe-export-panel', {
-        props: {
-          defaultOptions: this.exportParams,
-          storeData: this.exportStore
-        }
-      }) : _e(),
-      /**
-       * 自定义列
-       */
-      this.customConfig ? h('vxe-custom-panel', {
-        props: {
-          storeData: this.customStore
-        }
-      }) : _e(),
-      h('div', {
-        class: `vxe-table${tId}-wrapper ${this.$vnode.data.staticClass || ''}`,
-        ref: 'tableWrapper'
-      }, [
+      h('div', [
         /**
-         * 复选框-范围选择
+         * 筛选
          */
-        checkboxOpts.range ? h('div', {
-          class: 'vxe-table--checkbox-range',
-          ref: 'checkboxRange'
-        }) : _e(),
-        /**
-         * 快捷菜单
-         */
-        isCtxMenu ? h('vxe-table-context-menu', {
+        initStore.filter ? h('vxe-table-filter', {
           props: {
-            ctxMenuStore,
-            ctxMenuOpts
+            filterStore
           },
-          ref: 'ctxWrapper'
-        }) : _e(),
+          ref: 'filterWrapper'
+        }) : null,
+        /**
+         * 导入
+         */
+        initStore.import && this.importConfig ? h('vxe-import-panel', {
+          props: {
+            defaultOptions: this.importParams,
+            storeData: this.importStore
+          }
+        }) : null,
+        /**
+         * 导出
+         */
+        initStore.export && this.exportConfig ? h('vxe-export-panel', {
+          props: {
+            defaultOptions: this.exportParams,
+            storeData: this.exportStore
+          }
+        }) : null,
+        /**
+         * 自定义列
+         */
+        initStore.custom && this.customConfig ? h('vxe-custom-panel', {
+          props: {
+            storeData: this.customStore
+          }
+        }) : null,
         /**
          * 单元格溢出的提示
          */
@@ -995,7 +980,7 @@ export default {
           on: tooltipOpts.enterable ? {
             leave: this.handleTooltipLeaveEvent
           } : null
-        }) : _e(),
+        }) : null,
         /**
          * 单元格校验不通过的提示
          * 仅用于一行数据时有效，多行数据使用内部的提示框
@@ -1004,8 +989,18 @@ export default {
           class: 'vxe-table--valid-error',
           props: validOpts.message === 'tooltip' || tableData.length === 1 ? vaildTipOpts : null,
           ref: 'validTip'
-        }) : _e()
-      ])
+        }) : null
+      ]),
+      /**
+       * 快捷菜单
+       */
+      initStore.menu && this.isCtxMenu ? h('vxe-table-context-menu', {
+        props: {
+          ctxMenuStore,
+          ctxMenuOpts
+        },
+        ref: 'ctxWrapper'
+      }) : null
     ])
   },
   methods

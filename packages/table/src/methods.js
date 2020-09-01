@@ -114,6 +114,7 @@ function computeVirtualY (_vm) {
     if (!rowHeight) {
       rowHeight = rowHeightMaps[vSize || 'default']
     }
+    rowHeight = Math.max(48, rowHeight)
     const visibleSize = Math.max(8, Math.ceil(tableBodyElem.clientHeight / rowHeight) + 2)
     return { rowHeight, visibleSize }
   }
@@ -330,7 +331,6 @@ const Methods = {
       if (scrollYLoad) {
         scrollYStore.endIndex = scrollYStore.visibleSize
       }
-      this.isLoadData = true
       this.handleReserveStatus()
       this.checkSelectionStatus()
       return this.$nextTick().then(() => this.recalculate()).then(() => this.refreshScroll())
@@ -1693,7 +1693,7 @@ const Methods = {
   handleGlobalMousedownEvent (evnt) {
     const { $el, $refs, mouseConfig, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
     const { actived } = editStore
-    const { filterWrapper, validTip } = $refs
+    const { ctxWrapper, filterWrapper, validTip } = $refs
     if (filterWrapper) {
       if (getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
         // 如果点击了筛选按钮
@@ -1751,7 +1751,7 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!getEventTargetNode(evnt, $el).flag && !getEventTargetNode(evnt, $refs.tableWrapper).flag) {
+      if (!getEventTargetNode(evnt, $el).flag && (ctxWrapper && !getEventTargetNode(evnt, ctxWrapper.$el).flag)) {
         this.clearSelected()
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
           this.preventEvent(evnt, 'event.clearAreas', {}, () => {
@@ -1762,7 +1762,7 @@ const Methods = {
       }
     }
     // 如果配置了快捷菜单且，点击了其他地方则关闭
-    if (ctxMenuStore.visible && this.$refs.ctxWrapper && !getEventTargetNode(evnt, this.$refs.ctxWrapper.$el).flag) {
+    if (ctxMenuStore.visible && ctxWrapper && !getEventTargetNode(evnt, ctxWrapper.$el).flag) {
       this.closeMenu()
     }
     // 最后激活的表格
@@ -1948,24 +1948,27 @@ const Methods = {
     }
   },
   handleGlobalPasteEvent (evnt) {
-    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
-    if (isActivated) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
+    const { actived } = editStore
+    if (isActivated && !(actived.row || actived.column)) {
       if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
         this.handlePasteCellAreaEvent(evnt)
       }
     }
   },
   handleGlobalCopyEvent (evnt) {
-    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
-    if (isActivated) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
+    const { actived } = editStore
+    if (isActivated && !(actived.row || actived.column)) {
       if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
         this.handleCopyCellAreaEvent(evnt)
       }
     }
   },
   handleGlobalCutEvent (evnt) {
-    const { isActivated, keyboardConfig, mouseConfig, mouseOpts } = this
-    if (isActivated) {
+    const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
+    const { actived } = editStore
+    if (isActivated && !(actived.row || actived.column)) {
       if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
         this.handleCutCellAreaEvent(evnt)
       }
@@ -3326,10 +3329,10 @@ const Methods = {
     }
     calculateMergerOffserIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
     const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
-    scrollXStore.startIndex = offsetStartIndex
-    scrollXStore.endIndex = offsetEndIndex
     if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
       if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
+        scrollXStore.startIndex = offsetStartIndex
+        scrollXStore.endIndex = offsetEndIndex
         this.updateScrollXData()
       }
     }
@@ -3364,10 +3367,10 @@ const Methods = {
     }
     calculateMergerOffserIndex(mergeList, offsetItem, 'row')
     const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
-    scrollYStore.startIndex = offsetStartIndex
-    scrollYStore.endIndex = offsetEndIndex
     if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
       if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
+        scrollYStore.startIndex = offsetStartIndex
+        scrollYStore.endIndex = offsetEndIndex
         this.updateScrollYData()
       }
     }
@@ -3378,19 +3381,21 @@ const Methods = {
       const { sYOpts, sXOpts, scrollXLoad, scrollYLoad, scrollXStore, scrollYStore } = this
       // 计算 X 逻辑
       if (scrollXLoad) {
-        scrollXStore.offsetSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : browse.msie ? 10 : (browse.edge ? 5 : 0)
-        scrollXStore.endIndex = Math.max(scrollXStore.visibleSize, scrollXStore.endIndex)
+        const offsetXSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : browse.msie ? 10 : (browse.edge ? 5 : 0)
+        scrollXStore.offsetSize = offsetXSize
+        scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
         this.updateScrollXData()
       } else {
         this.updateScrollXSpace()
       }
       // 计算 Y 逻辑
-      const { rowHeight, visibleSize } = computeVirtualY(this)
+      const { rowHeight, visibleSize: visibleYSize } = computeVirtualY(this)
+      scrollYStore.rowHeight = rowHeight
       if (scrollYLoad) {
-        scrollYStore.offsetSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : browse.msie ? 20 : (browse.edge ? 10 : 0)
-        scrollYStore.visibleSize = visibleSize
-        scrollYStore.rowHeight = rowHeight
-        scrollYStore.endIndex = Math.max(visibleSize, scrollYStore.endIndex)
+        const offsetYSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : browse.msie ? 20 : (browse.edge ? 10 : 0)
+        scrollYStore.offsetSize = offsetYSize
+        scrollYStore.visibleSize = visibleYSize
+        scrollYStore.endIndex = Math.max(scrollYStore.startIndex + visibleYSize + offsetYSize, scrollYStore.endIndex)
         this.updateScrollYData()
       } else {
         this.updateScrollYSpace()

@@ -202,6 +202,7 @@ export default {
   },
   data () {
     return {
+      inited: false,
       collectOption: [],
       fullGroupList: [],
       fullOptionList: [],
@@ -290,11 +291,6 @@ export default {
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
-  mounted () {
-    if (this.transfer) {
-      document.body.appendChild(this.$refs.panel)
-    }
-  },
   beforeDestroy () {
     const panelElem = this.$refs.panel
     if (panelElem && panelElem.parentNode) {
@@ -308,7 +304,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, isActivated, disabled, visiblePanel } = this
+    const { vSize, inited, isActivated, disabled, visiblePanel } = this
     return h('div', {
       class: ['vxe-select', {
         [`size--${vSize}`]: vSize,
@@ -353,12 +349,12 @@ export default {
           'data-placement': this.panelPlacement
         },
         style: this.panelStyle
-      }, [
+      }, inited ? [
         h('div', {
           ref: 'optWrapper',
           class: 'vxe-select-option--wrapper'
         }, this.isGroup ? renderOptgroup(h, this) : renderOption(h, this, this.visibleOptionList))
-      ])
+      ] : [])
     ])
   },
   methods: {
@@ -547,6 +543,12 @@ export default {
     showOptionPanel () {
       if (!this.disabled) {
         clearTimeout(this.hidePanelTimeout)
+        if (!this.inited) {
+          this.inited = true
+          if (this.transfer) {
+            document.body.appendChild(this.$refs.panel)
+          }
+        }
         this.isActivated = true
         this.animatVisible = true
         setTimeout(() => {

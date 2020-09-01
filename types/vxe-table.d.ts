@@ -13,6 +13,14 @@ export interface VXETableOptions {
   [key: string]: any;
 }
 
+export interface VXETableTypes {
+  csv: number;
+  html: number;
+  xml: number;
+  txt: number;
+  [type: string]: number;
+}
+
 export interface VXETableStatic {
   /**
    * 版本号
@@ -22,7 +30,7 @@ export interface VXETableStatic {
    * 导出/导出文件类型设置
    * 0只支持导出 1 支持导入导出
    */
-  types: { [type: string]: any };
+  types: VXETableTypes;
   /**
    * 获取导出的所有文件类型
    */
@@ -114,6 +122,8 @@ declare global {
     VXETable: VXETableStatic;
   }
 }
+
+export * from './component'
 
 export * from './table'
 export * from './column'

@@ -50,7 +50,7 @@ export default {
           option._checked = option.checked
         })
         this.checkFilterOptions()
-        this.hasFilterPanel = true
+        this.initStore.filter = true
         this.$nextTick(() => {
           const filterWrapperElem = $refs.filterWrapper.$el
           const filterWidth = filterWrapperElem.offsetWidth

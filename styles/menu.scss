@@ -3,7 +3,6 @@
 /*快捷菜单*/
 .vxe-table--context-menu-wrapper,
 .vxe-table--context-menu-clild-wrapper {
-  display: none;
   position: absolute;
   top: 0;
   left: 0;
@@ -15,9 +14,6 @@
   color: $vxe-table-font-color;
   font-family: $vxe-font-family;
   background-color: $vxe-table-menu-background-color;
-  &.is--show {
-    display: block;
-  }
 }
 .vxe-context-menu--link {
   display: block;

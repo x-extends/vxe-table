@@ -268,6 +268,7 @@ export default {
         $xetable.emitEvent('resizable-change', params, evnt)
       }
       updateEvent(evnt)
+      $xetable.closeMenu()
     }
   }
 }
