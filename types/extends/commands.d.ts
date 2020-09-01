@@ -1,5 +1,5 @@
-import { GridRenderParams } from '../grid'
 import { ToolbarButtonConfig } from '../toolbar'
+import { GridRenderParams } from './renderer'
 
 declare function commandsFunc(params: CommandsParams, ...args: any[]): any;
 

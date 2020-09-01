@@ -115,6 +115,8 @@ declare global {
   }
 }
 
+export * from './component'
+
 export * from './table'
 export * from './column'
 export * from './grid'

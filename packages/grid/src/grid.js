@@ -809,7 +809,7 @@ export default {
       UtilTools.emitEvent(this, 'form-submit-invalid', [Object.assign({ $grid: this }, params), evnt])
     },
     togglCollapseEvent (params, evnt) {
-      this.recalculate(true)
+      this.$nextTick(() => this.recalculate(true))
       UtilTools.emitEvent(this, 'form-toggle-collapse', [Object.assign({ $grid: this }, params), evnt])
     },
     triggerZoomEvent (evnt) {

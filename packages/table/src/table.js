@@ -5940,20 +5940,26 @@ export default {
       let expColumns = []
       if (columns && columns.length) {
         columns.forEach(item => {
-          let column
-          if (UtilTools.isColumn(item)) {
-            column = item
-          } else {
-            const type = item.type
-            const field = item.property || item.field
-            if (field) {
-              column = this.getColumnByField(field)
-            } else if (type) {
-              column = tableFullColumn.find(item => item.type === type)
+          let targetColumn
+          if (item) {
+            if (UtilTools.isColumn(item)) {
+              targetColumn = item
+            } else if (XEUtils.isString(item)) {
+              targetColumn = this.getColumnByField(item)
+            } else {
+              const type = item.type
+              const field = item.property || item.field
+              if (field && type) {
+                targetColumn = tableFullColumn.find(column => column.property === field && column.type === type)
+              } else if (field) {
+                targetColumn = this.getColumnByField(field)
+              } else if (type) {
+                targetColumn = tableFullColumn.find(column => column.type === type)
+              }
             }
-          }
-          if (column) {
-            expColumns.push(column)
+            if (targetColumn) {
+              expColumns.push(targetColumn)
+            }
           }
         })
       } else {

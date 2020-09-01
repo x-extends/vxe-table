@@ -870,6 +870,7 @@ const apis = [
       },
       {
         name: 'z-index',
+        abandoned: true,
         descKey: 'app.api.table.desc.zIndex',
         version: '1.15.9',
         type: 'Number',
@@ -1981,6 +1982,7 @@ const apis = [
           },
           {
             name: 'maxWidth',
+            abandoned: true,
             desc: '校验提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
             type: 'String, Number',
@@ -2072,6 +2074,7 @@ const apis = [
           },
           {
             name: 'maxWidth',
+            abandoned: true,
             desc: '提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
             type: 'Number',
@@ -2246,6 +2249,7 @@ const apis = [
       },
       {
         name: 'animat',
+        abandoned: true,
         desc: '表格动画效果开关（关闭后视觉效果更快）',
         version: '1.15.28',
         type: 'Object',
