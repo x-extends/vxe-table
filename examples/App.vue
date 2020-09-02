@@ -1898,18 +1898,18 @@ export default {
               locat: {
                 name: 'TablePluginMenus'
               }
-            },
-            {
-              label: 'app.aside.nav.treeRowPlugin',
-              locat: {
-                name: 'TablePluginTreeRows'
-              }
-            },
-            {
-              label: 'app.aside.nav.treeColPlugin',
-              locat: {
-                name: 'TablePluginTreeCols'
-              }
+            // },
+            // {
+            //   label: 'app.aside.nav.treeRowPlugin',
+            //   locat: {
+            //     name: 'TablePluginTreeRows'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.treeColPlugin',
+            //   locat: {
+            //     name: 'TablePluginTreeCols'
+            //   }
             }
           ]
         },
@@ -2474,7 +2474,7 @@ export default {
           location.href = '/vxe-table/v2/index.html'
           break
         case '3':
-          location.href = '/vxe-table'
+          location.href = '/vxe-table/v3/index.html'
           break
         case '4':
           this.version = '1'
