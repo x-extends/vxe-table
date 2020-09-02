@@ -117,7 +117,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { enabled } = tooltipOpts
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable._getColumnIndex(column)
-  const fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
+  let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
   const showTitle = cellOverflow === 'title'
@@ -218,6 +218,12 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
     if (colspan > 1) {
       attrs.colspan = colspan
+    }
+  }
+  // 如果被合并不可隐藏
+  if (fixedHiddenColumn && mergeList) {
+    if (attrs.colspan > 1 || attrs.rowspan > 1) {
+      fixedHiddenColumn = false
     }
   }
   // 如果编辑列开启显示状态
@@ -447,9 +453,9 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, mergeList, spanMethod, scrollXLoad, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
     // 如果是固定列与设置了超出隐藏
-    if (!mergeList.length && !spanMethod) {
+    if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
       if (fixedType && allColumnOverflow) {
         tableColumn = fixedColumn
       } else if (scrollXLoad) {
