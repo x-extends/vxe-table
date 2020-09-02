@@ -1830,12 +1830,12 @@ export default {
                 name: 'TablePluginMenus'
               }
             },
-            {
-              label: 'app.aside.nav.excelPlugin',
-              locat: {
-                name: 'TablePluginExcel'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.excelPlugin',
+            //   locat: {
+            //     name: 'TablePluginExcel'
+            //   }
+            // },
             {
               label: 'app.aside.nav.treeRowPlugin',
               locat: {
@@ -2402,7 +2402,7 @@ export default {
           location.href = '/vxe-table/v2/index.html'
           break
         case '3':
-          location.href = '/vxe-table'
+          location.href = '/vxe-table/v3/index.html'
           break
         case '4':
           this.version = '2'
