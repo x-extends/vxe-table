@@ -28,6 +28,9 @@
           //     trigger: 'default'
           //   },
           //   checkboxConfig: {
+          //     strict: false,
+          //     highlight: false,
+          //     range: false,
           //     trigger: 'default'
           //   },
           //   sortConfig: {

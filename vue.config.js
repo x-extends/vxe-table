@@ -5,7 +5,7 @@ function resolve (dir) {
 }
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/vxe-table/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/vxe-table/v3/' : '/',
   outputDir: 'docs',
   assetsDir: 'static',
   productionSourceMap: false,

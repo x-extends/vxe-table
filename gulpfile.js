@@ -1,5 +1,6 @@
 const gulp = require('gulp')
 const XEUtils = require('xe-utils')
+const del = require('del')
 const babel = require('gulp-babel')
 const uglify = require('gulp-uglify')
 const rename = require('gulp-rename')
@@ -148,3 +149,46 @@ gulp.task('build_clean', gulp.series('build_style', 'lib_rename', () => {
 }))
 
 gulp.task('build', gulp.parallel('build_clean'))
+
+
+gulp.task('move_docs_static', () => {
+  return gulp.src([
+    'docs/static/**'
+  ])
+    .pipe(gulp.dest('docs/v3/static'))
+})
+
+gulp.task('move_docs_root', () => {
+  return gulp.src([
+    'docs/favicon.ico',
+    'docs/index.html',
+    'docs/logo.png'
+  ])
+    .pipe(gulp.dest('docs/v3'))
+})
+
+gulp.task('clear_docs_temp', () => {
+  return del([
+    'docs/static',
+    'docs/favicon.ico',
+    'docs/index.html',
+    'docs/logo.png',
+    '../branches/docs/vxe-table/docs'
+  ], { force: true })
+})
+
+gulp.task('move_docs_latest', gulp.series('clear_docs_temp', () => {
+  return gulp.src([
+    'docs/v2/**'
+  ])
+    .pipe(gulp.dest('docs'))
+}))
+
+gulp.task('build_docs_v3', gulp.parallel('move_docs_static', 'move_docs_root'))
+
+gulp.task('update_docs', gulp.series('build_docs_v3', 'move_docs_latest', () => {
+  return gulp.src([
+    'docs/**'
+  ])
+    .pipe(gulp.dest('../branches/docs/vxe-table/docs'))
+}))
