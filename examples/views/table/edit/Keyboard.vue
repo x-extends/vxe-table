@@ -37,8 +37,10 @@
     <pre>
       <code>
         mouse-config 鼠标配置：
-          | Mouse | (area) 鼠标选取指定区域 |
-          | Mouse + Ctrl | (area) 鼠标选取多重区域 |
+          | Mouse + Left | (area) 鼠标选取指定范围的单元格 |
+          | Mouse + Right | (area) 鼠标选取选中位置的单元格 |
+          | Mouse + Left + Ctrl | (area) 鼠标选取多区域的单元格 |
+          | Mouse + Left | (extension) 鼠标左键按住右下角延伸按钮，将区域横向或纵向扩大 |
         keyboard-config 按键配置：
           | Ctrl + X | (isClip) 将单元格标记为剪贴状态并将内容复制到剪贴板，支持 Excel 和 WPS |
           | Ctrl + C | (isClip) 将单元格标记为复制状态并将内容复制到剪贴板，支持 Excel 和 WPS |

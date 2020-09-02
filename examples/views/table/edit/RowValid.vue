@@ -51,17 +51,9 @@ import hljs from 'highlight.js'
 export default {
   data () {
     const nameValid = ({ cellValue }) => {
-      return new Promise((resolve, reject) => {
-        if (cellValue) {
-          if (!/^\w+$/.test(cellValue)) {
-            reject(new Error('名称格式不正确，必须字母或数字'))
-          } else {
-            resolve()
-          }
-        } else {
-          resolve()
-        }
-      })
+      if (cellValue && !/^\w+$/.test(cellValue)) {
+        return new Error('名称格式不正确，必须字母或数字')
+      }
     }
     return {
       tableData: [],
@@ -113,17 +105,9 @@ export default {
         export default {
           data () {
             const nameValid = ({ cellValue }) => {
-              return new Promise((resolve, reject) => {
-                if (cellValue) {
-                  if (!/^\\w+$/.test(cellValue)) {
-                    reject(new Error('名称格式不正确，必须字母或数字'))
-                  } else {
-                    resolve()
-                  }
-                } else {
-                  resolve()
-                }
-              })
+              if (cellValue && !/^\\w+$/.test(cellValue)) {
+                return new Error('名称格式不正确，必须字母或数字')
+              }
             }
             return {
               tableData: [],
