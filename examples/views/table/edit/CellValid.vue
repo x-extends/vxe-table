@@ -62,7 +62,7 @@ export default {
       // 模拟服务端校验
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          if (cellValue.length < 3 || cellValue.length > 50) {
+          if (cellValue && (cellValue.length < 3 || cellValue.length > 50)) {
             reject(new Error('名称长度在 3 到 50 个字符之间'))
           } else {
             resolve()
@@ -141,7 +141,7 @@ export default {
               // 模拟服务端校验
               return new Promise((resolve, reject) => {
                 setTimeout(() => {
-                  if (cellValue.length < 3 || cellValue.length > 50) {
+                  if (cellValue && (cellValue.length < 3 || cellValue.length > 50)) {
                     reject(new Error('名称长度在 3 到 50 个字符之间'))
                   } else {
                     resolve()

@@ -164,6 +164,17 @@
   z-index: 1;
 }
 
+.vxe-table--fixed-left-wrapper,
+.vxe-table--fixed-right-wrapper {
+  .vxe-table--checkbox-range,
+  .vxe-table--cell-main-area,
+  .vxe-table--cell-extend-area,
+  .vxe-table--cell-active-area,
+  .vxe-table--cell-copy-area {
+    z-index: 2;
+  }
+}
+
 .vxe-table--fixed-left-wrapper {
   .vxe-table--cell-main-area,
   .vxe-table--cell-extend-area,
