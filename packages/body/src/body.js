@@ -142,8 +142,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { enabled } = tooltipOpts
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable._getColumnIndex(column)
-  // 在 v3.0 中废弃 mouse-config.checked
-  const fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
+  let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
   const showTitle = cellOverflow === 'title'
@@ -246,6 +245,12 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
     if (colspan > 1) {
       attrs.colspan = colspan
+    }
+  }
+  // 如果被合并不可隐藏
+  if (fixedHiddenColumn && mergeList) {
+    if (attrs.colspan > 1 || attrs.rowspan > 1) {
+      fixedHiddenColumn = false
     }
   }
   // 如果编辑列开启显示状态
@@ -492,12 +497,13 @@ export default {
       mouseOpts,
       emptyRender,
       emptyOpts,
-      keyboardConfig = {}
+      keyboardConfig,
+      keyboardOpts
     } = $xetable
     // 在 v3.0 中废弃 mouse-config.checked
     const isMouseChecked = mouseConfig && mouseOpts.checked
     // 如果是固定列与设置了超出隐藏
-    if (!mergeList.length && !spanMethod) {
+    if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
       if (fixedType && allColumnOverflow) {
         tableColumn = fixedColumn
       } else if (scrollXLoad) {
@@ -564,11 +570,11 @@ export default {
       /**
        * 选中边框线
        */
-      !fixedType && (isMouseChecked || keyboardConfig.isCut) ? h('div', {
+      !fixedType && (isMouseChecked || keyboardOpts.isCut) ? h('div', {
         class: 'vxe-table--borders'
       }, [
         isMouseChecked ? renderBorder(h, 'check') : null,
-        keyboardConfig.isCut ? renderBorder(h, 'copy') : null
+        keyboardOpts.isCut ? renderBorder(h, 'copy') : null
       ]) : null,
       h('div', {
         class: 'vxe-table--checkbox-range'
