@@ -17,17 +17,17 @@ export default {
   },
   render (h) {
     const $xetable = this.$parent
-    const { _e, ctxMenuOpts, ctxMenuStore } = this
+    const { ctxMenuOpts, ctxMenuStore } = this
     return h('div', {
       class: ['vxe-table--context-menu-wrapper', ctxMenuOpts.className],
       style: ctxMenuStore.style
-    }, ctxMenuStore.visible ? ctxMenuStore.list.map((options, gIndex) => {
+    }, ctxMenuStore.list.map((options, gIndex) => {
       return h('ul', {
         class: 'vxe-context-menu--option-wrapper',
         key: gIndex
       }, options.map((item, index) => {
         const hasChildMenus = item.children && item.children.length
-        return item.visible === false ? _e() : h('li', {
+        return item.visible === false ? null : h('li', {
           class: [item.className, {
             'link--disabled': item.disabled,
             'link--active': item === ctxMenuStore.selected
@@ -63,7 +63,7 @@ export default {
               'is--show': item === ctxMenuStore.selected && ctxMenuStore.showChild
             }]
           }, item.children.map((child, cIndex) => {
-            return child.visible === false ? _e() : h('li', {
+            return child.visible === false ? null : h('li', {
               class: [child.className, {
                 'link--disabled': child.disabled,
                 'link--active': child === ctxMenuStore.selectChild
@@ -92,9 +92,9 @@ export default {
                 }, UtilTools.getFuncText(child.name))
               ])
             ])
-          })) : _e()
+          })) : null
         ])
       }))
-    }) : [])
+    }))
   }
 }
