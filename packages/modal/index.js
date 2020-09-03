@@ -1,6 +1,5 @@
 import XEUtils from 'xe-utils/methods/xe-utils'
 import VXEModal from './src/modal'
-import queue from './src/queue'
 import allActivedModals from './src/activities'
 import VXETable from '../v-x-e-table'
 import { UtilTools } from '../tools'
@@ -12,7 +11,7 @@ let ModalClass = null
 function openModal (opts) {
   const options = Object.assign({}, opts, { transfer: true })
   return new Promise(resolve => {
-    if (options && options.id && queue.some(comp => comp.id === options.id)) {
+    if (options && options.id && allActivedModals.some(comp => comp.id === options.id)) {
       resolve('exist')
     } else {
       const events = options.events || {}

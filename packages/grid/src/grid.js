@@ -495,8 +495,9 @@ export default {
         case 'mark_cancel':
           this.triggerPendingEvent(code)
           break
-        case 'remove':
+        // 在 v3 中废弃 remove_selection
         case 'remove_selection':
+        case 'remove':
           this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeCheckboxRow())
           break
         case 'import':
@@ -579,15 +580,16 @@ export default {
           }
           break
         }
+        // 在 v3 中废弃 delete_selection
         case 'delete_selection':
         case 'delete': {
-          this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
-            const ajaxMethods = ajax.delete
-            if (ajaxMethods) {
-              const removeRecords = this.getCheckboxRecords()
-              const body = { removeRecords }
-              const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
-              if (removeRecords.length) {
+          const ajaxMethods = ajax.delete
+          if (ajaxMethods) {
+            const removeRecords = this.getCheckboxRecords()
+            const body = { removeRecords }
+            const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+            if (removeRecords.length) {
+              return this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                 this.tableLoading = true
                 return Promise.resolve((beforeDelete || ajaxMethods).apply(this, applyArgs))
                   .then(rest => {
@@ -608,15 +610,15 @@ export default {
                       VXETable.modal.message({ id: code, message: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                   })
-              } else {
-                if (isMsg) {
-                  VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
-                }
-              }
+              })
             } else {
-              UtilTools.error('vxe.error.notFunc', [code])
+              if (isMsg) {
+                VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+              }
             }
-          })
+          } else {
+            UtilTools.error('vxe.error.notFunc', [code])
+          }
           break
         }
         case 'save': {
@@ -688,13 +690,13 @@ export default {
       const selectRecords = this.getCheckboxRecords()
       if (this.isMsg) {
         if (selectRecords.length) {
-          VXETable.modal.confirm(GlobalConfig.i18n(alertKey)).then(type => {
+          return VXETable.modal.confirm({ id: `cfm_${code}`, message: GlobalConfig.i18n(alertKey), escClosable: true }).then(type => {
             if (type === 'confirm') {
               callback()
             }
           })
         } else {
-          VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+          VXETable.modal.message({ id: `msg_${code}`, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       } else {
         if (selectRecords.length) {

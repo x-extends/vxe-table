@@ -699,7 +699,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'import',
         desc: '直接导入',
-        version: '1.15.12',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -708,7 +708,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'open_import',
         desc: '高级导入',
-        version: '1.15.12',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -726,7 +726,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'open_export',
         desc: '高级导出',
-        version: '1.15.12',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
