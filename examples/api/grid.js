@@ -22,7 +22,7 @@ pagerSlots.list.forEach(item => {
 
 const formItemSlots = XEUtils.clone(formItemAPI.find(item => item.name === 'Slots'), true)
 formItemSlots.name = 'slots'
-formItemSlots.version = '2.9.1'
+formItemSlots.version = ''
 formItemSlots.list.forEach(item => {
   item.type = 'String, Function'
   item.defVal = `${item.defVal}, h`
@@ -374,7 +374,7 @@ const apis = [
       {
         name: 'toolbar',
         desc: '工具栏模板',
-        version: '2.9',
+        version: '',
         type: '',
         enum: '',
         defVal: '{}',
@@ -650,7 +650,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'import',
         desc: '直接导入',
-        version: '1.15.12',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -659,7 +659,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'open_import',
         desc: '高级导入',
-        version: '1.15.12',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -677,7 +677,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'open_export',
         desc: '高级导出',
-        version: '1.15.12',
+        version: '',
         type: '',
         enum: '',
         defVal: '',

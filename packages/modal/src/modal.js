@@ -1,7 +1,7 @@
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import XEUtils from 'xe-utils/methods/xe-utils'
-import MsgQueue from './queue'
+import msgQueue from './queue'
 import allActivedModals from './activities'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
@@ -205,11 +205,13 @@ export default {
           class: 'vxe-modal--footer'
         }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : footerSlot.call(this, { $modal: this }, h)) : [
           type === 'confirm' ? h('vxe-button', {
+            ref: 'cancelBtn',
             on: {
               click: this.cancelEvent
             }
           }, this.cancelButtonText || GlobalConfig.i18n('vxe.button.cancel')) : null,
           h('vxe-button', {
+            ref: 'confirmBtn',
             props: {
               status: 'primary'
             },
@@ -272,7 +274,7 @@ export default {
       this.close(type)
     },
     open () {
-      const { events = {}, inited, duration, visible, isMsg, remember } = this
+      const { $refs, events = {}, inited, duration, visible, isMsg, remember, showFooter } = this
       if (!inited) {
         this.inited = true
         if (this.transfer) {
@@ -293,6 +295,12 @@ export default {
         setTimeout(() => {
           this.contentVisible = true
           this.$nextTick(() => {
+            if (showFooter) {
+              const operBtn = $refs.confirmBtn || $refs.cancelBtn
+              if (operBtn) {
+                operBtn.focus()
+              }
+            }
             if (events.show) {
               events.show.call(this, params)
             } else {
@@ -327,21 +335,21 @@ export default {
       }
     },
     addMsgQueue () {
-      if (MsgQueue.indexOf(this) === -1) {
-        MsgQueue.push(this)
+      if (msgQueue.indexOf(this) === -1) {
+        msgQueue.push(this)
       }
       this.updateStyle()
     },
     removeMsgQueue () {
-      if (MsgQueue.indexOf(this) > -1) {
-        XEUtils.remove(MsgQueue, comp => comp === this)
+      if (msgQueue.indexOf(this) > -1) {
+        XEUtils.remove(msgQueue, comp => comp === this)
       }
       this.updateStyle()
     },
     updateStyle () {
       this.$nextTick(() => {
         let offsetTop = 0
-        MsgQueue.forEach(comp => {
+        msgQueue.forEach(comp => {
           offsetTop += XEUtils.toNumber(comp.top)
           comp.modalTop = offsetTop
           offsetTop += comp.$refs.modalBox.clientHeight

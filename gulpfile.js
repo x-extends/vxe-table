@@ -188,7 +188,8 @@ gulp.task('build_docs_v3', gulp.parallel('move_docs_static', 'move_docs_root'))
 
 gulp.task('update_docs', gulp.series('build_docs_v3', 'move_docs_latest', () => {
   return gulp.src([
-    'docs/**'
+    'docs/**',
+    '../branches/docs/vxe-table/extends/**'
   ])
     .pipe(gulp.dest('../branches/docs/vxe-table/docs'))
 }))
