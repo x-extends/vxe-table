@@ -209,11 +209,13 @@ export default {
           class: 'vxe-modal--footer'
         }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : footerSlot.call(this, { $modal: this }, h)) : [
           type === 'confirm' ? h('vxe-button', {
+            ref: 'cancelBtn',
             on: {
               click: this.cancelEvent
             }
           }, this.cancelButtonText || GlobalConfig.i18n('vxe.button.cancel')) : null,
           h('vxe-button', {
+            ref: 'confirmBtn',
             props: {
               status: 'primary'
             },
@@ -276,7 +278,7 @@ export default {
       this.close(type)
     },
     open () {
-      const { events = {}, inited, duration, visible, isMsg, remember } = this
+      const { $refs, events = {}, inited, duration, visible, isMsg, remember, showFooter } = this
       if (!inited) {
         this.inited = true
       }
@@ -294,6 +296,12 @@ export default {
         setTimeout(() => {
           this.contentVisible = true
           this.$nextTick(() => {
+            if (showFooter) {
+              const operBtn = $refs.confirmBtn || $refs.cancelBtn
+              if (operBtn) {
+                operBtn.focus()
+              }
+            }
             if (events.show) {
               events.show.call(this, params)
             } else {

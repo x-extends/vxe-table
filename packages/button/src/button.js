@@ -283,6 +283,14 @@ export default {
           return this.$nextTick()
         }
       })
+    },
+    focus () {
+      this.$el.focus()
+      return this.$nextTick()
+    },
+    blur () {
+      this.$el.blur()
+      return this.$nextTick()
     }
   }
 }

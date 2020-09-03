@@ -180,7 +180,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'focus()',
+        desc: '使按钮获取焦点',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'blur()',
+        desc: '使按钮失去焦点',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   }
 ]
 
