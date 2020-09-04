@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
-    "build": "vue-cli-service build && gulp update_docs",
+    "build": "vue-cli-service build",
+    "build:docs": "gulp update_docs",
     "lib:modules": "gulp build",
     "lib:pack": "vue-cli-service build --target lib --name index --dest lib index.js",
     "lib": "npm run lib:pack && npm run lib:modules",
