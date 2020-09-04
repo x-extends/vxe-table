@@ -12,9 +12,8 @@
       ref="xVTree"
       height="500"
       :loading="loading"
-      :data="tableData"
       :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
-      :checkbox-config="{labelField: 'name', checkField: 'checked', halfField: 'indeterminate'}"
+      :checkbox-config="{labelField: 'a', checkField: 'checked', halfField: 'indeterminate'}"
       :tree-config="{children: 'children'}"
       :columns="tableColumn">
       <template v-slot:toolbar_buttons>
@@ -23,6 +22,7 @@
         <vxe-button @click="loadData(10000)">加载1w节点</vxe-button>
         <vxe-button @click="loadData(30000)">加载3w节点</vxe-button>
         <vxe-button @click="loadData(50000)">加载5w节点</vxe-button>
+        <vxe-button @click="loadData(80000)">加载8w节点</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
@@ -45,11 +45,22 @@ export default {
   data () {
     return {
       loading: false,
-      tableData: [],
       tableColumn: [
         { type: 'seq', title: '序号', width: 100 },
-        { type: 'checkbox', title: 'Name', treeNode: true },
-        { field: 'id', title: 'ID' }
+        { type: 'checkbox', title: 'A', treeNode: true, width: 200 },
+        { field: 'b', title: 'B', width: 100 },
+        { field: 'c', title: 'C', width: 100 },
+        { field: 'd', title: 'D', width: 100 },
+        { field: 'e', title: 'E', width: 100 },
+        { field: 'f', title: 'F', width: 100 },
+        { field: 'g', title: 'G', width: 100 },
+        { field: 'h', title: 'H', width: 100 },
+        { field: 'i', title: 'I', width: 100 },
+        { field: 'j', title: 'J', width: 100 },
+        { field: 'k', title: 'K', width: 100 },
+        { field: 'x', title: 'X', width: 100 },
+        { field: 'y', title: 'Y', width: 100 },
+        { field: 'z', title: 'Z', width: 100 }
       ],
       demoCodes: [
         `
@@ -60,9 +71,8 @@ export default {
           ref="xVTree"
           height="500"
           :loading="loading"
-          :data="tableData"
           :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
-          :checkbox-config="{labelField: 'name', checkField: 'checked', halfField: 'indeterminate'}"
+          :checkbox-config="{labelField: 'a', checkField: 'checked', halfField: 'indeterminate'}"
           :tree-config="{children: 'children'}"
           :columns="tableColumn">
           <template v-slot:toolbar_buttons>
@@ -71,6 +81,7 @@ export default {
             <vxe-button @click="loadData(10000)">加载1w节点</vxe-button>
             <vxe-button @click="loadData(30000)">加载3w节点</vxe-button>
             <vxe-button @click="loadData(50000)">加载5w节点</vxe-button>
+            <vxe-button @click="loadData(80000)">加载8w节点</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
@@ -82,15 +93,26 @@ export default {
           data () {
             return {
               loading: false,
-              tableData: [],
               tableColumn: [
                 { type: 'seq', title: '序号', width: 100 },
-                { type: 'checkbox', title: 'Name', treeNode: true },
-                { field: 'id', title: 'ID' }
+                { type: 'checkbox', title: 'A', treeNode: true, width: 200 },
+                { field: 'b', title: 'B', width: 100 },
+                { field: 'c', title: 'C', width: 100 },
+                { field: 'd', title: 'D', width: 100 },
+                { field: 'e', title: 'E', width: 100 },
+                { field: 'f', title: 'F', width: 100 },
+                { field: 'g', title: 'G', width: 100 },
+                { field: 'h', title: 'H', width: 100 },
+                { field: 'i', title: 'I', width: 100 },
+                { field: 'j', title: 'J', width: 100 },
+                { field: 'k', title: 'K', width: 100 },
+                { field: 'x', title: 'X', width: 100 },
+                { field: 'y', title: 'Y', width: 100 },
+                { field: 'z', title: 'Z', width: 100 }
               ]
             }
           },
-          created () {
+          mounted () {
             this.loadData(500)
           },
           methods: {
@@ -98,8 +120,8 @@ export default {
               this.loading = true
               this.getTreeList(size).then(data => {
                 const startTime = Date.now()
-                this.tableData = data
                 this.loading = false
+                this.$refs.xVTree.loadData(data)
                 this.$nextTick(() => {
                   this.$XModal.message({ message: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
                 })
@@ -113,7 +135,7 @@ export default {
                   const len2 = 3
                   const len3 = 2
                   const len4 = 2
-                  const len5 = 6
+                  const len5 = 5
                   const result = []
                   const startIndex = 10000
                   let ketIndex = 0
@@ -143,7 +165,20 @@ export default {
                             }
                             const item5 = {
                               id: startIndex + ketIndex++,
-                              name: \`name\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              a: \`a\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              b: \`b\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              c: \`c\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              d: \`d\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              e: \`e\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              f: \`f\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              g: \`g\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              h: \`h\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              i: \`i\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              j: \`j\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              k: \`k\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              x: \`x\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              y: \`y\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
+                              z: \`z\${index1}_\${index2}_\${index3}_\${index4}_\${index5}\`,
                               checked: false,
                               indeterminate: false,
                               children: []
@@ -152,7 +187,20 @@ export default {
                           }
                           const item4 = {
                             id: startIndex + ketIndex++,
-                            name: \`name\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            a: \`a\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            b: \`b\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            c: \`c\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            d: \`d\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            e: \`e\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            f: \`f\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            g: \`g\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            h: \`h\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            i: \`i\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            j: \`j\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            k: \`k\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            x: \`x\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            y: \`y\${index1}_\${index2}_\${index3}_\${index4}\`,
+                            z: \`z\${index1}_\${index2}_\${index3}_\${index4}\`,
                             checked: false,
                             indeterminate: false,
                             children: children4
@@ -161,7 +209,20 @@ export default {
                         }
                         const item3 = {
                           id: startIndex + ketIndex++,
-                          name: \`name\${index1}_\${index2}_\${index3}\`,
+                          a: \`a\${index1}_\${index2}_\${index3}\`,
+                          b: \`name\${index1}_\${index2}_\${index3}\`,
+                          c: \`b\${index1}_\${index2}_\${index3}\`,
+                          d: \`c\${index1}_\${index2}_\${index3}\`,
+                          e: \`d\${index1}_\${index2}_\${index3}\`,
+                          f: \`f\${index1}_\${index2}_\${index3}\`,
+                          g: \`g\${index1}_\${index2}_\${index3}\`,
+                          h: \`h\${index1}_\${index2}_\${index3}\`,
+                          i: \`i\${index1}_\${index2}_\${index3}\`,
+                          j: \`j\${index1}_\${index2}_\${index3}\`,
+                          k: \`k\${index1}_\${index2}_\${index3}\`,
+                          x: \`x\${index1}_\${index2}_\${index3}\`,
+                          y: \`y\${index1}_\${index2}_\${index3}\`,
+                          z: \`z\${index1}_\${index2}_\${index3}\`,
                           checked: false,
                           indeterminate: false,
                           children: children3
@@ -170,7 +231,20 @@ export default {
                       }
                       const item2 = {
                         id: startIndex + ketIndex++,
-                        name: \`name\${index1}_\${index2}\`,
+                        a: \`a\${index1}_\${index2}\`,
+                        b: \`b\${index1}_\${index2}\`,
+                        c: \`c\${index1}_\${index2}\`,
+                        d: \`d\${index1}_\${index2}\`,
+                        e: \`e\${index1}_\${index2}\`,
+                        f: \`f\${index1}_\${index2}\`,
+                        g: \`g\${index1}_\${index2}\`,
+                        h: \`h\${index1}_\${index2}\`,
+                        i: \`i\${index1}_\${index2}\`,
+                        j: \`j\${index1}_\${index2}\`,
+                        k: \`k\${index1}_\${index2}\`,
+                        x: \`x\${index1}_\${index2}\`,
+                        y: \`y\${index1}_\${index2}\`,
+                        z: \`z\${index1}_\${index2}\`,
                         checked: false,
                         indeterminate: false,
                         children: children2
@@ -179,7 +253,20 @@ export default {
                     }
                     const item1 = {
                       id: startIndex + ketIndex++,
-                      name: \`name\${index1}\`,
+                      a: \`a\${index1}\`,
+                      b: \`b\${index1}\`,
+                      c: \`c\${index1}\`,
+                      d: \`d\${index1}\`,
+                      e: \`e\${index1}\`,
+                      f: \`f\${index1}\`,
+                      g: \`g\${index1}\`,
+                      h: \`h\${index1}\`,
+                      i: \`i\${index1}\`,
+                      j: \`j\${index1}\`,
+                      k: \`k\${index1}\`,
+                      x: \`x\${index1}\`,
+                      y: \`y\${index1}\`,
+                      z: \`z\${index1}\`,
                       checked: false,
                       indeterminate: false,
                       children: children1
@@ -200,10 +287,8 @@ export default {
       ]
     }
   },
-  created () {
-    this.loadData(500)
-  },
   mounted () {
+    this.loadData(500)
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
@@ -213,8 +298,8 @@ export default {
       this.loading = true
       this.getTreeList(size).then(data => {
         const startTime = Date.now()
-        this.tableData = data
         this.loading = false
+        this.$refs.xVTree.loadData(data)
         this.$nextTick(() => {
           this.$XModal.message({ message: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
         })
@@ -228,7 +313,7 @@ export default {
           const len2 = 3
           const len3 = 2
           const len4 = 2
-          const len5 = 6
+          const len5 = 5
           const result = []
           const startIndex = 10000
           let ketIndex = 0
@@ -258,7 +343,20 @@ export default {
                     }
                     const item5 = {
                       id: startIndex + ketIndex++,
-                      name: `name${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      a: `a${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      b: `b${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      c: `c${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      d: `d${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      e: `e${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      f: `f${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      g: `g${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      h: `h${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      i: `i${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      j: `j${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      k: `k${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      x: `x${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      y: `y${index1}_${index2}_${index3}_${index4}_${index5}`,
+                      z: `z${index1}_${index2}_${index3}_${index4}_${index5}`,
                       checked: false,
                       indeterminate: false,
                       children: []
@@ -267,7 +365,20 @@ export default {
                   }
                   const item4 = {
                     id: startIndex + ketIndex++,
-                    name: `name${index1}_${index2}_${index3}_${index4}`,
+                    a: `a${index1}_${index2}_${index3}_${index4}`,
+                    b: `b${index1}_${index2}_${index3}_${index4}`,
+                    c: `c${index1}_${index2}_${index3}_${index4}`,
+                    d: `d${index1}_${index2}_${index3}_${index4}`,
+                    e: `e${index1}_${index2}_${index3}_${index4}`,
+                    f: `f${index1}_${index2}_${index3}_${index4}`,
+                    g: `g${index1}_${index2}_${index3}_${index4}`,
+                    h: `h${index1}_${index2}_${index3}_${index4}`,
+                    i: `i${index1}_${index2}_${index3}_${index4}`,
+                    j: `j${index1}_${index2}_${index3}_${index4}`,
+                    k: `k${index1}_${index2}_${index3}_${index4}`,
+                    x: `x${index1}_${index2}_${index3}_${index4}`,
+                    y: `y${index1}_${index2}_${index3}_${index4}`,
+                    z: `z${index1}_${index2}_${index3}_${index4}`,
                     checked: false,
                     indeterminate: false,
                     children: children4
@@ -276,7 +387,20 @@ export default {
                 }
                 const item3 = {
                   id: startIndex + ketIndex++,
-                  name: `name${index1}_${index2}_${index3}`,
+                  a: `a${index1}_${index2}_${index3}`,
+                  b: `name${index1}_${index2}_${index3}`,
+                  c: `b${index1}_${index2}_${index3}`,
+                  d: `c${index1}_${index2}_${index3}`,
+                  e: `d${index1}_${index2}_${index3}`,
+                  f: `f${index1}_${index2}_${index3}`,
+                  g: `g${index1}_${index2}_${index3}`,
+                  h: `h${index1}_${index2}_${index3}`,
+                  i: `i${index1}_${index2}_${index3}`,
+                  j: `j${index1}_${index2}_${index3}`,
+                  k: `k${index1}_${index2}_${index3}`,
+                  x: `x${index1}_${index2}_${index3}`,
+                  y: `y${index1}_${index2}_${index3}`,
+                  z: `z${index1}_${index2}_${index3}`,
                   checked: false,
                   indeterminate: false,
                   children: children3
@@ -285,7 +409,20 @@ export default {
               }
               const item2 = {
                 id: startIndex + ketIndex++,
-                name: `name${index1}_${index2}`,
+                a: `a${index1}_${index2}`,
+                b: `b${index1}_${index2}`,
+                c: `c${index1}_${index2}`,
+                d: `d${index1}_${index2}`,
+                e: `e${index1}_${index2}`,
+                f: `f${index1}_${index2}`,
+                g: `g${index1}_${index2}`,
+                h: `h${index1}_${index2}`,
+                i: `i${index1}_${index2}`,
+                j: `j${index1}_${index2}`,
+                k: `k${index1}_${index2}`,
+                x: `x${index1}_${index2}`,
+                y: `y${index1}_${index2}`,
+                z: `z${index1}_${index2}`,
                 checked: false,
                 indeterminate: false,
                 children: children2
@@ -294,7 +431,20 @@ export default {
             }
             const item1 = {
               id: startIndex + ketIndex++,
-              name: `name${index1}`,
+              a: `a${index1}`,
+              b: `b${index1}`,
+              c: `c${index1}`,
+              d: `d${index1}`,
+              e: `e${index1}`,
+              f: `f${index1}`,
+              g: `g${index1}`,
+              h: `h${index1}`,
+              i: `i${index1}`,
+              j: `j${index1}`,
+              k: `k${index1}`,
+              x: `x${index1}`,
+              y: `y${index1}`,
+              z: `z${index1}`,
               checked: false,
               indeterminate: false,
               children: children1

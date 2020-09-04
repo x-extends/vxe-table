@@ -191,6 +191,8 @@ const Methods = {
       this.clearChecked()
       this.clearSelected()
       this.clearCopyed()
+    }
+    if (this.mouseConfig) {
       this.clearCellAreas()
       this.clearCopyCellArea()
     }
@@ -2354,6 +2356,9 @@ const Methods = {
       if (property) {
         const checkValFn = (row) => {
           if (!checkMethod || checkMethod({ row })) {
+            if (value) {
+              selectRows.push(row)
+            }
             XEUtils.set(row, property, value)
           }
         }
@@ -2426,7 +2431,7 @@ const Methods = {
           afterFullData.forEach(row => this.handleCheckboxReserveRow(row, false))
         }
       }
-      this.selection = beforeSelection.concat(selectRows)
+      this.selection = property ? [] : beforeSelection.concat(selectRows)
     }
     this.treeIndeterminates = []
     this.checkSelectionStatus()

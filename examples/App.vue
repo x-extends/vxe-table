@@ -106,17 +106,15 @@
             <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供使用过程中相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
             <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请成为高级用户</vxe-button>
             <ul class="support-describe">
-              <li>1. 优质的技术支持群</li>
-              <li>2. 快速解决问题</li>
+              <li>优质的技术支持群</li>
             </ul>
           </div>
           <!-- <div class="vxe-col--12 support-group-item">
-            <div class="support-name">pro</div>
-            <div class="support-price">¥ 900<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供技术支持及版本更新，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+            <div class="support-name">强大的扩展插件</div>
+            <a class="link support-btn" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins/index.html" target="_blank">查看预览</a>
             <ul class="support-describe">
-              <li>1. 单元格鼠标选取、多区域</li>
-              <li>2. 单元格复制、粘贴操作</li>
-              <li>3. 全功能快捷键、查找替换</li>
+              <li>更强的 pro 专业版</li>
+              <li>更多的实用渲染器</li>
               <li>...</li>
             </ul>
           </div> -->
