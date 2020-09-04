@@ -260,6 +260,8 @@ const Methods = {
     }
     if (this.keyboardConfig || this.mouseConfig) {
       this.clearSelected()
+    }
+    if (this.mouseConfig) {
       this.clearCellAreas()
       this.clearCopyCellArea()
     }
@@ -1751,7 +1753,7 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!getEventTargetNode(evnt, $el).flag && (ctxWrapper && !getEventTargetNode(evnt, ctxWrapper.$el).flag)) {
+      if (!getEventTargetNode(evnt, $el).flag && (!ctxWrapper || !getEventTargetNode(evnt, ctxWrapper.$el).flag)) {
         this.clearSelected()
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
           this.preventEvent(evnt, 'event.clearAreas', {}, () => {
@@ -2314,6 +2316,9 @@ const Methods = {
       if (property) {
         const checkValFn = (row) => {
           if (!checkMethod || checkMethod({ row })) {
+            if (value) {
+              selectRows.push(row)
+            }
             XEUtils.set(row, property, value)
           }
         }
@@ -2386,7 +2391,7 @@ const Methods = {
           afterFullData.forEach(row => this.handleCheckboxReserveRow(row, false))
         }
       }
-      this.selection = beforeSelection.concat(selectRows)
+      this.selection = property ? [] : beforeSelection.concat(selectRows)
     }
     this.treeIndeterminates = []
     this.checkSelectionStatus()
