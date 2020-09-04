@@ -3592,6 +3592,9 @@ export default {
         if (property) {
           const setValFn = (row) => {
             if (!checkMethod || checkMethod({ row })) {
+              if (value) {
+                selectRows.push(row)
+              }
               XEUtils.set(row, property, value)
             }
           }
@@ -3650,7 +3653,7 @@ export default {
             })
           }
         }
-        this.selection = beforeSelection.concat(selectRows)
+        this.selection = property ? [] : beforeSelection.concat(selectRows)
       }
       this.treeIndeterminates = []
       this.checkSelectionStatus()
