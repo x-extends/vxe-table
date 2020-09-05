@@ -1529,13 +1529,13 @@ export default {
                 name: 'TableScrollEdit'
               }
             },
-            {
-              label: 'app.aside.nav.scrollTree',
-              disabled: true,
-              locat: {
-                name: 'TableScrollTree'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.scrollTree',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScrollTree'
+            //   }
+            // },
             {
               label: 'app.aside.nav.rowValid',
               locat: {
@@ -1617,13 +1617,13 @@ export default {
               locat: {
                 name: 'TableScrollFullCols'
               }
-            },
-            {
-              label: 'app.aside.nav.infiniteScroll',
-              disabled: true,
-              locat: {
-                name: 'TableScroll'
-              }
+            // },
+            // {
+            //   label: 'app.aside.nav.infiniteScroll',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScroll'
+            //   }
             }
           ]
         },

@@ -2748,7 +2748,7 @@ export default {
       if (this.isActivated) {
         this.preventEvent(evnt, 'event.keydown', null, () => {
           let params
-          const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
+          const { isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow } = this
           const { selected, actived } = editStore
           const keyCode = evnt.keyCode
           const isBack = keyCode === 8
@@ -2769,6 +2769,7 @@ export default {
           const isShiftKey = evnt.shiftKey
           const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
           const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
+          const isEditStatus = editConfig && actived.column && actived.row
           if (isEsc) {
           // 如果按下了 Esc 键，关闭快捷菜单、筛选
             this.closeMenu()
@@ -2840,12 +2841,14 @@ export default {
               this.handleActived(selected.args, evnt)
             }
           } else if (operArrow && keyboardConfig.isArrow) {
-            // 如果按下了方向键
-            if (selected.row && selected.column) {
-              this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-            } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
-            // 当前行按键上下移动
-              this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+            if (!isEditStatus) {
+              // 如果按下了方向键
+              if (selected.row && selected.column) {
+                this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+              } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
+              // 当前行按键上下移动
+                this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+              }
             }
           } else if (isTab && keyboardConfig.isTab) {
             // 如果按下了 Tab 键切换
