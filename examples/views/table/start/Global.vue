@@ -41,12 +41,14 @@
           //     filterMethod: null
           //   },
           //   expandConfig: {
-          //     trigger: 'default'
+          //     trigger: 'default',
+          //     showIcon: true
           //   },
           //   treeConfig: {
           //     children: 'children',
           //     hasChild: 'hasChild',
-          //     indent: 20
+          //     indent: 20,
+          //     showIcon: true
           //   },
           //   tooltipConfig: {
           //     theme: 'dark',

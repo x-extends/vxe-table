@@ -126,6 +126,8 @@ const treeList = [
     size: '53k',
     type: '',
     date: '2019-10-22',
+    checked: false,
+    indeterminate: false,
     childCols: [],
     childData: [],
     children: [
@@ -136,6 +138,8 @@ const treeList = [
         size: '11k',
         type: 'avi',
         date: '2019-05-21',
+        checked: false,
+        indeterminate: false,
         childCols: [],
         childData: []
       },
@@ -148,6 +152,8 @@ const treeList = [
         date: '2019-08-16',
         childCols: [],
         childData: [],
+        checked: false,
+        indeterminate: false,
         children: [
           {
             id: '12100',
@@ -158,6 +164,8 @@ const treeList = [
             date: '2019-08-20',
             childCols: [],
             childData: [],
+            checked: false,
+            indeterminate: false,
             children: [
               {
                 id: '12110',
@@ -167,7 +175,9 @@ const treeList = [
                 type: 'html',
                 date: '2019-05-19',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               }
             ]
           },
@@ -179,7 +189,9 @@ const treeList = [
             type: 'avi',
             date: '2019-04-18',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '123000',
@@ -190,6 +202,8 @@ const treeList = [
             date: '2019-06-17',
             childCols: [],
             childData: [],
+            checked: false,
+            indeterminate: false,
             children: [
               {
                 id: '123100',
@@ -199,7 +213,9 @@ const treeList = [
                 type: 'avi',
                 date: '2019-05-16',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               },
               {
                 id: '123200',
@@ -209,7 +225,9 @@ const treeList = [
                 type: 'avi',
                 date: '2019-02-20',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               },
               {
                 id: '123300',
@@ -219,7 +237,9 @@ const treeList = [
                 type: 'txt',
                 date: '2019-04-21',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               }
             ]
           },
@@ -231,7 +251,9 @@ const treeList = [
             type: 'mp4',
             date: '2019-01-27',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '125000',
@@ -241,7 +263,9 @@ const treeList = [
             type: 'avi',
             date: '2019-09-12',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '126000',
@@ -251,7 +275,9 @@ const treeList = [
             type: 'avi',
             date: '2019-07-29',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           }
         ]
       }
@@ -265,7 +291,9 @@ const treeList = [
     type: 'png',
     date: '2019-08-23',
     childCols: [],
-    childData: []
+    childData: [],
+    checked: false,
+    indeterminate: false
   },
   {
     id: '30000',
@@ -276,6 +304,8 @@ const treeList = [
     date: '2019-05-14',
     childCols: [],
     childData: [],
+    checked: false,
+    indeterminate: false,
     children: [
       {
         id: '31000',
@@ -286,6 +316,8 @@ const treeList = [
         date: '2019-07-24',
         childCols: [],
         childData: [],
+        checked: false,
+        indeterminate: false,
         children: [
           {
             id: '31100',
@@ -295,7 +327,9 @@ const treeList = [
             type: 'js',
             date: '2019-05-27',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '31200',
@@ -305,7 +339,9 @@ const treeList = [
             type: 'java',
             date: '2019-10-25',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           }
         ]
       },
@@ -318,6 +354,8 @@ const treeList = [
         date: '2019-05-25',
         childCols: [],
         childData: [],
+        checked: false,
+        indeterminate: false,
         children: [
           {
             id: '32100',
@@ -327,7 +365,9 @@ const treeList = [
             type: 'mp4',
             date: '2019-05-28',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '32200',
@@ -338,6 +378,8 @@ const treeList = [
             date: '2019-02-29',
             childCols: [],
             childData: [],
+            checked: false,
+            indeterminate: false,
             children: [
               {
                 id: '32210',
@@ -347,7 +389,9 @@ const treeList = [
                 type: 'pdf',
                 date: '2019-12-13',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               },
               {
                 id: '32220',
@@ -358,6 +402,8 @@ const treeList = [
                 date: '2019-08-12',
                 childCols: [],
                 childData: [],
+                checked: false,
+                indeterminate: false,
                 children: [
                   {
                     id: '32221',
@@ -367,7 +413,9 @@ const treeList = [
                     type: 'pdf',
                     date: '2019-12-30',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   },
                   {
                     id: '32222',
@@ -377,7 +425,9 @@ const treeList = [
                     type: 'ppt',
                     date: '2019-10-30',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   },
                   {
                     id: '32223',
@@ -387,7 +437,9 @@ const treeList = [
                     type: 'xlsx',
                     date: '2019-11-01',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   }
                 ]
               }
@@ -402,6 +454,8 @@ const treeList = [
             date: '2019-01-10',
             childCols: [],
             childData: [],
+            checked: false,
+            indeterminate: false,
             children: [
               {
                 id: '32310',
@@ -411,7 +465,9 @@ const treeList = [
                 type: 'mp4',
                 date: '2019-11-09',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               },
               {
                 id: '32320',
@@ -422,6 +478,8 @@ const treeList = [
                 date: '2019-08-08',
                 childCols: [],
                 childData: [],
+                checked: false,
+                indeterminate: false,
                 children: [
                   {
                     id: '32321',
@@ -431,7 +489,9 @@ const treeList = [
                     type: 'mp3',
                     date: '2019-03-07',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   },
                   {
                     id: '32322',
@@ -441,7 +501,9 @@ const treeList = [
                     type: 'avi',
                     date: '2019-09-09',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   },
                   {
                     id: '32323',
@@ -451,7 +513,9 @@ const treeList = [
                     type: 'mp3',
                     date: '2019-09-04',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   }
                 ]
               }
@@ -467,7 +531,9 @@ const treeList = [
         type: 'txt',
         date: '2019-01-14',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       },
       {
         id: '34000',
@@ -477,7 +543,9 @@ const treeList = [
         type: 'avi',
         date: '2019-01-17',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       },
       {
         id: '35000',
@@ -487,7 +555,9 @@ const treeList = [
         type: 'mp4',
         date: '2019-02-19',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       },
       {
         id: '36000',
@@ -497,7 +567,9 @@ const treeList = [
         type: 'pdf',
         date: '2019-12-27',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       }
     ]
   },
@@ -510,6 +582,8 @@ const treeList = [
     date: '2019-03-04',
     childCols: [],
     childData: [],
+    checked: false,
+    indeterminate: false,
     children: [
       {
         id: '41000',
@@ -519,7 +593,9 @@ const treeList = [
         type: 'mp4',
         date: '2019-02-03',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       }
     ]
   },
@@ -532,7 +608,9 @@ const treeList = [
     date: '2019-12-02',
     childCols: [],
     childData: [],
-    children: []
+    children: [],
+    checked: false,
+    indeterminate: false
   }
 ]
 

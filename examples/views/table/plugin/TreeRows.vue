@@ -121,10 +121,12 @@ export default {
               this.getTreeList(size).then(data => {
                 const startTime = Date.now()
                 this.loading = false
-                this.$refs.xVTree.loadData(data)
-                this.$nextTick(() => {
-                  this.$XModal.message({ message: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
-                })
+                if (this.$refs.xVTree) {
+                  this.$refs.xVTree.loadData(data)
+                  this.$nextTick(() => {
+                    this.$XModal.message({ message: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
+                  })
+                }
               })
             },
             getTreeList (size) {
@@ -299,10 +301,12 @@ export default {
       this.getTreeList(size).then(data => {
         const startTime = Date.now()
         this.loading = false
-        this.$refs.xVTree.loadData(data)
-        this.$nextTick(() => {
-          this.$XModal.message({ message: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
-        })
+        if (this.$refs.xVTree) {
+          this.$refs.xVTree.loadData(data)
+          this.$nextTick(() => {
+            this.$XModal.message({ message: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
+          })
+        }
       })
     },
     getTreeList (size) {

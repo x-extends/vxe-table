@@ -28,26 +28,6 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">带连接线</p>
-
-    <vxe-virtual-tree
-      show-overflow
-      highlight-hover-row
-      row-id="id"
-      :show-header="false"
-      :data="tableData"
-      :checkbox-config="{labelField: 'name'}"
-      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-      :columns="tableColumn2">
-    </vxe-virtual-tree>
-
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
-
-    <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
-    </pre>
-
     <p class="tip">更多功能</p>
 
     <vxe-virtual-tree
@@ -57,17 +37,17 @@
       row-id="id"
       :show-header="false"
       :data="tableData"
-      :checkbox-config="{labelField: 'name'}"
-      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+      :checkbox-config="{labelField: 'name', checkField: 'checked', halfField: 'indeterminate'}"
+      :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :columns="tableColumn3">
     </vxe-virtual-tree>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
-      <code class="css">{{ demoCodes[6] }}</code>
+      <code class="xml">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="css">{{ demoCodes[4] }}</code>
     </pre>
   </div>
 </template>
@@ -170,39 +150,12 @@ export default {
         <vxe-virtual-tree
           show-overflow
           highlight-hover-row
-          row-id="id"
-          :show-header="false"
-          :data="tableData"
-          :checkbox-config="{labelField: 'name'}"
-          :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-          :columns="tableColumn">
-        </vxe-virtual-tree>
-        `,
-        `
-        export default {
-          data () {
-            return {
-              tableData: [],
-              tableColumn: [
-                { type: 'checkbox', treeNode: true }
-              ]
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
-          }
-        }
-        `,
-        `
-        <vxe-virtual-tree
-          show-overflow
-          highlight-hover-row
           ref="xVTree"
           row-id="id"
           :show-header="false"
           :data="tableData"
-          :checkbox-config="{labelField: 'name'}"
-          :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+          :checkbox-config="{labelField: 'name', checkField: 'checked', halfField: 'indeterminate'}"
+          :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :columns="tableColumn3">
         </vxe-virtual-tree>
         `,

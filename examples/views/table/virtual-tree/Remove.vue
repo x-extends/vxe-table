@@ -41,7 +41,7 @@ export default {
     return {
       tableData: [],
       tableColumn: [
-        { type: 'checkbox', width: 120, treeNode: true },
+        { type: 'seq', width: 120, treeNode: true },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
         { field: 'size', title: 'Size', editRender: { name: 'input' } },
         { field: 'type', title: 'Type', editRender: { name: 'input' } },
@@ -86,7 +86,7 @@ export default {
             return {
               tableData: [],
               tableColumn: [
-                { type: 'checkbox', width: 120, treeNode: true },
+                { type: 'seq', width: 120, treeNode: true },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
                 { field: 'size', title: 'Size', editRender: { name: 'input' } },
                 { field: 'type', title: 'Type', editRender: { name: 'input' } },

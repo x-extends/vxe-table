@@ -10,7 +10,7 @@
       ref="xVTree"
       row-id="id"
       :tree-config="{children: 'children'}"
-      :checkbox-config="{labelField: 'id'}"
+      :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
       :columns="tableColumn"
       :data="tableData">
       <template v-slot:buttons>
@@ -55,7 +55,7 @@ export default {
           ref="xVTree"
           row-id="id"
           :tree-config="{children: 'children'}"
-          :checkbox-config="{labelField: 'id'}"
+          :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
           :columns="tableColumn"
           :data="tableData">
           <template v-slot:buttons>
