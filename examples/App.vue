@@ -121,13 +121,13 @@
         </div>
       </template>
     </vxe-modal>
-    <vxe-modal v-model="supportGroupVisible" title="申请成为高级用户" width="600" height="680" position="center">
+    <vxe-modal v-model="supportGroupVisible" title="申请成为高级用户" width="600" height="700" position="center">
       <template v-slot>
         <div class="support-pay-step">
-          <p style="font-size: 12px;">联系邮件： <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
+          <p style="font-size: 12px;">联系邮件： <a class="link" href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
           <p class="title">1. 扫码申请加入 QQ 群<br><img src="static/support/qq.png"></p>
-          <p class="title">2. 通过支付宝或微信付费：¥{{ supportDiscountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
-          <p class="title">3. 付费完成后点击“联系收款方”，需要留言QQ号<br>（只通过留言的 QQ 号去匹配是否审批）</p>
+          <p class="title">2. 通过支付宝或微信付费：¥{{ supportGroupPrice }}<br>3. 付费完成后点击 "联系收款方"，留言QQ号即可<br><img src="static/donation/pay.jpg"></p>
+          <p class="title">（注意：必须留言QQ号，否则将无法审批通过）</p>
         </div>
       </template>
     </vxe-modal>
