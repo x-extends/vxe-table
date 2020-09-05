@@ -214,9 +214,6 @@ export default {
                 [104, 'Test3', '女', 20, '<img height="40" src="static/other/img2.gif">', '程序员鼓励师']
               ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
           }
         }
         `

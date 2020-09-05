@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">重写默认的滚动条样式，可以自行根据不同浏览器的特性去做修改，简单示例如下：</p>
+    <p class="tip">
+      重写默认的滚动条样式，可以自行根据不同浏览器的特性去做修改，简单示例如下：<br>
+      <span class="red">（小小提示：修改浏览器原生滚动条样式将会导致不同浏览器的差异以及各种兼容性问题，该行为比较糟糕，慎重！）</span>
+    </p>
 
     <vxe-table
       border
@@ -34,7 +37,16 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
+      ],
       demoCodes: [
         `
         <vxe-table
@@ -56,11 +68,17 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
             footerMethod ({ columns, data }) {
@@ -109,9 +127,6 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
