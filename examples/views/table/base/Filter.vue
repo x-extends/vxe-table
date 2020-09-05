@@ -13,10 +13,9 @@
     <vxe-table
       border
       highlight-hover-row
-      height="400"
       :data="tableData">
       <vxe-table-column field="id" title="ID"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于1000003', value: 1000003}, {label: 'id大于1000020', value: 1000020}]" :filter-method="filterNameMethod"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10002', value: 10002}, {label: 'id大于10003', value: 10003}]" :filter-method="filterNameMethod"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
         <template v-slot:filter="{ $panel, column }">
@@ -38,16 +37,15 @@
     <vxe-table
       border
       highlight-hover-row
-      height="400"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column title="基本信息">
-        <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于1000003', value: 1000003}, {label: 'id大于1000020', value: 1000020, checked: true}]" :filter-method="filterNameMethod"></vxe-table-column>
+        <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10003', value: 10002}, {label: 'id大于10003', value: 10003, checked: true}]" :filter-method="filterNameMethod"></vxe-table-column>
         <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="其他">
         <vxe-table-column title="详细信息">
-          <vxe-table-column field="age" title="Age" :filters="[{ data: '30', checked: true }]" :filter-method="filterAgeMethod">
+          <vxe-table-column field="age" title="Age" :filters="[{ data: '30' }]" :filter-method="filterAgeMethod">
             <template v-slot:filter="{ $panel, column }">
               <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)">
             </template>
@@ -72,16 +70,20 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+      ],
       demoCodes: [
         `
         <vxe-table
           border
           highlight-hover-row
-          height="400"
           :data="tableData">
           <vxe-table-column field="id" title="ID"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于1000003', value: 1000003}, {label: 'id大于1000020', value: 1000020}]" :filter-method="filterNameMethod"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10002', value: 10002}, {label: 'id大于10003', value: 10003}]" :filter-method="filterNameMethod"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
             <template v-slot:filter="{ $panel, column }">
@@ -95,11 +97,13 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
             filterNameMethod ({ value, row, column }) {
@@ -115,16 +119,15 @@ export default {
         <vxe-table
           border
           highlight-hover-row
-          height="400"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column title="基本信息">
-            <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于1000003', value: 1000003}, {label: 'id大于1000020', value: 1000020, checked: true}]" :filter-method="filterNameMethod"></vxe-table-column>
+            <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10003', value: 10002}, {label: 'id大于10003', value: 10003, checked: true}]" :filter-method="filterNameMethod"></vxe-table-column>
             <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
           </vxe-table-column>
           <vxe-table-column title="其他">
             <vxe-table-column title="详细信息">
-              <vxe-table-column field="age" title="Age" :filters="[{ data: '30', checked: true }]" :filter-method="filterAgeMethod">
+              <vxe-table-column field="age" title="Age" :filters="[{ data: '30' }]" :filter-method="filterAgeMethod">
                 <template v-slot:filter="{ $panel, column }">
                   <input type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)">
                 </template>
@@ -138,11 +141,13 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
             filterNameMethod ({ value, row, column }) {
@@ -156,9 +161,6 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
