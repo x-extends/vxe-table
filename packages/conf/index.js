@@ -60,9 +60,9 @@ const GlobalConfig = {
       showIcon: true
     },
     treeConfig: {
-      // children: 'children',
-      // hasChild: 'hasChild',
-      // indent: 20,
+      children: 'children',
+      hasChild: 'hasChild',
+      indent: 20,
       showIcon: true
     },
     expandConfig: {
