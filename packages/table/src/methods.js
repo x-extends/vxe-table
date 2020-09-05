@@ -1795,7 +1795,7 @@ const Methods = {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
-        const { isCtxMenu, ctxMenuStore, editStore, editOpts, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
+        const { isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
         const { selected, actived } = editStore
         const keyCode = evnt.keyCode
         const isBack = keyCode === 8
@@ -1815,6 +1815,7 @@ const Methods = {
         const isShiftKey = evnt.shiftKey
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
+        const isEditStatus = editConfig && actived.column && actived.row
         let params
         if (operCtxMenu) {
           // 如果配置了右键菜单; 支持方向键操作、回车
@@ -1850,10 +1851,12 @@ const Methods = {
             }
           }
         } else if (isF2) {
-          // 如果按下了 F2 键
-          if (selected.row && selected.column) {
-            evnt.preventDefault()
-            this.handleActived(selected.args, evnt)
+          if (!isEditStatus) {
+            // 如果按下了 F2 键
+            if (selected.row && selected.column) {
+              evnt.preventDefault()
+              this.handleActived(selected.args, evnt)
+            }
           }
         } else if (isContextMenu) {
           // 如果按下上下文键
@@ -1904,12 +1907,14 @@ const Methods = {
             }
           }
         } else if (operArrow && keyboardConfig.isArrow) {
-          // 如果按下了方向键
-          if (selected.row && selected.column) {
-            this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-          } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
-            // 当前行按键上下移动
-            this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+          if (!isEditStatus) {
+            // 如果按下了方向键
+            if (selected.row && selected.column) {
+              this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+            } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
+              // 当前行按键上下移动
+              this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+            }
           }
         } else if (isTab && keyboardConfig.isTab) {
           // 如果按下了 Tab 键切换
@@ -1919,27 +1924,31 @@ const Methods = {
             this.moveTabSelected(actived.args, isShiftKey, evnt)
           }
         } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
-          // 如果是删除键
-          if (keyboardConfig.isDel && (selected.row || selected.column)) {
-            setCellValue(selected.row, selected.column, null)
-            if (isBack) {
-              this.handleActived(selected.args, evnt)
-            }
-          } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
-            // 如果树形表格回退键关闭当前行返回父节点
-            const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
-            if (parentRow) {
-              evnt.preventDefault()
-              params = { $table: this, row: parentRow }
-              this.setTreeExpand(parentRow, false)
-                .then(() => this.scrollToRow(parentRow))
-                .then(() => this.triggerCurrentRowEvent(evnt, params))
+          if (!isEditStatus) {
+            // 如果是删除键
+            if (keyboardConfig.isDel && (selected.row || selected.column)) {
+              setCellValue(selected.row, selected.column, null)
+              if (isBack) {
+                this.handleActived(selected.args, evnt)
+              }
+            } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
+              // 如果树形表格回退键关闭当前行返回父节点
+              const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
+              if (parentRow) {
+                evnt.preventDefault()
+                params = { $table: this, row: parentRow }
+                this.setTreeExpand(parentRow, false)
+                  .then(() => this.scrollToRow(parentRow))
+                  .then(() => this.triggerCurrentRowEvent(evnt, params))
+              }
             }
           }
         } else if (keyboardConfig && isCtrlKey && isA) {
-          // 如果开启复制功能
-          if (keyboardConfig.isCut && this.mouseConfig && this.mouseOpts.checked) {
-            this.handleAllChecked(evnt)
+          if (!isEditStatus) {
+            // 如果开启复制功能
+            if (keyboardConfig.isCut && this.mouseConfig && this.mouseOpts.checked) {
+              this.handleAllChecked(evnt)
+            }
           }
         } else if (keyboardConfig.isEdit && !isCtrlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           // 启用编辑后，空格键功能将失效
@@ -3356,13 +3365,15 @@ const Methods = {
         rows = [rows]
       }
       if (rows.length) {
+        let validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
         if (accordion) {
-          rows = rows.slice(rows.length - 1, rows.length)
+          validRows = validRows.length ? [validRows[validRows.length - 1]] : []
           // 同一级只能展开一个
-          const matchObj = XEUtils.findTree(tableFullData, item => item === rows[0], treeOpts)
-          XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
+          const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], treeOpts)
+          if (matchObj) {
+            XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
+          }
         }
-        const validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
         if (expanded) {
           validRows.forEach(row => {
             if (treeExpandeds.indexOf(row) === -1) {
@@ -3387,7 +3398,7 @@ const Methods = {
         return Promise.all(result).then(this.recalculate)
       }
     }
-    return Promise.resolve()
+    return this.$nextTick()
   },
   // 在 v3.0 中废弃 hasTreeExpand
   hasTreeExpand (row) {

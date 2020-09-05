@@ -521,11 +521,7 @@ export default {
       return Object.assign({}, GlobalConfig.table.expandConfig, this.expandConfig)
     },
     treeOpts () {
-      return Object.assign({
-        children: 'children',
-        hasChild: 'hasChild',
-        indent: 20
-      }, GlobalConfig.table.treeConfig, this.treeConfig)
+      return Object.assign({}, GlobalConfig.table.treeConfig, this.treeConfig)
     },
     emptyOpts () {
       return Object.assign({}, GlobalConfig.table.emptyRender, this.emptyRender)
