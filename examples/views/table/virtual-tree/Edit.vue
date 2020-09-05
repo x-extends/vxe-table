@@ -10,7 +10,7 @@
       row-id="id"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
-      :checkbox-config="{labelField: 'id'}"
+      :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
       :columns="tableColumn"
       :data="tableData">
       <template v-slot:buttons>
@@ -55,7 +55,7 @@ export default {
           row-id="id"
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
-          :checkbox-config="{labelField: 'id'}"
+          :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
           :columns="tableColumn"
           :data="tableData">
           <template v-slot:buttons>

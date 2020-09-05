@@ -89,23 +89,27 @@ export default {
               this.loading = true
               this.getTreeList(size).then(data => {
                 this.loading = false
-                this.$refs.xVTree.loadData(data)
+                if (this.$refs.xVTree) {
+                  this.$refs.xVTree.loadData(data)
+                }
               })
             },
-            loadColumn () {
+            loadColumn (size) {
               const tableColumn = [
                 { type: 'seq', title: '序号', width: 100 },
                 { type: 'radio', title: 'Name', width: 300, treeNode: true },
                 { field: 'id', title: 'ID', width: 200 }
               ]
-              for (let index = 0; index < 2000; index++) {
+              for (let index = 0; index < size; index++) {
                 tableColumn.push({
                   field: 'col' + index,
                   title: 'col_' + index,
                   width: 100
                 })
               }
-              this.$refs.xVTree.loadColumn(tableColumn)
+              if (this.$refs.xVTree) {
+                this.$refs.xVTree.loadColumn(tableColumn)
+              }
             },
             getTreeList (size) {
               return new Promise(resolve => {
@@ -207,7 +211,9 @@ export default {
       this.loading = true
       this.getTreeList(size).then(data => {
         this.loading = false
-        this.$refs.xVTree.loadData(data)
+        if (this.$refs.xVTree) {
+          this.$refs.xVTree.loadData(data)
+        }
       })
     },
     loadColumn (size) {
@@ -223,7 +229,9 @@ export default {
           width: 100
         })
       }
-      this.$refs.xVTree.loadColumn(tableColumn)
+      if (this.$refs.xVTree) {
+        this.$refs.xVTree.loadColumn(tableColumn)
+      }
     },
     getTreeList (size) {
       return new Promise(resolve => {

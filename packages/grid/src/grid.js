@@ -199,11 +199,9 @@ export default {
         }
       }
       if (proxyConfig) {
-        Object.assign(props, {
-          loading: isCloak || loading || tableLoading,
-          data: tableData,
-          rowClassName: this.handleRowClassName
-        })
+        props.loading = isCloak || loading || tableLoading
+        props.data = tableData
+        props.rowClassName = this.handleRowClassName
         if ((proxyOpts.seq || proxyOpts.index) && pagerConfig) {
           props.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }

@@ -50,7 +50,8 @@
           //   treeConfig: {
           //     children: 'children',
           //     hasChild: 'hasChild',
-          //     indent: 20
+          //     indent: 20,
+          //     showIcon: true
           //   },
           //   tooltipConfig: {
           //     theme: 'dark',
