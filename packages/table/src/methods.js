@@ -300,7 +300,9 @@ const Methods = {
     const tableFullData = datas ? datas.slice(0) : []
     const scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt <= tableFullData.length
     scrollYStore.startIndex = 0
+    scrollYStore.endIndex = 1
     scrollXStore.startIndex = 0
+    scrollXStore.endIndex = 1
     editStore.insertList = []
     editStore.removeList = []
     // 全量数据

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      树形虚拟滚动渲染<span class="orange">（最大可以支撑 1w 列、10w 行）</span>，具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-virtual-tree" target="_blank">vxe-table-plugin-virtual-tree</a> 插件的 API<br>
+      树形虚拟滚动渲染<span class="orange">（最大可以支撑 1w 列、20w 行）</span>，具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-virtual-tree" target="_blank">vxe-table-plugin-virtual-tree</a> 插件的 API<br>
       <span class="red">（注：启用纵向虚拟滚的后不支持动态行高）</span>
     </p>
 
@@ -22,7 +22,7 @@
         <vxe-button @click="loadData(10000)">加载1w节点</vxe-button>
         <vxe-button @click="loadData(30000)">加载3w节点</vxe-button>
         <vxe-button @click="loadData(50000)">加载5w节点</vxe-button>
-        <vxe-button @click="loadData(80000)">加载8w节点</vxe-button>
+        <vxe-button @click="loadData(100000)">加载10w节点</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
@@ -47,7 +47,7 @@ export default {
       loading: false,
       tableColumn: [
         { type: 'seq', title: '序号', width: 100 },
-        { type: 'checkbox', title: 'A', treeNode: true, width: 200 },
+        { type: 'checkbox', title: 'A', treeNode: true, width: 300 },
         { field: 'b', title: 'B', width: 100 },
         { field: 'c', title: 'C', width: 100 },
         { field: 'd', title: 'D', width: 100 },
@@ -81,7 +81,7 @@ export default {
             <vxe-button @click="loadData(10000)">加载1w节点</vxe-button>
             <vxe-button @click="loadData(30000)">加载3w节点</vxe-button>
             <vxe-button @click="loadData(50000)">加载5w节点</vxe-button>
-            <vxe-button @click="loadData(80000)">加载8w节点</vxe-button>
+            <vxe-button @click="loadData(100000)">加载10w节点</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
@@ -95,7 +95,7 @@ export default {
               loading: false,
               tableColumn: [
                 { type: 'seq', title: '序号', width: 100 },
-                { type: 'checkbox', title: 'A', treeNode: true, width: 200 },
+                { type: 'checkbox', title: 'A', treeNode: true, width: 300 },
                 { field: 'b', title: 'B', width: 100 },
                 { field: 'c', title: 'C', width: 100 },
                 { field: 'd', title: 'D', width: 100 },
@@ -212,10 +212,10 @@ export default {
                         const item3 = {
                           id: startIndex + ketIndex++,
                           a: \`a\${index1}_\${index2}_\${index3}\`,
-                          b: \`name\${index1}_\${index2}_\${index3}\`,
-                          c: \`b\${index1}_\${index2}_\${index3}\`,
-                          d: \`c\${index1}_\${index2}_\${index3}\`,
-                          e: \`d\${index1}_\${index2}_\${index3}\`,
+                          b: \`b\${index1}_\${index2}_\${index3}\`,
+                          c: \`c\${index1}_\${index2}_\${index3}\`,
+                          d: \`d\${index1}_\${index2}_\${index3}\`,
+                          e: \`e\${index1}_\${index2}_\${index3}\`,
                           f: \`f\${index1}_\${index2}_\${index3}\`,
                           g: \`g\${index1}_\${index2}_\${index3}\`,
                           h: \`h\${index1}_\${index2}_\${index3}\`,
@@ -392,10 +392,10 @@ export default {
                 const item3 = {
                   id: startIndex + ketIndex++,
                   a: `a${index1}_${index2}_${index3}`,
-                  b: `name${index1}_${index2}_${index3}`,
-                  c: `b${index1}_${index2}_${index3}`,
-                  d: `c${index1}_${index2}_${index3}`,
-                  e: `d${index1}_${index2}_${index3}`,
+                  b: `b${index1}_${index2}_${index3}`,
+                  c: `c${index1}_${index2}_${index3}`,
+                  d: `d${index1}_${index2}_${index3}`,
+                  e: `e${index1}_${index2}_${index3}`,
                   f: `f${index1}_${index2}_${index3}`,
                   g: `g${index1}_${index2}_${index3}`,
                   h: `h${index1}_${index2}_${index3}`,
