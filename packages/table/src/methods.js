@@ -236,6 +236,7 @@ const Methods = {
     const scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt <= tableFullData.length
     scrollYStore.startIndex = 0
     scrollYStore.visibleIndex = 0
+    scrollYStore.renderSize = 1
     editStore.insertList = []
     editStore.removeList = []
     // 全量数据
