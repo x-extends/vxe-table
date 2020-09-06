@@ -135,6 +135,9 @@ export default {
       saveSuccess: 'Saved successfully!',
       operError: 'Error occurred, operation failed!'
     },
+    select: {
+      emptyText: 'No Data'
+    },
     pager: {
       goto: 'Go to',
       pagesize: '{{0}}/page',
@@ -236,6 +239,7 @@ export default {
         dayLabel: '{{1}} {{0}}',
         labelFormat: {
           date: 'dd/MM/yyyy',
+          time: 'HH:mm:ss',
           datetime: 'yyyy-MM-dd HH:mm:ss',
           week: '[Week] WW, yyyy',
           month: 'MM/yyyy',

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.select') }}</h2>
-    <p class="tip">下拉选项，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'select'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
+    <p class="tip">下拉框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'select'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
 
     <p>
       <vxe-select v-model="value10" placeholder="默认尺寸">
@@ -101,7 +101,7 @@
     </p>
 
     <p>
-      <vxe-select v-model="value40" placeholder="配置式" :options="list40"></vxe-select>
+      <vxe-select v-model="value40" placeholder="空数据" :options="list40"></vxe-select>
       <vxe-select v-model="value41" placeholder="分组配置式" :option-groups="list41"></vxe-select>
       <vxe-select v-model="value42" placeholder="禁用选项" :options="list42"></vxe-select>
       <vxe-select v-model="value43" placeholder="禁用分组" :option-groups="list43" transfer></vxe-select>
@@ -148,10 +148,7 @@ export default {
       value33: null,
       value34: ['9', '11'],
       value40: null,
-      list40: [
-        { label: '男', value: '1' },
-        { label: '女', value: '0' }
-      ],
+      list40: [],
       value41: null,
       list41: [
         {
@@ -324,7 +321,7 @@ export default {
         </p>
 
         <p>
-          <vxe-select v-model="value40" placeholder="配置式" :options="list40"></vxe-select>
+          <vxe-select v-model="value40" placeholder="空数据" :options="list40"></vxe-select>
           <vxe-select v-model="value41" placeholder="分组配置式" :option-groups="list41"></vxe-select>
           <vxe-select v-model="value42" placeholder="禁用选项" :options="list42"></vxe-select>
           <vxe-select v-model="value43" placeholder="禁用分组" :option-groups="list43" transfer></vxe-select>
@@ -349,10 +346,7 @@ export default {
               value33: null,
               value34: ['9', '11'],
               value40: null,
-              list40: [
-                { label: '男', value: '1' },
-                { label: '女', value: '0' }
-              ],
+              list40: [],
               value41: null,
               list41: [
                 {

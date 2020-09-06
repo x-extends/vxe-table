@@ -135,6 +135,9 @@ export default {
       saveSuccess: '保存成功！',
       operError: '發生錯誤，操作失敗！'
     },
+    select: {
+      emptyText: '暫無資料'
+    },
     pager: {
       goto: '前往',
       pagesize: '{{0}}項/頁',
@@ -236,6 +239,7 @@ export default {
         dayLabel: '{{0}} 年 {{1}}',
         labelFormat: {
           date: 'yyyy-MM-dd',
+          time: 'HH:mm:ss',
           datetime: 'yyyy-MM-dd HH:mm:ss',
           week: 'yyyy 年第 WW 周',
           month: 'yyyy-MM',
