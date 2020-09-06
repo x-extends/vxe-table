@@ -170,6 +170,24 @@ export function renderOptgroup (h, _vm) {
   })
 }
 
+function renderOpts (h, _vm) {
+  const { isGroup, visibleGroupList, visibleOptionList } = _vm
+  if (isGroup) {
+    if (visibleGroupList.length) {
+      return renderOptgroup(h, _vm)
+    }
+  } else {
+    if (visibleOptionList.length) {
+      return renderOption(h, _vm, visibleOptionList)
+    }
+  }
+  return [
+    h('div', {
+      class: 'vxe-select--empty-placeholder'
+    }, _vm.emptyText || GlobalConfig.i18n('vxe.select.emptyText'))
+  ]
+}
+
 export default {
   name: 'VxeSelect',
   props: {
@@ -186,6 +204,7 @@ export default {
     optionGroups: Array,
     optionGroupProps: Object,
     size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
+    emptyText: String,
     optId: { type: String, default: () => GlobalConfig.select.optId },
     optKey: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
@@ -305,13 +324,14 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, inited, isActivated, disabled, visiblePanel } = this
+    const { vSize, inited, loading, isActivated, disabled, visiblePanel } = this
     return h('div', {
       class: ['vxe-select', {
         [`size--${vSize}`]: vSize,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,
-        'is--active': isActivated
+        'is--active': isActivated,
+        'is--loading': loading
       }]
     }, [
       h('div', {
@@ -354,7 +374,7 @@ export default {
         h('div', {
           ref: 'optWrapper',
           class: 'vxe-select-option--wrapper'
-        }, this.isGroup ? renderOptgroup(h, this) : renderOption(h, this, this.visibleOptionList))
+        }, renderOpts(h, this))
       ] : [])
     ])
   },
@@ -452,14 +472,11 @@ export default {
       }
     },
     handleGlobalMousewheelEvent (evnt) {
-      const { $refs, $el, disabled, visiblePanel } = this
+      const { $refs, disabled, visiblePanel } = this
       if (!disabled) {
         if (visiblePanel) {
-          const hasSlef = DomTools.getEventTargetNode(evnt, $el).flag
-          if (hasSlef || DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
-            if (hasSlef) {
-              this.updatePlacement()
-            }
+          if (DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
+            this.updatePlacement()
           } else {
             this.hideOptionPanel()
           }

@@ -8,6 +8,27 @@ const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 const yearSize = 20
 const monthSize = 20
 
+function toStringTime (date) {
+  if (date) {
+    if (XEUtils.isDate(date)) {
+      return date
+    }
+    const str = XEUtils.toString(date)
+    const rest = str.match(/(\d{2}):(\d{2}):(\d{2})/)
+    if (rest) {
+      const hh = rest[1]
+      const mm = rest[2]
+      const ss = rest[3]
+      const date = new Date()
+      date.setHours(hh || 0)
+      date.setMinutes(mm || 0)
+      date.setSeconds(ss || 0)
+      return date
+    }
+  }
+  return new Date('')
+}
+
 function renderDefaultInput (h, _vm) {
   const { inpAttrs, inpEvents, value } = _vm
   return h('input', {
@@ -243,7 +264,7 @@ function renderDateTable (h, _vm) {
   return renderDateDayTable(h, _vm)
 }
 
-function rendeDatePanel (h, _vm) {
+function renderDatePanel (h, _vm) {
   const { datePanelType, selectDatePanelLabel, isDisabledPrevDateBtn, isDisabledNextDateBtn } = _vm
   return [
     h('div', {
@@ -306,7 +327,7 @@ function rendeDatePanel (h, _vm) {
   ]
 }
 
-function rendeTimePanel (h, _vm) {
+function renderTimePanel (h, _vm) {
   const { dateTimeLabel, datetimePanelValue, hourList, minuteList, secondList } = _vm
   return [
     h('div', {
@@ -374,32 +395,49 @@ function rendeTimePanel (h, _vm) {
 
 function renderPanel (h, _vm) {
   const { type, vSize, isDatePicker, transfer, animatVisible, visiblePanel, panelPlacement, panelStyle } = _vm
-  return isDatePicker ? h('div', {
-    ref: 'panel',
-    class: ['vxe-table--ignore-clear vxe-input--panel', `type--${type}`, {
-      [`size--${vSize}`]: vSize,
-      'is--transfer': transfer,
-      'animat--leave': animatVisible,
-      'animat--enter': visiblePanel
-    }],
-    attrs: {
-      'data-placement': panelPlacement
-    },
-    style: panelStyle
-  }, [
-    type === 'datetime' ? h('div', {
-      class: 'vxe-input--panel-layout-wrapper'
-    }, [
-      h('div', {
-        class: 'vxe-input--panel-left-wrapper'
-      }, rendeDatePanel(h, _vm)),
-      h('div', {
-        class: 'vxe-input--panel-right-wrapper'
-      }, rendeTimePanel(h, _vm))
-    ]) : h('div', {
-      class: 'vxe-input--panel-wrapper'
-    }, rendeDatePanel(h, _vm))
-  ]) : null
+  const renders = []
+  if (isDatePicker) {
+    if (type === 'datetime') {
+      renders.push(
+        h('div', {
+          class: 'vxe-input--panel-layout-wrapper'
+        }, [
+          h('div', {
+            class: 'vxe-input--panel-left-wrapper'
+          }, renderDatePanel(h, _vm)),
+          h('div', {
+            class: 'vxe-input--panel-right-wrapper'
+          }, renderTimePanel(h, _vm))
+        ])
+      )
+    } else if (type === 'time') {
+      renders.push(
+        h('div', {
+          class: 'vxe-input--panel-wrapper'
+        }, renderTimePanel(h, _vm))
+      )
+    } else {
+      renders.push(
+        h('div', {
+          class: 'vxe-input--panel-wrapper'
+        }, renderDatePanel(h, _vm))
+      )
+    }
+    return h('div', {
+      ref: 'panel',
+      class: ['vxe-table--ignore-clear vxe-input--panel', `type--${type}`, {
+        [`size--${vSize}`]: vSize,
+        'is--transfer': transfer,
+        'animat--leave': animatVisible,
+        'animat--enter': visiblePanel
+      }],
+      attrs: {
+        'data-placement': panelPlacement
+      },
+      style: panelStyle
+    }, renders)
+  }
+  return null
 }
 
 function renderNumberIcon (h, _vm) {
@@ -619,7 +657,11 @@ export default {
       return ['number', 'integer', 'float'].indexOf(this.type) > -1
     },
     isDatePicker () {
-      return ['date', 'datetime', 'week', 'month', 'year'].indexOf(this.type) > -1
+      return this.hasTime || ['date', 'week', 'month', 'year'].indexOf(this.type) > -1
+    },
+    hasTime () {
+      const { type } = this
+      return type === 'time' || type === 'datetime'
     },
     isPassword () {
       return this.type === 'password'
@@ -663,8 +705,14 @@ export default {
       return this.maxDate ? XEUtils.toStringDate(this.maxDate) : null
     },
     dateValue () {
-      const { value } = this
-      return value ? XEUtils.toStringDate(value, this.dateValueFormat) : null
+      const { value, isDatePicker, type, dateValueFormat } = this
+      if (value && isDatePicker) {
+        if (type === 'time') {
+          return toStringTime(value, dateValueFormat)
+        }
+        return XEUtils.toStringDate(value, dateValueFormat)
+      }
+      return null
     },
     dateTimeLabel () {
       const { datetimePanelValue } = this
@@ -674,8 +722,8 @@ export default {
       return ''
     },
     hmsTime () {
-      const { type, dateValue } = this
-      return dateValue && type === 'datetime' ? (dateValue.getHours() * 3600 + dateValue.getMinutes() * 60 + dateValue.getSeconds()) * 1000 : 0
+      const { dateValue } = this
+      return dateValue && (this.hasTime) ? (dateValue.getHours() * 3600 + dateValue.getMinutes() * 60 + dateValue.getSeconds()) * 1000 : 0
     },
     dateLabelFormat () {
       if (this.isDatePicker) {
@@ -684,46 +732,59 @@ export default {
       return null
     },
     dateValueFormat () {
-      return this.valueFormat || this.dateOpts.valueFormat || (this.type === 'datetime' ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd')
+      const { type } = this
+      return this.valueFormat || this.dateOpts.valueFormat || (type === 'time' ? 'HH:mm:ss' : (type === 'datetime' ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'))
     },
     selectDatePanelLabel () {
-      const { datePanelType, selectMonth, yearList } = this
-      let year = ''
-      let month
-      if (selectMonth) {
-        year = selectMonth.getFullYear()
-        month = selectMonth.getMonth() + 1
+      if (this.isDatePicker) {
+        const { datePanelType, selectMonth, yearList } = this
+        let year = ''
+        let month
+        if (selectMonth) {
+          year = selectMonth.getFullYear()
+          month = selectMonth.getMonth() + 1
+        }
+        if (datePanelType === 'month') {
+          return XEUtils.template(GlobalConfig.i18n('vxe.input.date.monthLabel'), [year])
+        } else if (datePanelType === 'year') {
+          return yearList.length ? `${yearList[0].year} - ${yearList[yearList.length - 1].year}` : ''
+        }
+        return XEUtils.template(GlobalConfig.i18n('vxe.input.date.dayLabel'), [year, month ? GlobalConfig.i18n(`vxe.input.date.m${month}`) : '-'])
       }
-      if (datePanelType === 'month') {
-        return XEUtils.template(GlobalConfig.i18n('vxe.input.date.monthLabel'), [year])
-      } else if (datePanelType === 'year') {
-        return yearList.length ? `${yearList[0].year} - ${yearList[yearList.length - 1].year}` : ''
-      }
-      return XEUtils.template(GlobalConfig.i18n('vxe.input.date.dayLabel'), [year, month ? GlobalConfig.i18n(`vxe.input.date.m${month}`) : '-'])
+      return ''
     },
     weekDatas () {
-      let sWeek = XEUtils.toNumber(XEUtils.isNumber(this.startWeek) ? this.startWeek : this.dateOpts.startWeek)
-      const weeks = [sWeek]
-      for (let index = 0; index < 6; index++) {
-        if (sWeek >= 6) {
-          sWeek = 0
-        } else {
-          sWeek++
-        }
+      const weeks = []
+      if (this.isDatePicker) {
+        let sWeek = XEUtils.toNumber(XEUtils.isNumber(this.startWeek) ? this.startWeek : this.dateOpts.startWeek)
         weeks.push(sWeek)
+        for (let index = 0; index < 6; index++) {
+          if (sWeek >= 6) {
+            sWeek = 0
+          } else {
+            sWeek++
+          }
+          weeks.push(sWeek)
+        }
       }
       return weeks
     },
     dateHeaders () {
-      return this.weekDatas.map(day => {
-        return {
-          value: day,
-          label: GlobalConfig.i18n(`vxe.input.date.weeks.w${day}`)
-        }
-      })
+      if (this.isDatePicker) {
+        return this.weekDatas.map(day => {
+          return {
+            value: day,
+            label: GlobalConfig.i18n(`vxe.input.date.weeks.w${day}`)
+          }
+        })
+      }
+      return []
     },
     weekHeaders () {
-      return [{ label: GlobalConfig.i18n('vxe.input.date.weeks.w') }].concat(this.dateHeaders)
+      if (this.isDatePicker) {
+        return [{ label: GlobalConfig.i18n('vxe.input.date.weeks.w') }].concat(this.dateHeaders)
+      }
+      return []
     },
     yearList () {
       const { selectMonth, currentDate } = this
@@ -827,21 +888,25 @@ export default {
     },
     hourList () {
       const list = []
-      for (let index = 0; index < 24; index++) {
-        list.push({
-          value: index,
-          label: ('' + index).padStart(2, 0)
-        })
+      if (this.isDatePicker) {
+        for (let index = 0; index < 24; index++) {
+          list.push({
+            value: index,
+            label: ('' + index).padStart(2, 0)
+          })
+        }
       }
       return list
     },
     minuteList () {
       const list = []
-      for (let index = 0; index < 60; index++) {
-        list.push({
-          value: index,
-          label: ('' + index).padStart(2, 0)
-        })
+      if (this.isDatePicker) {
+        for (let index = 0; index < 60; index++) {
+          list.push({
+            value: index,
+            label: ('' + index).padStart(2, 0)
+          })
+        }
       }
       return list
     },
@@ -1066,7 +1131,7 @@ export default {
         this.changeValue()
       } else if (type === 'float') {
         if (value) {
-          const validValue = XEUtils.toFixedString(value, digitsValue)
+          const validValue = XEUtils.toFixed(XEUtils.floor(value, digitsValue), digitsValue)
           if (value !== validValue) {
             this.emitUpdate(validValue, { type: 'init' })
           }
@@ -1093,15 +1158,19 @@ export default {
             } else if (!this.vaildMaxNum(inpVal)) {
               inpVal = max
             }
-            this.emitUpdate(type === 'float' ? XEUtils.toFixedString(inpVal, digitsValue) : '' + inpVal, { type: 'check' })
+            this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(inpVal, digitsValue), digitsValue) : '' + inpVal, { type: 'check' })
           }
         } else if (isDatePicker) {
           let inpVal = this.inputValue
           if (inpVal) {
-            inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
+            if (type === 'time') {
+              inpVal = toStringTime(inpVal, dateLabelFormat)
+            } else {
+              inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
+            }
             if (XEUtils.isValidDate(inpVal)) {
               if (!XEUtils.isDateSame(value, inpVal, dateLabelFormat)) {
-                if (type === 'datetime') {
+                if (this.hasTime) {
                   datetimePanelValue.setHours(inpVal.getHours())
                   datetimePanelValue.setMinutes(inpVal.getMinutes())
                   datetimePanelValue.setSeconds(inpVal.getSeconds())
@@ -1210,7 +1279,7 @@ export default {
       const inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
       const newValue = isPlus ? XEUtils.add(inputValue, stepValue) : XEUtils.subtract(inputValue, stepValue)
       if (this.vaildMinNum(newValue) && this.vaildMaxNum(newValue)) {
-        this.emitUpdate(type === 'float' ? XEUtils.toFixedString(newValue, digitsValue) : '' + newValue, evnt)
+        this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(newValue, digitsValue), digitsValue) : '' + newValue, evnt)
       }
     },
     // 数值
@@ -1383,9 +1452,16 @@ export default {
       }
     },
     dateParseValue (date) {
-      const { dateLabelFormat, parseFormat } = this
-      let dValue = date ? XEUtils.toStringDate(date, parseFormat || this.dateOpts.parseFormat) : null
+      const { type, dateLabelFormat, parseFormat } = this
+      let dValue = null
       let dLabel = ''
+      if (date) {
+        if (type === 'time') {
+          dValue = toStringTime(date, parseFormat || this.dateOpts.parseFormat)
+        } else {
+          dValue = XEUtils.toStringDate(date, parseFormat || this.dateOpts.parseFormat)
+        }
+      }
       if (XEUtils.isValidDate(dValue)) {
         dLabel = XEUtils.toDateString(dValue, dateLabelFormat)
       } else {
@@ -1455,11 +1531,11 @@ export default {
       }
     },
     dateChange (date) {
-      const { value, type, datetimePanelValue, dateValueFormat } = this
-      if (type === 'week') {
+      const { value, datetimePanelValue, dateValueFormat } = this
+      if (this.type === 'week') {
         const sWeek = XEUtils.toNumber(XEUtils.isNumber(this.startWeek) ? this.startWeek : this.dateOpts.startWeek)
         date = XEUtils.getWhatWeek(date, 0, sWeek)
-      } else if (type === 'datetime') {
+      } else if (this.hasTime) {
         date.setHours(datetimePanelValue.getHours())
         date.setMinutes(datetimePanelValue.getMinutes())
         date.setSeconds(datetimePanelValue.getSeconds())
@@ -1490,7 +1566,7 @@ export default {
       } else {
         this.dateNowHandle()
       }
-      if (type === 'datetime') {
+      if (this.hasTime) {
         this.datetimePanelValue = this.datePanelValue || XEUtils.getWhatDay(Date.now(), 0, 'first')
         this.$nextTick(() => {
           XEUtils.arrayEach(this.$refs.timeBody.querySelectorAll('li.is--selected'), this.updateTimePos)
@@ -1679,14 +1755,11 @@ export default {
       }
     },
     handleGlobalMousewheelEvent (evnt) {
-      const { $refs, $el, disabled, visiblePanel } = this
+      const { $refs, disabled, visiblePanel } = this
       if (!disabled) {
         if (visiblePanel) {
-          const hasSlef = DomTools.getEventTargetNode(evnt, $el).flag
-          if (hasSlef || DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
-            if (hasSlef) {
-              this.updatePlacement()
-            }
+          if (DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
+            this.updatePlacement()
           } else {
             this.hidePanel()
             this.afterCheckValue()

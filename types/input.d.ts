@@ -15,7 +15,7 @@ export declare class Input extends VXETableModule {
   /**
    * 渲染类型
    */
-  type?: 'text' | 'search' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'datetime' | 'week' | 'month' | 'year';
+  type?: 'text' | 'search' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'time' | 'datetime' | 'week' | 'month' | 'year';
   /**
    * 当有值时，是否在右侧显示清除按钮
    */

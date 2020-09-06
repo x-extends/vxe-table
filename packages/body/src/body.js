@@ -514,13 +514,13 @@ export default {
     }
     let emptyContent
     if ($scopedSlots.empty) {
-      emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)
+      emptyContent = $scopedSlots.empty.call(this, { $table: $xetable }, h)
     } else {
       const compConf = emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
       if (compConf && compConf.renderEmpty) {
-        emptyContent = compConf.renderEmpty.call(this, h, emptyOpts, { $table: this }, { $table: this })
+        emptyContent = compConf.renderEmpty.call(this, h, emptyOpts, { $table: $xetable }, { $table: $xetable })
       } else {
-        emptyContent = GlobalConfig.i18n('vxe.table.emptyText')
+        emptyContent = $xetable.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
       }
     }
     return h('div', {

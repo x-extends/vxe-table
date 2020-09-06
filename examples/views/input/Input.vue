@@ -2,8 +2,7 @@
   <div>
     <h2>{{ $t('app.aside.nav.input') }}</h2>
     <p class="tip">
-      支持多种类型的输入框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link><br>
-      支持类型：text 文本、search 搜索、password 密码、number 数值、integer 整数、float 小数、date 日期、datetime 时间选择、week 周、month 月份、year 年份
+      输入框、选择器，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link><br>
     </p>
 
     <p>
@@ -28,12 +27,13 @@
     </p>
 
     <p>
-      <vxe-input v-model="value400" placeholder="日期类型" type="date"></vxe-input>
-      <vxe-input v-model="value401" placeholder="周" type="week" clearable></vxe-input>
-      <vxe-input v-model="value402" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
-      <vxe-input v-model="value403" placeholder="年" type="year" clearable></vxe-input>
-      <vxe-input v-model="value404" placeholder="时间选择" type="datetime" transfer></vxe-input>
-      <vxe-input v-model="value405" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
+      <vxe-input v-model="value400" placeholder="日期选择" type="date"></vxe-input>
+      <vxe-input v-model="value401" placeholder="周选择" type="week" clearable></vxe-input>
+      <vxe-input v-model="value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
+      <vxe-input v-model="value403" placeholder="年选择" type="year" clearable></vxe-input>
+      <vxe-input v-model="value404" placeholder="时间选择" type="time"></vxe-input>
+      <vxe-input v-model="value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
+      <vxe-input v-model="value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
     </p>
 
     <p>
@@ -119,6 +119,7 @@ export default {
       value403: '',
       value404: '',
       value405: '',
+      value406: '',
       value500: '22',
       value501: '',
       value502: '',
@@ -156,12 +157,13 @@ export default {
         </p>
 
         <p>
-          <vxe-input v-model="value400" placeholder="日期类型" type="date"></vxe-input>
-          <vxe-input v-model="value401" placeholder="周" type="week" clearable></vxe-input>
-          <vxe-input v-model="value402" placeholder="月" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
-          <vxe-input v-model="value403" placeholder="年" type="year" clearable></vxe-input>
-          <vxe-input v-model="value404" placeholder="时间选择" type="datetime" transfer></vxe-input>
-          <vxe-input v-model="value405" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
+          <vxe-input v-model="value400" placeholder="日期选择" type="date"></vxe-input>
+          <vxe-input v-model="value401" placeholder="周选择" type="week" clearable></vxe-input>
+          <vxe-input v-model="value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
+          <vxe-input v-model="value403" placeholder="年选择" type="year" clearable></vxe-input>
+          <vxe-input v-model="value404" placeholder="时间选择" type="time"></vxe-input>
+          <vxe-input v-model="value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
+          <vxe-input v-model="value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
         </p>
 
         <p>
@@ -221,6 +223,7 @@ export default {
               value403: '',
               value404: '',
               value405: '',
+              value406: '',
               value500: '22',
               value501: '',
               value502: '',
