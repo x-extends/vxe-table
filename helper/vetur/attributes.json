@@ -259,6 +259,10 @@
     "type": "{ [field: string]: columneditrule[] }",
     "description": "校验规则配置项"
   },
+  "vxe-table/empty-text": {
+    "type": "string",
+    "description": "空数据时显示的内容"
+  },
   "vxe-table/empty-render": {
     "type": "any",
     "description": "空内容渲染配置项"
@@ -702,6 +706,10 @@
   "vxe-grid/edit-rules": {
     "type": "{ [field: string]: columneditrule[] }",
     "description": "校验规则配置项"
+  },
+  "vxe-grid/empty-text": {
+    "type": "string",
+    "description": "空数据时显示的内容"
   },
   "vxe-grid/empty-render": {
     "type": "any",

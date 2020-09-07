@@ -2085,6 +2085,15 @@ const apis = [
         ]
       },
       {
+        name: 'empty-text',
+        descKey: 'app.api.table.desc.emptyText',
+        version: '1.15.31',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'empty-render',
         descKey: 'app.api.table.desc.emptyRender',
         version: '1.15.19',
