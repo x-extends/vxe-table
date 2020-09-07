@@ -222,6 +222,7 @@ export declare class Table extends VXETableModule {
   validConfig?: ValidConfig;
   // 校验规则配置项
   editRules?: EditVaildRules;
+  emptyText?: string;
   // 空内容渲染配置项
   emptyRender?: boolean | EmptyRender;
   animat?: boolean;
