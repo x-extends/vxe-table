@@ -8,23 +8,27 @@ const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 const yearSize = 20
 const monthSize = 20
 
-function toStringTime (date) {
-  if (date) {
-    if (XEUtils.isDate(date)) {
-      return date
+function toStringTime (str) {
+  if (str) {
+    const rest = new Date()
+    let h, m, s
+    if (XEUtils.isDate(str)) {
+      h = str.getHours()
+      m = str.getMinutes()
+      s = str.getSeconds()
+    } else {
+      str = XEUtils.toString(str)
+      const parses = str.match(/^(\d{1,2})(:(\d{1,2}))?(:(\d{1,2}))?/)
+      if (parses) {
+        h = parses[1]
+        m = parses[3]
+        s = parses[5]
+      }
     }
-    const str = XEUtils.toString(date)
-    const rest = str.match(/(\d{2}):(\d{2}):(\d{2})/)
-    if (rest) {
-      const hh = rest[1]
-      const mm = rest[2]
-      const ss = rest[3]
-      const date = new Date()
-      date.setHours(hh || 0)
-      date.setMinutes(mm || 0)
-      date.setSeconds(ss || 0)
-      return date
-    }
+    rest.setHours(h || 0)
+    rest.setMinutes(m || 0)
+    rest.setSeconds(s || 0)
+    return rest
   }
   return new Date('')
 }
@@ -98,7 +102,7 @@ function renderDateLabel (h, _vm, item, label) {
 
 function isDateDisabled (_vm, item) {
   const disabledMethod = _vm.disabledMethod || _vm.dateOpts.disabledMethod
-  return disabledMethod && disabledMethod({ date: item.date })
+  return disabledMethod && disabledMethod({ type: _vm.type, date: item.date })
 }
 
 function renderDateDayTable (h, _vm) {
@@ -733,7 +737,7 @@ export default {
     },
     dateValueFormat () {
       const { type } = this
-      return this.valueFormat || this.dateOpts.valueFormat || (type === 'time' ? 'HH:mm:ss' : (type === 'datetime' ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'))
+      return type === 'time' ? 'HH:mm:ss' : (this.valueFormat || this.dateOpts.valueFormat || (type === 'datetime' ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'))
     },
     selectDatePanelLabel () {
       if (this.isDatePicker) {
@@ -888,7 +892,7 @@ export default {
     },
     hourList () {
       const list = []
-      if (this.isDatePicker) {
+      if (this.hasTime) {
         for (let index = 0; index < 24; index++) {
           list.push({
             value: index,
@@ -900,7 +904,7 @@ export default {
     },
     minuteList () {
       const list = []
-      if (this.isDatePicker) {
+      if (this.hasTime) {
         for (let index = 0; index < 60; index++) {
           list.push({
             value: index,
@@ -1148,7 +1152,7 @@ export default {
       }
     },
     afterCheckValue () {
-      const { type, inpAttrs, value, isDatePicker, isNumber, datetimePanelValue, dateLabelFormat, min, max, digitsValue } = this
+      const { type, inpAttrs, value, inputValue, isDatePicker, isNumber, datetimePanelValue, dateLabelFormat, min, max, digitsValue } = this
       if (!inpAttrs.readonly) {
         if (isNumber) {
           if (value) {
@@ -1161,7 +1165,7 @@ export default {
             this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(inpVal, digitsValue), digitsValue) : '' + inpVal, { type: 'check' })
           }
         } else if (isDatePicker) {
-          let inpVal = this.inputValue
+          let inpVal = inputValue
           if (inpVal) {
             if (type === 'time') {
               inpVal = toStringTime(inpVal, dateLabelFormat)
@@ -1169,15 +1173,23 @@ export default {
               inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
             }
             if (XEUtils.isValidDate(inpVal)) {
-              if (!XEUtils.isDateSame(value, inpVal, dateLabelFormat)) {
-                if (this.hasTime) {
-                  datetimePanelValue.setHours(inpVal.getHours())
-                  datetimePanelValue.setMinutes(inpVal.getMinutes())
-                  datetimePanelValue.setSeconds(inpVal.getSeconds())
+              if (type === 'time') {
+                inpVal = XEUtils.toDateString(inpVal, dateLabelFormat)
+                if (value !== inpVal) {
+                  this.emitUpdate(inpVal, { type: 'check' })
                 }
-                this.dateChange(inpVal)
+                this.inputValue = inpVal
               } else {
-                this.inputValue = XEUtils.toDateString(value, dateLabelFormat)
+                if (!XEUtils.isDateSame(value, inpVal, dateLabelFormat)) {
+                  if (type === 'datetime') {
+                    datetimePanelValue.setHours(inpVal.getHours())
+                    datetimePanelValue.setMinutes(inpVal.getMinutes())
+                    datetimePanelValue.setSeconds(inpVal.getSeconds())
+                  }
+                  this.dateChange(inpVal)
+                } else {
+                  this.inputValue = XEUtils.toDateString(value, dateLabelFormat)
+                }
               }
             } else {
               this.dateRevert()

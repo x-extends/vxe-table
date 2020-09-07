@@ -3,11 +3,11 @@
     <p class="tip">
       默认的渲染 <table-column-api-link prop="cell-render"/>，查看 <a class="link" href="https://github.com/x-extends/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderHeader (h, renderOpts, <vxe-tooltip content="{ column, columnIndex, columnIndex, $rowIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表头<br>
-      renderDefault (h, renderOpts, <vxe-tooltip content="{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表内容<br>
-      renderFooter (h, renderOpts, <vxe-tooltip content="{ column, columnIndex, $columnIndex, $rowIndex, _columnIndex, items, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表尾<br>
-      exportMethod (<vxe-tooltip content="{ row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 单元格导出函数<br>
-      footerExportMethod (<vxe-tooltip content="{ items, _columnIndex }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表尾单元格导出函数<br>
+      renderHeader (h, renderOpts, <vxe-tooltip content="params: { column, columnIndex, columnIndex, $rowIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表头<br>
+      renderDefault (h, renderOpts, <vxe-tooltip content="params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表内容<br>
+      renderFooter (h, renderOpts, <vxe-tooltip content="params: { column, columnIndex, $columnIndex, $rowIndex, _columnIndex, items, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表尾<br>
+      exportMethod (<vxe-tooltip content="params: { row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 单元格导出函数<br>
+      footerExportMethod (<vxe-tooltip content="params: { items, _columnIndex }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表尾单元格导出函数<br>
     </p>
 
     <vxe-table

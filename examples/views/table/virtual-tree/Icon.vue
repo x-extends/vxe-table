@@ -7,15 +7,15 @@
       resizable
       row-key
       toolbar
-      ref="xTree1"
+      ref="xVTree1"
       row-id="id"
       :columns="tableColumn1"
       :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData">
       <template v-slot:buttons>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-        <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
-        <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
+        <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xVTree1.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-virtual-tree>
 
@@ -32,7 +32,7 @@
       resizable
       show-overflow
       row-key
-      ref="xTree2"
+      ref="xVTree2"
       row-id="id"
       :columns="tableColumn2"
       :tree-config="{children: 'children', iconOpen: 'fa fa-minus-circle', iconClose: 'fa fa-plus-circle'}"
@@ -75,7 +75,7 @@ export default {
                 <span>
                   {
                     row.children && row.children.length
-                      ? <i class={ ['tree-node-icon fa', this.$refs.xTree2.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
+                      ? <i class={ ['tree-node-icon fa', this.$refs.xVTree2.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
                       : <i class="tree-node-icon fa fa-file-o"></i>
                   }
                   <span>{ row.name }</span>
@@ -95,15 +95,15 @@ export default {
           resizable
           row-key
           toolbar
-          ref="xTree1"
+          ref="xVTree1"
           row-id="id"
           :columns="tableColumn1"
           :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :data="tableData">
           <template v-slot:buttons>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-            <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
-            <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
+            <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xVTree1.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,
@@ -125,7 +125,7 @@ export default {
           },
           methods: {
             getTreeExpansionEvent () {
-              let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
+              let treeExpandRecords = this.$refs.xVTree.getTreeExpandRecords()
               this.$XModal.alert(treeExpandRecords.length)
             }
           }
@@ -160,7 +160,7 @@ export default {
                         <span>
                           {
                             row.children && row.children.length
-                              ? <i class={ ['tree-node-icon fa', this.$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
+                              ? <i class={ ['tree-node-icon fa', this.$refs.xVTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
                               : <i class="tree-node-icon fa fa-file-o"></i>
                           }
                           <span>{ row.name }</span>
@@ -198,7 +198,7 @@ export default {
   },
   methods: {
     getTreeExpansionEvent () {
-      const treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
+      const treeExpandRecords = this.$refs.xVTree1.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
     }
   }

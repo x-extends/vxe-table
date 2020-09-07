@@ -3,9 +3,9 @@
     <p class="tip">
       表单-项渲染 <grid-api-link prop="itemRender"/>，查看 <a class="link" href="https://github.com/x-extends/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderItem (h, renderOpts, <vxe-tooltip content="{ data, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项<br>
-      itemVisibleMethod (<vxe-tooltip content="{ data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项可视函数<br>
-      itemResetMethod (<vxe-tooltip content="{ data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项重置函数<br>
+      renderItem (h, renderOpts, <vxe-tooltip content="params: { data, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项<br>
+      itemVisibleMethod (<vxe-tooltip content="params: { data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项可视函数<br>
+      itemResetMethod (<vxe-tooltip content="params: { data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项重置函数<br>
     </p>
 
     <vxe-grid

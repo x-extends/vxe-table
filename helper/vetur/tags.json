@@ -395,6 +395,7 @@
       "disabled",
       "loading",
       "placement",
+      "destroy-on-close",
       "transfer"
     ],
     "description": "按钮"
@@ -508,6 +509,7 @@
       "size",
       "disabled",
       "placement",
+      "destroy-on-close",
       "transfer"
     ],
     "description": "下拉容器"

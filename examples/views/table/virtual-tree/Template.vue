@@ -5,15 +5,15 @@
     <vxe-virtual-tree
       border
       resizable
-      toolbar
       row-key
+      :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons', tools: 'toolbar_tools'}}"
       :tree-config="{children: 'children'}"
       :data="tableData"
       :columns="tableColumn">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
          <vxe-input size="small" placeholder="搜索"></vxe-input>
       </template>
-      <template v-slot:tools>
+      <template v-slot:toolbar_tools>
         <vxe-button status="primary">操作1</vxe-button>
         <vxe-button status="primary">操作2</vxe-button>
         <vxe-button status="primary">操作3</vxe-button>
@@ -80,15 +80,15 @@ export default {
         <vxe-virtual-tree
           border
           resizable
-          toolbar
           row-key
+          :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons', tools: 'toolbar_tools'}}"
           :tree-config="{children: 'children'}"
           :data="tableData"
           :columns="tableColumn">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-input size="small" placeholder="搜索"></vxe-input>
           </template>
-          <template v-slot:tools>
+          <template v-slot:toolbar_tools>
             <vxe-button status="primary">操作1</vxe-button>
             <vxe-button status="primary">操作2</vxe-button>
             <vxe-button status="primary">操作3</vxe-button>

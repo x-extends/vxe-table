@@ -6,7 +6,7 @@
       show-overflow
       toolbar
       row-key
-      ref="xTree1"
+      ref="xVTree1"
       row-id="id"
       :show-header="false"
       :tree-config="{children: 'children'}"
@@ -16,8 +16,8 @@
       <template v-slot:buttons>
         <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-        <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
-        <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
+        <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xVTree1.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-virtual-tree>
 
@@ -33,7 +33,7 @@
     <vxe-virtual-tree
       show-overflow
       highlight-hover-row
-      ref="xTree3"
+      ref="xVTree3"
       row-id="id"
       :show-header="false"
       :data="tableData"
@@ -76,7 +76,7 @@ export default {
                 <span>
                   {
                     row.children && row.children.length
-                      ? <i class={ ['tree-node-icon fa', this.$refs.xTree3.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
+                      ? <i class={ ['tree-node-icon fa', this.$refs.xVTree3.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
                       : <i class="tree-node-icon fa fa-file-o"></i>
                   }
                   <span>{ row.name }</span>
@@ -106,7 +106,7 @@ export default {
           show-overflow
           toolbar
           row-key
-          ref="xTree1"
+          ref="xVTree1"
           row-id="id"
           :show-header="false"
           :tree-config="{children: 'children'}"
@@ -116,8 +116,8 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-            <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
-            <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
+            <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xVTree1.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,
@@ -136,11 +136,11 @@ export default {
           },
           methods: {
             getTreeExpansionEvent () {
-              let selectRow = this.$refs.xTree.getRadioRecord()
+              let selectRow = this.$refs.xVTree.getRadioRecord()
               this.$XModal.alert(selectRow ? selectRow.name : 'null')
             },
             getTreeExpansionEvent () {
-              let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
+              let treeExpandRecords = this.$refs.xVTree.getTreeExpandRecords()
               this.$XModal.alert(treeExpandRecords.length)
             }
           }
@@ -174,7 +174,7 @@ export default {
                         <span>
                           {
                             row.children && row.children.length
-                              ? <i class={ ['tree-node-icon fa', this.$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
+                              ? <i class={ ['tree-node-icon fa', this.$refs.xVTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
                               : <i class="tree-node-icon fa fa-file-o"></i>
                           }
                           <span>{ row.name }</span>
@@ -224,11 +224,11 @@ export default {
   },
   methods: {
     getTreeRadioEvent () {
-      const selectRow = this.$refs.xTree1.getRadioRecord()
+      const selectRow = this.$refs.xVTree1.getRadioRecord()
       this.$XModal.alert(selectRow ? selectRow.name : 'null')
     },
     getTreeExpansionEvent () {
-      const treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
+      const treeExpandRecords = this.$refs.xVTree1.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
     }
   }
