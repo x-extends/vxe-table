@@ -624,6 +624,7 @@ $iconWidth: 1.6em;
       &.is--selected {
         font-weight: 700;
         color: $vxe-primary-color;
+        background: #f5f5f5;
       }
     }
   }
@@ -776,7 +777,7 @@ $iconWidth: 1.6em;
         height: nth($heightList, $sizeIndex);
       }
       & > li {
-        height: 22px;
+        height: 26px;
         padding-left: 10px - $sizeIndex;
       }
     }

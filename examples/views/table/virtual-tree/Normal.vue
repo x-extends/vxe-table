@@ -6,7 +6,7 @@
       show-overflow
       toolbar
       row-key
-      ref="xTree1"
+      ref="xVTree1"
       row-id="id"
       :show-header="false"
       :tree-config="{children: 'children'}"
@@ -16,8 +16,8 @@
       <template v-slot:buttons>
         <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-        <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
-        <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
+        <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xVTree1.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-virtual-tree>
 
@@ -28,17 +28,18 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">带连接线</p>
+    <p class="tip">更多功能</p>
 
     <vxe-virtual-tree
       show-overflow
       highlight-hover-row
+      ref="xVTree3"
       row-id="id"
       :show-header="false"
       :data="tableData"
-      :checkbox-config="{labelField: 'name'}"
-      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-      :columns="tableColumn2">
+      :checkbox-config="{labelField: 'name', checkField: 'checked', halfField: 'indeterminate'}"
+      :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+      :columns="tableColumn3">
     </vxe-virtual-tree>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -46,28 +47,7 @@
     <pre>
       <code class="xml">{{ demoCodes[2] }}</code>
       <code class="javascript">{{ demoCodes[3] }}</code>
-    </pre>
-
-    <p class="tip">更多功能</p>
-
-    <vxe-virtual-tree
-      show-overflow
-      highlight-hover-row
-      ref="xTree3"
-      row-id="id"
-      :show-header="false"
-      :data="tableData"
-      :checkbox-config="{labelField: 'name'}"
-      :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-      :columns="tableColumn3">
-    </vxe-virtual-tree>
-
-    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
-
-    <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
-      <code class="css">{{ demoCodes[6] }}</code>
+      <code class="css">{{ demoCodes[4] }}</code>
     </pre>
   </div>
 </template>
@@ -96,7 +76,7 @@ export default {
                 <span>
                   {
                     row.children && row.children.length
-                      ? <i class={ ['tree-node-icon fa', this.$refs.xTree3.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
+                      ? <i class={ ['tree-node-icon fa', this.$refs.xVTree3.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
                       : <i class="tree-node-icon fa fa-file-o"></i>
                   }
                   <span>{ row.name }</span>
@@ -126,7 +106,7 @@ export default {
           show-overflow
           toolbar
           row-key
-          ref="xTree1"
+          ref="xVTree1"
           row-id="id"
           :show-header="false"
           :tree-config="{children: 'children'}"
@@ -136,8 +116,8 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-            <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
-            <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
+            <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xVTree1.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,
@@ -156,40 +136,13 @@ export default {
           },
           methods: {
             getTreeExpansionEvent () {
-              let selectRow = this.$refs.xTree.getRadioRecord()
+              let selectRow = this.$refs.xVTree.getRadioRecord()
               this.$XModal.alert(selectRow ? selectRow.name : 'null')
             },
             getTreeExpansionEvent () {
-              let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
+              let treeExpandRecords = this.$refs.xVTree.getTreeExpandRecords()
               this.$XModal.alert(treeExpandRecords.length)
             }
-          }
-        }
-        `,
-        `
-        <vxe-virtual-tree
-          show-overflow
-          highlight-hover-row
-          row-id="id"
-          :show-header="false"
-          :data="tableData"
-          :checkbox-config="{labelField: 'name'}"
-          :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-          :columns="tableColumn">
-        </vxe-virtual-tree>
-        `,
-        `
-        export default {
-          data () {
-            return {
-              tableData: [],
-              tableColumn: [
-                { type: 'checkbox', treeNode: true }
-              ]
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `,
@@ -201,8 +154,8 @@ export default {
           row-id="id"
           :show-header="false"
           :data="tableData"
-          :checkbox-config="{labelField: 'name'}"
-          :tree-config="{children: 'children', line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+          :checkbox-config="{labelField: 'name', checkField: 'checked', halfField: 'indeterminate'}"
+          :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :columns="tableColumn3">
         </vxe-virtual-tree>
         `,
@@ -221,7 +174,7 @@ export default {
                         <span>
                           {
                             row.children && row.children.length
-                              ? <i class={ ['tree-node-icon fa', this.$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
+                              ? <i class={ ['tree-node-icon fa', this.$refs.xVTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'] }></i>
                               : <i class="tree-node-icon fa fa-file-o"></i>
                           }
                           <span>{ row.name }</span>
@@ -271,11 +224,11 @@ export default {
   },
   methods: {
     getTreeRadioEvent () {
-      const selectRow = this.$refs.xTree1.getRadioRecord()
+      const selectRow = this.$refs.xVTree1.getRadioRecord()
       this.$XModal.alert(selectRow ? selectRow.name : 'null')
     },
     getTreeExpansionEvent () {
-      const treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
+      const treeExpandRecords = this.$refs.xVTree1.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
     }
   }

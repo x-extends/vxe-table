@@ -6,15 +6,14 @@
       resizable
       row-key
       export-config
-      keep-source
       ref="xVTree"
       row-id="id"
-      :toolbar="{export: true, zoom: true, custom: true}"
+      :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
       :tree-config="{children: 'children'}"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       :data="tableData"
       :columns="tableColumn">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="insertEvent()">插入第一行</vxe-button>
         <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -40,7 +39,7 @@ export default {
     return {
       tableData: [],
       tableColumn: [
-        { type: 'checkbox', width: 120, treeNode: true },
+        { type: 'seq', width: 120, treeNode: true },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
         { field: 'size', title: 'Size', editRender: { name: 'input' } },
         { field: 'type', title: 'Type', editRender: { name: 'input' } },
@@ -52,15 +51,14 @@ export default {
           resizable
           row-key
           export-config
-          keep-source
           ref="xVTree"
           row-id="id"
-          :toolbar="{export: true, zoom: true, custom: true}"
+          :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
           :tree-config="{children: 'children'}"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
           :data="tableData"
           :columns="tableColumn">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-button @click="insertEvent()">插入第一行</vxe-button>
             <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -74,7 +72,7 @@ export default {
             return {
               tableData: [],
               tableColumn: [
-                { type: 'checkbox', width: 120, treeNode: true },
+                { type: 'seq', width: 120, treeNode: true },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
                 { field: 'size', title: 'Size', editRender: { name: 'input' } },
                 { field: 'type', title: 'Type', editRender: { name: 'input' } },
@@ -87,28 +85,28 @@ export default {
           },
           methods: {
             insertEvent () {
-              let xTree = this.$refs.xTree
+              let xVTree = this.$refs.xVTree
               let record = {
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
               }
-              xTree.insert(record).then(({ row }) => xTree.setActiveRow(row))
+              xVTree.insert(record).then(({ row }) => xVTree.setActiveRow(row))
             },
             insertAtEvent () {
-              let xTree = this.$refs.xTree
+              let xVTree = this.$refs.xVTree
               let record = {
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
               }
               // 插入到第 3 行第 2 个子节点位置中
-              xTree.insertAt(record, this.tableData[2].children[1]).then(({ row }) => xTree.setActiveRow(row))
+              xVTree.insertAt(record, this.tableData[2].children[1]).then(({ row }) => xVTree.setActiveRow(row))
             },
             getInsertEvent () {
-              let insertRecords = this.$refs.xTree.getInsertRecords()
+              let insertRecords = this.$refs.xVTree.getInsertRecords()
               this.$XModal.alert(insertRecords.length)
             },
             getSelectEvent () {
-              let selectRecords = this.$refs.xTree.getCheckboxRecords()
+              let selectRecords = this.$refs.xVTree.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             }
           }
@@ -127,28 +125,28 @@ export default {
   },
   methods: {
     insertEvent () {
-      const xTree = this.$refs.xTree
+      const xVTree = this.$refs.xVTree
       const record = {
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
-      xTree.insert(record).then(({ row }) => xTree.setActiveRow(row))
+      xVTree.insert(record).then(({ row }) => xVTree.setActiveRow(row))
     },
     insertAtEvent () {
-      const xTree = this.$refs.xTree
+      const xVTree = this.$refs.xVTree
       const record = {
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
       // 插入到第 3 行第 2 个子节点位置中
-      xTree.insertAt(record, this.tableData[2].children[1]).then(({ row }) => xTree.setActiveRow(row))
+      xVTree.insertAt(record, this.tableData[2].children[1]).then(({ row }) => xVTree.setActiveRow(row))
     },
     getInsertEvent () {
-      const insertRecords = this.$refs.xTree.getInsertRecords()
+      const insertRecords = this.$refs.xVTree.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getSelectEvent () {
-      const selectRecords = this.$refs.xTree.getCheckboxRecords()
+      const selectRecords = this.$refs.xVTree.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }

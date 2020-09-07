@@ -5,18 +5,17 @@
     <vxe-virtual-tree
       resizable
       row-key
-      keep-source
       ref="xVTree"
       row-id="id"
-      :toolbar="{custom: true}"
+      :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
       :tree-config="{children: 'children'}"
-      :checkbox-config="{labelField: 'id'}"
+      :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       :data="tableData"
       :columns="tableColumn"
       @context-menu-click="contextMenuClickEvent">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
       </template>
     </vxe-virtual-tree>
@@ -95,18 +94,17 @@ export default {
         <vxe-virtual-tree
           resizable
           row-key
-          keep-source
           ref="xVTree"
           row-id="id"
-          :toolbar="{custom: true}"
+          :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
           :tree-config="{children: 'children'}"
-          :checkbox-config="{labelField: 'id'}"
+          :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
           :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
           :data="tableData"
           :columns="tableColumn"
           @context-menu-click="contextMenuClickEvent">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
           </template>
         </vxe-virtual-tree>
@@ -163,26 +161,26 @@ export default {
           },
           methods: {
             insertAtEvent (row, column) {
-              let xTree = this.$refs.xTree
+              let xVTree = this.$refs.xVTree
               let record = {
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
               }
               // 插入到指定节点位置中
-              xTree.insertAt(record, row).then(({ row }) => xTree.setActiveRow(row))
+              xVTree.insertAt(record, row).then(({ row }) => xVTree.setActiveRow(row))
             },
             getInsertEvent () {
-              let insertRecords = this.$refs.xTree.getInsertRecords()
+              let insertRecords = this.$refs.xVTree.getInsertRecords()
               this.$XModal.alert(insertRecords.length)
             },
             visibleMethod  ({ row, type }) {
-              let xTree = this.$refs.xTree
+              let xVTree = this.$refs.xVTree
               if (type === 'body') {
                 this.bodyMenus.forEach(list => {
                   list.forEach(item => {
                     if (['expand', 'contract'].includes(item.code)) {
                       if (row.children && row.children.length) {
-                        let isExpand = xTree.isTreeExpandByRow(row)
+                        let isExpand = xVTree.isTreeExpandByRow(row)
                         item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
                       } else {
                         item.disabled = true
@@ -194,22 +192,22 @@ export default {
               return true
             },
             contextMenuClickEvent ({ menu, row, column }) {
-              let xTree = this.$refs.xTree
+              let xVTree = this.$refs.xVTree
               switch (menu.code) {
                 case 'hideColumn':
-                  xTree.hideColumn(column)
+                  xVTree.hideColumn(column)
                   break
                 case 'showAllColumn':
-                  xTree.resetColumn()
+                  xVTree.resetColumn()
                   break
                 case 'insertAt':
                   this.insertAtEvent(row, column)
                   break
                 case 'expand':
-                  xTree.setTreeExpand(row, true)
+                  xVTree.setTreeExpand(row, true)
                   break
                 case 'contract':
-                  xTree.setTreeExpand(row, false)
+                  xVTree.setTreeExpand(row, false)
                   break
               }
             }
@@ -229,26 +227,26 @@ export default {
   },
   methods: {
     insertAtEvent (row) {
-      const xTree = this.$refs.xTree
+      const xVTree = this.$refs.xVTree
       const record = {
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
       // 插入到指定节点位置中
-      xTree.insertAt(record, row).then(({ row }) => xTree.setActiveRow(row))
+      xVTree.insertAt(record, row).then(({ row }) => xVTree.setActiveRow(row))
     },
     getInsertEvent () {
-      const insertRecords = this.$refs.xTree.getInsertRecords()
+      const insertRecords = this.$refs.xVTree.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     visibleMethod  ({ row, type }) {
-      const xTree = this.$refs.xTree
+      const xVTree = this.$refs.xVTree
       if (type === 'body') {
         this.bodyMenus.forEach(list => {
           list.forEach(item => {
             if (['expand', 'contract'].includes(item.code)) {
               if (row.children && row.children.length) {
-                const isExpand = xTree.isTreeExpandByRow(row)
+                const isExpand = xVTree.isTreeExpandByRow(row)
                 item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
               } else {
                 item.disabled = true
@@ -260,22 +258,22 @@ export default {
       return true
     },
     contextMenuClickEvent ({ menu, row, column }) {
-      const xTree = this.$refs.xTree
+      const xVTree = this.$refs.xVTree
       switch (menu.code) {
         case 'hideColumn':
-          xTree.hideColumn(column)
+          xVTree.hideColumn(column)
           break
         case 'showAllColumn':
-          xTree.resetColumn()
+          xVTree.resetColumn()
           break
         case 'insertAt':
           this.insertAtEvent(row, column)
           break
         case 'expand':
-          xTree.setTreeExpand(row, true)
+          xVTree.setTreeExpand(row, true)
           break
         case 'contract':
-          xTree.setTreeExpand(row, false)
+          xVTree.setTreeExpand(row, false)
           break
       }
     }

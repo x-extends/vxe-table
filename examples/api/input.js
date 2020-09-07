@@ -245,6 +245,7 @@ const apis = [
       },
       {
         name: 'min-date',
+        abandoned: true,
         desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最小值',
         version: '1.15.31',
         type: 'number | string | Date',
@@ -254,6 +255,7 @@ const apis = [
       },
       {
         name: 'max-date',
+        abandoned: true,
         desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最大值',
         version: '1.15.31',
         type: 'number | string | Date',
@@ -308,7 +310,7 @@ const apis = [
       },
       {
         name: 'disabled-method',
-        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({ date }) 的返回值用来决定该日期是否允许选中',
+        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({ date, type }) 的返回值用来决定该日期是否允许选中',
         version: '1.15.27',
         type: 'Function',
         enum: '',

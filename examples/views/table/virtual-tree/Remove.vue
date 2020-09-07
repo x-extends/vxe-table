@@ -6,15 +6,14 @@
       resizable
       row-key
       export-config
-      keep-source
       ref="xVTree"
       row-id="id"
-      :toolbar="{export: true, zoom: true, custom: true}"
+      :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
       :tree-config="{children: 'children'}"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       :data="tableData"
       :columns="tableColumn">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="insertEvent()">新增</vxe-button>
         <vxe-button @click="removeSelectEvent()">删除选中</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -41,7 +40,7 @@ export default {
     return {
       tableData: [],
       tableColumn: [
-        { type: 'checkbox', width: 120, treeNode: true },
+        { type: 'seq', width: 120, treeNode: true },
         { field: 'name', title: 'Name', editRender: { name: 'input' } },
         { field: 'size', title: 'Size', editRender: { name: 'input' } },
         { field: 'type', title: 'Type', editRender: { name: 'input' } },
@@ -63,15 +62,14 @@ export default {
           resizable
           row-key
           export-config
-          keep-source
           ref="xVTree"
           row-id="id"
-          :toolbar="{export: true, zoom: true, custom: true}"
+          :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
           :tree-config="{children: 'children'}"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
           :data="tableData"
           :columns="tableColumn">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-button @click="insertEvent()">新增</vxe-button>
             <vxe-button @click="removeSelectEvent()">删除选中</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -86,7 +84,7 @@ export default {
             return {
               tableData: [],
               tableColumn: [
-                { type: 'checkbox', width: 120, treeNode: true },
+                { type: 'seq', width: 120, treeNode: true },
                 { field: 'name', title: 'Name', editRender: { name: 'input' } },
                 { field: 'size', title: 'Size', editRender: { name: 'input' } },
                 { field: 'type', title: 'Type', editRender: { name: 'input' } },
@@ -109,29 +107,29 @@ export default {
           },
           methods: {
             insertEvent () {
-              let xTree = this.$refs.xTree
+              let xVTree = this.$refs.xVTree
               let record = {
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
               }
-              xTree.insert(record).then(({ row }) => xTree.setActiveRow(row))
+              xVTree.insert(record).then(({ row }) => xVTree.setActiveRow(row))
             },
             removeSelectEvent () {
-              this.$refs.xTree.removeCheckboxRow()
+              this.$refs.xVTree.removeCheckboxRow()
             },
             removeRowEvent (row) {
-              this.$refs.xTree.remove(row)
+              this.$refs.xVTree.remove(row)
             },
             getRemoveEvent () {
-              let removeRecords = this.$refs.xTree.getRemoveRecords()
+              let removeRecords = this.$refs.xVTree.getRemoveRecords()
               this.$XModal.alert(removeRecords.length)
             },
             getInsertEvent () {
-              let insertRecords = this.$refs.xTree.getInsertRecords()
+              let insertRecords = this.$refs.xVTree.getInsertRecords()
               this.$XModal.alert(insertRecords.length)
             },
             getSelectEvent () {
-              let selectRecords = this.$refs.xTree.getCheckboxRecords()
+              let selectRecords = this.$refs.xVTree.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             }
           }
@@ -150,29 +148,29 @@ export default {
   },
   methods: {
     insertEvent () {
-      const xTree = this.$refs.xTree
+      const xVTree = this.$refs.xVTree
       const record = {
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
-      xTree.insert(record).then(({ row }) => xTree.setActiveRow(row))
+      xVTree.insert(record).then(({ row }) => xVTree.setActiveRow(row))
     },
     removeSelectEvent () {
-      this.$refs.xTree.removeCheckboxRow()
+      this.$refs.xVTree.removeCheckboxRow()
     },
     removeRowEvent (row) {
-      this.$refs.xTree.remove(row)
+      this.$refs.xVTree.remove(row)
     },
     getRemoveEvent () {
-      const removeRecords = this.$refs.xTree.getRemoveRecords()
+      const removeRecords = this.$refs.xVTree.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getInsertEvent () {
-      const insertRecords = this.$refs.xTree.getInsertRecords()
+      const insertRecords = this.$refs.xVTree.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getSelectEvent () {
-      const selectRecords = this.$refs.xTree.getCheckboxRecords()
+      const selectRecords = this.$refs.xVTree.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }
