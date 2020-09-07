@@ -259,6 +259,10 @@
     "type": "{ [field: string]: columneditrule[] }",
     "description": "校验规则配置项"
   },
+  "vxe-table/empty-text": {
+    "type": "string",
+    "description": "空数据时显示的内容"
+  },
   "vxe-table/empty-render": {
     "type": "any",
     "description": "空内容渲染配置项"
@@ -703,6 +707,10 @@
     "type": "{ [field: string]: columneditrule[] }",
     "description": "校验规则配置项"
   },
+  "vxe-grid/empty-text": {
+    "type": "string",
+    "description": "空数据时显示的内容"
+  },
   "vxe-grid/empty-render": {
     "type": "any",
     "description": "空内容渲染配置项"
@@ -1081,11 +1089,11 @@
   },
   "vxe-input/editable": {
     "type": "boolean",
-    "description": "只对 type=date|datetime|week|month|year 有效，文本框是否允许输入"
+    "description": "只对 type=date|time|datetime|week|month|year 有效，文本框是否允许输入"
   },
   "vxe-input/disabled-method": {
     "type": "function",
-    "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({ date }) 的返回值用来决定该日期是否允许选中"
+    "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({ date, type }) 的返回值用来决定该日期是否允许选中"
   },
   "vxe-input/festival-method": {
     "type": "function",
@@ -1093,7 +1101,7 @@
   },
   "vxe-input/transfer": {
     "type": "boolean",
-    "description": "只对 type=date|datetime|week|month|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）"
+    "description": "只对 type=date|time|datetime|week|month|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）"
   },
   "vxe-select/value,v-model": {
     "type": "any",
@@ -1234,6 +1242,10 @@
   "vxe-button/placement": {
     "type": "string",
     "description": "固定显示下拉面板的方向"
+  },
+  "vxe-button/destroy-on-close": {
+    "type": "boolean",
+    "description": "在下拉容器关闭时销毁内容"
   },
   "vxe-button/transfer": {
     "type": "boolean",
@@ -1554,6 +1566,10 @@
   "vxe-pulldown/placement": {
     "type": "string",
     "description": "固定显示下拉面板的方向"
+  },
+  "vxe-pulldown/destroy-on-close": {
+    "type": "boolean",
+    "description": "在下拉容器关闭时销毁内容"
   },
   "vxe-pulldown/transfer": {
     "type": "boolean",

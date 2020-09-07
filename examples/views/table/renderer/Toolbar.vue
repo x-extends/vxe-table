@@ -3,7 +3,7 @@
     <p class="tip">
       工具栏-按钮渲染 <grid-api-link prop="buttonRender"/>，查看 <a class="link" href="https://github.com/x-extends/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderButton (h, renderOpts, <vxe-tooltip content="{ button, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 按钮<br>
+      renderButton (h, renderOpts, <vxe-tooltip content="params: { button, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 按钮<br>
     </p>
 
     <vxe-grid

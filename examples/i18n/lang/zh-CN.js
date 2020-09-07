@@ -439,6 +439,7 @@ module.exports = {
           editConfig: '可编辑配置项',
           validConfig: '校验配置项',
           editRules: '校验规则配置项',
+          emptyText: '空数据时显示的内容',
           emptyRender: '空内容渲染配置项',
           customConfig: '自定义列配置项',
           optimization: '即将废弃',

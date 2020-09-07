@@ -440,6 +440,7 @@ module.exports = {
           editConfig: 'Editable configuration',
           validConfig: 'Validate configuration',
           editRules: 'Checksum rule configuration entries',
+          emptyText: 'What is displayed when the data is empty',
           emptyRender: 'Empty content renderer config',
           customConfig: 'Custom configuration',
           optimization: 'Have been obsolete',

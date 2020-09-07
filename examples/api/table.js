@@ -1664,7 +1664,7 @@ const apis = [
           },
           {
             name: 'extension',
-            desc: '只对 area 启用后有效，是否开启区域延伸选取功能，开启后可以通过鼠标左键按住右下角延伸按钮，将区域横向或纵向扩大',
+            desc: '只对 area 启用后有效，是否开启区域延伸选取功能，开启后可以通过鼠标左键按住区域内右下角延伸按钮，将区域横向或纵向扩大',
             version: 'pro',
             type: 'boolean',
             enum: '',
@@ -1994,6 +1994,15 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'empty-text',
+        descKey: 'app.api.table.desc.emptyText',
+        version: '',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
       },
       {
         name: 'empty-render',

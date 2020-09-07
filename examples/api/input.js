@@ -30,7 +30,7 @@ const apis = [
         desc: '渲染类型',
         version: '',
         type: 'string',
-        enum: 'text, search, number, integer, float, password, date, datetime, week, month, year',
+        enum: 'text, search, number, integer, float, password, date, time, datetime, week, month, year',
         defVal: 'text',
         list: []
       },
@@ -180,6 +180,7 @@ const apis = [
       },
       {
         name: 'min-date',
+        abandoned: true,
         desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最小值',
         version: '',
         type: 'number | string | Date',
@@ -189,6 +190,7 @@ const apis = [
       },
       {
         name: 'max-date',
+        abandoned: true,
         desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最大值',
         version: '',
         type: 'number | string | Date',
@@ -234,7 +236,7 @@ const apis = [
       },
       {
         name: 'editable',
-        desc: '只对 type=date|datetime|week|month|year 有效，文本框是否允许输入',
+        desc: '只对 type=date|time|datetime|week|month|year 有效，文本框是否允许输入',
         version: '',
         type: 'boolean',
         enum: '',
@@ -243,7 +245,7 @@ const apis = [
       },
       {
         name: 'disabled-method',
-        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({ date }) 的返回值用来决定该日期是否允许选中',
+        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({ date, type }) 的返回值用来决定该日期是否允许选中',
         version: '',
         type: 'Function',
         enum: '',
@@ -261,7 +263,7 @@ const apis = [
       },
       {
         name: 'transfer',
-        desc: '只对 type=date|datetime|week|month|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）',
+        desc: '只对 type=date|time|datetime|week|month|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）',
         version: '',
         type: 'boolean',
         enum: '',

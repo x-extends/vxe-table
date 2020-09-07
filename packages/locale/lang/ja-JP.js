@@ -135,6 +135,9 @@ export default {
       saveSuccess: '保存しました',
       operError: 'エラーが発生しました。操作が失敗しました'
     },
+    select: {
+      emptyText: 'データがありません'
+    },
     pager: {
       goto: '移動',
       pagesize: '{{0}}件/ページ',
@@ -236,6 +239,7 @@ export default {
         dayLabel: '{{0}} 年 {{1}}',
         labelFormat: {
           date: 'yyyy-MM-dd',
+          time: 'HH:mm:ss',
           datetime: 'yyyy-MM-dd HH:mm:ss',
           week: 'yyyy 年 WW',
           month: 'yyyy-MM',

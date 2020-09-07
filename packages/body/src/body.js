@@ -472,7 +472,7 @@ export default {
       if (compConf && compConf.renderEmpty) {
         emptyContent = compConf.renderEmpty.call(this, h, emptyOpts, { $table: $xetable }, { $table: $xetable })
       } else {
-        emptyContent = GlobalConfig.i18n('vxe.table.emptyText')
+        emptyContent = $xetable.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
       }
     }
     return h('div', {

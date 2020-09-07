@@ -4,13 +4,13 @@
 
     <p class="tip">
       轻提示框、提示框、弹出窗口，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
-      对于某些场景如果需要动态创建的窗口，可以通过以下 API 全局调用<br>
-      VXETable.modal.open(options) 创建窗口<br>
-      VXETable.modal.message(message, title, options) 创建消息框<br>
-      VXETable.modal.alert(message, title, options) 创建提示框<br>
-      VXETable.modal.confirm(message, title, options) 创建确认框<br>
-      VXETable.modal.close(id?: string) 手动关闭当前活动的窗口<br>
-      全局实例对象：VXETable.modal 或者 ModalController<br>
+      对于某些场景如果需要动态创建的窗口，可以通过以下 API 全局调用：<br>
+      open(options: ModalOptions) 动态创建窗口<br>
+      message(message: string, title?: string, options?: ModalOptions) 动态创建消息框<br>
+      alert(message: string, title?: string, options?: ModalOptions) 动态创建提示框<br>
+      confirm(message: string, title?: string, options?: ModalOptions) 动态创建确认框<br>
+      close(id?: string) 手动关闭当前活动的窗口<br>
+      全局实例对象：this.$XModal || VXETable.modal 或者 ModalController<br>
     </p>
 
     <p>

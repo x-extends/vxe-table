@@ -1,5 +1,6 @@
 /**Variable**/
 @import './helpers/mixin.scss';
+@import './base/loading.scss';
 
 .vxe-select {
   position: relative;
@@ -113,6 +114,11 @@
   }
 }
 
+.vxe-select--empty-placeholder {
+  padding: 0 10px;
+  text-align: center;
+}
+
 .vxe-select,
 .vxe-select--panel {
   font-size: $vxe-font-size;
@@ -131,12 +137,20 @@
   .vxe-optgroup--title,
   .vxe-select-option {
     height: $vxe-select-option-height-default;
+  }
+  .vxe-optgroup--title,
+  .vxe-select-option,
+  .vxe-select--empty-placeholder {
     line-height: $vxe-select-option-height-default;
   }
   &.size--medium {
     .vxe-optgroup--title,
     .vxe-select-option {
       height: $vxe-select-option-height-medium;
+    }
+    .vxe-optgroup--title,
+    .vxe-select-option,
+    .vxe-select--empty-placeholder {
       line-height: $vxe-select-option-height-medium;
     }
   }
@@ -144,6 +158,10 @@
     .vxe-optgroup--title,
     .vxe-select-option {
       height: $vxe-select-option-height-small;
+    }
+    .vxe-optgroup--title,
+    .vxe-select-option,
+    .vxe-select--empty-placeholder {
       line-height: $vxe-select-option-height-small;
     }
   }
@@ -151,6 +169,10 @@
     .vxe-optgroup--title,
     .vxe-select-option {
       height: $vxe-select-option-height-mini;
+    }
+    .vxe-optgroup--title,
+    .vxe-select-option,
+    .vxe-select--empty-placeholder {
       line-height: $vxe-select-option-height-mini;
     }
   }

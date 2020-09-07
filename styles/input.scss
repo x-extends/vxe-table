@@ -367,6 +367,7 @@ $iconWidth: 1.6em;
 }
 
 .vxe-input--time-picker-header {
+  display: flex;
   position: relative;
   flex-shrink: 0;
 }
@@ -696,6 +697,7 @@ $iconWidth: 1.6em;
     max-height: 400px - $sizeIndex * 20;
   }
   &.type--date,
+  &.type--time,
   &.type--week,
   &.type--month,
   &.type--year {
@@ -714,6 +716,12 @@ $iconWidth: 1.6em;
   &.type--week {
     .vxe-input--panel-wrapper {
       $widthList: 380px, 380px, 354px, 326px;
+      width: nth($widthList, $sizeIndex);
+    }
+  }
+  &.type--time {
+    .vxe-input--panel-wrapper {
+      $widthList: 170px, 168px, 154px, 146px;
       width: nth($widthList, $sizeIndex);
     }
   }
@@ -768,7 +776,7 @@ $iconWidth: 1.6em;
         height: nth($heightList, $sizeIndex);
       }
       & > li {
-        height: 22px;
+        height: 26px;
         padding-left: 10px - $sizeIndex;
       }
     }

@@ -160,6 +160,7 @@ export default {
     rowKey: Boolean,
     rowId: { type: String, default: () => GlobalConfig.table.rowId },
     zIndex: Number,
+    emptyText: String,
     keepSource: { type: Boolean, default: () => GlobalConfig.table.keepSource },
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: { type: Boolean, default: () => GlobalConfig.table.autoResize },
@@ -815,7 +816,7 @@ export default {
       if (compConf) {
         emptyContent = compConf.renderEmpty.call(this, h, emptyOpts, { $table: this }, { $table: this })
       } else {
-        emptyContent = GlobalConfig.i18n('vxe.table.emptyText')
+        emptyContent = this.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
       }
     }
     // 头部

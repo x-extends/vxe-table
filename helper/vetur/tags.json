@@ -66,6 +66,7 @@
       "edit-config",
       "valid-config",
       "edit-rules",
+      "empty-text",
       "empty-render",
       "custom-config",
       "animat",
@@ -190,6 +191,7 @@
       "edit-config",
       "valid-config",
       "edit-rules",
+      "empty-text",
       "empty-render",
       "custom-config",
       "animat",
@@ -395,6 +397,7 @@
       "disabled",
       "loading",
       "placement",
+      "destroy-on-close",
       "transfer"
     ],
     "description": "按钮"
@@ -508,6 +511,7 @@
       "size",
       "disabled",
       "placement",
+      "destroy-on-close",
       "transfer"
     ],
     "description": "下拉容器"

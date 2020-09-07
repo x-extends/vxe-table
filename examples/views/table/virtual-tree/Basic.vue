@@ -17,8 +17,8 @@
       :data="tableData1">
       <template v-slot:buttons>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-        <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
-        <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+        <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xVTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-virtual-tree>
 
@@ -89,8 +89,8 @@ export default {
           :data="tableData">
           <template v-slot:buttons>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-            <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
-            <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+            <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xVTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,
@@ -112,7 +112,7 @@ export default {
           },
           methods: {
             getTreeExpansionEvent () {
-              let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
+              let treeExpandRecords = this.$refs.xVTree.getTreeExpandRecords()
               this.$XModal.alert(treeExpandRecords.length)
             }
           }
@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     getTreeExpansionEvent () {
-      const treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
+      const treeExpandRecords = this.$refs.xVTree.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
     }
   }
