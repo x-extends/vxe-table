@@ -14,6 +14,7 @@ module.exports = {
         basics: '基礎表格',
         base: '基础',
         size: '尺寸',
+        autoBreak: '自动换行',
         width: '列宽',
         ellipsis: '单元格溢出省略号',
         tooltips: '单元格工具提示',
