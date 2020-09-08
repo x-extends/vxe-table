@@ -2138,7 +2138,7 @@ const apis = [
       },
       {
         name: 'scroll-x',
-        desc: '横向虚拟滚动配置（tree-config 启用后无效）',
+        desc: '横向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）',
         version: '',
         type: 'any',
         enum: '',
@@ -2166,7 +2166,7 @@ const apis = [
       },
       {
         name: 'scroll-y',
-        desc: '纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）',
+        desc: '纵向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）',
         version: '',
         type: 'any',
         enum: '',
@@ -3044,7 +3044,7 @@ const apis = [
       },
       {
         name: 'getCheckboxIndeterminateRecords()',
-        desc: '用于 type=checkbox，获取半选状态的行数据',
+        desc: '用于 tree-config 和 type=checkbox，获取半选状态的行数据',
         version: '',
         type: 'Array<Row>',
         enum: '',
