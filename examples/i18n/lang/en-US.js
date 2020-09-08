@@ -13,6 +13,7 @@ module.exports = {
         icon: 'Icon',
         basics: 'Basic table',
         base: 'Basics table',
+        autoBreak: '自动换行',
         size: 'Size',
         ellipsis: 'Cell overflow ellipsis',
         tooltips: 'Cell tooltip',

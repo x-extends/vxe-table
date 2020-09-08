@@ -265,7 +265,7 @@ export default {
           left = Math.min(left, dragPosLeft + cell.clientWidth - minInterval)
         } else {
           dragMinLeft = Math.max(tableBodyElem.scrollLeft, dragMinLeft)
-          left = Math.min(left, tableBodyElem.clientWidth + tableBodyElem.scrollLeft - 40)
+          // left = Math.min(left, tableBodyElem.clientWidth + tableBodyElem.scrollLeft - 40)
         }
         dragLeft = Math.max(left, dragMinLeft)
         resizeBarElem.style.left = `${dragLeft - scrollLeft}px`

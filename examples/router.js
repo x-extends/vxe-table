@@ -24,6 +24,7 @@ import FormatsAPI from './views/table/formats/API.vue'
 
 import TableBasic from './views/table/base/Basic.vue'
 import TableSize from './views/table/base/Size.vue'
+import TableAutoBreak from './views/table/base/AutoBreak.vue'
 import TableWidth from './views/table/base/Width.vue'
 import TableOverflow from './views/table/base/Overflow.vue'
 import TableTooltip from './views/table/base/Tooltip.vue'
@@ -396,6 +397,11 @@ export default new Router({
       path: '/table/base/size',
       name: 'TableSize',
       component: TableSize
+    },
+    {
+      path: '/table/base/autoBreak',
+      name: 'TableAutoBreak',
+      component: TableAutoBreak
     },
     {
       path: '/table/base/width',

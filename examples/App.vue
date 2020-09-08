@@ -384,6 +384,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.autoBreak',
+              locat: {
+                name: 'TableAutoBreak'
+              }
+            },
+            {
               label: 'app.aside.nav.tooltips',
               locat: {
                 name: 'TableTooltip'

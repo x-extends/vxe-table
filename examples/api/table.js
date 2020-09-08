@@ -3303,7 +3303,7 @@ const apis = [
       },
       {
         name: 'getCheckboxIndeterminateRecords()',
-        desc: '用于 type=checkbox，获取半选状态的行数据',
+        desc: '用于 tree-config 和 type=checkbox，获取半选状态的行数据',
         version: '2.9',
         type: 'Array<Row>',
         enum: '',
