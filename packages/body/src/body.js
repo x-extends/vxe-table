@@ -362,7 +362,7 @@ function renderRows (h, _vm, $table, $seq, rowLevel, fixedType, tableData, table
       }
     }
     const rowid = UtilTools.getRowid($table, row, rowIndex)
-    const params = { $table, $seq, seq, rowid, fixed: fixedType, type: cellType, rowLevel, row, rowIndex, $rowIndex }
+    const params = { $table, $seq, seq, rowid, fixed: fixedType, type: cellType, level: rowLevel, row, rowIndex, $rowIndex }
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {

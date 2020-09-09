@@ -1442,7 +1442,7 @@ export default {
         if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
           row[treeOpts.children] = null
         }
-        const rest = { row, rowid, index, items, parent }
+        const rest = { row, rowid, index: treeConfig && parent ? -1 : index, items, parent }
         if (source) {
           fullDataRowIdData[rowid] = rest
           fullDataRowMap.set(row, rest)
@@ -1480,7 +1480,7 @@ export default {
         if (row[hasChild] && XEUtils.isUndefined(row[children])) {
           row[children] = null
         }
-        const rest = { row, rowid, index, items, parent }
+        const rest = { row, rowid, index: -1, items, parent }
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(row, rest)
         fullAllDataRowIdData[rowid] = rest
