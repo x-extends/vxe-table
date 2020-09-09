@@ -356,7 +356,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
       }
     }
     const rowid = UtilTools.getRowid($xetable, row)
-    const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: cellType, rowLevel, row, rowIndex, $rowIndex }
+    const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: cellType, level: rowLevel, row, rowIndex, $rowIndex }
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
