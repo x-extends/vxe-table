@@ -1044,7 +1044,7 @@ export default {
       this.$emit(evnt.type, { $panel: $refs.panel, value, $event: evnt })
     },
     emitUpdate (value, evnt) {
-      if (this.value !== value) {
+      if (XEUtils.toString(this.value) !== value) {
         this.$emit('input', value)
         this.$emit('change', { value, $event: evnt })
       }
@@ -1161,7 +1161,7 @@ export default {
             } else if (!this.vaildMaxNum(inpVal)) {
               inpVal = max
             }
-            this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(inpVal, digitsValue), digitsValue) : '' + inpVal, { type: 'check' })
+            this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(inpVal, digitsValue), digitsValue) : XEUtils.toString(inpVal), { type: 'check' })
           }
         } else if (isDatePicker) {
           let inpVal = inputValue
@@ -1290,7 +1290,7 @@ export default {
       const inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
       const newValue = isPlus ? XEUtils.add(inputValue, stepValue) : XEUtils.subtract(inputValue, stepValue)
       if (this.vaildMinNum(newValue) && this.vaildMaxNum(newValue)) {
-        this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(newValue, digitsValue), digitsValue) : '' + newValue, evnt)
+        this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(newValue, digitsValue), digitsValue) : XEUtils.toString(newValue), evnt)
       }
     },
     // 数值

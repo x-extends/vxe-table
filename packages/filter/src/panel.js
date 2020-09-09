@@ -174,7 +174,7 @@ export default {
       if (this.filterStore.multiple) {
         this.filterCheckAllEvent(evnt, checked)
       } else {
-        this.resetFilter()
+        this.resetFilter(evnt)
       }
     },
     // 筛选发生改变
@@ -194,9 +194,9 @@ export default {
       $xetable.confirmFilterEvent(evnt)
     },
     // 重置筛选
-    resetFilter () {
+    resetFilter (evnt) {
       const { $parent: $xetable } = this
-      $xetable.resetFilterEvent()
+      $xetable.resetFilterEvent(evnt)
     }
     /*************************
      * Publish methods

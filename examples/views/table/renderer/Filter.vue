@@ -9,9 +9,9 @@
       filterMethod (<vxe-tooltip content="params: { option, row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选数据函数<br>
       filterResetMethod (<vxe-tooltip content="params: { options, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选重置函数<br>
       $panel 对象:<br>
-      &nbsp;&nbsp;<span class="orange">changeOption(event: Event, checked: boolean, option: ColumnFilterParams) 更新选项的状态</span><br>
-      &nbsp;&nbsp;<span class="orange">confirmFilter() 确认筛选</span><br>
-      &nbsp;&nbsp;<span class="orange">resetFilter() 清除筛选条件</span>
+      &nbsp;&nbsp;<span class="orange">changeOption(event?: Event, checked: boolean, option: ColumnFilterParams) 更新选项的状态</span><br>
+      &nbsp;&nbsp;<span class="orange">confirmFilter(event?: Event) 确认筛选</span><br>
+      &nbsp;&nbsp;<span class="orange">resetFilter(event?: Event) 清除筛选条件</span>
     </p>
 
     <vxe-table
