@@ -100,17 +100,36 @@ gulp.task('copy_ts', () => {
 
 gulp.task('lib_rename', () => {
   return Promise.all([
-    gulp.src('lib/index.umd.js')
+    gulp.src('lib/vxe-table.umd.js')
       .pipe(rename({
         basename: 'index',
         extname: '.js'
       }))
       .pipe(gulp.dest('lib')),
-    gulp.src('lib/index.umd.min.js')
+    gulp.src('lib/vxe-table.umd.min.js')
       .pipe(rename({
         basename: 'index',
         suffix: '.min',
         extname: '.js'
+      }))
+      .pipe(gulp.dest('lib')),
+    gulp.src('lib/vxe-table.common.js')
+      .pipe(rename({
+        basename: 'index',
+        suffix: '.common',
+        extname: '.js'
+      }))
+      .pipe(gulp.dest('lib')),
+    gulp.src('lib/vxe-table.css')
+      .pipe(rename({
+        basename: 'vxe-table',
+        suffix: '.min',
+        extname: '.css'
+      }))
+      .pipe(gulp.dest('lib'))
+      .pipe(rename({
+        basename: 'index',
+        extname: '.css'
       }))
       .pipe(gulp.dest('lib'))
   ])
