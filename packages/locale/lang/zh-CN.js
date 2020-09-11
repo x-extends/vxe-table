@@ -88,6 +88,11 @@ export default {
           find: '查找',
           replace: '替换'
         },
+        filter: {
+          re: '正则表达式',
+          whole: '全词匹配',
+          sensitive: '区分大小写'
+        },
         btns: {
           findNext: '查找下一个',
           findAll: '查找全部',
@@ -101,6 +106,7 @@ export default {
           value: '值'
         },
         empty: '(空值)',
+        reError: '无效的正则表达式',
         recordCount: '已找到 {{0}} 个单元格',
         notCell: '找不到匹配的单元格',
         replaceSuccess: '成功替换 {{0}} 个单元格'

@@ -67,7 +67,8 @@
     }
     .vxe-export--panel-column-body {
       padding: 0.2em 0;
-      max-height: 16em;
+      min-height: 10em;
+      max-height: 17.6em;
     }
   }
   .vxe-import-selected--file {
