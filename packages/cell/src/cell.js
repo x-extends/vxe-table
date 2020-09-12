@@ -520,9 +520,9 @@ export const Cell = {
           class: ['vxe-table--expand-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.TABLE_EXPAND_LOADED) : (isAceived ? (iconOpen || GlobalConfig.icon.TABLE_EXPAND_OPEN) : (iconClose || GlobalConfig.icon.TABLE_EXPAND_CLOSE))]
         })
       ]) : null,
-      h('span', {
+      (slots && slots.default) || labelField ? h('span', {
         class: 'vxe-table--expand-label'
-      }, slots && slots.default ? slots.default.call($table, params, h) : (labelField ? XEUtils.get(row, labelField) : null))
+      }, slots.default ? slots.default.call($table, params, h) : XEUtils.get(row, labelField)) : null
     ]
   },
   renderExpandData (h, params) {
