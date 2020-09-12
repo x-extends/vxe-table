@@ -1344,7 +1344,7 @@ export default {
     loadTableData (datas) {
       const { keepSource, treeConfig, editStore, sYOpts, scrollYStore } = this
       const tableFullData = datas ? datas.slice(0) : []
-      const scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt <= tableFullData.length
+      const scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       scrollYStore.startIndex = 0
       scrollYStore.visibleIndex = 0
       editStore.insertList = []
@@ -1606,7 +1606,7 @@ export default {
      * 从指定行插入数据
      */
     insertAt (records, row) {
-      const { afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      const { afterFullData, editStore, sYOpts, scrollYLoad, tableFullData, treeConfig } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
@@ -1632,6 +1632,7 @@ export default {
         }
       }
       editStore.insertList.unshift(...newRecords)
+      this.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       this.handleTableData()
       this.updateFooter()
       this.updateCache()
@@ -1692,7 +1693,7 @@ export default {
      * 如果传 rows 则删除多行
      */
     remove (rows) {
-      const { afterFullData, tableFullData, editStore, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
+      const { afterFullData, tableFullData, treeConfig, editStore, checkboxOpts, selection, isInsertByRow, sYOpts, scrollYLoad } = this
       const { actived, removeList, insertList } = editStore
       const property = checkboxOpts.checkField || checkboxOpts.checkProp
       let rest = []
@@ -1727,6 +1728,7 @@ export default {
       }
       // 从新增中移除已删除的数据
       XEUtils.remove(insertList, row => rows.indexOf(row) > -1)
+      this.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       this.handleTableData()
       this.updateFooter()
       this.updateCache()
@@ -2394,7 +2396,7 @@ export default {
       }
       const visibleColumn = leftList.concat(centerList).concat(rightList)
       let tableColumn = visibleColumn
-      let scrollXLoad = sXOpts.gt > -1 && sXOpts.gt <= tableFullColumn.length
+      let scrollXLoad = sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (scrollXLoad && isGroup) {
         scrollXLoad = false

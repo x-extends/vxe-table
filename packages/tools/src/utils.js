@@ -46,7 +46,7 @@ class ColumnInfo {
         UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
       }
       if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
-        UtilTools.warn('vxe.error.expandContent')
+        UtilTools.error('vxe.error.expandContent')
       }
     }
     if (formatter) {

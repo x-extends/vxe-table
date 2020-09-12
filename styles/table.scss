@@ -779,7 +779,6 @@ select.vxe-select,
 
   /*展开行*/
   .vxe-table--expanded {
-    padding-right: 0.5em;
     cursor: pointer;
     .vxe-table--expand-btn {
       width: 1em;
@@ -790,6 +789,9 @@ select.vxe-select,
       &:hover {
         color: $vxe-table-font-color;
       }
+    }
+    &+.vxe-table--expand-label {
+      padding-left: 0.5em;
     }
   }
   .vxe-body--expanded-column {
