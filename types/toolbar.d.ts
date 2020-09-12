@@ -127,6 +127,7 @@ export interface ToolbarOptions {
     buttons?(params: ToolbarButtonsSlotParams, h: CreateElement): VNode[] | string[];
     tools?(params: ToolbarToolsSlotParams, h: CreateElement): VNode[] | string[];
   };
+  [key: string]: any;
 }
 
 export interface ToolbarButtonsSlotParams extends GridRenderParams {}

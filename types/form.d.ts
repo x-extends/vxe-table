@@ -47,6 +47,7 @@ export declare class Form extends VXETableModule {
    * 手动切换折叠状态
    */
   toggleCollapse(): Promise<any>;
+  [key: string]: any;
 }
 
 export interface FormRule {
@@ -118,4 +119,5 @@ export interface FormOptions {
   validConfig?: {
     autoPos?: boolean;
   };
+  [key: string]: any;
 }
