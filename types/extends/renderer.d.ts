@@ -135,6 +135,9 @@ export interface ColumnCellRenderParams extends TableRenderParams {
    * 相对于当前表格数据的索引
    */
   $rowIndex: number;
+  isHidden: boolean;
+  fixed: string;
+  type: string;
 }
 
 /**
