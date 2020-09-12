@@ -38,7 +38,7 @@
       <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120" :title-help="{message: '该文档与最新版本保持同步，如果遇到参数无效时，需要检查当前使用的版本号是否支持该参数'}">
         <template v-slot="{ row }">
           <template v-if="row.version === 'pro'">
-            <a class="link pro" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins/index.html" target="_blank">pro 专业版</a>
+            <a class="link pro" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">pro 专业版</a>
           </template>
            <template v-else-if="row.disabled">
             <span class="disabled">已废弃</span>

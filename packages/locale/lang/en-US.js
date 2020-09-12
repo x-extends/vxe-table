@@ -88,6 +88,11 @@ export default {
           find: 'Find',
           replace: 'Replace'
         },
+        filter: {
+          re: 'Regular Expression',
+          whole: 'Whole word',
+          sensitive: 'Case sensitive'
+        },
         btns: {
           findNext: 'Find next',
           findAll: 'Find all',
@@ -101,6 +106,7 @@ export default {
           value: 'Value'
         },
         empty: '(Empty)',
+        reError: 'Invalid regular expression',
         recordCount: 'Found {{0}} cells',
         notCell: 'No matching cells were found',
         replaceSuccess: 'Successfully replaced {{0}} cells'

@@ -88,6 +88,11 @@ export default {
           find: '查找',
           replace: '替換'
         },
+        filter: {
+          re: '規則運算式',
+          whole: '全詞匹配',
+          sensitive: '區分大小寫'
+        },
         btns: {
           findNext: '查找下一個',
           findAll: '查找全部',
@@ -101,6 +106,7 @@ export default {
           value: '值'
         },
         empty: '(空值)',
+        reError: '無效的規則運算式',
         recordCount: '已找到 {{0}} 個儲存格',
         notCell: '找不到匹配的儲存格',
         replaceSuccess: '成功替換 {{0}} 個儲存格'

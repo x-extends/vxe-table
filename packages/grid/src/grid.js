@@ -21,19 +21,20 @@ function getPaddingTopBottomSize (elem) {
 
 function renderDefaultForm (h, _vm) {
   const { proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
-  if (formOpts.items && formOpts.items.length) {
+  if (formConfig && formOpts.items && formOpts.items.length) {
     if (!formOpts.inited) {
       formOpts.inited = true
-      if (proxyOpts && proxyOpts.beforeItem) {
+      const beforeItem = proxyOpts.beforeItem
+      if (proxyOpts && beforeItem) {
         formOpts.items.forEach(item => {
-          proxyOpts.beforeItem.apply(_vm, [{ $grid: _vm, item }])
+          beforeItem.call(_vm, { $grid: _vm, item })
         })
       }
     }
     return [
       h('vxe-form', {
         props: Object.assign({}, formOpts, {
-          data: proxyConfig && proxyOpts.form ? formData : formConfig.data
+          data: proxyConfig && proxyOpts.form ? formData : formOpts.data
         }),
         on: {
           submit: _vm.submitEvent,
@@ -259,8 +260,6 @@ export default {
     const { $scopedSlots, vSize, isZMax } = this
     const hasForm = !!($scopedSlots.form || this.formConfig)
     const hasToolbar = !!($scopedSlots.toolbar || this.toolbar)
-    const hasTop = !!$scopedSlots.top
-    const hasBottom = !!$scopedSlots.bottom
     const hasPager = !!($scopedSlots.pager || this.pagerConfig)
     return h('div', {
       class: ['vxe-grid', {
@@ -301,7 +300,7 @@ export default {
       /**
        * 渲染表格顶部区域
        */
-      hasTop ? h('div', {
+      $scopedSlots.top ? h('div', {
         ref: 'topWrapper',
         class: 'vxe-grid--top-wrapper'
       }, $scopedSlots.top.call(this, { $grid: this }, h)) : null,
@@ -317,7 +316,7 @@ export default {
       /**
        * 渲染表格底部区域
        */
-      hasBottom ? h('div', {
+      $scopedSlots.bottom ? h('div', {
         ref: 'bottomWrapper',
         class: 'vxe-grid--bottom-wrapper'
       }, $scopedSlots.bottom.call(this, { $grid: this }, h)) : null,
@@ -663,8 +662,8 @@ export default {
       return Promise.resolve()
     },
     getFormItems (index) {
-      const { formConfig } = this
-      const items = formConfig && formConfig.items ? formConfig.items : []
+      const { formConfig, formOpts } = this
+      const items = formConfig && formOpts.items ? formOpts.items : []
       return arguments.length ? items[index] : items
     },
     getPendingRecords () {

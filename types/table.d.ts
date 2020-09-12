@@ -964,6 +964,7 @@ export declare class Table extends VXETableModule {
    * 使表格失去焦点
    */
   blur(): Promise<any>;
+  [key: string]: any;
 }
 
 /**
@@ -1028,6 +1029,7 @@ export interface CheckboxConfig {
   reserve?: boolean;
   labelField?: string;
   checkField?: string;
+  halfField?: string;
   showHeader?: boolean;
   checkAll?: boolean;
   checkRowKeys?: string[] | number[];
@@ -1063,6 +1065,7 @@ export interface ExpandConfig {
   loadMethod?(params: { row: RowInfo, rowIndex: number, $rowIndex: number }): Promise<any>;
   toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   visibleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
+  showIcon?: boolean;
   iconOpen?: string;
   iconClose?: string;
   iconLoaded?: string;
@@ -1083,6 +1086,7 @@ export interface TreeConfig {
   hasChild?: string;
   loadMethod?(params: { row: RowInfo }): Promise<any[]>;
   toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
+  showIcon?: boolean;
   iconOpen?: string;
   iconClose?: string;
   iconLoaded?: string;
@@ -1100,6 +1104,7 @@ export interface TreeOpts {
   hasChild: string;
   loadMethod?(params: { row: RowInfo }): Promise<any[]>;
   toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
+  showIcon: boolean;
   iconOpen: string;
   iconClose: string;
   iconLoaded: string;

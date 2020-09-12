@@ -21,7 +21,7 @@ export default {
      * @param {Row} row 指定行
      */
     _insertAt (records, row) {
-      const { mergeList, afterFullData, editStore, scrollYLoad, tableFullData, treeConfig } = this
+      const { mergeList, afterFullData, editStore, sYOpts, scrollYLoad, tableFullData, treeConfig } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
@@ -55,8 +55,8 @@ export default {
           if (afIndex === -1) {
             throw new Error(UtilTools.error('vxe.error.unableInsert'))
           }
-          afterFullData.splice(...([afIndex, 0].concat(newRecords)))
-          tableFullData.splice(...([tableFullData.indexOf(row), 0].concat(newRecords)))
+          afterFullData.splice(afIndex, 0, ...newRecords)
+          tableFullData.splice(tableFullData.indexOf(row), 0, ...newRecords)
           // 刷新单元格合并
           mergeList.forEach(mergeItem => {
             const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
@@ -69,6 +69,7 @@ export default {
         }
       }
       editStore.insertList.unshift(...newRecords)
+      this.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       this.handleTableData()
       this.updateFooter()
       this.updateCache()
@@ -91,7 +92,7 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows) {
-      const { afterFullData, tableFullData, mergeList, editStore, checkboxOpts, selection, isInsertByRow, scrollYLoad } = this
+      const { afterFullData, tableFullData, treeConfig, mergeList, editStore, checkboxOpts, selection, isInsertByRow, sYOpts, scrollYLoad } = this
       const { actived, removeList, insertList } = editStore
       const { checkField: property } = checkboxOpts
       let rest = []
@@ -154,6 +155,7 @@ export default {
           insertList.splice(iIndex, 1)
         }
       })
+      this.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       this.handleTableData()
       this.updateFooter()
       this.updateCache()
