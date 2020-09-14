@@ -13,7 +13,7 @@
         import Vue from 'vue'
         import 'xe-utils'
         import VXETable from 'vxe-table'
-        import 'vxe-table/lib/index.css'
+        import 'vxe-table/lib/style.css'
 
         Vue.use(VXETable)
 
@@ -26,7 +26,7 @@
     <pre>
       <code class="xml">
         &lt;!-- 引入样式 --&gt;
-        &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table/lib/index.css"&gt;
+        &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table/lib/style.css"&gt;
         &lt;!-- 引入脚本 --&gt;
         &lt;script src="https://cdn.jsdelivr.net/npm/xe-utils"&gt;&lt;/script&gt;
         &lt;script src="https://cdn.jsdelivr.net/npm/vxe-table"&gt;&lt;/script&gt;
