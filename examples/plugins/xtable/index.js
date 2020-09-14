@@ -42,7 +42,6 @@ import VXETablePluginExportPDF from 'vxe-table-plugin-export-pdf'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
-import 'vxe-table-plugin-excel/dist/style.css'
 import 'vxe-table-plugin-virtual-tree/dist/style.css'
 
 // 设置默认参数
