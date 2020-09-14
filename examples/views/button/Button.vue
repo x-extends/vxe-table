@@ -25,14 +25,14 @@
           <vxe-button type="text" content="下拉按钮3"></vxe-button>
         </template>
       </vxe-button>
-      <vxe-button size="medium" content="中等下拉按钮">
+      <vxe-button size="medium" content="固定向上" placement="top">
         <template v-slot:dropdowns>
           <vxe-button type="text" content="下拉按钮1"></vxe-button>
           <vxe-button type="text" status="warning" content="下拉按钮2"></vxe-button>
           <vxe-button type="text" content="下拉按钮3"></vxe-button>
         </template>
       </vxe-button>
-      <vxe-button content="默认下拉按钮">
+      <vxe-button content="固定向下" placement="bottom">
         <template v-slot:dropdowns>
           <vxe-button type="text" content="下拉按钮1"></vxe-button>
           <vxe-button type="text" status="danger" content="下拉按钮2"></vxe-button>
@@ -128,16 +128,16 @@
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
-      <vxe-button status="warning" transfer>
-        <template v-slot>警告颜色</template>
+      <vxe-button status="warning" transfer placement="top">
+        <template v-slot>固定向上</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
           <vxe-button type="text" status="warning">下拉按钮2</vxe-button>
           <vxe-button type="text">下拉按钮3</vxe-button>
         </template>
       </vxe-button>
-      <vxe-button status="danger" transfer>
-        <template v-slot>危险颜色</template>
+      <vxe-button status="danger" transfer placement="bottom">
+        <template v-slot>固定向下</template>
         <template v-slot:dropdowns>
           <vxe-button type="text">下拉按钮1</vxe-button>
           <vxe-button type="text" status="danger">下拉按钮2</vxe-button>
@@ -259,14 +259,14 @@ export default {
               <vxe-button type="text" content="下拉按钮3"></vxe-button>
             </template>
           </vxe-button>
-          <vxe-button size="medium" content="中等下拉按钮">
+          <vxe-button size="medium" content="固定向上" placement="top">
             <template v-slot:dropdowns>
               <vxe-button type="text" content="下拉按钮1"></vxe-button>
               <vxe-button type="text" status="warning" content="下拉按钮2"></vxe-button>
               <vxe-button type="text" content="下拉按钮3"></vxe-button>
             </template>
           </vxe-button>
-          <vxe-button content="默认下拉按钮">
+          <vxe-button content="固定向下" placement="bottom">
             <template v-slot:dropdowns>
               <vxe-button type="text" content="下拉按钮1"></vxe-button>
               <vxe-button type="text" status="danger" content="下拉按钮2"></vxe-button>
@@ -362,16 +362,16 @@ export default {
               <vxe-button type="text">下拉按钮3</vxe-button>
             </template>
           </vxe-button>
-          <vxe-button status="warning" transfer>
-            <template v-slot>警告颜色</template>
+          <vxe-button status="warning" transfer placement="top">
+            <template v-slot>固定向上</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text" status="warning">下拉按钮2</vxe-button>
               <vxe-button type="text">下拉按钮3</vxe-button>
             </template>
           </vxe-button>
-          <vxe-button status="danger" transfer>
-            <template v-slot>危险颜色</template>
+          <vxe-button status="danger" transfer placement="bottom">
+            <template v-slot>固定向下</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">下拉按钮1</vxe-button>
               <vxe-button type="text" status="danger">下拉按钮2</vxe-button>

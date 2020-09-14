@@ -1640,7 +1640,7 @@ export default {
             if (placement === 'top') {
               panelPlacement = 'top'
               top = boundingTop - panelHeight
-            } else {
+            } else if (!placement) {
               // 如果下面不够放，则向上
               if (top + panelHeight + marginSize > visibleHeight) {
                 panelPlacement = 'top'
@@ -1669,11 +1669,14 @@ export default {
             if (placement === 'top') {
               panelPlacement = 'top'
               panelStyle.bottom = `${targetHeight}px`
-            } else {
+            } else if (!placement) {
               // 如果下面不够放，则向上
               if (boundingTop + targetHeight + panelHeight > visibleHeight) {
-                panelPlacement = 'top'
-                panelStyle.bottom = `${targetHeight}px`
+                // 如果上面不够放，则向下（优先）
+                if (boundingTop - targetHeight - panelHeight > marginSize) {
+                  panelPlacement = 'top'
+                  panelStyle.bottom = `${targetHeight}px`
+                }
               }
             }
           }

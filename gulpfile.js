@@ -138,7 +138,6 @@ gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', (
 
 gulp.task('build_clean', gulp.series('build_style', 'lib_rename', () => {
   return gulp.src([
-    'lib/index.css',
     'lib/demo.html'
   ])
     .pipe(clean())
