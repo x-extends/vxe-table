@@ -7,7 +7,7 @@
     "lint": "vue-cli-service lint",
     "build": "vue-cli-service build",
     "lib:modules": "gulp build",
-    "lib:pack": "vue-cli-service build --target lib --name vxe-table --dest lib index.js",
+    "lib:pack": "vue-cli-service build --target lib --name index --dest lib index.js",
     "lib": "npm run lib:pack && npm run lib:modules",
     "postinstall": "node scripts/postinstall || echo \"ignore\""
   },
@@ -19,10 +19,10 @@
     "helper",
     "scripts"
   ],
-  "main": "lib/vxe-table.common.js",
-  "style": "lib/vxe-table.min.css",
-  "unpkg": "lib/vxe-table.umd.min.js",
-  "jsdelivr": "lib/vxe-table.umd.min.js",
+  "main": "lib/index.common.js",
+  "unpkg": "lib/index.umd.min.js",
+  "jsdelivr": "lib/index.umd.min.js",
+  "style": "lib/style.min.css",
   "typings": "types/index.d.ts",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
@@ -85,12 +85,12 @@
     "xe-ajax": "^4.0.5",
     "xe-ajax-mock": "^1.12.0",
     "xe-clipboard": "^1.10.0",
-    "xe-utils": "^2.7.10",
+    "xe-utils": "^2.7.11",
     "xlsx": "^0.16.5"
   },
   "peerDependencies": {
     "vue": ">= 2.6.0 < 3",
-    "xe-utils": ">= 2.7.5 < 3"
+    "xe-utils": ">= 2.7.10 < 3"
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",

@@ -100,40 +100,18 @@ gulp.task('copy_ts', () => {
 })
 
 gulp.task('lib_rename', () => {
-  return Promise.all([
-    gulp.src('lib/vxe-table.umd.js')
-      .pipe(rename({
-        basename: 'index',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('lib')),
-    gulp.src('lib/vxe-table.umd.min.js')
-      .pipe(rename({
-        basename: 'index',
-        suffix: '.min',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('lib')),
-    gulp.src('lib/vxe-table.common.js')
-      .pipe(rename({
-        basename: 'index',
-        suffix: '.common',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('lib')),
-    gulp.src('lib/vxe-table.css')
-      .pipe(rename({
-        basename: 'vxe-table',
-        suffix: '.min',
-        extname: '.css'
-      }))
-      .pipe(gulp.dest('lib'))
-      .pipe(rename({
-        basename: 'index',
-        extname: '.css'
-      }))
-      .pipe(gulp.dest('lib'))
-  ])
+  return gulp.src('lib/index.css')
+    .pipe(rename({
+      basename: 'style',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('lib'))
+    .pipe(rename({
+      basename: 'style',
+      suffix: '.min',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('lib'))
 })
 
 gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {
@@ -161,6 +139,7 @@ gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', (
 
 gulp.task('build_clean', gulp.series('build_style', 'lib_rename', () => {
   return gulp.src([
+    'lib/index.css',
     'lib/demo.html'
   ])
     .pipe(clean())
