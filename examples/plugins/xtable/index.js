@@ -31,10 +31,6 @@ import {
   Resize
 } from '../../../packages/vxe-table'
 
-// import VXETablePluginElement from '../../../../vxe-table-plugin-element/index.js'
-// import VXETablePluginIView from '../../../../vxe-table-plugin-iview/index.js'
-// import VXETablePluginAntd from '../../../../vxe-table-plugin-antd/index.js'
-// import VXETablePluginMenus from '../../../../vxe-table-plugin-menus/index.js'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
