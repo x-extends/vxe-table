@@ -38,7 +38,6 @@ import {
 // import VXETablePluginExcel from '../../../../vxe-table-plugin-excel/test.js'
 // import VXETablePluginRenderer from '../../../../vxe-table-plugin-renderer/test.js'
 // import VXETablePluginMenus from '../../../../vxe-table-plugin-menus/test.js'
-// import VXETablePluginCharts from '../../../../vxe-table-plugin-charts/test.js'
 // import VXETablePluginShortcutKey from '../../../../vxe-table-plugin-shortcut-key/test.js'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
@@ -47,7 +46,6 @@ import VXETablePluginExcel from 'vxe-table-plugin-excel'
 import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
 import VXETablePluginVirtualTree from 'vxe-table-plugin-virtual-tree'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
-import VXETablePluginCharts from 'vxe-table-plugin-charts'
 import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
 import VXETablePluginExportPDF from 'vxe-table-plugin-export-pdf'
 // import VXETablePluginShortcutKey from 'vxe-table-plugin-shortcut-key'
@@ -110,7 +108,6 @@ VXETable.use(VXETablePluginExcel)
 VXETable.use(VXETablePluginRenderer)
 VXETable.use(VXETablePluginVirtualTree)
 VXETable.use(VXETablePluginMenus)
-VXETable.use(VXETablePluginCharts)
 VXETable.use(VXETablePluginExportXLSX)
 VXETable.use(VXETablePluginExportPDF)
 // VXETable.use(VXETablePluginShortcutKey, {

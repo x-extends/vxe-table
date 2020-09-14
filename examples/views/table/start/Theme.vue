@@ -4,7 +4,7 @@
     <p class="tip">Case 1.使用默认的主题样式（<a class="link" href="https://github.com/x-extends/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）</p>
     <pre>
       <code class="scss">
-        @import 'vxe-table/lib/index.css';
+        @import 'vxe-table/lib/style.css';
       </code>
     </pre>
     <p class="tip">Case 2.修改主题颜色，并引入所有样式</p>
