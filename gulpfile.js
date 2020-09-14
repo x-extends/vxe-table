@@ -103,9 +103,14 @@ gulp.task('copy_ts', () => {
 })
 
 gulp.task('lib_rename', () => {
-  return gulp.src('lib/vxe-table.css')
+  return gulp.src('lib/index.css')
     .pipe(rename({
-      basename: 'vxe-table',
+      basename: 'style',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('lib'))
+    .pipe(rename({
+      basename: 'style',
       suffix: '.min',
       extname: '.css'
     }))
@@ -137,6 +142,7 @@ gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', (
 
 gulp.task('build_clean', gulp.series('build_style', 'lib_rename', () => {
   return gulp.src([
+    'lib/index.css',
     'lib/demo.html'
   ])
     .pipe(clean())

@@ -2,7 +2,7 @@ import VxeTable from './src/table'
 import VXETable from '../v-x-e-table'
 
 VxeTable.install = function (Vue) {
-  if (window.VXETableMixin) {
+  if (typeof window !== 'undefined' && window.VXETableMixin) {
     VxeTable.mixins.push(window.VXETableMixin)
     delete window.VXETableMixin
   }

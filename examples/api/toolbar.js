@@ -327,6 +327,51 @@ const apis = [
             list: []
           },
           {
+            name: 'round',
+            desc: '圆角边框',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'circle',
+            desc: '圆角按钮',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'placement',
+            descKey: 'app.api.button.desc.placement',
+            version: '',
+            type: 'string',
+            enum: 'top, bottom',
+            defVal: 'bottom',
+            list: []
+          },
+          {
+            name: 'destroy-on-close',
+            desc: '在下拉容器关闭时销毁内容',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'transfer',
+            descKey: 'app.api.button.desc.transfer',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: '默认 false，继承 setup.button.transfer',
+            list: []
+          },
+          {
             name: 'dropdowns',
             desc: '下拉按钮列表',
             version: '',
@@ -395,6 +440,24 @@ const apis = [
                 type: 'string',
                 enum: '',
                 defVal: '',
+                list: []
+              },
+              {
+                name: 'round',
+                desc: '圆角边框',
+                version: '',
+                type: 'boolean',
+                enum: '',
+                defVal: 'false',
+                list: []
+              },
+              {
+                name: 'circle',
+                desc: '圆角按钮',
+                version: '',
+                type: 'boolean',
+                enum: '',
+                defVal: 'false',
                 list: []
               }
             ]

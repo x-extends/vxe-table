@@ -13,7 +13,7 @@ function renderBtns (h, _vm) {
     return $scopedSlots.buttons.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
   }
   return buttons.map(item => {
-    const { name, visible, icon, type, status, disabled, loading, dropdowns, buttonRender } = item
+    const { name, visible, dropdowns, buttonRender } = item
     const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
     if (visible === false) {
       return _e()
@@ -28,11 +28,16 @@ function renderBtns (h, _vm) {
         click: evnt => _vm.btnEvent(evnt, item)
       },
       props: {
-        icon,
-        type,
-        status,
-        disabled,
-        loading
+        disabled: item.disabled,
+        loading: item.loading,
+        type: item.type,
+        icon: item.icon,
+        circle: item.circle,
+        round: item.round,
+        status: item.status,
+        destroyOnClose: item.destroyOnClose,
+        placement: item.placement,
+        transfer: item.transfer
       },
       scopedSlots: dropdowns && dropdowns.length ? {
         default: () => UtilTools.getFuncText(name),
@@ -42,10 +47,13 @@ function renderBtns (h, _vm) {
               click: evnt => _vm.btnEvent(evnt, child)
             },
             props: {
-              icon: child.icon,
-              type: child.type,
               disabled: child.disabled,
-              loading: child.loading
+              loading: child.loading,
+              type: child.type,
+              icon: child.icon,
+              circle: child.circle,
+              round: child.round,
+              status: child.status
             }
           }, UtilTools.getFuncText(child.name))
         })
