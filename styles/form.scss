@@ -190,7 +190,7 @@
     }
     &[disabled] {
       cursor: not-allowed;
-      background-color: #f3f3f3;
+      background-color: $vxe-input-disabled-background-color;
     }
   }
   .vxe-default-input[type="submit"],

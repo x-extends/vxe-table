@@ -44,6 +44,10 @@ export declare class Form extends VXETableModule {
    */
   updateStatus(scope: any): Promise<any>;
   /**
+   * 获取表单项列表
+   */
+  getItems(): FormItemOptions[];
+  /**
    * 手动切换折叠状态
    */
   toggleCollapse(): Promise<any>;

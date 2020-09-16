@@ -2965,12 +2965,12 @@ const apis = [
         list: []
       },
       {
-        name: 'getColumns(columnIndex)',
-        desc: '获取表格的可视列，也可以指定索引获取列',
+        name: 'getColumns()',
+        desc: '获取表格的可视的列',
         version: '',
         type: 'Array',
         enum: '',
-        defVal: 'columnIndex?',
+        defVal: '',
         list: []
       },
       {

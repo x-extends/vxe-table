@@ -63,7 +63,7 @@ select.vxe-select,
     }
     &[disabled] {
       cursor: not-allowed;
-      background-color: #f3f3f3;
+      background-color: $vxe-input-disabled-background-color;
     }
   }
   .vxe-default-input,
@@ -955,8 +955,8 @@ select.vxe-select,
           display: inline-block;
           border-radius: $vxe-border-radius;
           padding: 8px 12px;
-          color: #fff;
-          background-color: $vxe-table-validate-error-background-color;
+          color: $vxe-table-validate-tooltip-error-color;
+          background-color: $vxe-table-validate-tooltip-error-background-color;
           pointer-events: auto;
         }
       }

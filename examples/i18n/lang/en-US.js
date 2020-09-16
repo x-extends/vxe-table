@@ -636,7 +636,7 @@ module.exports = {
           type: 'Message type',
           status: 'Only valid for type=alert | confirm | message, message status',
           iconStatus: '自定义状态图标',
-          message: 'message content',
+          message: '显示的文本（支持开启国际化）',
           showHeader: 'Whether to display the head',
           showFooter: 'Whether to show bottom',
           lockView: 'Whether or not the page is locked does not allow any action outside the modal',

@@ -24,8 +24,6 @@ $vxe-input-border-color: #dcdfe6;
 $vxe-input-disabled-color: #dcdfe6;
 $vxe-input-disabled-background-color: #f3f3f3;
 $vxe-input-placeholder-color: #C0C4CC;
-$vxe-input-date-header-background-color: #f8f8f9;
-$vxe-input-date-picker-hover-background-color: #f2f6fc;
 
 /*popup*/
 $vxe-table-popup-border-color: #DADCE0;
@@ -36,14 +34,13 @@ $vxe-table-popup-border-color: #DADCE0;
 /*table*/
 $vxe-table-font-color: $vxe-font-color;
 $vxe-table-border-radius: $vxe-border-radius;
-
-/*table color*/
 $vxe-table-header-background-color: #f8f8f9;
 $vxe-table-border-color: #e8eaec;
 $vxe-table-resizable-color: #D9DDDF;
 $vxe-table-background-color: #ffffff;
+$vxe-table-tree-node-line-color:#909399;
+$vxe-table-header-font-weight: 700;
 
-/*table row*/
 $vxe-table-row-height-default: 48px;
 $vxe-table-row-height-medium: 44px;
 $vxe-table-row-height-small: 40px;
@@ -59,13 +56,11 @@ $vxe-table-row-hover-checked-background-color: #ffebbc;
 $vxe-table-row-current-background-color: #e6f7ff;
 $vxe-table-row-hover-current-background-color: #d7effb;
 
-/*table column*/
 $vxe-table-column-hover-background-color: #d7effb;
 $vxe-table-column-current-background-color: #e6f7ff;
 $vxe-table-column-icon-border-color: #c0c4cc;
 $vxe-table-column-icon-border-hover-color: #515A6E;
 
-/*table cell*/
 $vxe-table-cell-padding-left: 10px;
 $vxe-table-cell-padding-right: 10px;
 $vxe-table-cell-input-height-default: $vxe-table-row-height-default - 6;
@@ -75,22 +70,23 @@ $vxe-table-cell-input-height-mini: $vxe-table-row-height-mini - 6;
 $vxe-table-cell-dirty-width: 5px;
 $vxe-table-cell-dirty-color: #f56c6c;
 $vxe-table-cell-area-border-color: $vxe-primary-color;
-$vxe-table-cell-area-border-width: 2px;
-$vxe-table-cell-extend-area-border-width: 3px;
-$vxe-table-cell-copy-area-border-width: 4px;
-$vxe-table-cell-active-area-border-width: 3px;
+$vxe-table-cell-area-border-width: 1px;
+$vxe-table-cell-main-area-extension-border-color: #fff;
+$vxe-table-cell-main-area-extension-background-color: $vxe-primary-color;
+$vxe-table-cell-extend-area-border-width: 2px;
+$vxe-table-cell-copy-area-border-width: 3px;
+$vxe-table-cell-active-area-border-width: 2px;
 $vxe-table-cell-copy-area-border-color: $vxe-table-cell-area-border-color;
 $vxe-table-cell-extend-area-border-color: $vxe-table-cell-area-border-color;
 $vxe-table-cell-active-area-border-color: $vxe-table-cell-area-border-color;
 $vxe-table-cell-area-background-color: rgba(64,158,255,0.2);
 
-/*table checkbox*/
 $vxe-table-checkbox-range-border-width: 1px;
 $vxe-table-checkbox-range-border-color: #006af1;
 $vxe-table-checkbox-range-background-color: rgba(50,128,252,0.2);
 
-/*table tree*/
-$vxe-table-tree-node-line-color:#909399;
+/*filter*/
+$vxe-table-filter-panel-background-color: #fff;
 
 /*menu*/
 $vxe-table-menu-item-width: 178px;
@@ -110,7 +106,11 @@ $vxe-excel-primary-color: #217346;
 
 /*validate*/
 $vxe-table-validate-error-color: #f56c6c;
-$vxe-table-validate-error-background-color: $vxe-table-validate-error-color;
+$vxe-table-validate-tooltip-error-color: #fff;
+$vxe-table-validate-tooltip-error-background-color: $vxe-table-validate-error-color;
+
+/*grid*/
+$vxe-grid-maximize-background-color: #fff;
 
 /*toolbar*/
 $vxe-toolbar-height-default: 52px;
@@ -119,8 +119,11 @@ $vxe-toolbar-height-small: 48px;
 $vxe-toolbar-height-mini: 46px;
 
 /*tooltip*/
+$vxe-tooltip-dark-color: #fff;
 $vxe-tooltip-dark-background-color: #303133;
 $vxe-tooltip-light-background-color: #fff;
+$vxe-tooltip-validate-error-color: #fff;
+$vxe-tooltip-validate-error-background-color: #f56c6c;
 
 /*modal*/
 $vxe-modal-header-background-color: #F8F8F8;
@@ -136,6 +139,9 @@ $vxe-checkbox-indeterminate-width: 0.6em;
 $vxe-checkbox-indeterminate-height: 2px;
 $vxe-checkbox-border-width: 2px;
 $vxe-checkbox-border-radius: 2px;
+$vxe-checkbox-icon-background-color: #fff;
+$vxe-checkbox-checked-icon-border-color: #fff;
+$vxe-checkbox-indeterminate-icon-background-color: #fff;
 
 /*radio*/
 $vxe-radio-font-size-default: $vxe-checkbox-font-size-default;
@@ -143,6 +149,9 @@ $vxe-radio-font-size-medium: $vxe-checkbox-font-size-medium;
 $vxe-radio-font-size-small: $vxe-checkbox-font-size-small;
 $vxe-radio-font-size-mini: $vxe-checkbox-font-size-mini;
 $vxe-radio-border-width: $vxe-checkbox-border-width;
+$vxe-radio-icon-background-color: #fff;
+$vxe-radio-checked-icon-background-color: #fff;
+$vxe-radio-indeterminate-icon-background-color: #fff;
 
 /*button*/
 $vxe-button-max-width: 500px;
@@ -153,9 +162,17 @@ $vxe-button-height-small: 30px;
 $vxe-button-height-mini: 28px;
 
 /*input*/
+$vxe-input-background-color: #fff;
+$vxe-input-panel-background-color: $vxe-input-background-color;
 $vxe-input-date-festival-color: #999999;
 $vxe-input-date-festival-important-color: $vxe-primary-color;
 $vxe-input-date-notice-background-color: #FF0000;
+$vxe-input-date-header-background-color: #f8f8f9;
+$vxe-input-date-picker-hover-background-color: #f2f6fc;
+$vxe-input-date-picker-selected-color: #fff;
+$vxe-input-date-time-confirm-button-color: #fff;
+$vxe-input-date-picker-festival-selected-color: $vxe-input-date-picker-selected-color;
+$vxe-input-date-picker-notice-selected-background-color: $vxe-input-date-picker-selected-color;
 $vxe-input-date-extra-color: #67c23a;
 $vxe-input-date-extra-important-color: #fd2222;
 $vxe-input-date-title-height-default: 30px;
@@ -176,7 +193,9 @@ $vxe-input-height-small: $vxe-button-height-small;
 $vxe-input-height-mini: $vxe-button-height-mini;
 
 /*textarea*/
+$vxe-textarea-background-color: #fff;
 $vxe-textarea-count-color: #999;
+$vxe-textarea-count-background-color: #fff;
 $vxe-textarea-count-error-color: $vxe-table-validate-error-color;
 
 /*form*/
@@ -194,4 +213,9 @@ $vxe-select-option-height-medium: 28px;
 $vxe-select-option-height-small: 26px;
 $vxe-select-option-height-mini: 24px;
 $vxe-select-option-hover-background-color: #f5f7fa;
+$vxe-select-panel-background-color: #fff;
 $vxe-optgroup-title-color:#909399;
+
+/*switch*/
+$vxe-switch-font-color: #fff;
+$vxe-switch-icon-background-color: #fff;

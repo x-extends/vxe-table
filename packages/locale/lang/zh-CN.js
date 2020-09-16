@@ -46,7 +46,8 @@ export default {
         exclude: '不包含',
         between: '介于',
         custom: '自定义筛选',
-        insensitive: '不区分大小写'
+        insensitive: '不区分大小写',
+        isSensitive: '区分大小写'
       },
       combination: {
         menus: {

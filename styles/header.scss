@@ -44,6 +44,7 @@
 
 .vxe-header--column {
   position: relative;
+  font-weight: $vxe-table-header-font-weight;
   user-select: none;
   &.col--ellipsis {
     & > .vxe-cell {

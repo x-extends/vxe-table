@@ -23,6 +23,9 @@ export default {
     },
     isGroup () {
       return this.$xegroup
+    },
+    isDisabled () {
+      return this.disabled || (this.isGroup && this.$xegroup.disabled)
     }
   },
   render (h) {

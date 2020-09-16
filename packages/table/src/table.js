@@ -6244,7 +6244,7 @@ export default {
         original: defOpts.original,
         message: defOpts.message,
         isHeader: defOpts.isHeader,
-        isFooter: hasFooter,
+        isFooter: hasFooter && (XEUtils.isBoolean(exportOpts.isFooter) ? exportOpts.isFooter : true),
         isPrint: defOpts.isPrint
       })
       return this.$nextTick()

@@ -635,7 +635,7 @@ module.exports = {
           type: '窗口类型',
           status: '只对 type=alert | confirm | message 有效，消息状态',
           iconStatus: '自定义状态图标',
-          message: '窗口的内容',
+          message: '显示的文本（支持开启国际化）',
           showHeader: '是否显示头部',
           showFooter: '是否显示底部',
           lockView: '是否锁住页面，不允许窗口之外的任何操作',
