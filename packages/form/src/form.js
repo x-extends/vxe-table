@@ -119,6 +119,15 @@ export default {
     ]))
   },
   methods: {
+    getItems () {
+      return this.$children.map(({ field, title, itemRender }) => {
+        return {
+          field,
+          title,
+          itemRender
+        }
+      })
+    },
     toggleCollapse () {
       this.collapseAll = !this.collapseAll
       return this.$nextTick()

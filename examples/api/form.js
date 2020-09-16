@@ -325,6 +325,15 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'getItems()',
+        desc: '获取表单项列表',
+        version: '2.9.23',
+        type: 'array',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   }

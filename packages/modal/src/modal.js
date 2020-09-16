@@ -191,7 +191,7 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : (XEUtils.isFunction(message) ? message.call(this, h) : message)),
+          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : UtilTools.getFuncText(message)),
           !isMsg ? h('div', {
             class: ['vxe-loading', {
               'is--visible': loading

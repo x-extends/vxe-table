@@ -393,15 +393,17 @@ function toXML ($xetable, opts, columns, datas) {
 }
 
 function getContent ($xetable, opts, columns, datas) {
-  switch (opts.type) {
-    case 'csv':
-      return toCsv($xetable, opts, columns, datas)
-    case 'txt':
-      return toTxt($xetable, opts, columns, datas)
-    case 'html':
-      return toHtml($xetable, opts, columns, datas)
-    case 'xml':
-      return toXML($xetable, opts, columns, datas)
+  if (columns.length) {
+    switch (opts.type) {
+      case 'csv':
+        return toCsv($xetable, opts, columns, datas)
+      case 'txt':
+        return toTxt($xetable, opts, columns, datas)
+      case 'html':
+        return toHtml($xetable, opts, columns, datas)
+      case 'xml':
+        return toXML($xetable, opts, columns, datas)
+    }
   }
   return ''
 }
@@ -937,7 +939,7 @@ export default {
         original: defOpts.original,
         message: defOpts.message,
         isHeader: defOpts.isHeader,
-        isFooter: hasFooter,
+        isFooter: hasFooter && (XEUtils.isBoolean(exportOpts.isFooter) ? exportOpts.isFooter : true),
         isPrint: defOpts.isPrint
       })
       return this.$nextTick()

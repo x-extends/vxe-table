@@ -35,7 +35,7 @@
       width: 1em;
       height: 1em;
       border: $vxe-radio-border-width solid $vxe-input-border-color;
-      background-color: #fff;
+      background-color: $vxe-radio-icon-background-color;
       vertical-align: middle;
       border-radius: 50%;
     }
@@ -45,7 +45,7 @@
       &:before {
         content: "";
         position: absolute;
-        background-color: #fff;
+        background-color: $vxe-radio-checked-icon-background-color;
         border-radius: 50%;
         height: 0.25em;
         width: 0.25em;
@@ -82,11 +82,11 @@
         border-color: $vxe-input-disabled-color;
         background-color: $vxe-input-disabled-background-color;
         &:before {
-          border-color: #c0c4cc;
-          background-color: #c0c4cc;
+          border-color: $vxe-primary-disabled-color;
+          background-color: $vxe-primary-disabled-color;
         }
         &+.vxe-radio--label {
-          color: $vxe-input-disabled-color;
+          color: $vxe-disabled-color;
         }
       }
     }

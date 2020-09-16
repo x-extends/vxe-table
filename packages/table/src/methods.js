@@ -1498,24 +1498,27 @@ const Methods = {
             //   thElem.style.width = `${scrollbarWidth}px`
             // })
             XEUtils.arrayEach(listElem.querySelectorAll('.col--group'), thElem => {
-              const column = this.getColumnNode(thElem).item
-              const { showHeaderOverflow } = column
-              const cellOverflow = XEUtils.isBoolean(showHeaderOverflow) ? showHeaderOverflow : allColumnHeaderOverflow
-              const showEllipsis = cellOverflow === 'ellipsis'
-              const showTitle = cellOverflow === 'title'
-              const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-              const hasEllipsis = showTitle || showTooltip || showEllipsis
-              let childWidth = 0
-              let countChild = 0
-              if (hasEllipsis) {
-                XEUtils.eachTree(column.children, item => {
-                  if (!item.children || !column.children.length) {
-                    countChild++
-                  }
-                  childWidth += item.renderWidth
-                })
+              const colNode = this.getColumnNode(thElem)
+              if (colNode) {
+                const column = colNode.item
+                const { showHeaderOverflow } = column
+                const cellOverflow = XEUtils.isBoolean(showHeaderOverflow) ? showHeaderOverflow : allColumnHeaderOverflow
+                const showEllipsis = cellOverflow === 'ellipsis'
+                const showTitle = cellOverflow === 'title'
+                const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+                const hasEllipsis = showTitle || showTooltip || showEllipsis
+                let childWidth = 0
+                let countChild = 0
+                if (hasEllipsis) {
+                  XEUtils.eachTree(column.children, item => {
+                    if (!item.children || !column.children.length) {
+                      countChild++
+                    }
+                    childWidth += item.renderWidth
+                  })
+                }
+                thElem.style.width = hasEllipsis ? `${childWidth - countChild - (border ? 2 : 0)}px` : ''
               }
-              thElem.style.width = hasEllipsis ? `${childWidth - countChild - (border ? 2 : 0)}px` : ''
             })
           }
         } else if (layout === 'body') {

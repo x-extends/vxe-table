@@ -11,7 +11,7 @@ $iconWidth: 1.6em;
   padding: 0 0.6em;
   color: $vxe-font-color;
   border: 1px solid $vxe-input-border-color;
-  background-color: #FFF;
+  background-color: $vxe-input-background-color;
   box-shadow: none;
   &::placeholder {
     color: $vxe-input-placeholder-color;
@@ -279,7 +279,7 @@ $iconWidth: 1.6em;
 
 .vxe-input--panel-wrapper,
 .vxe-input--panel-layout-wrapper {
-  background-color: #fff;
+  background-color: $vxe-input-panel-background-color;
   border: 1px solid $vxe-table-popup-border-color;
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
   border-radius: $vxe-border-radius;
@@ -353,7 +353,7 @@ $iconWidth: 1.6em;
   border: 1px solid $vxe-input-border-color;
   border-radius: $vxe-border-radius;
   cursor: pointer;
-  color: #fff;
+  color: $vxe-input-date-time-confirm-button-color;
   border-color: $vxe-primary-color;
   background-color: $vxe-primary-color;
   &:hover {
@@ -463,16 +463,16 @@ $iconWidth: 1.6em;
       background-color: $vxe-input-date-picker-hover-background-color;
     }
     &.is--selected {
-      color: #fff;
+      color: $vxe-input-date-picker-selected-color;
       background-color: $vxe-primary-color;
       .vxe-input--date-label,
       .vxe-input--date-festival {
-        color: #fff;
+        color: $vxe-input-date-picker-festival-selected-color;
       }
       .vxe-input--date-label {
         &.is-notice {
           &:before {
-            background-color: #fff;
+            background-color: $vxe-input-date-picker-notice-selected-background-color;
           }
         }
       }
@@ -606,7 +606,6 @@ $iconWidth: 1.6em;
     overflow: hidden;
     margin: 0;
     padding: 0;
-    background-color: #fff;
     &:before,
     &:after {
       content: " ";
