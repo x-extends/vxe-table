@@ -40,14 +40,14 @@
           | Mouse + Left | (area) 鼠标选取指定范围的单元格 |
           | Mouse + Right | (area) 鼠标选取选中位置的单元格 |
           | Mouse + Left + Ctrl | (area) 鼠标选取多区域的单元格 |
-          | Mouse + Left | (extension) 鼠标左键按住右下角延伸按钮，将区域横向或纵向扩大 |
+          | Mouse + Left | (extension) 鼠标左键按住区域内右下角延伸按钮，将区域横向或纵向扩大 |
         keyboard-config 按键配置：
           | Ctrl + X | (isClip) 将单元格标记为剪贴状态并将内容复制到剪贴板，支持 Excel 和 WPS |
           | Ctrl + C | (isClip) 将单元格标记为复制状态并将内容复制到剪贴板，支持 Excel 和 WPS |
           | Ctrl + V | (isClip) 将剪贴板的内容粘贴到指定区域中，支持 Excel 和 WPS |
           | Ctrl + M | (isMerge) 将选取的单元格合并或取消合并 |
-          | Ctrl + F | (isFNR) 查找数据，全表或查找指定区域数据 |
-          | Ctrl + H | (isFNR) 替换数据，全表或替换指定区域数据 |
+          | Ctrl + F | (isFNR) 查找单元格数据，全表或查找指定区域单元格数据 |
+          | Ctrl + H | (isFNR) 替换单元格数据，全表或替换指定区域单元格数据 |
           | Arrow Up ↑ | （isArrow）如果存在，则移动到上面的单元格 |
           | Arrow Down ↓ | （isArrow）如果存在，则移动到下面的单元格 |
           | Arrow Left ← | （isArrow）如果存在，则移动到左边的单元格 |

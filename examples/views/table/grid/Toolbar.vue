@@ -49,7 +49,6 @@ export default {
             ]
           }
         ],
-        refresh: true,
         import: true,
         export: true,
         print: true,

@@ -46,27 +46,8 @@ export default {
     return {
       tableColumn: [],
       tableData: [],
-      myColumns: [
-        { field: 'name', title: 'Name' },
-        { field: 'role', title: 'Role' },
-        { field: 'sex', title: 'Sex' },
-        { field: 'age', title: 'Age' },
-        { field: 'date3', title: 'Date' }
-      ],
       tableColumn2: [],
       tableData2: [],
-      myColumns2: [
-        { field: 'name', title: 'Name' },
-        { field: 'role', title: 'Role' },
-        { field: 'sex', title: 'Sex' },
-        { field: 'age', title: 'Age' },
-        { field: 'date2', title: 'Datetime' },
-        { field: 'rate', title: 'Rate' },
-        { field: 'address2', title: 'Address' },
-        { field: 'date3', title: 'Date' },
-        { field: 'updateTime', title: 'UpdateTime' },
-        { field: 'createTime', title: 'CreateTime' }
-      ],
       demoCodes: [
         `
         <vxe-grid
@@ -81,25 +62,34 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
               tableColumn: [],
-              myColumns: [
-                { field: 'name', title: 'Name' },
-                { field: 'role', title: 'Role' },
-                { field: 'sex', title: 'Sex' },
-                { field: 'age', title: 'Age' },
-                { field: 'address2', title: 'Address' },
-                { field: 'date3', title: 'Date' }
-              ]
+              tableData: []
             }
           },
           created () {
-            this.reverseTable(window.MOCK_DATA_LIST.slice(0, 6))
+            const myColumns = [
+              { field: 'name', title: 'Name' },
+              { field: 'role', title: 'Role' },
+              { field: 'sex', title: 'Sex' },
+              { field: 'age', title: 'Age' },
+              { field: 'address', title: 'Address' }
+            ]
+            const myData = [
+              { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+              { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+              { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+              { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' },
+              { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
+              { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
+            ]
+            this.reverseTable(myColumns, myData)
           },
           methods: {
             // 反转函数
-            reverseTable (list) {
-              const buildData = this.myColumns.map(column => {
+            reverseTable (columns, list) {
+              const buildData = columns.map(column => {
                 const item = { col0: column.title }
                 list.forEach((row, index) => {
                   item[\`col\${index + 1}\`] = row[column.field]
@@ -143,29 +133,41 @@ export default {
         export default {
           data () {
             return {
-              tableData2: [],
               tableColumn2: [],
-              myColumns2: [
-                { field: 'name', title: 'Name' },
-                { field: 'role', title: 'Role' },
-                { field: 'sex', title: 'Sex' },
-                { field: 'age', title: 'Age' },
-                { field: 'date2', title: 'Datetime' },
-                { field: 'rate', title: 'Rate' },
-                { field: 'address2', title: 'Address' },
-                { field: 'date3', title: 'Date' },
-                { field: 'updateTime', title: 'UpdateTime' },
-                { field: 'createTime', title: 'CreateTime' }
-              ]
+              tableData2: []
             }
           },
           created () {
-            this.reverseTable2(window.MOCK_DATA_LIST.slice(0, 200))
+            const myColumns2 = [
+              { field: 'id', title: 'ID' },
+              { field: 'name', title: 'Name' },
+              { field: 'role', title: 'Role' },
+              { field: 'sex', title: 'Sex' },
+              { field: 'age', title: 'Age' },
+              { field: 'address', title: 'Address' },
+              { field: 'rate', title: 'Rate' },
+              { field: 'date3', title: 'Date' },
+              { field: 'updateTime', title: 'UpdateTime' },
+              { field: 'createTime', title: 'CreateTime' }
+            ]
+            const myData2 = [
+              { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, rate: 2, address: 'Shenzhen', date3: '20:30', updateTime: '2020-09-16', createTime: '2020-09-16' },
+              { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, rate: 2, address: 'Beijin', date3: '20:30', updateTime: '2019-09-16', createTime: '2020-09-16' },
+              { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, rate: 6, address: 'Shanghai', date3: '20:30', updateTime: '2020-09-16', createTime: '2021-09-16' },
+              { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, rate: 2, address: 'Shenzhen', date3: '20:30', updateTime: '2020-09-16', createTime: '2020-09-16' },
+              { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, rate: 10, address: 'Shanghai Beijin Shenzhen', date3: '20:30', updateTime: '2020-01-16', createTime: '2020-10-16' },
+              { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, rate: 2, address: 'Shenzhen', date3: '20:30', updateTime: '2018-09-16', createTime: '2020-09-16' },
+              { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, rate: 3, address: 'Shenzhen', date3: '20:30', updateTime: '2020-01-16', createTime: '2020-10-16' },
+              { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, rate: 2, address: 'Beijin Beijin Beijin', date3: '20:30', updateTime: '2017-09-16', createTime: '2020-09-16' },
+              { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: 'Man ', age: 29, rate: 3, address: 'Shenzhen', date3: '20:30', updateTime: '2020-01-16', createTime: '2020-10-16' },
+              { id: 10010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: 'Man ', age: 50, rate: 5, address: 'Shenzhen', date3: '20:30', updateTime: '2017-09-16', createTime: '2020-09-16' }
+            ]
+            this.reverseTable2(myColumns2, myData2)
           },
           methods: {
             // 反转函数
-            reverseTable2 (list) {
-              const buildData = this.myColumns2.map(column => {
+            reverseTable2 (columns, list) {
+              const buildData = columns.map(column => {
                 const item = { col0: column.title }
                 list.forEach((row, index) => {
                   item[\`col\${index + 1}\`] = row[column.field]
@@ -198,8 +200,50 @@ export default {
     }
   },
   created () {
-    this.reverseTable(window.MOCK_DATA_LIST.slice(0, 6))
-    this.reverseTable2(window.MOCK_DATA_LIST.slice(0, 200))
+    const myColumns = [
+      { field: 'name', title: 'Name' },
+      { field: 'role', title: 'Role' },
+      { field: 'sex', title: 'Sex' },
+      { field: 'age', title: 'Age' },
+      { field: 'address', title: 'Address' }
+    ]
+    const myData = [
+      { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+      { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+      { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+      { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+      { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' },
+      { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
+      { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
+    ]
+    this.reverseTable(myColumns, myData)
+
+    const myColumns2 = [
+      { field: 'id', title: 'ID' },
+      { field: 'name', title: 'Name' },
+      { field: 'role', title: 'Role' },
+      { field: 'sex', title: 'Sex' },
+      { field: 'age', title: 'Age' },
+      { field: 'address', title: 'Address' },
+      { field: 'rate', title: 'Rate' },
+      { field: 'date3', title: 'Date' },
+      { field: 'updateTime', title: 'UpdateTime' },
+      { field: 'createTime', title: 'CreateTime' }
+    ]
+    const myData2 = [
+      { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, rate: 2, address: 'Shenzhen', date3: '20:30', updateTime: '2020-09-16', createTime: '2020-09-16' },
+      { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, rate: 2, address: 'Beijin', date3: '20:30', updateTime: '2019-09-16', createTime: '2020-09-16' },
+      { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, rate: 6, address: 'Shanghai', date3: '20:30', updateTime: '2020-09-16', createTime: '2021-09-16' },
+      { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, rate: 2, address: 'Shenzhen', date3: '20:30', updateTime: '2020-09-16', createTime: '2020-09-16' },
+      { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, rate: 10, address: 'Shanghai Beijin Shenzhen', date3: '20:30', updateTime: '2020-01-16', createTime: '2020-10-16' },
+      { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, rate: 2, address: 'Shenzhen', date3: '20:30', updateTime: '2018-09-16', createTime: '2020-09-16' },
+      { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, rate: 3, address: 'Shenzhen', date3: '20:30', updateTime: '2020-01-16', createTime: '2020-10-16' },
+      { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, rate: 2, address: 'Beijin Beijin Beijin', date3: '20:30', updateTime: '2017-09-16', createTime: '2020-09-16' },
+      { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: 'Man ', age: 29, rate: 3, address: 'Shenzhen', date3: '20:30', updateTime: '2020-01-16', createTime: '2020-10-16' },
+      { id: 10010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: 'Man ', age: 50, rate: 5, address: 'Shenzhen', date3: '20:30', updateTime: '2017-09-16', createTime: '2020-09-16' }
+    ]
+    this.reverseTable2(myColumns2, myData2)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -208,8 +252,8 @@ export default {
   },
   methods: {
     // 将行与列进行反转
-    reverseTable (list) {
-      const buildData = this.myColumns.map(column => {
+    reverseTable (columns, list) {
+      const buildData = columns.map(column => {
         const item = { col0: column.title }
         list.forEach((row, index) => {
           item[`col${index + 1}`] = row[column.field]
@@ -230,8 +274,8 @@ export default {
       this.tableData = buildData
       this.tableColumn = buildColumns
     },
-    reverseTable2 (list) {
-      const buildData = this.myColumns2.map(column => {
+    reverseTable2 (columns, list) {
+      const buildData = columns.map(column => {
         const item = { col0: column.title }
         list.forEach((row, index) => {
           item[`col${index + 1}`] = row[column.field]
