@@ -76,7 +76,7 @@
     "vxe-table-plugin-antd": "^1.9.2",
     "vxe-table-plugin-element": "^1.9.2",
     "vxe-table-plugin-export-pdf": "^1.8.7",
-    "vxe-table-plugin-export-xlsx": "^1.6.2",
+    "vxe-table-plugin-export-xlsx": "^1.6.3",
     "vxe-table-plugin-iview": "^1.9.2",
     "vxe-table-plugin-menus": "^1.4.10",
     "xe-ajax": "^4.0.5",
