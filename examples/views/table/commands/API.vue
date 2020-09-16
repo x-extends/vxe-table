@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{ $t('app.aside.nav.commands') }}</h1>
-    <p class="tip">你可以很简单的将工具栏按钮或数据代理中常用的指令注册成全局可复用</p>
+    <p class="tip">将工具栏按钮或数据代理中常用的指令注册成全局可复用</p>
     <vxe-table
       resizable
       highlight-current-row
@@ -16,10 +16,10 @@
     </vxe-table>
     <h2>示例</h2>
     <pre>
-      <code class="javascript">{{ demoCodes[0] }}</code>
-      <code class="html">{{ demoCodes[1] }}</code>
-      <code class="javascript">{{ demoCodes[2] }}</code>
-      <code class="html">{{ demoCodes[3] }}</code>
+      <code class="html">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
+      <code class="html">{{ demoCodes[2] }}</code>
+      <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
   </div>
 </template>
@@ -81,17 +81,19 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
               toolbarButtons: [
                 {
                   code: 'exportBtn',
                   name: '导出.csv'
                 }
+              ],
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
               ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           }
         }
         `,
@@ -115,17 +117,19 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
               tableColumn: [
                 { type: 'seq', width: 50 },
                 { field: 'name', title: 'Name' },
                 { field: 'sex', title: 'Sex' },
                 { field: 'address', title: 'Address' }
+              ],
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
               ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
             printEvent () {

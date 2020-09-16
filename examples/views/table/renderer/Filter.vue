@@ -19,10 +19,10 @@
       height="400"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="nickname" title="Nickname" :filters="[{data: null}]" :filter-render="{name: 'FilterInput'}"></vxe-table-column>
-      <vxe-table-column field="name" title="实现条件的筛选" :filters="[{data: {type: 'has', name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
+      <vxe-table-column field="name" title="文本筛选" :filters="[{data: null}]" :filter-render="{name: 'FilterInput'}"></vxe-table-column>
+      <vxe-table-column field="role" title="实现条件的筛选" :filters="[{data: {type: 'has', name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
       <vxe-table-column field="age" title="实现内容的筛选" :filters="[{data: {vals: [], sVal: ''}}]" :filter-render="{name: 'FilterContent'}"></vxe-table-column>
-      <vxe-table-column field="role" title="实现Excel复杂的筛选" sortable :filters="[{data: {vals: [], sVal: '', fMenu: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]" :filter-render="{name: 'FilterExcel'}"></vxe-table-column>
+      <vxe-table-column field="address" title="实现Excel复杂的筛选" sortable :filters="[{data: {vals: [], sVal: '', fMenu: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]" :filter-render="{name: 'FilterExcel'}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -41,7 +41,16 @@ import hljs from 'highlight.js'
 export default {
   data  () {
     return {
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
+      ],
       demoCodes: [
         `
         // 创建一个简单的输入框筛选
@@ -66,29 +75,32 @@ export default {
           height="400"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="nickname" title="Nickname" :filters="[{data: null}]" :filter-render="{name: 'FilterInput'}"></vxe-table-column>
-          <vxe-table-column field="name" title="实现条件的筛选" :filters="[{data: {type: 'has', name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
+          <vxe-table-column field="name" title="文本筛选" :filters="[{data: null}]" :filter-render="{name: 'FilterInput'}"></vxe-table-column>
+          <vxe-table-column field="role" title="实现条件的筛选" :filters="[{data: {type: 'has', name: ''}}]" :filter-render="{name: 'FilterComplex'}"></vxe-table-column>
           <vxe-table-column field="age" title="实现内容的筛选" :filters="[{data: {vals: [], sVal: ''}}]" :filter-render="{name: 'FilterContent'}"></vxe-table-column>
-          <vxe-table-column field="role" title="实现Excel复杂的筛选" sortable :filters="[{data: {vals: [], sVal: '', fMenu: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]" :filter-render="{name: 'FilterExcel'}"></vxe-table-column>
+          <vxe-table-column field="address" title="实现Excel复杂的筛选" sortable :filters="[{data: {vals: [], sVal: '', fMenu: '', f1Type:'', f1Val: '', fMode: 'and', f2Type: '', f2Val: ''}}]" :filter-render="{name: 'FilterExcel'}"></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
           }
         }
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
