@@ -109,7 +109,7 @@
   },
   "vxe-table/cell-style": {
     "type": "any | function",
-    "description": "给单元格附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
+    "description": "给单元格附加样式，也可以是函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})"
   },
   "vxe-table/header-cell-style": {
     "type": "any | function",
@@ -121,7 +121,7 @@
   },
   "vxe-table/row-style": {
     "type": "any | function",
-    "description": "给行附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
+    "description": "给行附加样式，也可以是函数 Function({row, rowIndex, $rowIndex})"
   },
   "vxe-table/header-row-style": {
     "type": "any | function",
@@ -129,7 +129,7 @@
   },
   "vxe-table/footer-row-style": {
     "type": "any | function",
-    "description": "给表尾行附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
+    "description": "给表尾行附加样式，也可以是函数 Function({$rowIndex})"
   },
   "vxe-table/show-footer": {
     "type": "boolean",
@@ -141,19 +141,19 @@
   },
   "vxe-table/merge-cells": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并指定的单元格，不能用于固定列"
+    "description": "临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）"
   },
   "vxe-table/merge-footer-items": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并表尾，不能用于固定列"
+    "description": "临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）"
   },
   "vxe-table/span-method": {
     "type": "function",
-    "description": "自定义合并函数，该方法 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于固定列"
+    "description": "自定义合并函数，该方法 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于树形结构、展开行、固定列"
   },
   "vxe-table/footer-span-method": {
     "type": "function",
-    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于固定列"
+    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于树形结构、展开行、固定列"
   },
   "vxe-table/show-overflow": {
     "type": "boolean | string",
@@ -285,11 +285,11 @@
   },
   "vxe-table/scroll-x": {
     "type": "any",
-    "description": "横向虚拟滚动配置（tree-config 启用后无效）"
+    "description": "横向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）"
   },
   "vxe-table/scroll-y": {
     "type": "any",
-    "description": "纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）"
+    "description": "纵向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）"
   },
   "vxe-table/params": {
     "type": "any",
@@ -557,7 +557,7 @@
   },
   "vxe-grid/cell-style": {
     "type": "any | function",
-    "description": "给单元格附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
+    "description": "给单元格附加样式，也可以是函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})"
   },
   "vxe-grid/header-cell-style": {
     "type": "any | function",
@@ -569,7 +569,7 @@
   },
   "vxe-grid/row-style": {
     "type": "any | function",
-    "description": "给行附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
+    "description": "给行附加样式，也可以是函数 Function({row, rowIndex, $rowIndex})"
   },
   "vxe-grid/header-row-style": {
     "type": "any | function",
@@ -577,7 +577,7 @@
   },
   "vxe-grid/footer-row-style": {
     "type": "any | function",
-    "description": "给表尾行附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
+    "description": "给表尾行附加样式，也可以是函数 Function({$rowIndex})"
   },
   "vxe-grid/show-footer": {
     "type": "boolean",
@@ -589,19 +589,19 @@
   },
   "vxe-grid/merge-cells": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并指定的单元格，不能用于固定列"
+    "description": "临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）"
   },
   "vxe-grid/merge-footer-items": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并表尾，不能用于固定列"
+    "description": "临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）"
   },
   "vxe-grid/span-method": {
     "type": "function",
-    "description": "自定义合并函数，该方法 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于固定列"
+    "description": "自定义合并函数，该方法 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于树形结构、展开行、固定列"
   },
   "vxe-grid/footer-span-method": {
     "type": "function",
-    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于固定列"
+    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于树形结构、展开行、固定列"
   },
   "vxe-grid/show-overflow": {
     "type": "boolean | string",
@@ -733,11 +733,11 @@
   },
   "vxe-grid/scroll-x": {
     "type": "any",
-    "description": "横向虚拟滚动配置（tree-config 启用后无效）"
+    "description": "横向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）"
   },
   "vxe-grid/scroll-y": {
     "type": "any",
-    "description": "纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）"
+    "description": "纵向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）"
   },
   "vxe-grid/params": {
     "type": "any",
@@ -1321,7 +1321,7 @@
   },
   "vxe-modal/message": {
     "type": "string",
-    "description": "窗口的内容"
+    "description": "显示的文本（支持开启国际化）"
   },
   "vxe-modal/cancel-button-text": {
     "type": "string",
