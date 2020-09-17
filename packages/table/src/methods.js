@@ -1270,8 +1270,7 @@ const Methods = {
    */
   refreshScroll () {
     const { lastScrollLeft, lastScrollTop } = this
-    this.clearScroll()
-    return this.$nextTick().then(() => {
+    return this.clearScroll().then(() => {
       if (lastScrollLeft || lastScrollTop) {
         // 重置最后滚动状态
         this.lastScrollLeft = 0
@@ -3809,7 +3808,11 @@ const Methods = {
     if (footerTargetElem) {
       footerTargetElem.scrollLeft = 0
     }
-    return new Promise(resolve => setTimeout(() => resolve(this.$nextTick())))
+    return new Promise(resolve => {
+      requestAnimationFrame(() => {
+        resolve(this.$nextTick())
+      })
+    })
   },
   /**
    * 更新表尾合计
