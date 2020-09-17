@@ -75,7 +75,7 @@
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
     "vxe-table-plugin-antd": "^1.9.2",
-    "vxe-table-plugin-element": "^1.9.2",
+    "vxe-table-plugin-element": "^1.9.3",
     "vxe-table-plugin-export-pdf": "^1.8.7",
     "vxe-table-plugin-export-xlsx": "^1.6.3",
     "vxe-table-plugin-iview": "^1.9.2",
