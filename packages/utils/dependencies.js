@@ -20,7 +20,7 @@ import sortBy from 'xe-utils/methods/array/sortBy'
 // import shuffle from 'xe-utils/methods/array/shuffle'
 // import sample from 'xe-utils/methods/array/sample'
 import slice from 'xe-utils/methods/array/slice'
-// import filter from 'xe-utils/methods/array/filter'
+import filter from 'xe-utils/methods/array/filter'
 // import findKey from 'xe-utils/methods/array/findKey'
 // import includes from 'xe-utils/methods/array/includes'
 import find from 'xe-utils/methods/array/find'
@@ -204,7 +204,7 @@ export default {
   // shuffle,
   // sample,
   slice,
-  // filter,
+  filter,
   // findKey,
   // includes,
   find,
