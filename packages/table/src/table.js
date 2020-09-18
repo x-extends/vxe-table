@@ -5531,14 +5531,16 @@ export default {
         const { tableBody, rightBody, tableFooter } = $refs
         const tableBodyElem = tableBody ? tableBody.$el : null
         const rightBodyElem = rightBody ? rightBody.$el : null
-        const bodyTargetElem = rightBodyElem || tableBodyElem
         const tableFooterElem = tableFooter ? tableFooter.$el : null
-        const footerTargetElem = tableFooterElem || tableBodyElem
-        if (bodyTargetElem) {
-          bodyTargetElem.scrollTop = 0
+        if (rightBodyElem) {
+          rightBodyElem.scrollTop = 0
         }
-        if (footerTargetElem) {
-          footerTargetElem.scrollLeft = 0
+        if (tableFooterElem) {
+          tableFooterElem.scrollLeft = 0
+        }
+        if (tableBodyElem) {
+          tableBodyElem.scrollTop = 0
+          tableBodyElem.scrollLeft = 0
         }
         return new Promise(resolve => setTimeout(() => resolve(this.$nextTick())))
       })
