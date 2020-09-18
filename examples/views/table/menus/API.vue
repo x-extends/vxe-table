@@ -34,15 +34,15 @@ export default {
           desc: '添加一个',
           type: '',
           enum: '',
-          defVal: 'code, callback',
+          defVal: 'code: string, callback: (params, event) => any',
           list: []
         },
         {
-          name: 'mixin(map)',
+          name: 'mixin(options)',
           desc: '添加多个',
           type: '',
           enum: '',
-          defVal: 'map',
+          defVal: 'options: { [code: string]: (params, event) => any }',
           list: []
         },
         {
@@ -50,7 +50,7 @@ export default {
           desc: '删除',
           type: '',
           enum: '',
-          defVal: 'name',
+          defVal: 'code: string',
           list: []
         }
       ],

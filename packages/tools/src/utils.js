@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import formats from '../../v-x-e-table/src/formats'
 

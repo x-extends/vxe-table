@@ -39,8 +39,8 @@
     </vxe-table>
     <h2>示例</h2>
     <p class="tip">
-      例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突，对于这些场景就很有用了<br>
-      当然还有最简单的用法，直接给弹出面板加上 class=vxe-table--ignore-clear 即可
+      例子：比如自定义渲染某个组件后，由于弹出层面板不在单元格之内，按键事件的交互行为存在冲突<br>
+      当然还有最简单的用法，只需给弹出面板加上 class=vxe-table--ignore-clear 即可
     </p>
     <pre>
       <code class="javascript">{{ demoCodes[0] }}</code>
@@ -61,16 +61,16 @@ export default {
           version: '',
           type: '',
           enum: '',
-          defVal: 'type, callback',
+          defVal: 'type: string, callback: (params, event) => any',
           list: []
         },
         {
-          name: 'mixin(map)',
+          name: 'mixin(options)',
           desc: '添加多个',
           version: '',
           type: '',
           enum: '',
-          defVal: 'map',
+          defVal: 'options?: { [type: string]: (params, event) => any }',
           list: []
         },
         {
@@ -79,7 +79,7 @@ export default {
           version: '',
           type: '',
           enum: '',
-          defVal: 'name',
+          defVal: 'type: string',
           list: []
         }
       ],
@@ -87,7 +87,7 @@ export default {
         {
           name: 'created',
           desc: '表格初始化时触发',
-          version: '2.6',
+          version: '',
           type: '',
           enum: '',
           defVal: '',
@@ -96,7 +96,7 @@ export default {
         {
           name: 'mounted',
           desc: '表格挂载时触发',
-          version: '2.6',
+          version: '',
           type: '',
           enum: '',
           defVal: '',
@@ -105,7 +105,7 @@ export default {
         {
           name: 'activated',
           desc: '表格激活时触发',
-          version: '2.6',
+          version: '',
           type: '',
           enum: '',
           defVal: '',
@@ -114,7 +114,7 @@ export default {
         {
           name: 'deactivated',
           desc: '表格停用时触发',
-          version: '2.6',
+          version: '',
           type: '',
           enum: '',
           defVal: '',
@@ -123,7 +123,7 @@ export default {
         {
           name: 'beforeDestroy',
           desc: '表格销毁之前触发',
-          version: '2.6',
+          version: '',
           type: '',
           enum: '',
           defVal: '',
@@ -132,7 +132,7 @@ export default {
         {
           name: 'destroyed',
           desc: '表格销毁时触发',
-          version: '2.6',
+          version: '',
           type: '',
           enum: '',
           defVal: '',
@@ -150,7 +150,16 @@ export default {
         {
           name: 'event.clearFilter',
           desc: '清除筛选面板之前触发，允许返回 false 阻止默认行为',
-          version: '2.1',
+          version: '',
+          type: 'Boolean',
+          enum: '',
+          defVal: '',
+          list: []
+        },
+        {
+          name: 'event.clearAreas',
+          desc: '如果功能被支持，清除单元格区域之前触发，允许返回 false 阻止默认行为',
+          version: '',
           type: 'Boolean',
           enum: '',
           defVal: '',
@@ -159,7 +168,7 @@ export default {
         {
           name: 'event.keydown',
           desc: '键盘按下之前触发，允许返回 false 阻止默认行为',
-          version: '2.5.9',
+          version: '',
           type: 'Boolean',
           enum: '',
           defVal: '',
@@ -168,7 +177,7 @@ export default {
         {
           name: 'event.showMenu',
           desc: '显示快捷菜单之前触发，允许返回 false 阻止默认行为',
-          version: '2.4',
+          version: '',
           type: 'Boolean',
           enum: '',
           defVal: '',
@@ -177,7 +186,7 @@ export default {
         {
           name: 'event.import',
           desc: '导入之前触发，允许返回 false 阻止默认行为',
-          version: '2.6.14',
+          version: '',
           type: 'Boolean',
           enum: '',
           defVal: '',
@@ -186,7 +195,7 @@ export default {
         {
           name: 'event.export',
           desc: '导出之前触发，允许返回 false 阻止默认行为',
-          version: '2.6.14',
+          version: '',
           type: 'Boolean',
           enum: '',
           defVal: '',

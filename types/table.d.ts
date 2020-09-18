@@ -716,8 +716,9 @@ export declare class Table extends VXETableModule {
   /**
    * 如果有滚动条，则滚动到对应的行
    * @param row 指定行
+   * @param column 列对象
    */
-  scrollToRow(row: RowInfo): Promise<any>;
+  scrollToRow(row: RowInfo, column?: ColumnInfo): Promise<any>;
   /**
    * 如果有滚动条，则滚动到对应的列
    * @param column 列对象

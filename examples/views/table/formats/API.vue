@@ -30,25 +30,25 @@ export default {
     return {
       tableData: [
         {
-          name: 'add(code, callback)',
+          name: 'add(name, callback)',
           desc: '添加一个',
           version: '',
           type: '',
           enum: '',
-          defVal: 'code, callback',
+          defVal: 'name: string, callback: (params) => string | number',
           list: []
         },
         {
-          name: 'mixin(map)',
+          name: 'mixin(options)',
           desc: '添加多个',
           version: '',
           type: '',
           enum: '',
-          defVal: 'map',
+          defVal: 'options: { [name: string]: (params) => string | number }',
           list: []
         },
         {
-          name: 'delete(code)',
+          name: 'delete(name)',
           desc: '删除',
           version: '',
           type: '',

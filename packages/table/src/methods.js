@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import Cell from '../../cell'
 import VXETable from '../../v-x-e-table'
@@ -3758,7 +3758,9 @@ const Methods = {
         rest.push(DomTools.rowToVisible(this, row))
       }
     }
-    rest.push(this.scrollToColumn(column))
+    if (column) {
+      rest.push(this.scrollToColumn(column))
+    }
     return Promise.all(rest)
   },
   /**
@@ -3799,14 +3801,16 @@ const Methods = {
     const { tableBody, rightBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
     const rightBodyElem = rightBody ? rightBody.$el : null
-    const bodyTargetElem = rightBodyElem || tableBodyElem
     const tableFooterElem = tableFooter ? tableFooter.$el : null
-    const footerTargetElem = tableFooterElem || tableBodyElem
-    if (bodyTargetElem) {
-      bodyTargetElem.scrollTop = 0
+    if (rightBodyElem) {
+      rightBodyElem.scrollTop = 0
     }
-    if (footerTargetElem) {
-      footerTargetElem.scrollLeft = 0
+    if (tableFooterElem) {
+      tableFooterElem.scrollLeft = 0
+    }
+    if (tableBodyElem) {
+      tableBodyElem.scrollTop = 0
+      tableBodyElem.scrollLeft = 0
     }
     return new Promise(resolve => {
       requestAnimationFrame(() => {

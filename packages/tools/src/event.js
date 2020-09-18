@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import DomTools from './dom'
 
 // 监听全局事件

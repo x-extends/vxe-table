@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 
 const contextMenuAPI = [
   {
@@ -4216,12 +4216,12 @@ const apis = [
         list: []
       },
       {
-        name: 'scrollToRow(row)',
+        name: 'scrollToRow(row, column)',
         desc: '如果有滚动条，则滚动到对应的行（对于某些特定的场景可能会用到，比如定位到某一行）',
         version: '2.0',
         type: 'Promise',
         enum: '',
-        defVal: 'row: Row',
+        defVal: 'row: Row, column?: ColumnConfig',
         list: []
       },
       {

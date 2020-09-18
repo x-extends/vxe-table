@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VxeModal from '../../modal/src/modal'
 import VxeInput from '../../input/src/input'

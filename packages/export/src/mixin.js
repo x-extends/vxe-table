@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
