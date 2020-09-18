@@ -98,7 +98,7 @@ Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.ne
 import Vue from 'vue'
 import 'xe-utils'
 import VXETable from 'vxe-table'
-import 'vxe-table/lib/index.css'
+import 'vxe-table/lib/style.css'
 
 Vue.use(VXETable)
 ```
@@ -107,7 +107,7 @@ Vue.use(VXETable)
 
 ```HTML
 <!-- 引入样式 -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/index.css">
+<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
 <!-- 引入脚本 -->
 <script src="https://unpkg.com/xe-utils"></script>
 <script src="https://unpkg.com/vxe-table"></script>
