@@ -8,7 +8,7 @@ export * from 'xe-utils/methods/object/objectMap'
 
 // array
 export * from 'xe-utils/methods/array/map'
-// export * from 'xe-utils/methods/array/some'
+export * from 'xe-utils/methods/array/some'
 // export * from 'xe-utils/methods/array/every'
 export * from 'xe-utils/methods/array/includeArrays'
 export * from 'xe-utils/methods/array/arrayEach'

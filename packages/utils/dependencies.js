@@ -8,7 +8,7 @@ import objectMap from 'xe-utils/methods/object/objectMap'
 
 // array
 import map from 'xe-utils/methods/array/map'
-// import some from 'xe-utils/methods/array/some'
+import some from 'xe-utils/methods/array/some'
 // import every from 'xe-utils/methods/array/every'
 import includeArrays from 'xe-utils/methods/array/includeArrays'
 import arrayEach from 'xe-utils/methods/array/arrayEach'
@@ -192,7 +192,7 @@ export default {
 
   // array
   map,
-  // some,
+  some,
   // every,
   includeArrays,
   arrayEach,
