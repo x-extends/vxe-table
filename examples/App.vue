@@ -34,7 +34,6 @@
             <vxe-option value="4" label="4.x"></vxe-option>
           </vxe-select>
           <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
-          <a class="support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
         </div>
       </div>
     </header>
@@ -85,52 +84,6 @@
         </div>
       </div>
     </div>
-
-    <vxe-modal v-model="supportVisible" :loading="supportLoading" title="💡技术支持" width="800" position="center">
-      <template v-slot>
-        <div class="support-declare">考虑到部分用户有需要技术支持的需求，用于快速解决使用过程中遇到的各种问题，同时您的支持也可以帮助该项目持续维护下去！</div>
-        <div>
-          <ul class="vxe-row support-question">
-            <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
-              <vxe-tooltip :content="item.message || item.label">
-                <i class="support-help-icon" :class="item.icon || 'fa fa-question-circle'"></i>
-              </vxe-tooltip>
-              <span>&nbsp;{{ item.label }}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="vxe-row support-group">
-          <div class="vxe-col--24 support-group-item">
-            <div class="support-name">高级用户</div>
-            <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供使用过程中相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
-            <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供使用过程中相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
-            <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请成为高级用户</vxe-button>
-            <ul class="support-describe">
-              <li>优质的技术支持群</li>
-            </ul>
-          </div>
-          <!-- <div class="vxe-col--12 support-group-item">
-            <div class="support-name">强大的扩展插件</div>
-            <a class="link support-btn" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins/index.html" target="_blank">查看预览</a>
-            <ul class="support-describe">
-              <li>更强的 pro 专业版</li>
-              <li>更多的实用渲染器</li>
-              <li>...</li>
-            </ul>
-          </div> -->
-        </div>
-      </template>
-    </vxe-modal>
-    <vxe-modal v-model="supportGroupVisible" title="申请成为高级用户" width="600" height="700" position="center">
-      <template v-slot>
-        <div class="support-pay-step">
-          <p style="font-size: 12px;">联系邮件： <a class="link" href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
-          <p class="title">1. 扫码申请加入 QQ 群<br><img src="static/support/qq.png"></p>
-          <p class="title">2. 通过支付宝或微信付费：¥{{ supportDiscountPrice || supportGroupPrice }}<br>3. 付费完成后点击 "联系收款方"，留言QQ号即可<br><img src="static/donation/pay.jpg"></p>
-          <p class="title">（注意：点击 "联系收款方"，必须留言QQ号，否则将无法审批通过）</p>
-        </div>
-      </template>
-    </vxe-modal>
   </div>
 </template>
 
@@ -141,63 +94,6 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
-      supportDiscountPrice: 288,
-      supportGroupPrice: 500,
-      supportLoading: false,
-      supportVisible: false,
-      supportQuestion: '',
-      supportGroupVisible: false,
-      supportQuestionList: [
-        {
-          label: '安装/报错/主题/样式/国际化/版本升级',
-          message: '安装报错、版本升级报错、版本升级兼容性如何解决、国际化如果使用，修改行高、样式、背景，自定义图标'
-        },
-        {
-          label: '增删改查/数据校验/键盘导航使用',
-          message: '实现 Grid 的增删改查、新增保存的数据校验、服务端校验、按键导航事件监听等'
-        },
-        {
-          label: '列控制/动态列/列分组/自定义列问题',
-          message: '在 Tabs 页签中列宽显示错乱、弹出框中列显示错乱、在弹出框下拉框被遮挡、日期选择被遮挡等'
-        },
-        {
-          label: '数据联动/合并与列问题',
-          message: '单元格的数据联动、单元格合并使用'
-        },
-        {
-          label: '数据代理/Grid配置式使用问题',
-          message: '使用 Grid 数据代理，自定义返回数据结构、使用 json 动态渲染 Grid'
-        },
-        {
-          label: '高级筛选/可编辑/下拉容器/渲染器使用问题',
-          message: '实现高级筛选模板、自定义单元格可编辑渲染器、复用业务渲染器、下拉容器使用方法、自定义下拉容器实现'
-        },
-        {
-          label: '虚拟列表/虚拟树/虚拟下拉/虚拟合并/虚拟滚动',
-          message: '实现大数据虚拟表格、大数据虚拟树表格、大数据虚拟列表、大数据虚拟下拉框、大数据虚拟下拉容器'
-        },
-        {
-          label: '打印/导入/导出/数据格式化等问题',
-          message: '打印自定义数据、打印指定行货列、打印数据格式化、服务端导出、服务端导入'
-        },
-        {
-          label: '动态表单/表单权限/配置式使用问题',
-          message: '使用 json 动态生成表单、自定义表单渲染、禁用编辑、事件绑定'
-        },
-        {
-          label: '输入框/日期选择/工具栏/分页/模态窗口等模块',
-          message: '日期带节日、自定义日期节日提醒、工具栏自定义位置、前端分页、后端分页、窗口居中、多窗口、窗口放大与缩小等'
-        },
-        {
-          label: '第三方 UI 库集成渲染问题',
-          message: '例如集成 element-ui、view-ui、nt-design-vue 或者其他自定义组件集成用户，比如在单元格中无法选中、事件绑定等'
-        },
-        {
-          label: '额外需求的定制（需咨询）',
-          message: '如果需要定制特殊需求，购买 pro 版本等，请先需咨询',
-          icon: 'fa fa-exclamation-triangle'
-        }
-      ],
       showLeft: true,
       selected: null,
       filterName: '',
@@ -207,7 +103,7 @@ export default {
       betaVersionList: [],
       selectStableVersion: null,
       stableVersionList: [],
-      version: '2',
+      version: '1',
       usedJSHeapSize: 0,
       tableList: [
         {
