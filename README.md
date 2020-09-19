@@ -22,8 +22,6 @@
 * [计划](#donation)
   * [x] v1.0 100% 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能
   * [x] v2.0 &nbsp;100% 基于 vue2.6+，支持所有主流的浏览器，同时兼具功能与性能
-  * [x] v3.0 &nbsp;&nbsp;85% 基于 vue2.6+，只支持现代浏览器，不支持 IE，渲染性能大幅提升
-  * [ ] v4.0 &nbsp;&nbsp;0% 基于 vue3+，只支持现代浏览器，不支持 IE，渲染性能大幅提升
 
 👉 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/x-extends/vxe-table/issues/390)
 
