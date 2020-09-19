@@ -63,6 +63,7 @@ module.exports = {
         import: 'Import',
         export: 'Export',
         print: 'Print',
+        customPrint: 'Advanced print',
         fixedType: 'Fixed type + import/export',
         contextMenu: 'Context menu',
         menuPrivilege: 'Context menu + permission',

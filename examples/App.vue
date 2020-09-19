@@ -688,6 +688,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.customPrint',
+              locat: {
+                name: 'TableCustomPrint'
+              }
+            },
+            {
               label: 'app.aside.nav.fixedType',
               locat: {
                 name: 'TableFixedType'

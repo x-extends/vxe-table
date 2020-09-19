@@ -302,6 +302,15 @@ const exportDataAPI = [
     enum: '',
     defVal: '',
     list: []
+  },
+  {
+    name: 'style',
+    desc: '只对 type=html 有效，自定义文档的 css 样式信息',
+    version: '2.9.23',
+    type: 'string',
+    enum: '',
+    defVal: '',
+    list: []
   }
 ]
 
@@ -353,7 +362,26 @@ const importDataAPI = [
   }
 ]
 
-const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod'].includes(item.name))
+const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod'].includes(item.name)).concat([
+  {
+    name: 'content',
+    desc: '自定义打印的内容',
+    version: '2.9.23',
+    type: 'string',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'beforePrintMethod',
+    desc: '该函数 Function({ content, options }) 会在打印之前触发，可以通过返回自定义打印的内容',
+    version: '2.9.23',
+    type: '({ content, options }) => string',
+    enum: '',
+    defVal: '',
+    list: []
+  }
+])
 
 const apis = [
   {

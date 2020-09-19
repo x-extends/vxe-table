@@ -21,6 +21,13 @@ function createFrame () {
   return frame
 }
 
+function getExportBlobByContent (content, options) {
+  if (window.Blob) {
+    return new Blob([content], { type: `text/${options.type}` })
+  }
+  return null
+}
+
 function hasTreeChildren ($xetable, row) {
   const treeOpts = $xetable.treeOpts
   return row[treeOpts.children] && row[treeOpts.children].length
@@ -246,28 +253,37 @@ function hasEllipsis ($xetable, column, property, allColumnOverflow) {
   return isEllipsis
 }
 
+function createHtmlPage (opts, content) {
+  const { style } = opts
+  return [
+    '<!DOCTYPE html><html>',
+    '<head>',
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">',
+    `<title>${opts.sheetName}</title>`,
+    `<style>${defaultHtmlStyle}</style>`,
+    style ? `<style>${style}</style>` : '',
+    '</head>',
+    `<body>${XEUtils.toString(content)}</body>`,
+    '</html>'
+  ].join('')
+}
+
 function toHtml ($xetable, opts, columns, datas) {
   const { id, border, treeConfig, treeOpts, isAllSelected, isIndeterminate, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow } = $xetable
-  const isPrint = opts.print
+  const { print: isPrint, isHeader, isFooter } = opts
   const allCls = 'check-all'
   const clss = [
     'vxe-table',
     `border--${toTableBorder(border)}`,
     isPrint ? 'is--print' : '',
-    opts.isHeader ? 'show--head' : ''
+    isHeader ? 'show--head' : ''
   ].filter(cls => cls)
-  let html = [
-    '<html>',
-    '<head>',
-    `<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"><title>${opts.sheetName}</title>`,
-    `<style>${opts.style || defaultHtmlStyle}</style>`,
-    '</head>',
-    '<body>',
+  let body = [
     `<table class="${clss.join(' ')}" border="0" cellspacing="0" cellpadding="0">`,
     `<colgroup>${columns.map(column => `<col style="width:${column.renderWidth}px">`).join('')}</colgroup>`
   ].join('')
-  if (opts.isHeader) {
-    html += `<thead><tr>${columns.map(column => {
+  if (isHeader) {
+    body += `<thead><tr>${columns.map(column => {
       const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
       const classNames = hasEllipsis($xetable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
       const cellTitle = getHeaderTitle(opts, column)
@@ -281,10 +297,10 @@ function toHtml ($xetable, opts, columns, datas) {
     }).join('')}</tr></thead>`
   }
   if (datas.length) {
-    html += '<tbody>'
+    body += '<tbody>'
     if (treeConfig) {
       datas.forEach(item => {
-        html += '<tr>' + columns.map(column => {
+        body += '<tr>' + columns.map(column => {
           const cellAlign = column.align || allAlign
           const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
           const cellValue = item[column.id]
@@ -314,7 +330,7 @@ function toHtml ($xetable, opts, columns, datas) {
       })
     } else {
       datas.forEach(item => {
-        html += '<tr>' + columns.map(column => {
+        body += '<tr>' + columns.map(column => {
           const cellAlign = column.align || allAlign
           const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
           const cellValue = item[column.id]
@@ -330,15 +346,15 @@ function toHtml ($xetable, opts, columns, datas) {
         }).join('') + '</tr>'
       })
     }
-    html += '</tbody>'
+    body += '</tbody>'
   }
-  if (opts.isFooter) {
+  if (isFooter) {
     const footerData = $xetable.footerData
     const footers = getFooterData(opts, footerData)
     if (footers.length) {
-      html += '<tfoot>'
+      body += '<tfoot>'
       footers.forEach(rows => {
-        html += `<tr>${columns.map(column => {
+        body += `<tr>${columns.map(column => {
           const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
           const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
           const cellValue = getFooterCellValue($xetable, opts, rows, column)
@@ -348,12 +364,13 @@ function toHtml ($xetable, opts, columns, datas) {
           return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${UtilTools.formatText(cellValue, true)}</div></td>`
         }).join('')}</tr>`
       })
-      html += '</tfoot>'
+      body += '</tfoot>'
     }
   }
   // 是否半选状态
   const script = !isAllSelected && isIndeterminate ? `<script>(function(){var a=document.querySelector(".${allCls}");if(a){a.indeterminate=true}})()</script>` : ''
-  return html + `</table>${script}</body></html>`
+  body += '</table>' + script
+  return isPrint ? body : createHtmlPage(opts, body)
 }
 
 function toXML ($xetable, opts, columns, datas) {
@@ -412,7 +429,7 @@ function downloadFile ($xetable, opts, content) {
   const { filename, type, download } = opts
   const name = `${filename}.${type}`
   if (window.Blob) {
-    const blob = new Blob([content], { type: `text/${type}` })
+    const blob = getExportBlobByContent(content, opts)
     if (!download) {
       return Promise.resolve({ type, content, blob })
     }
@@ -625,6 +642,39 @@ function handleImport ($xetable, content, opts) {
   }
 }
 
+export function handlePrint ($xetable, opts, content) {
+  const { beforePrintMethod } = opts
+  if (beforePrintMethod) {
+    content = beforePrintMethod({ content, options: opts, $table: $xetable }) || ''
+  }
+  content = createHtmlPage(opts, content)
+  const blob = getExportBlobByContent(content, opts)
+  if (DomTools.browse.msie) {
+    if (printFrame) {
+      try {
+        printFrame.contentDocument.write('')
+        printFrame.contentDocument.clear()
+      } catch (e) { }
+      document.body.removeChild(printFrame)
+    }
+    printFrame = createFrame()
+    document.body.appendChild(printFrame)
+    printFrame.contentDocument.write(content)
+    printFrame.contentDocument.execCommand('print')
+  } else {
+    if (!printFrame) {
+      printFrame = createFrame()
+      printFrame.onload = evnt => {
+        if (evnt.target.src) {
+          evnt.target.contentWindow.print()
+        }
+      }
+      document.body.appendChild(printFrame)
+    }
+    printFrame.src = URL.createObjectURL(blob)
+  }
+}
+
 export default {
   methods: {
     // 在 v3.0 中废弃 exportCsv 方法
@@ -685,7 +735,9 @@ export default {
         // footerFilterMethod: null,
         // exportMethod: null,
         columnFilterMethod: columns && columns.length ? null : ({ column }) => defaultFilterExportColumn(column)
-      }, exportOpts, options, {
+      }, exportOpts, {
+        print: false
+      }, options, {
         columns: expColumns
       })
       if (!opts.filename) {
@@ -824,34 +876,15 @@ export default {
         print: true
       })
       if (!opts.sheetName) {
-        opts.sheetName = opts.filename
+        opts.sheetName = document.title
       }
-      this.exportData(opts).then(({ content, blob }) => {
-        if (DomTools.browse.msie) {
-          if (printFrame) {
-            try {
-              printFrame.contentDocument.write('')
-              printFrame.contentDocument.clear()
-            } catch (e) { }
-            document.body.removeChild(printFrame)
-          }
-          printFrame = createFrame()
-          document.body.appendChild(printFrame)
-          printFrame.contentDocument.write(content)
-          printFrame.contentDocument.execCommand('print')
-        } else {
-          if (!printFrame) {
-            printFrame = createFrame()
-            printFrame.onload = evnt => {
-              if (evnt.target.src) {
-                evnt.target.contentWindow.print()
-              }
-            }
-            document.body.appendChild(printFrame)
-          }
-          printFrame.src = URL.createObjectURL(blob)
-        }
-      })
+      if (opts.content) {
+        handlePrint(this, opts, opts.content)
+      } else {
+        this.exportData(opts).then(({ content }) => {
+          handlePrint(this, opts, content)
+        })
+      }
     },
     _openImport (options) {
       const defOpts = Object.assign({ mode: 'insert', message: true }, options, this.importOpts)

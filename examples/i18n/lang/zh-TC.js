@@ -62,6 +62,7 @@ module.exports = {
         import: '导入',
         export: '导出',
         print: '打印',
+        customPrint: '高级打印',
         fixedType: '固定类型 + 导入/导出',
         contextMenu: '快捷菜单',
         menuPrivilege: '快捷菜单 + 权限控制',
