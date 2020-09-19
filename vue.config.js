@@ -5,7 +5,7 @@ function resolve (dir) {
 }
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/vxe-table/v3/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/vxe-table/v4/' : '/',
   outputDir: 'docs',
   assetsDir: 'static',
   productionSourceMap: false,
@@ -19,7 +19,7 @@ module.exports = {
       entry: 'examples/main.js',
       template: 'public/index.html',
       filename: 'index.html',
-      title: 'vxe-table 3.x (Latest)'
+      title: 'vxe-table 4.x (Latest)'
     }
   },
   transpileDependencies: ['highlight.js'],

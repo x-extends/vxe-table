@@ -154,7 +154,7 @@ gulp.task('move_docs_static', () => {
   return gulp.src([
     'docs/static/**'
   ])
-    .pipe(gulp.dest('docs/v3/static'))
+    .pipe(gulp.dest('docs/v4/static'))
 })
 
 gulp.task('move_docs_root', () => {
@@ -163,7 +163,7 @@ gulp.task('move_docs_root', () => {
     'docs/index.html',
     'docs/logo.png'
   ])
-    .pipe(gulp.dest('docs/v3'))
+    .pipe(gulp.dest('docs/v4'))
 })
 
 gulp.task('clear_docs_temp', () => {
@@ -178,12 +178,12 @@ gulp.task('clear_docs_temp', () => {
 
 gulp.task('move_docs_latest', gulp.series('clear_docs_temp', () => {
   return gulp.src([
-    'docs/v2/**'
+    'docs/v3/**'
   ])
     .pipe(gulp.dest('docs'))
 }))
 
-gulp.task('build_docs_v3', gulp.parallel('move_docs_static', 'move_docs_root'))
+gulp.task('build_docs_v4', gulp.parallel('move_docs_static', 'move_docs_root'))
 
 gulp.task('build_html_docs', () => {
   return gulp.src([
@@ -233,7 +233,7 @@ gulp.task('update_plugin_docs', gulp.series('build_html_docs', 'build_css_docs',
 }))
 
 
-gulp.task('update_docs', gulp.series('build_docs_v3', 'move_docs_latest', 'update_plugin_docs', () => {
+gulp.task('update_docs', gulp.series('build_docs_v4', 'move_docs_latest', 'update_plugin_docs', () => {
   return gulp.src([
     'docs/**'
   ])

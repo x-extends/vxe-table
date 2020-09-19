@@ -2243,7 +2243,7 @@ export default {
           return true
         }
       } else {
-        return betaVersionList.some(item => item.value.indexOf('3.') === 0)
+        return betaVersionList.some(item => item.value.indexOf('4.') === 0)
       }
       return false
     },
@@ -2275,7 +2275,7 @@ export default {
           })
         }
       } else {
-        return betaVersionList.filter(item => item.value.indexOf('3.') === 0)
+        return betaVersionList.filter(item => item.value.indexOf('4.') === 0)
       }
       return stableVersionList
     },
@@ -2342,9 +2342,9 @@ export default {
         const betaVersionList = []
         if (versions) {
           versions.forEach(version => {
-            if (/^3.\d{1,3}.\d{1,3}$/.test(version)) {
+            if (/^4.\d{1,3}.\d{1,3}$/.test(version)) {
               stableVersionList.push({ label: version, value: version })
-            } else if (/^3.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(version)) {
+            } else if (/^4.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(version)) {
               betaVersionList.push({ label: version, value: version })
             }
           })
