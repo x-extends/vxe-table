@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 import { ModalController } from './modal'
 
+import { PrintOptons } from './extends/export'
 import { renderer } from './extends/renderer'
 import { interceptor } from './extends/interceptor'
 import { commands } from './extends/commands'
@@ -72,6 +73,10 @@ export interface VXETableStatic {
    * 全局的模态窗口
    */
   modal: typeof ModalController;
+  /**
+   * 全局打印
+   */
+  print(options: PrintOptons): any;
   /**
    * 安装插件
    * @param plugin 插件

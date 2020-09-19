@@ -154,6 +154,10 @@ export interface PrintOptons {
    */
   columns?: ColumnInfo[];
   /**
+   * 自定义打印内容
+   */
+  content?: string;
+  /**
    * 列过滤方法
    */
   columnFilterMethod?(params: { column: ColumnInfo, $columnIndex: number }): boolean;
@@ -165,6 +169,10 @@ export interface PrintOptons {
    * 表尾过滤方法
    */
   footerFilterMethod?(params: { items: any[], $rowIndex: number }): boolean;
+  /**
+   * 打印之前的方法，可以通过返回自定义打印的内容
+   */
+  beforePrintMethod?(params: { content: string, options: PrintOptons }): string;
 
   [name: string]: any;
 }
