@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import { DomTools } from '../../tools'
 
 const browse = DomTools.browse

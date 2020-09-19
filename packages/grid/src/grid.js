@@ -1,5 +1,5 @@
 import Table from '../../table'
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'

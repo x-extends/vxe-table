@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from '../../body'
@@ -296,8 +296,7 @@ export default {
       initStore: {
         filter: false,
         import: false,
-        export: false,
-        custom: false
+        export: false
       },
       // 当前选中的筛选列
       filterStore: {
@@ -407,11 +406,6 @@ export default {
         message: true,
         isHeader: false,
         isFooter: false
-      },
-      // 自定义列相关信息
-      customStore: {
-        inited: false,
-        visible: false
       }
     }
   },
@@ -896,16 +890,6 @@ export default {
           props: {
             defaultOptions: this.exportParams,
             storeData: this.exportStore
-          }
-        })
-      )
-    }
-    // 部件 - 自定义列
-    if (initStore.custom && this.customConfig) {
-      tableComps.push(
-        h('vxe-custom-panel', {
-          props: {
-            storeData: this.customStore
           }
         })
       )

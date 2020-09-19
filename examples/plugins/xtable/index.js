@@ -27,7 +27,6 @@ import {
 
   Edit,
   Export,
-  Custom,
   Keyboard,
   Validator
 } from '../../../packages/vxe-table'
@@ -79,7 +78,6 @@ Vue.use(Pulldown)
 
 Vue.use(Edit)
 Vue.use(Export)
-Vue.use(Custom)
 Vue.use(Keyboard)
 Vue.use(Validator)
 // 再安装核心
@@ -87,6 +85,9 @@ Vue.use(Table)
 
 // 给 vue 实例挂载全局窗口对象
 Vue.prototype.$XModal = VXETable.modal
+
+// 给 vue 实例挂载全局打印对象
+Vue.prototype.$XPrint = VXETable.print
 
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)

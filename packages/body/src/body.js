@@ -1,9 +1,15 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 const cellType = 'body'
+
+const lineOffsetSizes = {
+  mini: 3,
+  small: 2,
+  medium: 1
+}
 
 // 滚动、拖动过程中不需要触发
 function isOperateMouse ($xetable) {
@@ -23,15 +29,7 @@ function countTreeExpand (prevRow, params) {
 }
 
 function getOffsetSize ($xetable) {
-  switch ($xetable.vSize) {
-    case 'mini':
-      return 3
-    case 'small':
-      return 2
-    case 'medium':
-      return 1
-  }
-  return 0
+  return lineOffsetSizes[$xetable.vSize] || 0
 }
 
 function calcTreeLine (params, items) {
@@ -46,9 +44,12 @@ function calcTreeLine (params, items) {
 function renderLine (h, _vm, $xetable, rowLevel, items, params) {
   const column = params.column
   const { treeOpts, treeConfig } = $xetable
-  return column.slots && column.slots.line
-    ? column.slots.line.call($xetable, params, h)
-    : column.treeNode && treeConfig && treeOpts.line ? [
+  const { slots, treeNode } = column
+  if (slots && slots.line) {
+    return slots.line.call($xetable, params, h)
+  }
+  if (treeConfig && treeNode && treeOpts.line) {
+    return [
       h('div', {
         class: 'vxe-tree--line-wrapper'
       }, [
@@ -60,7 +61,9 @@ function renderLine (h, _vm, $xetable, rowLevel, items, params) {
           }
         })
       ])
-    ] : []
+    ]
+  }
+  return []
 }
 
 function mergeMethod (mergeList, _rowIndex, _columnIndex) {
@@ -82,7 +85,6 @@ function mergeMethod (mergeList, _rowIndex, _columnIndex) {
  */
 function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, columns, items) {
   const {
-    _e,
     $listeners: tableListeners,
     afterFullData,
     tableData,
@@ -230,6 +232,47 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && editOpts.showStatus) {
     isDirty = $xetable.isUpdateByRow(row, column.property)
   }
+  const tdVNs = []
+  if (allColumnOverflow && fixedHiddenColumn) {
+    tdVNs.push(
+      h('div', {
+        class: ['vxe-cell', {
+          'c--title': showTitle,
+          'c--tooltip': showTooltip,
+          'c--ellipsis': showEllipsis
+        }]
+      })
+    )
+  } else {
+    // 渲染单元格
+    tdVNs.push(
+      ...renderLine(h, _vm, $xetable, rowLevel, items, params),
+      h('div', {
+        class: ['vxe-cell', {
+          'c--title': showTitle,
+          'c--tooltip': showTooltip,
+          'c--ellipsis': showEllipsis
+        }],
+        attrs: {
+          title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
+        }
+      }, column.renderCell(h, params))
+    )
+    if (hasDefaultTip && hasValidError) {
+      tdVNs.push(
+        h('div', {
+          class: 'vxe-cell--valid',
+          style: validStore.rule && validStore.rule.maxWidth ? {
+            width: `${validStore.rule.maxWidth}px`
+          } : null
+        }, [
+          h('span', {
+            class: 'vxe-cell--valid-msg'
+          }, validStore.content)
+        ])
+      )
+    }
+  }
   return h('td', {
     class: ['vxe-body--column', column.id, {
       [`col--${cellAlign}`]: cellAlign,
@@ -248,38 +291,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     attrs,
     style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
     on: tdOns
-  }, allColumnOverflow && fixedHiddenColumn
-    ? [
-      h('div', {
-        class: ['vxe-cell', {
-          'c--title': showTitle,
-          'c--tooltip': showTooltip,
-          'c--ellipsis': showEllipsis
-        }]
-      })
-    ]
-    : renderLine(h, _vm, $xetable, rowLevel, items, params).concat([
-      h('div', {
-        class: ['vxe-cell', {
-          'c--title': showTitle,
-          'c--tooltip': showTooltip,
-          'c--ellipsis': showEllipsis
-        }],
-        attrs: {
-          title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
-        }
-      }, column.renderCell(h, params)),
-      hasDefaultTip ? hasValidError ? h('div', {
-        class: 'vxe-cell--valid',
-        style: validStore.rule && validStore.rule.maxWidth ? {
-          width: `${validStore.rule.maxWidth}px`
-        } : null
-      }, [
-        h('span', {
-          class: 'vxe-cell--valid-msg'
-        }, validStore.content)
-      ]) : _e() : null
-    ]))
+  }, tdVNs)
 }
 
 function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tableColumn) {

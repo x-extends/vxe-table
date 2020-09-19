@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import vSize from '../../mixins/size'
@@ -81,9 +81,6 @@ function renderCustoms (h, _vm) {
   const checkMethod = $xetable ? $xetable.customOpts.checkMethod : null
   if (customOpts.trigger === 'manual') {
     // 手动触发
-  } else if (customOpts.trigger === 'popup') {
-    // 弹窗
-    customBtnOns.click = _vm.customPanelEvent
   } else if (customOpts.trigger === 'hover') {
     // hover 触发
     customBtnOns.mouseenter = _vm.handleMouseenterSettingEvent
@@ -478,10 +475,6 @@ export default {
       })
       customStore.isAll = isAll
       this.checkCustomStatus()
-    },
-    customPanelEvent () {
-      const { $xetable } = this
-      $xetable.openCustom()
     },
     handleGlobalMousedownEvent (evnt) {
       if (!DomTools.getEventTargetNode(evnt, this.$refs.customWrapper).flag) {

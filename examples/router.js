@@ -72,6 +72,7 @@ import TableFooterMaxHeight from './views/table/advanced/MaxHeight.vue'
 import TableImport from './views/table/advanced/Import.vue'
 import TableExport from './views/table/advanced/Export.vue'
 import TablePrint from './views/table/advanced/Print.vue'
+import TableCustomPrint from './views/table/advanced/CustomPrint.vue'
 import TableFixedType from './views/table/advanced/FixedType.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
 import TableMenuPrivilege from './views/table/advanced/MenuPrivilege.vue'
@@ -633,6 +634,11 @@ export default new Router({
       path: '/table/advanced/print',
       name: 'TablePrint',
       component: TablePrint
+    },
+    {
+      path: '/table/advanced/customPrint',
+      name: 'TableCustomPrint',
+      component: TableCustomPrint
     },
     {
       path: '/table/advanced/fixedType',

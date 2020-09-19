@@ -61,16 +61,16 @@ export default {
           version: '',
           type: '',
           enum: '',
-          defVal: 'type, callback',
+          defVal: 'type: string, callback: (params, event) => any',
           list: []
         },
         {
-          name: 'mixin(map)',
+          name: 'mixin(options)',
           desc: '添加多个',
           version: '',
           type: '',
           enum: '',
-          defVal: 'map',
+          defVal: 'options?: { [type: string]: (params, event) => any }',
           list: []
         },
         {
@@ -79,7 +79,7 @@ export default {
           version: '',
           type: '',
           enum: '',
-          defVal: 'name',
+          defVal: 'type: string',
           list: []
         }
       ],

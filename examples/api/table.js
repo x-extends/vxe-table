@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 
 const contextMenuAPI = [
   {
@@ -302,6 +302,15 @@ const exportDataAPI = [
     enum: '',
     defVal: '',
     list: []
+  },
+  {
+    name: 'style',
+    desc: '只对 type=html 有效，自定义文档的 css 样式信息',
+    version: '',
+    type: 'string',
+    enum: '',
+    defVal: '',
+    list: []
   }
 ]
 
@@ -353,7 +362,26 @@ const importDataAPI = [
   }
 ]
 
-const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod'].includes(item.name))
+const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod'].includes(item.name)).concat([
+  {
+    name: 'content',
+    desc: '自定义打印的内容',
+    version: '',
+    type: 'string',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'beforePrintMethod',
+    desc: '该函数 Function({ content, options }) 会在打印之前触发，可以通过返回自定义打印的内容',
+    version: '',
+    type: '({ content, options }) => string',
+    enum: '',
+    defVal: '',
+    list: []
+  }
+])
 
 const apis = [
   {
@@ -2809,12 +2837,12 @@ const apis = [
         list: []
       },
       {
-        name: 'getColumns(columnIndex)',
-        desc: '获取表格的可视列，也可以指定索引获取列',
+        name: 'getColumns()',
+        desc: '获取表格的可视的列',
         version: '',
         type: 'Array',
         enum: '',
-        defVal: 'columnIndex?: number',
+        defVal: '',
         list: []
       },
       {
@@ -3709,12 +3737,12 @@ const apis = [
         list: []
       },
       {
-        name: 'scrollToRow(row)',
+        name: 'scrollToRow(row, column)',
         desc: '如果有滚动条，则滚动到对应的行（对于某些特定的场景可能会用到，比如定位到某一行）',
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: 'row: Row',
+        defVal: 'row: Row, column?: ColumnConfig',
         list: []
       },
       {

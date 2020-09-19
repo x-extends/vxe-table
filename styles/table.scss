@@ -58,7 +58,7 @@
     }
     &[disabled] {
       cursor: not-allowed;
-      background-color: #f3f3f3;
+      background-color: $vxe-input-disabled-background-color;
     }
   }
   .vxe-default-input,
@@ -172,9 +172,9 @@
     width: 7px;
     height: 7px;
     border-style: solid;
-    border-color: #fff;
+    border-color: $vxe-table-cell-main-area-extension-border-color;
     border-width: 1px 0 0 1px;
-    background-color: $vxe-table-cell-area-border-color;
+    background-color: $vxe-table-cell-main-area-extension-background-color;
     pointer-events: auto;
     cursor: crosshair;
   }
@@ -1028,8 +1028,8 @@
           display: inline-block;
           border-radius: $vxe-border-radius;
           padding: 8px 12px;
-          color: #fff;
-          background-color: $vxe-table-validate-error-background-color;
+          color: $vxe-table-validate-tooltip-error-color;
+          background-color: $vxe-table-validate-tooltip-error-background-color;
           pointer-events: auto;
         }
       }

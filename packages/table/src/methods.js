@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import Cell from '../../cell'
 import VXETable from '../../v-x-e-table'
@@ -114,7 +114,6 @@ function computeVirtualY (_vm) {
     if (!rowHeight) {
       rowHeight = rowHeightMaps[vSize || 'default']
     }
-    rowHeight = Math.max(48, rowHeight)
     const visibleSize = Math.max(8, Math.ceil(tableBodyElem.clientHeight / rowHeight) + 2)
     return { rowHeight, visibleSize }
   }
@@ -971,7 +970,7 @@ const Methods = {
     if (this.mergeFooterItems) {
       this.handleDefaultMergeFooterItems()
     }
-    this.$nextTick(() => setTimeout(this.recalculate))
+    this.$nextTick(() => requestAnimationFrame(this.recalculate))
   },
   /**
    * 隐藏指定列
@@ -1284,8 +1283,7 @@ const Methods = {
    */
   refreshScroll () {
     const { lastScrollLeft, lastScrollTop } = this
-    this.clearScroll()
-    return this.$nextTick().then(() => {
+    return this.clearScroll().then(() => {
       if (lastScrollLeft || lastScrollTop) {
         // 重置最后滚动状态
         this.lastScrollLeft = 0
@@ -1509,24 +1507,27 @@ const Methods = {
           const listElem = elemStore[`${name}-${layout}-list`]
           if (isGroup && listElem) {
             XEUtils.arrayEach(listElem.querySelectorAll('.col--group'), thElem => {
-              const column = this.getColumnNode(thElem).item
-              const { showHeaderOverflow } = column
-              const cellOverflow = XEUtils.isBoolean(showHeaderOverflow) ? showHeaderOverflow : allColumnHeaderOverflow
-              const showEllipsis = cellOverflow === 'ellipsis'
-              const showTitle = cellOverflow === 'title'
-              const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-              const hasEllipsis = showTitle || showTooltip || showEllipsis
-              let childWidth = 0
-              let countChild = 0
-              if (hasEllipsis) {
-                XEUtils.eachTree(column.children, item => {
-                  if (!item.children || !column.children.length) {
-                    countChild++
-                  }
-                  childWidth += item.renderWidth
-                })
+              const colNode = this.getColumnNode(thElem)
+              if (colNode) {
+                const column = colNode.item
+                const { showHeaderOverflow } = column
+                const cellOverflow = XEUtils.isBoolean(showHeaderOverflow) ? showHeaderOverflow : allColumnHeaderOverflow
+                const showEllipsis = cellOverflow === 'ellipsis'
+                const showTitle = cellOverflow === 'title'
+                const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
+                const hasEllipsis = showTitle || showTooltip || showEllipsis
+                let childWidth = 0
+                let countChild = 0
+                if (hasEllipsis) {
+                  XEUtils.eachTree(column.children, item => {
+                    if (!item.children || !column.children.length) {
+                      countChild++
+                    }
+                    childWidth += item.renderWidth
+                  })
+                }
+                thElem.style.width = hasEllipsis ? `${childWidth - countChild - (border ? 2 : 0)}px` : ''
               }
-              thElem.style.width = hasEllipsis ? `${childWidth - countChild - (border ? 2 : 0)}px` : ''
             })
           }
         } else if (layout === 'body') {
@@ -1748,7 +1749,7 @@ const Methods = {
                   // 如果点击了当前表格之外
                   !getEventTargetNode(evnt, $el).flag
               ) {
-                setTimeout(() => this.clearActived(evnt))
+                requestAnimationFrame(() => this.clearActived(evnt))
               }
             })
           }
@@ -3397,8 +3398,10 @@ const Methods = {
       const { sYOpts, sXOpts, scrollXLoad, scrollYLoad, scrollXStore, scrollYStore } = this
       // 计算 X 逻辑
       if (scrollXLoad) {
+        const { visibleSize: visibleXSize } = computeVirtualX(this)
         const offsetXSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : browse.msie ? 10 : (browse.edge ? 5 : 0)
         scrollXStore.offsetSize = offsetXSize
+        scrollXStore.visibleSize = visibleXSize
         scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
         this.updateScrollXData()
       } else {
@@ -3534,7 +3537,9 @@ const Methods = {
         rest.push(DomTools.rowToVisible(this, row))
       }
     }
-    rest.push(this.scrollToColumn(column))
+    if (column) {
+      rest.push(this.scrollToColumn(column))
+    }
     return Promise.all(rest)
   },
   /**
@@ -3575,16 +3580,22 @@ const Methods = {
     const { tableBody, rightBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
     const rightBodyElem = rightBody ? rightBody.$el : null
-    const bodyTargetElem = rightBodyElem || tableBodyElem
     const tableFooterElem = tableFooter ? tableFooter.$el : null
-    const footerTargetElem = tableFooterElem || tableBodyElem
-    if (bodyTargetElem) {
-      bodyTargetElem.scrollTop = 0
+    if (rightBodyElem) {
+      rightBodyElem.scrollTop = 0
     }
-    if (footerTargetElem) {
-      footerTargetElem.scrollLeft = 0
+    if (tableFooterElem) {
+      tableFooterElem.scrollLeft = 0
     }
-    return new Promise(resolve => setTimeout(() => resolve(this.$nextTick())))
+    if (tableBodyElem) {
+      tableBodyElem.scrollTop = 0
+      tableBodyElem.scrollLeft = 0
+    }
+    return new Promise(resolve => {
+      requestAnimationFrame(() => {
+        resolve(this.$nextTick())
+      })
+    })
   },
   /**
    * 更新表尾合计
@@ -3756,7 +3767,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,clearCopyCellArea,setCellAreas,openFind,openReplace,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print,openCustom'.split(',')
+const funcs = 'setFilter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,clearCopyCellArea,setCellAreas,openFind,openReplace,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,exportData,openImport,importData,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

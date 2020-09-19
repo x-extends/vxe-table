@@ -46,7 +46,8 @@ export default {
         exclude: 'Exclusive',
         between: 'Betweenness',
         custom: 'Custom filter',
-        insensitive: 'Case insensitive'
+        insensitive: 'Case insensitive',
+        isSensitive: 'Case sensitive'
       },
       combination: {
         menus: {

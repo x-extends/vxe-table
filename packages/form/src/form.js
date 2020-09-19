@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
@@ -262,6 +262,9 @@ export default {
       })
       this.collectItem = list.map(item => createItem(this, item))
       return this.$nextTick()
+    },
+    getItems () {
+      return this.formItems.slice(0)
     },
     toggleCollapse () {
       this.collapseAll = !this.collapseAll

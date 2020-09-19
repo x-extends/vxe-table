@@ -40,7 +40,6 @@ const components = [
   'menu',
   'edit',
   'export',
-  'custom',
   'keyboard',
   'validator',
   'v-x-e-table'

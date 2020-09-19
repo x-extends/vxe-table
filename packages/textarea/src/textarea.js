@@ -1,9 +1,9 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import { UtilTools } from '../../tools'
 
-let autoTxtElem
+const autoTxtElem = document.createElement('div')
 
 export default {
   name: 'VxeTextarea',
@@ -48,15 +48,11 @@ export default {
       this.updateAutoTxt()
     }
   },
-  created () {
-    if (!autoTxtElem) {
-      autoTxtElem = document.createElement('div')
-      document.body.appendChild(autoTxtElem)
-    }
-  },
   mounted () {
-    this.updateAutoTxt()
-    this.handleResize()
+    if (this.value) {
+      this.updateAutoTxt()
+      this.handleResize()
+    }
   },
   render (h) {
     const { defaultEvents, value, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount } = this
@@ -123,6 +119,9 @@ export default {
     updateAutoTxt () {
       const { $refs, value, size, autosize } = this
       if (autosize) {
+        if (!autoTxtElem.parentNode) {
+          document.body.appendChild(autoTxtElem)
+        }
         const textElem = $refs.textarea
         const textStyle = getComputedStyle(textElem)
         autoTxtElem.className = ['vxe-textarea--autosize', size ? `size--${size}` : ''].join(' ')

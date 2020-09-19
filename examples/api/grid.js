@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 import tableAPI from './table'
 import columnAPI from './column'
 import toolbarAPI from './toolbar'

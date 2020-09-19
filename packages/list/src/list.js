@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import { DomTools, GlobalEvent, ResizeEvent } from '../../tools'
@@ -176,14 +176,18 @@ export default {
       if (scrollBodyElem) {
         scrollBodyElem.scrollTop = 0
       }
+      return new Promise(resolve => {
+        requestAnimationFrame(() => {
+          resolve(this.$nextTick())
+        })
+      })
     },
     /**
      * 刷新滚动条
      */
     refreshScroll () {
       const { lastScrollLeft, lastScrollTop } = this
-      this.clearScroll()
-      return this.$nextTick().then(() => {
+      return this.clearScroll().then(() => {
         if (lastScrollLeft || lastScrollTop) {
           this.lastScrollLeft = 0
           this.lastScrollTop = 0
@@ -204,7 +208,6 @@ export default {
       if (XEUtils.isNumber(scrollTop)) {
         scrollBodyElem.scrollTop = scrollTop
       }
-      DomTools.triggerEvent(scrollBodyElem, 'scroll')
       if (this.scrollYLoad) {
         return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
       }

@@ -6,8 +6,6 @@
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.com/package/vxe-table)
 [![npm build](https://travis-ci.com/x-extends/vxe-table.svg?branch=master)](https://travis-ci.com/x-extends/vxe-table)
 [![npm downloads](https://img.shields.io/npm/dt/vxe-table.svg?style=flat-square)](https://npm-stat.com/charts.html?package=vxe-table)
-[![gzip size: JS](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/index.umd.min.js?compression=gzip&label=gzip%20size:%20JS)](https://unpkg.com/vxe-table/lib/index.umd.min.js)
-[![gzip size: CSS](https://img.badgesize.io/https://unpkg.com/vxe-table/lib/style.min.css?compression=gzip&label=gzip%20size:%20CSS&color=green)](https://unpkg.com/vxe-table/lib/style.min.css)
 [![issues](https://img.shields.io/github/issues/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/issues)
 [![issues closed](https://img.shields.io/github/issues-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/issues?q=is%3Aissue+is%3Aclosed)
 [![pull requests](https://img.shields.io/github/issues-pr/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls)
@@ -24,8 +22,8 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
 * [Donation](#donation)
   * [x] v1.0 100% Based on vue2.6+, it supports all mainstream browsers and realizes all practical functions of tables
   * [x] v2.0 &nbsp;100% Based on vue2.6+, it supports all mainstream browsers with both functions and performance
-  * [x] v3.0 &nbsp;&nbsp;80% Based on vue2.6+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
-  * [ ] v4.0 &nbsp;&nbsp;0% Based on vue3+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
+  * [x] v3.0 &nbsp;&nbsp;100% Based on vue2.6+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
+  * [x] v4.0 &nbsp;&nbsp;10% Based on vue3+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
 
 👉 If you have a better suggestion, optimization point or Bug, please feel free to ask [Issues](https://github.com/x-extends/vxe-table/issues/390)
 
@@ -99,7 +97,7 @@ Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.ne
 import Vue from 'vue'
 import 'xe-utils'
 import VXETable from 'vxe-table'
-import 'vxe-table/lib/index.css'
+import 'vxe-table/lib/style.css'
 
 Vue.use(VXETable)
 ```
@@ -108,7 +106,7 @@ Vue.use(VXETable)
 
 ```HTML
 <!-- Style -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/index.css">
+<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
 <!-- Script -->
 <script src="https://unpkg.com/xe-utils"></script>
 <script src="https://unpkg.com/vxe-table"></script>

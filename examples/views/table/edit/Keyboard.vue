@@ -48,10 +48,14 @@
           | Ctrl + M | (isMerge) 将选取的单元格合并或取消合并 |
           | Ctrl + F | (isFNR) 查找单元格数据，全表或查找指定区域单元格数据 |
           | Ctrl + H | (isFNR) 替换单元格数据，全表或替换指定区域单元格数据 |
-          | Arrow Up ↑ | （isArrow）如果存在，则移动到上面的单元格 |
-          | Arrow Down ↓ | （isArrow）如果存在，则移动到下面的单元格 |
-          | Arrow Left ← | （isArrow）如果存在，则移动到左边的单元格 |
-          | Arrow Right → | （isArrow）如果存在，则移动到右边的单元格 |
+          | ArrowUp | （isArrow）如果存在，则移动到上面的单元格 |
+          | Shift + ArrowUp | （isArrow）如果存在，则往上面延伸单元格区域 |
+          | ArrowDown | （isArrow）如果存在，则移动到下面的单元格 |
+          | Shift + ArrowDown | （isArrow）如果存在，则往下面延伸单元格区域 |
+          | ArrowLeft | （isArrow）如果存在，则移动到左边的单元格 |
+          | Shift + ArrowLeft | （isArrow）如果存在，则往左边延伸单元格区域 |
+          | ArrowRight | （isArrow）如果存在，则移动到右边的单元格 |
+          | Shift + ArrowRight | （isArrow）如果存在，则往右边延伸单元格区域 |
           | Tab | （isTab）如果存在，则移动到右边单元格；如果存在区域，则在指定区域内移动；如果移动到最后一列，则从下一行开始移到，以此循环 |
           | Tab + Shift | （isTab）如果存在，则移动到左边单元格，则在指定区域内移动；如果移动到第一列，则从上一行开始移到，以此循环 |
           | Spacebar | (isChecked) 如果选取的区域存在复选框，则切换勾选状态 |

@@ -84,7 +84,7 @@
   .vxe-switch--label {
     opacity: 0;
     display: block;
-    color: #fff;
+    color: $vxe-switch-font-color;
     font-size: 0.8em;
   }
   .vxe-switch--icon {
@@ -94,7 +94,7 @@
     width: 1.2em;
     height: 1.2em;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: $vxe-switch-icon-background-color;
   }
   .vxe-switch--label-icon {
     margin-right: 0.25em;

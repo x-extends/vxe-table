@@ -41,9 +41,11 @@
     <div class="page-container">
       <div class="aside" :class="{visible: showLeft}">
         <div class="header">
-          <div v-if="stableVersionList.length" class="version-list">
-            <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
-            <vxe-select class="stable-select" v-model="selectStableVersion" size="mini" :options="stableVersionList"></vxe-select>
+          <div class="version-list">
+            <template v-if="stableVersionList.length">
+              <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
+              <vxe-select class="stable-select" v-model="selectStableVersion" size="mini" :options="stableVersionList"></vxe-select>
+            </template>
             <template v-if="showBetaVetsion">
               <span class="title">{{  $t('app.body.label.latestVersion')}}</span>
               <vxe-select class="latest-select" v-model="selectBetaVersion" size="mini" :options="newBetsVersionList"></vxe-select>
@@ -126,7 +128,7 @@
         <div class="support-pay-step">
           <p style="font-size: 12px;">联系邮件： <a class="link" href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
           <p class="title">1. 扫码申请加入 QQ 群<br><img src="static/support/qq.png"></p>
-          <p class="title">2. 通过支付宝或微信付费：¥{{ supportGroupPrice }}<br>3. 付费完成后点击 "联系收款方"，留言QQ号即可<br><img src="static/donation/pay.jpg"></p>
+          <p class="title">2. 通过支付宝或微信付费：¥{{ supportDiscountPrice || supportGroupPrice }}<br>3. 付费完成后点击 "联系收款方"，留言QQ号即可<br><img src="static/donation/pay.jpg"></p>
           <p class="title">（注意：必须留言QQ号，否则将无法审批通过）</p>
         </div>
       </template>
@@ -141,7 +143,7 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
-      supportDiscountPrice: 266,
+      supportDiscountPrice: 288,
       supportGroupPrice: 500,
       supportLoading: false,
       supportVisible: false,
@@ -685,6 +687,12 @@ export default {
               label: 'app.aside.nav.print',
               locat: {
                 name: 'TablePrint'
+              }
+            },
+            {
+              label: 'app.aside.nav.customPrint',
+              locat: {
+                name: 'TableCustomPrint'
               }
             },
             {
@@ -1560,13 +1568,13 @@ export default {
               locat: {
                 name: 'TableScrollFullCols'
               }
-            },
-            {
-              label: 'app.aside.nav.infiniteScroll',
-              disabled: true,
-              locat: {
-                name: 'TableScroll'
-              }
+            // },
+            // {
+            //   label: 'app.aside.nav.infiniteScroll',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScroll'
+            //   }
             }
           ]
         },
@@ -2234,34 +2242,40 @@ export default {
         } else {
           return true
         }
+      } else {
+        return betaVersionList.some(item => item.value.indexOf('3.') === 0)
       }
       return false
     },
     newBetsVersionList () {
       const { betaVersionList, stableVersionList } = this
-      if (betaVersionList.length && stableVersionList.length) {
-        const stableNums = stableVersionList[0].value.split('-')[0].split('.')
-        const stable1 = XEUtils.toNumber(stableNums[0])
-        const stable2 = XEUtils.toNumber(stableNums[1])
-        const stable3 = XEUtils.toNumber(stableNums[2])
-        return betaVersionList.filter(pack => {
-          const betaNums = pack.value.split('-')[0].split('.')
-          const beta1 = XEUtils.toNumber(betaNums[0])
-          const beta2 = XEUtils.toNumber(betaNums[1])
-          const beta3 = XEUtils.toNumber(betaNums[2])
-          if (beta1 > stable1) {
-            return true
-          } else if (beta1 === stable1) {
-            if (beta2 > stable2) {
+      if (stableVersionList.length) {
+        if (betaVersionList.length) {
+          const stableNums = stableVersionList[0].value.split('-')[0].split('.')
+          const stable1 = XEUtils.toNumber(stableNums[0])
+          const stable2 = XEUtils.toNumber(stableNums[1])
+          const stable3 = XEUtils.toNumber(stableNums[2])
+          return betaVersionList.filter(pack => {
+            const betaNums = pack.value.split('-')[0].split('.')
+            const beta1 = XEUtils.toNumber(betaNums[0])
+            const beta2 = XEUtils.toNumber(betaNums[1])
+            const beta3 = XEUtils.toNumber(betaNums[2])
+            if (beta1 > stable1) {
               return true
-            } else if (beta2 === stable2) {
-              if (beta3 > stable3) {
+            } else if (beta1 === stable1) {
+              if (beta2 > stable2) {
                 return true
+              } else if (beta2 === stable2) {
+                if (beta3 > stable3) {
+                  return true
+                }
               }
             }
-          }
-          return false
-        })
+            return false
+          })
+        }
+      } else {
+        return betaVersionList.filter(item => item.value.indexOf('3.') === 0)
       }
       return stableVersionList
     },

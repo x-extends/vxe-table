@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import VXEModal from './src/modal'
 import allActivedModals from './src/activities'
 import VXETable from '../v-x-e-table'

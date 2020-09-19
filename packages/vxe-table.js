@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import VXETable from './v-x-e-table'
 import Table from './table'
 import Column from './column'
@@ -24,7 +24,6 @@ import Pulldown from './pulldown'
 
 import Edit from './edit'
 import Export from './export'
-import Custom from './custom'
 import Keyboard from './keyboard'
 import Validator from './validator'
 import zhCN from './locale/lang/zh-CN'
@@ -55,7 +54,6 @@ const components = [
 
   Edit,
   Export,
-  Custom,
   Keyboard,
   Validator,
   // 核心
@@ -106,7 +104,6 @@ export * from './pulldown'
 
 export * from './edit'
 export * from './export'
-export * from './custom'
 export * from './keyboard'
 export * from './validator'
 export * from './table'

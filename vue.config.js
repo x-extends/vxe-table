@@ -19,7 +19,7 @@ module.exports = {
       entry: 'examples/main.js',
       template: 'public/index.html',
       filename: 'index.html',
-      title: 'vxe-table 3.x (Next)'
+      title: 'vxe-table 3.x (Latest)'
     }
   },
   transpileDependencies: ['highlight.js'],
@@ -32,19 +32,19 @@ module.exports = {
     if (process.env.npm_lifecycle_event && process.env.npm_lifecycle_event.indexOf('lib') === 0) {
       const XEUtils = {
         root: 'XEUtils',
-        commonjs: 'xe-utils/methods/xe-utils',
-        commonjs2: 'xe-utils/methods/xe-utils',
+        commonjs: 'xe-utils/ctor',
+        commonjs2: 'xe-utils/ctor',
         amd: 'xe-utils'
       }
       if (config.has('externals')) {
         config.externals
           // .set('xe-utils', XEUtils)
-          .set('xe-utils/methods/xe-utils', XEUtils)
+          .set('xe-utils/ctor', XEUtils)
       } else {
         config
           .set('externals', {
             // 'xe-utils': XEUtils,
-            'xe-utils/methods/xe-utils': XEUtils
+            'xe-utils/ctor': XEUtils
           })
       }
     }
