@@ -75,12 +75,12 @@ export default {
         item.checked = isAll
       })
     },
-    confirmFilterEvent () {
+    confirmFilterEvent (evnt) {
       const { params, option, valList } = this
       const { data } = option
       const { $panel } = params
       data.vals = valList.filter(item => item.checked).map(item => item.value)
-      option.checked = true
+      $panel.changeOption(evnt, true, option)
       $panel.confirmFilter()
     },
     resetFilterEvent () {

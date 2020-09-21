@@ -31,30 +31,6 @@ VXETable.renderer.add('FilterInput', {
   }
 })
 
-// 创建一个支持列内容的筛选
-VXETable.renderer.add('FilterContent', {
-  // 不显示底部按钮，使用自定义的按钮
-  isFooter: false,
-  // 筛选模板
-  renderFilter (h, renderOpts, params) {
-    return [
-      <filter-content params={ params }></filter-content>
-    ]
-  },
-  // 重置数据方法
-  filterResetMethod ({ options }) {
-    options.forEach(option => {
-      option.data = { vals: [], sVal: '' }
-    })
-  },
-  // 筛选数据方法
-  filterMethod ({ option, row, column }) {
-    const { vals } = option.data
-    const cellValue = XEUtils.get(row, column.property)
-    return vals.some(val => val === cellValue)
-  }
-})
-
 // 创建一个条件的渲染器
 VXETable.renderer.add('FilterComplex', {
   // 不显示底部按钮，使用自定义的按钮
@@ -79,6 +55,30 @@ VXETable.renderer.add('FilterComplex', {
       return cellValue.indexOf(name) > -1
     }
     return false
+  }
+})
+
+// 创建一个支持列内容的筛选
+VXETable.renderer.add('FilterContent', {
+  // 不显示底部按钮，使用自定义的按钮
+  isFooter: false,
+  // 筛选模板
+  renderFilter (h, renderOpts, params) {
+    return [
+      <filter-content params={ params }></filter-content>
+    ]
+  },
+  // 重置数据方法
+  filterResetMethod ({ options }) {
+    options.forEach(option => {
+      option.data = { vals: [], sVal: '' }
+    })
+  },
+  // 筛选数据方法
+  filterMethod ({ option, row, column }) {
+    const { vals } = option.data
+    const cellValue = XEUtils.get(row, column.property)
+    return vals.includes(cellValue)
   }
 })
 
