@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      可编辑渲染 <table-column-api-link prop="edit-render"/>，查看 <a class="link" href="https://github.com/x-extends/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      可编辑渲染 <table-column-api-link prop="edit-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/v3/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       autofocus 自动聚焦的类名<br>
       renderHeader (h, renderOpts, <vxe-tooltip content="params: { column, columnIndex, columnIndex, $rowIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 表头<br>
