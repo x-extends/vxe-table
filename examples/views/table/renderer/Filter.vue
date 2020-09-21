@@ -65,7 +65,10 @@ export default {
           filterMethod ({ option, row, column }) {
             const { data } = option
             const cellValue = XEUtils.get(row, column.property)
-            return XEUtils.toString(cellValue).indexOf(data) > -1
+            if (cellValue) {
+              return cellValue.indexOf(data) > -1
+            }
+            return false
           }
         })
         `,
