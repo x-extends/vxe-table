@@ -2,8 +2,9 @@
   <div>
     <p class="tip">
       内置打印模块：可以非常简单将任何视图直接输出打印，可以通过 <table-api-link prop="content"/> 或者 <table-api-link prop="beforePrintMethod"/> 自定义内容模板<br>
-      全局实例对象：this.$XPrint || VXETable.print<br>
-      <span class="red">（注：<table-api-link prop="footer-method"/> 模板请自行实现，该示例仅供参考）</span>
+      给 vue 实例挂载属性，属性名自行定义：<br>
+      Vue.prototype.$XPrint = VXETable.print<br>
+      <span class="red">（注：打印的样式及模板自行实现，该示例仅供参考）</span>
     </p>
 
     <vxe-toolbar print>

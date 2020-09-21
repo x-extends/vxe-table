@@ -10,7 +10,8 @@
       alert(message: string, title?: string, options?: ModalOptions) 动态创建提示框<br>
       confirm(message: string, title?: string, options?: ModalOptions) 动态创建确认框<br>
       close(id?: string) 手动关闭当前活动的窗口<br>
-      全局实例对象：this.$XModal || VXETable.modal 或者 ModalController<br>
+      给 vue 实例挂载属性，属性名自行定义：<br>
+      Vue.prototype.$XModal = VXETable.modal
     </p>
 
     <p>
