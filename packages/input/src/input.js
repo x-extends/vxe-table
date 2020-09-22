@@ -1120,7 +1120,7 @@ export default {
       if (this.isDatePicker) {
         this.hidePanel()
       }
-      if (isNumber || ['text', 'password'].indexOf(type) > -1) {
+      if (isNumber || ['text', 'search', 'password'].indexOf(type) > -1) {
         this.focus()
       }
       this.$emit('clear', { $panel: $refs.panel, value, $event: evnt })

@@ -28,10 +28,10 @@
           </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
-            <vxe-option value="1" label="1.x"></vxe-option>
-            <vxe-option value="2" label="2.x"></vxe-option>
-            <vxe-option value="3" label="3.x"></vxe-option>
-            <vxe-option value="4" label="4.x"></vxe-option>
+            <vxe-option value="1" label="1.x (Abandoned)"></vxe-option>
+            <vxe-option value="2" label="2.x (LTS)"></vxe-option>
+            <vxe-option value="3" label="3.x (Latest)"></vxe-option>
+            <vxe-option value="4" label="4.x (Next)"></vxe-option>
           </vxe-select>
           <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
           <a class="support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
@@ -90,7 +90,7 @@
 
     <vxe-modal v-model="supportVisible" :loading="supportLoading" title="💡技术支持" width="800" position="center">
       <template v-slot>
-        <div class="support-declare">考虑到部分用户有需要技术支持的需求，用于快速解决使用过程中遇到的各种问题，同时您的支持也可以帮助该项目持续维护下去！</div>
+        <div class="support-declare">如果该项目帮助了您，你可以通过捐赠或者加入技术支持群的方式来支持作者，同时您的支持也可以帮助该项目持续维护下去！</div>
         <div>
           <ul class="vxe-row support-question">
             <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
@@ -111,15 +111,6 @@
               <li>优质的技术支持群</li>
             </ul>
           </div>
-          <!-- <div class="vxe-col--12 support-group-item">
-            <div class="support-name">强大的扩展插件</div>
-            <a class="link support-btn" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins/index.html" target="_blank">查看预览</a>
-            <ul class="support-describe">
-              <li>更强的 pro 专业版</li>
-              <li>更多的实用渲染器</li>
-              <li>...</li>
-            </ul>
-          </div> -->
         </div>
       </template>
     </vxe-modal>
@@ -2422,9 +2413,7 @@ export default {
           location.href = '/vxe-table/v3/index.html'
           break
         case '4':
-          this.$XModal.alert({ message: this.$t('app.body.other.newDevelopment'), status: 'info' }).then(() => {
-            location.href = '/vxe-table/'
-          })
+          this.$XModal.alert({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })
           break
       }
     }
