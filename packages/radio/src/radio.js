@@ -71,5 +71,19 @@ export default {
         class: 'vxe-radio--label'
       }, $slots.default || [UtilTools.getFuncText(content)])
     ])
+  },
+  methods: {
+    changeEvent (evnt) {
+      const { $xegroup, isGroup, isDisabled, label } = this
+      if (!isDisabled) {
+        const params = { label, $event: evnt }
+        if (isGroup) {
+          $xegroup.handleChecked(params)
+        } else {
+          this.$emit('input', label)
+          this.$emit('change', params)
+        }
+      }
+    }
   }
 }

@@ -136,8 +136,8 @@ function outLog (type) {
 export const UtilTools = {
   warn: outLog('warn'),
   error: outLog('error'),
-  getLog (message, params) {
-    return `[vxe-table] ${XEUtils.template(GlobalConfig.i18n(message), params)}`
+  getLog (message, args) {
+    return `[vxe-table] ${GlobalConfig.i18n(message, args)}`
   },
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)

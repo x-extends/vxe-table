@@ -134,16 +134,16 @@ const apis = [
         list: []
       },
       {
-        name: 'opt-id',
+        name: 'option-id',
         desc: '自定义选项唯一主键的字段名（选项必须要有唯一主键，默认自动生成）',
         version: '',
         type: 'string',
         enum: '',
-        defVal: '默认 _XID，继承 setup.select.rowId',
+        defVal: '默认 _XID，继承 setup.select.optionId',
         list: []
       },
       {
-        name: 'opt-key',
+        name: 'option-key',
         desc: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
         version: '',
         type: 'boolean',

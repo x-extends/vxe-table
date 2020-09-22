@@ -1,4 +1,5 @@
 import { UtilTools } from '../../tools'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 
@@ -48,21 +49,10 @@ export default {
           disabled: isDisabled
         },
         domProps: {
-          checked: isGroup ? ($xegroup.value && $xegroup.value.some(item => item === label)) : value
+          checked: isGroup ? XEUtils.includes($xegroup.value, label) : value
         },
         on: {
-          change: evnt => {
-            if (!isDisabled) {
-              const checked = evnt.target.checked
-              const params = { checked, label, $event: evnt }
-              if (isGroup) {
-                $xegroup.handleChecked(params)
-              } else {
-                this.$emit('input', checked)
-                this.$emit('change', params)
-              }
-            }
-          }
+          change: this.changeEvent
         }
       }),
       h('span', {
@@ -72,5 +62,20 @@ export default {
         class: 'vxe-checkbox--label'
       }, $slots.default || [UtilTools.getFuncText(content)])
     ])
+  },
+  methods: {
+    changeEvent (evnt) {
+      const { $xegroup, isGroup, isDisabled, label } = this
+      if (!isDisabled) {
+        const checked = evnt.target.checked
+        const params = { checked, label, $event: evnt }
+        if (isGroup) {
+          $xegroup.handleChecked(params)
+        } else {
+          this.$emit('input', checked)
+          this.$emit('change', params)
+        }
+      }
+    }
   }
 }

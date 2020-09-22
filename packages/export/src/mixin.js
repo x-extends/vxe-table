@@ -644,7 +644,7 @@ function handleImport ($xetable, content, opts) {
         }
       })
     if (opts.message !== false) {
-      VXETable.modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.table.impSuccess'), [rows.length]), status: 'success' })
+      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
     }
   } else if (opts.message !== false) {
     VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
@@ -749,7 +749,7 @@ export default {
         columns: expColumns
       })
       if (!opts.filename) {
-        opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
+        opts.filename = GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
       if (!opts.sheetName) {
         opts.sheetName = document.title
@@ -861,7 +861,7 @@ export default {
           this._fileResolve(evnt)
         } else {
           if (options.message !== false) {
-            VXETable.modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [type]), status: 'error' })
+            VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
           }
           this._fileReject(evnt)
         }

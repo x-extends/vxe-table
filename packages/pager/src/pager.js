@@ -66,7 +66,7 @@ export default {
         if (XEUtils.isNumber(item)) {
           return {
             value: item,
-            label: `${XEUtils.template(GlobalConfig.i18n('vxe.pager.pagesize'), [item])}`
+            label: `${GlobalConfig.i18n('vxe.pager.pagesize', [item])}`
           }
         }
         return { value: '', label: '', ...item }
@@ -264,7 +264,7 @@ export default {
     renderTotal (h) {
       return h('span', {
         class: 'vxe-pager--total'
-      }, XEUtils.template(GlobalConfig.i18n('vxe.pager.total'), [this.total]))
+      }, GlobalConfig.i18n('vxe.pager.total', [this.total]))
     },
     // number
     renderPageBtn (h, showJump) {

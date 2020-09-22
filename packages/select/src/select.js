@@ -13,7 +13,7 @@ function getOptUniqueId () {
 }
 
 function getOptkey (_vm) {
-  return _vm.optId || '_XID'
+  return _vm.optionId || '_XID'
 }
 
 function getOptid (_vm, option) {
@@ -115,14 +115,14 @@ function getSelectLabel (_vm, value) {
 }
 
 export function renderOption (h, _vm, list, group) {
-  const { isGroup, labelField, valueField, optkey, value, multiple, currentValue } = _vm
+  const { isGroup, labelField, valueField, optionKey, value, multiple, currentValue } = _vm
   return list.map((option, cIndex) => {
     const isVisible = !isGroup || isOptionVisible(option)
     const isDisabled = (group && group.disabled) || option.disabled
     const optionValue = option[valueField]
     const optid = getOptid(_vm, option)
     return isVisible ? h('div', {
-      key: optkey ? optid : cIndex,
+      key: optionKey ? optid : cIndex,
       class: ['vxe-select-option', {
         'is--disabled': isDisabled,
         'is--selected': multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue,
@@ -148,12 +148,12 @@ export function renderOption (h, _vm, list, group) {
 }
 
 export function renderOptgroup (h, _vm) {
-  const { optkey, visibleGroupList, groupLabelField, groupOptionsField } = _vm
+  const { optionKey, visibleGroupList, groupLabelField, groupOptionsField } = _vm
   return visibleGroupList.map((group, gIndex) => {
     const optid = getOptid(_vm, group)
     const isGroupDisabled = group.disabled
     return h('div', {
-      key: optkey ? optid : gIndex,
+      key: optionKey ? optid : gIndex,
       class: ['vxe-optgroup', {
         'is--disabled': isGroupDisabled
       }],
@@ -207,8 +207,8 @@ export default {
     optionGroupProps: Object,
     size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
     emptyText: String,
-    optId: { type: String, default: () => GlobalConfig.select.optId },
-    optKey: Boolean,
+    optionId: { type: String, default: () => GlobalConfig.select.optionId },
+    optionKey: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
   },
   components: {

@@ -10,7 +10,7 @@ import { formats } from './extends/formats'
 import { menus } from './extends/menus'
 
 export interface VXETableOptions {
-  i18n?(key: string, value: any): any;
+  i18n?(key: string, args?: any): any;
   [key: string]: any;
 }
 
@@ -43,7 +43,7 @@ export interface VXETableStatic {
   /**
    * 读取内置国际化
    */
-  t(key: string): any;
+  t(key: string, args?: any): any;
   /**
    * 设置全局参数/获取所有参数
    * @param options 参数

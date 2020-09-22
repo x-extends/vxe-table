@@ -50,18 +50,22 @@ export default {
           checked: isGroup && $xegroup.value === label
         },
         on: {
-          change: evnt => {
-            if (!isDisabled) {
-              if (isGroup) {
-                $xegroup.handleChecked({ label, $event: evnt })
-              }
-            }
-          }
+          change: this.changeEvent
         }
       }),
       h('span', {
         class: 'vxe-radio--label'
       }, $slots.default || [UtilTools.getFuncText(content)])
     ])
+  },
+  methods: {
+    changeEvent (evnt) {
+      const { $xegroup, isGroup, isDisabled, label } = this
+      if (!isDisabled) {
+        if (isGroup) {
+          $xegroup.handleChecked({ label, $event: evnt })
+        }
+      }
+    }
   }
 }
