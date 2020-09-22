@@ -28,10 +28,10 @@
           </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
-            <vxe-option value="1" label="1.x"></vxe-option>
-            <vxe-option value="2" label="2.x"></vxe-option>
-            <vxe-option value="3" label="3.x"></vxe-option>
-            <vxe-option value="4" label="4.x"></vxe-option>
+            <vxe-option value="1" label="1.x (Abandoned)"></vxe-option>
+            <vxe-option value="2" label="2.x (LTS)"></vxe-option>
+            <vxe-option value="3" label="3.x (Latest)"></vxe-option>
+            <vxe-option value="4" label="4.x (Next)"></vxe-option>
           </vxe-select>
           <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
         </div>
@@ -2346,19 +2346,6 @@ export default {
         item.expand = !item.expand
       }
     },
-    supportEvent () {
-      this.supportVisible = true
-    },
-    addQQGroup () {
-      this.supportLoading = true
-      setTimeout(() => {
-        this.supportLoading = false
-        this.supportGroupVisible = true
-      }, 300)
-    },
-    openEvent (tmplName) {
-      open(`https://xuliangzhan_admin.gitee.io/vxe-template/${tmplName}/`)
-    },
     vChangeEvent () {
       switch (this.version) {
         case '1':
@@ -2371,9 +2358,7 @@ export default {
           location.href = '/vxe-table/v3/index.html'
           break
         case '4':
-          this.$XModal.alert({ message: this.$t('app.body.other.newDevelopment'), status: 'info' }).then(() => {
-            location.href = '/vxe-table/'
-          })
+          this.$XModal.alert({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })
           break
       }
     }
