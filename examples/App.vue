@@ -28,10 +28,10 @@
           </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
-            <vxe-option value="1" label="1.x (Abandoned)"></vxe-option>
-            <vxe-option value="2" label="2.x (LTS)"></vxe-option>
-            <vxe-option value="3" label="3.x (Latest)"></vxe-option>
-            <vxe-option value="4" label="4.x (Next)"></vxe-option>
+            <vxe-option value="1" :label="$t('app.body.other.v1')"></vxe-option>
+            <vxe-option value="2" :label="$t('app.body.other.v2')"></vxe-option>
+            <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
+            <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
           <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
           <a class="support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
@@ -2414,6 +2414,7 @@ export default {
           break
         case '4':
           this.$XModal.alert({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })
+          this.version = '3'
           break
       }
     }
