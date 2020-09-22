@@ -308,6 +308,10 @@ module.exports = {
         copyToClipboard: 'Copied to clipboard'
       },
       other: {
+        v1: '1.x (Obsolete)',
+        v2: '2.x (LTS)',
+        v3: '3.x (Latest)',
+        v4: '4.x (vue 3.x Next)',
         plan: {
           vv1: 'v1 Based on vue2.6+, support all the mainstream browsers, to achieve all the practical functions of the table',
           v2: 'v2 Based on vue2.6+, support all mainstream browsing, both function and performance',
@@ -325,7 +329,7 @@ module.exports = {
         donationTitle: 'Donation method：',
         issuesTitle: '该群供大家交流问题，作者很忙基本没有时间去看群，<br>如果有问题请通过 issues 反馈',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
-        newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
+        newDevelopment: 'this release is being refactored. Stay tuned!'
       },
       search: {
         searchPlaceholder: 'Document search',

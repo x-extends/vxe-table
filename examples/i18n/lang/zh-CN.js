@@ -307,6 +307,10 @@ module.exports = {
         copyToClipboard: '已复制到剪贴板！'
       },
       other: {
+        v1: '1.x (已废弃)',
+        v2: '2.x (长期支持版本)',
+        v3: '3.x (最新版本)',
+        v4: '4.x (vue 3.x 版本)',
         plan: {
           v1: 'v1 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能',
           v2: 'v2 基于 vue2.6+，支持所有主的流浏览，同时兼具功能与性能',
@@ -324,7 +328,7 @@ module.exports = {
         donationTitle: '捐赠方式：',
         issuesTitle: '该群供大家交流问题，作者很忙基本没有时间去看群，<br>如果有问题请通过 issues 反馈',
         newFunc: '由于作者很忙，后续有时间可能会支持该功能！',
-        newDevelopment: '由于作者很忙，该版本正在重构中，敬请期待！'
+        newDevelopment: '该版本正在重构中，敬请期待！'
       },
       search: {
         searchPlaceholder: '文档搜索',
