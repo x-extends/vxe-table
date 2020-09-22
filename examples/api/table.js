@@ -2139,6 +2139,7 @@ const apis = [
           },
           {
             name: 'nativeEvents',
+            abandoned: true,
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '1.15.30',
             type: 'Object',
