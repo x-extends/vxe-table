@@ -307,6 +307,10 @@ module.exports = {
         copyToClipboard: '已複製到剪貼板！'
       },
       other: {
+        v1: '1.x (已廢棄)',
+        v2: '2.x (長期支持版本)',
+        v3: '3.x (最新版本)',
+        v4: '4.x (vue 3.x 版本)',
         plan: {
           v1: 'v1 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能',
           v2: 'v2 基于 vue2.6+，支持所有主的流浏览，同时兼具功能与性能',
@@ -324,7 +328,7 @@ module.exports = {
         donationTitle: '捐贈管道：',
         issuesTitle: '該群供大家交流問題，作者很忙基本沒有時間去看群，<br>如果有問題請通過 issues 迴響',
         newFunc: '由於作者很忙，後續有時間可能會支持該功能！',
-        newDevelopment: '由於作者很較忙，該版本正在重構中，敬請期待！'
+        newDevelopment: '該版本正在重構中，敬請期待！'
       },
       search: {
         searchPlaceholder: '檔案蒐索',
