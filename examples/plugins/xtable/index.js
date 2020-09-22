@@ -51,8 +51,8 @@ VXETable.setup({
       types: ['csv', 'html', 'xml', 'txt']
     }
   },
-  translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
-  i18n: key => i18n.t(key)
+  translate: (key, args) => key && key.indexOf('app.') > -1 ? i18n.t(key, args) : key, // 自动翻译以 app. 开头的键值
+  i18n: (key, args) => i18n.t(key, args)
 })
 
 // 先安装依赖模块

@@ -103,7 +103,7 @@ export default {
       betaVersionList: [],
       selectStableVersion: null,
       stableVersionList: [],
-      version: '1',
+      version: '2',
       usedJSHeapSize: 0,
       tableList: [
         {

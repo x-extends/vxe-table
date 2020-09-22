@@ -160,7 +160,7 @@ export default {
     resetEvent (evnt) {
       evnt.preventDefault()
       this.reset()
-      this.$emit('reset', { data: this.this, $form: this, $event: evnt }, evnt)
+      this.$emit('reset', { data: this.data, $form: this, $event: evnt }, evnt)
     },
     clearValidate (field) {
       if (field) {

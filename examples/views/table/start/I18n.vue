@@ -56,16 +56,8 @@ export default {
         })
 
         Vue.use(VXETable, {
-          // 对参数中的列头、校验提示..等进行自动翻译（只对支持国际化的有效）
-          // translate (key) {
-          //   // 例如，只翻译 "app." 开头的键值
-          //   if (key && key.indexOf('app.') > -1) {
-          //     return i18n.t(key)
-          //   }
-          //   return key
-          // },
           // 对组件内置的提示语进行国际化翻译
-          // i18n: key => i18n.t(key)
+          i18n: (key, args) => i18n.t(key, args)
         })
 
         new Vue({ i18n }).$mount('#app')
@@ -73,9 +65,13 @@ export default {
         `
         Vue.use(VXETable, {
           // 可选，对参数中的列头、校验提示..等进行自动翻译（只对支持国际化的有效）
-          translate: key => i18n.t(key),
-          // 对组件内置的提示语进行国际化翻译
-          i18n: key => i18n.t(key)
+          translate (key, args) {
+            // 例如，只翻译 "app." 开头的键值
+            if (key && key.indexOf('app.') > -1) {
+              return i18n.t(key, args)
+            }
+            return key
+          }
         })
         `,
         `
