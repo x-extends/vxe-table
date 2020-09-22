@@ -2292,19 +2292,6 @@ export default {
         item.expand = !item.expand
       }
     },
-    supportEvent () {
-      this.supportVisible = true
-    },
-    addQQGroup () {
-      this.supportLoading = true
-      setTimeout(() => {
-        this.supportLoading = false
-        this.supportGroupVisible = true
-      }, 300)
-    },
-    openEvent (tmplName) {
-      open(`https://xuliangzhan_admin.gitee.io/vxe-template/${tmplName}/`)
-    },
     vChangeEvent () {
       switch (this.version) {
         case '1':
@@ -2317,9 +2304,7 @@ export default {
           location.href = '/vxe-table/v3/index.html'
           break
         case '4':
-          this.$XModal.alert({ message: this.$t('app.body.other.newDevelopment'), status: 'info' }).then(() => {
-            location.href = '/vxe-table/'
-          })
+          this.$XModal.alert({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })
           break
       }
     }
