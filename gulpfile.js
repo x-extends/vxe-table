@@ -1,3 +1,4 @@
+const fs = require('fs')
 const gulp = require('gulp')
 const XEUtils = require('xe-utils')
 const del = require('del')
@@ -9,8 +10,6 @@ const clean = require('gulp-clean')
 const sass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
-
-const time = Date.now()
 
 const components = [
   'table',
@@ -54,6 +53,13 @@ const languages = [
   'en-US',
   'ja-JP'
 ]
+
+const commCode = `if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./index.common.pro.js')
+} else {
+  module.exports = require('./index.common.dev.js')
+}
+`
 
 gulp.task('build_modules', () => {
   return gulp.src('packages/**/*.js')
@@ -101,19 +107,40 @@ gulp.task('copy_ts', () => {
     .pipe(gulp.dest('lib'))
 })
 
-gulp.task('lib_rename', () => {
-  return gulp.src('lib/index.css')
-    .pipe(rename({
-      basename: 'style',
-      extname: '.css'
-    }))
-    .pipe(gulp.dest('lib'))
-    .pipe(rename({
-      basename: 'style',
-      suffix: '.min',
-      extname: '.css'
-    }))
-    .pipe(gulp.dest('lib'))
+gulp.task('build_lib', () => {
+  fs.writeFileSync('lib/index.common.js', commCode)
+  return Promise.all([
+    gulp.src('lib_pro/index.common.js')
+      .pipe(rename({
+        basename: 'index',
+        suffix: '.common.pro',
+        extname: '.js'
+      }))
+      .pipe(gulp.dest('lib')),
+    gulp.src('lib_dev/index.common.js')
+      .pipe(rename({
+        basename: 'index',
+        suffix: '.common.dev',
+        extname: '.js'
+      }))
+    .pipe(gulp.dest('lib')),
+    gulp.src('lib_dev/index.umd.js')
+      .pipe(gulp.dest('lib')),
+    gulp.src('lib_pro/index.umd.min.js')
+      .pipe(gulp.dest('lib')),
+    gulp.src('lib_pro/index.css')
+      .pipe(rename({
+        basename: 'style',
+        extname: '.css'
+      }))
+      .pipe(gulp.dest('lib'))
+      .pipe(rename({
+        basename: 'style',
+        suffix: '.min',
+        extname: '.css'
+      }))
+      .pipe(gulp.dest('lib'))
+  ])
 })
 
 gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {
@@ -139,12 +166,13 @@ gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', (
   }))
 }))
 
-gulp.task('build_clean', gulp.series('build_style', 'lib_rename', () => {
-  return gulp.src([
-    'lib/index.css',
-    'lib/demo.html'
-  ])
-    .pipe(clean())
-}))
+gulp.task('build_clean', () => {
+  return del('lib')
+})
 
-gulp.task('build', gulp.parallel('build_clean'))
+gulp.task('build', gulp.series('build_clean', 'build_style', 'build_lib', () => {
+  return del([
+    'lib_dev',
+    'lib_pro'
+  ])
+}))

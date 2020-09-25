@@ -31,7 +31,7 @@
           </ul>
         </div>
         <div>
-          <img src="static/donation/pay.jpg">
+          <img src="/vxe-table/static/donation/pay.jpg">
         </div>
       </div>
       <div style="display: inline-block;margin-left: 20em;">
@@ -40,7 +40,7 @@
           <br>
           <span v-html="$t('app.body.other.issuesTitle')"></span>
         </div>
-        <img src="static/donation/qq.png">
+        <img src="/vxe-table/static/donation/qq.png">
       </div>
     </div>
   </div>

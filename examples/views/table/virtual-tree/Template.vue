@@ -58,7 +58,7 @@ export default {
           slots: {
             default: () => {
               return [
-                <img src="static/other/img1.gif" height="50"/>
+                <img src="/vxe-table/static/other/img1.gif" height="50"/>
               ]
             }
           }
@@ -121,7 +121,7 @@ export default {
                   slots: {
                     default: ({ row }) => {
                       return [
-                        <img src="static/other/img1.gif" height="50"/>
+                        <img src="/vxe-table/static/other/img1.gif" height="50"/>
                       ]
                     }
                   }

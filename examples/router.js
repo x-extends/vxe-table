@@ -251,6 +251,8 @@ import ModuleForm from './views/form/Form.vue'
 import ModuleSwitch from './views/switch/Switch.vue'
 import ModuleList from './views/list/List.vue'
 import ModulePulldown from './views/pulldown/Pulldown.vue'
+import ModuleFile from './views/file/File.vue'
+import ModulePrint from './views/print/Print.vue'
 
 import TableOtherElement from './views/table/other/Element.vue'
 import TableOtherIview from './views/table/other/Iview.vue'
@@ -1496,6 +1498,16 @@ export default new Router({
       path: '/table/module/pulldown',
       name: 'ModulePulldown',
       component: ModulePulldown
+    },
+    {
+      path: '/table/module/file',
+      name: 'ModuleFile',
+      component: ModuleFile
+    },
+    {
+      path: '/table/module/print',
+      name: 'ModulePrint',
+      component: ModulePrint
     },
     {
       path: '/table/other/element',

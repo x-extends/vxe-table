@@ -1,9 +1,9 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 开关
  */
-export declare class Switch extends VXETableModule {
+export declare class Switch extends VXETableComponent {
   /**
    * 绑定值
    */

@@ -102,9 +102,9 @@
         </span>
       </template>
       <template v-slot:right>
-        <img src="static/other/img1.gif" height="34">
-        <img src="static/other/img1.gif" height="34">
-        <img src="static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
       </template>
     </vxe-pager>
 
@@ -233,9 +233,9 @@ export default {
             </span>
           </template>
           <template v-slot:right>
-            <img src="static/other/img1.gif" height="34">
-            <img src="static/other/img1.gif" height="34">
-            <img src="static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
           </template>
         </vxe-pager>
         `,

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   app: {
     aside: {
       nav: {
@@ -58,7 +58,7 @@ module.exports = {
         span: 'Rowspan and colspan',
         spanRow: 'Merge the list of horizontal trees',
         mergeCell: 'Merge cells',
-        footer: '表尾数据',
+        footer: 'Footer data',
         footerSpan: 'Footer rowspan and colspan',
         import: 'Import',
         export: 'Export',
@@ -71,10 +71,10 @@ module.exports = {
         expandRow: 'Expandable row',
         expandRowIcon: 'Expandable row + More customizations',
         expandRowLazy: 'Expandable row + lazy loading',
-        accordion: '展开行 + 手风琴效果',
+        accordion: 'Expandable row + accordion',
         toolbar: 'Toolbar',
-        customs: 'Show/hide column',
-        customStorage: '自定义列 + localStorage',
+        customs: 'Show, hide, and collapsed columns',
+        customStorage: 'Custom column + localStorage',
         customlWidthStorage: '完整自定义列 + localStorage',
         search: 'Table search',
         groupBy: 'Row group',
@@ -182,6 +182,7 @@ module.exports = {
         switch: 'Switch',
         list: 'List',
         pulldown: 'Pulldown',
+        readFile: 'Read file',
 
         other: 'Integrated third party Library',
         elementRender: 'element-ui -> Custom Templates',

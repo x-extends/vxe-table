@@ -12,8 +12,6 @@
           // table: {
           //   showHeader: true,
           //   keepSource: false,
-          //   animat: true,
-          //   cloak: false,
           //   delayHover: 250,
           //   showOverflow: null,
           //   showHeaderOverflow: null,

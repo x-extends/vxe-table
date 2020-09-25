@@ -165,11 +165,11 @@
           </template>
           <template v-slot:right>
             <span>
-              <img src="static/other/img1.gif" style="height: 30px;" />
-              <img src="static/other/img1.gif" style="height: 30px;" />
-              <img src="static/other/img2.gif" style="height: 30px;" />
-              <img src="static/other/img1.gif" style="height: 30px;" />
-              <img src="static/other/img1.gif" style="height: 30px;" />
+              <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
+              <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
+              <img src="/vxe-table/static/other/img2.gif" style="height: 30px;" />
+              <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
+              <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
             </span>
           </template>
         </vxe-pager>
@@ -226,9 +226,9 @@ export default {
             default: 'name_default',
             footer: () => {
               return [
-                <img src="static/other/img1.gif" style="height: 30px;" />,
+                <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />,
                 <span>浪里个浪</span>,
-                <img src="static/other/img2.gif" style="height: 30px;" />
+                <img src="/vxe-table/static/other/img2.gif" style="height: 30px;" />
               ]
             }
           }
@@ -480,11 +480,11 @@ export default {
               </template>
               <template v-slot:right>
                 <span>
-                  <img src="static/other/img1.gif" style="height: 30px;" />
-                  <img src="static/other/img1.gif" style="height: 30px;" />
-                  <img src="static/other/img2.gif" style="height: 30px;" />
-                  <img src="static/other/img1.gif" style="height: 30px;" />
-                  <img src="static/other/img1.gif" style="height: 30px;" />
+                  <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
+                  <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
+                  <img src="/vxe-table/static/other/img2.gif" style="height: 30px;" />
+                  <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
+                  <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
                 </span>
               </template>
             </vxe-pager>
@@ -528,9 +528,9 @@ export default {
                     default: 'name_default',
                     footer: () => {
                       return [
-                        <img src="static/other/img1.gif" style="height: 30px;" />,
+                        <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />,
                         <span>浪里个浪</span>,
-                        <img src="static/other/img2.gif" style="height: 30px;" />
+                        <img src="/vxe-table/static/other/img2.gif" style="height: 30px;" />
                       ]
                     }
                   }

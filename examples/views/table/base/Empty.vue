@@ -31,7 +31,7 @@
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
       <template v-slot:empty>
         <span style="color: red;">
-          <img src="static/other/img2.gif">
+          <img src="/vxe-table/static/other/img2.gif">
           <p>没有更多数据了！</p>
         </span>
       </template>
@@ -59,7 +59,7 @@
       <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
       <template v-slot:empty>
         <span style="color: red;">
-          <img src="static/other/img1.gif">
+          <img src="/vxe-table/static/other/img1.gif">
           <p>不用再看了，没有更多数据了！</p>
         </span>
       </template>
@@ -120,7 +120,7 @@ export default {
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
           <template v-slot:empty>
             <span style="color: red;">
-              <img src="static/other/img2.gif">
+              <img src="/vxe-table/static/other/img2.gif">
               <p>没有更多数据了！</p>
             </span>
           </template>
@@ -157,7 +157,7 @@ export default {
           <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
           <template v-slot:empty>
             <span style="color: red;">
-              <img src="static/other/img1.gif">
+              <img src="/vxe-table/static/other/img1.gif">
               <p>不用再看了，没有更多数据了！</p>
             </span>
           </template>

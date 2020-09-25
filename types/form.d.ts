@@ -1,10 +1,10 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 import { FormItemOptions } from './form-item'
 
 /**
  * 表单
  */
-export declare class Form extends VXETableModule {
+export declare class Form extends VXETableComponent {
   loading?: boolean;
   data?: any;
   span?: string | number;
@@ -18,9 +18,6 @@ export declare class Form extends VXETableModule {
   validConfig?: {
     autoPos?: boolean;
   };
-
-  // computed
-  vSize?: string;
 
   // methods
   /**

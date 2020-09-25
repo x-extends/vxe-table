@@ -311,13 +311,6 @@
   font-size: $vxe-font-size;
   color: $vxe-table-font-color;
   font-family: $vxe-font-family;
-  &[x-cloak] {
-    .vxe-table--main-wrapper,
-    .vxe-table--fixed-left-wrapper,
-    .vxe-table--fixed-right-wrapper {
-      visibility: hidden;
-    }
-  }
   .vxe-table--body-wrapper,
   .vxe-table--footer-wrapper {
     background-color: $vxe-table-background-color;

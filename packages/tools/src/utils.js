@@ -16,27 +16,35 @@ class ColumnInfo {
     const proxyOpts = $xegrid ? $xegrid.proxyOpts : null
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
-    if (_vm.cellRender && _vm.editRender) {
-      UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
-    }
-    if (_vm.type === 'expand') {
-      if ($xetable.treeConfig && $xetable.treeOpts.line) {
-        UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
+
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
+      if (_vm.type && types.indexOf(_vm.type) === -1) {
+        UtilTools.warn('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
       }
-    }
-    if (formatter) {
-      if (XEUtils.isString(formatter)) {
-        const globalFunc = formats.get(formatter) || XEUtils[formatter]
-        if (!XEUtils.isFunction(globalFunc)) {
-          UtilTools.error('vxe.error.notFunc', [formatter])
-        }
-      } else if (XEUtils.isArray(formatter)) {
-        const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
-        if (!XEUtils.isFunction(globalFunc)) {
-          UtilTools.error('vxe.error.notFunc', [formatter[0]])
+      if (_vm.cellRender && _vm.editRender) {
+        UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
+      }
+      if (_vm.type === 'expand') {
+        if ($xetable.treeConfig && $xetable.treeOpts.line) {
+          UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
         }
       }
+      if (formatter) {
+        if (XEUtils.isString(formatter)) {
+          const globalFunc = formats.get(formatter) || XEUtils[formatter]
+          if (!XEUtils.isFunction(globalFunc)) {
+            UtilTools.error('vxe.error.notFunc', [formatter])
+          }
+        } else if (XEUtils.isArray(formatter)) {
+          const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
+          if (!XEUtils.isFunction(globalFunc)) {
+            UtilTools.error('vxe.error.notFunc', [formatter[0]])
+          }
+        }
+      }
     }
+
     Object.assign(this, {
       // 基本属性
       type: _vm.type,

@@ -105,9 +105,6 @@ export default {
   },
   mounted () {
     UtilTools.assemColumn(this)
-    if (this.type === 'expand' && !this.$scopedSlots.content && this.$scopedSlots.default) {
-      UtilTools.warn('vxe.error.expandContent')
-    }
   },
   destroyed () {
     UtilTools.destroyColumn(this)

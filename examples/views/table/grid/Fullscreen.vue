@@ -9,13 +9,15 @@
       border
       resizable
       keep-source
+      show-overflow
+      show-footer
       ref="xGrid"
       height="530"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar="tableToolbar"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+      :footer-method="footerMethod">
       <template v-slot:toolbar_buttons>
         <vxe-button @click="$refs.xGrid.maximize()">表格最大化</vxe-button>
         <vxe-button @click="$refs.xGrid.revert()">表格还原</vxe-button>
@@ -33,6 +35,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 import hljs from 'highlight.js'
 
@@ -40,21 +43,16 @@ export default {
   data () {
     return {
       tablePage: {
-        pageSize: 15,
+        pageSize: 20,
         perfect: true
       },
       tableProxy: {
         props: {
-          result: 'result',
-          total: 'page.total'
+          result: 'result', // 配置响应结果列表字段
+          total: 'page.total' // 配置响应结果总页数字段
         },
         ajax: {
-          // page 对象： { pageSize, currentPage }
-          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
-          // body 对象： { removeRecords }
-          delete: ({ body }) => XEAjax.post('/api/user/save', body),
-          // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-          save: ({ body }) => XEAjax.post('/api/user/save', body)
+          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
         }
       },
       tableToolbar: {
@@ -67,12 +65,15 @@ export default {
         }
       },
       tableColumn: [
-        { type: 'checkbox', width: 50 },
-        { type: 'seq', width: 60 },
-        { field: 'name', title: 'Name', editRender: { name: 'input' } },
-        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-        { field: 'role', title: 'Role', editRender: { name: 'input' } },
-        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+        { type: 'checkbox', width: 100 },
+        { type: 'seq', width: 100 },
+        { field: 'name', title: 'Name', minWidth: 300 },
+        { field: 'nickname', title: 'Nickname', minWidth: 300 },
+        { field: 'role', title: 'Role', minWidth: 300 },
+        { field: 'rate', title: 'Rate', minWidth: 300 },
+        { field: 'describe', title: 'Describe', minWidth: 300 },
+        { field: 'createTime', title: 'Update Date', minWidth: 300 },
+        { field: 'updateTime', title: 'Create Date', minWidth: 300 }
       ],
       demoCodes: [
         `
@@ -80,13 +81,15 @@ export default {
           border
           resizable
           keep-source
+          show-overflow
+          show-footer
           ref="xGrid"
           height="530"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar="tableToolbar"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+          :footer-method="footerMethod">
           <template v-slot:toolbar_buttons>
             <vxe-button @click="$refs.xGrid.maximize()">表格最大化</vxe-button>
             <vxe-button @click="$refs.xGrid.revert()">表格还原</vxe-button>
@@ -99,22 +102,16 @@ export default {
           data () {
             return {
               tablePage: {
-                pageSize: 15,
+                pageSize: 20,
                 perfect: true
               },
               tableProxy: {
-                // 配置响应的数据属性
                 props: {
-                  result: 'result',
-                  total: 'page.total'
+                  result: 'result', // 配置响应结果列表字段
+                  total: 'page.total' // 配置响应结果总页数字段
                 },
                 ajax: {
-                  // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`), // 模拟请求
-                  // body 对象： { removeRecords }
-                  delete: ({ body }) => XEAjax.post('/api/user/save', body),
-                  // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-                  save: ({ body }) => XEAjax.post('/api/user/save', body)
+                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
                 }
               },
               tableToolbar: {
@@ -127,13 +124,34 @@ export default {
                 }
               },
               tableColumn: [
-                { type: 'checkbox', width: 50 },
-                { type: 'seq', width: 60 },
-                { field: 'name', title: 'Name', editRender: { name: 'input' } },
-                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                { field: 'role', title: 'Role', editRender: { name: 'input' } },
-                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+                { type: 'checkbox', width: 100 },
+                { type: 'seq', width: 100 },
+                { field: 'name', title: 'Name', minWidth: 300 },
+                { field: 'nickname', title: 'Nickname', minWidth: 300 },
+                { field: 'role', title: 'Role', minWidth: 300 },
+                { field: 'rate', title: 'Rate', minWidth: 300 },
+                { field: 'describe', title: 'Describe', minWidth: 300 },
+                { field: 'createTime', title: 'Update Date', minWidth: 300 },
+                { field: 'updateTime', title: 'Create Date', minWidth: 300 }
               ]
+            }
+          },
+          methods: {
+            footerMethod ({ columns, data }) {
+              const sums = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  sums.push('和值')
+                } else {
+                  if (column.property === 'rate') {
+                    sums.push(XEUtils.sum(data, column.property))
+                  } else {
+                    sums.push('-')
+                  }
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [sums]
             }
           }
         }
@@ -145,6 +163,24 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
+  },
+  methods: {
+    footerMethod ({ columns, data }) {
+      const sums = []
+      columns.forEach((column, columnIndex) => {
+        if (columnIndex === 0) {
+          sums.push('和值')
+        } else {
+          if (column.property === 'rate') {
+            sums.push(XEUtils.sum(data, column.property))
+          } else {
+            sums.push('-')
+          }
+        }
+      })
+      // 返回一个二维数组的表尾合计
+      return [sums]
+    }
   }
 }
 </script>

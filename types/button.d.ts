@@ -1,9 +1,9 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 按钮
  */
-export declare class Button extends VXETableModule {
+export declare class Button extends VXETableComponent {
   /**
    * 按钮类型
    */

@@ -75,7 +75,7 @@
         </template>
       </vxe-toolbar>
 
-      <vxe-toolbar :refresh="{ query: findList }">
+      <vxe-toolbar ref="xToolbar" custom>
         <template v-slot:buttons>
           <vxe-button>自定义模板</vxe-button>
           <vxe-button>按钮2</vxe-button>
@@ -94,6 +94,12 @@
           <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn"></vxe-button>
         </template>
       </vxe-toolbar>
+
+      <vxe-table ref="xTable" :data="tableData">
+        <vxe-table-column field="name" title="Name"></vxe-table-column>
+        <vxe-table-column field="role" title="Role"></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      </vxe-table>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -113,6 +119,12 @@ export default {
   data  () {
     return {
       loading: false,
+      tableData: [
+        { name: 'Test1', role: '前端', sex: '男' },
+        { name: 'Test2', role: '后端', sex: '男' },
+        { name: 'Test3', role: '测试', sex: '男' },
+        { name: 'Test4', role: '设计师', sex: '女' }
+      ],
       demoCodes: [
         `
         <p>
@@ -187,7 +199,7 @@ export default {
             </template>
           </vxe-toolbar>
 
-          <vxe-toolbar :refresh="{ query: findList }">
+          <vxe-toolbar ref="xToolbar" custom>
             <template v-slot:buttons>
               <vxe-button>自定义模板</vxe-button>
               <vxe-button>按钮2</vxe-button>
@@ -206,24 +218,33 @@ export default {
               <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn"></vxe-button>
             </template>
           </vxe-toolbar>
+
+          <vxe-table ref="xTable" :data="tableData">
+            <vxe-table-column field="name" title="Name"></vxe-table-column>
+            <vxe-table-column field="role" title="Role"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          </vxe-table>
         </p>
         `,
         `
         export default {
           data () {
             return {
-              loading: false
+              loading: false,
+              tableData: [
+                { name: 'Test1', role: '前端', sex: '男' },
+                { name: 'Test2', role: '后端', sex: '男' },
+                { name: 'Test3', role: '测试', sex: '男' },
+                { name: 'Test4', role: '设计师', sex: '女' }
+              ]
             }
           },
-          methods: {
-            findList () {
-              this.loading = true
-              return new Promise(resolve => {
-                this.loading = false
-                this.$XModal.message({ message: '刷新成功！', status: 'success' })
-                setTimeout(resolve, 800)
-              })
-            }
+          created () {
+            this.$nextTick(() => {
+              // 将表格和工具栏进行关联
+              const xTable = this.$refs.xTable
+              xTable.connect(this.$refs.xToolbar)
+            })
           }
         }
         `,
@@ -244,15 +265,12 @@ export default {
       hljs.highlightBlock(block)
     })
   },
-  methods: {
-    findList () {
-      this.loading = true
-      return new Promise(resolve => {
-        this.loading = false
-        this.$XModal.message({ message: '刷新成功！', status: 'success' })
-        setTimeout(resolve, 800)
-      })
-    }
+  created () {
+    this.$nextTick(() => {
+      // 将表格和工具栏进行关联
+      const xTable = this.$refs.xTable
+      xTable.connect(this.$refs.xToolbar)
+    })
   }
 }
 </script>

@@ -3,10 +3,8 @@ import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from '../../body'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools, GlobalEvent, ResizeEvent } from '../../tools'
+import { UtilTools, GlobalEvent, ResizeEvent } from '../../tools'
 import methods from './methods'
-
-const { browse } = DomTools
 
 /**
  * 渲染浮固定列
@@ -211,7 +209,6 @@ export default {
     // 纵向虚拟滚动配置项
     scrollY: Object,
     // 优化相关
-    cloak: { type: Boolean, default: () => GlobalConfig.table.cloak },
     animat: { type: Boolean, default: () => GlobalConfig.table.animat },
     delayHover: { type: Number, default: () => GlobalConfig.table.delayHover },
     // 额外的参数
@@ -233,7 +230,6 @@ export default {
   data () {
     return {
       tId: `${XEUtils.uniqueId()}`,
-      isCloak: false,
       // 低性能的静态列
       staticColumns: [],
       // 渲染的列分组
@@ -440,7 +436,11 @@ export default {
       return Object.assign({}, GlobalConfig.table.checkboxConfig, this.checkboxConfig)
     },
     tooltipOpts () {
-      return Object.assign({ leaveDelay: 300 }, GlobalConfig.table.tooltipConfig, this.tooltipConfig)
+      const opts = Object.assign({ leaveDelay: 300 }, GlobalConfig.table.tooltipConfig, this.tooltipConfig)
+      if (opts.enterable) {
+        opts.leaveMethod = this.handleTooltipLeaveMethod
+      }
+      return opts
     },
     vaildTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
@@ -646,18 +646,22 @@ export default {
       fullColumnIdData: {},
       fullColumnFieldData: {}
     })
-    if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
-      UtilTools.warn('vxe.error.reqProp', ['row-id'])
+
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
+        UtilTools.warn('vxe.error.reqProp', ['row-id'])
+      }
+      if (this.editConfig && editOpts.showStatus && !this.keepSource) {
+        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+      }
+      if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
+        UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
+      }
+      if (treeConfig && this.stripe) {
+        UtilTools.warn('vxe.error.noTree', ['stripe'])
+      }
     }
-    if (this.editConfig && editOpts.showStatus && !this.keepSource) {
-      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
-    }
-    if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
-      UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
-    }
-    if (treeConfig && this.stripe) {
-      UtilTools.warn('vxe.error.noTree', ['stripe'])
-    }
+
     const customOpts = this.customOpts
     if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
       UtilTools.error('vxe.error.reqProp', ['id'])
@@ -665,12 +669,16 @@ export default {
     if (this.treeConfig && this.checkboxOpts.range) {
       UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
     }
-    if (this.mouseOpts.area && !this.handleUpdateCellAreas) {
-      return UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (this.mouseOpts.area && !this.handleUpdateCellAreas) {
+        return UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+      }
+      if (this.treeConfig && this.mouseOpts.area) {
+        UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
+      }
     }
-    if (this.treeConfig && this.mouseOpts.area) {
-      UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
-    }
+
     // 检查是否有安装需要的模块
     let errorModuleName
     if (!VXETable._edit && this.editConfig) {
@@ -696,12 +704,6 @@ export default {
       endIndex: 0,
       visibleSize: 0
     })
-    if (this.cloak) {
-      this.isCloak = true
-      setTimeout(() => {
-        this.isCloak = false
-      }, browse ? 500 : 300)
-    }
     this.loadTableData(data).then(() => {
       if (data && data.length) {
         this.inited = true
@@ -765,7 +767,6 @@ export default {
       tableGroupColumn,
       isGroup,
       loading,
-      isCloak,
       stripe,
       showHeader,
       height,
@@ -865,10 +866,10 @@ export default {
     if (initStore.filter) {
       tableComps.push(
         h('vxe-table-filter', {
+          ref: 'filterWrapper',
           props: {
             filterStore
-          },
-          ref: 'filterWrapper'
+          }
         })
       )
     }
@@ -898,21 +899,11 @@ export default {
     if (ctxMenuStore.visible && this.isCtxMenu) {
       tableComps.push(
         h('vxe-table-context-menu', {
+          ref: 'ctxWrapper',
           props: {
             ctxMenuStore,
             ctxMenuOpts
-          },
-          ref: 'ctxWrapper'
-        })
-      )
-    }
-    // 部件 - 校验提示
-    if (hasTip && this.editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')) {
-      tableComps.push(
-        h('vxe-tooltip', {
-          class: 'vxe-table--valid-error',
-          props: validOpts.message === 'tooltip' || tableData.length === 1 ? vaildTipOpts : null,
-          ref: 'validTip'
+          }
         })
       )
     }
@@ -934,16 +925,13 @@ export default {
         'is--area': mouseConfig && mouseOpts.area,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
-        'is--loading': isCloak || loading,
+        'is--loading': loading,
         'is--empty': !loading && !tableData.length,
         'scroll--y': overflowY,
         'scroll--x': overflowX,
         'virtual--x': scrollXLoad,
         'virtual--y': scrollYLoad
-      }],
-      attrs: {
-        'x-cloak': isCloak
-      }
+      }]
     }, [
       /**
        * 隐藏列
@@ -990,24 +978,30 @@ export default {
        */
       h('div', {
         class: ['vxe-table--loading vxe-loading', {
-          'is--visible': isCloak || loading
+          'is--visible': loading
         }]
       }, [
         h('div', {
           class: 'vxe-loading--spinner'
         })
       ]),
-      /**
-       * 工具提示
-       */
-      hasTip ? h('vxe-tooltip', {
-        ref: 'tooltip',
-        props: tooltipOpts,
-        on: tooltipOpts.enterable ? {
-          leave: this.handleTooltipLeaveEvent
-        } : null
-      }) : null
-    ].concat(tableComps))
+      h('div', {}, [
+        // 工具提示
+        hasTip ? h('vxe-tooltip', {
+          key: 'mTip',
+          ref: 'tooltip',
+          props: tooltipOpts
+        }) : null,
+        // 校验提示
+        hasTip && this.editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
+          key: 'vTip',
+          ref: 'validTip',
+          class: 'vxe-table--valid-error',
+          props: validOpts.message === 'tooltip' || tableData.length === 1 ? vaildTipOpts : null
+        }) : null
+      ]),
+      h('div', {}, tableComps)
+    ])
   },
   methods
 }

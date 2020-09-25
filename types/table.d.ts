@@ -1,4 +1,4 @@
-import { VXETableModule, RowInfo, RecordInfo } from './component'
+import { VXETableComponent, RowInfo, RecordInfo } from './component'
 import { ColumnOptions, ColumnInfo } from './column'
 import { ColumnCellRenderParams, EmptyRender } from './extends/renderer'
 import { ExportOptons, ImportOptons, PrintOptons, ReadFileOptions } from './extends/export'
@@ -10,7 +10,7 @@ import { MenuOptions, MenuFirstOption } from './extends/menu'
 /**
  * 表格
  */
-export declare class Table extends VXETableModule {
+export declare class Table extends VXETableComponent {
   /**
    * 唯一标识
    */
@@ -39,7 +39,6 @@ export declare class Table extends VXETableModule {
    * 是否带有纵向边框
    */
   border?: boolean | 'default' | 'full' | 'outer' | 'inner' | 'none';
-  fit?: boolean;
   /**
    * 表格是否加载中
    */
@@ -226,7 +225,6 @@ export declare class Table extends VXETableModule {
   // 空内容渲染配置项
   emptyRender?: boolean | EmptyRender;
   animat?: boolean;
-  cloak?: boolean;
   delayHover?: number;
   /**
    * 横向虚拟滚动配置
@@ -258,9 +256,6 @@ export declare class Table extends VXETableModule {
   };
   // 额外的参数
   params?: any;
-
-  // computed
-  vSize: string;
 
   // methods
   /**
@@ -957,6 +952,11 @@ export declare class Table extends VXETableModule {
    * 用于 mouse-config.area，打开单元格替换功能
    */
   openReplace(): Promise<any>;
+  /**
+   * 连接工具栏
+   * @param toolbar 工具栏组件实例
+   */
+  connect(toolbar: any): Promise<any>;
   /**
    * 使表格获取焦点
    */

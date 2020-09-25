@@ -58,7 +58,7 @@ function getModal (id) {
   return XEUtils.find(allActivedModals, $modal => $modal.id === id)
 }
 
-export const ModalController = {
+const ModalController = {
   get: getModal,
   close: closeModal,
   open: openModal

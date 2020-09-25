@@ -2,7 +2,7 @@
   <div id="app" @click="clickEvent">
     <header class="page-header">
       <div class="left">
-        <a href="https://github.com/x-extends/vxe-table">
+        <a href="/vxe-table/">
           <img src="logo.png" width="18">
           <span class="title">vxe-table</span>
         </a>
@@ -33,8 +33,8 @@
             <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
             <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
-          <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
-          <a class="support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
+          <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
+          <a class="link support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
         </div>
       </div>
     </header>
@@ -90,7 +90,7 @@
 
     <vxe-modal v-model="supportVisible" :loading="supportLoading" title="💡技术支持" width="800" position="center">
       <template v-slot>
-        <div class="support-declare">如果该项目帮助了您，你可以通过捐赠或者加入技术支持群的方式来支持作者，同时您的支持也可以帮助该项目持续维护下去！</div>
+        <div class="support-declare">vxe-table 开源版完全免费，如果该项目帮助了您，你可以通过捐赠或者加入技术支持群的方式来支持作者，同时您的支持也能帮助该项目持续维护下去！</div>
         <div>
           <ul class="vxe-row support-question">
             <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
@@ -118,8 +118,8 @@
       <template v-slot>
         <div class="support-pay-step">
           <p style="font-size: 12px;">联系邮件： <a class="link" href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
-          <p class="title">1. 扫码申请加入 QQ 群<br><img src="static/support/qq.png"></p>
-          <p class="title">2. 通过支付宝或微信付费：¥{{ supportDiscountPrice || supportGroupPrice }}<br>3. 付费完成后点击 "联系收款方"，留言QQ号即可<br><img src="static/donation/pay.jpg"></p>
+          <p class="title">1. 扫码申请加入 QQ 群<br><img src="/vxe-table/static/support/qq.png"></p>
+          <p class="title">2. 通过支付宝或微信付费：¥{{ supportDiscountPrice || supportGroupPrice }}<br>3. 付费完成后点击 "联系收款方"，留言QQ号即可<br><img src="/vxe-table/static/donation/pay.jpg"></p>
           <p class="title">（注意：必须留言QQ号，否则将无法审批通过）</p>
         </div>
       </template>
@@ -340,6 +340,18 @@ export default {
               label: 'app.aside.nav.modal',
               locat: {
                 name: 'ModuleModal'
+              }
+            },
+            {
+              label: 'app.aside.nav.readFile',
+              locat: {
+                name: 'ModuleFile'
+              }
+            },
+            {
+              label: 'app.aside.nav.print',
+              locat: {
+                name: 'ModulePrint'
               }
             }
           ]
@@ -680,12 +692,12 @@ export default {
                 name: 'TablePrint'
               }
             },
-            {
-              label: 'app.aside.nav.customPrint',
-              locat: {
-                name: 'TableCustomPrint'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.customPrint',
+            //   locat: {
+            //     name: 'TableCustomPrint'
+            //   }
+            // },
             {
               label: 'app.aside.nav.fixedType',
               locat: {

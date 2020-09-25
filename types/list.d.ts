@@ -1,9 +1,9 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 列表
  */
-export declare class List extends VXETableModule {
+export declare class List extends VXETableComponent {
   /**
    * 绑定值
    */

@@ -1,11 +1,11 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 import { Form } from './form'
 import { RenderParams, RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
 
 /**
  * 表单 - 项
  */
-export class FormItem extends VXETableModule {
+export class FormItem extends VXETableComponent {
   /**
    * 标题
    */

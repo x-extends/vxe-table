@@ -532,16 +532,16 @@ export default {
         }, renderRows(h, this, $xetable, '', 0, fixedType, tableData, tableColumn))
       ]),
       h('div', {
-        staticClass: 'vxe-table--checkbox-range'
+        class: 'vxe-table--checkbox-range'
       }),
       mouseConfig && mouseOpts.area ? h('div', {
-        staticClass: 'vxe-table--cell-area'
+        class: 'vxe-table--cell-area'
       }, [
         h('span', {
-          staticClass: 'vxe-table--cell-main-area'
+          class: 'vxe-table--cell-main-area'
         }, mouseOpts.extension ? [
           h('span', {
-            staticClass: 'vxe-table--cell-main-area-btn',
+            class: 'vxe-table--cell-main-area-btn',
             on: {
               mousedown (evnt) {
                 $xetable.triggerCellExtendMousedownEvent(evnt, { $table: $xetable, fixed: fixedType, type: cellType })
@@ -550,16 +550,16 @@ export default {
           })
         ] : null),
         h('span', {
-          staticClass: 'vxe-table--cell-copy-area'
+          class: 'vxe-table--cell-copy-area'
         }),
         h('span', {
-          staticClass: 'vxe-table--cell-extend-area'
+          class: 'vxe-table--cell-extend-area'
         }),
         h('span', {
-          staticClass: 'vxe-table--cell-multi-area'
+          class: 'vxe-table--cell-multi-area'
         }),
         h('span', {
-          staticClass: 'vxe-table--cell-active-area'
+          class: 'vxe-table--cell-active-area'
         })
       ]) : null,
       !fixedType ? h('div', {

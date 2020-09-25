@@ -15,7 +15,7 @@
       <!--自定义空数据模板-->
       <template v-slot:empty>
         <span style="color: red;">
-          <img src="static/other/img1.gif">
+          <img src="/vxe-table/static/other/img1.gif">
           <p>没有更多数据了！</p>
         </span>
       </template>
@@ -87,6 +87,10 @@ export default {
           seq: true, // 启用动态序号代理
           sort: true, // 启用排序代理
           filter: true, // 启用筛选代理
+          props: {
+            result: 'result', // 配置响应结果列表字段
+            total: 'page.total' // 配置响应结果总页数字段
+          },
           ajax: {
             // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
             query: ({ page, sort, filters }) => {
@@ -153,7 +157,7 @@ export default {
           <!--自定义空数据模板-->
           <template v-slot:empty>
             <span style="color: red;">
-              <img src="static/other/img1.gif">
+              <img src="/vxe-table/static/other/img1.gif">
               <p>没有更多数据了！</p>
             </span>
           </template>
@@ -212,6 +216,10 @@ export default {
                   seq: true, // 启用动态序号代理
                   sort: true, // 启用排序代理
                   filter: true, // 启用筛选代理
+                  props: {
+                    result: 'result', // 配置响应结果列表字段
+                    total: 'page.total' // 配置响应结果总页数字段
+                  },
                   ajax: {
                     // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
                     query: ({ page, sort, filters }) => {

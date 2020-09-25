@@ -8,10 +8,8 @@ const GlobalConfig = {
   table: {
     fit: true,
     showHeader: true,
-    animat: true,
     delayHover: 250,
     // keepSource: false,
-    // cloak: false,
     // showOverflow: null,
     // showHeaderOverflow: null,
     // showFooterOverflow: null,
@@ -92,6 +90,9 @@ const GlobalConfig = {
       gt: 100
       // oSize: 0
     }
+  },
+  export: {
+    types: {}
   },
   icon: {
     // table

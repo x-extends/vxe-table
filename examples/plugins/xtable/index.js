@@ -83,10 +83,13 @@ Vue.use(Validator)
 // 再安装核心
 Vue.use(Table)
 
-// 给 vue 实例挂载全局窗口对象
+// 给 vue 实例挂载窗口对象
 Vue.prototype.$XModal = VXETable.modal
 
-// 给 vue 实例挂载全局打印对象
+// 给 vue 实例挂载文件对象
+Vue.prototype.$readFile = VXETable.readFile
+
+// 给 vue 实例挂载打印对象
 Vue.prototype.$XPrint = VXETable.print
 
 VXETable.use(VXETablePluginElement)

@@ -1,9 +1,9 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 工具提示
  */
-export declare class Tooltip extends VXETableModule {
+export declare class Tooltip extends VXETableComponent {
   /**
    * 绑定值
    */

@@ -1,14 +1,15 @@
 {
   "name": "vxe-table",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0-beta.1",
   "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...",
   "scripts": {
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
     "build": "vue-cli-service build",
     "lib:modules": "gulp build",
-    "lib:pack": "vue-cli-service build --target lib --name index --dest lib index.js",
-    "lib": "npm run lib:pack && npm run lib:modules",
+    "lib:dev_pack": "vue-cli-service build --target lib --name index --dest lib_dev index.js",
+    "lib:pro_pack": "vue-cli-service build --target lib --name index --dest lib_pro index.js",
+    "lib": "npm run lib:dev_pack && npm run lib:pro_pack && npm run lib:modules",
     "postinstall": "node scripts/postinstall || echo \"ignore\""
   },
   "files": [
@@ -78,8 +79,8 @@
     "vuex": "^3.4.0",
     "vxe-table-plugin-antd": "^1.9.2",
     "vxe-table-plugin-element": "^1.9.3",
-    "vxe-table-plugin-export-pdf": "^1.8.7",
-    "vxe-table-plugin-export-xlsx": "^1.6.3",
+    "vxe-table-plugin-export-pdf": "^1.8.8",
+    "vxe-table-plugin-export-xlsx": "^1.6.4",
     "vxe-table-plugin-iview": "^1.9.2",
     "vxe-table-plugin-menus": "^1.4.10",
     "vxe-table-plugin-shortcut-key": "^1.3.0",

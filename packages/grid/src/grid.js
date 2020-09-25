@@ -144,7 +144,6 @@ export default {
   },
   data () {
     return {
-      isCloak: false,
       tableLoading: false,
       isZMax: false,
       tableData: [],
@@ -190,7 +189,7 @@ export default {
       return rest
     },
     tableProps () {
-      const { isZMax, seqConfig, pagerConfig, loading, isCloak, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData } = this
+      const { isZMax, seqConfig, pagerConfig, loading, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData } = this
       const props = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
@@ -200,7 +199,7 @@ export default {
         }
       }
       if (proxyConfig) {
-        props.loading = isCloak || loading || tableLoading
+        props.loading = loading || tableLoading
         props.data = tableData
         props.rowClassName = this.handleRowClassName
         if ((proxyOpts.seq || proxyOpts.index) && pagerConfig) {
@@ -237,12 +236,6 @@ export default {
     if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
       console.error('[vxe-grid] There is a conflict between the props proxy-config and data.')
     }
-    if (this.cloak) {
-      this.isCloak = true
-      setTimeout(() => {
-        this.isCloak = false
-      }, DomTools.browse ? 500 : 300)
-    }
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
   mounted () {
@@ -267,7 +260,7 @@ export default {
         't--animat': !!this.animat,
         'is--round': this.round,
         'is--maximize': isZMax,
-        'is--loading': this.isCloak || this.loading || this.tableLoading
+        'is--loading': this.loading || this.tableLoading
       }],
       style: this.renderStyle
     }, [

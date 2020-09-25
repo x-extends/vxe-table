@@ -688,7 +688,7 @@ const Methods = {
    * 如果还额外传了 field 则还原指定的单元格数据
    */
   revertData (rows, field) {
-    const { keepSource, tableSourceData, tableFullData } = this
+    const { keepSource, tableSourceData, treeConfig } = this
     if (keepSource) {
       if (arguments.length) {
         if (rows && !XEUtils.isArray(rows)) {
@@ -696,7 +696,10 @@ const Methods = {
         }
         rows.forEach(row => {
           if (!this.isInsertByRow(row)) {
-            const rowIndex = tableFullData.indexOf(row)
+            const rowIndex = this.getRowIndex(row)
+            if (treeConfig && rowIndex === -1) {
+              throw new Error(UtilTools.getLog('vxe.error.noTree', ['revertData']))
+            }
             const oRow = tableSourceData[rowIndex]
             if (oRow && row) {
               if (field) {
@@ -1990,13 +1993,14 @@ const Methods = {
     this.closeMenu()
     this.recalculate(true)
   },
-  handleTooltipLeaveEvent () {
+  handleTooltipLeaveMethod () {
     const tooltipOpts = this.tooltipOpts
     setTimeout(() => {
       if (!this.tooltipActive) {
         this.clostTooltip()
       }
     }, tooltipOpts.leaveDelay)
+    return false
   },
   handleTargetEnterEvent () {
     clearTimeout(this.tooltipTimeout)
@@ -3739,6 +3743,16 @@ const Methods = {
     this.isActivated = false
     return this.$nextTick()
   },
+  // 连接工具栏
+  connect ($toolbar) {
+    if ($toolbar && $toolbar.syncUpdate) {
+      $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: this })
+      this.$toolbar = $toolbar
+    } else {
+      UtilTools.error('vxe.error.barUnableLink')
+    }
+    return this.$nextTick()
+  },
 
   /*************************
    * Publish methods
@@ -3751,15 +3765,6 @@ const Methods = {
       return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
     }
     return null
-  },
-  // 与工具栏对接
-  connect ($toolbar) {
-    if ($toolbar && $toolbar.syncUpdate) {
-      $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: this })
-      this.$toolbar = $toolbar
-    } else {
-      UtilTools.error('vxe.error.barUnableLink')
-    }
   }
   /*************************
    * Publish methods

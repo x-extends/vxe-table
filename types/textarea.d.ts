@@ -1,9 +1,9 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 文本域
  */
-export declare class Textarea extends VXETableModule {
+export declare class Textarea extends VXETableComponent {
   /**
    * 绑定值
    */

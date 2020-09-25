@@ -655,6 +655,42 @@ function handleImport ($xetable, content, opts) {
   }
 }
 
+export function readLocalFile (options = {}) {
+  if (!fileForm) {
+    fileForm = document.createElement('form')
+    fileInput = document.createElement('input')
+    fileForm.className = 'vxe-table--file-form'
+    fileInput.name = 'file'
+    fileInput.type = 'file'
+    fileForm.appendChild(fileInput)
+    document.body.appendChild(fileForm)
+  }
+  let fileResolve
+  let fileReject
+  const types = options.types || VXETable.importTypes
+  if (options.multiple) {
+    fileInput.multiple = 'multiple'
+  }
+  fileInput.accept = `.${types.join(', .')}`
+  fileInput.onchange = (evnt) => {
+    const { type } = UtilTools.parseFile(evnt.target.files[0])
+    if (types.indexOf(type) > -1) {
+      fileResolve(evnt)
+    } else {
+      if (options.message !== false) {
+        VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
+      }
+      fileReject(evnt)
+    }
+  }
+  fileForm.reset()
+  fileInput.click()
+  return new Promise((resolve, reject) => {
+    fileResolve = resolve
+    fileReject = reject
+  })
+}
+
 export function handlePrint ($xetable, opts, content) {
   const { beforePrintMethod } = opts
   if (beforePrintMethod) {
@@ -832,47 +868,16 @@ export default {
         this._importResolve = resolve
         this._importReject = reject
       })
-      this.readFile(opts)
-        .then(evnt => this.importByFile(evnt.target.files[0], opts))
-        .catch(evnt => {
-          this._importReject(evnt)
-          this._importReject = null
-        })
+      readLocalFile(opts).then((evnt) => {
+        this.importByFile(evnt.target.files[0], opts)
+      }).catch(evnt => {
+        this._importReject(evnt)
+        this._importReject = null
+      })
       return rest
     },
-    _readFile (options = {}) {
-      if (!fileForm) {
-        fileForm = document.createElement('form')
-        fileInput = document.createElement('input')
-        fileForm.className = 'vxe-table--file-form'
-        fileInput.name = 'file'
-        fileInput.type = 'file'
-        fileForm.appendChild(fileInput)
-        document.body.appendChild(fileForm)
-      }
-      const types = options.types || VXETable.importTypes
-      if (options.multiple) {
-        fileInput.multiple = 'multiple'
-      }
-      fileInput.accept = `.${types.join(', .')}`
-      fileInput.onchange = evnt => {
-        const { type } = UtilTools.parseFile(evnt.target.files[0])
-        if (types.indexOf(type) > -1) {
-          this._fileResolve(evnt)
-        } else {
-          if (options.message !== false) {
-            VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
-          }
-          this._fileReject(evnt)
-        }
-        this._fileResolve = null
-      }
-      fileForm.reset()
-      fileInput.click()
-      return new Promise((resolve, reject) => {
-        this._fileResolve = resolve
-        this._fileReject = reject
-      })
+    _readFile (options) {
+      return readLocalFile(options)
     },
     _print (options) {
       const opts = Object.assign({

@@ -37,7 +37,8 @@ export default {
     zIndex: [String, Number],
     isArrow: { type: Boolean, default: true },
     enterable: Boolean,
-    leaveDelay: { type: Number, default: GlobalConfig.tooltip.leaveDelay }
+    leaveDelay: { type: Number, default: GlobalConfig.tooltip.leaveDelay },
+    leaveMethod: Function
   },
   data () {
     return {
@@ -139,8 +140,8 @@ export default {
     ].concat(this.$slots.default))
   },
   methods: {
-    show () {
-      return this.toVisible(this.target)
+    show (target, message) {
+      return this.toVisible(target || this.target, message)
     },
     close () {
       this.tipTarget = null
@@ -219,16 +220,16 @@ export default {
       this.isHover = true
     },
     wrapperMouseleaveEvent (evnt) {
-      const { $listeners, trigger, enterable, leaveDelay } = this
+      const { leaveMethod, trigger, enterable, leaveDelay } = this
       this.isHover = false
-      if ($listeners.leave) {
-        this.$emit('leave', { $event: evnt })
-      } else if (enterable && trigger === 'hover') {
-        setTimeout(() => {
-          if (!this.targetActive) {
-            this.close()
-          }
-        }, leaveDelay)
+      if (!leaveMethod || leaveMethod({ $event: evnt }) !== false) {
+        if (enterable && trigger === 'hover') {
+          setTimeout(() => {
+            if (!this.targetActive) {
+              this.close()
+            }
+          }, leaveDelay)
+        }
       }
     }
   }

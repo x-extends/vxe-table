@@ -43,7 +43,7 @@ export default {
           renderEmpty (h, renderOpts) {
             return [
               <span>
-                <img src="static/other/img1.gif"/>
+                <img src="/vxe-table/static/other/img1.gif"/>
                 <p>亲，没有更多数据了！</p>
               </span>
             ]
