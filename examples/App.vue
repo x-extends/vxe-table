@@ -2,7 +2,7 @@
   <div id="app" @click="clickEvent">
     <header class="page-header">
       <div class="left">
-        <a href="https://github.com/x-extends/vxe-table">
+        <a href="/vxe-table/">
           <img src="logo.png" width="18">
           <span class="title">vxe-table</span>
         </a>
