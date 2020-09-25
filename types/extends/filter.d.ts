@@ -1,11 +1,11 @@
-import { VXETableModule } from '../component'
+import { VXETableComponent } from '../component'
 import { ColumnInfo } from '../column'
 import { TableRenderParams, RenderOptions, OptionProps, OptionGroupProps } from './renderer'
 
 /**
  * 筛选
  */
-export declare class Filter extends VXETableModule {}
+export declare class Filter extends VXETableComponent {}
 
 export class FilterPanel {
   /**

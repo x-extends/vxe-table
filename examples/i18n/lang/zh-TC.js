@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   app: {
     aside: {
       nav: {
@@ -72,7 +72,7 @@ module.exports = {
         expandRowLazy: '展开行 + 懒加载',
         accordion: '展开行 + 手风琴效果',
         toolbar: '工具栏',
-        customs: '显示/隐藏列',
+        customs: '显示、隐藏、折叠列',
         customStorage: '自定义列 + localStorage',
         customlWidthStorage: '完整自定义列 + localStorage',
         search: '全表搜索',
@@ -176,11 +176,12 @@ module.exports = {
         textarea: '文本域',
         select: '下拉框',
         modal: '模态窗口',
-        tooltip: '文字提示',
+        tooltip: '工具提示',
         form: '表单',
         switch: '开关',
         list: '列表',
         pulldown: '下拉容器',
+        readFile: '读取文件',
 
         other: '集成協力廠商庫',
         elementRender: 'element-ui -> 自定义渲染',

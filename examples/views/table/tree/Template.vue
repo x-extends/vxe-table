@@ -29,7 +29,7 @@
       </vxe-table-column>
       <vxe-table-column field="attr3" title="Image" tree-node>
         <template v-slot>
-          <img src="static/other/img1.gif" height="50">
+          <img src="/vxe-table/static/other/img1.gif" height="50">
         </template>
       </vxe-table-column>
       <vxe-table-column field="date" title="Date">
@@ -83,7 +83,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="attr3" title="Image" tree-node>
             <template v-slot>
-              <img src="static/other/img1.gif" height="50">
+              <img src="/vxe-table/static/other/img1.gif" height="50">
             </template>
           </vxe-table-column>
           <vxe-table-column field="date" title="Date">

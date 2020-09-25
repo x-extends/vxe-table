@@ -4447,6 +4447,15 @@ const apis = [
         list: []
       },
       {
+        name: 'connect(toolbar)',
+        desc: '连接工具栏',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'toolbar: Toolbar',
+        list: []
+      },
+      {
         name: 'focus()',
         desc: '使表格获取焦点',
         version: '2.9.11',

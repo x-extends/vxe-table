@@ -2,7 +2,7 @@
   <div id="app" @click="clickEvent">
     <header class="page-header">
       <div class="left">
-        <a href="https://github.com/x-extends/vxe-table">
+        <a href="/vxe-table/">
           <img src="logo.png" width="18">
           <span class="title">vxe-table</span>
         </a>
@@ -583,12 +583,12 @@ export default {
                 name: 'TablePrint'
               }
             },
-            {
-              label: 'app.aside.nav.customPrint',
-              locat: {
-                name: 'TableCustomPrint'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.customPrint',
+            //   locat: {
+            //     name: 'TableCustomPrint'
+            //   }
+            // },
             {
               label: 'app.aside.nav.fixedType',
               locat: {
@@ -1369,13 +1369,13 @@ export default {
                 name: 'TableScrollEdit'
               }
             },
-            {
-              label: 'app.aside.nav.scrollTree',
-              disabled: true,
-              locat: {
-                name: 'TableScrollTree'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.scrollTree',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScrollTree'
+            //   }
+            // },
             {
               label: 'app.aside.nav.cellValid',
               locat: {

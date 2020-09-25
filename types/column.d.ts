@@ -1,5 +1,5 @@
 import { CreateElement, VNode } from 'vue'
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './extends/filter'
 import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, ColumnContentSlotParams, RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
 import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './extends/header'
@@ -10,7 +10,7 @@ import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './
 /**
  * 列
  */
-export declare class Column extends VXETableModule {
+export declare class Column extends VXETableComponent {
   /**
    * 渲染类型
    */

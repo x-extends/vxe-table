@@ -98,6 +98,9 @@ const GlobalConfig = {
       // rHeight: 0
     }
   },
+  export: {
+    types: {}
+  },
   icon: {
     // table
     TABLE_SORT_ASC: iconPrefix + 'caret-top',

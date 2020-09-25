@@ -35,7 +35,7 @@
         <vxe-list class="my-list" height="200" :data="list3">
           <template v-slot="{ items }">
             <div class="my-list-item" v-for="(item, index) in items" :key="index">
-              <img src="static/other/img2.gif" height="28">
+              <img src="/vxe-table/static/other/img2.gif" height="28">
               <span>{{ item.label }}</span>
             </div>
           </template>
@@ -46,7 +46,7 @@
           <template v-slot="{ items }">
             <ul>
               <li v-for="(item, index) in items" :key="index">
-                <img src="static/other/img1.gif" height="28">
+                <img src="/vxe-table/static/other/img1.gif" height="28">
                 <span>{{ item.label }}</span>
               </li>
             </ul>
@@ -169,7 +169,7 @@ export default {
             <vxe-list class="my-list" height="200" :data="list3">
               <template v-slot="{ items }">
                 <div class="my-list-item" v-for="(item, index) in items" :key="index">
-                  <img src="static/other/img2.gif" height="28">
+                  <img src="/vxe-table/static/other/img2.gif" height="28">
                   <span>{{ item.label }}</span>
                 </div>
               </template>
@@ -180,7 +180,7 @@ export default {
               <template v-slot="{ items }">
                 <ul>
                   <li v-for="(item, index) in items" :key="index">
-                    <img src="static/other/img1.gif" height="28">
+                    <img src="/vxe-table/static/other/img1.gif" height="28">
                     <span>{{ item.label }}</span>
                   </li>
                 </ul>

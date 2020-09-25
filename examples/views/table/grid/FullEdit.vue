@@ -93,6 +93,10 @@ export default {
           sort: true, // 启用排序代理
           filter: true, // 启用筛选代理
           form: true, // 启用表单代理
+          props: {
+            result: 'result',
+            total: 'page.total'
+          },
           ajax: {
             // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
             query: ({ page, sort, filters, form }) => {
@@ -244,6 +248,10 @@ export default {
                   sort: true, // 启用排序代理
                   filter: true, // 启用筛选代理
                   form: true, // 启用表单代理
+                  props: {
+                    result: 'result',
+                    total: 'page.total'
+                  },
                   ajax: {
                     // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
                     query: ({ page, sort, filters, form }) => {

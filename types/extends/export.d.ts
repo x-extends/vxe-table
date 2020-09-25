@@ -1,4 +1,4 @@
-import { VXETableModule, RowInfo } from '../component'
+import { VXETableComponent, RowInfo } from '../component'
 import { Table } from '../table'
 import { Grid } from '../grid'
 import { ColumnInfo } from '../column'
@@ -7,7 +7,7 @@ import { GridRenderParams } from './renderer'
 /**
  * 导出
  */
-export declare class Export extends VXETableModule {}
+export declare class Export extends VXETableComponent {}
 
 /**
  * 导出参数
@@ -154,6 +154,10 @@ export interface PrintOptons {
    */
   columns?: ColumnInfo[];
   /**
+   * 打印样式
+   */
+  style?: string;
+  /**
    * 自定义打印内容
    */
   content?: string;
@@ -176,6 +180,9 @@ export interface PrintOptons {
 
   [name: string]: any;
 }
+
+export function readFile(options?: ReadFileOptions): Promise<any>;
+export function print(options: PrintOptons): any;
 
 export interface ReadFileOptions {
   multiple?: boolean;

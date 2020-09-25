@@ -15,7 +15,16 @@ export const Export = {
   install (Vue) {
     VXETable.reg('export')
     VXETable.print = print
-    Object.assign(VXETable.types, { csv: 1, html: 1, xml: 1, txt: 1 })
+    VXETable.setup({
+      export: {
+        types: {
+          csv: 0,
+          html: 0,
+          xml: 0,
+          txt: 0
+        }
+      }
+    })
     Table.mixins.push(mixin)
     Vue.component(ExportPanel.name, ExportPanel)
     Vue.component(ImportPanel.name, ImportPanel)

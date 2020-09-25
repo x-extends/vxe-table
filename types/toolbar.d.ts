@@ -1,12 +1,12 @@
 import { CreateElement, VNode } from 'vue'
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 import { ColumnInfo } from './column'
 import { GridRenderParams, RenderOptions } from './extends/renderer'
 
 /**
  * 工具栏
  */
-export declare class Toolbar extends VXETableModule {
+export declare class Toolbar extends VXETableComponent {
   /**
    * 唯一 ID 标识
    */

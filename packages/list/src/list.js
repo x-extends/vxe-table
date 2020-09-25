@@ -83,46 +83,44 @@ export default {
   },
   render (h) {
     const { $scopedSlots, styles, bodyHeight, topSpaceHeight, items, loading } = this
-    return [
+    return h('div', {
+      class: ['vxe-list', {
+        'is--loading': loading
+      }]
+    }, [
       h('div', {
-        class: ['vxe-list', {
-          'is--loading': loading
+        ref: 'virtualWrapper',
+        class: 'vxe-list--virtual-wrapper',
+        style: styles,
+        on: {
+          scroll: this.scrollEvent
+        }
+      }, [
+        h('div', {
+          ref: 'ySpace',
+          class: 'vxe-list--y-space',
+          style: {
+            height: bodyHeight ? `${bodyHeight}px` : ''
+          }
+        }),
+        h('div', {
+          ref: 'body',
+          class: 'vxe-list--body',
+          style: {
+            marginTop: topSpaceHeight ? `${topSpaceHeight}px` : ''
+          }
+        }, $scopedSlots.default ? $scopedSlots.default.call(this, { items, $list: this }, h) : [])
+      ]),
+      h('div', {
+        class: ['vxe-list--loading vxe-loading', {
+          'is--visible': loading
         }]
       }, [
         h('div', {
-          ref: 'virtualWrapper',
-          class: 'vxe-list--virtual-wrapper',
-          style: styles,
-          on: {
-            scroll: this.scrollEvent
-          }
-        }, [
-          h('div', {
-            ref: 'ySpace',
-            class: 'vxe-list--y-space',
-            style: {
-              height: bodyHeight ? `${bodyHeight}px` : ''
-            }
-          }),
-          h('div', {
-            ref: 'body',
-            class: 'vxe-list--body',
-            style: {
-              marginTop: topSpaceHeight ? `${topSpaceHeight}px` : ''
-            }
-          }, $scopedSlots.default ? $scopedSlots.default.call(this, { items, $list: this }, h) : [])
-        ]),
-        h('div', {
-          class: ['vxe-list--loading vxe-loading', {
-            'is--visible': loading
-          }]
-        }, [
-          h('div', {
-            class: 'vxe-loading--spinner'
-          })
-        ])
+          class: 'vxe-loading--spinner'
+        })
       ])
-    ]
+    ])
   },
   methods: {
     getParentElem () {

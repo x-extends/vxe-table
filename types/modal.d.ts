@@ -1,10 +1,10 @@
 import { CreateElement, VNode } from 'vue'
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 模态窗口
  */
-export declare class Modal extends VXETableModule {
+export declare class Modal extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -247,7 +247,7 @@ export interface ModalEventParams {
 /**
  * 全局窗口控制器
  */
-export interface ModalClass {
+export interface ModalController {
   /**
    * 创建窗口
    * @param options 参数
@@ -283,7 +283,7 @@ export interface ModalClass {
    * @param title 标题
    * @param options 参数
    */
-  message (message: string, title?: string, options?: ModalOptions): Promise<string>;
+  message (message: string, options?: ModalOptions): Promise<string>;
   /**
    * 创建消息提示
    * @param options 参数
@@ -300,5 +300,3 @@ export interface ModalClass {
    */
   close (id?: string): Promise<any>;
 }
-
-export declare const ModalController: ModalClass

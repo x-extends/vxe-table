@@ -1,9 +1,9 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 输入框
  */
-export declare class Input extends VXETableModule {
+export declare class Input extends VXETableComponent {
   /**
    * 绑定值
    */

@@ -1,9 +1,9 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 复选框
  */
-export declare class Checkbox extends VXETableModule {
+export declare class Checkbox extends VXETableComponent {
   /**
    * 绑定值
    */
