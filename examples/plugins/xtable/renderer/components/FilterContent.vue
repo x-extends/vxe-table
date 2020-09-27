@@ -116,6 +116,8 @@ export default {
 }
 .my-filter-content .my-fc-search-list {
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 .my-filter-content .my-fc-search-list-body {
   overflow: auto;
