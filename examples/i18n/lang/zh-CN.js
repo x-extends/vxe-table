@@ -234,6 +234,7 @@ export default {
 
         api: 'API',
         vxeTable: 'vxe-table',
+        vxeTableColgroup: 'vxe-table-colgroup',
         vxeTableColumn: 'vxe-table-column',
         vxeGrid: 'vxe-grid',
         vxeVirtualTree: 'vxe-virtual-tree',
@@ -309,9 +310,9 @@ export default {
       },
       other: {
         v1: '1.x (已废弃)',
-        v2: '2.x (长期支持版本)',
-        v3: '3.x (最新版本)',
-        v4: '4.x (vue 3.x 版本)',
+        v2: '2.x (vue 2.6.x 稳定版)',
+        v3: '3.x (vue 2.6.x 最新版)',
+        v4: '4.x (vue 3.x Next)',
         plan: {
           v1: 'v1 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能',
           v2: 'v2 基于 vue2.6+，支持所有主的流浏览，同时兼具功能与性能',
