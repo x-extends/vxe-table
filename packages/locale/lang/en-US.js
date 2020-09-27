@@ -3,6 +3,7 @@ export default {
     error: {
       groupFixed: 'If you use group headers, the fixed columns must be set by group.',
       groupMouseRange: 'Grouping headers and "{0}" cannot be used at the same time, which may cause errors.',
+      groupTag: 'Grouping column header should use "{0}" instead of "{1}", which may cause errors.',
       scrollErrProp: 'The parameter "{0}" is not supported when virtual scrolling is enabled.',
       scrollXNotGroup: 'Horizontal virtual scrolling does not support grouping headers. Please modify the parameters of "scroll-x.gt" correctly, otherwise errors may occur.',
       errConflicts: 'Argument "{0}" conflicts with "{1}"',

@@ -43,7 +43,7 @@
           </vxe-pulldown>
         </template>
       </vxe-table-column>
-      <vxe-table-column title="分组">
+      <vxe-table-colgroup title="分组">
         <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
           <template v-slot:edit="{ row }">
             <vxe-input type="number" v-model="row.age"></vxe-input>
@@ -55,7 +55,7 @@
           </template>
           <template v-slot="{ row }">￥{{ row.num }}</template>
         </vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
       <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
         <template v-slot:edit="{ row, rowIndex }">
           <template v-if="rowIndex === 0">
@@ -174,7 +174,7 @@ export default {
               </vxe-pulldown>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="分组">
+          <vxe-table-colgroup title="分组">
             <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
               <template v-slot:edit="{ row }">
                 <vxe-input type="number" v-model="row.age"></vxe-input>
@@ -186,7 +186,7 @@ export default {
               </template>
               <template v-slot="{ row }">￥{{ row.num }}</template>
             </vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
           <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
             <template v-slot:edit="{ row, rowIndex }">
               <template v-if="rowIndex === 0">
@@ -208,7 +208,7 @@ export default {
             </template>
           </vxe-table-column>
         </vxe-table>
-
+        
         <vxe-pager
           perfect
           :current-page.sync="tablePage.currentPage"

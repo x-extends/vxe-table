@@ -73,10 +73,10 @@
       :footer-cell-class-name="footerCellClassName3"
       :data="tableData">
       <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column title="基本信息">
+      <vxe-table-colgroup title="基本信息">
         <vxe-table-column field="name" title="Name" min-width="600" sortable></vxe-table-column>
         <vxe-table-column field="age" title="Age" min-width="600"></vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
       <vxe-table-column field="date" title="Date" min-width="600"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" width="200" fixed="right"></vxe-table-column>
     </vxe-table>
@@ -263,10 +263,10 @@ export default {
           :footer-cell-class-name="footerCellClassName3"
           :data="tableData">
           <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column title="基本信息">
+          <vxe-table-colgroup title="基本信息">
             <vxe-table-column field="name" title="Name" min-width="600" sortable></vxe-table-column>
             <vxe-table-column field="age" title="Age" min-width="600"></vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
           <vxe-table-column field="date" title="Date" min-width="600"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" width="200" fixed="right"></vxe-table-column>
         </vxe-table>

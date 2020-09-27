@@ -92,7 +92,7 @@ export default {
             total: 'page.total' // 配置响应结果总页数字段
           },
           ajax: {
-            // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
+            // 接收 Promise 对象
             query: ({ page, sort, filters }) => {
               // 处理排序条件
               const queryParams = Object.assign({
@@ -221,7 +221,7 @@ export default {
                     total: 'page.total' // 配置响应结果总页数字段
                   },
                   ajax: {
-                    // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
+                    // 接收 Promise 对象
                     query: ({ page, sort, filters }) => {
                       // 处理排序条件
                       const queryParams = Object.assign({

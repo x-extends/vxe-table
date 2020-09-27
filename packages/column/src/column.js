@@ -4,7 +4,7 @@ import { UtilTools } from '../../tools'
 const props = {
   // 列唯一主键
   colId: [String, Number],
-  // 渲染类型 index,radio,checkbox,expand
+  // 渲染类型 seq,radio,checkbox,expand
   type: String,
   // 在 v3.0 中废弃 prop
   prop: String,

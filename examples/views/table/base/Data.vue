@@ -70,14 +70,14 @@ export default {
         { name: 'Test2', age: 28, sex: '男', role: '后端', content: '<img height="40" src="/vxe-table/static/other/img1.gif">' },
         { name: 'Test4', age: 26, sex: '男', role: '前端', content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' },
         { name: 'Test3', age: 20, sex: '女', role: '程序员鼓励师', content: '<img height="40" src="/vxe-table/static/other/img2.gif">' },
-        { name: 'Test1', age: 22, sex: '女', role: '设计师', content: '<div><span style="color: red">在线观看.avi</span></div>' }
+        { name: 'Test1', age: 22, sex: '女', role: '设计师', content: '<div><span style="color: red">我是 Htmp 片段</span></div>' }
       ],
       tableData2: [
         {
           userInfo: { name: 'Test1', age: 22 },
           other: [
             { sex: '女' },
-            { more: { content: '<div><span style="color: red">在线观看.avi</span></div>' } }
+            { more: { content: '<div><span style="color: red">我是 Htmp 片段</span></div>' } }
           ],
           role: '设计师'
         },
@@ -109,7 +109,7 @@ export default {
       tableData3: [
         [101, 'Test4', '男', 26, '<a href="https://github.com/x-extends/vxe-table">我是链接</a>', '前端'],
         [102, 'Test2', '男', 28, '<img height="40" src="/vxe-table/static/other/img1.gif">', '后端'],
-        [103, 'Test1', '女', 22, '<div><span style="color: red">在线观看.avi</span></div>', '设计师'],
+        [103, 'Test1', '女', 22, '<div><span style="color: red">我是 Htmp 片段</span></div>', '设计师'],
         [104, 'Test3', '女', 20, '<img height="40" src="/vxe-table/static/other/img2.gif">', '程序员鼓励师']
       ],
       demoCodes: [
@@ -132,7 +132,7 @@ export default {
                 { name: 'Test2', age: 28, sex: '男', role: '后端', content: '<img height="40" src="/vxe-table/static/other/img1.gif">' },
                 { name: 'Test4', age: 26, sex: '男', role: '前端', content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' },
                 { name: 'Test3', age: 20, sex: '女', role: '程序员鼓励师', content: '<img height="40" src="/vxe-table/static/other/img2.gif">' },
-                { name: 'Test1', age: 22, sex: '女', role: '设计师', content: '<div><span style="color: red">在线观看.avi</span></div>' }
+                { name: 'Test1', age: 22, sex: '女', role: '设计师', content: '<div><span style="color: red">我是 Htmp 片段</span></div>' }
               ]
             }
           }
@@ -158,7 +158,7 @@ export default {
                   userInfo: { name: 'Test1', age: 22 },
                   other: [
                     { sex: '女' },
-                    { more: { content: '<div><span style="color: red">在线观看.avi</span></div>' } }
+                    { more: { content: '<div><span style="color: red">我是 Htmp 片段</span></div>' } }
                   ],
                   role: '设计师'
                 },
@@ -210,7 +210,7 @@ export default {
               tableData: [
                 [101, 'Test4', '男', 26, '<a href="https://github.com/x-extends/vxe-table">我是链接</a>', '前端'],
                 [102, 'Test2', '男', 28, '<img height="40" src="/vxe-table/static/other/img1.gif">', '后端'],
-                [103, 'Test1', '女', 22, '<div><span style="color: red">在线观看.avi</span></div>', '设计师'],
+                [103, 'Test1', '女', 22, '<div><span style="color: red">我是 Htmp 片段</span></div>', '设计师'],
                 [104, 'Test3', '女', 20, '<img height="40" src="/vxe-table/static/other/img2.gif">', '程序员鼓励师']
               ]
             }

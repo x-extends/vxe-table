@@ -275,10 +275,6 @@
     "type": "boolean",
     "description": "表格动画效果开关（关闭后视觉效果更快）"
   },
-  "vxe-table/cloak": {
-    "type": "boolean",
-    "description": "用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动"
-  },
   "vxe-table/delay-hover": {
     "type": "number",
     "description": "当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件"
@@ -294,6 +290,54 @@
   "vxe-table/params": {
     "type": "any",
     "description": "额外的参数（可以用来存放一些私有参数）"
+  },
+  "vxe-table-colgroup/field": {
+    "type": "string",
+    "description": "列字段名（注：属性层级越深，渲染性能就越差，例如：aa.bb.cc.dd.ee）"
+  },
+  "vxe-table-colgroup/title": {
+    "type": "string",
+    "description": "列标题（支持开启国际化）"
+  },
+  "vxe-table-colgroup/width": {
+    "type": "number | string",
+    "description": "列宽度（如果为空则均匀分配剩余宽度，如果全部列固定了，可能会存在宽屏下不会铺满，可以配合 \"%\" 或者 \"min-width\" 布局）"
+  },
+  "vxe-table-colgroup/min-width": {
+    "type": "number | string",
+    "description": "最小列宽度；会自动将剩余空间按比例分配"
+  },
+  "vxe-table-colgroup/resizable": {
+    "type": "boolean",
+    "description": "列是否允许拖动列宽调整大小"
+  },
+  "vxe-table-colgroup/visible": {
+    "type": "boolean",
+    "description": "列是否显示"
+  },
+  "vxe-table-colgroup/fixed": {
+    "type": "string",
+    "description": "将列固定在左侧或者右侧（注意：固定列应该放在左右两侧的位置）"
+  },
+  "vxe-table-colgroup/align": {
+    "type": "string",
+    "description": "列对齐方式"
+  },
+  "vxe-table-colgroup/header-align": {
+    "type": "string",
+    "description": "表头列的对齐方式"
+  },
+  "vxe-table-colgroup/show-overflow": {
+    "type": "string | boolean",
+    "description": "当内容过长时显示为省略号"
+  },
+  "vxe-table-colgroup/show-header-overflow": {
+    "type": "string | boolean",
+    "description": "当表头内容过长时显示为省略号"
+  },
+  "vxe-table-colgroup/header-class-name": {
+    "type": "string | function",
+    "description": "给表头的单元格附加 className，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
   },
   "vxe-table-column/type": {
     "type": "string",
@@ -722,10 +766,6 @@
   "vxe-grid/animat": {
     "type": "boolean",
     "description": "表格动画效果开关（关闭后视觉效果更快）"
-  },
-  "vxe-grid/cloak": {
-    "type": "boolean",
-    "description": "用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动"
   },
   "vxe-grid/delay-hover": {
     "type": "number",
@@ -1159,11 +1199,11 @@
     "type": "any",
     "description": "下拉分组选项属性参数配置"
   },
-  "vxe-select/opt-id": {
+  "vxe-select/option-id": {
     "type": "string",
     "description": "自定义选项唯一主键的字段名（选项必须要有唯一主键，默认自动生成）"
   },
-  "vxe-select/opt-key": {
+  "vxe-select/option-key": {
     "type": "boolean",
     "description": "是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）"
   },

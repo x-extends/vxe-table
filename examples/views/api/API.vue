@@ -63,6 +63,7 @@ import XEUtils from 'xe-utils'
 import pack from '../../../package.json'
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
+import tableColgroupAPI from '../../api/table-colgroup'
 import tableColumnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
@@ -94,6 +95,7 @@ import pulldownAPI from '../../api/pulldown'
 
 // const tagMaps = [
 //   ['vxe-table', tableAPI, { subtags: ['vxe-table-column'], description: '基础表格' }],
+//   ['vxe-table-colgroup', tableColgroupAPI, { description: '基础表格 - 分组列' }],
 //   ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
 //   ['vxe-grid', gridAPI, { description: '高级表格' }],
 //   ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
@@ -231,6 +233,9 @@ export default {
           switch (this.$route.params.name) {
             case 'table':
               apis = tableAPI
+              break
+            case 'table-colgroup':
+              apis = tableColgroupAPI
               break
             case 'table-column':
               apis = tableColumnAPI

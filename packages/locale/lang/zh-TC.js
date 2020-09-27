@@ -3,6 +3,7 @@ export default {
     error: {
       groupFixed: '如果使用分組表頭，固定列必須按組設定',
       groupMouseRange: '分组表頭與 "{0}" 不能同時使用，這可能會出現錯誤',
+      groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
       scrollErrProp: '啟用虛擬滾動後不支持該參數 "{0}"',
       scrollXNotGroup: '橫向虛擬滾動不支持分組表頭，請修改正確 "scroll-x.gt" 的參數，否則可能會導致出現錯誤',
       errConflicts: '參數 "{0}" 與 "{1}" 有衝突',

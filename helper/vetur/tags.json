@@ -70,7 +70,6 @@
       "empty-render",
       "custom-config",
       "animat",
-      "cloak",
       "delay-hover",
       "scroll-x",
       "scroll-y",
@@ -80,6 +79,23 @@
       "vxe-table-column"
     ],
     "description": "基础表格"
+  },
+  "vxe-table-colgroup": {
+    "attributes": [
+      "field",
+      "title",
+      "width",
+      "min-width",
+      "resizable",
+      "visible",
+      "fixed",
+      "align",
+      "header-align",
+      "show-overflow",
+      "show-header-overflow",
+      "header-class-name"
+    ],
+    "description": "基础表格 - 分组列"
   },
   "vxe-table-column": {
     "attributes": [
@@ -195,7 +211,6 @@
       "empty-render",
       "custom-config",
       "animat",
-      "cloak",
       "delay-hover",
       "scroll-x",
       "scroll-y",
@@ -354,8 +369,8 @@
       "option-props",
       "option-groups",
       "option-group-props",
-      "opt-id",
-      "opt-key",
+      "option-id",
+      "option-key",
       "transfer"
     ],
     "subtags": [

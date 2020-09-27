@@ -2,7 +2,8 @@ export default {
   vxe: {
     error: {
       groupFixed: '如果使用分组表头，固定列必须按组设置',
-      groupMouseRange: '分组表头与 "{0}" 不能同时使用，这可能會出現错误',
+      groupMouseRange: '分组表头与 "{0}" 不能同时使用，这可能会出现错误',
+      groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
       scrollErrProp: '启用虚拟滚动后不支持该参数 "{0}"',
       scrollXNotGroup: '横向虚拟滚动不支持分组表头，请修改正确 "scroll-x.gt" 的参数，否则可能会导致出现错误',
       errConflicts: '参数 "{0}" 与 "{1}" 有冲突',

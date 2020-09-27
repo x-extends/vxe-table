@@ -183,8 +183,8 @@ function outLog (type) {
 export const UtilTools = {
   warn: outLog('warn'),
   error: outLog('error'),
-  getLog (message, params) {
-    return `[vxe-table] ${XEUtils.template(GlobalConfig.i18n(message), params)}`
+  getLog (message, args) {
+    return `[vxe-table] ${GlobalConfig.i18n(message, args)}`
   },
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
@@ -293,6 +293,11 @@ export const UtilTools = {
     const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
     if (groupConfig) {
+      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      //   if ($xecolumn.$options._componentTag === 'vxe-table-column') {
+      //     UtilTools.warn('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
+      //   }
+      // }
       if (!groupConfig.children) {
         groupConfig.children = []
       }

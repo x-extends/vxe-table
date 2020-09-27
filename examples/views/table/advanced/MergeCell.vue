@@ -18,53 +18,53 @@
       :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column field="a" title="名称"></vxe-table-column>
-      <vxe-table-column field="b" title="教育经费投入">
+      <vxe-table-colgroup field="b" title="教育经费投入">
         <vxe-table-column field="c" title="总计"></vxe-table-column>
-        <vxe-table-column title="基本投入">
-          <vxe-table-column title="合计">
+        <vxe-table-colgroup title="基本投入">
+          <vxe-table-colgroup title="合计">
             <vxe-table-column field="d" title="合计"></vxe-table-column>
             <vxe-table-column field="e" title="比上年增长"></vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
           <vxe-table-column field="f" title="人员经费"></vxe-table-column>
           <vxe-table-column field="g" title="公用经费"></vxe-table-column>
-          <vxe-table-column title="其他经费">
+          <vxe-table-colgroup title="其他经费">
             <vxe-table-column field="w" title="合计"></vxe-table-column>
-            <vxe-table-column title="其中">
+            <vxe-table-colgroup title="其中">
               <vxe-table-column field="h" title="标准化建设"></vxe-table-column>
               <vxe-table-column field="i" title="信息化建设"></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
-        </vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
+        </vxe-table-colgroup>
         <vxe-table-column field="j" title="附加信息"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="其他投入">
-        <vxe-table-column title="投入">
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="其他投入">
+        <vxe-table-colgroup title="投入">
           <vxe-table-column field="k" title="合计"></vxe-table-column>
-          <vxe-table-column title="其中">
+          <vxe-table-colgroup title="其中">
             <vxe-table-column field="l" title="人员经费"></vxe-table-column>
             <vxe-table-column field="m" title="教育经费"></vxe-table-column>
             <vxe-table-column field="n" title="项目经费"></vxe-table-column>
             <vxe-table-column field="o" title="基建投入"></vxe-table-column>
-          </vxe-table-column>
-        </vxe-table-column>
-        <vxe-table-column title="社会捐款">
+          </vxe-table-colgroup>
+        </vxe-table-colgroup>
+        <vxe-table-colgroup title="社会捐款">
           <vxe-table-column field="p" title="合计"></vxe-table-column>
-          <vxe-table-column title="其中">
+          <vxe-table-colgroup title="其中">
             <vxe-table-column field="q" title="项目经费"></vxe-table-column>
             <vxe-table-column field="r" title="基建投入"></vxe-table-column>
-          </vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="补充资料">
-        <vxe-table-column title="信息化建设">
+          </vxe-table-colgroup>
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="补充资料">
+        <vxe-table-colgroup title="信息化建设">
           <vxe-table-column field="s" title="本年投入金额"></vxe-table-column>
-          <vxe-table-column title="其中">
+          <vxe-table-colgroup title="其中">
             <vxe-table-column field="t" title="合计"></vxe-table-column>
             <vxe-table-column field="u" title="建设数"></vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
           <vxe-table-column field="v" title="备注"></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -156,53 +156,53 @@ export default {
           :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column field="a" title="名称"></vxe-table-column>
-          <vxe-table-column field="b" title="教育经费投入">
+          <vxe-table-colgroup field="b" title="教育经费投入">
             <vxe-table-column field="c" title="总计"></vxe-table-column>
-            <vxe-table-column title="基本投入">
-              <vxe-table-column title="合计">
+            <vxe-table-colgroup title="基本投入">
+              <vxe-table-colgroup title="合计">
                 <vxe-table-column field="d" title="合计"></vxe-table-column>
                 <vxe-table-column field="e" title="比上年增长"></vxe-table-column>
-              </vxe-table-column>
+              </vxe-table-colgroup>
               <vxe-table-column field="f" title="人员经费"></vxe-table-column>
               <vxe-table-column field="g" title="公用经费"></vxe-table-column>
-              <vxe-table-column title="其他经费">
+              <vxe-table-colgroup title="其他经费">
                 <vxe-table-column field="w" title="合计"></vxe-table-column>
-                <vxe-table-column title="其中">
+                <vxe-table-colgroup title="其中">
                   <vxe-table-column field="h" title="标准化建设"></vxe-table-column>
                   <vxe-table-column field="i" title="信息化建设"></vxe-table-column>
-                </vxe-table-column>
-              </vxe-table-column>
-            </vxe-table-column>
+                </vxe-table-colgroup>
+              </vxe-table-colgroup>
+            </vxe-table-colgroup>
             <vxe-table-column field="j" title="附加信息"></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="其他投入">
-            <vxe-table-column title="投入">
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="其他投入">
+            <vxe-table-colgroup title="投入">
               <vxe-table-column field="k" title="合计"></vxe-table-column>
-              <vxe-table-column title="其中">
+              <vxe-table-colgroup title="其中">
                 <vxe-table-column field="l" title="人员经费"></vxe-table-column>
                 <vxe-table-column field="m" title="教育经费"></vxe-table-column>
                 <vxe-table-column field="n" title="项目经费"></vxe-table-column>
                 <vxe-table-column field="o" title="基建投入"></vxe-table-column>
-              </vxe-table-column>
-            </vxe-table-column>
-            <vxe-table-column title="社会捐款">
+              </vxe-table-colgroup>
+            </vxe-table-colgroup>
+            <vxe-table-colgroup title="社会捐款">
               <vxe-table-column field="p" title="合计"></vxe-table-column>
-              <vxe-table-column title="其中">
+              <vxe-table-colgroup title="其中">
                 <vxe-table-column field="q" title="项目经费"></vxe-table-column>
                 <vxe-table-column field="r" title="基建投入"></vxe-table-column>
-              </vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="补充资料">
-            <vxe-table-column title="信息化建设">
+              </vxe-table-colgroup>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="补充资料">
+            <vxe-table-colgroup title="信息化建设">
               <vxe-table-column field="s" title="本年投入金额"></vxe-table-column>
-              <vxe-table-column title="其中">
+              <vxe-table-colgroup title="其中">
                 <vxe-table-column field="t" title="合计"></vxe-table-column>
                 <vxe-table-column field="u" title="建设数"></vxe-table-column>
-              </vxe-table-column>
+              </vxe-table-colgroup>
               <vxe-table-column field="v" title="备注"></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `
