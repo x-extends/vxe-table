@@ -22,7 +22,7 @@ module.exports = {
       entry: 'examples/main.js',
       template: 'public/index.html',
       filename: 'index.html',
-      title: '(Latest) vxe-table 3.x'
+      title: 'vxe-table 3.x (Latest)'
     }
   },
   transpileDependencies: ['highlight.js'],

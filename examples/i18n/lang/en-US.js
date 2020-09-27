@@ -310,9 +310,9 @@ export default {
         copyToClipboard: 'Copied to clipboard'
       },
       other: {
-        v1: '1.x (Obsolete)',
-        v2: '2.x (LTS)',
-        v3: '3.x (Latest)',
+        v1: '1.x (Deprecated)',
+        v2: '2.x (vue 2.6.x Stable)',
+        v3: '3.x (vue 2.6.x Latest)',
         v4: '4.x (vue 3.x Next)',
         plan: {
           vv1: 'v1 Based on vue2.6+, support all the mainstream browsers, to achieve all the practical functions of the table',
