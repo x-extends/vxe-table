@@ -38,7 +38,7 @@ export declare class Column extends VXETableComponent {
   /**
    * 将列固定在左侧或者右侧
    */
-  fixed?: 'left' | 'right';
+  fixed?: 'left' | 'right' | null;
   /**
    * 列对其方式
    */
@@ -177,7 +177,7 @@ export interface ColumnOptions {
   /**
    * 将列固定在左侧或者右侧
    */
-  fixed?: 'left' | 'right';
+  fixed?: 'left' | 'right' | null;
   /**
    * 列对其方式
    */

@@ -65,6 +65,11 @@ export default {
             return [
               <span>{ row[column.property] }</span>
             ]
+          },
+          // 导出模板，例如导出插槽中自定义的内容
+          exportMethod (params) {
+            const { row, column } = params
+            return '自定义内容'
           }
         })
         `,

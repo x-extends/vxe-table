@@ -482,7 +482,7 @@ export default {
     } else {
       const compConf = emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
       if (compConf && compConf.renderEmpty) {
-        emptyContent = compConf.renderEmpty.call(this, h, emptyOpts, { $table: $xetable }, { $table: $xetable })
+        emptyContent = compConf.renderEmpty.call(this, h, emptyOpts, { $table: $xetable })
       } else {
         emptyContent = $xetable.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
       }

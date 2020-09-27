@@ -31,17 +31,17 @@
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column title="分组1">
+      <vxe-table-colgroup title="分组1">
         <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
         <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="分组2">
-        <vxe-table-column title="分组21">
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="分组2">
+        <vxe-table-colgroup title="分组21">
           <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -121,17 +121,17 @@ export default {
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column title="分组1">
+          <vxe-table-colgroup title="分组1">
             <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
             <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="分组2">
-            <vxe-table-column title="分组21">
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="分组2">
+            <vxe-table-colgroup title="分组21">
               <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
               <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-table-column>
               <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `

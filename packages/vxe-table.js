@@ -82,7 +82,6 @@ if (typeof window !== 'undefined' && window.Vue && window.Vue.use) {
 export * from './v-x-e-table'
 export * from './column'
 export * from './header'
-export * from './body'
 export * from './footer'
 export * from './filter'
 export * from './grid'

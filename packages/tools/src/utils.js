@@ -244,6 +244,11 @@ export const UtilTools = {
     const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
     if (groupConfig) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if ($xecolumn.$options._componentTag === 'vxe-table-column') {
+          UtilTools.warn('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
+        }
+      }
       if (!groupConfig.children) {
         groupConfig.children = []
       }

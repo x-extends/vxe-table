@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
-import Cell from '../../cell'
+import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 

@@ -1992,6 +1992,15 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.vxeTableColgroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'table-colgroup'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeTableColumn',
               locat: {
                 name: 'VXEAPI',

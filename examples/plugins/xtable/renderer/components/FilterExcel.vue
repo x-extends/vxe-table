@@ -52,7 +52,6 @@
 
 <script>
 import XEUtils from 'xe-utils'
-import { VXETable } from '../../../../../packages/vxe-table'
 
 export default {
   name: 'FilterExcel',
@@ -136,96 +135,7 @@ export default {
       $panel.resetFilter()
     },
     childMenuClickEvent (cItem) {
-      const { $table, $panel } = this.params
-      const { option, allCaseList } = this
-      const { data } = option
-      this.selectCMenuItem = cItem
-      data.fMode = 'and'
-      data.f1Val = ''
-      data.f2Val = ''
-      switch (cItem.value) {
-        case 'equal':
-          data.f1Type = '1'
-          data.f2Type = ''
-          break
-        case 'ne':
-          data.f1Type = '2'
-          data.f2Type = ''
-          break
-        case 'greater':
-          data.f1Type = '3'
-          data.f2Type = ''
-          break
-        case 'ge':
-          data.f1Type = '4'
-          data.f2Type = ''
-          break
-        case 'less':
-          data.f1Type = '5'
-          data.f2Type = ''
-          break
-        case 'le':
-          data.f1Type = '6'
-          data.f2Type = ''
-          break
-      }
-      $table.closeFilter()
-      VXETable.modal.open({
-        title: '自定义自动筛选方式',
-        width: 600,
-        slots: {
-          default: ({ $modal }) => {
-            return [
-              <div class="my-fe-popup">
-                <div class="my-fe-popup-filter my-fe-popup-f1">
-                  <vxe-select class="my-fe-popup-filter-select" v-model={ data.f1Type } transfer clearable>
-                    {
-                      allCaseList.map(fItem => {
-                        return <vxe-option value={ fItem.value } label={ fItem.label }></vxe-option>
-                      })
-                    }
-                  </vxe-select>
-                  <vxe-input class="my-fe-popup-filter-input" v-model={ data.f1Val } clearable></vxe-input>
-                </div>
-                <div class="my-fe-popup-concat">
-                  <vxe-radio-group v-model={ data.fMode }>
-                    <vxe-radio label="and">与</vxe-radio>
-                    <vxe-radio label="or">或</vxe-radio>
-                  </vxe-radio-group>
-                </div>
-                <div class="my-fe-popup-filter my-fe-popup-f2">
-                  <vxe-select class="my-fe-popup-filter-select" v-model={ data.f2Type } transfer clearable>
-                    {
-                      allCaseList.map(fItem => {
-                        return <vxe-option value={ fItem.value } label={ fItem.label }></vxe-option>
-                      })
-                    }
-                  </vxe-select>
-                  <vxe-input class="my-fe-popup-filter-input" v-model={ data.f2Val } clearable></vxe-input>
-                </div>
-                <div class="my-fe-popup-describe">
-                  <span>可用 ? 代表单个字符<br/>用 * 代表任意多个字符</span>
-                </div>
-                <div class="my-fe-popup-footer">
-                  <vxe-button status="primary" onClick={
-                    () => {
-                      data.fMenu = cItem.value
-                      option.checked = true
-                      $modal.close()
-                      $panel.confirmFilter()
-                    }
-                  }>确认</vxe-button>
-                  <vxe-button onClick={
-                    () => {
-                      $modal.close()
-                    }
-                  }>取消</vxe-button>
-                </div>
-              </div>
-            ]
-          }
-        }
-      })
+      this.$XModal.alert({ message: cItem.label })
     }
   }
 }
@@ -239,6 +149,7 @@ export default {
   position: relative;
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 .my-filter-excel .my-fe-top .my-fe-menu-group:after {
   content: "";

@@ -2,8 +2,10 @@ import { VNode } from 'vue'
 import { Table } from './table'
 import { ColumnOptions } from './column'
 import { FormOptions } from './form'
+import { FormItemOptions } from './form-item'
 import { ToolbarOptions } from './toolbar'
 import { PagerOptions } from './pager'
+import { RowInfo } from './component'
 
 /**
  * 高级表格
@@ -38,9 +40,13 @@ export declare class Grid extends Table {
    */
   commitProxy(code: string): Promise<any>;
   /**
+   * 获取表单项列表
+   */
+  getFormItems(index?: number): FormItemOptions[];
+  /**
    * 获取已标记删除的数据
    */
-  getPendingRecords(): any[];
+  getPendingRecords(): RowInfo[];
   /**
    * 切换表格最大化/还原
    */
@@ -49,6 +55,14 @@ export declare class Grid extends Table {
    * 判断是否最大化显示
    */
   isMaximized(): boolean;
+  /**
+   * 如果表格处于常规状态，则最大化表格
+   */
+  maximize(): Promise<any>;
+  /**
+   * 如果表格处于最大化状态，则还原表格
+   */
+  revert(): Promise<any>;
   /**
    * 获取数据代理信息
    */

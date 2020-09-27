@@ -1,4 +1,5 @@
 import VxeTable from './src/table'
+import VxeTableBody from './src/body'
 import VXETable from '../v-x-e-table'
 
 VxeTable.install = function (Vue) {
@@ -14,6 +15,7 @@ VxeTable.install = function (Vue) {
     Vue.prototype.$vxe.t = VXETable.t
   }
   Vue.component(VxeTable.name, VxeTable)
+  Vue.component(VxeTableBody.name, VxeTableBody)
 }
 
 export const Table = VxeTable

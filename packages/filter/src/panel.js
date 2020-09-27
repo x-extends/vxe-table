@@ -42,7 +42,7 @@ export default {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, compConf.renderFilter.call($xetable, h, filterRender, Object.assign({ $panel: this, context: this }, args), this))
+          }, compConf.renderFilter.call($xetable, h, filterRender, Object.assign({ $panel: this, context: this }, args)))
         ]
       }
       return [

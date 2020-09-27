@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
-import VxeTableBody from '../../body'
+import VxeTableBody from './body'
 import vSize from '../../mixins/size'
 import { UtilTools, GlobalEvent, ResizeEvent } from '../../tools'
 import methods from './methods'
@@ -15,25 +15,23 @@ import methods from './methods'
  * @param {String} fixedType 固定列类型
  */
 function renderFixed (h, $xetable, fixedType) {
-  const { tableData, tableColumn, tableGroupColumn, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
+  const { _e, tableData, tableColumn, tableGroupColumn, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
   const fixedColumn = columnStore[`${fixedType}List`]
-  const tableChilds = []
-  if (showHeader) {
-    tableChilds.push(
-      h('vxe-table-header', {
-        props: {
-          fixedType,
-          tableData,
-          tableColumn,
-          tableGroupColumn,
-          size: vSize,
-          fixedColumn
-        },
-        ref: `${fixedType}Header`
-      })
-    )
-  }
-  tableChilds.push(
+  return h('div', {
+    class: `vxe-table--fixed-${fixedType}-wrapper`,
+    ref: `${fixedType}Container`
+  }, [
+    showHeader ? h('vxe-table-header', {
+      props: {
+        fixedType,
+        tableData,
+        tableColumn,
+        tableGroupColumn,
+        size: vSize,
+        fixedColumn
+      },
+      ref: `${fixedType}Header`
+    }) : _e(),
     h('vxe-table-body', {
       props: {
         fixedType,
@@ -43,26 +41,35 @@ function renderFixed (h, $xetable, fixedType) {
         size: vSize
       },
       ref: `${fixedType}Body`
-    })
-  )
-  if (showFooter) {
-    tableChilds.push(
-      h('vxe-table-footer', {
-        props: {
-          footerData,
-          tableColumn,
-          fixedColumn,
-          fixedType,
-          size: vSize
-        },
-        ref: `${fixedType}Footer`
-      })
-    )
+    }),
+    showFooter ? h('vxe-table-footer', {
+      props: {
+        footerData,
+        tableColumn,
+        fixedColumn,
+        fixedType,
+        size: vSize
+      },
+      ref: `${fixedType}Footer`
+    }) : _e()
+  ])
+}
+
+function renderEmptyContenet (h, _vm) {
+  const { $scopedSlots, emptyOpts } = _vm
+  let emptyContent = ''
+  const params = { $table: _vm }
+  if ($scopedSlots.empty) {
+    emptyContent = $scopedSlots.empty.call(_vm, params, h)
+  } else {
+    const compConf = _vm.emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
+    if (compConf) {
+      emptyContent = compConf.renderEmpty.call(_vm, h, emptyOpts, params)
+    } else {
+      emptyContent = _vm.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
+    }
   }
-  return h('div', {
-    class: `vxe-table--fixed-${fixedType}-wrapper`,
-    ref: `${fixedType}Container`
-  }, tableChilds)
+  return emptyContent
 }
 
 export default {
@@ -680,19 +687,21 @@ export default {
     }
 
     // 检查是否有安装需要的模块
-    let errorModuleName
-    if (!VXETable._edit && this.editConfig) {
-      errorModuleName = 'Edit'
-    } else if (!VXETable._valid && this.editRules) {
-      errorModuleName = 'Validator'
-    } else if (!VXETable._keyboard && (this.keyboardConfig || this.mouseConfig)) {
-      errorModuleName = 'Keyboard'
-    } else if (!VXETable._export && (this.importConfig || this.exportConfig)) {
-      errorModuleName = 'Export'
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (this.editConfig && !this._insert) {
+        UtilTools.error('vxe.error.reqModule', ['Edit'])
+      }
+      if (this.editRules && !this._validate) {
+        UtilTools.error('vxe.error.reqModule', ['Validator'])
+      }
+      if ((this.keyboardConfig || this.mouseConfig) && !this.triggerCellMousedownEvent) {
+        UtilTools.error('vxe.error.reqModule', ['Keyboard'])
+      }
+      if ((this.printConfig || this.importConfig || this.exportConfig) && !this._exportData) {
+        UtilTools.error('vxe.error.reqModule', ['Export'])
+      }
     }
-    if (errorModuleName) {
-      throw new Error(UtilTools.getLog('vxe.error.reqModule', [errorModuleName]))
-    }
+
     Object.assign(scrollYStore, {
       startIndex: 0,
       endIndex: 0,
@@ -760,7 +769,7 @@ export default {
   },
   render (h) {
     const {
-      $scopedSlots,
+      _e,
       tId,
       tableData,
       tableColumn,
@@ -795,118 +804,9 @@ export default {
       ctxMenuStore,
       ctxMenuOpts,
       footerData,
-      hasTip,
-      emptyRender,
-      emptyOpts
+      hasTip
     } = this
-    const tableChilds = []
-    const fixedChilds = []
-    const tableComps = []
     const { leftList, rightList } = columnStore
-    let emptyContent
-    if ($scopedSlots.empty) {
-      emptyContent = $scopedSlots.empty.call(this, { $table: this }, h)
-    } else {
-      const compConf = emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
-      if (compConf) {
-        emptyContent = compConf.renderEmpty.call(this, h, emptyOpts, { $table: this }, { $table: this })
-      } else {
-        emptyContent = this.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
-      }
-    }
-    // 头部
-    if (showHeader) {
-      tableChilds.push(
-        h('vxe-table-header', {
-          ref: 'tableHeader',
-          props: {
-            tableData,
-            tableColumn,
-            tableGroupColumn,
-            size: vSize
-          }
-        })
-      )
-    }
-    // 主体
-    tableChilds.push(
-      h('vxe-table-body', {
-        ref: 'tableBody',
-        props: {
-          tableData,
-          tableColumn,
-          size: vSize
-        }
-      })
-    )
-    // 表尾
-    if (showFooter) {
-      tableChilds.push(
-        h('vxe-table-footer', {
-          props: {
-            footerData,
-            tableColumn,
-            size: vSize
-          },
-          ref: 'tableFooter'
-        })
-      )
-    }
-
-    // 左侧固定区域
-    if (leftList && leftList.length && overflowX) {
-      fixedChilds.push(renderFixed(h, this, 'left'))
-    }
-    // 右侧固定区域
-    if (rightList && rightList.length && overflowX) {
-      fixedChilds.push(renderFixed(h, this, 'right'))
-    }
-
-    // 部件 - 筛选
-    if (initStore.filter) {
-      tableComps.push(
-        h('vxe-table-filter', {
-          ref: 'filterWrapper',
-          props: {
-            filterStore
-          }
-        })
-      )
-    }
-    // 部件 - 导入
-    if (initStore.import && this.importConfig) {
-      tableComps.push(
-        h('vxe-import-panel', {
-          props: {
-            defaultOptions: this.importParams,
-            storeData: this.importStore
-          }
-        })
-      )
-    }
-    // 部件 - 导出
-    if (initStore.export && this.exportConfig) {
-      tableComps.push(
-        h('vxe-export-panel', {
-          props: {
-            defaultOptions: this.exportParams,
-            storeData: this.exportStore
-          }
-        })
-      )
-    }
-    // 部件 - 快捷菜单
-    if (ctxMenuStore.visible && this.isCtxMenu) {
-      tableComps.push(
-        h('vxe-table-context-menu', {
-          ref: 'ctxWrapper',
-          props: {
-            ctxMenuStore,
-            ctxMenuOpts
-          }
-        })
-      )
-    }
     return h('div', {
       class: ['vxe-table', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         'vxe-editable': !!editConfig,
@@ -942,10 +842,54 @@ export default {
       }, this.$slots.default),
       h('div', {
         class: 'vxe-table--main-wrapper'
-      }, tableChilds),
+      }, [
+        /**
+         * 表头
+         */
+        showHeader ? h('vxe-table-header', {
+          ref: 'tableHeader',
+          props: {
+            tableData,
+            tableColumn,
+            tableGroupColumn,
+            size: vSize
+          }
+        }) : _e(),
+        /**
+         * 表体
+         */
+        h('vxe-table-body', {
+          ref: 'tableBody',
+          props: {
+            tableData,
+            tableColumn,
+            size: vSize
+          }
+        }),
+        /**
+         * 表尾
+         */
+        showFooter ? h('vxe-table-footer', {
+          ref: 'tableFooter',
+          props: {
+            footerData,
+            tableColumn,
+            size: vSize
+          }
+        }) : _e()
+      ]),
       h('div', {
         class: 'vxe-table--fixed-wrapper'
-      }, fixedChilds),
+      }, [
+        /**
+         * 左侧固定区域
+         */
+        leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : _e(),
+        /**
+         * 右侧固定区域
+         */
+        rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e()
+      ]),
       /**
        * 空数据
        */
@@ -955,7 +899,7 @@ export default {
       }, [
         h('div', {
           class: 'vxe-table--empty-content'
-        }, emptyContent)
+        }, renderEmptyContenet(h, this))
       ]),
       /**
        * 边框线
@@ -985,22 +929,60 @@ export default {
           class: 'vxe-loading--spinner'
         })
       ]),
-      h('div', {}, [
-        // 工具提示
-        hasTip ? h('vxe-tooltip', {
-          key: 'mTip',
-          ref: 'tooltip',
-          props: tooltipOpts
-        }) : null,
-        // 校验提示
-        hasTip && this.editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
-          key: 'vTip',
-          ref: 'validTip',
-          class: 'vxe-table--valid-error',
-          props: validOpts.message === 'tooltip' || tableData.length === 1 ? vaildTipOpts : null
-        }) : null
-      ]),
-      h('div', {}, tableComps)
+      /**
+       * 筛选
+       */
+      initStore.filter ? h('vxe-table-filter', {
+        ref: 'filterWrapper',
+        props: {
+          filterStore
+        }
+      }) : _e(),
+      /**
+       * 导入
+       */
+      initStore.import && this.importConfig ? h('vxe-import-panel', {
+        props: {
+          defaultOptions: this.importParams,
+          storeData: this.importStore
+        }
+      }) : _e(),
+      /**
+       * 导出
+       */
+      initStore.export && this.exportConfig ? h('vxe-export-panel', {
+        props: {
+          defaultOptions: this.exportParams,
+          storeData: this.exportStore
+        }
+      }) : _e(),
+      /**
+       * 快捷菜单
+       */
+      ctxMenuStore.visible && this.isCtxMenu ? h('vxe-table-context-menu', {
+        ref: 'ctxWrapper',
+        props: {
+          ctxMenuStore,
+          ctxMenuOpts
+        }
+      }) : _e(),
+      /**
+       * 工具提示
+       */
+      hasTip ? h('vxe-tooltip', {
+        key: 'mTip',
+        ref: 'tooltip',
+        props: tooltipOpts
+      }) : _e(),
+      /**
+       * 校验提示
+       */
+      hasTip && this.editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
+        key: 'vTip',
+        ref: 'validTip',
+        class: 'vxe-table--valid-error',
+        props: validOpts.message === 'tooltip' || tableData.length === 1 ? vaildTipOpts : null
+      }) : _e()
     ])
   },
   methods

@@ -31,7 +31,7 @@
     "examples/**/*.tsx",
     "examples/**/*.vue",
     "types/**/*.ts",
-    "types/**/*.tsx"
+    "types/**/*.tsx", "examples/api/table-colgroup.js"
   ],
   "exclude": [
     "node_modules"

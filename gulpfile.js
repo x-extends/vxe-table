@@ -10,11 +10,11 @@ const clean = require('gulp-clean')
 const sass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
+const merge = require('merge-stream');
 
 const components = [
   'table',
   'column',
-  'body',
   'toolbar',
   'grid',
   'pager',
@@ -32,7 +32,6 @@ const components = [
   'pulldown',
 
   'icon',
-  'cell',
   'header',
   'footer',
   'filter',
@@ -53,6 +52,8 @@ const languages = [
   'en-US',
   'ja-JP'
 ]
+
+const styleCode = `require('./style.css')`
 
 const commCode = `if (process.env.NODE_ENV === 'production') {
   module.exports = require('./index.common.pro.js')
@@ -76,7 +77,7 @@ gulp.task('build_modules', () => {
 })
 
 gulp.task('build_i18n', () => {
-  return Promise.all(languages.map(code => {
+  const rest = languages.map(code => {
     const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
     const isZHTC = ['zh-HK', 'zh-MO', 'zh-TW'].includes(code)
     return gulp.src(`packages/locale/lang/${isZHTC ? 'zh-TC' : code}.js`)
@@ -99,7 +100,8 @@ gulp.task('build_i18n', () => {
         extname: '.js'
       }))
       .pipe(gulp.dest('lib/locale/lang'))
-  }))
+  })
+  return merge(...rest)
 })
 
 gulp.task('copy_ts', () => {
@@ -109,7 +111,7 @@ gulp.task('copy_ts', () => {
 
 gulp.task('build_lib', () => {
   fs.writeFileSync('lib/index.common.js', commCode)
-  return Promise.all([
+  return merge([
     gulp.src('lib_pro/index.common.js')
       .pipe(rename({
         basename: 'index',
@@ -144,26 +146,29 @@ gulp.task('build_lib', () => {
 })
 
 gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {
-  return Promise.all(components.map(name => {
-    Promise.all([
-      gulp.src('styles/index.js')
-        .pipe(gulp.dest(`lib/${name}/style`)),
-      gulp.src(`styles/${name}.scss`)
-        .pipe(replace(/(\/\*\*Variable\*\*\/)/, `@import './variable.scss';\n`))
-        .pipe(sass())
-        .pipe(prefixer({
-          borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
-          cascade: true,
-          remove: true
-        }))
-        .pipe(cleanCSS())
-        .pipe(rename({
-          basename: 'style',
-          extname: '.css'
-        }))
-        .pipe(gulp.dest(`lib/${name}/style`))
-    ])
-  }))
+  const rest = components.map(name => {
+   return gulp.src(`styles/${name}.scss`)
+     .pipe(replace(/(\/\*\*Variable\*\*\/)/, `@import './variable.scss';\n`))
+     .pipe(sass())
+     .pipe(prefixer({
+       borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
+       cascade: true,
+       remove: true
+     }))
+     .pipe(rename({
+        basename: 'style',
+        extname: '.css'
+      }))
+      .pipe(gulp.dest(`lib/${name}/style`))
+      .pipe(cleanCSS())
+      .pipe(rename({
+        basename: 'style',
+        suffix: '.min',
+        extname: '.css'
+      }))
+      .pipe(gulp.dest(`lib/${name}/style`))
+ })
+ return merge(...rest)
 }))
 
 gulp.task('build_clean', () => {
@@ -171,6 +176,9 @@ gulp.task('build_clean', () => {
 })
 
 gulp.task('build', gulp.series('build_clean', 'build_style', 'build_lib', () => {
+  components.forEach(name => {
+    fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
+  })
   return del([
     'lib_dev',
     'lib_pro'

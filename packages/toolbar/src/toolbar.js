@@ -13,15 +13,15 @@ function renderBtns (h, _vm) {
     return $scopedSlots.buttons.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
   }
   return buttons.map(item => {
-    const { name, visible, dropdowns, buttonRender } = item
+    const { dropdowns, buttonRender } = item
     const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
-    if (visible === false) {
+    if (item.visible === false) {
       return _e()
     }
     if (compConf && compConf.renderButton) {
       return h('span', {
         class: 'vxe-button--item'
-      }, compConf.renderButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item }, { $grid: $xegrid, $table: $xetable }))
+      }, compConf.renderButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item }))
     }
     return h('vxe-button', {
       on: {
@@ -35,12 +35,12 @@ function renderBtns (h, _vm) {
         circle: item.circle,
         round: item.round,
         status: item.status,
+        content: UtilTools.getFuncText(item.name),
         destroyOnClose: item.destroyOnClose,
         placement: item.placement,
         transfer: item.transfer
       },
       scopedSlots: dropdowns && dropdowns.length ? {
-        default: () => UtilTools.getFuncText(name),
         dropdowns: () => dropdowns.map(child => {
           return child.visible === false ? _e() : h('vxe-button', {
             on: {
@@ -53,12 +53,13 @@ function renderBtns (h, _vm) {
               icon: child.icon,
               circle: child.circle,
               round: child.round,
-              status: child.status
+              status: child.status,
+              content: UtilTools.getFuncText(child.name)
             }
-          }, UtilTools.getFuncText(child.name))
+          })
         })
       } : null
-    }, UtilTools.getFuncText(name))
+    })
   })
 }
 
@@ -258,9 +259,6 @@ export default {
   },
   created () {
     const { refresh, refreshOpts } = this
-    if (!VXETable._export && (this.export || this.import)) {
-      UtilTools.error('vxe.error.reqModule', ['Export'])
-    }
     this.$nextTick(() => {
       const $xetable = this.fintTable()
       if (refresh && !this.$xegrid && !refreshOpts.query) {
@@ -278,7 +276,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { $xegrid, perfect, loading, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, vSize } = this
+    const { _e, $xegrid, perfect, loading, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, vSize } = this
     return h('div', {
       class: ['vxe-toolbar', {
         [`size--${vSize}`]: vSize,
@@ -306,7 +304,7 @@ export default {
           on: {
             click: this.importEvent
           }
-        }) : null,
+        }) : _e(),
         this.export ? h('vxe-button', {
           props: {
             circle: true,
@@ -318,7 +316,7 @@ export default {
           on: {
             click: this.exportEvent
           }
-        }) : null,
+        }) : _e(),
         this.print ? h('vxe-button', {
           props: {
             circle: true,
@@ -330,7 +328,7 @@ export default {
           on: {
             click: this.printEvent
           }
-        }) : null,
+        }) : _e(),
         refresh ? h('vxe-button', {
           props: {
             circle: true,
@@ -342,7 +340,7 @@ export default {
           on: {
             click: this.refreshEvent
           }
-        }) : null,
+        }) : _e(),
         zoom && $xegrid ? h('vxe-button', {
           props: {
             circle: true,
@@ -354,8 +352,8 @@ export default {
           on: {
             click: $xegrid.triggerZoomEvent
           }
-        }) : null,
-        custom ? renderCustoms(h, this) : null
+        }) : _e(),
+        custom ? renderCustoms(h, this) : _e()
       ])
     ])
   },

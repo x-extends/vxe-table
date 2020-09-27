@@ -82,7 +82,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## Installing
 
-Dependent: [vue](https://www.npmjs.com/package/vue) 2.6.x, [xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
+Version：[vue](https://www.npmjs.com/package/vue) 2.6.x, Dependent: [xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
 
 ```shell
 npm install xe-utils vxe-table

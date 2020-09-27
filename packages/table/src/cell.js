@@ -70,7 +70,7 @@ function getFooterContent (h, params) {
   if (renderOpts) {
     const compConf = VXETable.renderer.get(renderOpts.name)
     if (compConf && compConf.renderFooter) {
-      return compConf.renderFooter.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $table })
+      return compConf.renderFooter.call($table, h, renderOpts, params)
     }
   }
   return [UtilTools.formatText(items[_columnIndex], 1)]
@@ -144,7 +144,7 @@ export const Cell = {
     if (renderOpts) {
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf.renderHeader) {
-        return renderTitleContent(h, params, compConf.renderHeader.call($table, h, renderOpts, params, { $grid: $table.$xegrid, $table }))
+        return renderTitleContent(h, params, compConf.renderHeader.call($table, h, renderOpts, params))
       }
     }
     return renderTitleContent(h, params, UtilTools.formatText(column.getTitle(), 1))
@@ -163,7 +163,7 @@ export const Cell = {
       const funName = editRender ? 'renderCell' : 'renderDefault'
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf[funName]) {
-        return compConf[funName].call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params), { $grid: $table.$xegrid, $table })
+        return compConf[funName].call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))
       }
     }
     return [
@@ -528,7 +528,7 @@ export const Cell = {
     if (contentRender) {
       const compConf = VXETable.renderer.get(contentRender.name)
       if (compConf && compConf.renderExpand) {
-        return compConf.renderExpand.call($table, h, contentRender, params, { $grid: $table.$xegrid, $table })
+        return compConf.renderExpand.call($table, h, contentRender, params)
       }
     }
     return []
@@ -690,7 +690,7 @@ export const Cell = {
       if (slots && slots.edit) {
         return slots.edit.call($table, params, h)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, Object.assign({ $type: 'edit' }, params), { $grid: $table.$xegrid, $table }) : []
+      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, Object.assign({ $type: 'edit' }, params)) : []
     }
     if (slots && slots.default) {
       return slots.default.call($table, params, h)

@@ -82,7 +82,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## 安裝
 
-依賴庫：[vue](https://www.npmjs.com/package/vue) 2.6.x, [xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
+版本：[vue](https://www.npmjs.com/package/vue) 2.6.x, 依賴庫：[xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
 
 ```shell
 npm install xe-utils vxe-table

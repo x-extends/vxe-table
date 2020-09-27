@@ -30,11 +30,10 @@ export default {
      * @param {Object} params 参数
      */
     triggerFilterEvent (evnt, column, params) {
-      const { $refs, filterStore } = this
+      const { filterStore } = this
       if (filterStore.column === column && filterStore.visible) {
         filterStore.visible = false
       } else {
-        const bodyElem = $refs.tableBody.$el
         const { target: targetElem, pageX } = evnt
         const { visibleWidth } = DomTools.getDomNode()
         Object.assign(filterStore, {
@@ -52,6 +51,8 @@ export default {
         this.checkFilterOptions()
         this.initStore.filter = true
         this.$nextTick(() => {
+          const { $refs } = this
+          const bodyElem = $refs.tableBody.$el
           const filterWrapperElem = $refs.filterWrapper.$el
           const filterWidth = filterWrapperElem.offsetWidth
           const centerWidth = filterWidth / 2

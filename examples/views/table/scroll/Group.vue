@@ -12,21 +12,21 @@
       :loading="loading"
       :data="tableData">
       <vxe-table-column type="seq" title="序号" width="100"></vxe-table-column>
-      <vxe-table-column title="基本信息">
+      <vxe-table-colgroup title="基本信息">
         <vxe-table-column field="name" title="Name" width="200" sortable></vxe-table-column>
         <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
         <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="详细信息">
-        <vxe-table-column title="分组">
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="详细信息">
+        <vxe-table-colgroup title="分组">
           <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
           <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-        </vxe-table-column>
-        <vxe-table-column title="其他">
+        </vxe-table-colgroup>
+        <vxe-table-colgroup title="其他">
           <vxe-table-column field="time" title="Time" width="200" sortable></vxe-table-column>
           <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
       <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
       <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
     </vxe-table>
@@ -61,21 +61,21 @@ export default {
           :loading="loading"
           :data="tableData">
           <vxe-table-column type="seq" title="序号" width="100"></vxe-table-column>
-          <vxe-table-column title="基本信息">
+          <vxe-table-colgroup title="基本信息">
             <vxe-table-column field="name" title="Name" width="200" sortable></vxe-table-column>
             <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
             <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="详细信息">
-            <vxe-table-column title="分组">
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="详细信息">
+            <vxe-table-colgroup title="分组">
               <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
               <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-            </vxe-table-column>
-            <vxe-table-column title="其他">
+            </vxe-table-colgroup>
+            <vxe-table-colgroup title="其他">
               <vxe-table-column field="time" title="Time" width="200" sortable></vxe-table-column>
               <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
           <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
           <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
         </vxe-table>

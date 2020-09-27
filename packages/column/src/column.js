@@ -1,10 +1,10 @@
-import Cell from '../../cell'
+import Cell from '../../table/src/cell'
 import { UtilTools } from '../../tools'
 
 const props = {
   // 列唯一主键
   colId: [String, Number],
-  // 渲染类型 index,radio,checkbox,expand,html
+  // 渲染类型 seq,radio,checkbox,expand,html
   type: String,
   // 列字段名
   field: String,

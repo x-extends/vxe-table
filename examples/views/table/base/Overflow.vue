@@ -48,16 +48,16 @@
       <vxe-table-column field="name" title="名称"></vxe-table-column>
       <vxe-table-column field="role" title="标题溢出直接隐藏 xxxxxxxxxxxxxxxxxxxxxxxxxxx" show-header-overflow="ellipsis"></vxe-table-column>
       <vxe-table-column field="date" title="Date" show-header-overflow show-overflow show-footer-overflow></vxe-table-column>
-      <vxe-table-column title="基本信息">
-        <vxe-table-column field="rate" show-header-overflow="title">
+      <vxe-table-colgroup title="基本信息">
+        <vxe-table-colgroup field="rate" show-header-overflow="title">
           <template v-slot:header>
             <span>标题溢出显示原生 title xxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
           </template>
-        </vxe-table-column>
-        <vxe-table-column title="详细信息">
+        </vxe-table-colgroup>
+        <vxe-table-colgroup title="详细信息">
           <vxe-table-column type="html" field="address" title="标题溢出显示tooltip内容内容内容内容内容内容" width="160" show-header-overflow show-overflow></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -155,16 +155,16 @@ export default {
           <vxe-table-column field="name" title="名称"></vxe-table-column>
           <vxe-table-column field="role" title="标题溢出直接隐藏 xxxxxxxxxxxxxxxxxxxxxxxxxxx" show-header-overflow="ellipsis"></vxe-table-column>
           <vxe-table-column field="date" title="Date" show-header-overflow show-overflow show-footer-overflow></vxe-table-column>
-          <vxe-table-column title="基本信息">
-            <vxe-table-column field="rate" show-header-overflow="title">
+          <vxe-table-colgroup title="基本信息">
+            <vxe-table-colgroup field="rate" show-header-overflow="title">
               <template v-slot:header>
                 <span>标题溢出显示原生 title xxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
               </template>
-            </vxe-table-column>
-            <vxe-table-column title="详细信息">
+            </vxe-table-colgroup>
+            <vxe-table-colgroup title="详细信息">
               <vxe-table-column type="html" field="address" title="标题溢出显示tooltip内容内容内容内容内容内容" width="160" show-header-overflow show-overflow></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `

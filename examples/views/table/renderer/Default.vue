@@ -56,6 +56,11 @@ export default {
             return [
               <a class="my-link" onClick={ () => events.click(params) }>{row[column.property]}</a>
             ]
+          },
+          // 导出模板，例如导出插槽中自定义的内容
+          exportMethod (params) {
+            const { row, column } = params
+            return '自定义内容'
           }
         })
         `,
