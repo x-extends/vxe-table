@@ -2358,8 +2358,7 @@ export default {
           location.href = '/vxe-table/v3/index.html'
           break
         case '4':
-          this.$XModal.alert({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })
-          this.version = '1'
+          location.href = '/vxe-table/v4/index.html'
           break
       }
     }
