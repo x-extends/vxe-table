@@ -9,9 +9,9 @@
     <vxe-grid
       border
       resizable
-      export-config
       ref="xGrid"
       height="400"
+      :export-config="{}"
       :toolbar="tableToolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn">
@@ -71,9 +71,9 @@ export default {
         <vxe-grid
           border
           resizable
-          export-config
           ref="xGrid"
           height="400"
+          :export-config="{}"
           :toolbar="tableToolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn">

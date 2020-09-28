@@ -44,7 +44,7 @@
     <p>
       <vxe-button type="text" content="默认颜色"></vxe-button>
       <vxe-button type="text" status="primary" content="主要颜色"></vxe-button>
-      <vxe-button type="text" status="success" content="信息颜色">x</vxe-button>
+      <vxe-button type="text" status="success" content="信息颜色"></vxe-button>
       <vxe-button type="text" status="info" content="信息颜色"></vxe-button>
       <vxe-button type="text" status="warning" content="警告颜色"></vxe-button>
       <vxe-button type="text" status="danger" content="危险颜色"></vxe-button>
@@ -278,7 +278,7 @@ export default {
         <p>
           <vxe-button type="text" content="默认颜色"></vxe-button>
           <vxe-button type="text" status="primary" content="主要颜色"></vxe-button>
-          <vxe-button type="text" status="success" content="信息颜色">x</vxe-button>
+          <vxe-button type="text" status="success" content="信息颜色"></vxe-button>
           <vxe-button type="text" status="info" content="信息颜色"></vxe-button>
           <vxe-button type="text" status="warning" content="警告颜色"></vxe-button>
           <vxe-button type="text" status="danger" content="危险颜色"></vxe-button>

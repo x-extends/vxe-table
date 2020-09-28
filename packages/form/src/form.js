@@ -94,9 +94,9 @@ function renderTitle (h, _vm, item) {
 }
 
 function renderItems (h, _vm) {
-  const { rules, formItems, data, collapseAll } = _vm
+  const { _e, rules, formItems, data, collapseAll } = _vm
   return formItems.map((item, index) => {
-    const { slots, title, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
+    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
     const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
     const span = item.span || _vm.span
     const align = item.align || _vm.align
@@ -104,10 +104,13 @@ function renderItems (h, _vm) {
     const titleWidth = item.titleWidth || _vm.titleWidth
     let itemVisibleMethod = visibleMethod
     const params = { data, property: field, $form: _vm }
+    let isRequired
+    if (visible === false) {
+      return _e()
+    }
     if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
       itemVisibleMethod = compConf.itemVisibleMethod
     }
-    let isRequired
     if (rules) {
       const itemRules = rules[field]
       if (itemRules) {
@@ -186,7 +189,7 @@ export default {
   data () {
     return {
       collapseAll: true,
-      collectItem: [],
+      staticItems: [],
       formItems: []
     }
   },
@@ -207,7 +210,7 @@ export default {
     }
   },
   watch: {
-    collectItem (value) {
+    staticItems (value) {
       this.formItems = value
     },
     items (value) {
@@ -260,7 +263,7 @@ export default {
           })
         }
       })
-      this.collectItem = list.map(item => createItem(this, item))
+      this.staticItems = list.map(item => createItem(this, item))
       return this.$nextTick()
     },
     getItems () {

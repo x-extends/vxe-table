@@ -10,7 +10,7 @@ export default {
   },
   provide () {
     return {
-      $xegroup: this
+      $xeradiogroup: this
     }
   },
   computed: {

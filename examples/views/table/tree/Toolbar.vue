@@ -15,10 +15,10 @@
     <vxe-table
       resizable
       show-overflow
-      export-config
       keep-source
       ref="xTree"
       row-id="id"
+      :export-config="{}"
       :loading="loading"
       :tree-config="treeConfig"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
@@ -64,10 +64,10 @@ export default {
         <vxe-table
           resizable
           show-overflow
-          export-config
           keep-source
           ref="xTree"
           row-id="id"
+          :export-config="{}"
           :loading="loading"
           :tree-config="treeConfig"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"

@@ -691,6 +691,7 @@ export default {
           titleAlign: '标题对齐方式',
           titleWidth: '标题宽度',
           folding: '默认收起',
+          visible: '是否显示',
           visibleMethod: '该方法 Function({data, property}) 的返回值用来决定该项是否显示',
           collapseNode: '折叠节点',
           titlePrefix: '前缀配置项',

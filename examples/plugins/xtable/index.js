@@ -87,7 +87,7 @@ Vue.use(Table)
 Vue.prototype.$XModal = VXETable.modal
 
 // 给 vue 实例挂载文件对象
-Vue.prototype.$readFile = VXETable.readFile
+Vue.prototype.$XReadFile = VXETable.readFile
 
 // 给 vue 实例挂载打印对象
 Vue.prototype.$XPrint = VXETable.print

@@ -7,10 +7,10 @@
       resizable
       show-overflow
       show-header-overflow
-      export-config
       show-footer
       ref="xTable"
       height="500"
+      :export-config="{}"
       :merge-cells="mergeCells"
       :sort-config="{trigger: 'cell'}"
       :merge-footer-items="mergeFooterItems"
@@ -74,10 +74,10 @@ export default {
           resizable
           show-overflow
           show-header-overflow
-          export-config
           show-footer
           ref="xTable"
           height="500"
+          :export-config="{}"
           :merge-cells="mergeCells"
           :sort-config="{trigger: 'cell'}"
           :merge-footer-items="mergeFooterItems"

@@ -16,9 +16,9 @@
     <vxe-table
       border
       show-footer
-      export-config
       ref="xTable"
       height="500"
+      :export-config="{}"
       :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -60,9 +60,9 @@ export default {
         <vxe-table
           border
           show-footer
-          export-config
           ref="xTable"
           height="500"
+          :export-config="{}"
           :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>

@@ -2143,7 +2143,7 @@ const Methods = {
    * 判断复选框是否全选
    */
   isCheckboxIndeterminate () {
-    return this.isIndeterminate
+    return !this.isAllSelected && this.isIndeterminate
   },
   /**
    * 获取复选框半选状态的行数据

@@ -45,9 +45,9 @@
       show-overflow
       keep-source
       highlight-hover-row
-      export-config
       ref="xTable"
       height="460"
+      :export-config="{}"
       :loading="loading"
       :data="tableData"
       :edit-rules="validRules"
@@ -188,9 +188,9 @@ export default {
             show-overflow
             keep-source
             highlight-hover-row
-            export-config
             ref="xTable"
             height="460"
+            :export-config="{}"
             :loading="loading"
             :data="tableData"
             :edit-rules="validRules"

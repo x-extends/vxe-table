@@ -58,7 +58,7 @@
             <vxe-form>
               <vxe-form-item>
                 <template v-slot>
-                  <vxe-input placeholder="搜索"></vxe-input>
+                  <vxe-input v-model="searchVal1" placeholder="搜索"></vxe-input>
                 </template>
               </vxe-form-item>
               <vxe-form-item>
@@ -69,7 +69,7 @@
             </vxe-form>
           </template>
           <template v-slot:tools>
-            <vxe-input placeholder="搜索"></vxe-input>
+            <vxe-input v-model="searchVal2" placeholder="搜索"></vxe-input>
           </template>
         </vxe-toolbar>
       </template>
@@ -79,16 +79,8 @@
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
-            <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">自定义模板</marquee>
+            <div>自定义模板</div>
           </span>
-        </div>
-      </template>
-
-      <!--自定义插槽 seq_header-->
-      <template v-slot:seq_header>
-        <div class="first-col">
-          <div class="first-col-top">名称</div>
-          <div class="first-col-bottom">序号</div>
         </div>
       </template>
 
@@ -108,25 +100,39 @@
         <span style="color: red">合计：{{ items[_columnIndex] }}</span>
       </template>
 
-      <!--自定义插槽 name_default-->
-      <template v-slot:name_default="{ row, column }">
+      <template v-slot:num1_default="{ row }">
+        <span>￥{{ row.num1 }}元</span>
+      </template>
+
+      <template v-slot:num1_height="{ column }">
         <span>
-          <span style="color: red;">{{ row.name }}</span>
-          <button @click="showDetailEvent(row, column)">弹框</button>
+          <i>@</i>
+          <span style="color: red;" @click="headerClickEvent">{{ column.title }}</span>
         </span>
       </template>
 
-      <!--自定义插槽 html1-->
-      <template v-slot:html1_default="{ row, rowIndex }">
-        <template v-if="rowIndex === 1">
-          <vxe-select v-model="row.flag1" transfer>
-            <vxe-option value="Y" label="是"></vxe-option>
-            <vxe-option value="N" label="否"></vxe-option>
-          </vxe-select>
-        </template>
-        <template v-else>
-          <span v-html="row.html1"></span>
-        </template>
+      <template v-slot:num1_footer="{ items, _columnIndex }">
+        <span>
+          <vxe-button status="primary" size="mini">自定义</vxe-button>
+          <span>累计：{{ items[_columnIndex] }}</span>
+        </span>
+      </template>
+
+      <template v-slot:num1_filter="{ column, $panel }">
+        <div>
+          <div v-for="(option, index) in column.filters" :key="index">
+            <input type="type" v-model="option.data" @input="changeFilterEvent(evnt, option, $panel)"/>
+          </div>
+        </div>
+      </template>
+
+      <template v-slot:num1_edit="{ row }">
+        <input type="number" class="my-input" v-model="row.num1" />
+      </template>
+
+      <template v-slot:img1_default="{ row }">
+        <img v-if="row.img1" :src="row.img1" style="width: 100px;"/>
+        <span v-else>无</span>
       </template>
 
       <!--使用 bottom 插槽-->
@@ -134,7 +140,7 @@
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
-            <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">自定义模板</marquee>
+            <div>自定义模板</div>
           </span>
         </div>
       </template>
@@ -199,6 +205,8 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      searchVal1: '',
+      searchVal2: '',
       showDetails: false,
       selectRow: null,
       isAllChecked: false,
@@ -214,70 +222,32 @@ export default {
         currentPage: 1,
         pageSize: 10
       },
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', num1: '222', sex: 'Man', age: 28, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', num1: '536', sex: 'Women', age: 22, address: 'Guangzhou', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', num1: '1000', sex: 'Man', age: 32, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women ', age: 23, address: 'Shenzhen', img1: '' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women ', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women ', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man ', age: 29, address: 'Shenzhen', img1: '' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man ', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
+      ],
       tableColumn: [
         { type: 'checkbox', width: 60 },
-        // 对应自定义插槽的名称
-        { type: 'seq', width: 100, resizable: false, slots: { header: 'seq_header' } },
-        {
-          field: 'name',
-          title: 'Name',
-          slots: {
-            default: 'name_default',
-            footer: () => {
-              return [
-                <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />,
-                <span>浪里个浪</span>,
-                <img src="/vxe-table/static/other/img2.gif" style="height: 30px;" />
-              ]
-            }
-          }
-        },
+        { field: 'name', title: 'Name' },
+        { field: 'age', title: 'Age', width: 100 },
         {
           field: 'num1',
-          title: 'Money',
+          title: 'Num1',
           showHeaderOverflow: true,
           editRender: { autofocus: '.my-input' },
           slots: {
-            // 使用 JSX 渲染
-            default: ({ row }) => {
-              return [
-                <span>￥{ row.num1 }元</span>
-              ]
-            },
-            header: ({ column }) => {
-              return [
-                <span>
-                  <i>@</i>
-                  <span style="color: red;" onClick={ this.headerClickEvent }>{ column.title }</span>
-                </span>
-              ]
-            },
-            footer: ({ items, _columnIndex }) => {
-              return [
-                <vxe-button status="primary" size="mini">按钮</vxe-button>,
-                <span>累计：{ items[_columnIndex] }</span>
-              ]
-            },
-            filter: ({ column, $panel }) => {
-              return column.filters.map(option => {
-                return <input type="type" v-model={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
-              })
-            },
-            edit: ({ row }) => {
-              return [
-                <input type="number" class="my-input" v-model={ row.num1 } />
-              ]
-            }
-          }
-        },
-        {
-          field: 'num',
-          title: 'Number',
-          slots: {
             // 对应自定义插槽的名称
-            default: 'num_default',
-            footer: 'num_footer'
+            default: 'num1_default',
+            header: 'num1_height',
+            footer: 'num1_footer',
+            filter: 'num1_filter',
+            edit: 'num1_edit'
           }
         },
         {
@@ -300,27 +270,7 @@ export default {
             }
           }
         },
-        {
-          field: 'html1',
-          title: 'Html片段',
-          showOverflow: true,
-          slots: {
-            // 对应自定义插槽的名称
-            default: 'html1_default'
-          }
-        },
-        {
-          field: 'img1',
-          title: '图片路径',
-          slots: {
-            // 使用 JSX 渲染
-            default: ({ row }) => {
-              return [
-                row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
-              ]
-            }
-          }
-        }
+        { field: 'img1', title: '图片路径', slots: { default: 'img1_default' } }
       ],
       demoCodes: [
         `
@@ -373,7 +323,7 @@ export default {
                 <vxe-form>
                   <vxe-form-item>
                     <template v-slot>
-                      <vxe-input placeholder="搜索"></vxe-input>
+                      <vxe-input v-model="searchVal1" placeholder="搜索"></vxe-input>
                     </template>
                   </vxe-form-item>
                   <vxe-form-item>
@@ -384,7 +334,7 @@ export default {
                 </vxe-form>
               </template>
               <template v-slot:tools>
-                <vxe-input placeholder="搜索"></vxe-input>
+                <vxe-input v-model="searchVal2" placeholder="搜索"></vxe-input>
               </template>
             </vxe-toolbar>
           </template>
@@ -394,16 +344,8 @@ export default {
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
-                <marquee direction="left" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">自定义模板</marquee>
+                <div>自定义模板</div>
               </span>
-            </div>
-          </template>
-
-          <!--自定义插槽 seq_header-->
-          <template v-slot:seq_header>
-            <div class="first-col">
-              <div class="first-col-top">名称</div>
-              <div class="first-col-bottom">序号</div>
             </div>
           </template>
 
@@ -423,25 +365,39 @@ export default {
             <span style="color: red">合计：{{ items[_columnIndex] }}</span>
           </template>
 
-          <!--自定义插槽 name_default-->
-          <template v-slot:name_default="{ row, column }">
+          <template v-slot:num1_default="{ row }">
+            <span>￥{{ row.num1 }}元</span>
+          </template>
+
+          <template v-slot:num1_height="{ column }">
             <span>
-              <span style="color: red;">{{ row.name }}</span>
-              <button @click="showDetailEvent(row, column)">弹框</button>
+              <i>@</i>
+              <span style="color: red;" @click="headerClickEvent">{{ column.title }}</span>
             </span>
           </template>
 
-          <!--自定义插槽 html1-->
-          <template v-slot:html1_default="{ row, rowIndex }">
-            <template v-if="rowIndex === 1">
-              <vxe-select v-model="row.flag1" transfer>
-                <vxe-option value="Y" label="是"></vxe-option>
-                <vxe-option value="N" label="否"></vxe-option>
-              </vxe-select>
-            </template>
-            <template v-else>
-              <span v-html="row.html1"></span>
-            </template>
+          <template v-slot:num1_footer="{ items, _columnIndex }">
+            <span>
+              <vxe-button status="primary" size="mini">自定义</vxe-button>
+              <span>累计：{{ items[_columnIndex] }}</span>
+            </span>
+          </template>
+
+          <template v-slot:num1_filter="{ column, $panel }">
+            <div>
+              <div v-for="(option, index) in column.filters" :key="index">
+                <input type="type" v-model="option.data" @input="changeFilterEvent(evnt, option, $panel)"/>
+              </div>
+            </div>
+          </template>
+
+          <template v-slot:num1_edit="{ row }">
+            <input type="number" class="my-input" v-model="row.num1" />
+          </template>
+
+          <template v-slot:img1_default="{ row }">
+            <img v-if="row.img1" :src="row.img1" style="width: 100px;"/>
+            <span v-else>无</span>
           </template>
 
           <!--使用 bottom 插槽-->
@@ -449,7 +405,7 @@ export default {
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
-                <marquee direction="right" scrollamount="4" width="100%" onmouseover="this.stop();" onmouseout="this.start();">自定义模板</marquee>
+                <div>自定义模板</div>
               </span>
             </div>
           </template>
@@ -501,6 +457,8 @@ export default {
         export default {
           data () {
             return {
+              searchVal1: '',
+              searchVal2: '',
               showDetails: false,
               selectRow: null,
               isAllChecked: false,
@@ -516,70 +474,32 @@ export default {
                 currentPage: 1,
                 pageSize: 10
               },
-              tableData: [],
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', num1: '222', sex: 'Man', age: 28, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', num1: '536', sex: 'Women', age: 22, address: 'Guangzhou', img1: '/vxe-table/static/other/img2.gif' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', num1: '1000', sex: 'Man', age: 32, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women ', age: 23, address: 'Shenzhen', img1: '' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women ', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women ', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man ', age: 29, address: 'Shenzhen', img1: '' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man ', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
+              ],
               tableColumn: [
                 { type: 'checkbox', width: 60 },
-                // 对应自定义插槽的名称
-                { type: 'seq', width: 100, resizable: false, slots: { header: 'seq_header' } },
-                {
-                  field: 'name',
-                  title: 'Name',
-                  slots: {
-                    default: 'name_default',
-                    footer: () => {
-                      return [
-                        <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />,
-                        <span>浪里个浪</span>,
-                        <img src="/vxe-table/static/other/img2.gif" style="height: 30px;" />
-                      ]
-                    }
-                  }
-                },
+                { field: 'name', title: 'Name' },
+                { field: 'age', title: 'Age', width: 100 },
                 {
                   field: 'num1',
-                  title: 'Money',
+                  title: 'Num1',
                   showHeaderOverflow: true,
                   editRender: { autofocus: '.my-input' },
                   slots: {
-                    // 使用 JSX 渲染
-                    default: ({ row }) => {
-                      return [
-                        <span>￥{ row.num1 }元</span>
-                      ]
-                    },
-                    header: ({ column }) => {
-                      return [
-                        <span>
-                          <i>@</i>
-                          <span style="color: red;" onClick={ this.headerClickEvent }>{ column.title }</span>
-                        </span>
-                      ]
-                    },
-                    footer: ({ items, _columnIndex }) => {
-                      return [
-                        <vxe-button status="primary" size="mini">按钮</vxe-button>,
-                        <span>累计：{ items[_columnIndex] }</span>
-                      ]
-                    },
-                    filter: ({ column, $panel }) => {
-                      return column.filters.map(option => {
-                        return <input type="type" v-model={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
-                      })
-                    },
-                    edit: ({ row }) => {
-                      return [
-                        <input type="number" class="my-input" v-model={ row.num1 } />
-                      ]
-                    }
-                  }
-                },
-                {
-                  field: 'num',
-                  title: 'Number',
-                  slots: {
                     // 对应自定义插槽的名称
-                    default: 'num_default',
-                    footer: 'num_footer'
+                    default: 'num1_default',
+                    header: 'num1_height',
+                    footer: 'num1_footer',
+                    filter: 'num1_filter',
+                    edit: 'num1_edit'
                   }
                 },
                 {
@@ -602,32 +522,9 @@ export default {
                     }
                   }
                 },
-                {
-                  field: 'html1',
-                  title: 'Html片段',
-                  showOverflow: true,
-                  slots: {
-                    // 对应自定义插槽的名称
-                    default: 'html1_default'
-                  }
-                },
-                {
-                  field: 'img1',
-                  title: '图片路径',
-                  slots: {
-                    // 使用 JSX 渲染
-                    default: ({ row }) => {
-                      return [
-                        row.img1 ? <img src={ row.img1 } style="width: 100px;"/> : <span>无</span>
-                      ]
-                    }
-                  }
-                }
+                { field: 'img1', title: '图片路径', slots: { default: 'img1_default' } }
               ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
           },
           methods: {
             searchEvent () {
@@ -657,9 +554,11 @@ export default {
             },
             footerMethod ({ columns, data }) {
               return [
-                columns.map((column, columnIndex) => {
-                  if (['num1', 'num'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                columns.map((column, index) => {
+                  if (index === 0) {
+                    return '平均'
+                  } else if (['num1', 'age'].includes(column.property)) {
+                    return XEUtils.mean(data, column.property)
                   }
                   return null
                 })
@@ -730,9 +629,6 @@ export default {
       ]
     }
   },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
-  },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
@@ -766,9 +662,11 @@ export default {
     },
     footerMethod ({ columns, data }) {
       return [
-        columns.map((column) => {
-          if (['num1', 'num'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+        columns.map((column, index) => {
+          if (index === 0) {
+            return '平均'
+          } else if (['num1', 'age'].includes(column.property)) {
+            return XEUtils.mean(data, column.property)
           }
           return null
         })

@@ -5,10 +5,10 @@
     <vxe-grid
       border
       resizable
-      export-config
-      import-config
       keep-source
       height="500"
+      :import-config="{}"
+      :export-config="{}"
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
@@ -90,10 +90,10 @@ export default {
         <vxe-grid
           border
           resizable
-          export-config
-          import-config
           keep-source
           height="500"
+          :import-config="{}"
+          :export-config="{}"
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"

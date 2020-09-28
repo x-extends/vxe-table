@@ -3,7 +3,7 @@
     <p class="tip">
       读取本地文件<br>
       给 vue 实例挂载属性：<br>
-      Vue.prototype.$readFile = VXETable.readFile<br>
+      Vue.prototype.$XReadFile = VXETable.readFile<br>
     </p>
 
     <vxe-button @click="clickEvent1">读取一个文件</vxe-button>
@@ -32,14 +32,14 @@ export default {
           methods: {
             async clickEvent1 () {
               try {
-                const event = await this.$readFile()
+                const event = await this.$XReadFile()
                 const file = event.target.files[0]
                 this.$XModal.alert(\`文件名：\${file.name}，文件大小：\${file.size}\`)
               } catch (e) {}
             },
             async clickEvent2 () {
               try {
-                const event = await this.$readFile({
+                const event = await this.$XReadFile({
                   multiple: true
                 })
                 const files = event.target.files
@@ -55,14 +55,14 @@ export default {
   methods: {
     async clickEvent1 () {
       try {
-        const event = await this.$readFile()
+        const event = await this.$XReadFile()
         const file = event.target.files[0]
         this.$XModal.alert(`文件名：${file.name}，文件大小：${file.size}`)
       } catch (e) {}
     },
     async clickEvent2 () {
       try {
-        const event = await this.$readFile({
+        const event = await this.$XReadFile({
           multiple: true
         })
         const files = event.target.files

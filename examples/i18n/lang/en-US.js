@@ -692,6 +692,7 @@ export default {
           titleAlign: 'Title align',
           titleWidth: 'Title width',
           folding: 'Default folding',
+          visible: 'Whether or not show',
           visibleMethod: 'The return value of this method Function({data, property}) determines whether the item is displayed',
           collapseNode: 'Collapse node',
           titlePrefix: 'Title prefix config',

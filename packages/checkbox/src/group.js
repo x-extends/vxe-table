@@ -9,7 +9,7 @@ export default {
   },
   provide () {
     return {
-      $xegroup: this
+      $xecheckboxgroup: this
     }
   },
   computed: {

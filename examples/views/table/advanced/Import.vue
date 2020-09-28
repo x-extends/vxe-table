@@ -64,7 +64,6 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          export-config
           highlight-hover-row
           ref="xTable"
           height="400"

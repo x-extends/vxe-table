@@ -23,9 +23,9 @@
       resizable
       show-overflow
       show-header-overflow
-      export-config
       ref="xTable"
       height="300"
+      :export-config="{}"
       :sort-config="{trigger: 'cell'}"
       :loading="loading">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
@@ -86,9 +86,9 @@ export default {
           resizable
           show-overflow
           show-header-overflow
-          export-config
           ref="xTable"
           height="300"
+          :export-config="{}"
           :sort-config="{trigger: 'cell'}"
           :loading="loading">
           <vxe-table-column type="seq" width="100"></vxe-table-column>

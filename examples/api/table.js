@@ -3179,6 +3179,15 @@ const apis = [
         list: []
       },
       {
+        name: 'isCheckboxIndeterminate()',
+        desc: '用于 type=checkbox，判断复选行是否半选',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'isCheckedByCheckboxRow(row)',
         desc: '用于 type=checkbox，判断复选行数据是否勾选',
         version: '',

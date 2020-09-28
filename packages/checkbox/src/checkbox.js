@@ -16,20 +16,20 @@ export default {
     size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
   inject: {
-    $xegroup: {
+    $xecheckboxgroup: {
       default: null
     }
   },
   computed: {
     isGroup () {
-      return this.$xegroup
+      return this.$xecheckboxgroup
     },
     isDisabled () {
-      return this.disabled || (this.isGroup && this.$xegroup.disabled)
+      return this.disabled || (this.isGroup && this.$xecheckboxgroup.disabled)
     }
   },
   render (h) {
-    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content } = this
+    const { $slots, $xecheckboxgroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -49,7 +49,7 @@ export default {
           disabled: isDisabled
         },
         domProps: {
-          checked: isGroup ? XEUtils.includes($xegroup.value, label) : value
+          checked: isGroup ? XEUtils.includes($xecheckboxgroup.value, label) : value
         },
         on: {
           change: this.changeEvent
@@ -65,12 +65,12 @@ export default {
   },
   methods: {
     changeEvent (evnt) {
-      const { $xegroup, isGroup, isDisabled, label } = this
+      const { $xecheckboxgroup, isGroup, isDisabled, label } = this
       if (!isDisabled) {
         const checked = evnt.target.checked
         const params = { checked, label, $event: evnt }
         if (isGroup) {
-          $xegroup.handleChecked(params)
+          $xecheckboxgroup.handleChecked(params)
         } else {
           this.$emit('input', checked)
           this.$emit('change', params)

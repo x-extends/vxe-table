@@ -11,6 +11,7 @@ const props = {
   titlePrefix: Object,
   titleSuffix: Object,
   resetValue: { default: null },
+  visible: { type: Boolean, default: null },
   visibleMethod: Function,
   folding: Boolean,
   collapseNode: Boolean,

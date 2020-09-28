@@ -13,6 +13,7 @@ class ItemConfig {
       titlePrefix: _vm.titlePrefix,
       titleSuffix: _vm.titleSuffix,
       resetValue: _vm.resetValue,
+      visible: _vm.visible,
       visibleMethod: _vm.visibleMethod,
       folding: _vm.folding,
       collapseNode: _vm.collapseNode,
@@ -43,7 +44,7 @@ export function createItem ($xeform, _vm) {
 
 export function destroyItem (_vm) {
   const { $xeform, itemConfig } = _vm
-  const matchObj = XEUtils.findTree($xeform.collectItem, option => option === itemConfig)
+  const matchObj = XEUtils.findTree($xeform.staticItems, option => option === itemConfig)
   if (matchObj) {
     matchObj.items.splice(matchObj.index, 1)
   }
@@ -52,5 +53,5 @@ export function destroyItem (_vm) {
 export function assemItem (_vm) {
   const { $el, $xeform, itemConfig } = _vm
   itemConfig.slots = _vm.$scopedSlots
-  $xeform.collectItem.splice([].indexOf.call($xeform.$refs.hideItem.children, $el), 0, itemConfig)
+  $xeform.staticItems.splice([].indexOf.call($xeform.$refs.hideItem.children, $el), 0, itemConfig)
 }

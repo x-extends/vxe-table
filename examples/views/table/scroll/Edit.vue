@@ -32,10 +32,10 @@
       border
       resizable
       show-overflow
-      export-config
       keep-source
       ref="xTable"
       height="400"
+      :export-config="{}"
       :loading="loading"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :checkbox-config="{checkField: 'checked'}">
@@ -109,10 +109,10 @@ export default {
           border
           resizable
           show-overflow
-          export-config
           keep-source
           ref="xTable"
           height="300"
+          :export-config="{}"
           :loading="loading"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :checkbox-config="{checkField: 'checked'}">

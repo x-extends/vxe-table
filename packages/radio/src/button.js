@@ -11,7 +11,7 @@ export default {
     size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   inject: {
-    $xegroup: {
+    $xeradiogroup: {
       default: null
     }
   },
@@ -20,14 +20,14 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     isGroup () {
-      return this.$xegroup
+      return this.$xeradiogroup
     },
     isDisabled () {
-      return this.disabled || (this.isGroup && this.$xegroup.disabled)
+      return this.disabled || (this.isGroup && this.$xeradiogroup.disabled)
     }
   },
   render (h) {
-    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, label, content } = this
+    const { $slots, $xeradiogroup, isGroup, isDisabled, title, vSize, label, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -43,11 +43,11 @@ export default {
         class: 'vxe-radio--input',
         attrs: {
           type: 'radio',
-          name: isGroup ? $xegroup.name : null,
+          name: isGroup ? $xeradiogroup.name : null,
           disabled: isDisabled
         },
         domProps: {
-          checked: isGroup && $xegroup.value === label
+          checked: isGroup && $xeradiogroup.value === label
         },
         on: {
           change: this.changeEvent
@@ -60,10 +60,10 @@ export default {
   },
   methods: {
     changeEvent (evnt) {
-      const { $xegroup, isGroup, isDisabled, label } = this
+      const { $xeradiogroup, isGroup, isDisabled, label } = this
       if (!isDisabled) {
         if (isGroup) {
-          $xegroup.handleChecked({ label, $event: evnt })
+          $xeradiogroup.handleChecked({ label, $event: evnt })
         }
       }
     }

@@ -21,15 +21,13 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-codecode class="xml">{{ demoCodes[0] }}</pre-codecode>
+      <pre-codecode class="javascript">{{ demoCodes[1] }}</pre-codecode>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -109,11 +107,6 @@ export default {
   },
   created () {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
 }
 </script>

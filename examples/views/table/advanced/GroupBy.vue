@@ -4,9 +4,9 @@
 
     <vxe-table
       resizable
-      tree-config
       ref="xTable"
       height="300"
+      :tree-config="{}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -35,9 +35,9 @@ export default {
         `
         <vxe-table
           resizable
-          tree-config
           ref="xTable"
           height="300"
+          :tree-config="{}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

@@ -1366,7 +1366,7 @@ export default {
             this.selectMonth = XEUtils.getWhatMonth(this.selectMonth, 1, 'first')
           }
         }
-        this.$emit('date-prev', { type, $event: evnt })
+        this.$emit('date-next', { type, $event: evnt })
       }
     },
     dateSelectEvent (item) {

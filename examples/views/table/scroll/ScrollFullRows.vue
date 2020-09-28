@@ -26,9 +26,9 @@
       show-header-overflow
       highlight-hover-row
       highlight-current-row
-      export-config
       ref="xTable"
       height="600"
+      :export-config="{}"
       :loading="loading"
       :sort-config="{trigger: 'cell'}"
       :checkbox-config="{checkField: 'checked'}">
@@ -107,9 +107,9 @@ export default {
           show-header-overflow
           highlight-hover-row
           highlight-current-row
-          export-config
           ref="xTable"
           height="600"
+          :export-config="{}"
           :loading="loading"
           :sort-config="{trigger: 'cell'}"
           :checkbox-config="{checkField: 'checked'}">

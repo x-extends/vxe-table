@@ -18,10 +18,10 @@
 
     <vxe-table
       highlight-hover-row
-      export-config
       border="inner"
       ref="xTable1"
       height="300"
+      :export-config="{}"
       :data="tableData1">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -174,10 +174,10 @@ export default {
 
         <vxe-table
           highlight-hover-row
-          export-config
           border="inner"
           ref="xTable1"
           height="300"
+          :export-config="{}"
           :data="tableData1">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>

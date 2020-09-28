@@ -5,12 +5,12 @@
     <vxe-grid
       border
       resizable
-      export-config
-      import-config
       keep-source
       ref="xGrid"
       id="toolbar_demo_1"
       height="530"
+      :import-config="{}"
+      :export-config="{}"
       :columns="tableColumn"
       :toolbar="tableToolbar"
       :data="tableData"
@@ -73,12 +73,12 @@ export default {
         <vxe-grid
           border
           resizable
-          export-config
-          import-config
           keep-source
           ref="xGrid"
           id="toolbar_demo_1"
           height="530"
+          :import-config="{}"
+          :export-config="{}"
           :columns="tableColumn"
           :toolbar="tableToolbar"
           :data="tableData"

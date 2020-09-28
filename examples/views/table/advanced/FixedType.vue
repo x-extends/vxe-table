@@ -15,10 +15,10 @@
     <vxe-table
       border
       highlight-hover-row
-      import-config
-      export-config
       ref="xTable"
       height="400"
+      :import-config="{}"
+      :export-config="{}"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -56,10 +56,10 @@ export default {
         <vxe-table
           border
           highlight-hover-row
-          import-config
-          export-config
           ref="xTable"
           height="400"
+          :import-config="{}"
+          :export-config="{}"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

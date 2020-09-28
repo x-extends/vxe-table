@@ -6,9 +6,9 @@
       border
       resizable
       row-key
-      export-config
       ref="xVTree"
       max-height="400"
+      :export-config="{}"
       :toolbar="{export: true, zoom: true}"
       :tree-config="{children: 'children'}"
       :columns="tableColumn"
@@ -48,9 +48,9 @@ export default {
           border
           resizable
           row-key
-          export-config
           ref="xVTree"
           max-height="400"
+          :export-config="{}"
           :toolbar="{export: true, zoom: true}"
           :tree-config="{children: 'children'}"
           :columns="tableColumn"

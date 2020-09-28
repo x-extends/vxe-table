@@ -15,20 +15,20 @@ export default {
     size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   inject: {
-    $xegroup: {
+    $xeradiogroup: {
       default: null
     }
   },
   computed: {
     isGroup () {
-      return this.$xegroup
+      return this.$xeradiogroup
     },
     isDisabled () {
-      return this.disabled || (this.isGroup && this.$xegroup.disabled)
+      return this.disabled || (this.isGroup && this.$xeradiogroup.disabled)
     }
   },
   render (h) {
-    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, value, label, name, content } = this
+    const { $slots, $xeradiogroup, isGroup, isDisabled, title, vSize, value, label, name, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -44,18 +44,18 @@ export default {
         class: 'vxe-radio--input',
         attrs: {
           type: 'radio',
-          name: isGroup ? $xegroup.name : name,
+          name: isGroup ? $xeradiogroup.name : name,
           disabled: isDisabled
         },
         domProps: {
-          checked: isGroup ? $xegroup.value === label : value === label
+          checked: isGroup ? $xeradiogroup.value === label : value === label
         },
         on: {
           change: evnt => {
             if (!isDisabled) {
               const params = { label, $event: evnt }
               if (isGroup) {
-                $xegroup.handleChecked(params)
+                $xeradiogroup.handleChecked(params)
               } else {
                 this.$emit('input', label)
                 this.$emit('change', params)
@@ -74,11 +74,11 @@ export default {
   },
   methods: {
     changeEvent (evnt) {
-      const { $xegroup, isGroup, isDisabled, label } = this
+      const { $xeradiogroup, isGroup, isDisabled, label } = this
       if (!isDisabled) {
         const params = { label, $event: evnt }
         if (isGroup) {
-          $xegroup.handleChecked(params)
+          $xeradiogroup.handleChecked(params)
         } else {
           this.$emit('input', label)
           this.$emit('change', params)
