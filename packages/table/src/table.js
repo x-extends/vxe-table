@@ -231,7 +231,8 @@ export default {
   },
   provide () {
     return {
-      $xetable: this
+      $xetable: this,
+      xecolgroup: null
     }
   },
   inject: {

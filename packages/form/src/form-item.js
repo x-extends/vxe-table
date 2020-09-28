@@ -77,6 +77,7 @@ export default {
     titlePrefix: Object,
     titleSuffix: Object,
     resetValue: { default: null },
+    visible: { type: Boolean, default: null },
     visibleMethod: Function,
     folding: Boolean,
     collapseNode: Boolean,
@@ -132,7 +133,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, $vxeform, title, folding, visibleMethod, field, collapseNode, itemRender, isRequired, showError, showRule } = this
+    const { _e, $scopedSlots, $vxeform, title, folding, visible, visibleMethod, field, collapseNode, itemRender, isRequired, showError, showRule } = this
     const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
     const span = this.span || $vxeform.span
     const align = this.align || $vxeform.align
@@ -140,6 +141,9 @@ export default {
     const titleWidth = this.titleWidth || $vxeform.titleWidth
     const collapseAll = $vxeform.collapseAll
     let itemVisibleMethod = visibleMethod
+    if (visible === false) {
+      return _e()
+    }
     if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
       itemVisibleMethod = compConf.itemVisibleMethod
     }
