@@ -2425,16 +2425,16 @@ export default {
     vChangeEvent () {
       switch (this.version) {
         case '1':
-          location.href = '/vxe-table/v1/index.html'
+          location.href = '/vxe-table/v1/'
           break
         case '2':
-          location.href = '/vxe-table/v2/index.html'
+          location.href = '/vxe-table/v2/'
           break
         case '3':
-          location.href = '/vxe-table/v3/index.html'
+          location.href = '/vxe-table/v3/'
           break
         case '4':
-          location.href = '/vxe-table/v4/index.html'
+          location.href = '/vxe-table/v4/'
           break
       }
     }
