@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "3.0.0-beta.2",
+  "version": "3.0.0-beta.3",
   "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -21,9 +21,9 @@
     "scripts"
   ],
   "main": "lib/index.common.js",
-  "unpkg": "lib/index.umd.min.js",
-  "jsdelivr": "lib/index.umd.min.js",
-  "style": "lib/style.min.css",
+  "unpkg": "lib/index.umd.js",
+  "jsdelivr": "lib/index.umd.js",
+  "style": "lib/style.css",
   "typings": "types/index.d.ts",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
