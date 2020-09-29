@@ -955,7 +955,7 @@ export default {
         'c--highlight': highlightCell,
         't--animat': !!this.animat,
         'is--round': this.round,
-        't--stripe': stripe,
+        't--stripe': !treeConfig && stripe,
         't--selected': mouseConfig && mouseOpts.selected,
         // 在 v3.0 中废弃 mouse-config.checked
         't--checked': mouseConfig && mouseOpts.checked,
