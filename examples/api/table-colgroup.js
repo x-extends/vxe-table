@@ -23,7 +23,7 @@ const apis = [
       'show-header-overflow',
       'header-class-name'
     ].includes(item.name)).map(item => {
-      item.version = ''
+      item.version = '2.9.24'
       return item
     })
   },
