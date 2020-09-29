@@ -1,11 +1,10 @@
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import XEUtils from 'xe-utils/ctor'
-import msgQueue from './queue'
 import allActivedModals from './activities'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
-const activeModals = []
+const msgQueue = []
 
 export default {
   name: 'VxeModal',
@@ -83,7 +82,6 @@ export default {
     if (this.storage && !this.id) {
       UtilTools.error('vxe.error.reqProp', ['modal.id'])
     }
-    activeModals.push(this)
   },
   mounted () {
     const { $listeners, events = {} } = this
@@ -110,7 +108,6 @@ export default {
     if ($el.parentNode === document.body) {
       $el.parentNode.removeChild($el)
     }
-    XEUtils.remove(activeModals, $modal => $modal === this)
   },
   render (h) {
     const { $scopedSlots, slots = {}, inited, vSize, className, type, resize, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
@@ -503,7 +500,7 @@ export default {
     },
     boxMousedownEvent () {
       const { modalZindex } = this
-      if (activeModals.some(_vm => _vm.visible && _vm.modalZindex > modalZindex)) {
+      if (allActivedModals.some(_vm => _vm.visible && _vm.modalZindex > modalZindex)) {
         this.updateZindex()
       }
     },

@@ -40,9 +40,6 @@ export default {
     },
     btnType () {
       return this.isText ? this.type : 'button'
-    },
-    btnStatus () {
-      return this.status
     }
   },
   created () {
@@ -58,7 +55,7 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
   },
   render (h) {
-    const { $scopedSlots, $listeners, inited, type, destroyOnClose, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
+    const { $scopedSlots, $listeners, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
     return downsSlot ? h('div', {
       class: ['vxe-button--dropdown', {
@@ -67,10 +64,10 @@ export default {
       }]
     }, [
       h('button', {
-        ref: 'btn',
+        ref: 'xBtn',
         class: ['vxe-button', `type--${btnType}`, {
           [`size--${vSize}`]: vSize,
-          [`theme--${btnStatus}`]: btnStatus,
+          [`theme--${status}`]: status,
           'is--round': this.round,
           'is--circle': this.circle,
           'is--disabled': disabled || loading,
@@ -112,10 +109,10 @@ export default {
         }, destroyOnClose && !showPanel ? [] : downsSlot.call(this, {}, h))
       ] : null)
     ]) : h('button', {
-      ref: 'btn',
+      ref: 'xBtn',
       class: ['vxe-button', `type--${btnType}`, {
         [`size--${vSize}`]: vSize,
-        [`theme--${btnStatus}`]: btnStatus,
+        [`theme--${status}`]: status,
         'is--round': this.round,
         'is--circle': this.circle,
         'is--disabled': disabled || loading,
@@ -221,7 +218,7 @@ export default {
     updatePlacement () {
       return this.$nextTick().then(() => {
         const { $refs, transfer, placement, panelIndex } = this
-        const targetElem = $refs.btn
+        const targetElem = $refs.xBtn
         const panelElem = $refs.panel
         if (panelElem && targetElem) {
           const targetHeight = targetElem.offsetHeight

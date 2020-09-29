@@ -102,7 +102,7 @@ function renderDateLabel (h, _vm, item, label) {
 }
 
 function isDateDisabled (_vm, item) {
-  const disabledMethod = _vm.disabledMethod || _vm.dateOpts.disabledMethod
+  const disabledMethod = _vm.disabledMethod
   return disabledMethod && disabledMethod({ type: _vm.type, date: item.date })
 }
 
@@ -730,13 +730,13 @@ export default {
     },
     dateLabelFormat () {
       if (this.isDatePicker) {
-        return this.labelFormat || this.dateOpts.labelFormat || GlobalConfig.i18n(`vxe.input.date.labelFormat.${this.type}`)
+        return this.labelFormat || GlobalConfig.i18n(`vxe.input.date.labelFormat.${this.type}`)
       }
       return null
     },
     dateValueFormat () {
       const { type } = this
-      return type === 'time' ? 'HH:mm:ss' : (this.valueFormat || this.dateOpts.valueFormat || (type === 'datetime' ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'))
+      return type === 'time' ? 'HH:mm:ss' : (this.valueFormat || (type === 'datetime' ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'))
     },
     selectDatePanelLabel () {
       if (this.isDatePicker) {
@@ -759,7 +759,7 @@ export default {
     weekDatas () {
       const weeks = []
       if (this.isDatePicker) {
-        let sWeek = XEUtils.toNumber(XEUtils.isNumber(this.startWeek) ? this.startWeek : this.dateOpts.startWeek)
+        let sWeek = XEUtils.toNumber(this.startWeek)
         weeks.push(sWeek)
         for (let index = 0; index < 6; index++) {
           if (sWeek >= 6) {
@@ -886,9 +886,6 @@ export default {
         return [item].concat(list)
       })
     },
-    dateOpts () {
-      return Object.assign({}, this.dateConfig, GlobalConfig.input.dateConfig)
-    },
     hourList () {
       const list = []
       if (this.hasTime) {
@@ -928,7 +925,7 @@ export default {
         type: inputType,
         placeholder,
         maxlength: isNumber && !XEUtils.toNumber(maxlength) ? 16 : maxlength, // 数值最大长度限制 16 位，包含小数
-        readonly: readonly || type === 'week' || !editable || this.dateOpts.editable === false,
+        readonly: readonly || type === 'week' || !editable,
         disabled,
         autocomplete
       }
@@ -1468,9 +1465,9 @@ export default {
       let dLabel = ''
       if (date) {
         if (type === 'time') {
-          dValue = toStringTime(date, parseFormat || this.dateOpts.parseFormat)
+          dValue = toStringTime(date, parseFormat)
         } else {
-          dValue = XEUtils.toStringDate(date, parseFormat || this.dateOpts.parseFormat)
+          dValue = XEUtils.toStringDate(date, parseFormat)
         }
       }
       if (XEUtils.isValidDate(dValue)) {
@@ -1544,7 +1541,7 @@ export default {
     dateChange (date) {
       const { value, datetimePanelValue, dateValueFormat } = this
       if (this.type === 'week') {
-        const sWeek = XEUtils.toNumber(XEUtils.isNumber(this.startWeek) ? this.startWeek : this.dateOpts.startWeek)
+        const sWeek = XEUtils.toNumber(this.startWeek)
         date = XEUtils.getWhatWeek(date, 0, sWeek)
       } else if (this.hasTime) {
         date.setHours(datetimePanelValue.getHours())

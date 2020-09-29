@@ -15,7 +15,7 @@ export default {
       reqProp: '缺少必要的 "{0}" 參數，可能會導致出現錯誤',
       emptyProp: '參數 "{0}" 不允許為空',
       errProp: '不支持的參數 "{0}"，可能為 "{1}"',
-      fieldRepet: 'column.{0}="{1}" 重複了，這可能會導致某些功能無法使用',
+      colRepet: 'column.{0}="{1}" 重複了，這可能會導致某些功能無法使用',
       notFunc: '方法 "{0}" 不存在',
       notSlot: '插槽 "{0}" 不存在',
       noTree: '樹狀結構不支援 {0}',
