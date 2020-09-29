@@ -56,6 +56,14 @@ export declare class Grid extends Table {
    */
   isMaximized(): boolean;
   /**
+   * 如果表格处于常规状态，则最大化表格
+   */
+  maximize(): Promise<any>;
+  /**
+   * 如果表格处于最大化状态，则还原表格
+   */
+  revert(): Promise<any>;
+  /**
    * 获取数据代理信息
    */
   getProxyInfo(): {

@@ -64,12 +64,22 @@ Object.defineProperty(VXETable, 'zIndex', { get: UtilTools.getLastZIndex })
  */
 Object.defineProperty(VXETable, 'nextZIndex', { get: UtilTools.nextZIndex })
 
+function getExportOrImpotType (types, flag) {
+  const rest = []
+  XEUtils.objectEach(types, (val, type) => {
+    if (val === 0 || val === flag) {
+      rest.push(type)
+    }
+  })
+  return rest
+}
+
 /**
  * 获取所有导出类型
  */
 Object.defineProperty(VXETable, 'exportTypes', {
   get () {
-    return Object.keys(VXETable.types)
+    return getExportOrImpotType(GlobalConfig.export.types, 1)
   }
 })
 
@@ -78,13 +88,7 @@ Object.defineProperty(VXETable, 'exportTypes', {
  */
 Object.defineProperty(VXETable, 'importTypes', {
   get () {
-    const rest = []
-    XEUtils.each(VXETable.types, (flag, type) => {
-      if (flag) {
-        rest.push(type)
-      }
-    })
-    return rest
+    return getExportOrImpotType(GlobalConfig.export.types, 2)
   }
 })
 

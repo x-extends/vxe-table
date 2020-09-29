@@ -22,7 +22,10 @@ const apis = [
       'show-overflow',
       'show-header-overflow',
       'header-class-name'
-    ].includes(item.name))
+    ].includes(item.name)).map(item => {
+      item.version = ''
+      return item
+    })
   },
   {
     name: 'Slots',

@@ -418,28 +418,55 @@ const Methods = {
     const { isGroup, tableFullColumn, collectColumn, fullColumnMap } = this
     const fullColumnIdData = this.fullColumnIdData = {}
     const fullColumnFieldData = this.fullColumnFieldData = {}
-    let treeNodeColumn
     let expandColumn
+    let treeNodeColumn
+    let checkboxColumn
+    let radioColumn
     let hasFixed
     const handleFunc = (column, index, items, path, parent) => {
       const { id: colid, property, fixed, type, treeNode } = column
       const rest = { column, colid, index, items, parent }
       if (property) {
         if (fullColumnFieldData[property]) {
-          UtilTools.warn('vxe.error.fieldRepet', ['field', property])
+          UtilTools.error('vxe.error.colRepet', ['field', property])
         }
         fullColumnFieldData[property] = rest
       }
       if (!hasFixed && fixed) {
         hasFixed = fixed
       }
-      if (!treeNodeColumn && treeNode) {
-        treeNodeColumn = column
-      } else if (!expandColumn && type === 'expand') {
-        expandColumn = column
+      if (treeNode) {
+        if (treeNodeColumn) {
+          UtilTools.warn('vxe.error.colRepet', ['tree-node', treeNode])
+        }
+        if (!treeNodeColumn) {
+          treeNodeColumn = column
+        }
+      } else if (type === 'expand') {
+        if (expandColumn) {
+          UtilTools.warn('vxe.error.colRepet', ['type', type])
+        }
+        if (!expandColumn) {
+          expandColumn = column
+        }
+      }
+      if (type === 'checkbox') {
+        if (checkboxColumn) {
+          UtilTools.warn('vxe.error.colRepet', ['type', type])
+        }
+        if (!checkboxColumn) {
+          checkboxColumn = column
+        }
+      } else if (type === 'radio') {
+        if (radioColumn) {
+          UtilTools.warn('vxe.error.colRepet', ['type', type])
+        }
+        if (!radioColumn) {
+          radioColumn = column
+        }
       }
       if (fullColumnIdData[colid]) {
-        UtilTools.error('vxe.error.fieldRepet', ['colId', colid])
+        UtilTools.error('vxe.error.colRepet', ['colId', colid])
       }
       fullColumnIdData[colid] = rest
       fullColumnMap.set(column, rest)

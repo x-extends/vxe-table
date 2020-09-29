@@ -749,11 +749,11 @@ export default {
           month = selectMonth.getMonth() + 1
         }
         if (datePanelType === 'month') {
-          return XEUtils.template(GlobalConfig.i18n('vxe.input.date.monthLabel'), [year])
+          return GlobalConfig.i18n('vxe.input.date.monthLabel', [year])
         } else if (datePanelType === 'year') {
           return yearList.length ? `${yearList[0].year} - ${yearList[yearList.length - 1].year}` : ''
         }
-        return XEUtils.template(GlobalConfig.i18n('vxe.input.date.dayLabel'), [year, month ? GlobalConfig.i18n(`vxe.input.date.m${month}`) : '-'])
+        return GlobalConfig.i18n('vxe.input.date.dayLabel', [year, month ? GlobalConfig.i18n(`vxe.input.date.m${month}`) : '-'])
       }
       return ''
     },

@@ -480,6 +480,10 @@ export declare class Table extends VXETableComponent {
    */
   isAllCheckboxChecked(): boolean;
   /**
+   * 用于 type=checkbox，判断复选框是否半选
+   */
+  isCheckboxIndeterminate(): boolean;
+  /**
    * 用于 type=checkbox，判断复选行数据是否勾选
    * @param row 指定行
    */
