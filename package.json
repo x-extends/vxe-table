@@ -20,9 +20,9 @@
     "scripts"
   ],
   "main": "lib/index.common.js",
-  "unpkg": "lib/index.umd.min.js",
-  "jsdelivr": "lib/index.umd.min.js",
-  "style": "lib/style.min.css",
+  "unpkg": "lib/index.umd.js",
+  "jsdelivr": "lib/index.umd.js",
+  "style": "lib/style.css",
   "typings": "types/index.d.ts",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
