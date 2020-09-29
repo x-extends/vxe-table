@@ -595,7 +595,7 @@ const apis = [
         name: 'row-class-name',
         descKey: 'app.api.table.desc.rowClassName',
         version: '',
-        type: 'string | Function',
+        type: 'string | (({ row, rowIndex, $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -604,7 +604,7 @@ const apis = [
         name: 'cell-class-name',
         descKey: 'app.api.table.desc.cellClassName',
         version: '',
-        type: 'string | Function',
+        type: 'string | (({ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -613,7 +613,7 @@ const apis = [
         name: 'header-row-class-name',
         descKey: 'app.api.table.desc.headerRowClassName',
         version: '',
-        type: 'string | Function',
+        type: 'string | (({ $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -622,7 +622,7 @@ const apis = [
         name: 'header-cell-class-name',
         descKey: 'app.api.table.desc.headerCellClassName',
         version: '',
-        type: 'string | Function',
+        type: 'string | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -631,7 +631,7 @@ const apis = [
         name: 'footer-row-class-name',
         descKey: 'app.api.table.desc.footerRowClassName',
         version: '',
-        type: 'string | Function',
+        type: 'string | (({ $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -640,7 +640,7 @@ const apis = [
         name: 'footer-cell-class-name',
         descKey: 'app.api.table.desc.footerCellClassName',
         version: '',
-        type: 'string | Function',
+        type: 'string | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -650,7 +650,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.cellStyle',
         version: '',
-        type: 'any | Function',
+        type: 'any | (({ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -660,7 +660,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.headerCellStyle',
         version: '',
-        type: 'any | Function',
+        type: 'any | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -670,7 +670,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.footerCellStyle',
         version: '',
-        type: 'any | Function',
+        type: 'any | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -680,7 +680,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.rowStyle',
         version: '',
-        type: 'any | Function',
+        type: 'any | (({ row, rowIndex, $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -690,7 +690,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.headerRowStyle',
         version: '',
-        type: 'any | Function',
+        type: 'any | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -700,7 +700,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.footerRowStyle',
         version: '',
-        type: 'any | Function',
+        type: 'any | (({ $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -718,7 +718,7 @@ const apis = [
         name: 'footer-method',
         descKey: 'app.api.table.desc.footerMethod',
         version: '',
-        type: 'Function',
+        type: '({ columns, data }) => any[][]',
         enum: '',
         defVal: '',
         list: []
@@ -746,7 +746,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.spanMethod',
         version: '',
-        type: 'Function',
+        type: '({ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data }) => { rowspan: number, colspan: number}',
         enum: '',
         defVal: '{ rowspan: 1, colspan: 1}',
         list: []
@@ -756,7 +756,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.footerSpanMethod',
         version: '',
-        type: 'Function',
+        type: '({ $rowIndex, column, columnIndex, $columnIndex, data }) => { rowspan: number, colspan: number}',
         enum: '',
         defVal: '{ rowspan: 1, colspan: 1}',
         list: []

@@ -430,7 +430,7 @@ export default {
       return true
     },
     handleSearch () {
-      const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      const filterName = XEUtils.kebabCase(XEUtils.toString(this.filterName).trim()).toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const options = { children: 'list' }
