@@ -821,7 +821,7 @@ export default {
         'c--highlight': highlightCell,
         't--animat': !!this.animat,
         'is--round': this.round,
-        't--stripe': stripe,
+        't--stripe': !treeConfig && stripe,
         't--selected': mouseConfig && mouseOpts.selected,
         'is--area': mouseConfig && mouseOpts.area,
         'row--highlight': highlightHoverRow,

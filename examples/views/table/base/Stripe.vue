@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">斑马线条纹，通过设置 <table-api-link prop="stripe"/> 参数<br><span class="red">（注：在可编辑表格场景下，临时插入的数据不会有斑马纹样式）</span></p>
+    <p class="tip">
+      斑马线条纹，通过设置 <table-api-link prop="stripe"/> 参数<br>
+      <span class="red">（注：不支持树形结构，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）</span>
+    </p>
 
     <vxe-table
       stripe
