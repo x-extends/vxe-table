@@ -14,7 +14,7 @@ export default {
       reqProp: '必要な "{{0}}" パラメーターが欠落しているため、エラーが発生する可能性があります',
       emptyProp: '"{{0}}" propertyはemptyが許可されていません',
       errProp: 'サポートされていないパラメーター "{{0}}"，"{{1}}" の可能性があります',
-      fieldRepet: 'column.{{0}}="{{0}}" が重複しているため、機能が使えなくなることがあります。',
+      colRepet: 'column.{{0}}="{{0}}" が重複しているため、機能が使えなくなることがあります。',
       notFunc: 'method "{{0}}" はありません',
       notSlot: 'slot "{{0}}" はありません',
       noTree: 'Tree structureは "{{0}}" をサポートしていません',

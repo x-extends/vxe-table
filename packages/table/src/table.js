@@ -1503,7 +1503,7 @@ export default {
         const rest = { column, colid, index, items, parent }
         if (property) {
           if (fullColumnFieldData[property]) {
-            UtilTools.warn('vxe.error.fieldRepet', ['field', property])
+            UtilTools.warn('vxe.error.colRepet', ['field', property])
           }
           fullColumnFieldData[property] = rest
         }
