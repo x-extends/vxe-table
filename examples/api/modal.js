@@ -352,7 +352,7 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: '—',
+        name: 'default',
         desc: '窗口内容模板',
         version: '',
         type: '',

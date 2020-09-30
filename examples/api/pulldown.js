@@ -63,7 +63,7 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: '—',
+        name: 'default',
         desc: '显示的内容',
         version: '',
         type: '',

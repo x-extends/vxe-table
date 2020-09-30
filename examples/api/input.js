@@ -290,15 +290,6 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'input',
-        desc: '在输入时触发该事件',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '{ $event }',
-        list: []
-      },
-      {
         name: 'change',
         desc: '在值发生变化时触发该事件',
         version: '',
@@ -336,7 +327,16 @@ const apis = [
       },
       {
         name: 'click',
-        desc: '在点击输入框时触发该事件',
+        desc: '在单击输入框时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'dblclick',
+        desc: '在双击输入框时触发该事件',
         version: '',
         type: '',
         enum: '',
