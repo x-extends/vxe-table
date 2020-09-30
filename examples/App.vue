@@ -3,7 +3,7 @@
     <header class="page-header">
       <div class="left">
         <a href="/vxe-table/">
-          <img src="logo.png" width="18">
+          <img src="/vxe-table/logo.png" width="18">
           <span class="title">vxe-table</span>
         </a>
         <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
