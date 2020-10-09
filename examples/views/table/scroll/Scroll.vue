@@ -2,8 +2,7 @@
   <div>
     <p class="tip">
       虚拟滚动<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
-      高性能的虚拟渲染，通过设置 <table-api-link prop="height"/>、<table-api-link prop="max-height"/> 即可启用虚拟渲染，只会渲染可指定范围内的可视区数据，其他的数据将被卷去收起，当滚动到可视区时才显示出来<br>
-      如果列较多建议使用 <grid-api-link name="vxe-grid"/>，使渲染性能达到最优，虚拟滚动只会渲染可视区域的数据，对于海量数据的性能提升非常大<br>
+      高性能的虚拟渲染，默认情况下，如果设置了 <table-api-link prop="height"/>、<table-api-link prop="max-height"/> 则会自动启用虚拟渲染，可以通过 <table-api-link prop="gt"/> 关闭或设置启动规则。虚拟滚动启用后只会渲染指定范围内的可视区数据，其他的数据将被卷去收起，当滚动到可视区时才被渲染出来<br>
       <span class="red">（注：启用虚拟滚动后：<table-api-link prop="show-overflow"/>，<table-api-link prop="show-header-overflow"/>，<table-api-link prop="show-footer-overflow"/> 参数将根据不同场景各自触发生效，无法取消；如果需要支持，将虚拟滚动关闭即可）</span>
     </p>
 

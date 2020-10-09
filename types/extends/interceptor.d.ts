@@ -24,6 +24,7 @@ export interface InterceptorKeydownParams extends InterceptorParams { }
 export interface InterceptorExportParams extends InterceptorParams {
   options: ExportOptons;
   columns: ColumnInfo[];
+  colgroups: ColumnInfo[][];
   datas: any[];
 }
 

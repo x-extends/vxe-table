@@ -8,7 +8,7 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'value,v-model',
+        name: 'v-model',
         descKey: 'app.api.modal.desc.value',
         version: '',
         type: 'any',
@@ -340,6 +340,15 @@ const apis = [
         enum: '',
         defVal: 'false',
         list: []
+      },
+      {
+        name: 'before-hide-method',
+        desc: '在窗口隐藏之前执行，可以返回 Error 阻止关闭，支持异步',
+        version: '',
+        type: 'Function/Promise<any>',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },
@@ -398,19 +407,10 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'inserted',
-        desc: '在窗口元素插入父节点时会触发该事件（只会执行一次）',
-        version: '',
-        type: '{ type, $event }',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'show',
         desc: '在窗口显示时会触发该事件',
         version: '',
-        type: '{ type, $event }',
+        type: '{ type }',
         enum: '',
         defVal: '',
         list: []
@@ -419,7 +419,7 @@ const apis = [
         name: 'hide',
         desc: '在窗口隐藏时会触发该事件',
         version: '',
-        type: '{ type, $event }',
+        type: '{ type }',
         enum: '',
         defVal: '',
         list: []
@@ -427,6 +427,15 @@ const apis = [
       {
         name: 'confirm',
         desc: '点击确定按钮时会触发该事件',
+        version: '',
+        type: '{ type, $event }',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'cancel',
+        desc: '点击取消按钮时会触发该事件',
         version: '',
         type: '{ type, $event }',
         enum: '',

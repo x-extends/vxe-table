@@ -8,7 +8,7 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'value,v-model',
+        name: 'v-model',
         descKey: 'app.api.radio.desc.value',
         version: '',
         type: 'any',

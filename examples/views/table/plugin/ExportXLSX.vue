@@ -20,12 +20,18 @@
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
-      <vxe-table-column field="other" title="默认自动转换" cell-type="auto"></vxe-table-column>
-      <vxe-table-column field="num" title="导出数值" cell-type="number"></vxe-table-column>
-      <vxe-table-column field="cardNo" title="导出字符串" cell-type="string"></vxe-table-column>
+      <vxe-table-colgroup title="Group1">
+        <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+        <vxe-table-column field="role" title="Role"></vxe-table-column>
+        <vxe-table-colgroup title="Group2">
+          <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
+          <vxe-table-column field="other" title="默认自动转换" cell-type="auto"></vxe-table-column>
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="Group1">
+        <vxe-table-column field="num" title="导出数值" cell-type="number"></vxe-table-column>
+        <vxe-table-column field="cardNo" title="导出字符串" cell-type="string"></vxe-table-column>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -53,7 +59,7 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-toolbar custom :export="tableExport">
+        <vxe-toolbar custom export>
           <template v-slot:buttons>
             <vxe-button @click="exportDataEvent">导出数据</vxe-button>
           </template>
@@ -68,12 +74,18 @@ export default {
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="other" title="默认自动转换" cell-type="auto"></vxe-table-column>
-          <vxe-table-column field="num" title="导出数值" cell-type="number"></vxe-table-column>
-          <vxe-table-column field="cardNo" title="导出字符串" cell-type="string"></vxe-table-column>
+          <vxe-table-colgroup title="Group1">
+            <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+            <vxe-table-column field="role" title="Role"></vxe-table-column>
+            <vxe-table-colgroup title="Group2">
+              <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
+              <vxe-table-column field="other" title="默认自动转换" cell-type="auto"></vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="Group1">
+            <vxe-table-column field="num" title="导出数值" cell-type="number"></vxe-table-column>
+            <vxe-table-column field="cardNo" title="导出字符串" cell-type="string"></vxe-table-column>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `

@@ -165,15 +165,16 @@ export default {
     },
     import: {
       modes: {
-        covering: '覆盖',
-        insert: '新增'
+        covering: 'Covering',
+        insert: 'Insert'
       },
-      impTitle: 'Import parameter settings',
+      impTitle: 'Import data',
       impFile: 'Filename',
       impSelect: 'Select file',
       impType: 'File type',
-      impOpts: 'Import option',
-      impConfirm: 'Import'
+      impOpts: 'Settings',
+      impConfirm: 'Import',
+      impCancel: 'Cancel'
     },
     export: {
       types: {
@@ -189,24 +190,30 @@ export default {
         selected: 'Selected data (data selected on the current page)',
         all: 'Full data (including all paging data)'
       },
-      expTitle: 'Export parameter settings',
+      printTitle: 'Print data',
+      expTitle: 'Export data',
       expName: 'Filename',
       expNamePlaceholder: 'Please enter filename',
       expSheetName: 'Title',
       expSheetNamePlaceholder: 'Please enter a title',
       expType: 'Save the type',
-      expMode: 'Data to export',
+      expMode: 'Select data',
       expCurrentColumn: 'All the field',
-      expColumn: 'The field to export',
-      expOpts: 'Export option',
+      expColumn: 'Select field',
+      expOpts: 'Settings',
       expOptHeader: 'Header',
-      expHeaderTitle: 'Need to export header',
+      expHeaderTitle: 'Do I need a header',
       expOptFooter: 'Footer',
-      expFooterTitle: 'Need to export footer',
-      expOptOriginal: 'Original data',
-      expOriginalTitle: 'Need to export original data? If it is checked, import to table is supported',
+      expFooterTitle: 'Do you need the footer table',
+      expOptColgroup: 'Group header',
+      expColgroupTitle: 'If it exists, headers with grouping structure are supported',
+      expOptMerge: 'Cell merge',
+      expMergeTitle: 'If it exists, cells with merged structures are supported',
+      expOptOriginal: 'Source data',
+      expOriginalTitle: 'If it is source data, import into the table is supported',
       expPrint: 'Print',
-      expConfirm: 'Export'
+      expConfirm: 'Export',
+      expCancel: 'Cancel'
     },
     modal: {
       zoomIn: 'Maximization',

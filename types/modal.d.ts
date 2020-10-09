@@ -135,6 +135,7 @@ export declare class Modal extends VXETableComponent {
   storage?: boolean;
   storageKey?: string;
   animat?: boolean;
+  beforeHideMethod?(params: { type: string }): Promise<any>;
 
   /**
    * 手动打开窗口
@@ -177,11 +178,29 @@ export declare class Modal extends VXETableComponent {
   revert(): Promise<any>;
 }
 
+/**
+ * 窗口类型
+ */
+export declare type ModalOptionTypes = 'alert' | 'confirm' | 'message'
+/**
+ * 窗口状态
+ */
+export declare type ModalOptionStatus = 'info' | 'success' | 'warning' | 'question' | 'error' | 'loading'
+
+/**
+ * 窗口事件类型
+ */
+
+/**
+ * 窗口事件类型
+ */
+export declare type ModalEventTypes = 'default' | 'mask' | 'close' | 'confirm' | 'cancel' | 'keydown' | 'exist'
+
 export interface ModalOptions {
   id?: string;
   type?: string;
   loading?: boolean;
-  status?: 'info' | 'success' | 'warning' | 'error' | 'loading';
+  status?: ModalOptionStatus;
   iconStatus?: string;
   top?: number | string;
   position?: 'center' | {
@@ -215,6 +234,7 @@ export interface ModalOptions {
   storageKey?: string;
   animat?: boolean;
   size?: 'medium' | 'small' | 'mini';
+  beforeHideMethod?(params: { type: string }): Promise<any>;
 
   slots?: {
     default?(params: ModalDefaultSlotParams, h: CreateElement): VNode[] | string[];

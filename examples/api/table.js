@@ -215,7 +215,16 @@ const exportDataAPI = [
   },
   {
     name: 'isHeader',
-    desc: '是否需要表头',
+    desc: '是否导出表头',
+    version: '',
+    type: 'boolean',
+    enum: '',
+    defVal: 'true',
+    list: []
+  },
+  {
+    name: 'isColgroup',
+    desc: '如果存在，则导出带有分组结构的表头',
     version: '',
     type: 'boolean',
     enum: '',
@@ -224,11 +233,20 @@ const exportDataAPI = [
   },
   {
     name: 'isFooter',
-    desc: '是否需要表尾',
+    desc: '是否导出表尾',
     version: '',
     type: 'boolean',
     enum: '',
     defVal: 'true',
+    list: []
+  },
+  {
+    name: 'isMerge',
+    desc: '如果存在，则导出带有合并结构的单元格',
+    version: '',
+    type: 'boolean',
+    enum: '',
+    defVal: 'false',
     list: []
   },
   {
@@ -3824,17 +3842,7 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
-        list: XEUtils.clone(exportDataAPI.filter(item => !['columns', 'data', 'download', 'columnFilterMethod', 'dataFilterMethod', 'footerFilterMethod'].includes(item.name)), true).concat([
-          {
-            name: 'isPrint',
-            desc: '是否需要打印按钮',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'true',
-            list: []
-          }
-        ])
+        list: XEUtils.clone(exportDataAPI.filter(item => !['columns', 'data', 'download', 'columnFilterMethod', 'dataFilterMethod', 'footerFilterMethod'].includes(item.name)), true)
       },
       {
         name: 'importData(options)',
@@ -3857,6 +3865,15 @@ const apis = [
       {
         name: 'print(options)',
         desc: '打印（只支持基本数据结构，目前不支持分组、合并等）',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'options: object',
+        list: XEUtils.clone(printAPI, true)
+      },
+      {
+        name: 'openPrint(options)',
+        desc: '打开高级打印（只对 print-config 启用后有效）',
         version: '',
         type: 'Promise',
         enum: '',

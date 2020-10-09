@@ -398,7 +398,10 @@ export default {
         modeList: [],
         typeList: [],
         columns: [],
+        isPrint: false,
         hasFooter: false,
+        hasMerge: false,
+        hasColgroup: false,
         visible: false
       },
       exportParams: {
@@ -406,6 +409,8 @@ export default {
         sheetName: '',
         mode: '',
         type: '',
+        isColgroup: false,
+        isMerge: false,
         original: false,
         message: true,
         isHeader: false,

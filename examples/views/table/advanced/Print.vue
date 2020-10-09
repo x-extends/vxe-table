@@ -7,9 +7,9 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="printEvent">打印</vxe-button>
+        <vxe-button @click="printEvent1">打印</vxe-button>
         <vxe-button @click="printSelectEvent">打印选中</vxe-button>
-        <vxe-button @click="exportDataEvent">导出与打印</vxe-button>
+        <vxe-button @click="printEvent2">高级打印</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -51,9 +51,9 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="printEvent">打印</vxe-button>
+            <vxe-button @click="printEvent1">打印</vxe-button>
             <vxe-button @click="printSelectEvent">打印选中</vxe-button>
-            <vxe-button @click="exportDataEvent">导出与打印</vxe-button>
+            <vxe-button @click="printEvent2">高级打印</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -133,7 +133,7 @@ export default {
     })
   },
   methods: {
-    printEvent () {
+    printEvent1 () {
       this.$refs.xTable.print()
     },
     printSelectEvent () {
@@ -141,8 +141,8 @@ export default {
         data: this.$refs.xTable.getCheckboxRecords()
       })
     },
-    exportDataEvent () {
-      this.$refs.xTable.openExport()
+    printEvent2 () {
+      this.$refs.xTable.openPrint()
     },
     footerMethod ({ columns, data }) {
       const footerData = [

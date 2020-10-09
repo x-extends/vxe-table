@@ -57,7 +57,8 @@ export default {
       on: {
         input (value) {
           storeData.visible = value
-        }
+        },
+        show: this.showEvent
       }
     }, [
       h('div', {
@@ -87,8 +88,12 @@ export default {
                       click: this.clearFileEvent
                     }
                   })
-                ]) : h('span', {
+                ]) : h('button', {
+                  ref: 'fileBtn',
                   class: 'vxe-import-select--file',
+                  attrs: {
+                    type: 'button'
+                  },
                   on: {
                     click: this.selectFileEvent
                   }
@@ -126,6 +131,11 @@ export default {
           class: 'vxe-export--panel-btns'
         }, [
           h('vxe-button', {
+            on: {
+              click: this.cancelEvent
+            }
+          }, GlobalConfig.i18n('vxe.import.impCancel')),
+          h('vxe-button', {
             props: {
               status: 'primary',
               disabled: !hasFile
@@ -152,6 +162,18 @@ export default {
         const file = evnt.target.files[0]
         Object.assign(this.storeData, UtilTools.parseFile(file), { file })
       }).catch(e => e)
+    },
+    showEvent () {
+      this.$nextTick(() => {
+        const { $refs } = this
+        const targetElem = $refs.fileBtn
+        if (targetElem) {
+          targetElem.focus()
+        }
+      })
+    },
+    cancelEvent () {
+      this.storeData.visible = false
     },
     importEvent () {
       const $xetable = this.$parent

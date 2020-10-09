@@ -168,12 +168,13 @@ export default {
         covering: 'カバー',
         insert: '追加'
       },
-      impTitle: 'インポートパラメータ設定',
+      impTitle: '导入数据',
       impFile: 'ファイル名',
       impSelect: 'ファイルを選択',
       impType: 'ファイルの種類',
-      impOpts: 'インポートオプション',
-      impConfirm: 'インポート'
+      impOpts: '参数设置',
+      impConfirm: 'インポート',
+      impCancel: '取消'
     },
     export: {
       types: {
@@ -189,24 +190,30 @@ export default {
         selected: '選択したデータ(現在のページで選択したデータ)',
         all: '全量データ（全ページ分のデータを含む）'
       },
-      expTitle: 'エクスポートパラメータ設定',
+      printTitle: '打印数据',
+      expTitle: '导出数据',
       expName: 'ファイル名',
       expNamePlaceholder: 'ファイル名を入力してください',
       expSheetName: 'タイトル',
       expSheetNamePlaceholder: 'タイトルを入力してください',
       expType: '保存タイプ',
-      expMode: 'エクスポートするデータ',
+      expMode: '选择字段',
       expCurrentColumn: '全てのフィールド',
-      expColumn: 'エクスポートするフィールド',
-      expOpts: 'エクスポートオプション',
+      expColumn: '选择字段',
+      expOpts: '参数设置',
       expOptHeader: 'ヘッダー',
       expHeaderTitle: 'ヘッダーをエクスポート',
       expOptFooter: 'フッター',
       expFooterTitle: 'フッターをエクスポート',
+      expOptColgroup: '分组表头',
+      expColgroupTitle: '如果存在，则支持带有分组结构的表头',
+      expOptMerge: '单元格合并',
+      expMergeTitle: '如果存在，则支持带有合并结构的单元格',
       expOptOriginal: 'ソースデータ',
-      expOriginalTitle: '元のデータをエクスポートする必要がありますか？チェックされている場合、テーブルへのインポートがサポートされています',
+      expOriginalTitle: '如果为源数据，则支持导入到表格中',
       expPrint: '印刷',
-      expConfirm: 'エクスポート'
+      expConfirm: 'エクスポート',
+      expCancel: '取消'
     },
     modal: {
       zoomIn: '最大化',

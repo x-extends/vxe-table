@@ -168,12 +168,13 @@ export default {
         covering: '覆盖',
         insert: '新增'
       },
-      impTitle: '導入參數設置',
+      impTitle: '導入數據',
       impFile: '檔名',
       impSelect: '選擇檔案',
       impType: '檔案類型',
-      impOpts: '導入選項',
-      impConfirm: '導入'
+      impOpts: '參數設置',
+      impConfirm: '導入',
+      impCancel: '取消'
     },
     export: {
       types: {
@@ -189,24 +190,30 @@ export default {
         selected: '選中數據（當前頁選中的數據）',
         all: '全量數據（包括所有分頁的數據）'
       },
-      expTitle: '匯出參數設置',
+      printTitle: '列印數據',
+      expTitle: '匯出數據',
       expName: '檔名',
       expNamePlaceholder: '請輸入檔名',
       expSheetName: '標題',
       expSheetNamePlaceholder: '請輸入標題',
       expType: '保存類型',
-      expMode: '要匯出的數據',
+      expMode: '選擇數據',
       expCurrentColumn: '全部欄位',
-      expColumn: '要匯出的欄位',
-      expOpts: '匯出選項',
-      expOptHeader: '錶頭',
-      expHeaderTitle: '是否需要匯出表頭',
-      expOptFooter: '錶尾',
-      expFooterTitle: '是否需要匯出錶尾',
+      expColumn: '選擇欄位',
+      expOpts: '參數設置',
+      expOptHeader: '表頭',
+      expHeaderTitle: '是否需要表頭',
+      expOptFooter: '表尾',
+      expFooterTitle: '是否需要表尾',
+      expOptColgroup: '分组表头',
+      expColgroupTitle: '如果存在，則支持帶有分組結構的表頭',
+      expOptMerge: '儲存格合併',
+      expMergeTitle: '如果存在，則支持帶有合併結構的儲存格',
       expOptOriginal: '源數據',
-      expOriginalTitle: '是否需要匯出源數據，如果勾上則支持導入到表格中',
+      expOriginalTitle: '如果為源數據，則支持導入到表格中',
       expPrint: '列印',
-      expConfirm: '匯出'
+      expConfirm: '匯出',
+      expCancel: '取消'
     },
     modal: {
       zoomIn: '最大化',

@@ -76,7 +76,9 @@ const GlobalConfig = {
       modes: ['insert', 'covering']
     },
     exportConfig: {
-      isPrint: true,
+      modes: ['current', 'selected']
+    },
+    printConfig: {
       modes: ['current', 'selected']
     },
     mouseConfig: {

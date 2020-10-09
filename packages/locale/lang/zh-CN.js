@@ -168,12 +168,13 @@ export default {
         covering: '覆盖',
         insert: '新增'
       },
-      impTitle: '导入参数设置',
+      impTitle: '导入数据',
       impFile: '文件名',
       impSelect: '选择文件',
       impType: '文件类型',
-      impOpts: '导入选项',
-      impConfirm: '导入'
+      impOpts: '参数设置',
+      impConfirm: '导入',
+      impCancel: '取消'
     },
     export: {
       types: {
@@ -189,24 +190,30 @@ export default {
         selected: '选中数据（当前页选中的数据）',
         all: '全量数据（包括所有分页的数据）'
       },
-      expTitle: '导出参数设置',
+      printTitle: '打印数据',
+      expTitle: '导出数据',
       expName: '文件名',
       expNamePlaceholder: '请输入文件名',
       expSheetName: '标题',
       expSheetNamePlaceholder: '请输入标题',
       expType: '保存类型',
-      expMode: '要导出的数据',
+      expMode: '选择数据',
       expCurrentColumn: '全部字段',
-      expColumn: '要导出的字段',
-      expOpts: '导出选项',
+      expColumn: '选择字段',
+      expOpts: '参数设置',
       expOptHeader: '表头',
-      expHeaderTitle: '是否需要导出表头',
+      expHeaderTitle: '是否需要表头',
       expOptFooter: '表尾',
-      expFooterTitle: '是否需要导出表尾',
+      expFooterTitle: '是否需要表尾',
+      expOptColgroup: '分组表头',
+      expColgroupTitle: '如果存在，则支持带有分组结构的表头',
+      expOptMerge: '单元格合并',
+      expMergeTitle: '如果存在，则支持带有合并结构的单元格',
       expOptOriginal: '源数据',
-      expOriginalTitle: '是否需要导出源数据，如果勾上则支持导入到表格中',
+      expOriginalTitle: '如果为源数据，则支持导入到表格中',
       expPrint: '打印',
-      expConfirm: '导出'
+      expConfirm: '导出',
+      expCancel: '取消'
     },
     modal: {
       zoomIn: '最大化',

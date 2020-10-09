@@ -36,6 +36,9 @@
         & > .vxe-select {
           width: 80%;
         }
+        & > .vxe-export--panel-option-row {
+          padding: 0.25em 0;
+        }
       }
     }
   }
@@ -97,9 +100,15 @@
   .vxe-import-select--file {
     border: 1px dashed $vxe-input-border-color;
     padding: 6px 34px;
+    outline: 0;
     border-radius: $vxe-border-radius;
+    background-color: #fff;
     user-select: none;
     cursor: pointer;
+    &:focus {
+      border-color: $vxe-primary-color;
+      box-shadow: 0 0 0.25em 0 $vxe-primary-color;
+    }
     &:hover {
       color: $vxe-primary-color;
       border-color: $vxe-primary-color;

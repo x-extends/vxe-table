@@ -563,7 +563,7 @@ export default {
     },
     printEvent () {
       if (this.checkTable()) {
-        this.$xetable.print(this.printOpts)
+        this.$xetable.openPrint(this.printOpts)
       }
     }
   }

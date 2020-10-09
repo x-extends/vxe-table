@@ -159,8 +159,8 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value10 = true">缩放表格的窗口</vxe-button>
-      <vxe-modal v-model="value10" title="缩放表格的窗口" width="800" height="400" resize>
+      <vxe-button @click="value10 = true">阻止关闭</vxe-button>
+      <vxe-modal v-model="value10" title="阻止关闭" width="800" height="400" :before-hide-method="beforeHideMethod" resize>
         <template v-slot>
           <vxe-table
             border
@@ -445,8 +445,8 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value10 = true">缩放表格的窗口</vxe-button>
-          <vxe-modal v-model="value10" title="缩放表格的窗口" width="800" height="400" resize>
+          <vxe-button @click="value10 = true">阻止关闭</vxe-button>
+          <vxe-modal v-model="value10" title="阻止关闭" width="800" height="400" :before-hide-method="beforeHideMethod" resize>
             <template v-slot>
               <vxe-table
                 border
@@ -572,6 +572,15 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
           },
           methods: {
+            async beforeHideMethod () {
+              const type = await this.$XModal.confirm('您确定要关闭吗？')
+              if (type === 'confirm') {
+                this.$XModal.message({ message: \`允许关闭 \${type}\`, status: 'success' })
+              } else {
+                this.$XModal.message({ message: \`禁止关闭 \${type}\`, status: 'error' })
+                return new Error()
+              }
+            },
             confirmEvent () {
               this.$XModal.confirm('您确定要删除吗？').then(type => {
                 this.$XModal.message({ message: \`点击了 \${type}\` })
@@ -592,6 +601,15 @@ export default {
     })
   },
   methods: {
+    async beforeHideMethod () {
+      const type = await this.$XModal.confirm('您确定要关闭吗？')
+      if (type === 'confirm') {
+        this.$XModal.message({ message: `允许关闭 ${type}`, status: 'success' })
+      } else {
+        this.$XModal.message({ message: `禁止关闭 ${type}`, status: 'error' })
+        return new Error()
+      }
+    },
     confirmEvent () {
       this.$XModal.confirm('您确定要删除吗？').then(type => {
         this.$XModal.message({ message: `点击了 ${type}` })

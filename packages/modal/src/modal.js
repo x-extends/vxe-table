@@ -48,6 +48,7 @@ export default {
     storageKey: { type: String, default: () => GlobalConfig.modal.storageKey },
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
     size: { type: String, default: () => GlobalConfig.modal.size || GlobalConfig.size },
+    beforeHideMethod: Function,
     slots: Object,
     events: Object
   },
@@ -279,8 +280,6 @@ export default {
         }
       }
       if (!visible) {
-        const type = 'show'
-        const params = { type, $modal: this, $event: { type } }
         if (!remember) {
           this.recalculate()
         }
@@ -288,7 +287,6 @@ export default {
         this.contentVisible = false
         this.updateZindex()
         allActivedModals.push(this)
-        this.$emit('activated', params)
         setTimeout(() => {
           this.contentVisible = true
           this.$nextTick(() => {
@@ -298,6 +296,8 @@ export default {
                 operBtn.focus()
               }
             }
+            const type = ''
+            const params = { type, $modal: this }
             if (events.show) {
               events.show.call(this, params)
             } else {
@@ -380,27 +380,30 @@ export default {
       })
     },
     close (type) {
-      const { events = {}, remember, visible, isMsg } = this
-      const params = { type, $modal: this, $event: { type } }
+      const { events = {}, remember, visible, isMsg, beforeHideMethod } = this
+      const params = { type, $modal: this }
       if (visible) {
-        if (isMsg) {
-          this.removeMsgQueue()
-        }
-        this.contentVisible = false
-        if (!remember) {
-          this.zoomLocat = null
-        }
-        this.$emit('deactivated', params)
-        XEUtils.remove(allActivedModals, item => item === this)
-        setTimeout(() => {
-          this.visible = false
-          if (events.hide) {
-            events.hide.call(this, params)
-          } else {
-            this.$emit('input', false)
-            this.$emit('hide', params)
+        Promise.resolve(beforeHideMethod ? beforeHideMethod(params) : null).then((rest) => {
+          if (!XEUtils.isError(rest)) {
+            if (isMsg) {
+              this.removeMsgQueue()
+            }
+            this.contentVisible = false
+            if (!remember) {
+              this.zoomLocat = null
+            }
+            XEUtils.remove(allActivedModals, item => item === this)
+            setTimeout(() => {
+              this.visible = false
+              if (events.hide) {
+                events.hide.call(this, params)
+              } else {
+                this.$emit('input', false)
+                this.$emit('hide', params)
+              }
+            }, 200)
           }
-        }, 200)
+        }).catch(e => e)
       }
     },
     handleGlobalKeydownEvent (evnt) {

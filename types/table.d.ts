@@ -922,32 +922,37 @@ export declare class Table extends VXETableComponent {
    * 打开高级导出
    * @param options 参数
    */
-  openExport(options: ExportOptons): Promise<any>;
+  openExport(options?: ExportOptons): Promise<any>;
   /**
    * 将表格数据导出
    * @param options 参数
    */
-  exportData(options: ExportOptons): Promise<any>;
+  exportData(options?: ExportOptons): Promise<any>;
   /**
    * 打开高级导入
    * @param options 参数
    */
-  openImport(options: ImportOptons): Promise<any>;
+  openImport(options?: ImportOptons): Promise<any>;
   /**
    * 将数据导入表格
    * @param options 参数
    */
-  importData(options: ImportOptons): Promise<any>;
+  importData(options?: ImportOptons): Promise<any>;
   /**
    * 读取本地文件
    * @param options 参数
    */
-  readFile(options: ReadFileOptions): Promise<any>;
+  readFile(options?: ReadFileOptions): Promise<any>;
   /**
-   * 打印配置项
+   * 打印表格数据
    * @param options 参数
    */
-  print(options: PrintOptons): Promise<any>;
+  print(options?: PrintOptons): Promise<any>;
+  /**
+   * 打开高级打印
+   * @param options 参数
+   */
+  openPrint(options?: PrintOptons): Promise<any>;
   /**
    * 用于 mouse-config.area，打开单元格查找功能
    */
