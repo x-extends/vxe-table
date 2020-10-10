@@ -35,10 +35,7 @@
       keep-source
       ref="xTable"
       height="400"
-<<<<<<< HEAD
       :export-config="{}"
-=======
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
       :loading="loading"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :checkbox-config="{checkField: 'checked'}">

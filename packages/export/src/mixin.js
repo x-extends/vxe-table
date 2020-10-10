@@ -867,11 +867,7 @@ export default {
           this._fileResolve({ files, file, target: evnt.target })
         } else {
           if (options.message !== false) {
-<<<<<<< HEAD
             VXETable.modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [errType]), status: 'error' })
-=======
-            VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
           }
           this._fileReject({ files, file })
         }
