@@ -2,44 +2,19 @@ export default {
   vxe: {
     error: {
       groupFixed: 'グループのヘッダを使用すると、固定列はグループで設定しなければなりません',
-<<<<<<< HEAD
-      groupMouseRange: 'グループ化ヘッダーと「{0}」は同時に使用できません。これによりエラーが発生する可能性があります',
-      groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
-      scrollErrProp: '启用虚拟滚动后不支持该参数 "{0}"',
-      scrollXNotGroup: '水平のバーチャルスクロールは、グループヘッダーをサポートしない。 "scroll-x.gt" のパラメータを正しく修正してください。そうしないとエラーが発生します。',
-      errConflicts: '参数 "{0}" 与 "{1}" 有冲突',
-=======
       groupMouseRange: 'グループ化ヘッダーと「{{0}}」は同時に使用できません。これによりエラーが発生する可能性があります',
       scrollErrProp: '启用虚拟滚动后不支持该参数 "{{0}}"',
       scrollXNotGroup: '水平のバーチャルスクロールは、グループヘッダーをサポートしない。 "scroll-x.gt" のパラメータを正しく修正してください。そうしないとエラーが発生します。',
       errConflicts: '参数 "{{0}}" 与 "{{1}}" 有冲突',
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       unableInsert: '指定された位置に挿入できない',
-      useErr: '"{0}" モジュールをインストールする際にエラーが発生し,順序が正しくない可能性があり,依頼するモジュールはTableの前にインストールする必要がある',
+      useErr: '"{{0}}" モジュールをインストールする際にエラーが発生し,順序が正しくない可能性があり,依頼するモジュールはTableの前にインストールする必要がある',
       barUnableLink: 'ツールバーはフォームを関連付けることができない',
       expandContent: '拡張行スロットは "content" である必要があります。正しいかどうかを確認してください',
-<<<<<<< HEAD
-      reqModule: '"{0}" モジュールが必要',
-      reqProp: '必要な "{0}" パラメーターが欠落しているため、エラーが発生する可能性があります',
-      emptyProp: '"{0}" propertyはemptyが許可されていません',
-      errProp: 'サポートされていないパラメーター "{0}"，"{1}" の可能性があります',
-      colRepet: 'column.{0}="{0}" が重複しているため、機能が使えなくなることがあります。',
-      notFunc: 'method "{0}" はありません',
-      notSlot: 'slot "{0}" はありません',
-      noTree: 'Tree structureは "{0}" をサポートしていません',
-      notProp: 'サポートされていないパラメータ "{0}"',
-      delFunc: '"{0}" functionは非推奨です、"{1}"を使用してください',
-      delProp: '"{0}" propertyは非推奨です、"{1}"を使用してください',
-      delEvent: 'イベント "{0}" は廃止されました。 "{1}" を使用してください',
-      removeProp: 'パラメーター "{0}" は非推奨および非推奨です。エラーが発生する可能性があります',
-      errFormat: '全局的格式化内容应该使用 "VXETable.formats" 定义，挂载 "formatter={0}" 的方式已不建议使用',
-      notType: 'サポートされていないファイルの種類 "{0}"',
-=======
       reqModule: '"{{0}}" モジュールが必要',
       reqProp: '必要な "{{0}}" パラメーターが欠落しているため、エラーが発生する可能性があります',
       emptyProp: '"{{0}}" propertyはemptyが許可されていません',
       errProp: 'サポートされていないパラメーター "{{0}}"，"{{1}}" の可能性があります',
-      colRepet: 'column.{{0}}="{{0}}" が重複しているため、機能が使えなくなることがあります。',
+      fieldRepet: 'column.{{0}}="{{0}}" が重複しているため、機能が使えなくなることがあります。',
       notFunc: 'method "{{0}}" はありません',
       notSlot: 'slot "{{0}}" はありません',
       noTree: 'Tree structureは "{{0}}" をサポートしていません',
@@ -50,7 +25,6 @@ export default {
       removeProp: 'パラメーター "{{0}}" は非推奨および非推奨です。エラーが発生する可能性があります',
       errFormat: '全局的格式化内容应该使用 "VXETable.formats" 定义，挂载 "formatter={{0}}" 的方式已不建议使用',
       notType: 'サポートされていないファイルの種類 "{{0}}"',
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       notExp: 'ブラウザはインポート/エクスポートをサポートしていません',
       impFields: 'インポートに失敗しました。フィールド名とデータ形式が正しいかどうかを確認してください',
       treeNotImp: 'ツリーテーブルはインポートをサポートしていません'
@@ -134,15 +108,9 @@ export default {
         },
         empty: '(空值)',
         reError: '无效的正则表达式',
-<<<<<<< HEAD
-        recordCount: '已找到 {0} 个单元格',
-        notCell: '找不到匹配的单元格',
-        replaceSuccess: '成功替换 {0} 个单元格'
-=======
         recordCount: '已找到 {{0}} 个单元格',
         notCell: '找不到匹配的单元格',
         replaceSuccess: '成功替换 {{0}} 个单元格'
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       }
     },
     table: {
@@ -155,19 +123,11 @@ export default {
       sortAsc: '昇順',
       sortDesc: '降順',
       filter: '選択した列をフィルタする',
-<<<<<<< HEAD
-      impSuccess: '{0} レコードが正常にインポートされました',
-      expLoading: '正在导出中',
-      expSuccess: 'エクスポートが成功しました',
-      expOriginFilename: 'エクスポート_{0}',
-      expSrcFilename: 'エクスポート_ソース_{0}',
-=======
       impSuccess: '{{0}} レコードが正常にインポートされました',
       expLoading: '正在导出中',
       expSuccess: 'エクスポートが成功しました',
       expOriginFilename: 'エクスポート_{{0}}',
       expSrcFilename: 'エクスポート_ソース_{{0}}',
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       customTitle: '列设置',
       customAll: '全部',
       customConfirm: '确认',
@@ -187,8 +147,8 @@ export default {
     },
     pager: {
       goto: '移動',
-      pagesize: '{0}件/ページ',
-      total: '全 {0} 件',
+      pagesize: '{{0}}件/ページ',
+      total: '全 {{0}} 件',
       pageClassifier: '',
       prevPage: '前のページ',
       nextPage: '次のページ',
@@ -242,13 +202,6 @@ export default {
       expHeaderTitle: 'ヘッダーをエクスポート',
       expOptFooter: 'フッター',
       expFooterTitle: 'フッターをエクスポート',
-<<<<<<< HEAD
-      expOptColgroup: '分组表头',
-      expColgroupTitle: '如果存在，则导出带有分组结构的表头',
-      expOptMerge: '单元格合并',
-      expMergeTitle: '如果存在，则导出带有合并结构的单元格',
-=======
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       expOptOriginal: 'ソースデータ',
       expOriginalTitle: '元のデータをエクスポートする必要がありますか？チェックされている場合、テーブルへのインポートがサポートされています',
       expPrint: '印刷',
@@ -289,13 +242,8 @@ export default {
         m10: '10月',
         m11: '11月',
         m12: '12月',
-<<<<<<< HEAD
-        monthLabel: '{0} 年',
-        dayLabel: '{0} 年 {1}',
-=======
         monthLabel: '{{0}} 年',
         dayLabel: '{{0}} 年 {{1}}',
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
         labelFormat: {
           date: 'yyyy-MM-dd',
           time: 'HH:mm:ss',

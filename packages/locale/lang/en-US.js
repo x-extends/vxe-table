@@ -2,44 +2,19 @@ export default {
   vxe: {
     error: {
       groupFixed: 'If you use group headers, the fixed columns must be set by group.',
-<<<<<<< HEAD
-      groupMouseRange: 'Grouping headers and "{0}" cannot be used at the same time, which may cause errors.',
-      groupTag: 'Grouping column header should use "{0}" instead of "{1}", which may cause errors.',
-      scrollErrProp: 'The parameter "{0}" is not supported when virtual scrolling is enabled.',
-      scrollXNotGroup: 'Horizontal virtual scrolling does not support grouping headers. Please modify the parameters of "scroll-x.gt" correctly, otherwise errors may occur.',
-      errConflicts: 'Argument "{0}" conflicts with "{1}"',
-=======
       groupMouseRange: 'Grouping headers and "{{0}}" cannot be used at the same time, which may cause errors.',
       scrollErrProp: 'The parameter "{{0}}" is not supported when virtual scrolling is enabled.',
       scrollXNotGroup: 'Horizontal virtual scrolling does not support grouping headers. Please modify the parameters of "scroll-x.gt" correctly, otherwise errors may occur.',
       errConflicts: 'Argument "{{0}}" conflicts with "{{1}}"',
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       unableInsert: 'Unable to insert to the specified location.',
-      useErr: 'Error installing "{0}" module, possibly in the wrong order, dependent modules need to be installed before Table.',
+      useErr: 'Error installing "{{0}}" module, possibly in the wrong order, dependent modules need to be installed before Table.',
       barUnableLink: 'Toolbar cannot associate table.',
       expandContent: 'Expand row slot should be "content", please check if it is correct.',
-<<<<<<< HEAD
-      reqModule: 'require "{0}" module.',
-      reqProp: 'Missing the necessary "{0}" parameter, which can cause error.',
-      emptyProp: 'The property "{0}" is not allowed to be empty.',
-      errProp: 'Unsupported parameter "{0}", possibly "{1}".',
-      colRepet: 'column.{0}="{0}" is duplicated, which may make some features unusable',
-      notFunc: 'method "{0}" not exist.',
-      notSlot: 'slot "{0}" does not exist',
-      noTree: 'The tree structure does not support "{0}".',
-      notProp: 'Unsupported parameters "{0}"',
-      delFunc: 'The function "{0}" is deprecated, please use "{1}".',
-      delProp: 'The property "{0}" is deprecated, please use "{1}".',
-      delEvent: 'The event "{0}" is deprecated, please use "{1}"',
-      removeProp: 'The property "{0}" is deprecated and is not recommended, which may cause error.',
-      errFormat: 'The global formatted content should be defined with "VXETable.formats". Mounting "formatter={0}" is not recommended.',
-      notType: 'Unsupported file types "{0}"',
-=======
       reqModule: 'require "{{0}}" module.',
       reqProp: 'Missing the necessary "{{0}}" parameter, which can cause error.',
       emptyProp: 'The property "{{0}}" is not allowed to be empty.',
       errProp: 'Unsupported parameter "{{0}}", possibly "{{1}}".',
-      colRepet: 'column.{{0}}="{{0}}" is duplicated, which may make some features unusable',
+      fieldRepet: 'column.{{0}}="{{0}}" is duplicated, which may make some features unusable',
       notFunc: 'method "{{0}}" not exist.',
       notSlot: 'slot "{{0}}" does not exist',
       noTree: 'The tree structure does not support "{{0}}".',
@@ -50,7 +25,6 @@ export default {
       removeProp: 'The property "{{0}}" is deprecated and is not recommended, which may cause error.',
       errFormat: 'The global formatted content should be defined with "VXETable.formats". Mounting "formatter={{0}}" is not recommended.',
       notType: 'Unsupported file types "{{0}}"',
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       notExp: 'The browser does not support import / export.',
       impFields: 'Import failed, please check that the field name and data format are correct.',
       treeNotImp: 'Tree table does not support import.'
@@ -134,15 +108,9 @@ export default {
         },
         empty: '(Empty)',
         reError: 'Invalid regular expression',
-<<<<<<< HEAD
-        recordCount: 'Found {0} cells',
-        notCell: 'No matching cells were found',
-        replaceSuccess: 'Successfully replaced {0} cells'
-=======
         recordCount: 'Found {{0}} cells',
         notCell: 'No matching cells were found',
         replaceSuccess: 'Successfully replaced {{0}} cells'
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       }
     },
     table: {
@@ -155,19 +123,11 @@ export default {
       sortAsc: 'Ascending: lowest to highest',
       sortDesc: 'Descending: highest to lowest',
       filter: 'Enable filtering on selected columns',
-<<<<<<< HEAD
-      impSuccess: 'Successfully imported {0} records',
-      expLoading: 'Exporting',
-      expSuccess: 'Export success',
-      expFilename: 'Export_{0}',
-      expOriginFilename: 'Export_original_{0}',
-=======
       impSuccess: 'Successfully imported {{0}} records',
       expLoading: 'Exporting',
       expSuccess: 'Export success',
       expFilename: 'Export_{{0}}',
       expOriginFilename: 'Export_original_{{0}}',
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       customTitle: 'Column settings',
       customAll: 'All',
       customConfirm: 'Confirm',
@@ -187,8 +147,8 @@ export default {
     },
     pager: {
       goto: 'Go to',
-      pagesize: '{0}/page',
-      total: 'Total {0} record',
+      pagesize: '{{0}}/page',
+      total: 'Total {{0}} record',
       pageClassifier: '',
       prevPage: 'Previous page',
       nextPage: 'next page',
@@ -242,10 +202,6 @@ export default {
       expHeaderTitle: 'Need to export header',
       expOptFooter: 'Footer',
       expFooterTitle: 'Need to export footer',
-      expOptColgroup: 'Group header',
-      expColgroupTitle: 'If it exists, the header with the grouping structure is exported',
-      expOptMerge: 'Cell merge',
-      expMergeTitle: 'If it exists, the cells with the merged structure are exported',
       expOptOriginal: 'Original data',
       expOriginalTitle: 'Need to export original data? If it is checked, import to table is supported',
       expPrint: 'Print',
@@ -286,13 +242,8 @@ export default {
         m10: 'October',
         m11: 'November',
         m12: 'December',
-<<<<<<< HEAD
-        monthLabel: '{0}',
-        dayLabel: '{1} {0}',
-=======
         monthLabel: '{{0}}',
         dayLabel: '{{1}} {{0}}',
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
         labelFormat: {
           date: 'dd/MM/yyyy',
           time: 'HH:mm:ss',
