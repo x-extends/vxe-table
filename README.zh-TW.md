@@ -152,7 +152,7 @@ export default {
 如果您覺得我們的開源軟件對妳有所幫助，請掃下方二維碼打賞我們壹杯咖啡。☕  
 
 由於維護一個開源項目需要花費非常大的精力與時間，如果您正在使用該項目，您的捐贈會幫助該項目能持續發展下去  
-[👉 該組件對我有幫助，我要捐贈💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
+[👉 該組件對我有幫助，支持作者💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
 ## License
 
