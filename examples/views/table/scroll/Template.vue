@@ -2,14 +2,6 @@
   <div>
     <p class="tip">
       使用自定义模板渲染，通过 <table-column-api-link prop="slots"/> 属性编写 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#JSX" target="_blank">JSX</a> 模板或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#%E8%99%9A%E6%8B%9F-DOM" target="_blank">VNode</a><br>
-      列：<br>
-      &nbsp;&nbsp;<table-column-api-link prop="default"/>：自定义内容模板（提前格式化好数据 > <table-column-api-link prop="formatter"/> > <table-column-api-link prop="slots"/>）<br>
-      &nbsp;&nbsp;<table-column-api-link prop="header"/>：自定义表头模板<br>
-      &nbsp;&nbsp;<table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）<br>
-      &nbsp;&nbsp;<table-column-api-link prop="edit"/>：自定义可编辑模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）<br>
-      工具栏：<br>
-      &nbsp;&nbsp;<table-column-api-link prop="buttons"/>：自定义按钮模板<br>
-      <span class="red">注意：请处理好单元格显示的内容，虚拟滚动无法支持动态行高</span>
     </p>
 
     <vxe-grid
@@ -25,7 +17,7 @@
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-      <template>
+      <template v-slot>
         <div v-if="selectRow" v-html="selectRow.html3"></div>
       </template>
     </vxe-modal>
@@ -68,11 +60,11 @@ export default {
           showHeaderOverflow: true,
           filters: [{ data: '' }],
           filterMethod: this.filterSexMethod,
-          editRender: { type: 'default' },
+          editRender: {},
           slots: {
             default: ({ row }) => {
               return [
-                <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
+                <a class="link" href="https://x-extends.github.io/vxe-table/">我是超链接：{ row.sex }</a>
               ]
             },
             header: ({ column }) => {
@@ -164,7 +156,7 @@ export default {
         </vxe-grid>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-          <template>
+          <template v-slot>
             <div v-if="selectRow" v-html="selectRow.html3"></div>
           </template>
         </vxe-modal>
@@ -196,11 +188,11 @@ export default {
                   showHeaderOverflow: true,
                   filters: [{ data: '' }],
                   filterMethod: this.filterSexMethod,
-                  editRender: { type: 'default' },
+                  editRender: {},
                   slots: {
                     default: ({ row, column }) => {
                       return [
-                        <a class="link" href="https://xuliangzhan.github.io/vxe-table/">我是超链接：{ row.sex }</a>
+                        <a class="link" href="https://x-extends.github.io/vxe-table/">我是超链接：{ row.sex }</a>
                       ]
                     },
                     header: ({ column }) => {

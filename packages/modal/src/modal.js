@@ -1,8 +1,10 @@
 import GlobalConfig from '../../conf'
-import VXETable from '../../v-x-e-table'
 import XEUtils from 'xe-utils'
 import MsgQueue from './queue'
+import allActivedModals from './activities'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+
+const activeModals = []
 
 export default {
   name: 'VxeModal',
@@ -13,10 +15,14 @@ export default {
     loading: { type: Boolean, default: null },
     status: String,
     iconStatus: String,
+    className: String,
     top: { type: [Number, String], default: 15 },
+    position: [String, Object],
     title: String,
     duration: { type: [Number, String], default: () => GlobalConfig.modal.duration },
     message: [String, Function],
+    cancelButtonText: String,
+    confirmButtonText: String,
     lockView: { type: Boolean, default: () => GlobalConfig.modal.lockView },
     lockScroll: Boolean,
     mask: { type: Boolean, default: () => GlobalConfig.modal.mask },
@@ -36,22 +42,23 @@ export default {
     remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
     destroyOnClose: Boolean,
     showTitleOverflow: { type: Boolean, default: () => GlobalConfig.modal.showTitleOverflow },
+    transfer: { type: Boolean, default: () => GlobalConfig.modal.transfer },
     storage: { type: Boolean, default: () => GlobalConfig.modal.storage },
     storageKey: { type: String, default: () => GlobalConfig.modal.storageKey },
     animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
-    size: String,
+    size: { type: String, default: () => GlobalConfig.modal.size || GlobalConfig.size },
     slots: Object,
     events: Object
   },
   data () {
     return {
+      inited: false,
       visible: false,
-      isLoading: false,
       contentVisible: false,
       modalTop: 0,
-      modalZindex: this.zIndex || UtilTools.nextZIndex(),
+      modalZindex: 0,
       zoomLocat: null,
-      inited: false
+      firstOpen: false
     }
   },
   computed: {
@@ -71,25 +78,16 @@ export default {
     },
     value (visible) {
       this[visible ? 'open' : 'close']()
-    },
-    loading () {
-      if (!this.isLoading) {
-        this.isLoading = true
-      }
     }
   },
   created () {
-    // 是否加载过 Loading 模块
-    this.isLoading = this.loading
-    if (!VXETable._loading && XEUtils.isBoolean(this.loading)) {
-      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['Loading']))
-    }
     if (this.storage && !this.id) {
-      UtilTools.error('vxe.error.reqProp', ['id'])
+      UtilTools.error('vxe.error.reqProp', ['modal.id'])
     }
+    activeModals.push(this)
   },
   mounted () {
-    const { $listeners, events = {} } = this
+    const { $listeners, $el, events = {}, transfer } = this
     if (this.value) {
       this.open()
     }
@@ -97,9 +95,12 @@ export default {
     if (this.escClosable) {
       GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     }
-    document.body.appendChild(this.$el)
+    if (transfer) {
+      document.body.appendChild($el)
+    }
     // 触发 inserted 事件
-    const params = { type: 'inserted', $modal: this }
+    const type = 'inserted'
+    const params = { type, $modal: this, $event: { type } }
     if ($listeners.inserted) {
       this.$emit('inserted', params)
     } else if (events.inserted) {
@@ -107,38 +108,16 @@ export default {
     }
   },
   beforeDestroy () {
+    const { $el } = this
     GlobalEvent.off(this, 'keydown')
     this.removeMsgQueue()
-    this.$el.parentNode.removeChild(this.$el)
+    if ($el.parentNode === document.body) {
+      $el.parentNode.removeChild($el)
+    }
+    XEUtils.remove(activeModals, $modal => $modal === this)
   },
   render (h) {
-    const {
-      $scopedSlots,
-      slots = {},
-      vSize,
-      type,
-      resize,
-      animat,
-      loading,
-      isLoading,
-      status,
-      iconStatus,
-      showHeader,
-      showFooter,
-      zoomLocat,
-      modalTop,
-      dblclickZoom,
-      contentVisible,
-      visible,
-      title,
-      message,
-      lockScroll,
-      lockView,
-      mask,
-      isMsg,
-      showTitleOverflow,
-      destroyOnClose
-    } = this
+    const { $scopedSlots, slots = {}, inited, vSize, className, type, resize, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
     const headerSlot = $scopedSlots.header || slots.header
@@ -150,7 +129,7 @@ export default {
       headerOns.dblclick = this.toggleZoomEvent
     }
     return h('div', {
-      class: ['vxe-modal--wrapper', `type--${type}`, {
+      class: ['vxe-modal--wrapper', `type--${type}`, className, {
         [`size--${vSize}`]: vSize,
         [`status--${status}`]: status,
         'is--animat': animat,
@@ -173,19 +152,19 @@ export default {
       h('div', {
         class: 'vxe-modal--box',
         on: {
-          mousedown: this.updateZindex
+          mousedown: this.boxMousedownEvent
         },
         ref: 'modalBox'
       }, [
-        showHeader ? h('div', {
+        this.showHeader ? h('div', {
           class: ['vxe-modal--header', !isMsg && showTitleOverflow ? 'is--ellipsis' : ''],
           on: headerOns
-        }, headerSlot ? headerSlot.call(this, { $modal: this }, h) : [
+        }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : headerSlot.call(this, { $modal: this }, h)) : [
           titleSlot ? titleSlot.call(this, { $modal: this }, h) : h('span', {
             class: 'vxe-modal--title'
           }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
           resize ? h('i', {
-            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.modalZoomOut : GlobalConfig.icon.modalZoomIn],
+            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
             attrs: {
               title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`)
             },
@@ -194,7 +173,7 @@ export default {
             }
           }) : null,
           h('i', {
-            class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.modalClose],
+            class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
             attrs: {
               title: GlobalConfig.i18n('vxe.modal.close')
             },
@@ -210,35 +189,41 @@ export default {
             class: 'vxe-modal--status-wrapper'
           }, [
             h('i', {
-              class: ['vxe-modal--status-icon', iconStatus || GlobalConfig.icon[`modal${status.replace(/\b(\w)/, word => word.toUpperCase())}`]]
+              class: ['vxe-modal--status-icon', iconStatus || GlobalConfig.icon[`MODAL_${status}`.toLocaleUpperCase()]]
             })
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, destroyOnClose && !visible ? [] : (defaultSlot ? defaultSlot.call(this, { $modal: this }, h) : (XEUtils.isFunction(message) ? message.call(this, h) : message))),
-          VXETable._loading && isLoading && !isMsg ? h('vxe-loading', {
-            props: {
-              visible: loading
-            }
-          }) : null
+          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : UtilTools.getFuncText(message)),
+          !isMsg ? h('div', {
+            class: ['vxe-loading', {
+              'is--visible': loading
+            }]
+          }, [
+            h('div', {
+              class: 'vxe-loading--spinner'
+            })
+          ]) : null
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
-        }, destroyOnClose && !visible ? [] : (footerSlot ? footerSlot.call(this, { $modal: this }, h) : [
+        }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : footerSlot.call(this, { $modal: this }, h)) : [
           type === 'confirm' ? h('vxe-button', {
+            ref: 'cancelBtn',
             on: {
               click: this.cancelEvent
             }
-          }, GlobalConfig.i18n('vxe.button.cancel')) : null,
+          }, this.cancelButtonText || GlobalConfig.i18n('vxe.button.cancel')) : null,
           h('vxe-button', {
+            ref: 'confirmBtn',
             props: {
               status: 'primary'
             },
             on: {
               click: this.confirmEvent
             }
-          }, GlobalConfig.i18n('vxe.button.confirm'))
-        ])) : null,
+          }, this.confirmButtonText || GlobalConfig.i18n('vxe.button.confirm'))
+        ]) : null,
         !isMsg && resize ? h('span', {
           class: 'vxe-modal--resize'
         }, ['wl', 'wr', 'swst', 'sest', 'st', 'swlb', 'selb', 'sb'].map(type => {
@@ -270,70 +255,80 @@ export default {
       }
     },
     updateZindex () {
-      if (this.modalZindex < UtilTools.getLastZIndex()) {
+      const { zIndex, modalZindex } = this
+      if (zIndex) {
+        this.modalZindex = zIndex
+      } else if (modalZindex < UtilTools.getLastZIndex()) {
         this.modalZindex = UtilTools.nextZIndex()
       }
     },
     closeEvent (evnt) {
       const type = 'close'
-      this.$emit(type, { type, $modal: this }, evnt)
+      this.$emit(type, { type, $modal: this, $event: evnt }, evnt)
       this.close(type)
     },
     confirmEvent (evnt) {
       const type = 'confirm'
-      this.$emit(type, { type, $modal: this }, evnt)
+      this.$emit(type, { type, $modal: this, $event: evnt }, evnt)
       this.close(type)
     },
     cancelEvent (evnt) {
       const type = 'cancel'
-      this.$emit(type, { type, $modal: this }, evnt)
+      this.$emit(type, { type, $modal: this, $event: evnt }, evnt)
       this.close(type)
     },
     open () {
-      const { $listeners, events = {}, duration, visible, isMsg, remember } = this
+      const { $refs, events = {}, inited, duration, visible, isMsg, remember, showFooter } = this
+      if (!inited) {
+        this.inited = true
+      }
       if (!visible) {
-        const params = { type: 'show', $modal: this }
+        const type = 'show'
+        const params = { type, $modal: this, $event: { type } }
         if (!remember) {
           this.recalculate()
         }
         this.visible = true
         this.contentVisible = false
         this.updateZindex()
+        allActivedModals.push(this)
         this.$emit('activated', params)
         setTimeout(() => {
           this.contentVisible = true
           this.$nextTick(() => {
-            if (!events.show) {
+            if (showFooter) {
+              const operBtn = $refs.confirmBtn || $refs.cancelBtn
+              if (operBtn) {
+                operBtn.focus()
+              }
+            }
+            if (events.show) {
+              events.show.call(this, params)
+            } else {
               this.$emit('input', true)
               this.$emit('show', params)
-            }
-            if (!$listeners.show && events.show) {
-              events.show.call(this, params)
             }
           })
         }, 10)
         if (isMsg) {
           this.addMsgQueue()
-          setTimeout(this.close, XEUtils.toNumber(duration))
+          if (duration !== -1) {
+            setTimeout(this.close, XEUtils.toNumber(duration))
+          }
         } else {
           this.$nextTick(() => {
-            const { inited, marginSize, fullscreen } = this
-            if (!remember || !inited) {
-              const modalBoxElem = this.getBox()
-              const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
-              const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
-              modalBoxElem.style.top = ''
-              modalBoxElem.style.left = `${clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2}px`
-              if (modalBoxElem.offsetHeight + modalBoxElem.offsetTop + marginSize > clientVisibleHeight) {
-                modalBoxElem.style.top = `${marginSize}px`
-              }
+            const { firstOpen, fullscreen } = this
+            if (!remember || !firstOpen) {
+              this.updatePosition().then(() => {
+                setTimeout(() => this.updatePosition(), 20)
+              })
             }
-            if (!inited) {
-              this.inited = true
+            if (!firstOpen) {
+              this.firstOpen = true
               if (this.hasPosStorage()) {
                 this.restorePosStorage()
               } else if (fullscreen) {
-                this.$nextTick(this.maximize)
+                this.$nextTick(() => this.maximize())
               }
             }
           })
@@ -362,9 +357,35 @@ export default {
         })
       })
     },
+    updatePosition () {
+      return this.$nextTick().then(() => {
+        const { marginSize, position } = this
+        const modalBoxElem = this.getBox()
+        const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
+        const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
+        const isPosCenter = position === 'center'
+        const { top, left } = isPosCenter ? { top: position, left: position } : Object.assign({}, position)
+        const topCenter = isPosCenter || top === 'center'
+        const leftCenter = isPosCenter || left === 'center'
+        let posTop = ''
+        let posLeft = ''
+        if (left && !leftCenter) {
+          posLeft = isNaN(left) ? left : `${left}px`
+        } else {
+          posLeft = `${Math.max(marginSize, clientVisibleWidth / 2 - modalBoxElem.offsetWidth / 2)}px`
+        }
+        if (top && !topCenter) {
+          posTop = isNaN(top) ? top : `${top}px`
+        } else {
+          posTop = `${Math.max(marginSize, clientVisibleHeight / 2 - modalBoxElem.offsetHeight / 2)}px`
+        }
+        modalBoxElem.style.top = posTop
+        modalBoxElem.style.left = posLeft
+      })
+    },
     close (type) {
       const { events = {}, remember, visible, isMsg } = this
-      const params = { type, $modal: this }
+      const params = { type, $modal: this, $event: { type } }
       if (visible) {
         if (isMsg) {
           this.removeMsgQueue()
@@ -373,31 +394,41 @@ export default {
         if (!remember) {
           this.zoomLocat = null
         }
-        if (events.hide) {
-          events.hide.call(this, params)
-        } else {
-          this.$emit('hide', params)
-        }
+        this.$emit('deactivated', params)
+        XEUtils.remove(allActivedModals, item => item === this)
         setTimeout(() => {
           this.visible = false
-          if (!events.hide) {
+          if (events.hide) {
+            events.hide.call(this, params)
+          } else {
             this.$emit('input', false)
+            this.$emit('hide', params)
           }
-          this.$emit('deactivated', params)
         }, 200)
       }
     },
     handleGlobalKeydownEvent (evnt) {
       if (evnt.keyCode === 27) {
-        this.close()
+        const lastModal = XEUtils.max(allActivedModals, item => item.modalZindex)
+        // 多个时，只关掉最上层的窗口
+        if (lastModal) {
+          setTimeout(() => {
+            if (lastModal === this && lastModal.escClosable) {
+              this.close()
+            }
+          }, 10)
+        }
       }
     },
     getBox () {
       return this.$refs.modalBox
     },
+    isMaximized () {
+      return !!this.zoomLocat
+    },
     maximize () {
       return this.$nextTick().then(() => {
-        if (!this.zoomLocat) {
+        if (this.resize && !this.zoomLocat) {
           const marginSize = this.marginSize
           const modalBoxElem = this.getBox()
           const { visibleHeight, visibleWidth } = DomTools.getDomNode()
@@ -433,10 +464,13 @@ export default {
         }
       })
     },
+    zoom () {
+      return this[this.zoomLocat ? 'revert' : 'maximize']().then(() => this.isMaximized())
+    },
     toggleZoomEvent (evnt) {
       const { $listeners, zoomLocat, events = {} } = this
-      const params = { type: zoomLocat ? 'min' : 'max', $modal: this }
-      return this[zoomLocat ? 'revert' : 'maximize']().then(() => {
+      const params = { type: zoomLocat ? 'revert' : 'max', $modal: this, $event: evnt }
+      return this.zoom().then(() => {
         if ($listeners.zoom) {
           this.$emit('zoom', params, evnt)
         } else if (events.zoom) {
@@ -444,13 +478,43 @@ export default {
         }
       })
     },
+    getPosition () {
+      if (!this.isMsg) {
+        const modalBoxElem = this.getBox()
+        if (modalBoxElem) {
+          return {
+            top: modalBoxElem.offsetTop,
+            left: modalBoxElem.offsetLeft
+          }
+        }
+      }
+      return null
+    },
+    setPosition (top, left) {
+      if (!this.isMsg) {
+        const modalBoxElem = this.getBox()
+        if (XEUtils.isNumber(top)) {
+          modalBoxElem.style.top = `${top}px`
+        }
+        if (XEUtils.isNumber(left)) {
+          modalBoxElem.style.left = `${left}px`
+        }
+      }
+      return this.$nextTick()
+    },
+    boxMousedownEvent () {
+      const { modalZindex } = this
+      if (activeModals.some(_vm => _vm.visible && _vm.modalZindex > modalZindex)) {
+        this.updateZindex()
+      }
+    },
     mousedownEvent (evnt) {
       const { remember, storage, marginSize, zoomLocat } = this
       const modalBoxElem = this.getBox()
       if (!zoomLocat && evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
         evnt.preventDefault()
-        const demMousemove = document.onmousemove
-        const demMouseup = document.onmouseup
+        const domMousemove = document.onmousemove
+        const domMouseup = document.onmouseup
         const disX = evnt.clientX - modalBoxElem.offsetLeft
         const disY = evnt.clientY - modalBoxElem.offsetTop
         const { visibleHeight, visibleWidth } = DomTools.getDomNode()
@@ -459,9 +523,9 @@ export default {
           const offsetWidth = modalBoxElem.offsetWidth
           const offsetHeight = modalBoxElem.offsetHeight
           const minX = marginSize
-          const maxX = visibleWidth - offsetWidth - marginSize
+          const maxX = visibleWidth - offsetWidth - marginSize - 1
           const minY = marginSize
-          const maxY = visibleHeight - offsetHeight - marginSize
+          const maxY = visibleHeight - offsetHeight - marginSize - 1
           let left = evnt.clientX - disX
           let top = evnt.clientY - disY
           if (left > maxX) {
@@ -478,17 +542,15 @@ export default {
           }
           modalBoxElem.style.left = `${left}px`
           modalBoxElem.style.top = `${top}px`
-          modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
         }
         document.onmouseup = () => {
-          document.onmousemove = demMousemove
-          document.onmouseup = demMouseup
-          this.$nextTick(() => {
-            modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '')
-            if (remember && storage) {
+          document.onmousemove = domMousemove
+          document.onmouseup = domMouseup
+          if (remember && storage) {
+            this.$nextTick(() => {
               this.savePosStorage()
-            }
-          })
+            })
+          }
         }
       }
     },
@@ -499,11 +561,11 @@ export default {
       const type = evnt.target.dataset.type
       const minWidth = XEUtils.toNumber(this.minWidth)
       const minHeight = XEUtils.toNumber(this.minHeight)
-      const maxWidth = visibleWidth - 20
-      const maxHeight = visibleHeight - 20
+      const maxWidth = visibleWidth
+      const maxHeight = visibleHeight
       const modalBoxElem = this.getBox()
-      const demMousemove = document.onmousemove
-      const demMouseup = document.onmouseup
+      const domMousemove = document.onmousemove
+      const domMouseup = document.onmouseup
       const clientWidth = modalBoxElem.clientWidth
       const clientHeight = modalBoxElem.clientHeight
       const disX = evnt.clientX
@@ -637,8 +699,8 @@ export default {
       }
       document.onmouseup = () => {
         this.zoomLocat = null
-        document.onmousemove = demMousemove
-        document.onmouseup = demMouseup
+        document.onmousemove = domMousemove
+        document.onmouseup = domMouseup
         setTimeout(() => {
           modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '')
         }, 50)

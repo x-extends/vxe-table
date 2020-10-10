@@ -1,13 +1,31 @@
-import { VXETableModule } from './module';
+import { VXETableModule } from './component'
 
 /**
- * 多选框
+ * 复选框
  */
 export declare class Checkbox extends VXETableModule {
   /**
-   * 表格的尺寸
-   * @default 'default'
-   * @type string
+   * 绑定值
    */
-  size: 'medium' | 'small' | 'mini';
+  value?: boolean;
+  /**
+   * 只对 checkbox-group 有效，值
+   */
+  label?: string | number;
+  /**
+   * 是否不确定状态
+   */
+  indeterminate?: boolean;
+  /**
+   * 原生 title 属性
+   */
+  title?: string | number;
+  /**
+   * 内容
+   */
+  content?: string | number;
+  /**
+   * 是否禁用
+   */
+  disabled?: boolean;
 }

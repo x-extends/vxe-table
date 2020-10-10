@@ -1,4 +1,5 @@
 const VxtIcon = {
+  /* eslint-disable @typescript-eslint/no-empty-function */
   install () {}
 }
 

@@ -23,35 +23,32 @@ import {
   Tooltip,
   Form,
   Select,
+  Switch,
+  List,
+  Pulldown,
+
   Export,
   Resize
 } from '../../../packages/vxe-table'
-import '../../../styles/index.scss'
 
-// import VXETablePluginElement from '../../../../vxe-table-plugin-element/index.js'
-// import VXETablePluginIView from '../../../../vxe-table-plugin-iview/index.js'
-// import VXETablePluginAntd from '../../../../vxe-table-plugin-antd/index.js'
-// import VXETablePluginMenus from '../../../../vxe-table-plugin-menus/index.js'
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
-import VXETablePluginVirtualTree from 'vxe-table-plugin-virtual-tree'
 import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
 import VXETablePluginExportPDF from 'vxe-table-plugin-export-pdf'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
-import 'vxe-table-plugin-virtual-tree/dist/style.css'
 
 VXETable.setup({
-  toolbar: {
-    export: {
+  table: {
+    exportConfig: {
       types: ['csv', 'html', 'xml', 'txt']
     }
   },
-  translate: key => key && key.indexOf('app.') > -1 ? i18n.t(key) : key, // 自动翻译以 app. 开头的键值
-  i18n: key => i18n.t(key)
+  translate: (key, args) => key && key.indexOf('app.') > -1 ? i18n.t(key, args) : key, // 自动翻译以 app. 开头的键值
+  i18n: (key, args) => i18n.t(key, args)
 })
 
 Vue.use(Column)
@@ -73,14 +70,20 @@ Vue.use(Modal)
 Vue.use(Tooltip)
 Vue.use(Form)
 Vue.use(Select)
+Vue.use(Switch)
+Vue.use(List)
+Vue.use(Pulldown)
+
 Vue.use(Export)
 Vue.use(Resize)
 Vue.use(Table)
+
+// 给 vue 实例挂载全局窗口对象
+Vue.prototype.$XModal = VXETable.modal
 
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
 VXETable.use(VXETablePluginMenus)
-VXETable.use(VXETablePluginVirtualTree)
 VXETable.use(VXETablePluginExportXLSX)
 VXETable.use(VXETablePluginExportPDF)

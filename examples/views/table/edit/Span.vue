@@ -1,11 +1,11 @@
 <template>
   <div>
-    <p class="tip">可编辑的合并行<br><span class="red">（注：<table-api-link prop="span-method"/> 合并的逻辑都是自行实现的，该示例仅供参考）</span></p>
+    <p class="tip">可编辑的合并行<br><span class="red">（注：<table-api-link prop="span-method"/> ，不能用于固定列，合并的逻辑都是自行实现的，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
-        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="saveEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
@@ -18,8 +18,6 @@
       :span-method="rowspanMethod"
       :data="tableData"
       :edit-rules="validRules"
-      :mouse-config="{selected: true}"
-      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="key" title="Key" :edit-render="{name: 'input', props: {placeholder: '请输入键值'}}"></vxe-table-column>
@@ -46,7 +44,6 @@ export default {
       loading: false,
       tableData: [],
       optionList: [
-        { label: '--请选择--', value: null },
         { label: '中文', value: 'zh_CN' },
         { label: 'English', value: 'en_US' },
         { label: 'Español', value: 'es' },
@@ -68,7 +65,7 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
-            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="saveEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>
@@ -81,8 +78,6 @@ export default {
           :span-method="rowspanMethod"
           :data="tableData"
           :edit-rules="validRules"
-          :mouse-config="{selected: true}"
-          :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="key" title="Key" :edit-render="{name: 'input', props: {placeholder: '请输入键值'}}"></vxe-table-column>
@@ -97,7 +92,6 @@ export default {
               loading: false,
               tableData: [],
               optionList: [
-                { label: '--请选择--', value: null },
                 { label: '中文', value: 'zh_CN' },
                 { label: 'English', value: 'en_US' },
                 { label: 'Español', value: 'es' },
@@ -136,8 +130,10 @@ export default {
               let body = this.$refs.xTable.getRecordset()
               let { insertRecords, removeRecords, updateRecords } = body
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
-                this.$refs.xTable.validate(valid => {
-                  if (valid) {
+                this.$refs.xTable.validate((errMap) => {
+                  if (errMap) {
+                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                  } else {
                     XEAjax.post('/api/i18n/save', body).then(() => {
                       this.$XModal.message({ message: '保存成功！', status: 'success' })
                       this.findList()
@@ -151,18 +147,18 @@ export default {
               }
             },
             // 通用行合并函数（将相同多列数据合并为一行）
-            rowspanMethod ({ row, $rowIndex, column, data }) {
+            rowspanMethod ({ row, _rowIndex, column, visibleData }) {
               let fields = ['key']
               let cellValue = row[column.property]
               if (cellValue && fields.includes(column.property)) {
-                let prevRow = data[$rowIndex - 1]
-                let nextRow = data[$rowIndex + 1]
+                let prevRow = visibleData[_rowIndex - 1]
+                let nextRow = visibleData[_rowIndex + 1]
                 if (prevRow && prevRow[column.property] === cellValue) {
                   return { rowspan: 0, colspan: 0 }
                 } else {
                   let countRowspan = 1
                   while (nextRow && nextRow[column.property] === cellValue) {
-                    nextRow = data[++countRowspan + $rowIndex]
+                    nextRow = visibleData[++countRowspan + _rowIndex]
                   }
                   if (countRowspan > 1) {
                     return { rowspan: countRowspan, colspan: 1 }
@@ -201,8 +197,10 @@ export default {
       const body = this.$refs.xTable.getRecordset()
       const { insertRecords, removeRecords, updateRecords } = body
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
-        this.$refs.xTable.validate(valid => {
-          if (valid) {
+        this.$refs.xTable.validate((errMap) => {
+          if (errMap) {
+            this.$XModal.message({ status: 'error', message: '校验不通过！' })
+          } else {
             XEAjax.post('/api/i18n/save', body).then(() => {
               this.$XModal.message({ message: '保存成功！', status: 'success' })
               this.findList()
@@ -216,18 +214,18 @@ export default {
       }
     },
     // 通用行合并函数（将相同多列数据合并为一行）
-    rowspanMethod ({ row, $rowIndex, column, data }) {
+    rowspanMethod ({ row, _rowIndex, column, visibleData }) {
       const fields = ['key']
       const cellValue = row[column.property]
       if (cellValue && fields.includes(column.property)) {
-        const prevRow = data[$rowIndex - 1]
-        let nextRow = data[$rowIndex + 1]
+        const prevRow = visibleData[_rowIndex - 1]
+        let nextRow = visibleData[_rowIndex + 1]
         if (prevRow && prevRow[column.property] === cellValue) {
           return { rowspan: 0, colspan: 0 }
         } else {
           let countRowspan = 1
           while (nextRow && nextRow[column.property] === cellValue) {
-            nextRow = data[++countRowspan + $rowIndex]
+            nextRow = visibleData[++countRowspan + _rowIndex]
           }
           if (countRowspan > 1) {
             return { rowspan: countRowspan, colspan: 1 }

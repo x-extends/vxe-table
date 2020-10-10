@@ -1,72 +1,191 @@
+import XEUtils from 'xe-utils'
 import VxeInput from '../../input/src/input'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
-function findOffsetOption (groupList, optionValue, isUpArrow) {
-  let prevOption
+function isOptionVisible (option) {
+  return option.visible !== false
+}
+
+function getOptUniqueId () {
+  return XEUtils.uniqueId('opt_')
+}
+
+function getOptkey (_vm) {
+  return _vm.optId || '_XID'
+}
+
+function getOptid (_vm, option) {
+  const optid = option[getOptkey(_vm)]
+  return optid ? encodeURIComponent(optid) : ''
+}
+
+function findOffsetOption (_vm, optionValue, isUpArrow) {
+  const { isGroup, visibleOptionList, visibleGroupList, valueField, groupOptionsField } = _vm
   let firstOption
-  let isMatchOption = false
-  for (let gIndex = 0; gIndex < groupList.length; gIndex++) {
-    const group = groupList[gIndex]
-    if (group.children.length) {
-      for (let index = 0; index < group.children.length; index++) {
-        const comp = group.children[index]
-        if (!firstOption) {
-          firstOption = comp
+  let prevOption
+  let nextOption
+  let currOption
+  if (isGroup) {
+    for (let gIndex = 0; gIndex < visibleGroupList.length; gIndex++) {
+      const group = visibleGroupList[gIndex]
+      const groupOptionList = group[groupOptionsField]
+      const isGroupDisabled = group.disabled
+      if (groupOptionList) {
+        for (let index = 0; index < groupOptionList.length; index++) {
+          const option = groupOptionList[index]
+          const isVisible = isOptionVisible(option)
+          const isDisabled = isGroupDisabled || option.disabled
+          if (!firstOption && !isDisabled) {
+            firstOption = option
+          }
+          if (currOption) {
+            if (isVisible && !isDisabled) {
+              nextOption = option
+              if (!isUpArrow) {
+                return { offsetOption: nextOption }
+              }
+            }
+          }
+          if (optionValue === option[valueField]) {
+            currOption = option
+            if (isUpArrow) {
+              return { offsetOption: prevOption }
+            }
+          } else {
+            if (isVisible && !isDisabled) {
+              prevOption = option
+            }
+          }
         }
+      }
+    }
+  } else {
+    for (let index = 0; index < visibleOptionList.length; index++) {
+      const option = visibleOptionList[index]
+      const isDisabled = option.disabled
+      if (!firstOption && !isDisabled) {
+        firstOption = option
+      }
+      if (currOption) {
+        if (!isDisabled) {
+          nextOption = option
+          if (!isUpArrow) {
+            return { offsetOption: nextOption }
+          }
+        }
+      }
+      if (optionValue === option[valueField]) {
+        currOption = option
         if (isUpArrow) {
-          if (optionValue === comp.value) {
-            return { offsetOption: prevOption, firstOption }
-          }
-        } else {
-          if (isMatchOption) {
-            return { offsetOption: comp, firstOption }
-          }
-          if (optionValue === comp.value) {
-            isMatchOption = true
-          }
-        }
-        prevOption = comp
-      }
-    } else {
-      const comp = group.comp
-      if (!firstOption) {
-        firstOption = comp
-      }
-      if (isUpArrow) {
-        if (optionValue === comp.value) {
-          return { offsetOption: prevOption, firstOption }
+          return { offsetOption: prevOption }
         }
       } else {
-        if (isMatchOption) {
-          return { offsetOption: comp, firstOption }
-        }
-        if (optionValue === comp.value) {
-          isMatchOption = true
+        if (!isDisabled) {
+          prevOption = option
         }
       }
-      prevOption = comp
     }
   }
   return { firstOption }
 }
 
-function findOption (groupList, optionValue) {
-  for (let gIndex = 0; gIndex < groupList.length; gIndex++) {
-    const group = groupList[gIndex]
-    if (group.children.length) {
-      for (let index = 0; index < group.children.length; index++) {
-        const comp = group.children[index]
-        if (optionValue === comp.value) {
-          return comp
+function findOption (_vm, optionValue) {
+  const { isGroup, fullOptionList, fullGroupList, valueField } = _vm
+  if (isGroup) {
+    for (let gIndex = 0; gIndex < fullGroupList.length; gIndex++) {
+      const group = fullGroupList[gIndex]
+      if (group.options) {
+        for (let index = 0; index < group.options.length; index++) {
+          const option = group.options[index]
+          if (optionValue === option[valueField]) {
+            return option
+          }
         }
-      }
-    } else {
-      if (optionValue === group.comp.value) {
-        return group.comp
       }
     }
   }
+  return fullOptionList.find(item => optionValue === item[valueField])
+}
+
+function getSelectLabel (_vm, value) {
+  const item = findOption(_vm, value)
+  return XEUtils.toString(item ? item[_vm.labelField] : value)
+}
+
+export function renderOption (h, _vm, list, group) {
+  const { isGroup, labelField, valueField, optkey, value, multiple, currentValue } = _vm
+  return list.map((option, cIndex) => {
+    const isVisible = !isGroup || isOptionVisible(option)
+    const isDisabled = (group && group.disabled) || option.disabled
+    const optionValue = option[valueField]
+    const optid = getOptid(_vm, option)
+    return isVisible ? h('div', {
+      key: optkey ? optid : cIndex,
+      class: ['vxe-select-option', {
+        'is--disabled': isDisabled,
+        'is--selected': multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue,
+        'is--hover': currentValue === optionValue
+      }],
+      attrs: {
+        'data-optid': optid
+      },
+      on: {
+        click: (evnt) => {
+          if (!isDisabled) {
+            _vm.changeOptionEvent(evnt, optionValue)
+          }
+        },
+        mouseenter: () => {
+          if (!isDisabled) {
+            _vm.setCurrentOption(option)
+          }
+        }
+      }
+    }, UtilTools.formatText(UtilTools.getFuncText(option[labelField]))) : null
+  })
+}
+
+export function renderOptgroup (h, _vm) {
+  const { optkey, visibleGroupList, groupLabelField, groupOptionsField } = _vm
+  return visibleGroupList.map((group, gIndex) => {
+    const optid = getOptid(_vm, group)
+    const isGroupDisabled = group.disabled
+    return h('div', {
+      key: optkey ? optid : gIndex,
+      class: ['vxe-optgroup', {
+        'is--disabled': isGroupDisabled
+      }],
+      attrs: {
+        'data-optid': optid
+      }
+    }, [
+      h('div', {
+        class: 'vxe-optgroup--title'
+      }, UtilTools.getFuncText(group[groupLabelField])),
+      h('div', {
+        class: 'vxe-optgroup--wrapper'
+      }, renderOption(h, _vm, group[groupOptionsField], group))
+    ])
+  })
+}
+
+function renderOpts (h, _vm) {
+  const { isGroup, visibleGroupList, visibleOptionList } = _vm
+  if (isGroup) {
+    if (visibleGroupList.length) {
+      return renderOptgroup(h, _vm)
+    }
+  } else {
+    if (visibleOptionList.length) {
+      return renderOption(h, _vm, visibleOptionList)
+    }
+  }
+  return [
+    h('div', {
+      class: 'vxe-select--empty-placeholder'
+    }, _vm.emptyText || GlobalConfig.i18n('vxe.select.emptyText'))
+  ]
 }
 
 export default {
@@ -76,9 +195,18 @@ export default {
     clearable: Boolean,
     placeholder: String,
     disabled: Boolean,
+    multiple: Boolean,
+    multiCharOverflow: { type: [Number, String], default: () => GlobalConfig.select.multiCharOverflow },
     prefixIcon: String,
     placement: String,
-    size: String,
+    options: Array,
+    optionProps: Object,
+    optionGroups: Array,
+    optionGroupProps: Object,
+    size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
+    emptyText: String,
+    optId: { type: String, default: () => GlobalConfig.select.optId },
+    optKey: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
   },
   components: {
@@ -91,8 +219,11 @@ export default {
   },
   data () {
     return {
-      // 使用技巧去更新视图
-      updateFlag: 0,
+      collectOption: [],
+      fullGroupList: [],
+      fullOptionList: [],
+      visibleGroupList: [],
+      visibleOptionList: [],
       panelIndex: 0,
       panelStyle: null,
       panelPlacement: null,
@@ -106,20 +237,77 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
+    propsOpts () {
+      return this.optionProps || {}
+    },
+    groupPropsOpts () {
+      return this.optionGroupProps || {}
+    },
+    labelField () {
+      return this.propsOpts.label || 'label'
+    },
+    valueField () {
+      return this.propsOpts.value || 'value'
+    },
+    groupLabelField () {
+      return this.groupPropsOpts.label || 'label'
+    },
+    groupOptionsField () {
+      return this.groupPropsOpts.options || 'options'
+    },
+    isGroup () {
+      return this.fullGroupList.some(item => item.options && item.options.length)
+    },
+    multiMaxCharNum () {
+      return XEUtils.toNumber(this.multiCharOverflow)
+    },
     selectLabel () {
-      if (this.updateFlag) {
-        const selectOption = findOption(this.getOptions(), this.value)
-        if (selectOption) {
-          return selectOption.label
-        }
+      const { value, multiple, multiMaxCharNum } = this
+      if (value && multiple) {
+        return value.map(val => {
+          const label = getSelectLabel(this, val)
+          if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
+            return `${label.substring(0, multiMaxCharNum)}...`
+          }
+          return label
+        }).join(', ')
       }
-      return ''
+      return getSelectLabel(this, value)
+    }
+  },
+  watch: {
+    collectOption (value) {
+      if (value.some(item => item.options && item.options.length)) {
+        this.fullOptionList = []
+        this.fullGroupList = value
+      } else {
+        this.fullGroupList = []
+        this.fullOptionList = value
+      }
+      this.updateCache()
+    },
+    options (value) {
+      this.fullGroupList = []
+      this.fullOptionList = value
+      this.updateCache()
+    },
+    optionGroups (value) {
+      this.fullOptionList = []
+      this.fullGroupList = value
+      this.updateCache()
     }
   },
   created () {
+    const { options, optionGroups } = this
+    if (optionGroups) {
+      this.fullGroupList = optionGroups
+    } else if (options) {
+      this.fullOptionList = options
+    }
+    this.updateCache()
+    GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
-    GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
   mounted () {
@@ -134,13 +322,13 @@ export default {
     }
   },
   destroyed () {
+    GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'mousedown')
     GlobalEvent.off(this, 'keydown')
-    GlobalEvent.off(this, 'mousewheel')
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, transfer, isActivated, disabled, clearable, placeholder, selectLabel, animatVisible, visiblePanel, panelStyle, prefixIcon, panelPlacement } = this
+    const { vSize, isActivated, disabled, visiblePanel } = this
     return h('div', {
       class: ['vxe-select', {
         [`size--${vSize}`]: vSize,
@@ -149,74 +337,109 @@ export default {
         'is--active': isActivated
       }]
     }, [
+      h('div', {
+        class: 'vxe-select-slots',
+        ref: 'hideOption'
+      }, this.$slots.default),
       h('vxe-input', {
         ref: 'input',
         props: {
-          clearable,
-          placeholder,
+          clearable: this.clearable,
+          placeholder: this.placeholder,
           readonly: true,
           disabled: disabled,
           type: 'text',
-          prefixIcon: prefixIcon,
-          suffixIcon: visiblePanel ? GlobalConfig.icon.selectOpen : GlobalConfig.icon.selectClose,
-          value: selectLabel
+          prefixIcon: this.prefixIcon,
+          suffixIcon: visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE,
+          value: this.selectLabel
         },
         on: {
           clear: this.clearEvent,
           click: this.togglePanelEvent,
           focus: this.focusEvent,
+          blur: this.blurEvent,
           'suffix-click': this.togglePanelEvent
         }
       }),
       h('div', {
         ref: 'panel',
-        class: ['vxe-dropdown--panel vxe-select--panel', {
+        class: ['vxe-table--ignore-clear vxe-select--panel', {
           [`size--${vSize}`]: vSize,
-          'is--transfer': transfer,
-          'animat--leave': animatVisible,
+          'is--transfer': this.transfer,
+          'animat--leave': this.animatVisible,
           'animat--enter': visiblePanel
         }],
         attrs: {
-          'data-placement': panelPlacement
+          'data-placement': this.panelPlacement
         },
-        style: panelStyle
+        style: this.panelStyle
       }, [
         h('div', {
+          ref: 'optWrapper',
           class: 'vxe-select-option--wrapper'
-        }, this.$slots.default)
+        }, renderOpts(h, this))
       ])
     ])
   },
   methods: {
-    getOptions () {
-      const options = []
-      if (!this.disabled) {
-        this.$children.forEach(option => {
-          if (!option.isDisabled && option.$xeselect) {
-            let children = option.$children
-            if (children.length) {
-              children = children.filter(option => !option.isDisabled && option.$xeselect && option.$xeoptgroup)
-              if (children.length) {
-                options.push({ comp: option, children })
-              }
-            } else {
-              options.push({ comp: option, children })
-            }
+    updateCache () {
+      const { fullOptionList, fullGroupList, groupOptionsField } = this
+      const optkey = getOptkey(this)
+      const handleOptis = (item) => {
+        if (!getOptid(this, item)) {
+          item[optkey] = getOptUniqueId()
+        }
+      }
+      if (fullGroupList.length) {
+        fullGroupList.forEach(group => {
+          handleOptis(group)
+          if (group[groupOptionsField]) {
+            group[groupOptionsField].forEach(handleOptis)
           }
         })
+      } else if (fullOptionList.length) {
+        fullOptionList.forEach(handleOptis)
       }
-      return options
+      this.refreshOption()
     },
-    updateStatus () {
-      this.updateFlag++
+    /**
+     * 刷新选项，当选项被动态显示/隐藏时可能会用到
+     */
+    refreshOption () {
+      const { isGroup, fullOptionList, fullGroupList } = this
+      if (isGroup) {
+        this.visibleGroupList = fullGroupList.filter(isOptionVisible)
+      } else {
+        this.visibleOptionList = fullOptionList.filter(isOptionVisible)
+      }
+      return this.$nextTick()
     },
     setCurrentOption (option) {
       if (option) {
-        this.currentValue = option.value
-        this.$nextTick(() => {
-          DomTools.toView(this.$refs.panel.querySelector(`[data-option-id='${option.id}']`))
-        })
+        this.currentValue = option[this.valueField]
       }
+    },
+    scrollToOption (option, isAlignBottom) {
+      return this.$nextTick().then(() => {
+        if (option) {
+          const { $refs } = this
+          const optWrapperElem = $refs.optWrapper
+          const optElem = $refs.panel.querySelector(`[data-optid='${getOptid(this, option)}']`)
+          if (optWrapperElem && optElem) {
+            const wrapperHeight = optWrapperElem.offsetHeight
+            const offsetPadding = 5
+            if (isAlignBottom) {
+              if (optElem.offsetTop + optElem.offsetHeight - optWrapperElem.scrollTop > wrapperHeight) {
+                optWrapperElem.scrollTop = optElem.offsetTop + optElem.offsetHeight - wrapperHeight
+              }
+            } else {
+              if (optElem.offsetTop + offsetPadding < optWrapperElem.scrollTop || optElem.offsetTop + offsetPadding > optWrapperElem.scrollTop + optWrapperElem.clientHeight) {
+                optWrapperElem.scrollTop = optElem.offsetTop - offsetPadding
+              }
+            }
+          }
+        }
+      })
     },
     clearEvent (params, evnt) {
       this.clearValueEvent(evnt, null)
@@ -224,17 +447,47 @@ export default {
     },
     clearValueEvent (evnt, selectValue) {
       this.changeEvent(evnt, selectValue)
-      this.$emit('clear', { value: selectValue }, evnt)
+      this.$emit('clear', { value: selectValue, $event: evnt }, evnt)
     },
     changeEvent (evnt, selectValue) {
       if (selectValue !== this.value) {
         this.$emit('input', selectValue)
-        this.$emit('change', { value: selectValue }, evnt)
+        this.$emit('change', { value: selectValue, $event: evnt }, evnt)
       }
     },
     changeOptionEvent (evnt, selectValue) {
-      this.changeEvent(evnt, selectValue)
-      this.hideOptionPanel()
+      const { value, multiple } = this
+      if (multiple) {
+        let multipleValue
+        if (value) {
+          if (value.indexOf(selectValue) === -1) {
+            multipleValue = value.concat([selectValue])
+          } else {
+            multipleValue = value.filter(val => val !== selectValue)
+          }
+        } else {
+          multipleValue = [selectValue]
+        }
+        this.changeEvent(evnt, multipleValue)
+      } else {
+        this.changeEvent(evnt, selectValue)
+        this.hideOptionPanel()
+      }
+    },
+    handleGlobalMousewheelEvent (evnt) {
+      const { $refs, $el, disabled, visiblePanel } = this
+      if (!disabled) {
+        if (visiblePanel) {
+          const hasSlef = DomTools.getEventTargetNode(evnt, $el).flag
+          if (hasSlef || DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
+            if (hasSlef) {
+              this.updatePlacement()
+            }
+          } else {
+            this.hideOptionPanel()
+          }
+        }
+      }
     },
     handleGlobalMousedownEvent (evnt) {
       const { $refs, $el, disabled, visiblePanel } = this
@@ -251,37 +504,39 @@ export default {
         const keyCode = evnt.keyCode
         const isTab = keyCode === 9
         const isEnter = keyCode === 13
+        const isEsc = keyCode === 27
         const isUpArrow = keyCode === 38
         const isDwArrow = keyCode === 40
         const isDel = keyCode === 46
+        const isSpacebar = keyCode === 32
         if (isTab) {
           this.isActivated = false
         }
         if (visiblePanel) {
-          if (isTab) {
+          if (isEsc || isTab) {
             this.hideOptionPanel()
           } else if (isEnter) {
             this.changeOptionEvent(evnt, currentValue)
           } else if (isUpArrow || isDwArrow) {
             evnt.preventDefault()
-            const groupList = this.getOptions()
-            let { offsetOption, firstOption } = findOffsetOption(groupList, currentValue, isUpArrow)
-            if (!offsetOption && !findOption(groupList, currentValue)) {
+            let { firstOption, offsetOption } = findOffsetOption(this, currentValue, isUpArrow)
+            if (!offsetOption && !findOption(this, currentValue)) {
               offsetOption = firstOption
             }
             this.setCurrentOption(offsetOption)
+            this.scrollToOption(offsetOption, isDwArrow)
+          } else if (isSpacebar) {
+            evnt.preventDefault()
           }
-        } else if (isEnter && this.isActivated) {
+        } else if ((isUpArrow || isDwArrow || isEnter || isSpacebar) && this.isActivated) {
+          evnt.preventDefault()
           this.showOptionPanel()
         }
-        if (isDel && clearable && this.isActivated) {
-          this.clearValueEvent(evnt, null)
+        if (this.isActivated) {
+          if (isDel && clearable) {
+            this.clearValueEvent(evnt, null)
+          }
         }
-      }
-    },
-    handleGlobalMousewheelEvent (evnt) {
-      if (!DomTools.getEventTargetNode(evnt, this.$el).flag && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
-        this.hideOptionPanel()
       }
     },
     handleGlobalBlurEvent () {
@@ -297,8 +552,12 @@ export default {
         this.isActivated = true
       }
     },
-    togglePanelEvent (params, evnt) {
-      evnt.preventDefault()
+    blurEvent () {
+      this.isActivated = false
+    },
+    togglePanelEvent (params) {
+      const { $event } = params
+      $event.preventDefault()
       if (this.visiblePanel) {
         this.hideOptionPanel()
       } else {
@@ -311,8 +570,13 @@ export default {
         this.isActivated = true
         this.animatVisible = true
         setTimeout(() => {
+          const { value, multiple } = this
+          const currOption = findOption(this, multiple && value ? value[0] : value)
           this.visiblePanel = true
-          this.setCurrentOption(findOption(this.getOptions(), this.value))
+          if (currOption) {
+            this.setCurrentOption(currOption)
+            this.scrollToOption(currOption)
+          }
         }, 10)
         this.updateZindex()
         this.updatePlacement()
@@ -322,58 +586,71 @@ export default {
       this.visiblePanel = false
       this.hidePanelTimeout = setTimeout(() => {
         this.animatVisible = false
-      }, 200)
+      }, 350)
     },
     updatePlacement () {
-      this.$nextTick(() => {
+      return this.$nextTick().then(() => {
         const { $refs, transfer, placement, panelIndex } = this
-        const inputElem = $refs.input.$el
+        const targetElem = $refs.input.$el
         const panelElem = $refs.panel
-        const inputHeight = inputElem.offsetHeight
-        const inputWidth = inputElem.offsetWidth
-        const panelHeight = panelElem.offsetHeight
-        const panelStyle = {
-          zIndex: panelIndex
-        }
-        const { boundingTop, boundingLeft, visibleHeight } = DomTools.getAbsolutePos(inputElem)
-        let panelPlacement = 'bottom'
-        if (transfer) {
-          const left = boundingLeft
-          let top = boundingTop + inputHeight
-          if (placement === 'top') {
-            panelPlacement = 'top'
-            top = boundingTop - panelHeight
-          } else {
-            // 如果下面不够放，则向上
-            if (top + panelHeight > visibleHeight) {
+        if (panelElem && targetElem) {
+          const targetHeight = targetElem.offsetHeight
+          const targetWidth = targetElem.offsetWidth
+          const panelHeight = panelElem.offsetHeight
+          const panelWidth = panelElem.offsetWidth
+          const marginSize = 5
+          const panelStyle = {
+            zIndex: panelIndex
+          }
+          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
+          let panelPlacement = 'bottom'
+          if (transfer) {
+            let left = boundingLeft
+            let top = boundingTop + targetHeight
+            if (placement === 'top') {
               panelPlacement = 'top'
               top = boundingTop - panelHeight
+            } else {
+              // 如果下面不够放，则向上
+              if (top + panelHeight + marginSize > visibleHeight) {
+                panelPlacement = 'top'
+                top = boundingTop - panelHeight
+              }
+              // 如果上面不够放，则向下（优先）
+              if (top < marginSize) {
+                panelPlacement = 'bottom'
+                top = boundingTop + targetHeight
+              }
             }
-            // 如果上面不够放，则向下（优先）
-            if (top < 0) {
-              panelPlacement = 'bottom'
-              top = boundingTop + inputHeight
+            // 如果溢出右边
+            if (left + panelWidth + marginSize > visibleWidth) {
+              left -= left + panelWidth + marginSize - visibleWidth
             }
-          }
-          Object.assign(panelStyle, {
-            left: `${left}px`,
-            top: `${top}px`,
-            minWidth: `${inputWidth}px`
-          })
-        } else {
-          if (placement === 'top') {
-            panelPlacement = 'top'
-            panelStyle.bottom = `${inputHeight}px`
+            // 如果溢出左边
+            if (left < marginSize) {
+              left = marginSize
+            }
+            Object.assign(panelStyle, {
+              left: `${left}px`,
+              top: `${top}px`,
+              minWidth: `${targetWidth}px`
+            })
           } else {
-            // 如果下面不够放，则向上
-            if (boundingTop + inputHeight + panelHeight > visibleHeight) {
+            if (placement === 'top') {
               panelPlacement = 'top'
-              panelStyle.bottom = `${inputHeight}px`
+              panelStyle.bottom = `${targetHeight}px`
+            } else {
+              // 如果下面不够放，则向上
+              if (boundingTop + targetHeight + panelHeight > visibleHeight) {
+                panelPlacement = 'top'
+                panelStyle.bottom = `${targetHeight}px`
+              }
             }
           }
+          this.panelStyle = panelStyle
+          this.panelPlacement = panelPlacement
+          return this.$nextTick()
         }
-        this.panelStyle = panelStyle
-        this.panelPlacement = panelPlacement
       })
     },
     focus () {

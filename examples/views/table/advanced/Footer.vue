@@ -1,9 +1,9 @@
 <template>
   <div>
     <p class="tip">
-      设置 <table-api-link prop="show-footer"/> show-footer 和 <table-api-link prop="footer-method"/> 自定义表尾合计<br>
-      需要注意的是表尾的的计算并非实时的，而是在 data 初始化时才会触发自动计算；如果要达到实时计算请手动调用 <table-api-link prop="updateFooter"/> 方法<br>
-      <span class="red">（注：<table-api-link prop="footer-method"/> 合计的逻辑都是自行实现的，该示例仅供参考）</span>
+      通过表尾来实现合计功能，设置 <table-api-link prop="show-footer"/> show-footer 和 <table-api-link prop="footer-method"/> 设置表尾数据，结果返回一个二维数组<br>
+      需要注意的是表尾的调用并非实时的，而是在 data 初始化时才会触发执行；如果要达到实时调用请手动调用 <table-api-link prop="updateFooter"/> 方法<br>
+      <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的数据都是自行生成的，该示例仅供参考）</span>
     </p>
 
     <vxe-table
@@ -36,7 +36,7 @@
       show-footer
       height="400"
       :footer-method="footerMethod"
-      :footer-cell-class-name="footerCellClassName"
+      :footer-cell-class-name="footerCellClassName2"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -50,18 +50,27 @@
     <pre>
       <code class="xml">{{ demoCodes[2] }}</code>
       <code class="javascript">{{ demoCodes[3] }}</code>
+      <code class="css">{{ demoCodes[4] }}</code>
     </pre>
 
     <p class="tip">还可以固定列</p>
 
+    <vxe-toolbar>
+      <template v-slot:buttons>
+        <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
+        <vxe-button @click="showFooter = !showFooter">显示/隐藏表尾</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       class="mytable-footer"
       border
-      show-footer
       height="400"
       show-overflow
+      :show-header="showHeader"
+      :show-footer="showFooter"
       :footer-method="footerMethod"
-      :footer-cell-class-name="footerCellClassName"
+      :footer-cell-class-name="footerCellClassName3"
       :data="tableData">
       <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column title="基本信息">
@@ -75,8 +84,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <code class="xml">{{ demoCodes[5] }}</code>
+      <code class="javascript">{{ demoCodes[6] }}</code>
+      <code class="javascript">{{ demoCodes[7] }}</code>
     </pre>
   </div>
 </template>
@@ -88,6 +98,8 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      showHeader: true,
+      showFooter: true,
       tableData1: [],
       tableData: [],
       demoCodes: [
@@ -159,7 +171,7 @@ export default {
           show-footer
           height="400"
           :footer-method="footerMethod"
-          :footer-cell-class-name="footerCellClassName"
+          :footer-cell-class-name="footerCellClassName2"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -179,7 +191,7 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            footerCellClassName ({ $rowIndex, column, columnIndex }) {
+            footerCellClassName2 ({ $rowIndex, column, columnIndex }) {
               if (columnIndex === 0) {
                 if ($rowIndex === 0) {
                   return 'col-blue'
@@ -223,14 +235,32 @@ export default {
         }
         `,
         `
+        .mytable-footer .col-blue {
+          background-color: #2db7f5;
+          color: #fff;
+        }
+        .mytable-footer .col-red {
+          background-color: red;
+          color: #fff;
+        }
+        `,
+        `
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
+            <vxe-button @click="showFooter = !showFooter">显示/隐藏表尾</vxe-button>
+          </template>
+        </vxe-toolbar>
+
         <vxe-table
           class="mytable-footer"
           border
-          show-footer
           height="400"
           show-overflow
+          :show-header="showHeader"
+          :show-footer="showFooter"
           :footer-method="footerMethod"
-          :footer-cell-class-name="footerCellClassName"
+          :footer-cell-class-name="footerCellClassName3"
           :data="tableData">
           <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column title="基本信息">
@@ -245,6 +275,7 @@ export default {
         export default {
           data () {
             return {
+              showFooter: true,
               tableData: []
             }
           },
@@ -252,11 +283,15 @@ export default {
             this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           },
           methods: {
-            footerCellClassName ({ $rowIndex, columnIndex }) {
-              if (columnIndex === 0) {
+            footerCellClassName3 ({ $rowIndex, column }) {
+              if (column.type === 'seq') {
                 if ($rowIndex === 0) {
                   return 'col-blue'
                 } else {
+                  return 'col-red'
+                }
+              } else if (column.property === 'age') {
+                if ($rowIndex === 1) {
                   return 'col-red'
                 }
               }
@@ -294,6 +329,16 @@ export default {
             }
           }
         }
+        `,
+        `
+        .mytable-footer .col-blue {
+          background-color: #2db7f5;
+          color: #fff;
+        }
+        .mytable-footer .col-red {
+          background-color: red;
+          color: #fff;
+        }
         `
       ]
     }
@@ -308,11 +353,24 @@ export default {
     })
   },
   methods: {
-    footerCellClassName ({ $rowIndex, columnIndex }) {
+    footerCellClassName2 ({ $rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         if ($rowIndex === 0) {
           return 'col-blue'
         } else {
+          return 'col-red'
+        }
+      }
+    },
+    footerCellClassName3 ({ $rowIndex, column }) {
+      if (column.type === 'seq') {
+        if ($rowIndex === 0) {
+          return 'col-blue'
+        } else {
+          return 'col-red'
+        }
+      } else if (column.property === 'age') {
+        if ($rowIndex === 1) {
           return 'col-red'
         }
       }
@@ -352,12 +410,12 @@ export default {
 }
 </script>
 
-<style>
-.mytable-footer .vxe-footer--column.col-blue {
+<style scoped>
+.mytable-footer >>> .col-blue {
   background-color: #2db7f5;
   color: #fff;
 }
-.mytable-footer .vxe-footer--column.col-red {
+.mytable-footer >>> .col-red {
   background-color: red;
   color: #fff;
 }

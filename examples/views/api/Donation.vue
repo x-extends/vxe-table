@@ -1,17 +1,47 @@
 <template>
   <div>
     <p class="tip">{{ $t('app.footer.donationDesc') }}</p>
+    <div class="upgrade">
+      <a class="link" href="https://github.com/x-extends/vxe-table/issues/712">
+        <span>😱{{ $t('app.body.other.compatibility') }}</span>
+      </a>
+      <a class="link" href="https://github.com/x-extends/vxe-table/releases">
+        <span>👀{{ $t('app.body.other.releases') }}</span>
+      </a>
+    </div>
     <div class="desc">
-      <div class="title">🐬 计划</div>
+      <div class="title">
+        <span style="vertical-align: middle;padding-left: 0.4em;">🔥{{ $t('app.body.label.plan') }}</span>
+      </div>
       <ul class="plan">
-        <li><i class="fa fa-battery-4"></i>v1 实现表格的一切实用的功能</li>
-        <li><i class="fa fa-battery-3"></i>v2 性能优化，同时兼具功能与性能</li>
-        <li><i class="fa fa-battery-0"></i>v3 内部重构，面向现代浏览器吗，不再支持 IE，渲染性能提升</li>
-        <li><i class="fa fa-battery-0"></i>v4 基于 <a class="link" href="https://github.com/vuejs/vue-next" target="_blank">vue3</a> 重构，渲染性能提升</li>
+        <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v1') }}</li>
+        <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v2') }}</li>
+        <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v3') }}</li>
+        <li><i class="fa fa-battery-1"></i>{{ $t('app.body.other.plan.v4') }}</li>
       </ul>
     </div>
-    <div class="content">
-      <img src="static/donation/pay.jpg">
+    <div class="content" style="padding-top: 50px">
+      <div style="display: inline-block;text-align: left;">
+        <div>
+          <div>😘<span v-html="$t('app.body.other.donationTitle')"></span></div>
+          <ul>
+            <li>1. <span v-html="$t('app.body.other.ways.alipay')"></span></li>
+            <li>2. <span v-html="$t('app.body.other.ways.wechat')"></span></li>
+            <li>3. <span v-html="$t('app.body.other.ways.gitee')"></span></li>
+          </ul>
+        </div>
+        <div>
+          <img src="static/donation/pay.jpg">
+        </div>
+      </div>
+      <div style="display: inline-block;margin-left: 20em;">
+        <div>
+          <span style="font-size: 22px;font-weight: 700;">QQ群</span>
+          <br>
+          <span v-html="$t('app.body.other.issuesTitle')"></span>
+        </div>
+        <img src="static/donation/qq.png">
+      </div>
     </div>
   </div>
 </template>

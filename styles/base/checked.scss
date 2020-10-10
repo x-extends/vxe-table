@@ -1,0 +1,174 @@
+// 单选框和复选框
+%RadioAndCheckboxSpan {
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+}
+%RadioAndCheckboxIcon {
+  display: none;
+  position: absolute;
+  height: 1em;
+  width: 1em;
+}
+
+%XERadio {
+  @extend %RadioAndCheckboxSpan;
+  .vxe-radio--icon {
+    @extend %RadioAndCheckboxIcon;
+    font-size: $vxe-radio-font-size-default;
+    &:before {
+      content: "";
+      position: absolute;
+      height: 1em;
+      width: 1em;
+      top: 0;
+      left: 0;
+      border: $vxe-radio-border-width solid $vxe-input-border-color;
+      background-color: $vxe-radio-icon-background-color;
+      border-radius: 50%;
+    }
+  }
+  .vxe-radio--unchecked-icon {
+    display: inline-block;
+  }
+  .vxe-radio--checked-icon {
+    &:after {
+      content: "";
+      position: absolute;
+      height: 0.25em;
+      width: 0.25em;
+      top: 0.4em;
+      left: 0.4em;
+      border-radius: 50%;
+      background-color: $vxe-radio-checked-icon-background-color;
+    }
+  }
+  &.is--checked {
+    color: $vxe-primary-color;
+    .vxe-radio--unchecked-icon {
+      display: none;
+    }
+    .vxe-radio--checked-icon {
+      display: inline-block;
+      &:before {
+        border-color: $vxe-primary-color;
+        background-color: $vxe-primary-color;
+      }
+    }
+  }
+  &:not(.is--disabled) {
+    &:hover {
+      .vxe-radio--icon {
+        &:before {
+          border-color: $vxe-primary-color;
+        }
+      }
+    }
+  }
+  &.is--disabled {
+    cursor: not-allowed;
+    color: $vxe-disabled-color;
+    .vxe-radio--icon {
+      &:before {
+        border-color: $vxe-input-disabled-color;
+        background-color: $vxe-input-disabled-background-color;
+      }
+      &:after {
+        background-color: $vxe-primary-disabled-color;
+      }
+    }
+  }
+}
+
+%XECheckbox {
+  @extend %RadioAndCheckboxSpan;
+  .vxe-checkbox--icon {
+    @extend %RadioAndCheckboxIcon;
+    font-size: $vxe-checkbox-font-size-default;
+    &:before {
+      content: "";
+      position: absolute;
+      height: 1em;
+      width: 1em;
+      top: 0;
+      left: 0;
+      background-color: $vxe-checkbox-icon-background-color;
+      border-radius: $vxe-checkbox-border-radius;
+      border: $vxe-checkbox-border-width solid $vxe-input-border-color;
+    }
+  }
+  .vxe-checkbox--unchecked-icon {
+    display: inline-block;
+  }
+  .vxe-checkbox--checked-icon {
+    &:after {
+      content: "";
+      position: absolute;
+      height: $vxe-checkbox-checked-height;
+      width: $vxe-checkbox-checked-width;
+      top: 50%;
+      left: 50%;
+      border: $vxe-checkbox-border-width solid $vxe-checkbox-checked-icon-border-color;
+      border-left: 0;
+      border-top: 0;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  }
+  .vxe-checkbox--indeterminate-icon {
+    &:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      height: $vxe-checkbox-indeterminate-height;
+      width: $vxe-checkbox-indeterminate-width;
+      background-color: $vxe-checkbox-indeterminate-icon-background-color;
+      transform: translate(-50%, -50%);
+    }
+  }
+  &.is--checked,
+  &.is--indeterminate {
+    color: $vxe-primary-color;
+    .vxe-checkbox--unchecked-icon {
+      display: none;
+    }
+    .vxe-checkbox--icon {
+      &:before {
+        border-color: $vxe-primary-color;
+        background-color: $vxe-primary-color;
+      }
+    }
+  }
+  &.is--checked {
+    .vxe-checkbox--checked-icon {
+      display: inline-block;
+    }
+  }
+  &.is--indeterminate {
+    .vxe-checkbox--indeterminate-icon {
+      display: inline-block;
+    }
+  }
+  &:not(.is--disabled) {
+    &:hover {
+      .vxe-checkbox--icon {
+        &:before {
+          border-color: $vxe-primary-color;
+        }
+      }
+    }
+  }
+  &.is--disabled {
+    cursor: not-allowed;
+    color: $vxe-disabled-color;
+    .vxe-checkbox--icon {
+      &:before {
+        border-color: $vxe-input-disabled-color;
+        background-color: $vxe-input-disabled-background-color;
+      }
+      &:after {
+        border-color: $vxe-primary-disabled-color;
+      }
+    }
+  }
+}

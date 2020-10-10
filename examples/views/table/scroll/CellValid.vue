@@ -1,29 +1,32 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动渲染，可编辑表格<br><span class="red">当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时</span></p>
+    <p class="tip">
+      虚拟滚动列校验，如果第一个参数为 true 则全量校验<br>
+      <span class="red">（如果不指定数据，则默认只校验临时变动的数据，例如新增或修改...等）</span>
+    </p>
 
     <vxe-toolbar :refresh="{query: findList}">
       <template v-slot:buttons>
         <vxe-button>
-          <template>新增操作</template>
+          <template v-slot>新增操作</template>
           <template v-slot:dropdowns>
-            <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
-            <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
-            <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-            <vxe-button @click="insertEvent($refs.xTable.getData(400))">插入到 400 行</vxe-button>
+            <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
+            <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
+            <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
+            <vxe-button type="text" @click="insertEvent($refs.xTable.getData(400))">插入到 400 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button>
-          <template>删除操作</template>
+          <template v-slot>删除操作</template>
           <template v-slot:dropdowns>
-            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
-            <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
-            <vxe-button @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
-            <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button>
-          <template>校验操作</template>
+          <template v-slot>校验操作</template>
           <template v-slot:dropdowns>
             <vxe-button @click="validEvent">基本校验</vxe-button>
             <vxe-button @click="fullValidEvent">完整校验</vxe-button>
@@ -78,7 +81,7 @@ export default {
       loading: false,
       validRules: {
         name: [
-          { required: true, message: '名称必须填写' },
+          { required: true, message: 'app.body.valid.rName' },
           { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
         ],
         sex: [
@@ -90,25 +93,25 @@ export default {
         <vxe-toolbar :refresh="{query: findList}">
           <template v-slot:buttons>
             <vxe-button>
-              <template>新增操作</template>
+              <template v-slot>新增操作</template>
               <template v-slot:dropdowns>
-                <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
-                <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
-                <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-                <vxe-button @click="insertEvent($refs.xTable.getData(400))">插入到 400 行</vxe-button>
+                <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
+                <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
+                <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
+                <vxe-button type="text" @click="insertEvent($refs.xTable.getData(400))">插入到 400 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button>
-              <template>删除操作</template>
+              <template v-slot>删除操作</template>
               <template v-slot:dropdowns>
-                <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
-                <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
-                <vxe-button @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
-                <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button>
-              <template>校验操作</template>
+              <template v-slot>校验操作</template>
               <template v-slot:dropdowns>
                 <vxe-button @click="validEvent">基本校验</vxe-button>
                 <vxe-button @click="fullValidEvent">完整校验</vxe-button>
@@ -152,7 +155,7 @@ export default {
               loading: false,
               validRules: {
                 name: [
-                  { required: true, message: '名称必须填写' },
+                  { required: true, message: 'app.body.valid.rName' },
                   { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
                 ],
                 sex: [
@@ -180,19 +183,17 @@ export default {
               })
             },
             validEvent () {
-              this.$refs.xTable.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTable.validate((errMap) => {
+                if (errMap) {
                   this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
             fullValidEvent () {
-              this.$refs.xTable.fullValidate((valid, errMap) => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTable.fullValidate((errMap) => {
+                if (errMap) {
                   let msgList = []
                   Object.values(errMap).forEach(errList => {
                     errList.forEach(params => {
@@ -216,17 +217,19 @@ export default {
                       ]
                     }
                   })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
             selectValidEvent () {
               let selectRecords = this.$refs.xTable.getCheckboxRecords()
               if (selectRecords.length > 0) {
-                this.$refs.xTable.validate(selectRecords, valid => {
-                  if (valid) {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
-                  } else {
+                this.$refs.xTable.validate(selectRecords, (errMap) => {
+                  if (errMap) {
                     this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                  } else {
+                    this.$XModal.message({ status: 'success', message: '校验成功！' })
                   }
                 })
               } else {
@@ -281,25 +284,23 @@ export default {
       })
     },
     validEvent () {
-      this.$refs.xTable.validate(valid => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTable.validate((errMap) => {
+        if (errMap) {
           this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
     fullValidEvent () {
-      this.$refs.xTable.fullValidate((valid, errMap) => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTable.fullValidate((errMap) => {
+        if (errMap) {
           const msgList = []
           Object.values(errMap).forEach(errList => {
             errList.forEach(params => {
               const { rowIndex, column, rules } = params
               rules.forEach(rule => {
-                msgList.push(`第 ${rowIndex} 行 ${column.title} 校验错误：${rule.message}`)
+                msgList.push(`第 ${rowIndex + 1} 行 ${column.title} 校验错误：${rule.message}`)
               })
             })
           })
@@ -317,17 +318,19 @@ export default {
               ]
             }
           })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
     selectValidEvent () {
       const selectRecords = this.$refs.xTable.getCheckboxRecords()
       if (selectRecords.length > 0) {
-        this.$refs.xTable.validate(selectRecords, valid => {
-          if (valid) {
-            this.$XModal.message({ status: 'success', message: '校验成功！' })
-          } else {
+        this.$refs.xTable.validate(selectRecords, (errMap) => {
+          if (errMap) {
             this.$XModal.message({ status: 'error', message: '校验不通过！' })
+          } else {
+            this.$XModal.message({ status: 'success', message: '校验成功！' })
           }
         })
       } else {

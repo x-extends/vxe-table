@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">自定义分页按钮图标</p>
+    <p class="tip">自定义分页按钮图标，例如第三方图标库：font-awesome、inconfont</p>
 
     <vxe-table
       border

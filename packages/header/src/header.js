@@ -1,67 +1,8 @@
 import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
+import { convertToRows } from './util'
 
-const getAllColumns = (columns) => {
-  const result = []
-  columns.forEach((column) => {
-    if (column.visible) {
-      if (column.children && column.children.length && column.children.some(column => column.visible)) {
-        result.push(column)
-        result.push(...getAllColumns(column.children))
-      } else {
-        result.push(column)
-      }
-    }
-  })
-  return result
-}
-
-const convertToRows = (originColumns) => {
-  let maxLevel = 1
-  const traverse = (column, parent) => {
-    if (parent) {
-      column.level = parent.level + 1
-      if (maxLevel < column.level) {
-        maxLevel = column.level
-      }
-    }
-    if (column.children && column.children.length && column.children.some(column => column.visible)) {
-      let colSpan = 0
-      column.children.forEach((subColumn) => {
-        if (subColumn.visible) {
-          traverse(subColumn, column)
-          colSpan += subColumn.colSpan
-        }
-      })
-      column.colSpan = colSpan
-    } else {
-      column.colSpan = 1
-    }
-  }
-
-  originColumns.forEach((column) => {
-    column.level = 1
-    traverse(column)
-  })
-
-  const rows = []
-  for (let i = 0; i < maxLevel; i++) {
-    rows.push([])
-  }
-
-  const allColumns = getAllColumns(originColumns)
-
-  allColumns.forEach((column) => {
-    if (column.children && column.children.length && column.children.some(column => column.visible)) {
-      column.rowSpan = 1
-    } else {
-      column.rowSpan = maxLevel - column.level + 1
-    }
-    rows[column.level - 1].push(column)
-  })
-
-  return rows
-}
+const cellType = 'header'
 
 export default {
   name: 'VxeTableHeader',
@@ -69,7 +10,7 @@ export default {
     tableData: Array,
     tableColumn: Array,
     visibleColumn: Array,
-    collectColumn: Array,
+    tableGroupColumn: Array,
     fixedColumn: Array,
     size: String,
     fixedType: String,
@@ -93,7 +34,7 @@ export default {
     let { tableColumn } = this
     const {
       $listeners: tableListeners,
-      id,
+      tId,
       resizable, border,
       overflowX,
       columnKey,
@@ -112,7 +53,8 @@ export default {
       scrollbarWidth,
       cellOffsetWidth,
       getColumnIndex,
-      sortOpts
+      sortOpts,
+      tooltipOpts
     } = $table
     let { tableWidth } = $table
     // v2.0 废弃属性，保留兼容
@@ -127,7 +69,7 @@ export default {
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed--${fixedType}-wrapper` : 'body--wrapper'],
       attrs: {
-        'data-tid': id
+        'data-tid': tId
       }
     }, [
       !fixedType && scrollXLoad ? h('div', {
@@ -139,7 +81,7 @@ export default {
       h('table', {
         class: 'vxe-table--header',
         attrs: {
-          'data-tid': id,
+          'data-tid': tId,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -152,8 +94,7 @@ export default {
         /**
          * 列宽
          */
-        h('colgroup', tableColumn.map((column, columnIndex) => {
-          const isColGroup = column.children && column.children.length
+        h('colgroup', tableColumn.map((column, $columnIndex) => {
           return h('col', {
             attrs: {
               name: column.id
@@ -161,7 +102,7 @@ export default {
             style: {
               width: column.renderWidth ? `${column.renderWidth}px` : null
             },
-            key: columnKey || isColGroup ? column.id : columnIndex
+            key: $columnIndex
           })
         }).concat(scrollbarWidth ? [
           h('col', {
@@ -175,11 +116,12 @@ export default {
          */
         h('thead', headerColumn.map((cols, $rowIndex) => {
           return h('tr', {
-            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType }) : headerRowClassName : ''],
-            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table, $rowIndex, fixed: fixedType }) : headerRowStyle) : null
+            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table, $rowIndex, fixed: fixedType, type: cellType }) : headerRowClassName : ''],
+            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table, $rowIndex, fixed: fixedType, type: cellType }) : headerRowStyle) : null
           }, cols.map((column, $columnIndex) => {
             const { showHeaderOverflow, headerAlign, align, headerClassName } = column
             let { renderWidth } = column
+            const { enabled } = tooltipOpts
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -190,25 +132,25 @@ export default {
             let hasEllipsis = showTitle || showTooltip || showEllipsis
             const thOns = {}
             const hasFilter = column.filters && column.filters.some(item => item.checked)
-            // 确保任何情况下 columnIndex 都精准指向真实列索引
             const columnIndex = getColumnIndex(column)
-            const params = { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, isHidden: fixedHiddenColumn, hasFilter }
+            const _columnIndex = $table._getColumnIndex(column)
+            const params = { $table, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
             }
-            if (showTitle || showTooltip) {
+            if (showTitle || showTooltip || enabled) {
               thOns.mouseenter = evnt => {
                 if (showTitle) {
-                  DomTools.updateCellTitle(evnt)
-                } else if (showTooltip) {
-                  $table.triggerHeaderTooltipEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+                  DomTools.updateCellTitle(evnt.currentTarget, column)
+                } else if (showTooltip || enabled) {
+                  $table.triggerHeaderTooltipEvent(evnt, params)
                 }
               }
             }
-            if (showTooltip) {
+            if (showTooltip || enabled) {
               thOns.mouseleave = evnt => {
-                if (showTooltip) {
+                if (showTooltip || enabled) {
                   $table.handleTargetLeaveEvent(evnt)
                 }
               }
@@ -225,10 +167,10 @@ export default {
               renderWidth = childWidth - countChild
             }
             if (highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
-              thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, { $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget })
+              thOns.click = evnt => $table.triggerHeaderCellClickEvent(evnt, params)
             }
             if (tableListeners['header-cell-dblclick']) {
-              thOns.dblclick = evnt => UtilTools.emitEvent($table, 'header-cell-dblclick', [{ $table, $rowIndex, column, columnIndex, $columnIndex, fixed: fixedType, cell: evnt.currentTarget }, evnt])
+              thOns.dblclick = evnt => $table.triggerHeaderCellDBLClickEvent(evnt, params)
             }
             const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type
             return h('th', {
@@ -241,18 +183,18 @@ export default {
                 'col--ellipsis': hasEllipsis,
                 'fixed--hidden': fixedHiddenColumn,
                 'is--sortable': column.sortable,
-                'is--filter': column.filters,
+                'is--filter': !!column.filters,
                 'filter--active': hasFilter,
                 'col--current': currentColumn === column
               }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],
               attrs: {
                 'data-colid': column.id,
-                colspan: column.colSpan,
-                rowspan: column.rowSpan
+                colspan: column.colSpan > 1 ? column.colSpan : null,
+                rowspan: column.rowSpan > 1 ? column.rowSpan : null
               },
               style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
               on: thOns,
-              key: columnKey || isColGroup ? column.id : columnIndex
+              key: columnKey || isColGroup ? column.id : $columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {
@@ -291,7 +233,7 @@ export default {
        * 其他
        */
       h('div', {
-        class: ['vxe-table--repair'],
+        class: 'vxe-table--header-border-line',
         style: {
           width: tableWidth === null ? tableWidth : `${tableWidth}px`
         }
@@ -300,7 +242,7 @@ export default {
   },
   methods: {
     uploadColumn () {
-      this.headerColumn = this.isGroup ? convertToRows(this.collectColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
+      this.headerColumn = this.isGroup ? convertToRows(this.tableGroupColumn) : [this.$parent.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
     },
     resizeMousedown (evnt, params) {
       const { column } = params
@@ -313,7 +255,7 @@ export default {
       const pos = DomTools.getOffsetPos(dragBtnElem, $el)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
-      const minInterval = column.getMinWidth() - dragBtnOffsetWidth // 列之间的最小间距
+      const minInterval = UtilTools.getColMinWidth($xetable, column) - dragBtnOffsetWidth // 列之间的最小间距
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
       let dragPosLeft = pos.left + dragBtnOffsetWidth
       const domMousemove = document.onmousemove
@@ -367,12 +309,11 @@ export default {
         $xetable._lastResizeTime = Date.now()
         $xetable.analyColumnWidth()
         $xetable.recalculate(true)
-        if ($xetable.$toolbar) {
-          $xetable.$toolbar.updateResizable()
-        }
-        UtilTools.emitEvent($xetable, 'resizable-change', [params])
+        $xetable.saveCustomResizable()
+        $xetable.$emit('resizable-change', Object.assign({ $event: evnt }, params))
       }
       updateEvent(evnt)
+      $xetable.closeMenu()
     }
   }
 }

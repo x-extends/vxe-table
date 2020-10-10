@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">通过调用 <table-api-link prop="print"/> 函数打印表格</p>
+    <p class="tip">
+      通过调用 <table-api-link prop="print"/> 函数打印表格
+      <span class="red">（注：打印的页数有限，如果超大数据量请关闭打印功能或者分页打印）</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>

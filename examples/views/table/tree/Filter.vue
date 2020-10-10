@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">实现树结构深层查找</p>
+    <p class="tip">
+      实现树结构深层查找<br>
+      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+    </p>
 
     <vxe-table
       ref="xTree"
@@ -85,7 +88,7 @@ export default {
                 this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toString(item[key]).indexOf(filterName) > -1), options)
                 // 搜索之后默认展开所有子节点
                 this.$nextTick(() => {
-                  this.$refs.xTree.setAllTreeExpansion(true)
+                  this.$refs.xTree.setAllTreeExpand(true)
                 })
               } else {
                 this.tableData = this.originData
@@ -122,7 +125,7 @@ export default {
         this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toString(item[key]).indexOf(filterName) > -1), options)
         // 搜索之后默认展开所有子节点
         this.$nextTick(() => {
-          this.$refs.xTree.setAllTreeExpansion(true)
+          this.$refs.xTree.setAllTreeExpand(true)
         })
       } else {
         this.tableData = this.originData

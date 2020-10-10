@@ -1,13 +1,16 @@
 <template>
   <div>
-    <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-charts" target="_blank">vxe-table-plugin-charts</a> 插件的 API</p>
+    <p class="tip">
+      具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-charts" target="_blank">vxe-table-plugin-charts</a> 插件的 API<br>
+      <span class="red">（注：实验功能，该示例仅供参考！不可用于生产）</span>
+    </p>
 
     <vxe-table
       border
       resizable
       height="500"
       :data="tableData"
-      :mouse-config="{ selected: true, range: true }"
+      :mouse-config="{ selected: true, checked: true }"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :context-menu="{body: {options: bodyMenus}}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
@@ -121,7 +124,7 @@ export default {
           resizable
           height="500"
           :data="tableData"
-          :mouse-config="{ selected: true, range: true }"
+          :mouse-config="{ selected: true, checked: true }"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :context-menu="{body: {options: bodyMenus}}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">

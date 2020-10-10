@@ -6,7 +6,7 @@ export default {
   name: 'VxeTooltip',
   props: {
     value: Boolean,
-    size: String,
+    size: { type: String, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
     trigger: { type: String, default: () => GlobalConfig.tooltip.trigger },
     theme: { type: String, default: () => GlobalConfig.tooltip.theme },
     content: [String, Function],
@@ -21,6 +21,7 @@ export default {
       isHover: false,
       visible: false,
       message: '',
+      tipTarget: null,
       tipZindex: 0,
       tipStore: {
         style: {},
@@ -123,6 +124,7 @@ export default {
       return this.toVisible(this.target)
     },
     close () {
+      this.tipTarget = null
       Object.assign(this.tipStore, {
         style: {},
         placement: '',
@@ -148,11 +150,8 @@ export default {
     toVisible (target, message) {
       this.targetActive = true
       if (target) {
-        const { $el, tipStore, zIndex } = this
-        const { top, left } = DomTools.getAbsolutePos(target)
-        const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+        const { $el, tipStore } = this
         const parentNode = $el.parentNode
-        let tipLeft = left
         tipStore.placement = 'top'
         tipStore.style = { width: 'auto' }
         tipStore.arrowStyle = { left: '50%' }
@@ -162,50 +161,53 @@ export default {
         if (message) {
           this.message = message
         }
+        this.tipTarget = target
         this.update(true)
         this.updateZindex()
-        return this.$nextTick().then(() => {
-          const wrapperElem = $el
-          if (wrapperElem) {
-            const clientHeight = wrapperElem.clientHeight
-            const clientWidth = XEUtils.toNumber(getComputedStyle(wrapperElem).width)
-            tipLeft = left + Math.floor((target.offsetWidth - clientWidth) / 2)
-            tipStore.style = {
-              zIndex: zIndex || this.tipZindex,
-              width: `${clientWidth}px`,
-              top: `${top - clientHeight - 6}px`,
-              left: `${tipLeft}px`
-            }
-            return this.$nextTick()
+        return this.updatePlacement()
+      }
+      return this.$nextTick()
+    },
+    updatePlacement () {
+      return this.$nextTick().then(() => {
+        const { $el: wrapperElem, tipTarget, tipStore, zIndex } = this
+        if (tipTarget && wrapperElem) {
+          const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+          const { top, left } = DomTools.getAbsolutePos(tipTarget)
+          let tipLeft = left
+          const offsetHeight = wrapperElem.offsetHeight
+          const offsetWidth = wrapperElem.offsetWidth
+          tipLeft = left + Math.floor((tipTarget.offsetWidth - offsetWidth) / 2)
+          tipStore.style = {
+            zIndex: zIndex || this.tipZindex,
+            top: `${top - offsetHeight - 6}px`,
+            left: `${tipLeft}px`
           }
-        }).then(() => {
-          const wrapperElem = $el
-          if (wrapperElem) {
-            const clientHeight = wrapperElem.clientHeight
-            const clientWidth = wrapperElem.clientWidth
+          return this.$nextTick().then(() => {
+            const offsetHeight = wrapperElem.offsetHeight
+            const offsetWidth = wrapperElem.offsetWidth
             Object.assign(tipStore.style, {
-              top: `${top - clientHeight - 6}px`,
+              top: `${top - offsetHeight - 6}px`,
               left: `${tipLeft}px`
             })
-            if (top - clientHeight < scrollTop + 6) {
+            if (top - offsetHeight < scrollTop + 6) {
               tipStore.placement = 'bottom'
-              tipStore.style.top = `${top + target.offsetHeight + 6}px`
+              tipStore.style.top = `${top + tipTarget.offsetHeight + 6}px`
             }
             if (tipLeft < scrollLeft + 6) {
               // 超出左边界
               tipLeft = scrollLeft + 6
               tipStore.arrowStyle.left = `${left > tipLeft + 16 ? left - tipLeft + 16 : 16}px`
               tipStore.style.left = `${tipLeft}px`
-            } else if (tipLeft + clientWidth > scrollLeft + visibleWidth) {
+            } else if (tipLeft + offsetWidth > scrollLeft + visibleWidth) {
               // 超出右边界
-              tipLeft = scrollLeft + visibleWidth - clientWidth - 6
-              tipStore.arrowStyle.left = `${clientWidth - Math.max(Math.floor((tipLeft + clientWidth - left) / 2), 22)}px`
+              tipLeft = scrollLeft + visibleWidth - offsetWidth - 6
+              tipStore.arrowStyle.left = `${offsetWidth - Math.max(Math.floor((tipLeft + offsetWidth - left) / 2), 22)}px`
               tipStore.style.left = `${tipLeft}px`
             }
-          }
-        })
-      }
-      return this.$nextTick()
+          })
+        }
+      })
     },
     clickEvent () {
       this[this.visible ? 'close' : 'show']()
@@ -233,7 +235,7 @@ export default {
       const { $listeners, trigger, enterable, leaveDelay } = this
       this.isHover = false
       if ($listeners.leave) {
-        this.$emit('leave', evnt)
+        this.$emit('leave', { $event: evnt })
       } else if (enterable && trigger === 'hover') {
         setTimeout(() => {
           if (!this.targetActive) {

@@ -80,10 +80,28 @@ const apis = [
         list: []
       },
       {
+        name: 'title-asterisk',
+        descKey: 'app.api.form.desc.titleAsterisk',
+        version: '1.15.31',
+        type: 'boolean',
+        enum: '',
+        defVal: '默认 true，继承 setup.form.titleAsterisk',
+        list: []
+      },
+      {
+        name: 'items',
+        desc: '项列表',
+        version: '2.8.24',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'rules',
         descKey: 'app.api.form.desc.rules',
         version: '',
-        type: 'Object',
+        type: '{[field: string]: Array<Object>}',
         enum: '',
         defVal: '',
         list: [
@@ -134,9 +152,9 @@ const apis = [
           },
           {
             name: 'validator',
-            desc: '自定义校验方法，Function(rule, value, callback, {rules,property})，通过调用 callback() 则校验成功，调用 callback(new Error("该字段必填")) 则校验失败',
-            version: '',
-            type: 'Function',
+            desc: '自定义校验方法 Function({ itemValue, rule, rules, data, property }) 返回一个 Promise<new Error("提示消息")>',
+            version: '1.15.27',
+            type: 'Promise<e?: Error>',
             enum: '',
             defVal: '',
             list: []
@@ -145,7 +163,7 @@ const apis = [
             name: 'message',
             desc: '校验提示内容（支持开启国际化）',
             version: '',
-            type: 'String, Function',
+            type: 'String',
             enum: '',
             defVal: '',
             list: []
@@ -166,6 +184,34 @@ const apis = [
             type: 'String, Number',
             enum: '',
             defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'prevent-submit',
+        desc: '禁用默认提交方式，禁用后配合 validate() 方法可以更加自由的控制提交逻辑',
+        version: '1.15.31',
+        type: 'boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'valid-config',
+        desc: '检验配置项',
+        version: '1.15.31',
+        type: 'any',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'autoPos',
+            desc: '是否自动定位到校验不通过的项',
+            version: '',
+            type: 'bolean',
+            enum: '',
+            defVal: 'true',
             list: []
           }
         ]
@@ -191,20 +237,20 @@ const apis = [
     list: [
       {
         name: 'submit',
-        desc: '表单提交时会触发该事件',
+        desc: '只对 prevent-submit=false 有效，表单提交时会触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: '{data}, event',
+        defVal: '{ data, $event }',
         list: []
       },
       {
         name: 'submit-invalid',
-        desc: '表单提交时如果校验不通过会触发该事件',
+        desc: '只对 prevent-submit=false 有效，表单提交时如果校验不通过会触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: '{data, errMap}, event',
+        defVal: '{ data, errMap, $event }',
         list: []
       },
       {
@@ -213,7 +259,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{data}, event',
+        defVal: '{ data, $event }',
         list: []
       },
       {
@@ -222,7 +268,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{collapse, data}, event',
+        defVal: '{ collapse, data, $event }',
         list: []
       }
     ]
@@ -236,12 +282,21 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'validate(callback)',
-        desc: '对表单进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise',
+        name: 'reset()',
+        desc: '重置表单',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
-        defVal: 'callback: Function',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'validate(callback)',
+        desc: '对表单进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
+        version: '1.15.27',
+        type: 'Promise<ErrMap>',
+        enum: '',
+        defVal: 'callback?: Function',
         list: []
       },
       {

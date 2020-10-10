@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现简单的唯一下拉选项列表</p>
+    <p class="tip">实现简单的唯一下拉选项列表<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -18,8 +18,8 @@
       @edit-actived="editActivedEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: roleList, events: {change: roleChangeEvent}}"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}}"></vxe-table-column>
+      <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-table-column>
+      <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -40,11 +40,6 @@ export default {
     return {
       tableData: [],
       roleList: [
-        {
-          label: '',
-          value: '',
-          disabled: false
-        },
         {
           label: '前端',
           value: '1',
@@ -89,8 +84,8 @@ export default {
           @edit-actived="editActivedEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: roleList, events: {change: roleChangeEvent}}"></vxe-table-column>
-          <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}}"></vxe-table-column>
+          <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -99,11 +94,6 @@ export default {
             return {
               tableData: [],
               roleList: [
-                {
-                  label: '',
-                  value: '',
-                  disabled: false
-                },
                 {
                   label: '前端',
                   value: '1',
@@ -140,9 +130,7 @@ export default {
           },
           methods: {
             insertEvent () {
-              let record = {
-
-              }
+              let record = {}
               this.$refs.xTable.insert(record)
             },
             updateRoleList () {
@@ -155,9 +143,7 @@ export default {
                 }
               })
             },
-            roleChangeEvent ({ row }, evnt) {
-              // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-              row.role1 = evnt.target.value
+            roleChangeEvent ({ row }) {
               this.updateRoleList()
             },
             editActivedEvent ({ row }) {
@@ -183,9 +169,7 @@ export default {
   },
   methods: {
     insertEvent () {
-      const record = {
-
-      }
+      const record = {}
       this.$refs.xTable.insert(record)
     },
     updateRoleList () {
@@ -198,9 +182,7 @@ export default {
         }
       })
     },
-    roleChangeEvent ({ row }, evnt) {
-      // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-      row.role1 = evnt.target.value
+    roleChangeEvent () {
       this.updateRoleList()
     },
     editActivedEvent () {

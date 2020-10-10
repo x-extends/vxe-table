@@ -4,10 +4,10 @@
       虚拟滚动渲染<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
       <table-api-link prop="data"/> 和 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 不应该同时使用，请根据数据量决定使用哪种方式，保证一致性<br>
-      <span class="red">（注：如果要启用纵向虚拟滚动，所有的行高必须一致，否则无法兼容）</span>
+      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高；如果需要支持，将虚拟滚动关闭即可）</span>
     </p>
 
-    <vxe-toolbar export>
+    <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="loadList(5000)">5k条</vxe-button>
         <vxe-button @click="loadList(10000)">1w条</vxe-button>
@@ -30,7 +30,7 @@
       :loading="loading">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
+      <vxe-table-column field="id" title="ID" width="200"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
       <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
@@ -46,9 +46,9 @@
       <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
       <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
       <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
+      <vxe-table-column field="attr11" title="attr11" width="200"></vxe-table-column>
       <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-table-column field="attr10" title="attr10" width="200"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -93,7 +93,7 @@ export default {
           :loading="loading">
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
+          <vxe-table-column field="id" title="ID" width="200"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
           <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
@@ -109,9 +109,9 @@ export default {
           <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
           <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
           <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
+          <vxe-table-column field="attr11" title="attr11" width="200"></vxe-table-column>
           <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-table-column field="attr10" title="attr10" width="200"></vxe-table-column>
         </vxe-table>
         `,
         `

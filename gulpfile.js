@@ -10,17 +10,8 @@ const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
 
 const components = [
-  'icon',
   'table',
   'column',
-  'cell',
-  'header',
-  'body',
-  'footer',
-  'filter',
-  'loading',
-  'menu',
-  'export',
   'toolbar',
   'grid',
   'excel',
@@ -34,7 +25,19 @@ const components = [
   'tooltip',
   'form',
   'select',
+  'switch',
+  'list',
+  'pulldown',
 
+  'icon',
+  'cell',
+  'header',
+  'body',
+  'footer',
+  'filter',
+  'loading',
+  'menu',
+  'export',
   'keyboard',
   'resize',
   'v-x-e-table'
@@ -42,6 +45,9 @@ const components = [
 
 const languages = [
   'zh-CN',
+  'zh-TC',
+  'zh-HK',
+  'zh-MO',
   'zh-TW',
   'en-US',
   'ja-JP'
@@ -64,7 +70,8 @@ gulp.task('build_modules', () => {
 gulp.task('build_i18n', () => {
   return Promise.all(languages.map(code => {
     const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
-    return gulp.src(`packages/locale/lang/${code}.js`)
+    const isZHTC = ['zh-HK', 'zh-MO', 'zh-TW'].includes(code)
+    return gulp.src(`packages/locale/lang/${isZHTC ? 'zh-TC' : code}.js`)
       .pipe(babel({
         moduleId: name,
         presets: ['@babel/env'],
@@ -72,12 +79,14 @@ gulp.task('build_i18n', () => {
       }))
       .pipe(replace(`global.${name} = mod.exports;`, `global.VXETableLang${name} = mod.exports.default;`))
       .pipe(rename({
+        basename: code,
         suffix: '.umd',
         extname: '.js'
       }))
       .pipe(gulp.dest('lib/locale/lang'))
       .pipe(uglify())
       .pipe(rename({
+        basename: code,
         suffix: '.min',
         extname: '.js'
       }))
@@ -91,21 +100,18 @@ gulp.task('copy_ts', () => {
 })
 
 gulp.task('lib_rename', () => {
-  return Promise.all([
-    gulp.src('lib/index.umd.js')
-      .pipe(rename({
-        basename: 'index',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('lib')),
-    gulp.src('lib/index.umd.min.js')
-      .pipe(rename({
-        basename: 'index',
-        suffix: '.min',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('lib'))
-  ])
+  return gulp.src('lib/index.css')
+    .pipe(rename({
+      basename: 'style',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('lib'))
+    .pipe(rename({
+      basename: 'style',
+      suffix: '.min',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('lib'))
 })
 
 gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {

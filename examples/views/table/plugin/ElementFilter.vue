@@ -1,12 +1,14 @@
 <template>
   <div>
-    <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 适配插件的 API</p>
+    <p class="tip">
+      具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-element" target="_blank">vxe-table-plugin-element</a> 适配插件的 API<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
+    </p>
 
     <vxe-table
       border
       resizable
       highlight-hover-row
-      class="vxe-table-element"
       height="400"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -16,7 +18,7 @@
       <vxe-table-column field="sex" title="ElSelect" width="100" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
       <vxe-table-column field="sex1" title="ElSelect" width="100" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
       <vxe-table-column field="date3" title="ElDatePicker" width="140" :filters="[{data: []}]" :filter-render="{name: 'ElDatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="ElSwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'ElSwitch'}" :cell-render="{name: 'ElSwitch', props: {disabled: true}}"></vxe-table-column>
+      <vxe-table-column field="flag" title="ElSwitch" width="100" :filters="[{data: null}]" :filter-render="{name: 'ElSwitch'}" :cell-render="{name: 'ElSwitch', props: {disabled: true}}"></vxe-table-column>
       <vxe-table-column field="rate" title="ElRate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElRate'}" :cell-render="{name: 'ElRate', props: {disabled: true}}"></vxe-table-column>
       <vxe-table-column field="slider" title="ElSlider" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElSlider'}" :cell-render="{name: 'ElSlider', props: {disabled: true}}"></vxe-table-column>
     </vxe-table>
@@ -51,7 +53,6 @@ export default {
           border
           resizable
           highlight-hover-row
-          class="vxe-table-element"
           height="400"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -61,7 +62,7 @@ export default {
           <vxe-table-column field="sex" title="ElSelect" width="100" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'ElSelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
           <vxe-table-column field="sex1" title="ElSelect" width="100" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'ElSelect', options: sexList, props: {multiple: true, placeholder: '请选择'}}"></vxe-table-column>
           <vxe-table-column field="date3" title="ElDatePicker" width="140" :filters="[{data: []}]" :filter-render="{name: 'ElDatePicker', props: {type: 'daterange', rangeSeparator: '至', startPlaceholder: '开始日期', endPlaceholder: '结束日期'}}"></vxe-table-column>
-          <vxe-table-column field="flag" title="ElSwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'ElSwitch'}" :cell-render="{name: 'ElSwitch', props: {disabled: true}}"></vxe-table-column>
+          <vxe-table-column field="flag" title="ElSwitch" width="100" :filters="[{data: null}]" :filter-render="{name: 'ElSwitch'}" :cell-render="{name: 'ElSwitch', props: {disabled: true}}"></vxe-table-column>
           <vxe-table-column field="rate" title="ElRate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElRate'}" :cell-render="{name: 'ElRate', props: {disabled: true}}"></vxe-table-column>
           <vxe-table-column field="slider" title="ElSlider" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ElSlider'}" :cell-render="{name: 'ElSlider', props: {disabled: true}}"></vxe-table-column>
         </vxe-table>

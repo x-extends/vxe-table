@@ -1,12 +1,14 @@
 <template>
   <div>
-    <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-iview" target="_blank">vxe-table-plugin-iview</a> 适配插件的 API</p>
+    <p class="tip">
+      具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-iview" target="_blank">vxe-table-plugin-iview</a> 适配插件的 API<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
+    </p>
 
     <vxe-table
       border
       resizable
       highlight-hover-row
-      class="vxe-table-antd"
       height="400"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -15,7 +17,7 @@
       <vxe-table-column field="sex" title="ASelect" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
       <vxe-table-column field="sex1" title="ASelect" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple', placeholder: '请选择'}}"></vxe-table-column>
       <vxe-table-column field="role" title="AAutoComplete" width="160" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="ASwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'ASwitch'}" :cell-render="{name: 'ASwitch', props: {disabled: true}}"></vxe-table-column>
+      <vxe-table-column field="flag" title="ASwitch" width="100" :filters="[{data: null}]" :filter-render="{name: 'ASwitch'}" :cell-render="{name: 'ASwitch', props: {disabled: true}}"></vxe-table-column>
       <vxe-table-column field="rate" title="ARate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ARate'}" :cell-render="{name: 'ARate', props: {disabled: true}}"></vxe-table-column>
     </vxe-table>
 
@@ -48,7 +50,6 @@ export default {
           border
           resizable
           highlight-hover-row
-          class="vxe-table-antd"
           height="400"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -57,7 +58,7 @@ export default {
           <vxe-table-column field="sex" title="ASelect" :formatter="formatterSex" :filters="[{data: null}]" :filter-render="{name: 'ASelect', options: sexList, props: {placeholder: '请选择'}}"></vxe-table-column>
           <vxe-table-column field="sex1" title="ASelect" :formatter="formatterSexs" :filters="[{data: []}]" :filter-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple', placeholder: '请选择'}}"></vxe-table-column>
           <vxe-table-column field="role" title="AAutoComplete" width="160" :filters="[{data: ''}]" :filter-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
-          <vxe-table-column field="flag" title="ASwitch" width="100" :filters="[{data: false}]" :filter-render="{name: 'ASwitch'}" :cell-render="{name: 'ASwitch', props: {disabled: true}}"></vxe-table-column>
+          <vxe-table-column field="flag" title="ASwitch" width="100" :filters="[{data: null}]" :filter-render="{name: 'ASwitch'}" :cell-render="{name: 'ASwitch', props: {disabled: true}}"></vxe-table-column>
           <vxe-table-column field="rate" title="ARate" width="180" sortable :filters="[{data: 0}]" :filter-render="{name: 'ARate'}" :cell-render="{name: 'ARate', props: {disabled: true}}"></vxe-table-column>
         </vxe-table>
         `,

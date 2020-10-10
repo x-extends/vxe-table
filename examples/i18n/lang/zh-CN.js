@@ -1,23 +1,26 @@
-module.exports = {
+export default {
   app: {
     aside: {
       nav: {
         start: '开发指南',
         install: '安装',
-        global: '全局参数',
         use: '快速上手',
-        icons: '自定义图标',
-        theme: '自定义主题',
+        global: '全局参数',
+        icons: '全局图标',
+        theme: '全局主题',
         i18n: '国际化',
 
         icon: '图标',
-        basics: '基础功能',
+        basics: '基础表格',
         base: '基础',
         size: '尺寸',
+        autoBreak: '自动换行',
         width: '列宽',
-        ellipsis: '内容显示省略号',
+        ellipsis: '单元格溢出省略号',
+        tooltips: '单元格工具提示',
         stripe: '斑马线条纹',
         border: '边框',
+        round: '圆角边框',
         style: '单元格样式',
         dynamicStyle: '单元格动态样式',
         scrollStyle: '滚动条样式',
@@ -29,6 +32,7 @@ module.exports = {
         fixed: '固定列',
         fullFixed: '固定表头和列',
         group: '表头分组',
+        merge: '合并行或列',
         seq: '序号',
         headerHighlight: '高亮列',
         current: '高亮行',
@@ -42,7 +46,7 @@ module.exports = {
         html: 'HTML 标签',
         data: '数据格式与字段',
 
-        more: '更多功能',
+        more: '复杂表格',
         events: '事件绑定',
         template: '自定义模板',
         dynamic: '使用 v-for 动态实现',
@@ -51,32 +55,35 @@ module.exports = {
         manualFilter: '筛选高级用法',
         filterIcon: '自定义筛选图标',
         span: '合并行或列',
-        spanRow: '更加复杂的合并行',
-        footer: '表尾合计',
+        spanRow: '合并横向树列表',
+        mergeCell: '合并单元格',
+        footer: '表尾数据',
         footerSpan: '表尾合并行或列',
-        import: '导入数据',
-        export: '导出数据',
+        import: '导入',
+        export: '导出',
         print: '打印',
+        customPrint: '高级打印',
         fixedType: '固定类型 + 导入/导出',
         contextMenu: '快捷菜单',
         menuPrivilege: '快捷菜单 + 权限控制',
-        footerImmediately: '表尾合计 + 实时更新',
+        footerImmediately: '表尾 + 实时更新合计',
         expandRow: '展开行',
-        expandRowIcon: '展开行 + 自定义图标',
+        expandRowIcon: '展开行 + 更多自定义',
         expandRowLazy: '展开行 + 懒加载',
-        accordion: '手风琴展开效果',
+        accordion: '展开行 + 手风琴效果',
         toolbar: '工具栏',
-        customs: '显示/隐藏列',
-        customStorage: '显示/隐藏列 + localStorage',
-        customlWidthStorage: '显示/隐藏/列宽 + localStorage',
+        customs: '显示、隐藏、折叠列',
+        customStorage: '自定义列 + localStorage',
+        customlWidthStorage: '完整自定义列 + localStorage',
         search: '全表搜索',
+        groupBy: '行分组',
         details: '弹框显示详情',
         popupEdit: '弹框表单编辑',
         pager: '分页',
         pageIcon: '分页 + 自定义图标',
         rangeSelect: '复选框的范围选中',
         tabs: '多页签切换',
-        keepAlives: 'keep-alive 切换',
+        keepAlives: '显示隐藏 + keep-alive',
 
         grid: '高级表格',
         reverse: '反转表格',
@@ -94,9 +101,9 @@ module.exports = {
         treeLazyEdit: '懒加载树 + 可编辑',
         crudTreeToolbar: '树表格 + 工具栏',
 
-        tree: '树表格',
+        tree: '树形表格',
         treeNormal: '普通树',
-        customIcon: '自定义图标',
+        customIcon: '更多自定义',
         expandTreeLazy: '树形展开行懒加载',
         treeSearch: '深层查找',
         treeSort: '深层排序',
@@ -111,22 +118,25 @@ module.exports = {
         full: '完整功能',
 
         virtualTree: '虚拟树表格',
+        big: '虚拟滚动',
 
         scroll: '大数据表格',
         bigData: '虚拟滚动',
-        scrollRows: '10 万行',
-        scrollFullRows: '10 万行 + 复杂渲染',
-        scrollCols: '1 万列 10 万行',
-        scrollFullCols: '1 万列 10 万行 + 复杂渲染',
+        scrollRows: '纵向',
+        scrollFullRows: '纵向 + 复杂渲染',
+        scrollCols: '横向&纵向',
+        scrollFullCols: '横向&纵向 + 复杂渲染',
         moveHighlight: '键盘移动高亮行',
         scrollTree: '虚拟树',
-        bigTree: '虚拟树实现',
+        bigTree: '树形纵向',
+        treeRows: '树形纵向',
+        treeCols: '树形横向&纵向',
         pageScroll: '滚动分页',
         infiniteScroll: '无限滚动',
         partialLoad: '局部加载',
         fullPartialLoad: '完整的局部加载',
 
-        editable: '可编辑表格',
+        editable: '编辑表格',
         popupForm: '弹框编辑',
         manual: '手动触发',
         click: '点击触发',
@@ -136,11 +146,11 @@ module.exports = {
         insert: '插入数据',
         delete: '删除数据',
         revert: '还原数据',
-        status: '数据更新',
-        cellDisable: '禁用编辑 cell',
-        rowDisable: '禁用编辑 row',
-        cellValid: '数据校验 call',
-        rowValid: '数据校验 row',
+        status: '数据状态',
+        cellDisable: '禁用编辑 + 单元格',
+        rowDisable: '禁用编辑 + 行',
+        cellValid: '数据校验 + 单元格',
+        rowValid: '数据校验 + 行',
         forceCellValid: '数据校验 cell + 强制锁定',
         forceRowValid: '数据校验 row + 强制锁定',
         highlightCell: '高亮编辑',
@@ -156,6 +166,9 @@ module.exports = {
         cell: '单元格',
 
         bad: '糟糕的用法',
+        badEdit: '全表渲染为编辑状态',
+        badLineHeight: '动态行高与虚拟滚动的取舍',
+        badNonsupport: '不被支持的用法',
 
         module: '功能模块',
         button: '按钮',
@@ -163,10 +176,14 @@ module.exports = {
         textarea: '文本域',
         select: '下拉框',
         modal: '模态窗口',
-        tooltip: '文字提示',
+        tooltip: '工具提示',
         form: '表单',
+        switch: '开关',
+        list: '列表',
+        pulldown: '下拉容器',
+        readFile: '读取文件',
 
-        other: '使用第三方库',
+        other: '集成第三方库',
         elementRender: 'element-ui -> 自定义渲染',
         iviewRender: 'iview -> 自定义渲染',
         antd: 'ant-design-vue -> 自定义渲染',
@@ -193,20 +210,23 @@ module.exports = {
         rendererPlugin: 'plugin-renderer 更多渲染器',
         menusPlugin: 'plugin-menus 快捷菜单集',
         excelPlugin: 'plugin-excel 简单的 Excel',
+        treeRowPlugin: 'plugin-virtual-tree 虚拟树',
+        treeColPlugin: 'plugin-virtual-tree 横向与纵向',
 
         formats: '(全局) 格式化',
         commands: '(全局) 指令注册',
         menus: '(全局) 快捷菜单',
 
-        renderer: '(进阶) 渲染器',
-        rendererFilter: '筛选渲染器',
-        rendererDefault: '单元格渲染器',
-        rendererEdit: '可编辑渲染器',
-        rendererToolbar: '工具栏渲染器',
-        rendererForm: '表单渲染器',
-        rendererEmpty: '空内容渲染器',
+        renderer: '(复用) 渲染器',
+        rendererFilter: '筛选渲染',
+        rendererDefault: '单元格渲染',
+        rendererEdit: '可编辑渲染',
+        rendererExpand: '内容渲染',
+        rendererToolbar: '工具栏渲染',
+        rendererForm: '表单渲染',
+        rendererEmpty: '空数据渲染',
 
-        interceptor: '(进阶) 事件拦截器',
+        interceptor: '(兼容) 事件拦截',
 
         optimize: '优化建议',
         optimizeScroller: '虚拟滚动优化',
@@ -214,6 +234,7 @@ module.exports = {
 
         api: 'API',
         vxeTable: 'vxe-table',
+        vxeTableColgroup: 'vxe-table-colgroup',
         vxeTableColumn: 'vxe-table-column',
         vxeGrid: 'vxe-grid',
         vxeVirtualTree: 'vxe-virtual-tree',
@@ -221,7 +242,10 @@ module.exports = {
         vxeToolbar: 'vxe-toolbar',
         vxePager: 'vxe-pager',
         vxeRadio: 'vxe-radio',
+        vxeRadioGroup: 'vxe-radio-group',
+        vxeRadioButton: 'vxe-radio-button',
         vxeCheckbox: 'vxe-checkbox',
+        vxeCheckboxGroup: 'vxe-checkbox-group',
         vxeInput: 'vxe-input',
         vxeTextarea: 'vxe-textarea',
         vxeSelect: 'vxe-select',
@@ -231,7 +255,16 @@ module.exports = {
         vxeTooltip: 'vxe-tooltip',
         vxeModal: 'vxe-modal',
         vxeForm: 'vxe-form',
-        vxeFormItem: 'vxe-form-item'
+        vxeFormItem: 'vxe-form-item',
+        vxeSwitch: 'vxe-switch',
+        vxeList: 'vxe-list',
+        vxePulldown: 'vxe-pulldown'
+      }
+    },
+    header: {
+      label: {
+        donation: '捐赠',
+        support: '获取支持'
       }
     },
     body: {
@@ -246,6 +279,10 @@ module.exports = {
         deleteSelectedRecords: '删除选中'
       },
       label: {
+        on: '开',
+        off: '关',
+        plan: '计划',
+        through: '通过',
         copy: '复制',
         cut: '剪贴',
         paste: '粘贴',
@@ -272,18 +309,51 @@ module.exports = {
         copyToClipboard: '已复制到剪贴板！'
       },
       other: {
-        newFunc: '由于作者比较忙，后续有时间可能会支持该功能！',
-        newDevelopment: '由于作者比较忙，该版本正在重构中，敬请期待！'
+        v1: '1.x (已废弃)',
+        v2: '2.x (vue 2.6.x 稳定版)',
+        v3: '3.x (vue 2.6.x 最新版)',
+        v4: '4.x (vue 3.x Next)',
+        plan: {
+          v1: 'v1 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能',
+          v2: 'v2 基于 vue2.6+，支持所有主的流浏览，同时兼具功能与性能',
+          v3: 'v3 基于 vue2.6+，只支持 H5 浏览器，不支持 IE，渲染性能大幅提升',
+          v4: 'v4 基于 vue3+，只支持 H5 浏览器，不支持 IE，渲染性能大幅提升'
+        },
+        ways: {
+          wechat: '通过以下 微信扫码 捐赠',
+          alipay: '通过以下 支付宝扫码 捐赠',
+          gitee: '通过 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee 捐赠</a>'
+        },
+        compatibility: '兼容性变动',
+        releases: '更新日志',
+        donation: '捐赠',
+        donationTitle: '捐赠方式：',
+        issuesTitle: '该群供大家交流问题，作者很忙基本没有时间去看群，<br>如果有问题请通过 issues 反馈',
+        newFunc: '由于作者很忙，后续有时间可能会支持该功能！',
+        newDevelopment: '该版本正在重构中，敬请期待！'
       },
       search: {
         searchPlaceholder: '文档搜索',
         noDataPrefix: '找不到与 “',
         noDataSuffix: '” 相关的结果！'
+      },
+      support: {
+        title: '该付费技术群用于快速解决使用过程中遇到的各种问题。'
+      },
+      demo: {
+        start: {
+          i18n: {
+            i18nTitle: '如果希望使用指定语言，则需要进行多语言设置。以中/英文为例',
+            translate: '集成国际化',
+            translateTitle: '若希望在项目中支持全局自动翻译，可以通过全局参数开启（将对列头、校验提示..进行自动翻译）',
+            findError: '发现错误？想参与翻译？'
+          }
+        }
       }
     },
     footer: {
       donation: '捐赠',
-      donationDesc: '为了使项目能够健康持续的发展下去，您可以通过赞助来支持作者 😊'
+      donationDesc: 'vxe-table 使用完全免费。为了使项目能够健康持续的发展下去，您可以通过捐赠来支持作者。'
     },
     api: {
       apiSearch: 'API 搜索',
@@ -301,16 +371,18 @@ module.exports = {
       },
       table: {
         desc: {
-          data: '表格数据（需要注意更新数据是不会重置状态）',
+          id: '唯一标识（被某些特定的功能所依赖）',
+          data: '表格数据（与 loadData 行为一致，更新数据是不会重置状态）',
           columns: '列配置',
-          customs: '用于读取列配置，和手动调用 getColumns 方法是一样的效果，如果是想要显示隐藏列直接通过修改列的 visible 属性（废弃的 API 不建议使用）',
-          height: '表格的高度；支持铺满父容器或者固定高度，如果设置 auto 为铺满父容器（如果设置自适应时，必须确保存在父节点且不允许存在相邻元素）',
+          customs: '即将废弃',
+          height: '表格的高度；支持铺满父容器或者固定高度，如果设置 auto 为铺满父容器（如果设置为 auto，则必须确保存在父节点且不允许存在相邻元素）',
           maxHeight: '表格的最大高度',
-          syncResize: '自动跟随某个属性的变化去调整大小，和手动调用 recalculate 方法是一样的效果（对于通过某个属性来控制显示/隐藏切换的场景可能会用到）',
-          autoResize: '自动监听父元素响应式调整大小（对于父元素可能存在动态变化的场景可能会用到）',
+          syncResize: '自动跟随某个属性的变化去重新计算表格，和手动调用 recalculate 方法是一样的效果（对于通过某个属性来控制显示/隐藏切换时可能会用到）',
+          autoResize: '自动监听父元素的变化去重新计算表格（对于父元素可能存在动态变化、显示隐藏的容器中、列宽异常等场景中的可能会用到）',
           resizable: '所有的列是否允许拖动列宽调整大小',
           stripe: '是否带有斑马纹（需要注意的是，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）',
-          border: '是否带有边框（如果为 true 则显示横向边框、纵向边框、外边框，如果为 false 则显示横向边框、外边框，如果为 none 则显示横向边框）',
+          border: '是否带有边框',
+          round: '是否为圆角边框',
           size: '表格的尺寸',
           fit: '所有列的宽度是否自撑开（可能会被废弃的参数，不要使用）',
           loading: '表格是否显示加载中',
@@ -323,23 +395,25 @@ module.exports = {
           highlightHoverRow: '鼠标移到行是否要高亮显示',
           highlightCurrentColumn: '是否要高亮当前列',
           highlightHoverColumn: '鼠标移到列是否要高亮显示',
-          highlightCell: '只对 edit-config 配置时有效，是否在编辑时高亮单元格边框',
-          rowClassName: '给行附加 className，也可以是函数 Function({row, rowIndex, $rowIndex})',
-          cellClassName: '给单元格附加 className，也可以是函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})',
-          headerRowClassName: '给表头的行附加 className，也可以是函数 Function({$rowIndex})',
-          headerCellClassName: '给表头的单元格附加 className，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
-          footerRowClassName: '给表尾的行附加 className，也可以是函数 Function({$rowIndex})',
-          footerCellClassName: '给表尾的单元格附加 className，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
-          cellStyle: '给单元格附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
-          headerCellStyle: '给表头单元格附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
-          footerCellStyle: '给表尾单元格附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
-          rowStyle: '给行附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
-          headerRowStyle: '给表头行附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
-          footerRowStyle: '给表尾行附加样式，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
-          showFooter: '是否显示表尾合计',
-          footerMethod: '表尾合计的计算方法 Function({columns, data})',
-          spanMethod: '合并行或列，该函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
-          footerSpanMethod: '表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值',
+          highlightCell: '只对 edit-config 配置时有效，是否在编辑时高亮单元格边框（只支持部分）',
+          rowClassName: '给行附加 className',
+          cellClassName: '给单元格附加 className',
+          headerRowClassName: '给表头的行附加 className',
+          headerCellClassName: '给表头的单元格附加 className',
+          footerRowClassName: '给表尾的行附加 className',
+          footerCellClassName: '给表尾的单元格附加 className',
+          cellStyle: '给单元格附加样式',
+          headerCellStyle: '给表头单元格附加样式',
+          footerCellStyle: '给表尾单元格附加样式',
+          rowStyle: '给行附加样式',
+          headerRowStyle: '给表头行附加样式',
+          footerRowStyle: '给表尾行附加样式',
+          showFooter: '是否显示表尾',
+          footerMethod: '表尾的数据获取方法，返回一个二维数组',
+          mergeCells: '临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）',
+          mergeFooterItems: '临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）',
+          spanMethod: '自定义合并函数，返回计算后的值，不能用于树形结构、展开行、固定列',
+          footerSpanMethod: '表尾合并行或列，返回计算后的值，不能用于树形结构、展开行、固定列',
           showOverflow: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
           showHeaderOverflow: '设置表头所有内容过长时显示为省略号',
           showAllOverflow: '即将废弃，请使用 show-overflow',
@@ -353,7 +427,7 @@ module.exports = {
           columnKey: '是否需要为每一列的 VNode 设置 key 属性（非特殊情况下不需要使用）',
           rowKey: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
           rowId: '自定义行数据唯一主键的字段名（行数据必须要有唯一主键，默认自动生成）',
-          keepSource: '保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等（开启后性能直线下降，具体取决于数据量）',
+          keepSource: '保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等（开启后影响性能，具体取决于数据量）',
           zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
           seqConfig: '序号配置项',
           sortConfig: '排序配置项',
@@ -373,8 +447,10 @@ module.exports = {
           editConfig: '可编辑配置项',
           validConfig: '校验配置项',
           editRules: '校验规则配置项',
+          emptyText: '空数据时显示的内容',
           emptyRender: '空内容渲染配置项',
-          optimization: '优化配置项',
+          customConfig: '自定义列配置项',
+          optimization: '即将废弃',
 
           params: '额外的参数（可以用来存放一些私有参数）',
 
@@ -388,13 +464,13 @@ module.exports = {
           checkboxAll: '只对 type=checkbox 有效，当手动勾选全选时触发的事件',
           cellClick: '单元格被点击时会触发该事件',
           cellDblclick: '单元格被双击时会触发该事件',
-          cellContextmenu: '单元格被鼠标右键点击时触发该事件',
+          cellContextmenu: '只对 context-menu 配置时有效，单元格被鼠标右键时触发该事件',
           headerCellClick: '表头单元格被点击时会触发该事件',
           headerCellDblclick: '表头单元格被双击时会触发该事件',
-          headerCellContextmenu: '表头单元格被鼠标右键点击时触发该事件',
+          headerCellContextmenu: '只对 context-menu 配置时有效，表头单元格被鼠标右键时触发该事件',
           footerCellClick: '表尾单元格被点击时会触发该事件',
           footerCellDblclick: '表尾单元格被双击时会触发该事件',
-          footerCellContextmenu: '表尾单元格被鼠标右键点击时触发该事件',
+          footerCellContextmenu: '只对 context-menu 配置时有效，表尾单元格被鼠标右键时触发该事件',
           cellMouseenter: '当单元格 hover 进入时会触发该事件',
           cellMouseleave: '当单元格 hover 退出时会触发该事件',
           sortChange: '当排序条件发生变化时会触发该事件',
@@ -419,10 +495,10 @@ module.exports = {
           checkbox: '复选框',
           radio: '单选框',
           expand: '展开行',
-          html: 'HTML 标签（动态渲染任意 HTML 是非常危险的，很容易导致 XSS 攻击，请确保内容是可信的）',
+          html: 'HTML 标签（动态渲染任意 HTML 是非常危险的，很容易导致 XSS 攻击，应该确保内容是可信的）',
           prop: '即将废弃，请使用 field',
           visible: '列是否显示',
-          field: '列字段名（注：属性层级越深，渲染性能将直线下降）',
+          field: '列字段名（注：属性层级越深，渲染性能就越差，例如：aa.bb.cc.dd.ee）',
           label: '即将废弃，请使用 title',
           title: '列标题（支持开启国际化）',
           width: '列宽度（如果为空则均匀分配剩余宽度，如果全部列固定了，可能会存在宽屏下不会铺满，可以配合 "%" 或者 "min-width" 布局）',
@@ -439,19 +515,22 @@ module.exports = {
           headerClassName: '给表头的单元格附加 className，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
           footerClassName: '给表尾的单元格附加 className，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})',
           formatter: '格式化显示内容 Function({cellValue, row, column})',
-          indexMethod: '只对 type=index 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})',
+          indexMethod: '即将废弃，请使用 seqMethod',
+          seqMethod: '只对 type=seq 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})',
           sortable: '是否允许列排序',
           sortBy: '只对 sortable 有效，自定义排序的属性',
-          sortMethod: '自定义排序方法，Array.sort(a, b)',
+          sortMethod: '只对 sortable 有效，列的排序方法，该方法 Function(prevRow, nexRow) 的返回值用来决定该行的排序规则',
           remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
           filters: '配置筛选条件（注：筛选只能用于列表，如果是树结构则过滤根节点）',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
-          filterMethod: '只对 filters 有效，自定义筛选方法 Function({value, row, column})',
+          filterMethod: '只对 filters 有效，列的筛选方法，该方法 Function({value, row, column}) 返回值用来决定该行是否显示',
           filterRender: '筛选渲染器配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: '即将废弃，请使用 table.column-key',
+          cellType: '只对特定功能有效，单元格值类型（例如：导出数据类型设置）',
           cellRender: '默认的渲染器配置项',
           editRender: '可编辑渲染器配置项',
+          contentRender: '内容渲染配置项',
           params: '额外的参数（可以用来存放一些私有参数）'
         }
       },
@@ -473,21 +552,23 @@ module.exports = {
           formConfig: '表单配置项',
           toolbar: '工具栏配置',
           pagerConfig: '分页配置项',
+          zoomConfig: '缩放配置项',
           proxyConfig: '数据代理配置项（基于 Promise API）',
           toolbarRender: '工具栏渲染器配置项'
         }
       },
       toolbar: {
         desc: {
-          id: '唯一 ID 标识',
+          id: '即将废弃',
           size: '尺寸',
           loading: '是否加载中',
           import: '导入按钮配置（需要设置 "import-config"）',
           export: '导出按钮配置（需要设置 "export-config"）',
+          print: '打印按钮配置',
           refresh: '刷新按钮配置',
-          resizable: '列宽拖动配置（需要设置 "id"）',
+          resizable: '即将废弃，请使用 custom-config',
           setting: '即将废弃，请使用 custom',
-          custom: '自定义列配置（需要设置 "id"）'
+          custom: '自定义列配置'
         }
       },
       pager: {
@@ -503,7 +584,6 @@ module.exports = {
           align: '对齐方式',
           border: '带边框',
           background: '带背景颜色',
-          perfect: '默认的样式',
           iconPrevPage: '自定义上一页图标',
           iconJumpPrev: '自定义向上跳页图标',
           iconJumpNext: '自定义向下跳页图标',
@@ -545,9 +625,12 @@ module.exports = {
           type: '类型',
           size: '尺寸',
           name: '用来标识这一项',
-          status: '状态',
+          icon: '前缀图标',
+          status: '按钮的图标',
           disabled: '是否禁用',
-          loading: '是否加载中'
+          loading: '是否加载中',
+          placement: '固定显示下拉面板的方向',
+          transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
       modal: {
@@ -559,7 +642,7 @@ module.exports = {
           type: '窗口类型',
           status: '只对 type=alert | confirm | message 有效，消息状态',
           iconStatus: '自定义状态图标',
-          message: '窗口的内容',
+          message: '显示的文本（支持开启国际化）',
           showHeader: '是否显示头部',
           showFooter: '是否显示底部',
           lockView: '是否锁住页面，不允许窗口之外的任何操作',
@@ -568,20 +651,21 @@ module.exports = {
           maskClosable: '是否允许点击遮罩层关闭窗口',
           escClosable: '是否允许按 Esc 键关闭窗口',
           resize: '是否允许拖动调整窗口大小',
-          duration: '只对 type=message 有效，自动关闭的延时',
+          duration: '只对 type=message 有效，自动关闭的延时，如果为 -1 禁用自动关闭',
           size: '尺寸',
           width: '窗口的宽度',
           height: '窗口的高度',
           minWidth: '窗口的最小宽度',
           minHeight: '窗口的最小高度',
           top: '只对 type=message 有效，消息距离顶部的位置',
+          position: '只对 type=modal 有效，窗口的默认位置，可以设置为 center 居中显示',
           zIndex: '自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）',
           showTitleOverflow: '设置标题内容过长时显示为省略号',
           fullscreen: '默认最大化显示',
           dblclickZoom: '只对 type=modal 有效，是否允许通过双击头部放大或还原窗口',
           remember: '记忆功能，会记住最后操作状态，再次打开窗口时还原窗口状态',
           destroyOnClose: '在窗口关闭时销毁内容',
-          storage: '是否启用 localStorage 本地保存，会将窗口拖动的状态保存到本地（需要设置 id）'
+          storage: '是否启用 localStorage 本地保存，会将窗口拖动的状态保存到本地（需要有 id）'
         }
       },
       form: {
@@ -594,6 +678,7 @@ module.exports = {
           titleAlign: '所有项的标题对齐方式',
           titleWidth: '所有项的标题宽度',
           titleColon: '是否显示标题冒号',
+          titleAsterisk: '是否显示必填字段的红色星号',
           rules: '校验规则配置项'
         }
       },
@@ -606,6 +691,7 @@ module.exports = {
           titleAlign: '标题对齐方式',
           titleWidth: '标题宽度',
           folding: '默认收起',
+          visible: '是否显示',
           visibleMethod: '该方法 Function({data, property}) 的返回值用来决定该项是否显示',
           collapseNode: '折叠节点',
           titlePrefix: '前缀配置项',
@@ -618,22 +704,58 @@ module.exports = {
         desc: {
           value: '绑定值',
           size: '尺寸',
+          multiple: '是否多选',
           placeholder: '空值显示的占位符',
           clearable: '当有值时，是否在右侧显示清除按钮',
           disabled: '是否禁用',
           prefixIcon: '头部图标',
           placement: '固定显示下拉面板的方向',
-          transfer: '是否将弹框容器插入于 body 内'
+          transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
-      selectGroup: {
+      optgroup: {
         desc: {
-          disabled: '是否禁用'
+          label: '显示内容',
+          disabled: '是否禁用',
+          size: '尺寸'
         }
       },
-      selectOption: {
+      option: {
         desc: {
-          disabled: '是否禁用'
+          value: '绑定值',
+          label: '显示内容',
+          disabled: '是否禁用',
+          size: '尺寸'
+        }
+      },
+      switch: {
+        desc: {
+          value: '绑定值',
+          size: '尺寸',
+          disabled: '是否禁用',
+          onLabel: '打开时显示的文字',
+          offLabel: '关闭时显示的文字',
+          onValue: '打开时的值',
+          offValue: '关闭时的值',
+          onIcon: '打开时的图标',
+          offIcon: '关闭时的图标',
+          onClass: '打开时的 className',
+          offClass: '关闭时的 className'
+        }
+      },
+      list: {
+        desc: {
+          data: '列表数据',
+          size: '尺寸'
+        }
+      },
+      pulldown: {
+        desc: {
+          data: '列表数据',
+          size: '尺寸',
+          disabled: '是否禁用',
+          placement: '固定显示下拉面板的方向',
+          transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       }
     }

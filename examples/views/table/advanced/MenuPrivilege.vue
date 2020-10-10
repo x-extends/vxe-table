@@ -10,7 +10,7 @@
       ref="xTable"
       :footer-method="footerMethod"
       :data="tableData"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
+      :context-menu="tableMenu"
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
@@ -51,50 +51,59 @@ export default {
   data () {
     return {
       tableData: [],
-      headerMenus: [
-        [
-          { code: 'exportAll', name: '导出所有.csv', visible: true, disabled: false }
-        ]
-      ],
-      bodyMenus: [
-        [
-          { code: 'details', name: '查看详情', prefixIcon: 'fa fa-link', visible: true, disabled: false }
-        ],
-        [
-          { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
-          { code: 'clear', name: '清除内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false }
-        ],
-        [
-          { code: 'remove', name: '删除', visible: true, disabled: false },
-          {
-            code: 'filter',
-            name: 'app.body.label.filter',
-            visible: true,
-            disabled: false,
-            children: [
-              { code: 'clearFilter', name: '清除筛选', visible: true, disabled: false },
-              { code: 'filterSelect', name: '按所选单元格的值筛选', visible: true, disabled: false }
+      tableMenu: {
+        header: {
+          options: [
+            [
+              { code: 'exportAll', name: '导出所有.csv', visible: true, disabled: false }
             ]
-          },
-          {
-            code: 'sort',
-            name: 'app.body.label.sort',
-            visible: true,
-            disabled: false,
-            children: [
-              { code: 'clearSort', name: '清除排序', visible: true, disabled: false },
-              { code: 'sortAsc', name: '升序', visible: true, disabled: false },
-              { code: 'sortDesc', name: '倒序', visible: true, disabled: false }
+          ]
+        },
+        body: {
+          options: [
+            [
+              { code: 'details', name: '查看详情', prefixIcon: 'fa fa-link', visible: true, disabled: false }
+            ],
+            [
+              { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+              { code: 'clear', name: '清除内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false }
+            ],
+            [
+              { code: 'remove', name: '删除', visible: true, disabled: false },
+              {
+                code: 'filter',
+                name: 'app.body.label.filter',
+                visible: true,
+                disabled: false,
+                children: [
+                  { code: 'clearFilter', name: '清除筛选', visible: true, disabled: false },
+                  { code: 'filterSelect', name: '按所选单元格的值筛选', visible: true, disabled: false }
+                ]
+              },
+              {
+                code: 'sort',
+                name: 'app.body.label.sort',
+                visible: true,
+                disabled: false,
+                children: [
+                  { code: 'clearSort', name: '清除排序', visible: true, disabled: false },
+                  { code: 'sortAsc', name: '升序', visible: true, disabled: false },
+                  { code: 'sortDesc', name: '倒序', visible: true, disabled: false }
+                ]
+              },
+              { code: 'print', name: '打印', disabled: true }
             ]
-          },
-          { code: 'print', name: '打印', disabled: true }
-        ]
-      ],
-      footerMenus: [
-        [
-          { code: 'clearAll', name: '清空数据', visible: true, disabled: false }
-        ]
-      ],
+          ]
+        },
+        footer: {
+          options: [
+            [
+              { code: 'clearAll', name: '清空数据', visible: true, disabled: false }
+            ]
+          ]
+        },
+        visibleMethod: this.visibleMethod
+      },
       demoCodes: [
         `
         <vxe-table
@@ -105,7 +114,7 @@ export default {
           ref="xTable"
           :footer-method="footerMethod"
           :data="tableData"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, footer: {options: footerMenus}, visibleMethod}"
+          :context-menu="tableMenu"
           @header-cell-context-menu="headerCellContextMenuEvent"
           @cell-context-menu="cellContextMenuEvent"
           @context-menu-click="contextMenuClickEvent">
@@ -121,50 +130,59 @@ export default {
           data () {
             return {
               tableData: [],
-              headerMenus: [
-                [
-                  { code: 'exportAll', name: '导出所有.csv', visible: true, disabled: false }
-                ]
-              ],
-              bodyMenus: [
-                [
-                  { code: 'details', name: '查看详情', prefixIcon: 'fa fa-link', visible: true, disabled: false }
-                ],
-                [
-                  { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
-                  { code: 'clear', name: '清除内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false }
-                ],
-                [
-                  { code: 'remove', name: '删除', visible: true, disabled: false },
-                  {
-                    code: 'filter',
-                    name: 'app.body.label.filter',
-                    visible: true,
-                    disabled: false,
-                    children: [
-                      { code: 'clearFilter', name: '清除筛选', visible: true, disabled: false },
-                      { code: 'filterSelect', name: '按所选单元格的值筛选', visible: true, disabled: false }
+              tableMenu: {
+                header: {
+                  options: [
+                    [
+                      { code: 'exportAll', name: '导出所有.csv', visible: true, disabled: false }
                     ]
-                  },
-                  {
-                    code: 'sort',
-                    name: 'app.body.label.sort',
-                    visible: true,
-                    disabled: false,
-                    children: [
-                      { code: 'clearSort', name: '清除排序', visible: true, disabled: false },
-                      { code: 'sortAsc', name: '升序', visible: true, disabled: false },
-                      { code: 'sortDesc', name: '倒序', visible: true, disabled: false }
+                  ]
+                },
+                body: {
+                  options: [
+                    [
+                      { code: 'details', name: '查看详情', prefixIcon: 'fa fa-link', visible: true, disabled: false }
+                    ],
+                    [
+                      { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', visible: true, disabled: false },
+                      { code: 'clear', name: '清除内容', prefixIcon: 'fa fa-copy', visible: true, disabled: false }
+                    ],
+                    [
+                      { code: 'remove', name: '删除', visible: true, disabled: false },
+                      {
+                        code: 'filter',
+                        name: 'app.body.label.filter',
+                        visible: true,
+                        disabled: false,
+                        children: [
+                          { code: 'clearFilter', name: '清除筛选', visible: true, disabled: false },
+                          { code: 'filterSelect', name: '按所选单元格的值筛选', visible: true, disabled: false }
+                        ]
+                      },
+                      {
+                        code: 'sort',
+                        name: 'app.body.label.sort',
+                        visible: true,
+                        disabled: false,
+                        children: [
+                          { code: 'clearSort', name: '清除排序', visible: true, disabled: false },
+                          { code: 'sortAsc', name: '升序', visible: true, disabled: false },
+                          { code: 'sortDesc', name: '倒序', visible: true, disabled: false }
+                        ]
+                      },
+                      { code: 'print', name: '打印', disabled: true }
                     ]
-                  },
-                  { code: 'print', name: '打印', disabled: true }
-                ]
-              ],
-              footerMenus: [
-                [
-                  { code: 'clearAll', name: '清空数据', visible: true, disabled: false }
-                ]
-              ]
+                  ]
+                },
+                footer: {
+                  options: [
+                    [
+                      { code: 'clearAll', name: '清空数据', visible: true, disabled: false }
+                    ]
+                  ]
+                },
+                visibleMethod: this.visibleMethod
+              }
             }
           },
           created () {

@@ -1,15 +1,21 @@
 /**Variable**/
+@import './helpers/mixin.scss';
+@import './base/common.scss';
 
 /*checkbox-group*/
 .vxe-checkbox-group {
   display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
 }
 
 /*checkbox*/
 .vxe-checkbox {
   display: inline-block;
+  vertical-align: middle;
   white-space: nowrap;
   user-select: none;
+  line-height: 1;
   cursor: pointer;
   &+.vxe-checkbox {
     margin-left: 10px;
@@ -20,13 +26,14 @@
       width: 0;
       height: 0;
       border: 0;
+      appearance: none;
     }
     &+.vxe-checkbox--icon {
       position: relative;
       display: inline-block;
       width: 1em;
       height: 1em;
-      background-color: #fff;
+      background-color: $vxe-checkbox-icon-background-color;
       vertical-align: middle;
       border-radius: $vxe-checkbox-border-radius;
       border: $vxe-checkbox-border-width solid $vxe-input-border-color;
@@ -39,17 +46,14 @@
       background-color: $vxe-primary-color;
       border-color: $vxe-primary-color;
       &:before {
-        height: 0.64em;
-        width: 0.32em;
-        top: 0;
-        left: 0.2em;
-        bottom: 0.1em;
-        border-width: 0.12em;
-        border-style: solid;
-        border-color: #fff;
+        height: $vxe-checkbox-checked-height;
+        width: $vxe-checkbox-checked-width;
+        left: 50%;
+        top: 50%;
+        border: $vxe-checkbox-border-width solid $vxe-checkbox-checked-icon-border-color;
         border-left: 0;
         border-top: 0;
-        transform: rotate(45deg);
+        transform: translate(-50%, -50%) rotate(45deg);
       }
       &+.vxe-checkbox--label {
         color: $vxe-primary-color;
@@ -64,12 +68,12 @@
           border-color: $vxe-primary-color;
           &:before {
             border: 0;
-            left: -0.15em;
-            top: 0.28em;
-            height: 0.18em;
-            width: 1em;
-            background-color: #ffffff;
-            transform: scale(.6);
+            left: 50%;
+            top: 50%;
+            height: $vxe-checkbox-indeterminate-height;
+            width: $vxe-checkbox-indeterminate-width;
+            background-color: $vxe-checkbox-indeterminate-icon-background-color;
+            transform: translate(-50%, -50%);
           }
         }
       }
@@ -99,10 +103,10 @@
         border-color: $vxe-input-disabled-color;
         background-color: $vxe-input-disabled-background-color;
         &:before {
-          border-color: #c0c4cc;
+          border-color: $vxe-primary-disabled-color;
         }
         &+.vxe-checkbox--label {
-          color: $vxe-input-disabled-color;
+          color: $vxe-disabled-color;
         }
       }
       &:checked+.vxe-checkbox--icon {
@@ -115,6 +119,8 @@
     padding-left: 0.5em;
     vertical-align: middle;
     display: inline-block;
+    max-width: 50em;
+    @extend %TextEllipsis;
   }
 }
 

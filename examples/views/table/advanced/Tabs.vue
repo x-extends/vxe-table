@@ -2,15 +2,17 @@
   <div>
     <p class="tip">
       Tab 页签切换<span class="red">（如果需要将表格放到隐藏的元素中，那么就必然会导致宽度无法计算）</span>，有以下方法解决<br>
-      1.每次切换 Tab 页显示之后手动调用 <table-api-link prop="recalculate"/> 重新计算宽度<br>
-      2.使用 <table-api-link prop="sync-resize"/> 绑定可视的变量实现自动更新宽度<br>
-      3.使用 <table-api-link prop="auto-resize"/> 自动监听响应式更新宽度
+      1.每次切换 Tab 页显示之后手动调用 <table-api-link prop="recalculate"/> 重新计算表格<br>
+      2.使用 <table-api-link prop="sync-resize"/> 绑定指定的变量来触发重新计算表格<br>
+      3.使用 <table-api-link prop="auto-resize"/> 自动监听父容器来触发重新计算表格
     </p>
 
     <p>
-      <vxe-radio v-model="selectTab" name="xtabs" label="tab1">页签1</vxe-radio>
-      <vxe-radio v-model="selectTab" name="xtabs" label="tab2">页签2</vxe-radio>
-      <vxe-radio v-model="selectTab" name="xtabs" label="tab3">页签3</vxe-radio>
+      <vxe-radio-group v-model="selectTab">
+        <vxe-radio-button label="tab1" content="页签1"></vxe-radio-button>
+        <vxe-radio-button label="tab2" content="页签2"></vxe-radio-button>
+        <vxe-radio-button label="tab3" content="页签3"></vxe-radio-button>
+      </vxe-radio-group>
     </p>
 
     <div v-show="selectTab === 'tab1'">
@@ -73,9 +75,11 @@ export default {
       demoCodes: [
         `
         <p>
-          <vxe-radio v-model="selectTab" name="xtabs" label="tab1">页签1</vxe-radio>
-          <vxe-radio v-model="selectTab" name="xtabs" label="tab2">页签2</vxe-radio>
-          <vxe-radio v-model="selectTab" name="xtabs" label="tab3">页签3</vxe-radio>
+          <vxe-radio-group v-model="selectTab">
+            <vxe-radio-button label="tab1" content="页签1"></vxe-radio-button>
+            <vxe-radio-button label="tab2" content="页签2"></vxe-radio-button>
+            <vxe-radio-button label="tab3" content="页签3"></vxe-radio-button>
+          </vxe-radio-group>
         </p>
 
         <div v-show="selectTab === 'tab1'">

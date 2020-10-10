@@ -2,6 +2,7 @@ export default {
   vxe: {
     error: {
       groupFixed: '如果使用分组表头，固定列必须按组设置',
+<<<<<<< HEAD
       groupMouseRange: '分组表头与 "{0}" 不能同时使用，这可能会出现错误',
       groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
       scrollErrProp: '启用虚拟滚动后不支持该参数 "{0}"',
@@ -26,6 +27,31 @@ export default {
       removeProp: '参数 "{0}" 已废弃，不建议使用，这可能会导致出现错误',
       errFormat: '全局的格式化内容应该使用 "VXETable.formats" 定义，挂载 "formatter={0}" 的方式已不建议使用',
       notType: '不支持的文件类型 "{0}"',
+=======
+      groupMouseRange: '分组表头与 "{{0}}" 不能同时使用，这可能會出現错误',
+      scrollErrProp: '启用虚拟滚动后不支持该参数 "{{0}}"',
+      scrollXNotGroup: '横向虚拟滚动不支持分组表头，请修改正确 "scroll-x.gt" 的参数，否则可能会导致出现错误',
+      errConflicts: '参数 "{{0}}" 与 "{{1}}" 有冲突',
+      unableInsert: '无法插入到指定位置，请检查参数是否正确',
+      useErr: '安装 "{{0}}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
+      barUnableLink: '工具栏无法关联表格',
+      expandContent: '展开行的插槽应该是 "content"，请检查是否正确',
+      reqModule: '缺少 "{{0}}" 模块',
+      reqProp: '缺少必要的 "{{0}}" 参数，这可能会导致出现错误',
+      emptyProp: '参数 "{{0}}" 不允许为空',
+      errProp: '不支持的参数 "{{0}}"，可能为 "{{1}}"',
+      colRepet: 'column.{{0}}="{{1}}" 重复了，这可能会导致某些功能无法使用',
+      notFunc: '方法 "{{0}}" 不存在',
+      notSlot: '插槽 "{{0}}" 不存在',
+      noTree: '树结构不支持 "{{0}}"',
+      notProp: '不支持的参数 "{{0}}"',
+      delFunc: '方法 "{{0}}" 已废弃，请使用 "{{1}}"',
+      delProp: '参数 "{{0}}" 已废弃，请使用 "{{1}}"',
+      delEvent: '事件 "{{0}}" 已废弃，请使用 "{{1}}"',
+      removeProp: '参数 "{{0}}" 已废弃，不建议使用，这可能会导致出现错误',
+      errFormat: '全局的格式化内容应该使用 "VXETable.formats" 定义，挂载 "formatter={{0}}" 的方式已不建议使用',
+      notType: '不支持的文件类型 "{{0}}"',
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       notExp: '该浏览器不支持导入/导出功能',
       impFields: '导入失败，请检查字段名和数据格式是否正确',
       treeNotImp: '树表格不支持导入'
@@ -109,9 +135,15 @@ export default {
         },
         empty: '(空值)',
         reError: '无效的正则表达式',
+<<<<<<< HEAD
         recordCount: '已找到 {0} 个单元格',
         notCell: '找不到匹配的单元格',
         replaceSuccess: '成功替换 {0} 个单元格'
+=======
+        recordCount: '已找到 {{0}} 个单元格',
+        notCell: '找不到匹配的单元格',
+        replaceSuccess: '成功替换 {{0}} 个单元格'
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       }
     },
     table: {
@@ -124,11 +156,19 @@ export default {
       sortAsc: '升序：最低到最高',
       sortDesc: '降序：最高到最低',
       filter: '对所选的列启用筛选',
+<<<<<<< HEAD
       impSuccess: '成功导入 {0} 条记录',
       expLoading: '正在导出中',
       expSuccess: '导出成功',
       expFilename: '导出_{0}',
       expOriginFilename: '导出_源_{0}',
+=======
+      impSuccess: '成功导入 {{0}} 条记录',
+      expLoading: '正在导出中',
+      expSuccess: '导出成功',
+      expFilename: '导出_{{0}}',
+      expOriginFilename: '导出_源_{{0}}',
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       customTitle: '列设置',
       customAll: '全部',
       customConfirm: '确认',
@@ -247,8 +287,13 @@ export default {
         m10: '10 月',
         m11: '11 月',
         m12: '12 月',
+<<<<<<< HEAD
         monthLabel: '{0} 年',
         dayLabel: '{0} 年 {1}',
+=======
+        monthLabel: '{{0}} 年',
+        dayLabel: '{{0}} 年 {{1}}',
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
         labelFormat: {
           date: 'yyyy-MM-dd',
           time: 'HH:mm:ss',

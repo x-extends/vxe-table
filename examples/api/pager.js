@@ -108,11 +108,20 @@ const apis = [
       },
       {
         name: 'perfect',
-        descKey: 'app.api.pager.desc.perfect',
+        desc: '配套的样式',
         version: '1.15.12',
         type: 'Boolean',
         enum: '',
         defVal: '默认 false，继承 setup.pager.perfect',
+        list: []
+      },
+      {
+        name: 'auto-hidden',
+        desc: '当只有一页时自动隐藏',
+        version: '1.15.27',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.pager.autoHidden',
         list: []
       },
       {
@@ -169,7 +178,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'left',
+        desc: '自定义左侧模板',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '{}',
+        list: []
+      },
+      {
+        name: 'right',
+        desc: '自定义右侧模板',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '{}',
+        list: []
+      }
+    ]
   },
   {
     name: 'Events',
@@ -205,7 +233,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{type, currentPage, pageSize}',
+        defVal: '{ type, currentPage, pageSize, $event }',
         list: []
       }
     ]
@@ -218,42 +246,33 @@ const apis = [
     enum: '',
     defVal: '',
     list: [
-      {
-        name: 'prevPage()',
-        desc: '跳转到上一页',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'nextPage()',
-        desc: '跳转到下一页',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'jumpPage(currentPage)',
-        desc: '跳转到指定页',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: 'currentPage',
-        list: []
-      },
-      {
-        name: 'changePageSize(pageSize)',
-        desc: '更改每页大小',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: 'pageSize',
-        list: []
-      }
+      // {
+      //   name: 'prevPage()',
+      //   desc: '跳转到上一页',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'nextPage()',
+      //   desc: '跳转到下一页',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '',
+      //   list: []
+      // },
+      // {
+      //   name: 'jumpPage(currentPage)',
+      //   desc: '跳转到指定页',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: 'currentPage',
+      //   list: []
+      // }
     ]
   }
 ]

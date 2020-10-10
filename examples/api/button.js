@@ -44,11 +44,38 @@ const apis = [
         list: []
       },
       {
+        name: 'icon',
+        descKey: 'app.api.button.desc.icon',
+        version: '1.15.25',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'round',
+        desc: '圆角边框',
+        version: '1.15.29',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'circle',
+        desc: '圆角按钮',
+        version: '1.15.29',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'status',
         descKey: 'app.api.button.desc.status',
-        version: '1.15.18',
+        version: '1.15.27',
         type: 'String',
-        enum: 'primary',
+        enum: 'perfect, primary, success, info, warning, danger',
         defVal: '',
         list: []
       },
@@ -68,6 +95,24 @@ const apis = [
         type: 'Boolean',
         enum: '',
         defVal: 'false',
+        list: []
+      },
+      {
+        name: 'placement',
+        descKey: 'app.api.button.desc.placement',
+        version: '1.15.27',
+        type: 'String',
+        enum: 'top, bottom',
+        defVal: 'bottom',
+        list: []
+      },
+      {
+        name: 'transfer',
+        descKey: 'app.api.button.desc.transfer',
+        version: '1.15.27',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.button.transfer',
         list: []
       }
     ]
@@ -110,11 +155,11 @@ const apis = [
     list: [
       {
         name: '*',
-        desc: '在需要时触发该事件',
+        desc: '原生事件',
         version: '',
         type: '',
         enum: '',
-        defVal: '{}, event',
+        defVal: '{ $event }',
         list: []
       },
       {
@@ -123,7 +168,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ name }, event',
+        defVal: '{ name, $event }',
         list: []
       }
     ]
@@ -135,7 +180,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'focus()',
+        desc: '使按钮获取焦点',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'blur()',
+        desc: '使按钮失去焦点',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   }
 ]
 

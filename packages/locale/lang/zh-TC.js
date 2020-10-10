@@ -2,6 +2,7 @@ export default {
   vxe: {
     error: {
       groupFixed: '如果使用分組表頭，固定列必須按組設定',
+<<<<<<< HEAD
       groupMouseRange: '分组表頭與 "{0}" 不能同時使用，這可能會出現錯誤',
       groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
       scrollErrProp: '啟用虛擬滾動後不支持該參數 "{0}"',
@@ -26,6 +27,31 @@ export default {
       removeProp: '參數 "{0}" 已停用，不建議使用，這可能會導致出現錯誤',
       errFormat: '全域的格式化內容應該使用 "VXETable.formats" 定義，掛載 "formatter={0}" 的管道已不建議使用',
       notType: '不支持的檔案類型 "{0}"',
+=======
+      groupMouseRange: '分组表頭與 "{{0}}" 不能同時使用，這可能會出現錯誤',
+      scrollErrProp: '啟用虛擬滾動後不支持該參數 "{{0}}"',
+      scrollXNotGroup: '橫向虛擬滾動不支持分組表頭，請修改正確 "scroll-x.gt" 的參數，否則可能會導致出現錯誤',
+      errConflicts: '參數 "{{0}}" 與 "{{1}}" 有衝突',
+      unableInsert: '無法插入到指定位置，請檢查參數是否正確',
+      useErr: '安裝 "{{0}}" 模組時發生錯誤，可能順序不正確，依賴的模組需要在Table之前安裝',
+      barUnableLink: '工具欄無法關聯表格',
+      expandContent: '展開行的插槽應該是 “content”，請檢查是否正確',
+      reqModule: '缺少 "{{0}}" 模組',
+      reqProp: '缺少必要的 "{{0}}" 參數，可能會導致出現錯誤',
+      emptyProp: '參數 "{{0}}" 不允許為空',
+      errProp: '不支持的參數 "{{0}}"，可能為 "{{1}}"',
+      colRepet: 'column.{{0}}="{{1}}" 重複了，這可能會導致某些功能無法使用',
+      notFunc: '方法 "{{0}}" 不存在',
+      notSlot: '插槽 "{{0}}" 不存在',
+      noTree: '樹狀結構不支援 {{0}}',
+      notProp: '不支持的參數 "{{0}}"',
+      delFunc: '方法 "{{0}}" 已停用，請使用 "{{1}}"',
+      delProp: '參數 "{{0}}" 已停用，請使用 "{{1}}"',
+      delEvent: '事件 "{{0}}" 已停用，請使用 "{{1}}"',
+      removeProp: '參數 "{{0}}" 已停用，不建議使用，這可能會導致出現錯誤',
+      errFormat: '全域的格式化內容應該使用 "VXETable.formats" 定義，掛載 "formatter={{0}}" 的管道已不建議使用',
+      notType: '不支持的檔案類型 "{{0}}"',
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       notExp: '該瀏覽器不支持導入/匯出功能',
       impFields: '導入失敗，請檢查欄位名和數據格式是否正確',
       treeNotImp: '樹狀表格不支持導入'
@@ -109,9 +135,15 @@ export default {
         },
         empty: '(空值)',
         reError: '無效的規則運算式',
+<<<<<<< HEAD
         recordCount: '已找到 {0} 個儲存格',
         notCell: '找不到匹配的儲存格',
         replaceSuccess: '成功替換 {0} 個儲存格'
+=======
+        recordCount: '已找到 {{0}} 個儲存格',
+        notCell: '找不到匹配的儲存格',
+        replaceSuccess: '成功替換 {{0}} 個儲存格'
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       }
     },
     table: {
@@ -124,11 +156,19 @@ export default {
       sortAsc: '按低到高排序',
       sortDesc: '按高到低排序',
       filter: '對所選的列啟用篩選',
+<<<<<<< HEAD
       impSuccess: '成功導入 {0} 條記錄',
       expLoading: '正在匯出中',
       expSuccess: '匯出成功',
       expOriginFilename: '匯出_{0}',
       expSrcFilename: '匯出_從_{0}',
+=======
+      impSuccess: '成功導入 {{0}} 條記錄',
+      expLoading: '正在匯出中',
+      expSuccess: '匯出成功',
+      expOriginFilename: '匯出_{{0}}',
+      expSrcFilename: '匯出_從_{{0}}',
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       customTitle: '列設定',
       customAll: '全部',
       customConfirm: '確認',
@@ -148,8 +188,13 @@ export default {
     },
     pager: {
       goto: '前往',
+<<<<<<< HEAD
       pagesize: '{0}項/頁',
       total: '共 {0} 項記錄',
+=======
+      pagesize: '{{0}}項/頁',
+      total: '共 {{0}} 項記錄',
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       pageClassifier: '頁',
       prevPage: '上一頁',
       nextPage: '下一頁',
@@ -203,10 +248,13 @@ export default {
       expHeaderTitle: '是否需要匯出表頭',
       expOptFooter: '錶尾',
       expFooterTitle: '是否需要匯出錶尾',
+<<<<<<< HEAD
       expOptColgroup: '分組表頭',
       expColgroupTitle: '如果存在，則匯出帶有分組結構的表頭',
       expOptMerge: '儲存格合併',
       expMergeTitle: '如果存在，則匯出帶有合併結構的儲存格',
+=======
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
       expOptOriginal: '源數據',
       expOriginalTitle: '是否需要匯出源數據，如果勾上則支持導入到表格中',
       expPrint: '列印',
@@ -247,8 +295,13 @@ export default {
         m10: '10 月',
         m11: '11 月',
         m12: '12 月',
+<<<<<<< HEAD
         monthLabel: '{0} 年',
         dayLabel: '{0} 年 {1}',
+=======
+        monthLabel: '{{0}} 年',
+        dayLabel: '{{0}} 年 {{1}}',
+>>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
         labelFormat: {
           date: 'yyyy-MM-dd',
           time: 'HH:mm:ss',

@@ -1,14 +1,15 @@
 <template>
   <div>
     <p class="tip">
-      统计编辑列的表尾合计，对于某些场景下如果需要频繁计算的可以手动调用 <table-api-link prop="updateFooter"/> 函数<br>
-      <span class="red">（注：<table-api-link prop="footer-method"/> 合计的逻辑都是自行实现的，该示例仅供参考）</span>
+      通过表尾来实现合计功能，对于某些场景下如果需要频繁计算的可以手动调用 <table-api-link prop="updateFooter"/> 函数<br>
+      <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的数据都是自行生成的，该示例仅供参考）</span>
     </p>
 
     <vxe-toolbar export>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
-        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="removeEvent">删除</vxe-button>
+        <vxe-button @click="saveEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -17,6 +18,7 @@
       show-footer
       show-overflow
       highlight-hover-row
+      export-config
       ref="xTable"
       height="400"
       class="editable-footer"
@@ -24,9 +26,10 @@
       :footer-cell-class-name="footerCellClassName"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number', min: 1, max: 120}}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
     </vxe-table>
@@ -53,7 +56,8 @@ export default {
         <vxe-toolbar export>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
-            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+            <vxe-button @click="removeEvent">删除</vxe-button>
+            <vxe-button @click="saveEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -62,6 +66,7 @@ export default {
           show-footer
           show-overflow
           highlight-hover-row
+          export-config
           ref="xTable"
           height="400"
           class="editable-footer"
@@ -69,9 +74,10 @@ export default {
           :footer-cell-class-name="footerCellClassName"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number', min: 1, max: 120}}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
         </vxe-table>
@@ -84,7 +90,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             footerCellClassName ({ $rowIndex, column, columnIndex }) {
@@ -103,7 +109,7 @@ export default {
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return parseInt(XEUtils.mean(data, column.property))
                   }
                   return null
                 }),
@@ -120,13 +126,17 @@ export default {
             },
             insertEvent () {
               let record = {
-                name: 'New name'
+                name: 'New name',
+                age: 18
               }
               this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveCell(row, 'age'))
             },
-            getInsertEvent () {
-              let insertRecords = this.$refs.xTable.getInsertRecords()
-              this.$XModal.alert(insertRecords.length)
+            removeEvent () {
+              this.$refs.xTable.removeCheckboxRow()
+            },
+            saveEvent () {
+              const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+              this.$XModal.alert(\`insertRecords=\${insertRecords.length} removeRecords=\${removeRecords.length} updateRecords=\${updateRecords.length}\`)
             }
           }
         }
@@ -135,7 +145,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -159,7 +169,7 @@ export default {
             return '平均'
           }
           if (['age'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return parseInt(XEUtils.mean(data, column.property))
           }
           return null
         }),
@@ -176,13 +186,17 @@ export default {
     },
     insertEvent () {
       const record = {
-        name: 'New name'
+        name: 'New name',
+        age: 18
       }
       this.$refs.xTable.insert(record).then(({ row }) => this.$refs.xTable.setActiveCell(row, 'age'))
     },
-    getInsertEvent () {
-      const insertRecords = this.$refs.xTable.getInsertRecords()
-      this.$XModal.alert(insertRecords.length)
+    removeEvent () {
+      this.$refs.xTable.removeCheckboxRow()
+    },
+    saveEvent () {
+      const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+      this.$XModal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
     }
   }
 }

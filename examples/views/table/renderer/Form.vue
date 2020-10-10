@@ -1,10 +1,11 @@
 <template>
   <div>
     <p class="tip">
-      表单-项渲染器 <grid-api-link prop="itemRender"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
+      表单-项渲染 <grid-api-link prop="itemRender"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/v3/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderItem (h, renderOpts, <vxe-tooltip content="{ data, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项<br>
-      itemVisibleMethod (<vxe-tooltip content="{ data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项可视函数<br>
+      renderItem (h, renderOpts, <vxe-tooltip content="params: { data, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项<br>
+      itemVisibleMethod (<vxe-tooltip content="params: { data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项可视函数<br>
+      itemResetMethod (<vxe-tooltip content="params: { data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项重置函数<br>
     </p>
 
     <vxe-grid
@@ -43,10 +44,6 @@ export default {
         { field: 'role', title: 'Role' }
       ],
       tableForm: {
-        data: {
-          name: '',
-          age: ''
-        },
         items: [
           { field: 'name', title: '名称', itemRender: { name: 'FormItemInput', props: { clearable: true, placeholder: '请输入名称' } } },
           { field: 'age', title: '年龄', itemRender: { name: 'FormItemInput', props: { type: 'number', clearable: true, placeholder: '请输入年龄' } } },
@@ -62,7 +59,7 @@ export default {
       },
       demoCodes: [
         `
-        // 创建一个表单-输入框渲染器
+        // 创建一个简单的表单-输入框渲染
         VXETable.renderer.add('FormItemInput', {
           // 项显示模板
           renderItem (h, renderOpts, params) {
@@ -98,10 +95,6 @@ export default {
                 { field: 'role', title: 'Role' }
               ],
               tableForm: {
-                data: {
-                  name: '',
-                  age: ''
-                },
                 items: [
                   { field: 'name', title: '名称', itemRender: { name: 'FormItemInput', props: { clearable: true, placeholder: '请输入名称' } } },
                   { field: 'age', title: '年龄', itemRender: { name: 'FormItemInput', props: { type: 'number', clearable: true, placeholder: '请输入年龄' } } },

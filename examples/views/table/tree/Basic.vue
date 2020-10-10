@@ -2,13 +2,13 @@
   <div>
     <p class="tip">
       树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格，通过 <table-api-link prop="row-id"/> 指定主键，还可以通过 <table-api-link prop="trigger"/> 指定触发方式<br>
-      <span class="red">(注：树结构不支持大量数据)</span>
+      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
     </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-toolbar>
@@ -16,7 +16,7 @@
     <vxe-table
       resizable
       tree-config
-      border="none"
+      border="inner"
       ref="xTree"
       :data="tableData"
       @toggle-tree-expand="toggleExpandChangeEvent">
@@ -57,6 +57,7 @@
 
     <vxe-table
       border
+      show-overflow
       row-id="id"
       :data="tableData"
       :tree-config="{children: 'children', expandAll: true}">
@@ -92,7 +93,7 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-toolbar>
@@ -100,7 +101,7 @@ export default {
         <vxe-table
           resizable
           tree-config
-          border="none"
+          border="inner"
           ref="xTree"
           :data="tableData"
           @toggle-tree-expand="toggleExpandChangeEvent">
@@ -118,7 +119,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             toggleExpandChangeEvent ({ row, expanded }) {
@@ -153,13 +154,14 @@ export default {
           },
           created () {
             this.defaultExpandKeys = ['30000']
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `,
         `
         <vxe-table
           border
+          show-overflow
           row-id="id"
           :data="tableData"
           :tree-config="{children: 'children', expandAll: true}">
@@ -180,7 +182,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `

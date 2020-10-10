@@ -1,8 +1,6 @@
 <template>
   <div>
-    <p class="tip">
-      虚拟滚动渲染，局部递增数据<br>
-    </p>
+    <p class="tip">局部递增数据</p>
 
     <vxe-toolbar :loading="loading">
       <template v-slot:buttons>
@@ -24,6 +22,7 @@
       height="500"
       row-id="id"
       :loading="loading">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -71,6 +70,7 @@ export default {
           height="500"
           row-id="id"
           :loading="loading">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -96,7 +96,10 @@ export default {
               this.loading = true
               this.findList(size).then(data => {
                 this.allData = this.allData.concat(data)// 局部追加并保存所有数据
-                this.$refs.xTable.loadData(this.allData)
+                const xTable = this.$refs.xTable
+                if (xTable) {
+                  xTable.loadData(this.allData)
+                }
                 this.loading = false
               })
             },
@@ -139,7 +142,10 @@ export default {
       this.loading = true
       this.findList(size).then(data => {
         this.allData = this.allData.concat(data)// 局部追加并保存所有数据
-        this.$refs.xTable.loadData(this.allData)
+        const xTable = this.$refs.xTable
+        if (xTable) {
+          xTable.loadData(this.allData)
+        }
         this.loading = false
       })
     },

@@ -1,11 +1,9 @@
 <template>
   <div>
     <vxe-toolbar
-      id="document_api"
+      custom
       :loading="loading"
-      :refresh="{query: loadList}"
-      :resizable="{storage: true}"
-      :custom="{storage: true, checkMethod: checkColumnMethod}">
+      :refresh="{query: loadList}">
       <template v-slot:buttons>
         <vxe-input clearable class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
       </template>
@@ -13,28 +11,44 @@
 
     <vxe-table
       resizable
+      auto-resize
+      show-header-overflow
       highlight-current-row
       highlight-hover-row
       highlight-current-column
       ref="xTable"
+      id="document_api"
       class="api-table"
       row-id="id"
       :loading="loading"
       :cell-class-name="cellClassNameFunc"
       :data="apiList"
-      :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus},}"
+      :custom-config="{storage: true, checkMethod: checkColumnMethod}"
+      :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys}"
+      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod: menuVisibleMethod}"
+      :tooltip-config="{contentMethod: showTooltipMethod}"
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" :filters="nameFilters" tree-node></vxe-table-column>
+      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" show-overflow :title-help="{message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'}" :filters="nameFilters" tree-node></vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" type="html" min-width="200"></vxe-table-column>
       <vxe-table-column field="type" title="app.api.title.type" type="html" min-width="140"></vxe-table-column>
       <vxe-table-column field="enum" :title="$t('app.api.title.enum')" type="html" min-width="150"></vxe-table-column>
-      <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160"></vxe-table-column>
-      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120">
+      <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160" :title-help="{message: '部分参数可支持全局设置，具体请查阅相关说明'}"></vxe-table-column>
+      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120" :title-help="{message: '该文档与最新版本保持同步，如果遇到参数无效时，需要检查当前使用的版本号是否支持该参数'}">
         <template v-slot="{ row }">
-          <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+          <template v-if="row.version === 'pro'">
+            <a class="link pro" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">pro</a>
+          </template>
+           <template v-else-if="row.disabled">
+            <span class="disabled">已废弃</span>
+          </template>
+           <template v-else-if="row.abandoned">
+            <span class="abandoned">评估阶段</span>
+          </template>
+          <template v-else>
+            <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+          </template>
         </template>
       </vxe-table-column>
       <template v-slot:empty>
@@ -49,6 +63,7 @@ import XEUtils from 'xe-utils'
 import pack from '../../../package.json'
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
+import tableColgroupAPI from '../../api/table-colgroup'
 import tableColumnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
@@ -56,9 +71,13 @@ import virtualTreeAPI from '../../api/virtual-tree'
 import excelAPI from '../../api/excel'
 import pagerAPI from '../../api/pager'
 import radioAPI from '../../api/radio'
+import radioGroupAPI from '../../api/radio-group'
+import radioButtonAPI from '../../api/radio-button'
 import checkboxAPI from '../../api/checkbox'
+import checkboxGroupAPI from '../../api/checkbox-group'
 import inputAPI from '../../api/input'
 import selectAPI from '../../api/select'
+import optgroupAPI from '../../api/optgroup'
 import optionAPI from '../../api/option'
 import textareaAPI from '../../api/textarea'
 import buttonAPI from '../../api/button'
@@ -66,11 +85,58 @@ import tooltipAPI from '../../api/tooltip'
 import modalAPI from '../../api/modal'
 import formAPI from '../../api/form'
 import formItemAPI from '../../api/form-item'
+import switchAPI from '../../api/switch'
+import listAPI from '../../api/list'
+import pulldownAPI from '../../api/pulldown'
+
+// import i18n from '../../i18n'
+// const attributes = window.attributes = {}
+// const tags = window.tags = {}
+
+// const tagMaps = [
+//   ['vxe-table', tableAPI, { subtags: ['vxe-table-column'], description: '基础表格' }],
+//   ['vxe-table-colgroup', tableColgroupAPI, { description: '基础表格 - 分组列' }],
+//   ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
+//   ['vxe-grid', gridAPI, { description: '高级表格' }],
+//   ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
+//   ['vxe-pager', pagerAPI, { description: '分页' }],
+//   ['vxe-radio', radioAPI, { description: '单选框' }],
+//   ['vxe-radio-group', radioGroupAPI, { description: '单选组' }],
+//   ['vxe-radio-button', radioButtonAPI, { description: '单选按钮' }],
+//   ['vxe-checkbox', checkboxAPI, { description: '复选框' }],
+//   ['vxe-checkbox-group', checkboxGroupAPI, { description: '复选组' }],
+//   ['vxe-switch', switchAPI, { description: '开关按钮' }],
+//   ['vxe-input', inputAPI, { description: '输入框' }],
+//   ['vxe-select', selectAPI, { subtags: ['vxe-optgroup', 'vxe-option'], description: '下拉框' }],
+//   ['vxe-optgroup', optgroupAPI, { subtags: ['vxe-option'], description: '下拉框 - 分组' }],
+//   ['vxe-option', optionAPI, { description: '下拉框 - 选项' }],
+//   ['vxe-button', buttonAPI, { description: '按钮' }],
+//   ['vxe-tooltip', tooltipAPI, { description: '工具提示' }],
+//   ['vxe-modal', modalAPI, { description: '模态窗口' }],
+//   ['vxe-form', formAPI, { subtags: ['vxe-form-item'], description: '表单' }],
+//   ['vxe-form-item', formItemAPI, { description: '表单 - 项' }],
+//   ['vxe-list', listAPI, { description: '列表' }],
+//   ['vxe-pulldown', pulldownAPI, { description: '下拉容器' }]
+// ]
+
+// tagMaps.forEach(confs => {
+//   const props = confs[1].find(item => item.name === 'Props').list
+//   const keys = []
+//   props.forEach(item => {
+//     const name = XEUtils.kebabCase(item.name)
+//     attributes[`${confs[0]}/${name}`] = {
+//       type: XEUtils.toString(item.type).toLowerCase(),
+//       description: item.descKey ? i18n.t(item.descKey) : item.desc
+//     }
+//     keys.push(name)
+//   })
+//   tags[confs[0]] = Object.assign({ attributes: keys }, confs[2])
+// })
 
 export default {
   data () {
     return {
-      filterName: this.$route.query.filterName ? decodeURIComponent(this.$route.query.filterName) : '',
+      filterName: (this.$route.query.q || this.$route.query.filterName) ? decodeURIComponent(this.$route.query.q || this.$route.query.filterName) : '',
       apiList: [],
       defaultExpandRowKeys: [],
       loading: false,
@@ -85,7 +151,8 @@ export default {
         [
           {
             code: 'hideColumn',
-            name: '隐藏列'
+            name: '隐藏列',
+            disabled: false
           },
           {
             code: 'showAllColumn',
@@ -99,7 +166,7 @@ export default {
         [
           {
             code: 'exportXLSXAPI',
-            name: '完整文档',
+            name: '导出文档.xlsx',
             prefixIcon: 'fa fa-download'
           }
         ]
@@ -119,12 +186,12 @@ export default {
           },
           {
             code: 'exportHTMLAPI',
-            name: '导出 HTML 文档',
+            name: '导出文档.html',
             prefixIcon: 'fa fa-download'
           },
           {
             code: 'exportXLSXAPI',
-            name: '导出 XLSX 文档',
+            name: '导出文档.xlsx',
             prefixIcon: 'fa fa-download'
           }
         ],
@@ -167,6 +234,9 @@ export default {
             case 'table':
               apis = tableAPI
               break
+            case 'table-colgroup':
+              apis = tableColgroupAPI
+              break
             case 'table-column':
               apis = tableColumnAPI
               break
@@ -188,8 +258,17 @@ export default {
             case 'radio':
               apis = radioAPI
               break
+            case 'radio-group':
+              apis = radioGroupAPI
+              break
+            case 'radio-button':
+              apis = radioButtonAPI
+              break
             case 'checkbox':
               apis = checkboxAPI
+              break
+            case 'checkbox-group':
+              apis = checkboxGroupAPI
               break
             case 'input':
               apis = inputAPI
@@ -199,6 +278,9 @@ export default {
               break
             case 'select':
               apis = selectAPI
+              break
+            case 'optgroup':
+              apis = optgroupAPI
               break
             case 'option':
               apis = optionAPI
@@ -217,6 +299,15 @@ export default {
               break
             case 'form-item':
               apis = formItemAPI
+              break
+            case 'switch':
+              apis = switchAPI
+              break
+            case 'list':
+              apis = listAPI
+              break
+            case 'pulldown':
+              apis = pulldownAPI
               break
           }
           // 生成唯一 id
@@ -241,9 +332,10 @@ export default {
     },
     cellClassNameFunc ({ row, column }) {
       return {
+        'api-pro': row.version === 'pro',
         'api-disabled': row.disabled,
         'api-abandoned': row.abandoned,
-        'disabled-line-through': (row.disabled || row.abandoned) && column.property === 'name'
+        'disabled-line-through': (row.disabled) && column.property === 'name'
       }
     },
     checkColumnMethod ({ column }) {
@@ -251,6 +343,20 @@ export default {
         return false
       }
       return true
+    },
+    showTooltipMethod ({ type, row, column }) {
+      if (type === 'body') {
+        if (column.property === 'name') {
+          if (row.disabled) {
+            return '该参数已经被废弃了，除非不打算更新版本，否则不应该被使用'
+          } else if (row.abandoned) {
+            return '该参数属于评估阶段，谨慎使用，后续有可能会被废弃的风险'
+          } else if (row.version === 'pro') {
+            return '该参数属于 pro 版本功能，开源版本不支持该功能，如有需要可联系邮件：xu_liangzhan@163.com'
+          }
+        }
+      }
+      return null
     },
     headerCellContextMenuEvent ({ column }) {
       this.$refs.xTable.setCurrentColumn(column)
@@ -265,10 +371,10 @@ export default {
           xTable.hideColumn(column)
           break
         case 'showAllColumn':
-          xTable.resetColumn()
+          xTable.resetColumn({ visible: true })
           break
         case 'resetColumn':
-          xTable.resetAll()
+          xTable.resetColumn(true)
           break
         case 'exportHTMLAPI':
           xTable.exportData({
@@ -305,15 +411,26 @@ export default {
           })
           break
         case 'allExpand':
-          xTable.setAllTreeExpansion(true)
+          xTable.setAllTreeExpand(true)
           break
         case 'allShrink':
           xTable.clearTreeExpand()
           break
       }
     },
+    menuVisibleMethod ({ options, column }) {
+      const isDisabled = !this.checkColumnMethod({ column })
+      options.forEach(list => {
+        list.forEach(item => {
+          if (['hideColumn'].includes(item.code)) {
+            item.disabled = isDisabled
+          }
+        })
+      })
+      return true
+    },
     handleSearch () {
-      const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      const filterName = XEUtils.kebabCase(XEUtils.toString(this.filterName).trim()).toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const options = { children: 'list' }
@@ -326,12 +443,16 @@ export default {
         }, options)
         this.apiList = rest
         this.$nextTick(() => {
-          this.$refs.xTable.setAllTreeExpansion(true)
+          if (this.$refs.xTable) {
+            this.$refs.xTable.setAllTreeExpand(true)
+          }
         })
       } else {
         this.apiList = this.tableData
         this.$nextTick(() => {
-          this.$refs.xTable.setTreeExpansion(this.defaultExpandRows, true)
+          if (this.$refs.xTable) {
+            this.$refs.xTable.setTreeExpand(this.defaultExpandRows, true)
+          }
         })
       }
     },
@@ -346,6 +467,7 @@ export default {
     if (this.$refs.xTable) {
       this.$refs.xTable.clearAll()
     }
+    this.handleSearch()
   }
 }
 </script>

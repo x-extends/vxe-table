@@ -2,20 +2,18 @@
   <div id="app" @click="clickEvent">
     <header class="page-header">
       <div class="left">
-        <a href="https://github.com/xuliangzhan/vxe-table">
-          <span class="title">🐬vxe-table</span>
+        <a href="/vxe-table/">
+          <img src="/vxe-table/logo.png" width="18">
+          <span class="title">vxe-table</span>
         </a>
         <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
           <img src='https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=dark' alt='star'>
         </a>
-        <a href="https://github.com/xuliangzhan/vxe-table/stargazers">
+        <a href="https://github.com/x-extends/vxe-table/stargazers">
           <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg">
         </a>
         <a href="http://npm-stat.com/charts.html?package=vxe-table">
           <img src="https://img.shields.io/npm/dm/vxe-table.svg">
-        </a>
-        <a href="https://github.com/xuliangzhan/vxe-table/blob/master/LICENSE">
-          <img src="https://img.shields.io/github/license/mashape/apistatus.svg">
         </a>
       </div>
       <div class="right">
@@ -24,37 +22,33 @@
           <span>{{ $t('app.body.label.translations') }}:</span>
           <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
             <vxe-option value="zh_CN" label="中文"></vxe-option>
+            <vxe-option value="zh_TC" label="繁體中文"></vxe-option>
             <vxe-option value="en_US" label="English"></vxe-option>
+            <!-- <vxe-option value="ja_JP" label="ジャパン"></vxe-option> -->
           </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
-            <vxe-option value="1" label="1.x"></vxe-option>
-            <vxe-option value="2" label="2.x"></vxe-option>
-            <vxe-option value="3" label="3.x"></vxe-option>
-            <vxe-option value="4" label="4.x"></vxe-option>
+            <vxe-option value="1" :label="$t('app.body.other.v1')"></vxe-option>
+            <vxe-option value="2" :label="$t('app.body.other.v2')"></vxe-option>
+            <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
+            <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
-          <vxe-tooltip :content="$t('app.footer.donationDesc')" enterable>
-            <router-link class="donation" :to="{name: 'Donation'}">{{ $t('app.footer.donation') }}☕</router-link>
-          </vxe-tooltip>
+          <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
         </div>
       </div>
     </header>
     <div class="page-container">
-      <div class="aside">
+      <div class="aside" :class="{visible: showLeft}">
         <div class="header">
           <div v-if="stableVersionList.length" class="version-list">
             <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
-            <select>
-              <option v-for="(pack, index) in stableVersionList" :key="index">{{ pack.version }}</option>
-            </select>
+            <vxe-select class="stable-select" v-model="selectStableVersion" size="mini" :options="stableVersionList"></vxe-select>
             <template v-if="showBetaVetsion">
               <span class="title">{{  $t('app.body.label.latestVersion')}}</span>
-              <select>
-                <option v-for="(pack, index) in newBetsVersionList" :key="index">{{ pack.version }}</option>
-              </select>
+              <vxe-select class="latest-select" v-model="selectBetaVersion" size="mini" :options="newBetsVersionList"></vxe-select>
             </template>
           </div>
-          <vxe-input clearable v-model="filterName" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
+          <vxe-input clearable v-model="filterName" type="search" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
         </div>
         <div class="body">
           <template v-if="apiList.length">
@@ -65,7 +59,7 @@
                   <span v-html="item.label"></span>
                 </a>
                 <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
-                  <li v-for="(child, cIndex) in item.children" :key="cIndex">
+                  <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name), 'is-bad': ['TableBadEdit', 'TableBadLineHeight', 'TableBadNonsupport'].includes(child.locat.name)}">
                     <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
                     <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
                   </li>
@@ -78,11 +72,13 @@
           </template>
         </div>
       </div>
+      <div class="oper-wrapper" v-show="showOperBtn">
+        <vxe-button class="oper-btn" :icon="showLeft ? 'vxe-icon--arrow-left' : 'vxe-icon--arrow-right'" @click="showLeft = !showLeft"></vxe-button>
+      </div>
       <div class="body">
-        <div class="content" :class="{full: ['VXEAPI', 'Donation'].includes($route.name)}">
-          <template v-if="$route.path.indexOf('/module') === -1 && $route.path.indexOf('/api') === -1">
-            <a class="link tosrc" :href="`https://github.com/xuliangzhan/vxe-table/tree/master/examples/views/table/${pageKey}`" target="_blank">{{ $t('app.body.button.viewCode') }}</a>
-            <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank">{{ $t('app.body.button.runDemo') }}</a>
+        <div class="content" :class="{full: ['VXEAPI', 'Donation', 'Run'].includes($route.name)}">
+          <template v-if="!/\/start|\/module|\/api/.test($route.path)">
+            <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank"><i class="fa fa-bug"></i>{{ $t('app.body.button.runDemo') }}</a>
           </template>
           <router-view/>
         </div>
@@ -98,13 +94,16 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
+      showLeft: true,
       selected: null,
       filterName: '',
       apiList: [],
       tableData: [],
+      selectBetaVersion: null,
       betaVersionList: [],
+      selectStableVersion: null,
       stableVersionList: [],
-      version: '2',
+      version: '1',
       usedJSHeapSize: 0,
       tableList: [
         {
@@ -152,6 +151,103 @@ export default {
           ]
         },
         {
+          label: 'app.aside.nav.module',
+          value: 'module',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.icon',
+              locat: {
+                name: 'ModuleIcon'
+              }
+            },
+            {
+              label: 'app.aside.nav.button',
+              locat: {
+                name: 'ModuleButton'
+              }
+            },
+            {
+              label: 'app.aside.nav.radio',
+              locat: {
+                name: 'ModuleRadio'
+              }
+            },
+            {
+              label: 'app.aside.nav.checkbox',
+              locat: {
+                name: 'ModuleCheckbox'
+              }
+            },
+            {
+              label: 'app.aside.nav.switch',
+              locat: {
+                name: 'ModuleSwitch'
+              }
+            },
+            {
+              label: 'app.aside.nav.input',
+              locat: {
+                name: 'ModuleInput'
+              }
+            },
+            {
+              label: 'app.aside.nav.textarea',
+              locat: {
+                name: 'ModuleTextarea'
+              }
+            },
+            {
+              label: 'app.aside.nav.select',
+              locat: {
+                name: 'ModuleSelect'
+              }
+            },
+            {
+              label: 'app.aside.nav.pulldown',
+              locat: {
+                name: 'ModulePulldown'
+              }
+            },
+            {
+              label: 'app.aside.nav.pager',
+              locat: {
+                name: 'ModulePager'
+              }
+            },
+            // {
+            //   label: 'app.aside.nav.tooltip',
+            //   locat: {
+            //     name: 'ModuleTooltip'
+            //   }
+            // },
+            {
+              label: 'app.aside.nav.toolbar',
+              locat: {
+                name: 'ModuleToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'ModuleForm'
+              }
+            },
+            {
+              label: 'app.aside.nav.list',
+              locat: {
+                name: 'ModuleList'
+              }
+            },
+            {
+              label: 'app.aside.nav.modal',
+              locat: {
+                name: 'ModuleModal'
+              }
+            }
+          ]
+        },
+        {
           label: 'app.aside.nav.basics',
           value: 'base',
           expand: false,
@@ -184,6 +280,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.tooltips',
+              locat: {
+                name: 'TableTooltip'
+              }
+            },
+            {
               label: 'app.aside.nav.ellipsis',
               locat: {
                 name: 'TableOverflow'
@@ -201,6 +303,13 @@ export default {
               demoUrl: 'https://jsrun.net/QrXKp/edit',
               locat: {
                 name: 'TableBorder'
+              }
+            },
+            {
+              label: 'app.aside.nav.round',
+              demoUrl: 'https://jsrun.pro/Ua2Kp/edit',
+              locat: {
+                name: 'TableRound'
               }
             },
             {
@@ -381,7 +490,7 @@ export default {
             },
             {
               label: 'app.aside.nav.dynamic',
-              demoUrl: 'https://jsrun.pro/SIWKp/edit',
+              // demoUrl: 'https://jsrun.pro/SIWKp/edit',
               locat: {
                 name: 'TableDynamic'
               }
@@ -464,7 +573,7 @@ export default {
             },
             {
               label: 'app.aside.nav.contextMenu',
-              demoUrl: 'https://jsrun.net/VjXKp/edit',
+              // demoUrl: 'https://jsrun.net/VjXKp/edit',
               locat: {
                 name: 'TableMenu'
               }
@@ -477,7 +586,7 @@ export default {
             },
             {
               label: 'app.aside.nav.expandRow',
-              demoUrl: 'https://jsrun.net/eRXKp/edit',
+              // demoUrl: 'https://jsrun.net/eRXKp/edit',
               locat: {
                 name: 'TableExpand'
               }
@@ -508,7 +617,7 @@ export default {
             },
             {
               label: 'app.aside.nav.customs',
-              demoUrl: 'https://jsrun.net/PrXKp/edit',
+              // demoUrl: 'https://jsrun.net/PrXKp/edit',
               locat: {
                 name: 'TableCustom'
               }
@@ -529,6 +638,12 @@ export default {
               label: 'app.aside.nav.search',
               locat: {
                 name: 'TableSearch'
+              }
+            },
+            {
+              label: 'app.aside.nav.groupBy',
+              locat: {
+                name: 'TableGroupBy'
               }
             },
             {
@@ -588,189 +703,6 @@ export default {
           ]
         },
         {
-          label: 'app.aside.nav.grid',
-          value: 'grid',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.base',
-              demoUrl: 'https://jsrun.net/5RXKp/edit',
-              locat: {
-                name: 'GridBasic'
-              }
-            },
-            {
-              label: 'app.aside.nav.group',
-              demoUrl: 'https://jsrun.pro/M8WKp/edit',
-              locat: {
-                name: 'GridGroup'
-              }
-            },
-            {
-              label: 'app.aside.nav.reverse',
-              demoUrl: 'https://jsrun.pro/zIWKp/edit',
-              locat: {
-                name: 'GridReverse'
-              }
-            },
-            {
-              label: 'app.aside.nav.template',
-              locat: {
-                name: 'GridTemplate'
-              }
-            },
-            {
-              label: 'app.aside.nav.footer',
-              locat: {
-                name: 'GridFooter'
-              }
-            },
-            {
-              label: 'app.aside.nav.pager',
-              locat: {
-                name: 'GridPage'
-              }
-            },
-            {
-              label: 'app.aside.nav.form',
-              locat: {
-                name: 'GridForm'
-              }
-            },
-            {
-              label: 'app.aside.nav.proxy',
-              demoUrl: 'https://jsrun.pro/XwWKp/edit',
-              locat: {
-                name: 'GridProxy'
-              }
-            },
-            {
-              label: 'app.aside.nav.proxyPage',
-              demoUrl: 'https://jsrun.pro/ywWKp/edit',
-              locat: {
-                name: 'GridPageProxy'
-              }
-            },
-            {
-              label: 'app.aside.nav.formProxy',
-              locat: {
-                name: 'GridFormProxy'
-              }
-            },
-            {
-              label: 'app.aside.nav.edit',
-              locat: {
-                name: 'GridEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.cellDisable',
-              locat: {
-                name: 'GridCellDisable'
-              }
-            },
-            {
-              label: 'app.aside.nav.rowDisable',
-              locat: {
-                name: 'GridRowDisable'
-              }
-            },
-            {
-              label: 'app.aside.nav.crudToolbar',
-              locat: {
-                name: 'GridToolbar'
-              }
-            },
-            {
-              label: 'app.aside.nav.customToolbar',
-              locat: {
-                name: 'GridCustomToolbar'
-              }
-            },
-            {
-              label: 'app.aside.nav.toolbarIcon',
-              locat: {
-                name: 'GridToolbarIcon'
-              }
-            },
-            {
-              label: 'app.aside.nav.fullscreen',
-              locat: {
-                name: 'GridFullscreen'
-              }
-            },
-            {
-              label: 'app.aside.nav.dynamicColumn',
-              locat: {
-                name: 'GridDynamic'
-              }
-            },
-            {
-              label: 'app.aside.nav.contextMenu',
-              demoUrl: 'https://jsrun.pro/m6WKp/edit',
-              locat: {
-                name: 'GridMenu'
-              }
-            },
-            {
-              label: 'app.aside.nav.span',
-              disabled: true,
-              locat: {
-                name: 'GridSpan'
-              }
-            },
-            {
-              label: 'app.aside.nav.upload',
-              locat: {
-                name: 'GridUpload'
-              }
-            },
-            {
-              label: 'app.aside.nav.baseTree',
-              locat: {
-                name: 'GridTree'
-              }
-            },
-            {
-              label: 'app.aside.nav.lazyTree',
-              locat: {
-                name: 'GridTreeLazy'
-              }
-            },
-            {
-              label: 'app.aside.nav.treeLazyEdit',
-              locat: {
-                name: 'GridTreeLazyEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.crudTreeToolbar',
-              locat: {
-                name: 'GridTreeEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.fullQuery',
-              locat: {
-                name: 'GridFullQuery'
-              }
-            },
-            {
-              label: 'app.aside.nav.full',
-              demoUrl: 'https://jsrun.pro/r6WKp/edit',
-              locat: {
-                name: 'GridFullEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.configProxy',
-              locat: {
-                name: 'GridConfigProxy'
-              }
-            }
-          ]
-        },
-        {
           label: 'app.aside.nav.tree',
           value: 'tree',
           expand: false,
@@ -796,7 +728,7 @@ export default {
             },
             {
               label: 'app.aside.nav.radio',
-              demoUrl: 'https://jsrun.pro/kfWKp/edit',
+              // demoUrl: 'https://jsrun.pro/kfWKp/edit',
               locat: {
                 name: 'TableTreeRadio'
               }
@@ -809,14 +741,14 @@ export default {
             },
             {
               label: 'app.aside.nav.checkbox',
-              demoUrl: 'https://jsrun.pro/B6bKp/edit',
+              // demoUrl: 'https://jsrun.pro/B6bKp/edit',
               locat: {
                 name: 'TableTreeSelection'
               }
             },
             {
               label: 'app.aside.nav.fixed',
-              demoUrl: 'https://jsrun.pro/ifWKp/edit',
+              // demoUrl: 'https://jsrun.pro/ifWKp/edit',
               locat: {
                 name: 'TableTreeFixed'
               }
@@ -829,7 +761,7 @@ export default {
             },
             {
               label: 'app.aside.nav.treeSearch',
-              demoUrl: 'https://jsrun.pro/CDWKp/edit',
+              // demoUrl: 'https://jsrun.pro/CDWKp/edit',
               locat: {
                 name: 'TableTreeFilter'
               }
@@ -842,14 +774,14 @@ export default {
             },
             {
               label: 'app.aside.nav.groupSummary',
-              demoUrl: 'https://jsrun.pro/KVWKp/edit',
+              // demoUrl: 'https://jsrun.pro/KVWKp/edit',
               locat: {
                 name: 'TableTreeGroupSummary'
               }
             },
             {
               label: 'app.aside.nav.groupSummaryCount',
-              demoUrl: 'https://jsrun.pro/GTWKp/edit',
+              // demoUrl: 'https://jsrun.pro/GTWKp/edit',
               locat: {
                 name: 'TableTreeGroupSummaryCount'
               }
@@ -884,26 +816,26 @@ export default {
                 name: 'TableTreeMenu'
               }
             },
-            {
-              label: 'app.aside.nav.span',
-              disabled: true,
-              locat: {
-                name: 'TableTreeSpan'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.span',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableTreeSpan'
+            //   }
+            // },
             {
               label: 'app.aside.nav.moveHighlight',
               locat: {
                 name: 'TableTreeHighlight'
               }
             },
-            {
-              label: 'app.aside.nav.keyboard',
-              disabled: true,
-              locat: {
-                name: 'TableTreeKeyboard'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.keyboard',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableTreeKeyboard'
+            //   }
+            // },
             {
               label: 'app.aside.nav.lazy',
               locat: {
@@ -946,247 +878,24 @@ export default {
                 name: 'TableTreeEditRowValid'
               }
             },
-            {
-              label: 'app.aside.nav.forceCellValid',
-              disabled: true,
-              locat: {
-                name: 'TableTreeEditForceCellValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.forceRowValid',
-              disabled: true,
-              locat: {
-                name: 'TableTreeEditForceRowValid'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.forceCellValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableTreeEditForceCellValid'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.forceRowValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableTreeEditForceRowValid'
+            //   }
+            // },
             {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableTreeTemplate'
-              }
-            },
-            {
-              label: 'app.aside.nav.full',
-              disabled: true,
-              locat: {
-                name: 'TableTreeBasic'
-              }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.virtualTree',
-          value: 'virtualTree',
-          expand: false,
-          disabled: true,
-          children: [
-            {
-              label: 'app.aside.nav.base',
-              locat: {
-                name: 'TableVirtualTreeBasic'
-              }
-            },
-            {
-              label: 'app.aside.nav.treeNormal',
-              locat: {
-                name: 'TableVirtualTreeNormal'
-              }
-            },
-            {
-              label: 'app.aside.nav.radio',
-              locat: {
-                name: 'TableVirtualTreeRadio'
-              }
-            },
-            {
-              label: 'app.aside.nav.checkbox',
-              locat: {
-                name: 'TableVirtualTreeCheckbox'
-              }
-            },
-            {
-              label: 'app.aside.nav.icon',
-              locat: {
-                name: 'TableVirtualTreeIcon'
-              }
-            },
-            {
-              label: 'app.aside.nav.fixed',
-              locat: {
-                name: 'TableVirtualTreeFixed'
-              }
-            },
-            {
-              label: 'app.aside.nav.fluidHeight',
-              locat: {
-                name: 'TableVirtualTreeMaxHeight'
-              }
-            },
-            {
-              label: 'app.aside.nav.edit',
-              locat: {
-                name: 'TableVirtualTreeEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.insert',
-              locat: {
-                name: 'TableVirtualTreeInsert'
-              }
-            },
-            {
-              label: 'app.aside.nav.delete',
-              locat: {
-                name: 'TableVirtualTreeRemove'
-              }
-            },
-            {
-              label: 'app.aside.nav.contextMenu',
-              locat: {
-                name: 'TableVirtualTreeMenu'
-              }
-            },
-            {
-              label: 'app.aside.nav.template',
-              locat: {
-                name: 'TableVirtualTreeTemplate'
-              }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.scroll',
-          value: 'scroll',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.bigData',
-              demoUrl: 'https://jsrun.net/XRXKp/edit',
-              locat: {
-                name: 'TableScroll'
-              }
-            },
-            {
-              label: 'app.aside.nav.moveHighlight',
-              locat: {
-                name: 'TableScrollHighlight'
-              }
-            },
-            {
-              label: 'app.aside.nav.keyboard',
-              locat: {
-                name: 'TableScrollKeyboard'
-              }
-            },
-            {
-              label: 'app.aside.nav.fluidHeight',
-              locat: {
-                name: 'TableScrollMaxHeight'
-              }
-            },
-            {
-              label: 'app.aside.nav.edit',
-              demoUrl: 'https://jsrun.pro/MIWKp/edit',
-              locat: {
-                name: 'TableScrollEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollTree',
-              disabled: true,
-              locat: {
-                name: 'TableScrollTree'
-              }
-            },
-            {
-              label: 'app.aside.nav.rowValid',
-              locat: {
-                name: 'TableScrollRowValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.forceCellValid',
-              disabled: true,
-              locat: {
-                name: 'TableScrollForceCellValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.forceRowValid',
-              disabled: true,
-              locat: {
-                name: 'TableScrollForceRowValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.partialLoad',
-              demoUrl: 'https://jsrun.pro/EVWKp/edit',
-              locat: {
-                name: 'TableScrollPartialLoad'
-              }
-            },
-            {
-              label: 'app.aside.nav.fullPartialLoad',
-              demoUrl: 'https://jsrun.pro/sVWKp/edit',
-              locat: {
-                name: 'TableScrollFullPartialLoad'
-              }
-            },
-            {
-              label: 'app.aside.nav.template',
-              locat: {
-                name: 'TableScrollTemplate'
-              }
-            },
-            {
-              label: 'app.aside.nav.tabs',
-              locat: {
-                name: 'TableScrollTabs'
-              }
-            },
-            {
-              label: 'app.aside.nav.keepAlives',
-              locat: {
-                name: 'TableScrollKeepAliveTable1'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollRows',
-              locat: {
-                name: 'TableScrollRows'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollFullRows',
-              locat: {
-                name: 'TableScrollFullRows'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollCols',
-              locat: {
-                name: 'TableScrollCols'
-              }
-            },
-            {
-              label: 'app.aside.nav.scrollFullCols',
-              locat: {
-                name: 'TableScrollFullCols'
-              }
-            },
-            {
-              label: 'app.aside.nav.infiniteScroll',
-              disabled: true,
-              locat: {
-                name: 'TableScroll'
-              }
-            },
-            {
-              label: 'app.aside.nav.full',
-              disabled: true,
-              locat: {
-                name: 'TableScroll'
               }
             }
           ]
@@ -1239,14 +948,14 @@ export default {
             },
             {
               label: 'app.aside.nav.insert',
-              demoUrl: 'https://jsrun.pro/vcWKp',
+              // demoUrl: 'https://jsrun.pro/vcWKp',
               locat: {
                 name: 'TableEditInsert'
               }
             },
             {
               label: 'app.aside.nav.delete',
-              demoUrl: 'https://jsrun.pro/6cWKp',
+              // demoUrl: 'https://jsrun.pro/6cWKp',
               locat: {
                 name: 'TableEditRemove'
               }
@@ -1289,20 +998,20 @@ export default {
                 name: 'TableEditRowValid'
               }
             },
-            {
-              label: 'app.aside.nav.forceCellValid',
-              disabled: true,
-              locat: {
-                name: 'TableEditForceCellValid'
-              }
-            },
-            {
-              label: 'app.aside.nav.forceRowValid',
-              disabled: true,
-              locat: {
-                name: 'TableEditForceRowValid'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.forceCellValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableEditForceCellValid'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.forceRowValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableEditForceRowValid'
+            //   }
+            // },
             {
               label: 'app.aside.nav.keyboard',
               locat: {
@@ -1384,7 +1093,7 @@ export default {
             },
             {
               label: 'app.aside.nav.events',
-              demoUrl: 'https://jsrun.pro/QIWKp/edit',
+              // demoUrl: 'https://jsrun.pro/QIWKp/edit',
               locat: {
                 name: 'TableEditEvents'
               }
@@ -1394,43 +1103,465 @@ export default {
               locat: {
                 name: 'TableEditTemplate'
               }
+            // },
+            // {
+            //   label: 'app.aside.nav.full',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableEditFull'
+            //   }
+            }
+          ]
+        },
+        // {
+        //   label: 'app.aside.nav.virtualTree',
+        //   value: 'virtualTree',
+        //   expand: false,
+        //   disabled: true,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.base',
+        //       locat: {
+        //         name: 'TableVirtualTreeBasic'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.treeNormal',
+        //       locat: {
+        //         name: 'TableVirtualTreeNormal'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.radio',
+        //       locat: {
+        //         name: 'TableVirtualTreeRadio'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.checkbox',
+        //       locat: {
+        //         name: 'TableVirtualTreeCheckbox'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.icon',
+        //       locat: {
+        //         name: 'TableVirtualTreeIcon'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.fixed',
+        //       locat: {
+        //         name: 'TableVirtualTreeFixed'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.fluidHeight',
+        //       locat: {
+        //         name: 'TableVirtualTreeMaxHeight'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.edit',
+        //       locat: {
+        //         name: 'TableVirtualTreeEdit'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.insert',
+        //       locat: {
+        //         name: 'TableVirtualTreeInsert'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.delete',
+        //       locat: {
+        //         name: 'TableVirtualTreeRemove'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.contextMenu',
+        //       locat: {
+        //         name: 'TableVirtualTreeMenu'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.template',
+        //       locat: {
+        //         name: 'TableVirtualTreeTemplate'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.big',
+        //       locat: {
+        //         name: 'TableVirtualTreeBig'
+        //       }
+        //     }
+        //   ]
+        // },
+        {
+          label: 'app.aside.nav.grid',
+          value: 'grid',
+          expand: false,
+          children: [
+            {
+              label: 'app.aside.nav.base',
+              demoUrl: 'https://jsrun.net/5RXKp/edit',
+              locat: {
+                name: 'GridBasic'
+              }
+            },
+            {
+              label: 'app.aside.nav.group',
+              demoUrl: 'https://jsrun.pro/M8WKp/edit',
+              locat: {
+                name: 'GridGroup'
+              }
+            },
+            {
+              label: 'app.aside.nav.reverse',
+              demoUrl: 'https://jsrun.pro/zIWKp/edit',
+              locat: {
+                name: 'GridReverse'
+              }
+            },
+            {
+              label: 'app.aside.nav.template',
+              locat: {
+                name: 'GridTemplate'
+              }
+            },
+            {
+              label: 'app.aside.nav.footer',
+              locat: {
+                name: 'GridFooter'
+              }
+            },
+            {
+              label: 'app.aside.nav.pager',
+              locat: {
+                name: 'GridPage'
+              }
+            },
+            {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'GridForm'
+              }
+            },
+            {
+              label: 'app.aside.nav.proxy',
+              // demoUrl: 'https://jsrun.pro/XwWKp/edit',
+              locat: {
+                name: 'GridProxy'
+              }
+            },
+            {
+              label: 'app.aside.nav.proxyPage',
+              // demoUrl: 'https://jsrun.pro/ywWKp/edit',
+              locat: {
+                name: 'GridPageProxy'
+              }
+            },
+            {
+              label: 'app.aside.nav.formProxy',
+              locat: {
+                name: 'GridFormProxy'
+              }
+            },
+            {
+              label: 'app.aside.nav.edit',
+              locat: {
+                name: 'GridEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.cellDisable',
+              locat: {
+                name: 'GridCellDisable'
+              }
+            },
+            {
+              label: 'app.aside.nav.rowDisable',
+              locat: {
+                name: 'GridRowDisable'
+              }
+            },
+            {
+              label: 'app.aside.nav.crudToolbar',
+              locat: {
+                name: 'GridToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.customToolbar',
+              locat: {
+                name: 'GridCustomToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.toolbarIcon',
+              locat: {
+                name: 'GridToolbarIcon'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullscreen',
+              locat: {
+                name: 'GridFullscreen'
+              }
+            },
+            {
+              label: 'app.aside.nav.dynamicColumn',
+              locat: {
+                name: 'GridDynamic'
+              }
+            },
+            {
+              label: 'app.aside.nav.contextMenu',
+              // demoUrl: 'https://jsrun.pro/m6WKp/edit',
+              locat: {
+                name: 'GridMenu'
+              }
+            },
+            // {
+            //   label: 'app.aside.nav.span',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'GridSpan'
+            //   }
+            // },
+            {
+              label: 'app.aside.nav.upload',
+              locat: {
+                name: 'GridUpload'
+              }
+            },
+            {
+              label: 'app.aside.nav.baseTree',
+              locat: {
+                name: 'GridTree'
+              }
+            },
+            {
+              label: 'app.aside.nav.lazyTree',
+              locat: {
+                name: 'GridTreeLazy'
+              }
+            },
+            {
+              label: 'app.aside.nav.treeLazyEdit',
+              locat: {
+                name: 'GridTreeLazyEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.crudTreeToolbar',
+              locat: {
+                name: 'GridTreeEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullQuery',
+              locat: {
+                name: 'GridFullQuery'
+              }
             },
             {
               label: 'app.aside.nav.full',
-              disabled: true,
+              // demoUrl: 'https://jsrun.pro/r6WKp/edit',
               locat: {
-                name: 'TableEditFull'
+                name: 'GridFullEdit'
               }
+            // },
+            // {
+            //   label: 'app.aside.nav.configProxy',
+            //   locat: {
+            //     name: 'GridConfigProxy'
+            //   }
             }
           ]
         },
         {
-          label: 'app.aside.nav.excel',
-          value: 'excel',
+          label: 'app.aside.nav.scroll',
+          value: 'scroll',
           expand: false,
           children: [
             {
-              label: 'app.aside.nav.cell',
+              label: 'app.aside.nav.bigData',
+              demoUrl: 'https://jsrun.net/XRXKp/edit',
               locat: {
-                name: 'TableExcelCell'
+                name: 'TableScroll'
               }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.bad',
-          value: 'bad',
-          expand: false,
-          children: [
+            },
+            {
+              label: 'app.aside.nav.moveHighlight',
+              locat: {
+                name: 'TableScrollHighlight'
+              }
+            },
+            {
+              label: 'app.aside.nav.fluidHeight',
+              locat: {
+                name: 'TableScrollMaxHeight'
+              }
+            },
+            {
+              label: 'app.aside.nav.group',
+              locat: {
+                name: 'TableScrollGroup'
+              }
+            },
+            {
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableScrollKeyboard'
+              }
+            },
             {
               label: 'app.aside.nav.edit',
-              demoUrl: 'https://jsrun.pro/uIWKp/edit',
+              // demoUrl: 'https://jsrun.pro/MIWKp/edit',
               locat: {
-                name: 'TableBadEdit'
+                name: 'TableScrollEdit'
               }
+            },
+            // {
+            //   label: 'app.aside.nav.scrollTree',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScrollTree'
+            //   }
+            // },
+            {
+              label: 'app.aside.nav.rowValid',
+              locat: {
+                name: 'TableScrollRowValid'
+              }
+            },
+            // {
+            //   label: 'app.aside.nav.forceCellValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScrollForceCellValid'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.forceRowValid',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScrollForceRowValid'
+            //   }
+            // },
+            {
+              label: 'app.aside.nav.partialLoad',
+              // demoUrl: 'https://jsrun.pro/EVWKp/edit',
+              locat: {
+                name: 'TableScrollPartialLoad'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullPartialLoad',
+              // demoUrl: 'https://jsrun.pro/sVWKp/edit',
+              locat: {
+                name: 'TableScrollFullPartialLoad'
+              }
+            },
+            {
+              label: 'app.aside.nav.footer',
+              locat: {
+                name: 'TableScrollFooter'
+              }
+            },
+            {
+              label: 'app.aside.nav.template',
+              locat: {
+                name: 'TableScrollTemplate'
+              }
+            },
+            {
+              label: 'app.aside.nav.tabs',
+              locat: {
+                name: 'TableScrollTabs'
+              }
+            },
+            {
+              label: 'app.aside.nav.keepAlives',
+              locat: {
+                name: 'TableScrollKeepAliveTable1'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollRows',
+              locat: {
+                name: 'TableScrollRows'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollFullRows',
+              locat: {
+                name: 'TableScrollFullRows'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollCols',
+              locat: {
+                name: 'TableScrollCols'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollFullCols',
+              locat: {
+                name: 'TableScrollFullCols'
+              }
+            // },
+            // {
+            //   label: 'app.aside.nav.infiniteScroll',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScroll'
+            //   }
             }
           ]
         },
+        // {
+        //   label: 'app.aside.nav.excel',
+        //   value: 'excel',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.cell',
+        //       locat: {
+        //         name: 'TableExcelCell'
+        //       }
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.bad',
+        //   value: 'bad',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.badEdit',
+        //       demoUrl: 'https://jsrun.pro/uIWKp/edit',
+        //       locat: {
+        //         name: 'TableBadEdit'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.badLineHeight',
+        //       locat: {
+        //         name: 'TableBadLineHeight'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.badNonsupport',
+        //       locat: {
+        //         name: 'TableBadNonsupport'
+        //       }
+        //     }
+        //   ]
+        // },
         {
           label: 'app.aside.nav.module',
           value: 'module',
@@ -1620,21 +1751,21 @@ export default {
                 name: 'TablePluginAntdPage'
               }
             },
-            {
-              label: 'app.aside.nav.shortcutKeyPlugin',
-              disabled: true,
-              locat: {
-                name: 'TablePluginShortcutKey'
-              }
-            },
-            {
-              label: 'app.aside.nav.chartsPlugin',
-              demoUrl: 'https://jsrun.pro/9aWKp/edit',
-              disabled: true,
-              locat: {
-                name: 'TablePluginCharts'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.shortcutKeyPlugin',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TablePluginShortcutKey'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.chartsPlugin',
+            //   demoUrl: 'https://jsrun.pro/9aWKp/edit',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TablePluginCharts'
+            //   }
+            // },
             {
               label: 'app.aside.nav.exportXLSXPlugin',
               demoUrl: 'https://jsrun.pro/PIWKp/edit',
@@ -1649,18 +1780,30 @@ export default {
                 name: 'TablePluginExportPDF'
               }
             },
-            {
-              label: 'app.aside.nav.rendererPlugin',
-              disabled: true,
-              locat: {
-                name: 'TablePluginRenderer'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.rendererPlugin',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TablePluginRenderer'
+            //   }
+            // },
             {
               label: 'app.aside.nav.menusPlugin',
               locat: {
                 name: 'TablePluginMenus'
               }
+            // },
+            // {
+            //   label: 'app.aside.nav.treeRowPlugin',
+            //   locat: {
+            //     name: 'TablePluginTreeRows'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.treeColPlugin',
+            //   locat: {
+            //     name: 'TablePluginTreeCols'
+            //   }
             }
           ]
         },
@@ -1733,6 +1876,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.rendererExpand',
+              locat: {
+                name: 'RendererExpand'
+              }
+            },
+            {
               label: 'app.aside.nav.rendererToolbar',
               locat: {
                 name: 'RendererToolbar'
@@ -1770,6 +1919,12 @@ export default {
           value: 'api',
           expand: false,
           children: [
+            // {
+            //   label: 'app.footer.donation',
+            //   locat: {
+            //     name: 'Donation'
+            //   }
+            // },
             {
               label: 'app.aside.nav.vxeTable',
               locat: {
@@ -1843,11 +1998,47 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.vxeRadioGroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'radio-group'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeRadioButton',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'radio-button'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeCheckbox',
               locat: {
                 name: 'VXEAPI',
                 params: {
                   name: 'checkbox'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeCheckboxGroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'checkbox-group'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeSwitch',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'switch'
                 }
               }
             },
@@ -1866,6 +2057,24 @@ export default {
                 name: 'VXEAPI',
                 params: {
                   name: 'select'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeOptgroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'optgroup'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeOption',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'option'
                 }
               }
             },
@@ -1924,9 +2133,21 @@ export default {
               }
             },
             {
-              label: 'app.footer.donation',
+              label: 'app.aside.nav.vxeList',
               locat: {
-                name: 'Donation'
+                name: 'VXEAPI',
+                params: {
+                  name: 'list'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxePulldown',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'pulldown'
+                }
               }
             }
           ]
@@ -1954,11 +2175,11 @@ export default {
       const { betaVersionList, stableVersionList } = this
       if (stableVersionList.length) {
         if (betaVersionList.length) {
-          const stableNums = stableVersionList[0].version.split('-')[0].split('.')
+          const stableNums = stableVersionList[0].value.split('-')[0].split('.')
           const stable1 = XEUtils.toNumber(stableNums[0])
           const stable2 = XEUtils.toNumber(stableNums[1])
           const stable3 = XEUtils.toNumber(stableNums[2])
-          const betaNums = betaVersionList[0].version.split('-')[0].split('.')
+          const betaNums = betaVersionList[0].value.split('-')[0].split('.')
           const beta1 = XEUtils.toNumber(betaNums[0])
           const beta2 = XEUtils.toNumber(betaNums[1])
           const beta3 = XEUtils.toNumber(betaNums[2])
@@ -1982,12 +2203,12 @@ export default {
     newBetsVersionList () {
       const { betaVersionList, stableVersionList } = this
       if (betaVersionList.length && stableVersionList.length) {
-        const stableNums = stableVersionList[0].version.split('-')[0].split('.')
+        const stableNums = stableVersionList[0].value.split('-')[0].split('.')
         const stable1 = XEUtils.toNumber(stableNums[0])
         const stable2 = XEUtils.toNumber(stableNums[1])
         const stable3 = XEUtils.toNumber(stableNums[2])
         return betaVersionList.filter(pack => {
-          const betaNums = pack.version.split('-')[0].split('.')
+          const betaNums = pack.value.split('-')[0].split('.')
           const beta1 = XEUtils.toNumber(betaNums[0])
           const beta2 = XEUtils.toNumber(betaNums[1])
           const beta3 = XEUtils.toNumber(betaNums[2])
@@ -2009,10 +2230,14 @@ export default {
     },
     pageKey () {
       return this.$route.path.split('/')[2]
+    },
+    showOperBtn () {
+      return ['StartInstall', 'StartUse', 'StartGlobal', 'StartIcons', 'StartTheme', 'StartI18n', 'VXEAPI', 'Donation', 'Run'].includes(this.$route.name)
     }
   },
   watch: {
-    '$i18n.locale' () {
+    '$i18n.locale' (value) {
+      localStorage.setItem('language', value)
       this.loadList()
       this.defaultExpand()
     },
@@ -2025,7 +2250,7 @@ export default {
       setInterval(() => {
         const performance = window.performance || window.webkitPerformance
         if (performance && performance.memory) {
-          this.usedJSHeapSize = XEUtils.toFixedNumber(performance.memory.usedJSHeapSize / 1048576, 2)
+          this.usedJSHeapSize = XEUtils.toFixed(XEUtils.floor(performance.memory.usedJSHeapSize / 1048576, 2), 2)
         }
       }, 3000)
     }
@@ -2061,22 +2286,26 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://registry.npm.taobao.org/vxe-table').then(data => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ versions }) => {
         const stableVersionList = []
         const betaVersionList = []
-        Object.values(data.versions).forEach(pack => {
-          if (/^1.\d{1,3}.\d{1,3}$/.test(pack.version)) {
-            stableVersionList.push({
-              version: pack.version
-            })
-          } else if (/^1.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(pack.version)) {
-            betaVersionList.push({
-              version: pack.version
-            })
-          }
-        })
+        if (versions) {
+          versions.forEach(version => {
+            if (/^1.\d{1,3}.\d{1,3}$/.test(version)) {
+              stableVersionList.push({ label: version, value: version })
+            } else if (/^1.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(version)) {
+              betaVersionList.push({ label: version, value: version })
+            }
+          })
+        }
         this.stableVersionList = stableVersionList
         this.betaVersionList = betaVersionList
+        if (stableVersionList.length) {
+          this.selectStableVersion = stableVersionList[0].value
+        }
+        if (betaVersionList.length) {
+          this.selectBetaVersion = betaVersionList[0].value
+        }
       })
     },
     // 调用频率间隔 500 毫秒
@@ -2114,28 +2343,22 @@ export default {
     },
     linkEvent (item) {
       if (!item.disabled) {
-        this.tableList.forEach(group => {
-          if (item !== group) {
-            group.expand = false
-          }
-        })
         item.expand = !item.expand
       }
     },
     vChangeEvent () {
       switch (this.version) {
         case '1':
-          location.href = '/vxe-table/v1/index.html'
+          location.href = '/vxe-table/v1/'
           break
         case '2':
-          location.href = '/vxe-table/v2/index.html'
+          location.href = '/vxe-table/v2/'
           break
         case '3':
-          location.href = '/vxe-table'
+          location.href = '/vxe-table/v3/'
           break
         case '4':
-          this.version = '1'
-          this.$XModal.message({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })
+          location.href = '/vxe-table/v4/'
           break
       }
     }

@@ -1,10 +1,10 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.icon') }}</h2>
-    <p class="tip">内置轻量级的 icon 图标，还可以通过修改 <router-link class="link" :to="{name: 'StartIcons'}">icon</router-link> 替换默认的</p>
+    <p class="tip">内置轻量级的 css 图标，可以通过 <router-link class="link" :to="{name: 'StartIcons'}">setup</router-link> 替换为 font 图标，例如第三方图标库：font-awesome、inconfont</p>
 
-    <ul class="icon-list" title="点击复制内容">
-      <li v-for="item in list" :key="item.icon" @click="copyEvent(item)">
+    <ul class="vxe-row icon-list" title="点击复制内容">
+      <li class="vxe-col--4" v-for="item in list" :key="item.icon" @click="copyEvent(item)">
         <i :class="item.icon"></i>
         <div class="title">{{ item.icon }}</div>
       </li>
@@ -64,6 +64,9 @@ export default {
         },
         {
           icon: 'vxe-icon--more'
+        },
+        {
+          icon: 'vxe-icon--check'
         },
         {
           icon: 'vxe-icon--close'
@@ -127,6 +130,12 @@ export default {
         },
         {
           icon: 'vxe-icon--dot'
+        },
+        {
+          icon: 'vxe-icon--print'
+        },
+        {
+          icon: 'vxe-icon--search'
         }
       ],
       demoCodes: [
@@ -164,9 +173,7 @@ export default {
     clear: both;
   }
   & > li {
-    float: left;
     height: 100px;
-    width: 16.66%;
     border-right: 1px solid #eee;
     border-bottom: 1px solid #eee;
     cursor: pointer;

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/element-ui">element-ui</a> 组合渲染 + 使用分页</p>
+    <p class="tip">
+      与 <a class="link" href="https://github.com/x-extends/element-ui">element-ui</a> 组合渲染 + 使用分页<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
+    </p>
 
     <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent" @reset="searchEvent">
       <vxe-form-item field="name" title="ElInput" span="8" :title-prefix="{ message: '帮助信息！！！', icon: 'fa fa-exclamation-circle' }" :item-render="{name: 'ElInput'}"></vxe-form-item>
@@ -15,10 +18,10 @@
       <vxe-form-item field="rate" title="ElRate" span="8" folding :item-render="{name: 'ElRate'}"></vxe-form-item>
       <vxe-form-item field="flag1" title="ElRadio" span="8" folding :item-render="{name: 'ElRadio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
       <vxe-form-item field="checkedList" title="ElCheckbox" span="8" folding :visible-method="visibleMethod" :item-render="{name: 'ElCheckbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}"></vxe-form-item>
-      <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ props: {type: 'primary', nativeType: 'submit', content: '查询'} }, { props: {nativeType: 'reset', content: '重置'} }]}"></vxe-form-item>
+      <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ content: '查询', props: {type: 'primary', nativeType: 'submit'} }, { content: '重置', props: {nativeType: 'reset'} }]}"></vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar export custom>
+    <vxe-toolbar export print custom>
       <template v-slot:buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
@@ -39,15 +42,15 @@
       border
       resizable
       show-overflow
+      keep-source
       highlight-hover-row
       export-config
       ref="xTable"
-      class="vxe-table-element"
       height="460"
       :loading="loading"
       :data="tableData"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @edit-actived="editActivedEvent"
       @edit-closed="editClosedEvent">
       <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
@@ -56,14 +59,15 @@
       <vxe-table-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
       <vxe-table-column field="age" title="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="state" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
+      <vxe-table-column field="sexList" title="ElSelect multiple" width="180" :edit-render="{name: 'ElSelect', options: sexList, props: {multiple: true}}"></vxe-table-column>
+      <vxe-table-column field="state" title="ElSelect remote" width="140" :edit-render="{name: 'ElSelect', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
       <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
       <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
       <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
       <vxe-table-column field="date5" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
-      <vxe-table-column field="slider" title="ElSlider" width="200" :edit-render="{name: 'ElSlider', type: 'visible'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
+      <vxe-table-column field="flag" title="ElSwitch" width="100" :cell-render="{name: 'ElSwitch'}"></vxe-table-column>
+      <vxe-table-column field="slider" title="ElSlider" width="200" :cell-render="{name: 'ElSlider'}"></vxe-table-column>
+      <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :cell-render="{name: 'ElRate'}"></vxe-table-column>
     </vxe-table>
 
     <el-pagination
@@ -96,7 +100,7 @@ export default {
       tableData: [],
       validRules: {
         name: [
-          { required: true, message: '名称必须填写' },
+          { required: true, message: 'app.body.valid.rName' },
           { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
         ],
         sex: [
@@ -165,10 +169,10 @@ export default {
           <vxe-form-item field="rate" title="ElRate" span="8" folding :item-render="{name: 'ElRate'}"></vxe-form-item>
           <vxe-form-item field="flag1" title="ElRadio" span="8" folding :item-render="{name: 'ElRadio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
           <vxe-form-item field="checkedList" title="ElCheckbox" span="8" folding :visible-method="visibleMethod" :item-render="{name: 'ElCheckbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}"></vxe-form-item>
-          <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ props: {type: 'primary', nativeType: 'submit', content: '查询'} }, { props: {nativeType: 'reset', content: '重置'} }]}"></vxe-form-item>
+          <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ content: '查询', props: {type: 'primary', nativeType: 'submit'} }, { content: '重置', props: {nativeType: 'reset'} }]}"></vxe-form-item>
         </vxe-form>
 
-        <vxe-toolbar export custom>
+        <vxe-toolbar export print custom>
           <template v-slot:buttons>
             <el-button @click="insertEvent">新增</el-button>
             <el-button @click="saveEvent">保存</el-button>
@@ -189,15 +193,15 @@ export default {
           border
           resizable
           show-overflow
+          keep-source
           highlight-hover-row
           export-config
           ref="xTable"
-          class="vxe-table-element"
           height="460"
           :loading="loading"
           :data="tableData"
           :edit-rules="validRules"
-          :edit-config="{trigger: 'click', mode: 'row'}"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @edit-actived="editActivedEvent"
           @edit-closed="editClosedEvent">
           <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
@@ -206,14 +210,15 @@ export default {
           <vxe-table-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleFetchSuggestions}}"></vxe-table-column>
           <vxe-table-column field="age" title="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
           <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="state" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
+          <vxe-table-column field="sexList" title="ElSelect multiple" width="180" :edit-render="{name: 'ElSelect', options: sexList, props: {multiple: true}}"></vxe-table-column>
+          <vxe-table-column field="state" title="ElSelect remote" width="140" :edit-render="{name: 'ElSelect', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
           <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: regionList}}"></vxe-table-column>
           <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
-          <vxe-table-column field="date1" title="DateTimePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
+          <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss'}}"></vxe-table-column>
           <vxe-table-column field="date5" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
-          <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{name: 'ElSwitch', type: 'visible'}"></vxe-table-column>
-          <vxe-table-column field="slider" title="ElSlider" width="200" :edit-render="{name: 'ElSlider', type: 'visible'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :edit-render="{name: 'ElRate', type: 'visible'}"></vxe-table-column>
+          <vxe-table-column field="flag" title="ElSwitch" width="100" :cell-render="{name: 'ElSwitch'}"></vxe-table-column>
+          <vxe-table-column field="slider" title="ElSlider" width="200" :cell-render="{name: 'ElSlider'}"></vxe-table-column>
+          <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :cell-render="{name: 'ElRate'}"></vxe-table-column>
         </vxe-table>
 
         <el-pagination
@@ -234,7 +239,7 @@ export default {
               tableData: [],
               validRules: {
                 name: [
-                  { required: true, message: '名称必须填写' },
+                  { required: true, message: 'app.body.valid.rName' },
                   { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
                 ],
                 sex: [
@@ -389,11 +394,11 @@ export default {
               }
             },
             vaildEvent () {
-              this.$refs.xTable.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTable.validate((errMap) => {
+                if (errMap) {
                   this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
@@ -402,7 +407,7 @@ export default {
                 case 'remove': {
                   let selectRecords = this.$refs.xTable.getCheckboxRecords()
                   if (selectRecords.length) {
-                    this.$refs.xTable.removeSelecteds()
+                    this.$refs.xTable.removeCheckboxRow()
                   } else {
                     this.$alert('请至少选择一条数据！')
                   }
@@ -552,11 +557,11 @@ export default {
       }
     },
     vaildEvent () {
-      this.$refs.xTable.validate(valid => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTable.validate((errMap) => {
+        if (errMap) {
           this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
@@ -565,7 +570,7 @@ export default {
         case 'remove': {
           const selectRecords = this.$refs.xTable.getCheckboxRecords()
           if (selectRecords.length) {
-            this.$refs.xTable.removeSelecteds()
+            this.$refs.xTable.removeCheckboxRow()
           } else {
             this.$alert('请至少选择一条数据！')
           }

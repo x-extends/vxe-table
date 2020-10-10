@@ -19,6 +19,9 @@ import Modal from './modal'
 import Tooltip from './tooltip'
 import Form from './form'
 import Select from './select'
+import Switch from './switch'
+import List from './list'
+import Pulldown from './pulldown'
 
 import Export from './export'
 import Resize from './resize'
@@ -47,6 +50,9 @@ const components = [
   Tooltip,
   Form,
   Select,
+  Switch,
+  List,
+  Pulldown,
 
   Export,
   Resize
@@ -92,7 +98,12 @@ export * from './modal'
 export * from './tooltip'
 export * from './form'
 export * from './select'
+export * from './switch'
+export * from './list'
+export * from './pulldown'
+
 export * from './export'
 export * from './resize'
 export * from './v-x-e-table'
+
 export default VXETable

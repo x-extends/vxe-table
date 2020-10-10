@@ -1,15 +1,17 @@
 import XEUtils from 'xe-utils'
 import VXEModal from './src/modal'
-import queue from './src/queue'
+import allActivedModals from './src/activities'
 import VXETable from '../v-x-e-table'
 import { UtilTools } from '../tools'
 
-let AlertController = null
-const allActivedModals = []
+/* eslint-disable @typescript-eslint/no-use-before-define */
 
-function openModal (options) {
+let ModalClass = null
+
+function openModal (opts) {
+  const options = Object.assign({}, opts, { transfer: true })
   return new Promise(resolve => {
-    if (options && options.id && queue.some(comp => comp.id === options.id)) {
+    if (options && options.id && allActivedModals.some(comp => comp.id === options.id)) {
       resolve('exist')
     } else {
       const events = options.events || {}
@@ -18,23 +20,27 @@ function openModal (options) {
           if (events.hide) {
             events.hide.call(this, params)
           }
-          /* eslint-disable @typescript-eslint/no-use-before-define */
           setTimeout(() => $modal.$destroy(), $modal.isMsg ? 500 : 100)
-          XEUtils.remove(allActivedModals, item => item === $modal)
           resolve(params.type)
         }
       })
-      const $modal = new AlertController({
+      const $modal = new ModalClass({
         el: document.createElement('div'),
         propsData: options
       })
-      setTimeout(() => $modal.open())
-      allActivedModals.push($modal)
+      setTimeout(() => {
+        if ($modal.isDestroy) {
+          $modal.close()
+        } else {
+          $modal.open()
+        }
+      })
     }
   })
 }
 
-export function Modal (options) {
+export function ModalController (options) {
+  UtilTools.warn('vxe.error.delFunc', ['Modal', 'Modal.open'])
   return openModal(options)
 }
 
@@ -51,13 +57,13 @@ export function Modal (options) {
   if (index === 1) {
     defOpts.status = 'question'
   }
-  Modal[type] = function (message, title, options) {
+  ModalController[type] = function (message, title, options) {
     let opts
     if (XEUtils.isObject(message)) {
       opts = message
     } else {
       if (title) {
-        opts = { title }
+        opts = index === 2 ? { status: title } : { title }
       }
     }
     return openModal(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
@@ -70,37 +76,44 @@ export function Modal (options) {
  * 如果不传则关闭所有窗口
  */
 function closeModal (id) {
-  if (arguments.length) {
-    const modal = getModal(id)
-    if (modal) {
-      modal.close('close')
+  const modals = arguments.length ? [getModal(id)] : allActivedModals
+  modals.forEach($modal => {
+    if ($modal) {
+      $modal.isDestroy = true
+      $modal.close('close')
     }
-  } else {
-    allActivedModals.forEach($modal => $modal.close('close'))
-  }
+  })
+  return Promise.resolve()
 }
 
 function getModal (id) {
-  return allActivedModals.find($modal => $modal.id === id)
+  return XEUtils.find(allActivedModals, $modal => $modal.id === id)
 }
 
-Modal.closeAll = function () {
+ModalController.closeAll = function () {
   UtilTools.warn('vxe.error.delFunc', ['closeAll', 'close'])
   closeModal()
 }
 
-Modal.get = getModal
-Modal.close = closeModal
-Modal.open = openModal
+ModalController.get = getModal
+ModalController.close = closeModal
+ModalController.open = openModal
 
-Modal.install = function (Vue) {
+ModalController.install = function (Vue) {
   VXETable._modal = 1
   Vue.component('vxe-message', VXEModal)
   Vue.component(VXEModal.name, VXEModal)
-  AlertController = Vue.extend(VXEModal)
-  Vue.prototype.$XMsg = Modal
-  Vue.prototype.$XModal = Modal
-  VXETable.$modal = Modal
+  ModalClass = Vue.extend(VXEModal)
+  Vue.prototype.$XMsg = ModalController
+  Vue.prototype.$XModal = ModalController
+  VXETable.$modal = ModalController
+  VXETable.modal = ModalController
+  if (!Vue.prototype.$vxe) {
+    Vue.prototype.$vxe = { modal: ModalController }
+  } else {
+    Vue.prototype.$vxe.modal = ModalController
+  }
 }
 
-export default Modal
+export const Modal = ModalController
+export default ModalController

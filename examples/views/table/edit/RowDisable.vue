@@ -22,7 +22,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">配合  <table-api-link prop="edit-actived"/> 事件，实现行编辑中对列的权限控制，例如：限制 age 小于 27 的与 name 为 'x' 开头的列禁止编辑</p>
+    <p class="tip">配合  <table-api-link prop="edit-actived"/> 事件，使用组件方式禁用编辑</p>
 
     <vxe-table
       border
@@ -33,9 +33,9 @@
       :edit-config="{trigger: 'click', mode: 'row'}"
       @edit-actived="editActivedEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: false}}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input', attrs: {disabled: false}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, attrs: {disabled: false}}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input', attrs: {disabled: ageDisabled}}"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, props: {disabled: sexDisabled}}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
@@ -55,6 +55,9 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      nameDisabled: false,
+      ageDisabled: false,
+      sexDisabled: false,
       tableData: [],
       sexList: [],
       demoCodes: [
@@ -94,7 +97,7 @@ export default {
               return rowIndex !== 1
             },
             editDisabledEvent ({ row, column }) {
-              this.$XModal.alert('禁止编辑')
+              this.$XModal.message({ message: '禁止编辑', status: 'error' })
             }
           }
         }
@@ -109,9 +112,9 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row'}"
           @edit-actived="editActivedEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: false}}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input', attrs: {disabled: false}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, attrs: {disabled: false}}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input', attrs: {disabled: ageDisabled}}"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, props: {disabled: sexDisabled}}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
@@ -119,6 +122,9 @@ export default {
         export default {
           data () {
             return {
+              nameDisabled: false,
+              sexDisabled: false,
+              dateDisabled: false,
               tableData: [],
               sexList: []
             }
@@ -133,21 +139,10 @@ export default {
                 this.sexList = data
               })
             },
-            editActivedEvent ({ row }) {
-              let xTable = this.$refs.xTable
-              let nameColumn = xTable.getColumnByField('name')
-              let ageColumn = xTable.getColumnByField('age')
-              let sexColumn = xTable.getColumnByField('sex')
-              // name 为 'x' 开头的列禁止编辑
-              let isNameDisabled = (row.name || '').indexOf('x') === 0
-              // age 小于 27 的列禁止编辑
-              let isAgeDisabled = row.age < 27
-              // sex 值编辑为 1 的列禁止编辑
-              let isSexDisabled = row.sex === '1'
-
-              nameColumn.editRender.attrs.disabled = isNameDisabled
-              ageColumn.editRender.attrs.disabled = isAgeDisabled
-              sexColumn.editRender.attrs.disabled = isSexDisabled
+            editActivedEvent ({ row, rowIndex }) {
+              this.nameDisabled = rowIndex === 1
+              this.ageDisabled = row.age < 30
+              this.sexDisabled = row.sex === '1'
             }
           }
         }
@@ -174,23 +169,12 @@ export default {
       return rowIndex !== 1
     },
     editDisabledEvent () {
-      this.$XModal.alert('禁止编辑')
+      this.$XModal.message({ message: '禁止编辑', status: 'error' })
     },
-    editActivedEvent ({ row }) {
-      const xTable = this.$refs.xTable
-      const nameColumn = xTable.getColumnByField('name')
-      const ageColumn = xTable.getColumnByField('age')
-      const sexColumn = xTable.getColumnByField('sex')
-      // name 为 'x' 开头的列禁止编辑
-      const isNameDisabled = (row.name || '').indexOf('x') === 0
-      // age 小于 27 的列禁止编辑
-      const isAgeDisabled = row.age < 27
-      // sex 值编辑为 1 的列禁止编辑
-      const isSexDisabled = row.sex === '1'
-
-      nameColumn.editRender.attrs.disabled = isNameDisabled
-      ageColumn.editRender.attrs.disabled = isAgeDisabled
-      sexColumn.editRender.attrs.disabled = isSexDisabled
+    editActivedEvent ({ row, rowIndex }) {
+      this.nameDisabled = rowIndex === 1
+      this.ageDisabled = row.age < 30
+      this.sexDisabled = row.sex === '1'
     }
   }
 }

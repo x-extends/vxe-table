@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.pager') }}</h2>
-    <p class="tip">查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'pager'}}">API</router-link>，建议通过 <router-link :to="{name: 'StartGlobal'}">setup</router-link> 设置全局样式</p>
+    <p class="tip">支持自定义的分页，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'pager'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
 
     <p>
       <vxe-pager
@@ -35,7 +35,6 @@
 
     <p>
       <vxe-pager
-        border
         :current-page.sync="page4.currentPage"
         :page-size.sync="page4.pageSize"
         :total="page4.totalResult"
@@ -47,7 +46,7 @@
         :current-page.sync="page5.currentPage"
         :page-size.sync="page5.pageSize"
         :total="page5.totalResult"
-        :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+        :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
       </vxe-pager>
     </p>
 
@@ -67,9 +66,32 @@
         :current-page.sync="page6.currentPage"
         :page-size.sync="page6.pageSize"
         :total="page6.totalResult"
+        :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
         :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+        <template v-slot:left>
+          <vxe-button size="small">
+            <template v-slot>更多操作</template>
+            <template v-slot:dropdowns>
+              <vxe-button type="text">批量修改</vxe-button>
+              <vxe-button type="text">批量管理</vxe-button>
+              <vxe-button type="text">批量删除</vxe-button>
+            </template>
+          </vxe-button>
+        </template>
+        <template v-slot:right>
+          <img src="static/other/img1.gif" height="34">
+          <img src="static/other/img1.gif" height="34">
+          <img src="static/other/img1.gif" height="34">
+        </template>
       </vxe-pager>
     </p>
+
+    <pre>
+      <code>
+        | Arrow Up ↑ | 如果在当前页输入框内则向上翻页 |
+        | Arrow Down ↓ | 如果在当前页输入框内则向下翻页 |
+      </code>
+    </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -151,7 +173,6 @@ export default {
 
         <p>
           <vxe-pager
-            border
             :current-page.sync="page4.currentPage"
             :page-size.sync="page4.pageSize"
             :total="page4.totalResult"
@@ -163,7 +184,7 @@ export default {
             :current-page.sync="page5.currentPage"
             :page-size.sync="page5.pageSize"
             :total="page5.totalResult"
-            :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
           </vxe-pager>
         </p>
 
@@ -183,7 +204,23 @@ export default {
             :current-page.sync="page6.currentPage"
             :page-size.sync="page6.pageSize"
             :total="page6.totalResult"
+            :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+            <template v-slot:left>
+              <vxe-button size="small">
+                <template v-slot>更多操作</template>
+                <template v-slot:dropdowns>
+                  <vxe-button type="text">批量修改</vxe-button>
+                  <vxe-button type="text">批量管理</vxe-button>
+                  <vxe-button type="text">批量删除</vxe-button>
+                </template>
+              </vxe-button>
+            </template>
+            <template v-slot:right>
+              <img src="static/other/img1.gif" height="34">
+              <img src="static/other/img1.gif" height="34">
+              <img src="static/other/img1.gif" height="34">
+            </template>
           </vxe-pager>
         </p>
         `,

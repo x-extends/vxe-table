@@ -1,8 +1,11 @@
 <template>
   <div>
-    <p class="tip">显示/隐藏列功能，通过设置 <toolbar-api-link prop="id"/> 和 <toolbar-api-link prop="custom"/>={storage: true} 参数开启将列个性化 localStorage 保存功能</p>
+    <p class="tip">
+      显示/隐藏列功能，通过表格设置 <table-api-link prop="id"/> 和 <table-api-link prop="custom-config"/>={storage: true} 参数开启将列个性化 localStorage 保存功能<br>
+      通过 <table-api-link prop="custom"/> 事件实现显示/隐藏列服务端保存，通过 <table-api-link prop="resizable-change"/> 事件实现列宽状态服务端保存
+    </p>
 
-    <vxe-toolbar id="toolbar_demo3" :custom="{storage: true}">
+    <vxe-toolbar custom>
       <template v-slot:buttons>
         <vxe-button>按钮1</vxe-button>
         <vxe-button>按钮2</vxe-button>
@@ -12,6 +15,8 @@
     <vxe-table
       border
       height="400"
+      id="toolbar_demo3"
+      :custom-config="{storage: true}"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -38,7 +43,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-toolbar id="toolbar_demo3" :custom="{storage: true}">
+        <vxe-toolbar custom>
           <template v-slot:buttons>
             <vxe-button>按钮1</vxe-button>
             <vxe-button>按钮2</vxe-button>
@@ -48,6 +53,8 @@ export default {
         <vxe-table
           border
           height="400"
+          id="toolbar_demo3"
+          :custom-config="{storage: true}"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

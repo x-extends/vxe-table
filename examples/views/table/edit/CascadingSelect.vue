@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现简单的级联下拉选项列表</p>
+    <p class="tip">实现简单的级联下拉选项列表<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -18,15 +18,9 @@
       @edit-actived="editActivedEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="attr3" title="Project type" :edit-render="{name: '$select', options: ptypeList, events: {change: ptypeChangeEvent}}"></vxe-table-column>
-      <vxe-table-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{}">
-        <template v-slot:edit="{ row }">
-          <select class="vxe-default-select" v-model="row.attr4">
-            <option v-for="item in pnameList" :key="item.value" :value="item.value">{{ item.label }}</option>
-          </select>
-        </template>
-      </vxe-table-column>
-      <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}}"></vxe-table-column>
+      <vxe-table-column field="attr3" title="Project type" :edit-render="{name: '$select', options: ptypeList, props: {clearable: true}, events: {change: ptypeChangeEvent}}"></vxe-table-column>
+      <vxe-table-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{name: '$select', options: pnameList, props: {clearable: true}}"></vxe-table-column>
+      <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -48,10 +42,6 @@ export default {
     return {
       tableData: [],
       ptypeList: [
-        {
-          label: '',
-          value: ''
-        },
         {
           label: '项目1',
           value: '1'
@@ -85,15 +75,9 @@ export default {
           @edit-actived="editActivedEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="attr3" title="Project type" :edit-render="{name: '$select', options: ptypeList, events: {change: ptypeChangeEvent}}"></vxe-table-column>
-          <vxe-table-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{}">
-            <template v-slot:edit="{ row }">
-              <select class="vxe-default-select" v-model="row.attr4">
-                <option v-for="item in pnameList" :key="item.value" :value="item.value">{{ item.label }}</option>
-              </select>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column field="date12" title="Date" :edit-render="{name: 'input', attrs: {type: 'date'}}"></vxe-table-column>
+          <vxe-table-column field="attr3" title="Project type" :edit-render="{name: '$select', options: ptypeList, props: {clearable: true}, events: {change: ptypeChangeEvent}}"></vxe-table-column>
+          <vxe-table-column field="attr4" title="Project name" :formatter="formatPanmeLabel" :edit-render="{name: '$select', options: pnameList, props: {clearable: true}}"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -102,10 +86,6 @@ export default {
             return {
               tableData: [],
               ptypeList: [
-                {
-                  label: '',
-                  value: ''
-                },
                 {
                   label: '项目1',
                   value: '1'
@@ -151,12 +131,7 @@ export default {
             // 更新级联选项列表
             updatePnameList (row) {
               let ptype = row.attr3
-              let pnameList = [
-                {
-                  label: '',
-                  value: ''
-                }
-              ]
+              let pnameList = []
               if (ptype) {
                 let item = this.cachePnameList.find(item => item.ptype === ptype)
                 if (item) {
@@ -174,9 +149,7 @@ export default {
               }
               this.pnameList = pnameList
             },
-            ptypeChangeEvent ({ row }, evnt) {
-              // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-              row.attr3 = evnt.target.value
+            ptypeChangeEvent ({ row }) {
               // 类型切换时更新级联的下拉数据
               row.attr4 = ''
               this.updatePnameList(row)
@@ -222,12 +195,7 @@ export default {
     // 更新级联选项列表
     updatePnameList (row) {
       const ptype = row.attr3
-      let pnameList = [
-        {
-          label: '',
-          value: ''
-        }
-      ]
+      let pnameList = []
       if (ptype) {
         const item = this.cachePnameList.find(item => item.ptype === ptype)
         if (item) {
@@ -245,9 +213,7 @@ export default {
       }
       this.pnameList = pnameList
     },
-    ptypeChangeEvent ({ row }, evnt) {
-      // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-      row.attr3 = evnt.target.value
+    ptypeChangeEvent ({ row }) {
       // 类型切换时更新级联的下拉数据
       row.attr4 = ''
       this.updatePnameList(row)

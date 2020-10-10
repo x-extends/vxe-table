@@ -71,6 +71,15 @@ const apis = [
         list: []
       },
       {
+        name: 'className',
+        desc: '给窗口附加 className',
+        version: '1.15.31',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'iconStatus',
         descKey: 'app.api.modal.desc.iconStatus',
         version: '1.15.15',
@@ -86,6 +95,24 @@ const apis = [
         type: 'String',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'cancel-button-text',
+        desc: '只对 type=confirm 有效，取消按钮的文本内容',
+        version: '1.15.31',
+        type: 'string',
+        enum: '',
+        defVal: '取消',
+        list: []
+      },
+      {
+        name: 'confirm-button-text',
+        desc: '只对 type=alert|confirm 有效，确定按钮的文本内容',
+        version: '1.15.31',
+        type: 'string',
+        enum: '',
+        defVal: '确定',
         list: []
       },
       {
@@ -215,6 +242,34 @@ const apis = [
         list: []
       },
       {
+        name: 'position',
+        descKey: 'app.api.modal.desc.position',
+        version: '1.15.30',
+        type: 'String, Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'top',
+            desc: '距离顶部的偏移',
+            version: '',
+            type: 'Number, String',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'left',
+            desc: '距离左侧的偏移',
+            version: '',
+            type: 'Number, String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'zIndex',
         descKey: 'app.api.modal.desc.zIndex',
         version: '1.15.9',
@@ -230,6 +285,15 @@ const apis = [
         type: 'Boolean',
         enum: '',
         defVal: 'true',
+        list: []
+      },
+      {
+        name: 'transfer',
+        desc: '是否将弹框容器插入于 body 内',
+        version: '1.15.27',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.modal.transfer',
         list: []
       },
       {
@@ -337,7 +401,7 @@ const apis = [
         name: 'inserted',
         desc: '在窗口元素插入父节点时会触发该事件（只会执行一次）',
         version: '1.15.8',
-        type: '{type}',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -346,16 +410,16 @@ const apis = [
         name: 'show',
         desc: '在窗口显示时会触发该事件',
         version: '',
-        type: '{type}',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
       },
       {
         name: 'hide',
-        desc: '在窗口关闭时会触发该事件',
+        desc: '在窗口隐藏时会触发该事件',
         version: '',
-        type: '{type}',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -364,7 +428,7 @@ const apis = [
         name: 'confirm',
         desc: '点击确定按钮时会触发该事件',
         version: '',
-        type: '{type}, event',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -373,7 +437,7 @@ const apis = [
         name: 'close',
         desc: '点击关闭按钮时会触发该事件',
         version: '',
-        type: '{type}, event',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -382,7 +446,7 @@ const apis = [
         name: 'zoom',
         desc: '窗口缩放时会触发该事件',
         version: '',
-        type: '{type}, event',
+        type: '{ type, $event }',
         enum: '',
         defVal: '',
         list: []
@@ -420,6 +484,42 @@ const apis = [
         desc: '获取当前窗口元素',
         version: '',
         type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getPosition()',
+        desc: '只对 type=modal 有效，获取窗口位置',
+        version: '1.15.30',
+        type: '{top,left}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'setPosition(top, left)',
+        desc: '只对 type=modal 有效，设置窗口位置',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: 'top?: number, left?: number',
+        list: []
+      },
+      {
+        name: 'isMaximized()',
+        desc: '判断是否最大化显示',
+        version: '1.15.27',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'zoom()',
+        desc: '切换窗口最大化/还原',
+        version: '2.8.29',
+        type: 'Promise<status>',
         enum: '',
         defVal: '',
         list: []

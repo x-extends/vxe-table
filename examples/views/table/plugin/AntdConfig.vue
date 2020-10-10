@@ -1,12 +1,15 @@
 <template>
   <div>
-    <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-antd" target="_blank">vxe-table-plugin-antd</a> 插件的 API</p>
+    <p class="tip">
+      具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-antd" target="_blank">vxe-table-plugin-antd</a> 插件的 API<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
+    </p>
 
     <vxe-grid
       border
       show-overflow
+      keep-source
       ref="xGrid"
-      class="vxe-table-antd"
       height="460"
       :loading="loading"
       :data="tableData"
@@ -18,7 +21,7 @@
       <template v-slot:top>
         <a-alert type="warning" :message="`已选择 ${selectRecords.length} 项`" banner></a-alert>
       </template>
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
       </template>
@@ -50,28 +53,32 @@ export default {
         { field: 'role', title: 'AAutoComplete', width: 160, editRender: { name: 'AAutoComplete', props: { dataSource: [] }, events: { search: this.roleSearchEvent } } },
         { field: 'age', title: 'AInputNumber', width: 160, editRender: { name: 'AInputNumber', props: { max: 35, min: 18 } } },
         { field: 'sex', title: 'ASelect', width: 140, editRender: { name: 'ASelect', options: [] } },
-        { field: 'sex1', title: 'ASelect', width: 160, editRender: { name: 'ASelect', options: [], props: { mode: 'multiple' } } },
+        { field: 'sex1', title: 'ASelect（不建议放在单元格）', width: 260, editRender: { name: 'ASelect', options: [], props: { mode: 'multiple' } } },
         { field: 'sex2', title: 'ASelect', width: 140, editRender: { name: 'ASelect', optionGroups: [] } },
         { field: 'region', title: 'ACascader', width: 200, editRender: { name: 'ACascader', props: { options: [] } } },
         { field: 'date7', title: 'ADatePicker', width: 140, editRender: { name: 'ADatePicker', props: { type: 'date', format: 'YYYY/MM/DD' } } },
         { field: 'date8', title: 'AMonthPicker', width: 140, editRender: { name: 'AMonthPicker' } },
         { field: 'date9', title: 'AWeekPicker', width: 140, editRender: { name: 'AWeekPicker' } },
-        { field: 'date11', title: 'ARangePicker', width: 140, editRender: { name: 'ARangePicker' } },
+        { field: 'date11', title: 'ARangePicker', width: 260, editRender: { name: 'ARangePicker' } },
         { field: 'date10', title: 'ATimePicker', width: 140, editRender: { name: 'ATimePicker' } },
         { field: 'attr1', title: 'ATreeSelect', width: 140, editRender: { name: 'ATreeSelect', props: { treeData: [] } } },
-        { field: 'attr2', title: 'ATreeSelect', width: 140, editRender: { name: 'ATreeSelect', props: { treeData: [], treeCheckable: true } } },
-        { field: 'flag', title: 'ASwitch', width: 100, editRender: { name: 'ASwitch', type: 'visible' } },
-        { field: 'rate', title: 'ARate', width: 200, editRender: { name: 'ARate', type: 'visible' } }
+        { field: 'attr2', title: 'ATreeSelect（不建议放在单元格）', width: 300, editRender: { name: 'ATreeSelect', props: { treeData: [], treeCheckable: true } } },
+        { field: 'flag', title: 'ASwitch', width: 100, cellRender: { name: 'ASwitch' } },
+        { field: 'rate', title: 'ARate', width: 200, cellRender: { name: 'ARate' } }
       ],
-      tableToolbar: {},
+      tableToolbar: {
+        slots: {
+          buttons: 'toolbar_buttons'
+        }
+      },
       restaurants: ['前端', '后端', '开发', '测试'],
       demoCodes: [
         `
         <vxe-grid
           border
           show-overflow
+          keep-source
           ref="xGrid"
-          class="vxe-table-antd"
           height="460"
           :loading="loading"
           :data="tableData"
@@ -83,7 +90,7 @@ export default {
           <template v-slot:top>
             <a-alert type="warning" :message="\`已选择 \${selectRecords.length} 项\`" banner></a-alert>
           </template>
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <el-button @click="insertEvent">新增</el-button>
             <el-button @click="saveEvent">保存</el-button>
           </template>
@@ -103,20 +110,24 @@ export default {
                 { field: 'role', title: 'AAutoComplete', width: 160, editRender: { name: 'AAutoComplete', props: { dataSource: [] }, events: { search: this.roleSearchEvent } } },
                 { field: 'age', title: 'AInputNumber', width: 160, editRender: { name: 'AInputNumber', props: { max: 35, min: 18 } } },
                 { field: 'sex', title: 'ASelect', width: 140, editRender: { name: 'ASelect', options: [] } },
-                { field: 'sex1', title: 'ASelect', width: 160, editRender: { name: 'ASelect', options: [], props: { mode: 'multiple' } } },
+                { field: 'sex1', title: 'ASelect（不建议放在单元格）', width: 260, editRender: { name: 'ASelect', options: [], props: { mode: 'multiple' } } },
                 { field: 'sex2', title: 'ASelect', width: 140, editRender: { name: 'ASelect', optionGroups: [] } },
                 { field: 'region', title: 'ACascader', width: 200, editRender: { name: 'ACascader', props: { options: [] } } },
                 { field: 'date7', title: 'ADatePicker', width: 140, editRender: { name: 'ADatePicker', props: { type: 'date', format: 'YYYY/MM/DD' } } },
                 { field: 'date8', title: 'AMonthPicker', width: 140, editRender: { name: 'AMonthPicker' } },
                 { field: 'date9', title: 'AWeekPicker', width: 140, editRender: { name: 'AWeekPicker' } },
-                { field: 'date11', title: 'ARangePicker', width: 140, editRender: { name: 'ARangePicker' } },
+                { field: 'date11', title: 'ARangePicker', width: 260, editRender: { name: 'ARangePicker' } },
                 { field: 'date10', title: 'ATimePicker', width: 140, editRender: { name: 'ATimePicker' } },
                 { field: 'attr1', title: 'ATreeSelect', width: 140, editRender: { name: 'ATreeSelect', props: { treeData: [] } } },
-                { field: 'attr2', title: 'ATreeSelect', width: 140, editRender: { name: 'ATreeSelect', props: { treeData: [], treeCheckable: true } } },
-                { field: 'flag', title: 'ASwitch', width: 100, editRender: { name: 'ASwitch', type: 'visible' } },
-                { field: 'rate', title: 'ARate', width: 200, editRender: { name: 'ARate', type: 'visible' } }
+                { field: 'attr2', title: 'ATreeSelect（不建议放在单元格）', width: 300, editRender: { name: 'ATreeSelect', props: { treeData: [], treeCheckable: true } } },
+                { field: 'flag', title: 'ASwitch', width: 100, cellRender: { name: 'ASwitch' } },
+                { field: 'rate', title: 'ARate', width: 200, cellRender: { name: 'ARate' } }
               ],
-              tableToolbar: {},
+              tableToolbar: {
+                slots: {
+                  buttons: 'toolbar_buttons'
+                }
+              },
               restaurants: ['前端', '后端', '开发', '测试']
             }
           },

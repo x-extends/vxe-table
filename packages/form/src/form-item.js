@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils'
 import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 import GlobalConfig from '../../conf'
@@ -7,7 +8,7 @@ function renderPrefixIcon (h, titlePrefix) {
     class: 'vxe-form--item-title-prefix'
   }, [
     h('i', {
-      class: titlePrefix.icon || GlobalConfig.icon.formPrefix
+      class: titlePrefix.icon || GlobalConfig.icon.FORM_PREFIX
     })
   ])
 }
@@ -17,7 +18,7 @@ function renderSuffixIcon (h, titleSuffix) {
     class: 'vxe-form--item-title-suffix'
   }, [
     h('i', {
-      class: titleSuffix.icon || GlobalConfig.icon.formSuffix
+      class: titleSuffix.icon || GlobalConfig.icon.FORM_SUFFIX
     })
   ])
 }
@@ -109,7 +110,7 @@ export default {
     errRule () {
       const { $vxeform, field } = this
       if ($vxeform) {
-        return $vxeform.invalids.find(({ property }) => field === property)
+        return XEUtils.find($vxeform.invalids, ({ property }) => field === property)
       }
       return null
     }
@@ -162,7 +163,7 @@ export default {
         }, renderTitle(h, this)) : null,
         h('div', {
           class: ['vxe-form--item-content', align ? `align--${align}` : null]
-        }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, property: field, $form: $vxeform }, { $form: $vxeform }) : ($scopedSlots.default ? $scopedSlots.default.call(this, { data: $vxeform.data, property: field, $form: $vxeform }) : [])).concat(
+        }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, property: field, $form: $vxeform }, { $form: $vxeform }) : ($scopedSlots.default ? $scopedSlots.default.call(this, { data: $vxeform.data, property: field, $form: $vxeform }, h) : [])).concat(
           [
             collapseNode ? h('div', {
               class: 'vxe-form--item-trigger-node',
@@ -174,7 +175,7 @@ export default {
                 class: 'vxe-form--item-trigger-text'
               }, collapseAll ? GlobalConfig.i18n('vxe.form.unfolding') : GlobalConfig.i18n('vxe.form.folding')),
               h('i', {
-                class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.formFolding : GlobalConfig.icon.formUnfolding]
+                class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
               })
             ]) : null,
             showRule ? h('div', {
@@ -191,8 +192,8 @@ export default {
   methods: {
     toggleCollapseEvent (evnt) {
       const $form = this.$vxeform
-      $form.$emit('toggle-collapse', { collapse: !$form.collapseAll, data: $form.data, $form }, evnt)
       $form.toggleCollapse()
+      $form.$emit('toggle-collapse', { collapse: !$form.collapseAll, data: $form.data, $form, $event: evnt }, evnt)
     }
   }
 }

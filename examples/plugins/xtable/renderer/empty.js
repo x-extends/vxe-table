@@ -1,6 +1,6 @@
 import VXETable from '../../../../packages/v-x-e-table'
 
-// 创建一个空内容渲染器
+// 创建一个简单的空内容渲染
 VXETable.renderer.add('NotData', {
   // 空内容模板
   renderEmpty () {

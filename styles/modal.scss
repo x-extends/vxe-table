@@ -6,8 +6,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  line-height: 1.5;
+  width: calc(100% + 18px);
+  height: calc(100% + 18px);
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   transition: top .4s ease-in-out;
@@ -135,9 +136,9 @@
     .vxe-modal--box {
       display: flex;
       flex-direction: column;
-      position: absolute;
+      position: fixed;
       left: 50%;
-      top: 15vh;
+      top: 0;
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
       border: 1px solid rgba(0,0,0,.2);
       .vxe-modal--header {
@@ -168,7 +169,7 @@
     visibility: hidden;
     width: 420px;
     background-color: #fff;
-    border-radius: 4px;
+    border-radius: $vxe-border-radius;
     border: 1px solid #ebeef5;
     text-align: left;
     pointer-events: auto;
@@ -196,28 +197,28 @@
   }
   &.status--info {
     .vxe-modal--status-wrapper {
-      color: #2998FF;
+      color: $vxe-info-color;
     }
   }
   &.status--warning,
   &.status--question {
     .vxe-modal--status-wrapper {
-      color: #FAAD14;
+      color: $vxe-warning-color;
     }
   }
   &.status--success {
     .vxe-modal--status-wrapper {
-      color: #52C41A;
+      color: $vxe-success-color;
     }
   }
   &.status--error {
     .vxe-modal--status-wrapper {
-      color: #F5222D;
+      color: $vxe-danger-color;
     }
   }
   &.status--loading {
     .vxe-modal--status-wrapper {
-      color: #78B1EB;
+      color: $vxe-disabled-color;
     }
   }
   .vxe-modal--status-wrapper {
@@ -245,7 +246,7 @@
     padding: 0.6em 2.8em 0.6em 1em;
     border-bottom: 1px solid #eee;
     background-color: $vxe-modal-header-background-color;
-    border-radius: 2px 2px 0 0;
+    border-radius: $vxe-border-radius $vxe-border-radius 0 0;
     user-select: none;
     &.is--ellipsis {
       overflow: hidden;
@@ -270,7 +271,7 @@
   .vxe-modal--footer {
     flex-shrink: 0;
     text-align: right;
-    padding: 0.6em 1em;
+    padding: 0.8em 1em;
   }
   &.is--maximize {
     .vxe-modal--box {

@@ -1,9 +1,6 @@
-import ResizeMethods from './src/resize'
-import { ResizeEvent } from '../tools'
-
-ResizeMethods.install = function () {
-  Object.assign(ResizeEvent, ResizeMethods)
+export const Resize = {
+  /* eslint-disable @typescript-eslint/no-empty-function */
+  install () {}
 }
 
-export const Resize = ResizeMethods
-export default ResizeMethods
+export default Resize

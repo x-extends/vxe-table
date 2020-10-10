@@ -1,4 +1,5 @@
 /**Variable**/
+@import './base/checked.scss';
 
 .vxe-export--panel-column > ul {
   list-style-type: none;
@@ -42,19 +43,32 @@
     width: 80%;
     border: 1px solid $vxe-input-border-color;
     margin: 3px 0;
-    border-radius: 4px;
+    border-radius: $vxe-border-radius;
     user-select: none;
     & > ul {
       & > li {
-        padding: 0.2em 1em 0.2em 2.25em;
+        padding: 0.2em 1em 0.2em 2.3em;
+        @for $i from 2 through 8 {
+          $interval: $i - 1 + 0.2;
+          &.level--#{$i}{
+            padding-left: #{$interval + 2.3}em;
+            .vxe-checkbox--icon {
+              left: #{$interval + 0.6}em;
+            }
+          }
+        }
       }
     }
     .vxe-export--panel-column-header {
+      padding: 0.1em 0;
       background-color: #f8f8f9;
       font-weight: 700;
+      border-bottom: 1px solid #DADCE0;
     }
     .vxe-export--panel-column-body {
-      max-height: 208px;
+      padding: 0.2em 0;
+      min-height: 10em;
+      max-height: 17.6em;
     }
   }
   .vxe-import-selected--file {
@@ -83,7 +97,7 @@
   .vxe-import-select--file {
     border: 1px dashed $vxe-input-border-color;
     padding: 6px 34px;
-    border-radius: 4px;
+    border-radius: $vxe-border-radius;
     user-select: none;
     cursor: pointer;
     &:hover {
@@ -98,82 +112,10 @@
 }
 
 .vxe-export--panel-column-option {
-  position: relative;
+  @extend %XECheckbox;
   .vxe-checkbox--icon {
-    &:before {
-      content: "";
-      position: absolute;
-      height: 1em;
-      width: 1em;
-      top: 0.4em;
-      left: 0.6em;
-      border-radius: $vxe-checkbox-border-radius;
-      border: $vxe-checkbox-border-width solid $vxe-input-border-color;
-    }
-  }
-  &.is--checked,
-  &.is--indeterminate {
-    color: $vxe-primary-color;
-    .vxe-checkbox--icon {
-      &:before {
-        border-color: $vxe-primary-color;
-        background-color: $vxe-primary-color;
-      }
-      &:after {
-        content: "";
-        position: absolute;
-      }
-    }
-  }
-  &.is--checked {
-    .vxe-checkbox--icon {
-      &:after {
-        height: 0.64em;
-        width: 0.32em;
-        top: 0.5em;
-        left: 0.95em;
-        border: 2px solid #ffffff;
-        border-left: 0;
-        border-top: 0;
-        transform: rotate(45deg);
-      }
-    }
-  }
-  &.is--indeterminate {
-    .vxe-checkbox--icon {
-      &:after {
-        top: 0.8em;
-        left: 0.6em;
-        height: 0.18em;
-        width: 1em;
-        background-color: #ffffff;
-        transform: scale(.6);
-      }
-    }
-  }
-  &:not(.is--disabled) {
-    &:hover {
-      .vxe-checkbox--icon {
-        &:before {
-          border-color: $vxe-primary-color;
-        }
-      }
-    }
-  }
-  &.is--disabled {
-    cursor: not-allowed;
-    color: $vxe-input-disabled-color;
-    &.is--checked {
-      .vxe-checkbox--icon {
-        &:before {
-          border-color: $vxe-input-disabled-color;
-          background-color: $vxe-input-disabled-background-color;
-        }
-        &:after {
-          border-color: $vxe-input-disabled-color;
-        }
-      }
-    }
+    left: 0.6em;
+    top: 0.38em;
   }
   &:hover {
     background-color: $vxe-table-row-hover-background-color;

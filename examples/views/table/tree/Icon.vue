@@ -1,11 +1,14 @@
 <template>
   <div>
-    <p class="tip">自定义图标，通过设置 <table-api-link prop="tree-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标</p>
+    <p class="tip">
+      自定义图标，通过设置 <table-api-link prop="tree-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标，例如第三方图标库：font-awesome、inconfont<br>
+      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-        <vxe-button @click="$refs.xTree1.setAllTreeExpansion(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-toolbar>
@@ -62,6 +65,26 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
       <code class="css">{{ demoCodes[4] }}</code>
     </pre>
+
+    <p class="tip">还可以通过 <table-api-link prop="tree-config"/>={<table-api-link prop="toggleMethod"/>} 方法实现展开与关闭的细节处理，返回值用来决定是否允许继续执行</p>
+
+    <vxe-table
+      resizable
+      show-overflow
+      :tree-config="{children: 'children', toggleMethod: toggleTreeMethod}"
+      :data="tableData">
+      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
+      <vxe-table-column field="size" title="Size"></vxe-table-column>
+      <vxe-table-column field="type" title="Type"></vxe-table-column>
+      <vxe-table-column field="date" title="Date"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <code class="xml">{{ demoCodes[5] }}</code>
+      <code class="javascript">{{ demoCodes[6] }}</code>
+    </pre>
   </div>
 </template>
 
@@ -78,7 +101,7 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-toolbar>
@@ -103,7 +126,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             getTreeExpansionEvent () {
@@ -146,13 +169,53 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `,
         `
         .tree-node-icon {
           width: 20px;
+        }
+        `,
+        `
+        <vxe-table
+          resizable
+          show-overflow
+          :tree-config="{children: 'children', toggleMethod: toggleTreeMethod}"
+          :data="tableData">
+          <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
+          <vxe-table-column field="size" title="Size"></vxe-table-column>
+          <vxe-table-column field="type" title="Type"></vxe-table-column>
+          <vxe-table-column field="date" title="Date"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData: []
+            }
+          },
+          created () {
+            this.tableData = window.MOCK_TREE_DATA_LIST
+          },
+          methods: {
+            toggleTreeMethod ({ expanded, row }) {
+              if (expanded) {
+                if (row.date === '2019-10-22') {
+                  this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+                  return false
+                }
+              } else {
+                if (row.date === '2019-03-04') {
+                  this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+                  return false
+                }
+              }
+              return true
+            }
+          }
         }
         `
       ]
@@ -170,6 +233,20 @@ export default {
     getTreeExpansionEvent () {
       const treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
       this.$XModal.alert(treeExpandRecords.length)
+    },
+    toggleTreeMethod ({ expanded, row }) {
+      if (expanded) {
+        if (row.date === '2019-10-22') {
+          this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+          return false
+        }
+      } else {
+        if (row.date === '2019-03-04') {
+          this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+          return false
+        }
+      }
+      return true
     }
   }
 }

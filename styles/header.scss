@@ -2,17 +2,12 @@
 
 .vxe-table {
   .vxe-table--header-wrapper {
-    .vxe-table--repair {
+    .vxe-table--header-border-line {
       position: absolute;
       left: 0;
       bottom: 0;
       height: 0;
       border-bottom: 1px solid $vxe-table-border-color;
-    }
-  }
-  &:not(.b--style-none) {
-    .vxe-table--header-wrapper {
-      background-color: $vxe-table-header-background-color;
     }
   }
   /*排序*/
@@ -23,40 +18,34 @@
     text-align: center;
     display: inline-block;
     position: relative;
-    .vxe-sort--asc-btn,
-    .vxe-sort--desc-btn {
-      position: absolute;
-      left: 0.35em;
-      color: $vxe-table-column-icon-border-color;
-      width: 1em;
-      text-align: center;
-      cursor: pointer;
-      &:hover {
-        color: $vxe-font-color;
-      }
-      &.sort--active {
-        color: $vxe-primary-color;
-      }
+  }
+  .vxe-sort--asc-btn,
+  .vxe-sort--desc-btn {
+    position: absolute;
+    left: 0.35em;
+    color: $vxe-table-column-icon-border-color;
+    width: 1em;
+    text-align: center;
+    cursor: pointer;
+    &:hover {
+      color: $vxe-table-font-color;
     }
-    .vxe-sort--asc-btn {
-      top: -0.04em;
+    &.sort--active {
+      color: $vxe-primary-color;
     }
-    .vxe-sort--desc-btn {
-      bottom: -0.04em;
-    }
+  }
+  .vxe-sort--asc-btn {
+    top: -0.04em;
+  }
+  .vxe-sort--desc-btn {
+    bottom: -0.04em;
   }
 }
 
 .vxe-header--column {
   position: relative;
+  font-weight: $vxe-table-header-font-weight;
   user-select: none;
-  .vxe-edit-icon {
-    &.vxe-icon--edit-outline {
-      &:before {
-        background-color: $vxe-table-header-background-color;
-      }
-    }
-  }
   &.col--ellipsis {
     & > .vxe-cell {
       display: flex;
@@ -74,11 +63,10 @@
       }
     }
   }
-  .vxe-required-icon {
+  .vxe-cell--required-icon {
     display: inline-block;
     color: $vxe-table-validate-error-color;
-    vertical-align: middle;
-    width: 0.85em;
+    width: 0.8em;
     height: 1em;
     line-height: 1em;
     font-family: $vxe-icon-font-family;
@@ -88,11 +76,22 @@
       content: "*";
       position: absolute;
       left: 0;
-      top: 0.05em;
+      top: 0.2em;
     }
   }
-  .vxe-edit-icon {
+  .vxe-cell--required-icon,
+  .vxe-cell--edit-icon,
+  .vxe-cell--title {
+    vertical-align: middle;
+  }
+  .vxe-cell--required-icon {
+    margin-right: 0.1em;
+  }
+  .vxe-cell--edit-icon  {
     margin-right: 0.2em;
+  }
+  .vxe-cell--title {
+    line-height: 1.5;
   }
   .vxe-resizable {
     position: absolute;

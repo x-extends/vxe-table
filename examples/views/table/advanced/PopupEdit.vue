@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现弹框表单编辑功能</p>
+    <p class="tip">实现弹框表单编辑功能<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-table
       border
@@ -23,23 +23,27 @@
     </vxe-table>
 
     <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" resize destroy-on-close>
-      <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
-        <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
-        <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
-        <vxe-form-item title="Nickname" field="nickname" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入昵称'}}"></vxe-form-item>
-        <vxe-form-item title="Role" field="role" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入角色'}}"></vxe-form-item>
-        <vxe-form-item title="Sex" field="sex" span="12" :item-render="{name: '$select', options: sexList}"></vxe-form-item>
-        <vxe-form-item title="Age" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
-        <vxe-form-item title="Other information" span="24" title-align="left" title-width="200px" :title-prefix="{message: '请填写必填项', icon: 'fa fa-info-circle'}"></vxe-form-item>
-        <vxe-form-item title="Number" field="num" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入数值'}}"></vxe-form-item>
-        <vxe-form-item title="Date" field="date3" span="12" :item-render="{name: 'input', attrs: {type: 'date', placeholder: '请选择日期'}}"></vxe-form-item>
-        <vxe-form-item title="Address" field="address" span="24" :title-suffix="{message: '啦啦啦，就是这么强大！！！', icon: 'fa fa-question-circle'}" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
-        <vxe-form-item align="center" span="24">
-          <vxe-button type="submit" status="primary">保存</vxe-button>
-          <vxe-button type="reset">重置</vxe-button>
-          <vxe-button @click="$refs.xModal.close()">取消</vxe-button>
-        </vxe-form-item>
-      </vxe-form>
+      <template v-slot>
+        <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
+          <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
+          <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
+          <vxe-form-item title="Nickname" field="nickname" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入昵称'}}"></vxe-form-item>
+          <vxe-form-item title="Role" field="role" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入角色'}}"></vxe-form-item>
+          <vxe-form-item title="Sex" field="sex" span="12" :item-render="{name: '$select', options: sexList}"></vxe-form-item>
+          <vxe-form-item title="Age" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
+          <vxe-form-item title="Other information" span="24" title-align="left" title-width="200px" :title-prefix="{message: '请填写必填项', icon: 'fa fa-info-circle'}"></vxe-form-item>
+          <vxe-form-item title="Number" field="num" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入数值'}}"></vxe-form-item>
+          <vxe-form-item title="Date" field="date3" span="12" :item-render="{name: 'input', attrs: {type: 'date', placeholder: '请选择日期'}}"></vxe-form-item>
+          <vxe-form-item title="Address" field="address" span="24" :title-suffix="{message: '啦啦啦，就是这么强大！！！', icon: 'fa fa-question-circle'}" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
+          <vxe-form-item align="center" span="24">
+            <template v-slot>
+              <vxe-button type="submit" status="primary">保存</vxe-button>
+              <vxe-button type="reset">重置</vxe-button>
+              <vxe-button @click="$refs.xModal.close()">取消</vxe-button>
+            </template>
+          </vxe-form-item>
+        </vxe-form>
+      </template>
     </vxe-modal>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -101,23 +105,27 @@ export default {
         </vxe-table>
 
         <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" resize destroy-on-close>
-          <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
-            <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
-            <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
-            <vxe-form-item title="Nickname" field="nickname" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入昵称'}}"></vxe-form-item>
-            <vxe-form-item title="Role" field="role" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入角色'}}"></vxe-form-item>
-            <vxe-form-item title="Sex" field="sex" span="12" :item-render="{name: '$select', options: sexList}"></vxe-form-item>
-            <vxe-form-item title="Age" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
-            <vxe-form-item title="Other information" span="24" title-align="left" title-width="200px" :title-prefix="{message: '请填写必填项', icon: 'fa fa-info-circle'}"></vxe-form-item>
-            <vxe-form-item title="Number" field="num" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入数值'}}"></vxe-form-item>
-            <vxe-form-item title="Date" field="date3" span="12" :item-render="{name: 'input', attrs: {type: 'date', placeholder: '请选择日期'}}"></vxe-form-item>
-            <vxe-form-item title="Address" field="address" span="24" :title-suffix="{message: '啦啦啦，就是这么强大！！！', icon: 'fa fa-question-circle'}" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
-            <vxe-form-item align="center" span="24">
-              <vxe-button type="submit" status="primary">保存</vxe-button>
-              <vxe-button type="reset">重置</vxe-button>
-              <vxe-button @click="$refs.xModal.close()">取消</vxe-button>
-            </vxe-form-item>
-          </vxe-form>
+          <template v-slot>
+            <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
+              <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
+              <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
+              <vxe-form-item title="Nickname" field="nickname" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入昵称'}}"></vxe-form-item>
+              <vxe-form-item title="Role" field="role" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入角色'}}"></vxe-form-item>
+              <vxe-form-item title="Sex" field="sex" span="12" :item-render="{name: '$select', options: sexList}"></vxe-form-item>
+              <vxe-form-item title="Age" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
+              <vxe-form-item title="Other information" span="24" title-align="left" title-width="200px" :title-prefix="{message: '请填写必填项', icon: 'fa fa-info-circle'}"></vxe-form-item>
+              <vxe-form-item title="Number" field="num" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入数值'}}"></vxe-form-item>
+              <vxe-form-item title="Date" field="date3" span="12" :item-render="{name: 'input', attrs: {type: 'date', placeholder: '请选择日期'}}"></vxe-form-item>
+              <vxe-form-item title="Address" field="address" span="24" :title-suffix="{message: '啦啦啦，就是这么强大！！！', icon: 'fa fa-question-circle'}" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
+              <vxe-form-item align="center" span="24">
+                <template v-slot>
+                  <vxe-button type="submit" status="primary">保存</vxe-button>
+                  <vxe-button type="reset">重置</vxe-button>
+                  <vxe-button @click="$refs.xModal.close()">取消</vxe-button>
+                </template>
+              </vxe-form-item>
+            </vxe-form>
+          </template>
         </vxe-modal>
         `,
         `
@@ -166,6 +174,7 @@ export default {
                 date3: row.date3,
                 address: row.address
               }
+              this.selectRow = row
               this.showEdit = true
             },
             submitEvent () {

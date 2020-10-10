@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>全局快捷菜单注册器</h1>
-    <p class="tip">你可以很简单的将常用的快捷菜单注册成全局可复用的</p>
+    <h1>{{ $t('app.aside.nav.menus') }}</h1>
+    <p class="tip">将快捷菜单注册成全局可复用的</p>
     <vxe-table
       resizable
       highlight-current-row
@@ -16,8 +16,8 @@
     </vxe-table>
     <h2>示例</h2>
     <pre>
-      <code class="javascript">{{ demoCodes[0] }}</code>
-      <code class="html">{{ demoCodes[1] }}</code>
+      <code class="html">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
   </div>
 </template>
@@ -31,18 +31,18 @@ export default {
       tableData: [
         {
           name: 'add(code, callback)',
-          desc: '添加',
+          desc: '添加一个',
           type: '',
           enum: '',
-          defVal: 'code, callback',
+          defVal: 'code: string, callback: (params, event) => any',
           list: []
         },
         {
-          name: 'mixin(map)',
-          desc: '混合多个',
+          name: 'mixin(options)',
+          desc: '添加多个',
           type: '',
           enum: '',
-          defVal: 'map',
+          defVal: 'options: { [code: string]: (params, event) => any }',
           list: []
         },
         {
@@ -50,7 +50,7 @@ export default {
           desc: '删除',
           type: '',
           enum: '',
-          defVal: 'name',
+          defVal: 'code: string',
           list: []
         }
       ],
@@ -58,7 +58,7 @@ export default {
         `
         <vxe-table
           border
-          :context-menu="{body: {options: bodyMenus}}"
+          :context-menu="tableMenu"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -81,26 +81,23 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
-              bodyMenus: [
-                [
-                  {
-                    code: 'exportData',
-                    name: '导出.csv'
-                  },
-                  {
-                    code: 'insert',
-                    name: '新增',
-                    record: {
-                      name: '默认名称'
-                    }
-                  }
-                ]
+              tableMenu: {
+                body: {
+                  options: [
+                    [
+                      { code: 'exportData', name: '导出.csv' },
+                      { code: 'insert', name: '新增', record: { name: '默认名称' } }
+                    ]
+                  ]
+                }
+              },
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
               ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           }
         }
         `

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用</p>
+    <p class="tip">
+      设置 <table-api-link prop="edit-config"/> 的 <table-api-link prop="activeMethod"/> 方法判断单元格是否禁用<br>
+      <span class="red">（具体请自行实现，该示例仅供参考）</span>
+    </p>
 
     <vxe-table
       border
@@ -21,18 +24,20 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">禁用第二行编辑</p>
+    <p class="tip">配合  <table-api-link prop="edit-actived"/> 事件，使用组件方式禁用编辑</p>
 
     <vxe-table
       border
       show-overflow
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
-      @edit-disabled="editDisabledEvent">
+      :edit-config="{trigger: 'click', mode: 'cell'}"
+      @edit-actived="editActivedEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-table-column>
+      <vxe-table-column title="分组">
+        <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', props: {disabled: sexDisabled}, options: sexList}"></vxe-table-column>
+        <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date', disabled: dateDisabled}}"></vxe-table-column>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -51,6 +56,9 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      nameDisabled: false,
+      sexDisabled: false,
+      dateDisabled: false,
       tableData: [],
       sexList: [],
       demoCodes: [
@@ -92,7 +100,7 @@ export default {
               return true
             },
             editDisabledEvent ({ row, column }) {
-              alert('禁止编辑')
+              this.$XModal.message({ message: '禁止编辑', status: 'error' })
             }
           }
         }
@@ -102,18 +110,23 @@ export default {
           border
           show-overflow
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeRowMethod}"
-          @edit-disabled="editDisabledEvent">
+          :edit-config="{trigger: 'click', mode: 'cell'}"
+          @edit-actived="editActivedEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-table-column>
+          <vxe-table-column title="分组">
+            <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', props: {disabled: sexDisabled}, options: sexList}"></vxe-table-column>
+            <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date', disabled: dateDisabled}}"></vxe-table-column>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
+              nameDisabled: false,
+              sexDisabled: false,
+              dateDisabled: false,
               tableData: [],
               sexList: []
             }
@@ -128,14 +141,10 @@ export default {
                 this.sexList = data
               })
             },
-            activeRowMethod ({ row, rowIndex }) {
-              if (rowIndex === 1) {
-                return false
-              }
-              return true
-            },
-            editDisabledEvent ({ row, column }) {
-              this.$XModal.alert('禁止编辑')
+            editActivedEvent ({ rowIndex, row }) {
+              this.nameDisabled = rowIndex === 1
+              this.sexDisabled = row.sex === '1'
+              this.dateDisabled = !!row.date
             }
           }
         }
@@ -164,14 +173,13 @@ export default {
       }
       return true
     },
-    activeRowMethod ({ rowIndex }) {
-      if (rowIndex === 1) {
-        return false
-      }
-      return true
-    },
     editDisabledEvent () {
-      this.$XModal.alert('禁止编辑')
+      this.$XModal.message({ message: '禁止编辑', status: 'error' })
+    },
+    editActivedEvent ({ rowIndex, row }) {
+      this.nameDisabled = rowIndex === 1
+      this.sexDisabled = row.sex === '1'
+      this.dateDisabled = !!row.date
     }
   }
 }

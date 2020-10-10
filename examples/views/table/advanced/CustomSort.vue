@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">自定义列头排序的实现，你可以把表格封装成子组件进行定制，通过 <table-column-api-link prop="slot"/> 非常简单就可以实现自定义排序，通过设置 <table-column-api-link prop="showIcon"/> 可以去掉内置排序图标</p>
+    <p class="tip">自定义列头排序的实现，你可以把表格封装成子组件进行定制，通过 <table-column-api-link prop="slot"/> 就可以实现自定义排序，通过设置 <table-column-api-link prop="showIcon"/> 可以去掉内置排序图标，例如第三方图标库：font-awesome、inconfont<br><span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-table
       border
@@ -31,7 +31,7 @@
           </span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="amount" title="Amount" formatter="commafy" sortable>
+      <vxe-table-column field="amount" title="Amount" :formatter="formatAmount" sortable>
         <template v-slot:header="{ column }">
           <span>{{ column.title }}</span>
           <span class="custom-sort" :class="{'is-order': column.order}">
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -89,7 +90,7 @@ export default {
               </span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="amount" title="Amount" formatter="commafy" sortable>
+          <vxe-table-column field="amount" title="Amount" :formatter="formatAmount" sortable>
             <template v-slot:header="{ column }">
               <span>{{ column.title }}</span>
               <span class="custom-sort" :class="{'is-order': column.order}">
@@ -98,6 +99,9 @@ export default {
             </template>
           </vxe-table-column>
         </vxe-table>
+        `,
+        `
+        
         `,
         `
         export default {
@@ -121,6 +125,9 @@ export default {
                   this.$refs.xTable.sort(column.property, 'asc')
                 }
               }
+            },
+            formatAmount ({ cellValue }) {
+              return XEUtils.commafy(cellValue)
             },
             filterNameMethod ({ value, row, column }) {
               return row.id >= value
@@ -159,6 +166,9 @@ export default {
           this.$refs.xTable.sort(column.property, 'asc')
         }
       }
+    },
+    formatAmount ({ cellValue }) {
+      return XEUtils.commafy(cellValue)
     },
     filterNameMethod ({ value, row }) {
       return row.id >= value

@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       <table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现行拖动，由于直接操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="row-key"/><br>
-      <span class="red">（注：该示例仅供参考，具体逻辑需要自行实现）</span>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 
     <vxe-table
@@ -12,7 +12,7 @@
       class="sortable-row-demo"
       :data="tableData">
       <vxe-table-column width="60">
-        <template>
+        <template v-slot>
           <span class="drag-btn">
             <i class="vxe-icon--menu"></i>
           </span>
@@ -39,8 +39,8 @@
 
     <p class="tip">
       <grid-api-link name="vxe-grid"/> 方式：树表格的移动也是一样的<br>
-      由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="refreshData"/> 方法刷新数据<br>
-      <span class="red">注意：树结构虽然可以任意跨层级拖动，但需要自行限制自己不能往自己子节点拖动</span>
+      由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="syncData"/> 方法刷新数据<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现，例如：限制自己不能往自己子节点拖动等...）</span>
     </p>
 
     <vxe-grid
@@ -108,7 +108,7 @@ export default {
           class="sortable-row-demo"
           :data="tableData">
           <vxe-table-column width="60">
-            <template>
+            <template v-slot>
               <span class="drag-btn">
                 <i class="vxe-icon--menu"></i>
               </span>
@@ -258,7 +258,7 @@ export default {
                       tableTreeData.unshift(currRow)
                     }
                     // 如果变动了树层级，需要刷新数据
-                    xTable.refreshData()
+                    xTable.syncData()
                   }
                 })
               })
@@ -348,7 +348,7 @@ export default {
               tableTreeData.unshift(currRow)
             }
             // 如果变动了树层级，需要刷新数据
-            xTable.refreshData()
+            xTable.syncData()
           }
         })
       })

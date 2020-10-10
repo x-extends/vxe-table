@@ -8,6 +8,25 @@ import formItemAPI from './form-item'
 
 const toolbarSlots = XEUtils.clone(toolbarAPI.find(item => item.name === 'Slots'), true)
 toolbarSlots.name = 'slots'
+toolbarSlots.list.forEach(item => {
+  item.type = 'String, Function'
+  item.defVal = `${item.defVal}, h`
+})
+
+const pagerSlots = XEUtils.clone(pagerAPI.find(item => item.name === 'Slots'), true)
+pagerSlots.name = 'slots'
+pagerSlots.list.forEach(item => {
+  item.type = 'String, Function'
+  item.defVal = `${item.defVal}, h`
+})
+
+const formItemSlots = XEUtils.clone(formItemAPI.find(item => item.name === 'Slots'), true)
+formItemSlots.name = 'slots'
+formItemSlots.version = '1.15.28'
+formItemSlots.list.forEach(item => {
+  item.type = 'String, Function'
+  item.defVal = `${item.defVal}, h`
+})
 
 const apis = [
   {
@@ -24,7 +43,7 @@ const apis = [
         version: '1.15.18',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.grid.formConfig',
         list: XEUtils.clone(formAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
           {
             name: 'items',
@@ -33,7 +52,9 @@ const apis = [
             type: 'Array',
             enum: '',
             defVal: '',
-            list: XEUtils.clone(formItemAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
+            list: XEUtils.clone(formItemAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
+              formItemSlots
+            ])
           }
         ])
       },
@@ -43,7 +64,7 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.grid.toolbar',
         list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
           name: 'zoom',
           desc: '是否允许最大化显示',
@@ -52,15 +73,6 @@ const apis = [
           enum: '',
           defVal: '',
           list: [
-            {
-              name: 'escRestore',
-              desc: '是否允许按 Esc 键还原',
-              version: '',
-              type: 'Boolean',
-              enum: '',
-              defVal: 'true',
-              list: []
-            },
             {
               name: 'iconIn',
               desc: '自定义最大化图标',
@@ -88,8 +100,10 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
-        list: XEUtils.mapTree(pagerAPI.find(item => item.name === 'Props').list.filter(item => !['size', 'loading'].includes(item.name)), item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
+        defVal: '继承 setup.grid.pagerConfig',
+        list: XEUtils.mapTree(pagerAPI.find(item => item.name === 'Props').list.filter(item => !['size', 'loading'].includes(item.name)), item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat(
+          pagerSlots
+        )
       },
       {
         name: 'proxy-config',
@@ -97,7 +111,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.grid.proxyConfig',
         list: [
           {
             name: 'autoLoad',
@@ -207,6 +221,15 @@ const apis = [
                 enum: '',
                 defVal: 'page.total',
                 list: []
+              },
+              {
+                name: 'message',
+                desc: '只对 pager-config 配置了有效，响应结果中获取提示消息的属性',
+                version: '1.15.31',
+                type: 'string',
+                enum: '',
+                defVal: 'message',
+                list: []
               }
             ]
           },
@@ -220,9 +243,18 @@ const apis = [
             list: [
               {
                 name: 'query',
-                desc: '查询方法 Function({ page, sort, filters, form }, ...arguments)，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息；如果使用了表单，form 属性可以获取相关信息',
+                desc: '查询方法 Function({ page, sort, filters, form }, ...arguments)，可以通过 proxy-config.props 配置读取响应结构的字段；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息；如果使用了表单，form 属性可以获取相关信息',
                 version: '',
-                type: 'Function / Promise',
+                type: 'Function / Promise<any[]>',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'queryAll',
+                desc: '全量查询方法 Function({})，和 query 同样属于查询方法，区别是 queryAll 只会被特殊行为触发，例如导出模式 export-config.mode=all 时会触发该方法并将返回值进行导出',
+                version: '1.15.31',
+                type: 'Function / Promise<any[]>',
                 enum: '',
                 defVal: '',
                 list: []
@@ -248,6 +280,25 @@ const apis = [
             ]
           }
         ]
+      },
+      {
+        name: 'zoom-config',
+        descKey: 'app.api.grid.desc.zoomConfig',
+        version: '1.15.28',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.grid.zoomConfig',
+        list: [
+          {
+            name: 'escRestore',
+            desc: '是否允许通过按下 ESC 键还原',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          }
+        ]
       }
     ]
   },
@@ -261,11 +312,20 @@ const apis = [
     list: [
       {
         name: 'form',
-        desc: '只对 form-config 配置时有效，表单模板',
+        desc: '表单模板',
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
+        list: []
+      },
+      {
+        name: 'toolbar',
+        desc: '工具栏模板',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '{}',
         list: []
       },
       {
@@ -274,7 +334,7 @@ const apis = [
         version: '1.15.19',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
@@ -283,43 +343,36 @@ const apis = [
         version: '1.15.19',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
         name: 'pager',
-        desc: '只对 pager-config 配置时有效，分页模板',
+        desc: '分页模板',
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
         name: 'buttons',
-        desc: '只对 toolbar 配置时有效，工具栏按钮列表模板',
+        disabled: true,
+        desc: '即将废弃',
         version: '',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
         name: 'tools',
-        desc: '只对 toolbar 配置时有效，工具栏右侧工具列表',
+        disabled: true,
+        desc: '即将废弃',
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'empty',
-        desc: '空数据时显示的文本内容',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '暂无数据',
+        defVal: '{}',
         list: []
       }
     ]
@@ -358,7 +411,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{type, currentPage, pageSize}',
+        defVal: '{ type, currentPage, pageSize, $event }',
         list: []
       },
       {
@@ -367,7 +420,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{data}, event',
+        defVal: '{ data, $event }',
         list: []
       },
       {
@@ -376,7 +429,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{data, errMap}, event',
+        defVal: '{ data, errMap, $event }',
         list: []
       },
       {
@@ -385,7 +438,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{data}, event',
+        defVal: '{ data, $event }',
         list: []
       },
       {
@@ -394,7 +447,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{collapse, data}, event',
+        defVal: '{ collapse, data, $event }',
         list: []
       },
       {
@@ -403,25 +456,16 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{code}, event',
+        defVal: '{ code, $event }',
         list: []
       },
       {
         name: 'zoom',
-        desc: '只对 toolbar.zoom 配置时有效，当工具栏的缩放按钮被点击时会后触发该事件',
+        desc: '当最大化或还原操作被手动点击时会后触发该事件',
         version: '1.15.23',
         type: '',
         enum: '',
-        defVal: '{maximize}, event',
-        list: []
-      },
-      {
-        name: 'custom',
-        desc: '只对 toolbar.custom 配置时有效，当工具栏的自定义列按钮被点击时会后触发该事件',
-        version: '1.15.23',
-        type: '',
-        enum: '',
-        defVal: '{type}, event',
+        defVal: '{ type, $event }',
         list: []
       }
     ]
@@ -460,6 +504,51 @@ const apis = [
         enum: '',
         defVal: '',
         list: []
+      },
+      {
+        name: 'maximize()',
+        desc: '如果表格处于常规状态，则最大化表格',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'revert()',
+        desc: '如果表格处于最大化状态，则还原表格',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getFormItems(index)',
+        desc: '只对 form-config 有效，获取表单项列表',
+        version: '1.15.29',
+        type: 'Array',
+        enum: '',
+        defVal: 'index? number',
+        list: []
+      },
+      {
+        name: 'getPendingRecords()',
+        desc: '获取已标记删除的数据',
+        version: '1.15.26',
+        type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getProxyInfo()',
+        desc: '获取数据代理信息',
+        version: '1.15.26',
+        type: '{data, filter, form, sort, pager, pendingRecords}',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   }
@@ -476,7 +565,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
     item.list = [
       {
         name: 'reload',
-        desc: '刷新数据并恢复到初始状态；触发 ajax.query 方法',
+        desc: '刷新数据并清除所有状态；触发 ajax.query 方法',
         version: '',
         type: '',
         enum: '',
@@ -520,18 +609,18 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
         list: []
       },
       {
-        name: 'delete_selection',
+        name: 'delete',
         desc: '删除选中行；会自动触发 ajax.delete 方法',
-        version: '',
+        version: '1.15.27',
         type: '',
         enum: '',
         defVal: '',
         list: []
       },
       {
-        name: 'remove_selection',
+        name: 'remove',
         desc: '移除选中行',
-        version: '',
+        version: '1.15.27',
         type: '',
         enum: '',
         defVal: '',
@@ -599,6 +688,7 @@ const columnSlots = XEUtils.clone(columnAPI.find(item => item.name === 'Slots'),
 columnSlots.name = 'slots'
 columnSlots.list.forEach(item => {
   item.type = 'String, Function'
+  item.defVal = `${item.defVal}, h`
 })
 
 gridAPI.find(item => item.name === 'Props').list.splice(1, 0, {

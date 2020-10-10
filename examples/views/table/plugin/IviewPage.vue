@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">与 <a class="link" href="https://www.npmjs.com/package/iview">iview</a> 组合渲染 + 使用分页</p>
+    <p class="tip">
+      与 <a class="link" href="https://github.com/x-extends/iview">iview</a> 组合渲染 + 使用分页<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
+    </p>
 
     <vxe-form :data="formData" title-width="120" title-align="right" @submit="searchEvent" @reset="searchEvent">
       <vxe-form-item field="name" title="Input" span="8" :title-prefix="{ message: '帮助信息！！！', icon: 'fa fa-exclamation-circle' }" :item-render="{name: 'Input'}"></vxe-form-item>
@@ -14,10 +17,10 @@
       <vxe-form-item field="rate" title="Rate" span="8" folding :item-render="{name: 'Rate'}"></vxe-form-item>
       <vxe-form-item field="flag1" title="Radio" span="8" folding :item-render="{name: 'Radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
       <vxe-form-item field="checkedList" title="Checkbox" span="8" folding :item-render="{name: 'Checkbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
-      <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ props: {type: 'primary', htmlType: 'submit', content: '查询'} }, { props: {htmlType: 'reset', content: '重置'} }]}"></vxe-form-item>
+      <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ content: '查询', props: {type: 'primary', nativeType: 'submit'} }, { content: '重置', props: {nativeType: 'reset'} }]}"></vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar export custom>
+    <vxe-toolbar export print custom>
       <template v-slot:buttons>
         <Button @click="insertEvent">新增</Button>
         <Button @click="saveEvent">保存</Button>
@@ -38,15 +41,15 @@
       border
       resizable
       show-overflow
+      keep-source
       highlight-hover-row
       export-config
       ref="xTable"
-      class="vxe-table-iview"
       height="460"
       :loading="loading"
       :data="tableData"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @edit-actived="editActivedEvent"
       @edit-closed="editClosedEvent">
       <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
@@ -55,12 +58,13 @@
       <vxe-table-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
       <vxe-table-column field="age" title="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
       <vxe-table-column field="sex" title="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="sexList" title="Select multiple" width="180" :edit-render="{name: 'Select', options: sexList, props: {multiple: true}}"></vxe-table-column>
       <vxe-table-column field="state" title="Select" width="140" :edit-render="{name: 'Select', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
       <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
       <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
       <vxe-table-column field="date6" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="iSwitch" width="100" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
+      <vxe-table-column field="flag" title="iSwitch" width="100" :cell-render="{name: 'iSwitch'}"></vxe-table-column>
+      <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :cell-render="{name: 'Rate'}"></vxe-table-column>
     </vxe-table>
 
     <Page
@@ -95,7 +99,7 @@ export default {
       tableData: [],
       validRules: {
         name: [
-          { required: true, message: '名称必须填写' },
+          { required: true, message: 'app.body.valid.rName' },
           { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
         ],
         sex: [
@@ -159,10 +163,10 @@ export default {
           <vxe-form-item field="rate" title="Rate" span="8" folding :item-render="{name: 'Rate'}"></vxe-form-item>
           <vxe-form-item field="flag1" title="Radio" span="8" folding :item-render="{name: 'Radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
           <vxe-form-item field="checkedList" title="Checkbox" span="8" folding :item-render="{name: 'Checkbox', options: [{label: '北京', value: 'beijing'}, {label: '深圳', value: 'shenzhen'}, {label: '上海', value: 'shanghai'}]}" :visible-method="visibleMethod"></vxe-form-item>
-          <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ props: {type: 'primary', htmlType: 'submit', content: '查询'} }, { props: {htmlType: 'reset', content: '重置'} }]}"></vxe-form-item>
+          <vxe-form-item span="24" align="center" collapse-node :item-render="{name: 'ElButtons', children: [{ content: '查询', props: {type: 'primary', nativeType: 'submit'} }, { content: '重置', props: {nativeType: 'reset'} }]}"></vxe-form-item>
         </vxe-form>
 
-        <vxe-toolbar export custom>
+        <vxe-toolbar export print custom>
           <template v-slot:buttons>
             <Button @click="insertEvent">新增</Button>
             <Button @click="saveEvent">保存</Button>
@@ -183,15 +187,15 @@ export default {
           border
           resizable
           show-overflow
+          keep-source
           highlight-hover-row
           export-config
           ref="xTable"
-          class="vxe-table-iview"
           height="460"
           :loading="loading"
           :data="tableData"
           :edit-rules="validRules"
-          :edit-config="{trigger: 'click', mode: 'row'}"
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @edit-actived="editActivedEvent"
           @edit-closed="editClosedEvent">
           <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
@@ -200,12 +204,13 @@ export default {
           <vxe-table-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
           <vxe-table-column field="age" title="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
           <vxe-table-column field="sex" title="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="sexList" title="Select multiple" width="180" :edit-render="{name: 'Select', options: sexList, props: {multiple: true}}"></vxe-table-column>
           <vxe-table-column field="state" title="Select" width="140" :edit-render="{name: 'Select', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
           <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
           <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
           <vxe-table-column field="date6" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
-          <vxe-table-column field="flag" title="iSwitch" width="100" :edit-render="{name: 'iSwitch', type: 'visible'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :edit-render="{name: 'Rate', type: 'visible'}"></vxe-table-column>
+          <vxe-table-column field="flag" title="iSwitch" width="100" :cell-render="{name: 'iSwitch'}"></vxe-table-column>
+          <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :cell-render="{name: 'Rate'}"></vxe-table-column>
         </vxe-table>
 
         <Page
@@ -228,7 +233,7 @@ export default {
               tableData: [],
               validRules: {
                 name: [
-                  { required: true, message: '名称必须填写' },
+                  { required: true, message: 'app.body.valid.rName' },
                   { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
                 ],
                 sex: [
@@ -380,11 +385,11 @@ export default {
               }
             },
             vaildEvent () {
-              this.$refs.xTable.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTable.validate((errMap) => {
+                if (errMap) {
                   this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
@@ -393,7 +398,7 @@ export default {
                 case 'remove': {
                   let selectRecords = this.$refs.xTable.getCheckboxRecords()
                   if (selectRecords.length) {
-                    this.$refs.xTable.removeSelecteds()
+                    this.$refs.xTable.removeCheckboxRow()
                   } else {
                     this.$Message.info('请至少选择一条数据！')
                   }
@@ -533,11 +538,11 @@ export default {
       }
     },
     vaildEvent () {
-      this.$refs.xTable.validate(valid => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTable.validate((errMap) => {
+        if (errMap) {
           this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
@@ -546,7 +551,7 @@ export default {
         case 'remove': {
           const selectRecords = this.$refs.xTable.getCheckboxRecords()
           if (selectRecords.length) {
-            this.$refs.xTable.removeSelecteds()
+            this.$refs.xTable.removeCheckboxRow()
           } else {
             this.$Message.info('请至少选择一条数据！')
           }

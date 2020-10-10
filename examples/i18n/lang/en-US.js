@@ -1,23 +1,26 @@
-module.exports = {
+export default {
   app: {
     aside: {
       nav: {
         start: 'Development',
         install: 'Install',
-        global: 'Global props',
         use: 'Quick start',
-        icons: 'Custom icon',
-        theme: 'Custom theme',
+        global: 'Global props',
+        icons: 'Global icon',
+        theme: 'Global theme',
         i18n: 'Internationalization',
 
         icon: 'Icon',
-        basics: 'Basic',
+        basics: 'Basic table',
         base: 'Basics table',
+        autoBreak: '自动换行',
         size: 'Size',
-        ellipsis: 'Ellipsis',
+        ellipsis: 'Cell overflow ellipsis',
+        tooltips: 'Cell tooltip',
         width: 'Column width',
         stripe: 'Striped',
         border: 'Border',
+        round: 'Round border',
         style: 'Cell style',
         dynamicStyle: 'Cell dynamic style',
         scrollStyle: 'Scrollbar style',
@@ -30,6 +33,7 @@ module.exports = {
         fixed: 'Table with fixed column',
         fullFixed: 'Table with fixed columns and header ',
         group: 'Grouping table head',
+        merge: 'Merge rows or columns',
         seq: 'Table sequence',
         headerHighlight: 'Highlight column',
         current: 'Highlight row',
@@ -43,7 +47,7 @@ module.exports = {
         html: 'HTML tag',
         data: 'Data and fields',
 
-        more: 'More',
+        more: 'Complex table',
         events: 'Event',
         template: 'Template',
         dynamic: 'Use v-for dynamic implementation',
@@ -52,32 +56,35 @@ module.exports = {
         manualFilter: 'Filtering advanced usage',
         filterIcon: 'Custom filter icon',
         span: 'Rowspan and colspan',
-        spanRow: 'More complex merge rows',
-        footer: 'Footer summary',
+        spanRow: 'Merge the list of horizontal trees',
+        mergeCell: 'Merge cells',
+        footer: 'Footer data',
         footerSpan: 'Footer rowspan and colspan',
-        import: 'Import data',
-        export: 'Export data',
+        import: 'Import',
+        export: 'Export',
         print: 'Print',
+        customPrint: 'Advanced print',
         fixedType: 'Fixed type + import/export',
         contextMenu: 'Context menu',
         menuPrivilege: 'Context menu + permission',
-        footerImmediately: 'Footer summary + immediately',
+        footerImmediately: 'Footer + immediately update total',
         expandRow: 'Expandable row',
-        expandRowIcon: 'Expandable row + custom icon',
+        expandRowIcon: 'Expandable row + More customizations',
         expandRowLazy: 'Expandable row + lazy loading',
-        accordion: 'Accordion expandable',
+        accordion: 'Expandable row + accordion',
         toolbar: 'Toolbar',
-        customs: 'Show/hide column',
-        customStorage: 'Show/hide column + localStorage',
-        customlWidthStorage: 'Show/hide & column width + localStorage',
+        customs: 'Show, hide, and collapsed columns',
+        customStorage: 'Custom column + localStorage',
+        customlWidthStorage: '完整自定义列 + localStorage',
         search: 'Table search',
+        groupBy: 'Row group',
         details: 'Popup displays details',
         popupEdit: 'Popup form edit',
         pager: 'Pager',
         pageIcon: 'Pagination + custom icon',
         rangeSelect: 'The range of the checkbox is checked',
         tabs: 'Switch tabs',
-        keepAlives: 'Switch keep-alive',
+        keepAlives: '显示隐藏 + keep-alive',
 
         grid: 'Advanced table',
         reverse: 'Reverse table',
@@ -97,7 +104,7 @@ module.exports = {
 
         tree: 'Tree table',
         treeNormal: 'Normal tree',
-        customIcon: 'Custom icon',
+        customIcon: 'More customizations',
         expandTreeLazy: 'Tree expansion line lazy load',
         treeSearch: 'Deep to search',
         treeSort: 'Deep sort',
@@ -112,16 +119,19 @@ module.exports = {
         full: 'Full demo',
 
         virtualTree: 'Virtual tree table',
+        big: 'Virtual scroll',
 
         scroll: 'Big table',
         bigData: 'Virtual Scroller',
-        scrollRows: '100,000 rows',
-        scrollFullRows: '100,000 rows + Complex render',
-        scrollCols: '10,000 columns, 100,000 rows',
-        scrollFullCols: '10,000 columns, 100,000 rows + Complex render',
+        scrollRows: 'vertical',
+        scrollFullRows: 'vertical + complicated',
+        scrollCols: 'horizontal and vertical',
+        scrollFullCols: 'horizontal and vertical + complicated',
         moveHighlight: 'Keyboard move highlight row',
         scrollTree: 'Virtual tree',
-        bigTree: 'Implementation of virtual tree',
+        bigTree: 'Tree vertical',
+        treeRows: 'Tree vertical',
+        treeCols: 'Tree horizontal and vertical&纵向',
         pageScroll: 'Scroll to page',
         infiniteScroll: 'The infinite scroll',
         partialLoad: 'Partial load',
@@ -137,11 +147,11 @@ module.exports = {
         insert: 'Insert',
         delete: 'Delete',
         revert: 'Revert',
-        status: 'Update',
-        cellDisable: 'Disable edit cell',
-        rowDisable: 'Disable edit row',
-        cellValid: 'Validate call',
-        rowValid: 'Validate row',
+        status: '数据状态',
+        cellDisable: '禁用编辑 + 单元格',
+        rowDisable: '禁用编辑 + 行',
+        cellValid: '数据校验 + 单元格',
+        rowValid: '数据校验 + 行',
         forceCellValid: 'Validate cell + lock',
         forceRowValid: 'Validate row + lock',
         highlightCell: 'Highlighting the editor',
@@ -157,6 +167,9 @@ module.exports = {
         cell: 'Cell',
 
         bad: 'Bad usage',
+        badEdit: 'The full table is rendered in edit',
+        badLineHeight: 'Dynamic row height with virtual scroll',
+        badNonsupport: 'Unsupported',
 
         module: 'Modules',
         button: 'Button',
@@ -166,8 +179,12 @@ module.exports = {
         modal: 'Modal',
         tooltip: 'Tooltip',
         form: 'Form',
+        switch: 'Switch',
+        list: 'List',
+        pulldown: 'Pulldown',
+        readFile: 'Read file',
 
-        other: 'Using third-party libraries',
+        other: 'Integrated third party Library',
         elementRender: 'element-ui -> Custom Templates',
         iviewRender: 'iview -> Custom Templates',
         antd: 'ant-design-vue -> Custom Templates',
@@ -194,20 +211,23 @@ module.exports = {
         rendererPlugin: 'plugin-renderer More renderer',
         menusPlugin: 'plugin-menus Context menus',
         excelPlugin: 'plugin-excel A simple excel',
+        treeRowPlugin: 'plugin-virtual-tree Virtual tree',
+        treeColPlugin: 'plugin-virtual-tree Horizontal and vertical',
 
         formats: '(Global) Formatter',
         commands: '(Global) Command register',
         menus: '(Global) Context menu',
 
-        renderer: '(Advanced) Renderer',
+        renderer: '(Reusable) Renderer',
         rendererFilter: 'Filter renderer',
         rendererDefault: 'Cell renderer',
         rendererEdit: 'Edit renderer',
+        rendererExpand: 'Content renderer',
         rendererToolbar: 'Toolbar renderer',
         rendererForm: 'Form renderer',
-        rendererEmpty: 'Empty renderer',
+        rendererEmpty: 'No data renderer',
 
-        interceptor: '(Advanced) Event interceptor',
+        interceptor: '(Compatibility) Event interceptor',
 
         optimize: 'Optimization and suggestion',
         optimizeScroller: '虚拟滚动优化',
@@ -215,6 +235,7 @@ module.exports = {
 
         api: 'API',
         vxeTable: 'vxe-table',
+        vxeTableColgroup: 'vxe-table-colgroup',
         vxeTableColumn: 'vxe-table-column',
         vxeGrid: 'vxe-grid',
         vxeVirtualTree: 'vxe-virtual-tree',
@@ -222,7 +243,10 @@ module.exports = {
         vxeToolbar: 'vxe-toolbar',
         vxePager: 'vxe-pager',
         vxeRadio: 'vxe-radio',
+        vxeRadioGroup: 'vxe-radio-group',
+        vxeRadioButton: 'vxe-radio-button',
         vxeCheckbox: 'vxe-checkbox',
+        vxeCheckboxGroup: 'vxe-checkbox-group',
         vxeInput: 'vxe-input',
         vxeTextarea: 'vxe-textarea',
         vxeSelect: 'vxe-select',
@@ -232,7 +256,16 @@ module.exports = {
         vxeTooltip: 'vxe-tooltip',
         vxeModal: 'vxe-modal',
         vxeForm: 'vxe-form',
-        vxeFormItem: 'vxe-form-item'
+        vxeFormItem: 'vxe-form-item',
+        vxeSwitch: 'vxe-switch',
+        vxeList: 'vxe-list',
+        vxePulldown: 'vxe-pulldown'
+      }
+    },
+    header: {
+      label: {
+        donation: 'Donation',
+        support: 'Getting support'
       }
     },
     body: {
@@ -247,6 +280,10 @@ module.exports = {
         deleteSelectedRecords: 'Delete selected records'
       },
       label: {
+        on: 'ON',
+        off: 'OFF',
+        plan: 'Plan',
+        through: 'Through',
         copy: 'Copy',
         cut: 'Cut and paste',
         paste: 'Paste',
@@ -273,18 +310,51 @@ module.exports = {
         copyToClipboard: 'Copied to clipboard'
       },
       other: {
+        v1: '1.x (Deprecated)',
+        v2: '2.x (vue 2.6.x Stable)',
+        v3: '3.x (vue 2.6.x Latest)',
+        v4: '4.x (vue 3.x Next)',
+        plan: {
+          vv1: 'v1 Based on vue2.6+, support all the mainstream browsers, to achieve all the practical functions of the table',
+          v2: 'v2 Based on vue2.6+, support all mainstream browsing, both function and performance',
+          v3: 'v3 Based on vue2.6+, only support H5 browser, do not support IE, rendering performance significantly improved',
+          v4: 'v4 Based on vue3+, only support H5 browser, do not support IE, rendering performance significantly improved'
+        },
+        ways: {
+          wechat: 'Donate via the following wechat code scanning',
+          alipay: 'Through the following Alipay sweep code donation',
+          gitee: 'Donation through <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee</a>'
+        },
+        compatibility: 'Compatibility',
+        releases: 'Releases',
+        donation: 'Donation',
+        donationTitle: 'Donation method：',
+        issuesTitle: '该群供大家交流问题，作者很忙基本没有时间去看群，<br>如果有问题请通过 issues 反馈',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
-        newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
+        newDevelopment: 'this release is being refactored. Stay tuned!'
       },
       search: {
         searchPlaceholder: 'Document search',
         noDataPrefix: 'No results related to "',
         noDataSuffix: '" can be found!'
+      },
+      support: {
+        title: '该付费技术群用于快速解决使用过程中遇到的各种问题。'
+      },
+      demo: {
+        start: {
+          i18n: {
+            i18nTitle: 'If you want to use the specified language, you need to make Multilingual Settings. Take Chinese / English as an example',
+            translate: 'Integration internationalization',
+            translateTitle: 'If you want to support global automatic translation in the project, you can turn it on through global parameters (automatic translation will be performed for column header, verification prompt, etc.)',
+            findError: 'Errors found? Want to participate in translation?'
+          }
+        }
       }
     },
     footer: {
       donation: 'Donation',
-      donationDesc: 'To make the project sustainable, you can support the author through sponsorship 😊'
+      donationDesc: 'vxe-table is completely free to use.To keep the project healthy and sustainable, you can support the author with a donation.'
     },
     api: {
       apiSearch: 'API Search',
@@ -302,16 +372,18 @@ module.exports = {
       },
       table: {
         desc: {
+          id: 'Unique identification',
           data: 'Table data(note that updating data does not reset the status)',
           columns: 'Column configuration',
-          customs: 'For reading column configuration, same effect as calling getColumns method manually, if you want to show hidden columns directly by modifying the visible property of the column (deprecated apis are not recommended)',
+          customs: 'Have been obsolete',
           height: 'Table height, supports adaptive or fixed height(if you set adaptive, you must ensure that parent nodes exist and no adjacent elements are allowed)',
           maxHeight: 'Maximum height of the table',
-          syncResize: 'Automatically resizing a property following a property change has the same effect as calling the recalculate method manually (this may be used in scenarios where a property is used to control the show/hide toggle)',
-          autoResize: 'Auto listen parent element response resize (may be used in scenarios where parent element may be dynamically changing)',
+          syncResize: 'Automatically following a property change to recalculate the table is the same as manually calling the recalculate method',
+          autoResize: 'Automatically listen for parent changes to recalculate the table (this may be used in scenarios where parent elements may be dynamically changing)',
           resizable: 'Resizable',
           stripe: 'Whether with zebra stripes(note that in the editable table scenario, the temporarily inserted data will not have a zebra-like pattern)',
-          border: 'Whether there is a border (if true, horizontal border, vertical border and external border are displayed; if false, horizontal border and external border are displayed; if "none", horizontal border is displayed)',
+          border: 'Border',
+          round: 'Round border',
           size: 'Table size',
           fit: 'Whether the width of all columns is self-supporting(do not use parameters that may be discarded)',
           loading: 'Whether the table is loaded',
@@ -324,23 +396,25 @@ module.exports = {
           highlightHoverRow: 'Mouse over a row to highlight',
           highlightCurrentColumn: 'Whether to highlight the current column',
           highlightHoverColumn: 'Mouse over whether to highlight a column',
-          highlightCell: 'Only valid for edit-config configuration, whether to highlight cell borders during editing',
-          rowClassName: 'Append a className to the row, It could be a function, Function({row, rowIndex, $rowIndex})',
-          cellClassName: 'Append a className to the cell, It could be a function, Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})',
-          headerRowClassName: 'Append a className to the row in the header, It could be a function, Function({$rowIndex})',
-          headerCellClassName: 'Append a className to the cell in the header, It could be a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          footerRowClassName: 'Append a className to the row in the footer, It could be a function, Function({$rowIndex})',
-          footerCellClassName: 'Append a className to the cell in the footer, It could be a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          cellStyle: 'Append styles to cells, which can also be function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          headerCellStyle: 'Append styles to header cells, which can also be function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          footerCellStyle: 'A table footer cell is attached to a style, or it can be a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          rowStyle: 'Attach styles to rows, which can also be function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          headerRowStyle: 'Append styles to header rows, which can also be function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          footerRowStyle: 'Attach a style to the end of a table, or a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          showFooter: 'Whether to display table end totals',
-          footerMethod: 'Table footer summation calculation method, Function({columns, data})',
-          spanMethod: 'Merge rows or columns, Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data})',
-          footerSpanMethod: 'Footer merge rows or columns, Function({$rowIndex, column, columnIndex, $columnIndex, data})',
+          highlightCell: 'Only valid for edit-config configuration, whether to highlight cell borders during editing(Partial support only)',
+          rowClassName: 'Append a className to the row',
+          cellClassName: 'Append a className to the cell',
+          headerRowClassName: 'Append a className to the row in the header',
+          headerCellClassName: 'Append a className to the cell in the header',
+          footerRowClassName: 'Append a className to the row in the footer',
+          footerCellClassName: 'Append a className to the cell in the footer',
+          cellStyle: 'Append styles to cells',
+          headerCellStyle: 'Append styles to header cells',
+          footerCellStyle: 'A table footer cell is attached to a style',
+          rowStyle: 'Attach styles to rows',
+          headerRowStyle: 'Append styles to header rows',
+          footerRowStyle: 'Attach a style to the end of a table',
+          showFooter: 'Whether to display table footer',
+          footerMethod: 'The data method at table footer, return a two-dimensional array',
+          mergeCells: '临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）',
+          mergeFooterItems: '临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）',
+          spanMethod: 'User defined merge function. returns the calculated value，不能用于树形结构、展开行、固定列',
+          footerSpanMethod: 'Footer merge rows or columns, returns the calculated value，不能用于树形结构、展开行、固定列',
           showOverflow: 'Sets all content to appear as ellipses if it is too long',
           showHeaderOverflow: 'Sets the header to show ellipsis when all content is too long',
           showAllOverflow: 'It is about to be abandoned, please use "show-overflow"',
@@ -354,7 +428,7 @@ module.exports = {
           columnKey: 'Whether the key attribute needs to be set for each column VNode (not required for non-exceptional cases)',
           rowKey: 'Do you need to set the key attribute for VNode on each row (not necessary for non-exceptional cases)',
           rowId: 'Field names for custom row data unique primary keys (row data must have a unique primary key, automatically generated by default)',
-          keepSource: 'Maintain the state of the original data, depending on certain functions, such as edit state, restore data, etc. (performance plummets after turn on, depending on the amount of data)',
+          keepSource: 'Maintain the state of the original data, depending on certain functions, such as edit state, restore data, etc.',
           zIndex: 'Custom style z-index (may be used for special situations, such as occlusion)',
           seqConfig: 'Sequence number configuration',
           sortConfig: 'Sort configuration',
@@ -374,8 +448,10 @@ module.exports = {
           editConfig: 'Editable configuration',
           validConfig: 'Validate configuration',
           editRules: 'Checksum rule configuration entries',
+          emptyText: 'What is displayed when the data is empty',
           emptyRender: 'Empty content renderer config',
-          optimization: 'Optimize configuration',
+          customConfig: 'Custom configuration',
+          optimization: 'Have been obsolete',
 
           params: 'Additional parameters (Can be used to store some private parameters)',
 
@@ -389,13 +465,13 @@ module.exports = {
           checkboxAll: 'Only valid for type=checkbox, events that are triggered when all is checked manually',
           cellClick: 'This event is triggered when the cell is click',
           cellDblclick: 'This event is triggered when a cell is dblclick',
-          cellContextmenu: 'This event is triggered when the cell is contextmenu',
+          cellContextmenu: 'This is only valid for context-menu configuration, and is triggered when the cell is context menu',
           headerCellClick: 'This event is triggered when the header cell is click',
           headerCellDblclick: 'This event is triggered when a header cell is dblclick',
-          headerCellContextmenu: 'This event is triggered when the header cell is contextmenu',
+          headerCellContextmenu: 'This is only valid for context-menu configuration, and is triggered when the header cell is context menu',
           footerCellClick: 'This event is triggered when a header cell is click',
           footerCellDblclick: 'This event is triggered when a cell at the end of a table is dblclick',
-          footerCellContextmenu: 'This event is triggered when the footer cell is contextmenu',
+          footerCellContextmenu: 'This is only valid for context-menu configuration, and is triggered when the footer cell is context menu',
           cellMouseenter: 'This event is fired when the cell mouseenter',
           cellMouseleave: 'This event is fired when the cell mouseleave',
           sortChange: 'This event is triggered when the sort condition changes',
@@ -440,19 +516,22 @@ module.exports = {
           headerClassName: 'Append a className to the cell in the header, It could be a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
           footerClassName: 'Append a className to the cell in the footer, It could be a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
           formatter: 'Format display content, Function({cellValue, row, column})',
-          indexMethod: 'Only valid for type=index, custom index method, Function({row, rowIndex, column, columnIndex})',
+          indexMethod: 'Obsolete, please use "seqMethod"',
+          seqMethod: 'Only valid for type=seq, custom index method, Function({row, rowIndex, column, columnIndex})',
           sortable: 'Whether column sorting is allowed',
           sortBy: 'Only valid for sortable, custom sort attributes',
-          sortMethod: 'Custom sort method, Array.sort(a, b)',
+          sortMethod: 'Only for sortable, the sorting method of the column, the return value of this method Function(prevRow, nexRow) is used to determine the sorting rule of the row',
           remoteSort: 'Whether to use remote sorting',
           filters: 'Configure filter conditions(note: filtering can only be used for lists, if it is a tree, filter the root node)',
           filterMultiple: 'Works only for filters, filtering whether multiple selections are allowed',
-          filterMethod: 'Works only for filters, custom filtering methods, Function({value, row, column})',
+          filterMethod: 'Function({value, row, column}) returns the value used to determine whether the row is displayed or not',
           filterRender: 'Filter renderer config',
           treeNode: 'Only valid for tree-config configuration, specified as the tree node',
           columnKey: 'Obsolete, please use "table.column-key"',
+          cellType: 'Cell value type',
           cellRender: 'Default renderer config',
           editRender: 'Edit renderer config',
+          contentRender: 'Content renderer config',
           params: 'Additional parameters (Can be used to store some private parameters)'
         }
       },
@@ -474,21 +553,23 @@ module.exports = {
           formConfig: 'Form config',
           toolbar: 'Toolbar config',
           pagerConfig: 'Pager config',
+          zoomConfig: 'Zoom config',
           proxyConfig: 'Data proxy config(based on the Promise API)',
           toolbarRender: 'Toolbar renderer config'
         }
       },
       toolbar: {
         desc: {
-          id: 'Unique ID identification',
+          id: 'Obsolete',
           size: 'Size',
           loading: 'Loading',
           import: 'Import button config("import-config" needs to be set)',
           export: 'Export button config("export-config" needs to be set)',
+          print: 'Printing button config',
           refresh: 'Refresh button config',
-          resizable: 'Column width drag config("id" needs to be set)',
+          resizable: 'Obsolete, please use "custom-config"',
           setting: 'Obsolete, please use "custom"',
-          custom: 'Custom column config("id" needs to be set)'
+          custom: 'Custom column config'
         }
       },
       pager: {
@@ -504,7 +585,6 @@ module.exports = {
           align: 'On the way',
           border: 'Show border',
           background: 'Show background color',
-          perfect: 'Default style',
           iconPrevPage: 'Custom the previous page icon',
           iconJumpPrev: 'Custom jump previous page icon',
           iconJumpNext: 'Custom jump next page icon',
@@ -546,9 +626,12 @@ module.exports = {
           type: 'Type',
           size: 'Size',
           name: 'To identify this item',
+          icon: 'button icon',
           status: 'Status',
           disabled: 'Whether to disable',
-          loading: 'Loading or not'
+          loading: 'Loading or not',
+          placement: 'Fix the direction of the display drop - down panel',
+          transfer: 'Whether to insert the popup container into the body（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
       modal: {
@@ -560,7 +643,7 @@ module.exports = {
           type: 'Message type',
           status: 'Only valid for type=alert | confirm | message, message status',
           iconStatus: '自定义状态图标',
-          message: 'message content',
+          message: '显示的文本（支持开启国际化）',
           showHeader: 'Whether to display the head',
           showFooter: 'Whether to show bottom',
           lockView: 'Whether or not the page is locked does not allow any action outside the modal',
@@ -569,13 +652,14 @@ module.exports = {
           maskClosable: 'Click the mask layer to close the modal',
           escClosable: 'Whether Esc key is allowed to close the modal',
           resize: 'Allow drag to resize modal window',
-          duration: 'Only valid for type=message, auto-closed delay',
+          duration: 'Only valid for type=message, auto-closed delay, if -1 is disabled automatically closed',
           size: 'Size',
           width: 'The width of the modal window',
           height: 'The height of the modal window',
           minWidth: 'The minimum width of the modal window',
           minHeight: 'The minimum height of the modal window',
           top: 'Valid only for type=message, message from top',
+          position: '只对 type=modal 有效，窗口的默认位置，可以设置为 center 居中显示',
           zIndex: 'Custom style z-index (may be used for special situations, such as occlusion)',
           showTitleOverflow: 'Set the title content to appear as an ellipsis when it is too long',
           fullscreen: 'Default maximized display',
@@ -595,6 +679,7 @@ module.exports = {
           titleAlign: 'All title align',
           titleWidth: 'All title width',
           titleColon: 'Whether to display the title colon',
+          titleAsterisk: '是否显示必填字段的红色星号',
           rules: 'Checksum rule configuration entries'
         }
       },
@@ -607,6 +692,7 @@ module.exports = {
           titleAlign: 'Title align',
           titleWidth: 'Title width',
           folding: 'Default folding',
+          visible: 'Whether or not show',
           visibleMethod: 'The return value of this method Function({data, property}) determines whether the item is displayed',
           collapseNode: 'Collapse node',
           titlePrefix: 'Title prefix config',
@@ -619,22 +705,58 @@ module.exports = {
         desc: {
           value: 'Binding values',
           size: 'Size',
+          multiple: 'Whether alternative',
           placeholder: 'Placeholder for null value empty',
           clearable: 'Whether to display the clear button on the right when there is a value',
           disabled: 'Whether to disable',
           prefixIcon: 'Prefix icon',
           placement: 'Fix the direction of the display drop - down panel',
-          transfer: 'Whether to insert the popup container into the body'
+          transfer: 'Whether to insert the popup container into the body（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       },
-      selectGroup: {
+      optgroup: {
         desc: {
-          disabled: 'Whether to disable'
+          label: 'display content',
+          disabled: 'Whether to disable',
+          size: 'Size'
         }
       },
-      selectOption: {
+      option: {
         desc: {
-          disabled: 'Whether to disable'
+          value: 'Binding values',
+          label: 'display content',
+          disabled: 'Whether to disable',
+          size: 'Size'
+        }
+      },
+      switch: {
+        desc: {
+          value: 'Binding values',
+          size: 'Size',
+          disabled: '是否禁用',
+          onLabel: '打开时显示的文字',
+          offLabel: '关闭时显示的文字',
+          onValue: '打开时的值',
+          offValue: '关闭时的值',
+          onIcon: '打开时的图标',
+          offIcon: '关闭时的图标',
+          onClass: '打开时的 className',
+          offClass: '关闭时的 className'
+        }
+      },
+      list: {
+        desc: {
+          data: 'List data',
+          size: 'Size'
+        }
+      },
+      pulldown: {
+        desc: {
+          data: '列表数据',
+          size: '尺寸',
+          disabled: '是否禁用',
+          placement: '固定显示下拉面板的方向',
+          transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
         }
       }
     }

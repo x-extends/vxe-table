@@ -1,12 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      筛选高级用法、动态更改筛选条件、自定义更加复杂的模板事件，通过调用 <table-api-link prop="setFilter"/> 和 <table-api-link prop="updateData"/> 方法来处理复杂场景的筛选逻辑<br>
+      筛选高级用法、动态更改筛选条件、自定义更加复杂的模板事件，通过调用 <table-api-link prop="setFilter"/> 和 <table-api-link prop="updateData"/> 方法来处理复杂场景的筛选逻辑<span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       进阶用法：<router-link class="link" :to="{name: 'RendererFilter'}">查看渲染器的使用</router-link><br>
-      context 对象:<br>
-      &nbsp;&nbsp;<span class="orange">changeOption(event, checked, option) 更新选项的状态</span><br>
-      &nbsp;&nbsp;<span class="orange">confirmFilter() 确认筛选</span><br>
-      &nbsp;&nbsp;<span class="orange">resetFilter() 清除筛选条件</span>
     </p>
 
     <vxe-toolbar>
@@ -14,7 +10,7 @@
         <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
         <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
         <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
-        <vxe-button @click="$refs.xTable.clearFilter('age')">清除 Age 的筛选条件</vxe-button>
+        <vxe-button @click="$refs.xTable.clearFilter($refs.xTable.getColumnByField('age'))">清除 Age 的筛选条件</vxe-button>
         <vxe-button @click="$refs.xTable.clearFilter()">清除所有的筛选条件</vxe-button>
       </template>
     </vxe-toolbar>
@@ -94,7 +90,7 @@ export default {
             <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
             <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
             <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
-            <vxe-button @click="$refs.xTable.clearFilter('age')">清除 Age 的筛选条件</vxe-button>
+            <vxe-button @click="$refs.xTable.clearFilter($refs.xTable.getColumnByField('age'))">清除 Age 的筛选条件</vxe-button>
             <vxe-button @click="$refs.xTable.clearFilter()">清除所有的筛选条件</vxe-button>
           </template>
         </vxe-toolbar>
@@ -217,10 +213,12 @@ export default {
         `,
         `
         .my-select {
+          margin: 10px;
           width: 100px;
           height: 32px;
         }
         .my-input {
+          margin: 10px;
           width: 140px;
           height: 32px;
         }
@@ -295,10 +293,12 @@ export default {
 
 <style scoped>
 .my-select {
+  margin: 10px;
   width: 100px;
   height: 32px;
 }
 .my-input {
+  margin: 10px;
   width: 140px;
   height: 32px;
 }

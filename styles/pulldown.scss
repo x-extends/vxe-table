@@ -1,0 +1,55 @@
+/**Variable**/
+/**Variable**/
+@import './helpers/mixin.scss';
+
+.vxe-pulldown {
+  position: relative;
+  display: inline-block;
+  color: $vxe-font-color;
+  text-align: left;
+}
+
+.vxe-pulldown--panel {
+  display: none;
+  position: absolute;
+  left: 0;
+  padding: 4px 0;
+  color: $vxe-font-color;
+  text-align: left;
+  &:not(.is--transfer) {
+    min-width: 100%;
+  }
+  &.is--transfer {
+    position: fixed;
+  }
+  &.animat--leave {
+    display: block;
+    opacity: 0;
+    transform: scaleY(0.5);
+    transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
+    transform-origin: center top;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    &[data-placement="top"] {
+      transform-origin: center bottom;
+    }
+  }
+  &.animat--enter {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.vxe-pulldown,
+.vxe-pulldown--panel {
+  font-size: $vxe-font-size;
+  &.size--medium {
+    font-size: $vxe-font-size-medium;
+  }
+  &.size--small {
+    font-size: $vxe-font-size-small;
+  }
+  &.size--mini {
+    font-size: $vxe-font-size-mini;
+  }
+}

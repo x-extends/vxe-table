@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">多选树表格</p>
+    <p class="tip">
+      多选树表格<br>
+      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+    </p>
 
     <vxe-table
       resizable
@@ -63,20 +66,6 @@
       <code class="xml">{{ demoCodes[4] }}</code>
       <code class="javascript">{{ demoCodes[5] }}</code>
     </pre>
-
-    <!-- <p class="tip">还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性，禁止用户手动勾选，但是可以通过函数式调用强制勾选，该功能对于某些场景需要强制勾选指定行时非常有用</p>
-
-    <vxe-table
-      resizable
-      :data="tableData"
-      :tree-config="{children: 'children'}"
-      :checkbox-config="{labelField: 'name', checkMethod}"
-      @checkbox-change="selectChangeEvent">
-      <vxe-table-column type="checkbox" width="180" title="Sex" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
-    </vxe-table> -->
   </div>
 </template>
 
@@ -111,11 +100,11 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
-            selectChangeEvent ({ selection }) {
-              console.info(\`勾选\${selection.length}个树形节点\`, selection)
+            selectChangeEvent ({ records }) {
+              console.info(\`勾选\${records.length}个树形节点\`, records)
             }
           }
         }
@@ -142,11 +131,11 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
-            selectChangeEvent ({ selection }) {
-              console.info(\`勾选\${selection.length}个树形节点\`, selection)
+            selectChangeEvent ({ records }) {
+              console.info(\`勾选\${records.length}个树形节点\`, records)
             }
           }
         }
@@ -171,7 +160,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `
@@ -187,11 +176,11 @@ export default {
     })
   },
   methods: {
-    checkMethod ({ row }) {
+    checCheckboxkMethod ({ row }) {
       return !['js', 'mp4'].includes(row.type)
     },
-    selectChangeEvent ({ selection }) {
-      console.info(`勾选${selection.length}个树形节点`, selection)
+    selectChangeEvent ({ records }) {
+      console.info(`勾选${records.length}个树形节点`, records)
     }
   }
 }

@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils'
 import GlobalConfig from '../../conf'
 import VxeModal from '../../modal/src/modal'
 import VxeRadio from '../../radio/src/radio'
@@ -32,7 +33,7 @@ export default {
       const { storeData } = this
       const { type, typeList } = storeData
       if (type) {
-        const selectItem = typeList.find(item => type === item.value)
+        const selectItem = XEUtils.find(typeList, item => type === item.value)
         return selectItem ? GlobalConfig.i18n(selectItem.label) : '*.*'
       }
       return `*.${typeList.map(item => item.value).join(', *.')}`
@@ -42,13 +43,8 @@ export default {
     const { hasFile, parseTypeLabel, defaultOptions, storeData, selectName } = this
     return h('vxe-modal', {
       res: 'modal',
-      model: {
-        value: storeData.visible,
-        callback (value) {
-          storeData.visible = value
-        }
-      },
       props: {
+        value: storeData.visible,
         title: GlobalConfig.i18n('vxe.import.impTitle'),
         width: 440,
         mask: true,
@@ -57,6 +53,11 @@ export default {
         escClosable: true,
         maskClosable: true,
         loading: this.loading
+      },
+      on: {
+        input (value) {
+          storeData.visible = value
+        }
       }
     }, [
       h('div', {
@@ -70,55 +71,55 @@ export default {
           }
         }, [
           h('tbody', [
-            [
-              h('tr', [
-                h('td', GlobalConfig.i18n('vxe.import.impFile')),
-                h('td', [
-                  hasFile ? h('div', {
-                    class: 'vxe-import-selected--file',
-                    attrs: {
-                      title: selectName
-                    }
-                  }, [
-                    h('span', selectName),
-                    h('i', {
-                      class: GlobalConfig.icon.importRemove,
-                      on: {
-                        click: this.clearFileEvent
-                      }
-                    })
-                  ]) : h('span', {
-                    class: 'vxe-import-select--file',
+            h('tr', [
+              h('td', GlobalConfig.i18n('vxe.import.impFile')),
+              h('td', [
+                hasFile ? h('div', {
+                  class: 'vxe-import-selected--file',
+                  attrs: {
+                    title: selectName
+                  }
+                }, [
+                  h('span', selectName),
+                  h('i', {
+                    class: GlobalConfig.icon.INPUT_CLEAR,
                     on: {
-                      click: this.selectFileEvent
+                      click: this.clearFileEvent
                     }
-                  }, GlobalConfig.i18n('vxe.import.impSelect'))
-                ])
-              ]),
-              h('tr', [
-                h('td', GlobalConfig.i18n('vxe.import.impType')),
-                h('td', parseTypeLabel)
-              ]),
-              h('tr', [
-                h('td', GlobalConfig.i18n('vxe.import.impOpts')),
-                h('td', [
-                  h('vxe-radio-group', {
-                    model: {
-                      value: defaultOptions.mode,
-                      callback (value) {
-                        defaultOptions.mode = value
-                      }
-                    }
-                  }, storeData.modeList.map(item => {
-                    return h('vxe-radio', {
-                      props: {
-                        label: item.value
-                      }
-                    }, GlobalConfig.i18n(item.label))
-                  }))
-                ])
+                  })
+                ]) : h('span', {
+                  class: 'vxe-import-select--file',
+                  on: {
+                    click: this.selectFileEvent
+                  }
+                }, GlobalConfig.i18n('vxe.import.impSelect'))
               ])
-            ]
+            ]),
+            h('tr', [
+              h('td', GlobalConfig.i18n('vxe.import.impType')),
+              h('td', parseTypeLabel)
+            ]),
+            h('tr', [
+              h('td', GlobalConfig.i18n('vxe.import.impOpts')),
+              h('td', [
+                h('vxe-radio-group', {
+                  props: {
+                    value: defaultOptions.mode
+                  },
+                  on: {
+                    input (value) {
+                      defaultOptions.mode = value
+                    }
+                  }
+                }, storeData.modeList.map(item => {
+                  return h('vxe-radio', {
+                    props: {
+                      label: item.value
+                    }
+                  }, GlobalConfig.i18n(item.label))
+                }))
+              ])
+            ])
           ])
         ]),
         h('div', {

@@ -1,12 +1,15 @@
 <template>
   <div>
-    <p class="tip">具体兼容请查看 <a class="link" href="https://www.npmjs.com/package/vxe-table-plugin-iview" target="_blank">vxe-table-plugin-iview</a> 插件的 API</p>
+    <p class="tip">
+      具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-iview" target="_blank">vxe-table-plugin-iview</a> 插件的 API<br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
+    </p>
 
     <vxe-grid
       border
       show-overflow
+      keep-source
       ref="xGrid"
-      class="vxe-table-iview"
       height="460"
       :loading="loading"
       :data="tableData"
@@ -18,7 +21,7 @@
       <template v-slot:top>
         <Alert type="warning" :closable="false" show-icon>已选择 {{ selectRecords.length }} 项</Alert>
       </template>
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
       </template>
@@ -51,22 +54,26 @@ export default {
         { field: 'role', title: 'AutoComplete', width: 160, editRender: { name: 'AutoComplete', props: { data: restaurants, filterMethod: this.roleFilterMethod } } },
         { field: 'age', title: 'InputNumber', width: 160, editRender: { name: 'InputNumber', props: { max: 35, min: 18 } } },
         { field: 'sex', title: 'Select', width: 140, editRender: { name: 'Select', options: [] } },
-        { field: 'sex1', title: 'Select', width: 160, editRender: { name: 'Select', options: [], props: { multiple: true, clearable: true } } },
+        { field: 'sex1', title: 'Select（不建议放在单元格）', width: 260, editRender: { name: 'Select', options: [], props: { multiple: true, clearable: true } } },
         { field: 'sex2', title: 'Select', width: 140, editRender: { name: 'Select', optionGroups: [], props: { clearable: true } } },
         { field: 'region', title: 'Cascader', width: 200, editRender: { name: 'Cascader', props: { data: [] } } },
         { field: 'date', title: 'DatePicker', width: 200, editRender: { name: 'DatePicker', props: { type: 'date', format: 'yyyy/MM/dd' } } },
         { field: 'date1', title: 'TimePicker', width: 200, editRender: { name: 'TimePicker', props: { type: 'time' } } },
-        { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
-        { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
+        { field: 'flag', title: 'iSwitch', width: 100, cellRender: { name: 'iSwitch' } },
+        { field: 'rate', title: 'Rate', width: 200, cellRender: { name: 'Rate' } }
       ],
-      tableToolbar: {},
+      tableToolbar: {
+        slots: {
+          buttons: 'toolbar_buttons'
+        }
+      },
       demoCodes: [
         `
         <vxe-grid
           border
           show-overflow
+          keep-source
           ref="xGrid"
-          class="vxe-table-iview"
           height="460"
           :loading="loading"
           :data="tableData"
@@ -77,7 +84,7 @@ export default {
           <template v-slot:top>
             <Alert type="warning" :closable="false" show-icon>已选择 {{ selectRecords.length }} 项</Alert>
           </template>
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <el-button @click="insertEvent">新增</el-button>
             <el-button @click="saveEvent">保存</el-button>
           </template>
@@ -98,15 +105,19 @@ export default {
                 { field: 'role', title: 'AutoComplete', width: 160, editRender: { name: 'AutoComplete', props: { data: restaurants, filterMethod: this.roleFilterMethod } } },
                 { field: 'age', title: 'InputNumber', width: 160, editRender: { name: 'InputNumber', props: { max: 35, min: 18 } } },
                 { field: 'sex', title: 'Select', width: 140, editRender: { name: 'Select', options: [] } },
-                { field: 'sex1', title: 'Select', width: 140, editRender: { name: 'Select', options: [], props: { multiple: true, clearable: true } } },
+                { field: 'sex1', title: 'Select（不建议放在单元格）', width: 260, editRender: { name: 'Select', options: [], props: { multiple: true, clearable: true } } },
                 { field: 'sex2', title: 'Select', width: 140, editRender: { name: 'Select', optionGroups: [], props: { clearable: true } } },
                 { field: 'region', title: 'Cascader', width: 200, editRender: { name: 'Cascader', props: { data: [] } } },
                 { field: 'date', title: 'DatePicker', width: 200, editRender: { name: 'DatePicker', props: { type: 'date', format: 'yyyy/MM/dd' } } },
                 { field: 'date1', title: 'TimePicker', width: 200, editRender: { name: 'TimePicker', props: { type: 'time' } } },
-                { field: 'flag', title: 'iSwitch', width: 100, editRender: { name: 'iSwitch', type: 'visible' } },
-                { field: 'rate', title: 'Rate', width: 200, editRender: { name: 'Rate', type: 'visible' } }
+                { field: 'flag', title: 'iSwitch', width: 100, cellRender: { name: 'iSwitch' } },
+                { field: 'rate', title: 'Rate', width: 200, cellRender: { name: 'Rate' } }
               ],
-              tableToolbar: {}
+              tableToolbar: {
+                slots: {
+                  buttons: 'toolbar_buttons'
+                }
+              }
             }
           },
           created () {

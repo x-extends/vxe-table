@@ -3,20 +3,20 @@ import { UtilTools } from '../../tools'
 export default {
   name: 'VxeTableContextMenu',
   props: {
-    ctxMenuStore: Object
+    ctxMenuStore: Object,
+    ctxMenuOpts: Object
   },
   render (h) {
     const $table = this.$parent
-    const { _e, ctxMenuStore } = this
+    const { _e, ctxMenuOpts, ctxMenuStore } = this
     return h('div', {
-      class: ['vxe-table--ctxmenu-wrapper', {
-        'is--show': ctxMenuStore.visible,
-        [`child-pos--${ctxMenuStore.childPos}`]: ctxMenuStore.childPos
+      class: ['vxe-table--context-menu-wrapper', ctxMenuOpts.className, {
+        'is--show': ctxMenuStore.visible
       }],
       style: ctxMenuStore.style
     }, ctxMenuStore.list.map((options, gIndex) => {
       return h('ul', {
-        class: ['vxe-ctxmenu--option-wrapper'],
+        class: ['vxe-context-menu--option-wrapper'],
         key: gIndex
       }, options.map((item, index) => {
         const hasChildMenus = item.children && item.children.length
@@ -28,7 +28,7 @@ export default {
           key: `${gIndex}_${index}`
         }, [
           h('a', {
-            class: ['vxe-ctxmenu--link'],
+            class: ['vxe-context-menu--link'],
             on: {
               click (evnt) {
                 $table.ctxMenuLinkEvent(evnt, item)
@@ -42,17 +42,17 @@ export default {
             }
           }, [
             h('i', {
-              class: ['vxe-ctxmenu--link-prefix', item.prefixIcon]
+              class: ['vxe-context-menu--link-prefix', item.prefixIcon]
             }),
             h('span', {
-              class: ['vxe-ctxmenu--link-content']
+              class: ['vxe-context-menu--link-content']
             }, UtilTools.getFuncText(item.name)),
             h('i', {
-              class: ['vxe-ctxmenu--link-suffix', hasChildMenus ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
+              class: ['vxe-context-menu--link-suffix', hasChildMenus ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
             })
           ]),
           hasChildMenus ? h('ul', {
-            class: ['vxe-table--ctxmenu-clild-wrapper', {
+            class: ['vxe-table--context-menu-clild-wrapper', {
               'is--show': item === ctxMenuStore.selected && ctxMenuStore.showChild
             }]
           }, item.children.map((child, cIndex) => {
@@ -64,7 +64,7 @@ export default {
               key: `${gIndex}_${index}_${cIndex}`
             }, [
               h('a', {
-                class: ['vxe-ctxmenu--link'],
+                class: ['vxe-context-menu--link'],
                 on: {
                   click (evnt) {
                     $table.ctxMenuLinkEvent(evnt, child)
@@ -78,10 +78,10 @@ export default {
                 }
               }, [
                 h('i', {
-                  class: ['vxe-ctxmenu--link-prefix', child.prefixIcon]
+                  class: ['vxe-context-menu--link-prefix', child.prefixIcon]
                 }),
                 h('span', {
-                  class: ['vxe-ctxmenu--link-content']
+                  class: ['vxe-context-menu--link-content']
                 }, UtilTools.getFuncText(child.name))
               ])
             ])

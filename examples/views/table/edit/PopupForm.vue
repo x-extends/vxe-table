@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现弹框表单编辑功能，双击行可以弹出编辑框</p>
+    <p class="tip">实现弹框表单编辑功能，双击行可以弹出编辑框<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -30,22 +30,10 @@
       </vxe-table-column>
     </vxe-table>
 
-    <vxe-modal v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" :loading="submitLoading" resize destroy-on-close>
-      <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
-        <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
-        <vxe-form-item title="Name" field="name" span="12" :item-render="{name: '$input', props: {placeholder: '请输入名称'}}"></vxe-form-item>
-        <vxe-form-item title="Nickname" field="nickname" span="12" :item-render="{name: '$input', props: {placeholder: '请输入昵称'}}"></vxe-form-item>
-        <vxe-form-item title="Role" field="role" span="12" :item-render="{name: '$input', props: {placeholder: '请输入角色'}}"></vxe-form-item>
-        <vxe-form-item title="Sex" field="sex" span="12" :item-render="{name: '$select', options: sexList}"></vxe-form-item>
-        <vxe-form-item title="Age" field="age" span="12" :item-render="{name: '$input', props: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
-        <vxe-form-item title="是否单身" field="flag1" span="12" :item-render="{name: '$radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
-        <vxe-form-item title="可选信息" field="checkedList" span="24" :visible-method="visibleMethod" :item-render="{name: '$checkbox', options: [{label: '运动、跑步', value: '1'}, {label: '听音乐', value: '2'}, {label: '泡妞', value: '3'}, {label: '吃美食', value: '4'}]}"></vxe-form-item>
-        <vxe-form-item title="Other information" span="24" title-align="left" title-width="200px" :title-prefix="{message: '请填写必填项', icon: 'fa fa-info-circle'}"></vxe-form-item>
-        <vxe-form-item title="Number" field="num" span="12" :item-render="{name: '$input', props: {type: 'number', placeholder: '请输入数值'}}"></vxe-form-item>
-        <vxe-form-item title="Date" field="date3" span="12" :item-render="{name: '$input', props: {type: 'date', placeholder: '请选择日期'}}"></vxe-form-item>
-        <vxe-form-item title="Address" field="address" span="24" :title-suffix="{message: '啦啦啦，就是这么强大！！！', icon: 'fa fa-question-circle'}" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
-        <vxe-form-item align="center" span="24" :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: '提交', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] }"></vxe-form-item>
-      </vxe-form>
+    <vxe-modal v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600" min-height="300" :loading="submitLoading" resize destroy-on-close>
+      <template v-slot>
+        <vxe-form :data="formData" :items="formItems" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent"></vxe-form>
+      </template>
     </vxe-modal>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -95,6 +83,21 @@ export default {
           { required: true, message: '请选择性别' }
         ]
       },
+      formItems: [
+        { title: 'Basic information', span: 24, titleAlign: 'left', titleWidth: 200, titlePrefix: { icon: 'fa fa-address-card-o' } },
+        { field: 'name', title: 'Name', span: 12, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+        { field: 'nickname', title: 'Nickname', span: 12, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
+        { field: 'role', title: 'Role', span: 12, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
+        { field: 'sex', title: 'Sex', span: 12, itemRender: { name: '$select', options: [] } },
+        { field: 'age', title: 'Age', span: 12, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
+        { field: 'flag1', title: '是否单身', span: 12, itemRender: { name: '$radio', options: [{ label: '是', value: 'Y' }, { label: '否', value: 'N' }] } },
+        { field: 'checkedList', title: '可选信息', span: 24, visibleMethod: this.visibleMethod, itemRender: { name: '$checkbox', options: [{ label: '运动、跑步', value: '1' }, { label: '听音乐', value: '2' }, { label: '泡妞', value: '3' }, { label: '吃美食', value: '4' }] } },
+        { title: 'Other information', span: 24, titleAlign: 'left', titleWidth: 200, titlePrefix: { message: '请填写必填项', icon: 'fa fa-info-circle' } },
+        { field: 'num', title: 'Number', span: 12, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入数值' } } },
+        { field: 'date3', title: 'Date', span: 12, itemRender: { name: '$input', props: { type: 'date', placeholder: '请选择日期' } } },
+        { field: 'address', title: 'Address', span: 24, titleSuffix: { message: '提示信息！！', icon: 'fa fa-question-circle' }, itemRender: { name: '$textarea', props: { autosize: { minRows: 2, maxRows: 4 }, placeholder: '请输入地址' } } },
+        { align: 'center', span: 24, titleAlign: 'left', itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '提交', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -125,22 +128,10 @@ export default {
           </vxe-table-column>
         </vxe-table>
 
-        <vxe-modal v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" :loading="submitLoading" resize destroy-on-close>
-          <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
-            <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
-            <vxe-form-item title="Name" field="name" span="12" :item-render="{name: '$input', props: {placeholder: '请输入名称'}}"></vxe-form-item>
-            <vxe-form-item title="Nickname" field="nickname" span="12" :item-render="{name: '$input', props: {placeholder: '请输入昵称'}}"></vxe-form-item>
-            <vxe-form-item title="Role" field="role" span="12" :item-render="{name: '$input', props: {placeholder: '请输入角色'}}"></vxe-form-item>
-            <vxe-form-item title="Sex" field="sex" span="12" :item-render="{name: '$select', options: sexList}"></vxe-form-item>
-            <vxe-form-item title="Age" field="age" span="12" :item-render="{name: '$input', props: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
-            <vxe-form-item title="是否单身" field="flag1" span="12" :item-render="{name: '$radio', options: [{label: '是', value: 'Y'}, {label: '否', value: 'N'}]}"></vxe-form-item>
-            <vxe-form-item title="可选信息" field="checkedList" span="24" :visible-method="visibleMethod" :item-render="{name: '$checkbox', options: [{label: '运动、跑步', value: '1'}, {label: '听音乐', value: '2'}, {label: '泡妞', value: '3'}, {label: '吃美食', value: '4'}]}"></vxe-form-item>
-            <vxe-form-item title="Other information" span="24" title-align="left" title-width="200px" :title-prefix="{message: '请填写必填项', icon: 'fa fa-info-circle'}"></vxe-form-item>
-            <vxe-form-item title="Number" field="num" span="12" :item-render="{name: '$input', props: {type: 'number', placeholder: '请输入数值'}}"></vxe-form-item>
-            <vxe-form-item title="Date" field="date3" span="12" :item-render="{name: '$input', props: {type: 'date', placeholder: '请选择日期'}}"></vxe-form-item>
-            <vxe-form-item title="Address" field="address" span="24" :title-suffix="{message: '啦啦啦，就是这么强大！！！', icon: 'fa fa-question-circle'}" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
-            <vxe-form-item align="center" span="24" :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: '提交', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] }"></vxe-form-item>
-          </vxe-form>
+        <vxe-modal v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600" min-height="300" :loading="submitLoading" resize destroy-on-close>
+          <template v-slot>
+            <vxe-form :data="formData" :items="formItems" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent"></vxe-form>
+          </template>
         </vxe-modal>
         `,
         `
@@ -178,10 +169,26 @@ export default {
                 sex: [
                   { required: true, message: '请选择性别' }
                 ]
-              }
+              },
+              formItems: [
+                { title: 'Basic information', span: 24, titleAlign: 'left', titleWidth: 200, titlePrefix: { icon: 'fa fa-address-card-o' } },
+                { field: 'name', title: 'Name', span: 12, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+                { field: 'nickname', title: 'Nickname', span: 12, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
+                { field: 'role', title: 'Role', span: 12, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
+                { field: 'sex', title: 'Sex', span: 12, itemRender: { name: '$select', options: [] } },
+                { field: 'age', title: 'Age', span: 12, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
+                { field: 'flag1', title: '是否单身', span: 12, itemRender: { name: '$radio', options: [{ label: '是', value: 'Y' }, { label: '否', value: 'N' }] } },
+                { field: 'checkedList', title: '可选信息', span: 24, visibleMethod: this.visibleMethod, itemRender: { name: '$checkbox', options: [{ label: '运动、跑步', value: '1' }, { label: '听音乐', value: '2' }, { label: '泡妞', value: '3' }, { label: '吃美食', value: '4' }] } },
+                { title: 'Other information', span: 24, titleAlign: 'left', titleWidth: 200, titlePrefix: { message: '请填写必填项', icon: 'fa fa-info-circle' } },
+                { field: 'num', title: 'Number', span: 12, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入数值' } } },
+                { field: 'date3', title: 'Date', span: 12, itemRender: { name: '$input', props: { type: 'date', placeholder: '请选择日期' } } },
+                { field: 'address', title: 'Address', span: 24, titleSuffix: { message: '提示信息！！', icon: 'fa fa-question-circle' }, itemRender: { name: '$textarea', props: { autosize: { minRows: 2, maxRows: 4 }, placeholder: '请输入地址' } } },
+                { align: 'center', span: 24, titleAlign: 'left', itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '提交', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
+              ]
             }
           },
           created () {
+            this.formItems[4].itemRender.options = this.sexList
             this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           },
           methods: {
@@ -255,6 +262,7 @@ export default {
     }
   },
   created () {
+    this.formItems[4].itemRender.options = this.sexList
     this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {

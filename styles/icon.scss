@@ -97,15 +97,15 @@
 }
 
 .vxe-icon--menu {
-  $yOffset: 0.38em;
+  $yOffset: 0.36em;
   @extend %DefaultWidthHeight;
   &:before {
     content: "";
     display: inline-block;
-    width: 0.24em;
-    height: 0.24em;
+    width: 0.22em;
+    height: 0.22em;
     box-shadow: 0 -#{$yOffset} 0, -#{$yOffset} -#{$yOffset} 0, #{$yOffset} -#{$yOffset} 0, 0 0 0 1em inset, -#{$yOffset} 0 0, #{$yOffset} 0 0, 0 #{$yOffset} 0, -#{$yOffset} #{$yOffset} 0, #{$yOffset} #{$yOffset} 0;
-    margin: 0.24em;
+    margin: 0.26em;
   }
 }
 
@@ -185,6 +185,7 @@
     border-right-color: inherit;
     border-bottom-color: transparent;
     border-left-color: transparent;
+    border-radius: 0.15em;
     transform: rotate(-45deg);
   }
 }
@@ -236,6 +237,7 @@
     border-right-color: transparent;
     border-bottom-color: transparent;
     border-left-color: inherit;
+    border-radius: 0.15em;
     transform: rotate(-45deg);
   }
 }
@@ -285,7 +287,7 @@
     @extend %PseudoClass;
     height: 0.84em;
     width: 0.86em;
-    top: 0.06em;
+    top: 0.1em;
     left: 0.02em;
     border-radius: 0.2em;
     border-width: 0.1em;
@@ -295,7 +297,7 @@
   &:after {
     @extend %PseudoClass;
     left: 0.6em;
-    bottom: 0.22em;
+    bottom: 0.2em;
     width: 0;
     height: 0.8em;
     border-radius: 0 0 80% 80%;
@@ -327,6 +329,25 @@
     bottom: 0;
     line-height: 0.9em;
     font-size: 1.4em;
+  }
+}
+
+.vxe-icon--check {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    left: 0.25em;
+    bottom: 0.2em;
+    width: 0.5em;
+    height: 0.9em;
+    border-width: 0.15em;
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: inherit;
+    border-bottom-color: inherit;
+    border-radius: 0.15em;
+    border-left-color: transparent;
+    transform: rotate(45deg);
   }
 }
 
@@ -407,58 +428,48 @@
   position: absolute;
   top: 0;
   left: 0;
+  transform: scale(0.95);
 }
 
-.vxe-icon--question {
-  @extend %DefaultWidthHeight;
-  &:before {
-    @extend %BeforeSolidRadius;
-  }
+%QuestionAndInfoWarning {
   &:after {
     @extend %PseudoClass;
-    content: "\3F";
     left: 0;
     bottom: 0;
     width: 100%;
     text-align: center;
-    line-height: 1.3em;
     color: #fff;
-    font-size: 0.8em;
+    transform: rotate(-10deg) scale(0.75);
+  }
+}
+
+.vxe-icon--question {
+  @extend %DefaultWidthHeight, %QuestionAndInfoWarning;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
+  &:after {
+    content: "\3F";
   }
 }
 
 .vxe-icon--info {
-  @extend %DefaultWidthHeight;
+  @extend %DefaultWidthHeight, %QuestionAndInfoWarning;
   &:before {
     @extend %BeforeSolidRadius;
   }
   &:after {
-    @extend %PseudoClass;
     content: "\A1";
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    line-height: 1.3em;
-    color: #fff;
-    font-size: 0.8em;
   }
 }
 
 .vxe-icon--warning {
-  @extend %DefaultWidthHeight;
+  @extend %DefaultWidthHeight, %QuestionAndInfoWarning;
   &:before {
     @extend %BeforeSolidRadius;
   }
   &:after {
-    @extend %PseudoClass;
     content: "\21";
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    color: #fff;
-    font-size: 0.8em;
   }
 }
 
@@ -553,25 +564,25 @@
 
 .vxe-icon--upload {
   &:before {
-    top: 0;
+    top: 0.1em;
     border-top-width: 0.1em;
   }
   &:after {
     content: "\2191";
     left: 0;
-    bottom: -0.1em;
+    top: 0.15em;
   }
 }
 
 .vxe-icon--download {
   &:before {
-    bottom: 0;
+    bottom: 0.05em;
     border-bottom-width: 0.1em;
   }
   &:after {
     content: "\2191";
     left: 0;
-    bottom: 0.1em;
+    bottom: 0.15em;
     transform: rotate(180deg);
   }
 }
@@ -645,5 +656,57 @@
     border-width: 0.25em;
     border-style: solid;
     border-color: inherit;
+  }
+}
+
+.vxe-icon--print {
+  @extend %DefaultWidthHeight;
+  box-shadow: inset 0 0 0 0.1em;
+  border-width: 0.2em 0;
+  border-style: solid;
+  border-color: transparent !important;
+  border-radius: 0.3em 0.3em 0 0;
+  &:before {
+    @extend %PseudoClass;
+    width: 0.6em;
+    height: 0.3em;
+    top: -0.2em;
+    left: 0.2em;
+    box-shadow: inset 0 0 0 0.1em;
+  }
+  &:after {
+    @extend %PseudoClass;
+    width: 0.6em;
+    height: 0.6em;
+    left: 0.2em;
+    bottom: -0.2em;
+    box-shadow: inset 0 0 0 0.1em;
+    background-color: #fff;
+  }
+}
+
+.vxe-icon--search {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0;
+    left: 0;
+    width: 0.8em;
+    height: 0.8em;
+    border-width: 0.15em;
+    border-style: solid;
+    border-color: inherit;
+    border-radius: 50%;
+  }
+  &:after {
+    @extend %PseudoClass;
+    top: 0.75em;
+    left: 0.6em;
+    width: 0.35em;
+    height: 0;
+    border-width: 0.15em 0 0 0;
+    border-style: solid;
+    border-color: inherit;
+    transform: rotate(45deg);
   }
 }

@@ -1,11 +1,16 @@
 <template>
   <div>
-    <p class="tip">统计编辑列的表尾合计，数据发生变化时实时统计，对于某些场景下如果需要频繁计算的可以手动调用 <table-api-link prop="updateFooter"/> 函数<br>如果是内置的渲染器，可以设置 <table-column-api-link prop="immediate"/> 属性和相关事件去实时更新</p>
+    <p class="tip">
+      通过表尾来实现合计功能，数据发生变化时实时统计，对于某些场景下如果需要频繁计算的可以手动调用 <table-api-link prop="updateFooter"/> 函数<br>
+      如果是内置的渲染器，可以设置 <table-column-api-link prop="immediate"/> 属性和相关事件去实时更新<br>
+      <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的数据都是自行生成的，该示例仅供参考）</span>
+    </p>
 
-    <vxe-toolbar>
+    <vxe-toolbar export>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
-        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="removeEvent">删除</vxe-button>
+        <vxe-button @click="saveEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -14,6 +19,7 @@
       show-footer
       show-overflow
       highlight-hover-row
+      export-config
       ref="xTable"
       height="400"
       class="editable-footer"
@@ -22,10 +28,12 @@
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age1" title="Age" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
-      <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
-      <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+      <vxe-table-column title="统计信息">
+        <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
+        <vxe-table-column field="age1" title="Age" :edit-render="{name: '$input', props: {type: 'number', min: 1, max: 120}, events: {input: updateFooterEvent}}"></vxe-table-column>
+        <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+        <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -47,10 +55,11 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        <vxe-toolbar>
+        <vxe-toolbar export>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
-            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+            <vxe-button @click="removeEvent">删除</vxe-button>
+            <vxe-button @click="saveEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -59,6 +68,7 @@ export default {
           show-footer
           show-overflow
           highlight-hover-row
+          export-config
           ref="xTable"
           height="400"
           class="editable-footer"
@@ -67,10 +77,12 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age1" title="Age" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
-          <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
-          <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+          <vxe-table-column title="统计信息">
+            <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
+            <vxe-table-column field="age1" title="Age" :edit-render="{name: '$input', props: {type: 'number', min: 1, max: 120}, events: {input: updateFooterEvent}}"></vxe-table-column>
+            <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+            <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+          </vxe-table-column>
         </vxe-table>
         `,
         `
@@ -81,7 +93,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             footerCellClassName ({ $rowIndex, column, columnIndex }) {
@@ -127,9 +139,12 @@ export default {
               this.$refs.xTable.insert(record)
                 .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'age'))
             },
-            getInsertEvent () {
-              let insertRecords = this.$refs.xTable.getInsertRecords()
-              this.$XModal.alert(insertRecords.length)
+            removeEvent () {
+              this.$refs.xTable.removeCheckboxRow()
+            },
+            saveEvent () {
+              const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+              this.$XModal.alert(\`insertRecords=\${insertRecords.length} removeRecords=\${removeRecords.length} updateRecords=\${updateRecords.length}\`)
             }
           }
         }
@@ -138,7 +153,7 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -189,9 +204,12 @@ export default {
       this.$refs.xTable.insert(record)
         .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'age'))
     },
-    getInsertEvent () {
-      const insertRecords = this.$refs.xTable.getInsertRecords()
-      this.$XModal.alert(insertRecords.length)
+    removeEvent () {
+      this.$refs.xTable.removeCheckboxRow()
+    },
+    saveEvent () {
+      const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+      this.$XModal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
     }
   }
 }

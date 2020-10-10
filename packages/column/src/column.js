@@ -41,6 +41,8 @@ const props = {
   // 格式化显示内容
   formatter: [Function, Array, String],
   // 自定义索引方法
+  seqMethod: Function,
+  // 在 v3.0 中废弃 indexMethod
   indexMethod: Function,
   // 是否允许排序
   sortable: Boolean,
@@ -64,10 +66,18 @@ const props = {
   visible: { type: Boolean, default: null },
   // 列的 key
   columnKey: [String, Number],
+  // 单元格数据导出方法
+  exportMethod: Function,
+  // 表尾单元格数据导出方法
+  footerExportMethod: Function,
+  // 单元格值类型
+  cellType: String,
   // 单元格渲染配置项
   cellRender: Object,
   // 单元格编辑渲染配置项
   editRender: Object,
+  // 内容渲染配置项
+  contentRender: Object,
   // 额外的参数
   params: Object
 }

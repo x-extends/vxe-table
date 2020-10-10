@@ -1,16 +1,17 @@
 <template>
   <div>
     <p class="tip">
-      空内容渲染器 <table-api-link prop="empty-render"/>，查看 <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><br>
+      空内容渲染 <table-api-link prop="empty-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/v3/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderEmpty (h, renderOpts, <vxe-tooltip content="{ $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 空内容<br>
+      renderEmpty (h, renderOpts, <vxe-tooltip content="params: { $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 空内容<br>
     </p>
 
     <vxe-table
       border
       resizable
       height="400"
-      :empty-render="{name: 'NotData'}">
+      :empty-render="{name: 'NotData'}"
+      :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="sex"></vxe-table-column>
@@ -36,7 +37,7 @@ export default {
       tableData: [],
       demoCodes: [
         `
-        // 创建一个空内容渲染器
+        // 创建一个空内容渲染
         VXETable.renderer.add('NotData', {
           // 空内容模板
           renderEmpty (h, renderOpts) {
@@ -54,7 +55,8 @@ export default {
           border
           resizable
           height="400"
-          :empty-render="{name: 'NotData'}">
+          :empty-render="{name: 'NotData'}"
+          :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="sex"></vxe-table-column>

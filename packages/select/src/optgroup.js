@@ -1,12 +1,21 @@
-import { UtilTools } from '../../tools'
+import { createOption, destroyOption, assemOption } from './util'
+
+const props = {
+  label: { type: [String, Number, Boolean], default: '' },
+  visible: { type: Boolean, default: null },
+  disabled: Boolean
+}
+
+const watch = {}
+Object.keys(props).forEach(name => {
+  watch[name] = function (value) {
+    this.optionConfig.update(name, value)
+  }
+})
 
 export default {
   name: 'VxeOptgroup',
-  props: {
-    label: [String, Number],
-    disabled: Boolean,
-    size: String
-  },
+  props,
   provide () {
     return {
       $xeoptgroup: this
@@ -22,22 +31,17 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     }
   },
+  watch,
   mounted () {
-    this.$xeselect.updateStatus()
+    assemOption(this)
+  },
+  created () {
+    this.optionConfig = createOption(this.$xeselect, this)
   },
   destroyed () {
-    this.$xeselect.updateStatus()
+    destroyOption(this)
   },
   render (h) {
-    return h('div', {
-      class: 'vxe-optgroup'
-    }, [
-      h('div', {
-        class: 'vxe-optgroup--title'
-      }, UtilTools.getFuncText(this.label)),
-      h('div', {
-        class: 'vxe-optgroup--wrapper'
-      }, this.$slots.default)
-    ])
+    return h('div', this.$slots.default)
   }
 }

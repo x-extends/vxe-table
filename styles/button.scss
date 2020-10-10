@@ -1,16 +1,44 @@
 /**Variable**/
 @import './helpers/mixin.scss';
 
-%ButtonHover {
-  color: lighten($vxe-primary-color, 6%);
-  border-color: lighten($vxe-primary-color, 10%);
-}
-
-%ButtonPrimaryHover {
-  color: #fff;
-  background-color: lighten($vxe-primary-color, 4%);
-  border-color: lighten($vxe-primary-color, 4%);
-}
+$btnThemeList: (
+  (
+    name: "primary",
+    textColor: $vxe-primary-color,
+    btnColor: #fff,
+    btnBackground: $vxe-primary-color
+  ),
+  (
+    name: "success",
+    textColor: $vxe-success-color,
+    btnColor: #fff,
+    btnBackground: $vxe-success-color
+  ),
+  (
+    name: "info",
+    textColor: $vxe-info-color,
+    btnColor: #fff,
+    btnBackground: $vxe-info-color
+  ),
+  (
+    name: "warning",
+    textColor: $vxe-warning-color,
+    btnColor: #fff,
+    btnBackground: $vxe-warning-color
+  ),
+  (
+    name: "danger",
+    textColor: $vxe-danger-color,
+    btnColor: #fff,
+    btnBackground: $vxe-danger-color
+  ),
+  (
+    name: "perfect",
+    textColor: $vxe-table-header-background-color,
+    btnColor: $vxe-font-color,
+    btnBackground: $vxe-table-header-background-color
+  )
+);
 
 .vxe-button {
   position: relative;
@@ -18,11 +46,21 @@
   background-color: $vxe-button-default-background-color;
   outline: 0;
   font-size: $vxe-font-size;
+  max-width: $vxe-button-max-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   white-space: nowrap;
   user-select: none;
+  appearance: none;
   @include animatTransition(border, .2s);
   &.is--disabled {
     color: $vxe-disabled-color;
+    .vxe-button--icon {
+      &.vxe-icon--zoomin {
+        border-color: $vxe-disabled-color;
+      }
+    }
     &:not(.is--loading) {
       cursor: no-drop;
     }
@@ -30,6 +68,11 @@
   &:not(.is--disabled) {
     color: $vxe-font-color;
     cursor: pointer;
+    .vxe-button--icon {
+      &.vxe-icon--zoomin {
+        border-color: $vxe-font-color;
+      }
+    }
   }
   &.is--loading {
     &:before {
@@ -53,56 +96,114 @@
         color: lighten($vxe-primary-color, 10%);
       }
     }
+    @for $index from 0 to length($btnThemeList) {
+      $item: nth($btnThemeList, $index + 1);
+      $textColor: map-get($item, textColor);
+      &.theme--#{map-get($item, name)} {
+        color: $textColor;
+        &:not(.is--disabled) {
+          &:hover {
+            color: lighten($textColor, 10%);
+          }
+        }
+        &.is--disabled {
+          color: lighten($textColor, 20%);
+        }
+      }
+    }
   }
   &.type--button {
-    padding: 0 1em;
+    &.is--round {
+      border-radius: $vxe-button-height-default / 2;
+    }
+    &:not(.is--round) {
+      border-radius: $vxe-border-radius;
+    }
+    &.is--circle {
+      padding: 0 0.5em;
+      min-width: $vxe-button-height-default;
+      border-radius: 50%;
+    }
+    &:not(.is--circle) {
+      padding: 0 1em;
+    }
     height: $vxe-button-height-default;
-    line-height: $vxe-button-height-default - 2px;
+    line-height: 1;
     border: 1px solid $vxe-input-border-color;
-    border-radius: 0.2em;
     &:not(.is--disabled) {
-      &:active {
-        background-color: darken($vxe-button-default-background-color, 3%);
+      &:hover {
+        color: lighten($vxe-primary-color, 6%);
+        .vxe-button--icon {
+          &.vxe-icon--zoomin {
+            border-color: lighten($vxe-primary-color, 6%);
+          }
+        }
       }
       &:focus {
         border-color: $vxe-primary-color;
-        box-shadow: 0 0 0.2em 0 $vxe-primary-color;
+        box-shadow: 0 0 0.25em 0 $vxe-primary-color;
+      }
+      &:active {
+        color: darken($vxe-primary-color, 3%);
+        border-color: darken($vxe-primary-color, 3%);
+        background-color: darken($vxe-button-default-background-color, 3%);
+        .vxe-button--icon {
+          &.vxe-icon--zoomin {
+            background-color: darken($vxe-button-default-background-color, 3%);
+          }
+          &.vxe-icon--zoomout {
+            &:after {
+              background-color: darken($vxe-button-default-background-color, 3%);
+            }
+          }
+        }
       }
     }
-    &.theme--primary {
-      color: #fff;
-      .vxe-button--icon {
-        border-color: #fff;
-      }
-      &:not(.is--disabled) {
-        border-color: $vxe-primary-color;
-        background-color: $vxe-primary-color;
-        &:hover {
-          @extend %ButtonPrimaryHover;
+    @for $index from 0 to length($btnThemeList) {
+      $item: nth($btnThemeList, $index + 1);
+      $btnColor: map-get($item, btnColor);
+      $btnBackground: map-get($item, btnBackground);
+      &.theme--#{map-get($item, name)} {
+        color: $btnColor;
+        .vxe-button--icon {
+          &.vxe-icon--zoomin {
+            border-color: $btnColor;
+          }
         }
-        &:active {
-          color: #fff;
-          background-color: darken($vxe-primary-color, 3%);
-          border-color: darken($vxe-primary-color, 3%);
+        &:not(.is--disabled) {
+          border-color: $btnBackground;
+          background-color: $btnBackground;
+          &:hover {
+            color: $btnColor;
+            background-color: lighten($btnBackground, 6%);
+            border-color: lighten($btnBackground, 6%);
+            .vxe-button--icon {
+              &.vxe-icon--zoomin {
+                border-color: lighten($btnBackground, 6%);
+              }
+            }
+          }
+          &:active {
+            color: $btnColor;
+            background-color: darken($btnBackground, 3%);
+            border-color: darken($btnBackground, 3%);
+            &.vxe-icon--zoomin {
+              background-color: darken($btnBackground, 3%);
+            }
+            &.vxe-icon--zoomout {
+              &:after {
+                background-color: darken($btnBackground, 3%);
+              }
+            }
+          }
         }
-      }
-      &.is--disabled {
-        border-color: #a0cfff;
-        background-color: #a0cfff;
-      }
-      &.is--loading {
-        border-color: $vxe-primary-color;
-        background-color: $vxe-primary-color;
-      }
-    }
-    &:not(.theme--primary) {
-      &:not(.is--disabled) {
-        &:hover {
-          @extend %ButtonHover;
+        &.is--disabled {
+          border-color: lighten($btnBackground, 20%);
+          background-color: lighten($btnBackground, 20%);
         }
-        &:active {
-          color: darken($vxe-primary-color, 3%);
-          border-color: darken($vxe-primary-color, 3%);
+        &.is--loading {
+          border-color: $btnBackground;
+          background-color: $btnBackground;
         }
       }
     }
@@ -111,21 +212,48 @@
     font-size: $vxe-font-size-medium;
     &.type--button {
       height: $vxe-button-height-medium;
-      line-height: $vxe-button-height-medium - 2px;
+      &.is--circle {
+        min-width: $vxe-button-height-medium;
+      }
+      &.is--round {
+        border-radius: $vxe-button-height-medium / 2;
+      }
+    }
+    .vxe-button--loading-icon,
+    .vxe-button--icon {
+      min-width: $vxe-font-size-medium;
     }
   }
   &.size--small {
     font-size: $vxe-font-size-small;
     &.type--button {
       height: $vxe-button-height-small;
-      line-height: $vxe-button-height-small - 2px;
+      &.is--circle {
+        min-width: $vxe-button-height-small;
+      }
+      &.is--round {
+        border-radius: $vxe-button-height-small / 2;
+      }
+    }
+    .vxe-button--loading-icon,
+    .vxe-button--icon {
+      min-width: $vxe-font-size-small;
     }
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
     &.type--button {
       height: $vxe-button-height-mini;
-      line-height: $vxe-button-height-mini - 2px;
+      &.is--circle {
+        min-width: $vxe-button-height-mini;
+      }
+      &.is--round {
+        border-radius: $vxe-button-height-mini / 2;
+      }
+    }
+    .vxe-button--loading-icon,
+    .vxe-button--icon {
+      min-width: $vxe-font-size-mini;
     }
   }
 }
@@ -133,13 +261,19 @@
 .vxe-button {
   &+.vxe-button,
   &+.vxe-button--dropdown {
-    margin-left: 0.8em;
+    margin-left: 12px;
   }
 }
 .vxe-button--loading-icon,
+.vxe-button--icon,
+.vxe-button--content {
+  vertical-align: middle;
+}
+.vxe-button--loading-icon,
 .vxe-button--icon {
+  min-width: $vxe-font-size;
   &+.vxe-button--content {
-    margin-left: 0.3em;
+    margin-left: 4px;
   }
 }
 .vxe-button--wrapper,
@@ -150,16 +284,43 @@
   position: relative;
   &+.vxe-button,
   &+.vxe-button--dropdown {
-    margin-left: 0.8em;
+    margin-left: 12px;
+  }
+  & > .vxe-button {
+    &.type--button {
+      @for $index from 0 to length($btnThemeList) {
+        $item: nth($btnThemeList, $index + 1);
+        $btnColor: map-get($item, btnColor);
+        &.theme--#{map-get($item, name)} {
+          color: $btnColor;
+        }
+      }
+    }
   }
   &.is--active {
     & > .vxe-button {
-      &.theme--primary {
-        @extend %ButtonPrimaryHover;
-      }
       &:not(.is--disabled) {
-        &:not(.theme--primary) {
-          @extend %ButtonHover;
+        color: lighten($vxe-primary-color, 6%);
+      }
+      &.type--text {
+        @for $index from 0 to length($btnThemeList) {
+          $item: nth($btnThemeList, $index + 1);
+          $textColor: map-get($item, textColor);
+          &.theme--#{map-get($item, name)} {
+            color: lighten($textColor, 10%);
+          }
+        }
+      }
+      &.type--button {
+        @for $index from 0 to length($btnThemeList) {
+          $item: nth($btnThemeList, $index + 1);
+          $btnColor: map-get($item, btnColor);
+          $btnBackground: map-get($item, btnBackground);
+          &.theme--#{map-get($item, name)} {
+            color: $btnColor;
+            background-color: lighten($btnBackground, 6%);
+            border-color: lighten($btnBackground, 6%);
+          }
         }
       }
     }
@@ -171,41 +332,51 @@
 
 .vxe-button--dropdown-arrow {
   font-size: 12px;
-  margin: -0.18em 0 0 0.3em;
+  margin-left: 4px;
   @include animatTransition(transform, .2s);
 }
 
 .vxe-button--dropdown-panel {
   display: none;
   position: absolute;
-  left: 50%;
-  padding: 0.2em 0;
-  min-width: 100%;
+  left: 0;
+  padding: 4px 0;
   &.animat--leave {
     display: block;
     opacity: 0;
-    transform: translateX(-50%) scaleY(0.5);
-    transition: all 0.2s;
-    transform-origin: 0% 0%;
+    transform: scaleY(0.5);
+    transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
+    transform-origin: center top;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    &[data-placement="top"] {
+      transform-origin: center bottom;
+    }
   }
   &.animat--enter {
     opacity: 1;
-    transform: translateX(-50%) scaleY(1);
+    transform: scaleY(1);
   }
 }
 .vxe-button--dropdown-wrapper {
   padding: 5px;
   background-color: #fff;
-  border-radius: 4px;
+  border-radius: $vxe-border-radius;
   border: 1px solid $vxe-input-border-color;
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   & > .vxe-button {
-    margin: 0;
+    margin: 2px 0;
     display: block;
     width: 100%;
     border: 0;
     &.type--text {
       padding: 2px 8px;
+    }
+    &:first-child {
+      margin-top: 0;
+    }
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 }

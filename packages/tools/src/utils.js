@@ -3,14 +3,13 @@ import GlobalConfig from '../../conf'
 import formats from '../../v-x-e-table/src/formats'
 
 let zindexIndex = 0
-let lastZindex = 0
-let columnUniqueId = 0
+let lastZindex = 1
 
 function getColFuncWidth (isExists, defaultWidth = 16) {
   return isExists ? defaultWidth : 0
 }
 
-class ColumnConfig {
+class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($table, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
     const $grid = $table.$grid
@@ -18,36 +17,63 @@ class ColumnConfig {
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
     if (_vm.cellRender && _vm.editRender) {
-      UtilTools.warn('vxe.error.cellEditRender')
+      UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
     }
+    // 在 v3.0 中废弃 editRender.type
+    if (_vm.editRender && _vm.editRender.type === 'visible') {
+      // UtilTools.warn('vxe.error.delProp', ['column.edit-render.type', 'column.cell-render'])
+    }
+    // 在 v3.0 中废弃 prop
+    if (_vm.prop) {
+      UtilTools.warn('vxe.error.delProp', ['column.prop', 'column.field'])
+    }
+    // 在 v3.0 中废弃 label
+    if (_vm.label) {
+      UtilTools.warn('vxe.error.delProp', ['column.label', 'column.title'])
+    }
+    // 在 v3.0 中废弃 class
+    if (_vm.class) {
+      UtilTools.warn('vxe.error.delProp', ['column.class', 'column.className'])
+    }
+    // 在 v3.0 中废弃 type=index
     if (_vm.type === 'index') {
-      // UtilTools.warn('vxe.error.delProp', ['index', 'seq'])
+      UtilTools.warn('vxe.error.delProp', ['column.type=index', 'column.type=seq'])
     } else if (_vm.type === 'selection') {
-      // UtilTools.warn('vxe.error.delProp', ['selection', 'checkbox'])
+      // 在 v3.0 中废弃 type=selection
+      UtilTools.warn('vxe.error.delProp', ['column.type=selection', 'column.type=checkbox'])
     } else if (_vm.type === 'expand') {
       if ($table.treeConfig && $table.treeOpts.line) {
-        UtilTools.error('vxe.error.treeLineExpand')
+        UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
       }
       if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
-        UtilTools.warn('vxe.error.expandContent')
+        UtilTools.error('vxe.error.expandContent')
       }
     }
     if (formatter) {
       if (XEUtils.isString(formatter)) {
-        const globalFunc = formats.get(formatter) || XEUtils[formatter]
+        let globalFunc = formats.get(formatter)
+        if (!globalFunc && XEUtils[formatter]) {
+          globalFunc = XEUtils[formatter]
+          // 在 v3.0 中废弃挂载格式化方式
+          UtilTools.warn('vxe.error.errFormat', [formatter])
+        }
         if (!XEUtils.isFunction(globalFunc)) {
-          UtilTools.error('vxe.error.notFunc', [globalFunc])
+          UtilTools.error('vxe.error.notFunc', [formatter])
         }
       } else if (XEUtils.isArray(formatter)) {
-        const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
+        let globalFunc = formats.get(formatter[0])
+        if (!globalFunc && XEUtils[formatter[0]]) {
+          globalFunc = XEUtils[formatter[0]]
+          // 在 v3.0 中废弃挂载格式化方式
+          UtilTools.warn('vxe.error.errFormat', [formatter[0]])
+        }
         if (!XEUtils.isFunction(globalFunc)) {
-          UtilTools.error('vxe.error.notFunc', [globalFunc])
+          UtilTools.error('vxe.error.notFunc', [formatter[0]])
         }
       }
     }
     Object.assign(this, {
       // 基本属性
-      id: `col_${++columnUniqueId}`,
       type: _vm.type,
       // 在 v3.0 中废弃 prop
       prop: _vm.prop,
@@ -69,6 +95,7 @@ class ColumnConfig {
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,
       indexMethod: _vm.indexMethod,
+      seqMethod: _vm.seqMethod,
       formatter: formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
@@ -80,14 +107,22 @@ class ColumnConfig {
       filterRender: _vm.filterRender,
       treeNode: _vm.treeNode,
       columnKey: _vm.columnKey,
+      cellType: _vm.cellType,
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
+      contentRender: _vm.contentRender,
+      exportMethod: _vm.exportMethod,
+      footerExportMethod: _vm.footerExportMethod,
       // 自定义参数
       params: _vm.params,
       // 渲染属性
+      id: _vm.colId || XEUtils.uniqueId('col_'),
+      parentId: null,
       visible,
+      halfVisible: false,
       defaultVisible: visible,
       checked: false,
+      halfChecked: false,
       disabled: false,
       level: 1,
       rowSpan: 1,
@@ -113,22 +148,20 @@ class ColumnConfig {
 
   getTitle () {
     // 在 v3.0 中废弃 label、type=index
-    return UtilTools.getFuncText(this.own.title || this.own.label || (this.type === 'seq' || this.type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
+    return UtilTools.getFuncText(this.title || this.label || (this.type === 'seq' || this.type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
   }
 
   getKey () {
     return this.property || (this.type ? `type=${this.type}` : null)
   }
 
-  getMinWidth () {
-    const { type, filters, sortable, remoteSort, editRender } = this
-    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(filters) + getColFuncWidth(sortable || remoteSort) + getColFuncWidth(editRender)
-  }
-
   update (name, value) {
     // 不支持双向的属性
     if (name !== 'filters') {
       this[name] = value
+      if (name === 'field') {
+        this.property = value
+      }
     }
   }
 }
@@ -147,16 +180,10 @@ export const UtilTools = {
   getLog (message, params) {
     return `[vxe-table] ${XEUtils.template(GlobalConfig.i18n(message), params)}`
   },
-  getSize ({ size, $parent }) {
-    return size || ($parent && ['medium', 'small', 'mini'].indexOf($parent.size) > -1 ? $parent.size : null)
-  },
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
   },
-  nextZIndex ($table) {
-    if ($table && $table.zIndex) {
-      return $table.zIndex
-    }
+  nextZIndex () {
     lastZindex = GlobalConfig.zIndex + zindexIndex++
     return lastZindex
   },
@@ -171,7 +198,7 @@ export const UtilTools = {
       // 在 v2.0 中废弃 key
       rowKey = rowId || checkboxOpts.key || treeOpts.key || expandOpts.key || editConfig.key || GlobalConfig.rowId
     }
-    return rowKey
+    return rowKey || '_XID'
   },
   // 行主键 value
   getRowid ($table, row, rowIndex) {
@@ -197,7 +224,9 @@ export const UtilTools = {
   },
   getFilters (filters) {
     if (filters && XEUtils.isArray(filters)) {
-      return filters.map(({ label, value, data, checked }) => ({ label, value, data, _data: data, checked: !!checked }))
+      return filters.map(({ label, value, data, resetValue, checked }) => {
+        return { label, value, data, resetValue, checked: !!checked, _checked: !!checked }
+      })
     }
     return filters
   },
@@ -217,6 +246,7 @@ export const UtilTools = {
       const colid = column.id
       const fullAllDataRowMap = $table.fullAllDataRowMap
       const cacheFormat = fullAllDataRowMap.has(row)
+      const formatParams = { cellValue, row, column }
       if (cacheFormat) {
         rest = fullAllDataRowMap.get(row)
         formatData = rest.formatData
@@ -230,13 +260,23 @@ export const UtilTools = {
         }
       }
       if (XEUtils.isString(formatter)) {
-        const globalFunc = formats.get(formatter) || XEUtils[formatter]
-        cellLabel = globalFunc ? globalFunc(cellValue) : ''
+        if (XEUtils[formatter]) {
+          cellLabel = XEUtils[formatter](cellValue)
+        } else if (formats.get(formatter)) {
+          cellLabel = formats.get(formatter)(formatParams)
+        } else {
+          cellLabel = ''
+        }
       } else if (XEUtils.isArray(formatter)) {
-        const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
-        cellLabel = globalFunc ? globalFunc(...([cellValue].concat(formatter.slice(1)))) : ''
+        if (XEUtils[formatter[0]]) {
+          cellLabel = XEUtils[formatter[0]](cellValue, ...formatter.slice(1))
+        } else if (formats.get(formatter[0])) {
+          cellLabel = formats.get(formatter[0])(formatParams, ...formatter.slice(1))
+        } else {
+          cellLabel = ''
+        }
       } else {
-        cellLabel = formatter(Object.assign({ cellValue }, params))
+        cellLabel = formatter(formatParams)
       }
       if (formatData) {
         formatData[colid] = { value: cellValue, label: cellLabel }
@@ -251,10 +291,10 @@ export const UtilTools = {
     return XEUtils.set(row, column.property, value)
   },
   isColumn (column) {
-    return column instanceof ColumnConfig
+    return column instanceof ColumnInfo
   },
-  getColumnConfig ($table, _vm, options) {
-    return UtilTools.isColumn(_vm) ? _vm : new ColumnConfig($table, _vm, options)
+  getColumnConfig ($xetable, _vm, options) {
+    return UtilTools.isColumn(_vm) ? _vm : new ColumnInfo($xetable, _vm, options)
   },
   // 组装列配置
   assemColumn (_vm) {
@@ -280,6 +320,11 @@ export const UtilTools = {
   },
   hasChildrenList (item) {
     return item && item.children && item.children.length > 0
+  },
+  getColMinWidth (_vm, column) {
+    const { sortOpts, filterOpts, editOpts } = _vm
+    const { type, filters, sortable, remoteSort, editRender, titleHelp } = column
+    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(editRender && editOpts.showIcon, 32)
   },
   parseFile (file) {
     const name = file.name

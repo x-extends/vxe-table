@@ -6,8 +6,9 @@
       resizable
       row-key
       row-id="id"
+      :checkbox-config="{checkField: 'checked', halfField: 'indeterminate'}"
       :tree-config="{children: 'children'}"
-      :data="tableData"
+      :data="tableData1"
       :columns="tableColumn1"
       @checkbox-change="selectChangeEvent">
     </vxe-virtual-tree>
@@ -25,10 +26,10 @@
       resizable
       row-key
       row-id="id"
-      :data="tableData"
+      :data="tableData2"
       :columns="tableColumn2"
       :tree-config="{children: 'children'}"
-      :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
+      :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000'], checkField: 'checked', halfField: 'indeterminate'}"
       @checkbox-change="selectChangeEvent">
     </vxe-virtual-tree>
 
@@ -45,10 +46,10 @@
       resizable
       row-key
       row-id="id"
-      :data="tableData"
+      :data="tableData3"
       :columns="tableColumn3"
       :tree-config="{children: 'children'}"
-      :checkbox-config="{labelField: 'name', checkStrictly: true}">
+      :checkbox-config="{labelField: 'name', checkStrictly: true, checkField: 'checked', halfField: 'indeterminate'}">
     </vxe-virtual-tree>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -67,7 +68,9 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      tableData: [],
+      tableData1: [],
+      tableData2: [],
+      tableData3: [],
       tableColumn1: [
         { type: 'checkbox', treeNode: true },
         { field: 'name', title: 'Name' },
@@ -93,9 +96,10 @@ export default {
           resizable
           row-key
           row-id="id"
+          :checkbox-config="{checkField: 'checked', halfField: 'indeterminate'}"
           :tree-config="{children: 'children'}"
-          :data="tableData"
-          :columns="tableColumn"
+          :data="tableData1"
+          :columns="tableColumn1"
           @checkbox-change="selectChangeEvent">
         </vxe-virtual-tree>
         `,
@@ -103,7 +107,7 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
+              tableData1: [],
               tableColumn: [
                 { type: 'checkbox', treeNode: true },
                 { field: 'name', title: 'Name' },
@@ -114,11 +118,11 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData1 = window.MOCK_TREE_DATA_LIST
           },
           methods: {
-            selectChangeEvent ({ selection }) {
-              console.info(\`勾选\${selection.length}个树形节点\`, selection)
+            selectChangeEvent ({ records }) {
+              console.info(\`勾选\${records.length}个树形节点\`, records)
             }
           }
         }
@@ -128,10 +132,10 @@ export default {
           resizable
           row-key
           row-id="id"
-          :data="tableData"
-          :columns="tableColumn"
+          :data="tableData2"
+          :columns="tableColumn2"
           :tree-config="{children: 'children'}"
-          :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000']}"
+          :checkbox-config="{labelField: 'name', checkRowKeys: ['122000', '20000'], checkField: 'checked', halfField: 'indeterminate'}"
           @checkbox-change="selectChangeEvent">
         </vxe-virtual-tree>
         `,
@@ -139,7 +143,7 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
+              tableData2: [],
               tableColumn: [
                 { type: 'checkbox', title: 'Name', width: 400, treeNode: true },
                 { field: 'size', title: 'Size' },
@@ -149,11 +153,11 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData2 = window.MOCK_TREE_DATA_LIST
           },
           methods: {
-            selectChangeEvent ({ selection }) {
-              console.info(\`勾选\${selection.length}个树形节点\`, selection)
+            selectChangeEvent ({ records }) {
+              console.info(\`勾选\${records.length}个树形节点\`, records)
             }
           }
         }
@@ -163,17 +167,17 @@ export default {
           resizable
           row-key
           row-id="id"
-          :data="tableData"
+          :data="tableData3"
           :columns="tableColumn3"
           :tree-config="{children: 'children'}"
-          :checkbox-config="{labelField: 'name', checkStrictly: true}">
+          :checkbox-config="{labelField: 'name', checkStrictly: true, checkField: 'checked', halfField: 'indeterminate'}">
         </vxe-virtual-tree>
         `,
         `
         export default {
           data () {
             return {
-              tableData: [],
+              tableData3: [],
               tableColumn: [
                 { type: 'checkbox', title: 'Name', width: 280, treeNode: true },
                 { field: 'size', title: 'Size' },
@@ -183,7 +187,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData3 = window.MOCK_TREE_DATA_LIST
           }
         }
         `
@@ -191,7 +195,9 @@ export default {
     }
   },
   created () {
-    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData1 = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData2 = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
+    this.tableData3 = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -199,11 +205,11 @@ export default {
     })
   },
   methods: {
-    checkMethod ({ row }) {
+    checCheckboxkMethod ({ row }) {
       return !['js', 'mp4'].includes(row.type)
     },
-    selectChangeEvent ({ selection }) {
-      console.info(`勾选${selection.length}个树形节点`, selection)
+    selectChangeEvent ({ records }) {
+      console.info(`勾选${records.length}个树形节点`, records)
     }
   }
 }

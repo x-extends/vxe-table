@@ -1,10 +1,12 @@
 import XEUtils from 'xe-utils'
+import GlobalConfig from '../../conf'
 
 export default {
   name: 'VxeRadioGroup',
   props: {
     value: [String, Number],
-    size: String
+    disabled: Boolean,
+    size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   provide () {
     return {
@@ -14,6 +16,9 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isDisabled () {
+      return this.disabled || (this.isGroup && this.$xegroup.disabled)
     }
   },
   data () {

@@ -12,8 +12,20 @@
       :pager-config="tablePage"
       :columns="tableColumn"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true, icon: 'fa fa-file-text-o'}"
-      @page-change="handlePageChange"></vxe-grid>
+      :edit-config="{trigger: 'manual', mode: 'row', showStatus: true, icon: 'fa fa-file-text-o'}"
+      @page-change="handlePageChange">
+      <template v-slot:operate="{ row }">
+        <template v-if="$refs.xGrid.isActiveByRow(row)">
+          <vxe-button icon="fa fa-save" status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
+        </template>
+        <template v-else>
+          <vxe-button icon="fa fa-edit" title="编辑" circle @click="editRowEvent(row)"></vxe-button>
+        </template>
+        <vxe-button icon="fa fa-trash" title="删除" circle @click="removeRowEvent(row)"></vxe-button>
+        <vxe-button icon="fa fa-eye" title="查看" circle></vxe-button>
+        <vxe-button icon="fa fa-gear" title="设置" circle></vxe-button>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -45,7 +57,8 @@ export default {
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
         { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
         { field: 'role', title: 'Role', editRender: { name: 'input' } },
-        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } },
+        { title: '操作', width: 200, slots: { default: 'operate' } }
       ],
       tableData: [],
       demoCodes: [
@@ -60,8 +73,20 @@ export default {
           :pager-config="tablePage"
           :columns="tableColumn"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true, icon: 'fa fa-file-text-o'}"
-          @page-change="handlePageChange"></vxe-grid>
+          :edit-config="{trigger: 'manual', mode: 'row', showStatus: true, icon: 'fa fa-file-text-o'}"
+          @page-change="handlePageChange">
+          <template v-slot:operate="{ row }">
+            <template v-if="$refs.xGrid.isActiveByRow(row)">
+              <vxe-button icon="fa fa-save" status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
+            </template>
+            <template v-else>
+              <vxe-button icon="fa fa-edit" title="编辑" circle @click="editRowEvent(row)"></vxe-button>
+            </template>
+            <vxe-button icon="fa fa-trash" title="删除" circle @click="removeRowEvent(row)"></vxe-button>
+            <vxe-button icon="fa fa-eye" title="查看" circle></vxe-button>
+            <vxe-button icon="fa fa-gear" title="设置" circle></vxe-button>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {
@@ -80,7 +105,8 @@ export default {
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                 { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
                 { field: 'role', title: 'Role', editRender: { name: 'input' } },
-                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } },
+                { title: '操作', width: 200, slots: { default: 'operate' } }
               ],
               tableData: []
             }
@@ -103,8 +129,10 @@ export default {
             findSexList () {
               return XEAjax.get('/api/conf/sex/list').then(data => {
                 // 异步更新下拉选项
-                let column = this.$refs.xGrid.getColumnByField('sex')
-                column.editRender.options = data
+                if (this.$refs.xGrid) {
+                  const column = this.$refs.xGrid.getColumnByField('sex')
+                  column.editRender.options = data
+                }
               })
             },
             searchEvent () {
@@ -115,6 +143,25 @@ export default {
               this.tablePage.currentPage = currentPage
               this.tablePage.pageSize = pageSize
               this.findList()
+            },
+            editRowEvent (row) {
+              this.$refs.xGrid.setActiveRow(row)
+            },
+            saveRowEvent () {
+              this.$refs.xGrid.clearActived().then(() => {
+                this.loading = true
+                setTimeout(() => {
+                  this.loading = false
+                  this.$XModal.message({ message: '保存成功！', status: 'success' })
+                }, 300)
+              })
+            },
+            removeRowEvent (row) {
+              this.$XModal.confirm('您确定要删除该数据?').then(type => {
+                if (type === 'confirm') {
+                  this.$refs.xGrid.remove(row)
+                }
+              })
             }
           }
         }
@@ -145,8 +192,10 @@ export default {
     findSexList () {
       return XEAjax.get('/api/conf/sex/list').then(data => {
         // 异步更新下拉选项
-        const column = this.$refs.xGrid.getColumnByField('sex')
-        column.editRender.options = data
+        if (this.$refs.xGrid) {
+          const column = this.$refs.xGrid.getColumnByField('sex')
+          column.editRender.options = data
+        }
       })
     },
     searchEvent () {
@@ -157,6 +206,25 @@ export default {
       this.tablePage.currentPage = currentPage
       this.tablePage.pageSize = pageSize
       this.findList()
+    },
+    editRowEvent (row) {
+      this.$refs.xGrid.setActiveRow(row)
+    },
+    saveRowEvent () {
+      this.$refs.xGrid.clearActived().then(() => {
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.$XModal.message({ message: '保存成功！', status: 'success' })
+        }, 300)
+      })
+    },
+    removeRowEvent (row) {
+      this.$XModal.confirm('您确定要删除该数据?').then(type => {
+        if (type === 'confirm') {
+          this.$refs.xGrid.remove(row)
+        }
+      })
     }
   }
 }

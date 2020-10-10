@@ -10,14 +10,14 @@
       ref="xVTree"
       row-id="id"
       :tree-config="{children: 'children'}"
-      :checkbox-config="{labelField: 'id'}"
+      :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
       :columns="tableColumn"
       :data="tableData">
       <template v-slot:buttons>
-        <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
-        <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
-        <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
-        <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+        <vxe-button @click="$refs.xVTree.toggleTreeExpand(tableData[0], true)">切换第一个</vxe-button>
+        <vxe-button @click="$refs.xVTree.setTreeExpand(tableData[2], true)">展开第三个</vxe-button>
+        <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
+        <vxe-button @click="$refs.xVTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
     </vxe-virtual-tree>
 
@@ -55,14 +55,14 @@ export default {
           ref="xVTree"
           row-id="id"
           :tree-config="{children: 'children'}"
-          :checkbox-config="{labelField: 'id'}"
+          :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
           :columns="tableColumn"
           :data="tableData">
           <template v-slot:buttons>
-            <vxe-button @click="$refs.xTree.toggleTreeExpansion(tableData[0], true)">切换第一个</vxe-button>
-            <vxe-button @click="$refs.xTree.setTreeExpansion(tableData[2], true)">展开第三个</vxe-button>
-            <vxe-button @click="$refs.xTree.setAllTreeExpansion(true)">展开所有</vxe-button>
-            <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+            <vxe-button @click="$refs.xVTree.toggleTreeExpand(tableData[0], true)">切换第一个</vxe-button>
+            <vxe-button @click="$refs.xVTree.setTreeExpand(tableData[2], true)">展开第三个</vxe-button>
+            <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xVTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,
@@ -81,7 +81,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `

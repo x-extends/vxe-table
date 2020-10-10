@@ -24,14 +24,37 @@ class Rule {
 }
 
 function getResetValue (value, resetValue) {
-  if (XEUtils.isString(value)) {
-    resetValue = ''
-  } else if (XEUtils.isArray(value)) {
+  if (XEUtils.isArray(value)) {
     resetValue = []
-  } else if (XEUtils.isBoolean(value)) {
-    resetValue = false
   }
   return resetValue
+}
+
+function getItemSlots (_vm, item) {
+  const { $scopedSlots } = _vm
+  const itemSlots = item.slots
+  const slots = {}
+  let $default
+  if (itemSlots) {
+    $default = itemSlots.default
+    if ($default && $scopedSlots[$default]) {
+      $default = $scopedSlots[$default]
+    }
+  }
+  if ($default) {
+    slots.default = $default
+  }
+  return slots
+}
+
+function renderItems (h, _vm) {
+  const { items } = _vm
+  return items ? items.map(item => {
+    return h('vxe-form-item', {
+      props: item,
+      scopedSlots: getItemSlots(_vm, item)
+    })
+  }) : []
 }
 
 export default {
@@ -39,18 +62,21 @@ export default {
   props: {
     loading: Boolean,
     data: Object,
-    size: String,
+    size: { type: String, default: () => GlobalConfig.form.size || GlobalConfig.size },
     span: [String, Number],
     align: String,
     titleAlign: String,
     titleWidth: [String, Number],
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
-    rules: Object
+    titleAsterisk: { type: Boolean, default: () => GlobalConfig.form.titleAsterisk },
+    items: Array,
+    rules: Object,
+    preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
+    validConfig: Object
   },
   data () {
     return {
       collapseAll: true,
-      isLoading: false,
       invalids: []
     }
   },
@@ -62,45 +88,35 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
-    }
-  },
-  watch: {
-    loading () {
-      if (!this.isLoading) {
-        this.isLoading = true
-      }
-    }
-  },
-  created () {
-    // 是否加载过 Loading 模块
-    this.isLoading = this.loading
-    if (!VXETable._loading && XEUtils.isBoolean(this.loading)) {
-      throw new Error(UtilTools.getLog('vxe.error.reqModule', ['Loading']))
+    },
+    validOpts () {
+      return Object.assign({}, GlobalConfig.form.validConfig, this.validConfig)
     }
   },
   render (h) {
-    const { titleColon, loading, isLoading, vSize } = this
-    const itemSlots = [].concat(this.$slots.default)
-    if (VXETable._loading && isLoading) {
-      itemSlots.push(
-        h('vxe-loading', {
-          props: {
-            visible: loading
-          }
-        })
-      )
-    }
+    const { $slots, loading, vSize } = this
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
         [`size--${vSize}`]: vSize,
-        'is--colon': titleColon,
+        'is--colon': this.titleColon,
+        'is--asterisk': this.titleAsterisk,
         'is--loading': loading
       }],
       on: {
         submit: this.submitEvent,
         reset: this.resetEvent
       }
-    }, itemSlots)
+    }, [].concat($slots.default || renderItems(h, this)).concat([
+      h('div', {
+        class: ['vxe-loading', {
+          'is--visible': loading
+        }]
+      }, [
+        h('div', {
+          class: 'vxe-loading--spinner'
+        })
+      ])
+    ]))
   },
   methods: {
     toggleCollapse () {
@@ -109,24 +125,33 @@ export default {
     },
     submitEvent (evnt) {
       evnt.preventDefault()
-      this.beginValidate().then(() => {
-        this.$emit('submit', { data: this.data, $form: this }, evnt)
-      }).catch(errMap => {
-        this.$emit('submit-invalid', { data: this.data, errMap, $form: this }, evnt)
-      })
+      if (!this.preventSubmit) {
+        this.beginValidate().then(() => {
+          this.$emit('submit', { data: this.data, $form: this, $event: evnt }, evnt)
+        }).catch(errMap => {
+          this.$emit('submit-invalid', { data: this.data, errMap, $form: this, $event: evnt }, evnt)
+        })
+      }
     },
-    resetEvent (evnt) {
-      evnt.preventDefault()
+    reset () {
       const { data } = this
       if (data) {
-        this.$children.forEach(({ field, resetValue }) => {
+        this.$children.forEach(({ field, resetValue, itemRender }) => {
           if (field) {
-            XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), resetValue) : resetValue)
+            XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
+            const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+            if (compConf && compConf.itemResetMethod) {
+              compConf.itemResetMethod({ data, property: field, $form: this })
+            }
           }
         })
       }
-      this.clearValidate()
-      this.$emit('reset', { data, $form: this }, evnt)
+      return this.clearValidate()
+    },
+    resetEvent (evnt) {
+      evnt.preventDefault()
+      this.reset()
+      this.$emit('reset', { data: this.data, $form: this, $event: evnt }, evnt)
     },
     clearValidate (field) {
       if (field) {
@@ -140,50 +165,47 @@ export default {
       return this.beginValidate(callback)
     },
     beginValidate (type, callback) {
-      const { data, rules: formRules } = this
+      const { data, rules: formRules, validOpts } = this
       const validRest = {}
       const validFields = []
       const itemValids = []
-      let status = true
       this.clearValidate()
       if (data && formRules) {
         this.$children.forEach(({ field }) => {
           if (field) {
             itemValids.push(
-              new Promise((resolve, reject) => {
-                this.validItemRules(type || 'all', field)
-                  .then(resolve)
-                  .catch(({ rule, rules }) => {
-                    const rest = { rule, rules, property: field }
-                    if (!validRest[field]) {
-                      validRest[field] = []
-                    }
-                    validRest[field].push(rest)
-                    validFields.push(field)
-                    this.invalids.push(rest)
-                    return reject(rest)
-                  })
-              })
+              this.validItemRules(type || 'all', field)
+                .catch(({ rule, rules }) => {
+                  const rest = { rule, rules, data, property: field, $form: this }
+                  if (!validRest[field]) {
+                    validRest[field] = []
+                  }
+                  validRest[field].push(rest)
+                  validFields.push(field)
+                  this.invalids.push(rest)
+                  return Promise.reject(rest)
+                })
             )
           }
         })
         return Promise.all(itemValids).then(() => {
           if (callback) {
-            callback(status)
+            callback()
           }
         }).catch(() => {
-          status = false
           if (callback) {
-            callback(status, validRest)
+            callback(validRest)
           }
-          this.$nextTick(() => {
-            this.handleFocus(validFields)
-          })
+          if (validOpts.autoPos !== false) {
+            this.$nextTick(() => {
+              this.handleFocus(validFields)
+            })
+          }
           return Promise.reject(validRest)
         })
       }
       if (callback) {
-        callback(status)
+        callback()
       }
       return Promise.resolve()
     },
@@ -191,62 +213,68 @@ export default {
      * 校验数据
      * 按表格行、列顺序依次校验（同步或异步）
      * 校验规则根据索引顺序依次校验，如果是异步则会等待校验完成才会继续校验下一列
-     * 如果校验失败则，触发回调或者Promise，结果返回一个 Boolean 值
-     * 如果是传回调方式这返回一个 Boolean 值和校验不通过列的错误消息
+     * 如果校验失败则，触发回调或者 Promise<(ErrMap 校验不通过列的信息)>
+     * 如果是传回调方式这返回一个 (ErrMap 校验不通过列的信息)
      *
      * rule 配置：
      *  required=Boolean 是否必填
      *  min=Number 最小长度
      *  max=Number 最大长度
-     *  validator=Function(rule, value, callback, {rules, property}) 自定义校验
-     *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
+     *  validator=Function({ itemValue, rule, rules, data, property }) 自定义校验，接收一个 Promise
+     *  trigger=change 触发方式
      */
     validItemRules (type, property, val) {
       const { data, rules: formRules } = this
       const errorRules = []
-      const itemVailds = []
+      const syncVailds = []
       if (property && formRules) {
         const rules = XEUtils.get(formRules, property)
         if (rules) {
           const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
           rules.forEach(rule => {
-            itemVailds.push(
-              new Promise(resolve => {
-                if (type === 'all' || !rule.trigger || type === rule.trigger) {
-                  if (XEUtils.isFunction(rule.validator)) {
-                    rule.validator(rule, itemValue, e => {
-                      if (XEUtils.isError(e)) {
-                        const cusRule = { type: 'custom', trigger: rule.trigger, message: e.message, rule: new Rule(rule) }
-                        errorRules.push(new Rule(cusRule))
-                      }
-                      return resolve()
-                    }, { rules, property })
-                  } else {
-                    const isNumber = rule.type === 'number'
-                    const numVal = isNumber ? XEUtils.toNumber(itemValue) : XEUtils.getSize(itemValue)
-                    if (itemValue === null || itemValue === undefined || itemValue === '') {
-                      if (rule.required) {
-                        errorRules.push(new Rule(rule))
-                      }
-                    } else if (
-                      (isNumber && isNaN(itemValue)) ||
-                      (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
-                      (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
-                      (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(itemValue))
-                    ) {
-                      errorRules.push(new Rule(rule))
-                    }
-                    resolve()
+            if (type === 'all' || !rule.trigger || type === rule.trigger) {
+              if (XEUtils.isFunction(rule.validator)) {
+                const customValid = rule.validator({
+                  itemValue,
+                  rule,
+                  rules,
+                  data,
+                  property,
+                  $form: this
+                })
+                if (customValid) {
+                  if (XEUtils.isError(customValid)) {
+                    errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: customValid.message, rule: new Rule(rule) }))
+                  } else if (customValid.catch) {
+                    // 如果为异步校验（注：异步校验是并发无序的）
+                    syncVailds.push(
+                      customValid.catch(e => {
+                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
+                      })
+                    )
                   }
-                } else {
-                  resolve()
                 }
-              })
-            )
+              } else {
+                const isNumber = rule.type === 'number'
+                const numVal = isNumber ? XEUtils.toNumber(itemValue) : XEUtils.getSize(itemValue)
+                if (itemValue === null || itemValue === undefined || itemValue === '') {
+                  if (rule.required) {
+                    errorRules.push(new Rule(rule))
+                  }
+                } else if (
+                  (isNumber && isNaN(itemValue)) ||
+                  (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
+                  (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
+                  (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(itemValue))
+                ) {
+                  errorRules.push(new Rule(rule))
+                }
+              }
+            }
           })
         }
       }
-      return Promise.all(itemVailds).then(() => {
+      return Promise.all(syncVailds).then(() => {
         if (errorRules.length) {
           const rest = { rules: errorRules, rule: errorRules[0] }
           return Promise.reject(rest)
@@ -256,7 +284,7 @@ export default {
     handleFocus (fields) {
       const { $children } = this
       fields.some(property => {
-        const comp = $children.find(item => item.field === property)
+        const comp = XEUtils.find($children, item => item.field === property)
         if (comp && comp.itemRender) {
           const { $el, itemRender } = comp
           const compConf = VXETable.renderer.get(itemRender.name)
@@ -295,7 +323,7 @@ export default {
             this.clearValidate(property)
           })
           .catch(({ rule, rules }) => {
-            const rest = this.invalids.find(rest => rest.property === property)
+            const rest = XEUtils.find(this.invalids, rest => rest.property === property)
             if (rest) {
               rest.rule = rule
               rest.rules = rules

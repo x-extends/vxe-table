@@ -1,12 +1,9 @@
 <template>
   <div>
     <p class="tip">
-      自定义渲染 <a class="link" href="https://www.npmjs.com/package/element-ui" target="_blank">element-ui</a> 组件<br>
-      使用自定义模板可以实现对更多细节的控制，但会失去默认的一些功能，比如自动聚焦等。（可以通过设置 <table-column-api-link prop="autofocus"/> 属性强制聚焦）<br>
-      如果很多页面都使用相同自定义模板的场景下建议使用<router-link class="link" :to="{name: 'RendererAPI'}">渲染器</router-link>，因为可以更好的复用<br>
-      自定义渲染需要配合 <table-api-link prop="updateStatus"/> 方法使用，在对应单元格的值发生改变时调用更新状态<br>
-      <span class="red">（注：自定义渲染虽然可以支持任意的 vue 组件，但是并不是所有组件都能直接使用的，所有跨组件之间会存在冲突问题，如果不处理好冲突的情况下是大部分组件是无法使用的；
-        可以通过使用 <router-link class="link" :to="{name: 'TablePluginElementConfig'}">vxe-table-plugin-element</router-link> 适配插件来解决冲突，当然你也可以<router-link class="link" :to="{name: 'InterceptorAPI'}">自行处理冲突</router-link> ）</span>
+      自定义渲染 <a class="link" href="https://www.npmjs.com/package/element-ui" target="_blank">element-ui</a> 组件，自定义渲染需要配合 <table-api-link prop="updateStatus"/> 方法使用，在对应单元格的值发生改变时调用更新状态<br>
+      建议通过使用 <router-link class="link" :to="{name: 'TablePluginElementConfig'}">vxe-table-plugin-element</router-link> 适配插件，轻松解决跨组件渲染的兼容性问题<span class="red">（也可以选择不用适配器，自行解决跨组件事件冲突也是可以的）</span><br>
+      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 
     <vxe-table
@@ -28,17 +25,17 @@
           <i class="el-icon-question"></i>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{}">
         <template v-slot:edit="scope">
           <el-input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></el-input>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{type: 'default'}">
+      <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <el-autocomplete v-model="row.role" :fetch-suggestions="roleFetchSuggestions"></el-autocomplete>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="age" title="ElInputNumber"  width="160" :edit-render="{type: 'default'}">
+      <vxe-table-column field="age" title="ElInputNumber"  width="160" :edit-render="{}">
         <template v-slot:header="{ column }">
           <span>{{ column.title }}</span>
           <i class="el-icon-warning"></i>
@@ -47,7 +44,7 @@
           <el-input-number v-model="row.age" :max="35" :min="18"></el-input-number>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{type: 'default'}">
+      <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{}">
         <template v-slot:edit="scope">
           <el-select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
             <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -55,37 +52,49 @@
         </template>
         <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
       </vxe-table-column>
-      <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="sex1" title="ElSelect" width="180" :edit-render="{}">
+        <template v-slot:edit="scope">
+          <el-select v-model="scope.row.sex1" multiple>
+            <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </template>
+        <template v-slot="{ row }">{{ getSelectMultipleLabel(row.sex1, sexList) }}</template>
+      </vxe-table-column>
+      <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <el-cascader v-model="row.region" :options="regionList"></el-cascader>
         </template>
         <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
       </vxe-table-column>
-      <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <el-date-picker v-model="row.date" type="date" format="yyyy/MM/dd"></el-date-picker>
         </template>
         <template v-slot="{ row }">{{ formatDate(row.date, 'yyyy/MM/dd') }}</template>
       </vxe-table-column>
-      <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{}">
         <template v-slot:edit="{ row }">
           <el-date-picker v-model="row.date1" type="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
         </template>
         <template v-slot="{ row }">{{ formatDate(row.date1, 'yyyy-MM-dd HH:mm:ss') }}</template>
       </vxe-table-column>
-      <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{type: 'default'}">
+      <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{}">
         <template v-slot:edit="{ row }">
-          <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}">
-        </el-time-select>
+          <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}"></el-time-select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="rate" title="ElRate" width="200" :edit-render="{type: 'visible'}">
+      <vxe-table-column field="color1" title="ElColorPicker" width="140" :edit-render="{}">
         <template v-slot:edit="{ row }">
+          <el-color-picker v-model="row.color1"></el-color-picker>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="rate" title="ElRate" width="200">
+        <template v-slot="{ row }">
           <el-rate v-model="row.rate"></el-rate>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{type: 'visible'}">
-        <template v-slot:edit="{ row }">
+      <vxe-table-column field="flag" title="ElSwitch" width="100">
+        <template v-slot="{ row }">
           <el-switch v-model="row.flag"></el-switch>
         </template>
       </vxe-table-column>
@@ -96,7 +105,6 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -133,22 +141,22 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="80">
-            <template v-slot:header="{ column }">
+            <template v-slot:header>
               <span>序号</span>
               <i class="el-icon-question"></i>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="name" title="ElInput" min-width="140" :edit-render="{}">
             <template v-slot:edit="scope">
               <el-input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></el-input>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{type: 'default'}">
+          <vxe-table-column field="role" title="ElAutocomplete" min-width="160" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <el-autocomplete v-model="row.role" :fetch-suggestions="roleFetchSuggestions"></el-autocomplete>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="age" title="ElInputNumber"  width="160" :edit-render="{type: 'default'}">
+          <vxe-table-column field="age" title="ElInputNumber"  width="160" :edit-render="{}">
             <template v-slot:header="{ column }">
               <span>{{ column.title }}</span>
               <i class="el-icon-warning"></i>
@@ -157,7 +165,7 @@ export default {
               <el-input-number v-model="row.age" :max="35" :min="18"></el-input-number>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{type: 'default'}">
+          <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{}">
             <template v-slot:edit="scope">
               <el-select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
                 <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -165,37 +173,49 @@ export default {
             </template>
             <template v-slot="{ row }">{{ getSelectLabel(row.sex, sexList) }}</template>
           </vxe-table-column>
-          <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="sex1" title="ElSelect" width="180" :edit-render="{}">
+            <template v-slot:edit="scope">
+              <el-select v-model="scope.row.sex1" multiple>
+                <el-option v-for="item in sexList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </template>
+            <template v-slot="{ row }">{{ getSelectMultipleLabel(row.sex1, sexList) }}</template>
+          </vxe-table-column>
+          <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <el-cascader v-model="row.region" :options="regionList"></el-cascader>
             </template>
             <template v-slot="{ row }">{{ getCascaderLabel(row.region, regionList) }}</template>
           </vxe-table-column>
-          <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <el-date-picker v-model="row.date" type="date" format="yyyy/MM/dd"></el-date-picker>
             </template>
             <template v-slot="{ row }">{{ formatDate(row.date, 'yyyy/MM/dd') }}</template>
           </vxe-table-column>
-          <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{}">
             <template v-slot:edit="{ row }">
               <el-date-picker v-model="row.date1" type="datetime" format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </template>
             <template v-slot="{ row }">{{ formatDate(row.date1, 'yyyy-MM-dd HH:mm:ss') }}</template>
           </vxe-table-column>
-          <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{type: 'default'}">
+          <vxe-table-column field="date2" title="ElTimePicker" width="200" :edit-render="{}">
             <template v-slot:edit="{ row }">
-              <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}">
-            </el-time-select>
+              <el-time-select v-model="row.date2" :picker-options="{start: '08:30', step: '00:15', end: '18:30'}"></el-time-select>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="rate" title="ElRate" width="200" :edit-render="{type: 'visible'}">
+          <vxe-table-column field="color1" title="ElColorPicker" width="140" :edit-render="{}">
             <template v-slot:edit="{ row }">
+              <el-color-picker v-model="row.color1"></el-color-picker>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="rate" title="ElRate" width="200">
+            <template v-slot="{ row }">
               <el-rate v-model="row.rate"></el-rate>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="flag" title="ElSwitch" width="100" :edit-render="{type: 'visible'}">
-            <template v-slot:edit="{ row }">
+          <vxe-table-column field="flag" title="ElSwitch" width="100">
+            <template v-slot="{ row }">
               <el-switch v-model="row.flag"></el-switch>
             </template>
           </vxe-table-column>
@@ -221,20 +241,40 @@ export default {
               this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
               this.loading = false
             }, 500)
+            this.findSexList()
+            this.findRegionList()
           },
           methods: {
+            findSexList () {
+              return XEAjax.get('/api/conf/sex/list').then(data => {
+                this.sexList = data
+                return data
+              })
+            },
+            findRegionList () {
+              return XEAjax.get('/api/conf/region/list').then(data => {
+                this.regionList = data
+                return data
+              })
+            },
             formatDate (value, format) {
               return XEUtils.toDateString(value, format)
             },
             getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-              let item = XEUtils.find(list, item => item[valueProp] === value)
+              const item = XEUtils.find(list, item => item[valueProp] === value)
               return item ? item[labelField] : null
             },
+            getSelectMultipleLabel (value, list, valueProp = 'value', labelField = 'label') {
+              return value.map(val => {
+                const item = XEUtils.find(list, item => item[valueProp] === val)
+                return item ? item[labelField] : null
+              }).join(', ')
+            },
             getCascaderLabel (value, list) {
-              let values = value || []
-              let labels = []
-              let matchCascaderData = function (index, list) {
-                let val = values[index]
+              const values = value || []
+              const labels = []
+              const matchCascaderData = function (index, list) {
+                const val = values[index]
                 if (list && values.length > index) {
                   list.forEach(item => {
                     if (item.value === val) {
@@ -248,8 +288,8 @@ export default {
               return labels.join(' / ')
             },
             roleFetchSuggestions (queryString, cb) {
-              var restaurants = this.restaurants
-              var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
+              const restaurants = this.restaurants
+              const results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants
               clearTimeout(this.timeout)
               this.timeout = setTimeout(() => {
                 cb(results)
@@ -284,18 +324,6 @@ export default {
             }
           }
         }
-        `,
-        `
-        /*注意：如果是自行实现，需要自行处理好兼容样式，否则可能会显示错乱，例如：*/
-        /*
-        .my-xtable-element .vxe-cell > .el-input,
-        .my-xtable-element .vxe-cell > .el-input-number,
-        .my-xtable-element .vxe-cell > .el-select,
-        .my-xtable-element .vxe-cell > .el-cascader,
-        .my-xtable-element .vxe-cell > .el-date-editor {
-          width: 100%;
-        }
-        */
         `
       ]
     }
@@ -333,6 +361,12 @@ export default {
     getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
       const item = XEUtils.find(list, item => item[valueProp] === value)
       return item ? item[labelField] : null
+    },
+    getSelectMultipleLabel (value, list, valueProp = 'value', labelField = 'label') {
+      return value.map(val => {
+        const item = XEUtils.find(list, item => item[valueProp] === val)
+        return item ? item[labelField] : null
+      }).join(', ')
     },
     getCascaderLabel (value, list) {
       const values = value || []

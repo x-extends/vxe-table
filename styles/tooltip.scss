@@ -8,7 +8,7 @@
   left: -100%;
   font-size: 12px;
   max-width: 400px;
-  border-radius: 4px;
+  border-radius: $vxe-border-radius;
   padding: 8px 12px;
   white-space: normal;
   word-break: break-word;
@@ -35,6 +35,9 @@
       height: 6px;
       background-color: transparent;
     }
+  }
+  .vxe-table--tooltip-content {
+    white-space: pre-line;
   }
   .vxe-table--tooltip-arrow {
     display: none;
@@ -103,7 +106,7 @@
   }
   &.theme--dark {
     background: $vxe-tooltip-dark-background-color;
-    color: #FFF;
+    color: $vxe-tooltip-dark-color;
     &.placement--top {
       .vxe-table--tooltip-arrow {
         border-top-color: $vxe-tooltip-dark-background-color;
@@ -126,7 +129,7 @@
 /*valid error*/
 .vxe-table--tooltip-wrapper {
   &.vxe-table--valid-error {
-    background-color: $vxe-table-validate-error-color;
-    color: #fff;
+    background-color: $vxe-tooltip-validate-error-background-color;
+    color: $vxe-tooltip-validate-error-color;
   }
 }

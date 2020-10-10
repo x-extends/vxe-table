@@ -9,6 +9,7 @@ const apis = [
     list: [
       {
         name: 'id',
+        disabled: true,
         descKey: 'app.api.toolbar.desc.id',
         version: '',
         type: 'String',
@@ -32,6 +33,15 @@ const apis = [
         type: 'Boolean',
         enum: '',
         defVal: 'false',
+        list: []
+      },
+      {
+        name: 'perfect',
+        desc: '配套的样式',
+        version: '1.15.27',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.toolbar.perfect',
         list: []
       },
       {
@@ -154,6 +164,25 @@ const apis = [
         ]
       },
       {
+        name: 'print',
+        descKey: 'app.api.toolbar.desc.print',
+        version: '1.15.30',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '默认继承 setup.toolbar.print',
+        list: [
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'refresh',
         descKey: 'app.api.toolbar.desc.refresh',
         version: '',
@@ -192,15 +221,17 @@ const apis = [
       },
       {
         name: 'resizable',
+        disabled: true,
         descKey: 'app.api.toolbar.desc.resizable',
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '默认继承 setup.toolbar.resizable',
+        defVal: '',
         list: [
           {
             name: 'storage',
-            desc: '是否启用 localStorage 本地保存，会将列宽拖动的状态保存到本地（需要设置 id）',
+            disabled: true,
+            desc: '即将废弃，请使用 custom-config.storage',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -247,7 +278,8 @@ const apis = [
           },
           {
             name: 'storage',
-            desc: '是否启用 localStorage 本地保存，会将列的隐藏状态保存到本地（需要设置 id）',
+            disabled: true,
+            desc: '即将废弃，请使用 custom-config.storage',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -256,7 +288,8 @@ const apis = [
           },
           {
             name: 'checkMethod',
-            desc: '是否允许选中的方法，该方法 Function({column}) 的返回值用来决定这一列的 checkbox 是否可以选中',
+            disabled: true,
+            desc: '即将废弃，请使用 custom-config.checkMethod',
             version: '1.15.14',
             type: 'Function',
             enum: '',
@@ -297,6 +330,24 @@ const apis = [
             version: '',
             type: 'String',
             enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'type',
+            desc: '按钮类型',
+            version: '1.15.24',
+            type: 'String',
+            enum: 'text,submit,reset,button',
+            defVal: 'button',
+            list: []
+          },
+          {
+            name: 'status',
+            desc: '按钮状态',
+            version: '1.15.27',
+            type: 'String',
+            enum: 'primary, success, info, warning, danger',
             defVal: '',
             list: []
           },
@@ -350,6 +401,24 @@ const apis = [
                 version: '',
                 type: 'String',
                 enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'type',
+                desc: '按钮类型',
+                version: '1.15.24',
+                type: 'String',
+                enum: 'text,submit,reset,button',
+                defVal: 'button',
+                list: []
+              },
+              {
+                name: 'status',
+                desc: '按钮状态',
+                version: '1.15.27',
+                type: 'String',
+                enum: 'primary, success, info, warning, danger',
                 defVal: '',
                 list: []
               },
@@ -427,42 +496,6 @@ const apis = [
                 list: []
               },
               {
-                name: 'options',
-                desc: '只对 name=select 有效，下拉选项列表',
-                version: '',
-                type: 'Array',
-                enum: '',
-                defVal: '',
-                list: []
-              },
-              {
-                name: 'optionProps',
-                desc: '只对 name=select 有效，下拉选项属性参数配置',
-                version: '',
-                type: 'Object',
-                enum: '',
-                defVal: '{ value, label, disabled }',
-                list: []
-              },
-              {
-                name: 'optionGroups',
-                desc: '只对 name=select 有效，下拉分组选项列表',
-                version: '',
-                type: 'Array',
-                enum: '',
-                defVal: '',
-                list: []
-              },
-              {
-                name: 'optionGroupProps',
-                desc: '只对 name=select 有效，下拉分组选项属性参数配置',
-                version: '',
-                type: 'Object',
-                enum: '',
-                defVal: '{ options, label }',
-                list: []
-              },
-              {
                 name: 'events',
                 desc: '渲染组件的事件（请查看目标渲染的 Events）',
                 version: '',
@@ -491,7 +524,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       },
       {
@@ -500,7 +533,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '',
+        defVal: '{}',
         list: []
       }
     ]
@@ -515,29 +548,11 @@ const apis = [
     list: [
       {
         name: 'button-click',
-        desc: '当工具栏的按钮被点击时会后触发该事件',
+        desc: '只对 buttons 配置时有效，当工具栏的按钮被点击时会后触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: '{code}, event',
-        list: []
-      },
-      {
-        name: 'zoom',
-        desc: '当工具栏的缩放按钮被点击时会后触发该事件',
-        version: '1.15.23',
-        type: '',
-        enum: '',
-        defVal: '{maximize}, event',
-        list: []
-      },
-      {
-        name: 'custom',
-        desc: '当工具栏的自定义列按钮被点击时会后触发该事件',
-        version: '1.15.23',
-        type: '',
-        enum: '',
-        defVal: '{type}, event',
+        defVal: '{ code, $event }',
         list: []
       }
     ]

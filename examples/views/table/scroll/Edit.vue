@@ -1,25 +1,25 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动渲染，可编辑表格<br><span class="red">当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时</span></p>
+    <p class="tip">可编辑表格</p>
 
     <vxe-toolbar export :refresh="{query: findList}">
       <template v-slot:buttons>
         <vxe-button>
-          <template>新增操作</template>
+          <template v-slot>新增操作</template>
           <template v-slot:dropdowns>
-            <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
-            <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
-            <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-            <vxe-button @click="insertEvent($refs.xTable.getData(500))">插入到 500 行</vxe-button>
+            <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
+            <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
+            <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
+            <vxe-button type="text" @click="insertEvent($refs.xTable.getData(300))">插入到 300 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button>
-          <template>删除操作</template>
+          <template v-slot>删除操作</template>
           <template v-slot:dropdowns>
-            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
-            <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
-            <vxe-button @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
-            <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
+            <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
           </template>
         </vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -35,7 +35,7 @@
       export-config
       keep-source
       ref="xTable"
-      height="300"
+      height="400"
       :loading="loading"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :checkbox-config="{checkField: 'checked'}">
@@ -49,7 +49,6 @@
       <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
       <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
       <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
       <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
       <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
       <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
@@ -83,21 +82,21 @@ export default {
         <vxe-toolbar export :refresh="{query: findList}">
           <template v-slot:buttons>
             <vxe-button>
-              <template>新增操作</template>
+              <template v-slot>新增操作</template>
               <template v-slot:dropdowns>
-                <vxe-button @click="insertEvent(null)">从第一行插入</vxe-button>
-                <vxe-button @click="insertEvent(-1)">从最后插入</vxe-button>
-                <vxe-button @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
-                <vxe-button @click="insertEvent($refs.xTable.getData(500))">插入到 500 行</vxe-button>
+                <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
+                <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
+                <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
+                <vxe-button type="text" @click="insertEvent($refs.xTable.getData(300))">插入到 300 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button>
-              <template>删除操作</template>
+              <template v-slot>删除操作</template>
               <template v-slot:dropdowns>
-                <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
-                <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
-                <vxe-button @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
-                <vxe-button @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
+                <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(100))">删除第 100 行</vxe-button>
               </template>
             </vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -127,6 +126,15 @@ export default {
           <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
           <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
           <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
+          <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
+          <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
+          <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
+          <vxe-table-column field="attr4" title="Attr4" width="200"></vxe-table-column>
+          <vxe-table-column field="attr5" title="Attr5" width="200"></vxe-table-column>
+          <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
+          <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
+          <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
+          <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
           <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
         </vxe-table>
         `,

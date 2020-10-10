@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">实现附件上传，使用展开行和 <table-api-link prop="readFile"/> 本地文件读取函数</p>
+    <p class="tip">实现附件上传，使用展开行和 <table-api-link prop="readFile"/> 本地文件读取函数<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-grid
       border
@@ -126,7 +126,7 @@ export default {
                   row.fileList.push(record)
                 })
                 // 加载完成后展开行
-                this.$refs.xGrid.setRowExpansion(row, true)
+                this.$refs.xGrid.setRowExpand(row, true)
               })
             }
           }
@@ -170,7 +170,7 @@ export default {
           row.fileList.push(record)
         })
         // 加载完成后展开行
-        this.$refs.xGrid.setRowExpansion(row, true)
+        this.$refs.xGrid.setRowExpand(row, true)
       })
     }
   }

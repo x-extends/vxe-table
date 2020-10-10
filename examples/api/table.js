@@ -162,7 +162,7 @@ const exportDataAPI = [
   },
   {
     name: 'sheetName',
-    desc: '默认的表名（只对支持的文档类型有效）',
+    desc: '表名（只对支持的文档类型有效）',
     version: '',
     type: 'String',
     enum: '',
@@ -189,7 +189,7 @@ const exportDataAPI = [
   },
   {
     name: 'mode',
-    desc: '导出数据的方式',
+    desc: '输出数据的方式',
     version: '1.15.21',
     type: 'String',
     enum: 'current, selected, all',
@@ -198,7 +198,7 @@ const exportDataAPI = [
   },
   {
     name: 'modes',
-    desc: '导出数据的方式列表',
+    desc: '输出数据的方式列表',
     version: '1.15.21',
     type: 'Array',
     enum: 'current, selected, all',
@@ -270,16 +270,16 @@ const exportDataAPI = [
   },
   {
     name: 'columnFilterMethod',
-    desc: '列过滤方法，该函数 Function(column,$columnIndex) 的返回值用来决定是否过滤掉列',
+    desc: '列过滤方法，该函数 Function({ column, $columnIndex }) 的返回值用来决定是否过滤掉列',
     version: '',
     type: 'Function',
     enum: '',
-    defVal: '默认过滤掉 type=index,checkbox,radio 和 field 为空的列',
+    defVal: '默认过滤掉 type=seq,checkbox,radio 和 field 为空的列',
     list: []
   },
   {
     name: 'dataFilterMethod',
-    desc: '数据过滤方法，该函数 Function(row,$rowIndex) 的返回值用来决定是否过滤掉数据行',
+    desc: '数据过滤方法，该函数 Function({ row, $rowIndex }) 的返回值用来决定是否过滤掉数据行',
     version: '',
     type: 'Function',
     enum: '',
@@ -288,7 +288,7 @@ const exportDataAPI = [
   },
   {
     name: 'footerFilterMethod',
-    desc: '表尾过滤方法，该函数 Function(data,$rowIndex) 的返回值用来决定是否过滤掉表尾行',
+    desc: '表尾过滤方法，该函数 Function({ items, $rowIndex }) 的返回值用来决定是否过滤掉表尾行',
     version: '',
     type: 'Function',
     enum: '',
@@ -306,7 +306,7 @@ const exportDataAPI = [
   },
   {
     name: 'exportMethod',
-    desc: '只对 remote=true 有效，该函数 Function({ options }) 用于自定义导出逻辑，返回 Promise',
+    desc: '只对 remote=true 有效，该函数 Function({ options }) 用于自定义导出或服务端导出，返回 Promise',
     version: '1.15.22',
     type: 'Function',
     enum: '',
@@ -354,7 +354,7 @@ const importDataAPI = [
   },
   {
     name: 'importMethod',
-    desc: '只对 remote=true 有效，该函数 Function({ file, options }) 用于自定义导入逻辑，返回 Promise',
+    desc: '只对 remote=true 有效，该函数 Function({ file, options }) 用于自定义导入或服务端导入，返回 Promise',
     version: '1.15.21',
     type: 'Function',
     enum: '',
@@ -363,7 +363,7 @@ const importDataAPI = [
   }
 ]
 
-const printAPI = exportDataAPI.filter(item => !['filename', 'sheetName', 'type', 'download', 'message'].includes(item.name))
+const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod'].includes(item.name))
 
 const apis = [
   {
@@ -374,6 +374,15 @@ const apis = [
     enum: '',
     defVal: '',
     list: [
+      {
+        name: 'id',
+        descKey: 'app.api.table.desc.id',
+        version: '1.15.28',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
       {
         name: 'data',
         descKey: 'app.api.table.desc.data',
@@ -424,7 +433,7 @@ const apis = [
         name: 'sync-resize',
         descKey: 'app.api.table.desc.syncResize',
         version: '1.14.3',
-        type: 'Boolean, String',
+        type: 'Boolean, String, Number',
         enum: '',
         defVal: '',
         list: []
@@ -435,7 +444,7 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.table.resizable',
         list: []
       },
       {
@@ -444,16 +453,25 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.table.stripe',
         list: []
       },
       {
         name: 'border',
         descKey: 'app.api.table.desc.border',
-        version: '1 | 1.15.16',
+        version: '1 | 1.15.27',
         type: 'Boolean, String',
+        enum: 'default（默认）, full（完整边框）, outer（外边框）, inner（内边框）, none（无边框）',
+        defVal: '默认 false，继承 setup.table.border',
+        list: []
+      },
+      {
+        name: 'round',
+        descKey: 'app.api.table.desc.round',
+        version: '1.15.29',
+        type: 'Boolean',
         enum: '',
-        defVal: 'false',
+        defVal: '默认 false，继承 setup.table.round',
         list: []
       },
       {
@@ -621,6 +639,7 @@ const apis = [
       },
       {
         name: 'cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.cellStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -630,6 +649,7 @@ const apis = [
       },
       {
         name: 'header-cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.headerCellStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -639,6 +659,7 @@ const apis = [
       },
       {
         name: 'footer-cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerCellStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -648,6 +669,7 @@ const apis = [
       },
       {
         name: 'row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.rowStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -657,6 +679,7 @@ const apis = [
       },
       {
         name: 'header-row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.headerRowStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -666,6 +689,7 @@ const apis = [
       },
       {
         name: 'footer-row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerRowStyle',
         version: '1.5.13',
         type: 'Object, Function',
@@ -693,6 +717,7 @@ const apis = [
       },
       {
         name: 'span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.spanMethod',
         version: '',
         type: 'Object',
@@ -702,6 +727,7 @@ const apis = [
       },
       {
         name: 'footer-span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerSpanMethod',
         version: '1.15',
         type: 'Object',
@@ -788,7 +814,8 @@ const apis = [
       },
       {
         name: 'column-width',
-        descKey: 'app.api.table.desc.columnWidth',
+        disabled: true,
+        desc: '即将废弃，请使用 column-config.width',
         version: '1.13',
         type: 'Number, String',
         enum: 'auto, px, %',
@@ -797,7 +824,8 @@ const apis = [
       },
       {
         name: 'column-min-width',
-        descKey: 'app.api.table.desc.columnMinWidth',
+        disabled: true,
+        desc: '即将废弃，请使用 column-config.minWidth',
         version: '1.13',
         type: 'Number, String',
         enum: 'auto, px, %',
@@ -828,7 +856,7 @@ const apis = [
         version: '',
         type: 'String',
         enum: '',
-        defVal: '默认 _XID，继承 setup.keepSource',
+        defVal: '默认 _XID，继承 setup.table.rowId',
         list: []
       },
       {
@@ -837,17 +865,46 @@ const apis = [
         version: '1.15.18',
         type: 'Boolean',
         enum: '',
-        defVal: '默认 false，继承 setup.keepSource',
+        defVal: '默认 false，继承 setup.table.keepSource',
         list: []
       },
       {
         name: 'z-index',
+        abandoned: true,
         descKey: 'app.api.table.desc.zIndex',
         version: '1.15.9',
         type: 'Number',
         enum: '',
-        defVal: '继承 setup.zIndex',
+        defVal: '继承 setup.table.zIndex',
         list: []
+      },
+      {
+        name: 'column-config',
+        desc: '列的默认参数',
+        version: '1.15.31',
+        type: 'any',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'width',
+            desc: '列的默认宽度',
+            version: '',
+            type: 'Number, String',
+            enum: 'auto, px, %',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'min-width',
+            desc: '列的默认最小宽度',
+            version: '',
+            type: 'Number, String',
+            enum: 'auto, px, %',
+            defVal: '',
+            list: []
+          }
+        ]
       },
       {
         name: 'seq-config',
@@ -855,7 +912,7 @@ const apis = [
         version: '1.15.15',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.seqConfig',
+        defVal: '继承 setup.table.seqConfig',
         list: [
           {
             name: 'startIndex',
@@ -883,7 +940,7 @@ const apis = [
         version: '1.11.10',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.sortConfig',
+        defVal: '继承 setup.table.sortConfig',
         list: [
           {
             name: 'defaultSort',
@@ -907,15 +964,24 @@ const apis = [
                 desc: '排序方式',
                 version: '',
                 type: 'String',
-                enum: 'asc（升序）,desc（降序）',
+                enum: 'asc（升序）,desc（降序）, null',
                 defVal: '',
                 list: []
               }
             ]
           },
           {
+            name: 'orders',
+            desc: '自定义轮转顺序',
+            version: '1.15.27',
+            type: 'Array',
+            enum: 'asc, desc, null',
+            defVal: '[\'asc\', \'desc\', \'null\']',
+            list: []
+          },
+          {
             name: 'sortMethod',
-            desc: '自定义所有列的排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的结果',
+            desc: '全局排序方法，当触发排序时会调用该函数 Function({ data, column, property, order  }) 返回排序后的列表',
             version: '1.15.15',
             type: 'Function',
             enum: '',
@@ -936,7 +1002,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'String',
-            enum: 'default（点击按钮触发）,cell（点击表头触发）',
+            enum: 'default（点击按钮触发）, cell（点击表头触发）',
             defVal: 'default',
             list: []
           },
@@ -975,13 +1041,22 @@ const apis = [
         version: '1.15.15',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.filterConfig',
+        defVal: '继承 setup.table.filterConfig',
         list: [
           {
             name: 'remote',
             desc: '所有列是否使用服务端筛选，如果设置为 true 则不会对数据进行处理',
             version: '',
             type: 'Boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'filterMethod',
+            desc: '全局筛选方法，当触发筛选时会调用该函数 Function({value, row, column}) 返回是否有效',
+            version: '1.15.30',
+            type: 'Function',
             enum: '',
             defVal: '',
             list: []
@@ -1016,13 +1091,49 @@ const apis = [
         ]
       },
       {
+        name: 'export-config',
+        descKey: 'app.api.table.desc.exportConfig',
+        version: '1.15.18',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.table.exportConfig',
+        list: XEUtils.clone(exportDataAPI, true)
+      },
+      {
+        name: 'import-config',
+        descKey: 'app.api.table.desc.importConfig',
+        version: '1.15.18',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.table.importConfig',
+        list: XEUtils.clone(importDataAPI, true)
+      },
+      {
+        name: 'print-config',
+        descKey: 'app.api.table.desc.printConfig',
+        version: '1.15.18',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.printConfig',
+        list: XEUtils.clone(printAPI, true)
+      },
+      {
         name: 'radio-config',
         descKey: 'app.api.table.desc.radioConfig',
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.radioConfig',
+        defVal: '继承 setup.table.radioConfig',
         list: [
+          {
+            name: 'reserve',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
+            version: '1.15.27',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
           {
             name: 'labelProp',
             disabled: true,
@@ -1065,7 +1176,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'String',
-            enum: 'default（默认）,cell（点击单元格触发）,row（点击行触发）',
+            enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
           },
@@ -1079,33 +1190,6 @@ const apis = [
             list: []
           }
         ]
-      },
-      {
-        name: 'export-config',
-        descKey: 'app.api.table.desc.exportConfig',
-        version: '1.15.18',
-        type: 'Boolean, Object',
-        enum: '',
-        defVal: '继承 setup.exportConfig',
-        list: XEUtils.clone(exportDataAPI, true)
-      },
-      {
-        name: 'import-config',
-        descKey: 'app.api.table.desc.importConfig',
-        version: '1.15.18',
-        type: 'Boolean, Object',
-        enum: '',
-        defVal: '继承 setup.importConfig',
-        list: XEUtils.clone(importDataAPI, true)
-      },
-      {
-        name: 'print-config',
-        descKey: 'app.api.table.desc.printConfig',
-        version: '1.15.18',
-        type: 'Object',
-        enum: '',
-        defVal: '继承 setup.printConfig',
-        list: XEUtils.clone(printAPI, true)
       },
       {
         name: 'select-config',
@@ -1123,7 +1207,7 @@ const apis = [
         version: '1.15.5',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.checkboxconfig',
+        defVal: '继承 setup.table.checkboxconfig',
         list: [
           {
             name: 'key',
@@ -1137,7 +1221,7 @@ const apis = [
           },
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -1220,7 +1304,7 @@ const apis = [
           },
           {
             name: 'strict',
-            desc: '严格模式，当数据为空或全部禁用时，列表为禁用状态',
+            desc: '严格模式，当数据为空或全部禁用时，列头的复选框为禁用状态',
             version: '2.6',
             type: 'Boolean',
             enum: '',
@@ -1241,7 +1325,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'String',
-            enum: 'default（默认）,cell（点击单元格触发）,row（点击行触发）',
+            enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
           },
@@ -1256,7 +1340,7 @@ const apis = [
           },
           {
             name: 'range',
-            desc: '开启复选框范围勾选功能（启用后通过鼠标在复选框的列圈选指定行）',
+            desc: '开启复选框范围选择功能（启用后通过鼠标在复选框的列内滑动选中或取消指定行）',
             version: '1.15.17',
             type: 'Boolean',
             enum: '',
@@ -1271,11 +1355,20 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.tooltipConfig',
+        defVal: '继承 setup.table.tooltipConfig',
         list: [
           {
+            name: 'enabled',
+            desc: '所有单元格开启 tooltip 显示',
+            version: '1.15.29',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'theme',
-            desc: '列 tooltip 的主题',
+            desc: 'tooltip 的主题颜色',
             version: '',
             type: 'String',
             enum: 'dark,light',
@@ -1299,6 +1392,15 @@ const apis = [
             enum: '',
             defVal: '300',
             list: []
+          },
+          {
+            name: 'contentMethod',
+            desc: '该方法 Function({items?, row?, rowIndex?, $rowIndex, column, columnIndex, $columnIndex, type, cell, $event}) 接收一个字符串，可以通过返回值来重写默认的提示内容',
+            version: '1.15.29',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
@@ -1308,7 +1410,7 @@ const apis = [
         version: '1 | 1.15.18',
         type: 'Object',
         enum: '',
-        defVal: '继承 setup.expandConfig',
+        defVal: '继承 setup.table.expandConfig',
         list: [
           {
             name: 'key',
@@ -1361,7 +1463,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'String',
-            enum: 'default（点击按钮触发）,cell（点击单元格触发）,row（点击行触发）',
+            enum: 'default（点击按钮触发）, cell（点击单元格触发）, row（点击行触发）',
             defVal: 'default',
             list: []
           },
@@ -1376,11 +1478,38 @@ const apis = [
           },
           {
             name: 'loadMethod',
-            desc: '该方法 Function({row}) 用于异步加载展开后的内容（必须返回 Promise<any[]> 对象）',
+            desc: '该方法 Function({row, rowIndex?, $rowIndex?}) 用于异步加载展开后的内容（必须返回 Promise<any[]> 对象）',
             version: '1.15.15',
             type: 'Function',
             enum: '',
             defVal: '',
+            list: []
+          },
+          {
+            name: 'toggleMethod',
+            desc: '该方法 Function({expanded, column, columnIndex, row, rowIndex?}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            version: '1.15.27',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'visibleMethod',
+            desc: '该函数 Function({column, columnIndex, row, rowIndex?}) 的返回值用来决定是否允许显示展开按钮',
+            version: '1.15.27',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'showIcon',
+            desc: '是否显示图标按钮',
+            version: '1.15.31',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {
@@ -1418,7 +1547,7 @@ const apis = [
         version: '1 | 1.15.18',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.treeConfig',
+        defVal: '继承 setup.table.treeConfig',
         list: [
           {
             name: 'key',
@@ -1521,6 +1650,24 @@ const apis = [
             list: []
           },
           {
+            name: 'toggleMethod',
+            desc: '该方法 Function({expanded, row, column, columnIndex}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            version: '1.15.27',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'showIcon',
+            desc: '是否显示图标按钮',
+            version: '1.15.31',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'iconOpen',
             desc: '自定义展开后显示的图标',
             version: '1.15.15',
@@ -1555,7 +1702,7 @@ const apis = [
         version: '1 | 1.15.18',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.contextMenu',
+        defVal: '继承 setup.table.contextMenu',
         list: [
           {
             name: 'header',
@@ -1589,15 +1736,24 @@ const apis = [
             desc: '触发方式',
             version: '1.11.16',
             type: 'String',
-            enum: 'default（默认触发）,cell（右键单元格触发）',
+            enum: 'default（默认触发）, cell（右键单元格触发）',
             defVal: 'default',
             list: []
           },
           {
             name: 'visibleMethod',
-            desc: '该函数会在菜单显示之前执行，支持通过 Function({type, options, columns, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）',
+            desc: '该函数 Function({type, options, columns, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）',
             version: '',
             type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'className',
+            desc: '菜单面板的 className',
+            version: '1.15.25',
+            type: 'String',
             enum: '',
             defVal: '',
             list: []
@@ -1614,7 +1770,7 @@ const apis = [
         list: [
           {
             name: 'selected',
-            desc: '开启左键选中功能',
+            desc: '开启左键选中功能（只对 edit-config.mode=cell 有效）',
             version: '',
             type: 'Boolean',
             enum: '',
@@ -1623,21 +1779,13 @@ const apis = [
           // },
           // {
           //   name: 'checked',
-          //   desc: '即将废弃，请使用 range',
+          //   desc: '即将废弃',
           //   version: '',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',
           //   list: []
-          // },
-          // {
-          //   name: 'range',
-          //   desc: '开启鼠标移动单元格批量选中功能',
-          //   version: '1.15.18',
-          //   type: 'Boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
+          // }
           }
         ]
       },
@@ -1719,7 +1867,7 @@ const apis = [
         version: '1 | 1.15.18',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.editConfig',
+        defVal: '继承 setup.table.editConfig',
         list: [
           {
             name: 'key',
@@ -1760,11 +1908,20 @@ const apis = [
           },
           {
             name: 'showStatus',
-            desc: '是否显示单元格值的修改状态（需要设置 keep-source）',
+            desc: '只对 keep-source 开启有效是否显示单元格值的修改状态',
             version: '1 | 1.15.18',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
+            list: []
+          },
+          {
+            name: 'showAsterisk',
+            desc: '是否显示必填字段的红色星号',
+            version: '1.15.31',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {
@@ -1778,7 +1935,7 @@ const apis = [
           },
           {
             name: 'activeMethod',
-            desc: '该方法 Function({row, rowIndex, column, columnIndex}) 决定该单元格是否允许编辑',
+            desc: '该方法 Function({row, rowIndex, column, columnIndex}) 的返回值用来决定该单元格是否允许编辑',
             version: '',
             type: 'Function',
             enum: '',
@@ -1825,6 +1982,7 @@ const apis = [
           },
           {
             name: 'maxWidth',
+            abandoned: true,
             desc: '校验提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
             type: 'String, Number',
@@ -1838,7 +1996,7 @@ const apis = [
         name: 'edit-rules',
         descKey: 'app.api.table.desc.editRules',
         version: '',
-        type: 'Object',
+        type: '{[field: string]: Array<Object>}',
         enum: '',
         defVal: '',
         list: [
@@ -1889,9 +2047,9 @@ const apis = [
           },
           {
             name: 'validator',
-            desc: '自定义校验方法，Function(rule, value, callback, {rules,row,column,rowIndex,columnIndex})，通过调用 callback() 则校验成功，调用 callback(new Error("该字段必填")) 则校验失败',
-            version: '',
-            type: 'Function',
+            desc: '自定义校验方法 Function({ cellValue, rule, rules, row, rowIndex，column, columnIndex }) 返回一个 Promise<new Error("提示消息")>',
+            version: '1.15.27',
+            type: 'Promise<e?: Error>',
             enum: '',
             defVal: '',
             list: []
@@ -1900,7 +2058,7 @@ const apis = [
             name: 'message',
             desc: '校验提示内容（支持开启国际化）',
             version: '',
-            type: 'String, Function',
+            type: 'String',
             enum: '',
             defVal: '',
             list: []
@@ -1916,6 +2074,7 @@ const apis = [
           },
           {
             name: 'maxWidth',
+            abandoned: true,
             desc: '提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
             type: 'Number',
@@ -1926,12 +2085,21 @@ const apis = [
         ]
       },
       {
+        name: 'empty-text',
+        descKey: 'app.api.table.desc.emptyText',
+        version: '1.15.31',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'empty-render',
         descKey: 'app.api.table.desc.emptyRender',
         version: '1.15.19',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.emptyRender',
+        defVal: '继承 setup.table.emptyRender',
         list: [
           {
             name: 'name',
@@ -1968,11 +2136,69 @@ const apis = [
             enum: '',
             defVal: '{}, ...[目标渲染的 arguments]',
             list: []
+          },
+          {
+            name: 'nativeEvents',
+            abandoned: true,
+            desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+            version: '1.15.30',
+            type: 'Object',
+            enum: '',
+            defVal: '{}, ...[目标渲染的 arguments]',
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'custom-config',
+        descKey: 'app.api.table.desc.customConfig',
+        version: '1.15.28',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.table.customConfig',
+        list: [
+          {
+            name: 'storage',
+            desc: '是否启用 localStorage 本地保存，会将列操作状态保留在本地（需要有 id）',
+            version: '',
+            type: 'Boolean, Object',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'visible',
+                desc: '启用显示/隐藏列状态',
+                version: '',
+                type: 'Boolean',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'resizable',
+                desc: '启用列宽状态',
+                version: '',
+                type: 'Boolean',
+                enum: '',
+                defVal: '',
+                list: []
+              }
+            ]
+          },
+          {
+            name: 'checkMethod',
+            desc: '自定义列是否允许列选中的方法，该方法 Function({column}) 的返回值用来决定这一列的 checkbox 是否可以选中',
+            version: '',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },
       {
         name: 'optimization',
+        disabled: true,
         descKey: 'app.api.table.desc.optimization',
         version: '',
         type: 'Object',
@@ -1981,7 +2207,8 @@ const apis = [
         list: [
           {
             name: 'animat',
-            desc: '表格动画效果开关（关闭后视觉效果更快）',
+            disabled: true,
+            desc: '即将废弃，请使用 animat',
             version: '',
             type: 'Object',
             enum: '',
@@ -1989,8 +2216,19 @@ const apis = [
             list: []
           },
           {
+            name: 'cloak',
+            disabled: true,
+            desc: '即将废弃，请使用 cloak',
+            version: '1.15.27',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'delayHover',
-            desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
+            disabled: true,
+            desc: '即将废弃，请使用 delay-hover',
             version: '1.14.16',
             type: 'Number',
             enum: '',
@@ -1999,150 +2237,154 @@ const apis = [
           },
           {
             name: 'scrollX',
-            desc: '横向虚拟滚动配置（tree-config 启用后无效）',
+            disabled: true,
+            desc: '即将废弃，请使用 scroll-x',
             version: '',
             type: 'Object',
             enum: '',
             defVal: '',
-            list: [
-              {
-                name: 'gt',
-                desc: '指定大于指定列时自动启动横向虚拟滚动（注：启用横向虚拟滚动之后将不能支持分组表头）',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '60',
-                list: []
-              },
-              {
-                name: 'oSize',
-                desc: '当剩余数据少于指定列时触发重新渲染',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              {
-                name: 'rSize',
-                desc: '每次渲染条数',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              {
-                name: 'vSize',
-                desc: '指定可视区域条数',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              }
-            ]
+            list: []
           },
           {
             name: 'scrollY',
-            desc: '纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）',
+            disabled: true,
+            desc: '即将废弃，请使用 scroll-y',
             version: '',
             type: 'Object',
             enum: '',
             defVal: '',
-            list: [
-              {
-                name: 'gt',
-                desc: '指定大于指定行时自动启动纵向虚拟滚动（注：启用纵向虚拟滚动之后将不能支持动态行高）',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '100',
-                list: []
-              },
-              {
-                name: 'oSize',
-                desc: '当剩余数据少于指定行时触发重新渲染',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              {
-                name: 'rSize',
-                desc: '每次渲染条数',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              {
-                name: 'vSize',
-                desc: '指定可视区域条数',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              },
-              {
-                name: 'rHeight',
-                desc: '指定行高',
-                version: '',
-                type: 'Number',
-                enum: '',
-                defVal: '默认自动计算',
-                list: []
-              }
-            ]
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'animat',
+        abandoned: true,
+        desc: '表格动画效果开关（关闭后视觉效果更快）',
+        version: '1.15.28',
+        type: 'Object',
+        enum: '',
+        defVal: '默认 true，继承 setup.table.animat',
+        list: []
+      },
+      {
+        name: 'cloak',
+        abandoned: true,
+        desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
+        version: '1.15.28',
+        type: 'Boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.table.cloak',
+        list: []
+      },
+      {
+        name: 'delay-hover',
+        abandoned: true,
+        desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
+        version: '1.15.28',
+        type: 'Number',
+        enum: '',
+        defVal: '默认 250，继承 setup.table.delayHover',
+        list: []
+      },
+      {
+        name: 'scroll-x',
+        desc: '横向虚拟滚动配置（tree-config 启用后无效）',
+        version: '1.15.28',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.scrollX',
+        list: [
+          {
+            name: 'gt',
+            desc: '指定大于指定列时自动启动横向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用横向虚拟滚动之后将不能支持分组表头）',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '60',
+            list: []
+          },
+          {
+            name: 'oSize',
+            desc: '当剩余数据少于指定列时触发重新渲染',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
+          },
+          {
+            name: 'rSize',
+            desc: '每次渲染条数',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
+          },
+          {
+            name: 'vSize',
+            desc: '指定可视区域条数',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'scroll-y',
+        desc: '纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）',
+        version: '1.15.28',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.scrollY',
+        list: [
+          {
+            name: 'gt',
+            desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用纵向虚拟滚动之后将不能支持动态行高）',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '100',
+            list: []
+          },
+          {
+            name: 'oSize',
+            desc: '当剩余数据少于指定行时触发重新渲染',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
+          },
+          {
+            name: 'rSize',
+            desc: '每次渲染条数',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
+          },
+          {
+            name: 'vSize',
+            desc: '指定可视区域条数',
+            version: '',
+            type: 'Number',
+            enum: '',
+            defVal: '默认自动计算',
+            list: []
           // },
           // {
-          //   name: 'rHeights',
-          //   desc: '重写表格默认高度,必须和 scss 中的变量一致（用于重写表格默认行高的场景，谨慎使用，99%场景不需要更改）',
+          //   name: 'rHeight',
+          //   desc: '指定行高',
           //   version: '',
-          //   type: 'Object',
+          //   type: 'Number',
           //   enum: '',
-          //   defVal: '',
-          //   list: [
-          //     {
-          //       name: 'default',
-          //       desc: '表格 default size',
-          //       version: '',
-          //       type: 'Number',
-          //       enum: '',
-          //       defVal: '48',
-          //       list: []
-          //     },
-          //     {
-          //       name: 'medium',
-          //       desc: '表格 medium size',
-          //       version: '',
-          //       type: 'Number',
-          //       enum: '',
-          //       defVal: '44',
-          //       list: []
-          //     },
-          //     {
-          //       name: 'small',
-          //       desc: '表格 small size',
-          //       version: '',
-          //       type: 'Number',
-          //       enum: '',
-          //       defVal: '40',
-          //       list: []
-          //     },
-          //     {
-          //       name: 'mini',
-          //       desc: '表格 mini size',
-          //       version: '',
-          //       type: 'Number',
-          //       enum: '',
-          //       defVal: '36',
-          //       list: []
-          //     }
-          //   ]
+          //   defVal: '默认自动计算',
+          //   list: []
           }
         ]
       },
@@ -2171,7 +2413,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '暂无数据',
+        defVal: '{}',
         list: []
       }
     ]
@@ -2185,12 +2427,21 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'keydown',
+        desc: '当表格被激活且键盘被按下时会触发的事件',
+        version: '1.15.27',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
         name: 'current-change',
         descKey: 'app.api.table.desc.currentChange',
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2199,7 +2450,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2209,7 +2460,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{selection,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ records, reserves, checked, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2218,7 +2469,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{selection,reserves,checked,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ records, reserves, indeterminates, checked, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2228,7 +2479,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{selection,reserves,checked},event',
+        defVal: '{ records, reserves, checked, $event }',
         list: []
       },
       {
@@ -2237,7 +2488,7 @@ const apis = [
         version: '1.15.18',
         type: '',
         enum: '',
-        defVal: '{selection,reserves,checked},event',
+        defVal: '{ records, reserves, indeterminates, checked, $event }',
         list: []
       },
       {
@@ -2246,7 +2497,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, triggerRadio, triggerCheckbox, triggerTreeNode, triggerExpandNode, $event }',
         list: []
       },
       {
@@ -2255,7 +2506,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2264,7 +2515,7 @@ const apis = [
         version: '1.11',
         type: '',
         enum: '',
-        defVal: '{type,row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{ type, row, rowIndex, column, columnIndex, $event }',
         list: []
       },
       {
@@ -2273,7 +2524,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2282,7 +2533,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2291,7 +2542,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{triggerResizable,triggerSort,triggerFilter,$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, triggerResizable, triggerSort, triggerFilter, $event }',
         list: []
       },
       {
@@ -2300,7 +2551,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2309,7 +2560,7 @@ const apis = [
         version: '1.11',
         type: '',
         enum: '',
-        defVal: '{type,column,columnIndex,cell},event',
+        defVal: '{ type, column, columnIndex, $event }',
         list: []
       },
       {
@@ -2318,7 +2569,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ items, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2327,7 +2578,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{$rowIndex,column,columnIndex,$columnIndex,cell},event',
+        defVal: '{ items, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2336,7 +2587,7 @@ const apis = [
         version: '1.11',
         type: '',
         enum: '',
-        defVal: '{type,column,columnIndex,cell},event',
+        defVal: '{ type, column, columnIndex, $event }',
         list: []
       },
       {
@@ -2345,7 +2596,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,property,order}',
+        defVal: '{ column, property, order, $event }',
         list: []
       },
       {
@@ -2354,7 +2605,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,property,values,datas,filters}',
+        defVal: '{ column, property, values, datas, filters, $event }',
         list: []
       },
       {
@@ -2363,7 +2614,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{$rowIndex, column, columnIndex, $columnIndex, fixed, isHidden}',
+        defVal: '{ $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2373,7 +2624,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex},event',
+        defVal: '{ row }',
         list: []
       },
       {
@@ -2382,7 +2633,7 @@ const apis = [
         version: '1.15.15',
         type: '',
         enum: '',
-        defVal: '{expanded,row,rowIndex},event',
+        defVal: '{ expanded, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2392,7 +2643,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex},event',
+        defVal: '{ row }',
         list: []
       },
       {
@@ -2401,7 +2652,7 @@ const apis = [
         version: '1.15.15',
         type: '',
         enum: '',
-        defVal: '{expanded,row,rowIndex},event',
+        defVal: '{ expanded, row, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2410,7 +2661,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{menu,type,row,rowIndex,column,columnIndex,cell},event',
+        defVal: '{ menu, type, row, rowIndex, column, columnIndex, $event }',
         list: []
       },
       {
@@ -2419,7 +2670,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
         list: []
       },
       {
@@ -2428,7 +2679,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
         list: []
       },
       {
@@ -2437,7 +2688,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
         list: []
       },
       {
@@ -2446,7 +2697,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{rule,row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        defVal: '{ rule, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
         list: []
       },
       {
@@ -2455,7 +2706,16 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{type,fixed,scrollTop,scrollLeft,isX,isY},event',
+        defVal: '{ type, scrollTop, scrollLeft, isX, isY, $event }',
+        list: []
+      },
+      {
+        name: 'custom',
+        desc: '如果与工具栏关联，在自定义列按钮被手动点击后会触发该事件',
+        version: '1.15.28',
+        type: '',
+        enum: '',
+        defVal: '{ type, $event}',
         list: []
       }
     ]
@@ -2479,7 +2739,7 @@ const apis = [
       },
       {
         name: 'reloadData(data)',
-        desc: '加载数据并恢复到初始状态（对于表格数据需要重载、局部递增的场景中可能会用到）',
+        desc: '加载数据并清除所有状态（对于表格数据需要重载、局部递增的场景中可能会用到）',
         version: '',
         type: 'Promise',
         enum: '',
@@ -2497,8 +2757,18 @@ const apis = [
       },
       {
         name: 'refreshData()',
-        desc: '同步刷新 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑（对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到）',
+        disabled: true,
+        desc: '即将废弃，请使用 revertData',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'syncData()',
+        desc: '同步 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑（对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到）',
+        version: '1.15.25',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -2572,7 +2842,7 @@ const apis = [
         name: 'createRow(records)',
         desc: '创建 Row|Rows 对象（对于某些特殊场景需要对数据进行手动插入时可能会用到）',
         version: '1.11',
-        type: 'Promise<Row|Rows>',
+        type: 'Promise<row|rows>',
         enum: '',
         defVal: 'records',
         list: []
@@ -2588,7 +2858,7 @@ const apis = [
       },
       {
         name: 'insert(records)',
-        desc: '往表格插入临时数据，从第一行新增一行或多行新数据',
+        desc: '往表格插入临时数据（不支持深层结构），从第一行插入一行或多行新数据',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2597,20 +2867,11 @@ const apis = [
       },
       {
         name: 'insertAt(records, row)',
-        desc: '往表格插入临时数据，从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null 从第一行插入、-1 从最后插入',
+        desc: '往表格插入临时数据（不支持深层结构），从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null 从第一行插入、-1 从最后插入',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: 'records, row',
-        list: []
-      },
-      {
-        name: 'revert(rows, field)',
-        desc: '即将废弃，请使用 revertData',
-        version: '',
-        type: 'Promise',
-        enum: '',
-        defVal: 'rows?, field?',
         list: []
       },
       {
@@ -2624,7 +2885,7 @@ const apis = [
       },
       {
         name: 'remove(rows)',
-        desc: '删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据',
+        desc: '删除指定行数据（不支持深层结构），指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据',
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
@@ -2633,8 +2894,36 @@ const apis = [
       },
       {
         name: 'removeSelecteds()',
-        desc: '删除已选中的所有行数据',
+        disabled: true,
+        desc: '即将废弃，请使用 removeCheckboxRow',
         version: '',
+        type: 'Promise<{row, rows}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'removeCheckboxRow()',
+        desc: '删除复选框选中的行数据（不支持深层结构）',
+        version: '1.15.26',
+        type: 'Promise<{row, rows}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'removeRadioRow()',
+        desc: '删除单选框选中的行数据（不支持深层结构）',
+        version: '1.15.26',
+        type: 'Promise<{row, rows}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'removeCurrentRow()',
+        desc: '删除当前行选中的行数据（不支持深层结构）',
+        version: '1.15.26',
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: '',
@@ -2647,6 +2936,15 @@ const apis = [
         type: 'Number',
         enum: '',
         defVal: 'row',
+        list: []
+      },
+      {
+        name: '_getRowIndex(row)',
+        desc: '根据 row 获取相对于当前数据中的索引',
+        version: '1.15.24',
+        type: 'Number',
+        enum: '',
+        defVal: 'row: Row',
         list: []
       },
       {
@@ -2668,12 +2966,12 @@ const apis = [
         list: []
       },
       {
-        name: 'getColumns(columnIndex)',
-        desc: '获取表格的可视列，也可以指定索引获取列',
+        name: 'getColumns()',
+        desc: '获取表格的可视的列',
         version: '',
         type: 'Array',
         enum: '',
-        defVal: 'columnIndex?',
+        defVal: '',
         list: []
       },
       {
@@ -2725,6 +3023,15 @@ const apis = [
         name: '$getColumnIndex(column)',
         desc: '根据 column 获取渲染中的虚拟索引',
         version: '1.15.15',
+        type: 'Number',
+        enum: '',
+        defVal: 'column',
+        list: []
+      },
+      {
+        name: '_getColumnIndex(column)',
+        desc: '根据 column 获取相对于当前表格列中的索引（分组表头可能会用到）',
+        version: '1.15.28',
         type: 'Number',
         enum: '',
         defVal: 'column',
@@ -2806,7 +3113,7 @@ const apis = [
       },
       {
         name: 'getRecordset()',
-        desc: '获取表格数据集（获取新增、删除、更改的数据，对于增删改查表格非常方便）',
+        desc: '获取表格数据集（获取插入、删除、更改的数据，对于增删改查表格非常方便）',
         version: '',
         type: '{insertRecords, removeRecords, updateRecords}',
         enum: '',
@@ -2815,7 +3122,7 @@ const apis = [
       },
       {
         name: 'getInsertRecords()',
-        desc: '获取新增的临时数据',
+        desc: '获取插入的临时数据',
         version: '',
         type: 'Array',
         enum: '',
@@ -2833,9 +3140,18 @@ const apis = [
       },
       {
         name: 'getUpdateRecords()',
-        desc: '获取已修改的数据',
+        desc: '只对 keep-source 开启有效，获取已修改的数据',
         version: '',
         type: 'Array',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getCurrentColumn()',
+        desc: '用于 highlight-current-column，获取当前列',
+        version: '1.15.28',
+        type: 'ColumnConfig',
         enum: '',
         defVal: '',
         list: []
@@ -2852,7 +3168,7 @@ const apis = [
       },
       {
         name: 'getCurrentRecord()',
-        desc: '用于 highlight-current-row，获取当前行的行数据',
+        desc: '用于 highlight-current-row，获取高亮的当前行数据',
         version: '1.15.17',
         type: 'Row',
         enum: '',
@@ -2889,6 +3205,15 @@ const apis = [
         list: []
       },
       {
+        name: 'getRadioReserveRecord()',
+        desc: '用于 radio-config.reserve，获取已保留选中的行数据（不包含当前列表）',
+        version: '1.15.27',
+        type: 'Row',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getCheckboxRecords()',
         desc: '用于 type=checkbox，获取已选中的行数据',
         version: '1.15.17',
@@ -2909,8 +3234,17 @@ const apis = [
       },
       {
         name: 'getCheckboxReserveRecords()',
-        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据',
+        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据（不包含当前列表）',
         version: '1.15.17',
+        type: 'Array<Row>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getCheckboxIndeterminateRecords()',
+        desc: '用于 type=checkbox，获取半选状态的行数据',
+        version: '2.9',
         type: 'Array<Row>',
         enum: '',
         defVal: '',
@@ -2939,7 +3273,7 @@ const apis = [
         disabled: true,
         desc: '即将废弃，请使用 getActiveRecord',
         version: '',
-        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
         enum: '',
         defVal: 'row',
         list: []
@@ -2948,7 +3282,7 @@ const apis = [
         name: 'getActiveRecord()',
         desc: '用于 edit-config，获取已激活的行数据',
         version: '1.15.17',
-        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}',
+        type: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
         enum: '',
         defVal: 'row',
         list: []
@@ -2993,6 +3327,16 @@ const apis = [
       },
       {
         name: 'getTableScroll()',
+        disabled: true,
+        desc: '即将废弃，请使用 getScroll',
+        version: '',
+        type: '{virtualX, virtualY, scrollTop, scrollLeft}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getScroll()',
         desc: '获取表格的滚动状态',
         version: '1.15.18',
         type: '{virtualX, virtualY, scrollTop, scrollLeft}',
@@ -3021,7 +3365,7 @@ const apis = [
       },
       {
         name: 'isInsertByRow(row)',
-        desc: '判断行是否为新增的临时数据',
+        desc: '判断行是否为插入的临时数据',
         version: '1.15.7',
         type: 'Boolean',
         enum: '',
@@ -3045,6 +3389,15 @@ const apis = [
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row, field?: string',
+        list: []
+      },
+      {
+        name: 'isAllCheckboxChecked()',
+        desc: '用于 type=checkbox，判断复选行是否被全部选中',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
         list: []
       },
       {
@@ -3169,7 +3522,7 @@ const apis = [
       },
       {
         name: 'setSelectCell(row, field)',
-        desc: '只对 trigger!=manual 有效，选中单元格',
+        desc: '用于 mouse-config.selected，选中指定的单元格',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3178,8 +3531,18 @@ const apis = [
       },
       {
         name: 'setRowExpansion(rows, checked)',
-        desc: '设置展开行，二个参数设置这一行展开与否',
+        disabled: true,
+        desc: '即将废弃，请使用 setRowExpand',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows, checked',
+        list: []
+      },
+      {
+        name: 'setRowExpand(rows, checked)',
+        desc: '设置展开行，二个参数设置这一行展开与否',
+        version: '1.15.30',
         type: 'Promise',
         enum: '',
         defVal: 'rows, checked',
@@ -3187,7 +3550,8 @@ const apis = [
       },
       {
         name: 'setAllRowExpansion(checked)',
-        desc: '设置所有行的展开与否',
+        disabled: true,
+        desc: '即将废弃，请使用 setAllRowExpand',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3195,8 +3559,18 @@ const apis = [
         list: []
       },
       {
+        name: 'setAllRowExpand(checked)',
+        desc: '设置所有行的展开与否（如果是关闭所有行，可以使用 clearRowExpand 快速清除）',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: 'checked',
+        list: []
+      },
+      {
         name: 'setTreeExpansion(rows, checked)',
-        desc: '设置展开树形节点，二个参数设置这一行展开与否',
+        disabled: true,
+        desc: '即将废弃，请使用 setTreeExpand',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3204,9 +3578,28 @@ const apis = [
         list: []
       },
       {
+        name: 'setTreeExpand(rows, checked)',
+        desc: '设置展开树形节点，二个参数设置这一行展开与否',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: 'rows, checked',
+        list: []
+      },
+      {
         name: 'setAllTreeExpansion(checked)',
-        desc: '设置所有树节点的展开与否',
+        disabled: true,
+        desc: '即将废弃，请使用 setAllTreeExpand',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'checked',
+        list: []
+      },
+      {
+        name: 'setAllTreeExpand(checked)',
+        desc: '设置所有树节点的展开与否（如果是关闭所有树节点，可以使用 clearTreeExpand 快速清除）',
+        version: '1.15.30',
         type: 'Promise',
         enum: '',
         defVal: 'checked',
@@ -3317,17 +3710,37 @@ const apis = [
       },
       {
         name: 'toggleRowExpansion(row)',
-        desc: '用于 type=expand，切换展开行的状态',
+        disabled: true,
+        desc: '即将废弃，请使用 toggleRowExpand',
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: 'row',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'toggleRowExpand(row)',
+        desc: '用于 type=expand，切换展开行的状态',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: 'row: Row',
         list: []
       },
       {
         name: 'toggleTreeExpansion(row)',
-        desc: '用于 tree-config，切换展开树形节点的状态',
+        disabled: true,
+        desc: '即将废弃，请使用 toggleTreeExpand',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'toggleTreeExpand(row)',
+        desc: '用于 tree-config，切换展开树形节点的状态',
+        version: '1.15.30',
         type: 'Promise',
         enum: '',
         defVal: 'row',
@@ -3355,6 +3768,15 @@ const apis = [
         name: 'clearRadioRow()',
         desc: '用于单选行，手动清空用户的选择',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearRadioReserve()',
+        desc: '用于 radio-config.reserve，手动清空用户保留选中的行数据',
+        version: '1.15.27',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -3444,12 +3866,12 @@ const apis = [
         list: []
       },
       {
-        name: 'clearFilter(field)',
-        desc: '手动清空筛选条件（如果不传 field 则清空所有筛选条件），数据会恢复成未筛选的状态',
-        version: '',
+        name: 'clearFilter(column)',
+        desc: '手动清空筛选条件（如果不传 column 则清空所有筛选条件），数据会恢复成未筛选的状态',
+        version: '1.15.27',
         type: 'Promise',
         enum: '',
-        defVal: 'field?',
+        defVal: 'column?: ColumnConfig',
         list: []
       },
       // {
@@ -3499,6 +3921,15 @@ const apis = [
         name: 'clearScroll()',
         desc: '手动清除滚动相关信息，还原到初始状态',
         version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearValidate()',
+        desc: '手动清除校验',
+        version: '1.15.27',
         type: 'Promise',
         enum: '',
         defVal: '',
@@ -3600,7 +4031,7 @@ const apis = [
       },
       {
         name: 'updateFooter()',
-        desc: '手动更新表尾合计（对于某些需要频繁更新的场景下可能会用到）',
+        desc: '手动更新表尾（对于某些需要频繁更新的场景下可能会用到）',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3661,15 +4092,15 @@ const apis = [
         defVal: 'column',
         list: []
       },
-      {
-        name: 'scrollToTreeRow(row)',
-        desc: '对于树形结构中，可以直接滚动到指定深层节点中（对于某些特定的场景可能会用到，比如定位到某一节点）',
-        version: '2.6',
-        type: 'Promise',
-        enum: '',
-        defVal: 'column: ColumnConfig',
-        list: []
-      },
+      // {
+      //   name: 'scrollToTreeRow(row)',
+      //   desc: '对于树形结构中，可以直接滚动到指定深层节点中（对于某些特定的场景可能会用到，比如定位到某一节点）',
+      //   version: '2.6',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: 'column: ColumnConfig',
+      //   list: []
+      // },
       {
         name: 'sort(field, order)',
         desc: '手动对表格进行排序（如果 order 为空则自动切换排序）',
@@ -3690,12 +4121,12 @@ const apis = [
         list: []
       },
       {
-        name: 'recalculate()',
-        desc: '重新计算表格（对于某些特殊场景可能会用到，比如隐藏的表格、更新列宽）',
+        name: 'recalculate(refull)',
+        desc: '重新计算表格，如果传 true 则进行完整计算（对于某些特殊场景可能会用到，比如隐藏的表格、重新计算列宽...等）',
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: '',
+        defVal: 'refull?: boolean',
         list: []
       },
       {
@@ -3709,20 +4140,20 @@ const apis = [
       },
       {
         name: 'validate(rows, callback)',
-        desc: '表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用，并传入两个参数：（是否校验成功，最近一列未通过校验的字段）。若不传入回调函数，则会返回一个 promise',
+        desc: '快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；如果第一个参数为 true 则校验当前表格数据，如果指定 row 或 rows 则校验指定行或多行，如果不指定数据，则默认只校验临时变动的数据，例如新增或修改。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
         version: '',
-        type: 'Promise<ErrorMap>',
+        type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?, callback?',
+        defVal: 'rows?: Row | Row[], callback?: Function',
         list: []
       },
       {
         name: 'fullValidate(rows, callback)',
-        desc: '表格完整校验函数，和 validate 的区别就是会对全量数据的所有规则进行完整校验',
+        desc: '完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验',
         version: '',
-        type: 'Promise<ErrorMap>',
+        type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?, callback?',
+        defVal: 'rows?: Row | Row[], callback?: Function',
         list: []
       },
       {
@@ -3751,7 +4182,17 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options',
-        list: XEUtils.clone(exportDataAPI, true)
+        list: XEUtils.clone(exportDataAPI.filter(item => !['columns', 'data', 'download', 'columnFilterMethod', 'dataFilterMethod', 'footerFilterMethod'].includes(item.name)), true).concat([
+          {
+            name: 'isPrint',
+            desc: '是否需要打印按钮',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          }
+        ])
       },
       {
         name: 'importData(options)',
@@ -3816,6 +4257,24 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'focus()',
+        desc: '使表格获取焦点',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'blur()',
+        desc: '使表格失去焦点',
+        version: '1.15.30',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   }

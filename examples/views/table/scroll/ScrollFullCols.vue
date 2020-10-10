@@ -4,7 +4,7 @@
       虚拟滚动渲染，左右固定列<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数<br>
       对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
-      <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头，如果需要支持动态列宽的话，那么需要处理好 <table-api-link name="rSize"/> 参数，内置的列宽算法是无法支持某些场景的，某些场景下必须手动设置)</span>
+      <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头)</span>
     </p>
 
     <vxe-grid
@@ -13,12 +13,12 @@
       show-header-overflow
       highlight-hover-row
       highlight-current-row
-      toolbar
       ref="xGrid"
       height="600"
       :loading="loading"
+      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
@@ -71,12 +71,12 @@ export default {
           show-header-overflow
           highlight-hover-row
           highlight-current-row
-          toolbar
           ref="xGrid"
           height="600"
           :loading="loading"
+          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>

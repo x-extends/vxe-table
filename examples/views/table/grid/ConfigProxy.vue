@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">进阶封装实现，<a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-grid-proxy">查看配置式代理项目使用示例</a>，只需要一个 json 数据就可以非常简单的渲染一个支持 CRUD 功能完整的表格</p>
+    <p class="tip">数据代理简单示例</p>
 
     <vxe-grid
       resizable
@@ -48,6 +48,7 @@ export default {
         pageSizes: [5, 10, 20, 50, 100, 200, 500, 1000]
       },
       tableProxy: {
+        form: true,
         sort: true,
         filter: true,
         ajax: {
@@ -70,7 +71,7 @@ export default {
       tableToolbar: {
         buttons: [
           { code: 'insert_actived', name: 'Add', icon: 'fa fa-plus' },
-          { code: 'mark_cancel', name: 'Mark', icon: 'fa fa-bookmark-o' },
+          { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-bookmark-o' },
           { code: 'save', name: 'Save', icon: 'fa fa-save' }
         ],
         refresh: true,
@@ -91,13 +92,15 @@ export default {
             itemRender: {
               name: '$select',
               options: [
-                { value: '', label: '' },
                 { value: '0', label: '女' },
                 { value: '1', label: '男' }
-              ]
+              ],
+              props: {
+                placeholder: '请选择性别'
+              }
             }
           },
-          { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: 'input', attrs: { type: 'number', placeholder: '请输入年龄' } } },
+          { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
           { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'FormItemButtonGroup' } }
         ]
       },
@@ -145,7 +148,6 @@ export default {
           editRender: {
             name: '$select',
             options: [
-              { value: '', label: '' },
               { value: '0', label: '女' },
               { value: '1', label: '男' }
             ]
@@ -222,7 +224,7 @@ export default {
                 toolbar: {
                   buttons: [
                     { code: 'insert_actived', name: 'Add', icon: 'fa fa-plus' },
-                    { code: 'mark_cancel', name: 'Mark', icon: 'fa fa-bookmark-o' },
+                    { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-bookmark-o' },
                     { code: 'save', name: 'Save', icon: 'fa fa-save' }
                   ],
                   refresh: true,

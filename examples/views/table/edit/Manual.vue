@@ -3,20 +3,24 @@
     <p class="tip">设置 <table-api-link prop="edit-config"/>={trigger: 'manual', mode: 'row'} 启用行编辑的功能，还可以配合 <table-api-link prop="revertData"/> 函数实现取消就还原数据<br></p>
 
     <vxe-table
-      ref="xTable"
       border
       resizable
       show-overflow
+      keep-source
+      ref="xTable"
+      :loading="loading"
       :data="tableData"
       :edit-config="{trigger: 'manual', mode: 'row'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
+      <vxe-table-column field="sex1" title="多选下拉" :edit-render="{name: '$select', options: sexList, props: {multiple: true}}"></vxe-table-column>
       <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column title="操作">
+      <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
+      <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea', immediate: true}"></vxe-table-column>
+      <vxe-table-column title="操作" width="160">
         <template v-slot="{ row }">
           <template v-if="$refs.xTable.isActiveByRow(row)">
             <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
@@ -45,25 +49,30 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
+      loading: false,
       tableData: [],
       sexList: [],
       demoCodes: [
         `
         <vxe-table
-          ref="xTable"
           border
           resizable
           show-overflow
+          keep-source
+          ref="xTable"
+          :loading="loading"
           :data="tableData"
           :edit-config="{trigger: 'manual', mode: 'row'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
+          <vxe-table-column field="sex1" title="多选下拉" :edit-render="{name: '$select', options: sexList, props: {multiple: true}}"></vxe-table-column>
           <vxe-table-column field="num6" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea', immediate: true}"></vxe-table-column>
+          <vxe-table-column title="操作" width="160">
             <template v-slot="{ row }">
               <template v-if="$refs.xTable.isActiveByRow(row)">
                 <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
@@ -80,6 +89,7 @@ export default {
         export default {
           data () {
             return {
+              loading: false,
               tableData: [],
               sexList: []
             }
@@ -99,7 +109,11 @@ export default {
             },
             saveRowEvent (row) {
               this.$refs.xTable.clearActived().then(() => {
-                this.$XModal.alert('success')
+                this.loading = true
+                setTimeout(() => {
+                  this.loading = false
+                  this.$XModal.message({ message: '保存成功！', status: 'success' })
+                }, 300)
               })
             },
             cancelRowEvent (row) {
@@ -135,7 +149,11 @@ export default {
     },
     saveRowEvent () {
       this.$refs.xTable.clearActived().then(() => {
-        this.$XModal.alert('success')
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.$XModal.message({ message: '保存成功！', status: 'success' })
+        }, 300)
       })
     },
     cancelRowEvent (row) {

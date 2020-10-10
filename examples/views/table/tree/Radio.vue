@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 方式</p>
+    <p class="tip">
+      使用 <table-api-link prop="highlight-current-row"/> 方式<br>
+      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+    </p>
 
     <vxe-table
       highlight-current-row
@@ -96,7 +99,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `,
@@ -119,7 +122,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `,
@@ -151,7 +154,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             currentChangeEvent ({ row }) {

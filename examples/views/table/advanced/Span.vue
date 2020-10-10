@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      合并列，通过 <table-api-link prop="span-method"/> 方法，使用 $rowIndex 获取渲染中的行索引，rowIndex 指向真实数据的行索引，可以根据不同场景使用<br>
-      <span class="red">（注：<table-api-link prop="span-method"/> 合并的逻辑都是自行实现的，该示例仅供参考）</span>
+      合并列，通过自定义 <table-api-link prop="span-method"/> 合并方法<br>
+      <span class="red">（注：<table-api-link prop="span-method"/> ，不能用于树形结构、展开行、固定列，合并的逻辑都是自行实现的，该示例仅供参考）</span>
     </p>
 
     <vxe-toolbar>
@@ -16,8 +16,9 @@
     <vxe-table
       border
       resizable
-      height="400"
+      height="300"
       :align="allAlign"
+      :scroll-y="{gt: -1}"
       :span-method="colspanMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -34,13 +35,14 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">合并行</p>
+    <p class="tip">通用合并行</p>
 
     <vxe-table
       border
       resizable
-      height="400"
-      :span-method="rowspanMethod"
+      height="300"
+      :scroll-y="{gt: -1}"
+      :span-method="mergeRowMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="key" title="Key"></vxe-table-column>
@@ -54,6 +56,7 @@
       <code class="xml">{{ demoCodes[2] }}</code>
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
+
   </div>
 </template>
 
@@ -66,6 +69,10 @@ export default {
     return {
       allAlign: null,
       tableData: [],
+      mergeCells: [
+        { row: 1, col: 1, rowspan: 3, colspan: 3 },
+        { row: 6, col: 0, rowspan: 2, colspan: 2 }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -79,8 +86,9 @@ export default {
         <vxe-table
           border
           resizable
-          height="400"
+          height="300"
           :align="allAlign"
+          :scroll-y="{gt: -1}"
           :span-method="colspanMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -99,21 +107,15 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
-            colspanMethod ({ row, rowIndex, column, columnIndex, data }) {
+            colspanMethod ({ rowIndex, _columnIndex }) {
               if (rowIndex % 2 === 0) {
-                if (columnIndex === 2) {
-                  return {
-                    rowspan: 1,
-                    colspan: 2
-                  }
-                } else if (columnIndex === 3) {
-                  return {
-                    rowspan: 0,
-                    colspan: 0
-                  }
+                if (_columnIndex === 2) {
+                  return { rowspan: 1, colspan: 2 }
+                } else if (_columnIndex === 3) {
+                  return { rowspan: 0, colspan: 0 }
                 }
               }
             }
@@ -124,8 +126,9 @@ export default {
         <vxe-table
           border
           resizable
-          height="400"
-          :span-method="rowspanMethod"
+          height="300"
+          :scroll-y="{gt: -1}"
+          :span-method="mergeRowMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="key" title="Key"></vxe-table-column>
@@ -141,22 +144,22 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
+            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             // 通用行合并函数（将相同多列数据合并为一行）
-            rowspanMethod ({ row, $rowIndex, column, data }) {
+            mergeRowMethod ({ row, _rowIndex, column, visibleData }) {
               const fields = ['key']
               const cellValue = XEUtils.get(row, column.property)
               if (cellValue && fields.includes(column.property)) {
-                const prevRow = data[$rowIndex - 1]
-                let nextRow = data[$rowIndex + 1]
+                const prevRow = visibleData[_rowIndex - 1]
+                let nextRow = visibleData[_rowIndex + 1]
                 if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
                   return { rowspan: 0, colspan: 0 }
                 } else {
                   let countRowspan = 1
                   while (nextRow && XEUtils.get(nextRow, column.property) === cellValue) {
-                    nextRow = data[++countRowspan + $rowIndex]
+                    nextRow = visibleData[++countRowspan + _rowIndex]
                   }
                   if (countRowspan > 1) {
                     return { rowspan: countRowspan, colspan: 1 }
@@ -171,8 +174,7 @@ export default {
     }
   },
   created () {
-    const list = window.MOCK_DATA_LIST.slice(0, 20)
-    this.tableData = list
+    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -183,31 +185,25 @@ export default {
     colspanMethod ({ rowIndex, columnIndex }) {
       if (rowIndex % 2 === 0) {
         if (columnIndex === 2) {
-          return {
-            rowspan: 1,
-            colspan: 2
-          }
+          return { rowspan: 1, colspan: 2 }
         } else if (columnIndex === 3) {
-          return {
-            rowspan: 0,
-            colspan: 0
-          }
+          return { rowspan: 0, colspan: 0 }
         }
       }
     },
     // 通用行合并函数（将相同多列数据合并为一行）
-    rowspanMethod ({ row, $rowIndex, column, data }) {
+    mergeRowMethod ({ row, _rowIndex, column, visibleData }) {
       const fields = ['key']
       const cellValue = XEUtils.get(row, column.property)
       if (cellValue && fields.includes(column.property)) {
-        const prevRow = data[$rowIndex - 1]
-        let nextRow = data[$rowIndex + 1]
+        const prevRow = visibleData[_rowIndex - 1]
+        let nextRow = visibleData[_rowIndex + 1]
         if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
           return { rowspan: 0, colspan: 0 }
         } else {
           let countRowspan = 1
           while (nextRow && XEUtils.get(nextRow, column.property) === cellValue) {
-            nextRow = data[++countRowspan + $rowIndex]
+            nextRow = visibleData[++countRowspan + _rowIndex]
           }
           if (countRowspan > 1) {
             return { rowspan: countRowspan, colspan: 1 }

@@ -1,4 +1,5 @@
 import { UtilTools } from '../../tools'
+import GlobalConfig from '../../conf'
 
 export default {
   name: 'VxeCheckbox',
@@ -9,7 +10,7 @@ export default {
     title: [String, Number],
     content: [String, Number],
     disabled: Boolean,
-    size: String
+    size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
   inject: {
     $xegroup: {
@@ -22,10 +23,13 @@ export default {
     },
     isGroup () {
       return this.$xegroup
+    },
+    isDisabled () {
+      return this.disabled || (this.isGroup && this.$xegroup.disabled)
     }
   },
   render (h) {
-    const { $slots, $xegroup, isGroup, disabled, title, vSize, indeterminate, value, label, content } = this
+    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -34,23 +38,24 @@ export default {
       class: ['vxe-checkbox', {
         [`size--${vSize}`]: vSize,
         'is--indeterminate': indeterminate,
-        'is--disabled': disabled
+        'is--disabled': isDisabled
       }],
       attrs
     }, [
       h('input', {
+        class: 'vxe-checkbox--input',
         attrs: {
           type: 'checkbox',
-          disabled
+          disabled: isDisabled
         },
         domProps: {
           checked: isGroup ? ($xegroup.value && $xegroup.value.some(item => item === label)) : value
         },
         on: {
           change: evnt => {
-            if (!this.disabled) {
+            if (!isDisabled) {
               const checked = evnt.target.checked
-              const params = { checked, label }
+              const params = { checked, label, $event: evnt }
               if (isGroup) {
                 $xegroup.handleChecked(params, evnt)
               } else {

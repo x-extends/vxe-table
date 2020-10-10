@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">树表格与展开行同时使用，非常简单就能实现很复杂的树形展开行</p>
+    <p class="tip">
+      树表格与展开行同时使用，非常简单就能实现很复杂的树形展开行<br>
+      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+    </p>
 
     <vxe-table
       border
@@ -87,7 +90,7 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `

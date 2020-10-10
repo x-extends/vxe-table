@@ -5,7 +5,7 @@ import { UtilTools } from '../../tools'
 export default {
   name: 'VxePager',
   props: {
-    size: String,
+    size: { type: String, default: () => GlobalConfig.pager.size || GlobalConfig.size },
     // 自定义布局
     layouts: { type: Array, default: () => GlobalConfig.pager.layouts || ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] },
     // 当前页
@@ -26,8 +26,10 @@ export default {
     border: { type: Boolean, default: () => GlobalConfig.pager.border },
     // 带背景颜色
     background: { type: Boolean, default: () => GlobalConfig.pager.background },
-    // 默认的样式
+    // 配套的样式
     perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect },
+    // 当只有一页时隐藏
+    autoHidden: { type: Boolean, default: () => GlobalConfig.pager.autoHidden },
     // 自定义图标
     iconPrevPage: String,
     iconJumpPrev: String,
@@ -60,23 +62,57 @@ export default {
     },
     offsetNumber () {
       return Math.floor((this.pagerCount - 2) / 2)
+    },
+    sizeList () {
+      return this.pageSizes.map(item => {
+        if (XEUtils.isNumber(item)) {
+          return {
+            value: item,
+            label: `${XEUtils.template(GlobalConfig.i18n('vxe.pager.pagesize'), [item])}`
+          }
+        }
+        return { value: '', label: '', ...item }
+      })
     }
   },
   render (h) {
-    const { vSize, align } = this
+    const { $scopedSlots, $xegrid, vSize, align } = this
+    const childNodes = []
+    if ($scopedSlots.left) {
+      childNodes.push(
+        h('span', {
+          class: 'vxe-pager--left-wrapper'
+        }, [
+          $scopedSlots.left.call(this, { $grid: $xegrid })
+        ])
+      )
+    }
+    this.layouts.forEach(name => {
+      childNodes.push(this[`render${name}`](h))
+    })
+    if ($scopedSlots.right) {
+      childNodes.push(
+        h('span', {
+          class: 'vxe-pager--right-wrapper'
+        }, [
+          $scopedSlots.right.call(this, { $grid: $xegrid })
+        ])
+      )
+    }
     return h('div', {
       class: ['vxe-pager', {
         [`size--${vSize}`]: vSize,
         [`align--${align}`]: align,
-        'p--border': this.border,
-        'p--background': this.background,
-        'p--perfect': this.perfect,
+        'is--border': this.border,
+        'is--background': this.background,
+        'is--perfect': this.perfect,
+        'is--hidden': this.autoHidden && this.pageCount === 1,
         'is--loading': this.loading
       }]
     }, [
       h('div', {
         class: 'vxe-pager--wrapper'
-      }, this.layouts.map(name => this[`render${name}`](h)))
+      }, childNodes)
     ])
   },
   methods: {
@@ -94,7 +130,7 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-pager--btn-icon', this.iconPrevPage || GlobalConfig.icon.prevPage]
+          class: ['vxe-pager--btn-icon', this.iconPrevPage || GlobalConfig.icon.PAGER_PREV_PAGE]
         })
       ])
     },
@@ -113,10 +149,10 @@ export default {
         }
       }, [
         tagName ? h('i', {
-          class: ['vxe-pager--jump-more', this.iconJumpMore || GlobalConfig.icon.jumpMore]
+          class: ['vxe-pager--jump-more-icon', this.iconJumpMore || GlobalConfig.icon.PAGER_JUMP_MORE]
         }) : null,
         h('i', {
-          class: ['vxe-pager--jump-icon', this.iconJumpPrev || GlobalConfig.icon.jumpPrev]
+          class: ['vxe-pager--jump-icon', this.iconJumpPrev || GlobalConfig.icon.PAGER_JUMP_PREV]
         })
       ])
     },
@@ -147,10 +183,10 @@ export default {
         }
       }, [
         tagName ? h('i', {
-          class: ['vxe-pager--jump-more', this.iconJumpMore || GlobalConfig.icon.jumpMore]
+          class: ['vxe-pager--jump-more-icon', this.iconJumpMore || GlobalConfig.icon.PAGER_JUMP_MORE]
         }) : null,
         h('i', {
-          class: ['vxe-pager--jump-icon', this.iconJumpNext || GlobalConfig.icon.jumpNext]
+          class: ['vxe-pager--jump-icon', this.iconJumpNext || GlobalConfig.icon.PAGER_JUMP_NEXT]
         })
       ])
     },
@@ -168,7 +204,7 @@ export default {
         }
       }, [
         h('i', {
-          class: ['vxe-pager--btn-icon', this.iconNextPage || GlobalConfig.icon.nextPage]
+          class: ['vxe-pager--btn-icon', this.iconNextPage || GlobalConfig.icon.PAGER_NEXT_PAGE]
         })
       ])
     },
@@ -177,20 +213,16 @@ export default {
       return h('vxe-select', {
         class: 'vxe-pager--sizes',
         props: {
-          placement: 'top'
-        },
-        model: {
           value: this.pageSize,
-          callback: num => this.pageSizeEvent(num)
-        }
-      }, this.pageSizes.map(num => {
-        return h('vxe-option', {
-          props: {
-            value: num,
-            label: `${XEUtils.template(GlobalConfig.i18n('vxe.pager.pagesize'), [num])}`
+          placement: 'top',
+          options: this.sizeList
+        },
+        on: {
+          change: ({ value }) => {
+            this.pageSizeEvent(value)
           }
-        })
-      }))
+        }
+      })
     },
     // FullJump
     renderFullJump (h) {
@@ -299,15 +331,15 @@ export default {
       return Math.max(Math.ceil(total / size), 1)
     },
     prevPage () {
-      const currentPage = this.currentPage
+      const { currentPage, pageCount } = this
       if (currentPage > 1) {
-        this.jumpPage(Math.max(currentPage - 1, 1))
+        this.jumpPage(Math.min(pageCount, Math.max(currentPage - 1, 1)))
       }
     },
     nextPage () {
       const { currentPage, pageCount } = this
       if (currentPage < pageCount) {
-        this.jumpPage(Math.min(currentPage + 1, pageCount))
+        this.jumpPage(Math.min(pageCount, currentPage + 1))
       }
     },
     prevJump () {
@@ -323,7 +355,7 @@ export default {
           UtilTools.warn('vxe.error.delEvent', ['current-change', 'page-change'])
           this.$emit('current-change', currentPage)
         }
-        this.$emit('page-change', { type: 'current-change', pageSize: this.pageSize, currentPage })
+        this.$emit('page-change', { type: 'current-change', pageSize: this.pageSize, currentPage, $event: { type: 'current' } })
       }
     },
     pageSizeEvent (pageSize) {
@@ -333,10 +365,10 @@ export default {
       if (pageSize !== this.pageSize) {
         this.$emit('update:pageSize', pageSize)
         if (this.$listeners['size-change']) {
-          UtilTools.warn('vxe.error.delEvent', ['size-change', 'page-change'])
+          UtilTools.warn('vxe.error.delEvent', ['size', 'page-change'])
           this.$emit('size-change', pageSize)
         }
-        this.$emit('page-change', { type: 'size-change', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) })
+        this.$emit('page-change', { type: 'size', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)), $event: { type: 'size' } })
       }
     },
     jumpKeydownEvent (evnt) {

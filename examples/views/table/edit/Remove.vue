@@ -6,9 +6,10 @@
       <template v-slot:buttons>
         <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
         <vxe-button @click="removeEvent(tableData[1])">删除第2行</vxe-button>
-        <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+        <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
+        <vxe-button icon="fa fa-save" @click="saveEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -47,9 +48,10 @@ export default {
           <template v-slot:buttons>
             <vxe-button @click="insertEvent()">在第1行插入</vxe-button>
             <vxe-button @click="removeEvent(tableData[1])">删除第2行</vxe-button>
-            <vxe-button @click="$refs.xTable.removeSelecteds()">删除选中</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
+            <vxe-button icon="fa fa-save" @click="saveEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -96,8 +98,12 @@ export default {
               this.$XModal.alert(removeRecords.length)
             },
             getSelectionEvent () {
-              let removeRecords = this.$refs.xTable.getCheckboxRecords()
-              this.$XModal.alert(removeRecords.length)
+              let selectRecords = this.$refs.xTable.getCheckboxRecords()
+              this.$XModal.alert(selectRecords.length)
+            },
+            saveEvent () {
+              const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+              this.$XModal.alert(\`insertRecords=\${insertRecords.length} removeRecords=\${removeRecords.length} updateRecords=\${updateRecords.length}\`)
             }
           }
         }
@@ -133,8 +139,12 @@ export default {
       this.$XModal.alert(removeRecords.length)
     },
     getSelectionEvent () {
-      const removeRecords = this.$refs.xTable.getCheckboxRecords()
-      this.$XModal.alert(removeRecords.length)
+      const selectRecords = this.$refs.xTable.getCheckboxRecords()
+      this.$XModal.alert(selectRecords.length)
+    },
+    saveEvent () {
+      const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+      this.$XModal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
     }
   }
 }

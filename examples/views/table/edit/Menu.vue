@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">通过快捷菜单增删改查</p>
+    <p class="tip">通过快捷菜单增删改查<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -19,7 +19,7 @@
       height="400"
       :loading="loading"
       :data="tableData"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
+      :context-menu="tableMenu"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @context-menu-click="contextMenuClickEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -46,51 +46,28 @@ export default {
     return {
       loading: false,
       tableData: [],
-      headerMenus: [
-        [
-          {
-            code: 'hideColumn',
-            name: '隐藏列',
-            disabled: false
-          },
-          {
-            code: 'showAllColumn',
-            name: '取消所有隐藏列',
-            disabled: false
-          }
-        ]
-      ],
-      bodyMenus: [
-        [
-          {
-            code: 'copy',
-            name: '复制',
-            prefixIcon: 'fa fa-copy',
-            disabled: false
-          },
-          {
-            code: 'reload',
-            name: '刷新',
-            disabled: false
-          },
-          {
-            code: 'insertAt',
-            name: '插入',
-            disabled: false
-          },
-          {
-            code: 'remove',
-            name: '删除',
-            disabled: false
-          },
-          {
-            code: 'save',
-            name: '保存',
-            prefixIcon: 'fa fa-save',
-            disabled: false
-          }
-        ]
-      ],
+      tableMenu: {
+        header: {
+          options: [
+            [
+              { code: 'hideColumn', name: '隐藏列', disabled: false },
+              { code: 'showAllColumn', name: '取消所有隐藏列', disabled: false }
+            ]
+          ]
+        },
+        body: {
+          options: [
+            [
+              { code: 'copy', name: '复制', prefixIcon: 'fa fa-copy', disabled: false },
+              { code: 'reload', name: '刷新', disabled: false },
+              { code: 'insertAt', name: '插入', disabled: false },
+              { code: 'remove', name: '删除', disabled: false },
+              { code: 'save', name: '保存', prefixIcon: 'fa fa-save', disabled: false }
+            ]
+          ]
+        },
+        visibleMethod: this.visibleMethod
+      },
       demoCodes: [
         `
         <vxe-toolbar>
@@ -110,7 +87,7 @@ export default {
           height="400"
           :loading="loading"
           :data="tableData"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
+          :context-menu="tableMenu"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @context-menu-click="contextMenuClickEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -125,44 +102,28 @@ export default {
             return {
               loading: false,
               tableData: [],
-              headerMenus: [
-                [
-                  {
-                    code: 'hideColumn',
-                    name: '隐藏列'
-                  },
-                  {
-                    code: 'showAllColumn',
-                    name: '取消所有隐藏列'
-                  }
-                ]
-              ],
-              bodyMenus: [
-                [
-                  {
-                    code: 'copy',
-                    name: '复制',
-                    prefixIcon: 'fa fa-copy'
-                  },
-                  {
-                    code: 'reload',
-                    name: '刷新'
-                  },
-                  {
-                    code: 'insertAt',
-                    name: '插入'
-                  },
-                  {
-                    code: 'remove',
-                    name: '删除'
-                  },
-                  {
-                    code: 'save',
-                    name: '保存',
-                    prefixIcon: 'fa fa-save'
-                  }
-                ]
-              ]
+              tableMenu: {
+                header: {
+                  options: [
+                    [
+                      { code: 'hideColumn', name: '隐藏列', disabled: false },
+                      { code: 'showAllColumn', name: '取消所有隐藏列', disabled: false }
+                    ]
+                  ]
+                },
+                body: {
+                  options: [
+                    [
+                      { code: 'copy', name: '复制', prefixIcon: 'fa fa-copy', disabled: false },
+                      { code: 'reload', name: '刷新', disabled: false },
+                      { code: 'insertAt', name: '插入', disabled: false },
+                      { code: 'remove', name: '删除', disabled: false },
+                      { code: 'save', name: '保存', prefixIcon: 'fa fa-save', disabled: false }
+                    ]
+                  ]
+                },
+                visibleMethod: this.visibleMethod
+              }
             }
           },
           created () {

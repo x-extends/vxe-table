@@ -6,7 +6,44 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'value',
+        descKey: 'app.api.option.desc.value',
+        version: '',
+        type: 'any',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'label',
+        descKey: 'app.api.option.desc.label',
+        version: '',
+        type: 'string | number | boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'visible',
+        desc: '是否显示',
+        version: '',
+        type: 'boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
+        name: 'disabled',
+        descKey: 'app.api.option.desc.disabled',
+        version: '',
+        type: 'boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   },
   {
     name: 'Slots',

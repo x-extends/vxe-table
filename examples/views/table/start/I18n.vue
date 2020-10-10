@@ -1,27 +1,27 @@
 <template>
   <div>
-    <h2>Internationalization 国际化</h2>
-    <p class="tip">目前支持的<a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/packages/locale/lang" target="_blank">国际化列表</a>，若希望使用指定语言，则需要进行多语言设置。以中/英文为例<br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-i18n" target="_blank">项目示例</a></p>
+    <h2>{{ $t('app.aside.nav.i18n') }}</h2>
+    <p class="tip">{{ $t('app.body.demo.start.i18n.i18nTitle') }}</p>
     <pre>
       <code class="shell">
         npm install vue-i18n
       </code>
       <code class="javascript">{{ demoCodes[0] }}</code>
     </pre>
-    <h2>集成国际化</h2>
-    <p class="tip">若希望在项目中支持全局自动翻译，可以通过全局参数开启（将对列头、校验提示..进行自动翻译）<br><a class="link" href="https://github.com/xuliangzhan/vxe-table-demo/tree/master/vxe-table-by-vue-i18n" target="_blank">项目示例</a></p>
+    <h2>{{ $t('app.body.demo.start.i18n.translate') }}</h2>
+    <p class="tip">{{ $t('app.body.demo.start.i18n.translateTitle') }}</p>
     <pre>
       <code class="javascript">{{ demoCodes[1] }}</code>
       <code class="html">{{ demoCodes[2] }}</code>
     </pre>
-    <h2>发现错误？想参与翻译？</h2>
-    <p class="tip">通过 <a class="link" href="https://github.com/xuliangzhan/vxe-table/pulls">Pull requests</a> 贡献翻译 -> <a class="link" href="https://github.com/xuliangzhan/vxe-table/tree/master/packages/locale/lang">添加或修改</a></p>
+    <h2>{{ $t('app.body.demo.start.i18n.findError') }}</h2>
+    <p class="tip">通过 <a class="link" href="https://github.com/x-extends/vxe-table/pulls">Pull requests</a> 贡献翻译 -> <a class="link" href="https://github.com/x-extends/vxe-table/tree/master/packages/locale/lang">添加或修改</a></p>
     <div>
       <ul class="lang-list">
-        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/zh-CN.js" target="_blank">简体中文（zh-CN）</a></li>
-        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/zh-TW.js" target="_blank">繁体中文（zh-TW）</a></li>
-        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/en-US.js" target="_blank">英文（en-US）</a></li>
-        <li><a class="link" href="https://github.com/xuliangzhan/vxe-table/blob/master/packages/locale/lang/ja-JP.js" target="_blank">日语（ja-JP）</a></li>
+        <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/zh-CN.js" target="_blank">简体中文（zh-CN）</a></li>
+        <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/zh-TC.js" target="_blank">繁体中文（zh-TC）</a></li>
+        <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/en-US.js" target="_blank">English（en-US）</a></li>
+        <li><a class="link" href="https://github.com/x-extends/vxe-table/blob/master/packages/locale/lang/ja-JP.js" target="_blank">ジャパン（ja-JP）</a></li>
       </ul>
     </div>
   </div>
@@ -57,22 +57,21 @@ export default {
 
         Vue.use(VXETable, {
           // 对组件内置的提示语进行国际化翻译
-          i18n: key => i18n.t(key)
+          i18n: (key, args) => i18n.t(key, args)
         })
 
         new Vue({ i18n }).$mount('#app')
         `,
         `
         Vue.use(VXETable, {
-          // 对参数的内容自动进行国际化翻译（只对支持国际化的有效）
-          translate: key => i18n.t(key)
-          // translate (key) {
-          //   // 只翻译 "app." 开头的键值
-          //   if (key && key.indexOf('app.') > -1) {
-          //     return i18n.t(key)
-          //   }
-          //   return key
-          // }
+          // 可选，对参数中的列头、校验提示..等进行自动翻译（只对支持国际化的有效）
+          translate (key, args) {
+            // 例如，只翻译 "app." 开头的键值
+            if (key && key.indexOf('app.') > -1) {
+              return i18n.t(key, args)
+            }
+            return key
+          }
         })
         `,
         `

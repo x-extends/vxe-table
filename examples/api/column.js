@@ -126,7 +126,7 @@ const apis = [
         version: '',
         type: 'Number, String',
         enum: 'px, %',
-        defVal: '继承 table.column-width',
+        defVal: '继承 table.column-config.width',
         list: []
       },
       {
@@ -135,7 +135,7 @@ const apis = [
         version: '',
         type: 'Number, String',
         enum: 'px, %',
-        defVal: '继承 table.column-min-width',
+        defVal: '继承 table.column-config.minWidth',
         list: []
       },
       {
@@ -257,8 +257,18 @@ const apis = [
       },
       {
         name: 'index-method',
+        disabled: true,
         descKey: 'app.api.tableColumn.desc.indexMethod',
         version: '',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'seq-method',
+        descKey: 'app.api.tableColumn.desc.seqMethod',
+        version: '1.15.27',
         type: 'Function',
         enum: '',
         defVal: '',
@@ -336,6 +346,15 @@ const apis = [
             list: []
           },
           {
+            name: 'resetValue',
+            desc: '重置时的默认值',
+            version: '1.15.27',
+            type: 'Any',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'data',
             desc: '自定义渲染的数据值（当使用自定义模板时可能会用到）',
             version: '',
@@ -377,7 +396,7 @@ const apis = [
             desc: '渲染器名称',
             version: '',
             type: 'String',
-            enum: 'input, textarea, select',
+            enum: 'input, textarea, select, $input, $textarea, $select',
             defVal: '',
             list: []
           },
@@ -407,8 +426,54 @@ const apis = [
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
             list: []
+          },
+          {
+            name: 'nativeEvents',
+            abandoned: true,
+            desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+            version: '1.15.30',
+            type: 'Object',
+            enum: '',
+            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'content',
+            desc: '渲染组件的内容（仅用于特殊组件）',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
+      },
+      {
+        name: 'export-method',
+        desc: '自定义的单元格数据导出方法，该方法 Function({ row, column }) 的返回值将会被导出',
+        version: '1.15.31',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'footer-export-method',
+        desc: '自定义的表尾单元格数据导出方法，该方法 Function({ items, _columnIndex }) 的返回值将会被导出',
+        version: '1.15.31',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'cell-type',
+        descKey: 'app.api.tableColumn.desc.cellType',
+        version: '1.15.29',
+        type: 'String',
+        enum: 'auto（默认自动转换），number（数值）, string（字符串）',
+        defVal: 'auto',
+        list: []
       },
       {
         name: 'cell-render',
@@ -423,7 +488,7 @@ const apis = [
             desc: '渲染器名称',
             version: '',
             type: 'String',
-            enum: 'input, textarea, select',
+            enum: 'input, textarea, select, $input, $textarea, $button, $buttons, $select, $switch',
             defVal: '',
             list: []
           },
@@ -460,7 +525,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {
@@ -488,6 +553,25 @@ const apis = [
             type: 'Object',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'nativeEvents',
+            abandoned: true,
+            desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+            version: '1.15.30',
+            type: 'Object',
+            enum: '',
+            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'content',
+            desc: '渲染组件的内容（仅用于特殊组件）',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
             list: []
           }
         ]
@@ -502,7 +586,8 @@ const apis = [
         list: [
           {
             name: 'type',
-            desc: '渲染类型',
+            disabled: true,
+            desc: '即将废弃，请使用 cell-render',
             version: '',
             type: 'String',
             enum: 'default（组件触发后可视）,visible（组件一直可视）',
@@ -514,7 +599,7 @@ const apis = [
             desc: '渲染器名称',
             version: '',
             type: 'String',
-            enum: 'input, textarea, select',
+            enum: 'input, textarea, select, $input, $select, $switch',
             defVal: '',
             list: []
           },
@@ -551,7 +636,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {
@@ -579,6 +664,25 @@ const apis = [
             type: 'Object',
             enum: '',
             defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'nativeEvents',
+            abandoned: true,
+            desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+            version: '1.15.30',
+            type: 'Object',
+            enum: '',
+            defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'content',
+            desc: '渲染组件的内容（仅用于特殊组件）',
+            version: '',
+            type: 'String',
+            enum: '',
+            defVal: '',
             list: []
           },
           {
@@ -606,6 +710,98 @@ const apis = [
             type: 'Any',
             enum: '',
             defVal: 'null',
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'content-render',
+        descKey: 'app.api.tableColumn.desc.contentRender',
+        version: '1.15.27',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'name',
+            desc: '渲染器名称',
+            version: '',
+            type: 'String',
+            enum: 'input, textarea, select, $input, $select',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'props',
+            desc: '渲染的参数（请查看目标渲染的 Props）',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'attrs',
+            desc: '渲染的属性（请查看目标渲染的 Attribute）',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'options',
+            desc: '只对 name=select 有效，下拉选项列表',
+            version: '',
+            type: 'Array',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'optionProps',
+            desc: '只对 name=select 有效，下拉选项属性参数配置',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '{ value, label }',
+            list: []
+          },
+          {
+            name: 'optionGroups',
+            desc: '只对 name=select 有效，下拉分组选项列表',
+            version: '',
+            type: 'Array',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'optionGroupProps',
+            desc: '只对 name=select 有效，下拉分组选项属性参数配置',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '{ options, label }',
+            list: []
+          },
+          {
+            name: 'events',
+            desc: '渲染组件的事件（请查看目标渲染的 Events）',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '{data, property}, ...[目标渲染的 arguments]',
+            list: []
+          },
+          {
+            name: 'nativeEvents',
+            abandoned: true,
+            desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
+            version: '1.15.30',
+            type: 'Object',
+            enum: '',
+            defVal: '{data, property}, ...[目标渲染的 arguments]',
             list: []
           }
         ]
@@ -654,7 +850,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
+        defVal: '{row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex}',
         list: []
       },
       {
@@ -663,7 +859,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex}, h',
+        defVal: '{column, columnIndex, $columnIndex, _columnIndex, $rowIndex}',
         list: []
       },
       {
@@ -672,7 +868,7 @@ const apis = [
         version: '1.15.19',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex,cells,cellIndex}, h',
+        defVal: '{column, columnIndex, $columnIndex, _columnIndex, $rowIndex, items}',
         list: []
       },
       {
@@ -681,35 +877,35 @@ const apis = [
         version: '1.15.15',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
+        defVal: '{row, rowIndex, $rowIndex, column}',
         list: []
       },
       {
         name: 'filter',
-        desc: '只对 filter-render 启用时有效，自定义筛选模板',
+        desc: '只对 filter-render 有效，自定义筛选模板',
         version: '',
         type: '',
         enum: '',
-        defVal: '{column,columnIndex,$columnIndex}, h',
+        defVal: '{column, columnIndex, $columnIndex}',
         list: []
       },
       {
         name: 'edit',
-        desc: '只对 edit-render 启用时有效，自定义可编辑组件模板',
+        desc: '只对 edit-render 有效，自定义可编辑组件模板',
         version: '',
         type: '',
         enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
+        defVal: '{row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex}',
         list: []
-      },
-      {
-        name: 'icon',
-        desc: '只对 type=expand 或 tree-node 有效，自定义图标模板',
-        version: '1.15.15',
-        type: '',
-        enum: '',
-        defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}, h',
-        list: []
+      // },
+      // {
+      //   name: 'icon',
+      //   desc: '只对 type=expand 或 tree-node 有效，自定义图标模板',
+      //   version: '1.15.15',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '{row,rowIndex,$rowIndex,column,columnIndex,$columnIndex}',
+      //   list: []
       }
     ]
   },

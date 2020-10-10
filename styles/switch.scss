@@ -1,0 +1,115 @@
+/**Variable**/
+
+.vxe-switch {
+  display: inline-block;
+  color: $vxe-font-color;
+  vertical-align: middle;
+  padding: 0.4em;
+  user-select: none;
+  text-align: center;
+  &.is--animat {
+    .vxe-switch--button {
+      transition: border-color .3s, background-color .3s;
+    }
+    .vxe-switch--icon {
+      transition: all 0.3s;
+    }
+  }
+  &.is--on {
+    .vxe-switch--button {
+      padding-right: 1.7em;
+      background-color: $vxe-primary-color;
+    }
+    .vxe-switch--icon {
+      left: 100%;
+      transform: translateX(-1.4em);
+    }
+  }
+  &.is--off {
+    .vxe-switch--button {
+      padding-left: 1.7em;
+      background-color: rgba(0,0,0,.35);
+    }
+    .vxe-switch--icon {
+      left: 0.2em;
+      transform: translateX(0);
+    }
+  }
+  &.is--on .vxe-switch--label-off,
+  &.is--off .vxe-switch--label-on {
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+  }
+  &.is--on,
+  &.is--off {
+    .vxe-switch--label {
+      opacity: 1;
+    }
+  }
+  &:not(.is--disabled) {
+    .vxe-switch--button {
+      cursor: pointer;
+      &:focus {
+        box-shadow: 0 0 0.4em 0 $vxe-primary-color;
+      }
+    }
+  }
+  &.is--disabled {
+    .vxe-switch--button {
+      cursor: no-drop;
+    }
+    &.is--on {
+      .vxe-switch--button {
+        background-color: lighten($vxe-primary-color, 20%);
+      }
+    }
+    &.is--off {
+      .vxe-switch--button {
+        background-color: rgba(0,0,0,.15);
+      }
+    }
+  }
+  .vxe-switch--button {
+    display: block;
+    position: relative;
+    height: 1.6em;
+    line-height: 1;
+    min-width: 3.2em;
+    padding: 0 0.6em;
+    border-radius: 1em;
+    border: 0;
+    outline: 0;
+  }
+  .vxe-switch--label {
+    opacity: 0;
+    display: block;
+    color: $vxe-switch-font-color;
+    font-size: 0.8em;
+  }
+  .vxe-switch--icon {
+    position: absolute;
+    top: 0.2em;
+    left: 0;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    background-color: $vxe-switch-icon-background-color;
+  }
+  .vxe-switch--label-icon {
+    margin-right: 0.25em;
+  }
+}
+
+.vxe-switch {
+  font-size: $vxe-font-size;
+  &.size--medium {
+    font-size: $vxe-font-size-medium;
+  }
+  &.size--small {
+    font-size: $vxe-font-size-small;
+  }
+  &.size--mini {
+    font-size: $vxe-font-size-mini;
+  }
+}

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置</p>
+    <p class="tip">
+      通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置<br>
+      <span class="red">（不指定数据的情况下，默认只校验状态发生变动的数据，例如：新增、修改...等）</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
@@ -14,6 +17,7 @@
 
     <vxe-table
       resizable
+      show-overflow
       keep-source
       ref="xTree"
       :edit-rules="validRules"
@@ -25,7 +29,7 @@
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -68,6 +72,7 @@ export default {
 
         <vxe-table
           resizable
+          show-overflow
           keep-source
           ref="xTree"
           :edit-rules="validRules"
@@ -79,7 +84,7 @@ export default {
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -99,23 +104,21 @@ export default {
             }
           },
           created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST.slice(0)
+            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             validEvent () {
-              this.$refs.xTree.validate(valid => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTree.validate((errMap) => {
+                if (errMap) {
                   this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
             fullValidEvent () {
-              this.$refs.xTree.fullValidate((valid, errMap) => {
-                if (valid) {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                } else {
+              this.$refs.xTree.fullValidate((errMap) => {
+                if (errMap) {
                   let msgList = []
                   Object.values(errMap).forEach(errList => {
                     errList.forEach(params => {
@@ -141,17 +144,19 @@ export default {
                       ]
                     }
                   })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
                 }
               })
             },
             selectValidEvent () {
               let selectRecords = this.$refs.xTree.getCheckboxRecords()
               if (selectRecords.length > 0) {
-                this.$refs.xTree.validate(selectRecords, valid => {
-                  if (valid) {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
-                  } else {
+                this.$refs.xTree.validate(selectRecords, (errMap) => {
+                  if (errMap) {
                     this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                  } else {
+                    this.$XModal.message({ status: 'success', message: '校验成功！' })
                   }
                 })
               } else {
@@ -182,19 +187,17 @@ export default {
   },
   methods: {
     validEvent () {
-      this.$refs.xTree.validate(valid => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTree.validate((errMap) => {
+        if (errMap) {
           this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
     fullValidEvent () {
-      this.$refs.xTree.fullValidate((valid, errMap) => {
-        if (valid) {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        } else {
+      this.$refs.xTree.fullValidate((errMap) => {
+        if (errMap) {
           const msgList = []
           Object.values(errMap).forEach(errList => {
             errList.forEach(params => {
@@ -220,17 +223,19 @@ export default {
               ]
             }
           })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
         }
       })
     },
     selectValidEvent () {
       const selectRecords = this.$refs.xTree.getCheckboxRecords()
       if (selectRecords.length > 0) {
-        this.$refs.xTree.validate(selectRecords, valid => {
-          if (valid) {
-            this.$XModal.message({ status: 'success', message: '校验成功！' })
-          } else {
+        this.$refs.xTree.validate(selectRecords, (errMap) => {
+          if (errMap) {
             this.$XModal.message({ status: 'error', message: '校验不通过！' })
+          } else {
+            this.$XModal.message({ status: 'success', message: '校验成功！' })
           }
         })
       } else {

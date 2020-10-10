@@ -1,66 +1,85 @@
+const iconPrefix = 'vxe-icon--'
 const GlobalConfig = {
-  // keepSource: false,
-  // showOverflow: null,
-  // showHeaderOverflow: null,
-  // resizeInterval: 250,
-  // size: null,
-  // resizable: false,
-  // stripe: false,
-  // border: false,
-  // radioConfig: {
-  //   trigger: 'default'
-  // },
-  // checkboxConfig: {
-  //   trigger: 'default'
-  // },
-  // sortConfig: {
-  //   remote: false,
-  //   trigger: 'default'
-  // },
-  // filterConfig: {
-  //   remote: false
-  // },
-  // expandConfig: {
-  //   trigger: 'default'
-  // },
-  // treeConfig: {
-  //   children: 'children',
-  //   hasChild: 'hasChild',
-  //   indent: 20
-  // },
-  // tooltipConfig: {
-  //   theme: 'dark'
-  // },
-  // validConfig: {
-  //   message: 'default'
-  // },
-  // editConfig: {
-  //   mode: 'cell'
-  // },
-  // contextMenu: {
-  //   visibleMethod () {}
-  // },
-  fit: true,
-  showHeader: true,
-  emptyCell: '　',
-  zIndex: 100,
-  rowId: '_XID', // 行数据的唯一主键字段名
+  // size: null, // 全局尺寸
+  zIndex: 100, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
-  importConfig: {
-    modes: ['insert', 'covering']
-  },
-  exportConfig: {
-    modes: ['current', 'selected']
-  },
-  optimization: {
+  // resizeInterval: 500,
+  emptyCell: '　',
+  table: {
+    fit: true,
+    showHeader: true,
     animat: true,
     delayHover: 250,
-    // rHeights: {
-    //   default: 48,
-    //   medium: 44,
-    //   small: 40,
-    //   mini: 36
+    keepSource: true,
+    cloak: false,
+    // showOverflow: null,
+    // showHeaderOverflow: null,
+    // showFooterOverflow: null,
+    // size: null,
+    // zIndex: null,
+    // resizable: false,
+    // autoResize: false,
+    // stripe: false,
+    // border: false,
+    // round: false,
+    // emptyRender: {
+    //   name: ''
     // },
+    // radioConfig: {
+    //   trigger: 'default'
+    // },
+    // checkboxConfig: {
+    //   trigger: 'default'
+    // },
+    // tooltipConfig: {
+    //   theme: 'dark',
+    //   enterable: false
+    // },
+    // validConfig: {
+    //   message: 'default'
+    // },
+    // contextMenu: {
+    //   visibleMethod () {}
+    // },
+    // customConfig: {
+    //  storage: false,
+    //  checkMethod () {}
+    // },
+    // rowId: '_XID', // 行数据的唯一主键字段名
+    sortConfig: {
+      // remote: false,
+      // trigger: 'default',
+      // orders: ['asc', 'desc', null],
+      // sortMethod: null,
+      showIcon: true
+    },
+    filterConfig: {
+      // remote: false,
+      // filterMethod: null,
+      showIcon: true
+    },
+    treeConfig: {
+      // children: 'children',
+      // hasChild: 'hasChild',
+      // indent: 20,
+      showIcon: true
+    },
+    expandConfig: {
+      // trigger: 'default',
+      showIcon: true
+    },
+    editConfig: {
+      // mode: 'cell',
+      showIcon: true,
+      showAsterisk: true
+    },
+    importConfig: {
+      modes: ['insert', 'covering']
+    },
+    exportConfig: {
+      isPrint: true,
+      modes: ['current', 'selected']
+    },
     scrollX: {
       gt: 60
       // oSize: 0,
@@ -76,68 +95,94 @@ const GlobalConfig = {
     }
   },
   icon: {
-    sortAsc: 'vxe-icon--caret-top',
-    sortDesc: 'vxe-icon--caret-bottom',
-    filterNone: 'vxe-icon--funnel',
-    filterMatch: 'vxe-icon--funnel',
-    edit: 'vxe-icon--edit-outline',
-    treeLoaded: 'vxe-icon--refresh roll',
-    treeOpen: 'vxe-icon--caret-right rotate90',
-    treeClose: 'vxe-icon--caret-right',
-    expandLoaded: 'vxe-icon--refresh roll',
-    expandOpen: 'vxe-icon--arrow-right rotate90',
-    expandClose: 'vxe-icon--arrow-right',
-    refresh: 'vxe-icon--refresh',
-    refreshLoading: 'vxe-icon--refresh roll',
-    formPrefix: 'vxe-icon--question',
-    formSuffix: 'vxe-icon--question',
-    formFolding: 'vxe-icon--arrow-top rotate180',
-    formUnfolding: 'vxe-icon--arrow-top',
-    import: 'vxe-icon--upload',
-    importRemove: 'vxe-icon--close',
-    export: 'vxe-icon--download',
-    zoomIn: 'vxe-icon--zoomin',
-    zoomOut: 'vxe-icon--zoomout',
-    custom: 'vxe-icon--menu',
-    inputClear: 'vxe-icon--close',
-    inputPwd: 'vxe-icon--eye-slash',
-    inputShowPwd: 'vxe-icon--eye',
-    inputPrevNum: 'vxe-icon--caret-top',
-    inputNextNum: 'vxe-icon--caret-bottom',
-    inputDate: 'vxe-icon--calendar',
-    inputDateOpen: 'vxe-icon--caret-bottom rotate180',
-    inputDateClose: 'vxe-icon--caret-bottom',
-    selectOpen: 'vxe-icon--caret-bottom rotate180',
-    selectClose: 'vxe-icon--caret-bottom',
-    jumpPrev: 'vxe-icon--d-arrow-left',
-    jumpNext: 'vxe-icon--d-arrow-right',
-    prevPage: 'vxe-icon--arrow-left',
-    nextPage: 'vxe-icon--arrow-right',
-    jumpMore: 'vxe-icon--more',
-    modalZoomIn: 'vxe-icon--square',
-    modalZoomOut: 'vxe-icon--zoomout',
-    modalClose: 'vxe-icon--close',
-    modalInfo: 'vxe-icon--info',
-    modalSuccess: 'vxe-icon--success',
-    modalWarning: 'vxe-icon--warning',
-    modalError: 'vxe-icon--error',
-    modalQuestion: 'vxe-icon--question',
-    modalLoading: 'vxe-icon--refresh roll',
-    dropdownBtn: 'vxe-icon--arrow-bottom',
-    btnLoading: 'vxe-icon--refresh roll'
+    // table
+    TABLE_SORT_ASC: iconPrefix + 'caret-top',
+    TABLE_SORT_DESC: iconPrefix + 'caret-bottom',
+    TABLE_FILTER_NONE: iconPrefix + 'funnel',
+    TABLE_FILTER_MATCH: iconPrefix + 'funnel',
+    TABLE_EDIT: iconPrefix + 'edit-outline',
+    TABLE_TREE_LOADED: iconPrefix + 'refresh roll',
+    TABLE_TREE_OPEN: iconPrefix + 'caret-right rotate90',
+    TABLE_TREE_CLOSE: iconPrefix + 'caret-right',
+    TABLE_EXPAND_LOADED: iconPrefix + 'refresh roll',
+    TABLE_EXPAND_OPEN: iconPrefix + 'arrow-right rotate90',
+    TABLE_EXPAND_CLOSE: iconPrefix + 'arrow-right',
+
+    // button
+    BUTTON_DROPDOWN: iconPrefix + 'arrow-bottom',
+    BUTTON_LOADING: iconPrefix + 'refresh roll',
+
+    // select
+    SELECT_OPEN: iconPrefix + 'caret-bottom rotate180',
+    SELECT_CLOSE: iconPrefix + 'caret-bottom',
+
+    // pager
+    PAGER_JUMP_PREV: iconPrefix + 'd-arrow-left',
+    PAGER_JUMP_NEXT: iconPrefix + 'd-arrow-right',
+    PAGER_PREV_PAGE: iconPrefix + 'arrow-left',
+    PAGER_NEXT_PAGE: iconPrefix + 'arrow-right',
+    PAGER_JUMP_MORE: iconPrefix + 'more',
+
+    // input
+    INPUT_CLEAR: iconPrefix + 'close',
+    INPUT_PWD: iconPrefix + 'eye-slash',
+    INPUT_SHOW_PWD: iconPrefix + 'eye',
+    INPUT_PREV_NUM: iconPrefix + 'caret-top',
+    INPUT_NEXT_NUM: iconPrefix + 'caret-bottom',
+    INPUT_DATE: iconPrefix + 'calendar',
+    INPUT_SEARCH: iconPrefix + 'search',
+
+    // modal
+    MODAL_ZOOM_IN: iconPrefix + 'square',
+    MODAL_ZOOM_OUT: iconPrefix + 'zoomout',
+    MODAL_CLOSE: iconPrefix + 'close',
+    MODAL_INFO: iconPrefix + 'info',
+    MODAL_SUCCESS: iconPrefix + 'success',
+    MODAL_WARNING: iconPrefix + 'warning',
+    MODAL_ERROR: iconPrefix + 'error',
+    MODAL_QUESTION: iconPrefix + 'question',
+    MODAL_LOADING: iconPrefix + 'refresh roll',
+
+    // toolbar
+    TOOLBAR_TOOLS_REFRESH: iconPrefix + 'refresh',
+    TOOLBAR_TOOLS_REFRESH_LOADING: iconPrefix + 'refresh roll',
+    TOOLBAR_TOOLS_IMPORT: iconPrefix + 'upload',
+    TOOLBAR_TOOLS_EXPORT: iconPrefix + 'download',
+    TOOLBAR_TOOLS_PRINT: iconPrefix + 'print',
+    TOOLBAR_TOOLS_ZOOM_IN: iconPrefix + 'zoomin',
+    TOOLBAR_TOOLS_ZOOM_OUT: iconPrefix + 'zoomout',
+    TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'menu',
+
+    // form
+    FORM_PREFIX: iconPrefix + 'info',
+    FORM_SUFFIX: iconPrefix + 'info',
+    FORM_FOLDING: iconPrefix + 'arrow-top rotate180',
+    FORM_UNFOLDING: iconPrefix + 'arrow-top'
   },
   grid: {
+    // size: null,
+    // zoomConfig: {
+    //   escRestore: true
+    // },
+    // pagerConfig: {
+    //   perfect: false
+    // },
+    // toolbar: {
+    //   perfect: false
+    // },
     proxyConfig: {
       autoLoad: true,
       message: true,
       props: {
         list: null,
         result: 'result',
-        total: 'page.total'
+        total: 'page.total',
+        message: 'message'
       }
       // beforeItem: null,
       // beforeColumn: null,
       // beforeQuery: null,
+      // afterQuery: null,
       // beforeDelete: null,
       // afterDelete: null,
       // beforeSave: null,
@@ -145,10 +190,14 @@ const GlobalConfig = {
     }
   },
   tooltip: {
+    // size: null,
     trigger: 'hover',
-    theme: 'dark'
+    theme: 'dark',
+    leaveDelay: 300
   },
   pager: {
+    // size: null,
+    // autoHidden: false,
     // perfect: true,
     // pageSize: 10,
     // pagerCount: 7,
@@ -156,47 +205,86 @@ const GlobalConfig = {
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
   form: {
-    // colon: false
+    // preventSubmit: false,
+    // validConfig: {
+    //   autoPos: true
+    // },
+    // size: null,
+    // colon: false,
+    titleAsterisk: true
   },
   input: {
-    startWeek: 1
-    // transfer: false,
+    // size: null,
+    // transfer: false
     // parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
     // labelFormat: '',
     // valueFormat: '',
-    // format: ''
+    minDate: new Date(1900, 0, 1),
+    maxDate: new Date(2100, 0, 1),
+    startWeek: 1,
+    digits: 2,
+    controls: true
+  },
+  textarea: {
+    // size: null,
+    // autosize: {
+    //   minRows: 1,
+    //   maxRows: 10
+    // }
   },
   select: {
-    // transfer: false
+    // size: null,
+    // transfer: false,
+    multiCharOverflow: 8
   },
   toolbar: {
+    // size: null,
     // import: {
     //   mode: 'covering'
     // },
     // export: {
     //   types: ['csv', 'html', 'xml', 'txt']
     // },
-    // resizable: {
-    //   storage: false
-    // },
     // custom: {
-    //   storage: false,
     //   isFooter: true
     // },
     // buttons: []
   },
+  button: {
+    // transfer: false
+  },
+  radio: {
+    // size: null
+  },
+  checkbox: {
+    // size: null
+  },
+  switch: {
+    // size: null
+  },
   modal: {
+    // size: null,
     minWidth: 340,
-    minHeight: 200,
+    minHeight: 140,
     lockView: true,
     mask: true,
     duration: 3000,
-    marginSize: 8,
+    marginSize: 0,
     dblclickZoom: true,
     showTitleOverflow: true,
     animat: true,
-    storage: false,
+    // storage: false,
     storageKey: 'VXE_MODAL_POSITION'
+  },
+  list: {
+    // size: null,
+    scrollY: {
+      gt: 100
+      // oSize: 0,
+      // rSize: 0
+      // vSize: 0,
+      // rHeight: 0
+    }
   },
   i18n: key => key
 }

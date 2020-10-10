@@ -1,4 +1,5 @@
 import { UtilTools } from '../../tools'
+import GlobalConfig from '../../conf'
 
 export default {
   name: 'VxeRadio',
@@ -9,7 +10,7 @@ export default {
     content: [String, Number],
     disabled: Boolean,
     name: String,
-    size: String
+    size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   inject: {
     $xegroup: {
@@ -22,10 +23,13 @@ export default {
     },
     isGroup () {
       return this.$xegroup
+    },
+    isDisabled () {
+      return this.disabled || (this.isGroup && this.$xegroup.disabled)
     }
   },
   render (h) {
-    const { $slots, $xegroup, isGroup, disabled, title, vSize, value, label, name, content } = this
+    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, value, label, name, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -33,23 +37,24 @@ export default {
     return h('label', {
       class: ['vxe-radio', {
         [`size--${vSize}`]: vSize,
-        'is--disabled': disabled
+        'is--disabled': isDisabled
       }],
       attrs
     }, [
       h('input', {
+        class: 'vxe-radio--input',
         attrs: {
           type: 'radio',
           name: isGroup ? $xegroup.name : name,
-          disabled
+          disabled: isDisabled
         },
         domProps: {
           checked: isGroup ? $xegroup.value === label : value === label
         },
         on: {
           change: evnt => {
-            if (!disabled) {
-              const params = { label }
+            if (!isDisabled) {
+              const params = { label, $event: evnt }
               if (isGroup) {
                 $xegroup.handleChecked(params, evnt)
               } else {

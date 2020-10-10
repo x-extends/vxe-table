@@ -1,13 +1,31 @@
-import { VXETableModule } from './module';
+import { VXETableModule } from './component'
 
 /**
- * 单选
+ * 单选框
  */
 export declare class Radio extends VXETableModule {
   /**
-   * 表格的尺寸
-   * @default 'default'
-   * @type string
+   * 绑定值
    */
-  size: 'medium' | 'small' | 'mini';
+  value?: string | number;
+  /**
+   * 值
+   */
+  label?: string | number;
+  /**
+   * 原生 title 属性
+   */
+  title?: string | number;
+  /**
+   * 内容
+   */
+  content?: string | number;
+  /**
+   * 是否禁用
+   */
+  disabled?: boolean;
+  /**
+   * 原生 title 属性
+   */
+  name?: string;
 }

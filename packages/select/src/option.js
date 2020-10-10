@@ -1,15 +1,22 @@
-import { UtilTools } from '../../tools'
+import { createOption, destroyOption, assemOption } from './util'
 
-let optionUniqueId = 0
+const props = {
+  value: null,
+  label: { type: [String, Number, Boolean], default: '' },
+  visible: { type: Boolean, default: null },
+  disabled: Boolean
+}
+
+const watch = {}
+Object.keys(props).forEach(name => {
+  watch[name] = function (value) {
+    this.optionConfig.update(name, value)
+  }
+})
 
 export default {
   name: 'VxeOption',
-  props: {
-    value: null,
-    label: [String, Number, Boolean],
-    disabled: Boolean,
-    size: String
-  },
+  props,
   inject: {
     $xeselect: {
       default: null
@@ -18,61 +25,17 @@ export default {
       default: null
     }
   },
-  data () {
-    return {
-      id: `option_${++optionUniqueId}`
-    }
-  },
-  computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
-    isDisabled () {
-      const { $xeoptgroup, disabled } = this
-      return ($xeoptgroup && $xeoptgroup.disabled) || disabled
-    }
-  },
-  warch: {
-    value () {
-      this.updateView()
-    }
-  },
+  watch,
   mounted () {
-    this.updateView()
+    assemOption(this)
+  },
+  created () {
+    this.optionConfig = createOption(this.$xeselect, this)
   },
   destroyed () {
-    this.updateView()
+    destroyOption(this)
   },
   render (h) {
-    const { $slots, $xeselect, id, isDisabled, value } = this
-    return h('div', {
-      class: ['vxe-select-option', {
-        'is--disabled': isDisabled,
-        'is--checked': $xeselect.value === value,
-        'is--hover': $xeselect.currentValue === value
-      }],
-      attrs: {
-        'data-option-id': id
-      },
-      on: {
-        click: this.optionEvent,
-        mouseenter: this.mouseenterEvent
-      }
-    }, $slots.default || UtilTools.getFuncText(this.label))
-  },
-  methods: {
-    updateView () {
-      this.$xeselect.updateStatus()
-    },
-    optionEvent (evnt) {
-      if (!this.isDisabled) {
-        this.$xeselect.changeOptionEvent(evnt, this.value)
-      }
-    },
-    mouseenterEvent () {
-      if (!this.isDisabled) {
-        this.$xeselect.setCurrentOption(this)
-      }
-    }
+    return h('div')
   }
 }

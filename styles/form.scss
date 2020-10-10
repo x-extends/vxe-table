@@ -22,6 +22,10 @@
   }
 }
 
+.vxe-form-slots {
+  display: none;
+}
+
 .vxe-form--item-title,
 .vxe-form--item-content,
 .vxe-form--item-trigger-node {
@@ -37,6 +41,7 @@
   padding-right: 0.8em;
   .vxe-form--item-title-prefix,
   .vxe-form--item-title-suffix {
+    cursor: help;
     & > [class*="vxe-icon--"] {
       margin-top: -0.2em;
     }
@@ -76,14 +81,34 @@
   transition: all 0.2s ease-in-out;
 }
 
-.vxe-form--item {
-  padding: 0.5em 0.8em 0.5em 0;
-  display: none;
-  &.is--active {
-    &:not(.is--hidden) {
-      display: inline-block;
+.vxe-form {
+  .vxe-form--item {
+    display: none;
+    padding: 0.5em 0.8em 0.5em 0;
+    &.is--active {
+      &:not(.is--hidden) {
+        display: inline-block;
+      }
     }
   }
+  &.is--asterisk {
+    .vxe-form--item {
+      &.is--required {
+        .vxe-form--item-title {
+          &:before {
+            content: "*";
+            color: $vxe-form-validate-error-color;
+            margin-right: 0.2em;
+            font-family: $vxe-icon-font-family;
+            font-weight: normal;
+          }
+        }
+      }
+    }
+  }
+}
+
+.vxe-form--item {
   &.is--span {
     .vxe-default-input:not([type="submit"]):not([type="reset"]),
     .vxe-default-textarea,
@@ -92,17 +117,6 @@
     .vxe-textarea,
     .vxe-select {
       width: 100%;
-    }
-  }
-  &.is--required {
-    .vxe-form--item-title {
-      &:before {
-        content: "*";
-        color: $vxe-form-validate-error-color;
-        margin-right: 0.2em;
-        font-family: $vxe-icon-font-family;
-        font-weight: normal;
-      }
     }
   }
   &.is--error {
@@ -147,7 +161,7 @@
   .vxe-default-select {
     outline: 0;
     border: 1px solid $vxe-input-border-color;
-    border-radius: 0.25em;
+    border-radius: $vxe-border-radius;
   }
   .vxe-default-input,
   .vxe-default-select {
@@ -176,7 +190,7 @@
     }
     &[disabled] {
       cursor: not-allowed;
-      background-color: #f3f3f3;
+      background-color: $vxe-input-disabled-background-color;
     }
   }
   .vxe-default-input[type="submit"],
