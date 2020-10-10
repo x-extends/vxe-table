@@ -28,11 +28,7 @@
     "date2": "{{ random.date('2019-01-01','2019-02-20', 'yyyy-MM-dd') }}",
     "date5": "09:00",
     "date6": "09:00:00",
-<<<<<<< HEAD
     "html1": "<a><span style=\"color:green;\">从入门到放弃</span>_{{ $index }}</a>",
-=======
-    "html1": "<a><span style=\"color:green;\">放弃</span>是<span style=\"font-size:24px;\">最好</span>的</><span style=\"color:red;\">选择</span>_{{ $index }}</a>",
->>>>>>> b0cae1b3a2d6f1c4bb820db72d98ea02239a7ab0
     "createTime|number": "{{ random.time('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-dd HH:mm:ss') }}",
     "updateTime|number": "{{ random.time('2019-01-01 00:00:00','2019-02-20 23:59:59', 'yyyy-MM-dd HH:mm:ss') }}",
     "attr1": null,
