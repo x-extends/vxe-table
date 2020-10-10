@@ -181,7 +181,6 @@ export interface PrintOptons {
   [name: string]: any;
 }
 
-<<<<<<< HEAD
 export interface ReadFileParams {
   files: FileList;
   file: File;
@@ -191,9 +190,6 @@ export interface ReadFileParams {
 }
 
 export function readFile(options?: ReadFileOptions): Promise<ReadFileParams>;
-=======
-export function readFile(options?: ReadFileOptions): Promise<any>;
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
 export function print(options: PrintOptons): any;
 
 export interface ReadFileOptions {

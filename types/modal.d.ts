@@ -200,11 +200,7 @@ export interface ModalOptions {
   id?: string;
   type?: string;
   loading?: boolean;
-<<<<<<< HEAD
   status?: ModalOptionStatus;
-=======
-  status?: 'info' | 'success' | 'warning' | 'error' | 'loading';
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   iconStatus?: string;
   top?: number | string;
   position?: 'center' | {
@@ -238,10 +234,7 @@ export interface ModalOptions {
   storageKey?: string;
   animat?: boolean;
   size?: 'medium' | 'small' | 'mini';
-<<<<<<< HEAD
   beforeHideMethod?(params: { type: string }): Promise<any>;
-=======
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
 
   slots?: {
     default?(params: ModalDefaultSlotParams, h: CreateElement): VNode[] | string[];

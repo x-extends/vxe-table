@@ -1,11 +1,7 @@
 import { VXETableComponent, RowInfo, RecordInfo } from './component'
 import { ColumnOptions, ColumnInfo } from './column'
 import { ColumnCellRenderParams, EmptyRender } from './extends/renderer'
-<<<<<<< HEAD
 import { ExportOptons, ImportOptons, PrintOptons, ReadFileOptions, ReadFileParams } from './extends/export'
-=======
-import { ExportOptons, ImportOptons, PrintOptons, ReadFileOptions } from './extends/export'
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
 import { ColumnFilterOption } from './extends/filter'
 import { ColumnEditRule, ColumnEditValidErrMapParams } from './extends/validator'
 import { ColumnFooterRenderParams } from './extends/footer'
@@ -957,19 +953,6 @@ export declare class Table extends VXETableComponent {
    * @param options 参数
    */
   openPrint(options?: PrintOptons): Promise<any>;
-  /**
-   * 用于 mouse-config.area，打开单元格查找功能
-   */
-  openFind(): Promise<any>;
-  /**
-   * 用于 mouse-config.area，打开单元格替换功能
-   */
-  openReplace(): Promise<any>;
-  /**
-   * 连接工具栏
-   * @param toolbar 工具栏组件实例
-   */
-  connect(toolbar: any): Promise<any>;
   /**
    * 用于 mouse-config.area，打开单元格查找功能
    */
