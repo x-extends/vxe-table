@@ -20,9 +20,9 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
   * Designed for single row table editing, supports addition, deletion, modification and query as well as more expansion, with powerful functions and performance at the same time
 
 * [Donation](#donation)
-  * [x] v1.0 100% Based on vue2.6+, it supports all mainstream browsers and realizes all practical functions of tables
-  * [x] v2.0 &nbsp;100% Based on vue2.6+, it supports all mainstream browsers with both functions and performance
-  * [x] v3.0 &nbsp;&nbsp;100% Based on vue2.6+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
+  * [x] v1.0 Based on vue2.6+, it supports all mainstream browsers and realizes all practical functions of tables
+  * [x] v2.0 Based on vue2.6+, it supports all mainstream browsers with both functions and performance
+  * [x] v3.0 Based on vue2.6+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
 
 👉 If you have a better suggestion, optimization point or Bug, please feel free to ask [Issues](https://github.com/x-extends/vxe-table/issues/390)
 

@@ -181,7 +181,15 @@ export interface PrintOptons {
   [name: string]: any;
 }
 
-export function readFile(options?: ReadFileOptions): Promise<any>;
+export interface ReadFileParams {
+  files: FileList;
+  file: File;
+  target: HTMLInputElement & EventTarget & {
+    files: FileList;
+  };
+}
+
+export function readFile(options?: ReadFileOptions): Promise<ReadFileParams>;
 export function print(options: PrintOptons): any;
 
 export interface ReadFileOptions {

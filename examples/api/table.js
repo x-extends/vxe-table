@@ -3884,7 +3884,7 @@ const apis = [
         name: 'readFile(options)',
         desc: '读取本地文件',
         version: '',
-        type: 'Promise<Event>',
+        type: 'Promise<{ file, files }>',
         enum: '',
         defVal: 'options: object',
         list: [

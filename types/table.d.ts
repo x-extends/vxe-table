@@ -1,7 +1,7 @@
 import { VXETableComponent, RowInfo, RecordInfo } from './component'
 import { ColumnOptions, ColumnInfo } from './column'
 import { ColumnCellRenderParams, EmptyRender } from './extends/renderer'
-import { ExportOptons, ImportOptons, PrintOptons, ReadFileOptions } from './extends/export'
+import { ExportOptons, ImportOptons, PrintOptons, ReadFileOptions, ReadFileParams } from './extends/export'
 import { ColumnFilterOption } from './extends/filter'
 import { ColumnEditRule, ColumnEditValidErrMapParams } from './extends/validator'
 import { ColumnFooterRenderParams } from './extends/footer'
@@ -942,7 +942,7 @@ export declare class Table extends VXETableComponent {
    * 读取本地文件
    * @param options 参数
    */
-  readFile(options?: ReadFileOptions): Promise<any>;
+  readFile(options?: ReadFileOptions): Promise<ReadFileParams>;
   /**
    * 打印表格数据
    * @param options 参数

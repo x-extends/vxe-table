@@ -262,7 +262,7 @@
   },
   "vxe-radio": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "label",
       "content",
       "size",
@@ -288,7 +288,7 @@
   },
   "vxe-checkbox": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "label",
       "content",
       "size",
@@ -307,7 +307,7 @@
   },
   "vxe-switch": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "disabled",
       "size",
       "on-label",
@@ -321,7 +321,7 @@
   },
   "vxe-input": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "size",
       "type",
       "name",
@@ -355,7 +355,7 @@
   },
   "vxe-select": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "size",
       "multiple",
       "multi-char-overflow",
@@ -419,11 +419,11 @@
   },
   "vxe-tooltip": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "content",
       "trigger",
       "theme",
-      "z-index",
+      "zindex",
       "is-arrow",
       "enterable",
       "leave-delay"
@@ -432,7 +432,7 @@
   },
   "vxe-modal": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "size",
       "loading",
       "id",
@@ -459,14 +459,15 @@
       "min-height",
       "top",
       "position",
-      "z-index",
+      "zindex",
       "show-title-overflow",
       "transfer",
       "fullscreen",
       "dblclick-zoom",
       "remember",
       "destroy-on-close",
-      "storage"
+      "storage",
+      "before-hide-method"
     ],
     "description": "模态窗口"
   },
@@ -499,6 +500,7 @@
       "align",
       "title-align",
       "title-width",
+      "visible",
       "visible-method",
       "folding",
       "collapse-node",

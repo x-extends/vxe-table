@@ -33,26 +33,23 @@ export default {
           methods: {
             async clickEvent1 () {
               try {
-                const event = await this.$XReadFile()
-                const file = event.target.files[0]
+                const { file } = await this.$XReadFile()
                 this.$XModal.alert(\`文件名：\${file.name}，文件大小：\${file.size}\`)
               } catch (e) {}
             },
             async clickEvent2 () {
               try {
-                const event = await this.$XReadFile({
+                const { file } = await this.$XReadFile({
                   types: ['xlsx', 'html']
                 })
-                const file = event.target.files[0]
                 this.$XModal.alert(\`文件名：\${file.name}，文件大小：\${file.size}\`)
               } catch (e) {}
             },
             async clickEvent3 () {
               try {
-                const event = await this.$XReadFile({
+                const { files } = await this.$XReadFile({
                   multiple: true
                 })
-                const files = event.target.files
                 this.$XModal.alert(\`共：\${files.length} 个文件\`)
               } catch (e) {}
             }
@@ -65,26 +62,23 @@ export default {
   methods: {
     async clickEvent1 () {
       try {
-        const event = await this.$XReadFile()
-        const file = event.target.files[0]
+        const { file } = await this.$XReadFile()
         this.$XModal.alert(`文件名：${file.name}，文件大小：${file.size}`)
       } catch (e) {}
     },
     async clickEvent2 () {
       try {
-        const event = await this.$XReadFile({
+        const { file } = await this.$XReadFile({
           types: ['xlsx', 'html']
         })
-        const file = event.target.files[0]
         this.$XModal.alert(`文件名：${file.name}，文件大小：${file.size}`)
       } catch (e) {}
     },
     async clickEvent3 () {
       try {
-        const event = await this.$XReadFile({
+        const { files } = await this.$XReadFile({
           multiple: true
         })
-        const files = event.target.files
         this.$XModal.alert(`共：${files.length} 个文件`)
       } catch (e) {}
     }

@@ -78,8 +78,9 @@ export default {
           },
           methods: {
             insertEvent (opts) {
-              this.$refs.xTable.readFile(opts).then(evnt => {
-                let records = Array.from(evnt.target.files).map(file => {
+              this.$refs.xTable.readFile(opts).then(params => {
+                const { files } = params
+                const records = Array.from(files).map(file => {
                   let ns = file.name.split('.')
                   let name = ns.slice(0, ns.length - 1).join('')
                   let type = ns[ns.length - 1]
@@ -110,8 +111,9 @@ export default {
   },
   methods: {
     insertEvent (opts) {
-      this.$refs.xTable.readFile(opts).then(evnt => {
-        const records = Array.from(evnt.target.files).map(file => {
+      this.$refs.xTable.readFile(opts).then(params => {
+        const { files } = params
+        const records = Array.from(files).map(file => {
           const ns = file.name.split('.')
           const name = ns.slice(0, ns.length - 1).join('')
           const type = ns[ns.length - 1]

@@ -765,20 +765,30 @@ export function readLocalFile (options = {}) {
   let fileResolve
   let fileReject
   const types = options.types || []
-  const isAllType = types.some(type => type === '*')
-  if (options.multiple) {
-    fileInput.multiple = 'multiple'
-  }
-  fileInput.accept = !isAllType && types.length ? `.${types.join(', .')}` : ''
+  const isAllType = !types.length || types.some((type) => type === '*')
+  fileInput.multiple = !!options.multiple
+  fileInput.accept = isAllType ? '' : `.${types.join(', .')}`
   fileInput.onchange = (evnt) => {
-    const { type } = UtilTools.parseFile(evnt.target.files[0])
-    if (isAllType || types.indexOf(type) > -1) {
-      fileResolve(evnt)
+    const { files } = evnt.target
+    const file = files[0]
+    let errType
+    // 校验类型
+    if (!isAllType) {
+      for (let fIndex = 0; fIndex < files.length; fIndex++) {
+        const { type } = UtilTools.parseFile(files[fIndex])
+        if (!XEUtils.includes(types, type)) {
+          errType = type
+          break
+        }
+      }
+    }
+    if (!errType) {
+      fileResolve({ files, file })
     } else {
       if (options.message !== false) {
-        VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
+        VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
       }
-      fileReject(evnt)
+      fileReject({ files, file })
     }
   }
   fileForm.reset()
@@ -1110,10 +1120,11 @@ export default {
         this._importResolve = resolve
         this._importReject = reject
       })
-      readLocalFile(opts).then((evnt) => {
-        this.importByFile(evnt.target.files[0], opts)
-      }).catch(evnt => {
-        this._importReject(evnt)
+      readLocalFile(opts).then((params) => {
+        const { file } = params
+        this.importByFile(file, opts)
+      }).catch(params => {
+        this._importReject(params)
         this._importReject = null
       })
       return rest
