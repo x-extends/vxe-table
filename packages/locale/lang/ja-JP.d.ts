@@ -3,6 +3,6 @@ import Language from './language'
 /**
  * ジャパン
  */
-declare const ja: Language
+declare const jaJP: Language
 
-export default ja
+export default jaJP

@@ -5,7 +5,9 @@
     "name": "文件夹 10000",
     "size": "53k",
     "type": "",
-    "date": "2019-05-16"
+    "date": "2019-05-16",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "11000",
@@ -13,7 +15,9 @@
     "name": "某 11000.avi",
     "size": "11k",
     "type": "avi",
-    "date": "2019-05-16"
+    "date": "2019-05-16",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "12000",
@@ -21,7 +25,9 @@
     "name": "文件夹 12000",
     "size": "22k",
     "type": "",
-    "date": "2019-05-16"
+    "date": "2019-05-16",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "12100",
@@ -29,7 +35,9 @@
     "name": "图片 12100.png",
     "size": "60k",
     "type": "",
-    "date": "2019-05-16"
+    "date": "2019-05-16",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "12110",
@@ -37,7 +45,9 @@
     "name": "某个页面 12110.html",
     "size": "100k",
     "type": "html",
-    "date": "2019-05-16"
+    "date": "2019-05-16",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "122000",
@@ -45,7 +55,9 @@
     "name": "xxx 122000.avi",
     "size": "80k",
     "type": "avi",
-    "date": "2019-05-16"
+    "date": "2019-05-16",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "123000",
@@ -53,7 +65,9 @@
     "name": "文件 123000",
     "size": "81k",
     "type": "mp4",
-    "date": "2019-05-17"
+    "date": "2019-05-17",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "123100",
@@ -61,7 +75,9 @@
     "size": "105k",
     "type": "avi",
     "date": "2019-05-16",
-    "parentId": "123000"
+    "parentId": "123000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "123200",
@@ -69,7 +85,9 @@
     "size": "105k",
     "type": "avi",
     "date": "2019-05-20",
-    "parentId": "123000"
+    "parentId": "123000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "20000",
@@ -77,7 +95,9 @@
     "name": "图片 20000.png",
     "size": "66k",
     "type": "png",
-    "date": "2019-05-16"
+    "date": "2019-05-16",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "30000",
@@ -85,7 +105,9 @@
     "name": "文件夹 30000",
     "size": "3k",
     "type": "",
-    "date": "2019-05-16"
+    "date": "2019-05-16",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "31000",
@@ -93,7 +115,9 @@
     "size": "9k",
     "type": "",
     "date": "2019-05-16",
-    "parentId": "30000"
+    "parentId": "30000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "31100",
@@ -101,7 +125,9 @@
     "size": "40k",
     "type": "js",
     "date": "2019-05-16",
-    "parentId": "31000"
+    "parentId": "31000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "31200",
@@ -109,7 +135,9 @@
     "size": "224k",
     "type": "java",
     "date": "2019-05-16",
-    "parentId": "31000"
+    "parentId": "31000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32000",
@@ -117,7 +145,9 @@
     "size": "33k",
     "type": "",
     "date": "2019-05-16",
-    "parentId": "30000"
+    "parentId": "30000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32100",
@@ -125,7 +155,9 @@
     "size": "35k",
     "type": "mp4",
     "date": "2019-05-16",
-    "parentId": "32000"
+    "parentId": "32000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32200",
@@ -133,7 +165,9 @@
     "size": "33k",
     "type": "",
     "date": "2019-08-16",
-    "parentId": "32000"
+    "parentId": "32000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32210",
@@ -141,7 +175,9 @@
     "size": "75k",
     "type": "pdf",
     "date": "2019-06-16",
-    "parentId": "32200"
+    "parentId": "32200",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32220",
@@ -149,7 +185,9 @@
     "size": "33k",
     "type": "",
     "date": "2019-08-31",
-    "parentId": "32200"
+    "parentId": "32200",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32221",
@@ -157,7 +195,9 @@
     "size": "85k",
     "type": "pdf",
     "date": "2019-06-30",
-    "parentId": "32220"
+    "parentId": "32220",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32300",
@@ -165,7 +205,9 @@
     "size": "678k",
     "type": "",
     "date": "2019-01-10",
-    "parentId": "32000"
+    "parentId": "32000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32310",
@@ -173,7 +215,9 @@
     "size": "75k",
     "type": "mp4",
     "date": "2019-06-16",
-    "parentId": "32300"
+    "parentId": "32300",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32320",
@@ -181,7 +225,9 @@
     "size": "88k",
     "type": "",
     "date": "2019-08-31",
-    "parentId": "32300"
+    "parentId": "32300",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32321",
@@ -189,7 +235,9 @@
     "size": "5k",
     "type": "mp3",
     "date": "2019-06-06",
-    "parentId": "32320"
+    "parentId": "32320",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "32322",
@@ -197,7 +245,9 @@
     "size": "5k",
     "type": "avi",
     "date": "2019-09-09",
-    "parentId": "32320"
+    "parentId": "32320",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "33000",
@@ -205,7 +255,9 @@
     "size": "95k",
     "type": "txt",
     "date": "2019-06-16",
-    "parentId": "30000"
+    "parentId": "30000",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "40000",
@@ -213,7 +265,9 @@
     "name": "文件夹 40000",
     "size": "26k",
     "type": "mp4",
-    "date": "2019-03-16"
+    "date": "2019-03-16",
+    "createTime": "",
+    "updateTime": ""
   },
   {
     "id": "41000",
@@ -221,6 +275,8 @@
     "name": "xxx 41000.mp4",
     "size": "135k",
     "type": "mp4",
-    "date": "2019-06-02"
+    "date": "2019-06-02",
+    "createTime": "",
+    "updateTime": ""
   }
 ]
