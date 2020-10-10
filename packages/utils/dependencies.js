@@ -8,7 +8,7 @@ import objectMap from 'xe-utils/methods/object/objectMap'
 
 // array
 import map from 'xe-utils/methods/array/map'
-// import some from 'xe-utils/methods/array/some'
+import some from 'xe-utils/methods/array/some'
 // import every from 'xe-utils/methods/array/every'
 import includeArrays from 'xe-utils/methods/array/includeArrays'
 import arrayEach from 'xe-utils/methods/array/arrayEach'
@@ -20,10 +20,11 @@ import sortBy from 'xe-utils/methods/array/sortBy'
 // import shuffle from 'xe-utils/methods/array/shuffle'
 // import sample from 'xe-utils/methods/array/sample'
 import slice from 'xe-utils/methods/array/slice'
-// import filter from 'xe-utils/methods/array/filter'
+import filter from 'xe-utils/methods/array/filter'
 // import findKey from 'xe-utils/methods/array/findKey'
 // import includes from 'xe-utils/methods/array/includes'
 import find from 'xe-utils/methods/array/find'
+import findLast from 'xe-utils/methods/array/findLast'
 // import reduce from 'xe-utils/methods/array/reduce'
 // import copyWithin from 'xe-utils/methods/array/copyWithin'
 import chunk from 'xe-utils/methods/array/chunk'
@@ -113,6 +114,10 @@ import destructuring from 'xe-utils/methods/base/destructuring'
 // import max from 'xe-utils/methods/number/max'
 // import min from 'xe-utils/methods/number/min'
 // import commafy from 'xe-utils/methods/number/commafy'
+import round from 'xe-utils/methods/number/round'
+import ceil from 'xe-utils/methods/number/ceil'
+import floor from 'xe-utils/methods/number/floor'
+import toFixed from 'xe-utils/methods/number/toFixed'
 import toFixedString from 'xe-utils/methods/number/toFixedString'
 import toFixedNumber from 'xe-utils/methods/number/toFixedNumber'
 import toInteger from 'xe-utils/methods/number/toInteger'
@@ -187,7 +192,7 @@ export default {
 
   // array
   map,
-  // some,
+  some,
   // every,
   includeArrays,
   arrayEach,
@@ -199,10 +204,11 @@ export default {
   // shuffle,
   // sample,
   slice,
-  // filter,
+  filter,
   // findKey,
   // includes,
   find,
+  findLast,
   // sum,
   // mean,
   // reduce,
@@ -294,6 +300,10 @@ export default {
   // max,
   // min,
   // commafy,
+  round,
+  ceil,
+  floor,
+  toFixed,
   toFixedString,
   toFixedNumber,
   toInteger,

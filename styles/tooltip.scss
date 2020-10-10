@@ -106,7 +106,7 @@
   }
   &.theme--dark {
     background: $vxe-tooltip-dark-background-color;
-    color: #FFF;
+    color: $vxe-tooltip-dark-color;
     &.placement--top {
       .vxe-table--tooltip-arrow {
         border-top-color: $vxe-tooltip-dark-background-color;
@@ -129,7 +129,7 @@
 /*valid error*/
 .vxe-table--tooltip-wrapper {
   &.vxe-table--valid-error {
-    background-color: $vxe-table-validate-error-color;
-    color: #fff;
+    background-color: $vxe-tooltip-validate-error-background-color;
+    color: $vxe-tooltip-validate-error-color;
   }
 }

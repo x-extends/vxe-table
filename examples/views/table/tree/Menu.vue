@@ -1,18 +1,12 @@
 <template>
   <div>
-    <p class="tip">
-      快捷菜单操作<br>
-      <span class="red">（注：树形结构默认不支持 insert、remove 相关方法，如果要往子节点插入或删除节点数据，直接操作数据源即可）</span>
-    </p>
+    <p class="tip">快捷菜单操作</p>
 
-    <vxe-toolbar custom>
-      <template v-slot:buttons>
-        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
-      </template>
-    </vxe-toolbar>
+    <vxe-toolbar custom></vxe-toolbar>
 
     <vxe-table
       resizable
+      show-overflow
       keep-source
       ref="xTree"
       :tree-config="treeConfig"
@@ -67,21 +61,17 @@ export default {
       ],
       bodyMenus: [
         [
-          { code: 'insertAt', name: '插入一行', disabled: false },
           { code: 'expand', name: '展开节点', disabled: false },
           { code: 'contract', name: '收缩节点', disabled: false }
         ]
       ],
       demoCodes: [
         `
-        <vxe-toolbar custom>
-          <template v-slot:buttons>
-            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
-          </template>
-        </vxe-toolbar>
+        <vxe-toolbar custom></vxe-toolbar>
 
         <vxe-table
           resizable
+          show-overflow
           keep-source
           ref="xTree"
           :tree-config="treeConfig"
@@ -112,7 +102,6 @@ export default {
               ],
               bodyMenus: [
                 [
-                  { code: 'insertAt', name: '插入一行', disabled: false },
                   { code: 'expand', name: '展开节点', disabled: false },
                   { code: 'contract', name: '收缩节点', disabled: false }
                 ]
@@ -123,25 +112,6 @@ export default {
             this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
-            insertAtEvent (row, column) {
-              let xTree = this.$refs.xTree
-              xTree.createRow({
-                name: '新数据',
-                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
-                isNew: true
-              }).then(newRow => {
-                // 插入到指定节点位置中
-                let rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
-                if (rowNode) {
-                  rowNode.items.splice(rowNode.index, 0, newRow)
-                  xTree.syncData().then(() => xTree.setActiveCell(newRow, column.property))
-                }
-              })
-            },
-            getInsertEvent () {
-              let insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
-              this.$XModal.alert(insertRecords.length)
-            },
             visibleMethod  ({ row, type }) {
               let xTree = this.$refs.xTree
               let treeConfig = this.treeConfig
@@ -170,9 +140,6 @@ export default {
                 case 'showAllColumn':
                   xTree.resetColumn()
                   break
-                case 'insertAt':
-                  this.insertAtEvent(row, column)
-                  break
                 case 'expandOrFold':
                   xTree.toggleTreeExpand(row)
                   break
@@ -193,25 +160,6 @@ export default {
     })
   },
   methods: {
-    insertAtEvent (row, column) {
-      const xTree = this.$refs.xTree
-      xTree.createRow({
-        name: '新数据',
-        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd'),
-        isNew: true
-      }).then(newRow => {
-        // 插入到指定节点位置中
-        const rowNode = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
-        if (rowNode) {
-          rowNode.items.splice(rowNode.index, 0, newRow)
-          xTree.syncData().then(() => xTree.setActiveCell(newRow, column.property))
-        }
-      })
-    },
-    getInsertEvent () {
-      const insertRecords = XEUtils.filterTree(this.tableData, item => item.isNew, this.treeConfig)
-      this.$XModal.alert(insertRecords.length)
-    },
     visibleMethod  ({ row, type }) {
       const xTree = this.$refs.xTree
       const treeConfig = this.treeConfig
@@ -239,9 +187,6 @@ export default {
           break
         case 'showAllColumn':
           xTree.resetColumn()
-          break
-        case 'insertAt':
-          this.insertAtEvent(row, column)
           break
         case 'expand':
           xTree.setTreeExpand(row, true)

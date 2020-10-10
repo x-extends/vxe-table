@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 
@@ -62,6 +62,17 @@ export default {
     },
     offsetNumber () {
       return Math.floor((this.pagerCount - 2) / 2)
+    },
+    sizeList () {
+      return this.pageSizes.map(item => {
+        if (XEUtils.isNumber(item)) {
+          return {
+            value: item,
+            label: `${GlobalConfig.i18n('vxe.pager.pagesize', [item])}`
+          }
+        }
+        return { value: '', label: '', ...item }
+      })
     }
   },
   render (h) {
@@ -204,12 +215,7 @@ export default {
         props: {
           value: this.pageSize,
           placement: 'top',
-          options: this.pageSizes.map(num => {
-            return {
-              value: num,
-              label: `${XEUtils.template(GlobalConfig.i18n('vxe.pager.pagesize'), [num])}`
-            }
-          })
+          options: this.sizeList
         },
         on: {
           change: ({ value }) => {
@@ -264,7 +270,7 @@ export default {
     renderTotal (h) {
       return h('span', {
         class: 'vxe-pager--total'
-      }, XEUtils.template(GlobalConfig.i18n('vxe.pager.total'), [this.total]))
+      }, GlobalConfig.i18n('vxe.pager.total', [this.total]))
     },
     // number
     renderPageBtn (h, showJump) {
@@ -325,15 +331,15 @@ export default {
       return Math.max(Math.ceil(total / size), 1)
     },
     prevPage () {
-      const currentPage = this.currentPage
+      const { currentPage, pageCount } = this
       if (currentPage > 1) {
-        this.jumpPage(Math.max(currentPage - 1, 1))
+        this.jumpPage(Math.min(pageCount, Math.max(currentPage - 1, 1)))
       }
     },
     nextPage () {
       const { currentPage, pageCount } = this
       if (currentPage < pageCount) {
-        this.jumpPage(Math.min(currentPage + 1, pageCount))
+        this.jumpPage(Math.min(pageCount, currentPage + 1))
       }
     },
     prevJump () {

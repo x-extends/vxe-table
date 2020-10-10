@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import VXETable from './v-x-e-table'
 import Table from './table'
 import Column from './column'
@@ -74,7 +74,7 @@ function install (Vue, options) {
 
 // 默认中文
 VXETable.setup({
-  i18n: key => XEUtils.get(zhCN, key)
+  i18n: (key, args) => XEUtils.template(XEUtils.get(zhCN, key), args, { tmplRE: /\{([.\w[\]\s]+)\}/g })
 })
 
 VXETable.install = install

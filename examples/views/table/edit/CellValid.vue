@@ -1,13 +1,17 @@
 <template>
   <div>
-    <p class="tip">通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置</p>
+    <p class="tip">
+      通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置，如果第一个参数为 true 则全量校验<br>
+      <span class="red">（如果不指定数据，则默认只校验临时变动的数据，例如新增或修改...等）</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
-        <vxe-button @click="validEvent">校验</vxe-button>
+        <vxe-button @click="validEvent">快速校验</vxe-button>
         <vxe-button @click="fullValidEvent">完整校验</vxe-button>
+        <vxe-button @click="validAllEvent">全量校验</vxe-button>
         <vxe-button @click="selectValidEvent">选中校验</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -27,17 +31,17 @@
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column title="分组1">
+      <vxe-table-colgroup title="分组1">
         <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
         <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="分组2">
-        <vxe-table-column title="分组21">
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="分组2">
+        <vxe-table-colgroup title="分组21">
+          <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -55,17 +59,20 @@ import hljs from 'highlight.js'
 export default {
   data () {
     const nameValid = ({ cellValue }) => {
+      // 模拟服务端校验
       return new Promise((resolve, reject) => {
-        if (cellValue.length < 3 || cellValue.length > 50) {
-          reject(new Error('名称长度在 3 到 50 个字符之间'))
-        } else {
-          resolve()
-        }
+        setTimeout(() => {
+          if (cellValue && (cellValue.length < 3 || cellValue.length > 50)) {
+            reject(new Error('名称长度在 3 到 50 个字符之间'))
+          } else {
+            resolve()
+          }
+        }, 100)
       })
     }
     const roleValid = ({ cellValue }) => {
       if (cellValue && !['前端', '后端', '设计师', '项目经理', '测试'].includes(cellValue)) {
-        return Promise.reject(new Error('角色输入不正确'))
+        return new Error('角色输入不正确')
       }
     }
     return {
@@ -78,7 +85,7 @@ export default {
         role: [
           { validator: roleValid }
         ],
-        sex: [
+        sex2: [
           { required: true, message: '性别必须填写' },
           { pattern: /^[0,1]{1}$/, message: '格式不正确' }
         ],
@@ -91,8 +98,10 @@ export default {
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
-            <vxe-button @click="validEvent">校验</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+            <vxe-button @click="validEvent">快速校验</vxe-button>
             <vxe-button @click="fullValidEvent">完整校验</vxe-button>
+            <vxe-button @click="validAllEvent">全量校验</vxe-button>
             <vxe-button @click="selectValidEvent">选中校验</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -112,34 +121,37 @@ export default {
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column title="分组1">
+          <vxe-table-colgroup title="分组1">
             <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
             <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="分组2">
-            <vxe-table-column title="分组21">
-              <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="分组2">
+            <vxe-table-colgroup title="分组21">
+              <vxe-table-column field="sex2" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
               <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-table-column>
               <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `
         export default {
           data () {
             const nameValid = ({ cellValue }) => {
+              // 模拟服务端校验
               return new Promise((resolve, reject) => {
-                if (cellValue.length < 3 || cellValue.length > 50) {
-                  reject(new Error('名称长度在 3 到 50 个字符之间'))
-                } else {
-                  resolve()
-                }
+                setTimeout(() => {
+                  if (cellValue && (cellValue.length < 3 || cellValue.length > 50)) {
+                    reject(new Error('名称长度在 3 到 50 个字符之间'))
+                  } else {
+                    resolve()
+                  }
+                }, 100)
               })
             }
             const roleValid = ({ cellValue }) => {
               if (cellValue && !['前端', '后端', '设计师', '项目经理', '测试'].includes(cellValue)) {
-                return Promise.reject(new Error('角色输入不正确'))
+                return new Error('角色输入不正确')
               }
             }
             return {
@@ -152,7 +164,7 @@ export default {
                 role: [
                   { validator: roleValid }
                 ],
-                sex: [
+                sex2: [
                   { required: true, message: '性别必须填写' },
                   { pattern: /^[0,1]{1}$/, message: '格式不正确' }
                 ],
@@ -198,6 +210,14 @@ export default {
                     ]
                   }
                 })
+              } else {
+                this.$XModal.message({ status: 'success', message: '校验成功！' })
+              }
+            },
+            async validAllEvent () {
+              const errMap = await this.$refs.xTable.validate(true).catch(errMap => errMap)
+              if (errMap) {
+                this.$XModal.message({ status: 'error', message: '校验不通过！' })
               } else {
                 this.$XModal.message({ status: 'success', message: '校验成功！' })
               }
@@ -286,6 +306,14 @@ export default {
             ]
           }
         })
+      } else {
+        this.$XModal.message({ status: 'success', message: '校验成功！' })
+      }
+    },
+    async validAllEvent () {
+      const errMap = await this.$refs.xTable.validate(true).catch(errMap => errMap)
+      if (errMap) {
+        this.$XModal.message({ status: 'error', message: '校验不通过！' })
       } else {
         this.$XModal.message({ status: 'success', message: '校验成功！' })
       }

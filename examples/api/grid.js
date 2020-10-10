@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 import tableAPI from './table'
 import columnAPI from './column'
 import toolbarAPI from './toolbar'
@@ -232,17 +232,17 @@ const apis = [
             list: [
               {
                 name: 'query',
-                desc: '查询方法 Function({ page, sort, filters, form }, ...arguments)，默认处理的数据结构 {page: {total: 0}, result: []}；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息；如果使用了表单，form 属性可以获取相关信息',
+                desc: '查询方法 Function({ page, sort, filters, form }, ...arguments)，可以通过 proxy-config.props 配置读取响应结构的字段；如果使用了服务端排序，sort 属性可以获取相关信息；如果使用了服务端过滤，filter 属性可以获取相关信息；如果使用了表单，form 属性可以获取相关信息',
                 version: '',
-                type: 'Function / Promise',
+                type: 'Function / Promise<any[]>',
                 enum: '',
                 defVal: '',
                 list: []
               },
               // {
               //   name: 'beforeQuery',
-              //   desc: '查询之前触发该 Function({ page, sort, filters, form }, ...arguments) 方法',
-              //   version: '2.8',
+              //   desc: '查询之前触发该 Function({ page, sort, filters, form }, ...arguments) 方法，如果存在该方法，query 参数将失效',
+              //   version: '',
               //   type: 'Function / Promise',
               //   enum: '',
               //   defVal: '',
@@ -251,7 +251,34 @@ const apis = [
               // {
               //   name: 'afterQuery',
               //   desc: '查询之后触发该 Function({ page, sort, filters, form }, ...arguments) 方法',
-              //   version: '2.9',
+              //   version: '',
+              //   type: 'Function',
+              //   enum: '',
+              //   defVal: '',
+              //   list: []
+              // },
+              {
+                name: 'queryAll',
+                desc: '全量查询方法 Function({})，和 query 同样属于查询方法，区别是 queryAll 只会被特殊行为触发，例如导出模式 export-config.mode=all 时会触发该方法并将返回值进行导出',
+                version: '2.9.16',
+                type: 'Function / Promise<any[]>',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              // {
+              //   name: 'beforeQueryAll',
+              //   desc: '全量查询之前触发该 Function({}) 方法，queryAll 参数将失效',
+              //   version: '',
+              //   type: 'Function / Promise',
+              //   enum: '',
+              //   defVal: '',
+              //   list: []
+              // },
+              // {
+              //   name: 'afterQueryAll',
+              //   desc: '全量查询之后触发该 Function({}) 方法',
+              //   version: '',
               //   type: 'Function',
               //   enum: '',
               //   defVal: '',
@@ -268,7 +295,7 @@ const apis = [
               },
               // {
               //   name: 'beforeDelete',
-              //   desc: '删除之前触发该 Function({ body }, ...arguments) 方法',
+              //   desc: '删除之前触发该 Function({ body }, ...arguments) 方法，如果存在该方法，delete 参数将失效',
               //   version: '2.8',
               //   type: 'Function / Promise',
               //   enum: '',
@@ -295,7 +322,7 @@ const apis = [
               // },
               // {
               //   name: 'beforeSave',
-              //   desc: '保存之前触发该 Function({ body }, ...arguments) 方法',
+              //   desc: '保存之前触发该 Function({ body }, ...arguments) 方法，如果存在该方法，save 参数将失效',
               //   version: '2.8',
               //   type: 'Function / Promise',
               //   enum: '',
@@ -672,7 +699,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'import',
         desc: '直接导入',
-        version: '1.15.12',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -681,7 +708,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'open_import',
         desc: '高级导入',
-        version: '1.15.12',
+        version: '',
         type: '',
         enum: '',
         defVal: '',
@@ -699,7 +726,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
       {
         name: 'open_export',
         desc: '高级导出',
-        version: '1.15.12',
+        version: '',
         type: '',
         enum: '',
         defVal: '',

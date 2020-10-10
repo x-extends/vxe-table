@@ -11,7 +11,7 @@ const apis = [
         name: 'type',
         descKey: 'app.api.tableColumn.desc.type',
         version: '',
-        type: 'String',
+        type: 'string',
         enum: '',
         defVal: '',
         list: [
@@ -106,7 +106,7 @@ const apis = [
         version: '',
         type: 'Number, String',
         enum: 'px, %',
-        defVal: '继承 table.column-width',
+        defVal: '继承 table.column-config.width',
         list: []
       },
       {
@@ -115,7 +115,7 @@ const apis = [
         version: '',
         type: 'Number, String',
         enum: 'px, %',
-        defVal: '继承 table.column-min-width',
+        defVal: '继承 table.column-config.minWidth',
         list: []
       },
       {
@@ -409,6 +409,7 @@ const apis = [
           },
           {
             name: 'nativeEvents',
+            abandoned: true,
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '2.9.13',
             type: 'Object',
@@ -421,6 +422,52 @@ const apis = [
             desc: '渲染组件的内容（仅用于特殊组件）',
             version: '',
             type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'export-method',
+        desc: '自定义单元格数据导出方法，该方法 Function({ row, column }) 的返回值将会被导出',
+        version: '2.9.16',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'footer-export-method',
+        desc: '自定义表尾单元格数据导出方法，该方法 Function({ items, _columnIndex }) 的返回值将会被导出',
+        version: '2.9.16',
+        type: 'Function',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'title-help',
+        desc: '标题帮助图标配置项',
+        version: '2.9.17',
+        type: 'any',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'message',
+            desc: '提示消息（支持开启国际化）',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'icon',
+            desc: '自定义图标',
+            version: '',
+            type: 'string',
             enum: '',
             defVal: '',
             list: []
@@ -486,7 +533,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {
@@ -518,6 +565,7 @@ const apis = [
           },
           {
             name: 'nativeEvents',
+            abandoned: true,
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '2.9.13',
             type: 'Object',
@@ -596,7 +644,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {
@@ -628,6 +676,7 @@ const apis = [
           },
           {
             name: 'nativeEvents',
+            abandoned: true,
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '2.9.13',
             type: 'Object',
@@ -673,7 +722,7 @@ const apis = [
           },
           {
             name: 'immediate',
-            desc: '输入值实时同步更新（如果设置为 true，但可编辑时性能将会直线下降）',
+            desc: '输入值实时同步更新（默认情况下单元格编辑的值只会在被触发时同步，如果需要实时同步可以设置为 true）',
             version: '2.6.2',
             type: 'Boolean',
             enum: '',
@@ -732,7 +781,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {
@@ -764,6 +813,7 @@ const apis = [
           },
           {
             name: 'nativeEvents',
+            abandoned: true,
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '2.9.13',
             type: 'Object',
@@ -787,6 +837,15 @@ const apis = [
         descKey: 'app.api.tableColumn.desc.params',
         version: '',
         type: 'Object',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'colId',
+        desc: '自定义列的唯一主键（注：非必要不需要设置，操作不正确将导致出现问题）',
+        version: '2.9.19',
+        type: 'string | number',
         enum: '',
         defVal: '',
         list: []

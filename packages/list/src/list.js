@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { DomTools, GlobalEvent, ResizeEvent } from '../../tools'
 
@@ -9,6 +9,7 @@ export default {
     height: [Number, String],
     maxHeight: [Number, String],
     loading: Boolean,
+    size: { type: String, default: () => GlobalConfig.list.size || GlobalConfig.size },
     autoResize: Boolean,
     syncResize: [Boolean, String, Number],
     scrollY: Object
@@ -22,6 +23,9 @@ export default {
     }
   },
   computed: {
+    vSize () {
+      return this.size || this.$parent.size || this.$parent.vSize
+    },
     sYOpts () {
       return Object.assign({}, GlobalConfig.list.scrollY, this.scrollY)
     },
@@ -79,46 +83,44 @@ export default {
   },
   render (h) {
     const { $scopedSlots, styles, bodyHeight, topSpaceHeight, items, loading } = this
-    return [
+    return h('div', {
+      class: ['vxe-list', {
+        'is--loading': loading
+      }]
+    }, [
       h('div', {
-        class: ['vxe-list', {
-          'is--loading': loading
+        ref: 'virtualWrapper',
+        class: 'vxe-list--virtual-wrapper',
+        style: styles,
+        on: {
+          scroll: this.scrollEvent
+        }
+      }, [
+        h('div', {
+          ref: 'ySpace',
+          class: 'vxe-list--y-space',
+          style: {
+            height: bodyHeight ? `${bodyHeight}px` : ''
+          }
+        }),
+        h('div', {
+          ref: 'body',
+          class: 'vxe-list--body',
+          style: {
+            marginTop: topSpaceHeight ? `${topSpaceHeight}px` : ''
+          }
+        }, $scopedSlots.default ? $scopedSlots.default.call(this, { items, $list: this }, h) : [])
+      ]),
+      h('div', {
+        class: ['vxe-list--loading vxe-loading', {
+          'is--visible': loading
         }]
       }, [
         h('div', {
-          ref: 'virtualWrapper',
-          class: 'vxe-list--virtual-wrapper',
-          style: styles,
-          on: {
-            scroll: this.scrollEvent
-          }
-        }, [
-          h('div', {
-            ref: 'ySpace',
-            class: 'vxe-list--y-space',
-            style: {
-              height: bodyHeight ? `${bodyHeight}px` : ''
-            }
-          }),
-          h('div', {
-            ref: 'body',
-            class: 'vxe-list--body',
-            style: {
-              marginTop: topSpaceHeight ? `${topSpaceHeight}px` : ''
-            }
-          }, $scopedSlots.default ? $scopedSlots.default.call(this, { items, $list: this }, h) : [])
-        ]),
-        h('div', {
-          class: ['vxe-list--loading vxe-loading', {
-            'is--visible': loading
-          }]
-        }, [
-          h('div', {
-            class: 'vxe-loading--spinner'
-          })
-        ])
+          class: 'vxe-loading--spinner'
+        })
       ])
-    ]
+    ])
   },
   methods: {
     getParentElem () {

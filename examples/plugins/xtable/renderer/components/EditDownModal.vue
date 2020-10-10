@@ -1,46 +1,28 @@
 <template>
   <div class="edit-down-modal">
-    <vxe-pulldown class="edit-down-pulldown" ref="xDown" transfer>
-      <template>
-        <vxe-input class="edit-down-input" v-model="row[column.property]" @keyup="keyupEvent" @click="clickEvent"></vxe-input>
-      </template>
-      <template v-slot:dropdown>
-        <div class="edit-down-wrapper">
-          <vxe-grid
-            highlight-hover-row
-            auto-resize
-            height="auto"
-            :loading="loading"
-            :pager-config="tablePage"
-            :data="tableData"
-            :columns="tableColumn1"
-            @cell-click="selectEvent"
-            @page-change="pageChangeEvent">
-          </vxe-grid>
-        </div>
-      </template>
-    </vxe-pulldown>
+    <vxe-input class="edit-down-input" v-model="row[column.property]" @keyup="keyupEvent"></vxe-input>
     <vxe-button class="edit-popup-button" status="primary" @click="popupEvent">选择</vxe-button>
     <vxe-modal
       show-footer
-      resize
       class="vxe-table--ignore-clear edit-popup-box"
       title="选择多条"
       width="800"
       height="400"
       v-model="modalVisible"
       @confirm="confirmEvent">
-      <vxe-grid
-        highlight-hover-row
-        auto-resize
-        ref="xGrid"
-        height="auto"
-        :loading="loading"
-        :pager-config="tablePage"
-        :data="tableData"
-        :columns="tableColumn"
-        @page-change="pageChangeEvent">
-      </vxe-grid>
+      <template v-slot>
+        <vxe-grid
+          highlight-hover-row
+          auto-resize
+          ref="xGrid"
+          height="auto"
+          :loading="loading"
+          :pager-config="tablePage"
+          :data="tableData"
+          :columns="tableColumn"
+          @page-change="pageChangeEvent">
+        </vxe-grid>
+      </template>
     </vxe-modal>
   </div>
 </template>
@@ -49,8 +31,7 @@
 export default {
   name: 'EditDownModal',
   props: {
-    params: Object,
-    renderOpts: Object
+    params: Object
   },
   data () {
     return {
@@ -75,11 +56,6 @@ export default {
         currentPage: 1,
         pageSize: 10
       }
-    }
-  },
-  watch: {
-    params () {
-      this.load()
     }
   },
   created () {
@@ -122,9 +98,6 @@ export default {
         this.tableData = data
       })
     },
-    clickEvent () {
-      this.$refs.xDown.showPanel()
-    },
     keyupEvent () {
       const { row, column } = this
       const cellValue = row[column.property]
@@ -137,12 +110,6 @@ export default {
           this.tableData = data
         }
       })
-    },
-    selectEvent (params) {
-      const { renderOpts, row, column } = this
-      const { props = {} } = renderOpts
-      row[column.property] = params.row[props.checkField]
-      this.$refs.xDown.hidePanel()
     },
     confirmEvent () {
       const { row, column } = this
@@ -161,13 +128,6 @@ export default {
 .edit-down-pulldown {
   width: auto;
   flex-grow: 1;
-}
-.edit-down-wrapper {
-  width: 600px;
-  height: 300px;
-  background-color: #fff;
-  border: 1px solid #dcdfe6;
-  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
 }
 .edit-down-input {
    /deep/ .vxe-input--inner {

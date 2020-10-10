@@ -19,16 +19,16 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column title="基本信息">
+      <vxe-table-colgroup title="基本信息">
         <vxe-table-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-table-column>
-        <vxe-table-column title="详细详细">
+        <vxe-table-colgroup title="详细详细">
           <vxe-table-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
       <vxe-table-column field="rate" title="Rate" width="180" sortable></vxe-table-column>
-      <vxe-table-column title="其他信息">
+      <vxe-table-colgroup title="其他信息">
         <vxe-table-column field="date13" title="Date" width="250"></vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -92,16 +92,16 @@ export default {
               }
             ],
             [
-              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
-              { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { type: 'csv' } }
+              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print', params: { columns: [{ field: 'name' }, { field: 'age' }, { field: 'rate' }] } },
+              { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { columns: [{ field: 'name' }, { field: 'age' }, { field: 'rate' }], type: 'csv' } }
             ]
           ]
         },
         footer: {
           options: [
             [
-              { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { type: 'xml' } },
-              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' }
+              { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { columns: [{ field: 'name' }, { field: 'role' }, { field: 'sex' }], type: 'xml' } },
+              { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print', params: { columns: [{ field: 'name' }, { field: 'role' }, { field: 'sex' }] } }
             ]
           ]
         }
@@ -122,16 +122,16 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column title="基本信息">
+          <vxe-table-colgroup title="基本信息">
             <vxe-table-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-table-column>
-            <vxe-table-column title="详细详细">
+            <vxe-table-colgroup title="详细详细">
               <vxe-table-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
           <vxe-table-column field="rate" title="Rate" width="180" sortable></vxe-table-column>
-          <vxe-table-column title="其他信息">
+          <vxe-table-colgroup title="其他信息">
             <vxe-table-column field="date13" title="Date" width="250"></vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `
@@ -183,16 +183,16 @@ export default {
                       }
                     ],
                     [
-                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' },
-                      { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { type: 'csv' } }
+                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print', params: { columns: [{ field: 'name' }, { field: 'age' }, { field: 'rate' }] } },
+                      { code: 'EXPORT_ALL', name: '导出.csv', prefixIcon: 'fa fa-download', params: { columns: [{ field: 'name' }, { field: 'age' }, { field: 'rate' }], type: 'csv' } }
                     ]
                   ]
                 },
                 footer: {
                   options: [
                     [
-                      { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { type: 'xml' } },
-                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print' }
+                      { code: 'EXPORT_ALL', name: '导出.xml', prefixIcon: 'fa fa-download', params: { columns: [{ field: 'name' }, { field: 'role' }, { field: 'sex' }], type: 'xml' } },
+                      { code: 'PRINT_ALL', name: '打印', prefixIcon: 'fa fa-print', params: { columns: [{ field: 'name' }, { field: 'role' }, { field: 'sex' }] } }
                     ]
                   ]
                 }

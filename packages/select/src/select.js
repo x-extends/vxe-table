@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import VxeInput from '../../input/src/input'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
@@ -12,7 +12,7 @@ function getOptUniqueId () {
 }
 
 function getOptkey (_vm) {
-  return _vm.optId || '_XID'
+  return _vm.optionId || _vm.optId || '_XID'
 }
 
 function getOptid (_vm, option) {
@@ -114,14 +114,14 @@ function getSelectLabel (_vm, value) {
 }
 
 export function renderOption (h, _vm, list, group) {
-  const { isGroup, labelField, valueField, optkey, value, multiple, currentValue } = _vm
+  const { isGroup, labelField, valueField, optkey, optionKey, value, multiple, currentValue } = _vm
   return list.map((option, cIndex) => {
     const isVisible = !isGroup || isOptionVisible(option)
     const isDisabled = (group && group.disabled) || option.disabled
     const optionValue = option[valueField]
     const optid = getOptid(_vm, option)
     return isVisible ? h('div', {
-      key: optkey ? optid : cIndex,
+      key: optionKey || optkey ? optid : cIndex,
       class: ['vxe-select-option', {
         'is--disabled': isDisabled,
         'is--selected': multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue,
@@ -147,12 +147,12 @@ export function renderOption (h, _vm, list, group) {
 }
 
 export function renderOptgroup (h, _vm) {
-  const { optkey, visibleGroupList, groupLabelField, groupOptionsField } = _vm
+  const { optionKey, optkey, visibleGroupList, groupLabelField, groupOptionsField } = _vm
   return visibleGroupList.map((group, gIndex) => {
     const optid = getOptid(_vm, group)
     const isGroupDisabled = group.disabled
     return h('div', {
-      key: optkey ? optid : gIndex,
+      key: optionKey || optkey ? optid : gIndex,
       class: ['vxe-optgroup', {
         'is--disabled': isGroupDisabled
       }],
@@ -170,6 +170,24 @@ export function renderOptgroup (h, _vm) {
   })
 }
 
+function renderOpts (h, _vm) {
+  const { isGroup, visibleGroupList, visibleOptionList } = _vm
+  if (isGroup) {
+    if (visibleGroupList.length) {
+      return renderOptgroup(h, _vm)
+    }
+  } else {
+    if (visibleOptionList.length) {
+      return renderOption(h, _vm, visibleOptionList)
+    }
+  }
+  return [
+    h('div', {
+      class: 'vxe-select--empty-placeholder'
+    }, _vm.emptyText || GlobalConfig.i18n('vxe.select.emptyText'))
+  ]
+}
+
 export default {
   name: 'VxeSelect',
   props: {
@@ -178,6 +196,7 @@ export default {
     placeholder: String,
     disabled: Boolean,
     multiple: Boolean,
+    multiCharOverflow: { type: [Number, String], default: () => GlobalConfig.select.multiCharOverflow },
     prefixIcon: String,
     placement: String,
     options: Array,
@@ -185,8 +204,11 @@ export default {
     optionGroups: Array,
     optionGroupProps: Object,
     size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
-    optId: { type: String, default: () => GlobalConfig.select.optId },
+    emptyText: String,
+    optId: { type: String, default: () => GlobalConfig.select.optionId },
+    optionId: { type: String, default: () => GlobalConfig.select.optionId },
     optKey: Boolean,
+    optionKey: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
   },
   components: {
@@ -199,6 +221,7 @@ export default {
   },
   data () {
     return {
+      inited: false,
       collectOption: [],
       fullGroupList: [],
       fullOptionList: [],
@@ -238,13 +261,16 @@ export default {
     isGroup () {
       return this.fullGroupList.some(item => item.options && item.options.length)
     },
+    multiMaxCharNum () {
+      return XEUtils.toNumber(this.multiCharOverflow)
+    },
     selectLabel () {
-      const { value, multiple } = this
+      const { value, multiple, multiMaxCharNum } = this
       if (value && multiple) {
         return value.map(val => {
           const label = getSelectLabel(this, val)
-          if (label.length > 8) {
-            return `${label.substring(0, 8)}...`
+          if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
+            return `${label.substring(0, multiMaxCharNum)}...`
           }
           return label
         }).join(', ')
@@ -287,11 +313,6 @@ export default {
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
     GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
   },
-  mounted () {
-    if (this.transfer) {
-      document.body.appendChild(this.$refs.panel)
-    }
-  },
   beforeDestroy () {
     const panelElem = this.$refs.panel
     if (panelElem && panelElem.parentNode) {
@@ -305,13 +326,14 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, isActivated, disabled, visiblePanel } = this
+    const { vSize, inited, loading, isActivated, disabled, visiblePanel } = this
     return h('div', {
       class: ['vxe-select', {
         [`size--${vSize}`]: vSize,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,
-        'is--active': isActivated
+        'is--active': isActivated,
+        'is--loading': loading
       }]
     }, [
       h('div', {
@@ -350,12 +372,12 @@ export default {
           'data-placement': this.panelPlacement
         },
         style: this.panelStyle
-      }, [
+      }, inited ? [
         h('div', {
           ref: 'optWrapper',
           class: 'vxe-select-option--wrapper'
-        }, this.isGroup ? renderOptgroup(h, this) : renderOption(h, this, this.visibleOptionList))
-      ])
+        }, renderOpts(h, this))
+      ] : [])
     ])
   },
   methods: {
@@ -452,14 +474,11 @@ export default {
       }
     },
     handleGlobalMousewheelEvent (evnt) {
-      const { $refs, $el, disabled, visiblePanel } = this
+      const { $refs, disabled, visiblePanel } = this
       if (!disabled) {
         if (visiblePanel) {
-          const hasSlef = DomTools.getEventTargetNode(evnt, $el).flag
-          if (hasSlef || DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
-            if (hasSlef) {
-              this.updatePlacement()
-            }
+          if (DomTools.getEventTargetNode(evnt, $refs.panel).flag) {
+            this.updatePlacement()
           } else {
             this.hideOptionPanel()
           }
@@ -544,6 +563,12 @@ export default {
     showOptionPanel () {
       if (!this.disabled) {
         clearTimeout(this.hidePanelTimeout)
+        if (!this.inited) {
+          this.inited = true
+          if (this.transfer) {
+            document.body.appendChild(this.$refs.panel)
+          }
+        }
         this.isActivated = true
         this.animatVisible = true
         setTimeout(() => {
@@ -570,62 +595,67 @@ export default {
         const { $refs, transfer, placement, panelIndex } = this
         const targetElem = $refs.input.$el
         const panelElem = $refs.panel
-        const targetHeight = targetElem.offsetHeight
-        const targetWidth = targetElem.offsetWidth
-        const panelHeight = panelElem.offsetHeight
-        const panelWidth = panelElem.offsetWidth
-        const marginSize = 5
-        const panelStyle = {
-          zIndex: panelIndex
-        }
-        const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
-        let panelPlacement = 'bottom'
-        if (transfer) {
-          let left = boundingLeft
-          let top = boundingTop + targetHeight
-          if (placement === 'top') {
-            panelPlacement = 'top'
-            top = boundingTop - panelHeight
-          } else {
-            // 如果下面不够放，则向上
-            if (top + panelHeight + marginSize > visibleHeight) {
+        if (panelElem && targetElem) {
+          const targetHeight = targetElem.offsetHeight
+          const targetWidth = targetElem.offsetWidth
+          const panelHeight = panelElem.offsetHeight
+          const panelWidth = panelElem.offsetWidth
+          const marginSize = 5
+          const panelStyle = {
+            zIndex: panelIndex
+          }
+          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
+          let panelPlacement = 'bottom'
+          if (transfer) {
+            let left = boundingLeft
+            let top = boundingTop + targetHeight
+            if (placement === 'top') {
               panelPlacement = 'top'
               top = boundingTop - panelHeight
+            } else if (!placement) {
+              // 如果下面不够放，则向上
+              if (top + panelHeight + marginSize > visibleHeight) {
+                panelPlacement = 'top'
+                top = boundingTop - panelHeight
+              }
+              // 如果上面不够放，则向下（优先）
+              if (top < marginSize) {
+                panelPlacement = 'bottom'
+                top = boundingTop + targetHeight
+              }
             }
-            // 如果上面不够放，则向下（优先）
-            if (top < marginSize) {
-              panelPlacement = 'bottom'
-              top = boundingTop + targetHeight
+            // 如果溢出右边
+            if (left + panelWidth + marginSize > visibleWidth) {
+              left -= left + panelWidth + marginSize - visibleWidth
             }
-          }
-          // 如果溢出右边
-          if (left + panelWidth + marginSize > visibleWidth) {
-            left -= left + panelWidth + marginSize - visibleWidth
-          }
-          // 如果溢出左边
-          if (left < marginSize) {
-            left = marginSize
-          }
-          Object.assign(panelStyle, {
-            left: `${left}px`,
-            top: `${top}px`,
-            minWidth: `${targetWidth}px`
-          })
-        } else {
-          if (placement === 'top') {
-            panelPlacement = 'top'
-            panelStyle.bottom = `${targetHeight}px`
+            // 如果溢出左边
+            if (left < marginSize) {
+              left = marginSize
+            }
+            Object.assign(panelStyle, {
+              left: `${left}px`,
+              top: `${top}px`,
+              minWidth: `${targetWidth}px`
+            })
           } else {
-            // 如果下面不够放，则向上
-            if (boundingTop + targetHeight + panelHeight > visibleHeight) {
+            if (placement === 'top') {
               panelPlacement = 'top'
               panelStyle.bottom = `${targetHeight}px`
+            } else if (!placement) {
+              // 如果下面不够放，则向上
+              if (boundingTop + targetHeight + panelHeight > visibleHeight) {
+                // 如果上面不够放，则向下（优先）
+                if (boundingTop - targetHeight - panelHeight > marginSize) {
+                  panelPlacement = 'top'
+                  panelStyle.bottom = `${targetHeight}px`
+                }
+              }
             }
           }
+          this.panelStyle = panelStyle
+          this.panelPlacement = panelPlacement
+          return this.$nextTick()
         }
-        this.panelStyle = panelStyle
-        this.panelPlacement = panelPlacement
-        return this.$nextTick()
       })
     },
     focus () {

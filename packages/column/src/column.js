@@ -2,7 +2,9 @@ import Cell from '../../cell'
 import { UtilTools } from '../../tools'
 
 const props = {
-  // 渲染类型 index,radio,checkbox,expand
+  // 列唯一主键
+  colId: [String, Number],
+  // 渲染类型 seq,radio,checkbox,expand
   type: String,
   // 在 v3.0 中废弃 prop
   prop: String,
@@ -64,6 +66,12 @@ const props = {
   treeNode: Boolean,
   // 是否可视
   visible: { type: Boolean, default: null },
+  // 单元格数据导出方法
+  exportMethod: Function,
+  // 表尾单元格数据导出方法
+  footerExportMethod: Function,
+  // 标题帮助图标配置项
+  titleHelp: Object,
   // 单元格值类型
   cellType: String,
   // 单元格渲染配置项

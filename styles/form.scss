@@ -22,6 +22,10 @@
   }
 }
 
+.vxe-form-slots {
+  display: none;
+}
+
 .vxe-form--item-title,
 .vxe-form--item-content,
 .vxe-form--item-trigger-node {
@@ -37,6 +41,7 @@
   padding-right: 0.8em;
   .vxe-form--item-title-prefix,
   .vxe-form--item-title-suffix {
+    cursor: help;
     & > [class*="vxe-icon--"] {
       margin-top: -0.2em;
     }
@@ -86,6 +91,21 @@
       }
     }
   }
+  &.is--asterisk {
+    .vxe-form--item {
+      &.is--required {
+        .vxe-form--item-title {
+          &:before {
+            content: "*";
+            color: $vxe-form-validate-error-color;
+            margin-right: 0.2em;
+            font-family: $vxe-icon-font-family;
+            font-weight: normal;
+          }
+        }
+      }
+    }
+  }
 }
 
 .vxe-form--item {
@@ -97,17 +117,6 @@
     .vxe-textarea,
     .vxe-select {
       width: 100%;
-    }
-  }
-  &.is--required {
-    .vxe-form--item-title {
-      &:before {
-        content: "*";
-        color: $vxe-form-validate-error-color;
-        margin-right: 0.2em;
-        font-family: $vxe-icon-font-family;
-        font-weight: normal;
-      }
     }
   }
   &.is--error {
@@ -181,7 +190,7 @@
     }
     &[disabled] {
       cursor: not-allowed;
-      background-color: #f3f3f3;
+      background-color: $vxe-input-disabled-background-color;
     }
   }
   .vxe-default-input[type="submit"],

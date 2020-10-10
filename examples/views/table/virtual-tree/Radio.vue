@@ -42,7 +42,7 @@
       resizable
       row-key
       highlight-current-row
-      ref="xTree3"
+      ref="xVTree3"
       row-id="id"
       :tree-config="{children: 'children'}"
       :radio-config="{labelField: 'name', trigger: 'row'}"
@@ -203,8 +203,8 @@ export default {
             },
             clearCurrentRowEvent () {
               this.selectRow = null
-              this.$refs.xTree.clearRadioRow()
-              this.$refs.xTree.clearCurrentRow()
+              this.$refs.xVTree.clearRadioRow()
+              this.$refs.xVTree.clearCurrentRow()
             }
           }
         }
@@ -226,8 +226,8 @@ export default {
     },
     clearCurrentRowEvent () {
       this.selectRow = null
-      this.$refs.xTree3.clearRadioRow()
-      this.$refs.xTree3.clearCurrentRow()
+      this.$refs.xVTree3.clearRadioRow()
+      this.$refs.xVTree3.clearCurrentRow()
     }
   }
 }

@@ -5,7 +5,7 @@
 
     <p>
       <vxe-pulldown ref="xDown1">
-        <template>
+        <template v-slot>
           <vxe-input v-model="value1" placeholder="可搜索的下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
         </template>
         <template v-slot:dropdown>
@@ -19,7 +19,7 @@
       </vxe-pulldown>
 
       <vxe-pulldown ref="xDown2">
-        <template>
+        <template v-slot>
           <vxe-input v-model="value2" placeholder="可搜索的大数据下拉框" @focus="focusEvent2" @keyup="keyupEvent2"></vxe-input>
         </template>
         <template v-slot:dropdown>
@@ -34,8 +34,8 @@
         </template>
       </vxe-pulldown>
 
-      <vxe-pulldown ref="xDown3">
-        <template>
+      <vxe-pulldown ref="xDown3" destroy-on-close>
+        <template v-slot>
           <vxe-button icon="fa fa-table" @click="clickEvent3">切换下拉表格</vxe-button>
         </template>
         <template v-slot:dropdown>
@@ -51,8 +51,8 @@
         </template>
       </vxe-pulldown>
 
-      <vxe-pulldown ref="xDown4">
-        <template>
+      <vxe-pulldown ref="xDown4" transfer>
+        <template v-slot>
           <vxe-input v-model="value4" suffix-icon="fa fa-search" placeholder="实现下拉分页表格" @keyup="keyupEvent4" @focus="focusEvent4" @suffix-click="suffixClick4"></vxe-input>
         </template>
         <template v-slot:dropdown>
@@ -124,7 +124,7 @@ export default {
         `
         <p>
           <vxe-pulldown ref="xDown1">
-            <template>
+            <template v-slot>
               <vxe-input v-model="value1" placeholder="可搜索的下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
             </template>
             <template v-slot:dropdown>
@@ -138,7 +138,7 @@ export default {
           </vxe-pulldown>
 
           <vxe-pulldown ref="xDown2">
-            <template>
+            <template v-slot>
               <vxe-input v-model="value2" placeholder="可搜索的大数据下拉框" @focus="focusEvent2" @keyup="keyupEvent2"></vxe-input>
             </template>
             <template v-slot:dropdown>
@@ -153,8 +153,8 @@ export default {
             </template>
           </vxe-pulldown>
 
-          <vxe-pulldown ref="xDown3">
-            <template>
+          <vxe-pulldown ref="xDown3" destroy-on-close>
+            <template v-slot>
               <vxe-button icon="fa fa-table" @click="clickEvent3">切换下拉表格</vxe-button>
             </template>
             <template v-slot:dropdown>
@@ -170,8 +170,8 @@ export default {
             </template>
           </vxe-pulldown>
 
-          <vxe-pulldown ref="xDown4">
-            <template>
+          <vxe-pulldown ref="xDown4" transfer>
+            <template v-slot>
               <vxe-input v-model="value4" suffix-icon="fa fa-search" placeholder="实现下拉分页表格" @keyup="keyupEvent4" @focus="focusEvent4" @suffix-click="suffixClick4"></vxe-input>
             </template>
             <template v-slot:dropdown>

@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
@@ -68,6 +68,7 @@ export default {
     titleAlign: String,
     titleWidth: [String, Number],
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
+    titleAsterisk: { type: Boolean, default: () => GlobalConfig.form.titleAsterisk },
     items: Array,
     rules: Object,
     preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
@@ -93,11 +94,12 @@ export default {
     }
   },
   render (h) {
-    const { $slots, titleColon, loading, vSize } = this
+    const { $slots, loading, vSize } = this
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
         [`size--${vSize}`]: vSize,
-        'is--colon': titleColon,
+        'is--colon': this.titleColon,
+        'is--asterisk': this.titleAsterisk,
         'is--loading': loading
       }],
       on: {
@@ -117,6 +119,15 @@ export default {
     ]))
   },
   methods: {
+    getItems () {
+      return this.$children.map(({ field, title, itemRender }) => {
+        return {
+          field,
+          title,
+          itemRender
+        }
+      })
+    },
     toggleCollapse () {
       this.collapseAll = !this.collapseAll
       return this.$nextTick()
@@ -131,8 +142,7 @@ export default {
         })
       }
     },
-    resetEvent (evnt) {
-      evnt.preventDefault()
+    reset () {
       const { data } = this
       if (data) {
         this.$children.forEach(({ field, resetValue, itemRender }) => {
@@ -145,8 +155,12 @@ export default {
           }
         })
       }
-      this.clearValidate()
-      this.$emit('reset', { data, $form: this, $event: evnt }, evnt)
+      return this.clearValidate()
+    },
+    resetEvent (evnt) {
+      evnt.preventDefault()
+      this.reset()
+      this.$emit('reset', { data: this.data, $form: this, $event: evnt }, evnt)
     },
     clearValidate (field) {
       if (field) {

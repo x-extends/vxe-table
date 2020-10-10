@@ -99,21 +99,18 @@ gulp.task('copy_ts', () => {
 })
 
 gulp.task('lib_rename', () => {
-  return Promise.all([
-    gulp.src('lib/index.umd.js')
-      .pipe(rename({
-        basename: 'index',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('lib')),
-    gulp.src('lib/index.umd.min.js')
-      .pipe(rename({
-        basename: 'index',
-        suffix: '.min',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('lib'))
-  ])
+  return gulp.src('lib/index.css')
+    .pipe(rename({
+      basename: 'style',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('lib'))
+    .pipe(rename({
+      basename: 'style',
+      suffix: '.min',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('lib'))
 })
 
 gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {

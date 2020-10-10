@@ -14,7 +14,7 @@
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
       <vxe-table-column title="操作" fixed="right" width="200">
-        <template>
+        <template v-slot>
           <vxe-button type="text">按钮1</vxe-button>
           <vxe-button type="text">按钮2</vxe-button>
         </template>
@@ -52,7 +52,7 @@
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="300" :fixed="colFixeds.col4"></vxe-table-column>
       <vxe-table-column title="操作" width="200" :fixed="colFixeds.col5">
-        <template>
+        <template v-slot>
           <vxe-button status="primary">按钮1</vxe-button>
           <vxe-button>按钮2</vxe-button>
         </template>
@@ -74,22 +74,22 @@
       border
       height="400"
       :data="tableData">
-      <vxe-table-column title="基本信息" fixed="left">
+      <vxe-table-colgroup title="基本信息" fixed="left">
         <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="更多信息">
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="更多信息">
         <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-        <vxe-table-column title="详细信息">
+        <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
+        <vxe-table-colgroup title="详细信息">
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
           <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="额外信息" fixed="right">
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="额外信息" fixed="right">
         <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
         <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -113,7 +113,14 @@ export default {
         col2: '',
         col3: ''
       },
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
+      ],
       demoCodes: [
         `
         <vxe-table
@@ -128,7 +135,7 @@ export default {
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
           <vxe-table-column title="操作" fixed="right" width="200">
-            <template>
+            <template v-slot>
               <vxe-button type="text">按钮1</vxe-button>
               <vxe-button type="text">按钮2</vxe-button>
             </template>
@@ -139,11 +146,15 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           }
         }
         `,
@@ -159,22 +170,24 @@ export default {
 
         <vxe-table
           border
-          ref="xTable2"
-          height="300"
-          highlight-hover-row
-          show-overflow
+          height="400"
           :data="tableData">
-          <vxe-table-column type="seq" width="60" :fixed="colFixeds.col0"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="300" :fixed="colFixeds.col1"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" width="300" :fixed="colFixeds.col4"></vxe-table-column>
-          <vxe-table-column title="操作" width="200" :fixed="colFixeds.col5">
-            <template>
-              <vxe-button status="primary">按钮1</vxe-button>
-              <vxe-button>按钮2</vxe-button>
-            </template>
-          </vxe-table-column>
+          <vxe-table-colgroup title="基本信息" fixed="left">
+            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="更多信息">
+            <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
+            <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
+            <vxe-table-colgroup title="详细信息">
+              <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
+              <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="额外信息" fixed="right">
+            <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
+            <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `
@@ -187,11 +200,15 @@ export default {
                 col2: '',
                 col3: ''
               },
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           },
           methods: {
             toggleFixedColumn (index, type) {
@@ -215,7 +232,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column title="更多信息">
             <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
+            <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
             <vxe-table-column title="详细信息">
               <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
               <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
@@ -231,19 +248,20 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
           }
         }
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

@@ -8,21 +8,21 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'size',
-        descKey: 'app.api.optgroup.desc.size',
-        version: '',
-        type: 'string',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'label',
         descKey: 'app.api.optgroup.desc.label',
         version: '',
         type: 'string | number | boolean',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'visible',
+        desc: '是否显示',
+        version: '',
+        type: 'boolean',
+        enum: '',
+        defVal: 'true',
         list: []
       },
       {

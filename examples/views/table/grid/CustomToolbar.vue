@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">工具栏：通过 <grid-api-link prop="toolbar"/> 属性配置，使用 <grid-api-link prop="slot"/> 自定义模板</p>
+    <p class="tip">工具栏：通过 <grid-api-link prop="toolbar"/> 属性开启，还可以使用 <grid-api-link prop="slot"/> 插槽自定义模板</p>
 
     <vxe-grid
       border

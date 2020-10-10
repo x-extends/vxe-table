@@ -2,8 +2,8 @@
   <div id="app" @click="clickEvent">
     <header class="page-header">
       <div class="left">
-        <a href="https://github.com/x-extends/vxe-table">
-          <img src="logo.png" width="18">
+        <a href="/vxe-table/">
+          <img src="/vxe-table/logo.png" width="18">
           <span class="title">vxe-table</span>
         </a>
         <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
@@ -28,13 +28,12 @@
           </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
-            <vxe-option value="1" label="1.x"></vxe-option>
-            <vxe-option value="2" label="2.x"></vxe-option>
-            <vxe-option value="3" label="3.x"></vxe-option>
-            <vxe-option value="4" label="4.x"></vxe-option>
+            <vxe-option value="1" :label="$t('app.body.other.v1')"></vxe-option>
+            <vxe-option value="2" :label="$t('app.body.other.v2')"></vxe-option>
+            <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
+            <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
           <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
-          <a class="support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
         </div>
       </div>
     </header>
@@ -85,36 +84,6 @@
         </div>
       </div>
     </div>
-
-    <vxe-modal v-model="supportVisible" :loading="supportLoading" title="技术支持" width="800" position="center">
-      <div class="support-declare">考虑到很多用户有需要支持的需求，提供该付费技术群用于快速解决使用过程中遇到的各种问题，同时也能支撑该项目可以持续的维护下去。若非必要建议先查阅相关的文档！，如果确实需要支持请先通过邮件描述一下问题！</div>
-      <div>
-        <ul class="vxe-row support-question">
-          <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
-            <i :class="item.icon || 'fa fa-question-circle'"></i>
-            <span>&nbsp;{{ item.label }}</span>
-          </li>
-        </ul>
-      </div>
-      <div class="vxe-row support-group">
-        <div class="vxe-col--24 support-group-item">
-          <div class="support-name">技术支持群</div>
-          <div v-if="discountPrice" class="support-price">¥ {{ discountPrice }}<span v-if="discountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span></div>
-          <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span></div>
-          <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请加入</vxe-button>
-        </div>
-      </div>
-    </vxe-modal>
-    <vxe-modal v-model="supportGroupVisible" title="申请加入付费群" width="600" position="center">
-      <template>
-        <div class="support-pay-step">
-          <p style="font-size: 12px;">联系邮件： <a href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
-          <p class="title">1. 扫码申请加入<br><img src="static/support/qq.png"></p>
-          <p class="title">2. 通过支付宝或微信付费：¥{{ discountPrice || supportGroupPrice }}<br><img src="static/donation/pay.jpg"></p>
-          <p class="title">3. 付费完成后点击“联系收款方”，留言QQ号即可</p>
-        </div>
-      </template>
-    </vxe-modal>
   </div>
 </template>
 
@@ -125,54 +94,6 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
-      discountPrice: 188,
-      supportGroupPrice: 299,
-      supportLoading: false,
-      supportVisible: false,
-      supportQuestion: '',
-      supportGroupVisible: false,
-      supportQuestionList: [
-        {
-          label: '安装/按需/报错/国际化/版本升级'
-        },
-        {
-          label: '主题/样式/图标相关问题'
-        },
-        {
-          label: '增删改查/数据校验/键盘导航实现'
-        },
-        {
-          label: '列错乱/列权限/动态列/自定义列问题'
-        },
-        {
-          label: '数据联动/分组显示/合并与列问题'
-        },
-        {
-          label: '数据代理/Grid配置式使用问题'
-        },
-        {
-          label: '高级筛选/可编辑/下拉容器/渲染器使用问题'
-        },
-        {
-          label: '虚拟列表/虚拟树/虚拟下拉框使用问题'
-        },
-        {
-          label: '打印/导入/导出/数据格式化等问题'
-        },
-        {
-          label: '动态表单/表单权限/配置式使用问题'
-        },
-        {
-          label: '输入框日期节日/工具栏/分页/模态窗口等模块'
-        },
-        {
-          label: '第三方 UI 库集成渲染问题'
-        },
-        {
-          label: '额外需求的定制（不包括，需咨询）',
-          icon: 'fa fa-exclamation-triangle'
-        }
-      ],
       showLeft: true,
       selected: null,
       filterName: '',
@@ -356,6 +277,12 @@ export default {
               label: 'app.aside.nav.width',
               locat: {
                 name: 'TableWidth'
+              }
+            },
+            {
+              label: 'app.aside.nav.autoBreak',
+              locat: {
+                name: 'TableAutoBreak'
               }
             },
             {
@@ -656,6 +583,12 @@ export default {
                 name: 'TablePrint'
               }
             },
+            // {
+            //   label: 'app.aside.nav.customPrint',
+            //   locat: {
+            //     name: 'TableCustomPrint'
+            //   }
+            // },
             {
               label: 'app.aside.nav.fixedType',
               locat: {
@@ -1103,12 +1036,12 @@ export default {
             //     name: 'TableEditForceRowValid'
             //   }
             // },
-            {
-              label: 'app.aside.nav.highlightCell',
-              locat: {
-                name: 'TableEditHighlightCell'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.highlightCell',
+            //   locat: {
+            //     name: 'TableEditHighlightCell'
+            //   }
+            // },
             {
               label: 'app.aside.nav.keyboard',
               locat: {
@@ -1436,13 +1369,13 @@ export default {
                 name: 'TableScrollEdit'
               }
             },
-            {
-              label: 'app.aside.nav.scrollTree',
-              disabled: true,
-              locat: {
-                name: 'TableScrollTree'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.scrollTree',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScrollTree'
+            //   }
+            // },
             {
               label: 'app.aside.nav.cellValid',
               locat: {
@@ -1530,13 +1463,13 @@ export default {
               locat: {
                 name: 'TableScrollFullCols'
               }
-            },
-            {
-              label: 'app.aside.nav.infiniteScroll',
-              disabled: true,
-              locat: {
-                name: 'TableScroll'
-              }
+            // },
+            // {
+            //   label: 'app.aside.nav.infiniteScroll',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableScroll'
+            //   }
             }
           ]
         },
@@ -1769,13 +1702,13 @@ export default {
             //     name: 'TablePluginShortcutKey'
             //   }
             // },
-            {
-              label: 'app.aside.nav.chartsPlugin',
-              demoUrl: 'https://jsrun.pro/9aWKp/edit',
-              locat: {
-                name: 'TablePluginCharts'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.chartsPlugin',
+            //   demoUrl: 'https://jsrun.pro/9aWKp/edit',
+            //   locat: {
+            //     name: 'TablePluginCharts'
+            //   }
+            // },
             {
               label: 'app.aside.nav.exportXLSXPlugin',
               demoUrl: 'https://jsrun.pro/PIWKp/edit',
@@ -1803,12 +1736,12 @@ export default {
                 name: 'TablePluginMenus'
               }
             },
-            {
-              label: 'app.aside.nav.excelPlugin',
-              locat: {
-                name: 'TablePluginExcel'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.excelPlugin',
+            //   locat: {
+            //     name: 'TablePluginExcel'
+            //   }
+            // },
             {
               label: 'app.aside.nav.treeRowPlugin',
               locat: {
@@ -1951,6 +1884,15 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.vxeTableColgroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'table-colgroup'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeTableColumn',
               locat: {
                 name: 'VXEAPI',
@@ -2005,11 +1947,38 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.vxeRadioGroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'radio-group'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeRadioButton',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'radio-button'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeCheckbox',
               locat: {
                 name: 'VXEAPI',
                 params: {
                   name: 'checkbox'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeCheckboxGroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'checkbox-group'
                 }
               }
             },
@@ -2037,6 +2006,24 @@ export default {
                 name: 'VXEAPI',
                 params: {
                   name: 'select'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeOptgroup',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'optgroup'
+                }
+              }
+            },
+            {
+              label: 'app.aside.nav.vxeOption',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'option'
                 }
               }
             },
@@ -2159,34 +2146,40 @@ export default {
         } else {
           return true
         }
+      } else {
+        return betaVersionList.some(item => item.value.indexOf('2.') === 0)
       }
       return false
     },
     newBetsVersionList () {
       const { betaVersionList, stableVersionList } = this
-      if (betaVersionList.length && stableVersionList.length) {
-        const stableNums = stableVersionList[0].value.split('-')[0].split('.')
-        const stable1 = XEUtils.toNumber(stableNums[0])
-        const stable2 = XEUtils.toNumber(stableNums[1])
-        const stable3 = XEUtils.toNumber(stableNums[2])
-        return betaVersionList.filter(pack => {
-          const betaNums = pack.value.split('-')[0].split('.')
-          const beta1 = XEUtils.toNumber(betaNums[0])
-          const beta2 = XEUtils.toNumber(betaNums[1])
-          const beta3 = XEUtils.toNumber(betaNums[2])
-          if (beta1 > stable1) {
-            return true
-          } else if (beta1 === stable1) {
-            if (beta2 > stable2) {
+      if (stableVersionList.length) {
+        if (betaVersionList.length) {
+          const stableNums = stableVersionList[0].value.split('-')[0].split('.')
+          const stable1 = XEUtils.toNumber(stableNums[0])
+          const stable2 = XEUtils.toNumber(stableNums[1])
+          const stable3 = XEUtils.toNumber(stableNums[2])
+          return betaVersionList.filter(pack => {
+            const betaNums = pack.value.split('-')[0].split('.')
+            const beta1 = XEUtils.toNumber(betaNums[0])
+            const beta2 = XEUtils.toNumber(betaNums[1])
+            const beta3 = XEUtils.toNumber(betaNums[2])
+            if (beta1 > stable1) {
               return true
-            } else if (beta2 === stable2) {
-              if (beta3 > stable3) {
+            } else if (beta1 === stable1) {
+              if (beta2 > stable2) {
                 return true
+              } else if (beta2 === stable2) {
+                if (beta3 > stable3) {
+                  return true
+                }
               }
             }
-          }
-          return false
-        })
+            return false
+          })
+        }
+      } else {
+        return betaVersionList.filter(item => item.value.indexOf('2.') === 0)
       }
       return stableVersionList
     },
@@ -2212,7 +2205,7 @@ export default {
       setInterval(() => {
         const performance = window.performance || window.webkitPerformance
         if (performance && performance.memory) {
-          this.usedJSHeapSize = XEUtils.toFixedNumber(performance.memory.usedJSHeapSize / 1048576, 2)
+          this.usedJSHeapSize = XEUtils.toFixed(XEUtils.floor(performance.memory.usedJSHeapSize / 1048576, 2), 2)
         }
       }, 3000)
     }
@@ -2308,30 +2301,19 @@ export default {
         item.expand = !item.expand
       }
     },
-    supportEvent () {
-      this.supportVisible = true
-    },
-    addQQGroup () {
-      this.supportLoading = true
-      setTimeout(() => {
-        this.supportLoading = false
-        this.supportGroupVisible = true
-      }, 300)
-    },
     vChangeEvent () {
       switch (this.version) {
         case '1':
-          location.href = '/vxe-table/v1/index.html'
+          location.href = '/vxe-table/v1/'
           break
         case '2':
-          location.href = '/vxe-table/v2/index.html'
+          location.href = '/vxe-table/v2/'
           break
         case '3':
-          location.href = '/vxe-table'
+          location.href = '/vxe-table/v3/'
           break
         case '4':
-          this.version = '2'
-          this.$XModal.message({ message: this.$t('app.body.other.newDevelopment'), status: 'info' })
+          location.href = '/vxe-table/v4/'
           break
       }
     }

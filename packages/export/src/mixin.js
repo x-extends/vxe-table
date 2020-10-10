@@ -1,10 +1,10 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 // 默认导出或打印的 HTML 样式
-const defaultHtmlStyle = 'body{margin:0;}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;text-align:left;font-size:14px;border-spacing:0}.vxe-table:not(.is--print ){table-layout:fixed;}.vxe-table.is--print{width:100%}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-top:1px solid #e8eaec;}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-left:1px solid #e8eaec;}.vxe-table.border--outer,.vxe-table.border--default th,.vxe-table.border--default td,.vxe-table.border--full th,.vxe-table.border--full td,.vxe-table.border--outer th,.vxe-table.border--inner th,.vxe-table.border--inner td{border-bottom:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--outer,.vxe-table.border--full th,.vxe-table.border--full td{border-right:1px solid #e8eaec}.vxe-table.border--default th,.vxe-table.border--full th,.vxe-table.border--outer th{background-color:#f8f8f9;}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.vxe-table:not(.is--print ) .col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}.vxe-table input[type="checkbox"],.vxe-table input[type="radio"],.vxe-table input[type="checkbox"]+span,.vxe-table input[type="radio"]+span{vertical-align:middle;}'
+const defaultHtmlStyle = 'body{margin:0}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;text-align:left;font-size:14px;border-spacing:0}.vxe-table:not(.is--print){table-layout:fixed}.vxe-table.is--print{width:100%}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-top:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-left:1px solid #e8eaec}.vxe-table.border--outer,.vxe-table.border--default th,.vxe-table.border--default td,.vxe-table.border--full th,.vxe-table.border--full td,.vxe-table.border--outer th,.vxe-table.border--inner th,.vxe-table.border--inner td{border-bottom:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--outer,.vxe-table.border--full th,.vxe-table.border--full td{border-right:1px solid #e8eaec}.vxe-table.border--default th,.vxe-table.border--full th,.vxe-table.border--outer th{background-color:#f8f8f9}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.vxe-table:not(.is--print) .col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}.vxe-table input[type="checkbox"]{margin:0}.vxe-table input[type="checkbox"],.vxe-table input[type="radio"],.vxe-table input[type="checkbox"]+span,.vxe-table input[type="radio"]+span{vertical-align:middle;padding-left: 0.4em}'
 
 let htmlCellElem
 
@@ -19,6 +19,13 @@ function createFrame () {
   const frame = document.createElement('iframe')
   frame.className = 'vxe-table--print-frame'
   return frame
+}
+
+function getExportBlobByContent (content, options) {
+  if (window.Blob) {
+    return new Blob([content], { type: `text/${options.type}` })
+  }
+  return null
 }
 
 function hasTreeChildren ($xetable, row) {
@@ -48,7 +55,7 @@ function toTableBorder (border) {
 }
 
 function getLabelData ($xetable, opts, columns, datas) {
-  const { treeConfig, treeOpts, scrollXLoad, scrollYLoad, radioOpts, checkboxOpts } = $xetable
+  const { treeConfig, treeOpts, radioOpts, checkboxOpts } = $xetable
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
   }
@@ -62,6 +69,68 @@ function getLabelData ($xetable, opts, columns, datas) {
       }
       columns.forEach((column, columnIndex) => {
         let cellValue = ''
+        const renderOpts = column.editRender || column.cellRender
+        let exportLabelMethod = column.exportMethod
+        if (!exportLabelMethod && renderOpts && renderOpts.name) {
+          const compConf = VXETable.renderer.get(renderOpts.name)
+          if (compConf) {
+            exportLabelMethod = compConf.exportMethod || compConf.cellExportMethod
+          }
+        }
+        if (exportLabelMethod) {
+          cellValue = exportLabelMethod({ $table: $xetable, row, column })
+        } else {
+          switch (column.type) {
+            // v3.0 废弃 type=index
+            case 'seq':
+            case 'index':
+              cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
+              break
+            // v3.0 废弃 type=selection
+            case 'selection':
+            case 'checkbox':
+              cellValue = $xetable.isCheckedByCheckboxRow(row)
+              item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
+              item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
+              break
+            case 'radio':
+              cellValue = $xetable.isCheckedByRadioRow(row)
+              item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
+              item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
+              break
+            default:
+              if (opts.original) {
+                cellValue = UtilTools.getCellValue(row, column)
+              } else {
+                cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+                if (column.type === 'html') {
+                  htmlCellElem.innerHTML = cellValue
+                  cellValue = htmlCellElem.innerText.trim()
+                }
+              }
+          }
+        }
+        item[column.id] = XEUtils.toString(cellValue)
+      })
+      rest.push(Object.assign(item, row))
+    }, treeOpts)
+    return rest
+  }
+  return datas.map((row, rowIndex) => {
+    const item = {}
+    columns.forEach((column, columnIndex) => {
+      let cellValue = ''
+      const renderOpts = column.editRender || column.cellRender
+      let exportLabelMethod = column.exportMethod
+      if (!exportLabelMethod && renderOpts && renderOpts.name) {
+        const compConf = VXETable.renderer.get(renderOpts.name)
+        if (compConf) {
+          exportLabelMethod = compConf.exportMethod || compConf.cellExportMethod
+        }
+      }
+      if (exportLabelMethod) {
+        cellValue = exportLabelMethod({ $table: $xetable, row, column })
+      } else {
         switch (column.type) {
           // v3.0 废弃 type=index
           case 'seq':
@@ -84,89 +153,13 @@ function getLabelData ($xetable, opts, columns, datas) {
             if (opts.original) {
               cellValue = UtilTools.getCellValue(row, column)
             } else {
-              const { cellRender, editRender } = column
-              let exportLabelMethod
-              if (editRender && editRender.name) {
-                const compConf = VXETable.renderer.get(editRender.name)
-                if (compConf) {
-                  exportLabelMethod = compConf.editCellExportMethod
-                }
-              } else if (cellRender && cellRender.name) {
-                const compConf = VXETable.renderer.get(cellRender.name)
-                if (compConf) {
-                  exportLabelMethod = compConf.cellExportMethod
-                }
-              }
-              if (exportLabelMethod) {
-                cellValue = exportLabelMethod({ $table: $xetable, row, column })
-              } else {
-                cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
-                if (column.type === 'html') {
-                  htmlCellElem.innerHTML = cellValue
-                  cellValue = htmlCellElem.innerText.trim()
-                }
-              }
-            }
-        }
-        item[column.id] = XEUtils.toString(cellValue)
-      })
-      rest.push(Object.assign(item, row))
-    }, treeOpts)
-    return rest
-  }
-  return datas.map((row, rowIndex) => {
-    const item = {}
-    columns.forEach((column, columnIndex) => {
-      let cellValue = ''
-      switch (column.type) {
-        // v3.0 废弃 type=index
-        case 'seq':
-        case 'index':
-          cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
-          break
-        // v3.0 废弃 type=selection
-        case 'selection':
-        case 'checkbox':
-          cellValue = $xetable.isCheckedByCheckboxRow(row)
-          item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
-          item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
-          break
-        case 'radio':
-          cellValue = $xetable.isCheckedByRadioRow(row)
-          item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
-          item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
-          break
-        default:
-          if (opts.original) {
-            cellValue = UtilTools.getCellValue(row, column)
-          } else if (scrollXLoad || scrollYLoad) {
-            // 如果是虚拟滚动
-            const { cellRender, editRender } = column
-            let exportLabelMethod
-            if (editRender && editRender.name) {
-              const compConf = VXETable.renderer.get(editRender.name)
-              if (compConf) {
-                exportLabelMethod = compConf.editCellExportMethod
-              }
-            } else if (cellRender && cellRender.name) {
-              const compConf = VXETable.renderer.get(cellRender.name)
-              if (compConf) {
-                exportLabelMethod = compConf.cellExportMethod
-              }
-            }
-            if (exportLabelMethod) {
-              cellValue = exportLabelMethod({ $table: $xetable, row, column })
-            } else {
               cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
               if (column.type === 'html') {
                 htmlCellElem.innerHTML = cellValue
                 cellValue = htmlCellElem.innerText.trim()
               }
             }
-          } else {
-            const cell = DomTools.getCell($xetable, { row, column })
-            cellValue = cell ? cell.innerText.trim() : UtilTools.getCellLabel(row, column, { $table: $xetable })
-          }
+        }
       }
       item[column.id] = XEUtils.toString(cellValue)
     })
@@ -175,13 +168,14 @@ function getLabelData ($xetable, opts, columns, datas) {
 }
 
 function getExportData ($xetable, opts) {
+  const { columnFilterMethod, dataFilterMethod } = opts
   let columns = opts.columns
   let datas = opts.data
-  if (opts.columnFilterMethod) {
-    columns = columns.filter(opts.columnFilterMethod)
+  if (columnFilterMethod) {
+    columns = columns.filter((column, index) => columnFilterMethod({ column, $columnIndex: index }))
   }
-  if (opts.dataFilterMethod) {
-    datas = datas.filter(opts.dataFilterMethod)
+  if (dataFilterMethod) {
+    datas = datas.filter((row, index) => dataFilterMethod({ row, $rowIndex: index }))
   }
   return { columns, datas: getLabelData($xetable, opts, columns, datas) }
 }
@@ -191,22 +185,22 @@ function getHeaderTitle (opts, column) {
 }
 
 function getFooterCellValue ($xetable, opts, items, column) {
-  const { cellRender, editRender } = column
-  let exportLabelMethod
-  if (editRender && editRender.name) {
-    const compConf = VXETable.renderer.get(editRender.name)
+  const renderOpts = column.editRender || column.cellRender
+  let exportLabelMethod = column.footerExportMethod
+  if (!exportLabelMethod && renderOpts && renderOpts.name) {
+    const compConf = VXETable.renderer.get(renderOpts.name)
     if (compConf) {
-      exportLabelMethod = compConf.footerCellExportMethod
-    }
-  } else if (cellRender && cellRender.name) {
-    const compConf = VXETable.renderer.get(cellRender.name)
-    if (compConf) {
-      exportLabelMethod = compConf.footerCellExportMethod
+      exportLabelMethod = compConf.footerExportMethod || compConf.footerCellExportMethod
     }
   }
   const _columnIndex = $xetable._getColumnIndex(column)
   const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column }) : XEUtils.toString(items[_columnIndex])
   return cellValue
+}
+
+function getFooterData (opts, footerData) {
+  const { footerFilterMethod } = opts
+  return footerFilterMethod ? footerData.filter((items, index) => footerFilterMethod({ items, $rowIndex: index })) : footerData
 }
 
 function toCsv ($xetable, opts, columns, datas) {
@@ -219,7 +213,7 @@ function toCsv ($xetable, opts, columns, datas) {
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
-    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
       content += columns.map(column => `"${getFooterCellValue($xetable, opts, rows, column)}"`).join(',') + '\n'
     })
@@ -237,7 +231,7 @@ function toTxt ($xetable, opts, columns, datas) {
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
-    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
       content += columns.map(column => `${getFooterCellValue($xetable, opts, rows, column)}`).join(',') + '\n'
     })
@@ -259,28 +253,37 @@ function hasEllipsis ($xetable, column, property, allColumnOverflow) {
   return isEllipsis
 }
 
+function createHtmlPage (opts, content) {
+  const { style } = opts
+  return [
+    '<!DOCTYPE html><html>',
+    '<head>',
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">',
+    `<title>${opts.sheetName}</title>`,
+    `<style>${defaultHtmlStyle}</style>`,
+    style ? `<style>${style}</style>` : '',
+    '</head>',
+    `<body>${XEUtils.toString(content)}</body>`,
+    '</html>'
+  ].join('')
+}
+
 function toHtml ($xetable, opts, columns, datas) {
   const { id, border, treeConfig, treeOpts, isAllSelected, isIndeterminate, headerAlign: allHeaderAlign, align: allAlign, footerAlign: allFooterAlign, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow } = $xetable
-  const isPrint = opts.print
+  const { print: isPrint, isHeader, isFooter } = opts
   const allCls = 'check-all'
   const clss = [
     'vxe-table',
     `border--${toTableBorder(border)}`,
     isPrint ? 'is--print' : '',
-    opts.isHeader ? 'show--head' : ''
+    isHeader ? 'show--head' : ''
   ].filter(cls => cls)
-  let html = [
-    '<html>',
-    '<head>',
-    `<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui"><title>${opts.sheetName}</title>`,
-    `<style>${opts.style || defaultHtmlStyle}</style>`,
-    '</head>',
-    '<body>',
+  let body = [
     `<table class="${clss.join(' ')}" border="0" cellspacing="0" cellpadding="0">`,
     `<colgroup>${columns.map(column => `<col style="width:${column.renderWidth}px">`).join('')}</colgroup>`
   ].join('')
-  if (opts.isHeader) {
-    html += `<thead><tr>${columns.map(column => {
+  if (isHeader) {
+    body += `<thead><tr>${columns.map(column => {
       const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
       const classNames = hasEllipsis($xetable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
       const cellTitle = getHeaderTitle(opts, column)
@@ -288,16 +291,16 @@ function toHtml ($xetable, opts, columns, datas) {
         classNames.push(`col--${headAlign}`)
       }
       if (column.type === 'checkbox' || column.type === 'selection') {
-        return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></td>`
+        return `<th class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" class="${allCls}" ${isAllSelected ? 'checked' : ''}><span>${cellTitle}</span></div></th>`
       }
-      return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><span>${cellTitle}</span></div></th>`
+      return `<th class="${classNames.join(' ')}" title="${cellTitle}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><span>${UtilTools.formatText(cellTitle, true)}</span></div></th>`
     }).join('')}</tr></thead>`
   }
   if (datas.length) {
-    html += '<tbody>'
+    body += '<tbody>'
     if (treeConfig) {
       datas.forEach(item => {
-        html += '<tr>' + columns.map(column => {
+        body += '<tr>' + columns.map(column => {
           const cellAlign = column.align || allAlign
           const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
           const cellValue = item[column.id]
@@ -322,12 +325,12 @@ function toHtml ($xetable, opts, columns, datas) {
           } else if (column.type === 'checkbox' || column.type === 'selection') {
             return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
           }
-          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${cellValue}</div></td>`
+          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${UtilTools.formatText(cellValue, true)}</div></td>`
         }).join('') + '</tr>'
       })
     } else {
       datas.forEach(item => {
-        html += '<tr>' + columns.map(column => {
+        body += '<tr>' + columns.map(column => {
           const cellAlign = column.align || allAlign
           const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
           const cellValue = item[column.id]
@@ -339,34 +342,35 @@ function toHtml ($xetable, opts, columns, datas) {
           } else if (column.type === 'checkbox' || column.type === 'selection') {
             return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
           }
-          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${cellValue}</div></td>`
+          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${UtilTools.formatText(cellValue, true)}</div></td>`
         }).join('') + '</tr>'
       })
     }
-    html += '</tbody>'
+    body += '</tbody>'
   }
-  if (opts.isFooter) {
+  if (isFooter) {
     const footerData = $xetable.footerData
-    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    const footers = getFooterData(opts, footerData)
     if (footers.length) {
-      html += '<tfoot>'
+      body += '<tfoot>'
       footers.forEach(rows => {
-        html += `<tr>${columns.map(column => {
+        body += `<tr>${columns.map(column => {
           const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
           const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
           const cellValue = getFooterCellValue($xetable, opts, rows, column)
           if (footAlign) {
             classNames.push(`col--${footAlign}`)
           }
-          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${cellValue}</div></td>`
+          return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${UtilTools.formatText(cellValue, true)}</div></td>`
         }).join('')}</tr>`
       })
-      html += '</tfoot>'
+      body += '</tfoot>'
     }
   }
   // 是否半选状态
   const script = !isAllSelected && isIndeterminate ? `<script>(function(){var a=document.querySelector(".${allCls}");if(a){a.indeterminate=true}})()</script>` : ''
-  return html + `</table>${script}</body></html>`
+  body += '</table>' + script
+  return isPrint ? body : createHtmlPage(opts, body)
 }
 
 function toXML ($xetable, opts, columns, datas) {
@@ -397,7 +401,7 @@ function toXML ($xetable, opts, columns, datas) {
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
-    const footers = opts.footerFilterMethod ? footerData.filter(opts.footerFilterMethod) : footerData
+    const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
       xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xetable, opts, rows, column)}</Data></Cell>`).join('')}</Row>`
     })
@@ -406,15 +410,17 @@ function toXML ($xetable, opts, columns, datas) {
 }
 
 function getContent ($xetable, opts, columns, datas) {
-  switch (opts.type) {
-    case 'csv':
-      return toCsv($xetable, opts, columns, datas)
-    case 'txt':
-      return toTxt($xetable, opts, columns, datas)
-    case 'html':
-      return toHtml($xetable, opts, columns, datas)
-    case 'xml':
-      return toXML($xetable, opts, columns, datas)
+  if (columns.length) {
+    switch (opts.type) {
+      case 'csv':
+        return toCsv($xetable, opts, columns, datas)
+      case 'txt':
+        return toTxt($xetable, opts, columns, datas)
+      case 'html':
+        return toHtml($xetable, opts, columns, datas)
+      case 'xml':
+        return toXML($xetable, opts, columns, datas)
+    }
   }
   return ''
 }
@@ -423,7 +429,7 @@ function downloadFile ($xetable, opts, content) {
   const { filename, type, download } = opts
   const name = `${filename}.${type}`
   if (window.Blob) {
-    const blob = new Blob([content], { type: `text/${type}` })
+    const blob = getExportBlobByContent(content, opts)
     if (!download) {
       return Promise.resolve({ type, content, blob })
     }
@@ -447,6 +453,13 @@ function downloadFile ($xetable, opts, content) {
 }
 
 function handleExport ($xetable, opts) {
+  if (opts.remote) {
+    const params = { options: opts, $table: $xetable, $grid: $xetable.$xegrid }
+    if (opts.exportMethod) {
+      return opts.exportMethod(params)
+    }
+    return Promise.resolve(params)
+  }
   const { columns, datas } = getExportData($xetable, opts)
   return Promise.resolve(
     $xetable.preventEvent(null, 'event.export', { options: opts, columns, datas }, () => {
@@ -618,7 +631,7 @@ function handleImport ($xetable, content, opts) {
         }
       })
     if (opts.message !== false) {
-      VXETable.modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.table.impSuccess'), [rows.length]), status: 'success' })
+      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
     }
   } else if (opts.message !== false) {
     VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
@@ -626,6 +639,39 @@ function handleImport ($xetable, content, opts) {
   if (_importResolve) {
     _importResolve(status)
     $xetable._importResolve = null
+  }
+}
+
+export function handlePrint ($xetable, opts, content) {
+  const { beforePrintMethod } = opts
+  if (beforePrintMethod) {
+    content = beforePrintMethod({ content, options: opts, $table: $xetable }) || ''
+  }
+  content = createHtmlPage(opts, content)
+  const blob = getExportBlobByContent(content, opts)
+  if (DomTools.browse.msie) {
+    if (printFrame) {
+      try {
+        printFrame.contentDocument.write('')
+        printFrame.contentDocument.clear()
+      } catch (e) { }
+      document.body.removeChild(printFrame)
+    }
+    printFrame = createFrame()
+    document.body.appendChild(printFrame)
+    printFrame.contentDocument.write(content)
+    printFrame.contentDocument.execCommand('print')
+  } else {
+    if (!printFrame) {
+      printFrame = createFrame()
+      printFrame.onload = evnt => {
+        if (evnt.target.src) {
+          evnt.target.contentWindow.print()
+        }
+      }
+      document.body.appendChild(printFrame)
+    }
+    printFrame.src = URL.createObjectURL(blob)
   }
 }
 
@@ -643,25 +689,31 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      const { visibleColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
+      const { $xegrid, visibleColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
       const columns = options && options.columns
       let expColumns = []
       if (columns && columns.length) {
         columns.forEach(item => {
-          let column
-          if (UtilTools.isColumn(item)) {
-            column = item
-          } else {
-            const type = item.type
-            const field = item.property || item.field
-            if (field) {
-              column = this.getColumnByField(field)
-            } else if (type) {
-              column = tableFullColumn.find(item => item.type === type)
+          let targetColumn
+          if (item) {
+            if (UtilTools.isColumn(item)) {
+              targetColumn = item
+            } else if (XEUtils.isString(item)) {
+              targetColumn = this.getColumnByField(item)
+            } else {
+              const type = item.type
+              const field = item.property || item.field
+              if (field && type) {
+                targetColumn = tableFullColumn.find(column => column.property === field && column.type === type)
+              } else if (field) {
+                targetColumn = this.getColumnByField(field)
+              } else if (type) {
+                targetColumn = tableFullColumn.find(column => column.type === type)
+              }
             }
-          }
-          if (column) {
-            expColumns.push(column)
+            if (targetColumn) {
+              expColumns.push(targetColumn)
+            }
           }
         })
       } else {
@@ -682,12 +734,14 @@ export default {
         // dataFilterMethod: null,
         // footerFilterMethod: null,
         // exportMethod: null,
-        columnFilterMethod: columns && columns.length ? null : column => defaultFilterExportColumn(column)
-      }, exportOpts, options, {
+        columnFilterMethod: columns && columns.length ? null : ({ column }) => defaultFilterExportColumn(column)
+      }, exportOpts, {
+        print: false
+      }, options, {
         columns: expColumns
       })
       if (!opts.filename) {
-        opts.filename = XEUtils.template(GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename'), [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
+        opts.filename = GlobalConfig.i18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
       }
       if (!opts.sheetName) {
         opts.sheetName = document.title
@@ -704,14 +758,32 @@ export default {
           } else {
             opts.data = selectRecords
           }
+        } else if (opts.mode === 'all') {
+          if ($xegrid && !opts.remote) {
+            const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = $xegrid.proxyOpts
+            const ajaxMethods = ajax.queryAll
+            if (ajaxMethods) {
+              const params = {
+                $table: this,
+                $grid: $xegrid,
+                sort: $xegrid.sortData,
+                filters: $xegrid.filterData,
+                form: $xegrid.formData,
+                target: ajaxMethods,
+                options: opts
+              }
+              return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
+                .catch(e => e)
+                .then(rest => {
+                  opts.data = (props.list ? XEUtils.get(rest, props.list) : rest) || []
+                  if (afterQueryAll) {
+                    afterQueryAll(params)
+                  }
+                  return handleExport(this, opts)
+                })
+            }
+          }
         }
-      }
-      if (opts.remote) {
-        const params = { options: opts, $table: this, $grid: this.$xegrid }
-        if (opts.exportMethod) {
-          return opts.exportMethod(params)
-        }
-        return Promise.resolve(params)
       }
       return handleExport(this, opts)
     },
@@ -795,7 +867,11 @@ export default {
           this._fileResolve({ files, file, target: evnt.target })
         } else {
           if (options.message !== false) {
+<<<<<<< HEAD
             VXETable.modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [errType]), status: 'error' })
+=======
+            VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
+>>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
           }
           this._fileReject({ files, file })
         }
@@ -818,34 +894,15 @@ export default {
         print: true
       })
       if (!opts.sheetName) {
-        opts.sheetName = opts.filename
+        opts.sheetName = document.title
       }
-      this.exportData(opts).then(({ content, blob }) => {
-        if (DomTools.browse.msie) {
-          if (printFrame) {
-            try {
-              printFrame.contentDocument.write('')
-              printFrame.contentDocument.clear()
-            } catch (e) { }
-            document.body.removeChild(printFrame)
-          }
-          printFrame = createFrame()
-          document.body.appendChild(printFrame)
-          printFrame.contentDocument.write(content)
-          printFrame.contentDocument.execCommand('print')
-        } else {
-          if (!printFrame) {
-            printFrame = createFrame()
-            printFrame.onload = evnt => {
-              if (evnt.target.src) {
-                evnt.target.contentWindow.print()
-              }
-            }
-            document.body.appendChild(printFrame)
-          }
-          printFrame.src = URL.createObjectURL(blob)
-        }
-      })
+      if (opts.content) {
+        handlePrint(this, opts, opts.content)
+      } else {
+        this.exportData(opts).then(({ content }) => {
+          handlePrint(this, opts, content)
+        })
+      }
     },
     _openImport (options) {
       const defOpts = Object.assign({ mode: 'insert', message: true }, options, this.importOpts)
@@ -933,7 +990,7 @@ export default {
         original: defOpts.original,
         message: defOpts.message,
         isHeader: defOpts.isHeader,
-        isFooter: hasFooter,
+        isFooter: hasFooter && (XEUtils.isBoolean(exportOpts.isFooter) ? exportOpts.isFooter : true),
         isPrint: defOpts.isPrint
       })
       return this.$nextTick()

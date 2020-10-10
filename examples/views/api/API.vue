@@ -12,6 +12,7 @@
     <vxe-table
       resizable
       auto-resize
+      show-header-overflow
       highlight-current-row
       highlight-hover-row
       highlight-current-column
@@ -23,19 +24,31 @@
       :cell-class-name="cellClassNameFunc"
       :data="apiList"
       :custom-config="{storage: true, checkMethod: checkColumnMethod}"
-      :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys, trigger: 'cell'}"
+      :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys}"
       :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod: menuVisibleMethod}"
+      :tooltip-config="{contentMethod: showTooltipMethod}"
       @header-cell-context-menu="headerCellContextMenuEvent"
       @cell-context-menu="cellContextMenuEvent"
       @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" :filters="nameFilters" tree-node></vxe-table-column>
+      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" show-overflow :title-help="{message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'}" :filters="nameFilters" tree-node></vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" type="html" min-width="200"></vxe-table-column>
       <vxe-table-column field="type" title="app.api.title.type" type="html" min-width="140"></vxe-table-column>
       <vxe-table-column field="enum" :title="$t('app.api.title.enum')" type="html" min-width="150"></vxe-table-column>
-      <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160"></vxe-table-column>
-      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120">
+      <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160" :title-help="{message: '部分参数可支持全局设置，具体请查阅相关说明'}"></vxe-table-column>
+      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120" :title-help="{message: '该文档与最新版本保持同步，如果遇到参数无效时，需要检查当前使用的版本号是否支持该参数'}">
         <template v-slot="{ row }">
-          <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+          <template v-if="row.version === 'pro'">
+            <a class="link pro" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">pro</a>
+          </template>
+           <template v-else-if="row.disabled">
+            <span class="disabled">已废弃</span>
+          </template>
+           <template v-else-if="row.abandoned">
+            <span class="abandoned">评估阶段</span>
+          </template>
+          <template v-else>
+            <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
+          </template>
         </template>
       </vxe-table-column>
       <template v-slot:empty>
@@ -50,6 +63,7 @@ import XEUtils from 'xe-utils'
 import pack from '../../../package.json'
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
+import tableColgroupAPI from '../../api/table-colgroup'
 import tableColumnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
@@ -57,7 +71,10 @@ import virtualTreeAPI from '../../api/virtual-tree'
 import excelAPI from '../../api/excel'
 import pagerAPI from '../../api/pager'
 import radioAPI from '../../api/radio'
+import radioGroupAPI from '../../api/radio-group'
+import radioButtonAPI from '../../api/radio-button'
 import checkboxAPI from '../../api/checkbox'
+import checkboxGroupAPI from '../../api/checkbox-group'
 import inputAPI from '../../api/input'
 import selectAPI from '../../api/select'
 import optgroupAPI from '../../api/optgroup'
@@ -78,12 +95,16 @@ import pulldownAPI from '../../api/pulldown'
 
 // const tagMaps = [
 //   ['vxe-table', tableAPI, { subtags: ['vxe-table-column'], description: '基础表格' }],
+//   ['vxe-table-colgroup', tableColgroupAPI, { description: '基础表格 - 分组列' }],
 //   ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
 //   ['vxe-grid', gridAPI, { description: '高级表格' }],
 //   ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
 //   ['vxe-pager', pagerAPI, { description: '分页' }],
 //   ['vxe-radio', radioAPI, { description: '单选框' }],
+//   ['vxe-radio-group', radioGroupAPI, { description: '单选组' }],
+//   ['vxe-radio-button', radioButtonAPI, { description: '单选按钮' }],
 //   ['vxe-checkbox', checkboxAPI, { description: '复选框' }],
+//   ['vxe-checkbox-group', checkboxGroupAPI, { description: '复选组' }],
 //   ['vxe-switch', switchAPI, { description: '开关按钮' }],
 //   ['vxe-input', inputAPI, { description: '输入框' }],
 //   ['vxe-select', selectAPI, { subtags: ['vxe-optgroup', 'vxe-option'], description: '下拉框' }],
@@ -213,6 +234,9 @@ export default {
             case 'table':
               apis = tableAPI
               break
+            case 'table-colgroup':
+              apis = tableColgroupAPI
+              break
             case 'table-column':
               apis = tableColumnAPI
               break
@@ -234,8 +258,17 @@ export default {
             case 'radio':
               apis = radioAPI
               break
+            case 'radio-group':
+              apis = radioGroupAPI
+              break
+            case 'radio-button':
+              apis = radioButtonAPI
+              break
             case 'checkbox':
               apis = checkboxAPI
+              break
+            case 'checkbox-group':
+              apis = checkboxGroupAPI
               break
             case 'input':
               apis = inputAPI
@@ -299,9 +332,10 @@ export default {
     },
     cellClassNameFunc ({ row, column }) {
       return {
+        'api-pro': row.version === 'pro',
         'api-disabled': row.disabled,
         'api-abandoned': row.abandoned,
-        'disabled-line-through': (row.disabled || row.abandoned) && column.property === 'name'
+        'disabled-line-through': (row.disabled) && column.property === 'name'
       }
     },
     checkColumnMethod ({ column }) {
@@ -309,6 +343,20 @@ export default {
         return false
       }
       return true
+    },
+    showTooltipMethod ({ type, row, column }) {
+      if (type === 'body') {
+        if (column.property === 'name') {
+          if (row.disabled) {
+            return '该参数已经被废弃了，除非不打算更新版本，否则不应该被使用'
+          } else if (row.abandoned) {
+            return '该参数属于评估阶段，谨慎使用，后续有可能会被废弃的风险'
+          } else if (row.version === 'pro') {
+            return '该参数属于 pro 版本功能，开源版本不支持该功能，如有需要可联系邮件：xu_liangzhan@163.com'
+          }
+        }
+      }
+      return null
     },
     headerCellContextMenuEvent ({ column }) {
       this.$refs.xTable.setCurrentColumn(column)
@@ -382,7 +430,7 @@ export default {
       return true
     },
     handleSearch () {
-      const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      const filterName = XEUtils.kebabCase(XEUtils.toString(this.filterName).trim()).toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const options = { children: 'list' }

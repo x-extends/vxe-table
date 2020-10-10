@@ -24,6 +24,7 @@ import FormatsAPI from './views/table/formats/API.vue'
 
 import TableBasic from './views/table/base/Basic.vue'
 import TableSize from './views/table/base/Size.vue'
+import TableAutoBreak from './views/table/base/AutoBreak.vue'
 import TableWidth from './views/table/base/Width.vue'
 import TableOverflow from './views/table/base/Overflow.vue'
 import TableTooltip from './views/table/base/Tooltip.vue'
@@ -71,6 +72,7 @@ import TableFooterMaxHeight from './views/table/advanced/MaxHeight.vue'
 import TableImport from './views/table/advanced/Import.vue'
 import TableExport from './views/table/advanced/Export.vue'
 import TablePrint from './views/table/advanced/Print.vue'
+import TableCustomPrint from './views/table/advanced/CustomPrint.vue'
 import TableFixedType from './views/table/advanced/FixedType.vue'
 import TableMenu from './views/table/advanced/Menu.vue'
 import TableMenuPrivilege from './views/table/advanced/MenuPrivilege.vue'
@@ -398,6 +400,11 @@ export default new Router({
       component: TableSize
     },
     {
+      path: '/table/base/autoBreak',
+      name: 'TableAutoBreak',
+      component: TableAutoBreak
+    },
+    {
       path: '/table/base/width',
       name: 'TableWidth',
       component: TableWidth
@@ -626,6 +633,11 @@ export default new Router({
       path: '/table/advanced/print',
       name: 'TablePrint',
       component: TablePrint
+    },
+    {
+      path: '/table/advanced/customPrint',
+      name: 'TableCustomPrint',
+      component: TableCustomPrint
     },
     {
       path: '/table/advanced/fixedType',

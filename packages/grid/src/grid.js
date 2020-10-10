@@ -1,5 +1,5 @@
 import Table from '../../table'
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
@@ -100,6 +100,25 @@ function getPagerSlots (_vm) {
     slots.right = $right
   }
   return slots
+}
+
+function getTableOns (_vm) {
+  const { $listeners, proxyConfig, proxyOpts } = _vm
+  const ons = {}
+  XEUtils.each($listeners, (cb, type) => {
+    ons[type] = (...args) => {
+      _vm.$emit(type, ...args)
+    }
+  })
+  if (proxyConfig) {
+    if (proxyOpts.sort) {
+      ons['sort-change'] = _vm.sortChangeEvent
+    }
+    if (proxyOpts.filter) {
+      ons['filter-change'] = _vm.filterChangeEvent
+    }
+  }
+  return ons
 }
 
 Object.keys(Table.methods).forEach(name => {
@@ -207,6 +226,11 @@ export default {
     columns (value) {
       this.$nextTick(() => this.loadColumn(value))
     },
+    toolbar (value) {
+      if (value) {
+        this.initToolbar()
+      }
+    },
     proxyConfig () {
       this.initProxy()
     },
@@ -243,6 +267,7 @@ export default {
     if (this.columns && this.columns.length) {
       this.loadColumn(this.columns)
     }
+    this.initToolbar()
     this.initPages()
     this.initProxy()
   },
@@ -270,7 +295,7 @@ export default {
        * 渲染表单
        */
       hasForm ? h('div', {
-        ref: 'xForm',
+        ref: 'formWrapper',
         class: 'vxe-grid--form-wrapper'
       }, $scopedSlots.form
         ? $scopedSlots.form.call(this, { $grid: this }, h)
@@ -280,13 +305,14 @@ export default {
        * 渲染工具栏
        */
       hasToolbar ? h('div', {
-        ref: 'xToolbar',
+        ref: 'toolbarWrapper',
         class: 'vxe-grid--toolbar-wrapper'
       }, $scopedSlots.toolbar
         ? $scopedSlots.toolbar.call(this, { $grid: this }, h)
         : [
           h('vxe-toolbar', {
             props: this.toolbarOpts,
+            ref: 'xToolbar',
             scopedSlots: getToolbarSlots(this)
           })
         ]
@@ -295,7 +321,7 @@ export default {
        * 渲染表格顶部区域
        */
       hasTop ? h('div', {
-        ref: 'xTop',
+        ref: 'topWrapper',
         class: 'vxe-grid--top-wrapper'
       }, $scopedSlots.top.call(this, { $grid: this }, h)) : null,
       /**
@@ -303,7 +329,7 @@ export default {
        */
       h('vxe-table', {
         props: this.tableProps,
-        on: this.getTableOns(),
+        on: getTableOns(this),
         scopedSlots: $scopedSlots,
         ref: 'xTable'
       }, this.$slots.default),
@@ -311,14 +337,14 @@ export default {
        * 渲染表格底部区域
        */
       hasBottom ? h('div', {
-        ref: 'xBottom',
+        ref: 'bottomWrapper',
         class: 'vxe-grid--bottom-wrapper'
       }, $scopedSlots.bottom.call(this, { $grid: this }, h)) : null,
       /**
        * 渲染分页
        */
       hasPager ? h('div', {
-        ref: 'xPager',
+        ref: 'pagerWrapper',
         class: 'vxe-grid--pager-wrapper'
       }, $scopedSlots.pager
         ? $scopedSlots.pager.call(this, { $grid: this }, h)
@@ -344,9 +370,9 @@ export default {
      */
     getExcludeHeight () {
       const { $refs, $el, isZMax } = this
-      const { xForm, xToolbar, xTop, xBottom, xPager } = $refs
+      const { formWrapper, toolbarWrapper, topWrapper, bottomWrapper, pagerWrapper } = $refs
       const parentPaddingSize = isZMax ? 0 : getPaddingTopBottomSize($el.parentNode)
-      return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(xForm) + getOffsetHeight(xToolbar) + getOffsetHeight(xTop) + getOffsetHeight(xBottom) + getOffsetHeight(xPager)
+      return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
     },
     handleRowClassName (params) {
       const rowClassName = this.rowClassName
@@ -382,36 +408,29 @@ export default {
       this.clearAll()
       return this.loadColumn(columns)
     },
-    getTableOns () {
-      const { $listeners, proxyConfig, proxyOpts } = this
-      const ons = {}
-      XEUtils.each($listeners, (cb, type) => {
-        ons[type] = (...args) => {
-          this.$emit(type, ...args)
+    initToolbar () {
+      this.$nextTick(() => {
+        const { xTable, xToolbar } = this.$refs
+        if (xTable && xToolbar) {
+          xTable.connect(xToolbar)
         }
       })
-      if (proxyConfig) {
-        if (proxyOpts.sort) {
-          ons['sort-change'] = this.sortChangeEvent
-        }
-        if (proxyOpts.filter) {
-          ons['filter-change'] = this.filterChangeEvent
-        }
-      }
-      return ons
     },
     initPages () {
-      if (this.pagerConfig && this.pagerOpts.pageSize) {
-        this.tablePage.pageSize = this.pagerOpts.pageSize
+      const { tablePage, pagerConfig, pagerOpts } = this
+      const { currentPage, pageSize } = pagerOpts
+      if (pagerConfig) {
+        if (currentPage) {
+          tablePage.currentPage = currentPage
+        }
+        if (pageSize) {
+          tablePage.pageSize = pageSize
+        }
       }
     },
     initProxy () {
       const { proxyInited, proxyConfig, proxyOpts, formConfig, formOpts } = this
       if (proxyConfig) {
-        if (!proxyInited && proxyOpts.autoLoad !== false) {
-          this.proxyInited = true
-          this.$nextTick(() => this.commitProxy('reload'))
-        }
         if (formConfig && proxyOpts.form && formOpts.items) {
           const formData = {}
           formOpts.items.forEach(({ field, itemRender }) => {
@@ -421,7 +440,28 @@ export default {
           })
           this.formData = formData
         }
+        if (!proxyInited && proxyOpts.autoLoad !== false) {
+          this.proxyInited = true
+          this.$nextTick(() => this.initLoad())
+        }
       }
+    },
+    initLoad () {
+      const { $refs } = this
+      const $xetable = $refs.xTable
+      const defaultSort = $xetable.sortOpts.defaultSort
+      let sortParams = {}
+      // 如果使用默认排序
+      if (defaultSort) {
+        sortParams = {
+          property: defaultSort.field,
+          order: defaultSort.order
+        }
+      }
+      this.sortData = sortParams
+      this.filterData = []
+      this.pendingRecords = []
+      this.commitProxy('query')
     },
     handleGlobalKeydownEvent (evnt) {
       const isEsc = evnt.keyCode === 27
@@ -456,8 +496,9 @@ export default {
         case 'mark_cancel':
           this.triggerPendingEvent(code)
           break
-        case 'remove':
+        // 在 v3 中废弃 remove_selection
         case 'remove_selection':
+        case 'remove':
           this.handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => this.removeCheckboxRow())
           break
         case 'import':
@@ -475,8 +516,11 @@ export default {
         case 'reset_custom':
           this.resetColumn(true)
           break
+        case 'init':
         case 'reload':
         case 'query': {
+          const isInited = code === 'init'
+          const isReload = code === 'reload'
           const ajaxMethods = ajax.query
           if (ajaxMethods) {
             const params = {
@@ -489,12 +533,15 @@ export default {
               options: ajaxMethods
             }
             if (pagerConfig) {
+              if (isReload) {
+                tablePage.currentPage = 1
+              }
               params.page = tablePage
             }
-            if (code === 'reload') {
+            if (isInited || isReload) {
               const defaultSort = $xetable.sortOpts.defaultSort
               let sortParams = {}
-              if (pagerConfig) {
+              if (isReload) {
                 tablePage.currentPage = 1
               }
               // 如果使用默认排序
@@ -534,15 +581,16 @@ export default {
           }
           break
         }
+        // 在 v3 中废弃 delete_selection
         case 'delete_selection':
         case 'delete': {
-          this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
-            const ajaxMethods = ajax.delete
-            if (ajaxMethods) {
-              const removeRecords = this.getCheckboxRecords()
-              const body = { removeRecords }
-              const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
-              if (removeRecords.length) {
+          const ajaxMethods = ajax.delete
+          if (ajaxMethods) {
+            const removeRecords = this.getCheckboxRecords()
+            const body = { removeRecords }
+            const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+            if (removeRecords.length) {
+              return this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                 this.tableLoading = true
                 return Promise.resolve((beforeDelete || ajaxMethods).apply(this, applyArgs))
                   .then(rest => {
@@ -563,15 +611,15 @@ export default {
                       VXETable.modal.message({ id: code, message: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
                   })
-              } else {
-                if (isMsg) {
-                  VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
-                }
-              }
+              })
             } else {
-              UtilTools.error('vxe.error.notFunc', [code])
+              if (isMsg) {
+                VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+              }
             }
-          })
+          } else {
+            UtilTools.error('vxe.error.notFunc', [code])
+          }
           break
         }
         case 'save': {
@@ -643,13 +691,13 @@ export default {
       const selectRecords = this.getCheckboxRecords()
       if (this.isMsg) {
         if (selectRecords.length) {
-          VXETable.modal.confirm(GlobalConfig.i18n(alertKey)).then(type => {
+          return VXETable.modal.confirm({ id: `cfm_${code}`, message: GlobalConfig.i18n(alertKey), escClosable: true }).then(type => {
             if (type === 'confirm') {
               callback()
             }
           })
         } else {
-          VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+          VXETable.modal.message({ id: `msg_${code}`, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       } else {
         if (selectRecords.length) {
@@ -716,7 +764,7 @@ export default {
       }
     },
     sortChangeEvent (params) {
-      const { proxyConfig, remoteSort } = this
+      const { remoteSort } = this
       const { $table, column } = params
       const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : ($table.sortOpts.remote || remoteSort)
       const property = params.order ? params.property : null
@@ -730,19 +778,22 @@ export default {
           order: params.order,
           sortBy: params.sortBy
         } : {}
-        if (proxyConfig) {
+        if (this.proxyConfig) {
+          this.tablePage.currentPage = 1
           this.commitProxy('query')
         }
       }
       this.$emit('sort-change', Object.assign({ $grid: this }, params))
     },
     filterChangeEvent (params) {
-      const { remoteFilter } = this
       const { $table, filters } = params
       // 如果是服务端过滤
-      if ($table.filterOpts.remote || remoteFilter) {
+      if ($table.filterOpts.remote || this.remoteFilter) {
         this.filterData = filters
-        this.commitProxy('query')
+        if (this.proxyConfig) {
+          this.tablePage.currentPage = 1
+          this.commitProxy('query')
+        }
       }
       this.$emit('filter-change', Object.assign({ $grid: this }, params))
     },
@@ -764,7 +815,7 @@ export default {
       this.$emit('form-submit-invalid', Object.assign({ $grid: this }, params), evnt)
     },
     togglCollapseEvent (params, evnt) {
-      this.recalculate(true)
+      this.$nextTick(() => this.recalculate(true))
       this.$emit('form-toggle-collapse', Object.assign({ $grid: this }, params), evnt)
     },
     triggerZoomEvent (evnt) {

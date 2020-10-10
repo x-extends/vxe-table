@@ -32,33 +32,12 @@ const GlobalConfig = {
     // checkboxConfig: {
     //   trigger: 'default'
     // },
-    // sortConfig: {
-    //   remote: false,
-    //   trigger: 'default',
-    //   orders: ['asc', 'desc', null],
-    //   sortMethod: null
-    // },
-    // filterConfig: {
-    //   remote: false,
-    //   filterMethod: null
-    // },
-    // expandConfig: {
-    //   trigger: 'default'
-    // },
-    // treeConfig: {
-    //   children: 'children',
-    //   hasChild: 'hasChild',
-    //   indent: 20
-    // },
     // tooltipConfig: {
     //   theme: 'dark',
     //   enterable: false
     // },
     // validConfig: {
     //   message: 'default'
-    // },
-    // editConfig: {
-    //   mode: 'cell'
     // },
     // contextMenu: {
     //   visibleMethod () {}
@@ -68,12 +47,42 @@ const GlobalConfig = {
     //  checkMethod () {}
     // },
     // rowId: '_XID', // 行数据的唯一主键字段名
+    sortConfig: {
+      // remote: false,
+      // trigger: 'default',
+      // orders: ['asc', 'desc', null],
+      // sortMethod: null,
+      showIcon: true
+    },
+    filterConfig: {
+      // remote: false,
+      // filterMethod: null,
+      showIcon: true
+    },
+    treeConfig: {
+      children: 'children',
+      hasChild: 'hasChild',
+      indent: 20,
+      showIcon: true
+    },
+    expandConfig: {
+      // trigger: 'default',
+      showIcon: true
+    },
+    editConfig: {
+      // mode: 'cell',
+      showIcon: true,
+      showAsterisk: true
+    },
     importConfig: {
       modes: ['insert', 'covering']
     },
     exportConfig: {
       isPrint: true,
       modes: ['current', 'selected']
+    },
+    mouseConfig: {
+      extension: true
     },
     scrollX: {
       gt: 60
@@ -89,6 +98,9 @@ const GlobalConfig = {
       // rHeight: 0
     }
   },
+  export: {
+    types: {}
+  },
   icon: {
     // table
     TABLE_SORT_ASC: iconPrefix + 'caret-top',
@@ -96,6 +108,7 @@ const GlobalConfig = {
     TABLE_FILTER_NONE: iconPrefix + 'funnel',
     TABLE_FILTER_MATCH: iconPrefix + 'funnel',
     TABLE_EDIT: iconPrefix + 'edit-outline',
+    TABLE_HELP: iconPrefix + 'question',
     TABLE_TREE_LOADED: iconPrefix + 'refresh roll',
     TABLE_TREE_OPEN: iconPrefix + 'caret-right rotate90',
     TABLE_TREE_CLOSE: iconPrefix + 'caret-right',
@@ -171,7 +184,8 @@ const GlobalConfig = {
       props: {
         list: null,
         result: 'result',
-        total: 'page.total'
+        total: 'page.total',
+        message: 'message'
       }
       // beforeItem: null,
       // beforeColumn: null,
@@ -199,12 +213,13 @@ const GlobalConfig = {
     // layouts: ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total']
   },
   form: {
-    // preventSubmit: false
+    // preventSubmit: false,
     // validConfig: {
     //   autoPos: true
     // },
     // size: null,
-    // colon: false
+    // colon: false,
+    titleAsterisk: true
   },
   input: {
     // size: null,
@@ -227,7 +242,8 @@ const GlobalConfig = {
   },
   select: {
     // size: null,
-    // transfer: false
+    // transfer: false,
+    multiCharOverflow: 8
   },
   toolbar: {
     // size: null,
@@ -258,7 +274,7 @@ const GlobalConfig = {
   modal: {
     // size: null,
     minWidth: 340,
-    minHeight: 200,
+    minHeight: 140,
     lockView: true,
     mask: true,
     duration: 3000,
@@ -270,6 +286,7 @@ const GlobalConfig = {
     storageKey: 'VXE_MODAL_POSITION'
   },
   list: {
+    // size: null,
     scrollY: {
       gt: 100
       // oSize: 0,

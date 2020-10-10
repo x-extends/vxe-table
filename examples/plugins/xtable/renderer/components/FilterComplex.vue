@@ -3,14 +3,9 @@
     <div class="my-fc-type">
       <vxe-radio v-model="option.data.type" name="fType" label="has">包含</vxe-radio>
       <vxe-radio v-model="option.data.type" name="fType" label="eq">等于</vxe-radio>
-      <vxe-radio v-model="option.data.type" name="fType" label="gt">大于</vxe-radio>
-      <vxe-radio v-model="option.data.type" name="fType" label="lt">小于</vxe-radio>
     </div>
     <div class="my-fc-name">
       <vxe-input v-model="option.data.name" type="text" placeholder="请输入名称" @input="changeOptionEvent()"></vxe-input>
-    </div>
-    <div class="my-fc-iscase">
-      <vxe-checkbox v-model="option.data.isCase">不区分大小写</vxe-checkbox>
     </div>
     <div class="my-fc-footer">
       <vxe-button status="primary" @click="confirmEvent">确认</vxe-button>
@@ -32,17 +27,11 @@ export default {
       option: null
     }
   },
-  watch: {
-    params () {
-      this.load()
-    }
-  },
   created () {
     this.load()
   },
   methods: {
     load () {
-      // filters 可以配置多个，实际只用一个就可以满足需求了
       const { column } = this.params
       const option = column.filters[0]
       this.column = column
@@ -73,9 +62,6 @@ export default {
 }
 .my-filter-complex .my-fc-type {
   padding: 8px 0;
-}
-.my-filter-complex .my-fc-iscase {
-  padding: 12px 0;
 }
 .my-filter-complex .my-fc-footer {
   text-align: center;

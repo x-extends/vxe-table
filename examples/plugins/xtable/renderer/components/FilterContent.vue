@@ -2,18 +2,18 @@
   <div class="my-filter-content">
     <div class="my-fc-search">
       <div class="my-fc-search-top">
-        <vxe-input v-model="option.data.sVal" placeholder="搜索" suffix-icon="fa fa-search" @keyup="searchEvent"></vxe-input>
+        <vxe-input v-model="option.data.sVal" placeholder="搜索" suffix-icon="fa fa-search"></vxe-input>
       </div>
       <div class="my-fc-search-content">
         <template v-if="valList.length">
           <ul class="my-fc-search-list my-fc-search-list-head">
             <li class="my-fc-search-item">
-              <vxe-checkbox v-model="isAll" :indeterminate="isIndeterminate" @change="changeAllEvent">全选</vxe-checkbox>
+              <vxe-checkbox v-model="isAll" @change="changeAllEvent">全选</vxe-checkbox>
             </li>
           </ul>
           <ul class="my-fc-search-list my-fc-search-list-body">
             <li class="my-fc-search-item" v-for="(item, sIndex) in valList" :key="sIndex">
-              <vxe-checkbox v-model="item.checked" @change="changeItemEvent">{{ item.value }}</vxe-checkbox>
+              <vxe-checkbox v-model="item.checked">{{ item.value }}</vxe-checkbox>
             </li>
           </ul>
         </template>
@@ -39,29 +39,18 @@ export default {
   },
   data () {
     return {
-      size: 'mini', // 被所有子组件继承 size
+      size: 'mini',
       isAll: false,
-      isIndeterminate: false,
       option: null,
       colValList: [],
       valList: []
     }
   },
-  watch: {
-    params () {
-      this.load()
-    },
-    colValList () {
-      this.searchEvent()
-    }
-  },
   created () {
     this.load()
-    this.searchEvent()
   },
   methods: {
     load () {
-      // filters 可以配置多个，实际只用一个就可以满足需求了
       const { $table, column } = this.params
       const { fullData } = $table.getTableData()
       const option = column.filters[0]
@@ -79,30 +68,19 @@ export default {
     searchEvent () {
       const { option, colValList } = this
       this.valList = option.data.sVal ? colValList.filter(item => item.value.indexOf(option.data.sVal) > -1) : colValList
-      this.updateCheckStatus()
     },
     changeAllEvent () {
       const { isAll } = this
       this.valList.forEach(item => {
         item.checked = isAll
       })
-      this.isIndeterminate = false
     },
-    updateCheckStatus () {
-      const { valList } = this
-      const isAll = valList.every(item => item.checked)
-      this.isAll = isAll
-      this.isIndeterminate = !isAll && valList.some(item => item.checked)
-    },
-    changeItemEvent () {
-      this.updateCheckStatus()
-    },
-    confirmFilterEvent () {
+    confirmFilterEvent (evnt) {
       const { params, option, valList } = this
       const { data } = option
       const { $panel } = params
       data.vals = valList.filter(item => item.checked).map(item => item.value)
-      option.checked = true
+      $panel.changeOption(evnt, true, option)
       $panel.confirmFilter()
     },
     resetFilterEvent () {
@@ -130,7 +108,6 @@ export default {
   line-height: 22px;
 }
 .my-filter-content .my-fc-search .my-fc-search-content {
-  border: 1px solid #E2E4E7;
   padding: 2px 10px;
 }
 .my-filter-content .my-fc-search-empty {
@@ -139,6 +116,8 @@ export default {
 }
 .my-filter-content .my-fc-search-list {
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 .my-filter-content .my-fc-search-list-body {
   overflow: auto;

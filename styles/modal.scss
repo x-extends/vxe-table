@@ -6,6 +6,7 @@
   position: fixed;
   top: 0;
   left: 0;
+  line-height: 1.5;
   width: calc(100% + 18px);
   height: calc(100% + 18px);
   color: $vxe-font-color;
@@ -270,7 +271,7 @@
   .vxe-modal--footer {
     flex-shrink: 0;
     text-align: right;
-    padding: 0.6em 1em;
+    padding: 0.8em 1em;
   }
   &.is--maximize {
     .vxe-modal--box {

@@ -41,24 +41,27 @@
           //     filterMethod: null
           //   },
           //   expandConfig: {
-          //     trigger: 'default'
+          //     trigger: 'default',
+          //     showIcon: true
           //   },
           //   treeConfig: {
           //     children: 'children',
           //     hasChild: 'hasChild',
-          //     indent: 20
+          //     indent: 20,
+          //     showIcon: true
           //   },
           //   tooltipConfig: {
           //     theme: 'dark',
           //     enterable: false
           //   },
-          //   editConfig: {
-          //     mode: 'cell'
-          //   },
           //   contextMenu: {
           //     visibleMethod () {}
           //   },
           //   rowId: '_XID', // 行数据的唯一主键字段名
+          //   editConfig: {
+          //     mode: 'cell',
+          //     showAsterisk: true
+          //   },
           //   importConfig: {
           //     modes: ['insert', 'covering']
           //   },
@@ -120,7 +123,8 @@
           //     autoPos: true
           //   },
           //   size: null,
-          //   colon: false
+          //   colon: false,
+          //   titleAsterisk: true
           // },
           // input: {
           //   size: null,
@@ -141,7 +145,8 @@
           // },
           // select: {
           //   size: null,
-          //   transfer: false
+          //   transfer: false,
+          //   multiCharOverflow: 8
           // },
           // toolbar: {
           //   size: null,

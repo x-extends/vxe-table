@@ -29,7 +29,7 @@
       <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
         <template v-slot:edit="{ row }">
           <vxe-pulldown ref="xDown1" transfer>
-            <template>
+            <template v-slot>
               <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
             </template>
             <template v-slot:dropdown>
@@ -43,7 +43,7 @@
           </vxe-pulldown>
         </template>
       </vxe-table-column>
-      <vxe-table-column title="分组">
+      <vxe-table-colgroup title="分组">
         <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
           <template v-slot:edit="{ row }">
             <vxe-input type="number" v-model="row.age"></vxe-input>
@@ -55,7 +55,7 @@
           </template>
           <template v-slot="{ row }">￥{{ row.num }}</template>
         </vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
       <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
         <template v-slot:edit="{ row, rowIndex }">
           <template v-if="rowIndex === 0">
@@ -92,7 +92,7 @@
           <vxe-button>管理</vxe-button>
           <vxe-button>删除</vxe-button>
           <vxe-button size="small">
-            <template>更多操作</template>
+            <template v-slot>更多操作</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
@@ -102,9 +102,9 @@
         </span>
       </template>
       <template v-slot:right>
-        <img src="static/other/img1.gif" height="34">
-        <img src="static/other/img1.gif" height="34">
-        <img src="static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
       </template>
     </vxe-pager>
 
@@ -160,7 +160,7 @@ export default {
           <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
             <template v-slot:edit="{ row }">
               <vxe-pulldown ref="xDown1" transfer>
-                <template>
+                <template v-slot>
                   <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
                 </template>
                 <template v-slot:dropdown>
@@ -174,7 +174,7 @@ export default {
               </vxe-pulldown>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="分组">
+          <vxe-table-colgroup title="分组">
             <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
               <template v-slot:edit="{ row }">
                 <vxe-input type="number" v-model="row.age"></vxe-input>
@@ -186,7 +186,7 @@ export default {
               </template>
               <template v-slot="{ row }">￥{{ row.num }}</template>
             </vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
           <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
             <template v-slot:edit="{ row, rowIndex }">
               <template v-if="rowIndex === 0">
@@ -208,7 +208,7 @@ export default {
             </template>
           </vxe-table-column>
         </vxe-table>
-
+        
         <vxe-pager
           perfect
           :current-page.sync="tablePage.currentPage"
@@ -223,7 +223,7 @@ export default {
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
               <vxe-button size="small">
-                <template>更多操作</template>
+                <template v-slot>更多操作</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
@@ -233,9 +233,9 @@ export default {
             </span>
           </template>
           <template v-slot:right>
-            <img src="static/other/img1.gif" height="34">
-            <img src="static/other/img1.gif" height="34">
-            <img src="static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
           </template>
         </vxe-pager>
         `,

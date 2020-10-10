@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      树形虚拟滚动渲染<span class="orange">（最大可以支撑 1w 列、10w 行）</span>，具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-virtual-tree" target="_blank">vxe-table-plugin-virtual-tree</a> 插件的 API<br>
+      树形虚拟滚动渲染<span class="orange">（最大可以支撑 1w 列、20w 行）</span>，具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-virtual-tree" target="_blank">vxe-table-plugin-virtual-tree</a> 插件的 API<br>
       <span class="red">（注：启用纵向虚拟滚的后不支持动态行高）</span>
     </p>
 
@@ -13,11 +13,9 @@
       ref="xVTree"
       height="500"
       :loading="loading"
-      :data="tableData"
       :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
       :radio-config="{labelField: 'name'}"
-      :tree-config="{children: 'children'}"
-      :columns="tableColumn">
+      :tree-config="{children: 'children'}">
       <template v-slot:toolbar_buttons>
         <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
@@ -48,8 +46,6 @@ export default {
   data () {
     return {
       loading: false,
-      tableData: [],
-      tableColumn: [],
       demoCodes: [
         `
         <vxe-virtual-tree
@@ -60,11 +56,9 @@ export default {
           ref="xVTree"
           height="500"
           :loading="loading"
-          :data="tableData"
           :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
           :radio-config="{labelField: 'name'}"
-          :tree-config="{children: 'children'}"
-          :columns="tableColumn">
+          :tree-config="{children: 'children'}">
           <template v-slot:toolbar_buttons>
             <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
             <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
@@ -83,12 +77,10 @@ export default {
         export default {
           data () {
             return {
-              loading: false,
-              tableData: [],
-              tableColumn: []
+              loading: false
             }
           },
-          created () {
+          mounted () {
             this.loadColumn()
             this.loadData(500)
           },
@@ -96,24 +88,28 @@ export default {
             loadData (size) {
               this.loading = true
               this.getTreeList(size).then(data => {
-                this.tableData = data
                 this.loading = false
+                if (this.$refs.xVTree) {
+                  this.$refs.xVTree.loadData(data)
+                }
               })
             },
-            loadColumn () {
+            loadColumn (size) {
               const tableColumn = [
                 { type: 'seq', title: '序号', width: 100 },
                 { type: 'radio', title: 'Name', width: 300, treeNode: true },
                 { field: 'id', title: 'ID', width: 200 }
               ]
-              for (let index = 0; index < 2000; index++) {
+              for (let index = 0; index < size; index++) {
                 tableColumn.push({
                   field: 'col' + index,
                   title: 'col_' + index,
                   width: 100
                 })
               }
-              this.tableColumn = tableColumn
+              if (this.$refs.xVTree) {
+                this.$refs.xVTree.loadColumn(tableColumn)
+              }
             },
             getTreeList (size) {
               return new Promise(resolve => {
@@ -200,10 +196,8 @@ export default {
       ]
     }
   },
-  created () {
-    this.loadColumnAndData(100, 500)
-  },
   mounted () {
+    this.loadColumnAndData(100, 500)
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
@@ -216,8 +210,10 @@ export default {
     loadData (size) {
       this.loading = true
       this.getTreeList(size).then(data => {
-        this.tableData = data
         this.loading = false
+        if (this.$refs.xVTree) {
+          this.$refs.xVTree.loadData(data)
+        }
       })
     },
     loadColumn (size) {
@@ -233,7 +229,9 @@ export default {
           width: 100
         })
       }
-      this.tableColumn = tableColumn
+      if (this.$refs.xVTree) {
+        this.$refs.xVTree.loadColumn(tableColumn)
+      }
     },
     getTreeList (size) {
       return new Promise(resolve => {

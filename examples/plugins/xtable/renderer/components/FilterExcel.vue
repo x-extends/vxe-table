@@ -2,13 +2,11 @@
   <div class="my-filter-excel">
     <div class="my-fe-top">
       <ul class="my-fe-menu-group">
-        <li class="my-fe-menu-link" @click="sortAscEvent">
-          <i class="fa fa-sort-alpha-asc my-fe-menu-link-left-icon"></i>
+        <li class="my-fe-menu-link">
           <span>升序</span>
         </li>
-        <li class="my-fe-menu-link" @click="sortDescEvent">
-          <i class="fa fa-sort-alpha-desc my-fe-menu-link-left-icon"></i>
-          <span>降序</span>
+        <li class="my-fe-menu-link">
+          <span>倒序</span>
         </li>
       </ul>
       <ul class="my-fe-menu-group">
@@ -21,8 +19,7 @@
           <i class="fa fa-caret-right my-fe-menu-link-right-icon"></i>
           <div class="my-fe-menu-child-list">
             <ul class="my-fe-child-menu-group-list" v-for="(cList, gIndex) in caseGroups" :key="gIndex">
-              <li v-for="(cItem, cIndex) in cList" :key="cIndex" :class="[option.data.fMenu === cItem.value ? 'my-fe-child-menu-item active' : 'my-fe-child-menu-item']" @click="childMenuClickEvent(cItem)">
-                <i class="fa fa-check my-fe-child-menu-left-icon"></i>
+              <li v-for="(cItem, cIndex) in cList" :key="cIndex" class="my-fe-child-menu-item" @click="childMenuClickEvent(cItem)">
                 <span>{{ cItem.label }}</span>
               </li>
             </ul>
@@ -35,9 +32,9 @@
         <input v-model="option.data.sVal" placeholder="搜索"/>
         <i class="fa fa-search my-fe-search-icon"></i>
       </div>
-      <ul class="my-fe-search-list" v-if="searchList.length">
+      <ul class="my-fe-search-list">
         <li class="my-fe-search-item" @click="sAllEvent">
-          <i :class="[isAllSearch ? 'fa fa-check-square-o my-fe-search-item-icon' : 'fa fa-square-o my-fe-search-item-icon']"></i>
+          <i class="fa fa-square-o my-fe-search-item-icon"></i>
           <span>(全选)</span>
         </li>
         <li class="my-fe-search-item" v-for="(val, sIndex) in searchList" :key="sIndex" @click="sItemEvent(val)">
@@ -45,9 +42,6 @@
           <span>{{ val }}</span>
         </li>
       </ul>
-      <div v-else class="body">
-        <div class="my-fe-search-empty">无匹配项</div>
-      </div>
     </div>
     <div class="my-fe-footer">
       <vxe-button status="primary" @click="confirmFilterEvent">确认</vxe-button>
@@ -58,7 +52,6 @@
 
 <script>
 import XEUtils from 'xe-utils'
-import { VXETable } from '../../../../../packages/vxe-table'
 
 export default {
   name: 'FilterExcel',
@@ -79,11 +72,7 @@ export default {
           { value: 'greater', label: '大于' },
           { value: 'ge', label: '大于或等于' },
           { value: 'less', label: '小于' },
-          { value: 'le', label: '小于或等于' },
-          { value: 'between', label: '介于' }
-        ],
-        [
-          { value: 'custom', label: '自定义筛选' }
+          { value: 'le', label: '小于或等于' }
         ]
       ],
       allCaseList: [
@@ -92,29 +81,14 @@ export default {
         { value: '3', label: '大于' },
         { value: '4', label: '大于或等于' },
         { value: '5', label: '小于' },
-        { value: '6', label: '小于或等于' },
-        { value: '7', label: '开头是' },
-        { value: '8', label: '开头不是' },
-        { value: '9', label: '结尾是' },
-        { value: '10', label: '结尾不是' },
-        { value: '11', label: '包含' },
-        { value: '12', label: '不包含' }
+        { value: '6', label: '小于或等于' }
       ]
     }
   },
   computed: {
-    isAllSearch () {
-      const { option, searchList } = this
-      return searchList.every(val => option.data.vals.indexOf(val) > -1)
-    },
     searchList () {
       const { option, colValList } = this
       return option.data.sVal ? colValList.filter(val => val.indexOf(option.data.sVal) > -1) : colValList
-    }
-  },
-  watch: {
-    params () {
-      this.load()
     }
   },
   created () {
@@ -124,29 +98,18 @@ export default {
     load () {
       const { $table, column } = this.params
       const { fullData } = $table.getTableData()
-      // filters 可以配置多个，实际只用一个就可以满足需求了
       const option = column.filters[0]
       const colValList = Object.keys(XEUtils.groupBy(fullData, column.property))
       this.column = column
       this.option = option
       this.colValList = colValList
     },
-    sortAscEvent () {
-      const { $table, column } = this.params
-      $table.closeFilter()
-      $table.sort(column.property, 'asc')
-    },
-    sortDescEvent () {
-      const { $table, column } = this.params
-      $table.closeFilter()
-      $table.sort(column.property, 'desc')
-    },
     sAllEvent () {
       const { data } = this.option
-      if (this.isAllSearch) {
+      if (data.vals.length > 0) {
         data.vals = []
       } else {
-        data.vals = this.searchList
+        data.vals = this.colValList
       }
     },
     sItemEvent (val) {
@@ -158,13 +121,13 @@ export default {
         data.vals.splice(vIndex, 1)
       }
     },
-    confirmFilterEvent () {
+    confirmFilterEvent (evnt) {
       const { params, option } = this
       const { data } = option
       const { $panel } = params
       data.f1 = ''
       data.f2 = ''
-      option.checked = true
+      $panel.changeOption(evnt, true, option)
       $panel.confirmFilter()
     },
     resetFilterEvent () {
@@ -172,106 +135,7 @@ export default {
       $panel.resetFilter()
     },
     childMenuClickEvent (cItem) {
-      const { $table, $panel } = this.params
-      const { option, allCaseList } = this
-      const { data } = option
-      this.selectCMenuItem = cItem
-      data.fMode = 'and'
-      data.f1Val = ''
-      data.f2Val = ''
-      switch (cItem.value === 'custom' ? (data.fMenu || cItem.value) : cItem.value) {
-        case 'equal':
-          data.f1Type = '1'
-          data.f2Type = ''
-          break
-        case 'ne':
-          data.f1Type = '2'
-          data.f2Type = ''
-          break
-        case 'greater':
-          data.f1Type = '3'
-          data.f2Type = ''
-          break
-        case 'ge':
-          data.f1Type = '4'
-          data.f2Type = ''
-          break
-        case 'less':
-          data.f1Type = '5'
-          data.f2Type = ''
-          break
-        case 'le':
-          data.f1Type = '6'
-          data.f2Type = ''
-          break
-        case 'between':
-          data.f1Type = '4'
-          data.f2Type = '6'
-          break
-        case 'custom':
-          break
-        default:
-          return
-      }
-      $table.closeFilter()
-      // 动态弹出框
-      VXETable.modal.open({
-        title: '自定义自动筛选方式',
-        width: 600,
-        slots: {
-          default: ({ $modal }) => {
-            return [
-              <div class="my-fe-popup">
-                <div class="my-fe-popup-title">显示行</div>
-                <div class="my-fe-popup-filter my-fe-popup-f1">
-                  <vxe-select class="my-fe-popup-filter-select" v-model={ data.f1Type } transfer clearable>
-                    {
-                      allCaseList.map(fItem => {
-                        return <vxe-option value={ fItem.value } label={ fItem.label }></vxe-option>
-                      })
-                    }
-                  </vxe-select>
-                  <vxe-input class="my-fe-popup-filter-input" v-model={ data.f1Val } clearable></vxe-input>
-                </div>
-                <div class="my-fe-popup-concat">
-                  <vxe-radio-group v-model={ data.fMode }>
-                    <vxe-radio label="and">与</vxe-radio>
-                    <vxe-radio label="or">或</vxe-radio>
-                  </vxe-radio-group>
-                </div>
-                <div class="my-fe-popup-filter my-fe-popup-f2">
-                  <vxe-select class="my-fe-popup-filter-select" v-model={ data.f2Type } transfer clearable>
-                    {
-                      allCaseList.map(fItem => {
-                        return <vxe-option value={ fItem.value } label={ fItem.label }></vxe-option>
-                      })
-                    }
-                  </vxe-select>
-                  <vxe-input class="my-fe-popup-filter-input" v-model={ data.f2Val } clearable></vxe-input>
-                </div>
-                <div class="my-fe-popup-describe">
-                  <span>可用 ? 代表单个字符<br/>用 * 代表任意多个字符</span>
-                </div>
-                <div class="my-fe-popup-footer">
-                  <vxe-button status="primary" onClick={
-                    () => {
-                      data.fMenu = cItem.value
-                      option.checked = true
-                      $modal.close()
-                      $panel.confirmFilter()
-                    }
-                  }>确认</vxe-button>
-                  <vxe-button onClick={
-                    () => {
-                      $modal.close()
-                    }
-                  }>取消</vxe-button>
-                </div>
-              </div>
-            ]
-          }
-        }
-      })
+      this.$XModal.alert({ message: cItem.label })
     }
   }
 }
@@ -285,6 +149,7 @@ export default {
   position: relative;
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 .my-filter-excel .my-fe-top .my-fe-menu-group:after {
   content: "";
@@ -346,15 +211,6 @@ export default {
 .my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item:hover {
   background-color: #C5C5C5;
 }
-.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item .my-fe-child-menu-left-icon {
-  display: none;
-  position: absolute;
-  left: 10px;
-  top: 6px;
-}
-.my-filter-excel .my-fe-top .my-fe-menu-group .my-fe-menu-link .my-fe-child-menu-group-list > .my-fe-child-menu-item.active .my-fe-child-menu-left-icon {
-  display: block;
-}
 .my-filter-excel .my-fe-search {
   padding: 0 10px 0 30px;
 }
@@ -380,10 +236,6 @@ export default {
   padding: 2px 10px;
   overflow: auto;
   height: 140px;
-}
-.my-filter-excel .my-fe-search .my-fe-search-list .my-fe-search-empty {
-  text-align: center;
-  padding-top: 20px;
 }
 .my-filter-excel .my-fe-search .my-fe-search-list .my-fe-search-item {
   cursor: pointer;

@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       通过调用 <table-api-link prop="validate"/> 函数校验数据，<table-api-link prop="edit-rules"/> 校验规则配置<br>
-      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+      <span class="red">（不指定数据的情况下，默认只校验状态发生变动的数据，例如：新增、修改...等）</span>
     </p>
 
     <vxe-toolbar>
@@ -17,6 +17,7 @@
 
     <vxe-table
       resizable
+      show-overflow
       keep-source
       ref="xTree"
       :edit-rules="validRules"
@@ -71,6 +72,7 @@ export default {
 
         <vxe-table
           resizable
+          show-overflow
           keep-source
           ref="xTree"
           :edit-rules="validRules"

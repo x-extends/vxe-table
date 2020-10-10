@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import UtilTools from './utils'
 
 const browse = XEUtils.browse()
@@ -51,11 +51,10 @@ export const DomTools = {
       elem.className = `${elem.className} ${cls}`
     }
   },
-  updateCellTitle (evnt, column) {
-    const cellElem = evnt.currentTarget.querySelector('.vxe-cell')
-    const content = column.type === 'html' ? cellElem.innerText : cellElem.textContent
-    if (cellElem.getAttribute('title') !== content) {
-      cellElem.setAttribute('title', content)
+  updateCellTitle (overflowElem, column) {
+    const content = column.type === 'html' ? overflowElem.innerText : overflowElem.textContent
+    if (overflowElem.getAttribute('title') !== content) {
+      overflowElem.setAttribute('title', content)
     }
   },
   rowToVisible ($xetable, row) {
@@ -189,14 +188,6 @@ export const DomTools = {
     const rowIndex = [].indexOf.call(trElem.parentNode.children, trElem)
     return { rowid, rowIndex, columnIndex }
   },
-  getCell ($xetable, { row, column }) {
-    const rowid = UtilTools.getRowid($xetable, row)
-    const bodyElem = $xetable.$refs[`${column.fixed || 'table'}Body`] || $xetable.$refs.tableBody
-    if (bodyElem && bodyElem.$el) {
-      return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
-    }
-    return null
-  },
   toView (elem) {
     const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
     const scrollIntoView = 'scrollIntoView'
@@ -217,6 +208,23 @@ export const DomTools = {
       evnt.initEvent(type, true, true)
     }
     targetElem.dispatchEvent(evnt)
+  },
+  calcHeight ($xetable, key) {
+    const val = $xetable[key]
+    let num = 0
+    if (val) {
+      if (val === 'auto') {
+        num = $xetable.parentHeight
+      } else {
+        if (DomTools.isScale(val)) {
+          num = Math.floor(parseInt(val) / 100 * $xetable.parentHeight)
+        } else {
+          num = XEUtils.toNumber(val)
+        }
+        num -= $xetable.getExcludeHeight()
+      }
+    }
+    return num
   }
 }
 

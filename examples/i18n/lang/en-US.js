@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   app: {
     aside: {
       nav: {
@@ -13,6 +13,7 @@ module.exports = {
         icon: 'Icon',
         basics: 'Basic table',
         base: 'Basics table',
+        autoBreak: '自动换行',
         size: 'Size',
         ellipsis: 'Cell overflow ellipsis',
         tooltips: 'Cell tooltip',
@@ -32,6 +33,7 @@ module.exports = {
         fixed: 'Table with fixed column',
         fullFixed: 'Table with fixed columns and header ',
         group: 'Grouping table head',
+        merge: 'Merge rows or columns',
         seq: 'Table sequence',
         headerHighlight: 'Highlight column',
         current: 'Highlight row',
@@ -55,12 +57,13 @@ module.exports = {
         filterIcon: 'Custom filter icon',
         span: 'Rowspan and colspan',
         spanRow: 'Merge the list of horizontal trees',
-        mergeCell: 'Consolidate complex reports',
-        footer: '表尾数据',
+        mergeCell: 'Merge cells',
+        footer: 'Footer data',
         footerSpan: 'Footer rowspan and colspan',
         import: 'Import',
         export: 'Export',
         print: 'Print',
+        customPrint: 'Advanced print',
         fixedType: 'Fixed type + import/export',
         contextMenu: 'Context menu',
         menuPrivilege: 'Context menu + permission',
@@ -68,10 +71,10 @@ module.exports = {
         expandRow: 'Expandable row',
         expandRowIcon: 'Expandable row + More customizations',
         expandRowLazy: 'Expandable row + lazy loading',
-        accordion: '展开行 + 手风琴效果',
+        accordion: 'Expandable row + accordion',
         toolbar: 'Toolbar',
-        customs: 'Show/hide column',
-        customStorage: '自定义列 + localStorage',
+        customs: 'Show, hide, and collapsed columns',
+        customStorage: 'Custom column + localStorage',
         customlWidthStorage: '完整自定义列 + localStorage',
         search: 'Table search',
         groupBy: 'Row group',
@@ -179,6 +182,7 @@ module.exports = {
         switch: 'Switch',
         list: 'List',
         pulldown: 'Pulldown',
+        readFile: 'Read file',
 
         other: 'Integrated third party Library',
         elementRender: 'element-ui -> Custom Templates',
@@ -231,6 +235,7 @@ module.exports = {
 
         api: 'API',
         vxeTable: 'vxe-table',
+        vxeTableColgroup: 'vxe-table-colgroup',
         vxeTableColumn: 'vxe-table-column',
         vxeGrid: 'vxe-grid',
         vxeVirtualTree: 'vxe-virtual-tree',
@@ -238,7 +243,10 @@ module.exports = {
         vxeToolbar: 'vxe-toolbar',
         vxePager: 'vxe-pager',
         vxeRadio: 'vxe-radio',
+        vxeRadioGroup: 'vxe-radio-group',
+        vxeRadioButton: 'vxe-radio-button',
         vxeCheckbox: 'vxe-checkbox',
+        vxeCheckboxGroup: 'vxe-checkbox-group',
         vxeInput: 'vxe-input',
         vxeTextarea: 'vxe-textarea',
         vxeSelect: 'vxe-select',
@@ -302,6 +310,10 @@ module.exports = {
         copyToClipboard: 'Copied to clipboard'
       },
       other: {
+        v1: '1.x (Deprecated)',
+        v2: '2.x (vue 2.6.x Stable)',
+        v3: '3.x (vue 2.6.x Latest)',
+        v4: '4.x (vue 3.x Next)',
         plan: {
           vv1: 'v1 Based on vue2.6+, support all the mainstream browsers, to achieve all the practical functions of the table',
           v2: 'v2 Based on vue2.6+, support all mainstream browsing, both function and performance',
@@ -319,7 +331,7 @@ module.exports = {
         donationTitle: 'Donation method：',
         issuesTitle: '该群供大家交流问题，作者很忙基本没有时间去看群，<br>如果有问题请通过 issues 反馈',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
-        newDevelopment: 'Due to the author\'s busy schedule, this release is being refactored. Stay tuned!'
+        newDevelopment: 'this release is being refactored. Stay tuned!'
       },
       search: {
         searchPlaceholder: 'Document search',
@@ -328,6 +340,16 @@ module.exports = {
       },
       support: {
         title: '该付费技术群用于快速解决使用过程中遇到的各种问题。'
+      },
+      demo: {
+        start: {
+          i18n: {
+            i18nTitle: 'If you want to use the specified language, you need to make Multilingual Settings. Take Chinese / English as an example',
+            translate: 'Integration internationalization',
+            translateTitle: 'If you want to support global automatic translation in the project, you can turn it on through global parameters (automatic translation will be performed for column header, verification prompt, etc.)',
+            findError: 'Errors found? Want to participate in translation?'
+          }
+        }
       }
     },
     footer: {
@@ -375,22 +397,24 @@ module.exports = {
           highlightCurrentColumn: 'Whether to highlight the current column',
           highlightHoverColumn: 'Mouse over whether to highlight a column',
           highlightCell: 'Only valid for edit-config configuration, whether to highlight cell borders during editing(Partial support only)',
-          rowClassName: 'Append a className to the row, It could be a function, Function({row, rowIndex, $rowIndex})',
-          cellClassName: 'Append a className to the cell, It could be a function, Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})',
-          headerRowClassName: 'Append a className to the row in the header, It could be a function, Function({$rowIndex})',
-          headerCellClassName: 'Append a className to the cell in the header, It could be a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          footerRowClassName: 'Append a className to the row in the footer, It could be a function, Function({$rowIndex})',
-          footerCellClassName: 'Append a className to the cell in the footer, It could be a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          cellStyle: 'Append styles to cells, which can also be function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          headerCellStyle: 'Append styles to header cells, which can also be function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          footerCellStyle: 'A table footer cell is attached to a style, or it can be a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          rowStyle: 'Attach styles to rows, which can also be function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          headerRowStyle: 'Append styles to header rows, which can also be function, Function({$rowIndex, column, columnIndex, $columnIndex})',
-          footerRowStyle: 'Attach a style to the end of a table, or a function, Function({$rowIndex, column, columnIndex, $columnIndex})',
+          rowClassName: 'Append a className to the row',
+          cellClassName: 'Append a className to the cell',
+          headerRowClassName: 'Append a className to the row in the header',
+          headerCellClassName: 'Append a className to the cell in the header',
+          footerRowClassName: 'Append a className to the row in the footer',
+          footerCellClassName: 'Append a className to the cell in the footer',
+          cellStyle: 'Append styles to cells',
+          headerCellStyle: 'Append styles to header cells',
+          footerCellStyle: 'A table footer cell is attached to a style',
+          rowStyle: 'Attach styles to rows',
+          headerRowStyle: 'Append styles to header rows',
+          footerRowStyle: 'Attach a style to the end of a table',
           showFooter: 'Whether to display table footer',
-          footerMethod: 'The data method at table footer, Function({columns, data}) return a two-dimensional array',
-          spanMethod: 'Merge rows or columns, Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data})',
-          footerSpanMethod: 'Footer merge rows or columns, Function({$rowIndex, column, columnIndex, $columnIndex, data})',
+          footerMethod: 'The data method at table footer, return a two-dimensional array',
+          mergeCells: '临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）',
+          mergeFooterItems: '临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）',
+          spanMethod: 'User defined merge function. returns the calculated value，不能用于树形结构、展开行、固定列',
+          footerSpanMethod: 'Footer merge rows or columns, returns the calculated value，不能用于树形结构、展开行、固定列',
           showOverflow: 'Sets all content to appear as ellipses if it is too long',
           showHeaderOverflow: 'Sets the header to show ellipsis when all content is too long',
           showAllOverflow: 'It is about to be abandoned, please use "show-overflow"',
@@ -404,7 +428,7 @@ module.exports = {
           columnKey: 'Whether the key attribute needs to be set for each column VNode (not required for non-exceptional cases)',
           rowKey: 'Do you need to set the key attribute for VNode on each row (not necessary for non-exceptional cases)',
           rowId: 'Field names for custom row data unique primary keys (row data must have a unique primary key, automatically generated by default)',
-          keepSource: 'Maintain the state of the original data, depending on certain functions, such as edit state, restore data, etc. (performance plummets after turn on, depending on the amount of data)',
+          keepSource: 'Maintain the state of the original data, depending on certain functions, such as edit state, restore data, etc.',
           zIndex: 'Custom style z-index (may be used for special situations, such as occlusion)',
           seqConfig: 'Sequence number configuration',
           sortConfig: 'Sort configuration',
@@ -419,11 +443,12 @@ module.exports = {
           expandConfig: 'Expand the row configuration',
           treeConfig: 'Tree configuration',
           contextMenu: 'context menu configuration',
-          mouseConfig: 'Mouse configuration (Only valid for edit-config.mode=cell)',
+          mouseConfig: 'Mouse configuration',
           keyboardConfig: 'Keyboard configuration',
           editConfig: 'Editable configuration',
           validConfig: 'Validate configuration',
           editRules: 'Checksum rule configuration entries',
+          emptyText: 'What is displayed when the data is empty',
           emptyRender: 'Empty content renderer config',
           customConfig: 'Custom configuration',
           optimization: 'Have been obsolete',
@@ -618,7 +643,7 @@ module.exports = {
           type: 'Message type',
           status: 'Only valid for type=alert | confirm | message, message status',
           iconStatus: '自定义状态图标',
-          message: 'message content',
+          message: '显示的文本（支持开启国际化）',
           showHeader: 'Whether to display the head',
           showFooter: 'Whether to show bottom',
           lockView: 'Whether or not the page is locked does not allow any action outside the modal',
@@ -654,6 +679,7 @@ module.exports = {
           titleAlign: 'All title align',
           titleWidth: 'All title width',
           titleColon: 'Whether to display the title colon',
+          titleAsterisk: '是否显示必填字段的红色星号',
           rules: 'Checksum rule configuration entries'
         }
       },
@@ -666,6 +692,7 @@ module.exports = {
           titleAlign: 'Title align',
           titleWidth: 'Title width',
           folding: 'Default folding',
+          visible: 'Whether or not show',
           visibleMethod: 'The return value of this method Function({data, property}) determines whether the item is displayed',
           collapseNode: 'Collapse node',
           titlePrefix: 'Title prefix config',

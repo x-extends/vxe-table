@@ -66,10 +66,11 @@
         :current-page.sync="page6.currentPage"
         :page-size.sync="page6.pageSize"
         :total="page6.totalResult"
+        :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
         :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
         <template v-slot:left>
           <vxe-button size="small">
-            <template>更多操作</template>
+            <template v-slot>更多操作</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
@@ -78,9 +79,9 @@
           </vxe-button>
         </template>
         <template v-slot:right>
-          <img src="static/other/img1.gif" height="34">
-          <img src="static/other/img1.gif" height="34">
-          <img src="static/other/img1.gif" height="34">
+          <img src="/vxe-table/static/other/img1.gif" height="34">
+          <img src="/vxe-table/static/other/img1.gif" height="34">
+          <img src="/vxe-table/static/other/img1.gif" height="34">
         </template>
       </vxe-pager>
     </p>
@@ -203,10 +204,11 @@ export default {
             :current-page.sync="page6.currentPage"
             :page-size.sync="page6.pageSize"
             :total="page6.totalResult"
+            :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
             <template v-slot:left>
               <vxe-button size="small">
-                <template>更多操作</template>
+                <template v-slot>更多操作</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
@@ -215,9 +217,9 @@ export default {
               </vxe-button>
             </template>
             <template v-slot:right>
-              <img src="static/other/img1.gif" height="34">
-              <img src="static/other/img1.gif" height="34">
-              <img src="static/other/img1.gif" height="34">
+              <img src="/vxe-table/static/other/img1.gif" height="34">
+              <img src="/vxe-table/static/other/img1.gif" height="34">
+              <img src="/vxe-table/static/other/img1.gif" height="34">
             </template>
           </vxe-pager>
         </p>

@@ -18,11 +18,6 @@
   &.is--show {
     display: block;
   }
-  &.child-pos--left {
-    .vxe-table--context-menu-clild-wrapper {
-      left: -100%;
-    }
-  }
 }
 .vxe-context-menu--link {
   display: block;
@@ -30,6 +25,7 @@
   width: $vxe-table-menu-item-width;
   line-height: 26px;
   color: $vxe-table-font-color;
+  cursor: pointer;
   .vxe-context-menu--link-prefix,
   .vxe-context-menu--link-suffix {
     position: absolute;
@@ -87,6 +83,7 @@
     &.link--disabled {
       & > .vxe-context-menu--link {
         color: $vxe-disabled-color;
+        cursor: no-drop;
       }
       &.link--active {
         border-color:#C0C1C2;

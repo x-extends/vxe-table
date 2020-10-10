@@ -16,8 +16,8 @@
       <ul class="plan">
         <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v1') }}</li>
         <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v2') }}</li>
-        <li><i class="fa fa-battery-2"></i>{{ $t('app.body.other.plan.v3') }}</li>
-        <li><i class="fa fa-battery-0"></i>{{ $t('app.body.other.plan.v4') }}</li>
+        <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v3') }}</li>
+        <li><i class="fa fa-battery-1"></i>{{ $t('app.body.other.plan.v4') }}</li>
       </ul>
     </div>
     <div class="content" style="padding-top: 50px">
@@ -31,7 +31,7 @@
           </ul>
         </div>
         <div>
-          <img src="static/donation/pay.jpg">
+          <img src="/vxe-table/static/donation/pay.jpg">
         </div>
       </div>
       <div style="display: inline-block;margin-left: 20em;">
@@ -40,7 +40,7 @@
           <br>
           <span v-html="$t('app.body.other.issuesTitle')"></span>
         </div>
-        <img src="static/donation/qq.png">
+        <img src="/vxe-table/static/donation/qq.png">
       </div>
     </div>
   </div>

@@ -3,7 +3,7 @@
     <h2>{{ $t('app.aside.nav.use') }}</h2>
     <p class="tip">
       使用 npm 的方式安装，它能更好地和 <a class="link" href="https://webpack.js.org/">webpack</a> 打包工具配合使用。<br>
-      依赖库： <a class="link" href="https://www.npmjs.com/package/xe-utils">xe-utils2.4+</a>&nbsp;&nbsp;<a class="link" href="https://cn.vuejs.org/v2/guide/components-slots.html#%E5%8A%A8%E6%80%81%E6%8F%92%E6%A7%BD%E5%90%8D" style="font-size: 20px;font-weight: 700;">vue2.6+</a><br>
+      依赖库： <a class="link" href="https://www.npmjs.com/package/xe-utils">xe-utils2.7+</a>&nbsp;&nbsp;<a class="link" href="https://cn.vuejs.org/v2/guide/components-slots.html#%E5%8A%A8%E6%80%81%E6%8F%92%E6%A7%BD%E5%90%8D" style="font-size: 20px;font-weight: 700;">vue2.6+</a><br>
     </p>
     <pre>
       <code class="shell">
@@ -13,12 +13,15 @@
         import Vue from 'vue'
         import 'xe-utils'
         import VXETable from 'vxe-table'
-        import 'vxe-table/lib/index.css'
+        import 'vxe-table/lib/style.css'
 
         Vue.use(VXETable)
 
-        // 给 vue 实例挂载全局窗口对象，属性名称随意定义，例如：$XModal
-        Vue.prototype.$modal = VXETable.modal
+        // 给 vue 实例挂载全局窗口对象，例如：
+        // Vue.prototype.$XModal = VXETable.modal
+
+        // 给 vue 实例挂载全局打印对象，例如：
+        // Vue.prototype.$XPrint = VXETable.print
       </code>
     </pre>
     <h2>Import on demand 按需引入</h2>
@@ -81,11 +84,10 @@
           Switch,
           List
         } from 'vxe-table'
-        import zhCNLocat from 'vxe-table/lib/locale/lang/zh-CN'
 
         // 按需加载的方式默认是不带国际化的，需要自行导入
         VXETable.setup({
-          i18n: (key, value) => XEUtils.get(zhCNLocat, key)
+          i18n: (key, args) => i18n.t(key, args)
         })
 
         // 先安装依赖模块
@@ -117,8 +119,11 @@
         // 再安装核心库
         Vue.use(Table)
 
-        // 给 vue 实例挂载全局窗口对象，属性名称随意定义，例如：$XModal
-        Vue.prototype.$modal = VXETable.modal
+        // 给 vue 实例挂载全局窗口对象，例如：
+        // Vue.prototype.$XModal = VXETable.modal
+
+        // 给 vue 实例挂载全局打印对象，例如：
+        // Vue.prototype.$XPrint = VXETable.print
       </code>
     </pre>
     <div>main.js</div>

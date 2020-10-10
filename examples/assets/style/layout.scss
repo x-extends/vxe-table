@@ -422,7 +422,6 @@ body,
   .vxe-body--row {
     .vxe-body--column {
       &.api-abandoned {
-        cursor: no-drop;
         color: #70541C;
         background-color: #FFFBE5;
         .compatibility {
@@ -437,22 +436,32 @@ body,
           background-color: #cb2431;
         }
       }
+      &.api-pro {
+        color: #409eff;
+        font-weight: 700;
+      }
     }
   }
   .disabled-line-through {
     text-decoration: line-through;
   }
+  .pro,
   .compatibility {
-    background-color: #1081C2;
     border-radius: 10px;
     padding: 2px 8px;
     color: #fff;
     font-size: 12px;
   }
+  .pro {
+    color: #333;
+    background-color: #f6ca9d;
+  }
+  .compatibility {
+    background-color: #1081C2;
+  }
 }
 
 .support-declare {
-  color: red;
   padding: 10px 0 10px 15px;
 }
 .support-question {
@@ -461,8 +470,11 @@ body,
     line-height: 24px;
   }
 }
+.support-help-icon {
+  cursor: help;
+}
 .support-group {
-  width: 250px;
+  width: 300px;
   margin: 20px auto 15px auto;
   text-align: center;
   border: 1px solid #ddd;
@@ -496,9 +508,9 @@ body,
 }
 .support-describe {
   margin: 0;
-  padding: 5px 0 5px 40px;
+  padding: 5px;
   list-style: none;
-  text-align: left;
+  text-align: center;
   & > li {
     padding: 0;
   }
@@ -509,5 +521,26 @@ body,
     font-size: 16px;
     font-weight: 700;
     color: red;
+  }
+}
+.price-help-icon {
+  font-size: 14px;
+  color: #606266;
+  margin-left: 5px;
+  cursor: help;
+}
+.template-name {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 32px;
+}
+.template-describe {
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  text-align: left;
+  font-size: 12px;
+  & > li {
+    padding: 0 5px 0 20px;
   }
 }

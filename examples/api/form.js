@@ -80,6 +80,15 @@ const apis = [
         list: []
       },
       {
+        name: 'title-asterisk',
+        descKey: 'app.api.form.desc.titleAsterisk',
+        version: '2.9.16',
+        type: 'boolean',
+        enum: '',
+        defVal: '默认 true，继承 setup.form.titleAsterisk',
+        list: []
+      },
+      {
         name: 'items',
         desc: '项列表',
         version: '2.8.24',
@@ -181,7 +190,7 @@ const apis = [
       },
       {
         name: 'prevent-submit',
-        desc: '是否阻止默认提交方式',
+        desc: '禁用默认提交方式，禁用后配合 validate() 方法可以更加自由的控制提交逻辑',
         version: '2.9.15',
         type: 'boolean',
         enum: '',
@@ -228,7 +237,7 @@ const apis = [
     list: [
       {
         name: 'submit',
-        desc: '表单提交时会触发该事件',
+        desc: '只对 prevent-submit=false 有效，表单提交时会触发该事件',
         version: '',
         type: '',
         enum: '',
@@ -237,7 +246,7 @@ const apis = [
       },
       {
         name: 'submit-invalid',
-        desc: '表单提交时如果校验不通过会触发该事件',
+        desc: '只对 prevent-submit=false 有效，表单提交时如果校验不通过会触发该事件',
         version: '',
         type: '',
         enum: '',
@@ -273,12 +282,21 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'reset()',
+        desc: '重置表单',
+        version: '',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'validate(callback)',
         desc: '对表单进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
         version: '2.8.32',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'callback: Function',
+        defVal: 'callback?: Function',
         list: []
       },
       {
@@ -304,6 +322,15 @@ const apis = [
         desc: '手动切换折叠状态',
         version: '',
         type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getItems()',
+        desc: '获取表单项列表',
+        version: '2.9.23',
+        type: 'array',
         enum: '',
         defVal: '',
         list: []

@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils'
 
 const contextMenuAPI = [
   {
@@ -260,7 +260,7 @@ const exportDataAPI = [
   },
   {
     name: 'columnFilterMethod',
-    desc: '列过滤方法，该函数 Function(column,$columnIndex) 的返回值用来决定是否过滤掉列',
+    desc: '列过滤方法，该函数 Function({ column, $columnIndex }) 的返回值用来决定是否过滤掉列',
     version: '',
     type: 'Function',
     enum: '',
@@ -269,7 +269,7 @@ const exportDataAPI = [
   },
   {
     name: 'dataFilterMethod',
-    desc: '数据过滤方法，该函数 Function(row,$rowIndex) 的返回值用来决定是否过滤掉数据行',
+    desc: '数据过滤方法，该函数 Function({ row, $rowIndex }) 的返回值用来决定是否过滤掉数据行',
     version: '',
     type: 'Function',
     enum: '',
@@ -278,7 +278,7 @@ const exportDataAPI = [
   },
   {
     name: 'footerFilterMethod',
-    desc: '表尾过滤方法，该函数 Function(cells,$rowIndex) 的返回值用来决定是否过滤掉表尾行',
+    desc: '表尾过滤方法，该函数 Function({ items, $rowIndex }) 的返回值用来决定是否过滤掉表尾行',
     version: '',
     type: 'Function',
     enum: '',
@@ -299,6 +299,15 @@ const exportDataAPI = [
     desc: '只对 remote=true 有效，该函数 Function({ options }) 用于自定义导出或服务端导出，返回 Promise',
     version: '2.8.3',
     type: 'Function',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'style',
+    desc: '只对 type=html 有效，自定义文档的 css 样式信息',
+    version: '2.9.23',
+    type: 'string',
     enum: '',
     defVal: '',
     list: []
@@ -353,7 +362,26 @@ const importDataAPI = [
   }
 ]
 
-const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod'].includes(item.name))
+const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod'].includes(item.name)).concat([
+  {
+    name: 'content',
+    desc: '自定义打印的内容',
+    version: '2.9.23',
+    type: 'string',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'beforePrintMethod',
+    desc: '该函数 Function({ content, options }) 会在打印之前触发，可以通过返回自定义打印的内容',
+    version: '2.9.23',
+    type: '({ content, options }) => string',
+    enum: '',
+    defVal: '',
+    list: []
+  }
+])
 
 const apis = [
   {
@@ -575,6 +603,7 @@ const apis = [
       },
       {
         name: 'highlight-cell',
+        abandoned: true,
         descKey: 'app.api.table.desc.highlightCell',
         version: '',
         type: 'Boolean',
@@ -638,6 +667,7 @@ const apis = [
       },
       {
         name: 'cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.cellStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -647,6 +677,7 @@ const apis = [
       },
       {
         name: 'header-cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.headerCellStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -656,6 +687,7 @@ const apis = [
       },
       {
         name: 'footer-cell-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerCellStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -665,6 +697,7 @@ const apis = [
       },
       {
         name: 'row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.rowStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -674,6 +707,7 @@ const apis = [
       },
       {
         name: 'header-row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.headerRowStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -683,6 +717,7 @@ const apis = [
       },
       {
         name: 'footer-row-style',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerRowStyle',
         version: '2.6.19',
         type: 'Object, Function',
@@ -709,7 +744,26 @@ const apis = [
         list: []
       },
       {
+        name: 'merge-cells',
+        descKey: 'app.api.table.desc.mergeCells',
+        version: '2.9.18',
+        type: 'Array<{ row: number, col: number, rowspan: number, colspan: number }>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'merge-footer-items',
+        descKey: 'app.api.table.desc.mergeFooterItems',
+        version: '2.9.18',
+        type: 'Array<{ row: number, col: number, rowspan: number, colspan: number }>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.spanMethod',
         version: '',
         type: 'Object',
@@ -719,6 +773,7 @@ const apis = [
       },
       {
         name: 'footer-span-method',
+        abandoned: true,
         descKey: 'app.api.table.desc.footerSpanMethod',
         version: '2.6',
         type: 'Object',
@@ -785,7 +840,8 @@ const apis = [
       },
       {
         name: 'column-width',
-        descKey: 'app.api.table.desc.columnWidth',
+        disabled: true,
+        desc: '即将废弃，请使用 column-config.width',
         version: '2.3.0',
         type: 'Number, String',
         enum: 'auto, px, %',
@@ -794,7 +850,8 @@ const apis = [
       },
       {
         name: 'column-min-width',
-        descKey: 'app.api.table.desc.columnMinWidth',
+        disabled: true,
+        desc: '即将废弃，请使用 column-config.minWidth',
         version: '2.3.0',
         type: 'Number, String',
         enum: 'auto, px, %',
@@ -839,12 +896,41 @@ const apis = [
       },
       {
         name: 'z-index',
+        abandoned: true,
         descKey: 'app.api.table.desc.zIndex',
         version: '2.6.7',
         type: 'Number',
         enum: '',
         defVal: '继承 setup.table.zIndex',
         list: []
+      },
+      {
+        name: 'column-config',
+        desc: '列的默认参数',
+        version: '2.9.18',
+        type: 'any',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'width',
+            desc: '列的默认宽度',
+            version: '',
+            type: 'Number, String',
+            enum: 'auto, px, %',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'min-width',
+            desc: '列的默认最小宽度',
+            version: '',
+            type: 'Number, String',
+            enum: 'auto, px, %',
+            defVal: '',
+            list: []
+          }
+        ]
       },
       {
         name: 'seq-config',
@@ -1067,7 +1153,7 @@ const apis = [
         list: [
           {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
+            desc: '是否保留勾选状态，对于某些场景下非常有用，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
             version: '2.8.21',
             type: 'Boolean',
             enum: '',
@@ -1140,15 +1226,6 @@ const apis = [
         defVal: '继承 setup.table.checkboxConfig',
         list: [
           {
-            name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如分页之后还保留之前选中的状态（需要有 row-id）',
-            version: '',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
             name: 'labelField',
             desc: '复选框显示的字段名，可以直接显示在复选框中',
             version: '',
@@ -1204,7 +1281,7 @@ const apis = [
           },
           {
             name: 'strict',
-            desc: '严格模式，当数据为空或全部禁用时，列表为禁用状态',
+            desc: '严格模式，当数据为空或全部禁用时，列头的复选框为禁用状态',
             version: '2.6',
             type: 'Boolean',
             enum: '',
@@ -1239,8 +1316,17 @@ const apis = [
             list: []
           },
           {
+            name: 'reserve',
+            desc: '是否保留勾选状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'range',
-            desc: '开启复选框范围勾选功能（启用后通过鼠标在复选框的列圈选指定行）',
+            desc: '开启复选框范围选择功能（启用后通过鼠标在复选框的列内滑动选中或取消指定行）',
             version: '2.7.7',
             type: 'Boolean',
             enum: '',
@@ -1377,7 +1463,7 @@ const apis = [
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({expanded, column, columnIndex, $columnIndex, row, rowIndex?, $rowIndex?}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法 Function({expanded, column, columnIndex, row, rowIndex?}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '2.8.22',
             type: 'Function',
             enum: '',
@@ -1386,11 +1472,29 @@ const apis = [
           },
           {
             name: 'visibleMethod',
-            desc: '该函数 Function({column, columnIndex, $columnIndex, row, rowIndex?, $rowIndex?}) 的返回值用来决定是否允许显示展开按钮',
+            desc: '该函数 Function({column, columnIndex, row, rowIndex?}) 的返回值用来决定是否允许显示展开按钮',
             version: '2.8.24',
             type: 'Function',
             enum: '',
             defVal: '',
+            list: []
+          },
+          {
+            name: 'reserve',
+            desc: '是否保留展开状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前展开的状态（需要有 row-id）',
+            version: '2.9.17',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'showIcon',
+            desc: '是否显示图标按钮',
+            version: '2.9.18',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {
@@ -1522,11 +1626,29 @@ const apis = [
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({expanded, row, column, columnIndex, $columnIndex}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法 Function({expanded, row, column, columnIndex}) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '2.8.22',
             type: 'Function',
             enum: '',
             defVal: '',
+            list: []
+          },
+          {
+            name: 'reserve',
+            desc: '是否保留展开状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前展开的状态（需要有 row-id）',
+            version: '2.9.17',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'showIcon',
+            desc: '是否显示图标按钮',
+            version: '2.9.18',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {
@@ -1632,30 +1754,39 @@ const apis = [
         list: [
           {
             name: 'selected',
-            desc: '开启单元格选中功能',
+            desc: '开启单元格选中功能（只对 edit-config.mode=cell 有效）',
             version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
             list: []
-          // },
+          },
           // {
           //   name: 'checked',
-          //   desc: '即将废弃，请使用 range',
+          //   desc: '开启单元格选取功能',
           //   version: '',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',
           //   list: []
           // },
-          // {
-          //   name: 'range',
-          //   desc: '开启鼠标移动单元格批量选中功能',
-          //   version: '2.7.22',
-          //   type: 'Boolean',
-          //   enum: '',
-          //   defVal: 'false',
-          //   list: []
+          {
+            name: 'area',
+            desc: '如果功能被支持，则开启鼠标左键单元格区域选取功能，非连续的区域，同时按住 鼠标左键 + Ctrl 键，用鼠标逐一选取',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'extension',
+            desc: '只对 area 启用后有效，是否开启区域延伸选取功能，开启后可以通过鼠标左键按住右下角延伸按钮，将区域横向或纵向扩大',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
           }
         ]
       },
@@ -1703,18 +1834,64 @@ const apis = [
             defVal: 'false',
             list: []
           },
+          {
+            name: 'isEdit',
+            desc: '开启任意键进入编辑（功能键除外）',
+            version: '',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
           // {
           //   name: 'isCut',
           //   desc: '开启复制粘贴功能',
+          //   version: '',
           //   type: 'Boolean',
           //   enum: '',
           //   defVal: 'false',
           //   list: []
           // },
           {
-            name: 'isEdit',
-            desc: '开启任意键进入编辑（功能键除外）',
-            version: '',
+            name: 'isMerge',
+            desc: '如果功能被支持，用于 mouse-config.area，开启合并和取消合并功能',
+            version: 'pro',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isClip',
+            desc: '如果功能被支持，用于 mouse-config.area，开启复制/剪贴/粘贴功能',
+            version: 'pro',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isFNR',
+            desc: '如果功能被支持，用于 mouse-config.area，开启查找和替换功能',
+            version: 'pro',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isChecked',
+            desc: '如果功能被支持，用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
+            version: 'pro',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'enterToTab',
+            desc: '是否将回车键行为改成 Tab 键行为',
+            version: '2.9.18',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -1776,6 +1953,15 @@ const apis = [
             list: []
           },
           {
+            name: 'showAsterisk',
+            desc: '是否显示必填字段的红色星号',
+            version: '2.9.16',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'autoClear',
             desc: '当点击非编辑列之后，是否自动清除单元格的激活状态',
             version: '',
@@ -1833,6 +2019,7 @@ const apis = [
           },
           {
             name: 'maxWidth',
+            abandoned: true,
             desc: '校验提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
             type: 'String, Number',
@@ -1924,6 +2111,7 @@ const apis = [
           },
           {
             name: 'maxWidth',
+            abandoned: true,
             desc: '提示框的最大宽度（对于某些特殊场景可能会用到）',
             version: '',
             type: 'Number',
@@ -1932,6 +2120,15 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'empty-text',
+        descKey: 'app.api.table.desc.emptyText',
+        version: '2.9.20',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
       },
       {
         name: 'empty-render',
@@ -1979,6 +2176,7 @@ const apis = [
           },
           {
             name: 'nativeEvents',
+            abandoned: true,
             desc: '渲染组件的原生事件（请查看目标渲染的 Events）',
             version: '2.9.13',
             type: 'Object',
@@ -1998,7 +2196,7 @@ const apis = [
         list: [
           {
             name: 'storage',
-            desc: '是否启用 localStorage 本地保存，会将列操作状态保留在本地',
+            desc: '是否启用 localStorage 本地保存，会将列操作状态保留在本地（需要有 id）',
             version: '',
             type: 'Boolean, Object',
             enum: '',
@@ -2098,6 +2296,7 @@ const apis = [
       },
       {
         name: 'animat',
+        abandoned: true,
         desc: '表格动画效果开关（关闭后视觉效果更快）',
         version: '2.9.4',
         type: 'Object',
@@ -2107,7 +2306,8 @@ const apis = [
       },
       {
         name: 'cloak',
-        desc: '可以设置为 true 来避免初始化渲染时的闪动',
+        abandoned: true,
+        desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
         version: '2.9.4',
         type: 'Boolean',
         enum: '',
@@ -2116,6 +2316,7 @@ const apis = [
       },
       {
         name: 'delay-hover',
+        abandoned: true,
         desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
         version: '2.9.4',
         type: 'Number',
@@ -2334,6 +2535,33 @@ const apis = [
         type: '',
         enum: '',
         defVal: '{ records, reserves, indeterminates, checked, $event }',
+        list: []
+      },
+      {
+        name: 'checkbox-range-start',
+        desc: '只对 checkbox-config.range 有效，当鼠标范围选择开始时会触发的事件',
+        version: '2.9.16',
+        type: '',
+        enum: '',
+        defVal: '{ records, reserves, $event }',
+        list: []
+      },
+      {
+        name: 'checkbox-range-change',
+        desc: '只对 checkbox-config.range 有效，当鼠标范围选择内的行数发生变化时会触发的事件',
+        version: '2.9.16',
+        type: '',
+        enum: '',
+        defVal: '{ records, reserves, $event }',
+        list: []
+      },
+      {
+        name: 'checkbox-range-end',
+        desc: '只对 checkbox-config.range 有效，当鼠标范围选择结束时会触发的事件',
+        version: '2.9.16',
+        type: '',
+        enum: '',
+        defVal: '{ records, reserves, $event }',
         list: []
       },
       {
@@ -2775,6 +3003,24 @@ const apis = [
         list: []
       },
       {
+        name: 'removeMergeCells(merges)',
+        desc: '取消单元格的临时合并状态，如果为数组，则取消多个合并',
+        version: '2.9.18',
+        type: 'Promise<merges>',
+        enum: '',
+        defVal: 'merges: {row: Row, col: ColumnInfo} | {row: Row, col: ColumnInfo}[]',
+        list: []
+      },
+      {
+        name: 'removeMergeFooterItems(merges)',
+        desc: '取消表尾的临时合并状态，如果为数组，则取消多个合并',
+        version: '2.9.18',
+        type: 'Promise<merges>',
+        enum: '',
+        defVal: 'merges: {row: Row, col: ColumnInfo} | {row: Row, col: ColumnInfo}[]',
+        list: []
+      },
+      {
         name: 'getRowIndex(row)',
         desc: '根据 row 获取相对于 data 中的索引',
         version: '',
@@ -2811,12 +3057,12 @@ const apis = [
         list: []
       },
       {
-        name: 'getColumns(columnIndex)',
-        desc: '获取表格的可视列，也可以指定索引获取列',
+        name: 'getColumns()',
+        desc: '获取表格的可视的列',
         version: '',
         type: 'Array',
         enum: '',
-        defVal: 'columnIndex?: number',
+        defVal: '',
         list: []
       },
       {
@@ -2973,6 +3219,24 @@ const apis = [
         list: []
       },
       {
+        name: 'getMergeCells()',
+        desc: '获取临时合并的单元格',
+        version: '2.9.18',
+        type: 'Array<{row: any, col: ColumnInfo, rowspan: number, colspan: number}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getMergeFooterItems()',
+        desc: '获取临时合并的表尾',
+        version: '2.9.18',
+        type: 'Array<{row: any, col: ColumnInfo, rowspan: number, colspan: number}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getCurrentColumn()',
         desc: '用于 highlight-current-column，获取当前列',
         version: '2.9.2',
@@ -3068,7 +3332,7 @@ const apis = [
       },
       {
         name: 'getCheckboxIndeterminateRecords()',
-        desc: '用于 type=checkbox，获取半选状态的行数据',
+        desc: '用于 tree-config 和 type=checkbox，获取半选状态的行数据',
         version: '2.9',
         type: 'Array<Row>',
         enum: '',
@@ -3140,6 +3404,33 @@ const apis = [
       //   defVal: '',
       //   list: []
       // },
+      {
+        name: 'getCellAreas()',
+        desc: '如果功能被支持，用于 mouse-config.area，用于获取鼠标选择的所有区域',
+        version: 'pro',
+        type: 'Array<{cols: ColumnConfig[], rows: any[]}>',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getActiveCellArea()',
+        desc: '如果功能被支持，用于 mouse-config.area，用于获取区域中的活动单元格',
+        version: 'pro',
+        type: '{column: ColumnConfig, row: any}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getCopyCellArea()',
+        desc: '如果功能被支持，用于 mouse-config.area，用于获取被标记为复制状态的区域',
+        version: 'pro',
+        type: '{cols: ColumnConfig[], rows: any[]}',
+        enum: '',
+        defVal: '',
+        list: []
+      },
       {
         name: 'getVirtualScroller()',
         disabled: true,
@@ -3352,6 +3643,33 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'row: Row, field: string',
+        list: []
+      },
+      {
+        name: 'setCellAreas(areas)',
+        desc: '如果功能被支持，用于 mouse-config.area，选择指定区域的单元格',
+        version: 'pro',
+        type: 'Promise',
+        enum: '',
+        defVal: 'areas: CellAreaOptions',
+        list: []
+      },
+      {
+        name: 'setMergeCells(merges)',
+        desc: '临时合并单元格，如果为数组则合并多个',
+        version: '2.9.18',
+        type: 'Promise',
+        enum: '',
+        defVal: 'merges: MergeOptions | MergeOptions[]',
+        list: []
+      },
+      {
+        name: 'setMergeFooterItems(merges)',
+        desc: '临时合并表尾，如果为数组则合并多个',
+        version: '2.9.18',
+        type: 'Promise',
+        enum: '',
+        defVal: 'merges: MergeOptions | MergeOptions[]',
         list: []
       },
       {
@@ -3572,6 +3890,24 @@ const apis = [
         list: []
       },
       {
+        name: 'clearMergeCells()',
+        desc: '手动清除临时合并的单元格',
+        version: '2.9.18',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'clearMergeFooterItems()',
+        desc: '手动清除临时合并的表尾',
+        version: '2.9.18',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'clearCurrentRow()',
         desc: '用于 highlight-current-row，手动清空当前高亮的状态',
         version: '',
@@ -3733,6 +4069,15 @@ const apis = [
       //   defVal: '',
       //   list: []
       // },
+      {
+        name: 'clearCellAreas()',
+        desc: '如果功能被支持，用于 mouse-config.area，用于清除鼠标选择的区域',
+        version: 'pro',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
       {
         name: 'clearData(rows, field)',
         desc: '手动清空单元格内容，如果不创参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容',
@@ -3900,12 +4245,12 @@ const apis = [
         list: []
       },
       {
-        name: 'scrollToRow(row)',
+        name: 'scrollToRow(row, column)',
         desc: '如果有滚动条，则滚动到对应的行（对于某些特定的场景可能会用到，比如定位到某一行）',
         version: '2.0',
         type: 'Promise',
         enum: '',
-        defVal: 'row: Row',
+        defVal: 'row: Row, column?: ColumnConfig',
         list: []
       },
       {
@@ -3965,20 +4310,20 @@ const apis = [
       },
       {
         name: 'validate(rows, callback)',
-        desc: '表格校验函数，如果指定 row 或 rows 则校验指定一行或多行，否则校验整个表格。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
+        desc: '快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；如果第一个参数为 true 则校验当前表格数据，如果指定 row 或 rows 则校验指定行或多行，如果不指定数据，则默认只校验临时变动的数据，例如新增或修改，例如新增或修改。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: Row | Array<Row>, callback?: Function',
+        defVal: 'rows?: Row | Row[], callback?: Function',
         list: []
       },
       {
         name: 'fullValidate(rows, callback)',
-        desc: '表格完整校验函数，和 validate 的区别就是会对全量数据的所有规则进行完整校验',
+        desc: '完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验',
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: Row | Array<Row>, callback?: Function',
+        defVal: 'rows?: Row | Row[], callback?: Function',
         list: []
       },
       {
@@ -4082,6 +4427,33 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'openFind()',
+        desc: '如果功能被支持，用于 mouse-config.area，打开单元格查找功能',
+        version: 'pro',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'openReplace()',
+        desc: '如果功能被支持，用于 mouse-config.area，打开单元格替换功能',
+        version: 'pro',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'connect(toolbar)',
+        desc: '连接工具栏',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: 'toolbar: Toolbar',
+        list: []
       },
       {
         name: 'focus()',

@@ -12,7 +12,7 @@
       class="sortable-row-demo"
       :data="tableData">
       <vxe-table-column width="60">
-        <template>
+        <template v-slot>
           <span class="drag-btn">
             <i class="vxe-icon--menu"></i>
           </span>
@@ -108,7 +108,7 @@ export default {
           class="sortable-row-demo"
           :data="tableData">
           <vxe-table-column width="60">
-            <template>
+            <template v-slot>
               <span class="drag-btn">
                 <i class="vxe-icon--menu"></i>
               </span>

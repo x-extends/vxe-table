@@ -2,8 +2,11 @@
 node_modules
 /dist
 /lib
+/docs
 /public/v1
 /public/v2
+/public/v3
+/public/v4
 package-lock.json
 
 # local env files

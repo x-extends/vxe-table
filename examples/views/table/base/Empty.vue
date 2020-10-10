@@ -1,8 +1,9 @@
 <template>
   <div>
-    <p class="tip">基础使用，可以使用 <router-link class="link" :to="{name: 'RendererEmpty'}">渲染器</router-link> 实现全局复用</p>
+    <p class="tip">当数据为空时，通过 <table-column-api-link prop="empty-text"/> 设置空数据提示文本，可以使用 <router-link class="link" :to="{name: 'RendererEmpty'}">渲染器</router-link> 实现全局复用</p>
 
     <vxe-table
+      empty-text="没有更多数据了！"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -30,7 +31,7 @@
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
       <template v-slot:empty>
         <span style="color: red;">
-          <img src="static/other/img2.gif">
+          <img src="/vxe-table/static/other/img2.gif">
           <p>没有更多数据了！</p>
         </span>
       </template>
@@ -58,7 +59,7 @@
       <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
       <template v-slot:empty>
         <span style="color: red;">
-          <img src="static/other/img1.gif">
+          <img src="/vxe-table/static/other/img1.gif">
           <p>不用再看了，没有更多数据了！</p>
         </span>
       </template>
@@ -85,6 +86,7 @@ export default {
       demoCodes: [
         `
         <vxe-table
+          empty-text="没有更多数据了！"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -118,7 +120,7 @@ export default {
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
           <template v-slot:empty>
             <span style="color: red;">
-              <img src="static/other/img2.gif">
+              <img src="/vxe-table/static/other/img2.gif">
               <p>没有更多数据了！</p>
             </span>
           </template>
@@ -155,7 +157,7 @@ export default {
           <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
           <template v-slot:empty>
             <span style="color: red;">
-              <img src="static/other/img1.gif">
+              <img src="/vxe-table/static/other/img1.gif">
               <p>不用再看了，没有更多数据了！</p>
             </span>
           </template>

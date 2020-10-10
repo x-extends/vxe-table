@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 
 function toType (type) {
   return XEUtils.toString(type).replace('_', '').toLowerCase()

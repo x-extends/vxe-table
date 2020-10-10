@@ -1,19 +1,25 @@
 <template>
   <div>
-    <p class="tip">表单</p>
+    <p class="tip">表格与表单的组合使用</p>
 
     <vxe-form :data="formData" @submit="findList">
       <vxe-form-item title="app.body.label.name" field="name">
-        <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
+        <template v-slot>
+          <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="性别" field="sex">
-        <vxe-select v-model="formData.sex" placeholder="请选择性别">
-          <vxe-option v-for="(item, index) in sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
-        </vxe-select>
+        <template v-slot>
+          <vxe-select v-model="formData.sex" placeholder="请选择性别">
+            <vxe-option v-for="(item, index) in sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
+          </vxe-select>
+        </template>
       </vxe-form-item>
       <vxe-form-item>
-        <vxe-button type="submit" status="primary">查询</vxe-button>
-        <vxe-button type="reset">重置</vxe-button>
+        <template v-slot>
+          <vxe-button type="submit" status="primary">查询</vxe-button>
+          <vxe-button type="reset">重置</vxe-button>
+        </template>
       </vxe-form-item>
     </vxe-form>
 
@@ -58,16 +64,22 @@ export default {
         `
         <vxe-form :data="formData" @submit="findList">
           <vxe-form-item title="app.body.label.name" field="name">
-            <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
+            <template v-slot>
+              <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
+            </template>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex">
-            <vxe-select v-model="formData.sex" placeholder="请选择性别">
-              <vxe-option v-for="(item, index) in sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
-            </vxe-select>
+            <template v-slot>
+              <vxe-select v-model="formData.sex" placeholder="请选择性别">
+                <vxe-option v-for="(item, index) in sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
+              </vxe-select>
+            </template>
           </vxe-form-item>
           <vxe-form-item>
-            <vxe-button type="submit" status="primary">查询</vxe-button>
-            <vxe-button type="reset">重置</vxe-button>
+            <template v-slot>
+              <vxe-button type="submit" status="primary">查询</vxe-button>
+              <vxe-button type="reset">重置</vxe-button>
+            </template>
           </vxe-form-item>
         </vxe-form>
 

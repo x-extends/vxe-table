@@ -35,6 +35,15 @@ const apis = [
         list: []
       },
       {
+        name: 'multi-char-overflow',
+        desc: '只对 multiple 有效，设置多选中每个选项显示值的最大字符数，如果超出显示省略号；如果为 -1 则关闭',
+        version: '2.9.17',
+        type: 'number, string',
+        enum: '',
+        defVal: '8',
+        list: []
+      },
+      {
         name: 'clearable',
         descKey: 'app.api.select.desc.clearable',
         version: '',
@@ -116,16 +125,16 @@ const apis = [
         list: []
       },
       {
-        name: 'opt-id',
+        name: 'option-id',
         desc: '自定义选项唯一主键的字段名（选项必须要有唯一主键，默认自动生成）',
         version: '2.9',
         type: 'String',
         enum: '',
-        defVal: '默认 _XID，继承 setup.select.rowId',
+        defVal: '默认 _XID，继承 setup.select.optionId',
         list: []
       },
       {
-        name: 'opt-key',
+        name: 'option-key',
         desc: '是否需要为每一行的 VNode 设置 key 属性（非特殊情况下没必要设置）',
         version: '2.9',
         type: 'Boolean',

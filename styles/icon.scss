@@ -287,7 +287,7 @@
     @extend %PseudoClass;
     height: 0.84em;
     width: 0.86em;
-    top: 0.06em;
+    top: 0.1em;
     left: 0.02em;
     border-radius: 0.2em;
     border-width: 0.1em;
@@ -297,7 +297,7 @@
   &:after {
     @extend %PseudoClass;
     left: 0.6em;
-    bottom: 0.22em;
+    bottom: 0.2em;
     width: 0;
     height: 0.8em;
     border-radius: 0 0 80% 80%;
@@ -329,6 +329,25 @@
     bottom: 0;
     line-height: 0.9em;
     font-size: 1.4em;
+  }
+}
+
+.vxe-icon--check {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    left: 0.25em;
+    bottom: 0.2em;
+    width: 0.5em;
+    height: 0.9em;
+    border-width: 0.15em;
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: inherit;
+    border-bottom-color: inherit;
+    border-radius: 0.15em;
+    border-left-color: transparent;
+    transform: rotate(45deg);
   }
 }
 
@@ -409,58 +428,48 @@
   position: absolute;
   top: 0;
   left: 0;
+  transform: scale(0.95);
 }
 
-.vxe-icon--question {
-  @extend %DefaultWidthHeight;
-  &:before {
-    @extend %BeforeSolidRadius;
-  }
+%QuestionAndInfoWarning {
   &:after {
     @extend %PseudoClass;
-    content: "\3F";
     left: 0;
     bottom: 0;
     width: 100%;
     text-align: center;
-    line-height: 1.3em;
     color: #fff;
-    font-size: 0.8em;
+    transform: rotate(-10deg) scale(0.75);
+  }
+}
+
+.vxe-icon--question {
+  @extend %DefaultWidthHeight, %QuestionAndInfoWarning;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
+  &:after {
+    content: "\3F";
   }
 }
 
 .vxe-icon--info {
-  @extend %DefaultWidthHeight;
+  @extend %DefaultWidthHeight, %QuestionAndInfoWarning;
   &:before {
     @extend %BeforeSolidRadius;
   }
   &:after {
-    @extend %PseudoClass;
     content: "\A1";
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    line-height: 1.3em;
-    color: #fff;
-    font-size: 0.8em;
   }
 }
 
 .vxe-icon--warning {
-  @extend %DefaultWidthHeight;
+  @extend %DefaultWidthHeight, %QuestionAndInfoWarning;
   &:before {
     @extend %BeforeSolidRadius;
   }
   &:after {
-    @extend %PseudoClass;
     content: "\21";
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    color: #fff;
-    font-size: 0.8em;
   }
 }
 

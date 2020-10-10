@@ -1,13 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.theme') }}</h2>
-    <p class="tip">Case 1.使用默认的主题样式（<a class="link" href="https://github.com/x-extends/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>）</p>
-    <pre>
-      <code class="scss">
-        @import 'vxe-table/lib/index.css';
-      </code>
-    </pre>
-    <p class="tip">Case 2.修改主题颜色，并引入所有样式</p>
+    <p class="tip">第一种方式：创建 scss 文件（<a class="link" href="https://github.com/x-extends/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>），并引入所有样式</p>
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
@@ -16,13 +10,15 @@
         $vxe-font-size: 14px;
         $vxe-font-color: #666;
         $vxe-primary-color: #409eff;
+        $vxe-table-font-color: $vxe-font-color;
+        $vxe-table-border-color: #e8eaec;
         $vxe-table-border-radius: 4px;
         // ...
 
         @import 'vxe-table/styles/modules.scss';
       </code>
     </pre>
-    <p class="tip">Case 3.修改主题颜色，并按需引入样式</p>
+    <p class="tip">第二种方式：创建 scss 文件（<a class="link" href="https://github.com/x-extends/vxe-table/blob/master/styles/variable.scss" target="_blank">查看所有变量</a>），并按需引入模块样式（<a class="link" href="https://github.com/x-extends/vxe-table/blob/master/styles/modules.scss" target="_blank">查看所有模块</a>）</p>
     <pre>
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
@@ -31,6 +27,8 @@
         $vxe-font-size: 14px;
         $vxe-font-color: #666;
         $vxe-primary-color: #409eff;
+        $vxe-table-font-color: $vxe-font-color;
+        $vxe-table-border-color: #e8eaec;
         $vxe-table-border-radius: 4px;
         // ...
 
@@ -41,24 +39,7 @@
         @import 'vxe-table/styles/body.scss';
         @import 'vxe-table/styles/footer.scss';
         @import 'vxe-table/styles/filter.scss';
-        @import 'vxe-table/styles/menu.scss';
-        @import 'vxe-table/styles/export.scss';
-
-        @import 'vxe-table/styles/grid.scss';
-        @import 'vxe-table/styles/toolbar.scss';
-        @import 'vxe-table/styles/pager.scss';
-        @import 'vxe-table/styles/checkbox.scss';
-        @import 'vxe-table/styles/radio.scss';
-        @import 'vxe-table/styles/input.scss';
-        @import 'vxe-table/styles/textarea.scss';
-        @import 'vxe-table/styles/button.scss';
-        @import 'vxe-table/styles/modal.scss';
-        @import 'vxe-table/styles/tooltip.scss';
-        @import 'vxe-table/styles/form.scss';
-        @import 'vxe-table/styles/select.scss';
-        @import 'vxe-table/styles/switch.scss';
-        @import 'vxe-table/styles/list.scss';
-        @import 'vxe-table/styles/pulldown.scss';
+        // ...
       </code>
     </pre>
   </div>

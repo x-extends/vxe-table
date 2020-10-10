@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 
@@ -415,11 +415,9 @@ function renderNativeFormOptions (h, options, renderOpts, params) {
   })
 }
 
-function createExportMethod (valueMethod, isEdit) {
-  const renderProperty = isEdit ? 'editRender' : 'cellRender'
-  return function (params) {
-    return valueMethod(params.column[renderProperty], params)
-  }
+function handleExportSelectMethod (params) {
+  const { column } = params
+  return getSelectCellValue(column.editRender || column.cellRender, params)
 }
 
 /**
@@ -498,8 +496,7 @@ const renderMap = {
         renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeFormOptions) : renderNativeFormOptions(h, renderOpts.options, renderOpts, params))
       ]
     },
-    editCellExportMethod: createExportMethod(getSelectCellValue, true),
-    cellExportMethod: createExportMethod(getSelectCellValue)
+    cellExportMethod: handleExportSelectMethod
   },
   $input: {
     autofocus: '.vxe-input--inner',
@@ -574,8 +571,7 @@ const renderMap = {
         })
       ]
     },
-    editCellExportMethod: createExportMethod(getSelectCellValue, true),
-    cellExportMethod: createExportMethod(getSelectCellValue)
+    cellExportMethod: handleExportSelectMethod
   },
   $radio: {
     autofocus: '.vxe-radio--input',

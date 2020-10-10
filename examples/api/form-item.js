@@ -103,6 +103,15 @@ const apis = [
         list: []
       },
       {
+        name: 'visible',
+        descKey: 'app.api.formItem.desc.visible',
+        version: '2.9.24',
+        type: 'boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'visible-method',
         descKey: 'app.api.formItem.desc.visibleMethod',
         version: '',
@@ -206,7 +215,7 @@ const apis = [
             version: '',
             type: 'Object',
             enum: '',
-            defVal: '{ value, label, disabled }',
+            defVal: '{ value, label }',
             list: []
           },
           {

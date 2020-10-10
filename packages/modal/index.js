@@ -1,16 +1,17 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import VXEModal from './src/modal'
-import queue from './src/queue'
+import allActivedModals from './src/activities'
 import VXETable from '../v-x-e-table'
 import { UtilTools } from '../tools'
 
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
 let ModalClass = null
-const allActivedModals = []
 
 function openModal (opts) {
   const options = Object.assign({}, opts, { transfer: true })
   return new Promise(resolve => {
-    if (options && options.id && queue.some(comp => comp.id === options.id)) {
+    if (options && options.id && allActivedModals.some(comp => comp.id === options.id)) {
       resolve('exist')
     } else {
       const events = options.events || {}
@@ -19,9 +20,7 @@ function openModal (opts) {
           if (events.hide) {
             events.hide.call(this, params)
           }
-          /* eslint-disable @typescript-eslint/no-use-before-define */
           setTimeout(() => $modal.$destroy(), $modal.isMsg ? 500 : 100)
-          XEUtils.remove(allActivedModals, item => item === $modal)
           resolve(params.type)
         }
       })
@@ -29,10 +28,9 @@ function openModal (opts) {
         el: document.createElement('div'),
         propsData: options
       })
-      allActivedModals.push($modal)
       setTimeout(() => {
         if ($modal.isDestroy) {
-          XEUtils.remove(allActivedModals, item => item === $modal)
+          $modal.close()
         } else {
           $modal.open()
         }
@@ -110,6 +108,11 @@ ModalController.install = function (Vue) {
   Vue.prototype.$XModal = ModalController
   VXETable.$modal = ModalController
   VXETable.modal = ModalController
+  if (!Vue.prototype.$vxe) {
+    Vue.prototype.$vxe = { modal: ModalController }
+  } else {
+    Vue.prototype.$vxe.modal = ModalController
+  }
 }
 
 export const Modal = ModalController

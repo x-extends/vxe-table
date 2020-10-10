@@ -1,8 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      自定义图标，通过设置 <table-api-link prop="tree-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标，例如第三方图标库：font-awesome、inconfont<br>
-      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+      自定义图标，通过设置 <table-api-link prop="tree-config"/>={<table-api-link prop="iconOpen"/>, <table-api-link prop="iconClose"/>} 局部替换默认的图标，例如第三方图标库：font-awesome、inconfont
     </p>
 
     <vxe-toolbar>

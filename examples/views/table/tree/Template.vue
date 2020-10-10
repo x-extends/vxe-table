@@ -2,7 +2,6 @@
   <div>
     <p class="tip">
       使用自定义模板渲染<br>
-      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
     </p>
 
     <vxe-toolbar>
@@ -28,9 +27,9 @@
           <span>{{ `类型：${row.type || '无'}` }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="type" title="Image" tree-node>
-        <template>
-          <img src="static/other/img1.gif" height="50">
+      <vxe-table-column field="attr3" title="Image" tree-node>
+        <template v-slot>
+          <img src="/vxe-table/static/other/img1.gif" height="50">
         </template>
       </vxe-table-column>
       <vxe-table-column field="date" title="Date">
@@ -82,9 +81,9 @@ export default {
               <span>{{ \`类型：\${row.type || '无'}\` }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="type" title="Image" tree-node>
-            <template>
-              <img src="static/other/img1.gif" height="50">
+          <vxe-table-column field="attr3" title="Image" tree-node>
+            <template v-slot>
+              <img src="/vxe-table/static/other/img1.gif" height="50">
             </template>
           </vxe-table-column>
           <vxe-table-column field="date" title="Date">

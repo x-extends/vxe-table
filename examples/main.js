@@ -10,6 +10,12 @@ import './mock'
 import XEUtils from 'xe-utils'
 import moment from 'moment'
 
+// **************** （注意：该全局变量仅用于开发环境调试） ****************
+if (process.env.NODE_ENV === 'development') {
+  window.XEUtils = XEUtils
+}
+// **************** （注意：该全局变量仅用于开发环境调试） ****************
+
 Vue.config.productionTip = false
 
 // 生成模拟数据
@@ -63,18 +69,20 @@ function mockData () {
       num5: (0.967 * index).toFixed(2),
       num6: `${(0.234 * index).toFixed(0)}`,
       num7: (1.39784 * (index + 1)).toFixed(5),
+      num8: (1.39784 * (index + 1)).toFixed(5),
+      num9: (1.39784 * (index + 1)).toFixed(5),
       color: index % 4 === 0 ? 'rgba(255, 0, 0, 0.8)' : index % 3 === 0 ? 'rgba(0, 255, 0, 0.8)' : '',
       color1: index % 4 === 0 ? '#409EFF' : index % 3 === 0 ? '#22de22' : '',
       slider: index % 5 === 0 ? 40 : index % 4 === 0 ? 20 : index % 3 === 0 ? 60 : 0,
       list: [],
       time: currTime + 360000,
-      sex: index % 3 ? '0' : '1',
-      sex1: index % 3 ? ['0'] : index % 4 ? ['0', '1'] : index % 5 ? [] : ['1'],
-      sex2: index % 4 ? '0' : '1',
-      sex3: index % 3 ? 0 : 1,
-      sex4: index % 4 ? 0 : 1,
-      sex5: index % 5 ? '0' : '1',
-      sex6: index % 5 ? 0 : 1,
+      sex: index % 3 === 0 ? '0' : '1',
+      sex1: index % 3 === 0 ? ['0'] : index % 4 === 0 ? ['0', '1'] : index % 5 === 0 ? [] : ['1'],
+      sex2: index % 4 === 0 ? '1' : index % 3 === 0 ? '0' : '',
+      sex3: index % 3 === 0 ? 0 : 1,
+      sex4: index % 4 === 0 ? 0 : 1,
+      sex5: index % 5 === 0 ? '0' : '1',
+      sex6: index % 5 === 0 ? 0 : 1,
       amount: 10000000 * (index % 11 === 0 ? 9.46676 : index % 7 === 8.9886 ? 34.78869 : index % 3 === 2.894453 ? 3.33356 : 7.6566444) + index * 88,
       bankCard: '6200000' + (100000000 + index),
       age: index % 8 === 0 ? 22 : index % 7 === 0 ? 24 : index % 6 === 0 ? 16 : index % 5 === 0 ? 18 : index % 4 === 0 ? 26 : index % 3 === 0 ? 28 : 30,
@@ -85,8 +93,8 @@ function mockData () {
       state: `${index % 4 === 0 ? 'value:Washington' : index % 3 === 0 ? 'value:Delaware' : ''}`,
       address: `vxe-table 从入门到放弃 - ${index}`,
       address2: `vxe-table 从入门到放弃${index}`,
-      img: `static/other/img${index % 3 ? '1' : '2'}.gif`,
-      img1: index % 4 === 0 ? `static/other/img${index % 3 ? '1' : '2'}.gif` : '',
+      img: `/vxe-table/static/other/img${index % 3 ? '1' : '2'}.gif`,
+      img1: index % 4 === 0 ? `/vxe-table/static/other/img${index % 3 ? '1' : '2'}.gif` : '',
       html1: index % 3 === 0 ? `<span style="color:red;">我是一段Html代码</span><br><span style="color:blue;">vxe-table 从入门到放弃${index}</span><br><span style="color:green;">绿到你发慌！</span>` : '',
       html2: index % 3 === 0 ? `<span style="color:red;">我是一段Html代码</span><span style="color:blue;">vxe-table 从入门到住院${index}</span><span style="color:green;">绿到你发慌！</span>` : '',
       html3: `${index} -> <span style="color:red;">我是一段Html代码</span><span style="color:blue;">vxe-table 从入门到放弃${index}</span><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">绿到你发慌！</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码，绿到你发慌！</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:red;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span><br><span style="color:green;">我是一段Html代码,我是一段Html代码，我是一段Html代码</span>`,
@@ -114,10 +122,12 @@ const treeList = [
   {
     id: '10000',
     parentId: null,
-    name: '文件夹 10000',
+    name: 'vxe-table 从入门到放弃 10000',
     size: '53k',
     type: '',
     date: '2019-10-22',
+    checked: false,
+    indeterminate: false,
     childCols: [],
     childData: [],
     children: [
@@ -128,6 +138,8 @@ const treeList = [
         size: '11k',
         type: 'avi',
         date: '2019-05-21',
+        checked: false,
+        indeterminate: false,
         childCols: [],
         childData: []
       },
@@ -140,6 +152,8 @@ const treeList = [
         date: '2019-08-16',
         childCols: [],
         childData: [],
+        checked: false,
+        indeterminate: false,
         children: [
           {
             id: '12100',
@@ -150,6 +164,8 @@ const treeList = [
             date: '2019-08-20',
             childCols: [],
             childData: [],
+            checked: false,
+            indeterminate: false,
             children: [
               {
                 id: '12110',
@@ -159,7 +175,9 @@ const treeList = [
                 type: 'html',
                 date: '2019-05-19',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               }
             ]
           },
@@ -171,7 +189,9 @@ const treeList = [
             type: 'avi',
             date: '2019-04-18',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '123000',
@@ -182,6 +202,8 @@ const treeList = [
             date: '2019-06-17',
             childCols: [],
             childData: [],
+            checked: false,
+            indeterminate: false,
             children: [
               {
                 id: '123100',
@@ -191,7 +213,9 @@ const treeList = [
                 type: 'avi',
                 date: '2019-05-16',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               },
               {
                 id: '123200',
@@ -201,7 +225,9 @@ const treeList = [
                 type: 'avi',
                 date: '2019-02-20',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               },
               {
                 id: '123300',
@@ -211,7 +237,9 @@ const treeList = [
                 type: 'txt',
                 date: '2019-04-21',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               }
             ]
           },
@@ -223,7 +251,9 @@ const treeList = [
             type: 'mp4',
             date: '2019-01-27',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '125000',
@@ -233,7 +263,9 @@ const treeList = [
             type: 'avi',
             date: '2019-09-12',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '126000',
@@ -243,7 +275,9 @@ const treeList = [
             type: 'avi',
             date: '2019-07-29',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           }
         ]
       }
@@ -257,7 +291,9 @@ const treeList = [
     type: 'png',
     date: '2019-08-23',
     childCols: [],
-    childData: []
+    childData: [],
+    checked: false,
+    indeterminate: false
   },
   {
     id: '30000',
@@ -268,6 +304,8 @@ const treeList = [
     date: '2019-05-14',
     childCols: [],
     childData: [],
+    checked: false,
+    indeterminate: false,
     children: [
       {
         id: '31000',
@@ -278,6 +316,8 @@ const treeList = [
         date: '2019-07-24',
         childCols: [],
         childData: [],
+        checked: false,
+        indeterminate: false,
         children: [
           {
             id: '31100',
@@ -287,7 +327,9 @@ const treeList = [
             type: 'js',
             date: '2019-05-27',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '31200',
@@ -297,7 +339,9 @@ const treeList = [
             type: 'java',
             date: '2019-10-25',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           }
         ]
       },
@@ -310,16 +354,20 @@ const treeList = [
         date: '2019-05-25',
         childCols: [],
         childData: [],
+        checked: false,
+        indeterminate: false,
         children: [
           {
             id: '32100',
             parentId: '32000',
-            name: 'vxe-table 从入门到废弃 32100.mp4',
+            name: 'vxe-table 从入门到放弃 32100.mp4',
             size: '35k',
             type: 'mp4',
             date: '2019-05-28',
             childCols: [],
-            childData: []
+            childData: [],
+            checked: false,
+            indeterminate: false
           },
           {
             id: '32200',
@@ -330,6 +378,8 @@ const treeList = [
             date: '2019-02-29',
             childCols: [],
             childData: [],
+            checked: false,
+            indeterminate: false,
             children: [
               {
                 id: '32210',
@@ -339,7 +389,9 @@ const treeList = [
                 type: 'pdf',
                 date: '2019-12-13',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               },
               {
                 id: '32220',
@@ -350,6 +402,8 @@ const treeList = [
                 date: '2019-08-12',
                 childCols: [],
                 childData: [],
+                checked: false,
+                indeterminate: false,
                 children: [
                   {
                     id: '32221',
@@ -359,7 +413,9 @@ const treeList = [
                     type: 'pdf',
                     date: '2019-12-30',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   },
                   {
                     id: '32222',
@@ -369,7 +425,9 @@ const treeList = [
                     type: 'ppt',
                     date: '2019-10-30',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   },
                   {
                     id: '32223',
@@ -379,7 +437,9 @@ const treeList = [
                     type: 'xlsx',
                     date: '2019-11-01',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   }
                 ]
               }
@@ -394,6 +454,8 @@ const treeList = [
             date: '2019-01-10',
             childCols: [],
             childData: [],
+            checked: false,
+            indeterminate: false,
             children: [
               {
                 id: '32310',
@@ -403,7 +465,9 @@ const treeList = [
                 type: 'mp4',
                 date: '2019-11-09',
                 childCols: [],
-                childData: []
+                childData: [],
+                checked: false,
+                indeterminate: false
               },
               {
                 id: '32320',
@@ -414,6 +478,8 @@ const treeList = [
                 date: '2019-08-08',
                 childCols: [],
                 childData: [],
+                checked: false,
+                indeterminate: false,
                 children: [
                   {
                     id: '32321',
@@ -423,7 +489,9 @@ const treeList = [
                     type: 'mp3',
                     date: '2019-03-07',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   },
                   {
                     id: '32322',
@@ -433,7 +501,9 @@ const treeList = [
                     type: 'avi',
                     date: '2019-09-09',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   },
                   {
                     id: '32323',
@@ -443,7 +513,9 @@ const treeList = [
                     type: 'mp3',
                     date: '2019-09-04',
                     childCols: [],
-                    childData: []
+                    childData: [],
+                    checked: false,
+                    indeterminate: false
                   }
                 ]
               }
@@ -459,7 +531,9 @@ const treeList = [
         type: 'txt',
         date: '2019-01-14',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       },
       {
         id: '34000',
@@ -469,17 +543,21 @@ const treeList = [
         type: 'avi',
         date: '2019-01-17',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       },
       {
         id: '35000',
         parentId: '30000',
-        name: '在线学习 35000.mp4',
+        name: 'vxe-table 从入门到放弃 35000.mp4',
         size: '286k',
         type: 'mp4',
         date: '2019-02-19',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       },
       {
         id: '36000',
@@ -489,19 +567,23 @@ const treeList = [
         type: 'pdf',
         date: '2019-12-27',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       }
     ]
   },
   {
     id: '40000',
     parentId: null,
-    name: '文件夹 40000',
+    name: 'vxe-table 从入门到放弃系列 40000',
     size: '26k',
     type: 'mp4',
     date: '2019-03-04',
     childCols: [],
     childData: [],
+    checked: false,
+    indeterminate: false,
     children: [
       {
         id: '41000',
@@ -511,20 +593,24 @@ const treeList = [
         type: 'mp4',
         date: '2019-02-03',
         childCols: [],
-        childData: []
+        childData: [],
+        checked: false,
+        indeterminate: false
       }
     ]
   },
   {
     id: '50000',
     parentId: null,
-    name: 'vxe-table 从入门到废弃 50000.avi',
+    name: 'vxe-table 从入门到放弃 50000.avi',
     size: '498k',
     type: 'avi',
     date: '2019-12-02',
     childCols: [],
     childData: [],
-    children: []
+    children: [],
+    checked: false,
+    indeterminate: false
   }
 ]
 

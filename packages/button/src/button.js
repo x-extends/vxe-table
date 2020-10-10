@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
@@ -16,10 +16,12 @@ export default {
     circle: Boolean,
     disabled: Boolean,
     loading: Boolean,
+    destroyOnClose: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.button.transfer }
   },
   data () {
     return {
+      inited: false,
       showPanel: false,
       animatVisible: false,
       panelIndex: 0,
@@ -50,12 +52,6 @@ export default {
     }
     GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
   },
-  mounted () {
-    const panelElem = this.$refs.panel
-    if (panelElem && this.transfer) {
-      document.body.appendChild(panelElem)
-    }
-  },
   beforeDestroy () {
     const panelElem = this.$refs.panel
     if (panelElem && panelElem.parentNode) {
@@ -66,8 +62,9 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
   },
   render (h) {
-    const { $scopedSlots, $listeners, type, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
-    return $scopedSlots.dropdowns ? h('div', {
+    const { $scopedSlots, $listeners, inited, type, destroyOnClose, isFormBtn, btnStatus, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
+    const downsSlot = $scopedSlots.dropdowns
+    return downsSlot ? h('div', {
       class: ['vxe-button--dropdown', {
         [`size--${vSize}`]: vSize,
         'is--active': showPanel
@@ -108,7 +105,7 @@ export default {
           'data-placement': panelPlacement
         },
         style: this.panelStyle
-      }, [
+      }, inited ? [
         h('div', {
           class: 'vxe-button--dropdown-wrapper',
           on: {
@@ -116,8 +113,8 @@ export default {
             mouseenter: this.mouseenterEvent,
             mouseleave: this.mouseleaveEvent
           }
-        }, $scopedSlots.dropdowns.call(this))
-      ])
+        }, destroyOnClose && !showPanel ? [] : downsSlot.call(this, {}, h))
+      ] : null)
     ]) : h('button', {
       ref: 'btn',
       class: ['vxe-button', `type--${btnType}`, {
@@ -180,13 +177,13 @@ export default {
     },
     clickDropdownEvent (evnt) {
       const dropdownElem = evnt.currentTarget
-      const wrapperElem = this.$refs.panel
+      const panelElem = this.$refs.panel
       const { flag, targetElem } = DomTools.getEventTargetNode(evnt, dropdownElem, 'vxe-button')
       if (flag) {
-        wrapperElem.dataset.active = 'N'
+        panelElem.dataset.active = 'N'
         this.showPanel = false
         setTimeout(() => {
-          if (wrapperElem.dataset.active !== 'Y') {
+          if (panelElem.dataset.active !== 'Y') {
             this.animatVisible = false
           }
         }, 350)
@@ -194,11 +191,17 @@ export default {
       }
     },
     mouseenterEvent () {
-      const wrapperElem = this.$refs.panel
-      wrapperElem.dataset.active = 'Y'
+      const panelElem = this.$refs.panel
+      if (!this.inited) {
+        this.inited = true
+        if (this.transfer) {
+          document.body.appendChild(panelElem)
+        }
+      }
+      panelElem.dataset.active = 'Y'
       this.animatVisible = true
       setTimeout(() => {
-        if (wrapperElem.dataset.active === 'Y') {
+        if (panelElem.dataset.active === 'Y') {
           this.showPanel = true
           this.updateZindex()
           this.updatePlacement()
@@ -206,13 +209,13 @@ export default {
       }, 10)
     },
     mouseleaveEvent () {
-      const wrapperElem = this.$refs.panel
-      wrapperElem.dataset.active = 'N'
+      const panelElem = this.$refs.panel
+      panelElem.dataset.active = 'N'
       setTimeout(() => {
-        if (wrapperElem.dataset.active !== 'Y') {
+        if (panelElem.dataset.active !== 'Y') {
           this.showPanel = false
           setTimeout(() => {
-            if (wrapperElem.dataset.active !== 'Y') {
+            if (panelElem.dataset.active !== 'Y') {
               this.animatVisible = false
             }
           }, 350)
@@ -224,63 +227,76 @@ export default {
         const { $refs, transfer, placement, panelIndex } = this
         const targetElem = $refs.btn
         const panelElem = $refs.panel
-        const targetHeight = targetElem.offsetHeight
-        const targetWidth = targetElem.offsetWidth
-        const panelHeight = panelElem.offsetHeight
-        const panelWidth = panelElem.offsetWidth
-        const marginSize = 5
-        const panelStyle = {
-          zIndex: panelIndex
-        }
-        const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
-        let panelPlacement = 'bottom'
-        if (transfer) {
-          let left = boundingLeft
-          let top = boundingTop + targetHeight
-          if (placement === 'top') {
-            panelPlacement = 'top'
-            top = boundingTop - panelHeight
-          } else {
-            // 如果下面不够放，则向上
-            if (top + panelHeight + marginSize > visibleHeight) {
+        if (panelElem && targetElem) {
+          const targetHeight = targetElem.offsetHeight
+          const targetWidth = targetElem.offsetWidth
+          const panelHeight = panelElem.offsetHeight
+          const panelWidth = panelElem.offsetWidth
+          const marginSize = 5
+          const panelStyle = {
+            zIndex: panelIndex
+          }
+          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
+          let panelPlacement = 'bottom'
+          if (transfer) {
+            let left = boundingLeft
+            let top = boundingTop + targetHeight
+            if (placement === 'top') {
               panelPlacement = 'top'
               top = boundingTop - panelHeight
+            } else if (!placement) {
+              // 如果下面不够放，则向上
+              if (top + panelHeight + marginSize > visibleHeight) {
+                panelPlacement = 'top'
+                top = boundingTop - panelHeight
+              }
+              // 如果上面不够放，则向下（优先）
+              if (top < marginSize) {
+                panelPlacement = 'bottom'
+                top = boundingTop + targetHeight
+              }
             }
-            // 如果上面不够放，则向下（优先）
-            if (top < marginSize) {
-              panelPlacement = 'bottom'
-              top = boundingTop + targetHeight
+            // 如果溢出右边
+            if (left + panelWidth + marginSize > visibleWidth) {
+              left -= left + panelWidth + marginSize - visibleWidth
             }
-          }
-          // 如果溢出右边
-          if (left + panelWidth + marginSize > visibleWidth) {
-            left -= left + panelWidth + marginSize - visibleWidth
-          }
-          // 如果溢出左边
-          if (left < marginSize) {
-            left = marginSize
-          }
-          Object.assign(panelStyle, {
-            left: `${left}px`,
-            top: `${top}px`,
-            minWidth: `${targetWidth}px`
-          })
-        } else {
-          if (placement === 'top') {
-            panelPlacement = 'top'
-            panelStyle.bottom = `${targetHeight}px`
+            // 如果溢出左边
+            if (left < marginSize) {
+              left = marginSize
+            }
+            Object.assign(panelStyle, {
+              left: `${left}px`,
+              top: `${top}px`,
+              minWidth: `${targetWidth}px`
+            })
           } else {
-            // 如果下面不够放，则向上
-            if (boundingTop + targetHeight + panelHeight > visibleHeight) {
+            if (placement === 'top') {
               panelPlacement = 'top'
               panelStyle.bottom = `${targetHeight}px`
+            } else if (!placement) {
+              // 如果下面不够放，则向上
+              if (boundingTop + targetHeight + panelHeight > visibleHeight) {
+                // 如果上面不够放，则向下（优先）
+                if (boundingTop - targetHeight - panelHeight > marginSize) {
+                  panelPlacement = 'top'
+                  panelStyle.bottom = `${targetHeight}px`
+                }
+              }
             }
           }
+          this.panelStyle = panelStyle
+          this.panelPlacement = panelPlacement
+          return this.$nextTick()
         }
-        this.panelStyle = panelStyle
-        this.panelPlacement = panelPlacement
-        return this.$nextTick()
       })
+    },
+    focus () {
+      this.$el.focus()
+      return this.$nextTick()
+    },
+    blur () {
+      this.$el.blur()
+      return this.$nextTick()
     }
   }
 }

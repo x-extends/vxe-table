@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{ $t('app.aside.nav.formats') }}</h1>
-    <p class="tip">你可以很简单的将单元格的格式化函数注册成全局可复用，通过 <table-column-api-link prop="formatter"/> 调用</p>
+    <p class="tip">将列的格式化函数注册成全局可复用，通过 <table-column-api-link prop="formatter"/> 调用</p>
     <vxe-table
       resizable
       highlight-current-row
@@ -16,8 +16,8 @@
     </vxe-table>
     <h2>示例</h2>
     <pre>
-      <code class="javascript">{{ demoCodes[0] }}</code>
-      <code class="html">{{ demoCodes[1] }}</code>
+      <code class="html">{{ demoCodes[0] }}</code>
+      <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
   </div>
 </template>
@@ -30,25 +30,25 @@ export default {
     return {
       tableData: [
         {
-          name: 'add(code, callback)',
+          name: 'add(name, callback)',
           desc: '添加一个',
           version: '',
           type: '',
           enum: '',
-          defVal: 'code, callback',
+          defVal: 'name: string, callback: (params) => string | number',
           list: []
         },
         {
-          name: 'mixin(map)',
+          name: 'mixin(options)',
           desc: '添加多个',
           version: '',
           type: '',
           enum: '',
-          defVal: 'map',
+          defVal: 'options: { [name: string]: (params) => string | number }',
           list: []
         },
         {
-          name: 'delete(code)',
+          name: 'delete(name)',
           desc: '删除',
           version: '',
           type: '',
@@ -64,8 +64,8 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="num" title="默认两位小数" formatter="myAmount"></vxe-table-column>
-          <vxe-table-column field="num" title="保留3位小数" :formatter="['myAmount', 3]"></vxe-table-column>
+          <vxe-table-column field="num1" title="默认两位小数" formatter="myAmount"></vxe-table-column>
+          <vxe-table-column field="num2" title="保留3位小数" :formatter="['myAmount', 3]"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -77,11 +77,13 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', num2: 22, num1: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', role: 'Test', num2: 10, num1: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', num2: 5, num1: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', num2: 20, num1: 24, address: 'Shanghai' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           }
         }
         `

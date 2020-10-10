@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import formats from '../../v-x-e-table/src/formats'
 
@@ -9,7 +9,7 @@ function getColFuncWidth (isExists, defaultWidth = 16) {
   return isExists ? defaultWidth : 0
 }
 
-class ColumnConfig {
+class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xetable, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
     const $xegrid = $xetable.$xegrid
@@ -31,6 +31,10 @@ class ColumnConfig {
     if (_vm.label) {
       UtilTools.warn('vxe.error.delProp', ['column.label', 'column.title'])
     }
+    // 在 v3.0 中废弃 class
+    if (_vm.class) {
+      UtilTools.warn('vxe.error.delProp', ['column.class', 'column.className'])
+    }
     // 在 v3.0 中废弃 type=index
     if (_vm.type === 'index') {
       UtilTools.warn('vxe.error.delProp', ['column.type=index', 'column.type=seq'])
@@ -42,7 +46,7 @@ class ColumnConfig {
         UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
       }
       if (_vm.slots && !_vm.slots.content && _vm.slots.default) {
-        UtilTools.warn('vxe.error.expandContent')
+        UtilTools.error('vxe.error.expandContent')
       }
     }
     if (formatter) {
@@ -106,10 +110,13 @@ class ColumnConfig {
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
       contentRender: _vm.contentRender,
+      exportMethod: _vm.exportMethod,
+      footerExportMethod: _vm.footerExportMethod,
+      titleHelp: _vm.titleHelp,
       // 自定义参数
       params: _vm.params,
       // 渲染属性
-      id: XEUtils.uniqueId('col_'),
+      id: _vm.colId || XEUtils.uniqueId('col_'),
       parentId: null,
       visible,
       halfVisible: false,
@@ -142,7 +149,7 @@ class ColumnConfig {
 
   getTitle () {
     // 在 v3.0 中废弃 label、type=index
-    return UtilTools.getFuncText(this.own.title || this.own.label || (this.type === 'seq' || this.type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
+    return UtilTools.getFuncText(this.title || this.label || (this.type === 'seq' || this.type === 'index' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
   }
 
   getKey () {
@@ -150,8 +157,8 @@ class ColumnConfig {
   }
 
   getMinWidth () {
-    const { type, filters, sortable, remoteSort, editRender } = this
-    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(filters) + getColFuncWidth(sortable || remoteSort) + getColFuncWidth(editRender, 32)
+    const { type, filters, sortable, remoteSort, sortOpts, editRender, editOpts, titleHelp } = this
+    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(editRender && editOpts.showIcon, 32)
   }
 
   update (name, value) {
@@ -176,8 +183,8 @@ function outLog (type) {
 export const UtilTools = {
   warn: outLog('warn'),
   error: outLog('error'),
-  getLog (message, params) {
-    return `[vxe-table] ${XEUtils.template(GlobalConfig.i18n(message), params)}`
+  getLog (message, args) {
+    return `[vxe-table] ${GlobalConfig.i18n(message, args)}`
   },
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
@@ -211,7 +218,9 @@ export const UtilTools = {
   },
   getFilters (filters) {
     if (filters && XEUtils.isArray(filters)) {
-      return filters.map(({ label, value, data, resetValue, checked }) => ({ label, value, data, resetValue, checked: !!checked }))
+      return filters.map(({ label, value, data, resetValue, checked }) => {
+        return { label, value, data, resetValue, checked: !!checked, _checked: !!checked }
+      })
     }
     return filters
   },
@@ -273,17 +282,22 @@ export const UtilTools = {
     return XEUtils.set(row, column.property, value)
   },
   isColumn (column) {
-    return column instanceof ColumnConfig
+    return column instanceof ColumnInfo
   },
   getColumnConfig ($xetable, _vm, options) {
-    return UtilTools.isColumn(_vm) ? _vm : new ColumnConfig($xetable, _vm, options)
+    return UtilTools.isColumn(_vm) ? _vm : new ColumnInfo($xetable, _vm, options)
   },
   // 组装列配置
   assemColumn (_vm) {
     const { $el, $xetable, $xecolumn, columnConfig } = _vm
     const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
-    if (groupConfig && $xecolumn.$children.length > 0) {
+    if (groupConfig) {
+      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      //   if ($xecolumn.$options._componentTag === 'vxe-table-column') {
+      //     UtilTools.warn('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
+      //   }
+      // }
       if (!groupConfig.children) {
         groupConfig.children = []
       }
@@ -302,6 +316,11 @@ export const UtilTools = {
   },
   hasChildrenList (item) {
     return item && item.children && item.children.length > 0
+  },
+  getColMinWidth (_vm, column) {
+    const { sortOpts, filterOpts, editOpts } = _vm
+    const { type, filters, sortable, remoteSort, editRender, titleHelp } = column
+    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(editRender && editOpts.showIcon, 32)
   },
   parseFile (file) {
     const name = file.name

@@ -71,6 +71,15 @@ const apis = [
         list: []
       },
       {
+        name: 'className',
+        desc: '给窗口附加 className',
+        version: '2.9.19',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'iconStatus',
         descKey: 'app.api.modal.desc.iconStatus',
         version: '2.7.0',
@@ -86,6 +95,24 @@ const apis = [
         type: 'String',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'cancel-button-text',
+        desc: '只对 type=confirm 有效，取消按钮的文本内容',
+        version: '2.9.17',
+        type: 'string',
+        enum: '',
+        defVal: '取消',
+        list: []
+      },
+      {
+        name: 'confirm-button-text',
+        desc: '只对 type=alert|confirm 有效，确定按钮的文本内容',
+        version: '2.9.17',
+        type: 'string',
+        enum: '',
+        defVal: '确定',
         list: []
       },
       {
@@ -390,7 +417,7 @@ const apis = [
       },
       {
         name: 'hide',
-        desc: '在窗口关闭时会触发该事件',
+        desc: '在窗口隐藏时会触发该事件',
         version: '',
         type: '{ type, $event }',
         enum: '',

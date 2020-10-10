@@ -30,7 +30,7 @@ const apis = [
         desc: '渲染类型',
         version: '',
         type: 'String',
-        enum: 'text, search, number, integer, float, password, date, datetime, week, month, year',
+        enum: 'text, search, number, integer, float, password, date, time, datetime, week, month, year',
         defVal: '',
         list: []
       },
@@ -161,6 +161,15 @@ const apis = [
         list: []
       },
       {
+        name: 'align',
+        desc: '内容对齐方式',
+        version: '2.9.17',
+        type: 'string',
+        enum: 'left, center, right',
+        defVal: 'left',
+        list: []
+      },
+      {
         name: 'controls',
         desc: '只对 type=number|integer|float 有效，是否显示控制按钮',
         version: '2.9.16',
@@ -236,20 +245,22 @@ const apis = [
       },
       {
         name: 'min-date',
+        abandoned: true,
         desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最小值',
         version: '2.9.16',
         type: 'number | string | Date',
         enum: '',
-        defVal: '默认 1900，继承 setup.input.minDate',
+        defVal: '默认 new Date(1900, 0, 1)，继承 setup.input.minDate',
         list: []
       },
       {
         name: 'max-date',
+        abandoned: true,
         desc: '只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最大值',
         version: '2.9.16',
         type: 'number | string | Date',
         enum: '',
-        defVal: '默认 2100，继承 setup.input.maxDate',
+        defVal: '默认 new Date(2100, 0, 1)，继承 setup.input.maxDate',
         list: []
       },
       {
@@ -299,7 +310,7 @@ const apis = [
       },
       {
         name: 'disabled-method',
-        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({ date }) 的返回值用来决定该日期是否允许选中',
+        desc: '只对 type=date|datetime|week|month|year 有效，该方法 Function({ date, type }) 的返回值用来决定该日期是否允许选中',
         version: '2.8.32',
         type: 'Function',
         enum: '',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">通过 <table-column-api-link prop="events"/> 自定义目标组件的事件<br><span class="red">（注：具体请查看目标组件所支持的事件API）</span></p>
+    <p class="tip">通过 <table-column-api-link prop="events"/> 自定义目标组件的事件<br><span class="red">（注：具体请查看目标组件所支持的事件）</span></p>
 
     <vxe-table
       border
@@ -11,8 +11,8 @@
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-table-column>
       <vxe-table-column
-        field="role"
-        title="Role"
+        field="nickname"
+        title="Nickname"
         :filters="[{ data: '' }]"
         :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
         :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>
@@ -49,8 +49,8 @@ export default {
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-table-column>
           <vxe-table-column
-            field="role"
-            title="Role"
+            field="nickname"
+            title="Nickname"
             :filters="[{ data: '' }]"
             :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
             :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>

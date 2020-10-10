@@ -46,6 +46,10 @@ $btnThemeList: (
   background-color: $vxe-button-default-background-color;
   outline: 0;
   font-size: $vxe-font-size;
+  max-width: $vxe-button-max-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   white-space: nowrap;
   user-select: none;
   appearance: none;
@@ -109,6 +113,9 @@ $btnThemeList: (
     }
   }
   &.type--button {
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
     &.is--round {
       border-radius: $vxe-button-height-default / 2;
     }
@@ -343,6 +350,8 @@ $btnThemeList: (
     transform: scaleY(0.5);
     transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
     transform-origin: center top;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
     &[data-placement="top"] {
       transform-origin: center bottom;
     }

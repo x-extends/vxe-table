@@ -7,10 +7,17 @@
       resizable
       show-overflow
       show-header-overflow
+<<<<<<< HEAD
       show-footer
       ref="xTable"
       height="500"
       :export-config="{}"
+=======
+      export-config
+      show-footer
+      ref="xTable"
+      height="500"
+>>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
       :merge-cells="mergeCells"
       :sort-config="{trigger: 'cell'}"
       :merge-footer-items="mergeFooterItems"
@@ -74,10 +81,17 @@ export default {
           resizable
           show-overflow
           show-header-overflow
+<<<<<<< HEAD
           show-footer
           ref="xTable"
           height="500"
           :export-config="{}"
+=======
+          export-config
+          show-footer
+          ref="xTable"
+          height="500"
+>>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
           :merge-cells="mergeCells"
           :sort-config="{trigger: 'cell'}"
           :merge-footer-items="mergeFooterItems"

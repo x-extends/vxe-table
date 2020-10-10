@@ -24,7 +24,7 @@
       top: 0;
       left: 0;
       border: $vxe-radio-border-width solid $vxe-input-border-color;
-      background-color: #ffffff;
+      background-color: $vxe-radio-icon-background-color;
       border-radius: 50%;
     }
   }
@@ -40,7 +40,7 @@
       top: 0.4em;
       left: 0.4em;
       border-radius: 50%;
-      background-color: #ffffff;
+      background-color: $vxe-radio-checked-icon-background-color;
     }
   }
   &.is--checked {
@@ -67,14 +67,14 @@
   }
   &.is--disabled {
     cursor: not-allowed;
-    color: $vxe-input-disabled-color;
+    color: $vxe-disabled-color;
     .vxe-radio--icon {
       &:before {
         border-color: $vxe-input-disabled-color;
         background-color: $vxe-input-disabled-background-color;
       }
       &:after {
-        background-color: #c0c4cc;
+        background-color: $vxe-primary-disabled-color;
       }
     }
   }
@@ -92,7 +92,7 @@
       width: 1em;
       top: 0;
       left: 0;
-      background-color: #ffffff;
+      background-color: $vxe-checkbox-icon-background-color;
       border-radius: $vxe-checkbox-border-radius;
       border: $vxe-checkbox-border-width solid $vxe-input-border-color;
     }
@@ -108,7 +108,7 @@
       width: $vxe-checkbox-checked-width;
       top: 50%;
       left: 50%;
-      border: $vxe-checkbox-border-width solid #fff;
+      border: $vxe-checkbox-border-width solid $vxe-checkbox-checked-icon-border-color;
       border-left: 0;
       border-top: 0;
       transform: translate(-50%, -50%) rotate(45deg);
@@ -122,7 +122,7 @@
       left: 50%;
       height: $vxe-checkbox-indeterminate-height;
       width: $vxe-checkbox-indeterminate-width;
-      background-color: #fff;
+      background-color: $vxe-checkbox-indeterminate-icon-background-color;
       transform: translate(-50%, -50%);
     }
   }
@@ -160,14 +160,14 @@
   }
   &.is--disabled {
     cursor: not-allowed;
-    color: $vxe-input-disabled-color;
+    color: $vxe-disabled-color;
     .vxe-checkbox--icon {
       &:before {
         border-color: $vxe-input-disabled-color;
         background-color: $vxe-input-disabled-background-color;
       }
       &:after {
-        border-color: $vxe-input-disabled-color;
+        border-color: $vxe-primary-disabled-color;
       }
     }
   }

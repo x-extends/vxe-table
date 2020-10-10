@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/methods/xe-utils'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../conf'
 import interceptor from './src/interceptor'
 import renderer from './src/renderer'
@@ -33,7 +33,7 @@ function reg (key) {
 }
 
 export const VXETable = {
-  t: key => GlobalConfig.i18n(key),
+  t: (key, args) => GlobalConfig.i18n(key, args),
   v: 'v2',
   reg,
   use,
@@ -64,12 +64,22 @@ Object.defineProperty(VXETable, 'zIndex', { get: UtilTools.getLastZIndex })
  */
 Object.defineProperty(VXETable, 'nextZIndex', { get: UtilTools.nextZIndex })
 
+function getExportOrImpotType (types, flag) {
+  const rest = []
+  XEUtils.objectEach(types, (val, type) => {
+    if (val === 0 || val === flag) {
+      rest.push(type)
+    }
+  })
+  return rest
+}
+
 /**
  * 获取所有导出类型
  */
 Object.defineProperty(VXETable, 'exportTypes', {
   get () {
-    return Object.keys(VXETable.types)
+    return getExportOrImpotType(GlobalConfig.export.types, 1)
   }
 })
 
@@ -78,13 +88,7 @@ Object.defineProperty(VXETable, 'exportTypes', {
  */
 Object.defineProperty(VXETable, 'importTypes', {
   get () {
-    const rest = []
-    XEUtils.each(VXETable.types, (flag, type) => {
-      if (flag) {
-        rest.push(type)
-      }
-    })
-    return rest
+    return getExportOrImpotType(GlobalConfig.export.types, 2)
   }
 })
 

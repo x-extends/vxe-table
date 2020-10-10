@@ -1,8 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      树表格的懒加载和快捷菜单，通过调用 <table-api-link prop="clearTreeExpandLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="reloadTreeChilds"/> 方法重新加载子节点<br>
-      <span class="red">(注：树结构不支持大量数据，如果数据量超过 500 条，请谨慎使用！)</span>
+      树表格的懒加载和快捷菜单，通过调用 <table-api-link prop="clearTreeExpandLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="reloadTreeChilds"/> 方法重新加载子节点
     </p>
 
     <vxe-table
