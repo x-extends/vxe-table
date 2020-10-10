@@ -747,15 +747,18 @@ export default {
       return Promise.resolve()
     },
     _importData (options) {
-      const opts = Object.assign({}, this.importOpts, options)
+      const opts = Object.assign({ types: VXETable.importTypes }, this.importOpts, options)
       const rest = new Promise((resolve, reject) => {
         this._importResolve = resolve
         this._importReject = reject
       })
       this.readFile(opts)
-        .then(evnt => this.importByFile(evnt.target.files[0], opts))
-        .catch(evnt => {
-          this._importReject(evnt)
+        .then(params => {
+          const { file } = params
+          this.importByFile(file, opts)
+        })
+        .catch(params => {
+          this._importReject(params)
           this._importReject = null
         })
       return rest
@@ -770,20 +773,31 @@ export default {
         fileForm.appendChild(fileInput)
         document.body.appendChild(fileForm)
       }
-      const types = options.types || VXETable.importTypes
-      if (options.multiple) {
-        fileInput.multiple = 'multiple'
-      }
-      fileInput.accept = `.${types.join(', .')}`
+      const types = options.types || []
+      const isAllType = !types.length || types.some((type) => type === '*')
+      fileInput.multiple = !!options.multiple
+      fileInput.accept = isAllType ? '' : `.${types.join(', .')}`
       fileInput.onchange = evnt => {
-        const { type } = UtilTools.parseFile(evnt.target.files[0])
-        if (types.indexOf(type) > -1) {
-          this._fileResolve(evnt)
+        const { files } = evnt.target
+        const file = files[0]
+        let errType
+        // 校验类型
+        if (!isAllType) {
+          for (let fIndex = 0; fIndex < files.length; fIndex++) {
+            const { type } = UtilTools.parseFile(files[fIndex])
+            if (!XEUtils.includes(types, type)) {
+              errType = type
+              break
+            }
+          }
+        }
+        if (!errType) {
+          this._fileResolve({ files, file, target: evnt.target })
         } else {
           if (options.message !== false) {
-            VXETable.modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [type]), status: 'error' })
+            VXETable.modal.message({ message: XEUtils.template(GlobalConfig.i18n('vxe.error.notType'), [errType]), status: 'error' })
           }
-          this._fileReject(evnt)
+          this._fileReject({ files, file })
         }
         this._fileResolve = null
       }

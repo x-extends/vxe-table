@@ -1,11 +1,11 @@
-import { VXETableModule } from '../component'
-import { ColumnConfig } from '../column'
+import { VXETableComponent } from '../component'
+import { ColumnInfo } from '../column'
 import { Table } from '../table'
 
 /**
  * 表格校验
  */
-export declare class Validator extends VXETableModule {}
+export declare class Validator extends VXETableComponent {}
 
 export interface ColumnEditRule {
   /**
@@ -46,7 +46,7 @@ export interface ColumnEditValidErrParams {
   cellValue: any,
   rule: ColumnEditRule;
   rules: ColumnEditRule[];
-  column: ColumnConfig;
+  column: ColumnInfo;
   columnIndex: number;
   row: any;
   rowIndex: number;

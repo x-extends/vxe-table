@@ -111,9 +111,10 @@ export default {
               this.$refs.xGrid.readFile({
                 multiple: true,
                 types: ['xlsx', 'csv', 'html']
-              }).then(evnt => {
+              }).then(params => {
+                const { files } = params
                 // 解析数据并显示
-                Array.from(evnt.target.files).forEach(file => {
+                Array.from(files).forEach(file => {
                   let ns = file.name.split('.')
                   let name = ns.slice(0, ns.length - 1).join('')
                   let type = ns[ns.length - 1]
@@ -155,9 +156,10 @@ export default {
       this.$refs.xGrid.readFile({
         multiple: true,
         types: ['xlsx', 'csv', 'html']
-      }).then(evnt => {
+      }).then(params => {
+        const { files } = params
         // 解析数据并显示
-        Array.from(evnt.target.files).forEach(file => {
+        Array.from(files).forEach(file => {
           const ns = file.name.split('.')
           const name = ns.slice(0, ns.length - 1).join('')
           const type = ns[ns.length - 1]

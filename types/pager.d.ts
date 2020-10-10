@@ -1,9 +1,9 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 分页
  */
-export declare class Pager extends VXETableModule {
+export declare class Pager extends VXETableComponent {
   /**
    * 自定义布局
    */

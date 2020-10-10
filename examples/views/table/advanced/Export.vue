@@ -18,10 +18,10 @@
 
     <vxe-table
       highlight-hover-row
-      export-config
       border="inner"
       ref="xTable1"
       height="300"
+      :export-config="{}"
       :data="tableData1">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -68,7 +68,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="exportDataEvent3">导出指定第10-20行</vxe-button>
+        <vxe-button @click="exportDataEvent3">导出 sex=1 的行</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -174,10 +174,10 @@ export default {
 
         <vxe-table
           highlight-hover-row
-          export-config
           border="inner"
           ref="xTable1"
           height="300"
+          :export-config="{}"
           :data="tableData1">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -249,7 +249,9 @@ export default {
             exportDataEvent2 () {
               this.$refs.xTable2.exportData({
                 type: 'csv',
-                columnFilterMethod: column => ['name', 'sex'].includes(column.property)
+                columnFilterMethod ({ column }) {
+                  return ['name', 'sex'].includes(column.property)
+                }
               })
             }
           }
@@ -312,7 +314,9 @@ export default {
             exportDataEvent3 () {
               this.$refs.xTable3.exportData({
                 type: 'csv',
-                dataFilterMethod: (row, rowIndex) => rowIndex >= 9 && rowIndex < 20
+                dataFilterMethod ({ row }) {
+                  return row.sex === '1'
+                }
               })
             }
           }
@@ -509,13 +513,17 @@ export default {
     exportDataEvent2 () {
       this.$refs.xTable2.exportData({
         type: 'csv',
-        columnFilterMethod: column => ['name', 'sex'].includes(column.property)
+        columnFilterMethod ({ column }) {
+          return ['name', 'sex'].includes(column.property)
+        }
       })
     },
     exportDataEvent3 () {
       this.$refs.xTable3.exportData({
         type: 'csv',
-        dataFilterMethod: (row, rowIndex) => rowIndex >= 9 && rowIndex < 20
+        dataFilterMethod ({ row }) {
+          return row.sex === '1'
+        }
       })
     },
     exportCurrDataEvent4 () {

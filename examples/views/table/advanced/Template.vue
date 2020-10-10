@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">使用 <table-column-api-link prop="slot"/> 自定义模板；可以实现自定义任意内容及 html 元素<br>
-      <table-column-api-link prop="default"/>：自定义内容模板（提前格式化（最优） > <table-column-api-link prop="formatter"/>（值发生变化时） > <table-column-api-link prop="slots"/>（即时））<br>
+      <table-column-api-link prop="default"/>：自定义内容模板（提前格式化（最优） > <table-column-api-link prop="formatter"/>（field值发生变化时） > <table-column-api-link prop="slots"/>（即时））<br>
       <table-column-api-link prop="header"/>：自定义表头模板<br>
       <table-column-api-link prop="footer"/>：自定义表尾模板<br>
       <table-column-api-link prop="filter"/>：自定义筛选模板（建议使用<router-link :to="{name: 'RendererAPI'}">渲染器</router-link>，可以更好的复用）<br>
@@ -12,7 +12,7 @@
       <template v-slot:buttons>
         <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button>
-          <template>下拉按钮</template>
+          <template v-slot>下拉按钮</template>
           <template v-slot:dropdowns>
             <vxe-button>删除</vxe-button>
             <vxe-button>保存</vxe-button>
@@ -43,8 +43,8 @@
           </div>
         </template>
         <template v-slot:footer="{ items, _columnIndex }">
-          <vxe-button status="primary" @click="clickFooterItem(items, _columnIndex)">支持</vxe-button>
-          <vxe-button @click="clickFooterItem(items, _columnIndex)">放弃</vxe-button>
+          <vxe-button status="primary" @click="clickFooterItem(items, _columnIndex)" size="mini">支持</vxe-button>
+          <vxe-button @click="clickFooterItem(items, _columnIndex)" size="mini">放弃</vxe-button>
         </template>
         <template v-slot="{ row }">
           <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
@@ -108,7 +108,7 @@
         </template>
         <template v-slot:footer>
           <span>
-            <img src="static/other/img1.gif" style="width: 36px;">自定义模板<img src="static/other/img2.gif" style="width: 30px;">
+            <img src="/vxe-table/static/other/img1.gif" style="width: 36px;">自定义模板<img src="/vxe-table/static/other/img2.gif" style="width: 30px;">
           </span>
         </template>
       </vxe-table-column>
@@ -134,7 +134,7 @@
           <vxe-button>管理</vxe-button>
           <vxe-button>删除</vxe-button>
           <vxe-button size="small">
-            <template>更多操作</template>
+            <template v-slot>更多操作</template>
             <template v-slot:dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
@@ -144,14 +144,14 @@
         </span>
       </template>
       <template v-slot:right>
-        <img src="static/other/img1.gif" height="34">
-        <img src="static/other/img1.gif" height="34">
-        <img src="static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
       </template>
     </vxe-pager>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-      <template>{{ selectRow ? selectRow.text : '' }}</template>
+      <template v-slot>{{ selectRow ? selectRow.name : '' }}</template>
     </vxe-modal>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -178,7 +178,16 @@ export default {
       isAllChecked: false,
       isIndeterminate: false,
       selectRecords: [],
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '<span style="color:red">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', flag: true, time: 1600261774531, html1: '<span style="color:blue">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' }
+      ],
       tablePage: {
         total: 0,
         currentPage: 1,
@@ -190,7 +199,7 @@ export default {
           <template v-slot:buttons>
             <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
             <vxe-button>
-              <template>下拉按钮</template>
+              <template v-slot>下拉按钮</template>
               <template v-slot:dropdowns>
                 <vxe-button>删除</vxe-button>
                 <vxe-button>保存</vxe-button>
@@ -221,8 +230,8 @@ export default {
               </div>
             </template>
             <template v-slot:footer="{ items, _columnIndex }">
-              <vxe-button status="primary" @click="clickFooterItem(items, _columnIndex)">支持</vxe-button>
-              <vxe-button @click="clickFooterItem(items, _columnIndex)">放弃</vxe-button>
+              <vxe-button status="primary" @click="clickFooterItem(items, _columnIndex)" size="mini">支持</vxe-button>
+              <vxe-button @click="clickFooterItem(items, _columnIndex)" size="mini">放弃</vxe-button>
             </template>
             <template v-slot="{ row }">
               <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
@@ -286,7 +295,7 @@ export default {
             </template>
             <template v-slot:footer>
               <span>
-                <img src="static/other/img1.gif" style="width: 36px;">自定义模板<img src="static/other/img2.gif" style="width: 30px;">
+                <img src="/vxe-table/static/other/img1.gif" style="width: 36px;">自定义模板<img src="/vxe-table/static/other/img2.gif" style="width: 30px;">
               </span>
             </template>
           </vxe-table-column>
@@ -312,7 +321,7 @@ export default {
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
               <vxe-button size="small">
-                <template>更多操作</template>
+                <template v-slot>更多操作</template>
                 <template v-slot:dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
@@ -322,14 +331,14 @@ export default {
             </span>
           </template>
           <template v-slot:right>
-            <img src="static/other/img1.gif" height="34">
-            <img src="static/other/img1.gif" height="34">
-            <img src="static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
           </template>
         </vxe-pager>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-          <template>{{ selectRow ? selectRow.text : '' }}</template>
+          <template v-slot>{{ selectRow ? selectRow.name : '' }}</template>
         </vxe-modal>
         `,
         `
@@ -343,16 +352,22 @@ export default {
               isAllChecked: false,
               isIndeterminate: false,
               selectRecords: [],
-              tableData: [],
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '<span style="color:red">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img1.gif' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', flag: true, time: 1600261774531, html1: '<span style="color:orange">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img2.gif' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', flag: true, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', flag: true, time: 1600261774531, html1: '<span style="color:blue">vxe-table从入门到废弃</span>', img1: '/vxe-table/static/other/img2.gif' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', flag: false, time: 1600261774531, html1: '', img1: '/vxe-table/static/other/img1.gif' }
+              ],
               tablePage: {
                 total: 0,
                 currentPage: 1,
                 pageSize: 10
               }
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             formatDate (value) {
@@ -431,9 +446,6 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {

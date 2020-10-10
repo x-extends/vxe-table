@@ -1,20 +1,20 @@
 import { CreateElement, VNode } from 'vue'
-import { VXETableModule } from './component'
-import { TableRenderParams } from './table'
-import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams } from './extends/filter'
-import { RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
-import { ColumnHeaderSlotParams } from './extends/header'
-import { ColumnFooterSlotParams } from './extends/footer'
+import { VXETableComponent } from './component'
+import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './extends/filter'
+import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, ColumnContentSlotParams, RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
+import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './extends/header'
+import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './extends/footer'
 import { ColumnEditRenderOptions, ColumnEditSlotParams } from './extends/edit'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './extends/export'
 
 /**
  * 列
  */
-export declare class Column extends VXETableModule {
+export declare class Column extends VXETableComponent {
   /**
    * 渲染类型
    */
-  type?: 'index' | 'radio' | 'checkbox' | 'expand' | 'html';
+  type?: 'seq' | 'radio' | 'checkbox' | 'expand' | 'html';
   /**
    * 列字段名
    */
@@ -38,7 +38,7 @@ export declare class Column extends VXETableModule {
   /**
    * 将列固定在左侧或者右侧
    */
-  fixed?: 'left' | 'right';
+  fixed?: 'left' | 'right' | null;
   /**
    * 列对其方式
    */
@@ -66,23 +66,19 @@ export declare class Column extends VXETableModule {
   /**
    * 给单元格附加 className
    */
-  className?: string | Function;
+  className?: string | ((params: ColumnCellRenderParams) => string | any[] | { [key: string]: boolean });
   /**
    * 给表头单元格附加 className
    */
-  headerClassName?: string | Function;
+  headerClassName?: string | ((params: ColumnHeaderRenderParams) => string | any[] | { [key: string]: boolean });
   /**
    * 给表尾单元格附加 className
    */
-  footerClassName?: string | Function;
+  footerClassName?: string | ((params: ColumnFooterRenderParams) => string | any[] | { [key: string]: boolean });
   /**
    * 格式化显示内容
    */
-  formatter?: Function | any[] | string;
-  /**
-   * 自定义索引方法
-   */
-  seqMethod?: Function;
+  formatter?: ((params: ColumnFormatterMethodParams) => string) | any[] | string;
   /**
    * 是否允许排序
    */
@@ -110,7 +106,7 @@ export declare class Column extends VXETableModule {
   /**
    * 自定义筛选方法
    */
-  filterMethod?: Function;
+  filterMethod?(params: ColumnFilterMethodParams): boolean;
   /**
    * 筛选模板配置项
    */
@@ -123,6 +119,14 @@ export declare class Column extends VXETableModule {
    * 是否可视
    */
   visible?: boolean;
+  /**
+   * 自定义单元格数据导出方法
+   */
+  exportMethod?(params: ColumnExportCellRenderParams): string | number;
+  /**
+   * 自定义表尾单元格数据导出方法
+   */
+  footerExportMethod?(params: ColumnExportFooterRenderParams): string | number;
   /**
    * 单元格值类型
    */
@@ -149,7 +153,7 @@ export interface ColumnOptions {
   /**
    * 渲染类型
    */
-  type?: 'index' | 'radio' | 'checkbox' | 'expand' | 'html';
+  type?: 'seq' | 'radio' | 'checkbox' | 'expand' | 'html';
   /**
    * 列字段名
    */
@@ -173,7 +177,7 @@ export interface ColumnOptions {
   /**
    * 将列固定在左侧或者右侧
    */
-  fixed?: 'left' | 'right';
+  fixed?: 'left' | 'right' | null;
   /**
    * 列对其方式
    */
@@ -201,23 +205,19 @@ export interface ColumnOptions {
   /**
    * 给单元格附加 className
    */
-  className?: string | Function;
+  className?: string | ((params: ColumnCellRenderParams) => string | any[] | { [key: string]: boolean });
   /**
    * 给表头单元格附加 className
    */
-  headerClassName?: string | Function;
+  headerClassName?: string | ((params: ColumnHeaderRenderParams) => string | any[] | { [key: string]: boolean });
   /**
    * 给表尾单元格附加 className
    */
-  footerClassName?: string | Function;
+  footerClassName?: string | ((params: ColumnFooterRenderParams) => string | any[] | { [key: string]: boolean });
   /**
    * 格式化显示内容
    */
-  formatter?: Function | any[] | string;
-  /**
-   * 自定义索引方法
-   */
-  seqMethod?: Function;
+  formatter?: ((params: ColumnFormatterMethodParams) => string) | any[] | string;
   /**
    * 是否允许排序
    */
@@ -245,7 +245,7 @@ export interface ColumnOptions {
   /**
    * 自定义筛选方法
    */
-  filterMethod?: Function;
+  filterMethod?(params: ColumnFilterMethodParams): boolean;
   /**
    * 筛选模板配置项
    */
@@ -258,6 +258,14 @@ export interface ColumnOptions {
    * 是否可视
    */
   visible?: boolean;
+  /**
+   * 自定义单元格数据导出方法
+   */
+  exportMethod?(params: ColumnExportCellRenderParams): string | number;
+  /**
+   * 自定义表尾单元格数据导出方法
+   */
+  footerExportMethod?(params: ColumnExportFooterRenderParams): string | number;
   /**
    * 单元格值类型
    */
@@ -290,14 +298,10 @@ export interface ColumnOptions {
   };
 }
 
-export interface ColumnDefaultSlotParams extends ColumnCellRenderParams {}
-export interface ColumnContentSlotParams extends ColumnContentRenderParams {}
-export interface ColumnIconSlotParams extends ColumnIconRenderParams {}
-
 /**
  * 列对象
  */
-export class ColumnConfig {
+export class ColumnInfo {
   title: string;
   width: number | string;
   minWidth: number | string;
@@ -333,10 +337,12 @@ export class ColumnConfig {
     update: boolean;
     value: any;
   };
-  children: ColumnConfig[];
+  children: ColumnInfo[];
 
   getTitle(): string;
 }
+
+export class ColumnConfig extends ColumnInfo {}
 
 /**
  * 默认的渲染配置项
@@ -387,34 +393,19 @@ export interface ColumnContentRenderOptions extends RenderOptions {
 }
 
 /**
- * 单元格渲染参数
+ * 格式化方法参数
  */
-export interface ColumnCellRenderParams extends TableRenderParams {
+export interface ColumnFormatterMethodParams {
+  /**
+   * 单元格值
+   */
+  cellValue: any;
   /**
    * 列对象
    */
-  column: ColumnConfig;
-  /**
-   * 相对于 columns 中的索引
-   */
-  columnIndex: number;
-  /**
-   * 相对于可视区渲染中的列索引
-   */
-  $columnIndex: number;
+  column: ColumnInfo;
   /**
    * 行数据对象
    */
   row: any;
-  /**
-   * 相对于 data 中的索引
-   */
-  rowIndex: number;
-  /**
-   * 相对于当前表格数据的索引
-   */
-  $rowIndex: number;
 }
-
-export interface ColumnContentRenderParams extends ColumnCellRenderParams {}
-export interface ColumnIconRenderParams extends ColumnCellRenderParams {}

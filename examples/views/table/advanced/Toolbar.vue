@@ -9,21 +9,21 @@
 
     <vxe-table
       border
-      export-config
       height="300"
+      :export-config="{}"
       :data="tableData1">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column title="分组信息">
-        <vxe-table-column title="基本信息">
+      <vxe-table-colgroup title="分组信息">
+        <vxe-table-colgroup title="基本信息">
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
-        </vxe-table-column>
+        </vxe-table-colgroup>
         <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
       <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
-      <vxe-table-column title="其他信息">
+      <vxe-table-colgroup title="其他信息">
         <vxe-table-column field="rate" title="Rate"></vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -51,9 +51,9 @@
 
     <vxe-table
       border
-      export-config
       ref="xTable"
       height="300"
+      :export-config="{}"
       :loading="loading"
       :data="tableData"
       @custom="toolbarCustomEvent">
@@ -99,21 +99,21 @@ export default {
 
         <vxe-table
           border
-          export-config
           height="300"
+          :export-config="{}"
           :data="tableData1">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column title="分组信息">
-            <vxe-table-column title="基本信息">
+          <vxe-table-colgroup title="分组信息">
+            <vxe-table-colgroup title="基本信息">
               <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
               <vxe-table-column field="role" title="Role"></vxe-table-column>
-            </vxe-table-column>
+            </vxe-table-colgroup>
             <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
           <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
-          <vxe-table-column title="其他信息">
+          <vxe-table-colgroup title="其他信息">
             <vxe-table-column field="rate" title="Rate"></vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `
@@ -131,9 +131,9 @@ export default {
         `
         <vxe-table
           border
-          export-config
           ref="xTable"
           height="300"
+          :export-config="{}"
           :loading="loading"
           :data="tableData"
           @custom="toolbarCustomEvent">

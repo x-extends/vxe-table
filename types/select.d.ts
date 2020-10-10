@@ -1,10 +1,10 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 import { OptionProps, OptionGroupProps } from './extends/renderer'
 
 /**
  * 下拉框
  */
-export declare class Select extends VXETableModule {
+export declare class Select extends VXETableComponent {
   /**
    * 绑定值
    */

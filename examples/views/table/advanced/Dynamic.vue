@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      配合 v-for 动态生成，动态改变宽度、固定列..等<span class="green">（如果是全动态的数据源建议使用 <grid-api-link name="vxe-grid"/>）</span><br>
-      如果是列发生变动，则需要通过调用 <table-api-link prop="refreshColumn"/> 方法刷新列信息<br>
+      使用 v-for 去循环列是不建议的<span class="green">（建议动态列使用 <grid-api-link name="vxe-grid"/> 进行渲染）</span><br>
+      如果列信息发生变动，则需要通过调用 <table-api-link prop="refreshColumn"/> 方法刷新列信息<br>
       <span class="red">（注：动态更新属性必须要先定义，否则将失去自动响应）</span>
     </p>
 
@@ -44,7 +44,6 @@ import hljs from 'highlight.js'
 export default {
   data () {
     return {
-      tableData: [],
       tableColumn: [
         { type: 'seq', width: 60, fixed: null },
         { type: 'checkbox', width: 50, fixed: null },
@@ -53,6 +52,16 @@ export default {
         { field: 'sex', title: 'Sex', width: 200, filters: [{ value: '1', label: '男' }] },
         { field: 'role', title: 'Role', width: 200 },
         { field: 'address', title: 'Address', width: 300, showOverflow: true }
+      ],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
       ],
       demoCodes: [
         `
@@ -82,7 +91,6 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
               tableColumn: [
                 { type: 'seq', width: 60, fixed: null },
                 { type: 'checkbox', width: 50, fixed: null },
@@ -91,11 +99,18 @@ export default {
                 { field: 'sex', title: 'Sex', width: 200 },
                 { field: 'role', title: 'Role', width: 200 },
                 { field: 'address', title: 'Address', width: 300, showOverflow: true }
+              ],
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
             addColumn () {
@@ -146,9 +161,6 @@ export default {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
       hljs.highlightBlock(block)
     })
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   methods: {
     addColumn () {

@@ -1,10 +1,10 @@
 import { CreateElement, VNode } from 'vue'
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 模态窗口
  */
-export declare class Modal extends VXETableModule {
+export declare class Modal extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -135,6 +135,7 @@ export declare class Modal extends VXETableModule {
   storage?: boolean;
   storageKey?: string;
   animat?: boolean;
+  beforeHideMethod?(params: { type: string }): Promise<any>;
 
   /**
    * 手动打开窗口
@@ -177,11 +178,29 @@ export declare class Modal extends VXETableModule {
   revert(): Promise<any>;
 }
 
+/**
+ * 窗口类型
+ */
+export declare type ModalOptionTypes = 'alert' | 'confirm' | 'message'
+/**
+ * 窗口状态
+ */
+export declare type ModalOptionStatus = 'info' | 'success' | 'warning' | 'question' | 'error' | 'loading'
+
+/**
+ * 窗口事件类型
+ */
+
+/**
+ * 窗口事件类型
+ */
+export declare type ModalEventTypes = 'default' | 'mask' | 'close' | 'confirm' | 'cancel' | 'keydown' | 'exist'
+
 export interface ModalOptions {
   id?: string;
   type?: string;
   loading?: boolean;
-  status?: string;
+  status?: ModalOptionStatus;
   iconStatus?: string;
   top?: number | string;
   position?: 'center' | {
@@ -214,7 +233,8 @@ export interface ModalOptions {
   storage?: boolean;
   storageKey?: string;
   animat?: boolean;
-  size?: string;
+  size?: 'medium' | 'small' | 'mini';
+  beforeHideMethod?(params: { type: string }): Promise<any>;
 
   slots?: {
     default?(params: ModalDefaultSlotParams, h: CreateElement): VNode[] | string[];
@@ -247,7 +267,7 @@ export interface ModalEventParams {
 /**
  * 全局窗口控制器
  */
-export interface ModalClass {
+export interface ModalController {
   /**
    * 创建窗口
    * @param options 参数
@@ -283,7 +303,7 @@ export interface ModalClass {
    * @param title 标题
    * @param options 参数
    */
-  message (message: string, title?: string, options?: ModalOptions): Promise<string>;
+  message (message: string, options?: ModalOptions): Promise<string>;
   /**
    * 创建消息提示
    * @param options 参数
@@ -300,5 +320,3 @@ export interface ModalClass {
    */
   close (id?: string): Promise<any>;
 }
-
-export declare const ModalController: ModalClass

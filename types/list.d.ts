@@ -1,9 +1,9 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 
 /**
  * 列表
  */
-export declare class List extends VXETableModule {
+export declare class List extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -20,10 +20,17 @@ export declare class List extends VXETableModule {
    * 纵向虚拟滚动配置
    */
   scrollY?: {
+    /**
+     * 指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭
+     */
     gt?: number;
+    /**
+     * 指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久
+     */
     oSize?: number;
-    rSize?: number;
-    vSize?: number;
+    /**
+     * 指定列表项的 className
+     */
     sItem?: string;
   };
 

@@ -1,4 +1,4 @@
-import { ColumnConfig } from '../column'
+import { ColumnInfo } from '../column'
 
 declare function formatsFunc(params: FormatsParams, ...args: any[]): any;
 
@@ -15,5 +15,5 @@ export class formats {
 export interface FormatsParams {
   cellValue: any;
   row: any,
-  column: ColumnConfig;
+  column: ColumnInfo;
 }

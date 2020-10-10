@@ -1,7 +1,7 @@
-import { GridRenderParams } from '../grid'
-import { ColumnConfig } from '../column'
+import { ColumnInfo } from '../column'
 import { ExportOptons } from './export'
 import { MenuFirstOption } from './menu'
+import { GridRenderParams } from './renderer'
 
 declare function interceptorFunc(params: any, event: any): any;
 
@@ -23,23 +23,24 @@ export interface InterceptorKeydownParams extends InterceptorParams { }
 
 export interface InterceptorExportParams extends InterceptorParams {
   options: ExportOptons;
-  columns: ColumnConfig[];
+  columns: ColumnInfo[];
+  colgroups: ColumnInfo[][];
   datas: any[];
 }
 
 export interface InterceptorImportParams extends InterceptorParams {
   file: File;
   options: ExportOptons;
-  columns: ColumnConfig[];
+  columns: ColumnInfo[];
   datas: any[];
 }
 
 export interface InterceptorMenuParams extends InterceptorParams {
   type: 'header' | 'body' | 'footer';
   options: MenuFirstOption[][];
-  columns: ColumnConfig[];
+  columns: ColumnInfo[];
   row?: any;
   rowIndex?: number;
-  column?: ColumnConfig;
+  column?: ColumnInfo;
   columnIndex?: number;
 }

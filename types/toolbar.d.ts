@@ -1,13 +1,12 @@
 import { CreateElement, VNode } from 'vue'
-import { VXETableModule } from './component'
-import { GridRenderParams } from './grid'
-import { ColumnConfig } from './column'
-import { RenderOptions } from './extends/renderer'
+import { VXETableComponent } from './component'
+import { ColumnInfo } from './column'
+import { GridRenderParams, RenderOptions } from './extends/renderer'
 
 /**
  * 工具栏
  */
-export declare class Toolbar extends VXETableModule {
+export declare class Toolbar extends VXETableComponent {
   /**
    * 唯一 ID 标识
    */
@@ -51,7 +50,7 @@ export declare class Toolbar extends VXETableModule {
     trigger?: string,
     immediate?: boolean;
     storage?: boolean;
-    checkMethod?(params: { column: ColumnConfig }): boolean;
+    checkMethod?(params: { column: ColumnInfo }): boolean;
     isFooter?: Boolean;
     icon?: string;
     [key: string]: any;
@@ -110,7 +109,7 @@ export interface ToolbarOptions {
     trigger?: string,
     immediate?: boolean;
     storage?: boolean;
-    checkMethod?(params: { column: ColumnConfig }): boolean;
+    checkMethod?(params: { column: ColumnInfo }): boolean;
     isFooter?: Boolean;
     icon?: string;
     [key: string]: any;
@@ -128,6 +127,7 @@ export interface ToolbarOptions {
     buttons?(params: ToolbarButtonsSlotParams, h: CreateElement): VNode[] | string[];
     tools?(params: ToolbarToolsSlotParams, h: CreateElement): VNode[] | string[];
   };
+  [key: string]: any;
 }
 
 export interface ToolbarButtonsSlotParams extends GridRenderParams {}

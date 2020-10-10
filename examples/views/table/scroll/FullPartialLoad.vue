@@ -114,9 +114,13 @@ export default {
               })
             },
             removeColumn (size) {
+              this.loading = true
               if (this.allColumn.length > size) {
                 this.allColumn = this.allColumn.slice(0, this.allColumn.length - size)
-                this.$refs.xGrid.loadColumn(this.allColumn)
+                if (this.$refs.xGrid) {
+                  this.$refs.xGrid.loadColumn(this.allColumn)
+                }
+                this.loading = false
               }
             },
             loadColumns (size) {
@@ -128,10 +132,16 @@ export default {
               })
             },
             removeList (size) {
-              if (this.allData.length > size) {
-                this.allData = this.allData.slice(0, this.allData.length - size)
-                this.$refs.xGrid.loadData(this.allData)
-              }
+              this.loading = true
+              setTimeout(() => {
+                if (this.allData.length > size) {
+                  this.allData = this.allData.slice(0, this.allData.length - size)
+                  if (this.$refs.xGrid) {
+                    this.$refs.xGrid.loadData(this.allData)
+                  }
+                }
+                this.loading = false
+              }, 100)
             },
             loadList (size) {
               this.loading = true
@@ -220,11 +230,13 @@ export default {
       })
     },
     removeColumn (size) {
+      this.loading = true
       if (this.allColumn.length > size) {
         this.allColumn = this.allColumn.slice(0, this.allColumn.length - size)
         if (this.$refs.xGrid) {
           this.$refs.xGrid.loadColumn(this.allColumn)
         }
+        this.loading = false
       }
     },
     loadColumns (size) {
@@ -238,12 +250,16 @@ export default {
       })
     },
     removeList (size) {
-      if (this.allData.length > size) {
-        this.allData = this.allData.slice(0, this.allData.length - size)
-        if (this.$refs.xGrid) {
-          this.$refs.xGrid.loadData(this.allData)
+      this.loading = true
+      setTimeout(() => {
+        if (this.allData.length > size) {
+          this.allData = this.allData.slice(0, this.allData.length - size)
+          if (this.$refs.xGrid) {
+            this.$refs.xGrid.loadData(this.allData)
+          }
         }
-      }
+        this.loading = false
+      }, 100)
     },
     loadList (size) {
       this.loading = true

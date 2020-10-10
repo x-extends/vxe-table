@@ -1,32 +1,20 @@
 <template>
   <div>
-    <p class="tip">
-      虚拟滚动渲染<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
-      大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
-      <table-api-link prop="data"/> 和 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 不应该同时使用，请根据数据量决定使用哪种方式，保证一致性<br>
-      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高；如果需要支持，将虚拟滚动关闭即可）</span>
-    </p>
-
-    <vxe-toolbar>
-      <template v-slot:buttons>
-        <vxe-button @click="loadList(5000)">5k条</vxe-button>
-        <vxe-button @click="loadList(10000)">1w条</vxe-button>
-        <vxe-button @click="loadList(50000)">5w条</vxe-button>
-        <vxe-button @click="loadList(100000)">10w条</vxe-button>
-        <vxe-button @click="loadList(200000)">20w条</vxe-button>
-        <vxe-button @click="loadList(300000)">30w条</vxe-button>
-      </template>
-    </vxe-toolbar>
+    <p class="tip">虚拟渲染与单元格合并，可以通过设置参数 <table-api-link prop="merge-cells"/> 或调用函数 <table-api-link prop="setMergeCells"/>、<table-api-link prop="setMergeCells"/> 来控制单元格的临时合并状态</p>
 
     <vxe-table
       border
       resizable
       show-overflow
       show-header-overflow
+      show-footer
       ref="xTable"
-      height="300"
+      height="500"
       :export-config="{}"
+      :merge-cells="mergeCells"
       :sort-config="{trigger: 'cell'}"
+      :merge-footer-items="mergeFooterItems"
+      :footer-method="footerMethod"
       :loading="loading">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
@@ -68,28 +56,32 @@ export default {
   data () {
     return {
       loading: false,
+      mergeCells: [
+        { row: 4, col: 2, rowspan: 2, colspan: 5 },
+        { row: 30, col: 3, rowspan: 10, colspan: 1 },
+        { row: 80, col: 4, rowspan: 30, colspan: 3 }
+      ],
+      mergeFooterItems: [
+        { row: 0, col: 1, rowspan: 1, colspan: 2 },
+        { row: 0, col: 6, rowspan: 1, colspan: 2 },
+        { row: 0, col: 14, rowspan: 2, colspan: 5 },
+        { row: 1, col: 4, rowspan: 1, colspan: 8 }
+      ],
       demoCodes: [
         `
-        <vxe-toolbar export>
-          <template v-slot:buttons>
-            <vxe-button @click="loadList(5000)">5k条</vxe-button>
-            <vxe-button @click="loadList(10000)">1w条</vxe-button>
-            <vxe-button @click="loadList(50000)">5w条</vxe-button>
-            <vxe-button @click="loadList(100000)">10w条</vxe-button>
-            <vxe-button @click="loadList(200000)">20w条</vxe-button>
-            <vxe-button @click="loadList(300000)">30w条</vxe-button>
-          </template>
-        </vxe-toolbar>
-
         <vxe-table
           border
           resizable
           show-overflow
           show-header-overflow
+          show-footer
           ref="xTable"
-          height="300"
+          height="500"
           :export-config="{}"
+          :merge-cells="mergeCells"
           :sort-config="{trigger: 'cell'}"
+          :merge-footer-items="mergeFooterItems"
+          :footer-method="footerMethod"
           :loading="loading">
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
@@ -118,7 +110,18 @@ export default {
         export default {
           data () {
             return {
-              loading: false
+              loading: false,
+              mergeCells: [
+                { row: 4, col: 2, rowspan: 2, colspan: 5 },
+                { row: 30, col: 3, rowspan: 10, colspan: 1 },
+                { row: 80, col: 4, rowspan: 30, colspan: 3 }
+              ],
+              mergeFooterItems: [
+                { row: 0, col: 1, rowspan: 1, colspan: 2 },
+                { row: 0, col: 6, rowspan: 1, colspan: 2 },
+                { row: 0, col: 14, rowspan: 2, colspan: 5 },
+                { row: 1, col: 4, rowspan: 1, colspan: 8 }
+              ]
             }
           },
           created () {
@@ -138,6 +141,12 @@ export default {
                   })
                 }
               })
+            },
+            footerMethod ({ columns }) {
+              return [
+                columns.map((column, index) => index),
+                columns.map((column, index) => 1000 + index)
+              ]
             }
           }
         }
@@ -167,6 +176,12 @@ export default {
           })
         }
       })
+    },
+    footerMethod ({ columns }) {
+      return [
+        columns.map((column, index) => index),
+        columns.map((column, index) => 1000 + index)
+      ]
     }
   }
 }

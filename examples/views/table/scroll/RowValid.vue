@@ -1,11 +1,14 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动渲染，可编辑表格<br><span class="red">（注：当数据量非常大时，由于需要进行大量数据运算，所以数据校验或者获取数据...等函数执行会相对耗时）</span></p>
+    <p class="tip">
+      虚拟滚动行校验，如果第一个参数为 true 则全量校验<br>
+      <span class="red">（如果不指定数据，则默认只校验临时变动的数据，例如新增或修改...等）</span>
+    </p>
 
     <vxe-toolbar :refresh="{query: findList}">
       <template v-slot:buttons>
         <vxe-button>
-          <template>新增操作</template>
+          <template v-slot>新增操作</template>
           <template v-slot:dropdowns>
             <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
             <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
@@ -14,7 +17,7 @@
           </template>
         </vxe-button>
         <vxe-button>
-          <template>删除操作</template>
+          <template v-slot>删除操作</template>
           <template v-slot:dropdowns>
             <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
@@ -23,7 +26,7 @@
           </template>
         </vxe-button>
         <vxe-button>
-          <template>校验操作</template>
+          <template v-slot>校验操作</template>
           <template v-slot:dropdowns>
             <vxe-button type="text" @click="validEvent">基本校验</vxe-button>
             <vxe-button type="text" @click="fullValidEvent">完整校验</vxe-button>
@@ -90,7 +93,7 @@ export default {
         <vxe-toolbar :refresh="{query: findList}">
           <template v-slot:buttons>
             <vxe-button>
-              <template>新增操作</template>
+              <template v-slot>新增操作</template>
               <template v-slot:dropdowns>
                 <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
                 <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
@@ -99,7 +102,7 @@ export default {
               </template>
             </vxe-button>
             <vxe-button>
-              <template>删除操作</template>
+              <template v-slot>删除操作</template>
               <template v-slot:dropdowns>
                 <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
                 <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
@@ -108,7 +111,7 @@ export default {
               </template>
             </vxe-button>
             <vxe-button>
-              <template>校验操作</template>
+              <template v-slot校验操作</template>
               <template v-slot:dropdowns>
                 <vxe-button @click="validEvent">基本校验</vxe-button>
                 <vxe-button @click="fullValidEvent">完整校验</vxe-button>

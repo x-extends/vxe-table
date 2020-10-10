@@ -1,10 +1,10 @@
-import { VXETableModule } from './component'
+import { VXETableComponent } from './component'
 import { FormItemOptions } from './form-item'
 
 /**
  * 表单
  */
-export declare class Form extends VXETableModule {
+export declare class Form extends VXETableComponent {
   loading?: boolean;
   data?: any;
   span?: string | number;
@@ -19,10 +19,11 @@ export declare class Form extends VXETableModule {
     autoPos?: boolean;
   };
 
-  // computed
-  vSize?: string;
-
   // methods
+  /**
+   * 重置表单
+   */
+  reset(): Promise<any>;
   /**
    * 对表单进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
    * @param callback 回调函数
@@ -40,9 +41,14 @@ export declare class Form extends VXETableModule {
    */
   updateStatus(scope: any): Promise<any>;
   /**
+   * 获取表单项列表
+   */
+  getItems(): FormItemOptions[];
+  /**
    * 手动切换折叠状态
    */
   toggleCollapse(): Promise<any>;
+  [key: string]: any;
 }
 
 export interface FormRule {
@@ -114,4 +120,5 @@ export interface FormOptions {
   validConfig?: {
     autoPos?: boolean;
   };
+  [key: string]: any;
 }

@@ -1,11 +1,11 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动渲染，全键盘操作</p>
+    <p class="tip">全键盘操作</p>
 
     <vxe-toolbar :refresh="{query: findList}">
       <template v-slot:buttons>
         <vxe-button>
-          <template>新增操作</template>
+          <template v-slot>新增操作</template>
           <template v-slot:dropdowns>
             <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
             <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
@@ -14,7 +14,7 @@
           </template>
         </vxe-button>
         <vxe-button>
-          <template>删除操作</template>
+          <template v-slot>删除操作</template>
           <template v-slot:dropdowns>
             <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
@@ -23,7 +23,7 @@
           </template>
         </vxe-button>
         <vxe-button>
-          <template>校验操作</template>
+          <template v-slot>校验操作</template>
           <template v-slot:dropdowns>
             <vxe-button type="text" @click="validEvent">基本校验</vxe-button>
             <vxe-button type="text" @click="fullValidEvent">完整校验</vxe-button>
@@ -34,7 +34,7 @@
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
         <vxe-button>
-          <template>滚动操作</template>
+          <template v-slot>滚动操作</template>
           <template v-slot:dropdowns>
             <vxe-button type="text" @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
             <vxe-button type="text" @click="$refs.xTable.scrollToRow($refs.xTable.getData(400))">滚动第 400 行</vxe-button>
@@ -122,7 +122,7 @@ export default {
         <vxe-toolbar :refresh="{query: findList}">
           <template v-slot:buttons>
             <vxe-button>
-              <template>新增操作</template>
+              <template v-slot>新增操作</template>
               <template v-slot:dropdowns>
                 <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
                 <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
@@ -131,7 +131,7 @@ export default {
               </template>
             </vxe-button>
             <vxe-button>
-              <template>删除操作</template>
+              <template v-slot>删除操作</template>
               <template v-slot:dropdowns>
                 <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
                 <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
@@ -140,7 +140,7 @@ export default {
               </template>
             </vxe-button>
             <vxe-button>
-              <template>校验操作</template>
+              <template v-slot>校验操作</template>
               <template v-slot:dropdowns>
                 <vxe-button type="text" @click="validEvent">基本校验</vxe-button>
                 <vxe-button type="text" @click="fullValidEvent">完整校验</vxe-button>
@@ -151,7 +151,7 @@ export default {
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
             <vxe-button>
-              <template>滚动操作</template>
+              <template v-slot>滚动操作</template>
               <template v-slot:dropdowns>
                 <vxe-button type="text" @click="$refs.xTable.scrollToRow($refs.xTable.getData(10))">滚动到第 10 行</vxe-button>
                 <vxe-button type="text" @click="$refs.xTable.scrollToRow($refs.xTable.getData(400))">滚动第 400 行</vxe-button>

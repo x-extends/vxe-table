@@ -1,12 +1,13 @@
-import { VXETableModule } from '../component'
+import { VXETableComponent, RowInfo } from '../component'
 import { Table } from '../table'
-import { Grid, GridRenderParams } from '../grid'
-import { ColumnConfig } from '../column'
+import { Grid } from '../grid'
+import { ColumnInfo } from '../column'
+import { GridRenderParams } from './renderer'
 
 /**
  * 导出
  */
-export declare class Export extends VXETableModule {}
+export declare class Export extends VXETableComponent {}
 
 /**
  * 导出参数
@@ -63,19 +64,19 @@ export interface ExportOptons {
   /**
    * 自定义列
    */
-  columns?: ColumnConfig[];
+  columns?: ColumnInfo[];
   /**
    * 列过滤方法
    */
-  columnFilterMethod?(column: ColumnConfig, $columnIndex: number, columns: ColumnConfig[]): boolean;
+  columnFilterMethod?(params: { column: ColumnInfo, $columnIndex: number }): boolean;
   /**
    * 数据过滤方法
    */
-  dataFilterMethod?(row: any, $rowIndex: number, data: any[]): boolean;
+  dataFilterMethod?(params: { row: RowInfo, $rowIndex: number }): boolean;
   /**
    * 表尾过滤方法
    */
-  footerFilterMethod?(cells: any[], $rowIndex: number, footerData: any[][]): boolean;
+  footerFilterMethod?(params: { items: any[], $rowIndex: number }): boolean;
   /**
    * 是否服务端导出
    */
@@ -83,7 +84,7 @@ export interface ExportOptons {
   /**
    * 只对 remote=true 有效，用于自定义导出逻辑
    */
-  exportMethod?(params: { $table: Table, $grid: Grid, options: ExportOptons }): Promise<any>;
+  exportMethod?(params: { $table: Table, $grid?: Grid, options: ExportOptons }): Promise<any>;
 
   [name: string]: any;
 }
@@ -151,22 +152,45 @@ export interface PrintOptons {
   /**
    * 自定义列
    */
-  columns?: ColumnConfig[];
+  columns?: ColumnInfo[];
+  /**
+   * 打印样式
+   */
+  style?: string;
+  /**
+   * 自定义打印内容
+   */
+  content?: string;
   /**
    * 列过滤方法
    */
-  columnFilterMethod?(column: ColumnConfig, $columnIndex: number, columns: ColumnConfig[]): boolean;
+  columnFilterMethod?(params: { column: ColumnInfo, $columnIndex: number }): boolean;
   /**
    * 数据过滤方法
    */
-  dataFilterMethod?(row: any, $rowIndex: number, data: any[]): boolean;
+  dataFilterMethod?(params: { row: RowInfo, $rowIndex: number }): boolean;
   /**
    * 表尾过滤方法
    */
-  footerFilterMethod?(cells: any[], $rowIndex: number, footerData: any[][]): boolean;
+  footerFilterMethod?(params: { items: any[], $rowIndex: number }): boolean;
+  /**
+   * 打印之前的方法，可以通过返回自定义打印的内容
+   */
+  beforePrintMethod?(params: { content: string, options: PrintOptons }): string;
 
   [name: string]: any;
 }
+
+export interface ReadFileParams {
+  files: FileList;
+  file: File;
+  target: HTMLInputElement & EventTarget & {
+    files: FileList;
+  };
+}
+
+export function readFile(options?: ReadFileOptions): Promise<ReadFileParams>;
+export function print(options: PrintOptons): any;
 
 export interface ReadFileOptions {
   multiple?: boolean;
@@ -175,12 +199,12 @@ export interface ReadFileOptions {
 }
 
 export interface ColumnExportCellRenderParams extends GridRenderParams {
-  row: any;
-  column: ColumnConfig;
+  row: RowInfo;
+  column: ColumnInfo;
 }
 
 export interface ColumnExportFooterRenderParams extends GridRenderParams {
   items: any[];
   _columnIndex: number;
-  column: ColumnConfig;
+  column: ColumnInfo;
 }

@@ -19,7 +19,7 @@
       <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
       <template v-slot:empty>
         <span style="color: red;">
-          <img src="static/other/img2.gif">
+          <img src="/vxe-table/static/other/img2.gif">
           <p>没有更多数据了！</p>
         </span>
       </template>
@@ -53,7 +53,7 @@
       <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
       <template v-slot:empty>
         <span style="color: red;">
-          <img src="static/other/img1.gif">
+          <img src="/vxe-table/static/other/img1.gif">
           <p>搜索不到数据，可能输入的关键字姿势不对！</p>
         </span>
       </template>
@@ -99,7 +99,7 @@ export default {
           <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
           <template v-slot:empty>
             <span style="color: red;">
-              <img src="static/other/img2.gif">
+              <img src="/vxe-table/static/other/img2.gif">
               <p>没有更多数据了！</p>
             </span>
           </template>
@@ -161,7 +161,7 @@ export default {
           <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
           <template v-slot:empty>
             <span style="color: red;">
-              <img src="static/other/img1.gif">
+              <img src="/vxe-table/static/other/img1.gif">
               <p>搜索不到数据，可能输入的关键字姿势不对！</p>
             </span>
           </template>
