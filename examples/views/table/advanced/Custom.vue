@@ -113,7 +113,7 @@
       <vxe-table-column field="sex" title="Sex" :visible="false" width="200"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="200">
         <template v-slot:header>
-          <i :class="collapsable2 ? 'fa fa-minus-square' : 'fa fa-plus-square'" @click="collapsable2Event"></i>
+          <i :class="collapsable2 ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" @click="collapsable2Event"></i>
           <span>Age</span>
         </template>
       </vxe-table-column>
@@ -318,7 +318,7 @@ export default {
           <vxe-table-column field="sex" title="Sex" :visible="false" width="200"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="200">
             <template v-slot:header>
-              <i :class="collapsable2 ? 'fa fa-minus-square' : 'fa fa-plus-square'" @click="collapsable2Event"></i>
+              <i :class="collapsable2 ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" @click="collapsable2Event"></i>
               <span>Age</span>
             </template>
           </vxe-table-column>
