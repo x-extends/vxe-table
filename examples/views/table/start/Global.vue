@@ -67,7 +67,6 @@
           //     modes: ['insert', 'covering']
           //   },
           //   exportConfig: {
-          //     isPrint: true,
           //     modes: ['current', 'selected']
           //   },
           //   customConfig: {

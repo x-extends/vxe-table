@@ -5,6 +5,8 @@
       <span class="red">（注意：合并数据属于临时行为，例如：操作数据源、显示隐藏列、固定列...等操作都会导致合并状态被取消）</span>
     </p>
 
+    <vxe-toolbar print></vxe-toolbar>
+
     <vxe-table
       border
       resizable
@@ -12,6 +14,7 @@
       ref="xTable"
       height="800"
       align="center"
+      :print-config="{}"
       :column-config="{width: 90}"
       :merge-cells="mergeCells"
       :merge-footer-items="mergeFooterItems"
@@ -143,6 +146,8 @@ export default {
       ],
       demoCodes: [
         `
+        <vxe-toolbar print></vxe-toolbar>
+
         <vxe-table
           border
           resizable
@@ -150,6 +155,7 @@ export default {
           ref="xTable"
           height="800"
           align="center"
+          :print-config="{}"
           :column-config="{width: 90}"
           :merge-cells="mergeCells"
           :merge-footer-items="mergeFooterItems"
