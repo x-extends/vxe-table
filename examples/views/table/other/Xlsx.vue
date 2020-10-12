@@ -114,7 +114,7 @@ export default {
               this.$refs.xGrid1.readFile({
                 types: ['xls', 'xlsx']
               }).then(params => {
-                const { files } = params.target
+                const { files } = params
                 const fileReader = new FileReader()
                 fileReader.onload = (ev) => {
                   const data = ev.target.result
@@ -249,7 +249,7 @@ export default {
       this.$refs.xGrid1.readFile({
         types: ['xls', 'xlsx']
       }).then(params => {
-        const { files } = params.target
+        const { files } = params
         const fileReader = new FileReader()
         fileReader.onload = (ev) => {
           const data = ev.target.result

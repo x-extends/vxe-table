@@ -75,11 +75,11 @@ export declare class Input extends VXETableComponent {
   /**
    * 只对 type=date|week|month|year 有效，该方法 Function({ date, type }) 用于返回对应日期显示的节日
    */
-  festivalMethod?(params: { date: Date, type: string }): DateFestival | void;
+  festivalMethod?(params: InputDateFestivalParams): InputDateFestivalInfo | void;
   /**
    * 只对 type=date|week|month|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中
    */
-  disabledMethod?(params: { date: Date }): boolean;
+  disabledMethod?(params: InputDateDisabledParams): boolean;
   /**
    * 只对 type=number|integer|float 有效，最小值
    */
@@ -123,10 +123,19 @@ export declare class Input extends VXETableComponent {
   blur(): Promise<any>;
 }
 
+export interface InputDateFestivalParams {
+  date: Date;
+  type: string;
+}
+
+export interface InputDateDisabledParams {
+  date: Date;
+}
+
 /**
  * 日期节日对象
  */
-export interface DateFestival {
+export interface InputDateFestivalInfo {
   /**
    * 节日名称，如果重叠使用逗号隔开
    */

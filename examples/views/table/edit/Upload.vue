@@ -79,7 +79,7 @@ export default {
           methods: {
             insertEvent (opts) {
               this.$refs.xTable.readFile(opts).then(params => {
-                const { files } = params.target
+                const { files } = params
                 let records = Array.from(files).map(file => {
                   let ns = file.name.split('.')
                   let name = ns.slice(0, ns.length - 1).join('')
@@ -112,7 +112,7 @@ export default {
   methods: {
     insertEvent (opts) {
       this.$refs.xTable.readFile(opts).then(params => {
-        const { files } = params.target
+        const { files } = params
         const records = Array.from(files).map(file => {
           const ns = file.name.split('.')
           const name = ns.slice(0, ns.length - 1).join('')

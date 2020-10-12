@@ -108,13 +108,8 @@
     "description": "给表尾的单元格附加 className"
   },
   "vxe-table/cell-style": {
-<<<<<<< HEAD
     "type": "any | (({ row, rowindex, $rowindex, column, columnindex, $columnindex }) => any)",
     "description": "给单元格附加样式"
-=======
-    "type": "any | function",
-    "description": "给单元格附加样式，也可以是函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})"
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   },
   "vxe-table/header-cell-style": {
     "type": "any | (({ $rowindex, column, columnindex, $columnindex }) => any)",
@@ -125,26 +120,16 @@
     "description": "给表尾单元格附加样式"
   },
   "vxe-table/row-style": {
-<<<<<<< HEAD
     "type": "any | (({ row, rowindex, $rowindex }) => any)",
     "description": "给行附加样式"
-=======
-    "type": "any | function",
-    "description": "给行附加样式，也可以是函数 Function({row, rowIndex, $rowIndex})"
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   },
   "vxe-table/header-row-style": {
     "type": "any | (({ $rowindex, column, columnindex, $columnindex }) => any)",
     "description": "给表头行附加样式"
   },
   "vxe-table/footer-row-style": {
-<<<<<<< HEAD
     "type": "any | (({ $rowindex }) => any)",
     "description": "给表尾行附加样式"
-=======
-    "type": "any | function",
-    "description": "给表尾行附加样式，也可以是函数 Function({$rowIndex})"
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   },
   "vxe-table/show-footer": {
     "type": "boolean",
@@ -162,30 +147,13 @@
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
     "description": "临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）"
   },
-  "vxe-table/merge-cells": {
-    "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）"
-  },
-  "vxe-table/merge-footer-items": {
-    "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）"
-  },
   "vxe-table/span-method": {
-<<<<<<< HEAD
     "type": "({ row, rowindex, $rowindex, column, columnindex, $columnindex, data }) => { rowspan: number, colspan: number}",
     "description": "自定义合并函数，返回计算后的值，不能用于树形结构、展开行、固定列"
   },
   "vxe-table/footer-span-method": {
     "type": "({ $rowindex, column, columnindex, $columnindex, data }) => { rowspan: number, colspan: number}",
     "description": "表尾合并行或列，返回计算后的值，不能用于树形结构、展开行、固定列"
-=======
-    "type": "function",
-    "description": "自定义合并函数，该方法 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于树形结构、展开行、固定列"
-  },
-  "vxe-table/footer-span-method": {
-    "type": "function",
-    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于树形结构、展开行、固定列"
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   },
   "vxe-table/show-overflow": {
     "type": "boolean | string",
@@ -632,13 +600,8 @@
     "description": "给表尾的单元格附加 className"
   },
   "vxe-grid/cell-style": {
-<<<<<<< HEAD
     "type": "any | (({ row, rowindex, $rowindex, column, columnindex, $columnindex }) => any)",
     "description": "给单元格附加样式"
-=======
-    "type": "any | function",
-    "description": "给单元格附加样式，也可以是函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})"
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   },
   "vxe-grid/header-cell-style": {
     "type": "any | (({ $rowindex, column, columnindex, $columnindex }) => any)",
@@ -649,26 +612,16 @@
     "description": "给表尾单元格附加样式"
   },
   "vxe-grid/row-style": {
-<<<<<<< HEAD
     "type": "any | (({ row, rowindex, $rowindex }) => any)",
     "description": "给行附加样式"
-=======
-    "type": "any | function",
-    "description": "给行附加样式，也可以是函数 Function({row, rowIndex, $rowIndex})"
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   },
   "vxe-grid/header-row-style": {
     "type": "any | (({ $rowindex, column, columnindex, $columnindex }) => any)",
     "description": "给表头行附加样式"
   },
   "vxe-grid/footer-row-style": {
-<<<<<<< HEAD
     "type": "any | (({ $rowindex }) => any)",
     "description": "给表尾行附加样式"
-=======
-    "type": "any | function",
-    "description": "给表尾行附加样式，也可以是函数 Function({$rowIndex})"
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   },
   "vxe-grid/show-footer": {
     "type": "boolean",
@@ -686,30 +639,13 @@
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
     "description": "临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）"
   },
-  "vxe-grid/merge-cells": {
-    "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）"
-  },
-  "vxe-grid/merge-footer-items": {
-    "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）"
-  },
   "vxe-grid/span-method": {
-<<<<<<< HEAD
     "type": "({ row, rowindex, $rowindex, column, columnindex, $columnindex, data }) => { rowspan: number, colspan: number}",
     "description": "自定义合并函数，返回计算后的值，不能用于树形结构、展开行、固定列"
   },
   "vxe-grid/footer-span-method": {
     "type": "({ $rowindex, column, columnindex, $columnindex, data }) => { rowspan: number, colspan: number}",
     "description": "表尾合并行或列，返回计算后的值，不能用于树形结构、展开行、固定列"
-=======
-    "type": "function",
-    "description": "自定义合并函数，该方法 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于树形结构、展开行、固定列"
-  },
-  "vxe-grid/footer-span-method": {
-    "type": "function",
-    "description": "表尾合并行或列，该函数 Function({$rowIndex, column, columnIndex, $columnIndex, data}) 返回计算后的值，不能用于树形结构、展开行、固定列"
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   },
   "vxe-grid/show-overflow": {
     "type": "boolean | string",
@@ -1019,11 +955,7 @@
     "type": "boolean",
     "description": "是否禁用"
   },
-<<<<<<< HEAD
   "vxe-checkbox/v-model": {
-=======
-  "vxe-checkbox/value,v-model": {
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
     "type": "any",
     "description": "绑定值"
   },
@@ -1059,11 +991,7 @@
     "type": "boolean",
     "description": "是否禁用"
   },
-<<<<<<< HEAD
   "vxe-switch/v-model": {
-=======
-  "vxe-switch/value,v-model": {
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
     "type": "string | number | boolean",
     "description": "绑定值"
   },
@@ -1534,13 +1462,10 @@
   "vxe-modal/storage": {
     "type": "boolean",
     "description": "是否启用 localStorage 本地保存，会将窗口拖动的状态保存到本地（需要有 id）"
-<<<<<<< HEAD
   },
   "vxe-modal/before-hide-method": {
     "type": "function/promise<any>",
     "description": "在窗口隐藏之前执行，可以返回 Error 阻止关闭，支持异步"
-=======
->>>>>>> fbb4df9240080fc7c19e2f1a5f3120eb7aba6888
   },
   "vxe-form/data": {
     "type": "any",
