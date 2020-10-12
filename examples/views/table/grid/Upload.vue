@@ -112,7 +112,7 @@ export default {
                 multiple: true,
                 types: ['xlsx', 'csv', 'html']
               }).then(params => {
-                const { files } = params
+                const { files } = params.target
                 // 解析数据并显示
                 Array.from(files).forEach(file => {
                   let ns = file.name.split('.')
@@ -157,7 +157,7 @@ export default {
         multiple: true,
         types: ['xlsx', 'csv', 'html']
       }).then(params => {
-        const { files } = params
+        const { files } = params.target
         // 解析数据并显示
         Array.from(files).forEach(file => {
           const ns = file.name.split('.')

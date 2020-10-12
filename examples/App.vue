@@ -18,7 +18,7 @@
       </div>
       <div class="right">
         <div class="content">
-          <span v-if="usedJSHeapSize" class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
+          <span v-if="usedJSHeapSize && usedJSHeapSize !== '0'" class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
           <span>{{ $t('app.body.label.translations') }}:</span>
           <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
             <vxe-option value="zh_CN" label="中文"></vxe-option>
@@ -104,7 +104,7 @@ export default {
       selectStableVersion: null,
       stableVersionList: [],
       version: '2',
-      usedJSHeapSize: 0,
+      usedJSHeapSize: '0',
       tableList: [
         {
           label: 'app.aside.nav.start',

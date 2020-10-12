@@ -113,8 +113,8 @@ export default {
             impotEvent () {
               this.$refs.xGrid1.readFile({
                 types: ['xls', 'xlsx']
-              }).then(evnt => {
-                const files = evnt.target.files
+              }).then(params => {
+                const { files } = params.target
                 const fileReader = new FileReader()
                 fileReader.onload = (ev) => {
                   const data = ev.target.result
@@ -248,8 +248,8 @@ export default {
     impotEvent () {
       this.$refs.xGrid1.readFile({
         types: ['xls', 'xlsx']
-      }).then(evnt => {
-        const files = evnt.target.files
+      }).then(params => {
+        const { files } = params.target
         const fileReader = new FileReader()
         fileReader.onload = (ev) => {
           const data = ev.target.result
