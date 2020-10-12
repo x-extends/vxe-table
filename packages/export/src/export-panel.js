@@ -248,26 +248,28 @@ export default {
                     h('vxe-checkbox', {
                       props: {
                         value: isHeader,
-                        title: GlobalConfig.i18n('vxe.export.expHeaderTitle')
+                        title: GlobalConfig.i18n('vxe.export.expHeaderTitle'),
+                        content: GlobalConfig.i18n('vxe.export.expOptHeader')
                       },
                       on: {
                         input (value) {
                           defaultOptions.isHeader = value
                         }
                       }
-                    }, GlobalConfig.i18n('vxe.export.expOptHeader')),
+                    }),
                     h('vxe-checkbox', {
                       props: {
                         value: defaultOptions.isFooter,
                         disabled: !storeData.hasFooter,
-                        title: GlobalConfig.i18n('vxe.export.expFooterTitle')
+                        title: GlobalConfig.i18n('vxe.export.expFooterTitle'),
+                        content: GlobalConfig.i18n('vxe.export.expOptFooter')
                       },
                       on: {
                         input (value) {
                           defaultOptions.isFooter = value
                         }
                       }
-                    }, GlobalConfig.i18n('vxe.export.expOptFooter'))
+                    })
                   ]),
                   h('div', {
                     class: 'vxe-export--panel-option-row'
@@ -276,37 +278,40 @@ export default {
                       props: {
                         value: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
                         disabled: !isHeader || !hasColgroup || !supportMerge,
-                        title: GlobalConfig.i18n('vxe.export.expColgroupTitle')
+                        title: GlobalConfig.i18n('vxe.export.expColgroupTitle'),
+                        content: GlobalConfig.i18n('vxe.export.expOptColgroup')
                       },
                       on: {
                         input (value) {
                           defaultOptions.isColgroup = value
                         }
                       }
-                    }, GlobalConfig.i18n('vxe.export.expOptColgroup')),
+                    }),
                     h('vxe-checkbox', {
                       props: {
                         value: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false,
                         disabled: !hasMerge || !supportMerge || !checkedAll,
-                        title: GlobalConfig.i18n('vxe.export.expMergeTitle')
+                        title: GlobalConfig.i18n('vxe.export.expMergeTitle'),
+                        content: GlobalConfig.i18n('vxe.export.expOptMerge')
                       },
                       on: {
                         input (value) {
                           defaultOptions.isMerge = value
                         }
                       }
-                    }, GlobalConfig.i18n('vxe.export.expOptMerge')),
+                    }),
                     h('vxe-checkbox', {
                       props: {
                         value: defaultOptions.original,
-                        title: GlobalConfig.i18n('vxe.export.expOriginalTitle')
+                        title: GlobalConfig.i18n('vxe.export.expOriginalTitle'),
+                        content: GlobalConfig.i18n('vxe.export.expOptOriginal')
                       },
                       on: {
                         input (value) {
                           defaultOptions.original = value
                         }
                       }
-                    }, GlobalConfig.i18n('vxe.export.expOptOriginal'))
+                    })
                   ])
                 ])
               ])
@@ -317,19 +322,23 @@ export default {
           class: 'vxe-export--panel-btns'
         }, [
           h('vxe-button', {
+            props: {
+              content: GlobalConfig.i18n('vxe.export.expCancel')
+            },
             on: {
               click: this.cancelEvent
             }
-          }, GlobalConfig.i18n('vxe.export.expCancel')),
+          }),
           h('vxe-button', {
             ref: 'confirmBtn',
             props: {
-              status: 'primary'
+              status: 'primary',
+              content: GlobalConfig.i18n(isPrint ? 'vxe.export.expPrint' : 'vxe.export.expConfirm')
             },
             on: {
               click: this.confirmEvent
             }
-          }, GlobalConfig.i18n(isPrint ? 'vxe.export.expPrint' : 'vxe.export.expConfirm'))
+          })
         ])
       ])
     ])

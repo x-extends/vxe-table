@@ -158,8 +158,8 @@ export default {
     },
     selectFileEvent () {
       const $xetable = this.$parent
-      $xetable.readFile(this.defaultOptions).then(evnt => {
-        const file = evnt.target.files[0]
+      $xetable.readFile(this.defaultOptions).then(params => {
+        const { file } = params
         Object.assign(this.storeData, UtilTools.parseFile(file), { file })
       }).catch(e => e)
     },

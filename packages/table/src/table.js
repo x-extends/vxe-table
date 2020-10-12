@@ -72,6 +72,13 @@ function renderEmptyContenet (h, _vm) {
   return emptyContent
 }
 
+function handleUupdateResize (_vm) {
+  const { $el } = _vm
+  if ($el && $el.clientWidth && $el.clientHeight) {
+    _vm.recalculate()
+  }
+}
+
 export default {
   name: 'VxeTable',
   mixins: [vSize],
@@ -595,17 +602,10 @@ export default {
     },
     syncResize (value) {
       if (value) {
-        const { $el } = this
-        // 只在可视状态下才去更新
-        if ($el.clientWidth && $el.clientHeight) {
-          this.recalculate()
-        }
+        handleUupdateResize(this)
         this.$nextTick(() => {
-          setTimeout(() => {
-            if ($el.clientWidth && $el.clientHeight) {
-              this.recalculate(true)
-            }
-          })
+          handleUupdateResize(this)
+          setTimeout(() => handleUupdateResize(this))
         })
       }
     }
