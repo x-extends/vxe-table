@@ -10,7 +10,7 @@
     <vxe-table
       border
       height="300"
-      :export-config="{}"
+      :print-config="{}"
       :data="tableData1">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-colgroup title="分组信息">
@@ -53,7 +53,7 @@
       border
       ref="xTable"
       height="300"
-      :export-config="{}"
+      :print-config="{}"
       :loading="loading"
       :data="tableData"
       @custom="toolbarCustomEvent">
@@ -100,7 +100,7 @@ export default {
         <vxe-table
           border
           height="300"
-          :export-config="{}"
+          :print-config="{}"
           :data="tableData1">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-colgroup title="分组信息">
@@ -133,7 +133,7 @@ export default {
           border
           ref="xTable"
           height="300"
-          :export-config="{}"
+          :print-config="{}"
           :loading="loading"
           :data="tableData"
           @custom="toolbarCustomEvent">

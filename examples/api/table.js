@@ -3828,7 +3828,7 @@ const apis = [
       },
       {
         name: 'exportData(options)',
-        desc: '将表格数据导出（只支持基本数据结构，目前不支持分组、合并等；树结构和虚拟滚动只允许导出数据源）',
+        desc: '将表格数据导出（树结构和虚拟滚动只允许导出数据源）',
         version: '',
         type: 'Promise',
         enum: '',

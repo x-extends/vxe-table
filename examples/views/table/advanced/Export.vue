@@ -5,7 +5,7 @@
       默认会排除 field 为空和 type 相关的功能列，可以通过自定义 <table-api-link prop="data"/> 和 <table-api-link prop="columns"/> 导出数据<br>
       对于 csv 等特殊类型，可以通过设置 <table-column-api-link prop="cell-type"/> 将数值类型转为字符串类型<br>
       如果是服务端导出，通过设置 <table-api-link prop="remote"/> 和 <table-api-link prop="exportMethod"/> 开启服务端自定义导出<br>
-      <span class="red">（注：只支持基本数据结构，目前不支持分组、合并等；树结构和虚拟滚动只允许导出数据源，前端导出的数据量有限，建议使用后端导出）</span>
+      <span class="red">（注：树结构和虚拟滚动只允许导出数据源，前端导出的数据量有限，建议使用后端导出）</span>
     </p>
 
     <vxe-toolbar>

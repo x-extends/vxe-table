@@ -21,8 +21,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <pre-codecode class="xml">{{ demoCodes[0] }}</pre-codecode>
-      <pre-codecode class="javascript">{{ demoCodes[1] }}</pre-codecode>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>

@@ -954,9 +954,9 @@ export default {
         }
       }) : _e(),
       /**
-       * 导出
+       * 导出/打印
        */
-      initStore.export && this.exportConfig ? h('vxe-export-panel', {
+      initStore.export && (this.exportConfig || this.printConfig) ? h('vxe-export-panel', {
         props: {
           defaultOptions: this.exportParams,
           storeData: this.exportStore

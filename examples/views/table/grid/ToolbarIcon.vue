@@ -7,6 +7,7 @@
       resizable
       keep-source
       height="500"
+      :print-config="{}"
       :import-config="{}"
       :export-config="{}"
       :pager-config="tablePage"
@@ -92,6 +93,7 @@ export default {
           resizable
           keep-source
           height="500"
+          :print-config="{}"
           :import-config="{}"
           :export-config="{}"
           :pager-config="tablePage"

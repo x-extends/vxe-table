@@ -18,6 +18,7 @@
       keep-source
       ref="xTree"
       row-id="id"
+      :print-config="{}"
       :export-config="{}"
       :loading="loading"
       :tree-config="treeConfig"
@@ -67,6 +68,7 @@ export default {
           keep-source
           ref="xTree"
           row-id="id"
+          :print-config="{}"
           :export-config="{}"
           :loading="loading"
           :tree-config="treeConfig"

@@ -18,15 +18,19 @@
       show-footer
       ref="xTable"
       height="500"
-      :export-config="{}"
+      :print-config="{}"
       :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date"></vxe-table-column>
+      <vxe-table-colgroup title="Group1">
+        <vxe-table-column field="name" title="Name"></vxe-table-column>
+        <vxe-table-colgroup title="Group2">
+          <vxe-table-column field="role" title="Role"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+        </vxe-table-colgroup>
+        <vxe-table-column field="date12" title="Date"></vxe-table-column>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -62,15 +66,19 @@ export default {
           show-footer
           ref="xTable"
           height="500"
-          :export-config="{}"
+          :print-config="{}"
           :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="date12" title="Date"></vxe-table-column>
+          <vxe-table-colgroup title="Group1">
+            <vxe-table-column field="name" title="Name"></vxe-table-column>
+            <vxe-table-colgroup title="Group2">
+              <vxe-table-column field="role" title="Role"></vxe-table-column>
+              <vxe-table-column field="age" title="Age"></vxe-table-column>
+            </vxe-table-colgroup>
+            <vxe-table-column field="date12" title="Date"></vxe-table-column>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `
