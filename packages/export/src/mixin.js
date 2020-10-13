@@ -1043,9 +1043,15 @@ export default {
       if (!opts.sheetName) {
         opts.sheetName = document.title
       }
-      if (VXETable.exportTypes.indexOf(type) === -1) {
-        throw new Error(UtilTools.getLog('vxe.error.notType', [type]))
+
+      // 检查类型
+      if (!XEUtils.includes(VXETable.exportTypes, type)) {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          UtilTools.error('vxe.error.notType', [type])
+        }
+        return Promise.resolve()
       }
+
       if (!opts.data) {
         opts.data = tableFullData
         if (mode === 'selected') {
@@ -1085,32 +1091,40 @@ export default {
       return handleExport(this, opts)
     },
     _importByFile (file, opts) {
-      if (window.FileReader) {
-        const { type, filename } = UtilTools.parseFile(file)
-        const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
-        if (VXETable.importTypes.indexOf(type) > -1) {
-          if (options.remote) {
-            const params = { file, options, $table: this }
-            if (options.importMethod) {
-              return options.importMethod(params)
-            }
-            return Promise.resolve(params)
-          }
-          this.preventEvent(null, 'event.import', { file, options, columns: this.tableFullColumn }, () => {
-            const reader = new FileReader()
-            reader.onerror = () => {
-              UtilTools.error('vxe.error.notType', [type])
-            }
-            reader.onload = e => {
-              handleImport(this, e.target.result, options)
-            }
-            reader.readAsText(file, 'UTF-8')
-          })
-        } else {
+      const { type, filename } = UtilTools.parseFile(file)
+
+      // 检查类型
+      if (!XEUtils.includes(VXETable.importTypes, type)) {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           UtilTools.error('vxe.error.notType', [type])
         }
+        return Promise.resolve()
+      }
+
+      if (window.FileReader) {
+        const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
+        if (options.remote) {
+          const params = { file, options, $table: this }
+          if (options.importMethod) {
+            return options.importMethod(params)
+          }
+          return Promise.resolve(params)
+        }
+        this.preventEvent(null, 'event.import', { file, options, columns: this.tableFullColumn }, () => {
+          const reader = new FileReader()
+          reader.onerror = () => {
+            UtilTools.error('vxe.error.notType', [type])
+          }
+          reader.onload = e => {
+            handleImport(this, e.target.result, options)
+          }
+          reader.readAsText(file, 'UTF-8')
+        })
       } else {
-        UtilTools.error('vxe.error.notExp')
+        // 不支持的浏览器
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          UtilTools.error('vxe.error.notExp')
+        }
       }
       return Promise.resolve()
     },

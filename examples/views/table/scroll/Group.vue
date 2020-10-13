@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">分组表头<br><span class="red">（注：分组表头不支持横向虚拟滚动，设置 scroll-x={gt: -1} 关闭即可）</span></p>
+    <p class="tip">分组表头<br><span class="red">（注：分组表头不支持横向虚拟滚动，通过设置 scroll-x={gt: -1} 关闭即可）</span></p>
 
     <vxe-table
       border

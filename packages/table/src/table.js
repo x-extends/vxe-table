@@ -673,6 +673,14 @@ export default {
       if (treeConfig && this.stripe) {
         UtilTools.warn('vxe.error.noTree', ['stripe'])
       }
+      // 检查导入导出类型
+      const { exportConfig, exportOpts, importConfig, importOpts } = this
+      if (importConfig && importOpts.types && !XEUtils.includeArrays(VXETable.importTypes, importOpts.types)) {
+        UtilTools.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter(type => XEUtils.includes(VXETable.importTypes, type)).join(',') || VXETable.importTypes.join(',')])
+      }
+      if (exportConfig && exportOpts.types && !XEUtils.includeArrays(VXETable.exportTypes, exportOpts.types)) {
+        UtilTools.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter(type => XEUtils.includes(VXETable.exportTypes, type)).join(',') || VXETable.exportTypes.join(',')])
+      }
     }
 
     const customOpts = this.customOpts
