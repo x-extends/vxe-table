@@ -182,6 +182,7 @@ export default {
         switch: 'Switch',
         list: 'List',
         pulldown: 'Pulldown',
+        file: 'File',
         readFile: 'Read file',
 
         other: 'Integrated third party Library',
