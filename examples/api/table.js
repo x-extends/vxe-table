@@ -4392,6 +4392,43 @@ const apis = [
         list: XEUtils.clone(printAPI, true)
       },
       {
+        name: 'saveFile(options)',
+        desc: '保存文件到本地',
+        version: '2.9.26',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: 'options: object',
+        list: [
+          {
+            name: 'filename',
+            desc: '文件名',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'type',
+            desc: '文件类型',
+            version: '',
+            type: 'string',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'content',
+            desc: '内容',
+            version: '',
+            type: 'string | Blob',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'readFile(options)',
         desc: '读取本地文件',
         version: '2.6.22',

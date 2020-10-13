@@ -26,7 +26,7 @@
     </pre>
 
     <p class="tip">
-      使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 和 <a class="link" href="https://www.npmjs.com/package/file-saver" target="_blank">file-saver</a> 实现导出 xlsx 文件<br>
+      使用 <a class="link" href="https://www.npmjs.com/package/xlsx" target="_blank">xlsx</a> 实现导出 xlsx 文件<br>
       <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 
@@ -56,7 +56,6 @@
 <script>
 import hljs from 'highlight.js'
 import XLSX from 'xlsx'
-import FileSaver from 'file-saver'
 
 export default {
   data () {
@@ -185,12 +184,40 @@ export default {
               }
               return ''
             },
+            async impotEvent () {
+              const { files } = await this.$refs.xGrid1.readFile({
+                types: ['xls', 'xlsx']
+              })
+              const fileReader = new FileReader()
+              fileReader.onload = (ev) => {
+                const data = ev.target.result
+                const workbook = XLSX.read(data, { type: 'binary' })
+                const csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+                const tableData = []
+                // 解析数据
+                csvData.split('\\n').forEach((vRow) => {
+                  if (vRow) {
+                    const vCols = vRow.split(',')
+                    const item = {}
+                    vCols.forEach((val, cIndex) => {
+                      const column = this.tableColumn[cIndex]
+                      if (column.field) {
+                        item[column.field] = val
+                      }
+                    })
+                    tableData.push(item)
+                  }
+                })
+                this.tableData1 = tableData
+              }
+              fileReader.readAsBinaryString(files[0])
+            },
             // 通用行合并函数（将相同多列数据合并为一行）
             rowspanMethod ({ row, _rowIndex, column, visibleData }) {
-              let fields = ['sex']
-              let cellValue = row[column.property]
+              const fields = ['sex']
+              const cellValue = row[column.property]
               if (cellValue && fields.includes(column.property)) {
-                let prevRow = visibleData[_rowIndex - 1]
+                const prevRow = visibleData[_rowIndex - 1]
                 let nextRow = visibleData[_rowIndex + 1]
                 if (prevRow && prevRow[column.property] === cellValue) {
                   return { rowspan: 0, colspan: 0 }
@@ -220,7 +247,7 @@ export default {
               const wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
               const blob = new Blob([toBuffer(wbout)], { type: 'application/octet-stream' })
               // 保存导出
-              FileSaver.saveAs(blob, '数据导出.xlsx')
+              this.$XSaveFile({ filename: '数据导出', type: 'xlsx', content: blob })
             }
           }
         }
@@ -245,35 +272,33 @@ export default {
       }
       return ''
     },
-    impotEvent () {
-      this.$refs.xGrid1.readFile({
+    async impotEvent () {
+      const { files } = await this.$refs.xGrid1.readFile({
         types: ['xls', 'xlsx']
-      }).then(params => {
-        const { files } = params
-        const fileReader = new FileReader()
-        fileReader.onload = (ev) => {
-          const data = ev.target.result
-          const workbook = XLSX.read(data, { type: 'binary' })
-          const csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
-          const tableData = []
-          // 解析数据
-          csvData.split('\n').forEach((vRow) => {
-            if (vRow) {
-              const vCols = vRow.split(',')
-              const item = {}
-              vCols.forEach((val, cIndex) => {
-                const column = this.tableColumn[cIndex]
-                if (column.field) {
-                  item[column.field] = val
-                }
-              })
-              tableData.push(item)
-            }
-          })
-          this.tableData1 = tableData
-        }
-        fileReader.readAsBinaryString(files[0])
       })
+      const fileReader = new FileReader()
+      fileReader.onload = (ev) => {
+        const data = ev.target.result
+        const workbook = XLSX.read(data, { type: 'binary' })
+        const csvData = XLSX.utils.sheet_to_csv(workbook.Sheets.Sheet1)
+        const tableData = []
+        // 解析数据
+        csvData.split('\n').forEach((vRow) => {
+          if (vRow) {
+            const vCols = vRow.split(',')
+            const item = {}
+            vCols.forEach((val, cIndex) => {
+              const column = this.tableColumn[cIndex]
+              if (column.field) {
+                item[column.field] = val
+              }
+            })
+            tableData.push(item)
+          }
+        })
+        this.tableData1 = tableData
+      }
+      fileReader.readAsBinaryString(files[0])
     },
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, _rowIndex, column, visibleData }) {
@@ -310,7 +335,7 @@ export default {
       const wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
       const blob = new Blob([toBuffer(wbout)], { type: 'application/octet-stream' })
       // 保存导出
-      FileSaver.saveAs(blob, '数据导出.xlsx')
+      this.$XSaveFile({ filename: '数据导出', type: 'xlsx', content: blob })
     }
   }
 }

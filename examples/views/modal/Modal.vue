@@ -77,7 +77,7 @@
       <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
       <vxe-button @click="$XModal.alert({ message: '按 Esc 键可以关闭', escClosable: true })">按 Esc 键可以关闭</vxe-button>
       <vxe-button @click="$XModal.alert({ message: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
-      <vxe-button @click="$XModal.alert({ message: '不锁界面不要遮罩层（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">不锁界面不要遮罩层</vxe-button>
+      <vxe-button @click="$XModal.alert({ message: '多窗口、叠加窗口（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">多窗口、叠加窗口</vxe-button>
     </p>
 
     <p>
@@ -363,7 +363,7 @@ export default {
           <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
           <vxe-button @click="$XModal.alert({ message: '按 Esc 键可以关闭', escClosable: true })">按 Esc 键可以关闭</vxe-button>
           <vxe-button @click="$XModal.alert({ message: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '不锁界面不要遮罩层（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">不锁界面不要遮罩层</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '多窗口、叠加窗口（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">多窗口、叠加窗口</vxe-button>
         </p>
 
         <p>

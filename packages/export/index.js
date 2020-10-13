@@ -2,7 +2,7 @@ import Table from '../table'
 import VXETable from '../v-x-e-table'
 import ExportPanel from './src/export-panel'
 import ImportPanel from './src/import-panel'
-import mixin, { handlePrint } from './src/mixin'
+import mixin, { saveLocalFile, handlePrint } from './src/mixin'
 
 function print (options) {
   const opts = Object.assign({}, options, {
@@ -14,6 +14,7 @@ function print (options) {
 export const Export = {
   install (Vue) {
     VXETable.reg('export')
+    VXETable.saveFile = saveLocalFile
     VXETable.print = print
     VXETable.setup({
       export: {

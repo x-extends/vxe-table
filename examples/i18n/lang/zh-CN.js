@@ -181,6 +181,7 @@ export default {
         switch: '开关',
         list: '列表',
         pulldown: '下拉容器',
+        file: '文件操作',
         readFile: '读取文件',
 
         other: '集成第三方库',

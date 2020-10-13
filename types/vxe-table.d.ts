@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 import { ModalController } from './modal'
 
-import { readFile, print } from './extends/export'
+import { saveFile, readFile, print } from './extends/export'
 import { renderer } from './extends/renderer'
 import { interceptor } from './extends/interceptor'
 import { commands } from './extends/commands'
@@ -68,6 +68,10 @@ export interface VXETableStatic {
    * 模态窗口
    */
   modal: ModalController;
+  /**
+   * 保存文件到本地
+   */
+  saveFile: typeof saveFile;
   /**
    * 读取本地文件
    */

@@ -88,6 +88,9 @@ Vue.use(Table)
 // 给 vue 实例挂载全局窗口对象
 Vue.prototype.$XModal = VXETable.modal
 
+// 给 vue 实例挂载文件对象
+Vue.prototype.$XSaveFile = VXETable.saveFile
+
 // 给 vue 实例挂载全局打印对象
 Vue.prototype.$XPrint = VXETable.print
 

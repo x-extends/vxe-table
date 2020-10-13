@@ -425,14 +425,15 @@ function getContent ($xetable, opts, columns, datas) {
   return ''
 }
 
-function downloadFile ($xetable, opts, content) {
-  const { filename, type, download } = opts
+/**
+ * 保存文件到本地
+ * @param {*} options 参数
+ */
+export function saveLocalFile (options) {
+  const { filename, type, content } = options
   const name = `${filename}.${type}`
   if (window.Blob) {
-    const blob = getExportBlobByContent(content, opts)
-    if (!download) {
-      return Promise.resolve({ type, content, blob })
-    }
+    const blob = content instanceof Blob ? content : getExportBlobByContent(XEUtils.toString(content), options)
     if (navigator.msSaveBlob) {
       navigator.msSaveBlob(blob, name)
     } else {
@@ -444,12 +445,22 @@ function downloadFile ($xetable, opts, content) {
       linkElem.click()
       document.body.removeChild(linkElem)
     }
+    return Promise.resolve()
+  }
+  return Promise.reject(new Error(UtilTools.getLog('vxe.error.notExp')))
+}
+
+function downloadFile ($xetable, opts, content) {
+  const { filename, type, download } = opts
+  if (!download) {
+    const blob = getExportBlobByContent(content, opts)
+    return Promise.resolve({ type, content, blob })
+  }
+  saveLocalFile({ filename, type, content }).then(() => {
     if (opts.message !== false) {
       VXETable.modal.message({ message: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
     }
-  } else {
-    UtilTools.error('vxe.error.notExp')
-  }
+  })
 }
 
 function handleExport ($xetable, opts) {
@@ -834,6 +845,9 @@ export default {
           this._importReject = null
         })
       return rest
+    },
+    _saveFile (options) {
+      return saveLocalFile(options)
     },
     _readFile (options = {}) {
       if (!fileForm) {
