@@ -343,7 +343,7 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.readFile',
+              label: 'app.aside.nav.file',
               locat: {
                 name: 'ModuleFile'
               }

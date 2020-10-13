@@ -5,11 +5,19 @@
     <p class="tip">
       轻提示框、提示框、弹出窗口，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
       对于某些场景如果需要动态创建的窗口，可以通过以下 API 全局调用：<br>
-      open(options: ModalOptions) 打开窗口<br>
-      message(message: string | ModalOptions, title?: string, options?: ModalOptions) 打开消息框<br>
-      alert(message: string | ModalOptions, title?: string, options?: ModalOptions) 打开提示框<br>
-      confirm(message: string | ModalOptions, title?: string, options?: ModalOptions) 打开确认框<br>
-      close(id?: string) 手动关闭当前活动的窗口<br>
+      打开窗口：<br>
+      open(options: ModalOptions)<br>
+      打开消息框：<br>
+      message(options: ModalOptions)<br>
+      message(message: string, title?: string)<br>
+      打开提示框：<br>
+      alert(options: ModalOptions) 打开提示框<br>
+      alert(message: string, title?: string)<br>
+      打开确认框：<br>
+      confirm(options: ModalOptions) 打开确认框<br>
+      confirm(message: string, title?: string)<br>
+      手动关闭当前活动的窗口：<br>
+      close(id?: string)<br>
       给 vue 实例挂载属性：<br>
       Vue.prototype.$XModal = VXETable.modal
     </p>
@@ -77,7 +85,7 @@
       <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
       <vxe-button @click="$XModal.alert({ message: '按 Escape 键可以关闭', escClosable: true })">按 Escape 键可以关闭</vxe-button>
       <vxe-button @click="$XModal.alert({ message: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
-      <vxe-button @click="$XModal.alert({ message: '不锁界面不要遮罩层（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">不锁界面不要遮罩层</vxe-button>
+      <vxe-button @click="$XModal.alert({ message: '多窗口、叠加窗口（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">多窗口、叠加窗口</vxe-button>
     </p>
 
     <p>
@@ -362,7 +370,7 @@ export default {
           <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
           <vxe-button @click="$XModal.alert({ message: '按 Escape 键可以关闭', escClosable: true })">按 Escape 键可以关闭</vxe-button>
           <vxe-button @click="$XModal.alert({ message: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '不锁界面不要遮罩层（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">不锁界面不要遮罩层</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '多窗口、叠加窗口（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">多窗口、叠加窗口</vxe-button>
         </p>
 
         <p>

@@ -1,14 +1,22 @@
 <template>
   <div>
     <p class="tip">
-      读取本地文件<br>
+      文件操作<br>
       给 vue 实例挂载属性：<br>
+      Vue.prototype.$XSaveFile = VXETable.saveFile<br>
       Vue.prototype.$XReadFile = VXETable.readFile<br>
     </p>
 
-    <vxe-button @click="clickEvent1">读取一个文件</vxe-button>
-    <vxe-button @click="clickEvent2">读取指定类型文件</vxe-button>
-    <vxe-button @click="clickEvent3">读取多个文件</vxe-button>
+    <p>
+      <vxe-button @click="clickEvent1">读取一个文件</vxe-button>
+      <vxe-button @click="clickEvent2">读取指定类型文件</vxe-button>
+      <vxe-button @click="clickEvent3">读取多个文件</vxe-button>
+    </p>
+
+    <p>
+      <vxe-button @click="clickEvent6">保存为txt文件</vxe-button>
+      <vxe-button @click="clickEvent7">保存为html文件</vxe-button>
+    </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -25,8 +33,16 @@ export default {
     return {
       demoCodes: [
         `
-        <vxe-button @click="clickEvent1">读取一个文件</vxe-button>
-        <vxe-button @click="clickEvent2">读取多个文件</vxe-button>
+        <p>
+          <vxe-button @click="clickEvent1">读取一个文件</vxe-button>
+          <vxe-button @click="clickEvent2">读取指定类型文件</vxe-button>
+          <vxe-button @click="clickEvent3">读取多个文件</vxe-button>
+        </p>
+
+        <p>
+          <vxe-button @click="clickEvent6">保存为txt文件</vxe-button>
+          <vxe-button @click="clickEvent7">保存为html文件</vxe-button>
+        </p>
         `,
         `
         export default {
@@ -52,6 +68,20 @@ export default {
                 })
                 this.$XModal.alert(\`共：\${files.length} 个文件\`)
               } catch (e) {}
+            },
+            clickEvent6 () {
+              this.$XSaveFile({
+                filename: '文本',
+                type: 'txt',
+                content: '内容xxx'
+              })
+            },
+            clickEvent7 () {
+              this.$XSaveFile({
+                filename: '页面',
+                type: 'html',
+                content: '<html><head></head><body>内容xx</body></html>'
+              })
             }
           }
         }
@@ -81,6 +111,20 @@ export default {
         })
         this.$XModal.alert(`共：${files.length} 个文件`)
       } catch (e) {}
+    },
+    clickEvent6 () {
+      this.$XSaveFile({
+        filename: '文本',
+        type: 'txt',
+        content: '内容xxx'
+      })
+    },
+    clickEvent7 () {
+      this.$XSaveFile({
+        filename: '页面',
+        type: 'html',
+        content: '<html><head></head><body>内容xx</body></html>'
+      })
     }
   }
 }

@@ -189,8 +189,15 @@ export interface ReadFileParams {
   };
 }
 
+export function saveFile(options?: SaveFileOptions): Promise<any>;
 export function readFile(options?: ReadFileOptions): Promise<ReadFileParams>;
 export function print(options: PrintOptons): any;
+
+export interface SaveFileOptions {
+  filename: string;
+  type: string;
+  content: string | Blob;
+}
 
 export interface ReadFileOptions {
   multiple?: boolean;
