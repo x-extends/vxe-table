@@ -361,8 +361,10 @@ export default {
               return true
             },
             importMethod ({ file }) {
+              // 处理表单
               const formBody = new FormData()
               formBody.append('file', file)
+              // 上传文件
               return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
                 this.$XModal.message({ message: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
                 // 导入完成，刷新表格
@@ -393,8 +395,13 @@ export default {
               return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/export', body).then(data => {
                 if (data.id) {
                   this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
-                  // 读取路径，请求文件流 => 开始下载
-                  location.href = \`https://api.xuliangzhan.com:10443/api/pub/export/download/\${data.id}\`
+                  // 读取路径，请求文件
+                  XEAjax.fetch(\`https://api.xuliangzhan.com:10443/api/pub/export/download/\${data.id}\`).then(response => {
+                    response.blob().then(blob => {
+                      // 开始下载
+                      this.$XSaveFile({ filename: '导出数据', type: 'xlsx', content: blob })
+                    })
+                  })
                 }
               }).catch(() => {
                 this.$XModal.message({ message: '导出失败！', status: 'error' })
@@ -440,8 +447,10 @@ export default {
       return true
     },
     importMethod ({ file }) {
+      // 处理表单
       const formBody = new FormData()
       formBody.append('file', file)
+      // 上传文件
       return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
         this.$XModal.message({ message: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
         // 导入完成，刷新表格
@@ -472,8 +481,13 @@ export default {
       return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/export', body).then(data => {
         if (data.id) {
           this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
-          // 读取路径，请求文件流 => 开始下载
-          location.href = `https://api.xuliangzhan.com:10443/api/pub/export/download/${data.id}`
+          // 读取路径，请求文件
+          XEAjax.fetch(`https://api.xuliangzhan.com:10443/api/pub/export/download/${data.id}`).then(response => {
+            response.blob().then(blob => {
+              // 开始下载
+              this.$XSaveFile({ filename: '导出数据', type: 'xlsx', content: blob })
+            })
+          })
         }
       }).catch(() => {
         this.$XModal.message({ message: '导出失败！', status: 'error' })

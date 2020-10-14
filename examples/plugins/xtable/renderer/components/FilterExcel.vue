@@ -74,14 +74,6 @@ export default {
           { value: 'less', label: '小于' },
           { value: 'le', label: '小于或等于' }
         ]
-      ],
-      allCaseList: [
-        { value: '1', label: '等于' },
-        { value: '2', label: '不等于' },
-        { value: '3', label: '大于' },
-        { value: '4', label: '大于或等于' },
-        { value: '5', label: '小于' },
-        { value: '6', label: '小于或等于' }
       ]
     }
   },

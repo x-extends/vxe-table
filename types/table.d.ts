@@ -86,7 +86,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 表尾数据获取的方法
    */
-  footerMethod?(params: { columns: ColumnInfo[], data: any[] }): Array<string | number>[];
+  footerMethod?(params: FooterDataParams): Array<string | number>[];
   /**
    * 给行附加 className
    */
@@ -982,12 +982,111 @@ export declare class Table extends VXETableComponent {
   [key: string]: any;
 }
 
+export interface FooterDataParams {
+  $table: Table;
+  columns: ColumnInfo[];
+  data: any[];
+}
+
+export interface TableOptions {
+  id?: string;
+  data?: any[];
+  height?: number | string;
+  maxHeight?: number | string;
+  resizable?: boolean;
+  stripe?: boolean;
+  border?: boolean | 'default' | 'full' | 'outer' | 'inner' | 'none';
+  loading?: boolean;
+  align?: 'left' | 'center' | 'right';
+  headerAlign?: 'left' | 'center' | 'right';
+  footerAlign?: 'left' | 'center' | 'right';
+  showHeader?: boolean;
+  highlightCurrentRow?: boolean;
+  highlightHoverRow?: boolean;
+  highlightCurrentColumn?: boolean;
+  highlightHoverColumn?: boolean;
+  highlightCell?: boolean;
+  showFooter?: boolean;
+  footerMethod?(params: FooterDataParams): Array<string | number | null>[];
+  rowClassName?: string | Function;
+  cellClassName?: string | Function;
+  headerRowClassName?: string | Function;
+  headerCellClassName?: string | Function;
+  footerRowClassName?: string | Function;
+  footerCellClassName?: string | Function;
+  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  mergeCells?: MergeOptions[];
+  mergeFooterItems?: MergeOptions[];
+  spanMethod?(params: ColumnCellRenderParams): { rowspan: number, colspan: number };
+  footerSpanMethod?(params: ColumnFooterRenderParams): { rowspan: number, colspan: number };
+  showOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+  showHeaderOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+  showFooterOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+  columnKey?: boolean;
+  rowKey?: boolean;
+  rowId?: string;
+  keepSource?: boolean;
+  autoResize?: boolean;
+  syncResize?: boolean | string;
+  columnConfig?: ColumnDefaultConfig;
+  customConfig?: CustomConfig;
+  seqConfig?: SeqConfig;
+  sortConfig?: SortConfig;
+  filterConfig?: FilterConfig;
+  radioConfig?: RadioConfig;
+  checkboxConfig?: CheckboxConfig;
+  tooltipConfig?: TooltipConfig;
+  exportConfig?: boolean | ExportOptons;
+  importConfig?: boolean | ImportOptons;
+  printConfig?: PrintOptons;
+  expandConfig?: ExpandConfig;
+  treeConfig?: boolean | TreeConfig;
+  contextMenu?: boolean | ContextMenuConfig;
+  mouseConfig?: MouseConfig;
+  keyboardConfig?: KeyboardConfig;
+  editConfig?: boolean | EditConfig;
+  validConfig?: ValidConfig;
+  editRules?: EditVaildRules;
+  emptyText?: string;
+  emptyRender?: boolean | EmptyRender;
+  animat?: boolean;
+  delayHover?: number;
+  scrollX?: {
+    gt?: number;
+    oSize?: number;
+    [key: string]: any;
+  };
+  scrollY?: {
+    gt?: number;
+    oSize?: number;
+    [key: string]: any;
+  };
+  params?: any;
+  [key: string]: any;
+}
+
 /**
  * 列的默认配置
  */
 export interface ColumnDefaultConfig {
   width?: number;
   minWidth?: number;
+}
+
+/**
+ * 自定义列配置项
+ */
+export interface CustomConfig {
+  storage?: boolean | {
+    visible?: boolean;
+    resizable?: boolean;
+  };
+  checkMethod?(params: { column: ColumnInfo }): boolean;
 }
 
 /**

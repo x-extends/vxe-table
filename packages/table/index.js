@@ -9,6 +9,7 @@ VxeTable.install = function (Vue) {
   }
   VXETable.Vue = Vue
   VXETable.Table = VxeTable
+  VXETable.TableComponent = VxeTable
   if (!Vue.prototype.$vxe) {
     Vue.prototype.$vxe = { t: VXETable.t }
   } else {

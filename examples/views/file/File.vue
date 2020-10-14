@@ -18,6 +18,10 @@
       <vxe-button @click="clickEvent7">保存为html文件</vxe-button>
     </p>
 
+    <p>
+      <vxe-button @click="clickEvent10">下载文件</vxe-button>
+    </p>
+
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
@@ -28,6 +32,8 @@
 </template>
 
 <script>
+import XEAjax from 'xe-ajax'
+
 export default {
   data () {
     return {
@@ -42,6 +48,10 @@ export default {
         <p>
           <vxe-button @click="clickEvent6">保存为txt文件</vxe-button>
           <vxe-button @click="clickEvent7">保存为html文件</vxe-button>
+        </p>
+
+        <p>
+          <vxe-button @click="clickEvent10">下载文件</vxe-button>
         </p>
         `,
         `
@@ -81,6 +91,15 @@ export default {
                 filename: '页面',
                 type: 'html',
                 content: '<html><head></head><body>内容xx</body></html>'
+              })
+            },
+            clickEvent10 () {
+              // 请求文件
+              XEAjax.fetch('/vxe-table/static/other/img2.gif').then(response => {
+                response.blob().then(blob => {
+                  // 下载到本地
+                  this.$XSaveFile({ filename: '图片', type: 'gif', content: blob })
+                })
               })
             }
           }
@@ -124,6 +143,15 @@ export default {
         filename: '页面',
         type: 'html',
         content: '<html><head></head><body>内容xx</body></html>'
+      })
+    },
+    clickEvent10 () {
+      // 请求文件
+      XEAjax.fetch('/vxe-table/static/other/img2.gif').then(response => {
+        response.blob().then(blob => {
+          // 下载到本地
+          this.$XSaveFile({ filename: '图片', type: 'gif', content: blob })
+        })
       })
     }
   }

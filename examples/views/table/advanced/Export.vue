@@ -33,8 +33,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">配置 <table-api-link prop="columnFilterMethod"/> 参数过滤指定列</p>
@@ -60,8 +60,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">配置 <table-api-link prop="dataFilterMethod"/> 参数过滤指定行</p>
@@ -89,8 +89,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">不导出表头，指定文件名，导出源数据,格式化数据</p>
@@ -131,22 +131,29 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
 import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
-import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
       loading: false,
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+      ],
       tableData1: [
         { name: 'test1', amount: '12953.6985', num: 1259326 },
         { name: '154645623546345', amount: '45646464888888654654', num: 4564566456645 },
@@ -374,13 +381,21 @@ export default {
           methods: {
             findList () {
               this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage4.pageSize}/\${this.tablePage4.currentPage}\`).then(({ page, result }) => {
-                this.tableData4 = result
-                this.tablePage4.totalResult = page.totalResult
+              setTimeout(() => {
+                const list = [
+                  { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+                  { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', html1: '<span>111</span>' },
+                  { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', html1: '<span>456</span>' },
+                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
+                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
+                  { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
+                  { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
+                ]
+                this.tableData4 = list
+                this.tablePage4.totalResult = 20
                 this.loading = false
-              }).catch(e => {
-                this.loading = false
-              })
+              }, 100)
             },
             handlePageChange ({ currentPage, pageSize }) {
               this.tablePage4.currentPage = currentPage
@@ -433,18 +448,26 @@ export default {
             },
             exportAllDataEvent4 () {
               this.loading = true
-              XEAjax.get('/api/user/full').then(data => {
+              setTimeout(() => {
+                const list = [
+                  { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+                  { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', html1: '<span>111</span>' },
+                  { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', html1: '<span>456</span>' },
+                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
+                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
+                  { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
+                  { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
+                ]
                 this.$refs.xTable4.exportData({
                   filename: '自定义文件名',
                   type: 'csv',
                   isHeader: true,
                   isFooter: true,
-                  data
+                  data: list
                 })
                 this.loading = false
-              }).catch(() => {
-                this.loading = false
-              })
+              }, 100)
             }
           }
         }
@@ -453,24 +476,26 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
     this.findList()
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     findList () {
       this.loading = true
-      XEAjax.get(`/api/user/page/list/${this.tablePage4.pageSize}/${this.tablePage4.currentPage}`).then(({ page, result }) => {
-        this.tableData4 = result
-        this.tablePage4.totalResult = page.totalResult
+      setTimeout(() => {
+        const list = [
+          { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+          { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', html1: '<span>111</span>' },
+          { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', html1: '<span>456</span>' },
+          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
+          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
+          { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
+          { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
+        ]
+        this.tableData4 = list
+        this.tablePage4.totalResult = 20
         this.loading = false
-      }).catch(() => {
-        this.loading = false
-      })
+      }, 100)
     },
     handlePageChange ({ currentPage, pageSize }) {
       this.tablePage4.currentPage = currentPage
@@ -550,18 +575,26 @@ export default {
     },
     exportAllDataEvent4 () {
       this.loading = true
-      XEAjax.get('/api/user/full').then(data => {
+      setTimeout(() => {
+        const list = [
+          { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+          { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', html1: '<span>111</span>' },
+          { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', html1: '<span>456</span>' },
+          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
+          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
+          { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
+          { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
+        ]
         this.$refs.xTable4.exportData({
           filename: '自定义文件名',
           type: 'csv',
           isHeader: true,
           isFooter: true,
-          data
+          data: list
         })
         this.loading = false
-      }).catch(() => {
-        this.loading = false
-      })
+      }, 100)
     }
   }
 }

@@ -183,7 +183,7 @@ const apis = [
         name: 'class-name',
         descKey: 'app.api.tableColumn.desc.className',
         version: '',
-        type: 'string | Function',
+        type: 'string | (({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex}) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -192,7 +192,7 @@ const apis = [
         name: 'header-class-name',
         descKey: 'app.api.tableColumn.desc.headerClassName',
         version: '',
-        type: 'string | Function',
+        type: 'string | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -201,7 +201,7 @@ const apis = [
         name: 'footer-class-name',
         descKey: 'app.api.tableColumn.desc.footerClassName',
         version: '',
-        type: 'string | Function',
+        type: 'string | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -210,7 +210,7 @@ const apis = [
         name: 'formatter',
         descKey: 'app.api.tableColumn.desc.formatter',
         version: '',
-        type: 'Function | any[] | string',
+        type: '(({ cellValue, row, column }) => any) | any[] | string',
         enum: '',
         defVal: '',
         list: []
@@ -219,7 +219,7 @@ const apis = [
         name: 'seq-method',
         descKey: 'app.api.tableColumn.desc.seqMethod',
         version: '',
-        type: 'Function',
+        type: '({ row, rowIndex, column, columnIndex }) => number',
         enum: '',
         defVal: '',
         list: []
