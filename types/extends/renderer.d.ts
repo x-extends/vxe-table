@@ -52,7 +52,7 @@ export interface RendererMapOptions {
   itemResetMethod?(params: FormItemResetParams): void;
 
   // 空内容渲染
-  renderEmpty?(h: CreateElement, renderOpts: EmptyRender, params: EmptyRenderParams): VNode[] | string[];
+  renderEmpty?(h: CreateElement, renderOpts: TableEmptyRender, params: EmptyRenderParams): VNode[] | string[];
 
   [key: string]: any;
 }
@@ -143,7 +143,7 @@ export interface ColumnCellRenderParams extends TableRenderParams {
 /**
  * 空内容渲染配置项
  */
-export class EmptyRender extends RenderOptions { }
+export class TableEmptyRender extends RenderOptions { }
 
 export class TableRenderParams extends RenderParams {
   /**

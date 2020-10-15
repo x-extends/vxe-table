@@ -764,7 +764,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.spanMethod',
         version: '',
-        type: '({ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, data }) => { rowspan: number, colspan: number}',
+        type: '({ row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, data }) => { rowspan: number, colspan: number}',
         enum: '',
         defVal: '{ rowspan: 1, colspan: 1}',
         list: []
@@ -774,7 +774,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.footerSpanMethod',
         version: '',
-        type: '({ $rowIndex, column, columnIndex, $columnIndex, data }) => { rowspan: number, colspan: number}',
+        type: '({ $rowIndex, column, columnIndex, $columnIndex, _columnIndex, data }) => { rowspan: number, colspan: number}',
         enum: '',
         defVal: '{ rowspan: 1, colspan: 1}',
         list: []
@@ -3319,7 +3319,7 @@ const apis = [
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: 'merges: MergeOptions | MergeOptions[]',
+        defVal: 'merges: TableMergeConfig | TableMergeConfig[]',
         list: []
       },
       {
@@ -3328,7 +3328,7 @@ const apis = [
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: 'merges: MergeOptions | MergeOptions[]',
+        defVal: 'merges: TableMergeConfig | TableMergeConfig[]',
         list: []
       },
       {

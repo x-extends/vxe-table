@@ -4,7 +4,8 @@ import GlobalConfig from '../../conf'
 export default {
   name: 'VxeRadioButton',
   props: {
-    label: [String, Number],
+    value: [String, Number, Boolean],
+    label: [String, Number, Boolean],
     title: [String, Number],
     content: [String, Number],
     disabled: Boolean,
@@ -19,15 +20,13 @@ export default {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
     },
-    isGroup () {
-      return this.$xeradiogroup
-    },
     isDisabled () {
-      return this.disabled || (this.isGroup && this.$xeradiogroup.disabled)
+      const { $xeradiogroup } = this
+      return this.disabled || ($xeradiogroup && $xeradiogroup.disabled)
     }
   },
   render (h) {
-    const { $slots, $xeradiogroup, isGroup, isDisabled, title, vSize, label, content } = this
+    const { $slots, $xeradiogroup, isDisabled, title, vSize, label, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -43,11 +42,11 @@ export default {
         class: 'vxe-radio--input',
         attrs: {
           type: 'radio',
-          name: isGroup ? $xeradiogroup.name : null,
+          name: $xeradiogroup ? $xeradiogroup.name : null,
           disabled: isDisabled
         },
         domProps: {
-          checked: isGroup && $xeradiogroup.value === label
+          checked: $xeradiogroup ? $xeradiogroup.value === label : value === label
         },
         on: {
           change: this.changeEvent
@@ -60,10 +59,14 @@ export default {
   },
   methods: {
     changeEvent (evnt) {
-      const { $xeradiogroup, isGroup, isDisabled, label } = this
+      const { $xeradiogroup, isDisabled, label } = this
       if (!isDisabled) {
-        if (isGroup) {
-          $xeradiogroup.handleChecked({ label, $event: evnt })
+        const params = { label, $event: evnt }
+        if ($xeradiogroup) {
+          $xeradiogroup.handleChecked(params)
+        } else {
+          this.$emit('input', label)
+          this.$emit('change', params)
         }
       }
     }

@@ -3682,7 +3682,7 @@ const Methods = {
   },
   /**
    * 设置合并单元格
-   * @param {MergeOptions[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
+   * @param {TableMergeConfig[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
    */
   setMergeCells (merges) {
     if (this.spanMethod) {
@@ -3693,7 +3693,7 @@ const Methods = {
   },
   /**
    * 移除单元格合并
-   * @param {MergeOptions[]} merges 多个或数组 [{row:Row|number, col:ColumnInfo|number}]
+   * @param {TableMergeConfig[]} merges 多个或数组 [{row:Row|number, col:ColumnInfo|number}]
    */
   removeMergeCells (merges) {
     if (this.spanMethod) {

@@ -4,7 +4,7 @@ import GlobalConfig from '../../conf'
 export default {
   name: 'VxeRadioGroup',
   props: {
-    value: [String, Number],
+    value: [String, Number, Boolean],
     disabled: Boolean,
     size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
