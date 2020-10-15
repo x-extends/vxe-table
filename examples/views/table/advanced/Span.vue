@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="tip">
-      合并列，通过自定义 <table-api-link prop="span-method"/> 合并方法<br>
-      <span class="red">（注：<table-api-link prop="span-method"/> ，不能用于树形结构、展开行、固定列，合并的逻辑都是自行实现的，该示例仅供参考）</span>
+      合并行或列，通过 <table-api-link prop="merge-cells"/> 临时合并，或者自定义 <table-api-link prop="span-method"/> 合并方法<br>
+      <span class="red">（注：<table-api-link prop="span-method"/> ，不能用于虚拟滚动、树形结构、展开行、固定列，合并的逻辑都是自行实现的，该示例仅供参考）</span>
     </p>
 
     <vxe-toolbar>
@@ -18,6 +18,28 @@
       resizable
       height="300"
       :align="allAlign"
+      :merge-cells="mergeCells"
+      :data="tableData">
+      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="role" title="Role"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+    </pre>
+
+    <p class="tip">合并列</p>
+
+    <vxe-table
+      border
+      resizable
+      height="300"
       :scroll-y="{gt: -1}"
       :span-method="colspanMethod"
       :data="tableData">
@@ -31,11 +53,11 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
-    <p class="tip">通用合并行</p>
+    <p class="tip">合并行</p>
 
     <vxe-table
       border
@@ -53,8 +75,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
   </div>
@@ -62,16 +84,24 @@
 
 <script>
 import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
       allAlign: null,
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+      ],
       mergeCells: [
         { row: 1, col: 1, rowspan: 3, colspan: 3 },
-        { row: 6, col: 0, rowspan: 2, colspan: 2 }
+        { row: 5, col: 0, rowspan: 2, colspan: 2 }
       ],
       demoCodes: [
         `
@@ -88,6 +118,43 @@ export default {
           resizable
           height="300"
           :align="allAlign"
+          :merge-cells="mergeCells"
+          :data="tableData">
+          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-table-column field="name" title="Name"></vxe-table-column>
+          <vxe-table-column field="role" title="Role"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              allAlign: null,
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+              ],
+              mergeCells: [
+                { row: 1, col: 1, rowspan: 3, colspan: 3 },
+                { row: 5, col: 0, rowspan: 2, colspan: 2 }
+              ]
+            }
+          }
+        }
+        `,
+        `
+        <vxe-table
+          border
+          resizable
+          height="300"
           :scroll-y="{gt: -1}"
           :span-method="colspanMethod"
           :data="tableData">
@@ -102,16 +169,21 @@ export default {
         export default {
           data () {
             return {
-              allAlign: null,
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+              ]
             }
           },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
-          },
           methods: {
-            colspanMethod ({ rowIndex, _columnIndex }) {
-              if (rowIndex % 2 === 0) {
+            colspanMethod ({ _rowIndex, _columnIndex }) {
+              if (_rowIndex % 2 === 0) {
                 if (_columnIndex === 2) {
                   return { rowspan: 1, colspan: 2 }
                 } else if (_columnIndex === 3) {
@@ -140,11 +212,17 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
           },
           methods: {
             // 通用行合并函数（将相同多列数据合并为一行）
@@ -173,17 +251,9 @@ export default {
       ]
     }
   },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
   methods: {
-    colspanMethod ({ rowIndex, columnIndex }) {
-      if (rowIndex % 2 === 0) {
+    colspanMethod ({ _rowIndex, columnIndex }) {
+      if (_rowIndex % 2 === 0) {
         if (columnIndex === 2) {
           return { rowspan: 1, colspan: 2 }
         } else if (columnIndex === 3) {

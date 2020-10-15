@@ -38,19 +38,19 @@ export declare class Column extends VXETableComponent {
   /**
    * 将列固定在左侧或者右侧
    */
-  fixed?: 'left' | 'right' | null;
+  fixed?: ColumnFixed;
   /**
    * 列对其方式
    */
-  align?: 'left' | 'center' | 'right';
+  align?: ColumnAlign;
   /**
    * 表头对齐方式
    */
-  headerAlign?: 'left' | 'center' | 'right';
+  headerAlign?: ColumnAlign;
   /**
    * 表尾列的对齐方式
    */
-  footerAlign?: string;
+  footerAlign?: ColumnAlign;
   /**
    * 当内容过长时显示为省略号
    */
@@ -149,6 +149,9 @@ export declare class Column extends VXETableComponent {
   params?: any;
 }
 
+export type ColumnAlign = 'left' | 'center' | 'right' | null
+export type ColumnFixed = 'left' | 'right' | null
+
 export interface ColumnOptions {
   /**
    * 渲染类型
@@ -177,19 +180,19 @@ export interface ColumnOptions {
   /**
    * 将列固定在左侧或者右侧
    */
-  fixed?: 'left' | 'right' | null;
+  fixed?: ColumnFixed;
   /**
    * 列对其方式
    */
-  align?: 'left' | 'center' | 'right';
+  align?: ColumnAlign;
   /**
    * 表头对齐方式
    */
-  headerAlign?: 'left' | 'center' | 'right';
+  headerAlign?: ColumnAlign;
   /**
    * 表尾列的对齐方式
    */
-  footerAlign?: string;
+  footerAlign?: ColumnAlign;
   /**
    * 当内容过长时显示为省略号
    */

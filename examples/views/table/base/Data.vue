@@ -207,6 +207,7 @@ export default {
         export default {
           data () {
             return {
+              // 将第0个设置为主键，可以为 null 或者自定义主键值
               tableData: [
                 [101, 'Test4', '男', 26, '<a href="https://github.com/x-extends/vxe-table">我是链接</a>', '前端'],
                 [102, 'Test2', '男', 28, '<img height="40" src="/vxe-table/static/other/img1.gif">', '后端'],
