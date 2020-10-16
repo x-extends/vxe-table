@@ -368,22 +368,22 @@ export default {
         if (!inputElem && compRender && compRender.autofocus) {
           inputElem = cell.querySelector(compRender.autofocus)
         }
-        if (inputElem) {
+        // 先使用统一滚动定位, 再异步调用聚焦事件
+        // issues https://github.com/xuliangzhan/vxe-table/issues/849#issuecomment-633950708
+        this.scrollToRow(row, column).then(() => {
+          if (!inputElem) {
+            return
+          }
           inputElem.focus()
           if (autoselect) {
             inputElem.select()
-          } else {
             // 保持一致行为，光标移到末端
-            if (DomTools.browse.msie) {
-              const textRange = inputElem.createTextRange()
-              textRange.collapse(false)
-              textRange.select()
-            }
+          } else if (DomTools.browse.msie) {
+            const textRange = inputElem.createTextRange()
+            textRange.collapse(false)
+            textRange.select()
           }
-        } else {
-          // 显示到可视区中
-          this.scrollToRow(row, column)
-        }
+        })
       }
     },
     /**
