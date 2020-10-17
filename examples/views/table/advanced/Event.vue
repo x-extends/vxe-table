@@ -4,11 +4,11 @@
 
     <vxe-table
       border
-      context-menu
       highlight-hover-row
       show-overflow
       resizable
       height="400"
+      :context-menu="{}"
       :data="tableData"
       @header-cell-click="headerCellClickEvent"
       @header-cell-dblclick="headerCellDBLClickEvent"
@@ -56,11 +56,11 @@ export default {
         `
         <vxe-table
           border
-          context-menu
           highlight-hover-row
           show-overflow
           resizable
           height="400"
+          :context-menu="{}"
           :data="tableData"
           @header-cell-click="headerCellClickEvent"
           @header-cell-dblclick="headerCellDBLClickEvent"

@@ -120,8 +120,11 @@ export default {
     ].concat(this.$slots.default))
   },
   methods: {
-    show () {
-      return this.toVisible(this.target)
+    show (target, message) {
+      return this.open(target, message)
+    },
+    open (target, message) {
+      return this.toVisible(target || this.target, message)
     },
     close () {
       this.tipTarget = null
