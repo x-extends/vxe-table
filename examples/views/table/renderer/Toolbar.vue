@@ -12,7 +12,7 @@
       ref="xGrid"
       height="400"
       :export-config="{}"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn">
     </vxe-grid>
@@ -74,7 +74,7 @@ export default {
           ref="xGrid"
           height="400"
           :export-config="{}"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :proxy-config="tableProxy"
           :columns="tableColumn">
         </vxe-grid>

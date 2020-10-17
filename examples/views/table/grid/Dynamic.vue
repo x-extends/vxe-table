@@ -11,7 +11,7 @@
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -32,7 +32,7 @@
       :pager-config="tablePage2"
       :proxy-config="tableProxy2"
       :columns="tableColumn2"
-      :toolbar="tableToolbar2"
+      :toolbar-config="tableToolbar2"
       :edit-rules="validRules2"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
@@ -137,7 +137,7 @@ export default {
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,
         `
@@ -204,7 +204,7 @@ export default {
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
         `,

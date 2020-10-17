@@ -13,7 +13,7 @@
       :custom-config="tableCustom"
       :data="tableData"
       :columns="tableColumn"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <template v-slot:toolbar_buttons>
         <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
@@ -83,7 +83,7 @@ export default {
           :custom-config="tableCustom"
           :data="tableData"
           :columns="tableColumn"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <template v-slot:toolbar_buttons>
             <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>

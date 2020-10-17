@@ -44,7 +44,7 @@ class ResizeObserverPolyfill {
 
   observe (target) {
     if (target) {
-      if (this.tarList.indexOf(target) === -1) {
+      if (!this.tarList.some(observer => observer.target === target)) {
         this.tarList.push({
           target,
           width: target.clientWidth,
@@ -61,7 +61,7 @@ class ResizeObserverPolyfill {
   }
 
   unobserve (target) {
-    XEUtils.remove(eventStore, item => item.tarList.indexOf(target) > -1)
+    XEUtils.remove(eventStore, item => item.tarList.some(observer => observer.target === target))
   }
 
   disconnect () {

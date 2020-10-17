@@ -11,7 +11,7 @@
       ref="xGrid"
       height="400"
       :loading="loading"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :columns="tableColumn"
       :edit-config="{trigger: 'click', mode: 'cell'}">
     </vxe-grid>
@@ -150,7 +150,7 @@ export default {
           ref="xGrid"
           height="400"
           :loading="loading"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :columns="tableColumn"
           :edit-config="{trigger: 'click', mode: 'cell'}">
         </vxe-grid>

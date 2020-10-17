@@ -2936,6 +2936,15 @@ const apis = [
         list: []
       },
       {
+        name: 'getCheckedFilters()',
+        desc: '获取当前筛选的所有列信息',
+        version: '',
+        type: 'any[]',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'getTableData()',
         desc: '获取当前表格的数据（完整的全量表体数据、处理条件之后的全量表体数据、当前渲染中的表体数据、当前渲染中的表尾数据）',
         version: '',

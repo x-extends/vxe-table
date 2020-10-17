@@ -100,8 +100,8 @@ export default {
                 order: sort.order
               }, this.formData)
               // 处理筛选条件
-              filters.forEach(({ field, values }) => {
-                queryParams[field] = values.join(',')
+              filters.forEach(({ property, values }) => {
+                queryParams[property] = values.join(',')
               })
               return XEAjax.get(`https://api.xuliangzhan.com:10443/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
             },
@@ -109,7 +109,7 @@ export default {
             queryAll: () => XEAjax.get('https://api.xuliangzhan.com:10443/api/pub/all')
           }
         },
-        toolbar: {
+        toolbarConfig: {
           export: true,
           print: true,
           custom: true,
@@ -130,7 +130,7 @@ export default {
             remoteSort: true,
             minWidth: 160,
             filters: [
-              { label: '前端开发', value: '前端' },
+              { label: '前端开发', value: '前端', checked: true },
               { label: '后端开发', value: '后端' },
               { label: '测试', value: '测试' },
               { label: '程序员鼓励师', value: '程序员鼓励师' }
@@ -229,8 +229,8 @@ export default {
                         order: sort.order
                       }, this.formData)
                       // 处理筛选条件
-                      filters.forEach(({ field, values }) => {
-                        queryParams[field] = values.join(',')
+                      filters.forEach(({ property, values }) => {
+                        queryParams[property] = values.join(',')
                       })
                       return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                     },
@@ -238,7 +238,7 @@ export default {
                     queryAll: () => XEAjax.get('https://api.xuliangzhan.com:10443/api/pub/all')
                   }
                 },
-                toolbar: {
+                toolbarConfig: {
                   export: true,
                   print: true,
                   custom: true,
@@ -259,7 +259,7 @@ export default {
                     remoteSort: true,
                     minWidth: 160,
                     filters: [
-                      { label: '前端开发', value: '前端' },
+                      { label: '前端开发', value: '前端', checked: true },
                       { label: '后端开发', value: '后端' },
                       { label: '测试', value: '测试' },
                       { label: '程序员鼓励师', value: '程序员鼓励师' }

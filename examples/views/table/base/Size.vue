@@ -58,7 +58,7 @@
 
     <vxe-table
       border
-      export-config
+      :export-config="{}"
       :align="allAlign"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -134,8 +134,8 @@
 
     <vxe-table
       border
-      export-config
       size="medium"
+      :export-config="{}"
       :align="allAlign"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -212,8 +212,8 @@
 
     <vxe-table
       border
-      export-config
       size="small"
+      :export-config="{}"
       :align="allAlign"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -290,8 +290,8 @@
 
     <vxe-table
       border
-      export-config
       size="mini"
+      :export-config="{}"
       :align="allAlign"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>

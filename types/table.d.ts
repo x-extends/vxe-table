@@ -174,7 +174,7 @@ export declare class Table extends VXETableComponent {
   // 是否自动监听父容器变化去更新响应式表格宽高
   autoResize?: boolean;
   // 是否自动根据状态属性去更新响应式表格宽高
-  syncResize?: boolean | string;
+  syncResize?: boolean | string | number;
   // 列的默认参数
   columnConfig?: TableColumnConfig;
   // 序号配置项
@@ -192,10 +192,10 @@ export declare class Table extends VXETableComponent {
   tooltipConfig?: TableTooltipConfig;
   tooltipOpts: TableTooltipConfig;
   // 导出配置项
-  exportConfig?: boolean | TableExportConfig;
+  exportConfig?: TableExportConfig;
   exportOpts: TableExportConfig;
   // 导入配置项
-  importConfig?: boolean | TableImportConfig;
+  importConfig?: TableImportConfig;
   importOpts: TableImportConfig;
   // 打印配置项
   printConfig?: TablePrintConfig;
@@ -204,10 +204,10 @@ export declare class Table extends VXETableComponent {
   expandConfig?: TableExpandConfig;
   expandOpts: TableExpandConfig;
   // 树形结构配置项
-  treeConfig?: boolean | TableTreeConfig;
+  treeConfig?: TableTreeConfig;
   treeOpts: TreeOpts;
   // 快捷菜单配置项
-  contextMenu?: boolean | TableContextMenu;
+  contextMenu?: TableContextMenu;
   // 鼠标配置项
   mouseConfig?: TableMouseConfig;
   mouseOpts: TableMouseConfig;
@@ -215,7 +215,7 @@ export declare class Table extends VXETableComponent {
   keyboardConfig?: TableKeyboardConfig;
   keyboardOpts: TableKeyboardConfig;
   // 编辑配置项
-  editConfig?: boolean | TableEditConfig;
+  editConfig?: TableEditConfig;
   editOpts: TableEditConfig;
   // 校验配置项
   validConfig?: TableValidConfig;
@@ -223,7 +223,7 @@ export declare class Table extends VXETableComponent {
   editRules?: EditVaildRules;
   emptyText?: string;
   // 空内容渲染配置项
-  emptyRender?: boolean | TableEmptyRender;
+  emptyRender?: TableEmptyRender;
   animat?: boolean;
   delayHover?: number;
   /**
@@ -1043,7 +1043,7 @@ export interface TableOptions {
   rowId?: string;
   keepSource?: boolean;
   autoResize?: boolean;
-  syncResize?: boolean | string;
+  syncResize?: boolean | string | number;
   columnConfig?: TableColumnConfig;
   customConfig?: TableCustomConfig;
   seqConfig?: TableSeqConfig;
@@ -1052,19 +1052,19 @@ export interface TableOptions {
   radioConfig?: TableRadioConfig;
   checkboxConfig?: TableCheckboxConfig;
   tooltipConfig?: TableTooltipConfig;
-  exportConfig?: boolean | TableExportConfig;
-  importConfig?: boolean | TableImportConfig;
+  exportConfig?: TableExportConfig;
+  importConfig?: TableImportConfig;
   printConfig?: TablePrintConfig;
   expandConfig?: TableExpandConfig;
-  treeConfig?: boolean | TableTreeConfig;
-  contextMenu?: boolean | TableContextMenu;
+  treeConfig?: TableTreeConfig;
+  contextMenu?: TableContextMenu;
   mouseConfig?: TableMouseConfig;
   keyboardConfig?: TableKeyboardConfig;
-  editConfig?: boolean | TableEditConfig;
+  editConfig?: TableEditConfig;
   validConfig?: TableValidConfig;
   editRules?: EditVaildRules;
   emptyText?: string;
-  emptyRender?: boolean | TableEmptyRender;
+  emptyRender?: TableEmptyRender;
   animat?: boolean;
   delayHover?: number;
   scrollX?: {

@@ -13,7 +13,7 @@
       ref="xVTree"
       height="500"
       :loading="loading"
-      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+      :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :radio-config="{labelField: 'name'}"
       :tree-config="{children: 'children'}">
       <template v-slot:toolbar_buttons>
@@ -56,7 +56,7 @@ export default {
           ref="xVTree"
           height="500"
           :loading="loading"
-          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+          :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :radio-config="{labelField: 'name'}"
           :tree-config="{children: 'children'}">
           <template v-slot:toolbar_buttons>

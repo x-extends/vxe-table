@@ -9,7 +9,7 @@
       :export-config="{}"
       :pager-config="tablePage"
       :form-config="tableForm"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :proxy-config="tableProxy"
       :columns="tableColumn">
     </vxe-grid>
@@ -71,7 +71,7 @@ export default {
           :export-config="{}"
           :loading="loading"
           :form-config="tableForm"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :data="tableData"
           :columns="tableColumn"
           @form-submit="findList">

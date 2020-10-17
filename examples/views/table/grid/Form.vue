@@ -9,7 +9,7 @@
       :export-config="{}"
       :loading="loading"
       :form-config="tableForm"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :data="tableData"
       :columns="tableColumn"
       @form-submit="findList">
@@ -66,7 +66,7 @@ export default {
           :export-config="{}"
           :loading="loading"
           :form-config="tableForm"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :data="tableData"
           :columns="tableColumn"
           @form-submit="findList">

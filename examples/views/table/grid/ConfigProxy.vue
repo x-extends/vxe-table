@@ -7,7 +7,7 @@
       keep-source
       height="528"
       :filter-config="{remote: true}"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :pager-config="tablePage"
       :columns="tableColumn"
       :form-config="tableForm"
@@ -221,7 +221,7 @@ export default {
                     }
                   }
                 },
-                toolbar: {
+                toolbarConfig: {
                   buttons: [
                     { code: 'insert_actived', name: 'Add', icon: 'fa fa-plus' },
                     { code: 'mark_cancel', name: '删除/取消', icon: 'fa fa-bookmark-o' },

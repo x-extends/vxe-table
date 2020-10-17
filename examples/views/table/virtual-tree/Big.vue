@@ -10,7 +10,7 @@
       height="500"
       :loading="loading"
       :data="tableData"
-      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+      :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :radio-config="{labelField: 'name'}"
       :tree-config="{children: 'children'}"
       :columns="tableColumn">
@@ -55,7 +55,7 @@ export default {
           height="500"
           :loading="loading"
           :data="tableData"
-          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+          :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :radio-config="{labelField: 'name'}"
           :tree-config="{children: 'children'}"
           :columns="tableColumn">

@@ -1,3 +1,5 @@
+import VXETable from '../../v-x-e-table'
+
 const lineOffsetSizes = {
   mini: 3,
   small: 2,
@@ -41,4 +43,36 @@ export function mergeBodyMethod (mergeList, _rowIndex, _columnIndex) {
       }
     }
   }
+}
+
+export function clearTableDefaultStatus (_vm) {
+  _vm.inited = false
+  _vm.clearSort()
+  _vm.clearCurrentRow()
+  _vm.clearCurrentColumn()
+  _vm.clearRadioRow()
+  _vm.clearRadioReserve()
+  _vm.clearCheckboxRow()
+  _vm.clearCheckboxReserve()
+  _vm.clearRowExpand()
+  _vm.clearTreeExpand()
+  _vm.clearTreeExpandReserve()
+  if (VXETable._edit) {
+    _vm.clearActived()
+  }
+  if (_vm.keyboardConfig || _vm.mouseConfig) {
+    _vm.clearSelected()
+  }
+  if (_vm.mouseConfig) {
+    _vm.clearCellAreas()
+    _vm.clearCopyCellArea()
+  }
+  return _vm.clearScroll()
+}
+
+export function clearTableAllStatus (_vm) {
+  if (VXETable._filter) {
+    _vm.clearFilter()
+  }
+  return clearTableDefaultStatus(_vm)
 }

@@ -700,6 +700,34 @@ export default {
       }
     }
 
+    // v4 中只支持对象类型
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (this.contextMenu && !XEUtils.isObject(this.contextMenu)) {
+        UtilTools.warn('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
+      }
+      if (this.exportConfig && !XEUtils.isObject(this.exportConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.export-config=${this.exportConfig}`, 'table.export-config={}'])
+      }
+      if (this.importConfig && !XEUtils.isObject(this.importConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.import-config=${this.importConfig}`, 'table.import-config={}'])
+      }
+      if (this.printConfig && !XEUtils.isObject(this.printConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.print-config=${this.printConfig}`, 'table.print-config={}'])
+      }
+      if (this.treeConfig && !XEUtils.isObject(this.treeConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.tree-config=${this.treeConfig}`, 'table.tree-config={}'])
+      }
+      if (this.customConfig && !XEUtils.isObject(this.customConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.custom-config=${this.customConfig}`, 'table.custom-config={}'])
+      }
+      if (this.editConfig && !XEUtils.isObject(this.editConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.edit-config=${this.editConfig}`, 'table.edit-config={}'])
+      }
+      if (this.emptyRender && !XEUtils.isObject(this.emptyRender)) {
+        UtilTools.warn('vxe.error.errProp', [`table.empty-render=${this.emptyRender}`, 'table.empty-render={}'])
+      }
+    }
+
     // 检查是否有安装需要的模块
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (this.editConfig && !this._insert) {

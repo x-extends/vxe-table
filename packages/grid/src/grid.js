@@ -4,6 +4,7 @@ import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import { clearTableDefaultStatus, clearTableAllStatus } from '../../table/src/util'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
@@ -41,8 +42,7 @@ function renderDefaultForm (h, _vm) {
           reset: _vm.resetEvent,
           'submit-invalid': _vm.submitInvalidEvent,
           'toggle-collapse': _vm.togglCollapseEvent
-        },
-        ref: 'form'
+        }
       })
     ]
   }
@@ -133,6 +133,7 @@ export default {
     pagerConfig: [Boolean, Object],
     proxyConfig: Object,
     toolbar: [Boolean, Object],
+    toolbarConfig: [Boolean, Object],
     formConfig: [Boolean, Object],
     zoomConfig: Object,
     size: { type: String, default: () => GlobalConfig.grid.size || GlobalConfig.size }
@@ -173,7 +174,7 @@ export default {
       return Object.assign({}, GlobalConfig.grid.formConfig, this.formConfig)
     },
     toolbarOpts () {
-      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
+      return Object.assign({}, GlobalConfig.grid.toolbarConfig, this.toolbarConfig || this.toolbar)
     },
     zoomOpts () {
       return Object.assign({}, GlobalConfig.grid.zoomConfig, this.zoomConfig)
@@ -190,26 +191,26 @@ export default {
     },
     tableProps () {
       const { isZMax, seqConfig, pagerConfig, loading, editConfig, proxyConfig, proxyOpts, tableExtendProps, tableLoading, tablePage, tableData } = this
-      const props = Object.assign({}, tableExtendProps)
+      const tableProps = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
-          props.maxHeight = 'auto'
+          tableProps.maxHeight = 'auto'
         } else {
-          props.height = 'auto'
+          tableProps.height = 'auto'
         }
       }
       if (proxyConfig) {
-        props.loading = loading || tableLoading
-        props.data = tableData
-        props.rowClassName = this.handleRowClassName
+        tableProps.loading = loading || tableLoading
+        tableProps.data = tableData
+        tableProps.rowClassName = this.handleRowClassName
         if ((proxyOpts.seq || proxyOpts.index) && pagerConfig) {
-          props.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
+          tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
       if (editConfig) {
-        props.editConfig = Object.assign({}, editConfig, { activeMethod: this.handleActiveMethod })
+        tableProps.editConfig = Object.assign({}, editConfig, { activeMethod: this.handleActiveMethod })
       }
-      return props
+      return tableProps
     },
     pagerProps () {
       return Object.assign({}, this.pagerOpts, this.proxyConfig ? this.tablePage : {})
@@ -220,6 +221,11 @@ export default {
       this.$nextTick(() => this.loadColumn(value))
     },
     toolbar (value) {
+      if (value) {
+        this.initToolbar()
+      }
+    },
+    toolbarConfig (value) {
       if (value) {
         this.initToolbar()
       }
@@ -236,6 +242,16 @@ export default {
     if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
       console.error('[vxe-grid] There is a conflict between the props proxy-config and data.')
     }
+
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (this.toolbar) {
+        UtilTools.warn('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
+      }
+      if (this.toolbarConfig && !XEUtils.isObject(this.toolbarConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
+      }
+    }
+
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
   mounted () {
@@ -252,7 +268,7 @@ export default {
   render (h) {
     const { $scopedSlots, vSize, isZMax } = this
     const hasForm = !!($scopedSlots.form || this.formConfig)
-    const hasToolbar = !!($scopedSlots.toolbar || this.toolbar)
+    const hasToolbar = !!($scopedSlots.toolbar || this.toolbarConfig || this.toolbar)
     const hasPager = !!($scopedSlots.pager || this.pagerConfig)
     return h('div', {
       class: ['vxe-grid', {
@@ -353,22 +369,23 @@ export default {
       if (this.pendingRecords.some(item => item === params.row)) {
         clss.push('row--pending')
       }
-      return clss.concat(rowClassName ? rowClassName(params) : [])
+      return clss.push(rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : '')
     },
     handleActiveMethod (params) {
-      const activeMethod = this.editConfig.activeMethod
+      const { editConfig } = this
+      const activeMethod = editConfig ? editConfig.activeMethod : null
       return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
     },
     loadColumn (columns) {
       const { $scopedSlots } = this
       XEUtils.eachTree(columns, column => {
         if (column.slots) {
-          XEUtils.each(column.slots, (func, name, slots) => {
+          XEUtils.each(column.slots, (func, name, colSlots) => {
             if (!XEUtils.isFunction(func)) {
               if ($scopedSlots[func]) {
-                slots[name] = $scopedSlots[func]
+                colSlots[name] = $scopedSlots[func]
               } else {
-                slots[name] = null
+                colSlots[name] = null
                 UtilTools.error('vxe.error.notSlot', [func])
               }
             }
@@ -429,16 +446,18 @@ export default {
      * 提交指令，支持 code 或 button
      * @param {String/Object} code 字符串或对象
      */
-    commitProxy (code, ...args) {
-      const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
-      const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props = {} } = proxyOpts
+    commitProxy (proxyTarget, ...args) {
+      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
+      const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props: proxyProps = {} } = proxyOpts
       const $xetable = $refs.xTable
       let button
-      if (XEUtils.isString(code)) {
-        const matchObj = toolbar ? XEUtils.findTree(toolbarOpts.buttons, item => item.code === code, { children: 'dropdowns' }) : null
+      let code
+      if (XEUtils.isString(proxyTarget)) {
+        const matchObj = toolbarConfig || toolbar ? XEUtils.findTree(toolbarOpts.buttons, item => item.code === proxyTarget, { children: 'dropdowns' }) : null
+        code = proxyTarget
         button = matchObj ? matchObj.item : null
       } else {
-        button = code
+        button = proxyTarget
         code = button.code
       }
       const btnParams = button ? button.params : null
@@ -492,6 +511,7 @@ export default {
               params.page = tablePage
             }
             if (isInited || isReload) {
+              const checkedFilters = isInited ? this.getCheckedFilters() : []
               const defaultSort = $xetable.sortOpts.defaultSort
               let sortParams = {}
               // 如果使用默认排序
@@ -502,9 +522,15 @@ export default {
                 }
               }
               this.sortData = params.sort = sortParams
-              this.filterData = params.filters = []
+              this.filterData = params.filters = isInited ? checkedFilters : []
               this.pendingRecords = []
-              this.clearAll()
+              this.$nextTick(() => {
+                if (isInited) {
+                  clearTableDefaultStatus($xetable)
+                } else {
+                  clearTableAllStatus($xetable)
+                }
+              })
             }
             const applyArgs = [params].concat(args)
             this.tableLoading = true
@@ -514,10 +540,10 @@ export default {
                 this.tableLoading = false
                 if (rest) {
                   if (pagerConfig) {
-                    tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
-                    this.tableData = XEUtils.get(rest, props.result || props.data || 'result') || []
+                    tablePage.total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
+                    this.tableData = XEUtils.get(rest, proxyProps.result || proxyProps.data || 'result') || []
                   } else {
-                    this.tableData = (props.list ? XEUtils.get(rest, props.list) : rest) || []
+                    this.tableData = (proxyProps.list ? XEUtils.get(rest, proxyProps.list) : rest) || []
                   }
                 } else {
                   this.tableData = []
@@ -628,10 +654,10 @@ export default {
       return this.$nextTick()
     },
     getRespMsg (rest, defaultMsg) {
-      const { props = {} } = this.proxyOpts
+      const { props: proxyProps = {} } = this.proxyOpts
       let msg
-      if (rest && props.message) {
-        msg = XEUtils.get(rest, props.message)
+      if (rest && proxyProps.message) {
+        msg = XEUtils.get(rest, proxyProps.message)
       }
       return msg || GlobalConfig.i18n(defaultMsg)
     },
@@ -723,7 +749,7 @@ export default {
     filterChangeEvent (params) {
       const { $table, filters } = params
       // 如果是服务端过滤
-      if ($table.filterOpts.remote || this.remoteFilter) {
+      if ($table.filterOpts.remote) {
         this.filterData = filters
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1

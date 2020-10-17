@@ -13,7 +13,7 @@
       :pager-config="tablePage"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -99,7 +99,7 @@ export default {
           :pager-config="tablePage"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,
         `

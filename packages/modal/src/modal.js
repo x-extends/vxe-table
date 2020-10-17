@@ -1,10 +1,10 @@
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import XEUtils from 'xe-utils/ctor'
-import allActivedModals from './activities'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
-const msgQueue = []
+export const allActivedModals = []
+export const msgQueue = []
 
 export default {
   name: 'VxeModal',

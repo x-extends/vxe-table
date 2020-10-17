@@ -4,16 +4,16 @@
 
     <vxe-virtual-tree
       show-overflow
-      toolbar
       row-key
       ref="xVTree1"
       row-id="id"
       :show-header="false"
+      :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :tree-config="{children: 'children'}"
       :radio-config="{labelField: 'name'}"
       :columns="tableColumn1"
       :data="tableData">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
         <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
@@ -104,16 +104,16 @@ export default {
         `
         <vxe-virtual-tree
           show-overflow
-          toolbar
           row-key
           ref="xVTree1"
           row-id="id"
           :show-header="false"
+          :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :tree-config="{children: 'children'}"
           :radio-config="{labelField: 'name'}"
-          :columns="tableColumn"
+          :columns="tableColumn1"
           :data="tableData">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
             <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>

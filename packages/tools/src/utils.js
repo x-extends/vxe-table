@@ -279,6 +279,9 @@ export const UtilTools = {
     const type = name.substring(tIndex + 1, name.length)
     const filename = name.substring(0, tIndex)
     return { filename, type }
+  },
+  isNumVal (num) {
+    return !isNaN(parseFloat('' + num))
   }
 }
 

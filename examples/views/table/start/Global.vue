@@ -87,7 +87,7 @@
           //   pagerConfig: {
           //     perfect: false
           //   },
-          //   toolbar: {
+          //   toolbarConfig: {
           //     perfect: false
           //   },
           //   proxyConfig: {

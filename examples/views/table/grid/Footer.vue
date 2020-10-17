@@ -12,7 +12,7 @@
       show-footer
       height="500"
       :export-config="{}"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :footer-method="footerMethod"
       :columns="tableColumn"
       :data="tableData"></vxe-grid>
@@ -54,7 +54,7 @@ export default {
           show-footer
           height="500"
           :export-config="{}"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :footer-method="footerMethod"
           :columns="tableColumn"
           :data="tableData"></vxe-grid>

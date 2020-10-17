@@ -14,7 +14,7 @@
       :loading="loading"
       :data="tableData"
       :columns="tableColumn"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row'}"
       @checkbox-change="checkboxChangeEvent"
       @checkbox-all="checkboxChangeEvent">
@@ -78,6 +78,7 @@ export default {
           :loading="loading"
           :data="tableData"
           :columns="tableColumn"
+          :toolbar-config="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row'}"
           @checkbox-change="checkboxChangeEvent"
           @checkbox-all="checkboxChangeEvent">

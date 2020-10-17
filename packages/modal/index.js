@@ -1,6 +1,5 @@
 import XEUtils from 'xe-utils/ctor'
-import VXEModal from './src/modal'
-import allActivedModals from './src/activities'
+import VXEModal, { allActivedModals } from './src/modal'
 import VXETable from '../v-x-e-table'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */

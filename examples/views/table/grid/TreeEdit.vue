@@ -12,7 +12,7 @@
       :export-config="{}"
       :proxy-config="tableProxy"
       :columns="tableColumn"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :checkbox-config="{labelField: 'id'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
 
@@ -71,7 +71,7 @@ export default {
           :export-config="{}"
           :proxy-config="tableProxy"
           :columns="tableColumn"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :checkbox-config="{labelField: 'id'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
         `,

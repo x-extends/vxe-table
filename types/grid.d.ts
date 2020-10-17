@@ -14,11 +14,11 @@ export declare class Grid extends Table {
   /**
    * 列配置
    */
-  columns?: GridColumnOptions[];
+  columns?: GridColumns[];
   /**
    * 分页配置项
    */
-  pagerConfig?: boolean | GridPagerConfig;
+  pagerConfig?: GridPagerConfig;
   /**
    * 数据代理配置项
    */
@@ -27,11 +27,11 @@ export declare class Grid extends Table {
   /**
    * 工具栏配置
    */
-  toolbar?: boolean | GridToolbarOptions;
+  toolbarConfig?: GridToolbarConfig;
   /**
    * 表单配置项
    */
-  formConfig?: boolean | GridFormOptions;
+  formConfig?: GridFormOptions;
   formOpts: GridFormOptions;
 
   /**
@@ -117,11 +117,11 @@ export interface GridPagerConfig extends PagerOptions {
   [key: string]: any;
 }
 
-export interface GridColumnOptions extends ColumnOptions {
-  children?: GridColumnOptions[];
+export interface GridColumns extends ColumnOptions {
+  children?: GridColumns[];
 }
 
-export interface GridToolbarOptions extends ToolbarOptions {
+export interface GridToolbarConfig extends ToolbarOptions {
   zoom?: boolean | {
     escRestore?: boolean;
     iconIn?: string;

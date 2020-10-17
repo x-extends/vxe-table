@@ -33,7 +33,7 @@ export default {
     size: { type: String, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
     trigger: { type: String, default: () => GlobalConfig.tooltip.trigger },
     theme: { type: String, default: () => GlobalConfig.tooltip.theme },
-    content: [String, Function],
+    content: [String, Number],
     zIndex: [String, Number],
     isArrow: { type: Boolean, default: true },
     enterable: Boolean,
@@ -61,7 +61,7 @@ export default {
     },
     value (value) {
       if (!this.isUpdate) {
-        this[value ? 'show' : 'close']()
+        this[value ? 'open' : 'close']()
       }
       this.isUpdate = false
     }
@@ -91,7 +91,7 @@ export default {
       }
     }
     if (value) {
-      this.show()
+      this.open()
     }
   },
   beforeDestroy () {
@@ -140,7 +140,7 @@ export default {
     ].concat(this.$slots.default))
   },
   methods: {
-    show (target, message) {
+    open (target, message) {
       return this.toVisible(target || this.target, message)
     },
     close () {
@@ -198,10 +198,10 @@ export default {
       })
     },
     clickEvent () {
-      this[this.visible ? 'close' : 'show']()
+      this[this.visible ? 'close' : 'open']()
     },
     targetMouseenterEvent () {
-      this.show()
+      this.open()
     },
     targetMouseleaveEvent () {
       const { trigger, enterable, leaveDelay } = this
