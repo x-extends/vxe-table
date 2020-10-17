@@ -195,7 +195,7 @@
             :pager-config="tablePage"
             :proxy-config="tableProxy"
             :columns="tableColumn"
-            :toolbar="tableToolbar"></vxe-grid>
+            :toolbar-config="tableToolbar"></vxe-grid>
         </template>
       </vxe-modal>
     </p>
@@ -481,7 +481,7 @@ export default {
                 :pager-config="tablePage"
                 :proxy-config="tableProxy"
                 :columns="tableColumn"
-                :toolbar="tableToolbar"></vxe-grid>
+                :toolbar-config="tableToolbar"></vxe-grid>
             </template>
           </vxe-modal>
         </p>

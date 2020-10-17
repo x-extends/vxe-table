@@ -19,10 +19,10 @@
       show-footer
       show-overflow
       highlight-hover-row
-      export-config
       ref="xTable"
       height="400"
       class="editable-footer"
+      :export-config="{}"
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName"
       :data="tableData"
@@ -68,10 +68,10 @@ export default {
           show-footer
           show-overflow
           highlight-hover-row
-          export-config
           ref="xTable"
           height="400"
           class="editable-footer"
+          :export-config="{}"
           :footer-method="footerMethod"
           :footer-cell-class-name="footerCellClassName"
           :data="tableData"

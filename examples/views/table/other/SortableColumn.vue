@@ -37,7 +37,7 @@
       ref="xTable2"
       class="sortable-column-demo"
       :footer-method="footerMethod"
-      :toolbar="toolbar"
+      :toolbar-config="tableToolbar"
       :columns="tableColumn"
       :data="tableData"></vxe-grid>
 
@@ -67,7 +67,7 @@ export default {
         { field: 'date3', title: 'Date', minWidth: 200 },
         { field: 'address', title: 'Address', minWidth: 200, showOverflow: true }
       ],
-      toolbar: {
+      tableToolbar: {
         custom: true
       },
       tableData: [],
@@ -148,7 +148,7 @@ export default {
           ref="xTable"
           class="sortable-column-demo"
           :footer-method="footerMethod"
-          :toolbar="toolbar"
+          :toolbar-config="tableToolbar"
           :columns="tableColumn"
           :data="tableData"></vxe-grid>
         `,
@@ -164,7 +164,7 @@ export default {
                 { field: 'date3', title: 'Date', minWidth: 200 },
                 { field: 'address', title: 'Address', minWidth: 200, showOverflow: true }
               ],
-              toolbar: {
+              tableToolbar: {
                 custom: true
               },
               tableData: []

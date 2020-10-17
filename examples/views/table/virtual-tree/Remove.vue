@@ -5,10 +5,10 @@
     <vxe-virtual-tree
       resizable
       row-key
-      export-config
       ref="xVTree"
       row-id="id"
-      :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
+      :export-config="{}"
+      :toolbar-config="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
       :data="tableData"
@@ -61,10 +61,10 @@ export default {
         <vxe-virtual-tree
           resizable
           row-key
-          export-config
           ref="xVTree"
           row-id="id"
-          :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
+          :export-config="{}"
+          :toolbar-config="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
           :data="tableData"

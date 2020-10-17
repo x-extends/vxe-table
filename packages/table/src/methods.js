@@ -573,11 +573,17 @@ const Methods = {
    * @param {Row} record 行数据
    */
   defineField (record) {
-    const { treeConfig, treeOpts } = this
+    const { radioOpts, checkboxOpts, treeConfig, treeOpts, expandOpts } = this
     const rowkey = getRowkey(this)
     this.visibleColumn.forEach(({ property, editRender }) => {
       if (property && !XEUtils.has(record, property)) {
         XEUtils.set(record, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
+      }
+    })
+    const ohterFields = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
+    ohterFields.forEach((key) => {
+      if (key && !XEUtils.get(record, key)) {
+        XEUtils.set(record, key, null)
       }
     })
     if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[treeOpts.children])) {
@@ -2075,7 +2081,7 @@ const Methods = {
       this.handleTargetEnterEvent()
       tooltipStore.visible = true
       if (tooltip) {
-        tooltip.toVisible(evnt.currentTarget, content)
+        tooltip.open(evnt.currentTarget, content)
       }
     }
   },
@@ -2154,7 +2160,7 @@ const Methods = {
         visible: true
       })
       if (tooltip) {
-        tooltip.toVisible(isCellOverflow ? overflowElem : (tipElem || overflowElem), UtilTools.formatText(content))
+        tooltip.open(isCellOverflow ? overflowElem : (tipElem || overflowElem), UtilTools.formatText(content))
       }
     }
     return this.$nextTick()
@@ -4020,7 +4026,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,filter,clearFilter,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,clearCopyCellArea,setCellAreas,openFind,openReplace,getMouseSelecteds,getMouseCheckeds,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,filter,clearFilter,getCheckedFilters,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,clearCopyCellArea,setCellAreas,openFind,openReplace,getMouseSelecteds,getMouseCheckeds,getSelectedCell,getSelectedRanges,clearCopyed,clearChecked,clearHeaderChecked,clearIndexChecked,clearSelected,insert,insertAt,remove,removeSelecteds,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,getActiveRow,hasActiveRow,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,exportCsv,openExport,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

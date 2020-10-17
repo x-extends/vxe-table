@@ -15,9 +15,9 @@
 
     <vxe-table
       show-overflow
-      tree-config
       ref="xTree1"
       :show-header="false"
+      :tree-config="{}"
       :radio-config="{labelField: 'name'}"
       :data="tableData">
       <vxe-table-column type="radio" tree-node></vxe-table-column>
@@ -117,9 +117,9 @@ export default {
 
         <vxe-table
           show-overflow
-          tree-config
           ref="xTree"
           :show-header="false"
+          :tree-config="{}"
           :radio-config="{labelField: 'name'}"
           :data="tableData">
           <vxe-table-column type="radio" tree-node></vxe-table-column>

@@ -15,9 +15,9 @@
 
     <vxe-table
       resizable
-      tree-config
       border="inner"
       ref="xTree"
+      :tree-config="{}"
       :data="tableData"
       @toggle-tree-expand="toggleExpandChangeEvent">
       <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
@@ -100,9 +100,9 @@ export default {
 
         <vxe-table
           resizable
-          tree-config
           border="inner"
           ref="xTree"
+          :tree-config="{}"
           :data="tableData"
           @toggle-tree-expand="toggleExpandChangeEvent">
           <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>

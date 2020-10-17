@@ -107,13 +107,34 @@ export default {
         })
       }
     },
+    _getCheckedFilters () {
+      const { visibleColumn } = this
+      const filterList = []
+      visibleColumn.filter(column => {
+        const { property, filters } = column
+        const valueList = []
+        const dataList = []
+        if (filters && filters.length) {
+          filters.forEach(item => {
+            if (item.checked) {
+              valueList.push(item.value)
+              dataList.push(item.data)
+            }
+          })
+          if (valueList.length) {
+            filterList.push({ column, property, values: valueList, datas: dataList })
+          }
+        }
+      })
+      return filterList
+    },
     /**
      * 确认筛选
      * 当筛选面板中的确定按钮被按下时触发
      * @param {Event} evnt 事件
      */
     confirmFilterEvent (evnt) {
-      const { visibleColumn, filterStore, remoteFilter, filterOpts, scrollXLoad, scrollYLoad } = this
+      const { filterStore, remoteFilter, filterOpts, scrollXLoad, scrollYLoad } = this
       const { column } = filterStore
       const { property } = column
       const values = []
@@ -130,24 +151,8 @@ export default {
         this.handleTableData(true)
         this.checkSelectionStatus()
       }
-      const filterList = []
-      visibleColumn.filter(column => {
-        const { property, filters } = column
-        const valueList = []
-        const dataList = []
-        if (filters && filters.length) {
-          filters.forEach(item => {
-            if (item.checked) {
-              valueList.push(item.value)
-              dataList.push(item.data)
-            }
-          })
-          // 在 v3.0 中废弃 prop
-          filterList.push({ column, property, field: property, prop: property, values: valueList, datas: dataList })
-        }
-      })
       // 在 v3.0 中废弃 prop
-      this.emitEvent('filter-change', { column, property, field: property, prop: property, values, datas, filters: filterList }, evnt)
+      this.emitEvent('filter-change', { column, property, field: property, prop: property, values, datas, filters: this.getCheckedFilters() }, evnt)
       this.updateFooter()
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()

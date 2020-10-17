@@ -344,7 +344,7 @@ export default {
           visible: true
         })
         if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
-          validTip.toVisible(cell, content)
+          validTip.open(cell, content)
         }
         this.emitEvent('valid-error', params)
       })

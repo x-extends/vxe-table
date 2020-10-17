@@ -9,7 +9,7 @@
       height="400"
       :loading="loading"
       :form-config="tableForm"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :data="tableData"
       :columns="tableColumn"
       @form-submit="findList">
@@ -66,7 +66,7 @@ export default {
           height="400"
           :loading="loading"
           :form-config="tableForm"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :data="tableData"
           :columns="tableColumn"
           @form-submit="findList">

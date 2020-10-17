@@ -135,6 +135,7 @@ export default {
     pagerConfig: [Boolean, Object],
     proxyConfig: Object,
     toolbar: [Boolean, Object],
+    toolbarConfig: [Boolean, Object],
     formConfig: [Boolean, Object],
     size: { type: String, default: () => GlobalConfig.grid.size || GlobalConfig.size }
   },
@@ -178,7 +179,7 @@ export default {
       return Object.assign({}, GlobalConfig.grid.formConfig, this.formConfig)
     },
     toolbarOpts () {
-      return Object.assign({}, GlobalConfig.grid.toolbar, this.toolbar)
+      return Object.assign({}, GlobalConfig.grid.toolbarConfig, this.toolbarConfig || this.toolbar)
     },
     zoomOpts () {
       return Object.assign({}, GlobalConfig.grid.zoomConfig, this.zoomConfig)
@@ -231,6 +232,11 @@ export default {
         this.initToolbar()
       }
     },
+    toolbarConfig (value) {
+      if (value) {
+        this.initToolbar()
+      }
+    },
     proxyConfig () {
       this.initProxy()
     },
@@ -277,7 +283,7 @@ export default {
   render (h) {
     const { $scopedSlots, vSize, isZMax } = this
     const hasForm = !!($scopedSlots.form || this.formConfig)
-    const hasToolbar = !!($scopedSlots.toolbar || this.toolbar)
+    const hasToolbar = !!($scopedSlots.toolbar || this.toolbarConfig || this.toolbar)
     const hasTop = !!$scopedSlots.top
     const hasBottom = !!$scopedSlots.bottom
     const hasPager = !!($scopedSlots.pager || this.pagerConfig)
@@ -474,12 +480,12 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (code, ...args) {
-      const { $refs, toolbar, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
+      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props = {} } = proxyOpts
       const $xetable = $refs.xTable
       let button
       if (XEUtils.isString(code)) {
-        const matchObj = toolbar ? XEUtils.findTree(toolbarOpts.buttons, item => item.code === code, { children: 'dropdowns' }) : null
+        const matchObj = toolbarConfig || toolbar ? XEUtils.findTree(toolbarOpts.buttons, item => item.code === code, { children: 'dropdowns' }) : null
         button = matchObj ? matchObj.item : null
       } else {
         button = code

@@ -278,7 +278,9 @@ export default {
             },
             insertEvent (row) {
               let xTable = this.$refs.xTable
-              let record = {}
+              const record = {
+                checked: false
+              }
               xTable.insertAt(record, row).then(({ row }) => {
                 xTable.setActiveRow(row)
               })
@@ -380,7 +382,9 @@ export default {
     },
     insertEvent (row) {
       const xTable = this.$refs.xTable
-      const record = {}
+      const record = {
+        checked: false
+      }
       xTable.insertAt(record, row).then(({ row }) => {
         xTable.setActiveRow(row)
       })

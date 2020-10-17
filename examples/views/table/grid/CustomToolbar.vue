@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">工具栏：通过 <grid-api-link prop="toolbar"/> 属性开启，还可以使用 <grid-api-link prop="slot"/> 插槽自定义模板</p>
+    <p class="tip">工具栏：通过 <grid-api-link prop="toolbar-config"/> 属性开启，还可以使用 <grid-api-link prop="slot"/> 插槽自定义模板</p>
 
     <vxe-grid
       border
@@ -13,7 +13,7 @@
       :custom-config="tableCustom"
       :data="tableData"
       :columns="tableColumn"
-      :toolbar="tableToolbar"
+      :toolbar-config="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <template v-slot:toolbar_buttons>
         <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
@@ -83,7 +83,7 @@ export default {
           :custom-config="tableCustom"
           :data="tableData"
           :columns="tableColumn"
-          :toolbar="tableToolbar"
+          :toolbar-config="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <template v-slot:toolbar_buttons>
             <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>

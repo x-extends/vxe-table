@@ -163,8 +163,8 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: '*',
-        desc: '原生事件',
+        name: 'click',
+        desc: '在单击按钮时触发该事件',
         version: '',
         type: '',
         enum: '',

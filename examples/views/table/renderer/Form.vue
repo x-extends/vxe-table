@@ -11,9 +11,9 @@
     <vxe-grid
       border
       resizable
-      export-config
       height="400"
-      :toolbar="{export: true, custom: true}"
+      :export-config="{}"
+      :toolbar-config="{export: true, custom: true}"
       :form-config="tableForm"
       :proxy-config="tableProxy"
       :columns="tableColumn">
@@ -75,9 +75,9 @@ export default {
         <vxe-grid
           border
           resizable
-          export-config
           height="400"
-          :toolbar="{export: true, custom: true}"
+          :export-config="{}"
+          :toolbar-config="{export: true, custom: true}"
           :form-config="tableForm"
           :proxy-config="tableProxy"
           :columns="tableColumn">

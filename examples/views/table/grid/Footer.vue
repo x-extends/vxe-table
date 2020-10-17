@@ -10,9 +10,9 @@
       stripe
       resizable
       show-footer
-      export-config
       height="500"
-      :toolbar="tableToolbar"
+      :export-config="{}"
+      :toolbar-config="tableToolbar"
       :footer-method="footerMethod"
       :columns="tableColumn"
       :data="tableData"></vxe-grid>
@@ -52,9 +52,9 @@ export default {
           stripe
           resizable
           show-footer
-          export-config
           height="500"
-          :toolbar="tableToolbar"
+          :export-config="{}"
+          :toolbar-config="tableToolbar"
           :footer-method="footerMethod"
           :columns="tableColumn"
           :data="tableData"></vxe-grid>

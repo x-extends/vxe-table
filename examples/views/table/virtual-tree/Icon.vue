@@ -6,13 +6,13 @@
       border
       resizable
       row-key
-      toolbar
       ref="xVTree1"
       row-id="id"
+      :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :columns="tableColumn1"
       :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData">
-      <template v-slot:buttons>
+      <template v-slot:toolbar_buttons>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
         <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xVTree1.clearTreeExpand()">关闭所有</vxe-button>
@@ -94,13 +94,13 @@ export default {
           border
           resizable
           row-key
-          toolbar
           ref="xVTree1"
           row-id="id"
+          :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :columns="tableColumn1"
           :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :data="tableData">
-          <template v-slot:buttons>
+          <template v-slot:toolbar_buttons>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
             <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xVTree1.clearTreeExpand()">关闭所有</vxe-button>

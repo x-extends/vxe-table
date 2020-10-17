@@ -29,7 +29,7 @@
 
     <p>
       <vxe-tooltip ref="myTip"></vxe-tooltip>
-      <vxe-button @mouseenter="$refs.myTip.toVisible($event.target, '自定义提示内容')" @mouseleave="$refs.myTip.close()">高性能模式，只创建一个实例</vxe-button>
+      <vxe-button @mouseenter="$refs.myTip.open($event.target, '自定义提示内容')" @mouseleave="$refs.myTip.close()">高性能模式，只创建一个实例</vxe-button>
     </p>
 
     <p>
@@ -92,7 +92,7 @@ export default {
 
         <p>
           <vxe-tooltip ref="myTip"></vxe-tooltip>
-          <vxe-button @mouseenter="$refs.myTip.toVisible($event.target, '自定义提示内容')" @mouseleave="$refs.myTip.close()">高性能模式，只创建一个实例</vxe-button>
+          <vxe-button @mouseenter="$refs.myTip.open($event.target, '自定义提示内容')" @mouseleave="$refs.myTip.close()">高性能模式，只创建一个实例</vxe-button>
         </p>
 
         <p>
@@ -122,7 +122,7 @@ export default {
           },
           methods: {
             cellMouseenterEvent ({ row, column, cell }) {
-              this.$refs.xTip.toVisible(cell, \`自定义提示内容：\${cell.innerText}\`)
+              this.$refs.xTip.open(cell, \`自定义提示内容：\${cell.innerText}\`)
             },
             cellMouseleaveEvent ({ row, column, cell }) {
               this.$refs.xTip.close()
@@ -143,7 +143,7 @@ export default {
   },
   methods: {
     cellMouseenterEvent ({ cell }) {
-      this.$refs.xTip.toVisible(cell, `自定义提示内容：${cell.innerText}`)
+      this.$refs.xTip.open(cell, `自定义提示内容：${cell.innerText}`)
     },
     cellMouseleaveEvent () {
       this.$refs.xTip.close()

@@ -552,7 +552,8 @@ export default {
       grid: {
         desc: {
           formConfig: 'Form config',
-          toolbar: 'Toolbar config',
+          toolbar: 'Obsolete, please use "toolbar-config"',
+          toolbarConfig: 'Toolbar config',
           pagerConfig: 'Pager config',
           zoomConfig: 'Zoom config',
           proxyConfig: 'Data proxy config(based on the Promise API)',

@@ -13,7 +13,7 @@
       ref="xGrid"
       height="500"
       :loading="loading"
-      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+      :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
       <template v-slot:toolbar_buttons>
         <vxe-button @click="loadColumnAndData(5000, 5000)">5k列5k条</vxe-button>
@@ -53,7 +53,7 @@ export default {
           ref="xGrid"
           height="500"
           :loading="loading"
-          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+          :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
           <template v-slot:toolbar_buttons>
             <vxe-button @click="loadColumnAndData(5000, 5000)">5k列5k条</vxe-button>

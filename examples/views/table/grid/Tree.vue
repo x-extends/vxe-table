@@ -5,7 +5,7 @@
     <vxe-grid
       border
       resizable
-      tree-config
+      :tree-config="{}"
       :proxy-config="tableProxy"
       :columns="tableColumn"></vxe-grid>
 
@@ -44,7 +44,7 @@ export default {
         <vxe-grid
           border
           resizable
-          tree-config
+          :tree-config="{}"
           :proxy-config="tableProxy"
           :columns="tableColumn"></vxe-grid>
         `,

@@ -100,8 +100,8 @@ export default {
                 order: sort.order
               }, this.formData)
               // 处理筛选条件
-              filters.forEach(({ field, values }) => {
-                queryParams[field] = values.join(',')
+              filters.forEach(({ property, values }) => {
+                queryParams[property] = values.join(',')
               })
               return XEAjax.get(`https://api.xuliangzhan.com:10443/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
             },
@@ -229,8 +229,8 @@ export default {
                         order: sort.order
                       }, this.formData)
                       // 处理筛选条件
-                      filters.forEach(({ field, values }) => {
-                        queryParams[field] = values.join(',')
+                      filters.forEach(({ property, values }) => {
+                        queryParams[property] = values.join(',')
                       })
                       return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                     },

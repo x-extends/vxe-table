@@ -63,7 +63,43 @@ const apis = [
         version: '',
         type: 'Boolean, Object',
         enum: '',
-        defVal: '继承 setup.grid.toolbar',
+        defVal: '继承 setup.grid.toolbarConfig',
+        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
+          name: 'zoom',
+          desc: '是否允许最大化显示',
+          version: '2.7.0',
+          type: 'Boolean, Object',
+          enum: '',
+          defVal: '',
+          list: [
+            {
+              name: 'iconIn',
+              desc: '自定义最大化图标',
+              version: '',
+              type: 'String',
+              enum: '',
+              defVal: '',
+              list: []
+            },
+            {
+              name: 'iconOut',
+              desc: '自定义还原图标',
+              version: '',
+              type: 'String',
+              enum: '',
+              defVal: '',
+              list: []
+            }
+          ]
+        }, toolbarSlots])
+      },
+      {
+        name: 'toolbar-config',
+        descKey: 'app.api.grid.desc.toolbarConfig',
+        version: '',
+        type: 'Boolean, Object',
+        enum: '',
+        defVal: '继承 setup.grid.toolbarConfig',
         list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
           name: 'zoom',
           desc: '是否允许最大化显示',

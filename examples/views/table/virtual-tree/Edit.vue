@@ -7,7 +7,7 @@
       row-key
       ref="xVTree"
       row-id="id"
-      :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
+      :toolbar-config="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
       :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
@@ -52,7 +52,7 @@ export default {
           row-key
           ref="xVTree"
           row-id="id"
-          :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
+          :toolbar-config="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
           :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"

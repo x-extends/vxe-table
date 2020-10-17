@@ -10,7 +10,7 @@
       height="300"
       :align="allAlign"
       :columns="tableColumn"
-      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+      :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :data="tableData">
       <template v-slot:toolbar_buttons>
         <vxe-button @click="allAlign = 'left'">居左</vxe-button>
@@ -59,7 +59,7 @@ export default {
           height="300"
           :align="allAlign"
           :columns="tableColumn"
-          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+          :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :data="tableData">
           <template v-slot:toolbar_buttons>
             <vxe-button @click="allAlign = 'left'">居左</vxe-button>

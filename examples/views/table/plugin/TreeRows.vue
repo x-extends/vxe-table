@@ -12,7 +12,7 @@
       ref="xVTree"
       height="500"
       :loading="loading"
-      :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+      :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :checkbox-config="{labelField: 'a', checkField: 'checked', halfField: 'indeterminate'}"
       :tree-config="{children: 'children'}"
       :columns="tableColumn">
@@ -71,7 +71,7 @@ export default {
           ref="xVTree"
           height="500"
           :loading="loading"
-          :toolbar="{slots: {buttons: 'toolbar_buttons'}}"
+          :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :checkbox-config="{labelField: 'a', checkField: 'checked', halfField: 'indeterminate'}"
           :tree-config="{children: 'children'}"
           :columns="tableColumn">

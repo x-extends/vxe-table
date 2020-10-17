@@ -74,7 +74,7 @@ export default {
             { span: 24, align: 'center', collapseNode: true, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] } }
           ]
         },
-        toolbar: {
+        toolbarConfig: {
           buttons: [
             { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
             { code: 'delete', name: '直接删除', icon: 'fa fa-trash-o' },
@@ -229,7 +229,7 @@ export default {
                     { span: 24, align: 'center', collapseNode: true, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] } }
                   ]
                 },
-                toolbar: {
+                toolbarConfig: {
                   buttons: [
                     { code: 'insert_actived', name: '新增', icon: 'fa fa-plus' },
                     { code: 'delete', name: '直接删除', icon: 'fa fa-trash-o' },

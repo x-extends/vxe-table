@@ -42,9 +42,9 @@
     </vxe-toolbar>
 
     <vxe-table
-      tree-config
       ref="xTree"
       max-height="400"
+      :tree-config="{}"
       :data="list2">
       <vxe-table-column type="seq" width="220" title="序号" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
@@ -150,9 +150,9 @@ export default {
         </vxe-toolbar>
 
         <vxe-table
-          tree-config
           ref="xTree"
           max-height="400"
+          :tree-config="{}"
           :data="list">
           <vxe-table-column type="seq" width="220" title="序号" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>

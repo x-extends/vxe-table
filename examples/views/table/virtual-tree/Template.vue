@@ -6,7 +6,7 @@
       border
       resizable
       row-key
-      :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons', tools: 'toolbar_tools'}}"
+      :toolbar-config="{custom: true, slots: {buttons: 'toolbar_buttons', tools: 'toolbar_tools'}}"
       :tree-config="{children: 'children'}"
       :data="tableData"
       :columns="tableColumn">
@@ -81,7 +81,7 @@ export default {
           border
           resizable
           row-key
-          :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons', tools: 'toolbar_tools'}}"
+          :toolbar-config="{custom: true, slots: {buttons: 'toolbar_buttons', tools: 'toolbar_tools'}}"
           :tree-config="{children: 'children'}"
           :data="tableData"
           :columns="tableColumn">

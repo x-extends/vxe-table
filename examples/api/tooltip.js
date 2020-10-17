@@ -118,12 +118,12 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'show()',
-        desc: '手动显示提示框',
+        name: 'open(target, message)',
+        desc: '手动打开提示框',
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: '',
+        defVal: 'target?: HTMLElement, message?: string | number',
         list: []
       },
       {
@@ -133,15 +133,6 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: '',
-        list: []
-      },
-      {
-        name: 'toVisible(target, message)',
-        desc: '手动显示提示框（对于可复用高性能场景非常适合，只需要创建一个实例，后续通过该方法调用即可显示）',
-        version: '',
-        type: 'Promise',
-        enum: '',
-        defVal: 'target: Element, message: string',
         list: []
       }
     ]
