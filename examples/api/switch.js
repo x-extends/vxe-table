@@ -36,6 +36,7 @@ const apis = [
       },
       {
         name: 'on-label',
+        disabled: true,
         descKey: 'app.api.switch.desc.onLabel',
         version: '',
         type: 'String',
@@ -44,7 +45,17 @@ const apis = [
         list: []
       },
       {
+        name: 'open-label',
+        descKey: 'app.api.switch.desc.onLabel',
+        version: '2.9.26',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'off-label',
+        disabled: true,
         descKey: 'app.api.switch.desc.offLabel',
         version: '',
         type: 'String',
@@ -53,7 +64,17 @@ const apis = [
         list: []
       },
       {
+        name: 'close-label',
+        descKey: 'app.api.switch.desc.offLabel',
+        version: '2.9.26',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'on-value',
+        disabled: true,
         descKey: 'app.api.switch.desc.onValue',
         version: '',
         type: 'String, Number, Boolean',
@@ -62,7 +83,17 @@ const apis = [
         list: []
       },
       {
+        name: 'open-value',
+        descKey: 'app.api.switch.desc.onValue',
+        version: '2.9.26',
+        type: 'string | number | boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'off-value',
+        disabled: true,
         descKey: 'app.api.switch.desc.offValue',
         version: '',
         type: 'String, Number, Boolean',
@@ -71,7 +102,17 @@ const apis = [
         list: []
       },
       {
+        name: 'close-value',
+        descKey: 'app.api.switch.desc.offValue',
+        version: '2.9.26',
+        type: 'string | number | boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'on-icon',
+        disabled: true,
         descKey: 'app.api.switch.desc.onIcon',
         version: '',
         type: 'String',
@@ -80,10 +121,29 @@ const apis = [
         list: []
       },
       {
+        name: 'open-icon',
+        descKey: 'app.api.switch.desc.onIcon',
+        version: '2.9.26',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'off-icon',
+        disabled: true,
         descKey: 'app.api.switch.desc.offIcon',
         version: '',
         type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'close-icon',
+        descKey: 'app.api.switch.desc.offIcon',
+        version: '2.9.26',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []

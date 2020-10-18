@@ -9,6 +9,14 @@ export default {
     value: [String, Number, Boolean],
     disabled: Boolean,
     size: { type: String, default: () => GlobalConfig.switch.size || GlobalConfig.size },
+    openLabel: String,
+    closeLabel: String,
+    openValue: { type: [String, Number, Boolean], default: true },
+    closeValue: { type: [String, Number, Boolean], default: false },
+    openIcon: String,
+    closeIcon: String,
+
+    // 在 v3 中废弃 onLabel、offLabel、onValue、offValue、onIcon、offIcon
     onLabel: String,
     offLabel: String,
     onValue: { type: [String, Number, Boolean], default: true },
@@ -27,13 +35,13 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     isChecked () {
-      return this.value === this.onValue
+      return this.value === (this.openValue || this.onValue)
     },
     onShowLabel () {
-      return UtilTools.getFuncText(this.onLabel)
+      return UtilTools.getFuncText(this.openLabel || this.onLabel)
     },
     offShowLabel () {
-      return UtilTools.getFuncText(this.offLabel)
+      return UtilTools.getFuncText(this.closeLabel || this.offLabel)
     },
     styles () {
       return browse.msie && this.isChecked ? {
@@ -47,7 +55,7 @@ export default {
     }
   },
   render (h) {
-    const { isChecked, vSize, disabled, onIcon, offIcon } = this
+    const { isChecked, vSize, disabled, openIcon, onIcon, closeIcon, offIcon } = this
     return h('div', {
       class: ['vxe-switch', isChecked ? 'is--on' : 'is--off', {
         [`size--${vSize}`]: vSize,
@@ -69,16 +77,16 @@ export default {
         h('span', {
           class: 'vxe-switch--label vxe-switch--label-on'
         }, [
-          onIcon ? h('i', {
-            class: ['vxe-switch--label-icon', onIcon]
+          (openIcon || onIcon) ? h('i', {
+            class: ['vxe-switch--label-icon', openIcon || onIcon]
           }) : null,
           this.onShowLabel
         ]),
         h('span', {
           class: 'vxe-switch--label vxe-switch--label-off'
         }, [
-          offIcon ? h('i', {
-            class: ['vxe-switch--label-icon', offIcon]
+          (closeIcon || offIcon) ? h('i', {
+            class: ['vxe-switch--label-icon', closeIcon || offIcon]
           }) : null,
           this.offShowLabel
         ]),
@@ -98,7 +106,7 @@ export default {
     clickEvent (evnt) {
       if (!this.disabled) {
         clearTimeout(this.activeTimeout)
-        const value = this.isChecked ? this.offValue : this.onValue
+        const value = this.isChecked ? (this.closeValue || this.offValue) : (this.openValue || this.onValue)
         this.hasAnimat = true
         if (browse.msie) {
           this.updateStyle()
