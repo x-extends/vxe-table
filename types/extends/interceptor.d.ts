@@ -1,5 +1,5 @@
 import { ColumnInfo } from '../column'
-import { ExportOptons } from './export'
+import { TableExportConfig } from './export'
 import { MenuFirstOption } from './menu'
 import { GridRenderParams } from './renderer'
 
@@ -22,7 +22,7 @@ export interface InterceptorParams extends GridRenderParams {
 export interface InterceptorKeydownParams extends InterceptorParams { }
 
 export interface InterceptorExportParams extends InterceptorParams {
-  options: ExportOptons;
+  options: TableExportConfig;
   columns: ColumnInfo[];
   colgroups: ColumnInfo[][];
   datas: any[];
@@ -30,7 +30,7 @@ export interface InterceptorExportParams extends InterceptorParams {
 
 export interface InterceptorImportParams extends InterceptorParams {
   file: File;
-  options: ExportOptons;
+  options: TableExportConfig;
   columns: ColumnInfo[];
   datas: any[];
 }

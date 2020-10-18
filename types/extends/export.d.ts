@@ -12,7 +12,7 @@ export declare class Export extends VXETableComponent {}
 /**
  * 导出参数
  */
-export interface ExportOptons {
+export interface TableExportConfig {
   /**
    * 文件名
    */
@@ -84,7 +84,7 @@ export interface ExportOptons {
   /**
    * 只对 remote=true 有效，用于自定义导出逻辑
    */
-  exportMethod?(params: { $table: Table, $grid?: Grid, options: ExportOptons }): Promise<any>;
+  exportMethod?(params: { $table: Table, $grid?: Grid, options: TableExportConfig }): Promise<any>;
 
   [name: string]: any;
 }
@@ -92,7 +92,7 @@ export interface ExportOptons {
 /**
  * 导入参数
  */
-export interface ImportOptons {
+export interface TableImportConfig {
   /**
    * 可选文件类型列表
    */
@@ -112,7 +112,7 @@ export interface ImportOptons {
   /**
    * 只对 remote=true 有效，用于自定义导入逻辑
    */
-  importMethod?(params: { $table: Table, $grid: Grid, file: File, options: ExportOptons }): Promise<any>;
+  importMethod?(params: { $table: Table, $grid: Grid, file: File, options: TableExportConfig }): Promise<any>;
 
   [name: string]: any;
 }
@@ -120,7 +120,7 @@ export interface ImportOptons {
 /**
  * 打印参数
  */
-export interface PrintOptons {
+export interface TablePrintConfig {
   /**
    * 表名
    */
@@ -176,7 +176,7 @@ export interface PrintOptons {
   /**
    * 打印之前的方法，可以通过返回自定义打印的内容
    */
-  beforePrintMethod?(params: { content: string, options: PrintOptons }): string;
+  beforePrintMethod?(params: { content: string, options: TablePrintConfig }): string;
 
   [name: string]: any;
 }
@@ -191,7 +191,7 @@ export interface ReadFileParams {
 
 export function saveFile(options?: SaveFileOptions): Promise<any>;
 export function readFile(options?: ReadFileOptions): Promise<ReadFileParams>;
-export function print(options: PrintOptons): any;
+export function print(options: TablePrintConfig): any;
 
 export interface SaveFileOptions {
   filename: string;

@@ -1,7 +1,7 @@
 import { VXETableComponent, RowInfo, RecordInfo } from './component'
 import { ColumnOptions, ColumnInfo } from './column'
-import { ColumnCellRenderParams, EmptyRender } from './extends/renderer'
-import { ExportOptons, ImportOptons, PrintOptons, SaveFileOptions, ReadFileOptions, ReadFileParams } from './extends/export'
+import { ColumnCellRenderParams, TableEmptyRender } from './extends/renderer'
+import { TableExportConfig, TableImportConfig, TablePrintConfig, SaveFileOptions, ReadFileOptions, ReadFileParams } from './extends/export'
 import { ColumnFilterOption } from './extends/filter'
 import { ColumnEditRule, ColumnEditValidErrMapParams } from './extends/validator'
 import { ColumnFooterRenderParams } from './extends/footer'
@@ -38,7 +38,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 是否带有纵向边框
    */
-  border?: boolean | 'default' | 'full' | 'outer' | 'inner' | 'none';
+  border?: TableBorder;
   /**
    * 表格是否加载中
    */
@@ -46,15 +46,15 @@ export declare class Table extends VXETableComponent {
   /**
    * 所有的列对其方式
    */
-  align?: 'left' | 'center' | 'right';
+  align?: TableAlign;
   /**
    * 所有的表头列的对齐方式
    */
-  headerAlign?: 'left' | 'center' | 'right';
+  headerAlign?: TableAlign;
   /**
    * 所有的表尾列的对齐方式
    */
-  footerAlign?: 'left' | 'center' | 'right';
+  footerAlign?: TableAlign;
   /**
    * 是否显示表头
    */
@@ -86,7 +86,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 表尾数据获取的方法
    */
-  footerMethod?(params: { columns: ColumnInfo[], data: any[] }): Array<string | number>[];
+  footerMethod?: typeof TableFooterMethod;
   /**
    * 给行附加 className
    */
@@ -138,31 +138,31 @@ export declare class Table extends VXETableComponent {
   /**
    * 临时合并单元格
    */
-  mergeCells: MergeOptions[];
+  mergeCells: TableMergeConfig[];
   /**
    * 临时合并表尾
    */
-  mergeFooterItems: MergeOptions[];
+  mergeFooterItems: TableMergeConfig[];
   /**
    * 自定义单元格合并方法
    */
-  spanMethod?(params: ColumnCellRenderParams): { rowspan: number, colspan: number };
+  spanMethod?: typeof TableSpanMethod;
   /**
    * 自定义表尾合并方法
    */
-  footerSpanMethod?(params: ColumnFooterRenderParams): { rowspan: number, colspan: number };
+  footerSpanMethod?: typeof TableFooterSpanMethod;
   /**
    * 设置所有内容过长时显示为省略号
    */
-  showOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+  showOverflow?: TableOverflow;
   /**
    * 设置表头所有内容过长时显示为省略号
    */
-  showHeaderOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+  showHeaderOverflow?: TableOverflow;
   /**
    * 设置表尾所有内容过长时显示为省略号
    */
-  showFooterOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+  showFooterOverflow?: TableOverflow;
 
   /** 高级属性 */
   // 主键配置
@@ -174,56 +174,56 @@ export declare class Table extends VXETableComponent {
   // 是否自动监听父容器变化去更新响应式表格宽高
   autoResize?: boolean;
   // 是否自动根据状态属性去更新响应式表格宽高
-  syncResize?: boolean | string;
+  syncResize?: boolean | string | number;
   // 列的默认参数
-  columnConfig?: ColumnDefaultConfig;
+  columnConfig?: TableColumnConfig;
   // 序号配置项
-  seqConfig?: SeqConfig;
+  seqConfig?: TableSeqConfig;
   // 排序配置项
-  sortConfig?: SortConfig;
+  sortConfig?: TableSortConfig;
   // 筛选配置项
-  filterConfig?: FilterConfig;
+  filterConfig?: TableFilterConfig;
   // 单选框配置
-  radioConfig?: RadioConfig;
+  radioConfig?: TableRadioConfig;
   // 复选框配置项
-  checkboxConfig?: CheckboxConfig;
-  checkboxOpts: CheckboxConfig;
+  checkboxConfig?: TableCheckboxConfig;
+  checkboxOpts: TableCheckboxConfig;
   // 提示信息配置项
-  tooltipConfig?: TooltipConfig;
-  tooltipOpts: TooltipConfig;
+  tooltipConfig?: TableTooltipConfig;
+  tooltipOpts: TableTooltipConfig;
   // 导出配置项
-  exportConfig?: boolean | ExportOptons;
-  exportOpts: ExportOptons;
+  exportConfig?: TableExportConfig;
+  exportOpts: TableExportConfig;
   // 导入配置项
-  importConfig?: boolean | ImportOptons;
-  importOpts: ImportOptons;
+  importConfig?: TableImportConfig;
+  importOpts: TableImportConfig;
   // 打印配置项
-  printConfig?: PrintOptons;
-  printOpts: PrintOptons;
+  printConfig?: TablePrintConfig;
+  printOpts: TablePrintConfig;
   // 展开行配置项
-  expandConfig?: ExpandConfig;
-  expandOpts: ExpandConfig;
+  expandConfig?: TableExpandConfig;
+  expandOpts: TableExpandConfig;
   // 树形结构配置项
-  treeConfig?: boolean | TreeConfig;
+  treeConfig?: TableTreeConfig;
   treeOpts: TreeOpts;
   // 快捷菜单配置项
-  contextMenu?: boolean | ContextMenuConfig;
+  contextMenu?: TableContextMenu;
   // 鼠标配置项
-  mouseConfig?: MouseConfig;
-  mouseOpts: MouseConfig;
+  mouseConfig?: TableMouseConfig;
+  mouseOpts: TableMouseConfig;
   // 按键配置项
-  keyboardConfig?: KeyboardConfig;
-  keyboardOpts: KeyboardConfig;
+  keyboardConfig?: TableKeyboardConfig;
+  keyboardOpts: TableKeyboardConfig;
   // 编辑配置项
-  editConfig?: boolean | EditConfig;
-  editOpts: EditConfig;
+  editConfig?: TableEditConfig;
+  editOpts: TableEditConfig;
   // 校验配置项
-  validConfig?: ValidConfig;
+  validConfig?: TableValidConfig;
   // 校验规则配置项
   editRules?: EditVaildRules;
   emptyText?: string;
   // 空内容渲染配置项
-  emptyRender?: boolean | EmptyRender;
+  emptyRender?: TableEmptyRender;
   animat?: boolean;
   delayHover?: number;
   /**
@@ -327,31 +327,31 @@ export declare class Table extends VXETableComponent {
    * @param row 行对象
    */
   getRowIndex(row: RowInfo): number;
-  /**
-   * 根据 row 获取相对于当前数据中的索引
-   * @param row 行对象
-   */
-  _getRowIndex(row: RowInfo): number;
-  /**
-   * 根据 row 获取渲染中的虚拟索引
-   * @param row 行对象
-   */
-  $getRowIndex(row: RowInfo): number;
+  // /**
+  //  * 根据 row 获取相对于当前数据中的索引
+  //  * @param row 行对象
+  //  */
+  // _getRowIndex(row: RowInfo): number;
+  // /**
+  //  * 根据 row 获取渲染中的虚拟索引
+  //  * @param row 行对象
+  //  */
+  // $getRowIndex(row: RowInfo): number;
   /**
    * 根据 column 获取相对于 columns 中的索引
    * @param column 列对象
    */
   getColumnIndex(column: ColumnInfo): number;
-  /**
-   * 根据 column 获取相对于当前表格列中的索引
-   * @param column 列对象
-   */
-  _getColumnIndex(column: ColumnInfo): number;
-  /**
-   * 根据 column 获取渲染中的虚拟索引
-   * @param column 列对象
-   */
-  $getColumnIndex(column: ColumnInfo): number;
+  // /**
+  //  * 根据 column 获取相对于当前表格列中的索引
+  //  * @param column 列对象
+  //  */
+  // _getColumnIndex(column: ColumnInfo): number;
+  // /**
+  //  * 根据 column 获取渲染中的虚拟索引
+  //  * @param column 列对象
+  //  */
+  // $getColumnIndex(column: ColumnInfo): number;
   /**
    * 创建 data 对象
    * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义
@@ -816,11 +816,11 @@ export declare class Table extends VXETableComponent {
   /**
    * 取消单元格的临时合并状态，如果为数组，则取消多个合并
    */
-  removeMergeCells(merges: MergeOptions | MergeOptions[]): Promise<MergeItem[]>;
+  removeMergeCells(merges: TableMergeConfig | TableMergeConfig[]): Promise<MergeItem[]>;
   /**
    * 取消表尾的临时合并状态，如果为数组，则取消多个合并
    */
-  removeMergeFooterItems(merges: MergeOptions | MergeOptions[]): Promise<MergeItem[]>;
+  removeMergeFooterItems(merges: TableMergeConfig | TableMergeConfig[]): Promise<MergeItem[]>;
   /**
    * 获取表格数据集
    * 获取新增、删除、更改的数据
@@ -892,11 +892,11 @@ export declare class Table extends VXETableComponent {
   /**
    * 临时合并单元格，如果为数组则合并多个
    */
-  setMergeCells(merges: MergeOptions | MergeOptions[]): Promise<any>;
+  setMergeCells(merges: TableMergeConfig | TableMergeConfig[]): Promise<any>;
   /**
    * 临时合并表尾，如果为数组则合并多个
    */
-  setMergeFooterItems(merges: MergeOptions | MergeOptions[]): Promise<any>;
+  setMergeFooterItems(merges: TableMergeConfig | TableMergeConfig[]): Promise<any>;
   /**
    * 用于 mouse-config.area，设置活动的区域的单元格
    * @param activeArea
@@ -922,22 +922,22 @@ export declare class Table extends VXETableComponent {
    * 打开高级导出
    * @param options 参数
    */
-  openExport(options?: ExportOptons): Promise<any>;
+  openExport(options?: TableExportConfig): Promise<any>;
   /**
    * 将表格数据导出
    * @param options 参数
    */
-  exportData(options?: ExportOptons): Promise<any>;
+  exportData(options?: TableExportConfig): Promise<any>;
   /**
    * 打开高级导入
    * @param options 参数
    */
-  openImport(options?: ImportOptons): Promise<any>;
+  openImport(options?: TableImportConfig): Promise<any>;
   /**
    * 将数据导入表格
    * @param options 参数
    */
-  importData(options?: ImportOptons): Promise<any>;
+  importData(options?: TableImportConfig): Promise<any>;
   /**
    * 保存文件到本地
    * @param options 
@@ -952,12 +952,12 @@ export declare class Table extends VXETableComponent {
    * 打印表格数据
    * @param options 参数
    */
-  print(options?: PrintOptons): Promise<any>;
+  print(options?: TablePrintConfig): Promise<any>;
   /**
    * 打开高级打印
    * @param options 参数
    */
-  openPrint(options?: PrintOptons): Promise<any>;
+  openPrint(options?: TablePrintConfig): Promise<any>;
   /**
    * 用于 mouse-config.area，打开单元格查找功能
    */
@@ -982,26 +982,139 @@ export declare class Table extends VXETableComponent {
   [key: string]: any;
 }
 
+export type TableBorder = boolean | 'default' | 'full' | 'outer' | 'inner' | 'none';
+export type TableAlign = 'left' | 'center' | 'right' | null;
+export type TableOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | null;
+
+export interface TableFooterMethodParams {
+  $table: Table;
+  columns: ColumnInfo[];
+  data: any[];
+}
+export function TableFooterMethod(params: TableFooterMethodParams): Array<string | number | null>[];
+
+export interface TableSpanMethodParams extends ColumnCellRenderParams {}
+export function TableSpanMethod(params: TableSpanMethodParams): { rowspan: number, colspan: number }
+
+export interface TableFooterSpanMethodParams extends ColumnFooterRenderParams {}
+export function TableFooterSpanMethod(params: TableFooterSpanMethodParams): { rowspan: number, colspan: number }
+
+export interface TableOptions {
+  id?: string;
+  data?: any[];
+  height?: number | string;
+  maxHeight?: number | string;
+  resizable?: boolean;
+  stripe?: boolean;
+  border?: TableBorder;
+  loading?: boolean;
+  align?: TableAlign;
+  headerAlign?: TableAlign;
+  footerAlign?: TableAlign;
+  showHeader?: boolean;
+  highlightCurrentRow?: boolean;
+  highlightHoverRow?: boolean;
+  highlightCurrentColumn?: boolean;
+  highlightHoverColumn?: boolean;
+  highlightCell?: boolean;
+  showFooter?: boolean;
+  footerMethod?: typeof TableFooterMethod;
+  rowClassName?: string | Function;
+  cellClassName?: string | Function;
+  headerRowClassName?: string | Function;
+  headerCellClassName?: string | Function;
+  footerRowClassName?: string | Function;
+  footerCellClassName?: string | Function;
+  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  mergeCells?: TableMergeConfig[];
+  mergeFooterItems?: TableMergeConfig[];
+  spanMethod?: typeof TableSpanMethod;
+  footerSpanMethod?: typeof TableFooterSpanMethod;
+  showOverflow?: TableOverflow;
+  showHeaderOverflow?: TableOverflow;
+  showFooterOverflow?: TableOverflow;
+  columnKey?: boolean;
+  rowKey?: boolean;
+  rowId?: string;
+  keepSource?: boolean;
+  autoResize?: boolean;
+  syncResize?: boolean | string | number;
+  columnConfig?: TableColumnConfig;
+  customConfig?: TableCustomConfig;
+  seqConfig?: TableSeqConfig;
+  sortConfig?: TableSortConfig;
+  filterConfig?: TableFilterConfig;
+  radioConfig?: TableRadioConfig;
+  checkboxConfig?: TableCheckboxConfig;
+  tooltipConfig?: TableTooltipConfig;
+  exportConfig?: TableExportConfig;
+  importConfig?: TableImportConfig;
+  printConfig?: TablePrintConfig;
+  expandConfig?: TableExpandConfig;
+  treeConfig?: TableTreeConfig;
+  contextMenu?: TableContextMenu;
+  mouseConfig?: TableMouseConfig;
+  keyboardConfig?: TableKeyboardConfig;
+  editConfig?: TableEditConfig;
+  validConfig?: TableValidConfig;
+  editRules?: EditVaildRules;
+  emptyText?: string;
+  emptyRender?: TableEmptyRender;
+  animat?: boolean;
+  delayHover?: number;
+  scrollX?: {
+    gt?: number;
+    oSize?: number;
+    [key: string]: any;
+  };
+  scrollY?: {
+    gt?: number;
+    oSize?: number;
+    [key: string]: any;
+  };
+  params?: any;
+  [key: string]: any;
+}
+
 /**
  * 列的默认配置
  */
-export interface ColumnDefaultConfig {
+export interface TableColumnConfig {
   width?: number;
   minWidth?: number;
 }
+export interface ColumnDefaultConfig extends TableColumnConfig {}
+
+/**
+ * 自定义列配置项
+ */
+export interface TableCustomConfig {
+  storage?: boolean | {
+    visible?: boolean;
+    resizable?: boolean;
+  };
+  checkMethod?(params: { column: ColumnInfo }): boolean;
+}
+export interface CustomConfig extends TableCustomConfig {}
 
 /**
  * 序号配置项
  */
-export interface SeqConfig {
+export interface TableSeqConfig {
   startIndex?: number;
   seqMethod?(params: ColumnCellRenderParams): number;
 }
+export interface SeqConfig extends TableSeqConfig {}
 
 /**
  * 排序配置项
  */
-export interface SortConfig {
+export interface TableSortConfig {
   defaultSort?: {
     field: string;
     order: 'asc' | 'desc' | null;
@@ -1014,21 +1127,23 @@ export interface SortConfig {
   iconAsc?: string;
   iconDesc?: string;
 }
+export interface SortConfig extends TableSortConfig {}
 
 /**
  * 筛选配置项
  */
-export interface FilterConfig {
+export interface TableFilterConfig {
   remote?: boolean;
   showIcon?: string;
   iconNone?: string;
   iconMatch?: string;
 }
+export interface FilterConfig extends TableFilterConfig {}
 
 /**
  * 单选框配置
  */
-export interface RadioConfig {
+export interface TableRadioConfig {
   reserve?: boolean;
   labelField?: string;
   checkRowKey?: string | number;
@@ -1036,11 +1151,12 @@ export interface RadioConfig {
   trigger?: 'default' | 'cell' | 'row';
   highlight?: boolean;
 }
+export interface RadioConfig extends TableRadioConfig {}
 
 /**
  * 复选框配置项
  */
-export interface CheckboxConfig {
+export interface TableCheckboxConfig {
   reserve?: boolean;
   labelField?: string;
   checkField?: string;
@@ -1055,22 +1171,24 @@ export interface CheckboxConfig {
   highlight?: boolean;
   range?: boolean;
 }
+export interface CheckboxConfig extends TableCheckboxConfig {}
 
 /**
  * 提示信息配置项
  */
-export interface TooltipConfig {
+export interface TableTooltipConfig {
   enabled?: boolean;
   theme?: 'dark' | 'light';
   enterable?: boolean;
   leaveDelay?: number;
   contentMethod?(params: { items: any[], row: RowInfo, rowIndex: number, $rowIndex: number, column: ColumnInfo, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
 }
+export interface TooltipConfig extends TableTooltipConfig {}
 
 /**
  * 展开行配置项
  */
-export interface ExpandConfig {
+export interface TableExpandConfig {
   labelField?: string;
   expandAll?: boolean;
   expandRowKeys?: string[] | number[];
@@ -1085,11 +1203,12 @@ export interface ExpandConfig {
   iconClose?: string;
   iconLoaded?: string;
 }
+export interface ExpandConfig extends TableExpandConfig {}
 
 /**
  * 树形结构配置项
  */
-export interface TreeConfig {
+export interface TableTreeConfig {
   children?: string;
   indent?: number;
   line?: boolean;
@@ -1106,6 +1225,7 @@ export interface TreeConfig {
   iconClose?: string;
   iconLoaded?: string;
 }
+export interface TreeConfig extends TableTreeConfig {}
 
 export interface TreeOpts {
   children: string;
@@ -1128,7 +1248,7 @@ export interface TreeOpts {
 /**
  * 快捷菜单配置项
  */
-export interface ContextMenuConfig {
+export interface TableContextMenu {
   header?: MenuOptions;
   body?: MenuOptions;
   footer?: MenuOptions;
@@ -1136,17 +1256,19 @@ export interface ContextMenuConfig {
   visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnInfo[], row?: RowInfo, rowIndex?: number, column?: ColumnInfo, columnIndex?: number }): boolean;
   className?: string;
 }
+export interface ContextMenuConfig extends TableContextMenu {}
 
 /**
  * 鼠标配置项
  */
-export interface MouseConfig {
+export interface TableMouseConfig {
   selected?: boolean;
   /**
    * 如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取
    */
   area?: boolean;
 }
+export interface MouseConfig extends TableMouseConfig {}
 
 export interface MouseCellArea {
   main: boolean;
@@ -1167,12 +1289,13 @@ export interface CellAreaOptions {
   [key: string]: any;
 }
 
-export interface MergeOptions {
+export interface TableMergeConfig {
   row: RowInfo | number;
   col: ColumnInfo | number;
   rowspan: number;
   colspan: number;
 }
+export interface MergeOptions extends TableMergeConfig {}
 
 export interface MergeItem {
   row: number;
@@ -1191,7 +1314,7 @@ export interface ActiveCellAreaOptions {
 /**
  * 按键配置项
  */
-export interface KeyboardConfig {
+export interface TableKeyboardConfig {
   /**
    * 是否开启非编辑状态下，上下左右移动功能
    */
@@ -1229,11 +1352,12 @@ export interface KeyboardConfig {
    */
   editMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number, cell: HTMLElement }): boolean;
 }
+export interface KeyboardConfig extends TableKeyboardConfig {}
 
 /**
  * 编辑配置项
  */
-export interface EditConfig {
+export interface TableEditConfig {
   trigger?: 'manual' | 'click' | 'dblclick';
   mode?: string;
   showIcon?: boolean;
@@ -1244,15 +1368,17 @@ export interface EditConfig {
    */
   activeMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
 }
+export interface EditConfig extends TableEditConfig {}
 
 /**
  * 校验配置项
  */
-export interface ValidConfig {
+export interface TableValidConfig {
   autoPos?: boolean;
   message?: string;
   maxWidth?: number;
 }
+export interface ValidConfig extends TableValidConfig {}
 
 /**
  * 校验规则配置项
@@ -1260,3 +1386,4 @@ export interface ValidConfig {
 export interface EditVaildRules {
   [field: string]: ColumnEditRule[];
 }
+export interface VaildRules extends EditVaildRules {}
