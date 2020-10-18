@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
-import { DomTools, GlobalEvent, ResizeEvent } from '../../tools'
+import { DomTools, GlobalEvent, createResizeEvent } from '../../tools'
 
 const { browse } = DomTools
 
@@ -69,7 +69,7 @@ export default {
   },
   mounted () {
     if (this.autoResize) {
-      const resizeObserver = new ResizeEvent(() => this.recalculate())
+      const resizeObserver = createResizeEvent(() => this.recalculate())
       resizeObserver.observe(this.$el)
       this.$resize = resizeObserver
     }

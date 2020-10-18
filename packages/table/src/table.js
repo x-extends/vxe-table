@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from './body'
 import vSize from '../../mixins/size'
-import { UtilTools, GlobalEvent, ResizeEvent } from '../../tools'
+import { UtilTools, GlobalEvent, createResizeEvent } from '../../tools'
 import methods from './methods'
 
 /**
@@ -775,7 +775,7 @@ export default {
   },
   mounted () {
     if (this.autoResize) {
-      const resizeObserver = new ResizeEvent(() => this.recalculate(true))
+      const resizeObserver = createResizeEvent(() => this.recalculate(true))
       resizeObserver.observe(this.$el)
       resizeObserver.observe(this.getParentElem())
       this.$resize = resizeObserver

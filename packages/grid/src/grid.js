@@ -534,14 +534,14 @@ export default {
             }
             const applyArgs = [params].concat(args)
             this.tableLoading = true
-            return Promise.resolve((beforeQuery || ajaxMethods).apply(this, applyArgs))
+            return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
               .catch(e => e)
               .then(rest => {
                 this.tableLoading = false
                 if (rest) {
                   if (pagerConfig) {
                     tablePage.total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
-                    this.tableData = XEUtils.get(rest, proxyProps.result || proxyProps.data || 'result') || []
+                    this.tableData = XEUtils.get(rest, proxyProps.result || 'result') || []
                   } else {
                     this.tableData = (proxyProps.list ? XEUtils.get(rest, proxyProps.list) : rest) || []
                   }
@@ -566,7 +566,7 @@ export default {
             if (removeRecords.length) {
               return this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                 this.tableLoading = true
-                return Promise.resolve((beforeDelete || ajaxMethods).apply(this, applyArgs))
+                return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                   .then(rest => {
                     this.tableLoading = false
                     this.pendingRecords = this.pendingRecords.filter(row => removeRecords.indexOf(row) === -1)
@@ -614,7 +614,7 @@ export default {
             return this.validate(body.insertRecords.concat(updateRecords)).then(() => {
               if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                 this.tableLoading = true
-                return Promise.resolve((beforeSave || ajaxMethods).apply(this, applyArgs))
+                return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
                   .then(rest => {
                     this.tableLoading = false
                     this.pendingRecords = []
@@ -647,7 +647,7 @@ export default {
         default: {
           const btnMethod = VXETable.commands.get(code)
           if (btnMethod) {
-            btnMethod.apply(this, [{ code, button, $grid: this, $table: $xetable }].concat(args))
+            btnMethod({ code, button, $grid: this, $table: $xetable }, ...args)
           }
         }
       }

@@ -227,7 +227,7 @@ function getCsvCellTypeLabel (column, cellValue) {
 }
 
 function toTxtCellLabel (val) {
-  if (/"/.test(val)) {
+  if (/[",]/.test(val)) {
     return `"${val.replace(/"/g, '""')}"`
   }
   return val
