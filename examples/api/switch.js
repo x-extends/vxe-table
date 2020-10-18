@@ -35,7 +35,7 @@ const apis = [
         list: []
       },
       {
-        name: 'on-label',
+        name: 'open-label',
         descKey: 'app.api.switch.desc.onLabel',
         version: '',
         type: 'string',
@@ -44,7 +44,7 @@ const apis = [
         list: []
       },
       {
-        name: 'off-label',
+        name: 'close-label',
         descKey: 'app.api.switch.desc.offLabel',
         version: '',
         type: 'string',
@@ -53,7 +53,7 @@ const apis = [
         list: []
       },
       {
-        name: 'on-value',
+        name: 'open-value',
         descKey: 'app.api.switch.desc.onValue',
         version: '',
         type: 'string | number | boolean',
@@ -62,7 +62,7 @@ const apis = [
         list: []
       },
       {
-        name: 'off-value',
+        name: 'close-value',
         descKey: 'app.api.switch.desc.offValue',
         version: '',
         type: 'string | number | boolean',
@@ -71,7 +71,7 @@ const apis = [
         list: []
       },
       {
-        name: 'on-icon',
+        name: 'open-icon',
         descKey: 'app.api.switch.desc.onIcon',
         version: '',
         type: 'string',
@@ -80,7 +80,7 @@ const apis = [
         list: []
       },
       {
-        name: 'off-icon',
+        name: 'close-icon',
         descKey: 'app.api.switch.desc.offIcon',
         version: '',
         type: 'string',

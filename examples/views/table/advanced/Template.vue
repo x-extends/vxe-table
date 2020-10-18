@@ -82,7 +82,7 @@
             <vxe-switch v-model="row.flag"></vxe-switch>
           </template>
           <template v-else-if="rowIndex === 3">
-            <vxe-switch v-model="row.flag" on-label="开" off-label="关"></vxe-switch>
+            <vxe-switch v-model="row.flag" open-label="开" close-label="关"></vxe-switch>
           </template>
           <template v-else>
             <span>{{ formatDate(row.time) }}</span>
@@ -269,7 +269,7 @@ export default {
                 <vxe-switch v-model="row.flag"></vxe-switch>
               </template>
               <template v-else-if="rowIndex === 3">
-                <vxe-switch v-model="row.flag" on-label="开" off-label="关"></vxe-switch>
+                <vxe-switch v-model="row.flag" open-label="开" close-label="关"></vxe-switch>
               </template>
               <template v-else>
                 <span>{{ formatDate(row.time) }}</span>

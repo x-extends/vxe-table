@@ -217,6 +217,7 @@
       "params",
       "form-config",
       "toolbar",
+      "toolbar-config",
       "pager-config",
       "proxy-config",
       "zoom-config"
@@ -310,12 +311,12 @@
       "v-model",
       "disabled",
       "size",
-      "on-label",
-      "off-label",
-      "on-value",
-      "off-value",
-      "on-icon",
-      "off-icon"
+      "open-label",
+      "close-label",
+      "open-value",
+      "close-value",
+      "open-icon",
+      "close-icon"
     ],
     "description": "开关按钮"
   },

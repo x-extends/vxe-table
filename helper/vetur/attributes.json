@@ -121,7 +121,7 @@
   },
   "vxe-table/row-style": {
     "type": "any | (({ row, rowindex, $rowindex }) => any)",
-    "description": "给行附加样式"
+    "description": "给行附加样式，也可以是函数"
   },
   "vxe-table/header-row-style": {
     "type": "any | (({ $rowindex, column, columnindex, $columnindex }) => any)",
@@ -145,15 +145,15 @@
   },
   "vxe-table/merge-footer-items": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）"
+    "description": "临时合并表尾（不能用于树形结构、展开行,不建议用于固定列）"
   },
   "vxe-table/span-method": {
-    "type": "({ row, rowindex, $rowindex, column, columnindex, $columnindex, data }) => { rowspan: number, colspan: number}",
-    "description": "自定义合并函数，返回计算后的值，不能用于树形结构、展开行、固定列"
+    "type": "({ row, rowindex, $rowindex, _rowindex, column, columnindex, $columnindex, _columnindex, data }) => { rowspan: number, colspan: number}",
+    "description": "自定义合并函数，返回计算后的值，不能用于虚拟滚动、树形结构、展开行、固定列"
   },
   "vxe-table/footer-span-method": {
-    "type": "({ $rowindex, column, columnindex, $columnindex, data }) => { rowspan: number, colspan: number}",
-    "description": "表尾合并行或列，返回计算后的值，不能用于树形结构、展开行、固定列"
+    "type": "({ $rowindex, column, columnindex, $columnindex, _columnindex, data }) => { rowspan: number, colspan: number}",
+    "description": "表尾合并行或列，返回计算后的值，不能用于虚拟滚动、树形结构、展开行、固定列"
   },
   "vxe-table/show-overflow": {
     "type": "boolean | string",
@@ -336,8 +336,8 @@
     "description": "当表头内容过长时显示为省略号"
   },
   "vxe-table-colgroup/header-class-name": {
-    "type": "string | function",
-    "description": "给表头的单元格附加 className，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
+    "type": "string | (({ $rowindex, column, columnindex, $columnindex }) => any)",
+    "description": "给表头的单元格附加 className"
   },
   "vxe-table-column/type": {
     "type": "string",
@@ -396,24 +396,24 @@
     "description": "当表尾内容过长时显示为省略号"
   },
   "vxe-table-column/class-name": {
-    "type": "string | function",
-    "description": "给单元格附加 className，也可以是函数 Function({row, rowIndex, $rowIndex, column, columnIndex, $columnIndex})"
+    "type": "string | (({row, rowindex, $rowindex, column, columnindex, $columnindex}) => any)",
+    "description": "给单元格附加 className"
   },
   "vxe-table-column/header-class-name": {
-    "type": "string | function",
-    "description": "给表头的单元格附加 className，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
+    "type": "string | (({ $rowindex, column, columnindex, $columnindex }) => any)",
+    "description": "给表头的单元格附加 className"
   },
   "vxe-table-column/footer-class-name": {
-    "type": "string | function",
-    "description": "给表尾的单元格附加 className，也可以是函数 Function({$rowIndex, column, columnIndex, $columnIndex})"
+    "type": "string | (({ $rowindex, column, columnindex, $columnindex }) => any)",
+    "description": "给表尾的单元格附加 className"
   },
   "vxe-table-column/formatter": {
-    "type": "function | any[] | string",
-    "description": "格式化显示内容 Function({cellValue, row, column})"
+    "type": "(({ cellvalue, row, column }) => any) | any[] | string",
+    "description": "格式化显示内容"
   },
   "vxe-table-column/seq-method": {
-    "type": "function",
-    "description": "只对 type=seq 有效，自定义索引方法 Function({row, rowIndex, column, columnIndex})"
+    "type": "({ row, rowindex, column, columnindex }) => number",
+    "description": "只对 type=seq 有效，自定义索引方法"
   },
   "vxe-table-column/sortable": {
     "type": "boolean",
@@ -425,7 +425,7 @@
   },
   "vxe-table-column/sort-method": {
     "type": "function",
-    "description": "只对 sortable 有效，列的排序方法，该方法 Function(prevRow, nexRow) 的返回值用来决定该行的排序规则"
+    "description": "只对 sortable 有效，列的排序方法，该方法的返回值用来决定该行的排序规则"
   },
   "vxe-table-column/remote-sort": {
     "type": "boolean",
@@ -441,7 +441,7 @@
   },
   "vxe-table-column/filter-method": {
     "type": "function",
-    "description": "只对 filters 有效，列的筛选方法，该方法 Function({value, row, column}) 返回值用来决定该行是否显示"
+    "description": "只对 filters 有效，列的筛选方法，该方法的返回值用来决定该行是否显示"
   },
   "vxe-table-column/filter-render": {
     "type": "any",
@@ -613,7 +613,7 @@
   },
   "vxe-grid/row-style": {
     "type": "any | (({ row, rowindex, $rowindex }) => any)",
-    "description": "给行附加样式"
+    "description": "给行附加样式，也可以是函数"
   },
   "vxe-grid/header-row-style": {
     "type": "any | (({ $rowindex, column, columnindex, $columnindex }) => any)",
@@ -637,15 +637,15 @@
   },
   "vxe-grid/merge-footer-items": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）"
+    "description": "临时合并表尾（不能用于树形结构、展开行,不建议用于固定列）"
   },
   "vxe-grid/span-method": {
-    "type": "({ row, rowindex, $rowindex, column, columnindex, $columnindex, data }) => { rowspan: number, colspan: number}",
-    "description": "自定义合并函数，返回计算后的值，不能用于树形结构、展开行、固定列"
+    "type": "({ row, rowindex, $rowindex, _rowindex, column, columnindex, $columnindex, _columnindex, data }) => { rowspan: number, colspan: number}",
+    "description": "自定义合并函数，返回计算后的值，不能用于虚拟滚动、树形结构、展开行、固定列"
   },
   "vxe-grid/footer-span-method": {
-    "type": "({ $rowindex, column, columnindex, $columnindex, data }) => { rowspan: number, colspan: number}",
-    "description": "表尾合并行或列，返回计算后的值，不能用于树形结构、展开行、固定列"
+    "type": "({ $rowindex, column, columnindex, $columnindex, _columnindex, data }) => { rowspan: number, colspan: number}",
+    "description": "表尾合并行或列，返回计算后的值，不能用于虚拟滚动、树形结构、展开行、固定列"
   },
   "vxe-grid/show-overflow": {
     "type": "boolean | string",
@@ -788,6 +788,10 @@
     "description": "表单配置项"
   },
   "vxe-grid/toolbar": {
+    "type": "any",
+    "description": "即将废弃，请使用 toolbar-config"
+  },
+  "vxe-grid/toolbar-config": {
     "type": "any",
     "description": "工具栏配置"
   },
@@ -1003,27 +1007,27 @@
     "type": "string",
     "description": "尺寸"
   },
-  "vxe-switch/on-label": {
+  "vxe-switch/open-label": {
     "type": "string",
     "description": "打开时显示的文字"
   },
-  "vxe-switch/off-label": {
+  "vxe-switch/close-label": {
     "type": "string",
     "description": "关闭时显示的文字"
   },
-  "vxe-switch/on-value": {
+  "vxe-switch/open-value": {
     "type": "string | number | boolean",
     "description": "打开时的值"
   },
-  "vxe-switch/off-value": {
+  "vxe-switch/close-value": {
     "type": "string | number | boolean",
     "description": "关闭时的值"
   },
-  "vxe-switch/on-icon": {
+  "vxe-switch/open-icon": {
     "type": "string",
     "description": "打开时的图标"
   },
-  "vxe-switch/off-icon": {
+  "vxe-switch/close-icon": {
     "type": "string",
     "description": "关闭时的图标"
   },
@@ -1545,7 +1549,7 @@
   },
   "vxe-form-item/visible": {
     "type": "boolean",
-    "description": "是否显示"
+    "description": "是否可视"
   },
   "vxe-form-item/visible-method": {
     "type": "function",
