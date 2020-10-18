@@ -2938,24 +2938,24 @@ const apis = [
         defVal: 'row',
         list: []
       },
-      {
-        name: '_getRowIndex(row)',
-        desc: '根据 row 获取相对于当前数据中的索引',
-        version: '1.15.24',
-        type: 'Number',
-        enum: '',
-        defVal: 'row: Row',
-        list: []
-      },
-      {
-        name: '$getRowIndex(row)',
-        desc: '根据 row 获取渲染中的虚拟索引',
-        version: '1.15.15',
-        type: 'Number',
-        enum: '',
-        defVal: 'row: Row',
-        list: []
-      },
+      // {
+      //   name: '_getRowIndex(row)',
+      //   desc: '根据 row 获取相对于当前数据中的索引',
+      //   version: '1.15.24',
+      //   type: 'Number',
+      //   enum: '',
+      //   defVal: 'row: Row',
+      //   list: []
+      // },
+      // {
+      //   name: '$getRowIndex(row)',
+      //   desc: '根据 row 获取渲染中的虚拟索引',
+      //   version: '1.15.15',
+      //   type: 'Number',
+      //   enum: '',
+      //   defVal: 'row: Row',
+      //   list: []
+      // },
       {
         name: 'getRowNode(tr)',
         desc: '根据 tr 元素获取对应的 row 信息',
@@ -3019,24 +3019,24 @@ const apis = [
         defVal: 'column',
         list: []
       },
-      {
-        name: '$getColumnIndex(column)',
-        desc: '根据 column 获取渲染中的虚拟索引',
-        version: '1.15.15',
-        type: 'Number',
-        enum: '',
-        defVal: 'column',
-        list: []
-      },
-      {
-        name: '_getColumnIndex(column)',
-        desc: '根据 column 获取相对于当前表格列中的索引（分组表头可能会用到）',
-        version: '1.15.28',
-        type: 'Number',
-        enum: '',
-        defVal: 'column',
-        list: []
-      },
+      // {
+      //   name: '$getColumnIndex(column)',
+      //   desc: '根据 column 获取渲染中的虚拟索引',
+      //   version: '1.15.15',
+      //   type: 'Number',
+      //   enum: '',
+      //   defVal: 'column',
+      //   list: []
+      // },
+      // {
+      //   name: '_getColumnIndex(column)',
+      //   desc: '根据 column 获取相对于当前表格列中的索引（分组表头可能会用到）',
+      //   version: '1.15.28',
+      //   type: 'Number',
+      //   enum: '',
+      //   defVal: 'column',
+      //   list: []
+      // },
       {
         name: 'getColumnNode(cell)',
         desc: '根据 th/td 元素获取对应的 column 信息',
