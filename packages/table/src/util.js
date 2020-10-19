@@ -72,7 +72,7 @@ export function clearTableDefaultStatus (_vm) {
 
 export function clearTableAllStatus (_vm) {
   if (VXETable._filter) {
-    _vm.clearFilter()
+    return _vm.clearFilter()
   }
   return clearTableDefaultStatus(_vm)
 }

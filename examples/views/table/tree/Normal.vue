@@ -26,8 +26,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">带连接线</p>
@@ -46,8 +46,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">更多功能</p>
@@ -88,22 +88,75 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
-      <code class="css">{{ demoCodes[6] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[6] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
 import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
 
 export default {
   data () {
     return {
-      tableData: [],
-      tableData3: [],
+      tableData: [
+        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          children: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'vxe-table 从入门到放弃96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              children: [
+                { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
+      tableData3: [
+        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          children: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'vxe-table 从入门到放弃96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              children: [
+                { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -129,11 +182,35 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'vxe-table 从入门到放弃96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             getTreeExpansionEvent () {
@@ -163,11 +240,35 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'vxe-table 从入门到放弃96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `,
@@ -179,7 +280,7 @@ export default {
           ref="xTree3"
           border="inner"
           :show-header="false"
-          :data="tableData"
+          :data="tableData3"
           :checkbox-config="{labelField: 'name'}"
           :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
           <vxe-table-column type="checkbox" tree-node>
@@ -209,17 +310,41 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData3: [
+                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'vxe-table 从入门到放弃96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             removeRowEvent (row) {
               this.$XModal.confirm('您确定要删除吗？').then(type => {
                 if (type === 'confirm') {
-                  let matchObj = XEUtils.findTree(this.tableData, item => item === row, this.treeConfig)
+                  const matchObj = XEUtils.findTree(this.tableData3, item => item === row, this.treeConfig)
                   if (matchObj) {
                     // 从树节点中移除
                     matchObj.items.splice(matchObj.index, 1)
@@ -238,15 +363,6 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
-    this.tableData3 = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     removeRowEvent (row) {

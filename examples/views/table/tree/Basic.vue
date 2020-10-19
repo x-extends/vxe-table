@@ -29,8 +29,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">默认展开树节点，通过 <table-api-link prop="tree-config"/>={<table-api-link prop="expandRowKeys"/>: []} 设置默认展开树节点的主键</p>
@@ -49,8 +49,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">默认展开所有树节点，通过 <table-api-link prop="tree-config"/>={<table-api-link prop="expandAll"/>: true} 设置默认展开所有树节点</p>
@@ -73,21 +73,45 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
-      tableData: [],
-      defaultExpandKeys: [],
+      tableData: [
+        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          children: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'vxe-table 从入门到放弃96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              children: [
+                { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
+      defaultExpandKeys: [1005],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -115,11 +139,35 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'vxe-table 从入门到放弃96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
           },
           methods: {
             toggleExpandChangeEvent ({ row, expanded }) {
@@ -148,13 +196,36 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
-              defaultExpandKeys: [],
+              tableData: [
+                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'vxe-table 从入门到放弃96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              ],
+              defaultExpandKeys: [1005]
             }
-          },
-          created () {
-            this.defaultExpandKeys = ['30000']
-            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `,
@@ -178,25 +249,40 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'vxe-table 从入门到放弃96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
           }
         }
         `
       ]
     }
-  },
-  created () {
-    this.defaultExpandKeys = ['30000']
-    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     toggleExpandChangeEvent ({ expanded }) {

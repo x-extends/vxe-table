@@ -106,7 +106,7 @@
             <div class="support-name">高级用户</div>
             <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供使用过程中相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
             <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供使用过程中相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
-            <vxe-button class="support-btn" status="primary" @click="addQQGroup">申请成为高级用户</vxe-button>
+            <vxe-button class="support-btn" status="primary" @click="addQQGroup" :disabled="disabledSupport">申请成为高级用户</vxe-button>
             <ul class="support-describe">
               <li>优质的技术支持群</li>
             </ul>
@@ -2213,6 +2213,13 @@ export default {
     }
   },
   computed: {
+    disabledSupport () {
+      const currDate = new Date()
+      if (currDate.getDay() === 0 || currDate.getDay() === 6) {
+        return true
+      }
+      return false
+    },
     demoLink () {
       const { $route, apiList } = this
       for (let gIndex = 0; gIndex < apiList.length; gIndex++) {

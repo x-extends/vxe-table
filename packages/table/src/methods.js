@@ -241,7 +241,7 @@ const Methods = {
    * 重置表格的一切数据状态
    */
   clearAll () {
-    clearTableAllStatus()
+    return clearTableAllStatus(this)
   },
   /**
    * 同步 data 数据

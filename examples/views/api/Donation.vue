@@ -17,7 +17,7 @@
         <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v1') }}</li>
         <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v2') }}</li>
         <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v3') }}</li>
-        <li><i class="fa fa-battery-1"></i>{{ $t('app.body.other.plan.v4') }}</li>
+        <li><i class="fa fa-battery-3"></i>{{ $t('app.body.other.plan.v4') }}</li>
       </ul>
     </div>
     <div class="content" style="padding-top: 50px">
