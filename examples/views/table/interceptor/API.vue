@@ -84,60 +84,60 @@ export default {
         }
       ],
       typeList: [
-        {
-          name: 'created',
-          desc: '表格初始化时触发',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: '',
-          list: []
-        },
-        {
-          name: 'mounted',
-          desc: '表格挂载时触发',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: '',
-          list: []
-        },
-        {
-          name: 'activated',
-          desc: '表格激活时触发',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: '',
-          list: []
-        },
-        {
-          name: 'deactivated',
-          desc: '表格停用时触发',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: '',
-          list: []
-        },
-        {
-          name: 'beforeDestroy',
-          desc: '表格销毁之前触发',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: '',
-          list: []
-        },
-        {
-          name: 'destroyed',
-          desc: '表格销毁时触发',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: '',
-          list: []
-        },
+        // {
+        //   name: 'created',
+        //   desc: '表格初始化时触发',
+        //   version: '',
+        //   type: '',
+        //   enum: '',
+        //   defVal: '',
+        //   list: []
+        // },
+        // {
+        //   name: 'mounted',
+        //   desc: '表格挂载时触发',
+        //   version: '',
+        //   type: '',
+        //   enum: '',
+        //   defVal: '',
+        //   list: []
+        // },
+        // {
+        //   name: 'activated',
+        //   desc: '表格激活时触发',
+        //   version: '',
+        //   type: '',
+        //   enum: '',
+        //   defVal: '',
+        //   list: []
+        // },
+        // {
+        //   name: 'deactivated',
+        //   desc: '表格停用时触发',
+        //   version: '',
+        //   type: '',
+        //   enum: '',
+        //   defVal: '',
+        //   list: []
+        // },
+        // {
+        //   name: 'beforeDestroy',
+        //   desc: '表格销毁之前触发',
+        //   version: '',
+        //   type: '',
+        //   enum: '',
+        //   defVal: '',
+        //   list: []
+        // },
+        // {
+        //   name: 'destroyed',
+        //   desc: '表格销毁时触发',
+        //   version: '',
+        //   type: '',
+        //   enum: '',
+        //   defVal: '',
+        //   list: []
+        // },
         {
           name: 'event.clearActived',
           desc: '清除激活单元格之前触发，允许返回 false 阻止默认行为',

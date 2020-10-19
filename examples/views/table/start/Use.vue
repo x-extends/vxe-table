@@ -17,11 +17,10 @@
 
         Vue.use(VXETable)
 
-        // 给 vue 实例挂载全局窗口对象，例如：
-        // Vue.prototype.$XModal = VXETable.modal
-
-        // 给 vue 实例挂载全局打印对象，例如：
-        // Vue.prototype.$XPrint = VXETable.print
+        // 给 vue 实例挂载内部对象，例如：
+        Vue.prototype.$XModal = VXETable.modal
+        Vue.prototype.$XPrint = VXETable.print
+        Vue.prototype.$XReadFile = VXETable.readFile
       </code>
     </pre>
     <h2>Import on demand 按需引入</h2>
@@ -119,11 +118,10 @@
         // 再安装核心库
         Vue.use(Table)
 
-        // 给 vue 实例挂载全局窗口对象，例如：
-        // Vue.prototype.$XModal = VXETable.modal
-
-        // 给 vue 实例挂载全局打印对象，例如：
-        // Vue.prototype.$XPrint = VXETable.print
+        // 给 vue 实例挂载内部对象，例如：
+        Vue.prototype.$XModal = VXETable.modal
+        Vue.prototype.$XPrint = VXETable.print
+        Vue.prototype.$XReadFile = VXETable.readFile
       </code>
     </pre>
     <div>main.js</div>
