@@ -26,7 +26,7 @@ export default {
     }
   },
   render (h) {
-    const { $slots, $xeradiogroup, isDisabled, title, vSize, label, content } = this
+    const { $slots, $xeradiogroup, isDisabled, title, vSize, value, label, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
