@@ -81,7 +81,7 @@
     "vxe-table-plugin-export-xlsx": "^1.6.4",
     "vxe-table-plugin-iview": "^1.9.2",
     "vxe-table-plugin-menus": "^1.4.10",
-    "vxe-table-plugin-virtual-tree": "0.5.4",
+    "vxe-table-plugin-virtual-tree": "0.5.5",
     "xe-ajax": "^4.0.5",
     "xe-ajax-mock": "^1.12.0",
     "xe-clipboard": "^1.10.0",
