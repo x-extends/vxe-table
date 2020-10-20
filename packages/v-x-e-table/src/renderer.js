@@ -415,8 +415,8 @@ function renderNativeFormOptions (h, options, renderOpts, params) {
 }
 
 function handleExportSelectMethod (params) {
-  const { column } = params
-  return getSelectCellValue(column.editRender || column.cellRender, params)
+  const { row, column, options } = params
+  return options.original ? UtilTools.getCellValue(row, column) : getSelectCellValue(column.editRender || column.cellRender, params)
 }
 
 /**

@@ -260,7 +260,7 @@ const exportDataAPI = [
   },
   {
     name: 'data',
-    desc: '自定义数据',
+    desc: '指定数据',
     version: '',
     type: 'any[]',
     enum: '',
@@ -269,9 +269,9 @@ const exportDataAPI = [
   },
   {
     name: 'columns',
-    desc: '自定义列（如果指定了 columns 则 columnFilterMethod 默认为空）',
+    desc: '指定列',
     version: '',
-    type: 'any[]',
+    type: 'Array<{ colid?: number; field:? string; type?: string }>',
     enum: '',
     defVal: '',
     list: []
@@ -3851,7 +3851,7 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'options: object',
-        list: XEUtils.clone(exportDataAPI.filter(item => !['columns', 'data', 'download', 'columnFilterMethod', 'dataFilterMethod', 'footerFilterMethod'].includes(item.name)), true)
+        list: XEUtils.clone(exportDataAPI.filter(item => !['data', 'download', 'columnFilterMethod', 'dataFilterMethod', 'footerFilterMethod'].includes(item.name)), true)
       },
       {
         name: 'importData(options)',

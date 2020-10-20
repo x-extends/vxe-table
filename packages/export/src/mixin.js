@@ -81,7 +81,7 @@ function getLabelData ($xetable, opts, columns, datas) {
           }
         }
         if (exportLabelMethod) {
-          cellValue = exportLabelMethod({ $table: $xetable, row, column })
+          cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
         } else {
           switch (column.type) {
             case 'seq':
@@ -135,7 +135,7 @@ function getLabelData ($xetable, opts, columns, datas) {
         }
       }
       if (exportLabelMethod) {
-        cellValue = exportLabelMethod({ $table: $xetable, row, column })
+        cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
       } else {
         switch (column.type) {
           case 'seq':
@@ -197,7 +197,7 @@ function getFooterCellValue ($xetable, opts, items, column) {
     }
   }
   const _columnIndex = $xetable._getColumnIndex(column)
-  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column }) : XEUtils.toString(items[_columnIndex])
+  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toString(items[_columnIndex])
   return cellValue
 }
 
@@ -856,6 +856,7 @@ function handleExportAndPrint ($xetable, options, isPrint) {
   const types = defOpts.types || VXETable.exportTypes
   const checkMethod = customOpts.checkMethod
   const exportColumns = collectColumn.slice(0)
+  const { columns } = defOpts
   // 处理类型
   const typeList = types.map(value => {
     return {
@@ -873,7 +874,26 @@ function handleExportAndPrint ($xetable, options, isPrint) {
   XEUtils.eachTree(exportColumns, (column, index, items, path, parent) => {
     const isColGroup = column.children && column.children.length
     if (isColGroup || defaultFilterExportColumn(column)) {
-      column.checked = column.visible
+      column.checked = columns ? columns.some((item) => {
+        if (UtilTools.isColumn(item)) {
+          return column === item
+        } else if (XEUtils.isString(item)) {
+          return column.field === item
+        } else {
+          const colid = item.id
+          const type = item.type
+          const field = item.property || item.field
+          if (colid) {
+            return column.id === colid
+          } else if (field && type) {
+            return column.property === field && column.type === type
+          } else if (field) {
+            return column.property === field
+          } else if (type) {
+            return column.type === type
+          }
+        }
+      }) : column.visible
       column.halfChecked = false
       column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ column }) : false)
     }
@@ -1019,10 +1039,12 @@ export default {
                 const field = item.property || item.field
                 if (colid) {
                   targetColumn = this.getColumnById(colid)
+                } else if (field && type) {
+                  targetColumn = tableFullColumn.find((column) => column.property === field && column.type === type)
                 } else if (field) {
                   targetColumn = this.getColumnByField(field)
                 } else if (type) {
-                  targetColumn = tableFullColumn.find(column => column.type === type)
+                  targetColumn = tableFullColumn.find((column) => column.type === type)
                 }
               }
               return targetColumn || {}
