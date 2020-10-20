@@ -9,6 +9,7 @@
     "lib:modules": "gulp build",
     "lib:pack": "vue-cli-service build --target lib --name index --dest lib index.js",
     "lib": "npm run lib:pack && npm run lib:modules",
+    "format": "eslint --fix examples/**/*.{js,ts,vue}",
     "postinstall": "node scripts/postinstall || echo \"ignore\""
   },
   "files": [

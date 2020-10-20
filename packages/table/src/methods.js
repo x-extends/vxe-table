@@ -1259,6 +1259,7 @@ const Methods = {
       return this.recalculate(true)
     }).then(() => {
       this.updateCellAreas()
+      return this.$nextTick().then(() => this.recalculate())
     })
   },
   /**
