@@ -64,7 +64,7 @@ export interface TableExportConfig {
   /**
    * 自定义列
    */
-  columns?: ColumnInfo[];
+  columns?: ColumnInfo[] | ColumnOption[];
   /**
    * 列过滤方法
    */
@@ -84,7 +84,14 @@ export interface TableExportConfig {
   /**
    * 只对 remote=true 有效，用于自定义导出逻辑
    */
-  exportMethod?(params: { $table: Table, $grid?: Grid, options: TableExportConfig }): Promise<any>;
+  exportMethod?(params: { $table: Table, $grid?: Grid, options: ExportParams }): Promise<any>;
+
+  [name: string]: any;
+}
+
+export interface ExportParams extends TableExportConfig {
+  data: any[];
+  columns: ColumnOption[];
 
   [name: string]: any;
 }
@@ -181,6 +188,13 @@ export interface TablePrintConfig {
   [name: string]: any;
 }
 
+interface ColumnOption {
+  colid?: number;
+  type?: string;
+  field?: string;
+  [key: string]: any;
+}
+
 export interface ReadFileParams {
   files: FileList;
   file: File;
@@ -208,10 +222,12 @@ export interface ReadFileOptions {
 export interface ColumnExportCellRenderParams extends GridRenderParams {
   row: RowInfo;
   column: ColumnInfo;
+  options: ExportParams;
 }
 
 export interface ColumnExportFooterRenderParams extends GridRenderParams {
   items: any[];
   _columnIndex: number;
   column: ColumnInfo;
+  options: ExportParams;
 }

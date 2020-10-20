@@ -78,7 +78,7 @@ function getLabelData ($xetable, opts, columns, datas) {
           }
         }
         if (exportLabelMethod) {
-          cellValue = exportLabelMethod({ $table: $xetable, row, column })
+          cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
         } else {
           switch (column.type) {
             // v3.0 废弃 type=index
@@ -129,7 +129,7 @@ function getLabelData ($xetable, opts, columns, datas) {
         }
       }
       if (exportLabelMethod) {
-        cellValue = exportLabelMethod({ $table: $xetable, row, column })
+        cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
       } else {
         switch (column.type) {
           // v3.0 废弃 type=index
@@ -194,7 +194,7 @@ function getFooterCellValue ($xetable, opts, items, column) {
     }
   }
   const _columnIndex = $xetable._getColumnIndex(column)
-  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column }) : XEUtils.toString(items[_columnIndex])
+  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toString(items[_columnIndex])
   return cellValue
 }
 
@@ -958,6 +958,7 @@ export default {
       const types = defOpts.types || VXETable.exportTypes
       const checkMethod = customOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)
       const exportColumns = collectColumn.slice(0)
+      const { columns } = defOpts
       if (!exportConfig) {
         UtilTools.error('vxe.error.reqProp', ['export-config'])
       }
@@ -978,7 +979,26 @@ export default {
       XEUtils.eachTree(exportColumns, (column, index, items, path, parent) => {
         const isColGroup = column.children && column.children.length
         if (isColGroup || defaultFilterExportColumn(column)) {
-          column.checked = column.visible
+          column.checked = columns ? columns.some((item) => {
+            if (UtilTools.isColumn(item)) {
+              return column === item
+            } else if (XEUtils.isString(item)) {
+              return column.field === item
+            } else {
+              const colid = item.id
+              const type = item.type
+              const field = item.property || item.field
+              if (colid) {
+                return column.id === colid
+              } else if (field && type) {
+                return column.property === field && column.type === type
+              } else if (field) {
+                return column.property === field
+              } else if (type) {
+                return column.type === type
+              }
+            }
+          }) : column.visible
           column.halfChecked = false
           column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ column }) : false)
         }
