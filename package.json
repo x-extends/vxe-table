@@ -10,6 +10,7 @@
     "lib:dev_pack": "vue-cli-service build --target lib --name index --dest lib_dev index.js",
     "lib:pro_pack": "vue-cli-service build --target lib --name index --dest lib_pro index.js",
     "lib": "npm run lib:dev_pack && npm run lib:pro_pack && npm run lib:modules",
+    "format": "eslint --fix examples/**/*.{js,ts,vue}",
     "postinstall": "node scripts/postinstall || echo \"ignore\""
   },
   "files": [
