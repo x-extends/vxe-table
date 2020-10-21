@@ -271,7 +271,7 @@ const exportDataAPI = [
     name: 'columns',
     desc: '指定列',
     version: '',
-    type: 'Array<{ colid?: number; field:? string; type?: string }>',
+    type: 'Array<{ colId?: number; field:? string; type?: string }>',
     enum: '',
     defVal: '',
     list: []

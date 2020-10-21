@@ -802,7 +802,7 @@ const apis = [
         list: []
       },
       {
-        name: 'colId',
+        name: 'col-id',
         desc: '自定义列的唯一主键（注：非必要不需要设置，操作不正确将导致出现问题）',
         version: '',
         type: 'string | number',

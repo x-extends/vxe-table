@@ -883,7 +883,7 @@ function handleExportAndPrint ($xetable, options, isPrint) {
         } else if (XEUtils.isString(item)) {
           return column.field === item
         } else {
-          const colid = item.id
+          const colid = item.id || item.colId
           const type = item.type
           const field = item.property || item.field
           if (colid) {
@@ -1037,7 +1037,7 @@ export default {
               } else if (XEUtils.isString(item)) {
                 targetColumn = this.getColumnByField(item)
               } else {
-                const colid = item.id
+                const colid = item.id || item.colId
                 const type = item.type
                 const field = item.property || item.field
                 if (colid) {
