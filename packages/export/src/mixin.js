@@ -564,10 +564,10 @@ function clearColumnConvert (columns) {
 }
 
 function handleExport ($xetable, opts) {
-  const { remote, columns, colgroups, exportMethod } = opts
+  const { remote, columns, colgroups, exportMethod, afterExportMethod } = opts
+  const params = { options: opts, $table: $xetable, $grid: $xetable.$xegrid }
   return new Promise(resolve => {
     if (remote) {
-      const params = { options: opts, $table: $xetable, $grid: $xetable.$xegrid }
       resolve(exportMethod ? exportMethod(params) : params)
     } else {
       const datas = getExportData($xetable, opts)
@@ -579,6 +579,11 @@ function handleExport ($xetable, opts) {
     }
   }).then((params) => {
     clearColumnConvert(columns)
+    if (!opts.print) {
+      if (afterExportMethod) {
+        afterExportMethod(params)
+      }
+    }
     return params
   })
 }
@@ -728,8 +733,9 @@ function checkImportData (columns, fields) {
 
 function handleImport ($xetable, content, opts) {
   const { tableFullColumn, _importResolve } = $xetable
+  const { type, mode } = opts
   let rest = { fields: [], rows: [] }
-  switch (opts.type) {
+  switch (type) {
     case 'csv':
       rest = parseCsv(tableFullColumn, content)
       break
@@ -748,10 +754,15 @@ function handleImport ($xetable, content, opts) {
   if (status) {
     $xetable.createData(rows)
       .then(data => {
-        if (opts.mode === 'insert') {
+        if (mode === 'insert') {
           $xetable.insert(data)
         } else {
           $xetable.reloadData(data)
+        }
+      }).then(() => {
+        if (_importResolve) {
+          _importResolve(status)
+          $xetable._importResolve = null
         }
       })
     if (opts.message !== false) {
@@ -759,10 +770,10 @@ function handleImport ($xetable, content, opts) {
     }
   } else if (opts.message !== false) {
     VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
-  }
-  if (_importResolve) {
-    _importResolve(status)
-    $xetable._importResolve = null
+    if (_importResolve) {
+      _importResolve(status)
+      $xetable._importResolve = null
+    }
   }
 }
 
@@ -1015,15 +1026,17 @@ export default {
         // dataFilterMethod: null,
         // footerFilterMethod: null,
         // exportMethod: null,
-        // columnFilterMethod: null
+        // columnFilterMethod: null,
+        // beforeExportMethod: null,
+        // afterExportMethod: null
       }, exportOpts, {
         print: false
       }, options)
-      const { type, mode, columns, original } = opts
+      const { type, mode, columns, original, beforeExportMethod } = opts
       let groups = []
       const customCols = columns && columns.length ? columns : null
-      let columnFilterMethod = opts.columnFilterMethod
       // 如果设置源数据，则默认导出设置了字段的列
+      let columnFilterMethod = opts.columnFilterMethod
       if (!customCols && !columnFilterMethod) {
         columnFilterMethod = original ? ({ column }) => column.property : ({ column }) => defaultFilterExportColumn(column)
       }
@@ -1090,6 +1103,12 @@ export default {
           UtilTools.error('vxe.error.notType', [type])
         }
         return Promise.resolve()
+      }
+
+      if (!opts.print) {
+        if (beforeExportMethod) {
+          beforeExportMethod({ options: opts, $table: this, $grid: $xegrid })
+        }
       }
 
       if (!opts.data) {
@@ -1169,11 +1188,19 @@ export default {
       return Promise.resolve()
     },
     _importData (options) {
-      const opts = Object.assign({ types: VXETable.importTypes }, this.importOpts, options)
+      const opts = Object.assign({
+        types: VXETable.importTypes
+        // beforeImportMethod: null,
+        // afterImportMethod: null
+      }, this.importOpts, options)
+      const { beforeImportMethod, afterImportMethod } = opts
       const rest = new Promise((resolve, reject) => {
         this._importResolve = resolve
         this._importReject = reject
       })
+      if (beforeImportMethod) {
+        beforeImportMethod({ options: opts, $table: this })
+      }
       readLocalFile(opts).then((params) => {
         const { file } = params
         this.importByFile(file, opts)
@@ -1181,7 +1208,16 @@ export default {
         this._importReject(params)
         this._importReject = null
       })
-      return rest
+      return rest.then(() => {
+        if (afterImportMethod) {
+          afterImportMethod({ status: true, options: opts, $table: this })
+        }
+      }).catch((e) => {
+        if (afterImportMethod) {
+          afterImportMethod({ status: false, options: opts, $table: this })
+        }
+        return Promise.reject(e)
+      })
     },
     _saveFile (options) {
       return saveLocalFile(options)
@@ -1192,6 +1228,7 @@ export default {
     _print (options) {
       const opts = Object.assign({
         original: false
+        // beforePrintMethod
       }, this.printOpts, options, {
         type: 'html',
         download: false,
@@ -1201,13 +1238,17 @@ export default {
       if (!opts.sheetName) {
         opts.sheetName = document.title
       }
-      if (opts.content) {
-        handlePrint(this, opts, opts.content)
-      } else {
-        this.exportData(opts).then(({ content }) => {
-          handlePrint(this, opts, content)
-        })
-      }
+      return new Promise(resolve => {
+        if (opts.content) {
+          resolve(handlePrint(this, opts, opts.content))
+        } else {
+          resolve(
+            this.exportData(opts).then(({ content }) => {
+              return handlePrint(this, opts, content)
+            })
+          )
+        }
+      })
     },
     _openImport (options) {
       const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.importTypes }, options, this.importOpts)

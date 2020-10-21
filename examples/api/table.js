@@ -313,19 +313,37 @@ const exportDataAPI = [
     list: []
   },
   {
-    name: 'exportMethod',
-    desc: '只对 remote=true 有效，该函数 Function({ options }) 用于自定义导出或服务端导出，返回 Promise',
+    name: 'style',
+    desc: '只对 type=html 有效，自定义文档的 css 样式信息',
     version: '',
-    type: 'Function',
+    type: 'string',
     enum: '',
     defVal: '',
     list: []
   },
   {
-    name: 'style',
-    desc: '只对 type=html 有效，自定义文档的 css 样式信息',
+    name: 'exportMethod',
+    desc: '只对 remote=true 有效，该函数用于自定义导出或服务端导出，返回 Promise',
     version: '',
-    type: 'string',
+    type: '({ options }) => Promise<any>',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'beforeExportMethod',
+    desc: '该方法会在导出之前触发',
+    version: '',
+    type: '({ options }) => void',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'afterExportMethod',
+    desc: '该方法会在导出之后触发',
+    version: '',
+    type: '({ options }) => viod',
     enum: '',
     defVal: '',
     list: []
@@ -371,9 +389,27 @@ const importDataAPI = [
   },
   {
     name: 'importMethod',
-    desc: '只对 remote=true 有效，该函数 Function({ file, options }) 用于自定义导入或服务端导入，返回 Promise',
+    desc: '只对 remote=true 有效，该函数用于自定义导入或服务端导入，返回 Promise',
     version: '',
-    type: 'Function',
+    type: '({ file, options }) => Promise<any>',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'beforeImportMethod',
+    desc: '该方法会在导入之前触发',
+    version: '',
+    type: '({ options }) => void',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'afterImportMethod',
+    desc: '该方法会在导入之后触发',
+    version: '',
+    type: '({ options }) => viod',
     enum: '',
     defVal: '',
     list: []
