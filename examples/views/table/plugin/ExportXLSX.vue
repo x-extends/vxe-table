@@ -5,8 +5,9 @@
       <span class="red">（注：该示例仅供参考，建议使用后端导出）</span>
       </p>
 
-    <vxe-toolbar custom export>
+    <vxe-toolbar custom import export>
       <template v-slot:buttons>
+        <vxe-button @click="tableData = []">清空数据</vxe-button>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
       </template>
     </vxe-toolbar>
@@ -16,6 +17,7 @@
       ref="xTable"
       height="400"
       :loading="loading"
+      :import-config="tableImport"
       :export-config="tableExport"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -51,6 +53,10 @@ export default {
     return {
       loading: false,
       tableData: [],
+      tableImport: {
+        // 自定义类型
+        types: ['xlsx']
+      },
       tableExport: {
         // 默认选中类型
         type: 'xlsx',
@@ -59,8 +65,9 @@ export default {
       },
       demoCodes: [
         `
-        <vxe-toolbar custom export>
+        <vxe-toolbar custom import export>
           <template v-slot:buttons>
+            <vxe-button @click="tableData = []">清空数据</vxe-button>
             <vxe-button @click="exportDataEvent">导出数据</vxe-button>
           </template>
         </vxe-toolbar>
@@ -70,6 +77,7 @@ export default {
           ref="xTable"
           height="400"
           :loading="loading"
+          :import-config="tableImport"
           :export-config="tableExport"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -94,6 +102,10 @@ export default {
             return {
               loading: false,
               tableData: [],
+              tableImport: {
+                // 自定义类型
+                types: ['xlsx']
+              },
               tableExport: {
                 // 默认选中类型
                 type: 'xlsx',

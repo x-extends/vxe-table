@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      使用 v-for 去循环列是不建议的<span class="green">（建议动态列使用 <grid-api-link name="vxe-grid"/> 进行渲染）</span><br>
+      使用 v-for 去循环列是不建议的<span class="green">（建议动态场景使用 <grid-api-link name="vxe-grid"/> 进行渲染）</span><br>
       如果列信息发生变动，则需要通过调用 <table-api-link prop="refreshColumn"/> 方法刷新列信息<br>
       <span class="red">（注：动态更新属性必须要先定义，否则将失去自动响应）</span>
     </p>

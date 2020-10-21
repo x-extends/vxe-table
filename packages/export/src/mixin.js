@@ -18,6 +18,9 @@ let fileInput
 // 打印
 let printFrame
 
+const csvBOM = '\ufeff'
+const enterSymbol = '\r\n'
+
 function createFrame () {
   const frame = document.createElement('iframe')
   frame.className = 'vxe-table--print-frame'
@@ -234,18 +237,18 @@ function toTxtCellLabel (val) {
 }
 
 function toCsv ($xetable, opts, columns, datas) {
-  let content = '\ufeff'
+  let content = csvBOM
   if (opts.isHeader) {
-    content += columns.map(column => toTxtCellLabel(getHeaderTitle(opts, column))).join(',') + '\n'
+    content += columns.map(column => toTxtCellLabel(getHeaderTitle(opts, column))).join(',') + enterSymbol
   }
   datas.forEach(row => {
-    content += columns.map(column => toTxtCellLabel(getCsvCellTypeLabel(column, row[column.id]))).join(',') + '\n'
+    content += columns.map(column => toTxtCellLabel(getCsvCellTypeLabel(column, row[column.id]))).join(',') + enterSymbol
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
     const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
-      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, rows, column))).join(',') + '\n'
+      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, rows, column))).join(',') + enterSymbol
     })
   }
   return content
@@ -254,16 +257,16 @@ function toCsv ($xetable, opts, columns, datas) {
 function toTxt ($xetable, opts, columns, datas) {
   let content = ''
   if (opts.isHeader) {
-    content += columns.map(column => toTxtCellLabel(getHeaderTitle(opts, column))).join('\t') + '\n'
+    content += columns.map(column => toTxtCellLabel(getHeaderTitle(opts, column))).join('\t') + enterSymbol
   }
   datas.forEach(row => {
-    content += columns.map(column => toTxtCellLabel(row[column.id])).join('\t') + '\n'
+    content += columns.map(column => toTxtCellLabel(row[column.id])).join('\t') + enterSymbol
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
     const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
-      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, rows, column))).join(',') + '\n'
+      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, rows, column))).join(',') + enterSymbol
     })
   }
   return content
@@ -598,18 +601,18 @@ function getTxtCellValue (val, vMaps) {
 }
 
 function parseCsvAndTxt (columns, content, cellSeparator) {
-  const list = content.split('\n')
+  const list = content.split(enterSymbol)
   const rows = []
   let fields = []
   if (list.length) {
     const vMaps = {}
     const now = Date.now()
-    list.forEach(rVal => {
+    list.forEach((rVal) => {
       if (rVal) {
         const item = {}
-        rVal = rVal.replace(/""/g, () => {
+        rVal = rVal.replace(/("")|(\n)/g, (text, dVal) => {
           const key = getTxtCellKey(now)
-          vMaps[key] = '"'
+          vMaps[key] = dVal ? '"' : '\n'
           return key
         }).replace(/"(.*?)"/g, (text, cVal) => {
           const key = getTxtCellKey(now)
@@ -714,13 +717,13 @@ function parseXML (columns, content) {
  */
 function checkImportData (columns, fields) {
   const tableFields = []
-  columns.forEach(column => {
+  columns.forEach((column) => {
     const field = column.property
     if (field) {
       tableFields.push(field)
     }
   })
-  return tableFields.every(field => fields.indexOf(field) > -1)
+  return fields.some(field => tableFields.indexOf(field) > -1)
 }
 
 function handleImport ($xetable, content, opts) {
@@ -1207,8 +1210,8 @@ export default {
       }
     },
     _openImport (options) {
-      const defOpts = Object.assign({ mode: 'insert', message: true }, options, this.importOpts)
-      const types = defOpts.types || VXETable.exportTypes
+      const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.importTypes }, options, this.importOpts)
+      const { types } = defOpts
       const isTree = !!this.getTreeStatus()
       if (isTree) {
         if (defOpts.message) {
