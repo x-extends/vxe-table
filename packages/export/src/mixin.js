@@ -15,6 +15,9 @@ let fileInput
 // 打印
 let printFrame
 
+const csvBOM = '\ufeff'
+const enterSymbol = '\r\n'
+
 function createFrame () {
   const frame = document.createElement('iframe')
   frame.className = 'vxe-table--print-frame'
@@ -204,18 +207,18 @@ function getFooterData (opts, footerData) {
 }
 
 function toCsv ($xetable, opts, columns, datas) {
-  let content = '\ufeff'
+  let content = csvBOM
   if (opts.isHeader) {
-    content += columns.map(column => `"${getHeaderTitle(opts, column)}"`).join(',') + '\n'
+    content += columns.map(column => `"${getHeaderTitle(opts, column)}"`).join(',') + enterSymbol
   }
   datas.forEach(row => {
-    content += columns.map(column => `"${row[column.id]}"`).join(',') + '\n'
+    content += columns.map(column => `"${row[column.id]}"`).join(',') + enterSymbol
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
     const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
-      content += columns.map(column => `"${getFooterCellValue($xetable, opts, rows, column)}"`).join(',') + '\n'
+      content += columns.map(column => `"${getFooterCellValue($xetable, opts, rows, column)}"`).join(',') + enterSymbol
     })
   }
   return content
@@ -224,16 +227,16 @@ function toCsv ($xetable, opts, columns, datas) {
 function toTxt ($xetable, opts, columns, datas) {
   let content = ''
   if (opts.isHeader) {
-    content += columns.map(column => `${getHeaderTitle(opts, column)}`).join('\t') + '\n'
+    content += columns.map(column => `${getHeaderTitle(opts, column)}`).join('\t') + enterSymbol
   }
   datas.forEach(row => {
-    content += columns.map(column => `${row[column.id]}`).join('\t') + '\n'
+    content += columns.map(column => `${row[column.id]}`).join('\t') + enterSymbol
   })
   if (opts.isFooter) {
     const footerData = $xetable.footerData
     const footers = getFooterData(opts, footerData)
     footers.forEach(rows => {
-      content += columns.map(column => `${getFooterCellValue($xetable, opts, rows, column)}`).join(',') + '\n'
+      content += columns.map(column => `${getFooterCellValue($xetable, opts, rows, column)}`).join(',') + enterSymbol
     })
   }
   return content
@@ -488,7 +491,7 @@ function replaceDoubleQuotation (val) {
 }
 
 function parseCsv (columns, content) {
-  const list = content.split('\n')
+  const list = content.split(enterSymbol)
   const rows = []
   let fields = []
   if (list.length) {
