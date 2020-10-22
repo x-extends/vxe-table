@@ -74,6 +74,7 @@ class ColumnInfo {
       titleHelp: _vm.titleHelp,
       // 自定义参数
       params: _vm.params,
+      customRowSpan: _vm.customRowSpan,
       // 渲染属性
       id: _vm.colId || XEUtils.uniqueId('col_'),
       parentId: null,

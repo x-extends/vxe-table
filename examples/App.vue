@@ -1269,6 +1269,13 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.groupcustom',
+              demoUrl: 'https://jsrun.pro/M8WKp/edit',
+              locat: {
+                name: 'GridGroupCustom'
+              }
+            },
+            {
               label: 'app.aside.nav.reverse',
               demoUrl: 'https://jsrun.pro/zIWKp/edit',
               locat: {

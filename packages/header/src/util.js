@@ -14,7 +14,7 @@ const getAllColumns = (columns, parentColumn) => {
   return result
 }
 
-export const convertToRows = (originColumns) => {
+export const convertToRows = (useCustomRowSpan, originColumns) => {
   let maxLevel = 1
   const traverse = (column, parent) => {
     if (parent) {
@@ -49,13 +49,62 @@ export const convertToRows = (originColumns) => {
 
   const allColumns = getAllColumns(originColumns)
 
-  allColumns.forEach((column) => {
-    if (column.children && column.children.length && column.children.some(column => column.visible)) {
-      column.rowSpan = 1
-    } else {
-      column.rowSpan = maxLevel - column.level + 1
+  const traverseParent = (column, findcolumnid) => {
+    let r = null
+    if (column.id === findcolumnid) {
+      return column
     }
-    rows[column.level - 1].push(column)
+    if (column.children && column.children.length && column.children.some(column => column.visible)) {
+      for (let i = 0; i < column.children.length; i++) {
+        const subColumn = column.children[i]
+        if (subColumn.visible) {
+          const subr = traverseParent(subColumn, findcolumnid)
+          if (subr) {
+            r = subr
+            break
+          }
+        }
+      }
+    }
+    return r
+  }
+
+  const getParent = (columnId) => {
+    let r = null
+    for (let i = 0; i < originColumns.length; i++) {
+      const column = originColumns[i]
+      r = traverseParent(column, columnId)
+      if (r) {
+        break
+      }
+    }
+    return r
+  }
+
+  allColumns.forEach((column) => {
+    if (useCustomRowSpan) {
+      if (column.customRowSpan) {
+        column.rowSpan = column.customRowSpan
+      } else {
+        column.rowSpan = 1
+      }
+      let alevel = column.level - 1
+      if (column.parentId) {
+        const parent = getParent(column.parentId)
+        alevel = parent.level + parent.rowSpan - 1
+        if (alevel > maxLevel) {
+          alevel = maxLevel
+        }
+      }
+      rows[alevel].push(column)
+    } else {
+      if (column.children && column.children.length && column.children.some(column => column.visible)) {
+        column.rowSpan = 1
+      } else {
+        column.rowSpan = maxLevel - column.level + 1
+      }
+      rows[column.level - 1].push(column)
+    }
   })
 
   return rows

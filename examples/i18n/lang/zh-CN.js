@@ -32,6 +32,7 @@ module.exports = {
         fixed: '固定列',
         fullFixed: '固定表头和列',
         group: '表头分组',
+        groupcustom: '表头分组——自定义行合并',
         merge: '合并行或列',
         seq: '序号',
         headerHighlight: '高亮列',

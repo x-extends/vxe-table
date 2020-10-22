@@ -75,6 +75,8 @@ export default {
     id: String,
     // 数据
     data: Array,
+    // 使用自定义表头合并方式
+    useCustomHeaderRowSpan: { type: Boolean, default: () => false },
     // 表格的高度
     height: [Number, String],
     // 表格的最大高度
@@ -796,7 +798,8 @@ export default {
       footerData,
       hasTip,
       emptyRender,
-      emptyOpts
+      emptyOpts,
+      useCustomHeaderRowSpan
     } = this
     const tableChilds = []
     const fixedChilds = []
@@ -822,6 +825,7 @@ export default {
             tableData,
             tableColumn,
             tableGroupColumn,
+            useCustomHeaderRowSpan,
             size: vSize
           }
         })

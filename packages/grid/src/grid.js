@@ -135,6 +135,7 @@ export default {
     toolbar: [Boolean, Object],
     formConfig: [Boolean, Object],
     zoomConfig: Object,
+    useCustomHeaderRowSpan: Boolean,
     size: { type: String, default: () => GlobalConfig.grid.size || GlobalConfig.size }
   },
   provide () {
@@ -199,6 +200,7 @@ export default {
           props.height = 'auto'
         }
       }
+      props.useCustomHeaderRowSpan = this.useCustomHeaderRowSpan
       if (proxyConfig) {
         props.loading = isCloak || loading || tableLoading
         props.data = tableData

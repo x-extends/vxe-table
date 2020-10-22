@@ -101,6 +101,7 @@ import TableKeepAliveTable3 from './views/table/advanced/keepAlives/Table3.vue'
 
 import GridBasic from './views/table/grid/Basic.vue'
 import GridGroup from './views/table/grid/Group.vue'
+import GridGroupCustom from './views/table/grid/GroupCustom.vue'
 import GridReverse from './views/table/grid/Reverse.vue'
 import GridTemplate from './views/table/grid/Template.vue'
 import GridFooter from './views/table/grid/Footer.vue'
@@ -990,6 +991,11 @@ export default new Router({
       path: '/table/grid/group',
       name: 'GridGroup',
       component: GridGroup
+    },
+    {
+      path: '/table/grid/groupCustom',
+      name: 'GridGroupCustom',
+      component: GridGroupCustom
     },
     {
       path: '/table/grid/reverse',
