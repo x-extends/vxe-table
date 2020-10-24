@@ -151,7 +151,7 @@ export default {
       pendingRecords: [],
       filterData: [],
       formData: {},
-      sortData: {},
+      sortData: [],
       tZindex: 0,
       tablePage: {
         total: 0,
@@ -499,7 +499,8 @@ export default {
               code,
               button,
               $grid: this,
-              sort: sortData,
+              sort: sortData.length ? sortData[0] : {},
+              sorts: sortData,
               filters: filterData,
               form: formData,
               options: ajaxMethods
@@ -512,18 +513,19 @@ export default {
             }
             if (isInited || isReload) {
               const checkedFilters = isInited ? this.getCheckedFilters() : []
-              const defaultSort = $xetable.sortOpts.defaultSort
-              let sortParams = {}
+              let defaultSort = $xetable.sortOpts.defaultSort
+              let sortParams = []
               // 如果使用默认排序
               if (defaultSort) {
-                sortParams = {
-                  property: defaultSort.field,
-                  order: defaultSort.order
+                if (!XEUtils.isArray(defaultSort)) {
+                  defaultSort = [defaultSort]
                 }
+                sortParams = defaultSort
               }
-              this.sortData = params.sort = sortParams
+              this.sortData = params.sorts = sortParams
               this.filterData = params.filters = isInited ? checkedFilters : []
               this.pendingRecords = []
+              params.sort = params.sorts.length ? params.sorts[0] : {}
               this.$nextTick(() => {
                 if (isInited) {
                   clearTableDefaultStatus($xetable)
@@ -728,17 +730,11 @@ export default {
       }
     },
     sortChangeEvent (params) {
-      const { $table, column } = params
+      const { $table, column, sortList } = params
       const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : $table.sortOpts.remote
-      const property = params.order ? params.property : null
       // 如果是服务端排序
       if (isRemote) {
-        this.sortData = property ? {
-          property,
-          order: params.order,
-          sortBy: params.sortBy,
-          sortList: params.sortList
-        } : {}
+        this.sortData = sortList
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1
           this.commitProxy('query')
@@ -806,11 +802,13 @@ export default {
       return this.$nextTick().then(() => this.recalculate(true)).then(() => this.isZMax)
     },
     getProxyInfo () {
+      const { sortData } = this
       return this.proxyConfig ? {
         data: this.tableData,
         filter: this.filterData,
         form: this.formData,
-        sort: this.sortData,
+        sort: sortData.length ? sortData[0] : {},
+        sorts: sortData,
         pager: this.tablePage,
         pendingRecords: this.pendingRecords
       } : null

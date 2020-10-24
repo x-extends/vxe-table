@@ -3827,12 +3827,12 @@ const apis = [
       //   list: []
       // },
       {
-        name: 'sort(field, order)',
+        name: 'sort(sortConfs, order)',
         desc: '手动对表格进行排序（如果 order 为空则自动切换排序）',
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: 'field: string, order?: \'desc\' | \'asc\'',
+        defVal: 'sortConfs: string | { field: string | ColumnInfo, order: \'desc\' | \'asc\' | null } | { field: string | ColumnInfo, order?: \'desc\' | \'asc\' | null }[], order?: \'desc\' | \'asc\' | null',
         list: []
       },
       {
