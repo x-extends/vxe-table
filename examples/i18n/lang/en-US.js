@@ -445,6 +445,7 @@ export default {
           expandConfig: 'Expand the row configuration',
           treeConfig: 'Tree configuration',
           contextMenu: 'context menu configuration',
+          clipConfig: 'Copy and paste configuration',
           mouseConfig: 'Mouse configuration',
           keyboardConfig: 'Keyboard configuration',
           editConfig: 'Editable configuration',

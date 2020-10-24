@@ -2016,34 +2016,43 @@ const Methods = {
   handleGlobalPasteEvent (evnt) {
     const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
     const { actived } = editStore
-    if (isActivated && !(actived.row || actived.column)) {
-      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
-        this.handlePasteCellAreaEvent(evnt)
-      } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
-        this.handlePaste(evnt)
+    if (isActivated) {
+      if (!(actived.row || actived.column)) {
+        if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
+          this.handlePasteCellAreaEvent(evnt)
+        } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
+          this.handlePaste(evnt)
+        }
       }
+      this.emitEvent('paste', {}, evnt)
     }
   },
   handleGlobalCopyEvent (evnt) {
     const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
     const { actived } = editStore
-    if (isActivated && !(actived.row || actived.column)) {
-      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
-        this.handleCopyCellAreaEvent(evnt)
-      } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
-        this.handleCopyed(false, evnt)
+    if (isActivated) {
+      if (!(actived.row || actived.column)) {
+        if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
+          this.handleCopyCellAreaEvent(evnt)
+        } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
+          this.handleCopyed(false, evnt)
+        }
       }
+      this.emitEvent('copy', {}, evnt)
     }
   },
   handleGlobalCutEvent (evnt) {
     const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
     const { actived } = editStore
-    if (isActivated && !(actived.row || actived.column)) {
-      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
-        this.handleCutCellAreaEvent(evnt)
-      } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
-        this.handleCopyed(true, evnt)
+    if (isActivated) {
+      if (!(actived.row || actived.column)) {
+        if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
+          this.handleCutCellAreaEvent(evnt)
+        } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
+          this.handleCopyed(true, evnt)
+        }
       }
+      this.emitEvent('cut', {}, evnt)
     }
   },
   handleGlobalResizeEvent () {

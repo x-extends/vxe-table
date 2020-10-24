@@ -444,6 +444,7 @@ export default {
           expandConfig: '展开行配置项',
           treeConfig: '树形结构配置项',
           contextMenu: '快捷菜单配置项',
+          clipConfig: '复制粘贴配置项',
           mouseConfig: '鼠标配置项',
           keyboardConfig: '按键配置项',
           editConfig: '可编辑配置项',
