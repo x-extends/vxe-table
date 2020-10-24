@@ -17,7 +17,7 @@ import arrayEach from 'xe-utils/arrayEach'
 // import uniq from 'xe-utils/uniq'
 // import union from 'xe-utils/union'
 // import toArray from 'xe-utils/toArray'
-import sortBy from 'xe-utils/sortBy'
+import orderBy from 'xe-utils/orderBy'
 // import shuffle from 'xe-utils/shuffle'
 // import sample from 'xe-utils/sample'
 import slice from 'xe-utils/slice'
@@ -199,7 +199,7 @@ export default {
   // uniq,
   // union,
   // toArray,
-  sortBy,
+  orderBy,
   // shuffle,
   // sample,
   slice,

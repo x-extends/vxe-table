@@ -565,9 +565,9 @@ function clearColumnConvert (columns) {
 
 function handleExport ($xetable, opts) {
   const { remote, columns, colgroups, exportMethod, afterExportMethod } = opts
-  const params = { options: opts, $table: $xetable, $grid: $xetable.$xegrid }
   return new Promise(resolve => {
     if (remote) {
+      const params = { options: opts, $table: $xetable, $grid: $xetable.$xegrid }
       resolve(exportMethod ? exportMethod(params) : params)
     } else {
       const datas = getExportData($xetable, opts)
@@ -577,14 +577,23 @@ function handleExport ($xetable, opts) {
         })
       )
     }
-  }).then((params) => {
+  }).then(() => {
     clearColumnConvert(columns)
     if (!opts.print) {
       if (afterExportMethod) {
-        afterExportMethod(params)
+        afterExportMethod({ status: true, options: opts, $table: $xetable, $grid: $xetable.$xegrid })
       }
     }
-    return params
+    return { status: true }
+  }).catch(() => {
+    clearColumnConvert(columns)
+    if (!opts.print) {
+      if (afterExportMethod) {
+        afterExportMethod({ status: false, options: opts, $table: $xetable, $grid: $xetable.$xegrid })
+      }
+    }
+    const params = { status: false }
+    return Promise.reject(params)
   })
 }
 
@@ -732,10 +741,9 @@ function checkImportData (columns, fields) {
 }
 
 function handleImport ($xetable, content, opts) {
-  const { tableFullColumn, _importResolve } = $xetable
-  const { type, mode } = opts
+  const { tableFullColumn, _importResolve, _importReject } = $xetable
   let rest = { fields: [], rows: [] }
-  switch (type) {
+  switch (opts.type) {
     case 'csv':
       rest = parseCsv(tableFullColumn, content)
       break
@@ -753,28 +761,100 @@ function handleImport ($xetable, content, opts) {
   const status = checkImportData(tableFullColumn, fields)
   if (status) {
     $xetable.createData(rows)
-      .then(data => {
-        if (mode === 'insert') {
-          $xetable.insert(data)
+      .then((data) => {
+        let loadRest
+        if (opts.mode === 'insert') {
+          loadRest = $xetable.insert(data)
         } else {
-          $xetable.reloadData(data)
+          loadRest = $xetable.reloadData(data)
         }
-      }).then(() => {
-        if (_importResolve) {
-          _importResolve(status)
-          $xetable._importResolve = null
+        if (opts.message !== false) {
+          VXETable.modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
         }
+        return loadRest.then(() => {
+          if (_importResolve) {
+            _importResolve({ status: true })
+          }
+        })
       })
-    if (opts.message !== false) {
-      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
-    }
   } else if (opts.message !== false) {
     VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
-    if (_importResolve) {
-      _importResolve(status)
-      $xetable._importResolve = null
+    if (_importReject) {
+      _importReject({ status: false })
     }
   }
+}
+
+function handleFileImport ($xetable, file, opts) {
+  const { afterImportMethod } = opts
+  const { type, filename } = UtilTools.parseFile(file)
+
+  // 检查类型
+  if (!XEUtils.includes(VXETable.importTypes, type)) {
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      UtilTools.error('vxe.error.notType', [type])
+    }
+    const params = { status: false }
+    return Promise.reject(params)
+  }
+
+  const rest = new Promise((resolve, reject) => {
+    const _importResolve = (params) => {
+      resolve(params)
+      $xetable._importResolve = null
+      $xetable._importReject = null
+    }
+    const _importReject = (params) => {
+      reject(params)
+      $xetable._importResolve = null
+      $xetable._importReject = null
+    }
+    $xetable._importResolve = _importResolve
+    $xetable._importReject = _importReject
+    if (window.FileReader) {
+      const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
+      if (options.remote) {
+        if (options.importMethod) {
+          Promise.resolve(options.importMethod({ file, options, $table: $xetable })).then(() => {
+            _importResolve({ status: true })
+          }).catch(() => {
+            _importResolve({ status: true })
+          })
+        } else {
+          _importResolve({ status: true })
+        }
+      } else {
+        $xetable.preventEvent(null, 'event.import', { file, options, columns: $xetable.tableFullColumn }, () => {
+          const reader = new FileReader()
+          reader.onerror = () => {
+            UtilTools.error('vxe.error.notType', [type])
+            _importReject({ status: false })
+          }
+          reader.onload = (e) => {
+            handleImport($xetable, e.target.result, options)
+          }
+          reader.readAsText(file, 'UTF-8')
+        })
+      }
+    } else {
+      // 不支持的浏览器
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        UtilTools.error('vxe.error.notExp')
+      }
+      _importResolve({ status: true })
+    }
+  })
+
+  return rest.then(() => {
+    if (afterImportMethod) {
+      afterImportMethod({ status: true, options: opts, $table: $xetable })
+    }
+  }).catch((e) => {
+    if (afterImportMethod) {
+      afterImportMethod({ status: false, options: opts, $table: $xetable })
+    }
+    return Promise.reject(e)
+  })
 }
 
 /**
@@ -791,40 +871,37 @@ export function readLocalFile (options = {}) {
     fileForm.appendChild(fileInput)
     document.body.appendChild(fileForm)
   }
-  let fileResolve
-  let fileReject
-  const types = options.types || []
-  const isAllType = !types.length || types.some((type) => type === '*')
-  fileInput.multiple = !!options.multiple
-  fileInput.accept = isAllType ? '' : `.${types.join(', .')}`
-  fileInput.onchange = (evnt) => {
-    const { files } = evnt.target
-    const file = files[0]
-    let errType
-    // 校验类型
-    if (!isAllType) {
-      for (let fIndex = 0; fIndex < files.length; fIndex++) {
-        const { type } = UtilTools.parseFile(files[fIndex])
-        if (!XEUtils.includes(types, type)) {
-          errType = type
-          break
+  return new Promise((resolve, reject) => {
+    const types = options.types || []
+    const isAllType = !types.length || types.some((type) => type === '*')
+    fileInput.multiple = !!options.multiple
+    fileInput.accept = isAllType ? '' : `.${types.join(', .')}`
+    fileInput.onchange = (evnt) => {
+      const { files } = evnt.target
+      const file = files[0]
+      let errType
+      // 校验类型
+      if (!isAllType) {
+        for (let fIndex = 0; fIndex < files.length; fIndex++) {
+          const { type } = UtilTools.parseFile(files[fIndex])
+          if (!XEUtils.includes(types, type)) {
+            errType = type
+            break
+          }
         }
       }
-    }
-    if (!errType) {
-      fileResolve({ files, file })
-    } else {
-      if (options.message !== false) {
-        VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
+      if (!errType) {
+        resolve({ status: true, files, file })
+      } else {
+        if (options.message !== false) {
+          VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
+        }
+        const params = { status: false, files, file }
+        reject(params)
       }
-      fileReject({ files, file })
     }
-  }
-  fileForm.reset()
-  fileInput.click()
-  return new Promise((resolve, reject) => {
-    fileResolve = resolve
-    fileReject = reject
+    fileForm.reset()
+    fileInput.click()
   })
 }
 
@@ -1102,7 +1179,8 @@ export default {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           UtilTools.error('vxe.error.notType', [type])
         }
-        return Promise.resolve()
+        const params = { status: false }
+        return Promise.reject(params)
       }
 
       if (!opts.print) {
@@ -1149,43 +1227,13 @@ export default {
       }
       return handleExport(this, opts)
     },
-    _importByFile (file, opts) {
-      const { type, filename } = UtilTools.parseFile(file)
-
-      // 检查类型
-      if (!XEUtils.includes(VXETable.importTypes, type)) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          UtilTools.error('vxe.error.notType', [type])
-        }
-        return Promise.resolve()
+    _importByFile (file, options) {
+      const opts = Object.assign({}, options)
+      const { beforeImportMethod } = opts
+      if (beforeImportMethod) {
+        beforeImportMethod({ options: opts, $table: this })
       }
-
-      if (window.FileReader) {
-        const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
-        if (options.remote) {
-          const params = { file, options, $table: this }
-          if (options.importMethod) {
-            return options.importMethod(params)
-          }
-          return Promise.resolve(params)
-        }
-        this.preventEvent(null, 'event.import', { file, options, columns: this.tableFullColumn }, () => {
-          const reader = new FileReader()
-          reader.onerror = () => {
-            UtilTools.error('vxe.error.notType', [type])
-          }
-          reader.onload = e => {
-            handleImport(this, e.target.result, options)
-          }
-          reader.readAsText(file, 'UTF-8')
-        })
-      } else {
-        // 不支持的浏览器
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          UtilTools.error('vxe.error.notExp')
-        }
-      }
-      return Promise.resolve()
+      return handleFileImport(this, file, opts)
     },
     _importData (options) {
       const opts = Object.assign({
@@ -1194,29 +1242,17 @@ export default {
         // afterImportMethod: null
       }, this.importOpts, options)
       const { beforeImportMethod, afterImportMethod } = opts
-      const rest = new Promise((resolve, reject) => {
-        this._importResolve = resolve
-        this._importReject = reject
-      })
       if (beforeImportMethod) {
         beforeImportMethod({ options: opts, $table: this })
       }
-      readLocalFile(opts).then((params) => {
-        const { file } = params
-        this.importByFile(file, opts)
-      }).catch(params => {
-        this._importReject(params)
-        this._importReject = null
-      })
-      return rest.then(() => {
-        if (afterImportMethod) {
-          afterImportMethod({ status: true, options: opts, $table: this })
-        }
-      }).catch((e) => {
+      return readLocalFile(opts).catch(e => {
         if (afterImportMethod) {
           afterImportMethod({ status: false, options: opts, $table: this })
         }
         return Promise.reject(e)
+      }).then((params) => {
+        const { file } = params
+        return handleFileImport(this, file, opts)
       })
     },
     _saveFile (options) {

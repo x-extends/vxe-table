@@ -728,16 +728,16 @@ export default {
       }
     },
     sortChangeEvent (params) {
-      const { remoteSort } = this
       const { $table, column } = params
-      const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : ($table.sortOpts.remote || remoteSort)
+      const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : $table.sortOpts.remote
       const property = params.order ? params.property : null
       // 如果是服务端排序
       if (isRemote) {
         this.sortData = property ? {
           property,
           order: params.order,
-          sortBy: params.sortBy
+          sortBy: params.sortBy,
+          sortList: params.sortList
         } : {}
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1

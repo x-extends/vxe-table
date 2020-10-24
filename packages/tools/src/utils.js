@@ -30,6 +30,15 @@ class ColumnInfo {
           UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
         }
       }
+      if (_vm.remoteSort !== null) {
+        UtilTools.warn('vxe.error.delProp', ['column.remote-sort', 'sort-config.remote'])
+      }
+      if (_vm.sortMethod) {
+        UtilTools.warn('vxe.error.delProp', ['column.sort-method', 'sort-config.sortMethod'])
+      }
+      if (_vm.sortBy && !XEUtils.isString(_vm.sortBy)) {
+        UtilTools.warn('vxe.error.errProp', [`column.sort-by=${JSON.stringify(_vm.sortBy)}`, `column.sort-by="${_vm.sortBy[0]}"`])
+      }
       if (formatter) {
         if (XEUtils.isString(formatter)) {
           const globalFunc = formats.get(formatter) || XEUtils[formatter]

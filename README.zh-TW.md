@@ -19,11 +19,6 @@
   * 模組化表格、按需加載、擴展介面
   * 為單行編輯表格而設計，支持增删改查及更多擴展，强大的功能的同時兼具效能
 
-* [計劃](#donation)
-  * [x] v1.0 基於 vue2.6+，支持所有主流的瀏覽器，實現表格的一切實用的功能
-  * [x] v2.0 基於 vue2.6+，支持所有主流的瀏覽器，同時兼具功能與效能
-  * [x] v3.0 基於 vue2.6+，只支持現代瀏覽器，不支持IE，渲染效能大幅提升
-
 ## 瀏覽器支持
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)

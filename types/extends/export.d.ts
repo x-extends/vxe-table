@@ -196,6 +196,7 @@ interface ColumnOption {
 }
 
 export interface ReadFileParams {
+  status: boolean;
   files: FileList;
   file: File;
   target: HTMLInputElement & EventTarget & {

@@ -623,6 +623,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.multiSort',
+              locat: {
+                name: 'TableMultiSort'
+              }
+            },
+            {
               label: 'app.aside.nav.manualFilter',
               locat: {
                 name: 'TableManualFilter'

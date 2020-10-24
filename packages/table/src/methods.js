@@ -216,6 +216,12 @@ function removeMerges (_vm, merges, mList, rowList) {
   return rest
 }
 
+function clearAllSort (_vm) {
+  _vm.tableFullColumn.forEach((column) => {
+    column.order = null
+  })
+}
+
 const Methods = {
   /**
    * 获取父容器元素
@@ -881,29 +887,36 @@ const Methods = {
    */
   updateAfterFullData () {
     const { visibleColumn, tableFullData, filterOpts, sortOpts } = this
+    const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
+    const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple } = sortOpts
     let tableData = tableFullData.slice(0)
-    const column = XEUtils.find(visibleColumn, column => column.order)
     const filterColumns = []
+    const orderColumns = []
     visibleColumn.forEach(column => {
-      if (column.filters && column.filters.length) {
+      const { sortable, order, filters } = column
+      if (!allRemoteFilter && filters && filters.length) {
         const valueList = []
         const itemList = []
-        column.filters.forEach(item => {
+        filters.forEach((item) => {
           if (item.checked) {
             itemList.push(item)
             valueList.push(item.value)
           }
         })
-        filterColumns.push({ column, valueList, itemList })
+        if (itemList.length) {
+          filterColumns.push({ column, valueList, itemList })
+        }
+      }
+      if (!allRemoteSort && sortable && order) {
+        orderColumns.push({ column, sortBy: column.sortBy, property: column.property, order })
       }
     })
     if (filterColumns.length) {
       tableData = tableData.filter(row => {
         return filterColumns.every(({ column, valueList, itemList }) => {
-          if (valueList.length && !filterOpts.remote) {
+          if (valueList.length && !allRemoteFilter) {
             const { filterRender, property } = column
             let { filterMethod } = column
-            const allFilterMethod = filterOpts.filterMethod
             const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
             if (!filterMethod && compConf && compConf.renderFilter) {
               filterMethod = compConf.filterMethod
@@ -917,17 +930,38 @@ const Methods = {
         })
       })
     }
-    if (column && column.order) {
-      const { remoteSort, sortMethod, property, order } = column
-      const allSortMethod = sortOpts.sortMethod
-      const isRemote = XEUtils.isBoolean(remoteSort) ? remoteSort : sortOpts.remote
-      if (!isRemote) {
-        if (allSortMethod && !sortMethod) {
-          tableData = allSortMethod({ data: tableData, column, property, order, $table: this }) || tableData
+    const firstOrderColumn = orderColumns[0]
+    if (!allRemoteSort && firstOrderColumn) {
+      if (allSortMethod) {
+        const sortRests = allSortMethod({ data: tableData, column: firstOrderColumn.column, property: firstOrderColumn.property, order: firstOrderColumn.order, sortList: orderColumns, $table: this })
+        tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
+      } else {
+        const params = { $table: this }
+        // 兼容 v4
+        if (sortMultiple) {
+          tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, property, order }) => {
+            return {
+              field: (column.sortBy ? (XEUtils.isArray(column.sortBy) ? column.sortBy[0] : column.sortBy) : null) || (column.formatter ? (row) => getCellLabel(row, column, params) : property),
+              order
+            }
+          }))
         } else {
-          const params = { $table: this }
-          const rest = sortMethod ? tableData.sort(sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => getCellLabel(row, column, params) : property)))
-          tableData = order === 'desc' ? rest.reverse() : rest
+          // 兼容 v2，在 v4 中废弃， sortBy 不能为数组
+          let sortByConfs
+          if (firstOrderColumn.sortBy) {
+            sortByConfs = (XEUtils.isArray(firstOrderColumn.sortBy) ? firstOrderColumn.sortBy : [firstOrderColumn.sortBy]).map(item => {
+              return {
+                field: item,
+                order: firstOrderColumn.order
+              }
+            })
+          }
+          tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, property, order }) => {
+            return {
+              field: column.formatter ? (row) => getCellLabel(row, column, params) : property,
+              order
+            }
+          }))
         }
       }
     }
@@ -2849,14 +2883,23 @@ const Methods = {
     this.emitEvent('cell-dblclick', params, evnt)
   },
   handleDefaultSort () {
-    const defaultSort = this.sortOpts.defaultSort
-    if (defaultSort) {
-      const { field, order } = defaultSort
-      if (field && order) {
-        const column = XEUtils.find(this.visibleColumn, item => item.property === field)
-        if (column && !column.order) {
-          this.sort(field, order)
-        }
+    const { sortOpts } = this
+    let { defaultSort } = sortOpts
+    if (!sortOpts.remote && defaultSort) {
+      if (!XEUtils.isArray(defaultSort)) {
+        defaultSort = [defaultSort]
+      }
+      if (defaultSort.length) {
+        defaultSort.forEach((item) => {
+          const { field, order } = item
+          if (field && order) {
+            const column = this.getColumnByField(field)
+            if (column && column.sortable) {
+              column.order = order
+            }
+          }
+        })
+        this.handleTableData(true).then(this.updateStyle)
       }
     }
   },
@@ -2864,20 +2907,20 @@ const Methods = {
    * 点击排序事件
    */
   triggerSortEvent (evnt, column, order) {
+    const { sortOpts } = this
     const property = column.property
     if (column.sortable || column.remoteSort) {
-      const params = { column, property, order, sortBy: column.sortBy }
       if (!order || column.order === order) {
-        params.order = null
-        this.clearSort()
+        this.clearSort(sortOpts.multiple ? column : null)
       } else {
         this.sort(property, order)
       }
+      const params = { column, property, order: column.order, sortBy: column.sortBy, sortList: this.getSortColumns() }
       this.emitEvent('sort-change', params, evnt)
     }
   },
   sort (field, order) {
-    const { tableFullColumn, sortOpts } = this
+    const { sortOpts } = this
     const column = this.getColumnByField(field)
     if (column) {
       const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : sortOpts.remote
@@ -2886,9 +2929,9 @@ const Methods = {
           order = getNextSortOrder(this, column)
         }
         if (column.order !== order) {
-          tableFullColumn.forEach(column => {
-            column.order = null
-          })
+          if (!sortOpts.multiple) {
+            clearAllSort(this)
+          }
           column.order = order
           // 如果是服务端排序，则跳过本地排序处理
           if (!isRemote) {
@@ -2901,16 +2944,46 @@ const Methods = {
     return this.$nextTick()
   },
   /**
-   * 手动清空排序条件，数据会恢复成未排序的状态
+   * 清空指定列的排序条件
+   * 如果为空则清空所有列的排序条件
+   * @param {String} column 列或字段名
    */
-  clearSort () {
-    this.tableFullColumn.forEach(column => {
+  clearSort (column) {
+    const { sortOpts } = this
+    if (column && XEUtils.isString(column)) {
+      column = this.getColumnByField(column)
+    }
+    if (column) {
       column.order = null
-    })
-    return this.handleTableData(true)
+    } else {
+      clearAllSort(this)
+    }
+    if (!sortOpts.remote) {
+      return this.handleTableData(true)
+    }
+    return this.$nextTick()
   },
+  // 在 v3 中废弃
   getSortColumn () {
+    UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
     return XEUtils.find(this.visibleColumn, column => column.sortable && column.order)
+  },
+  isSort (field) {
+    if (field) {
+      const column = this.getColumnByField(field)
+      return column && column.sortable && column.order
+    }
+    return this.getSortColumns().length > 0
+  },
+  getSortColumns () {
+    const sortList = []
+    this.visibleColumn.forEach((column) => {
+      const { order } = column
+      if (column.sortable && order) {
+        sortList.push({ column, sortBy: column.sortBy, property: column.property, order })
+      }
+    })
+    return sortList
   },
   /**
    * 关闭筛选

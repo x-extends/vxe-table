@@ -956,7 +956,7 @@ const apis = [
             name: 'defaultSort',
             desc: '默认排序（只会在初始化时被触发一次）',
             version: '',
-            type: 'any',
+            type: 'any | any[]',
             enum: '',
             defVal: '',
             list: [
@@ -2963,10 +2963,10 @@ const apis = [
         list: []
       },
       {
-        name: 'getSortColumn()',
-        desc: '获取当前排序的 column 信息',
+        name: 'getSortColumns()',
+        desc: '获取当前排序的所有列信息',
         version: '',
-        type: 'Column',
+        type: 'any[]',
         enum: '',
         defVal: '',
         list: []
@@ -3310,7 +3310,7 @@ const apis = [
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: 'column?: Column',
+        defVal: 'column?: string | ColumnInfo',
         list: []
       },
       {
@@ -3833,6 +3833,15 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'field: string, order?: \'desc\' | \'asc\'',
+        list: []
+      },
+      {
+        name: 'isSort(column)',
+        desc: '判断指定列是否为排序状态，如果为空则判断所有列',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'column?: string | ColumnInfo',
         list: []
       },
       {

@@ -416,6 +416,8 @@ export default {
       $xetable.exportData(Object.assign({}, $xetable.exportOpts, this.getExportOption())).then(() => {
         this.loading = false
         this.storeData.visible = false
+      }).catch(() => {
+        this.loading = false
       })
     }
   }

@@ -237,27 +237,9 @@ const apis = [
         name: 'sort-by',
         descKey: 'app.api.tableColumn.desc.sortBy',
         version: '',
-        type: 'string | string[]',
+        type: 'string',
         enum: '',
         defVal: '',
-        list: []
-      },
-      {
-        name: 'sort-method',
-        descKey: 'app.api.tableColumn.desc.sortMethod',
-        version: '',
-        type: 'Function',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'remote-sort',
-        descKey: 'app.api.tableColumn.desc.remoteSort',
-        version: '',
-        type: 'boolean',
-        enum: '',
-        defVal: '继承 table.remote-sort',
         list: []
       },
       {

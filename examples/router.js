@@ -61,6 +61,7 @@ import TableTemplate from './views/table/advanced/Template.vue'
 import TableDynamic from './views/table/advanced/Dynamic.vue'
 import TableSortIcon from './views/table/advanced/SortIcon.vue'
 import TableCustomSort from './views/table/advanced/CustomSort.vue'
+import TableMultiSort from './views/table/advanced/MultiSort.vue'
 import TableManualFilter from './views/table/advanced/ManualFilter.vue'
 import TableFilterIcon from './views/table/advanced/FilterIcon.vue'
 import TableSpan from './views/table/advanced/Span.vue'
@@ -581,6 +582,11 @@ export default new Router({
       path: '/table/advanced/customSort',
       name: 'TableCustomSort',
       component: TableCustomSort
+    },
+    {
+      path: '/table/advanced/multiSort',
+      name: 'TableMultiSort',
+      component: TableMultiSort
     },
     {
       path: '/table/advanced/manualFilter',
