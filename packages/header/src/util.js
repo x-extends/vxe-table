@@ -49,33 +49,17 @@ export const convertToRows = (useCustomRowSpan, originColumns) => {
 
   const allColumns = getAllColumns(originColumns)
 
-  const traverseParent = (column, findcolumnid) => {
-    let r = null
-    if (column.id === findcolumnid) {
-      return column
-    }
-    if (column.children && column.children.length && column.children.some(column => column.visible)) {
-      for (let i = 0; i < column.children.length; i++) {
-        const subColumn = column.children[i]
-        if (subColumn.visible) {
-          const subr = traverseParent(subColumn, findcolumnid)
-          if (subr) {
-            r = subr
-            break
-          }
+  const getGroupParentRowSpan = (columnId) => {
+    let r = 0
+    for (let i = 0; i < allColumns.length; i++) {
+      const column = allColumns[i]
+      if (column.id === columnId) {
+        if (column.rowSpan && column.rowSpan > 1) {
+          r = r + column.rowSpan
         }
-      }
-    }
-    return r
-  }
-
-  const getParent = (columnId) => {
-    let r = null
-    for (let i = 0; i < originColumns.length; i++) {
-      const column = originColumns[i]
-      r = traverseParent(column, columnId)
-      if (r) {
-        break
+        if (column.parentId) {
+          r = r + getGroupParentRowSpan(column.parentId)
+        }
       }
     }
     return r
@@ -90,8 +74,9 @@ export const convertToRows = (useCustomRowSpan, originColumns) => {
       }
       let alevel = column.level - 1
       if (column.parentId) {
-        const parent = getParent(column.parentId)
-        alevel = parent.level + parent.rowSpan - 1
+        let parentRowSpan = getGroupParentRowSpan(column.parentId)
+        parentRowSpan = parentRowSpan > 0 ? parentRowSpan - 1 : 0
+        alevel = alevel + parentRowSpan
         if (alevel > maxLevel) {
           alevel = maxLevel
         }
