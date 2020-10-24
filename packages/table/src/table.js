@@ -208,6 +208,8 @@ export default {
     mouseConfig: Object,
     // 按键配置项
     keyboardConfig: Object,
+    // 复制粘贴配置项
+    clipConfig: Object,
     // 编辑配置项
     editConfig: [Boolean, Object],
     // 校验配置项
@@ -479,6 +481,9 @@ export default {
     },
     keyboardOpts () {
       return Object.assign({}, this.keyboardConfig)
+    },
+    clipOpts () {
+      return Object.assign({}, this.clipConfig)
     },
     hasTip () {
       return VXETable._tooltip

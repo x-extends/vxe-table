@@ -1719,6 +1719,34 @@ const apis = [
         ]
       },
       {
+        name: 'clip-config',
+        descKey: 'app.api.table.desc.clipConfig',
+        version: 'pro',
+        type: 'Object',
+        enum: '',
+        defVal: '',
+        list: [
+          {
+            name: 'getMethod',
+            desc: '自定义单元格复制取值的方法，将单元格复制到剪贴板',
+            version: 'pro',
+            type: '({ row, column }) => string',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'setMethod',
+            desc: '自定义单元格粘贴赋值的方法，从剪贴板赋值到单元格',
+            version: 'pro',
+            type: '({ row, column, cellValue }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'mouse-config',
         descKey: 'app.api.table.desc.mouseConfig',
         version: '',
@@ -2644,6 +2672,69 @@ const apis = [
         type: '',
         enum: '',
         defVal: '{ type, $event}',
+        list: []
+      },
+      {
+        name: 'open-fnr',
+        desc: '只对 keyboard-config.isFNR 配置时有效，在查询与搜索弹框被打开时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ tab, $event}',
+        list: []
+      },
+      {
+        name: 'change-fnr',
+        desc: '只对 keyboard-config.isFNR 配置时有效，在查询与搜索弹框的 Tab 页被切换时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ tab, $event}',
+        list: []
+      },
+      {
+        name: 'cell-merge',
+        desc: '只对 keyboard-config.isMerge 配置时有效，在单元格临时合并、取消时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ areas, $event}',
+        list: []
+      },
+      {
+        name: 'cell-area-start',
+        desc: '只对 mouse-config.area 配置时有效，在单元格区域选取开始时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ $event}',
+        list: []
+      },
+      {
+        name: 'cell-area-end',
+        desc: '只对 mouse-config.area 配置时有效，在单元格区域选取结束时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ rows, cols, $event}',
+        list: []
+      },
+      {
+        name: 'cell-area-extension-start',
+        desc: '只对 mouse-config.extension 配置时有效，在单元格区域延伸开始时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ $event}',
+        list: []
+      },
+      {
+        name: 'cell-area-extension-end',
+        desc: '只对 mouse-config.extension 配置时有效，在单元格区域延伸结束时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ rows, cols, $event}',
         list: []
       }
     ]

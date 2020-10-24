@@ -2016,28 +2016,37 @@ const Methods = {
   handleGlobalPasteEvent (evnt) {
     const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
     const { actived } = editStore
-    if (isActivated && !(actived.row || actived.column)) {
-      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
-        this.handlePasteCellAreaEvent(evnt)
+    if (isActivated) {
+      if (!(actived.row || actived.column)) {
+        if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
+          this.handlePasteCellAreaEvent(evnt)
+        }
       }
+      this.emitEvent('paste', {}, evnt)
     }
   },
   handleGlobalCopyEvent (evnt) {
     const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
     const { actived } = editStore
-    if (isActivated && !(actived.row || actived.column)) {
-      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
-        this.handleCopyCellAreaEvent(evnt)
+    if (isActivated) {
+      if (!(actived.row || actived.column)) {
+        if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
+          this.handleCopyCellAreaEvent(evnt)
+        }
       }
+      this.emitEvent('copy', {}, evnt)
     }
   },
   handleGlobalCutEvent (evnt) {
     const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
     const { actived } = editStore
-    if (isActivated && !(actived.row || actived.column)) {
-      if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
-        this.handleCutCellAreaEvent(evnt)
+    if (isActivated) {
+      if (!(actived.row || actived.column)) {
+        if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
+          this.handleCutCellAreaEvent(evnt)
+        }
       }
+      this.emitEvent('cut', {}, evnt)
     }
   },
   handleGlobalResizeEvent () {
