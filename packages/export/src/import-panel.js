@@ -159,6 +159,8 @@ export default {
       $xetable.importByFile(this.storeData.file, Object.assign({}, $xetable.importOpts, this.defaultOptions)).then(() => {
         this.loading = false
         this.storeData.visible = false
+      }).catch(() => {
+        this.loading = false
       })
     }
   }

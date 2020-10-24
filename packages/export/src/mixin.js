@@ -835,8 +835,18 @@ export default {
     _importData (options) {
       const opts = Object.assign({ types: VXETable.importTypes }, this.importOpts, options)
       const rest = new Promise((resolve, reject) => {
-        this._importResolve = resolve
-        this._importReject = reject
+        const _importResolve = (params) => {
+          resolve(params)
+          this._importResolve = null
+          this._importReject = null
+        }
+        const _importReject = (params) => {
+          reject(params)
+          this._importResolve = null
+          this._importReject = null
+        }
+        this._importResolve = _importResolve
+        this._importReject = _importReject
       })
       this.readFile(opts)
         .then(params => {

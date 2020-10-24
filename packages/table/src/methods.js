@@ -829,6 +829,7 @@ const Methods = {
     let tableData = tableFullData.slice(0)
     const column = XEUtils.find(visibleColumn, column => column.order)
     const filterColumns = []
+    const orderColumns = []
     visibleColumn.forEach(column => {
       if (column.filters && column.filters.length) {
         const valueList = []
@@ -840,6 +841,9 @@ const Methods = {
           }
         })
         filterColumns.push({ column, valueList, itemList })
+      }
+      if (column.sortable && column.order) {
+        orderColumns.push({ column, sortBy: column.sortBy, property: column.property, order: column.order })
       }
     })
     if (filterColumns.length) {
@@ -867,7 +871,7 @@ const Methods = {
       const isRemote = XEUtils.isBoolean(column.remoteSort) ? column.remoteSort : (sortOpts.remote || remoteSort)
       if (!isRemote) {
         if (allSortMethod) {
-          tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, $table: this }) || tableData
+          tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, sortList: orderColumns, $table: this }) || tableData
         } else {
           const params = { $table: this }
           const rest = column.sortMethod ? tableData.sort(column.sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => getCellLabel(row, column, params) : column.property)))
@@ -2966,13 +2970,12 @@ const Methods = {
   triggerSortEvent (evnt, column, order) {
     const property = column.property
     if (column.sortable || column.remoteSort) {
-      const params = { column, property, field: property, prop: property, order, sortBy: column.sortBy, $table: this, $event: evnt }
       if (!order || column.order === order) {
-        params.order = null
         this.clearSort()
       } else {
         this.sort(property, order)
       }
+      const params = { column, property, order: column.order, sortBy: column.sortBy, sortList: this.getSortColumns() }
       this.emitEvent('sort-change', params, evnt)
     }
   },
@@ -3009,8 +3012,27 @@ const Methods = {
     })
     return this.handleTableData(true)
   },
+  // 在 v3 中废弃
   getSortColumn () {
+    // UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
     return XEUtils.find(this.visibleColumn, column => column.sortable && column.order)
+  },
+  isSort (field) {
+    if (field) {
+      const column = this.getColumnByField(field)
+      return column && column.sortable && column.order
+    }
+    return this.getSortColumns().length > 0
+  },
+  getSortColumns () {
+    const sortList = []
+    this.visibleColumn.forEach((column) => {
+      const { order } = column
+      if (column.sortable && order) {
+        sortList.push({ column, sortBy: column.sortBy, property: column.property, order })
+      }
+    })
+    return sortList
   },
   /**
    * 关闭筛选

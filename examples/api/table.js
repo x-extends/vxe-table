@@ -3139,9 +3139,19 @@ const apis = [
       },
       {
         name: 'getSortColumn()',
-        desc: '获取当前排序的 column 信息',
+        disabled: true,
+        desc: '即将废弃，请使用 getSortColumns',
         version: '2.7.3',
         type: 'Column',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'getSortColumns()',
+        desc: '获取当前排序的所有列信息',
+        version: '2.9.26',
+        type: 'any[]',
         enum: '',
         defVal: '',
         list: []
@@ -4287,6 +4297,15 @@ const apis = [
         type: 'Promise',
         enum: '',
         defVal: 'field: string, order?: \'desc\' | \'asc\'',
+        list: []
+      },
+      {
+        name: 'isSort(column)',
+        desc: '判断指定列是否为排序状态，如果为空则判断所有列',
+        version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'column?: string | ColumnInfo',
         list: []
       },
       {

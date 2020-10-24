@@ -22,10 +22,10 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
+      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
       <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
+      <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -35,7 +35,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">配置 <table-column-api-link prop="sort-by"/> 多个字段排序</p>
+    <p class="tip">配置 <table-column-api-link prop="sort-by"/> 指定字段排序</p>
 
     <vxe-table
       border
@@ -43,9 +43,9 @@
       height="300"
       :data="tableData2">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="单个排序 name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="多字段排序 role+num" :sort-by="['role', 'num']" sortable></vxe-table-column>
-      <vxe-table-column field="num" title="多字段排序 name+role+num" :sort-by="['name', 'role', 'num']" sortable></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+      <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
+      <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -55,7 +55,7 @@
       <code class="javascript">{{ demoCodes[3] }}</code>
     </pre>
 
-    <p class="tip">配置 <table-column-api-link prop="sort-method"/> 自定义排序</p>
+    <!-- <p class="tip">配置 <table-column-api-link prop="sort-method"/> 自定义排序</p>
 
     <vxe-table
       border
@@ -65,10 +65,10 @@
       @sort-change="sortChangeEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
-      <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
+      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
       <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
+      <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -76,7 +76,7 @@
     <pre>
       <code class="xml">{{ demoCodes[4] }}</code>
       <code class="javascript">{{ demoCodes[5] }}</code>
-    </pre>
+    </pre> -->
 
     <p class="tip">点击表头排序，通过 <table-api-link prop="defaultSort"/> 默认排序、<table-api-link prop="orders"/> 自定义轮转顺序、通过配置 <table-api-link prop="trigger"/> 设置触发源</p>
 
@@ -90,10 +90,10 @@
       @sort-change="sortChangeEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
+      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
       <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
+      <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -161,10 +161,10 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
+          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
+          <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -192,9 +192,9 @@ export default {
           height="300"
           :data="tableData2">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="单个排序 name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="多字段排序 role+num" :sort-by="['role', 'num']" sortable></vxe-table-column>
-          <vxe-table-column field="num" title="多字段排序 name+role+num" :sort-by="['name', 'role', 'num']" sortable></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+          <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
+          <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -236,10 +236,10 @@ export default {
           @sort-change="sortChangeEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :sort-method="sortNameMethod"></vxe-table-column>
-          <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
+          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
+          <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -282,10 +282,10 @@ export default {
           @sort-change="sortChangeEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="nickname" title="Nickname" sortable></vxe-table-column>
+          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
+          <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
         </vxe-table>
         `,
         `

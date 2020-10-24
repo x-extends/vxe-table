@@ -267,13 +267,14 @@ const apis = [
         name: 'sort-by',
         descKey: 'app.api.tableColumn.desc.sortBy',
         version: '',
-        type: 'String, Array',
+        type: 'string',
         enum: '',
         defVal: '',
         list: []
       },
       {
         name: 'sort-method',
+        abandoned: true,
         descKey: 'app.api.tableColumn.desc.sortMethod',
         version: '2.3.3',
         type: 'Function',
@@ -283,6 +284,7 @@ const apis = [
       },
       {
         name: 'remote-sort',
+        abandoned: true,
         descKey: 'app.api.tableColumn.desc.remoteSort',
         version: '',
         type: 'Boolean',

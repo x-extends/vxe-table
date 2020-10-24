@@ -782,7 +782,8 @@ export default {
           // v3 废弃 prop
           prop: property,
           order: params.order,
-          sortBy: params.sortBy
+          sortBy: params.sortBy,
+          sortList: params.sortList
         } : {}
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1
