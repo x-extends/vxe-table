@@ -3,8 +3,8 @@
     <p class="tip">分组表头</p>
     <vxe-grid
       border
-	  resizable
-	  stripe
+      resizable
+      stripe
       height="500"
       :columns="tableColumn"
       :useCustomHeaderRowSpan=true
@@ -27,7 +27,8 @@ export default {
         {
           title: '序号',
           customRowSpan: 3,
-          children: [{ type: 'seq', width: 50, title: '1' }]
+          fixed: 'left',
+          children: [{ type: 'seq', title: '1' }]
         },
         {
           title: '基本信息',

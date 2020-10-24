@@ -17,7 +17,7 @@ const { browse } = DomTools
  * @param {String} fixedType 固定列类型
  */
 function renderFixed (h, $xetable, fixedType) {
-  const { tableData, tableColumn, tableGroupColumn, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
+  const { tableData, tableColumn, tableGroupColumn, useCustomHeaderRowSpan, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
   const fixedColumn = columnStore[`${fixedType}List`]
   const tableChilds = []
   if (showHeader) {
@@ -28,6 +28,7 @@ function renderFixed (h, $xetable, fixedType) {
           tableData,
           tableColumn,
           tableGroupColumn,
+          useCustomHeaderRowSpan,
           size: vSize,
           fixedColumn
         },
