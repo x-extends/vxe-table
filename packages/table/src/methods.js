@@ -3015,12 +3015,12 @@ const Methods = {
   // 在 v3 中废弃
   getSortColumn () {
     // UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
-    return XEUtils.find(this.visibleColumn, column => column.sortable && column.order)
+    return XEUtils.find(this.visibleColumn, column => (column.sortable || column.remoteSort) && column.order)
   },
   isSort (field) {
     if (field) {
       const column = this.getColumnByField(field)
-      return column && column.sortable && column.order
+      return column && (column.sortable || column.remoteSort) && column.order
     }
     return this.getSortColumns().length > 0
   },
@@ -3028,7 +3028,7 @@ const Methods = {
     const sortList = []
     this.visibleColumn.forEach((column) => {
       const { order } = column
-      if (column.sortable && order) {
+      if ((column.sortable || column.remoteSort) && order) {
         sortList.push({ column, sortBy: column.sortBy, property: column.property, order })
       }
     })

@@ -534,6 +534,7 @@ export default {
               button,
               $grid: this,
               sort: sortData,
+              sorts: proxyOpts.sort ? [this.sortData] : [],
               filters: filterData,
               form: formData,
               options: ajaxMethods
@@ -560,6 +561,9 @@ export default {
               this.sortData = params.sort = sortParams
               this.filterData = params.filters = []
               this.pendingRecords = []
+              if (proxyOpts.sort) {
+                params.sorts = [params.sort]
+              }
               this.clearAll()
             }
             const applyArgs = [params].concat(args)
@@ -782,8 +786,7 @@ export default {
           // v3 废弃 prop
           prop: property,
           order: params.order,
-          sortBy: params.sortBy,
-          sortList: params.sortList
+          sortBy: params.sortBy
         } : {}
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1
@@ -857,6 +860,7 @@ export default {
         filter: this.filterData,
         form: this.formData,
         sort: this.sortData,
+        sorts: this.proxyOpts.sort ? [this.sortData] : [],
         pager: this.tablePage,
         pendingRecords: this.pendingRecords
       } : null
