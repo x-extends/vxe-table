@@ -51,7 +51,8 @@ export default {
         template: '自定义模板',
         dynamic: '使用 v-for 动态实现',
         sortIcon: '自定义排序图标',
-        customSort: '实现列头排序',
+        customSort: '自定义列头排序',
+        multiSort: '多字段组合排序',
         manualFilter: '筛选高级用法',
         filterIcon: '自定义筛选图标',
         span: '合并行或列',
@@ -443,6 +444,7 @@ export default {
           expandConfig: '展开行配置项',
           treeConfig: '树形结构配置项',
           contextMenu: '快捷菜单配置项',
+          clipConfig: '复制粘贴配置项',
           mouseConfig: '鼠标配置项',
           keyboardConfig: '按键配置项',
           editConfig: '可编辑配置项',
@@ -551,7 +553,8 @@ export default {
       grid: {
         desc: {
           formConfig: '表单配置项',
-          toolbar: '工具栏配置',
+          toolbar: '即将废弃，请使用 toolbar-config',
+          toolbarConfig: '工具栏配置',
           pagerConfig: '分页配置项',
           zoomConfig: '缩放配置项',
           proxyConfig: '数据代理配置项（基于 Promise API）',

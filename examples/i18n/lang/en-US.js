@@ -52,7 +52,8 @@ export default {
         template: 'Template',
         dynamic: 'Use v-for dynamic implementation',
         sortIcon: 'Custom sort icon',
-        customSort: 'Implement column header sort',
+        customSort: 'Custom header sort',
+        multiSort: 'Multi-field sort',
         manualFilter: 'Filtering advanced usage',
         filterIcon: 'Custom filter icon',
         span: 'Rowspan and colspan',
@@ -444,6 +445,7 @@ export default {
           expandConfig: 'Expand the row configuration',
           treeConfig: 'Tree configuration',
           contextMenu: 'context menu configuration',
+          clipConfig: 'Copy and paste configuration',
           mouseConfig: 'Mouse configuration',
           keyboardConfig: 'Keyboard configuration',
           editConfig: 'Editable configuration',
@@ -552,7 +554,8 @@ export default {
       grid: {
         desc: {
           formConfig: 'Form config',
-          toolbar: 'Toolbar config',
+          toolbar: 'Obsolete, please use "toolbar-config"',
+          toolbarConfig: 'Toolbar config',
           pagerConfig: 'Pager config',
           zoomConfig: 'Zoom config',
           proxyConfig: 'Data proxy config(based on the Promise API)',
