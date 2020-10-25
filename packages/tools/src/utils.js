@@ -30,7 +30,7 @@ class ColumnInfo {
           UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
         }
       }
-      if (_vm.remoteSort !== null) {
+      if (_vm.remoteSort) {
         UtilTools.warn('vxe.error.delProp', ['column.remote-sort', 'sort-config.remote'])
       }
       if (_vm.sortMethod) {
