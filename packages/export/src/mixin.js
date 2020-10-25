@@ -703,7 +703,7 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      const { $xegrid, visibleColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
+      const { $xegrid, visibleColumn, tableFullColumn, afterFullData, treeConfig, treeOpts, exportOpts } = this
       const columns = options && options.columns
       let expColumns = []
       if (columns && columns.length) {
@@ -764,7 +764,7 @@ export default {
         throw new Error(UtilTools.getLog('vxe.error.notType', [opts.type]))
       }
       if (!opts.data) {
-        opts.data = tableFullData
+        opts.data = afterFullData
         if (opts.mode === 'selected') {
           const selectRecords = this.getCheckboxRecords()
           if (['html', 'pdf'].indexOf(opts.type) > -1 && treeConfig) {
