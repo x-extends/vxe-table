@@ -1085,7 +1085,7 @@ export default {
      * @param {Object} options 参数
      */
     _exportData (options) {
-      const { $xegrid, isGroup, tableGroupColumn, tableFullColumn, tableFullData, treeConfig, treeOpts, exportOpts } = this
+      const { $xegrid, isGroup, tableGroupColumn, tableFullColumn, afterFullData, treeConfig, treeOpts, exportOpts } = this
       const opts = Object.assign({
         // filename: '',
         // sheetName: '',
@@ -1190,7 +1190,7 @@ export default {
       }
 
       if (!opts.data) {
-        opts.data = tableFullData
+        opts.data = afterFullData
         if (mode === 'selected') {
           const selectRecords = this.getCheckboxRecords()
           if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
