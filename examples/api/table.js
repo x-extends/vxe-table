@@ -1736,10 +1736,28 @@ const apis = [
             list: []
           },
           {
+            name: 'beforeGetMethod',
+            desc: '自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为',
+            version: 'pro',
+            type: '({ targetAreas, cellValues }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'setMethod',
             desc: '自定义单元格粘贴赋值的方法，从剪贴板赋值到单元格',
             version: 'pro',
             type: '({ row, column, cellValue }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'beforeSetMethod',
+            desc: '自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为',
+            version: 'pro',
+            type: '({ currentAreas, targetAreas, cellValues }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -2693,16 +2711,43 @@ const apis = [
         list: []
       },
       {
-        name: 'cell-merge',
+        name: 'cell-area-copy',
+        desc: '只对 keyboard-config.isClip 配置时有效，在单元格被复制时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ status, targetAreas, cellValues, $event}',
+        list: []
+      },
+      {
+        name: 'cell-area-cut',
+        desc: '只对 keyboard-config.isClip 配置时有效，在单元格被剪贴时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ status, targetAreas, cellValues, $event}',
+        list: []
+      },
+      {
+        name: 'cell-area-paste',
+        desc: '只对 keyboard-config.isClip 配置时有效，在单元格被粘贴时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ status, targetAreas, $event}',
+        list: []
+      },
+      {
+        name: 'cell-area-merge',
         desc: '只对 keyboard-config.isMerge 配置时有效，在单元格临时合并、取消时会触发该事件',
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ areas, $event}',
+        defVal: '{ status, targetAreas, $event}',
         list: []
       },
       {
-        name: 'cell-area-start',
+        name: 'cell-area-select-start',
         desc: '只对 mouse-config.area 配置时有效，在单元格区域选取开始时会触发该事件',
         version: 'pro',
         type: '',
@@ -2711,7 +2756,7 @@ const apis = [
         list: []
       },
       {
-        name: 'cell-area-end',
+        name: 'cell-area-select-end',
         desc: '只对 mouse-config.area 配置时有效，在单元格区域选取结束时会触发该事件',
         version: 'pro',
         type: '',
