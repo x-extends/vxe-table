@@ -327,31 +327,31 @@ export declare class Table extends VXETableComponent {
    * @param row 行对象
    */
   getRowIndex(row: RowInfo): number;
-  // /**
-  //  * 根据 row 获取相对于当前数据中的索引
-  //  * @param row 行对象
-  //  */
-  // _getRowIndex(row: RowInfo): number;
-  // /**
-  //  * 根据 row 获取渲染中的虚拟索引
-  //  * @param row 行对象
-  //  */
-  // $getRowIndex(row: RowInfo): number;
+  /**
+   * 根据 row 获取相对于当前数据中的索引
+   * @param row 行对象
+   */
+  getVTRowIndex(row: RowInfo): number;
+  /**
+   * 根据 row 获取渲染中的虚拟索引
+   * @param row 行对象
+   */
+  getVMRowIndex(row: RowInfo): number;
   /**
    * 根据 column 获取相对于 columns 中的索引
    * @param column 列对象
    */
   getColumnIndex(column: ColumnInfo): number;
-  // /**
-  //  * 根据 column 获取相对于当前表格列中的索引
-  //  * @param column 列对象
-  //  */
-  // _getColumnIndex(column: ColumnInfo): number;
-  // /**
-  //  * 根据 column 获取渲染中的虚拟索引
-  //  * @param column 列对象
-  //  */
-  // $getColumnIndex(column: ColumnInfo): number;
+  /**
+   * 根据 column 获取相对于当前表格列中的索引
+   * @param column 列对象
+   */
+  getVTColumnIndex(column: ColumnInfo): number;
+  /**
+   * 根据 column 获取渲染中的虚拟索引
+   * @param column 列对象
+   */
+  getVMColumnIndex(column: ColumnInfo): number;
   /**
    * 创建 data 对象
    * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义

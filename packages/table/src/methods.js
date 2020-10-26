@@ -530,15 +530,29 @@ const Methods = {
    * 根据 row 获取相对于当前数据中的索引
    * @param {Row} row 行对象
    */
-  _getRowIndex (row) {
+  getVTRowIndex (row) {
     return this.afterFullData.indexOf(row)
+  },
+  // 在 v3 中废弃
+  _getRowIndex (row) {
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      UtilTools.warn('vxe.error.delFunc', ['_getRowIndex', 'getVTRowIndex'])
+    }
+    return this.getVTRowIndex(row)
   },
   /**
    * 根据 row 获取渲染中的虚拟索引
    * @param {Row} row 行对象
    */
-  $getRowIndex (row) {
+  getVMRowIndex (row) {
     return this.tableData.indexOf(row)
+  },
+  // 在 v3 中废弃
+  $getRowIndex (row) {
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      UtilTools.warn('vxe.error.delFunc', ['$getRowIndex', 'getVMRowIndex'])
+    }
+    return this.getVMRowIndex(row)
   },
   /**
    * 根据 column 获取相对于 columns 中的索引
@@ -551,15 +565,29 @@ const Methods = {
    * 根据 column 获取相对于当前表格列中的索引
    * @param {ColumnInfo} column 列配置
    */
-  _getColumnIndex (column) {
+  getVTColumnIndex (column) {
     return this.visibleColumn.indexOf(column)
+  },
+  // 在 v3 中废弃
+  _getColumnIndex (column) {
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      UtilTools.warn('vxe.error.delFunc', ['_getColumnIndex', 'getVTColumnIndex'])
+    }
+    return this.getVTColumnIndex(column)
   },
   /**
    * 根据 column 获取渲染中的虚拟索引
    * @param {ColumnInfo} column 列配置
    */
-  $getColumnIndex (column) {
+  getVMColumnIndex (column) {
     return this.tableColumn.indexOf(column)
+  },
+  // 在 v3 中废弃
+  $getColumnIndex (column) {
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      UtilTools.warn('vxe.error.delFunc', ['$getColumnIndex', 'getVMColumnIndex'])
+    }
+    return this.getVMColumnIndex(column)
   },
   /**
    * 判断是否为索引列
@@ -3108,14 +3136,14 @@ const Methods = {
     if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
       const expanded = !this.isExpandByRow(row)
       const columnIndex = this.getColumnIndex(column)
-      const $columnIndex = this.$getColumnIndex(column)
+      const $columnIndex = this.getVMColumnIndex(column)
       this.setRowExpand(row, expanded)
       // 在 v3.0 中废弃 toggle-expand-change
       if ($listeners['toggle-expand-change']) {
         UtilTools.warn('vxe.error.delEvent', ['toggle-expand-change', 'toggle-row-expand'])
-        this.emitEvent('toggle-expand-change', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) }, evnt)
+        this.emitEvent('toggle-expand-change', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }, evnt)
       } else {
-        this.emitEvent('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) }, evnt)
+        this.emitEvent('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }, evnt)
       }
     }
   },
@@ -3162,7 +3190,7 @@ const Methods = {
     const rest = this.fullAllDataRowMap.get(row)
     return new Promise(resolve => {
       this.expandLazyLoadeds.push(row)
-      this.expandOpts.loadMethod({ $table: this, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) }).catch(e => e).then(() => {
+      this.expandOpts.loadMethod({ $table: this, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).catch(e => e).then(() => {
         rest.expandLoaded = true
         XEUtils.remove(this.expandLazyLoadeds, item => item === row)
         this.rowExpandeds.push(row)
@@ -3187,7 +3215,7 @@ const Methods = {
     const { reserve, lazy, accordion, toggleMethod } = expandOpts
     const lazyRests = []
     const columnIndex = this.getColumnIndex(column)
-    const $columnIndex = this.$getColumnIndex(column)
+    const $columnIndex = this.getVMColumnIndex(column)
     if (rows) {
       if (!XEUtils.isArray(rows)) {
         rows = [rows]
@@ -3197,7 +3225,7 @@ const Methods = {
         rowExpandeds = []
         rows = rows.slice(rows.length - 1, rows.length)
       }
-      const validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.$getRowIndex(row) })) : rows
+      const validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) })) : rows
       if (expanded) {
         validRows.forEach(row => {
           if (rowExpandeds.indexOf(row) === -1) {
@@ -3323,7 +3351,7 @@ const Methods = {
     if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
       const expanded = !this.isTreeExpandByRow(row)
       const columnIndex = this.getColumnIndex(column)
-      const $columnIndex = this.$getColumnIndex(column)
+      const $columnIndex = this.getVMColumnIndex(column)
       this.setTreeExpand(row, expanded)
       // 在 v3.0 中废弃 toggle-tree-change
       if ($listeners['toggle-tree-change']) {
@@ -3430,7 +3458,7 @@ const Methods = {
     const { reserve, lazy, hasChild, children, accordion, toggleMethod } = treeOpts
     const result = []
     const columnIndex = this.getColumnIndex(treeNodeColumn)
-    const $columnIndex = this.$getColumnIndex(treeNodeColumn)
+    const $columnIndex = this.getVMColumnIndex(treeNodeColumn)
     if (rows) {
       if (!XEUtils.isArray(rows)) {
         rows = [rows]

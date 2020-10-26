@@ -133,7 +133,7 @@ export default {
             const hasFilter = column.filters && column.filters.some(item => item.checked)
             // 确保任何情况下 columnIndex 都精准指向真实列索引
             const columnIndex = getColumnIndex(column)
-            const _columnIndex = $xetable._getColumnIndex(column)
+            const _columnIndex = $xetable.getVTColumnIndex(column)
             const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {

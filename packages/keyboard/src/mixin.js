@@ -32,7 +32,7 @@ function getCheckboxRangeRows (_vm, params, targetTrElem, moveRange) {
   const moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
   const { afterFullData, scrollYStore, scrollYLoad } = _vm
   if (scrollYLoad) {
-    const _rowIndex = _vm._getRowIndex(params.row)
+    const _rowIndex = _vm.getVTRowIndex(params.row)
     if (isDown) {
       rangeRows = afterFullData.slice(_rowIndex, _rowIndex + Math.ceil(moveSize / scrollYStore.rowHeight))
     } else {
@@ -141,7 +141,7 @@ export default {
             targetRow = items[index + 1]
           }
         } else {
-          const _rowIndex = this._getRowIndex(currentRow)
+          const _rowIndex = this.getVTRowIndex(currentRow)
           if (isUpArrow && _rowIndex > 0) {
             targetRow = afterFullData[_rowIndex - 1]
           } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
@@ -161,8 +161,8 @@ export default {
     moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
       const { afterFullData, visibleColumn, isSeqColumn } = this
       const params = Object.assign({}, args)
-      const _rowIndex = this._getRowIndex(params.row)
-      const _columnIndex = this._getColumnIndex(params.column)
+      const _rowIndex = this.getVTRowIndex(params.row)
+      const _columnIndex = this.getVTColumnIndex(params.column)
       evnt.preventDefault()
       if (isUpArrow && _rowIndex > 0) {
         // 移动到上一行
