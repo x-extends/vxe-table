@@ -74,7 +74,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { actived } = editStore
   const { enabled } = tooltipOpts
   const columnIndex = $xetable.getColumnIndex(column)
-  const _columnIndex = $xetable._getColumnIndex(column)
+  const _columnIndex = $xetable.getVTColumnIndex(column)
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -277,7 +277,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     if (scrollYLoad) {
       seq += scrollYStore.startIndex
     }
-    const _rowIndex = $xetable._getRowIndex(row)
+    const _rowIndex = $xetable.getVTRowIndex(row)
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
     rowIndex = $xetable.getRowIndex(row)
     // 事件绑定
@@ -300,7 +300,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
-          'row--stripe': stripe && ($xetable._getRowIndex(row) + 1) % 2 === 0,
+          'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
           'is--new': editStore.insertList.indexOf(row) > -1,
           'row--radio': radioOpts.highlight && $xetable.selectRow === row,
           'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)

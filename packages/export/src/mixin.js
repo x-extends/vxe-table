@@ -199,7 +199,7 @@ function getFooterCellValue ($xetable, opts, items, column) {
       exportLabelMethod = compConf.footerExportMethod || compConf.footerCellExportMethod
     }
   }
-  const _columnIndex = $xetable._getColumnIndex(column)
+  const _columnIndex = $xetable.getVTColumnIndex(column)
   const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toString(items[_columnIndex])
   return cellValue
 }
@@ -405,8 +405,8 @@ function toHtml ($xetable, opts, columns, datas) {
             let rowSpan = 1
             let colSpan = 1
             if (isMerge && mergeList.length) {
-              const _rowIndex = $xetable._getRowIndex(item._row)
-              const _columnIndex = $xetable._getColumnIndex(column)
+              const _rowIndex = $xetable.getVTRowIndex(item._row)
+              const _columnIndex = $xetable.getVTColumnIndex(column)
               const spanRest = mergeBodyMethod(mergeList, _rowIndex, _columnIndex)
               if (spanRest) {
                 const { rowspan, colspan } = spanRest

@@ -133,7 +133,7 @@ export default {
             const attrs = { 'data-colid': column.id }
             const tfOns = {}
             const columnIndex = $xetable.getColumnIndex(column)
-            const _columnIndex = $xetable._getColumnIndex(column)
+            const _columnIndex = $xetable.getVTColumnIndex(column)
             const itemIndex = _columnIndex
             const params = { $table: $xetable, _rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerData }
             // 虚拟滚动不支持动态高度
