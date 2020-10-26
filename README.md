@@ -45,6 +45,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 下拉选项
 * [x] 开关
 * [x] 排序
+* [x] 多字段组合排序
 * [x] 筛选
 * [x] 合并单元格
 * [x] 合并表尾

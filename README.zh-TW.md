@@ -45,6 +45,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 下拉選項
 * [x] 開關
 * [x] 排序
+* [x] 多欄位組合排序
 * [x] 篩選
 * [x] 儲存格合併
 * [x] 合併錶尾

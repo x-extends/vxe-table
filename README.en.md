@@ -45,6 +45,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Select
 * [x] Switch
 * [x] Sorting
+* [x] Multi field sorting
 * [x] Filter
 * [x] Merged cells
 * [x] Merged footer items
