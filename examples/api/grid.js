@@ -60,6 +60,7 @@ const apis = [
       },
       {
         name: 'toolbar',
+        disabled: true,
         descKey: 'app.api.grid.desc.toolbar',
         version: '',
         type: 'any',

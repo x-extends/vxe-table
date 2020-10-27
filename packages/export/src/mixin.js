@@ -577,14 +577,14 @@ function handleExport ($xetable, opts) {
         })
       )
     }
-  }).then(() => {
+  }).then((params) => {
     clearColumnConvert(columns)
     if (!opts.print) {
       if (afterExportMethod) {
         afterExportMethod({ status: true, options: opts, $table: $xetable, $grid: $xetable.$xegrid })
       }
     }
-    return { status: true }
+    return Object.assign({ status: true }, params)
   }).catch(() => {
     clearColumnConvert(columns)
     if (!opts.print) {

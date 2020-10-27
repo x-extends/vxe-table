@@ -321,7 +321,7 @@ export default {
         on: getTableOns(this),
         scopedSlots: $scopedSlots,
         ref: 'xTable'
-      }, this.$slots.default),
+      }),
       /**
        * 渲染表格底部区域
        */
