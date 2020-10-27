@@ -239,6 +239,10 @@
     "type": "any",
     "description": "快捷菜单配置项"
   },
+  "vxe-table/clip-config": {
+    "type": "object",
+    "description": "复制粘贴配置项"
+  },
   "vxe-table/mouse-config": {
     "type": "any",
     "description": "鼠标配置项"
@@ -420,16 +424,8 @@
     "description": "是否允许列排序"
   },
   "vxe-table-column/sort-by": {
-    "type": "string | string[]",
+    "type": "string",
     "description": "只对 sortable 有效，自定义排序的属性"
-  },
-  "vxe-table-column/sort-method": {
-    "type": "function",
-    "description": "只对 sortable 有效，列的排序方法，该方法的返回值用来决定该行的排序规则"
-  },
-  "vxe-table-column/remote-sort": {
-    "type": "boolean",
-    "description": "是否使用服务端排序，如果设置为 true 则不会对数据进行处理"
   },
   "vxe-table-column/filters": {
     "type": "any[]",
@@ -730,6 +726,10 @@
   "vxe-grid/context-menu": {
     "type": "any",
     "description": "快捷菜单配置项"
+  },
+  "vxe-grid/clip-config": {
+    "type": "object",
+    "description": "复制粘贴配置项"
   },
   "vxe-grid/mouse-config": {
     "type": "any",
