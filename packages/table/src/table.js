@@ -459,7 +459,7 @@ export default {
     tooltipOpts () {
       return Object.assign({ size: this.vSize, leaveDelay: 300 }, GlobalConfig.table.tooltipConfig, this.tooltipConfig)
     },
-    vaildTipOpts () {
+    validTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
     },
     editOpts () {
@@ -926,7 +926,7 @@ export default {
       highlightHoverColumn,
       editConfig,
       checkboxOpts,
-      vaildTipOpts,
+      validTipOpts,
       tooltipOpts,
       columnStore,
       filterStore,
@@ -1141,7 +1141,7 @@ export default {
          */
         hasTip && editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
-          props: validOpts.message === 'tooltip' || tableData.length === 1 ? vaildTipOpts : null,
+          props: validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : null,
           ref: 'validTip'
         }) : _e()
       ])
