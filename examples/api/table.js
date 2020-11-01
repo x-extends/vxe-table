@@ -1681,7 +1681,72 @@ const apis = [
         ]
       },
       {
+        name: 'menu-config',
+        descKey: 'app.api.table.desc.menuConfig',
+        version: '2.9.27',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.menuConfig',
+        list: [
+          {
+            name: 'header',
+            desc: '表头的快捷菜单',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: XEUtils.clone(contextMenuAPI, true)
+          },
+          {
+            name: 'body',
+            desc: '内容的快捷菜单',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: XEUtils.clone(contextMenuAPI, true)
+          },
+          {
+            name: 'footer',
+            desc: '表尾的快捷菜单',
+            version: '',
+            type: 'Object',
+            enum: '',
+            defVal: '',
+            list: XEUtils.clone(contextMenuAPI, true)
+          },
+          {
+            name: 'trigger',
+            desc: '触发方式',
+            version: '2.0.12',
+            type: 'String',
+            enum: 'default（默认触发）, cell（右键单元格触发）',
+            defVal: 'default',
+            list: []
+          },
+          {
+            name: 'visibleMethod',
+            desc: '该函数 Function({type, options, columns, row?, rowIndex?, column?, columnIndex?}) 的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）',
+            version: '',
+            type: 'Function',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'className',
+            desc: '菜单面板的 className',
+            version: '2.8.17',
+            type: 'String',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'context-menu',
+        disabled: true,
         descKey: 'app.api.table.desc.contextMenu',
         version: '2 | 2.8',
         type: 'Boolean, Object',
@@ -1765,7 +1830,7 @@ const apis = [
             name: 'beforeGetMethod',
             desc: '自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
-            type: '({ targetAreas, cellValues }) => boolean',
+            type: '({ targetAreas }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -2130,7 +2195,7 @@ const apis = [
           },
           {
             name: 'validator',
-            desc: '自定义校验方法 Function({ cellValue, rule, rules, row, rowIndex，column, columnIndex }) 返回一个 Promise<new Error("提示消息")>',
+            desc: '自定义校验方法 Function({ cellValue, rule, rules, row, rowIndex，column, columnIndex }) 返回一个 Error 或者 Promise<new Error("提示消息")>',
             version: '2.9',
             type: 'Promise<e?: Error>',
             enum: '',
@@ -2775,7 +2840,17 @@ const apis = [
         list: []
       },
       {
+        name: 'menu-click',
+        descKey: 'app.api.table.desc.menuClick',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ menu, type, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
+        list: []
+      },
+      {
         name: 'context-menu-click',
+        disabled: true,
         descKey: 'app.api.table.desc.contextMenuClick',
         version: '',
         type: '',

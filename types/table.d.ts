@@ -207,13 +207,19 @@ export declare class Table extends VXETableComponent {
   treeConfig?: TableTreeConfig;
   treeOpts: TreeOpts;
   // 快捷菜单配置项
-  contextMenu?: TableContextMenu;
+  menuConfig?: TableMenuConfig;
+  /**
+   * 即将废弃，请使用 menu-config
+   * @deprecated
+   */
+  contextMenu?: TableMenuConfig;
   // 鼠标配置项
   mouseConfig?: TableMouseConfig;
   mouseOpts: TableMouseConfig;
   // 按键配置项
   keyboardConfig?: TableKeyboardConfig;
   keyboardOpts: TableKeyboardConfig;
+  clipConfig?: TableClipConfig;
   // 编辑配置项
   editConfig?: TableEditConfig;
   editOpts: TableEditConfig;
@@ -1057,9 +1063,15 @@ export interface TableOptions {
   printConfig?: TablePrintConfig;
   expandConfig?: TableExpandConfig;
   treeConfig?: TableTreeConfig;
-  contextMenu?: TableContextMenu;
+  menuConfig?: TableMenuConfig;
+  /**
+   * 即将废弃，请使用 menu-config
+   * @deprecated
+   */
+  contextMenu?: TableMenuConfig;
   mouseConfig?: TableMouseConfig;
   keyboardConfig?: TableKeyboardConfig;
+  clipConfig?: TableClipConfig;
   editConfig?: TableEditConfig;
   validConfig?: TableValidConfig;
   editRules?: EditVaildRules;
@@ -1248,7 +1260,7 @@ export interface TreeOpts {
 /**
  * 快捷菜单配置项
  */
-export interface TableContextMenu {
+export interface TableMenuConfig {
   header?: MenuOptions;
   body?: MenuOptions;
   footer?: MenuOptions;
@@ -1256,6 +1268,7 @@ export interface TableContextMenu {
   visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnInfo[], row?: RowInfo, rowIndex?: number, column?: ColumnInfo, columnIndex?: number }): boolean;
   className?: string;
 }
+export interface TableContextMenu extends TableMenuConfig {}
 export interface ContextMenuConfig extends TableContextMenu {}
 
 /**
@@ -1353,6 +1366,29 @@ export interface TableKeyboardConfig {
   editMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number, cell: HTMLElement }): boolean;
 }
 export interface KeyboardConfig extends TableKeyboardConfig {}
+
+/**
+ * 复制粘贴配置项
+ */
+export interface TableClipConfig {
+  getMethod?(params: {
+    row: any;
+    column: ColumnInfo;
+  }): string;
+  beforeGetMethod?(params: {
+    targetAreas: any[];
+  }): boolean;
+  setMethod?(params: {
+    row: any,
+    column: ColumnInfo;
+    cellValue: any;
+  }): void;
+  beforeSetMethod?(params: {
+    currentAreas: any[];
+    targetAreas: any[];
+    cellValues: any[][];
+  }): boolean;
+}
 
 /**
  * 编辑配置项

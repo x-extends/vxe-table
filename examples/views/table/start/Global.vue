@@ -54,7 +54,7 @@
           //     theme: 'dark',
           //     enterable: false
           //   },
-          //   contextMenu: {
+          //   menuConfig: {
           //     visibleMethod () {}
           //   },
           //   rowId: '_XID', // 行数据的唯一主键字段名

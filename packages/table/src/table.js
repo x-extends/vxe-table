@@ -198,6 +198,8 @@ export default {
     // 树形结构配置项
     treeConfig: [Boolean, Object],
     // 快捷菜单配置项
+    menuConfig: [Boolean, Object],
+    // 在 v3 中废弃
     contextMenu: [Boolean, Object],
     // 鼠标配置项
     mouseConfig: Object,
@@ -504,7 +506,7 @@ export default {
       return this.headerCtxMenu.length || this.bodyCtxMenu.length || this.footerCtxMenu.length
     },
     ctxMenuOpts () {
-      return Object.assign({}, GlobalConfig.table.contextMenu, this.contextMenu)
+      return Object.assign({}, GlobalConfig.table.contextMenu, GlobalConfig.table.menuConfig, this.contextMenu, this.menuConfig)
     },
     ctxMenuList () {
       const rest = []

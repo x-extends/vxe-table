@@ -32,7 +32,7 @@ export interface ColumnEditRule {
    * 使用自定义校验函数，接收一个 Promise
    * @param params 参数
    */
-  validator?(params: ColumnEditValidErrParams): Promise<any>;
+  validator?: typeof ColumnValidatorMethod;
   /**
    * 提示消息
    */
@@ -40,6 +40,10 @@ export interface ColumnEditRule {
   trigger?: 'blur' | 'change';
   maxWidth?: number;
 }
+
+export function ColumnValidatorMethod(params: ColumnEditValidErrParams): void;
+export function ColumnValidatorMethod(params: ColumnEditValidErrParams): Error;
+export function ColumnValidatorMethod(params: ColumnEditValidErrParams): Promise<any>;
 
 export interface ColumnEditValidErrParams {
   $table: Table,
