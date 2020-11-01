@@ -466,7 +466,7 @@ export default {
       }
       return opts
     },
-    vaildTipOpts () {
+    validTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
     },
     editOpts () {
@@ -852,7 +852,7 @@ export default {
       highlightHoverRow,
       highlightHoverColumn,
       editConfig,
-      vaildTipOpts,
+      validTipOpts,
       tooltipOpts,
       initStore,
       columnStore,
@@ -1037,7 +1037,7 @@ export default {
         key: 'vTip',
         ref: 'validTip',
         class: 'vxe-table--valid-error',
-        props: validOpts.message === 'tooltip' || tableData.length === 1 ? vaildTipOpts : null
+        props: validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : null
       }) : _e()
     ])
   },
