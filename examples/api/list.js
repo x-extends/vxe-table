@@ -70,15 +70,6 @@ const apis = [
         defVal: '',
         list: [
           {
-            name: 'item',
-            desc: '指定行元素的选择器',
-            version: '',
-            type: 'string',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
             name: 'gt',
             desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭',
             version: '',
@@ -89,29 +80,20 @@ const apis = [
           },
           {
             name: 'oSize',
-            desc: '当剩余数据少于指定行时触发重新渲染',
+            desc: '指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久',
             version: '',
             type: 'number',
             enum: '',
-            defVal: '默认自动计算',
+            defVal: '0',
             list: []
           },
           {
-            name: 'rSize',
-            desc: '每次渲染条数',
+            name: 'sItem',
+            desc: '指定行元素的选择器',
             version: '',
-            type: 'number',
+            type: 'string',
             enum: '',
-            defVal: '默认自动计算',
-            list: []
-          },
-          {
-            name: 'vSize',
-            desc: '指定可视区域条数',
-            version: '',
-            type: 'number',
-            enum: '',
-            defVal: '默认自动计算',
+            defVal: '',
             list: []
           // },
           // {

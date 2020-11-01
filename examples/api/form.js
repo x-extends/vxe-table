@@ -152,7 +152,7 @@ const apis = [
           },
           {
             name: 'validator',
-            desc: '自定义校验方法 Function({ itemValue, rule, rules, data, property }) 返回一个 Promise<new Error("提示消息")>',
+            desc: '自定义校验方法 Function({ itemValue, rule, rules, data, property }) 返回一个 Error 或者 Promise<new Error("提示消息")>',
             version: '',
             type: 'Function',
             enum: '',

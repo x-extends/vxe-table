@@ -51,6 +51,10 @@ export declare class Form extends VXETableComponent {
   [key: string]: any;
 }
 
+export function FormValidatorMethod(params: FormValidErrParams): void;
+export function FormValidatorMethod(params: FormValidErrParams): Error;
+export function FormValidatorMethod(params: FormValidErrParams): Promise<any>;
+
 export interface FormRule {
   /**
    * 是否必填
@@ -76,7 +80,7 @@ export interface FormRule {
    * 使用自定义校验函数，接收一个 Promise
    * @param params 参数
    */
-  validator?(params: FormValidErrParams): Promise<any>;
+  validator?: typeof FormValidatorMethod;
   /**
    * 提示消息
    */

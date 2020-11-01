@@ -37,7 +37,7 @@ const GlobalConfig = {
     // validConfig: {
     //   message: 'default'
     // },
-    // contextMenu: {
+    // menuConfig: {
     //   visibleMethod () {}
     // },
     // customConfig: {

@@ -51,10 +51,10 @@ export default {
      * 快捷菜单事件处理
      */
     handleGlobalContextmenuEvent (evnt) {
-      const { $refs, tId, editStore, contextMenu, ctxMenuStore, ctxMenuOpts, mouseConfig, mouseOpts } = this
+      const { $refs, tId, editStore, menuConfig, contextMenu, ctxMenuStore, ctxMenuOpts, mouseConfig, mouseOpts } = this
       const { selected } = editStore
       const layoutList = ['header', 'body', 'footer']
-      if (contextMenu) {
+      if (menuConfig || contextMenu) {
         if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
           evnt.preventDefault()
           return
@@ -101,7 +101,15 @@ export default {
               params.rowIndex = this.getRowIndex(row)
             }
             this.openContextMenu(evnt, layout, params)
-            this.emitEvent(`${typePrefix}cell-context-menu`, params, evnt)
+            // 在 v4 中废弃事件 cell-context-menu、header-cell-context-menu、footer-cell-context-menu
+            if (this.$listeners[`${typePrefix}cell-context-menu`]) {
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                UtilTools.warn('vxe.error.delEvent', [`${typePrefix}cell-context-menu`, `${typePrefix}cell-menu`])
+              }
+              this.emitEvent(`${typePrefix}cell-context-menu`, params, evnt)
+            } else {
+              this.emitEvent(`${typePrefix}cell-menu`, params, evnt)
+            }
             return
           } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === tId).flag) {
             if (ctxMenuOpts.trigger === 'cell') {
@@ -243,7 +251,15 @@ export default {
         if (ctxMenuMethod) {
           ctxMenuMethod.call(this, params, evnt)
         }
-        this.emitEvent('context-menu-click', params, evnt)
+        // 在 v4 中废弃事件 context-menu-click
+        if (this.$listeners['context-menu-click']) {
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            UtilTools.warn('vxe.error.delEvent', ['context-menu-click', 'menu-click'])
+          }
+          this.emitEvent('context-menu-click', params, evnt)
+        } else {
+          this.emitEvent('menu-click', params, evnt)
+        }
         this.closeMenu()
       }
     }

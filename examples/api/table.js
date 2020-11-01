@@ -1655,12 +1655,12 @@ const apis = [
         ]
       },
       {
-        name: 'context-menu',
-        descKey: 'app.api.table.desc.contextMenu',
+        name: 'menu-config',
+        descKey: 'app.api.table.desc.menuConfig',
         version: '',
         type: 'any',
         enum: '',
-        defVal: '继承 setup.table.contextMenu',
+        defVal: '继承 setup.table.menuConfig',
         list: [
           {
             name: 'header',
@@ -1739,7 +1739,7 @@ const apis = [
             name: 'beforeGetMethod',
             desc: '自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
-            type: '({ targetAreas, cellValues }) => boolean',
+            type: '({ targetAreas }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -2086,7 +2086,7 @@ const apis = [
           },
           {
             name: 'validator',
-            desc: '自定义校验方法 Function({ cellValue, rule, rules, row, rowIndex，column, columnIndex }) 返回一个 Promise<new Error("提示消息")>',
+            desc: '自定义校验方法 Function({ cellValue, rule, rules, row, rowIndex，column, columnIndex }) 返回一个 Error 或者 Promise<new Error("提示消息")>',
             version: '',
             type: 'Function',
             enum: '',
@@ -2630,8 +2630,8 @@ const apis = [
         list: []
       },
       {
-        name: 'context-menu-click',
-        descKey: 'app.api.table.desc.contextMenuClick',
+        name: 'menu-click',
+        descKey: 'app.api.table.desc.menuClick',
         version: '',
         type: '',
         enum: '',

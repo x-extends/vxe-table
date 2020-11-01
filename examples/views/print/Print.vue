@@ -122,7 +122,7 @@ const topHtml = `
     <div class="my-list-col">发货日期：2020-09-20</div>
   </div>
   <div class="my-list-row">
-    <div class="my-list-col">收货姓名：小三</div>
+    <div class="my-list-col">收货姓名：小徐</div>
     <div class="my-list-col">收货地址：火星第七区18号001</div>
     <div class="my-list-col">联系电话：10086</div>
   </div>
@@ -230,7 +230,7 @@ export default {
             <div class="my-list-col">发货日期：2020-09-20</div>
           </div>
           <div class="my-list-row">
-            <div class="my-list-col">收货姓名：小三</div>
+            <div class="my-list-col">收货姓名：小徐</div>
             <div class="my-list-col">收货地址：火星第七区18号001</div>
             <div class="my-list-col">联系电话：10086</div>
           </div>

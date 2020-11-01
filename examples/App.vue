@@ -2221,7 +2221,9 @@ export default {
   computed: {
     disabledSupport () {
       const currDate = new Date()
-      if (currDate.getDay() === 0 || currDate.getDay() === 6) {
+      const day = currDate.getDay()
+      const hours = currDate.getHours()
+      if (day === 0 || !((hours >= 9 && hours <= 11) || (hours >= 14 && hours <= 17) || (hours >= 19 && hours <= 21))) {
         return true
       }
       return false

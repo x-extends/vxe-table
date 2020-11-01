@@ -151,6 +151,7 @@ export * from './extends/validator'
 
 export * from './table'
 export * from './column'
+export * from './colgroup'
 export * from './grid'
 export * from './toolbar'
 export * from './pager'

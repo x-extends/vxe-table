@@ -203,6 +203,8 @@ export default {
     // 树形结构配置项
     treeConfig: [Boolean, Object],
     // 快捷菜单配置项
+    menuConfig: [Boolean, Object],
+    // 在 v4 中废弃 contextMenu
     contextMenu: [Boolean, Object],
     // 鼠标配置项
     mouseConfig: Object,
@@ -504,7 +506,7 @@ export default {
       return this.headerCtxMenu.length || this.bodyCtxMenu.length || this.footerCtxMenu.length
     },
     ctxMenuOpts () {
-      return Object.assign({}, GlobalConfig.table.contextMenu, this.contextMenu)
+      return Object.assign({}, GlobalConfig.table.menuConfig, this.contextMenu, this.menuConfig)
     },
     ctxMenuList () {
       const rest = []
@@ -707,8 +709,15 @@ export default {
 
     // v4 中只支持对象类型
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      if (this.contextMenu && !XEUtils.isObject(this.contextMenu)) {
-        UtilTools.warn('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
+      // 在 v3.0 中废弃 context-menu
+      if (this.contextMenu) {
+        UtilTools.warn('vxe.error.delProp', ['context-menu', 'menu-config'])
+        if (!XEUtils.isObject(this.contextMenu)) {
+          UtilTools.warn('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
+        }
+      }
+      if ((this.menuConfig) && !XEUtils.isObject(this.menuConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.menu-config=${this.menuConfig}`, 'table.menu-config={}'])
       }
       if (this.exportConfig && !XEUtils.isObject(this.exportConfig)) {
         UtilTools.warn('vxe.error.errProp', [`table.export-config=${this.exportConfig}`, 'table.export-config={}'])
