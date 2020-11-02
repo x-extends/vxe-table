@@ -1815,7 +1815,7 @@ const apis = [
         version: 'pro',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.table.clipConfig',
         list: [
           {
             name: 'getMethod',
@@ -1861,7 +1861,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.table.mouseConfig',
         list: [
           {
             name: 'selected',
@@ -1907,7 +1907,7 @@ const apis = [
         version: '',
         type: 'Object',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.table.keyboardConfig',
         list: [
           {
             name: 'isArrow',
