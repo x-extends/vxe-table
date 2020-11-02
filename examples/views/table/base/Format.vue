@@ -148,7 +148,7 @@ export default {
           },
           // 四舍五入金额，每隔3位逗号分隔，默认2位数
           formatAmount ({ cellValue }, digits = 2) {
-            return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: digits })
+            return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
           },
           // 格式化银行卡，默认每4位空格隔开
           formatBankcard ({ cellValue }) {

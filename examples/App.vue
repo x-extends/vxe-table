@@ -90,7 +90,7 @@
 
     <vxe-modal v-model="supportVisible" :loading="supportLoading" title="💡技术支持" width="800" position="center">
       <template v-slot>
-        <div class="support-declare">vxe-table 开源版完全免费，如果该项目帮助了您，你可以通过捐赠或者加入技术支持群的方式来支持作者，同时您的支持也能帮助该项目持续维护下去！</div>
+        <div class="support-declare">vxe-table 使用完全免费，如果该项目帮助了您，你可以通过捐赠或者加入技术支持群的方式来支持作者，同时您的支持也能帮助该项目持续维护下去！</div>
         <div>
           <ul class="vxe-row support-question">
             <li class="vxe-col--12" v-for="(item, index) in supportQuestionList" :key="index">
