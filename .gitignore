@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 /dist
-/lib
+# /lib
 /docs
 /public/v1
 /public/v2
