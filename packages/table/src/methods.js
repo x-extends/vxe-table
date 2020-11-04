@@ -1959,17 +1959,18 @@ const Methods = {
           } else {
             // 如果是激活状态，退则出到上一行/下一行
             if (selected.row || actived.row) {
+              const targetArgs = selected.row ? selected.args : actived.args
               if (isShiftKey) {
                 if (keyboardConfig.enterToTab) {
-                  this.moveTabSelected(selected.args, isShiftKey, evnt)
+                  this.moveTabSelected(targetArgs, isShiftKey, evnt)
                 } else {
-                  this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, true, isRightArrow, false, evnt)
+                  this.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
                 }
               } else {
                 if (keyboardConfig.enterToTab) {
-                  this.moveTabSelected(selected.args, isShiftKey, evnt)
+                  this.moveTabSelected(targetArgs, isShiftKey, evnt)
                 } else {
-                  this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, false, isRightArrow, true, evnt)
+                  this.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
                 }
               }
             } else if (treeConfig && highlightCurrentRow && currentRow) {
@@ -2029,7 +2030,7 @@ const Methods = {
           // }
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && selected.column.editRender) {
-            if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
+            if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args) === false)) {
               if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
                 setCellValue(selected.row, selected.column, null)
                 this.handleActived(selected.args, evnt)
@@ -3025,10 +3026,11 @@ const Methods = {
     UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
     return XEUtils.find(this.visibleColumn, column => (column.sortable || column.remoteSort) && column.order)
   },
-  isSort (field) {
-    if (field) {
-      const column = this.getColumnByField(field)
-      return column && (column.sortable || column.remoteSort) && column.order
+  isSort (columnOrField) {
+    let column
+    if (columnOrField) {
+      column = XEUtils.isString(columnOrField) ? this.getColumnByField(columnOrField) : columnOrField
+      return column && column.sortable && column.order
     }
     return this.getSortColumns().length > 0
   },
@@ -3059,12 +3061,13 @@ const Methods = {
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param {String} field 字段名
    */
-  isFilter (field) {
-    if (field) {
-      const column = this.getColumnByField(field)
+  isFilter (columnOrField) {
+    let column
+    if (columnOrField) {
+      column = XEUtils.isString(columnOrField) ? this.getColumnByField(columnOrField) : columnOrField
       return column && column.filters && column.filters.some(option => option.checked)
     }
-    return this.visibleColumn.some(column => column.filters && column.filters.some(option => option.checked))
+    return this.getCheckedFilters().length
   },
   /**
    * 判断展开行是否懒加载完成

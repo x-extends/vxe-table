@@ -1,4 +1,5 @@
 import { UtilTools, DomTools } from '../../tools'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 
@@ -34,7 +35,7 @@ export default {
   },
   computed: {
     isChecked () {
-      return this.value === (this.openValue || this.onValue)
+      return XEUtils.isBoolean(this.onValue) ? this.value === this.openValue : this.value === this.onValue
     },
     onShowLabel () {
       return UtilTools.getFuncText(this.openLabel || this.onLabel)
@@ -49,7 +50,7 @@ export default {
     }
   },
   created () {
-    // 在 v4 中废弃 onLabel、offLabel、onValue、offValue、onIcon、offIcon
+    // 在 v3 中废弃 onLabel、offLabel、onValue、offValue、onIcon、offIcon
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       const { propsData } = this.$options
       if (propsData.onLabel) {
@@ -127,7 +128,7 @@ export default {
     clickEvent (evnt) {
       if (!this.disabled) {
         clearTimeout(this.activeTimeout)
-        const value = this.isChecked ? (this.closeValue || this.offValue) : (this.openValue || this.onValue)
+        const value = this.isChecked ? (XEUtils.isBoolean(this.offValue) ? this.closeValue : this.offValue) : (XEUtils.isBoolean(this.onValue) ? this.openValue : this.onValue)
         this.hasAnimat = true
         if (browse.msie) {
           this.updateStyle()
