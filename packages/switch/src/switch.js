@@ -1,4 +1,5 @@
 import { UtilTools, DomTools } from '../../tools'
+import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 
 const browse = DomTools.browse
@@ -35,7 +36,7 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     isChecked () {
-      return this.value === (this.openValue || this.onValue)
+      return XEUtils.isBoolean(this.onValue) ? this.value === this.openValue : this.value === this.onValue
     },
     onShowLabel () {
       return UtilTools.getFuncText(this.openLabel || this.onLabel)
@@ -106,7 +107,7 @@ export default {
     clickEvent (evnt) {
       if (!this.disabled) {
         clearTimeout(this.activeTimeout)
-        const value = this.isChecked ? (this.closeValue || this.offValue) : (this.openValue || this.onValue)
+        const value = this.isChecked ? (XEUtils.isBoolean(this.offValue) ? this.closeValue : this.offValue) : (XEUtils.isBoolean(this.onValue) ? this.openValue : this.onValue)
         this.hasAnimat = true
         if (browse.msie) {
           this.updateStyle()

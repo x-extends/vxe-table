@@ -256,7 +256,7 @@ export default {
      * 处理激活编辑
      */
     handleActived (params, evnt) {
-      const { editStore, editOpts, tableColumn } = this
+      const { editStore, editOpts, tableColumn, mouseConfig } = this
       const { mode, activeMethod } = editOpts
       const { actived } = editStore
       const { row, column, cell } = params
@@ -266,7 +266,7 @@ export default {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
           if (!activeMethod || activeMethod(params)) {
-            if (this.mouseConfig) {
+            if (mouseConfig) {
               this.clearCopyed(evnt)
               this.clearChecked()
               this.clearSelected(evnt)
@@ -292,6 +292,13 @@ export default {
           this.emitEvent(type, params, evnt)
         } else {
           const { column: oldColumn } = actived
+          if (mouseConfig) {
+            this.clearCopyed(evnt)
+            this.clearChecked()
+            this.clearSelected(evnt)
+            this.clearCellAreas(evnt)
+            this.clearCopyCellArea(evnt)
+          }
           if (oldColumn !== column) {
             const { model: oldModel } = oldColumn
             if (oldModel.update) {

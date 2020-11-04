@@ -594,10 +594,10 @@ export declare class Table extends VXETableComponent {
   clearCurrentColumn(): Promise<any>;
   /**
    * 手动对表格进行排序
-   * @param field 字段名
+   * @param sortConfs 字段名、多列排序
    * @param order 排序方式
    */
-  sort(field: string, order?: 'desc' | 'asc'): Promise<any>;
+  sort(sortConfs: string | TableSortConfs | TableSortConfs[], order?: TableSortOrder): Promise<any>;
   /**
    * 手动清空排序条件，数据会恢复成未排序的状态
    */
@@ -623,7 +623,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 用于 expand-config.lazy，手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
-  clearRowExpandLoaded(): Promise<any>;
+  clearRowExpandLoaded(row: any): Promise<any>;
   /**
    * 用于懒加载展开行，重新加载展开行的内容
    * @param rows 指定行
@@ -671,7 +671,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 用于 tree-config.lazy，手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
-  clearTreeExpandLoaded(): Promise<any>;
+  clearTreeExpandLoaded(row: any): Promise<any>;
   /**
    * 用于懒加载树表格，重新加载子节点
    * @param rows 指定行
@@ -1123,15 +1123,22 @@ export interface TableSeqConfig {
 }
 export interface SeqConfig extends TableSeqConfig {}
 
+export interface TableSortConfs {
+  field: string;
+  order?: TableSortOrder;
+}
+
+export type TableSortOrder = 'asc' | 'desc' | null;
+
 /**
  * 排序配置项
  */
 export interface TableSortConfig {
   defaultSort?: {
     field: string;
-    order: 'asc' | 'desc' | null;
+    order: TableSortOrder;
   };
-  orders?: ('asc' | 'desc' | null)[];
+  orders?: TableSortOrder[];
   sortMethod?(params: { data: any[], column: ColumnInfo, property: string, order: string }): any[];
   remote?: boolean;
   trigger?: 'default' | 'cell';

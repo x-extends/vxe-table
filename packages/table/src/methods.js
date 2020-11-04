@@ -1952,17 +1952,18 @@ const Methods = {
           } else {
             // 如果是激活状态，退则出到上一行/下一行
             if (selected.row || actived.row) {
+              const targetArgs = selected.row ? selected.args : actived.args
               if (isShiftKey) {
                 if (keyboardConfig.enterToTab) {
-                  this.moveTabSelected(selected.args, isShiftKey, evnt)
+                  this.moveTabSelected(targetArgs, isShiftKey, evnt)
                 } else {
-                  this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, true, isRightArrow, false, evnt)
+                  this.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
                 }
               } else {
                 if (keyboardConfig.enterToTab) {
-                  this.moveTabSelected(selected.args, isShiftKey, evnt)
+                  this.moveTabSelected(targetArgs, isShiftKey, evnt)
                 } else {
-                  this.moveSelected(selected.row ? selected.args : actived.args, isLeftArrow, false, isRightArrow, true, evnt)
+                  this.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
                 }
               }
             } else if (treeConfig && highlightCurrentRow && currentRow) {

@@ -2859,6 +2859,15 @@ const apis = [
         list: []
       },
       {
+        name: 'cell-selected',
+        descKey: 'app.api.table.desc.cellSelected',
+        version: '2.9.27',
+        type: '',
+        enum: '',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
+        list: []
+      },
+      {
         name: 'edit-closed',
         descKey: 'app.api.table.desc.editClosed',
         version: '',
@@ -4262,12 +4271,12 @@ const apis = [
         list: []
       },
       {
-        name: 'clearRowExpandLoaded()',
+        name: 'clearRowExpandLoaded(row)',
         desc: '用于 expand-config.lazy，手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
         version: '2.7',
         type: 'Promise',
         enum: '',
-        defVal: '',
+        defVal: 'row: any',
         list: []
       },
       {
@@ -4280,12 +4289,12 @@ const apis = [
         list: []
       },
       {
-        name: 'clearTreeExpandLoaded()',
+        name: 'clearTreeExpandLoaded(row)',
         desc: '用于 tree-config.lazy，手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
         version: '2.7',
         type: 'Promise',
         enum: '',
-        defVal: '',
+        defVal: 'row: any',
         list: []
       },
       {
