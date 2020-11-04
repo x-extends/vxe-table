@@ -127,7 +127,7 @@ export default {
               }
             },
             formatAmount ({ cellValue }) {
-              return XEUtils.commafy(cellValue)
+              return XEUtils.commafy(XEUtils.toNumber(cellValue))
             },
             filterNameMethod ({ value, row, column }) {
               return row.id >= value
@@ -168,7 +168,7 @@ export default {
       }
     },
     formatAmount ({ cellValue }) {
-      return XEUtils.commafy(cellValue)
+      return XEUtils.commafy(XEUtils.toNumber(cellValue))
     },
     filterNameMethod ({ value, row }) {
       return row.id >= value
