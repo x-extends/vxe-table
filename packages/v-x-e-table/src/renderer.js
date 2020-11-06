@@ -459,12 +459,12 @@ const renderMap = {
     renderDefault: nativeEditRender,
     renderFilter: nativeFilterRender,
     filterMethod: handleFilterMethod,
-    renderItem: nativeItemRender
+    renderItemContent: nativeItemRender
   },
   textarea: {
     autofocus: 'textarea',
     renderEdit: nativeEditRender,
-    renderItem: nativeItemRender
+    renderItemContent: nativeItemRender
   },
   select: {
     renderEdit: nativeSelectEditRender,
@@ -485,7 +485,7 @@ const renderMap = {
       })
     },
     filterMethod: handleFilterMethod,
-    renderItem (h, renderOpts, params) {
+    renderItemContent (h, renderOpts, params) {
       return [
         h('select', {
           class: 'vxe-default-select',
@@ -523,19 +523,19 @@ const renderMap = {
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
     filterMethod: handleFilterMethod,
-    renderItem: defaultItemRender
+    renderItemContent: defaultItemRender
   },
   $textarea: {
     autofocus: '.vxe-textarea--inner',
-    renderItem: defaultItemRender
+    renderItemContent: defaultItemRender
   },
   $button: {
     renderDefault: defaultButtonEditRender,
-    renderItem: defaultButtonItemRender
+    renderItemContent: defaultButtonItemRender
   },
   $buttons: {
     renderDefault: defaultButtonsEditRender,
-    renderItem: defaultButtonsItemRender
+    renderItemContent: defaultButtonsItemRender
   },
   $select: {
     autofocus: '.vxe-input--inner',
@@ -559,7 +559,7 @@ const renderMap = {
       })
     },
     filterMethod: handleFilterMethod,
-    renderItem (h, renderOpts, params) {
+    renderItemContent (h, renderOpts, params) {
       const { data, property } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
       const itemValue = XEUtils.get(data, property)
@@ -575,17 +575,17 @@ const renderMap = {
   },
   $radio: {
     autofocus: '.vxe-radio--input',
-    renderItem: defaultFormItemRadioAndCheckboxRender
+    renderItemContent: defaultFormItemRadioAndCheckboxRender
   },
   $checkbox: {
     autofocus: '.vxe-checkbox--input',
-    renderItem: defaultFormItemRadioAndCheckboxRender
+    renderItemContent: defaultFormItemRadioAndCheckboxRender
   },
   $switch: {
     autofocus: '.vxe-switch--button',
     renderEdit: defaultEditRender,
     renderDefault: defaultEditRender,
-    renderItem: defaultItemRender
+    renderItemContent: defaultItemRender
   }
 }
 

@@ -1,4 +1,6 @@
 import XEUtils from 'xe-utils/ctor'
+import VXETable from '../../v-x-e-table'
+import { UtilTools } from '../../tools'
 
 class ItemConfig {
   constructor ($xeform, _vm) {
@@ -23,6 +25,12 @@ class ItemConfig {
       errRule: null,
       slots: _vm.slots
     })
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      const compConf = _vm.itemRender ? VXETable.renderer.get(_vm.itemRender.name) : null
+      if (compConf && compConf.renderItem) {
+        UtilTools.warn('vxe.error.delProp', ['item-render.renderItem', 'item-render.renderItemContent'])
+      }
+    }
   }
 
   update (name, value) {

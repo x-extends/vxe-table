@@ -3,7 +3,8 @@
     <p class="tip">
       表单-项渲染 <grid-api-link prop="itemRender"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/v3/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderItem (h, renderOpts, <vxe-tooltip content="params: { data, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项<br>
+      renderItemTitle (h, renderOpts, <vxe-tooltip content="params: { data, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项标题<br>
+      renderItemContent (h, renderOpts, <vxe-tooltip content="params: { data, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项内容<br>
       itemVisibleMethod (<vxe-tooltip content="params: { data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项可视函数<br>
       itemResetMethod (<vxe-tooltip content="params: { data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 项重置函数<br>
     </p>
@@ -61,8 +62,8 @@ export default {
         `
         // 创建一个简单的表单-输入框渲染
         VXETable.renderer.add('FormItemInput', {
-          // 项显示模板
-          renderItem (h, renderOpts, params) {
+          // 项内容模板
+          renderItemContent (h, renderOpts, params) {
             const { data, property } = params
             const props = renderOpts.props || {}
             return [

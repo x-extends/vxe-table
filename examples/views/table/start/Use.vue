@@ -90,9 +90,8 @@
           i18n: (key, args) => i18n.t(key, args)
         })
 
-        // 先安装依赖模块
+        // 表格模块
         Vue.use(Icon)
-        Vue.use(Column)
         Vue.use(Header)
         Vue.use(Footer)
         Vue.use(Filter)
@@ -102,8 +101,10 @@
         Vue.use(Keyboard)
         Vue.use(Validator)
 
-        Vue.use(Tooltip)
+        // 可选组件
+        Vue.use(Column)
         Vue.use(Grid)
+        Vue.use(Tooltip)
         Vue.use(Toolbar)
         Vue.use(Pager)
         Vue.use(Form)
@@ -116,7 +117,7 @@
         Vue.use(Modal)
         Vue.use(List)
 
-        // 再安装核心库
+        // 安装表格
         Vue.use(Table)
 
         // 给 vue 实例挂载内部对象，例如：

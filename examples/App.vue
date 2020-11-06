@@ -88,6 +88,23 @@
       </div>
     </div>
 
+    <vxe-modal v-model="newVersionVisible" title="v4.x 预发布" width="500" min-height="200" min-width="400" :position="{left: 20, top: 20}" :mask="false" :lock-view="false" show-footer resize>
+      <template v-slot>
+        <ul>
+          <li>1. 全面支持 vue 3.0 Component API</li>
+          <li>2. 全面支持 ts，使用 Typescript 完全重写</li>
+          <li>3. 不再支持 IE，面向现代浏览器</li>
+          <li>4. 重写虚拟渲染，更快、更少的渲染次数</li>
+          <li>5. 重写渲染器：移除 h 参数</li>
+          <li>6. 高级用法：支持 Hooks 扩展</li>
+        </ul>
+      </template>
+      <template v-slot:footer>
+        <vxe-button @click="claseNewVersionEvent">不看</vxe-button>
+        <vxe-button status="primary" @click="viewNewVersionEvent">查看更多</vxe-button>
+      </template>
+    </vxe-modal>
+
     <vxe-modal v-model="supportVisible" :loading="supportLoading" title="💡技术支持" width="800" position="center">
       <template v-slot>
         <div class="support-declare">vxe-table 使用完全免费，如果该项目帮助了您，你可以通过捐赠或者加入技术支持群的方式来支持作者，同时您的支持也能帮助该项目持续维护下去！</div>
@@ -202,6 +219,7 @@ export default {
       stableVersionList: [],
       version: '3',
       usedJSHeapSize: '0',
+      newVersionVisible: false,
       tableList: [
         {
           label: 'app.aside.nav.start',
@@ -2332,6 +2350,9 @@ export default {
         }
       }, 3000)
     }
+    // setTimeout(() => {
+    //   this.newVersionVisible = localStorage.getItem('VXE_TABLE_NEW_VERSION') !== '4'
+    // }, 5000)
     this.init()
   },
   methods: {
@@ -2436,6 +2457,14 @@ export default {
     },
     openEvent (tmplName) {
       open(`https://xuliangzhan_admin.gitee.io/vxe-template/${tmplName}/`)
+    },
+    claseNewVersionEvent () {
+      this.newVersionVisible = false
+      localStorage.setItem('VXE_TABLE_NEW_VERSION', '4')
+    },
+    viewNewVersionEvent () {
+      this.claseNewVersionEvent()
+      location.href = '/vxe-table/v4/'
     },
     vChangeEvent () {
       switch (this.version) {

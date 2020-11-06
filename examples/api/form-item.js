@@ -277,11 +277,20 @@ const apis = [
     list: [
       {
         name: 'default',
-        desc: '自定义表单项',
+        desc: '自定义内容模板',
         version: '',
         type: '',
         enum: '',
-        defVal: '{ data, property }',
+        defVal: '{ item, data, property }',
+        list: []
+      },
+      {
+        name: 'title',
+        desc: '自定义标题模板',
+        version: '2.9.27',
+        type: '',
+        enum: '',
+        defVal: '{ item, data, property }',
         list: []
       }
     ]

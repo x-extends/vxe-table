@@ -53,7 +53,10 @@ function renderSuffixIcon (h, titleSuffix) {
 }
 
 function renderTitle (h, _vm, item) {
-  const { titlePrefix, titleSuffix } = item
+  const { data } = _vm
+  const { slots, field, itemRender, titlePrefix, titleSuffix } = item
+  const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+  const params = { data, property: field, item, $form: _vm }
   const tss = []
   if (titlePrefix) {
     tss.push(
@@ -73,7 +76,7 @@ function renderTitle (h, _vm, item) {
   tss.push(
     h('span', {
       class: 'vxe-form--item-title-label'
-    }, UtilTools.getFuncText(item.title))
+    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? slots.title.call(_vm, params) : UtilTools.getFuncText(item.title)))
   )
   if (titleSuffix) {
     tss.push(
@@ -103,7 +106,7 @@ function renderItems (h, _vm) {
     const titleAlign = item.titleAlign || _vm.titleAlign
     const titleWidth = item.titleWidth || _vm.titleWidth
     let itemVisibleMethod = visibleMethod
-    const params = { data, property: field, $form: _vm }
+    const params = { data, property: field, item, $form: _vm }
     let isRequired
     if (visible === false) {
       return _e()
@@ -116,6 +119,14 @@ function renderItems (h, _vm) {
       if (itemRules) {
         isRequired = itemRules.some(rule => rule.required)
       }
+    }
+    let contentVNs = []
+    if (compConf && compConf.renderItemContent) {
+      contentVNs = compConf.renderItemContent.call(_vm, h, itemRender, params)
+    } else if (compConf && compConf.renderItem) {
+      contentVNs = compConf.renderItem.call(_vm, h, itemRender, params)
+    } else if (slots && slots.default) {
+      contentVNs = slots.default.call(_vm, params, h)
     }
     return h('div', {
       class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, {
@@ -138,9 +149,7 @@ function renderItems (h, _vm) {
         }, renderTitle(h, _vm, item)) : null,
         h('div', {
           class: ['vxe-form--item-content', align ? `align--${align}` : null]
-        }, (
-          compConf && compConf.renderItem ? compConf.renderItem.call(_vm, h, itemRender, params) : (slots && slots.default ? slots.default.call(_vm, params, h) : [])
-        ).concat(
+        }, contentVNs.concat(
           [
             collapseNode ? h('div', {
               class: 'vxe-form--item-trigger-node',
@@ -296,7 +305,7 @@ export default {
             XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
             const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
             if (compConf && compConf.itemResetMethod) {
-              compConf.itemResetMethod({ data, property: field, $form: this })
+              compConf.itemResetMethod({ data, property: field, item, $form: this })
             }
           }
         })
