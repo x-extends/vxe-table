@@ -141,18 +141,27 @@ export default {
     const titleWidth = this.titleWidth || $vxeform.titleWidth
     const collapseAll = $vxeform.collapseAll
     let itemVisibleMethod = visibleMethod
+    const params = { data: $vxeform.data, property: field, item: this, $form: $vxeform }
     if (visible === false) {
       return _e()
     }
     if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
       itemVisibleMethod = compConf.itemVisibleMethod
     }
+    let contentVNs = []
+    if (compConf && compConf.renderItemContent) {
+      contentVNs = compConf.renderItemContent.call(this, h, itemRender, params)
+    } else if (compConf && compConf.renderItem) {
+      contentVNs = compConf.renderItem.call(this, h, itemRender, params)
+    } else if ($scopedSlots && $scopedSlots.default) {
+      contentVNs = $scopedSlots.default.call(this, params, h)
+    }
     return h('div', {
       class: ['vxe-form--item', span ? `vxe-col--${span} is--span` : null, {
         'is--title': title,
         'is--required': isRequired,
         'is--hidden': folding && collapseAll,
-        'is--active': !itemVisibleMethod || itemVisibleMethod({ data: $vxeform.data, property: field, $form: $vxeform }),
+        'is--active': !itemVisibleMethod || itemVisibleMethod(params),
         'is--error': showError
       }]
     }, [
@@ -167,7 +176,7 @@ export default {
         }, renderTitle(h, this)) : null,
         h('div', {
           class: ['vxe-form--item-content', align ? `align--${align}` : null]
-        }, (compConf && compConf.renderItem ? compConf.renderItem.call(this, h, itemRender, { data: $vxeform.data, property: field, $form: $vxeform }, { $form: $vxeform }) : ($scopedSlots.default ? $scopedSlots.default.call(this, { data: $vxeform.data, property: field, $form: $vxeform }, h) : [])).concat(
+        }, contentVNs.concat(
           [
             collapseNode ? h('div', {
               class: 'vxe-form--item-trigger-node',
