@@ -11,7 +11,7 @@
       :header-cell-class-name="headerCellClassName"
       :row-class-name="rowClassName"
       :cell-class-name="cellClassName"
-      :data="tableData">
+      :data="demo1.tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -23,9 +23,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="scss">{{ demoCodes[2] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="scss">{{ demoCodes[2] }}</pre-code>
     </pre>
 
     <p class="tip">通过 <table-api-link prop="cell-click"/> 事件点击改变颜色</p>
@@ -34,7 +34,7 @@
       border
       class="mytable-style"
       :cell-class-name="cellClassName2"
-      :data="tableData"
+      :data="demo2.tableData"
       @cell-click="cellClickEvent2">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -47,19 +47,33 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
-      <code class="scss">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="scss">{{ demoCodes[5] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive } from 'vue'
+import { VxeTablePropTypes, VxeTableEvents } from '../../../../types/vxe-table'
 
-export default {
-  data () {
-    return {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+      ]
+    })
+
+    const demo2 = reactive({
       tableData: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -70,8 +84,55 @@ export default {
         { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
         { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
       ],
-      selectRow: null,
-      selectColumn: null,
+      selectRow: null as any,
+      selectColumn: null as any
+    })
+
+    const headerCellClassName: VxeTablePropTypes.HeaderCellClassName = ({ column }) => {
+      if (column.property === 'name') {
+        return 'col-blue'
+      }
+      return null
+    }
+
+    const rowClassName: VxeTablePropTypes.RowClassName = ({ rowIndex }) => {
+      if ([2, 3, 5].includes(rowIndex)) {
+        return 'row-green'
+      }
+      return null
+    }
+
+    const cellClassName: VxeTablePropTypes.CellClassName = ({ row, column }) => {
+      if (column.property === 'sex') {
+        if (row.sex >= '1') {
+          return 'col-red'
+        } else if (row.age === 26) {
+          return 'col-orange'
+        }
+      }
+      return null
+    }
+
+    const cellClassName2: VxeTablePropTypes.CellClassName = ({ row, column }) => {
+      if (row === demo2.selectRow && column === demo2.selectColumn) {
+        return 'col-orange'
+      }
+      return null
+    }
+
+    const cellClickEvent2: VxeTableEvents.CellClick = ({ row, column }) => {
+      demo2.selectRow = row
+      demo2.selectColumn = column
+    }
+
+    return {
+      demo1,
+      demo2,
+      headerCellClassName,
+      rowClassName,
+      cellClassName,
+      cellClassName2,
+      cellClickEvent2,
       demoCodes: [
         `
         <vxe-table
@@ -80,7 +141,7 @@ export default {
           :header-cell-class-name="headerCellClassName"
           :row-class-name="rowClassName"
           :cell-class-name="cellClassName"
-          :data="tableData">
+          :data="demo1.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -90,10 +151,26 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
-             tableData: [
+        import { defineComponent, reactive } from 'vue'
+        import { VxeTablePropTypes } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+              ]
+            })
+
+            const demo2 = reactive({
+              tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
@@ -103,22 +180,25 @@ export default {
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ],
-              selectRow: null,
-              selectColumn: null
-            }
-          },
-          methods: {
-            headerCellClassName ({ column, columnIndex }) {
+              selectRow: null as any,
+              selectColumn: null as any
+            })
+
+            const headerCellClassName: VxeTablePropTypes.HeaderCellClassName = ({ column }) => {
               if (column.property === 'name') {
                 return 'col-blue'
               }
-            },
-            rowClassName ({ row, rowIndex }) {
+              return null
+            }
+
+            const rowClassName: VxeTablePropTypes.RowClassName = ({ rowIndex }) => {
               if ([2, 3, 5].includes(rowIndex)) {
                 return 'row-green'
               }
-            },
-            cellClassName ({ row, rowIndex, column, columnIndex }) {
+              return null
+            }
+
+            const cellClassName: VxeTablePropTypes.CellClassName = ({ row, column }) => {
               if (column.property === 'sex') {
                 if (row.sex >= '1') {
                   return 'col-red'
@@ -126,9 +206,17 @@ export default {
                   return 'col-orange'
                 }
               }
+              return null
+            }
+
+            return {
+              demo1,
+              headerCellClassName,
+              rowClassName,
+              cellClassName
             }
           }
-        }
+        })
         `,
         `
         .mytable-style .vxe-body--row.row-green {
@@ -152,9 +240,9 @@ export default {
         <vxe-table
           border
           class="mytable-style"
-          :cell-class-name="cellClassName"
-          :data="tableData"
-          @cell-click="cellClickEvent">
+          :cell-class-name="cellClassName2"
+          :data="demo2.tableData"
+          @cell-click="cellClickEvent2">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -164,9 +252,12 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+        import { VxeTablePropTypes, VxeTableEvents } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo2 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -177,22 +268,29 @@ export default {
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ],
-              selectRow: null,
-              selectColumn: null
-            }
-          },
-          methods: {
-            cellClassName ({ row, column }) {
-              if (row === this.selectRow & column === this.selectColumn) {
+              selectRow: null as any,
+              selectColumn: null as any
+            })
+
+            const cellClassName2: VxeTablePropTypes.CellClassName = ({ row, column }) => {
+              if (row === demo2.selectRow && column === demo2.selectColumn) {
                 return 'col-orange'
               }
-            },
-            cellClickEvent ({ row, column }) {
-              this.selectRow = row
-              this.selectColumn = column
+              return null
+            }
+
+            const cellClickEvent2: VxeTableEvents.CellClick = ({ row, column }) => {
+              demo2.selectRow = row
+              demo2.selectColumn = column
+            }
+
+            return {
+              demo2,
+              cellClassName2,
+              cellClickEvent2
             }
           }
-        }
+        })
         `,
         `
         .mytable-style.vxe-table .vxe-body--row.row-green {
@@ -214,46 +312,8 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    headerCellClassName ({ column }) {
-      if (column.property === 'name') {
-        return 'col-blue'
-      }
-    },
-    rowClassName ({ rowIndex }) {
-      if ([2, 3, 5].includes(rowIndex)) {
-        return 'row-green'
-      }
-    },
-    cellClassName ({ row, column }) {
-      if (column.property === 'sex') {
-        if (row.sex >= '1') {
-          return 'col-red'
-        } else if (row.age === 26) {
-          return 'col-orange'
-        }
-      }
-    },
-    cellClassName2 ({ row, column }) {
-      if (row === this.selectRow & column === this.selectColumn) {
-        return 'col-orange'
-      }
-    },
-    cellClickEvent2 ({ row, column }) {
-      this.selectRow = row
-      this.selectColumn = column
-    }
   }
-}
+})
 </script>
 
 <style>

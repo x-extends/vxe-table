@@ -7,73 +7,75 @@
     </p>
 
     <p>
-      <vxe-input v-model="value100" placeholder="默认尺寸"></vxe-input>
-      <vxe-input v-model="value101" placeholder="中等尺寸" size="medium"></vxe-input>
-      <vxe-input v-model="value102" placeholder="小型尺寸" size="small"></vxe-input>
-      <vxe-input v-model="value103" placeholder="超小尺寸" size="mini"></vxe-input>
+      <vxe-input v-model="demo1.value100" placeholder="默认尺寸"></vxe-input>
+      <vxe-input v-model="demo1.value101" placeholder="中等尺寸" size="medium"></vxe-input>
+      <vxe-input v-model="demo1.value102" placeholder="小型尺寸" size="small"></vxe-input>
+      <vxe-input v-model="demo1.value103" placeholder="超小尺寸" size="mini"></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value200" placeholder="可清除" clearable></vxe-input>
-      <vxe-input v-model="value201" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
-      <vxe-input v-model="value202" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
-      <vxe-input v-model="value203" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
+      <vxe-input v-model="demo1.value200" placeholder="可清除" clearable></vxe-input>
+      <vxe-input v-model="demo1.value201" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
+      <vxe-input v-model="demo1.value202" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
+      <vxe-input v-model="demo1.value203" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value300" placeholder="搜索类型" type="search"></vxe-input>
-      <vxe-input v-model="value301" placeholder="可清除" type="search" clearable></vxe-input>
-      <vxe-input v-model="value302" placeholder="密码类型" type="password"></vxe-input>
-      <vxe-input v-model="value303" placeholder="可清除" type="password" clearable></vxe-input>
+      <vxe-input v-model="demo1.value300" placeholder="搜索类型" type="search"></vxe-input>
+      <vxe-input v-model="demo1.value301" placeholder="可清除" type="search" clearable></vxe-input>
+      <vxe-input v-model="demo1.value302" placeholder="密码类型" type="password"></vxe-input>
+      <vxe-input v-model="demo1.value303" placeholder="可清除" type="password" clearable></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value400" placeholder="日期选择" type="date"></vxe-input>
-      <vxe-input v-model="value401" placeholder="周选择" type="week" clearable></vxe-input>
-      <vxe-input v-model="value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
-      <vxe-input v-model="value403" placeholder="年选择" type="year" clearable></vxe-input>
-      <vxe-input v-model="value404" placeholder="时间选择" type="time"></vxe-input>
-      <vxe-input v-model="value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
-      <vxe-input v-model="value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
+      <vxe-input v-model="demo1.value400" placeholder="日期选择" type="date"></vxe-input>
+      <vxe-input v-model="demo1.value401" placeholder="周选择" type="week" clearable></vxe-input>
+      <vxe-input v-model="demo1.value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
+      <vxe-input v-model="demo1.value403" placeholder="年选择" type="year" clearable></vxe-input>
+      <vxe-input v-model="demo1.value404" placeholder="时间选择" type="time"></vxe-input>
+      <vxe-input v-model="demo1.value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
+      <vxe-input v-model="demo1.value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
+      <vxe-input v-model="demo1.value407" placeholder="小圆点" type="date" :festival-method="festivalNoticeMethod" transfer></vxe-input>
+      <vxe-input v-model="demo1.value408" placeholder="农历节日" type="date" :festival-method="festivalCalendarMethod" transfer></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value500" placeholder="数值类型" type="number"></vxe-input>
-      <vxe-input v-model="value501" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
-      <vxe-input v-model="value502" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
-      <vxe-input v-model="value503" placeholder="小数类型" type="float"></vxe-input>
-      <vxe-input v-model="value504" placeholder="小数间隔 2.3" type="float" step="2.3" clearable></vxe-input>
-      <vxe-input v-model="value505" placeholder="小数范围限制 0-50" type="float" min="0" max="50" clearable></vxe-input>
-      <vxe-input v-model="value506" placeholder="整数类型" type="integer"></vxe-input>
-      <vxe-input v-model="value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
-      <vxe-input v-model="value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
+      <vxe-input v-model="demo1.value500" placeholder="数值类型" type="number"></vxe-input>
+      <vxe-input v-model="demo1.value501" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
+      <vxe-input v-model="demo1.value502" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
+      <vxe-input v-model="demo1.value503" placeholder="小数类型" type="float"></vxe-input>
+      <vxe-input v-model="demo1.value504" placeholder="小数间隔 2.3" type="float" step="2.3" clearable></vxe-input>
+      <vxe-input v-model="demo1.value505" placeholder="小数范围限制 0-50" type="float" min="0" max="50" clearable></vxe-input>
+      <vxe-input v-model="demo1.value506" placeholder="整数类型" type="integer"></vxe-input>
+      <vxe-input v-model="demo1.value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
+      <vxe-input v-model="demo1.value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
     </p>
 
     <p>
-      <vxe-input v-model="value600" placeholder="自定义前缀图标">
-        <template v-slot:prefix>
+      <vxe-input v-model="demo1.value600" placeholder="自定义前缀图标">
+        <template #prefix>
           <i class="fa fa-search my-red"></i>
         </template>
       </vxe-input>
-      <vxe-input v-model="value601" placeholder="自定义后缀图标">
-        <template v-slot:suffix>
+      <vxe-input v-model="demo1.value601" placeholder="自定义后缀图标">
+        <template #suffix>
           <i class="fa fa-search my-green"></i>
         </template>
       </vxe-input>
-      <vxe-input v-model="value602" class="my-domain" placeholder="自定义前缀模板">
-        <template v-slot:prefix>
+      <vxe-input v-model="demo1.value602" class="my-domain" placeholder="自定义前缀模板">
+        <template #prefix>
           <span>Http://</span>
         </template>
       </vxe-input>
-      <vxe-input v-model="value603" class="my-search" placeholder="自定义后缀模板">
-        <template v-slot:suffix>
+      <vxe-input v-model="demo1.value603" class="my-search" placeholder="自定义后缀模板">
+        <template #suffix>
           <i class="fa fa-search"></i>
         </template>
       </vxe-input>
     </p>
 
     <pre>
-      <code>
+      <pre-code>
         | Tab | 切换到上一个 |
         | Shift Tab | 切换到下一个 |
         | Arrow Up ↑ | 展开下拉面板、如果已展开则向上移动（用于日期类型...等） |
@@ -83,25 +85,27 @@
         | Enter | 展开下拉面板、确定选中日期...等（用于日期类型...等） |
         | Page Up | 向前翻页（用于日期类型...等） |
         | Page Down | 向后翻页（用于日期类型...等） |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="html">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <pre-code class="html">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive } from 'vue'
+import { VxeInputPropTypes, VxeInputDefines } from '../../../types/vxe-table'
+import XEUtils from 'xe-utils'
 
-export default {
-  data  () {
-    return {
+export default defineComponent({
+  setup  () {
+    const demo1 = reactive({
       value100: '',
       value101: '',
       value102: '',
@@ -121,6 +125,8 @@ export default {
       value404: '',
       value405: '',
       value406: '',
+      value407: '2020-10-01',
+      value408: '2020-10-01',
       value500: '22',
       value501: '',
       value502: '',
@@ -133,79 +139,179 @@ export default {
       value600: '',
       value601: '',
       value602: '',
-      value603: '',
+      value603: ''
+    })
+
+    const disabledDateMethod: VxeInputPropTypes.DisabledMethod = (params) => {
+      const { date } = params
+      const dd = date.getDate()
+      return dd > 15
+    }
+
+    // 渲染日期小圆点
+    const noticeMaps: { [key: string]: VxeInputDefines.DateFestivalInfo } = {
+      20200910: {
+        notice: true // 显示小圆点事件通知
+      },
+      20201015: {
+        notice: true
+      },
+      20201108: {
+        notice: true
+      },
+      20201222: {
+        notice: true
+      }
+    }
+    const festivalNoticeMethod: VxeInputPropTypes.FestivalMethod = (params) => {
+      const { date, type } = params
+      if (type === 'day') {
+        const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
+        return noticeMaps[ymd] || { label: '无' }
+      }
+    }
+
+    // 显示日期农历节假日
+    const calendarMaps: { [key: string]: VxeInputDefines.DateFestivalInfo } = {
+      20200930: {
+        label: '十四' // 显示节日名称
+      },
+      20201001: {
+        label: '国庆节,中秋节', // 如果同一天拥有多个节日重叠，用逗号分开
+        important: true, // 是否标记为重要节日
+        extra: '休' // 右上角额外显示的事件名称
+      },
+      20201002: {
+        label: '十六',
+        extra: '休'
+      },
+      20201003: {
+        label: '十七',
+        extra: '休'
+      },
+      20201004: {
+        label: '十八',
+        extra: '休'
+      },
+      20201005: {
+        label: '十九',
+        extra: '休'
+      },
+      20201006: {
+        label: '二十',
+        extra: '休'
+      },
+      20201007: {
+        label: '廿一',
+        extra: '休'
+      },
+      20201008: {
+        label: '寒霜',
+        important: true,
+        extra: '休'
+      },
+      20201009: {
+        label: '廿三'
+      },
+      20201010: {
+        label: '廿四',
+        extra: {
+          label: '班',
+          important: true // 是否标记为重要事件
+        }
+      }
+    }
+    const festivalCalendarMethod: VxeInputPropTypes.FestivalMethod = (params) => {
+      const { date, type } = params
+      if (type === 'day') {
+        const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
+        return calendarMaps[ymd] || { label: '无' }
+      }
+    }
+
+    return {
+      demo1,
+      disabledDateMethod,
+      festivalNoticeMethod,
+      festivalCalendarMethod,
       demoCodes: [
         `
         <p>
-          <vxe-input v-model="value100" placeholder="默认尺寸"></vxe-input>
-          <vxe-input v-model="value101" placeholder="中等尺寸" size="medium"></vxe-input>
-          <vxe-input v-model="value102" placeholder="小型尺寸" size="small"></vxe-input>
-          <vxe-input v-model="value103" placeholder="超小尺寸" size="mini"></vxe-input>
+          <vxe-input v-model="demo1.value100" placeholder="默认尺寸"></vxe-input>
+          <vxe-input v-model="demo1.value101" placeholder="中等尺寸" size="medium"></vxe-input>
+          <vxe-input v-model="demo1.value102" placeholder="小型尺寸" size="small"></vxe-input>
+          <vxe-input v-model="demo1.value103" placeholder="超小尺寸" size="mini"></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value200" placeholder="可清除" clearable></vxe-input>
-          <vxe-input v-model="value201" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
-          <vxe-input v-model="value202" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
-          <vxe-input v-model="value203" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
+          <vxe-input v-model="demo1.value200" placeholder="可清除" clearable></vxe-input>
+          <vxe-input v-model="demo1.value201" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
+          <vxe-input v-model="demo1.value202" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
+          <vxe-input v-model="demo1.value203" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value300" placeholder="搜索类型" type="search"></vxe-input>
-          <vxe-input v-model="value301" placeholder="可清除" type="search" clearable></vxe-input>
-          <vxe-input v-model="value302" placeholder="密码类型" type="password"></vxe-input>
-          <vxe-input v-model="value303" placeholder="可清除" type="password" clearable></vxe-input>
+          <vxe-input v-model="demo1.value300" placeholder="搜索类型" type="search"></vxe-input>
+          <vxe-input v-model="demo1.value301" placeholder="可清除" type="search" clearable></vxe-input>
+          <vxe-input v-model="demo1.value302" placeholder="密码类型" type="password"></vxe-input>
+          <vxe-input v-model="demo1.value303" placeholder="可清除" type="password" clearable></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value400" placeholder="日期选择" type="date"></vxe-input>
-          <vxe-input v-model="value401" placeholder="周选择" type="week" clearable></vxe-input>
-          <vxe-input v-model="value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
-          <vxe-input v-model="value403" placeholder="年选择" type="year" clearable></vxe-input>
-          <vxe-input v-model="value404" placeholder="时间选择" type="time"></vxe-input>
-          <vxe-input v-model="value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
-          <vxe-input v-model="value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
+          <vxe-input v-model="demo1.value400" placeholder="日期选择" type="date"></vxe-input>
+          <vxe-input v-model="demo1.value401" placeholder="周选择" type="week" clearable></vxe-input>
+          <vxe-input v-model="demo1.value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
+          <vxe-input v-model="demo1.value403" placeholder="年选择" type="year" clearable></vxe-input>
+          <vxe-input v-model="demo1.value404" placeholder="时间选择" type="time"></vxe-input>
+          <vxe-input v-model="demo1.value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
+          <vxe-input v-model="demo1.value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
+          <vxe-input v-model="demo1.value407" placeholder="小圆点" type="date" :festival-method="festivalNoticeMethod" transfer></vxe-input>
+          <vxe-input v-model="demo1.value408" placeholder="农历节日" type="date" :festival-method="festivalCalendarMethod" transfer></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value500" placeholder="数值类型" type="number"></vxe-input>
-          <vxe-input v-model="value501" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
-          <vxe-input v-model="value502" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
-          <vxe-input v-model="value503" placeholder="小数类型" type="float"></vxe-input>
-          <vxe-input v-model="value504" placeholder="小数间隔 2.3" type="float" step="2.3" clearable></vxe-input>
-          <vxe-input v-model="value505" placeholder="小数范围限制 0-50" type="float" min="0" max="50" clearable></vxe-input>
-          <vxe-input v-model="value506" placeholder="整数类型" type="integer"></vxe-input>
-          <vxe-input v-model="value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
-          <vxe-input v-model="value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
+          <vxe-input v-model="demo1.value500" placeholder="数值类型" type="number"></vxe-input>
+          <vxe-input v-model="demo1.value501" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
+          <vxe-input v-model="demo1.value502" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
+          <vxe-input v-model="demo1.value503" placeholder="小数类型" type="float"></vxe-input>
+          <vxe-input v-model="demo1.value504" placeholder="小数间隔 2.3" type="float" step="2.3" clearable></vxe-input>
+          <vxe-input v-model="demo1.value505" placeholder="小数范围限制 0-50" type="float" min="0" max="50" clearable></vxe-input>
+          <vxe-input v-model="demo1.value506" placeholder="整数类型" type="integer"></vxe-input>
+          <vxe-input v-model="demo1.value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
+          <vxe-input v-model="demo1.value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
         </p>
 
         <p>
-          <vxe-input v-model="value600" placeholder="自定义前缀图标">
-            <template v-slot:prefix>
+          <vxe-input v-model="demo1.value600" placeholder="自定义前缀图标">
+            <template #prefix>
               <i class="fa fa-search my-red"></i>
             </template>
           </vxe-input>
-          <vxe-input v-model="value601" placeholder="自定义后缀图标">
-            <template v-slot:suffix>
+          <vxe-input v-model="demo1.value601" placeholder="自定义后缀图标">
+            <template #suffix>
               <i class="fa fa-search my-green"></i>
             </template>
           </vxe-input>
-          <vxe-input v-model="value602" class="my-domain" placeholder="自定义前缀模板">
-            <template v-slot:prefix>
+          <vxe-input v-model="demo1.value602" class="my-domain" placeholder="自定义前缀模板">
+            <template #prefix>
               <span>Http://</span>
             </template>
           </vxe-input>
-          <vxe-input v-model="value603" class="my-search" placeholder="自定义后缀模板">
-            <template v-slot:suffix>
+          <vxe-input v-model="demo1.value603" class="my-search" placeholder="自定义后缀模板">
+            <template #suffix>
               <i class="fa fa-search"></i>
             </template>
           </vxe-input>
         </p>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+        import { VxeInputPropTypes, VxeInputDefines } from 'vxe-table'
+        import XEUtils from 'xe-utils'
+
+        export default defineComponent({
+          setup  () {
+            const demo1 = reactive({
               value100: '',
               value101: '',
               value102: '',
@@ -225,6 +331,8 @@ export default {
               value404: '',
               value405: '',
               value406: '',
+              value407: '2020-10-01',
+              value408: '2020-10-01',
               value500: '22',
               value501: '',
               value502: '',
@@ -238,12 +346,100 @@ export default {
               value601: '',
               value602: '',
               value603: ''
-            }
-          },
-          methods: {
-            disabledDateMethod ({ date }) {
+            })
+
+            const disabledDateMethod: VxeInputPropTypes.FestivalMethod = (params) => {
+              const { date } = params
               const dd = date.getDate()
               return dd > 15
+            }
+
+            // 渲染日期小圆点
+            const noticeMaps: { [key: string]: VxeInputDefines.DateFestivalInfo } = {
+              20200910: {
+                notice: true // 显示小圆点事件通知
+              },
+              20201015: {
+                notice: true
+              },
+              20201108: {
+                notice: true
+              },
+              20201222: {
+                notice: true
+              }
+            }
+            const festivalNoticeMethod: VxeInputPropTypes.FestivalMethod = (params) => {
+              const { date, type } = params
+              if (type === 'day') {
+                const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
+                return noticeMaps[ymd] || { label: '无' }
+              }
+            }
+
+            // 显示日期农历节假日
+            const calendarMaps: { [key: string]: VxeInputDefines.DateFestivalInfo } = {
+              20200930: {
+                label: '十四' // 显示节日名称
+              },
+              20201001: {
+                label: '国庆节,中秋节', // 如果同一天拥有多个节日重叠，用逗号分开
+                important: true, // 是否标记为重要节日
+                extra: '休' // 右上角额外显示的事件名称
+              },
+              20201002: {
+                label: '十六',
+                extra: '休'
+              },
+              20201003: {
+                label: '十七',
+                extra: '休'
+              },
+              20201004: {
+                label: '十八',
+                extra: '休'
+              },
+              20201005: {
+                label: '十九',
+                extra: '休'
+              },
+              20201006: {
+                label: '二十',
+                extra: '休'
+              },
+              20201007: {
+                label: '廿一',
+                extra: '休'
+              },
+              20201008: {
+                label: '寒霜',
+                important: true,
+                extra: '休'
+              },
+              20201009: {
+                label: '廿三'
+              },
+              20201010: {
+                label: '廿四',
+                extra: {
+                  label: '班',
+                  important: true // 是否标记为重要事件
+                }
+              }
+            }
+            const festivalCalendarMethod: VxeInputPropTypes.FestivalMethod = (params) => {
+              const { date, type } = params
+              if (type === 'day') {
+                const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
+                return calendarMaps[ymd] || { label: '无' }
+              }
+            }
+
+            return {
+              demo1,
+              disabledDateMethod,
+              festivalNoticeMethod,
+              festivalCalendarMethod
             }
           }
         }
@@ -291,19 +487,8 @@ export default {
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    disabledDateMethod ({ date }) {
-      const dd = date.getDate()
-      return dd > 15
-    }
   }
-}
+})
 </script>
 
 <style scoped>

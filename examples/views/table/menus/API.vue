@@ -16,49 +16,59 @@
     </vxe-table>
     <h2>示例</h2>
     <pre>
-      <code class="html">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="javascript">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="html">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 
-export default {
-  data () {
+export default defineComponent({
+  setup () {
+    const tableData = ref([
+      {
+        name: 'add(code, callback)',
+        desc: '添加一个',
+        type: '',
+        enum: '',
+        defVal: 'code: string, callback: (params, event) => any',
+        list: []
+      },
+      {
+        name: 'mixin(options)',
+        desc: '添加多个',
+        type: '',
+        enum: '',
+        defVal: 'options: { [code: string]: (params, event) => any }',
+        list: []
+      },
+      {
+        name: 'delete(code)',
+        desc: '删除',
+        type: '',
+        enum: '',
+        defVal: 'code: string',
+        list: []
+      }
+    ])
     return {
-      tableData: [
-        {
-          name: 'add(code, callback)',
-          desc: '添加一个',
-          type: '',
-          enum: '',
-          defVal: 'code: string, callback: (params, event) => any',
-          list: []
-        },
-        {
-          name: 'mixin(options)',
-          desc: '添加多个',
-          type: '',
-          enum: '',
-          defVal: 'options: { [code: string]: (params, event) => any }',
-          list: []
-        },
-        {
-          name: 'delete(code)',
-          desc: '删除',
-          type: '',
-          enum: '',
-          defVal: 'code: string',
-          list: []
-        }
-      ],
+      tableData,
       demoCodes: [
+        `
+        import VXETable from 'vxe-table'
+        
+        VXETable.menus.add('exportData', (params, event) => {
+          let { $table } = params
+          $table.exportData()
+        })
+        `,
         `
         <vxe-table
           border
-          :context-menu="tableMenu"
+          :menu-config="tableMenu"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -67,47 +77,34 @@ export default {
         </vxe-table>
         `,
         `
-        VXETable.menus.add('exportData', (params, event) => {
-          let { $table } = params
-          $table.exportData()
-        })
+        import { defineComponent, ref } from 'vue'
 
-        VXETable.menus.add('insert', (params, event) => {
-          let { $table, menu } = params
-          // 读取自定义的参数
-          $table.insert(menu.record)
-        })
-
-        export default {
-          data () {
-            return {
-              tableMenu: {
-                body: {
-                  options: [
-                    [
-                      { code: 'exportData', name: '导出.csv' },
-                      { code: 'insert', name: '新增', record: { name: '默认名称' } }
-                    ]
+        export default defineComponent({
+          setup () {
+            const tableMenu = ref({
+              body: {
+                options: [
+                  [
+                    { code: 'exportData', name: '导出.csv' }
                   ]
-                }
-              },
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
-              ]
+                ]
+              }
+            })
+            const tableData = ref([
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+            ])
+            return {
+              tableMenu,
+              tableData
             }
           }
-        }
+        })
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
-}
+})
 </script>

@@ -9,7 +9,7 @@
       <vxe-table
         border
         height="auto"
-        :data="tableData">
+        :data="demo1.tableData">
         <vxe-table-column type="seq" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name"></vxe-table-column>
         <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -21,8 +21,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">也可以设置相对于父容器的百分比</p>
@@ -31,7 +31,7 @@
       <vxe-table
         border
         height="40%"
-        :data="tableData">
+        :data="demo2.tableData">
         <vxe-table-column type="seq" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name"></vxe-table-column>
         <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -41,7 +41,7 @@
       <vxe-table
         border
         height="60%"
-        :data="tableData">
+        :data="demo2.tableData">
         <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
         <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
@@ -54,31 +54,31 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">设置为 <table-api-link prop="auto-resize"/> 响应式就可以自动跟随父容器宽、高动态变化</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
-        <vxe-button @click="tableWidth = '600px'">宽600px</vxe-button>
-        <vxe-button @click="tableWidth = '700px'">宽700px</vxe-button>
-        <vxe-button @click="tableWidth = '800px'">宽800px</vxe-button>
-        <vxe-button @click="tableHeight = '300px'">高300px</vxe-button>
-        <vxe-button @click="tableHeight = '500px'">高500px</vxe-button>
-        <vxe-button @click="tableHeight = '800px'">高800px</vxe-button>
+      <template #buttons>
+        <vxe-button @click="demo3.tableWidth = '600px'">宽600px</vxe-button>
+        <vxe-button @click="demo3.tableWidth = '700px'">宽700px</vxe-button>
+        <vxe-button @click="demo3.tableWidth = '800px'">宽800px</vxe-button>
+        <vxe-button @click="demo3.tableHeight = '300px'">高300px</vxe-button>
+        <vxe-button @click="demo3.tableHeight = '500px'">高500px</vxe-button>
+        <vxe-button @click="demo3.tableHeight = '800px'">高800px</vxe-button>
       </template>
     </vxe-toolbar>
 
-    <div :style="{width: tableWidth, height: tableHeight}">
+    <div :style="{width: demo3.tableWidth, height: demo3.tableHeight}">
       <vxe-table
         border
         auto-resize
         show-footer
         height="auto"
         :footer-method="footerMethod"
-        :data="tableData">
+        :data="demo3.tableData">
         <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
         <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
@@ -91,170 +91,57 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, reactive } from 'vue'
+import { VxeTablePropTypes } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
 
-export default {
-  data () {
-    return {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+      ]
+    })
+
+    const demo2 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+      ]
+    })
+
+    const demo3 = reactive({
       tableWidth: null,
       tableHeight: '300px',
-      tableData: [],
-      demoCodes: [
-        `
-        <div style="width: 100%; height: 300px">
-          <vxe-table
-            border
-            height="auto"
-            :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="Name"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-            <vxe-table-column field="age" title="Age"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
-          </vxe-table>
-        </div>
-        `,
-        `
-        export default {
-          data () {
-            return {
-              tableData: []
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
-          }
-        }
-        `,
-        `
-        <div style="height: 500px">
-          <vxe-table
-            border
-            height="40%"
-            :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="Name"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-            <vxe-table-column field="age" title="Age"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
-          </vxe-table>
-          <vxe-table
-            border
-            height="60%"
-            :data="tableData">
-            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-            <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
-            <vxe-table-column field="date13" title="Date" width="300"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" width="200" fixed="right" show-overflow></vxe-table-column>
-          </vxe-table>
-        </div>
-        `,
-        `
-        export default {
-          data () {
-            return {
-              tableData: []
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
-          }
-        }
-        `,
-        `
-        <vxe-toolbar>
-          <template v-slot:buttons>
-            <vxe-button @click="tableWidth = '600px'">宽600px</vxe-button>
-            <vxe-button @click="tableWidth = '700px'">宽700px</vxe-button>
-            <vxe-button @click="tableWidth = '800px'">宽800px</vxe-button>
-            <vxe-button @click="tableHeight = '300px'">高300px</vxe-button>
-            <vxe-button @click="tableHeight = '500px'">高500px</vxe-button>
-            <vxe-button @click="tableHeight = '800px'">高800px</vxe-button>
-          </template>
-        </vxe-toolbar>
-
-        <div :style="{width: tableWidth, height: tableHeight}">
-          <vxe-table
-            border
-            auto-resize
-            show-footer
-            height="auto"
-            :footer-method="footerMethod"
-            :data="tableData">
-            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-            <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
-            <vxe-table-column field="date13" title="Date" width="300"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" width="200" fixed="right" show-overflow></vxe-table-column>
-          </vxe-table>
-        </div>
-        `,
-        `
-        export default {
-          data () {
-            return {
-              tableWidth: null,
-              tableHeight: '300px',
-              tableData: []
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
-          },
-          methods: {
-            footerMethod ({ columns, data }) {
-              const means = []
-              const sums = []
-              columns.forEach((column, columnIndex) => {
-                if (columnIndex === 0) {
-                  means.push('平均')
-                  sums.push('和值')
-                } else {
-                  let meanCell = null
-                  let sumCell = null
-                  switch (column.property) {
-                    case 'age':
-                    case 'rate':
-                      meanCell = parseInt(XEUtils.mean(data, column.property))
-                      sumCell = XEUtils.sum(data, column.property)
-                      break
-                  }
-                  means.push(meanCell)
-                  sums.push(sumCell)
-                }
-              })
-              // 返回一个二维数组的表尾合计
-              return [means, sums]
-            }
-          }
-        }
-        `
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'PM', sex: 'Man ', age: 32, address: 'Shanghai' },
+        { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 30, address: 'Guangzhou' },
+        { id: 10009, name: 'Test9', role: 'Test', sex: 'Women ', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 100010, name: 'Test10', role: 'Test', sex: 'Man ', age: 24, address: 'Shanghai' }
       ]
-    }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
     })
-  },
-  methods: {
-    footerMethod ({ columns, data }) {
-      const means = []
-      const sums = []
+
+    const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
+      const means: any[] = []
+      const sums: any[] = []
       columns.forEach((column, columnIndex) => {
         if (columnIndex === 0) {
           means.push('平均')
@@ -265,7 +152,7 @@ export default {
           switch (column.property) {
             case 'age':
             case 'rate':
-              meanCell = parseInt(XEUtils.mean(data, column.property))
+              meanCell = XEUtils.toInteger(XEUtils.mean(data, column.property))
               sumCell = XEUtils.sum(data, column.property)
               break
           }
@@ -276,6 +163,179 @@ export default {
       // 返回一个二维数组的表尾合计
       return [means, sums]
     }
+
+    return {
+      demo1,
+      demo2,
+      demo3,
+      footerMethod,
+      demoCodes: [
+        `
+        <div style="width: 100%; height: 300px">
+          <vxe-table
+            border
+            height="auto"
+            :data="demo1.tableData">
+            <vxe-table-column type="seq" width="60"></vxe-table-column>
+            <vxe-table-column field="name" title="Name"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+            <vxe-table-column field="age" title="Age"></vxe-table-column>
+            <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          </vxe-table>
+        </div>
+        `,
+        `
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+              ]
+            })
+
+            return {
+              demo1
+            }
+          }
+        })
+        `,
+        `
+        <div style="height: 500px">
+          <vxe-table
+            border
+            height="40%"
+            :data="demo2.tableData">
+            <vxe-table-column type="seq" width="60"></vxe-table-column>
+            <vxe-table-column field="name" title="Name"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+            <vxe-table-column field="age" title="Age"></vxe-table-column>
+            <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          </vxe-table>
+          <vxe-table
+            border
+            height="60%"
+            :data="demo2.tableData">
+            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+            <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
+            <vxe-table-column field="date13" title="Date" width="300"></vxe-table-column>
+            <vxe-table-column field="address" title="Address" width="200" fixed="right" show-overflow></vxe-table-column>
+          </vxe-table>
+        </div>
+        `,
+        `
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo2 = reactive({
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+              ]
+            })
+
+            return {
+              demo2
+            }
+          }
+        })
+        `,
+        `
+        <vxe-toolbar>
+          <template #buttons>
+            <vxe-button @click="demo3.tableWidth = '600px'">宽600px</vxe-button>
+            <vxe-button @click="demo3.tableWidth = '700px'">宽700px</vxe-button>
+            <vxe-button @click="demo3.tableWidth = '800px'">宽800px</vxe-button>
+            <vxe-button @click="demo3.tableHeight = '300px'">高300px</vxe-button>
+            <vxe-button @click="demo3.tableHeight = '500px'">高500px</vxe-button>
+            <vxe-button @click="demo3.tableHeight = '800px'">高800px</vxe-button>
+          </template>
+        </vxe-toolbar>
+
+        <div :style="{width: demo3.tableWidth, height: demo3.tableHeight}">
+          <vxe-table
+            border
+            auto-resize
+            show-footer
+            height="auto"
+            :footer-method="footerMethod"
+            :data="demo3.tableData">
+            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
+            <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+            <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
+            <vxe-table-column field="date13" title="Date" width="300"></vxe-table-column>
+            <vxe-table-column field="address" title="Address" width="200" fixed="right" show-overflow></vxe-table-column>
+          </vxe-table>
+        </div>
+        `,
+        `
+        import { defineComponent, reactive } from 'vue'
+        import { VxeTablePropTypes } from 'vxe-table'
+        import XEUtils from 'xe-utils'
+
+        export default defineComponent({
+          setup () {
+            const demo3 = reactive({
+              tableWidth: null,
+              tableHeight: '300px',
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', role: 'PM', sex: 'Man ', age: 32, address: 'Shanghai' },
+                { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 30, address: 'Guangzhou' },
+                { id: 10009, name: 'Test9', role: 'Test', sex: 'Women ', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 100010, name: 'Test10', role: 'Test', sex: 'Man ', age: 24, address: 'Shanghai' }
+              ]
+            })
+
+            const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
+              const means: any[] = []
+              const sums: any[] = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  means.push('平均')
+                  sums.push('和值')
+                } else {
+                  let meanCell = null
+                  let sumCell = null
+                  switch (column.property) {
+                    case 'age':
+                    case 'rate':
+                      meanCell = XEUtils.toInteger(XEUtils.mean(data, column.property))
+                      sumCell = XEUtils.sum(data, column.property)
+                      break
+                  }
+                  means.push(meanCell)
+                  sums.push(sumCell)
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [means, sums]
+            }
+
+            return {
+              demo3,
+              footerMethod
+            }
+          }
+        })
+        `
+      ]
+    }
   }
-}
+})
 </script>

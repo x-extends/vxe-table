@@ -7,14 +7,14 @@
       resizable
       height="300"
       highlight-hover-row
-      :data="tableData">
+      :data="demo1.tableData">
       <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
       <vxe-table-column title="操作" fixed="right" width="200">
-        <template v-slot>
+        <template #default>
           <vxe-button type="text">按钮1</vxe-button>
           <vxe-button type="text">按钮2</vxe-button>
         </template>
@@ -24,14 +24,14 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">固定列建议设置 <table-api-link prop="show-overflow"/> 该值，禁用自动换行，大幅提升渲染速度</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="toggleFixedColumn(0, 'left')">切换第一列固定</vxe-button>
         <vxe-button @click="toggleFixedColumn(1, 'left')">切换第二列固定</vxe-button>
         <vxe-button @click="toggleFixedColumn(4, 'right')">切换第五列固定</vxe-button>
@@ -45,14 +45,14 @@
       height="300"
       highlight-hover-row
       show-overflow
-      :data="tableData">
-      <vxe-table-column type="seq" width="60" :fixed="colFixeds.col0"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="300" :fixed="colFixeds.col1"></vxe-table-column>
+      :data="demo2.tableData">
+      <vxe-table-column type="seq" width="60" :fixed="demo2.colFixeds.col0"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="300" :fixed="demo2.colFixeds.col1"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" width="300" :fixed="colFixeds.col4"></vxe-table-column>
-      <vxe-table-column title="操作" width="200" :fixed="colFixeds.col5">
-        <template v-slot>
+      <vxe-table-column field="date" title="Date" width="300" :fixed="demo2.colFixeds.col4"></vxe-table-column>
+      <vxe-table-column title="操作" width="200" :fixed="demo2.colFixeds.col5">
+        <template #default>
           <vxe-button status="primary">按钮1</vxe-button>
           <vxe-button>按钮2</vxe-button>
         </template>
@@ -62,8 +62,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -73,40 +73,41 @@
     <vxe-table
       border
       height="400"
-      :data="tableData">
-      <vxe-table-column title="基本信息" fixed="left">
+      :data="demo3.tableData">
+      <vxe-table-colgroup title="基本信息" fixed="left">
         <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="更多信息">
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="更多信息">
         <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
         <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
-        <vxe-table-column title="详细信息">
+        <vxe-table-colgroup title="详细信息">
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
           <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="额外信息" fixed="right">
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="额外信息" fixed="right">
         <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
         <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive, ref, Ref } from 'vue'
+import { VxeTableInstance } from '../../../../types/vxe-table'
 
-export default {
-  data () {
-    return {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
       colFixeds: {
         col0: '',
         col1: '',
@@ -120,7 +121,61 @@ export default {
         { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
         { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
         { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
-      ],
+      ]
+    })
+
+    const demo2 = reactive({
+      colFixeds: {
+        col0: '',
+        col1: '',
+        col2: '',
+        col3: ''
+      },
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
+      ]
+    })
+
+    const xTable2 = ref() as Ref<VxeTableInstance>
+
+    const toggleFixedColumn = (index: number, type: 'left' | 'right') => {
+      const $table = xTable2.value
+      const column = $table.getColumns(index)
+      if (column) {
+        column.fixed = column.fixed ? null : type
+      }
+      // 刷新列
+      $table.refreshColumn()
+    }
+
+    const demo3 = reactive({
+      colFixeds: {
+        col0: '',
+        col1: '',
+        col2: '',
+        col3: ''
+      },
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
+      ]
+    })
+
+    return {
+      demo1,
+      demo2,
+      xTable2,
+      toggleFixedColumn,
+      demo3,
       demoCodes: [
         `
         <vxe-table
@@ -128,14 +183,14 @@ export default {
           resizable
           height="300"
           highlight-hover-row
-          :data="tableData">
+          :data="demo1.tableData">
           <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
           <vxe-table-column title="操作" fixed="right" width="200">
-            <template v-slot>
+            <template #default>
               <vxe-button type="text">按钮1</vxe-button>
               <vxe-button type="text">按钮2</vxe-button>
             </template>
@@ -143,9 +198,11 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive, ref, Ref } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -154,13 +211,17 @@ export default {
                 { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+
+            return {
+              demo1
             }
           }
-        }
+        })
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="toggleFixedColumn(0, 'left')">切换第一列固定</vxe-button>
             <vxe-button @click="toggleFixedColumn(1, 'left')">切换第二列固定</vxe-button>
             <vxe-button @click="toggleFixedColumn(4, 'right')">切换第五列固定</vxe-button>
@@ -174,14 +235,14 @@ export default {
           height="300"
           highlight-hover-row
           show-overflow
-          :data="tableData">
-          <vxe-table-column type="seq" width="60" :fixed="colFixeds.col0"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="300" :fixed="colFixeds.col1"></vxe-table-column>
+          :data="demo2.tableData">
+          <vxe-table-column type="seq" width="60" :fixed="demo2.colFixeds.col0"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="300" :fixed="demo2.colFixeds.col1"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" width="300" :fixed="colFixeds.col4"></vxe-table-column>
-          <vxe-table-column title="操作" width="200" :fixed="colFixeds.col5">
-            <template v-slot>
+          <vxe-table-column field="date" title="Date" width="300" :fixed="demo2.colFixeds.col4"></vxe-table-column>
+          <vxe-table-column title="操作" width="200" :fixed="demo2.colFixeds.col5">
+            <template #default>
               <vxe-button status="primary">按钮1</vxe-button>
               <vxe-button>按钮2</vxe-button>
             </template>
@@ -189,9 +250,12 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { VxeTableInstance } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo2 = reactive({
               colFixeds: {
                 col0: '',
                 col1: '',
@@ -206,24 +270,50 @@ export default {
                 { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
               ]
-            }
-          },
-          methods: {
-            toggleFixedColumn (index, type) {
-              const xTable = this.$refs.xTable2
-              const column = xTable.getColumns(index)
-              column.fixed = column.fixed ? null : type
+            })
+
+            const xTable2 = ref() as Ref<VxeTableInstance>
+
+            const toggleFixedColumn = (index: number, type: 'left' | 'right') => {
+              const $table = xTable2.value
+              const column = $table.getColumns(index)
+              if (column) {
+                column.fixed = column.fixed ? null : type
+              }
               // 刷新列
-              xTable.refreshColumn()
+              $table.refreshColumn()
+            }
+
+            const demo3 = reactive({
+              colFixeds: {
+                col0: '',
+                col1: '',
+                col2: '',
+                col3: ''
+              },
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
+              ]
+            })
+
+            return {
+              demo2,
+              xTable2,
+              toggleFixedColumn
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
           border
           height="400"
-          :data="tableData">
+          :data="demo3.tableData">
           <vxe-table-column title="基本信息" fixed="left">
             <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
@@ -243,9 +333,11 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo3 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -254,26 +346,16 @@ export default {
                 { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+
+            return {
+              demo3
             }
           }
-        }
+        })
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    toggleFixedColumn (index, type) {
-      const xTable = this.$refs.xTable2
-      const column = xTable.getColumns(index)
-      column.fixed = column.fixed ? null : type
-      // 刷新列
-      xTable.refreshColumn()
-    }
   }
-}
+})
 </script>

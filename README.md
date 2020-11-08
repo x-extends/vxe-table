@@ -20,12 +20,10 @@
   * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能
 
 * [计划](#donation)
-  * [x] v1.0 100% 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能
-  * [x] v2.0 &nbsp;100% 基于 vue2.6+，支持所有主流的浏览器，同时兼具功能与性能
-  * [x] v3.0 &nbsp;100% 基于 vue2.6+，只支持现代浏览器，不支持 IE，渲染性能大幅提升
+  * [x] v1.0 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能
+  * [x] v2.0 基于 vue2.6+，支持所有主流的浏览器，同时兼具功能与性能
+  * [x] v3.0 vue2.6+，只支持现代浏览器，不支持 IE，渲染性能大幅提升
   * [x] v4.0 &nbsp;&nbsp;10% 基于 vue3+，只支持现代浏览器，不支持 IE，渲染性能大幅提升
-
-👉 如果有更好的建议、优化点或 Bug 都欢迎提 [Issues](https://github.com/x-extends/vxe-table/issues/390)
 
 ## 浏览器支持
 
@@ -53,6 +51,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 下拉选项
 * [x] 开关
 * [x] 排序
+* [x] 多字段组合排序
 * [x] 筛选
 * [x] 合并单元格
 * [x] 合并表尾
@@ -83,7 +82,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## 安装
 
-依赖库：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.7+
+版本：[vue](https://www.npmjs.com/package/vue) 3.x, 依赖库：[xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
 
 ```shell
 npm install xe-utils vxe-table
@@ -118,27 +117,33 @@ Vue.use(VXETable)
 ```html
 <template>
   <div>
-    <vxe-table :data="tableData">
+    <vxe-table :data="demo1.tableData">
       <vxe-table-column type="seq" title="Seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="address" title="Address"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
       tableData: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
       ]
+    })
+    return {
+      demo1
     }
   }
-}
+})
 </script>
 ```
 
@@ -153,7 +158,7 @@ export default {
 如果您觉得我们的开源软件对你有所帮助，请扫下方二维码打赏我们一杯咖啡。☕  
 
 由于维护一个开源项目需要花费非常大的精力与时间，如果您正在使用该项目，您的捐赠会帮助该项目能持续发展下去  
-[👉 该组件对我有帮助，我要捐赠💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
+[👉 该组件对我有帮助，支持作者💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
 ## License
 

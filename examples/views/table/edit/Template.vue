@@ -15,26 +15,27 @@
       border
       show-overflow
       ref="xTable"
-      :data="tableData"
+      :loading="demo1.loading"
+      :data="demo1.tableData"
       :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}"
       @checkbox-change="checkboxChangeEvent"
       @checkbox-all="checkboxChangeEvent">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
-        <template v-slot:edit="{ row }">
+        <template #edit="{ row }">
           <vxe-input type="text" v-model="row.role"></vxe-input>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
-        <template v-slot:edit="{ row }">
+        <template #edit="{ row }">
           <vxe-pulldown ref="xDown1" transfer>
-            <template v-slot>
+            <template #default>
               <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
             </template>
-            <template v-slot:dropdown>
+            <template #dropdown>
               <ul class="my-downpanel1">
-                <li v-for="item in downList" :key="item.value" @click="changeNameEvent(item, row)">
+                <li v-for="item in demo1.downList" :key="item.value" @click="changeNameEvent(item, row)">
                   <i class="fa fa-user-o"></i>
                   <span>{{ item.label }}</span>
                 </li>
@@ -43,21 +44,21 @@
           </vxe-pulldown>
         </template>
       </vxe-table-column>
-      <vxe-table-column title="分组">
+      <vxe-table-colgroup title="分组">
         <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
-          <template v-slot:edit="{ row }">
+          <template #edit="{ row }">
             <vxe-input type="number" v-model="row.age"></vxe-input>
           </template>
         </vxe-table-column>
         <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
-          <template v-slot:edit="{ row }">
+          <template #edit="{ row }">
             <vxe-input type="number" v-model="row.num"></vxe-input>
           </template>
-          <template v-slot="{ row }">￥{{ row.num }}</template>
+          <template #default="{ row }">￥{{ row.num }}</template>
         </vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
       <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
-        <template v-slot:edit="{ row, rowIndex }">
+        <template #edit="{ row, rowIndex }">
           <template v-if="rowIndex === 0">
             <vxe-input type="date" v-model="row.attr1" placeholder="请选择日期" transfer></vxe-input>
           </template>
@@ -80,20 +81,20 @@
 
     <vxe-pager
       perfect
-      :current-page.sync="tablePage.currentPage"
-      :page-size.sync="tablePage.pageSize"
-      :total="tablePage.total"
+      v-model:current-page="demo1.tablePage.currentPage"
+      v-model:page-size="demo1.tablePage.pageSize"
+      :total="demo1.tablePage.total"
       :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-      <template v-slot:left>
+      <template #left>
         <span class="page-left">
-          <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
-          <span class="select-count">自定义模板 {{ selectRecords.length }} 条</span>
+          <vxe-checkbox v-model="demo1.isAllChecked" :indeterminate="demo1.isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+          <span class="select-count">自定义模板 {{ demo1.selectRecords.length }} 条</span>
           <vxe-button>修改</vxe-button>
           <vxe-button>管理</vxe-button>
           <vxe-button>删除</vxe-button>
           <vxe-button size="small">
-            <template v-slot>更多操作</template>
-            <template v-slot:dropdowns>
+            <template #default>更多操作</template>
+            <template #dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
               <vxe-button type="text">批量删除</vxe-button>
@@ -101,33 +102,35 @@
           </vxe-button>
         </span>
       </template>
-      <template v-slot:right>
-        <img src="static/other/img1.gif" height="34">
-        <img src="static/other/img1.gif" height="34">
-        <img src="static/other/img1.gif" height="34">
+      <template #right>
+        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
+        <img src="/vxe-table/static/other/img1.gif" height="34">
       </template>
     </vxe-pager>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive, ref, Ref } from 'vue'
+import { VxeTableInstance, VxeTableEvents, VxePulldownInstance } from '../../../../types/vxe-table'
 
-export default {
-  data () {
-    return {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
+      loading: false,
       isAllChecked: false,
       isIndeterminate: false,
-      selectRecords: [],
-      tableData: [],
+      selectRecords: [] as any[],
+      tableData: [] as any[],
       downList: [
         { label: '选项1', value: 1 },
         { label: '选项2', value: 2 },
@@ -139,33 +142,90 @@ export default {
         total: 0,
         currentPage: 1,
         pageSize: 10
-      },
+      }
+    })
+
+    const xTable = ref() as Ref<VxeTableInstance>
+    const xDown1 = ref() as Ref<VxePulldownInstance>
+
+    const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
+      const $table = xTable.value
+      demo1.isAllChecked = $table.isAllCheckboxChecked()
+      demo1.isIndeterminate = $table.isCheckboxIndeterminate()
+      demo1.selectRecords = records
+    }
+
+    const changeAllEvent = () => {
+      const $table = xTable.value
+      $table.setAllCheckboxRow(demo1.isAllChecked)
+      demo1.selectRecords = $table.getCheckboxRecords()
+    }
+
+    const clickDownEvent = () => {
+      const $pulldown1 = xDown1.value
+      if ($pulldown1) {
+        $pulldown1.showPanel()
+      }
+    }
+
+    const changeNameEvent = (item: any, row: any) => {
+      const $pulldown1 = xDown1.value
+      row.name = item.label
+      if ($pulldown1) {
+        $pulldown1.hidePanel()
+      }
+    }
+
+    demo1.loading = true
+    setTimeout(() => {
+      const list = [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 20, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'Test', sex: '0', sex2: ['1'], num1: 200, age: 32, address: 'Shanghai', date12: '2020-09-10', date13: '' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '1', sex2: ['0'], num1: 30, age: 23, address: 'Shenzhen', date12: '', date13: '2020-12-04' },
+        { id: 10004, name: 'Test5', nickname: 'T5', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 26, address: 'Shenzhen', date12: '', date13: '' },
+        { id: 10004, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 28, address: 'BeiJing', date12: '', date13: '2020-09-04' },
+        { id: 10004, name: 'Test7', nickname: 'T7', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 30, address: 'BeiJing', date12: '', date13: '2020-04-10' }
+      ]
+      demo1.loading = false
+      demo1.tableData = list
+    }, 100)
+
+    return {
+      demo1,
+      xTable,
+      xDown1,
+      checkboxChangeEvent,
+      changeAllEvent,
+      clickDownEvent,
+      changeNameEvent,
       demoCodes: [
         `
         <vxe-table
           border
           show-overflow
           ref="xTable"
-          :data="tableData"
+          :loading="demo1.loading"
+          :data="demo1.tableData"
           :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}"
           @checkbox-change="checkboxChangeEvent"
           @checkbox-all="checkboxChangeEvent">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
-            <template v-slot:edit="{ row }">
+            <template #edit="{ row }">
               <vxe-input type="text" v-model="row.role"></vxe-input>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
-            <template v-slot:edit="{ row }">
+            <template #edit="{ row }">
               <vxe-pulldown ref="xDown1" transfer>
-                <template v-slot>
+                <template #default>
                   <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
                 </template>
-                <template v-slot:dropdown>
+                <template #dropdown>
                   <ul class="my-downpanel1">
-                    <li v-for="item in downList" :key="item.value" @click="changeNameEvent(item, row)">
+                    <li v-for="item in demo1.downList" :key="item.value" @click="changeNameEvent(item, row)">
                       <i class="fa fa-user-o"></i>
                       <span>{{ item.label }}</span>
                     </li>
@@ -174,21 +234,21 @@ export default {
               </vxe-pulldown>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="分组">
+          <vxe-table-colgroup title="分组">
             <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
-              <template v-slot:edit="{ row }">
+              <template #edit="{ row }">
                 <vxe-input type="number" v-model="row.age"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
-              <template v-slot:edit="{ row }">
+              <template #edit="{ row }">
                 <vxe-input type="number" v-model="row.num"></vxe-input>
               </template>
-              <template v-slot="{ row }">￥{{ row.num }}</template>
+              <template #default="{ row }">￥{{ row.num }}</template>
             </vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
           <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
-            <template v-slot:edit="{ row, rowIndex }">
+            <template #edit="{ row, rowIndex }">
               <template v-if="rowIndex === 0">
                 <vxe-input type="date" v-model="row.attr1" placeholder="请选择日期" transfer></vxe-input>
               </template>
@@ -211,20 +271,20 @@ export default {
 
         <vxe-pager
           perfect
-          :current-page.sync="tablePage.currentPage"
-          :page-size.sync="tablePage.pageSize"
-          :total="tablePage.total"
+          v-model:current-page="demo1.tablePage.currentPage"
+          v-model:page-size="demo1.tablePage.pageSize"
+          :total="demo1.tablePage.total"
           :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-          <template v-slot:left>
+          <template #left>
             <span class="page-left">
-              <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
-              <span class="select-count">自定义模板 {{ selectRecords.length }} 条</span>
+              <vxe-checkbox v-model="demo1.isAllChecked" :indeterminate="demo1.isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
+              <span class="select-count">自定义模板 {{ demo1.selectRecords.length }} 条</span>
               <vxe-button>修改</vxe-button>
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
               <vxe-button size="small">
-                <template v-slot>更多操作</template>
-                <template v-slot:dropdowns>
+                <template #default>更多操作</template>
+                <template #dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
                   <vxe-button type="text">批量删除</vxe-button>
@@ -232,21 +292,25 @@ export default {
               </vxe-button>
             </span>
           </template>
-          <template v-slot:right>
-            <img src="static/other/img1.gif" height="34">
-            <img src="static/other/img1.gif" height="34">
-            <img src="static/other/img1.gif" height="34">
+          <template #right>
+            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
+            <img src="/vxe-table/static/other/img1.gif" height="34">
           </template>
         </vxe-pager>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { VxeTableInstance, VxeTableEvents, VxePulldownInstance } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
+              loading: false,
               isAllChecked: false,
               isIndeterminate: false,
-              selectRecords: [],
-              tableData: [],
+              selectRecords: [] as any[],
+              tableData: [] as any[],
               downList: [
                 { label: '选项1', value: 1 },
                 { label: '选项2', value: 2 },
@@ -259,34 +323,65 @@ export default {
                 currentPage: 1,
                 pageSize: 10
               }
+            })
+
+            const xTable = ref() as Ref<VxeTableInstance>
+            const xDown1 = ref() as Ref<VxePulldownInstance>
+
+            const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
+              const $table = xTable.value
+              demo1.isAllChecked = $table.isAllCheckboxChecked()
+              demo1.isIndeterminate = $table.isCheckboxIndeterminate()
+              demo1.selectRecords = records
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-          },
-          methods: {
-            checkboxChangeEvent ({ records }) {
-              this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()
-              this.isIndeterminate = this.$refs.xTable.isCheckboxIndeterminate()
-              this.selectRecords = records
-            },
-            changeAllEvent () {
-              this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
-              this.selectRecords = this.$refs.xTable.getCheckboxRecords()
-            },
-            clickDownEvent () {
-              if (this.$refs.xDown1) {
-                this.$refs.xDown1.showPanel()
+
+            const changeAllEvent = () => {
+              const $table = xTable.value
+              $table.setAllCheckboxRow(demo1.isAllChecked)
+              demo1.selectRecords = $table.getCheckboxRecords()
+            }
+
+            const clickDownEvent = () => {
+              const $pulldown1 = xDown1.value
+              if ($pulldown1) {
+                $pulldown1.showPanel()
               }
-            },
-            changeNameEvent (item, row) {
+            }
+
+            const changeNameEvent = (item: any, row: any) => {
+              const $pulldown1 = xDown1.value
               row.name = item.label
-              if (this.$refs.xDown1) {
-                this.$refs.xDown1.hidePanel()
+              if ($pulldown1) {
+                $pulldown1.hidePanel()
               }
+            }
+
+            demo1.loading = true
+            setTimeout(() => {
+              const list = [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 20, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'Test', sex: '0', sex2: ['1'], num1: 200, age: 32, address: 'Shanghai', date12: '2020-09-10', date13: '' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '1', sex2: ['0'], num1: 30, age: 23, address: 'Shenzhen', date12: '', date13: '2020-12-04' },
+                { id: 10004, name: 'Test5', nickname: 'T5', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 26, address: 'Shenzhen', date12: '', date13: '' },
+                { id: 10004, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 28, address: 'BeiJing', date12: '', date13: '2020-09-04' },
+                { id: 10004, name: 'Test7', nickname: 'T7', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 30, address: 'BeiJing', date12: '', date13: '2020-04-10' }
+              ]
+              demo1.loading = false
+              demo1.tableData = list
+            }, 100)
+
+            return {
+              demo1,
+              xTable,
+              xDown1,
+              checkboxChangeEvent,
+              changeAllEvent,
+              clickDownEvent,
+              changeNameEvent
             }
           }
-        }
+        })
         `,
         `
         .my-downpanel1 {
@@ -303,38 +398,8 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    checkboxChangeEvent ({ records }) {
-      this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()
-      this.isIndeterminate = this.$refs.xTable.isCheckboxIndeterminate()
-      this.selectRecords = records
-    },
-    changeAllEvent () {
-      this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
-      this.selectRecords = this.$refs.xTable.getCheckboxRecords()
-    },
-    clickDownEvent () {
-      if (this.$refs.xDown1) {
-        this.$refs.xDown1.showPanel()
-      }
-    },
-    changeNameEvent (item, row) {
-      row.name = item.label
-      if (this.$refs.xDown1) {
-        this.$refs.xDown1.hidePanel()
-      }
-    }
   }
-}
+})
 </script>
 
 <style scoped>

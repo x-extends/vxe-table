@@ -1,13 +1,31 @@
-import { VXETableModule } from './component'
+import { RenderFunction, SetupContext, ComponentPublicInstance } from 'vue'
+import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
- * 文本域
+ * 组件 - 文本域
  */
-export declare class Textarea extends VXETableModule {
+export interface Textarea extends VXETableComponent { }
+
+export type VxeTextareaInstance = ComponentPublicInstance<VxeTextareaProps, VxeTextareaConstructor>;
+
+export interface VxeTextareaConstructor extends VxeComponentInstance, VxeTextareaMethods {
+  props: VxeTextareaProps;
+  context: SetupContext<VxeTextareaEmits>;
+  refMaps: TextareaPrivateRef;
+  renderVN: RenderFunction;
+}
+
+export interface TextareaPrivateRef { }
+export interface VxeTextareaPrivateRef extends TextareaPrivateRef { }
+
+export interface VxeTextareaOptions extends VxeTextareaProps, VxeTextareaListeners { }
+
+export interface VxeTextareaProps {
+  size?: SizeType;
   /**
    * 绑定值
    */
-  value?: string | number;
+  modelValue?: string | number;
   /**
    * 原生 name 属性
    */
@@ -51,7 +69,10 @@ export declare class Textarea extends VXETableModule {
    * 调整文本域大小的方式
    */
   resize?: string;
+}
 
+export interface TextareaMethods {
+  dispatchEvent(type: ValueOf<VxeTextareaEmits>, params: any, evnt: Event): void;
   /**
    * 获取焦点
    */
@@ -61,3 +82,25 @@ export declare class Textarea extends VXETableModule {
    */
   blur(): Promise<any>;
 }
+export interface VxeTextareaMethods extends TextareaMethods { }
+
+export interface TextareaPrivateMethods { }
+export interface VxeTextareaPrivateMethods extends TextareaPrivateMethods { }
+
+export type VxeTextareaEmits = [
+  'update:modelValue',
+  'input',
+  'change',
+  'focus',
+  'blur'
+]
+
+export namespace VxeTextareaDefines {
+  interface TextareaEventParams extends VxeEvent {
+    $textarea: VxeTextareaConstructor;
+  }
+}
+
+export interface VxeTextareaListeners { }
+
+export namespace VxeTextareaEvents { }

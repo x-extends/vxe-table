@@ -1,149 +1,45 @@
-import { CreateElement, VNode } from 'vue'
-import { VXETableModule } from './component'
+import { VNode, RenderFunction, SetupContext, ComponentPublicInstance } from 'vue'
+import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
- * 模态窗口
+ * 组件 - 模态窗口
  */
-export declare class Modal extends VXETableModule {
-  /**
-   * 绑定值
-   */
-  value?: boolean;
-  /**
-   * 设置窗口唯一标识
-   */
-  id?: string;
-  /**
-   * 窗口类型
-   */
-  type?: 'alert' | 'confirm' | 'message';
-  /**
-   * 是否加载中
-   */
-  loading?: boolean;
-  /**
-   * 只对 type=alert | confirm | message 有效，消息状态
-   */
-  status?: string;
-  /**
-   * 自定义状态图标
-   */
-  iconStatus?: string;
-  /**
-   * 只对 type=message 有效，消息距离顶部的位置
-   */
-  top?: number | string;
-  /**
-   * 只对 type=modal 有效，窗口的默认位置
-   */
-  position?: 'center' | {
-    top?: number;
-    left?: number;
-  };
-  /**
-   * 窗口的标题
-   */
-  title?: string;
-  /**
-   * 只对 type=message 有效，自动关闭的延时
-   */
-  duration?: number | string;
-  /**
-   * 窗口的内容
-   */
-  message?: string | Function;
-  /**
-   * 是否锁住页面，不允许窗口之外的任何操作
-   */
-  lockView?: boolean;
-  /**
-   * 是否锁住滚动条，不允许页面滚动
-   */
-  lockScroll?: boolean;
-  /**
-   * 是否显示遮罩层
-   */
-  mask?: boolean;
-  /**
-   * 是否允许点击遮罩层关闭窗口
-   */
-  maskClosable?: boolean;
-  /**
-   * 是否允许按 Esc 键关闭窗口
-   */
-  escClosable?: boolean;
-  /**
-   * 是否允许拖动调整窗口大小
-   */
-  resize?: boolean;
-  /**
-   * 是否显示头部
-   */
-  showHeader?: boolean;
-  /**
-   * 是否显示底部
-   */
-  showFooter?: boolean;
-  /**
-   * 只对 type=modal 有效，是否允许通过双击头部放大或还原窗口
-   */
-  dblclickZoom?: boolean;
-  /**
-   * 窗口的宽度
-   */
-  width?: number | string;
-  /**
-   * 窗口的高度
-   */
-  height?: number | string;
-  /**
-   * 窗口的最小宽度
-   */
-  minWidth?: number | string;
-  /**
-   * 窗口的最小高度
-   */
-  minHeight?: number | string;
-  /**
-   * 自定义堆叠顺序
-   */
-  zIndex?: number;
-  marginSize?: number | string;
-  /**
-   * 默认最大化显示
-   */
-  fullscreen?: boolean;
-  /**
-   * 记忆功能，会记住最后操作状态，再次打开窗口时还原窗口状态
-   */
-  remember?: boolean;
-  /**
-   * 在窗口关闭时销毁内容
-   */
-  destroyOnClose?: boolean;
-  /**
-   * 设置标题内容过长时显示为省略号
-   */
-  showTitleOverflow?: boolean;
-  /**
-   * 是否将弹框容器插入于 body 内
-   */
-  transfer?: boolean;
-  /**
-   * 是否启用 localStorage 本地保存，会将窗口拖动的状态保存到本地
-   */
-  storage?: boolean;
-  storageKey?: string;
-  animat?: boolean;
+export interface Modal extends VXETableComponent { }
 
+export type VxeModalInstance = ComponentPublicInstance<VxeModalProps, VxeModalConstructor>;
+
+export interface VxeModalConstructor extends VxeComponentInstance, VxeModalMethods {
+  props: VxeModalProps;
+  context: SetupContext<VxeModalEmits>;
+  reactData: ModalReactData;
+  renderVN: RenderFunction;
+}
+
+export interface ModalReactData {
+  inited: boolean;
+  visible: boolean;
+  contentVisible: boolean;
+  modalTop: number;
+  modalZindex: number;
+  zoomLocat: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  } | null;
+  firstOpen: boolean;
+}
+
+export interface ModalMethods {
+  dispatchEvent(type: ValueOf<VxeModalEmits>, params: any, evnt?: Event): void;
   /**
    * 手动打开窗口
    */
-  open(): any;
+  open(): Promise<any>;
   /**
    * 手动关闭窗口
    */
-  close(): any;
+  close(): Promise<any>;
   /**
    * 获取当前窗口元素
    */
@@ -176,129 +72,238 @@ export declare class Modal extends VXETableModule {
    */
   revert(): Promise<any>;
 }
+export interface VxeModalMethods extends ModalMethods { }
 
-export interface ModalOptions {
-  id?: string;
-  type?: string;
-  loading?: boolean;
-  status?: 'info' | 'success' | 'warning' | 'error' | 'loading';
-  iconStatus?: string;
-  top?: number | string;
-  position?: 'center' | {
-    top?: number;
-    left?: number;
-  };
-  title?: string;
-  duration?: number | string;
-  message?: string | Function;
-  lockView?: boolean;
-  lockScroll?: boolean;
-  mask?: boolean;
-  maskClosable?: boolean;
-  escClosable?: boolean;
-  resize?: boolean;
-  showHeader?: boolean;
-  showFooter?: boolean;
-  dblclickZoom?: boolean;
-  width?: number | string;
-  height?: number | string;
-  minWidth?: number | string;
-  minHeight?: number | string;
-  zIndex?: number;
-  marginSize?: number | string;
-  fullscreen?: boolean;
-  remember?: boolean;
-  destroyOnClose?: boolean;
-  showTitleOverflow?: boolean;
-  transfer?: boolean;
-  storage?: boolean;
-  storageKey?: string;
-  animat?: boolean;
-  size?: 'medium' | 'small' | 'mini';
+export interface ModalPrivateMethods { }
+export interface VxeModalPrivateMethods extends ModalPrivateMethods { }
 
-  slots?: {
-    default?(params: ModalDefaultSlotParams, h: CreateElement): VNode[] | string[];
-    header?(params: ModalHeaderSlotParams, h: CreateElement): VNode[] | string[];
-    title?(params: ModalTitleSlotParams, h: CreateElement): VNode[] | string[];
-    footer?(params: ModalFooterSlotParams, h: CreateElement): VNode[] | string[];
-  };
+/**
+ * 窗口类型
+ */
+export type ModalType = 'alert' | 'confirm' | 'message' | 'modal'
+/**
+ * 窗口状态
+ */
+export type ModalStatus = 'info' | 'success' | 'warning' | 'question' | 'error' | 'loading'
 
-  events?: {
-    inserted?(params: ModalEventParams): any;
-    show?(params: ModalEventParams): any;
-    hide?(params: ModalEventParams): any;
-    zoom?(params: ModalEventParams): any;
-  };
+export type ModalPosition = 'center' | {
+  top?: number;
+  left?: number;
+};
+
+/**
+ * 窗口事件类型
+ */
+export type ModalEventTypes = 'default' | 'mask' | 'close' | 'confirm' | 'cancel' | 'keydown' | 'exist'
+
+export interface VxeModalOptions extends VxeModalProps, VxeModalListeners { }
+
+export namespace VxeModalPropTypes {
+  export type Size = SizeType;
+  export type ModelValue = boolean;
+  export type ID = string | null;
+  export type Type = ModalType;
+  export type Loading = boolean;
+  export type Status = ModalStatus;
+  export type IconStatus = string;
+  export type Top = number | string;
+  export type Position = ModalPosition;
+  export type Title = string;
+  export type Duration = number | string;
+  export type Message = string;
+  export type LockView = boolean;
+  export type LockScroll = boolean;
+  export type Mask = boolean;
+  export type MaskClosable = boolean;
+  export type EscClosable = boolean;
+  export type Resize = boolean;
+  export type ShowHeader = boolean;
+  export type ShowFooter = boolean;
+  export type DblclickZoom = boolean;
+  export type Width = number | string;
+  export type Height = number | string;
+  export type MinWidth = number | string;
+  export type MinHeight = number | string;
+  export type ZIndex = number;
+  export type MarginSize = number | string;
+  export type Fullscreen = boolean;
+  export type Remember = boolean;
+  export type DestroyOnClose = boolean;
+  export type ShowTitleOverflow = boolean;
+  export type Transfer = boolean;
+  export type Storage = boolean;
+  export type StorageKey = string;
+  export type Animat = boolean;
+  export type BeforeHideMethod = (params: ModalVisibleParams) => Promise<any>;
+  export type Slots = ModalSlots;
 }
 
-export interface ModalDefaultSlotParams {
-  $modal: Modal;
+export interface VxeModalProps {
+  size?: VxeModalPropTypes.Size;
+  modelValue?: VxeModalPropTypes.ModelValue;
+  id?: VxeModalPropTypes.ID;
+  type?: VxeModalPropTypes.Type;
+  loading?: VxeModalPropTypes.Loading;
+  status?: VxeModalPropTypes.Status;
+  iconStatus?: VxeModalPropTypes.IconStatus;
+  top?: VxeModalPropTypes.Top;
+  position?: VxeModalPropTypes.Position;
+  title?: VxeModalPropTypes.Title;
+  duration?: VxeModalPropTypes.Duration;
+  message?: VxeModalPropTypes.Message;
+  lockView?: VxeModalPropTypes.LockView;
+  lockScroll?: VxeModalPropTypes.LockScroll;
+  mask?: VxeModalPropTypes.Mask;
+  maskClosable?: VxeModalPropTypes.MaskClosable;
+  escClosable?: VxeModalPropTypes.EscClosable;
+  resize?: VxeModalPropTypes.Resize;
+  showHeader?: VxeModalPropTypes.ShowHeader;
+  showFooter?: VxeModalPropTypes.ShowFooter;
+  dblclickZoom?: VxeModalPropTypes.DblclickZoom;
+  width?: VxeModalPropTypes.Width;
+  height?: VxeModalPropTypes.Height;
+  minWidth?: VxeModalPropTypes.MinWidth;
+  minHeight?: VxeModalPropTypes.MinHeight;
+  zIndex?: VxeModalPropTypes.ZIndex;
+  marginSize?: VxeModalPropTypes.MarginSize;
+  fullscreen?: VxeModalPropTypes.Fullscreen;
+  remember?: VxeModalPropTypes.Remember;
+  destroyOnClose?: VxeModalPropTypes.DestroyOnClose;
+  showTitleOverflow?: VxeModalPropTypes.ShowTitleOverflow;
+  transfer?: VxeModalPropTypes.Transfer;
+  storage?: VxeModalPropTypes.Storage;
+  storageKey?: VxeModalPropTypes.StorageKey;
+  animat?: VxeModalPropTypes.Animat;
+  beforeHideMethod?: VxeModalPropTypes.BeforeHideMethod;
+  slots?: VxeModalPropTypes.Slots;
 }
 
-export interface ModalHeaderSlotParams extends ModalDefaultSlotParams {}
-export interface ModalTitleSlotParams extends ModalDefaultSlotParams {}
-export interface ModalFooterSlotParams extends ModalDefaultSlotParams {}
-
-export interface ModalEventParams {
-  $modal: Modal;
-  type: string;
+export type ModalSlots = {
+  default?(params: ModalDefaultSlotParams): VNode[] | string[];
+  header?(params: ModalHeaderSlotParams): VNode[] | string[];
+  title?(params: ModalTitleSlotParams): VNode[] | string[];
+  footer?(params: ModalFooterSlotParams): VNode[] | string[];
 }
+
+export type VxeModalEmits = [
+  'update:modelValue',
+  'show',
+  'hide',
+  'close',
+  'confirm',
+  'cancel',
+  'zoom'
+]
 
 /**
  * 全局窗口控制器
  */
-export interface ModalClass {
+export interface ModalController {
   /**
    * 创建窗口
    * @param options 参数
    */
-  open (options: ModalOptions): Promise<string>;
+  open(options: VxeModalOptions): Promise<string>;
   /**
    * 创建提示框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  alert (message: string, title?: string, options?: ModalOptions): Promise<string>;
+  alert(message: string, title?: string, options?: VxeModalOptions): Promise<string>;
   /**
    * 创建提示框
    * @param options 参数
    */
-  alert (options: ModalOptions): Promise<string>;
+  alert(options: VxeModalOptions): Promise<string>;
   /**
    * 创建确认框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  confirm (message: string, title?: string, options?: ModalOptions): Promise<string>;
+  confirm(message: string, title?: string, options?: VxeModalOptions): Promise<string>;
   /**
    * 创建确认框
    * @param options 参数
    */
-  confirm (options: ModalOptions): Promise<string>;
+  confirm(options: VxeModalOptions): Promise<string>;
   /**
    * 创建消息提示
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  message (message: string, title?: string, options?: ModalOptions): Promise<string>;
+  message(message: string, options?: VxeModalOptions): Promise<string>;
   /**
    * 创建消息提示
    * @param options 参数
    */
-  message (options: ModalOptions): Promise<string>;
+  message(options: VxeModalOptions): Promise<string>;
   /**
    * 获取动态的活动窗口
    * @param id 窗口唯一标识
    */
-  get (id: string): Modal;
+  get(id: string): Modal;
   /**
    * 关闭动态的活动窗口，如果为空则关闭所有
    * @param id 窗口唯一标识
    */
-  close (id?: string): Promise<any>;
+  close(id?: string): Promise<any>;
 }
 
-export declare const ModalController: ModalClass
+export interface ModalDefaultSlotParams {
+  $modal: VxeModalConstructor;
+}
+
+export interface ModalHeaderSlotParams extends ModalDefaultSlotParams { }
+export interface ModalTitleSlotParams extends ModalDefaultSlotParams { }
+export interface ModalFooterSlotParams extends ModalDefaultSlotParams { }
+
+interface ModalVisibleParams {
+  type: ModalEventTypes;
+}
+
+export namespace VxeModalDefines {
+  interface ModalEventParams extends VxeEvent {
+    $modal: VxeModalConstructor;
+  }
+
+  interface ModalBaseParams extends ModalVisibleParams { }
+
+  export interface ShowParams extends ModalBaseParams { }
+  export interface ShowEventParams extends ModalEventParams, ShowParams { }
+
+  export interface HideParams extends ModalBaseParams { }
+  export interface HideEventParams extends ModalEventParams, HideParams { }
+
+  export interface ConfirmParams extends ModalBaseParams { }
+  export interface ConfirmEventParams extends ModalEventParams, ConfirmParams { }
+
+  export interface CancelParams extends ModalBaseParams { }
+  export interface CancelEventParams extends ModalEventParams, CancelParams { }
+
+  export interface CloseParams extends ModalBaseParams { }
+  export interface CloseEventParams extends ModalEventParams, CloseParams { }
+
+  export interface ZoomParams extends ModalBaseParams { }
+  export interface ZoomEventParams extends ModalEventParams, ZoomParams { }
+}
+
+export interface VxeModalListeners {
+  onShow?: VxeModalEvents.Show;
+  onHide?: VxeModalEvents.Hide;
+  onConfirm?: VxeModalEvents.Confirm;
+  onCancel?: VxeModalEvents.Cancel;
+  onClose?: VxeModalEvents.Close;
+  onZoom?: VxeModalEvents.Zoom;
+}
+
+export namespace VxeModalEvents {
+  export type Show = (params: VxeModalDefines.ShowEventParams) => void;
+  export type Hide = (params: VxeModalDefines.HideEventParams) => void;
+  export type Confirm = (params: VxeModalDefines.ConfirmEventParams) => void;
+  export type Cancel = (params: VxeModalDefines.CancelEventParams) => void;
+  export type Close = (params: VxeModalDefines.CloseEventParams) => void;
+  export type Zoom = (params: VxeModalDefines.ZoomEventParams) => void;
+}

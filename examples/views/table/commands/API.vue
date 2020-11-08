@@ -16,50 +16,58 @@
     </vxe-table>
     <h2>示例</h2>
     <pre>
-      <code class="html">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="html">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="javascript">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="html">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 
-export default {
-  data () {
+export default defineComponent({
+  setup () {
+    const tableData = ref([
+      {
+        name: 'add(code, callback)',
+        desc: '添加一个',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: 'code: string, callback: (params) => any',
+        list: []
+      },
+      {
+        name: 'mixin(options)',
+        desc: '添加多个',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: 'options: { [code: string]: (params) => any }',
+        list: []
+      },
+      {
+        name: 'delete(code)',
+        desc: '删除',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: 'code: string',
+        list: []
+      }
+    ])
     return {
-      tableData: [
-        {
-          name: 'add(code, callback)',
-          desc: '添加一个',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: 'code: string, callback: (params) => any',
-          list: []
-        },
-        {
-          name: 'mixin(options)',
-          desc: '添加多个',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: 'options: { [code: string]: (params) => any }',
-          list: []
-        },
-        {
-          name: 'delete(code)',
-          desc: '删除',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: 'code: string',
-          list: []
-        }
-      ],
+      tableData,
       demoCodes: [
+        `
+        import VXETable from 'vxe-table'
+
+        VXETable.commands.add('exportBtn', (params) => {
+          const { $table, code, button } = params
+          $table.exportData()
+        })
+        `,
         `
         <vxe-toolbar :buttons="toolbarButtons"></vxe-toolbar>
 
@@ -73,78 +81,28 @@ export default {
         </vxe-table>
         `,
         `
-        VXETable.commands.add('exportBtn', (params) => {
-          let { $table, code, button } = params
-          $table.exportData()
-        })
+        import { defineComponent, ref } from 'vue'
 
-        export default {
-          data () {
+        export default defineComponent({
+          setup () {
+            const toolbarButtons = ref([
+              { code: 'exportBtn', name: '导出.csv' }
+            ])
+            const tableData = ref([
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+            ])
             return {
-              toolbarButtons: [
-                {
-                  code: 'exportBtn',
-                  name: '导出.csv'
-                }
-              ],
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
-              ]
+              toolbarButtons,
+              tableData
             }
           }
-        }
-        `,
-        `
-        <button @click="printEvent">打印</button>
-        <vxe-grid
-          border
-          resizable
-          ref="xGrid"
-          height="300"
-          :columns="tableColumn"
-          :data="tableData">
-        </vxe-grid>
-        `,
-        `
-        VXETable.commands.add('myPrint', (params) => {
-          let { $table, code, button } = params
-          $table.print()
         })
-
-        export default {
-          data () {
-            return {
-              tableColumn: [
-                { type: 'seq', width: 50 },
-                { field: 'name', title: 'Name' },
-                { field: 'sex', title: 'Sex' },
-                { field: 'address', title: 'Address' }
-              ],
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
-              ]
-            }
-          },
-          methods: {
-            printEvent () {
-              this.$refs.xGrid.commitProxy('myPrint')
-            }
-          }
-        }
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
-}
+})
 </script>

@@ -7,7 +7,7 @@
 
     <vxe-table
       border
-      :data="tableData">
+      :data="demo1.tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="num" title="Num" :formatter="formatterNum" sortable></vxe-table-column>
@@ -18,8 +18,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -29,7 +29,7 @@
 
     <vxe-table
       border
-      :data="tableData">
+      :data="demo2.tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-table-column>
       <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-table-column>
@@ -44,20 +44,21 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="javascript">{{ demoCodes[2] }}</code>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
+      <pre-code class="javascript">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="xml">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[4] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive } from 'vue'
+import { VxeColumnPropTypes } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
 
-export default {
-  data () {
-    return {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
       tableData: [
         { id: 10001, name: 'Test1', bankCard: '6222525678789432', sex: '0', time: 1599320111520, date: '2020-11-14T07:14:41.000Z', amount: 998.3, num: 863.345, num7: 863.345, num8: 863.345, num9: 863.345 },
         { id: 10002, name: 'Test2', bankCard: '6222525675674564', sex: '1', time: 1590820967410, date: '2022-10-24T08:14:18.000Z', amount: 777776536.3, num: 854.7789, num7: 854.7789, num8: 854.7789, num9: 854.7789 },
@@ -67,22 +68,51 @@ export default {
         { id: 10006, name: 'Test6', bankCard: '6222525789898793', sex: '1', time: 1599728569710, date: '2021-01-04T10:12:18.000Z', amount: 999, num: 698.3689, num7: 698.3689, num8: 698.3689, num9: 698.3689 },
         { id: 10007, name: 'Test7', bankCard: '6222525476534534', sex: '1', time: 1590740052710, date: '2020-08-10T08:14:18.000Z', amount: 458666.3, num: 1000.3658, num7: 1000.3658, num8: 1000.3658, num9: 1000.3658 },
         { id: 10008, name: 'Test8', bankCard: '6222525445554231', sex: '0', time: 1599320425610, date: '2020-05-04T07:17:30.000Z', amount: 79999935.6, num: 600053.32845, num7: 600053.32845, num8: 600053.32845, num9: 600053.32845 }
-      ],
-      sexList: [
-        {
-          label: '女',
-          value: '0'
-        },
-        {
-          label: '男',
-          value: '1'
-        }
-      ],
+      ]
+    })
+
+    const sexList = [
+      { label: '女', value: '0' },
+      { label: '男', value: '1' }
+    ]
+
+    const formatterNum: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
+      return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
+    }
+
+    const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
+      const item = sexList.find(item => item.value === cellValue)
+      return item ? item.label : ''
+    }
+
+    const formatTime: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
+      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
+    }
+
+    const demo2 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', bankCard: '6222525678789432', sex: '0', time: 1599320111520, date: '2020-11-14T07:14:41.000Z', amount: 998.3, num: 863.345, num7: 863.345, num8: 863.345, num9: 863.345 },
+        { id: 10002, name: 'Test2', bankCard: '6222525675674564', sex: '1', time: 1590820967410, date: '2022-10-24T08:14:18.000Z', amount: 777776536.3, num: 854.7789, num7: 854.7789, num8: 854.7789, num9: 854.7789 },
+        { id: 10003, name: 'Test3', bankCard: '6222525477686963', sex: '0', time: 1599390785410, date: '2020-09-04T06:08:25.000Z', amount: 253.486, num: 963.1456, num7: 963.1456, num8: 963.1456, num9: 963.1456 },
+        { id: 10004, name: 'Test4', bankCard: '6222525678678946', sex: '1', time: 1597385230710, date: '2019-10-20T20:40:20.000Z', amount: 9990000.66, num: 963.9856, num7: 963.9856, num8: 963.9856, num9: 963.9856 },
+        { id: 10005, name: 'Test5', bankCard: '6222525478909009', sex: '0', time: 1591627586920, date: '2020-09-17T11:14:18.000Z', amount: 10000.35, num: 99.845632, num7: 99.845632, num8: 99.845632, num9: 99.845632 },
+        { id: 10006, name: 'Test6', bankCard: '6222525789898793', sex: '1', time: 1599728569710, date: '2021-01-04T10:12:18.000Z', amount: 999, num: 698.3689, num7: 698.3689, num8: 698.3689, num9: 698.3689 },
+        { id: 10007, name: 'Test7', bankCard: '6222525476534534', sex: '1', time: 1590740052710, date: '2020-08-10T08:14:18.000Z', amount: 458666.3, num: 1000.3658, num7: 1000.3658, num8: 1000.3658, num9: 1000.3658 },
+        { id: 10008, name: 'Test8', bankCard: '6222525445554231', sex: '0', time: 1599320425610, date: '2020-05-04T07:17:30.000Z', amount: 79999935.6, num: 600053.32845, num7: 600053.32845, num8: 600053.32845, num9: 600053.32845 }
+      ]
+    })
+
+    return {
+      demo1,
+      formatterNum,
+      formatterSex,
+      formatTime,
+      demo2,
       demoCodes: [
         `
         <vxe-table
           border
-          :data="tableData">
+          :data="demo1.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="num" title="Num" :formatter="formatterNum" sortable></vxe-table-column>
@@ -91,9 +121,13 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+        import { VxeColumnPropTypes } from 'vxe-table'
+        import XEUtils from 'xe-utils'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', bankCard: '6222525678789432', sex: '0', time: 1599320111520, date: '2020-11-14T07:14:41.000Z', amount: 998.3, num: 863.345, num7: 863.345, num8: 863.345, num9: 863.345 },
                 { id: 10002, name: 'Test2', bankCard: '6222525675674564', sex: '1', time: 1590820967410, date: '2022-10-24T08:14:18.000Z', amount: 777776536.3, num: 854.7789, num7: 854.7789, num8: 854.7789, num9: 854.7789 },
@@ -103,34 +137,40 @@ export default {
                 { id: 10006, name: 'Test6', bankCard: '6222525789898793', sex: '1', time: 1599728569710, date: '2021-01-04T10:12:18.000Z', amount: 999, num: 698.3689, num7: 698.3689, num8: 698.3689, num9: 698.3689 },
                 { id: 10007, name: 'Test7', bankCard: '6222525476534534', sex: '1', time: 1590740052710, date: '2020-08-10T08:14:18.000Z', amount: 458666.3, num: 1000.3658, num7: 1000.3658, num8: 1000.3658, num9: 1000.3658 },
                 { id: 10008, name: 'Test8', bankCard: '6222525445554231', sex: '0', time: 1599320425610, date: '2020-05-04T07:17:30.000Z', amount: 79999935.6, num: 600053.32845, num7: 600053.32845, num8: 600053.32845, num9: 600053.32845 }
-              ],
-              sexList: [
-                {
-                  label: '女',
-                  value: '0'
-                },
-                {
-                  label: '男',
-                  value: '1'
-                }
               ]
-            }
-          },
-          methods: {
-            formatterNum ({ cellValue }) {
+            })
+
+            const sexList = [
+              { label: '女', value: '0' },
+              { label: '男', value: '1' }
+            ]
+
+            const formatterNum: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
               return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
-            },
-            formatterSex ({ cellValue }) {
-              let item = this.sexList.find(item => item.value === cellValue)
+            }
+
+            const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
+              const item = sexList.find(item => item.value === cellValue)
               return item ? item.label : ''
-            },
-            formatTime ({ cellValue, row, column }) {
+            }
+
+            const formatTime: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
             }
+
+            return {
+              demo1,
+              formatterNum,
+              formatterSex,
+              formatTime
+            }
           }
-        }
+        })
         `,
         `
+        import VXETable from 'vxe-table'
+        import XEUtils from 'xe-utils'
+
         // 自定义全局的格式化处理函数
         VXETable.formats.mixin({
           // 格式化性别
@@ -148,7 +188,7 @@ export default {
           },
           // 四舍五入金额，每隔3位逗号分隔，默认2位数
           formatAmount ({ cellValue }, digits = 2) {
-            return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: digits })
+            return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
           },
           // 格式化银行卡，默认每4位空格隔开
           formatBankcard ({ cellValue }) {
@@ -171,7 +211,7 @@ export default {
         `
         <vxe-table
           border
-          :data="tableData">
+          :data="demo2.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-table-column>
           <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-table-column>
@@ -184,9 +224,11 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo2 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', bankCard: '6222525678789432', sex: '0', time: 1599320111520, date: '2020-11-14T07:14:41.000Z', amount: 998.3, num: 863.345, num7: 863.345, num8: 863.345, num9: 863.345 },
                 { id: 10002, name: 'Test2', bankCard: '6222525675674564', sex: '1', time: 1590820967410, date: '2022-10-24T08:14:18.000Z', amount: 777776536.3, num: 854.7789, num7: 854.7789, num8: 854.7789, num9: 854.7789 },
@@ -197,29 +239,16 @@ export default {
                 { id: 10007, name: 'Test7', bankCard: '6222525476534534', sex: '1', time: 1590740052710, date: '2020-08-10T08:14:18.000Z', amount: 458666.3, num: 1000.3658, num7: 1000.3658, num8: 1000.3658, num9: 1000.3658 },
                 { id: 10008, name: 'Test8', bankCard: '6222525445554231', sex: '0', time: 1599320425610, date: '2020-05-04T07:17:30.000Z', amount: 79999935.6, num: 600053.32845, num7: 600053.32845, num8: 600053.32845, num9: 600053.32845 }
               ]
+            })
+
+            return {
+              demo2
             }
           }
-        }
+        })
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    formatterNum ({ cellValue }) {
-      return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
-    },
-    formatterSex ({ cellValue }) {
-      const item = this.sexList.find(item => item.value === cellValue)
-      return item ? item.label : ''
-    },
-    formatTime ({ cellValue }) {
-      return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
-    }
   }
-}
+})
 </script>

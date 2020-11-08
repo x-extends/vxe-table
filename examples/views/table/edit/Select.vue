@@ -6,34 +6,40 @@
       border
       resizable
       show-overflow
-      :data="tableData"
+      :data="demo1.tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column title="分组1">
+      <vxe-table-colgroup title="分组1">
         <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
-        <vxe-table-column field="sex5" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="分组1">
-        <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-table-column>
-      </vxe-table-column>
+        <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', optionGroups: demo1.sexGriupList}"></vxe-table-column>
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="分组1">
+        <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-table-column>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive } from 'vue'
 
-export default {
-  data () {
-    return {
-      tableData: [],
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 20, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'Test', sex: '0', sex2: ['1'], num1: 200, age: 32, address: 'Shanghai', date12: '2020-09-10', date13: '' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 23, address: 'Shenzhen', date12: '', date13: '2020-12-04' }
+      ],
       sexGriupList: [
         {
           label: '第一分组',
@@ -53,29 +59,35 @@ export default {
             { value: '2', label: '无' }
           ]
         }
-      ],
+      ]
+    })
+    return {
+      demo1,
       demoCodes: [
         `
         <vxe-table
           border
           resizable
           show-overflow
-          :data="tableData"
+          :data="demo1.tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column title="分组1">
+          <vxe-table-colgroup title="分组1">
             <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
-            <vxe-table-column field="sex5" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="分组1">
-            <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-table-column>
-          </vxe-table-column>
+            <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input', autoselect: true}"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', optionGroups: demo1.sexGriupList}"></vxe-table-column>
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="分组1">
+            <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-table-column>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
               tableData: [],
               sexGriupList: [
                 {
@@ -97,23 +109,15 @@ export default {
                   ]
                 }
               ]
+            })
+            return {
+              demo1
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           }
-        }
+        })
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
-}
+})
 </script>

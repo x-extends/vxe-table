@@ -1,411 +1,327 @@
-import { CreateElement, VNode } from 'vue'
-import { VXETableModule } from './component'
-import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './extends/filter'
-import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, ColumnContentSlotParams, RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
-import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './extends/header'
-import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './extends/footer'
-import { ColumnEditRenderOptions, ColumnEditSlotParams } from './extends/edit'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './extends/export'
+import { VNode } from 'vue'
+import { VXETableComponent } from './component'
+import { VxeTableConstructor, VxeTableDefines } from './table'
+import { VxeGlobalRendererHandles } from './v-x-e-table'
+import { VxeFilterPanel } from './filter'
 
 /**
- * 列
+ * 组件 - 表格列
  */
-export declare class Column extends VXETableModule {
-  /**
-   * 渲染类型
-   */
-  type?: 'seq' | 'radio' | 'checkbox' | 'expand' | 'html';
-  /**
-   * 列字段名
-   */
-  field?: string;
-  /**
-   * 列标题
-   */
-  title?: string;
-  /**
-   * 列宽度
-   */
-  width?: number | string;
-  /**
-   * 列最小宽度，把剩余宽度按比例分配
-   */
-  minWidth?: number | string;
-  /**
-   * 是否允许拖动列宽调整大小
-   */
-  resizable?: boolean;
-  /**
-   * 将列固定在左侧或者右侧
-   */
-  fixed?: 'left' | 'right';
-  /**
-   * 列对其方式
-   */
-  align?: 'left' | 'center' | 'right';
-  /**
-   * 表头对齐方式
-   */
-  headerAlign?: 'left' | 'center' | 'right';
-  /**
-   * 表尾列的对齐方式
-   */
-  footerAlign?: string;
-  /**
-   * 当内容过长时显示为省略号
-   */
-  showOverflow?: boolean | string;
-  /**
-   * 当表头内容过长时显示为省略号
-   */
-  showHeaderOverflow?: boolean | string;
-  /**
-   * 当表尾内容过长时显示为省略号
-   */
-  showFooterOverflow?: boolean | string;
-  /**
-   * 给单元格附加 className
-   */
-  className?: string | ((params: ColumnCellRenderParams) => string | any[] | { [key: string]: boolean });
-  /**
-   * 给表头单元格附加 className
-   */
-  headerClassName?: string | ((params: ColumnHeaderRenderParams) => string | any[] | { [key: string]: boolean });
-  /**
-   * 给表尾单元格附加 className
-   */
-  footerClassName?: string | ((params: ColumnFooterRenderParams) => string | any[] | { [key: string]: boolean });
-  /**
-   * 格式化显示内容
-   */
-  formatter?: ((params: ColumnFormatterMethodParams) => string) | any[] | string;
-  /**
-   * 是否允许排序
-   */
-  sortable?: boolean;
-  /**
-   * 是否服务端排序
-   */
-  remoteSort?: boolean;
-  /**
-   * 自定义排序的属性
-   */
-  sortBy?: string | string[];
-  /**
-   * 自定义排序方法
-   */
-  sortMethod?(a: any, b: any): boolean;
-  /**
-   * 配置筛选条件数组
-   */
-  filters?: ColumnFilterOption[];
-  /**
-   * 筛选是否允许多选
-   */
-  filterMultiple?: boolean;
-  /**
-   * 自定义筛选方法
-   */
-  filterMethod?(params: ColumnFilterMethodParams): boolean;
-  /**
-   * 筛选模板配置项
-   */
-  filterRender?: ColumnFilterRenderOptions;
-  /**
-   * 指定为树节点
-   */
-  treeNode?: boolean;
-  /**
-   * 是否可视
-   */
-  visible?: boolean;
-  /**
-   * 自定义单元格数据导出方法
-   */
-  exportMethod?(params: ColumnExportCellRenderParams): string | number;
-  /**
-   * 自定义表尾单元格数据导出方法
-   */
-  footerExportMethod?(params: ColumnExportFooterRenderParams): string | number;
-  /**
-   * 单元格值类型
-   */
-  cellType?: string;
-  /**
-   * 单元格渲染配置项
-   */
-  cellRender?: ColumnCellRenderOptions;
-  /**
-   * 单元格编辑渲染配置项
-   */
-  editRender?: ColumnEditRenderOptions;
-  /**
-   * 内容渲染配置项
-   */
-  contentRender?: ColumnContentRenderOptions;
-  /**
-   * 额外的参数
-   */
-  params?: any;
+export interface Column extends VXETableComponent {}
+
+export interface VxeColumnOptions extends VxeColumnProps {
+  children?: VxeColumnOptions[];
+  slots?: VxeColumnPropTypes.Slots;
 }
 
-export interface ColumnOptions {
-  /**
-   * 渲染类型
-   */
-  type?: 'seq' | 'radio' | 'checkbox' | 'expand' | 'html';
-  /**
-   * 列字段名
-   */
-  field?: string;
-  /**
-   * 列标题
-   */
-  title?: string;
-  /**
-   * 列宽度
-   */
-  width?: number | string;
-  /**
-   * 列最小宽度，把剩余宽度按比例分配
-   */
-  minWidth?: number | string;
-  /**
-   * 是否允许拖动列宽调整大小
-   */
-  resizable?: boolean;
-  /**
-   * 将列固定在左侧或者右侧
-   */
-  fixed?: 'left' | 'right';
-  /**
-   * 列对其方式
-   */
-  align?: 'left' | 'center' | 'right';
-  /**
-   * 表头对齐方式
-   */
-  headerAlign?: 'left' | 'center' | 'right';
-  /**
-   * 表尾列的对齐方式
-   */
-  footerAlign?: string;
-  /**
-   * 当内容过长时显示为省略号
-   */
-  showOverflow?: boolean | string;
-  /**
-   * 当表头内容过长时显示为省略号
-   */
-  showHeaderOverflow?: boolean | string;
-  /**
-   * 当表尾内容过长时显示为省略号
-   */
-  showFooterOverflow?: boolean | string;
-  /**
-   * 给单元格附加 className
-   */
-  className?: string | ((params: ColumnCellRenderParams) => string | any[] | { [key: string]: boolean });
-  /**
-   * 给表头单元格附加 className
-   */
-  headerClassName?: string | ((params: ColumnHeaderRenderParams) => string | any[] | { [key: string]: boolean });
-  /**
-   * 给表尾单元格附加 className
-   */
-  footerClassName?: string | ((params: ColumnFooterRenderParams) => string | any[] | { [key: string]: boolean });
-  /**
-   * 格式化显示内容
-   */
-  formatter?: ((params: ColumnFormatterMethodParams) => string) | any[] | string;
-  /**
-   * 是否允许排序
-   */
-  sortable?: boolean;
-  /**
-   * 是否服务端排序
-   */
-  remoteSort?: boolean;
-  /**
-   * 自定义排序的属性
-   */
-  sortBy?: string | string[];
-  /**
-   * 自定义排序方法
-   */
-  sortMethod?(a: any, b: any): boolean;
-  /**
-   * 配置筛选条件数组
-   */
-  filters?: ColumnFilterOption[];
-  /**
-   * 筛选是否允许多选
-   */
-  filterMultiple?: boolean;
-  /**
-   * 自定义筛选方法
-   */
-  filterMethod?(params: ColumnFilterMethodParams): boolean;
-  /**
-   * 筛选模板配置项
-   */
-  filterRender?: ColumnFilterRenderOptions;
-  /**
-   * 指定为树节点
-   */
-  treeNode?: boolean;
-  /**
-   * 是否可视
-   */
-  visible?: boolean;
-  /**
-   * 自定义单元格数据导出方法
-   */
-  exportMethod?(params: ColumnExportCellRenderParams): string | number;
-  /**
-   * 自定义表尾单元格数据导出方法
-   */
-  footerExportMethod?(params: ColumnExportFooterRenderParams): string | number;
-  /**
-   * 单元格值类型
-   */
-  cellType?: string;
-  /**
-   * 单元格渲染配置项
-   */
-  cellRender?: ColumnCellRenderOptions;
-  /**
-   * 单元格编辑渲染配置项
-   */
-  editRender?: ColumnEditRenderOptions;
-  /**
-   * 内容渲染配置项
-   */
-  contentRender?: ColumnContentRenderOptions;
-  /**
-   * 额外的参数
-   */
-  params?: any;
+export namespace VxeColumnPropTypes {
+  export type Type = 'seq' | 'radio' | 'checkbox' | 'expand' | 'html';
+  export type Field = string;
+  export type Title = string;
+  export type Width = number | string;
+  export type MinWidth = number | string;
+  export type Resizable = boolean;
+  export type Fixed = 'left' | 'right' | null;
+  export type Align = 'left' | 'center' | 'right' | null;
+  export type HeaderAlign = Align;
+  export type FooterAlign = Align;
+  export type ShowOverflow = boolean | string;
+  export type ShowHeaderOverflow = boolean | string;
+  export type ShowFooterOverflow = boolean | string;
+  export type ClassName = string | ((params: VxeGlobalRendererHandles.RenderCellParams) => string | any[] | { [key: string]: boolean });
+  export type HeaderClassName = string | ((params: VxeGlobalRendererHandles.RenderHeaderParams) => string | any[] | { [key: string]: boolean });
+  export type FooterClassName = string | ((params: VxeGlobalRendererHandles.RenderFooterParams) => string | any[] | { [key: string]: boolean });
 
-  slots?: {
-    default?(params: ColumnDefaultSlotParams, h: CreateElement): VNode[] | string[];
-    header?(params: ColumnHeaderSlotParams, h: CreateElement): VNode[] | string[];
-    footer?(params: ColumnFooterSlotParams, h: CreateElement): VNode[] | string[];
-    content?(params: ColumnContentSlotParams, h: CreateElement): VNode[] | string[];
-    filter?(params: ColumnFilterSlotParams, h: CreateElement): VNode[] | string[];
-    edit?(params: ColumnEditSlotParams, h: CreateElement): VNode[] | string[];
-    icon?(params: ColumnIconSlotParams, h: CreateElement): VNode[] | string[];
-  };
-}
+  export type Formatter = ((params: {
+    cellValue: any;
+    column: VxeTableDefines.ColumnInfo;
+    row: any;
+  }) => string | number) | any[] | string;
+  
+  export type Sortable = boolean;
+  export type SortBy = string;
 
-/**
- * 列对象
- */
-export class ColumnInfo {
-  title: string;
-  width: number | string;
-  minWidth: number | string;
-  resizable: boolean;
-  fixed: string;
-  property: string;
-  type: string;
-  sortable: boolean;
-  treeNode: boolean;
-  filters: ColumnFilterParams[];
-  filterRender: ColumnFilterRenderOptions;
-  cellType: string;
-  cellRender: ColumnCellRenderOptions;
-  editRender: ColumnEditRenderOptions;
-  contentRender: ColumnContentRenderOptions;
+  export interface Filter {
+    label?: string | number;
+    value?: any;
+    data?: any;
+    resetValue?: any;
+    checked?: boolean;
+  }
 
-  id: string;
-  parentId: string;
-  level: number;
-  rowSpan: number;
-  colSpan: number;
-  visible: boolean;
-  halfVisible: boolean;
-  defaultVisible: any;
-  checked: boolean;
-  halfChecked: boolean;
-  disabled: boolean;
-  order: string;
-  renderWidth: number;
-  renderHeight: number;
-  resizeWidth: number;
-  model: {
-    update: boolean;
+  export type FilterMultiple = boolean;
+
+  interface FilterMethodParams {
     value: any;
+    option: VxeTableDefines.FilterOption;
+    row: any;
+    column: VxeTableDefines.ColumnInfo;
+  }
+  export type FilterMethod = (params: FilterMethodParams) => boolean;
+
+  /**
+   * 筛选渲染配置项
+   */
+  export interface FilterRender extends VxeGlobalRendererHandles.RenderOptions {
+    options?: any[];
+    optionProps?: VxeGlobalRendererHandles.RenderOptionProps;
+    optionGroups?: any[];
+    optionGroupProps?: VxeGlobalRendererHandles.RenderOptionGroupProps;
+    content?: string;
+  }
+
+  export type TreeNode = boolean;
+  export type Visible = boolean;
+
+  interface ExportMethodParams {
+    $table: VxeTableConstructor,
+    row: any;
+    column: VxeTableDefines.ColumnInfo;
+  }
+  export type ExportMethod = (params: ExportMethodParams) => string | number;
+
+  interface FooterExportParams {
+    $table: VxeTableConstructor,
+    items: any[];
+    column: VxeTableDefines.ColumnInfo;
+    _columnIndex: number;
+  }
+  export type FooterExportMethod = (params: FooterExportParams) => string | number;
+
+  export type CellType = 'auto' | 'number' | 'string';
+
+  export interface CellRender extends VxeGlobalRendererHandles.RenderOptions {
+    options?: any[];
+    optionProps?: VxeGlobalRendererHandles.RenderOptionProps;
+    optionGroups?: any[];
+    optionGroupProps?: VxeGlobalRendererHandles.RenderOptionGroupProps;
+    content?: string;
+  }
+
+  /**
+   * 编辑渲染配置项
+   */
+  export interface EditRender extends VxeGlobalRendererHandles.RenderOptions {
+    options?: any[];
+    optionProps?: VxeGlobalRendererHandles.RenderOptionProps;
+    optionGroups?: any[];
+    optionGroupProps?: VxeGlobalRendererHandles.RenderOptionGroupProps;
+    autofocus?: string;
+    autoselect?: boolean;
+    defaultValue?: any;
+    immediate?: boolean;
+    content?: string;
+  }
+
+  /**
+   * 内容渲染配置项
+   */
+  export interface ContentRender extends VxeGlobalRendererHandles.RenderOptions {
+    options?: any[];
+    optionProps?: VxeGlobalRendererHandles.RenderOptionProps;
+    optionGroups?: any[];
+    optionGroupProps?: VxeGlobalRendererHandles.RenderOptionGroupProps;
+  }
+
+  export type Params = any;
+
+  interface FilterSlotParams {
+    $panel: VxeFilterPanel;
+    column: VxeTableDefines.ColumnInfo & {
+      filters: VxeTableDefines.FilterOption[];
+    };
+    columnIndex: number;
+    $columnIndex: number;
+    $rowIndex: number;
+  }
+
+  interface EditSlotParams {
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    row: any;
+    rowIndex: number;
+    $rowIndex: number;
+  }
+
+  interface FooterSlotParams {
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    _columnIndex: number;
+    $columnIndex: number;
+    $rowIndex: number;
+    items: any[];
+    data: any[][];
+  }
+
+  interface HeaderSlotParams {
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    $rowIndex: number;
+  }
+
+  interface ContentSlotParams {
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    row: any;
+    rowIndex: number;
+    $rowIndex: number;
+    isHidden: boolean;
+    fixed: string;
+    type: string;
+  }
+
+  interface DefaultSlotParams {
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    row: any;
+    rowIndex: number;
+    $rowIndex: number;
+    isHidden: boolean;
+    fixed: string;
+    type: string;
+  }
+
+  export type Slots = {
+    default?: string | ((params: DefaultSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
+    header?: string | ((params: HeaderSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
+    footer?: string | ((params: FooterSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
+    content?: string | ((params: ContentSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
+    filter?: string | ((params: FilterSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
+    edit?: string | ((params: EditSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
   };
-  children: ColumnInfo[];
-
-  getTitle(): string;
 }
 
-export class ColumnConfig extends ColumnInfo {}
-
-/**
- * 默认的渲染配置项
- */
-export interface ColumnCellRenderOptions extends RenderOptions {
+export interface VxeColumnProps {
   /**
-   * 下拉选项列表（需要渲染器支持）
+   * 渲染类型
    */
-  options?: { [key: string]: any }[];
+  type?: VxeColumnPropTypes.Type;
   /**
-   * 下拉选项属性参数配置（需要渲染器支持）
+   * 列字段名
    */
-  optionProps?: OptionProps;
+  field?: VxeColumnPropTypes.Field;
   /**
-   * 下拉分组选项列表（需要渲染器支持）
+   * 列标题
    */
-  optionGroups?: { [key: string]: any }[];
+  title?: VxeColumnPropTypes.Title;
   /**
-   * 下拉分组选项属性参数配置（需要渲染器支持）
+   * 列宽度
    */
-  optionGroupProps?: OptionGroupProps;
+  width?: VxeColumnPropTypes.Width;
   /**
-   * 渲染组件的内容（需要渲染器支持）
+   * 列最小宽度，把剩余宽度按比例分配
    */
-  content?: string;
-}
-
-/**
- * 内容渲染配置项
- */
-export interface ColumnContentRenderOptions extends RenderOptions {
+  minWidth?: VxeColumnPropTypes.MinWidth;
   /**
-   * 下拉选项列表（需要渲染器支持）
+   * 是否允许拖动列宽调整大小
    */
-  options?: { [key: string]: any }[];
+  resizable?: VxeColumnPropTypes.Resizable;
   /**
-   * 下拉选项属性参数配置（需要渲染器支持）
+   * 将列固定在左侧或者右侧
    */
-  optionProps?: OptionProps;
+  fixed?: VxeColumnPropTypes.Fixed;
   /**
-   * 下拉分组选项列表（需要渲染器支持）
+   * 列对其方式
    */
-  optionGroups?: { [key: string]: any }[];
+  align?: VxeColumnPropTypes.Align;
   /**
-   * 下拉分组选项属性参数配置（需要渲染器支持）
+   * 表头对齐方式
    */
-  optionGroupProps?: OptionGroupProps;
-}
-
-/**
- * 格式化方法参数
- */
-export interface ColumnFormatterMethodParams {
+  headerAlign?: VxeColumnPropTypes.HeaderAlign;
   /**
-   * 单元格值
+   * 表尾列的对齐方式
    */
-  cellValue: any;
+  footerAlign?: VxeColumnPropTypes.FooterAlign;
   /**
-   * 列对象
+   * 当内容过长时显示为省略号
    */
-  column: ColumnInfo;
+  showOverflow?: VxeColumnPropTypes.ShowOverflow;
   /**
-   * 行数据对象
+   * 当表头内容过长时显示为省略号
    */
-  row: any;
+  showHeaderOverflow?: VxeColumnPropTypes.ShowHeaderOverflow;
+  /**
+   * 当表尾内容过长时显示为省略号
+   */
+  showFooterOverflow?: VxeColumnPropTypes.ShowFooterOverflow;
+  /**
+   * 给单元格附加 className
+   */
+  className?: VxeColumnPropTypes.ClassName;
+  /**
+   * 给表头单元格附加 className
+   */
+  headerClassName?: VxeColumnPropTypes.HeaderClassName;
+  /**
+   * 给表尾单元格附加 className
+   */
+  footerClassName?: VxeColumnPropTypes.FooterClassName;
+  /**
+   * 格式化显示内容
+   */
+  formatter?: VxeColumnPropTypes.Formatter;
+  /**
+   * 是否允许排序
+   */
+  sortable?: VxeColumnPropTypes.Sortable;
+  /**
+   * 自定义排序的属性
+   */
+  sortBy?: VxeColumnPropTypes.SortBy;
+  /**
+   * 配置筛选条件数组
+   */
+  filters?: VxeColumnPropTypes.Filter[];
+  /**
+   * 筛选是否允许多选
+   */
+  filterMultiple?: VxeColumnPropTypes.FilterMultiple;
+  /**
+   * 自定义筛选方法
+   */
+  filterMethod?: VxeColumnPropTypes.FilterMethod;
+  /**
+   * 筛选模板配置项
+   */
+  filterRender?: VxeColumnPropTypes.FilterRender;
+  /**
+   * 指定为树节点
+   */
+  treeNode?: VxeColumnPropTypes.TreeNode;
+  /**
+   * 是否可视
+   */
+  visible?: VxeColumnPropTypes.Visible;
+  /**
+   * 自定义单元格数据导出方法
+   */
+  exportMethod?: VxeColumnPropTypes.ExportMethod;
+  /**
+   * 自定义表尾单元格数据导出方法
+   */
+  footerExportMethod?: VxeColumnPropTypes.FooterExportMethod;
+  /**
+   * 单元格值类型
+   */
+  cellType?: VxeColumnPropTypes.CellType;
+  /**
+   * 单元格渲染配置项
+   */
+  cellRender?: VxeColumnPropTypes.CellRender;
+  /**
+   * 单元格编辑渲染配置项
+   */
+  editRender?: VxeColumnPropTypes.EditRender;
+  /**
+   * 内容渲染配置项
+   */
+  contentRender?: VxeColumnPropTypes.ContentRender;
+  /**
+   * 额外的参数
+   */
+  params?: VxeColumnPropTypes.Params;
 }

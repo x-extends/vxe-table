@@ -5,10 +5,10 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
          <vxe-input size="small" placeholder="搜索"></vxe-input>
       </template>
-      <template v-slot:tools>
+      <template #tools>
         <vxe-button status="primary">操作1</vxe-button>
         <vxe-button status="primary">操作2</vxe-button>
         <vxe-button status="primary">操作3</vxe-button>
@@ -19,21 +19,21 @@
       border
       resizable
       :tree-config="{children: 'children'}"
-      :data="tableData">
+      :data="demo1.tableData">
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>{{ `类型：${row.type || '无'}` }}</span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="attr3" title="Image" tree-node>
-        <template v-slot>
-          <img src="static/other/img1.gif" height="50">
+        <template #default>
+          <img src="/vxe-table/static/other/img1.gif" height="50">
         </template>
       </vxe-table-column>
       <vxe-table-column field="date" title="Date">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>{{ formatDate(row.date) }}</span>
         </template>
       </vxe-table-column>
@@ -42,27 +42,67 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, reactive } from 'vue'
 import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
+import { VxeTablePropTypes } from '../../../../types/vxe-table'
 
-export default {
-  data () {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
+      tableData: [
+        { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          children: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'Test96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              children: [
+                { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
+      tableTreeConfig: {
+        children: 'children'
+      } as VxeTablePropTypes.TreeConfig
+    })
+
+    const formatDate = (value: any) => {
+      return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
+    }
+
     return {
-      tableData: [],
+      demo1,
+      formatDate,
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-input size="small" placeholder="搜索"></vxe-input>
           </template>
-          <template v-slot:tools>
+          <template #tools>
             <vxe-button status="primary">操作1</vxe-button>
             <vxe-button status="primary">操作2</vxe-button>
             <vxe-button status="primary">操作3</vxe-button>
@@ -73,58 +113,80 @@ export default {
           border
           resizable
           :tree-config="{children: 'children'}"
-          :data="tableData">
+          :data="demo1.tableData">
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>{{ \`类型：\${row.type || '无'}\` }}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="attr3" title="Image" tree-node>
-            <template v-slot>
-              <img src="static/other/img1.gif" height="50">
+            <template #default>
+              <img src="/vxe-table/static/other/img1.gif" height="50">
             </template>
           </vxe-table-column>
           <vxe-table-column field="date" title="Date">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>{{ formatDate(row.date) }}</span>
             </template>
           </vxe-table-column>
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
-              tableData: []
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
-          },
-          methods: {
-            formatDate (value) {
+        import { defineComponent, reactive } from 'vue'
+        import XEUtils from 'xe-utils'
+        import { VxeTablePropTypes } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
+              tableData: [
+                { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'Test96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+              ],
+              tableTreeConfig: {
+                children: 'children'
+              } as VxeTablePropTypes.TreeConfig
+            })
+
+            const formatDate = (value: any) => {
               return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
             }
+
+            return {
+              demo1,
+              formatDate
+            }
           }
-        }
+        })
         `
       ]
     }
-  },
-  created () {
-    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    formatDate (value) {
-      return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
-    }
   }
-}
+})
 </script>

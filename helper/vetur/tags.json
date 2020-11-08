@@ -60,7 +60,8 @@
       "tooltip-config",
       "expand-config",
       "tree-config",
-      "context-menu",
+      "menu-config",
+      "clip-config",
       "mouse-config",
       "keyboard-config",
       "edit-config",
@@ -80,6 +81,23 @@
       "vxe-table-column"
     ],
     "description": "基础表格"
+  },
+  "vxe-table-colgroup": {
+    "attributes": [
+      "field",
+      "title",
+      "width",
+      "min-width",
+      "resizable",
+      "visible",
+      "fixed",
+      "align",
+      "header-align",
+      "show-overflow",
+      "show-header-overflow",
+      "header-class-name"
+    ],
+    "description": "基础表格 - 分组列"
   },
   "vxe-table-column": {
     "attributes": [
@@ -104,8 +122,6 @@
       "seq-method",
       "sortable",
       "sort-by",
-      "sort-method",
-      "remote-sort",
       "filters",
       "filter-multiple",
       "filter-method",
@@ -185,7 +201,8 @@
       "tooltip-config",
       "expand-config",
       "tree-config",
-      "context-menu",
+      "menu-config",
+      "clip-config",
       "mouse-config",
       "keyboard-config",
       "edit-config",
@@ -201,7 +218,7 @@
       "scroll-y",
       "params",
       "form-config",
-      "toolbar",
+      "toolbar-config",
       "pager-config",
       "proxy-config",
       "zoom-config"
@@ -247,7 +264,7 @@
   },
   "vxe-radio": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "label",
       "content",
       "size",
@@ -273,7 +290,7 @@
   },
   "vxe-checkbox": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "label",
       "content",
       "size",
@@ -292,21 +309,21 @@
   },
   "vxe-switch": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "disabled",
       "size",
-      "on-label",
-      "off-label",
-      "on-value",
-      "off-value",
-      "on-icon",
-      "off-icon"
+      "open-label",
+      "close-label",
+      "open-value",
+      "close-value",
+      "open-icon",
+      "close-icon"
     ],
     "description": "开关按钮"
   },
   "vxe-input": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "size",
       "type",
       "name",
@@ -340,7 +357,7 @@
   },
   "vxe-select": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "size",
       "multiple",
       "multi-char-overflow",
@@ -354,8 +371,8 @@
       "option-props",
       "option-groups",
       "option-group-props",
-      "opt-id",
-      "opt-key",
+      "option-id",
+      "option-key",
       "transfer"
     ],
     "subtags": [
@@ -404,11 +421,11 @@
   },
   "vxe-tooltip": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "content",
       "trigger",
       "theme",
-      "z-index",
+      "zindex",
       "is-arrow",
       "enterable",
       "leave-delay"
@@ -417,7 +434,7 @@
   },
   "vxe-modal": {
     "attributes": [
-      "value,v-model",
+      "v-model",
       "size",
       "loading",
       "id",
@@ -444,14 +461,15 @@
       "min-height",
       "top",
       "position",
-      "z-index",
+      "zindex",
       "show-title-overflow",
       "transfer",
       "fullscreen",
       "dblclick-zoom",
       "remember",
       "destroy-on-close",
-      "storage"
+      "storage",
+      "before-hide-method"
     ],
     "description": "模态窗口"
   },
@@ -484,6 +502,7 @@
       "align",
       "title-align",
       "title-width",
+      "visible",
       "visible-method",
       "folding",
       "collapse-node",

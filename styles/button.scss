@@ -113,6 +113,8 @@ $btnThemeList: (
     }
   }
   &.type--button {
+    font-family: inherit;
+    line-height: inherit;
     &.is--round {
       border-radius: $vxe-button-height-default / 2;
     }

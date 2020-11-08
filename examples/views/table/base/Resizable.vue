@@ -16,8 +16,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">横向滚动条</p>
@@ -38,8 +38,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">固定左列宽拖动（固定左不允许超过表格右边距）</p>
@@ -63,8 +63,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">固定右列宽拖动（固定右不允许超过表格左边距）</p>
@@ -89,8 +89,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
     </pre>
 
     <p class="tip">左右固定列宽拖动（固定左不允许超过固定右，固定右不允许超过固定左）</p>
@@ -116,8 +116,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[8] }}</code>
-      <code class="javascript">{{ demoCodes[9] }}</code>
+      <pre-code class="xml">{{ demoCodes[8] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[9] }}</pre-code>
     </pre>
 
     <p class="tip">分组表头拖动（只允许列拖动，不允许分组标题拖动）</p>
@@ -126,26 +126,26 @@
       border
       resizable
       :data="tableData">
-      <vxe-table-column title="基本信息">
+      <vxe-table-colgroup title="基本信息">
         <vxe-table-column type="seq" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="更多信息">
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="更多信息">
         <vxe-table-column field="role" title="Role"></vxe-table-column>
         <vxe-table-column field="age" title="Age"></vxe-table-column>
-        <vxe-table-column title="详细信息">
+        <vxe-table-colgroup title="详细信息">
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="140" show-overflow></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
       <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[10] }}</code>
-      <code class="javascript">{{ demoCodes[11] }}</code>
+      <pre-code class="xml">{{ demoCodes[10] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[11] }}</pre-code>
     </pre>
 
     <p class="tip">左右固定列的分组表头拖动（只允许列拖动，不允许分组标题拖动）</p>
@@ -154,29 +154,29 @@
       border
       resizable
       :data="tableData">
-      <vxe-table-column title="基本信息" fixed="left">
+      <vxe-table-colgroup title="基本信息" fixed="left">
         <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="更多信息">
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="更多信息">
         <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
         <vxe-table-column field="attr1" title="Attr1" width="300"></vxe-table-column>
-        <vxe-table-column title="详细信息">
+        <vxe-table-colgroup title="详细信息">
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="其他信息" fixed="right">
+        </vxe-table-colgroup>
+      </vxe-table-colgroup>
+      <vxe-table-colgroup title="其他信息" fixed="right">
         <vxe-table-column field="age" title="Age" width="100" fixed="right" show-overflow></vxe-table-column>
         <vxe-table-column field="address" title="Address" width="100" fixed="right" show-overflow></vxe-table-column>
-      </vxe-table-column>
+      </vxe-table-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[12] }}</code>
-      <code class="javascript">{{ demoCodes[13] }}</code>
+      <pre-code class="xml">{{ demoCodes[12] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[13] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -373,18 +373,18 @@ export default {
           border
           resizable
           :data="tableData">
-          <vxe-table-column title="基本信息">
+          <vxe-table-colgroup title="基本信息">
             <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="Name"></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="更多信息">
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="更多信息">
             <vxe-table-column field="role" title="Role"></vxe-table-column>
             <vxe-table-column field="age" title="Age"></vxe-table-column>
-            <vxe-table-column title="详细信息">
+            <vxe-table-colgroup title="详细信息">
               <vxe-table-column field="sex" title="Sex"></vxe-table-column>
               <vxe-table-column field="date" title="Date" width="140" show-overflow></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
           <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
         </vxe-table>
         `,
@@ -411,22 +411,22 @@ export default {
           border
           resizable
           :data="tableData">
-          <vxe-table-column title="基本信息" fixed="left">
+          <vxe-table-colgroup title="基本信息" fixed="left">
             <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="更多信息">
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="更多信息">
             <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
             <vxe-table-column field="attr1" title="Attr1" width="300"></vxe-table-column>
-            <vxe-table-column title="详细信息">
+            <vxe-table-colgroup title="详细信息">
               <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
               <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="其他信息" fixed="right">
+            </vxe-table-colgroup>
+          </vxe-table-colgroup>
+          <vxe-table-colgroup title="其他信息" fixed="right">
             <vxe-table-column field="age" title="Age" width="100" fixed="right" show-overflow></vxe-table-column>
             <vxe-table-column field="address" title="Address" width="100" fixed="right" show-overflow></vxe-table-column>
-          </vxe-table-column>
+          </vxe-table-colgroup>
         </vxe-table>
         `,
         `

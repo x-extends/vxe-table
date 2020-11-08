@@ -1,268 +1,82 @@
-import { VXETableModule, RowInfo, RecordInfo } from './component'
-import { ColumnOptions, ColumnInfo } from './column'
-import { ColumnCellRenderParams, EmptyRender } from './extends/renderer'
-import { ExportOptons, ImportOptons, PrintOptons, ReadFileOptions } from './extends/export'
-import { ColumnFilterOption } from './extends/filter'
-import { ColumnEditRule, ColumnEditValidErrMapParams } from './extends/validator'
-import { ColumnFooterRenderParams } from './extends/footer'
-import { MenuOptions, MenuFirstOption } from './extends/menu'
+import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance } from 'vue'
+import { VXETableComponent, VxeComponentInstance, VxeEvent, RowInfo, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
+import { VxeColumnOptions, VxeColumnPropTypes } from './column'
+import { VxeGlobalRendererHandles } from './v-x-e-table'
+import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
+import { VxeTooltipInstance } from './tooltip'
+import { VxeGridConstructor } from './grid'
 
 /**
- * 表格
+ * 组件 - 表格
  */
-export declare class Table extends VXETableModule {
-  /**
-   * 唯一标识
-   */
-  id?: string;
-  /**
-   * 数据
-   */
-  data?: any[];
-  /**
-   * 表格的高度
-   */
-  height?: number | string;
-  /**
-   * 表格的最大高度
-   */
-  maxHeight?: number | string;
-  /**
-   * 所有列是否允许拖动列宽调整大小
-   */
-  resizable?: boolean;
-  /**
-   * 是否带有斑马纹
-   */
-  stripe?: boolean;
-  /**
-   * 是否带有纵向边框
-   */
-  border?: boolean | 'default' | 'full' | 'outer' | 'inner' | 'none';
-  fit?: boolean;
-  /**
-   * 表格是否加载中
-   */
-  loading?: boolean;
-  /**
-   * 所有的列对其方式
-   */
-  align?: 'left' | 'center' | 'right';
-  /**
-   * 所有的表头列的对齐方式
-   */
-  headerAlign?: 'left' | 'center' | 'right';
-  /**
-   * 所有的表尾列的对齐方式
-   */
-  footerAlign?: 'left' | 'center' | 'right';
-  /**
-   * 是否显示表头
-   */
-  showHeader?: boolean;
-  /**
-   * 是否要高亮当前选中行
-   */
-  highlightCurrentRow?: boolean;
-  /**
-   * 鼠标移到行是否要高亮显示
-   */
-  highlightHoverRow?: boolean;
-  /**
-   * 是否要高亮当前选中列
-   */
-  highlightCurrentColumn?: boolean;
-  /**
-   * 鼠标移到列是否要高亮显示
-   */
-  highlightHoverColumn?: boolean;
-  /**
-   * 激活单元格编辑时是否高亮显示
-   */
-  highlightCell?: boolean;
-  /**
-   * 是否显示表尾
-   */
-  showFooter?: boolean;
-  /**
-   * 表尾数据获取的方法
-   */
-  footerMethod?(params: { columns: ColumnInfo[], data: any[] }): Array<string | number>[];
-  /**
-   * 给行附加 className
-   */
-  rowClassName?: string | Function;
-  /**
-   * 给单元格附加 className
-   */
-  cellClassName?: string | Function;
-  /**
-   * 给表头的行附加 className
-   */
-  headerRowClassName?: string | Function;
-  /**
-   * 给表头的单元格附加 className
-   */
-  headerCellClassName?: string | Function;
-  /**
-   * 给表尾的行附加 className
-   */
-  footerRowClassName?: string | Function;
-  /**
-   * 给表尾的单元格附加 className
-   */
-  footerCellClassName?: string | Function;
-  /**
-   * 给单元格附加样式
-   */
-  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  /**
-   * 给表头单元格附加样式
-   */
-  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  /**
-   * 给表尾单元格附加样式
-   */
-  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  /**
-   * 给行附加样式
-   */
-  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  /**
-   * 给表头行附加样式
-   */
-  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  /**
-   * 给表尾行附加样式
-   */
-  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  /**
-   * 临时合并单元格
-   */
-  mergeCells: MergeOptions[];
-  /**
-   * 临时合并表尾
-   */
-  mergeFooterItems: MergeOptions[];
-  /**
-   * 自定义单元格合并方法
-   */
-  spanMethod?(params: ColumnCellRenderParams): { rowspan: number, colspan: number };
-  /**
-   * 自定义表尾合并方法
-   */
-  footerSpanMethod?(params: ColumnFooterRenderParams): { rowspan: number, colspan: number };
-  /**
-   * 设置所有内容过长时显示为省略号
-   */
-  showOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
-  /**
-   * 设置表头所有内容过长时显示为省略号
-   */
-  showHeaderOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
-  /**
-   * 设置表尾所有内容过长时显示为省略号
-   */
-  showFooterOverflow?: boolean | 'ellipsis' | 'title' | 'tooltip';
+export interface Table extends VXETableComponent { }
 
-  /** 高级属性 */
-  // 主键配置
-  columnKey?: boolean;
-  rowKey?: boolean;
-  rowId?: string;
-  zIndex?: number;
-  keepSource?: boolean;
-  // 是否自动监听父容器变化去更新响应式表格宽高
-  autoResize?: boolean;
-  // 是否自动根据状态属性去更新响应式表格宽高
-  syncResize?: boolean | string;
-  // 列的默认参数
-  columnConfig?: ColumnDefaultConfig;
-  // 序号配置项
-  seqConfig?: SeqConfig;
-  // 排序配置项
-  sortConfig?: SortConfig;
-  // 筛选配置项
-  filterConfig?: FilterConfig;
-  // 单选框配置
-  radioConfig?: RadioConfig;
-  // 复选框配置项
-  checkboxConfig?: CheckboxConfig;
-  checkboxOpts: CheckboxConfig;
-  // 提示信息配置项
-  tooltipConfig?: TooltipConfig;
-  tooltipOpts: TooltipConfig;
-  // 导出配置项
-  exportConfig?: boolean | ExportOptons;
-  exportOpts: ExportOptons;
-  // 导入配置项
-  importConfig?: boolean | ImportOptons;
-  importOpts: ImportOptons;
-  // 打印配置项
-  printConfig?: PrintOptons;
-  printOpts: PrintOptons;
-  // 展开行配置项
-  expandConfig?: ExpandConfig;
-  expandOpts: ExpandConfig;
-  // 树形结构配置项
-  treeConfig?: boolean | TreeConfig;
-  treeOpts: TreeOpts;
-  // 快捷菜单配置项
-  contextMenu?: boolean | ContextMenuConfig;
-  // 鼠标配置项
-  mouseConfig?: MouseConfig;
-  mouseOpts: MouseConfig;
-  // 按键配置项
-  keyboardConfig?: KeyboardConfig;
-  keyboardOpts: KeyboardConfig;
-  // 编辑配置项
-  editConfig?: boolean | EditConfig;
-  editOpts: EditConfig;
-  // 校验配置项
-  validConfig?: ValidConfig;
-  // 校验规则配置项
-  editRules?: EditVaildRules;
-  emptyText?: string;
-  // 空内容渲染配置项
-  emptyRender?: boolean | EmptyRender;
-  animat?: boolean;
-  cloak?: boolean;
-  delayHover?: number;
-  /**
-   * 横向虚拟滚动配置
-   */
-  scrollX?: {
-    /**
-     * 指定大于指定列时自动启动横向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭
-     */
-    gt?: number;
-    /**
-     * 指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久
-     */
-    oSize?: number;
-    [key: string]: any;
-  };
-  /**
-   * 纵向虚拟滚动配置
-   */
-  scrollY?: {
-    /**
-     * 指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭
-     */
-    gt?: number;
-    /**
-     * 指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久
-     */
-    oSize?: number;
-    [key: string]: any;
-  };
-  // 额外的参数
-  params?: any;
+export type VxeTableInstance = ComponentPublicInstance<VxeTableProps, VxeTableConstructor>;
 
-  // computed
-  vSize: string;
+export interface VxeTableConstructor extends VxeComponentInstance, VxeTableMethods {
+  props: VxeTableProps;
+  context: SetupContext<VxeTableEmits>;
+  reactData: TableReactData;
+  internalData: TableInternalData;
+  refMaps: TablePrivateRef;
+  computeMaps: TablePrivateComputed;
+  xegrid?: VxeGridConstructor | null;
+  renderVN: RenderFunction;
+}
 
-  // methods
+export interface TablePrivateRef {
+  refElem: Ref<HTMLDivElement>;
+  refTooltip: Ref<VxeTooltipInstance>;
+  refValidTooltip: Ref<VxeTooltipInstance>;
+  refTableFilter: Ref<ComponentPublicInstance>;
+  refTableMenu: Ref<ComponentPublicInstance>;
+  refTableHeader: Ref<ComponentPublicInstance>;
+  refTableBody: Ref<ComponentPublicInstance>;
+  refTableFooter: Ref<ComponentPublicInstance>;
+  refTableLeftHeader: Ref<ComponentPublicInstance>;
+  refTableLeftBody: Ref<ComponentPublicInstance>;
+  refTableLeftFooter: Ref<ComponentPublicInstance>;
+  refTableRightHeader: Ref<ComponentPublicInstance>;
+  refTableRightBody: Ref<ComponentPublicInstance>;
+  refTableRightFooter: Ref<ComponentPublicInstance>;
+  refLeftContainer: Ref<HTMLDivElement>;
+  refRightContainer: Ref<HTMLDivElement>;
+  refCellResizeBar: Ref<HTMLDivElement>;
+}
+export interface VxeTablePrivateRef extends TablePrivateRef { }
+
+export interface TablePrivateComputed {
+  computeValidOpts: ComputedRef<VxeTablePropTypes.ValidOpts>;
+  computeSXOpts: ComputedRef<VxeTablePropTypes.SXOpts>;
+  computeSYOpts: ComputedRef<VxeTablePropTypes.SYOpts>;
+  computeSeqOpts: ComputedRef<VxeTablePropTypes.SeqOpts>;
+  computeRadioOpts: ComputedRef<VxeTablePropTypes.RadioOpts>;
+  computeCheckboxOpts: ComputedRef<VxeTablePropTypes.CheckboxOpts>;
+  computeTooltipOpts: ComputedRef<VxeTablePropTypes.TooltipOpts>;
+  computeEditOpts: ComputedRef<VxeTablePropTypes.EditOpts>;
+  computeSortOpts: ComputedRef<VxeTablePropTypes.SortConfig>;
+  computeFilterOpts: ComputedRef<VxeTablePropTypes.FilterOpts>;
+  computeMouseOpts: ComputedRef<VxeTablePropTypes.MouseOpts>;
+  computeKeyboardOpts: ComputedRef<VxeTablePropTypes.KeyboardOpts>;
+  computeClipOpts: ComputedRef<VxeTablePropTypes.ClipOpts>;
+  computeMenuOpts: ComputedRef<VxeTablePropTypes.MenuConfig>;
+  computeExportOpts: ComputedRef<VxeTablePropTypes.ExportOpts>;
+  computeImportOpts: ComputedRef<VxeTablePropTypes.ImportOpts>;
+  computePrintOpts: ComputedRef<VxeTablePropTypes.PrintOpts>;
+  computeExpandOpts: ComputedRef<VxeTablePropTypes.ExpandOpts>;
+  computeTreeOpts: ComputedRef<VxeTablePropTypes.TreeOpts>;
+  computeEmptyOpts: ComputedRef<VxeTablePropTypes.EmptyOpts>;
+  computeCustomOpts: ComputedRef<VxeTablePropTypes.CustomOpts>;
+  computeIsAllCheckboxDisabled: ComputedRef<boolean>;
+}
+
+export interface VxeTablePrivateComputed extends TablePrivateComputed { }
+
+export interface TableMethods extends TablePublicMethods {
+  dispatchEvent(type: ValueOf<VxeTableEmits>, params: any, evnt: Event | null): void;
+}
+
+export interface TablePublicMethods {
   /**
    * 手动清除表格所有条件，还原到初始状态
    * 对于增删改查的场景中可能会用到，比如在数据保存之后清除表格缓存
@@ -299,12 +113,12 @@ export declare class Table extends VXETableModule {
    * 加载列配置
    * @param columns 列对象
    */
-  loadColumn(columns: ColumnOptions[]): Promise<any>;
+  loadColumn(columns: VxeColumnOptions[]): Promise<any>;
   /**
    * 加载列配置并恢复到初始状态
    * @param columns 列对象
    */
-  reloadColumn(columns: ColumnOptions[]): Promise<any>;
+  reloadColumn(columns: VxeColumnOptions[]): Promise<any>;
   /**
    * 根据 tr 元素获取对应的 row 信息
    * @param tr 行节点元素
@@ -315,18 +129,18 @@ export declare class Table extends VXETableModule {
     items: RowInfo[];
     index: number;
     parent?: RowInfo;
-  };
+  } | null;
   /**
    * 根据 th/td 元素获取对应的 column 信息
    * @param cell 单元格节点元素
    */
   getColumnNode(cellElem: HTMLElement): {
     colid: string;
-    item: ColumnInfo;
-    items: ColumnInfo[];
+    item: VxeTableDefines.ColumnInfo;
+    items: VxeTableDefines.ColumnInfo[];
     index: number;
-    parent?: ColumnInfo;
-  };
+    parent?: VxeTableDefines.ColumnInfo;
+  } | null;
   /**
    * 根据 row 获取相对于 data 中的索引
    * @param row 行对象
@@ -336,27 +150,27 @@ export declare class Table extends VXETableModule {
    * 根据 row 获取相对于当前数据中的索引
    * @param row 行对象
    */
-  _getRowIndex(row: RowInfo): number;
+  getVTRowIndex(row: RowInfo): number;
   /**
    * 根据 row 获取渲染中的虚拟索引
    * @param row 行对象
    */
-  $getRowIndex(row: RowInfo): number;
+  getVMRowIndex(row: RowInfo): number;
   /**
    * 根据 column 获取相对于 columns 中的索引
    * @param column 列对象
    */
-  getColumnIndex(column: ColumnInfo): number;
+  getColumnIndex(column: VxeTableDefines.ColumnInfo): number;
   /**
    * 根据 column 获取相对于当前表格列中的索引
    * @param column 列对象
    */
-  _getColumnIndex(column: ColumnInfo): number;
+  getVTColumnIndex(column: VxeTableDefines.ColumnInfo): number;
   /**
    * 根据 column 获取渲染中的虚拟索引
    * @param column 列对象
    */
-  $getColumnIndex(column: ColumnInfo): number;
+  getVMColumnIndex(column: VxeTableDefines.ColumnInfo): number;
   /**
    * 创建 data 对象
    * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义
@@ -389,37 +203,40 @@ export declare class Table extends VXETableModule {
   /**
    * 只对 keep-source 开启有效，判断行数据是否发生改变
    * @param row 指定行
+   * @param field 指定字段
    */
-  isUpdateByRow(row: RowInfo): boolean;
+  isUpdateByRow(row: RowInfo, field?: string): boolean;
   /**
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
    */
-  getColumns(columnIndex?: number): ColumnInfo | ColumnInfo[];
+  getColumns(): VxeTableDefines.ColumnInfo[];
+  getColumns(columnIndex: number): VxeTableDefines.ColumnInfo;
   /**
    * 根据列的唯一主键获取列
    * @param colid 列主键
    */
-  getColumnById(colid: string): ColumnInfo;
+  getColumnById(colid: string): VxeTableDefines.ColumnInfo;
   /**
    * 根据列的字段名获取列
    * @param field 字段名
    */
-  getColumnByField(field: string): ColumnInfo;
+  getColumnByField(field: string): VxeTableDefines.ColumnInfo;
   /**
    * 获取当前表格的列
    * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
    */
   getTableColumn(): {
-    collectColumn: ColumnInfo[];
-    fullColumn: ColumnInfo[];
-    visibleColumn: ColumnInfo[];
-    tableColumn: ColumnInfo[];
+    collectColumn: VxeTableDefines.ColumnInfo[];
+    fullColumn: VxeTableDefines.ColumnInfo[];
+    visibleColumn: VxeTableDefines.ColumnInfo[];
+    tableColumn: VxeTableDefines.ColumnInfo[];
   };
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
-  getData(rowIndex?: number): RowInfo[];
+  getData(): RowInfo[];
+  getData(rowIndex: number): RowInfo;
   /**
    * 用于 type=checkbox，获取已选中的行数据
    */
@@ -429,6 +246,11 @@ export declare class Table extends VXETableModule {
    * @param rowid 行主键
    */
   getRowById(rowid: string | number): RowInfo;
+  /**
+   * 根据行获取行的唯一主键
+   * @param row 行对象
+   */
+  getRowid(row: RowInfo): string;
   /**
    * 获取当前表格的数据
    * 完整的全量表体数据、处理条件之后的全量表体数据、当前渲染中的表体数据、当前渲染中的表尾数据
@@ -443,12 +265,12 @@ export declare class Table extends VXETableModule {
    * 隐藏指定列
    * @param column 列对象
    */
-  hideColumn(column: ColumnInfo): Promise<any>;
+  hideColumn(column: VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 显示指定列
    * @param column 列对象
    */
-  showColumn(column: ColumnInfo): Promise<any>;
+  showColumn(column: VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
@@ -484,6 +306,10 @@ export declare class Table extends VXETableModule {
    * 用于 type=checkbox，判断复选行是否被全部选中
    */
   isAllCheckboxChecked(): boolean;
+  /**
+   * 用于 type=checkbox，判断复选框是否半选
+   */
+  isCheckboxIndeterminate(): boolean;
   /**
    * 用于 type=checkbox，判断复选行数据是否勾选
    * @param row 指定行
@@ -561,15 +387,15 @@ export declare class Table extends VXETableModule {
   /**
    * 获取临时合并的单元格
    */
-  getMergeCells(): MergeItem[];
+  getMergeCells(): VxeTableDefines.MergeInfo[];
   /**
    * 获取临时合并的表尾
    */
-  getMergeFooterItems(): MergeItem[];
+  getMergeFooterItems(): VxeTableDefines.MergeInfo[];
   /**
    * 用于 highlight-current-column，获取当前列
    */
-  getCurrentColumn(): ColumnInfo | null;
+  getCurrentColumn(): VxeTableDefines.ColumnInfo | null;
   /**
    * 用于 highlight-current-row，获取当前行的行数据
    */
@@ -582,25 +408,36 @@ export declare class Table extends VXETableModule {
    * 用于 highlight-current-column，设置某列行为高亮状态
    * @param column 列对象
    */
-  setCurrentColumn(column: ColumnInfo): Promise<any>;
+  setCurrentColumn(column: VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 用于 highlight-current-column，手动清空当前高亮的状态
    */
   clearCurrentColumn(): Promise<any>;
   /**
    * 手动对表格进行排序
-   * @param field 字段名
+   * @param sortConfs 字段名、多列排序
    * @param order 排序方式
    */
-  sort(field: string, order?: 'desc' | 'asc'): Promise<any>;
+  sort(field: string, order?: VxeTablePropTypes.SortOrder): Promise<any>;
+  sort(sortConfs: VxeTableDefines.SortConfs, order?: VxeTablePropTypes.SortOrder): Promise<any>;
+  sort(sortConfs: VxeTableDefines.SortConfs[], order?: VxeTablePropTypes.SortOrder): Promise<any>;
   /**
    * 手动清空排序条件，数据会恢复成未排序的状态
    */
   clearSort(): Promise<any>;
+  clearSort(field: string | null): Promise<any>;
+  clearSort(column: VxeTableDefines.ColumnInfo | null): Promise<any>;
   /**
-   * 获取当前排序的 column 信息
+   * 判断指定列是否为排序状态，如果为空则判断所有列
+   * @param columnOrField 
    */
-  getSortColumn(): ColumnInfo;
+  isSort(): boolean;
+  isSort(field: string): boolean;
+  isSort(column: VxeTableDefines.ColumnInfo): boolean;
+  /**
+   * 获取当前排序的列信息
+   */
+  getSortColumns(): any[];
   /**
    * 手动关闭筛选面板
    */
@@ -609,7 +446,8 @@ export declare class Table extends VXETableModule {
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param column 列对象
    */
-  isFilter(column: ColumnInfo): boolean;
+  isFilter(field: string): boolean;
+  isFilter(column: VxeTableDefines.ColumnInfo): boolean;
   /**
    * 用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成
    * @param row 指定行
@@ -618,7 +456,7 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 expand-config.lazy，手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
-  clearRowExpandLoaded(): Promise<any>;
+  clearRowExpandLoaded(row: RowInfo): Promise<any>;
   /**
    * 用于懒加载展开行，重新加载展开行的内容
    * @param rows 指定行
@@ -651,6 +489,10 @@ export declare class Table extends VXETableModule {
    */
   clearRowExpand(): Promise<any>;
   /**
+   * 用于 type=expand，手动清空用户保留行的展开状态
+   */
+  clearRowExpandReserve(): Promise<any>;
+  /**
    * 用于 expand-config，用于展开行，获取已展开的行数据
    */
   getRowExpandRecords(): RowInfo[];
@@ -666,7 +508,7 @@ export declare class Table extends VXETableModule {
   /**
    * 用于 tree-config.lazy，手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
-  clearTreeExpandLoaded(): Promise<any>;
+  clearTreeExpandLoaded(row: RowInfo): Promise<any>;
   /**
    * 用于懒加载树表格，重新加载子节点
    * @param rows 指定行
@@ -699,6 +541,10 @@ export declare class Table extends VXETableModule {
    */
   clearTreeExpand(): Promise<any>;
   /**
+   * 用于 tree-config.reserve，手动清空用户保留树节点的展开状态
+   */
+  clearTreeExpandReserve(): Promise<any>;
+  /**
    * 获取表格的滚动状态
    */
   getScroll(): {
@@ -712,18 +558,18 @@ export declare class Table extends VXETableModule {
    * @param scrollLeft 左边距离
    * @param scrollTop 顶部距离
    */
-  scrollTo(scrollLeft: number, scrollTop?: number): Promise<any>;
+  scrollTo(scrollLeft: number | null, scrollTop?: number | null): Promise<any>;
   /**
    * 如果有滚动条，则滚动到对应的行
    * @param row 指定行
    * @param column 列对象
    */
-  scrollToRow(row: RowInfo, column?: ColumnInfo): Promise<any>;
+  scrollToRow(row: RowInfo, column?: VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 如果有滚动条，则滚动到对应的列
    * @param column 列对象
    */
-  scrollToColumn(column: ColumnInfo): Promise<any>;
+  scrollToColumn(column: VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 手动清除滚动相关信息，还原到初始状态
    */
@@ -739,224 +585,31 @@ export declare class Table extends VXETableModule {
   updateStatus(
     params: {
       row: RowInfo;
-      column: ColumnInfo;
-    }
+      column: VxeTableDefines.ColumnInfo;
+    },
+    cellValue?: any
   ): Promise<any>;
-  /**
-   * 用于 filters，修改筛选列表
-   * 在筛选条件更新之后可以调用 updateData 函数处理表格数据
-   * @param column 列对象
-   * @param options 选项列表
-   */
-  setFilter(column: ColumnInfo, options: ColumnFilterOption[]): Promise<any>;
-  /**
-   * 手动清空筛选条件
-   * 如果不传 column 则清空所有筛选条件，数据会恢复成未筛选的状态
-   * @param column 字段名
-   */
-  clearFilter(column?: ColumnInfo): Promise<any>;
-  /**
-   * 手动关闭快捷菜单
-   */
-  closeMenu(): Promise<any>;
-  /**
-   * 用于 mouse-config.selected，获取选中的单元格信息
-   */
-  getSelectedCell(): {
-    row: RowInfo;
-    column: ColumnInfo;
-  };
-  /**
-   * 用于 mouse-config.area，用于获取鼠标选择的区域
-   */
-  getCellAreas(): MouseCellArea[];
-  /**
-   * 用于 mouse-config.area，复制指定区域，返回转换后的文本
-   */
-  copyCellArea(): { text: string, html: string };
-  /**
-   * 用于 mouse-config.area，剪贴指定区域，返回转换后的文本
-   */
-  cutCellArea(): { text: string, html: string };
-  /**
-   * 用于 mouse-config.area，粘贴从表格中被复制的数据，如果不是从表格中操作，则无法粘贴
-   */
-  pasteCellArea(): Promise<any>;
-  /**
-   * 手动清除单元格选中状态
-   */
-  clearSelected(): Promise<any>;
-  /**
-   * 往表格插入临时数据，从第一行新增一行或多行新数据
-   * @param records 新数据
-   */
-  insert(records: RecordInfo | RecordInfo[]): Promise<{ row: RowInfo, rows: RowInfo[] }>;
-  /**
-   * 往表格插入临时数据，从指定位置插入一行或多行；第二个参数：row 指定位置、null从第一行插入、-1 从最后插入
-   * @param records 新数据
-   * @param row 指定行
-   */
-  insertAt(records: RecordInfo | RecordInfo[], row: RowInfo | number | null): Promise<{ row: RowInfo, rows: RowInfo[] }>;
-  /**
-   * 删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据
-   * @param rows 指定行
-   */
-  remove(rows?: RowInfo | RowInfo[]): Promise<{ row: RowInfo, rows: RowInfo[] }>;
-  /**
-   * 删除复选框选中的行数据
-   */
-  removeCheckboxRow(): Promise<{ row: RowInfo, rows: RowInfo[] }>;
-  /**
-   * 删除单选框选中的行数据
-   */
-  removeRadioRow(): Promise<{ row: RowInfo, rows: RowInfo[] }>;
-  /**
-   * 删除当前行选中的行数据
-   */
-  removeCurrentRow(): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
    * 取消单元格的临时合并状态，如果为数组，则取消多个合并
    */
-  removeMergeCells(merges: MergeOptions | MergeOptions[]): Promise<MergeItem[]>;
+  removeMergeCells(merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]): Promise<VxeTableDefines.MergeInfo[]>;
   /**
    * 取消表尾的临时合并状态，如果为数组，则取消多个合并
    */
-  removeMergeFooterItems(merges: MergeOptions | MergeOptions[]): Promise<MergeItem[]>;
-  /**
-   * 获取表格数据集
-   * 获取新增、删除、更改的数据
-   */
-  getRecordset(): {
-    insertRecords: RowInfo[];
-    removeRecords: RowInfo[];
-    updateRecords: RowInfo[];
-  };
-  /**
-   * 用于 edit-config，获取新增的临时数据
-   */
-  getInsertRecords(): RowInfo[];
-  /**
-   * 获取已删除的数据
-   */
-  getRemoveRecords(): RowInfo[];
-  /**
-   * 用于 edit-config，获取已修改的数据
-   */
-  getUpdateRecords(): RowInfo[];
-  /**
-   * 手动清除单元格激活状态
-   */
-  clearActived(): Promise<any>;
-  /**
-   * 用于 mouse-config.area，用于清除鼠标选择的区域
-   */
-  clearCellAreas(): Promise<any>;
-  /**
-   * 用于 edit-config，获取已激活的行数据
-   */
-  getActiveRecord(): {
-    row: RowInfo;
-    rowIndex: number;
-    $rowIndex: number;
-    column: ColumnInfo;
-    columnIndex: number;
-    $columnIndex: number;
-    cell: HTMLElement;
-  };
-  /**
-   * 用于 edit-config，判断行是否为激活编辑状态
-   * @param row 指定行
-   */
-  isActiveByRow(row: RowInfo): boolean;
-  /**
-   * 用于 edit-config，激活行编辑，如果是 mode=cell 则默认激活第一个单元格
-   * @param row 指定行
-   */
-  setActiveRow(row: RowInfo): Promise<any>;
-  /**
-   * 用于 edit-config，激活单元格编辑
-   * @param row 指定行
-   * @param field 字段名
-   */
-  setActiveCell(row: RowInfo, field: string): Promise<any>;
-  /**
-   * 用于 mouse-config.mouse-config，选中某个单元格
-   * @param row 指定行
-   * @param field 字段名
-   */
-  setSelectCell(row: RowInfo, field: string): Promise<any>;
-  /**
-   * 用于 mouse-config.area，选取指定区域的单元格
-   * @param areas 指定区域
-   */
-  setCellAreas(areas: CellAreaOptions): Promise<any>;
+  removeMergeFooterItems(merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]): Promise<VxeTableDefines.MergeInfo[]>;
   /**
    * 临时合并单元格，如果为数组则合并多个
    */
-  setMergeCells(merges: MergeOptions | MergeOptions[]): Promise<any>;
+  setMergeCells(merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]): Promise<any>;
   /**
    * 临时合并表尾，如果为数组则合并多个
    */
-  setMergeFooterItems(merges: MergeOptions | MergeOptions[]): Promise<any>;
+  setMergeFooterItems(merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]): Promise<any>;
   /**
-   * 用于 mouse-config.area，设置活动的区域的单元格
-   * @param activeArea
+   * 连接工具栏
+   * @param toolbar 工具栏组件实例
    */
-  setActiveCellArea(activeArea: ActiveCellAreaOptions): Promise<any>;
-  /**
-   * 手动清除校验
-   */
-  clearValidate(): Promise<any>;
-  /**
-   * 完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验
-   * @param rows 指定行
-   * @param callback 回调函数
-   */
-  fullValidate(rows?: boolean | RowInfo | RowInfo[], callback?: (errMap: ColumnEditValidErrMapParams) => void): Promise<ColumnEditValidErrMapParams>;
-  /**
-   * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；如果第一个参数为 true 则校验当前表格数据，如果指定 row 或 rows 则校验指定一行或多行，如果不指定数据，则默认只校验临时变动的数据，例如新增或修改。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
-   * @param rows 指定行
-   * @param callback 回调函数
-   */
-  validate(rows?: boolean | RowInfo | RowInfo[], callback?: (errMap?: ColumnEditValidErrMapParams) => void): Promise<ColumnEditValidErrMapParams>;
-  /**
-   * 打开高级导出
-   * @param options 参数
-   */
-  openExport(options: ExportOptons): Promise<any>;
-  /**
-   * 将表格数据导出
-   * @param options 参数
-   */
-  exportData(options: ExportOptons): Promise<any>;
-  /**
-   * 打开高级导入
-   * @param options 参数
-   */
-  openImport(options: ImportOptons): Promise<any>;
-  /**
-   * 将数据导入表格
-   * @param options 参数
-   */
-  importData(options: ImportOptons): Promise<any>;
-  /**
-   * 读取本地文件
-   * @param options 参数
-   */
-  readFile(options: ReadFileOptions): Promise<any>;
-  /**
-   * 打印配置项
-   * @param options 参数
-   */
-  print(options: PrintOptons): Promise<any>;
-  /**
-   * 用于 mouse-config.area，打开单元格查找功能
-   */
-  openFind(): Promise<any>;
-  /**
-   * 用于 mouse-config.area，打开单元格替换功能
-   */
-  openReplace(): Promise<any>;
+  connect(toolbar: VxeToolbarConstructor | VxeToolbarInstance): Promise<any>;
   /**
    * 使表格获取焦点
    */
@@ -965,284 +618,1288 @@ export declare class Table extends VXETableModule {
    * 使表格失去焦点
    */
   blur(): Promise<any>;
-  [key: string]: any;
 }
 
-/**
- * 列的默认配置
- */
-export interface ColumnDefaultConfig {
-  width?: number;
-  minWidth?: number;
+export interface VxeTableMethods extends TableMethods { }
+
+export interface TablePrivateMethods {
+  getParentElem(): any;
+  getParentHeight(): any;
+  getExcludeHeight(): any;
+  defineField(record: any): any;
+  handleTableData(force?: boolean): Promise<any>;
+  updateCache(isSource?: boolean): void;
+  saveCustomResizable(isReset?: boolean): void;
+  saveCustomVisible(): void;
+  analyColumnWidth(): void;
+  checkSelectionStatus(): void;
+  handleSelectRow(params: any, value: any): void;
+  preventEvent(evnt: any, type: any, args?: any, next?: any, end?: any): any;
+  triggerHeaderHelpEvent(evnt: Event, params: any): void;
+  triggerHeaderTooltipEvent(evnt: Event, params: any): void;
+  triggerBodyTooltipEvent(evnt: Event, params: any): void;
+  triggerFooterTooltipEvent(evnt: Event, params: any): void;
+  handleTargetLeaveEvent(): void;
+  triggerHeaderCellClickEvent(evnt: any, params: any): void;
+  triggerHeaderCellDBLClickEvent(evnt: Event, params: any): void;
+  triggerCellClickEvent(evnt: Event, params: any): void;
+  triggerCellDBLClickEvent(evnt: Event, params: any): void;
+  triggerCheckRowEvent(evnt: any, params: any, value: any): void;
+  triggerCheckAllEvent(evnt: any, value: any): void;
+  triggerRadioRowEvent(evnt: any, params: any): void;
+  triggerCurrentRowEvent(evnt: any, params: any): void;
+  triggerRowExpandEvent(evnt: any, params: any): void;
+  triggerTreeExpandEvent(evnt: any, params: any): void;
+  triggerSortEvent(evnt: any, column: VxeTableDefines.ColumnInfo, order: VxeTablePropTypes.SortOrder): void;
+  triggerScrollXEvent(evnt: Event): void;
+  triggerScrollYEvent(evnt: Event): void;
+  scrollToTreeRow(row: any): Promise<any>;
+  updateScrollXSpace(): void;
+  updateScrollYSpace(): void;
+  updateScrollXData(): void;
+  updateScrollYData(): void;
+  checkScrolling(): void;
+  updateZindex(): void;
+  updateCellAreas(): void;
+  triggerHoverEvent(evnt: any, params: any): void;
+  setHoverRow(row: any): void;
+  clearHoverRow(): void;
+  getCell(row: any, column: any): HTMLTableDataCellElement | null;
 }
 
-/**
- * 序号配置项
- */
-export interface SeqConfig {
-  startIndex?: number;
-  seqMethod?(params: ColumnCellRenderParams): number;
+export interface VxeTablePrivateMethods extends TablePrivateMethods { }
+
+export interface TableReactData {
+  // 低性能的静态列
+  staticColumns: any[];
+  // 渲染的列分组
+  tableGroupColumn: any[];
+  // 可视区渲染的列
+  tableColumn: any[];
+  // 渲染中的数据
+  tableData: any[];
+  // 是否启用了横向 X 可视渲染方式加载
+  scrollXLoad: boolean;
+  // 是否启用了纵向 Y 可视渲染方式加载
+  scrollYLoad: boolean;
+  // 是否存在纵向滚动条
+  overflowY: boolean;
+  // 是否存在横向滚动条
+  overflowX: boolean;
+  // 纵向滚动条的宽度
+  scrollbarWidth: number;
+  // 横向滚动条的高度
+  scrollbarHeight: number;
+  // 行高
+  rowHeight: number;
+  // 表格父容器的高度
+  parentHeight: number;
+  // 是否使用分组表头
+  isGroup: boolean;
+  // 复选框属性，是否全选
+  isAllSelected: boolean;
+  // 复选框属性，有选中且非全选状态
+  isIndeterminate: boolean;
+  // 复选框属性，已选中的行
+  selection: any[];
+  // 当前行
+  currentRow: any;
+  // 单选框属性，选中列
+  currentColumn: any;
+  // 单选框属性，选中行
+  selectRow: any;
+  // 表尾合计数据
+  footerData: any[];
+  // 展开列信息
+  expandColumn: any;
+  // 树节点列信息
+  treeNodeColumn: any;
+  // 已展开的行
+  rowExpandeds: any[];
+  // 懒加载中的展开行的列表
+  expandLazyLoadeds: any[];
+  // 已展开树节点
+  treeExpandeds: any[];
+  // 懒加载中的树节点的列表
+  treeLazyLoadeds: any[];
+  // 树节点不确定状态的列表
+  treeIndeterminates: any[];
+  // 合并单元格的对象集
+  mergeList: any[];
+  // 合并表尾数据的对象集
+  mergeFooterList: any[];
+  // 初始化标识
+  initStore: {
+    filter: boolean;
+    import: boolean;
+    export: boolean;
+  },
+  // 当前选中的筛选列
+  filterStore: {
+    isAllSelected: boolean;
+    isIndeterminate: boolean;
+    style: any;
+    options: any[];
+    column: any;
+    multiple: boolean;
+    visible: boolean;
+    [key: string]: any;
+  },
+  // 存放列相关的信息
+  columnStore: {
+    leftList: any[];
+    centerList: any[];
+    rightList: any[];
+    resizeList: any[];
+    pxList: any[];
+    pxMinList: any[];
+    scaleList: any[];
+    scaleMinList: any[];
+    autoList: any[];
+  },
+  // 存放快捷菜单的信息
+  ctxMenuStore: {
+    selected: any;
+    visible: boolean;
+    showChild: boolean;
+    selectChild: any;
+    list: any[][];
+    style: any;
+    [key: string]: any;
+  },
+  // 存放可编辑相关信息
+  editStore: {
+    indexs: {
+      columns: any[];
+    },
+    titles: {
+      columns: any[];
+    },
+    // 所有选中
+    checked: {
+      rows: any[];
+      columns: any[];
+      tRows: any[];
+      tColumns: any[];
+      [key: string]: any;
+    },
+    // 选中源
+    selected: {
+      row: any;
+      column: any;
+      [key: string]: any;
+    },
+    // 已复制源
+    copyed: {
+      cut: boolean;
+      rows: any[];
+      columns: any[];
+      [key: string]: any;
+    },
+    // 激活
+    actived: {
+      row: any;
+      column: any;
+      [key: string]: any;
+    },
+    insertList: any[];
+    removeList: any[];
+  },
+  // 存放数据校验相关信息
+  validStore: {
+    visible: boolean;
+    row: any;
+    column: any;
+    content: any;
+    rule: any;
+    isArrow: boolean;
+  },
+  // 导入相关信息
+  importStore: {
+    inited: boolean;
+    file: any;
+    type: any;
+    modeList: any[];
+    typeList: any[];
+    filename: any;
+    visible: boolean;
+  },
+  importParams: {
+    mode: any;
+    types: any;
+    message: boolean;
+  },
+  // 导出相关信息
+  exportStore: {
+    inited: boolean;
+    name: any;
+    modeList: any[];
+    typeList: any[];
+    columns: any[];
+    isPrint: boolean;
+    hasFooter: boolean;
+    hasMerge: boolean;
+    hasColgroup: boolean;
+    visible: boolean;
+  },
+  exportParams: {
+    filename: any;
+    sheetName: any;
+    mode: any;
+    type: any;
+    isColgroup: boolean;
+    isMerge: boolean;
+    original: boolean;
+    message: boolean;
+    isHeader: boolean;
+    isFooter: boolean;
+  }
 }
 
-/**
- * 排序配置项
- */
-export interface SortConfig {
-  defaultSort?: {
+export interface TableInternalData {
+  tZindex: number;
+  elemStore: any;
+  // 存放横向 X 虚拟滚动相关的信息
+  scrollXStore: any;
+  // 存放纵向 Y 虚拟滚动相关信息
+  scrollYStore: any;
+  // 存放 tooltip 相关信息
+  tooltipStore: any;
+  // 表格宽度
+  tableWidth: number;
+  // 表格高度
+  tableHeight: number;
+  // 表头高度
+  headerHeight: number;
+  // 表尾高度
+  footerHeight: number;
+  customHeight: number;
+  customMaxHeight: number;
+  // 当前 hover 行
+  hoverRow: any;
+  // 最后滚动位置
+  lastScrollLeft: number;
+  lastScrollTop: number;
+  lastScrollTime: number;
+  // 单选框属性，已选中保留的行
+  radioReserveRow: any;
+  // 复选框属性，已选中保留的行
+  checkboxReserveRowMap: any;
+  // 行数据，已展开保留的行
+  rowExpandedReserveRowMap: any;
+  // 树结构数据，已展开保留的行
+  treeExpandedReserveRowMap: any;
+  // 完整数据、条件处理后
+  tableFullData: any[];
+  afterFullData: any[];
+  tableSynchData: any[];
+  tableSourceData: any[];
+  // 收集的列配置（带分组）
+  collectColumn: any[],
+  // 完整所有列（不带分组）
+  tableFullColumn: any[];
+  // 渲染所有列
+  visibleColumn: any[];
+  // 缓存数据集
+  fullAllDataRowMap: Map<any, any>;
+  fullAllDataRowIdData: { [key: string]: any };
+  fullDataRowMap: Map<any, any>;
+  fullDataRowIdData: { [key: string]: any };
+  fullColumnMap: Map<any, any>;
+  fullColumnIdData: { [key: string]: any };
+  fullColumnFieldData: { [key: string]: any };
+
+  // 特殊标识
+  tooltipActive: boolean;
+  tooltipTimeout: any;
+  _lastResizeTime: any;
+  _isResize: boolean;
+  _keyCtx: any;
+  inited: boolean;
+  isActivated: boolean;
+  lastCallTime: any;
+  _importResolve: any;
+  _importReject: any;
+}
+
+export interface VxeTableOptions extends VxeTableProps, VxeTableListeners { }
+
+export namespace VxeTablePropTypes {
+  export type Size = SizeType;
+  export type ID = string;
+  export type Data = any[];
+  export type Height = number | string;
+  export type MaxHeight = number | string;
+  export type Resizable = boolean;
+  export type Stripe = boolean;
+  export type Round = boolean;
+  export type Border = boolean | 'default' | 'full' | 'outer' | 'inner' | 'none';
+  export type Loading = boolean;
+  export type Align = 'left' | 'center' | 'right' | null;
+  export type HeaderAlign = Align;
+  export type FooterAlign = Align;
+  export type ShowHeader = boolean;
+  export type HighlightCurrentRow = boolean;
+  export type HighlightHoverRow = boolean;
+  export type HighlightCurrentColumn = boolean;
+  export type HighlightHoverColumn = boolean;
+  export type HighlightCell = boolean;
+  export type ShowFooter = boolean;
+
+  export type FooterMethod = (params: {
+    $table: VxeTableConstructor;
+    $grid: VxeGridConstructor | null;
+    columns: VxeTableDefines.ColumnInfo[];
+    data: any[];
+  }) => Array<string | number | null>[];
+
+  export type RowClassName = string | ((params: {
+    row: RowInfo;
+    rowIndex: number;
+    $rowIndex: number;
+    _rowIndex: number;
+  }) => null | string | { [key: string]: boolean });
+
+  export type CellClassName = string | ((params: {
+    row: RowInfo;
+    rowIndex: number;
+    $rowIndex: number;
+    _rowIndex: number;
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    _columnIndex: number;
+  }) => null | string | { [key: string]: boolean });
+
+  export type HeaderRowClassName = string | ((params: {
+    $table: VxeTableConstructor;
+    $rowIndex: number;
+    fixed?: string;
+    type: string;
+  }) => null | string | { [key: string]: boolean });
+
+  export type HeaderCellClassName = string | ((params: {
+    $table: VxeTableConstructor;
+    $rowIndex: number;
+    column: VxeTableDefines.ColumnInfo;
+    fixed?: string;
+    type: string;
+  }) => null | string | { [key: string]: boolean });
+
+  export type FooterRowClassName = string | ((params: {
+    $table: VxeTableConstructor;
+    $rowIndex: number;
+    _rowIndex: number;
+    fixed?: string;
+    type: string;
+  }) => null | string | { [key: string]: boolean });
+
+  export type FooterCellClassName = string | ((params: {
+    $table: VxeTableConstructor;
+    $rowIndex: number;
+    _rowIndex: number;
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    _columnIndex: number;
+  }) => null | string | { [key: string]: boolean });
+
+  export type CellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+    row: RowInfo;
+    rowIndex: number;
+    $rowIndex: number;
+    _rowIndex: number;
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    _columnIndex: number;
+  }) => null | string | { [key: string]: boolean });
+
+  export type HeaderCellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+    $table: VxeTableConstructor;
+    $rowIndex: number;
+  }) => null | string | { [key: string]: boolean });
+
+  export type FooterCellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+    $rowIndex: number;
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    _columnIndex: number;
+  }) => null | string | { [key: string]: boolean });
+
+  export type RowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+    row: RowInfo;
+    rowIndex: number;
+    $rowIndex: number;
+    _rowIndex: number;
+  }) => null | string | { [key: string]: boolean });
+
+  export type HeaderRowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+    $table: VxeTableConstructor;
+    $rowIndex: number;
+    fixed?: string;
+    type: string;
+  }) => null | string | { [key: string]: boolean });
+
+  export type FooterRowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+    $table: VxeTableConstructor;
+    $rowIndex: number;
+    _rowIndex: number;
+    fixed?: string;
+    type: string;
+  }) => null | string | { [key: string]: boolean });
+
+  export type MergeCell = VxeTableDefines.MergeOptions;
+  export type MergeFooterItem = VxeTableDefines.MergeOptions;
+
+  export type SpanMethod = (params: {
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    row: RowInfo;
+    rowIndex: number;
+    $rowIndex: number;
+    isHidden: boolean;
+    fixed: string;
+    type: string;
+  }) => { rowspan: number, colspan: number };
+
+  export type FooterSpanMethod = (params: {
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    _columnIndex: number;
+    $columnIndex: number;
+    $rowIndex: number;
+    items: any[];
+    data: any[][];
+  }) => { rowspan: number, colspan: number };
+
+  export type ShowOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | null;
+  export type ShowHeaderOverflow = ShowOverflow;
+  export type ShowFooterOverflow = ShowOverflow;
+  export type ColumnKey = boolean;
+  export type RowKey = boolean;
+  export type RowId = string;
+  export type KeepSource = boolean;
+  export type AutoResize = boolean;
+  export type SyncResize = boolean | string | number;
+
+  /**
+   * 列的默认配置
+   */
+  export interface ColumnConfig {
+    width?: number;
+    minWidth?: number;
+  }
+  export interface ColumnOpts extends ColumnConfig { }
+
+  /**
+   * 自定义列配置项
+   */
+  export interface CustomConfig {
+    storage?: boolean | {
+      visible?: boolean;
+      resizable?: boolean;
+    };
+    checkMethod?(params: { column: VxeTableDefines.ColumnInfo }): boolean;
+  }
+  export interface CustomOpts extends CustomConfig { }
+
+  /**
+   * 序号配置项
+   */
+  export interface SeqConfig {
+    startIndex?: number;
+    seqMethod?(params: {
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
+      $columnIndex: number;
+      row: RowInfo;
+      rowIndex: number;
+      $rowIndex: number;
+      isHidden: boolean;
+      fixed: string;
+      type: string;
+    }): number;
+  }
+  export interface SeqOpts extends SeqConfig { }
+
+  interface SortConfigDefaultSort {
     field: string;
-    order: 'asc' | 'desc' | null;
-  };
-  orders?: ('asc' | 'desc' | null)[];
-  sortMethod?(params: { data: any[], column: ColumnInfo, property: string, order: string }): any[];
-  remote?: boolean;
-  trigger?: 'default' | 'cell';
-  showIcon: boolean;
-  iconAsc?: string;
-  iconDesc?: string;
-}
+    order: SortOrder;
+  }
 
-/**
- * 筛选配置项
- */
-export interface FilterConfig {
-  remote?: boolean;
-  showIcon?: string;
-  iconNone?: string;
-  iconMatch?: string;
-}
-
-/**
- * 单选框配置
- */
-export interface RadioConfig {
-  reserve?: boolean;
-  labelField?: string;
-  checkRowKey?: string | number;
-  checkMethod?(params: { row: RowInfo }): boolean;
-  trigger?: 'default' | 'cell' | 'row';
-  highlight?: boolean;
-}
-
-/**
- * 复选框配置项
- */
-export interface CheckboxConfig {
-  reserve?: boolean;
-  labelField?: string;
-  checkField?: string;
-  halfField?: string;
-  showHeader?: boolean;
-  checkAll?: boolean;
-  checkRowKeys?: string[] | number[];
-  checkStrictly?: boolean;
-  strict?: boolean;
-  checkMethod?(params: { row: RowInfo }): boolean;
-  trigger?: 'default' | 'cell' | 'row';
-  highlight?: boolean;
-  range?: boolean;
-}
-
-/**
- * 提示信息配置项
- */
-export interface TooltipConfig {
-  enabled?: boolean;
-  theme?: 'dark' | 'light';
-  enterable?: boolean;
-  leaveDelay?: number;
-  contentMethod?(params: { items: any[], row: RowInfo, rowIndex: number, $rowIndex: number, column: ColumnInfo, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
-}
-
-/**
- * 展开行配置项
- */
-export interface ExpandConfig {
-  labelField?: string;
-  expandAll?: boolean;
-  expandRowKeys?: string[] | number[];
-  accordion?: boolean;
-  trigger?: 'default' | 'cell' | 'row';
-  lazy?: boolean;
-  loadMethod?(params: { row: RowInfo, rowIndex: number, $rowIndex: number }): Promise<any>;
-  toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
-  visibleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
-  showIcon?: boolean;
-  iconOpen?: string;
-  iconClose?: string;
-  iconLoaded?: string;
-}
-
-/**
- * 树形结构配置项
- */
-export interface TreeConfig {
-  children?: string;
-  indent?: number;
-  line?: boolean;
-  expandAll?: boolean;
-  expandRowKeys?: string[] | number[];
-  accordion?: boolean;
-  trigger?: 'default' | 'cell' | 'row';
-  lazy?: boolean;
-  hasChild?: string;
-  loadMethod?(params: { row: RowInfo }): Promise<any[]>;
-  toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
-  showIcon?: boolean;
-  iconOpen?: string;
-  iconClose?: string;
-  iconLoaded?: string;
-}
-
-export interface TreeOpts {
-  children: string;
-  indent: number;
-  line?: boolean;
-  expandAll?: boolean;
-  expandRowKeys?: string[] | number[];
-  accordion?: boolean;
-  trigger?: 'default' | 'cell' | 'row';
-  lazy?: boolean;
-  hasChild: string;
-  loadMethod?(params: { row: RowInfo }): Promise<any[]>;
-  toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
-  showIcon: boolean;
-  iconOpen: string;
-  iconClose: string;
-  iconLoaded: string;
-}
-
-/**
- * 快捷菜单配置项
- */
-export interface ContextMenuConfig {
-  header?: MenuOptions;
-  body?: MenuOptions;
-  footer?: MenuOptions;
-  trigger?: 'default' | 'cell';
-  visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnInfo[], row?: RowInfo, rowIndex?: number, column?: ColumnInfo, columnIndex?: number }): boolean;
-  className?: string;
-}
-
-/**
- * 鼠标配置项
- */
-export interface MouseConfig {
-  selected?: boolean;
   /**
-   * 如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取
+   * 排序配置项
    */
-  area?: boolean;
+  export interface SortConfig {
+    defaultSort?: SortConfigDefaultSort | SortConfigDefaultSort[];
+    orders?: SortOrder[];
+    sortMethod?(params: {
+      $table: VxeTableConstructor;
+      data: any[];
+      sortList: any[];
+    }): any[];
+    remote?: boolean;
+    multiple?: boolean;
+    trigger?: 'default' | 'cell';
+    showIcon?: boolean;
+    iconAsc?: string;
+    iconDesc?: string;
+  }
+  export type SortOrder = 'asc' | 'desc' | null;
+  export interface SortOpts extends SortConfig {
+    orders: SortOrder[];
+  }
+
+  /**
+   * 筛选配置项
+   */
+  export interface FilterConfig {
+    filterMethod?: (params: { options: any[], values: any[], row: any, column: any }) => any;
+    remote?: boolean;
+    showIcon?: boolean;
+    iconNone?: string;
+    iconMatch?: string;
+  }
+  export interface FilterOpts extends FilterConfig { }
+
+  /**
+   * 单选框配置
+   */
+  export interface RadioConfig {
+    reserve?: boolean;
+    labelField?: string;
+    checkRowKey?: string | number;
+    checkMethod?(params: { row: RowInfo }): boolean;
+    trigger?: 'default' | 'cell' | 'row';
+    highlight?: boolean;
+  }
+  export interface RadioOpts extends RadioConfig { }
+
+  /**
+   * 复选框配置项
+   */
+  export interface CheckboxConfig {
+    reserve?: boolean;
+    labelField?: string;
+    checkField?: string;
+    halfField?: string;
+    showHeader?: boolean;
+    checkAll?: boolean;
+    checkRowKeys?: string[] | number[];
+    checkStrictly?: boolean;
+    strict?: boolean;
+    checkMethod?(params: { row: RowInfo }): boolean;
+    trigger?: 'default' | 'cell' | 'row';
+    highlight?: boolean;
+    range?: boolean;
+  }
+  export interface CheckboxOpts extends CheckboxConfig { }
+
+  /**
+   * 提示信息配置项
+   */
+  export interface TooltipConfig {
+    enabled?: boolean;
+    theme?: 'dark' | 'light';
+    enterable?: boolean;
+    leaveDelay?: number;
+    leaveMethod?: (params: { $event: Event }) => boolean;
+    contentMethod?(params: {
+      items: any[];
+      row: RowInfo;
+      rowIndex: number;
+      $rowIndex: number;
+      _rowIndex: number;
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
+      $columnIndex: number;
+      _columnIndex: number;
+      type: 'header' | 'body' | 'footer';
+      cell: HTMLElement;
+      $event: any;
+    }): string | null | void;
+  }
+  export interface TooltipOpts extends TooltipConfig { }
+
+  /**
+   * 展开行配置项
+   */
+  export interface ExpandConfig {
+    labelField?: string;
+    expandAll?: boolean;
+    expandRowKeys?: string[] | number[];
+    accordion?: boolean;
+    trigger?: 'default' | 'cell' | 'row';
+    lazy?: boolean;
+    reserve?: boolean;
+    loadMethod?(params: {
+      $table: VxeTableConstructor;
+      row: RowInfo;
+      rowIndex: number;
+      $rowIndex: number;
+    }): Promise<any>;
+    toggleMethod?(params: {
+      $table: VxeTableConstructor;
+      expanded: boolean;
+      row: RowInfo;
+      rowIndex: number;
+      $rowIndex: number;
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
+      $columnIndex: number;
+    }): boolean;
+    visibleMethod?(params: {
+      $table: VxeTableConstructor;
+      expanded: boolean;
+      row: RowInfo;
+      rowIndex: number;
+      $rowIndex: number;
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
+      $columnIndex: number;
+    }): boolean;
+    showIcon?: boolean;
+    iconOpen?: string;
+    iconClose?: string;
+    iconLoaded?: string;
+  }
+  export interface ExpandOpts extends ExpandConfig { }
+
+  /**
+   * 树形结构配置项
+   */
+  export interface TreeConfig {
+    children?: string;
+    indent?: number;
+    line?: boolean;
+    expandAll?: boolean;
+    expandRowKeys?: string[] | number[];
+    accordion?: boolean;
+    trigger?: 'default' | 'cell' | 'row';
+    lazy?: boolean;
+    hasChild?: string;
+    reserve?: boolean;
+    loadMethod?(params: {
+      $table: VxeTableConstructor;
+      row: RowInfo
+    }): Promise<any[]>;
+    toggleMethod?(params: {
+      $table: VxeTableConstructor;
+      expanded: boolean;
+      row: RowInfo;
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
+      $columnIndex: number;
+    }): boolean;
+    showIcon?: boolean;
+    iconOpen?: string;
+    iconClose?: string;
+    iconLoaded?: string;
+  }
+  export interface TreeOpts extends TreeConfig {
+    children: string;
+    indent: number;
+    hasChild: string;
+    iconOpen: string;
+    iconClose: string;
+    iconLoaded: string;
+  }
+
+  /**
+   * 快捷菜单配置项
+   */
+  export interface MenuConfig {
+    header?: VxeTableDefines.MenuOptions;
+    body?: VxeTableDefines.MenuOptions;
+    footer?: VxeTableDefines.MenuOptions;
+    trigger?: 'default' | 'cell';
+    className?: string;
+    visibleMethod?(params: {
+      type: string;
+      options: VxeTableDefines.MenuFirstOption[];
+      columns: VxeTableDefines.ColumnInfo[];
+      row?: RowInfo;
+      rowIndex?: number;
+      column?: VxeTableDefines.ColumnInfo;
+      columnIndex?: number;
+    }): boolean;
+  }
+
+  /**
+   * 鼠标配置项
+   */
+  export interface MouseConfig {
+    selected?: boolean;
+    /**
+     * 如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取
+     */
+    area?: boolean;
+    extension?: boolean;
+  }
+  export interface MouseOpts extends MouseConfig { }
+
+  /**
+   * 按键配置项
+   */
+  export interface KeyboardConfig {
+    /**
+     * 是否开启非编辑状态下，上下左右移动功能
+     */
+    isArrow?: boolean;
+    /**
+     * 是否开启删除键功能
+     */
+    isDel?: boolean;
+    /**
+     * 是否开启回车移动上下行移动
+     */
+    isEnter?: boolean;
+    /**
+     * 是否开启TAB键左右移动功能
+     */
+    isTab?: boolean;
+    /**
+     * 是否开启单元格选择编辑
+     */
+    isEdit?: boolean;
+    /**
+     * 用于 mouse-config.area，开启合并和取消合并功能
+     */
+    isMerge?: boolean;
+    /**
+     * 用于 mouse-config.area，开启复制/剪贴/粘贴功能
+     */
+    isClip?: boolean;
+    /**
+     * 用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能
+     */
+    isChecked?: boolean;
+    /**
+     * 用于 mouse-config.area，是否将回车键行为改成 Tab 键行为
+     */
+    enterToTab?: boolean;
+    /**
+     * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
+     */
+    editMethod?(params: {
+      row: RowInfo;
+      rowIndex: number;
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
+      cell: HTMLElement;
+    }): boolean;
+  }
+  export interface KeyboardOpts extends KeyboardConfig { }
+
+  /**
+   * 复制粘贴配置项
+   */
+  export interface ClipConfig {
+    getMethod?(params: {
+      row: any;
+      column: VxeTableDefines.ColumnInfo;
+    }): string;
+    beforeGetMethod?(params: {
+      targetAreas: any[];
+    }): boolean;
+    setMethod?(params: {
+      row: any,
+      column: VxeTableDefines.ColumnInfo;
+      cellValue: any;
+    }): void;
+    beforeSetMethod?(params: {
+      currentAreas: any[];
+      targetAreas: any[];
+      cellValues: any[][];
+    }): boolean;
+  }
+  export interface ClipOpts extends ClipConfig { }
+
+  /**
+   * 编辑配置项
+   */
+  export interface EditConfig {
+    trigger?: 'manual' | 'click' | 'dblclick';
+    mode?: string;
+    showIcon?: boolean;
+    showStatus?: boolean;
+    showAsterisk?: boolean;
+    autoClear?: boolean;
+    /**
+     * 该方法的返回值用来决定该单元格是否允许编辑
+     */
+    activeMethod?(params: {
+      row: RowInfo
+      rowIndex: number
+      column: VxeTableDefines.ColumnInfo
+      columnIndex: number
+    }): boolean;
+  }
+  export interface EditOpts extends EditConfig { }
+
+  /**
+   * 校验配置项
+   */
+  export interface ValidConfig {
+    autoPos?: boolean;
+    message?: string;
+    maxWidth?: number;
+  }
+  export interface ValidOpts extends ValidConfig { }
+
+  /**
+   * 校验规则配置项
+   */
+  export interface EditRules {
+    [field: string]: VxeTableDefines.ValidatorRule[];
+  }
+
+  export type ZIndex = number;
+  export type EmptyText = string;
+
+  export interface EmptyRender extends VxeGlobalRendererHandles.RenderOptions { }
+  export interface EmptyOpts extends EmptyRender { }
+
+  export type Fit = boolean;
+  export type Animat = boolean;
+  export type DelayHover = number;
+
+  export interface ScrollX {
+    gt?: number;
+    oSize?: number;
+    [key: string]: any;
+  }
+  export interface SXOpts extends ScrollX {
+    gt: number;
+    oSize: number;
+  }
+
+  export interface ScrollY {
+    gt?: number;
+    oSize?: number;
+    [key: string]: any;
+  }
+  export interface SYOpts extends ScrollY {
+    gt: number;
+    oSize: number;
+  }
+
+  export type Params = any;
 }
 
-export interface MouseCellArea {
-  main: boolean;
-  rows: RowInfo[];
-  cols: ColumnInfo[];
-  top: number;
-  left: number;
-  width: number;
-  height: number;
+export interface VxeTableProps {
+  size?: VxeTablePropTypes.Size;
+  id?: VxeTablePropTypes.ID;
+  data?: VxeTablePropTypes.Data;
+  height?: VxeTablePropTypes.Height;
+  maxHeight?: VxeTablePropTypes.MaxHeight;
+  resizable?: VxeTablePropTypes.Resizable;
+  stripe?: VxeTablePropTypes.Stripe;
+  round?: VxeTablePropTypes.Round;
+  border?: VxeTablePropTypes.Border;
+  loading?: VxeTablePropTypes.Loading;
+  align?: VxeTablePropTypes.Align;
+  headerAlign?: VxeTablePropTypes.HeaderAlign;
+  footerAlign?: VxeTablePropTypes.FooterAlign;
+  showHeader?: VxeTablePropTypes.ShowHeader;
+  highlightCurrentRow?: VxeTablePropTypes.HighlightCurrentRow;
+  highlightHoverRow?: VxeTablePropTypes.HighlightHoverRow;
+  highlightCurrentColumn?: VxeTablePropTypes.HighlightCurrentColumn;
+  highlightHoverColumn?: VxeTablePropTypes.HighlightHoverColumn;
+  highlightCell?: VxeTablePropTypes.HighlightCell;
+  showFooter?: VxeTablePropTypes.ShowFooter;
+  footerMethod?: VxeTablePropTypes.FooterMethod;
+  rowClassName?: VxeTablePropTypes.RowClassName;
+  cellClassName?: VxeTablePropTypes.CellClassName;
+  headerRowClassName?: VxeTablePropTypes.HeaderRowClassName;
+  headerCellClassName?: VxeTablePropTypes.HeaderCellClassName;
+  footerRowClassName?: VxeTablePropTypes.FooterRowClassName;
+  footerCellClassName?: VxeTablePropTypes.FooterCellClassName;
+  cellStyle?: VxeTablePropTypes.CellStyle;
+  headerCellStyle?: VxeTablePropTypes.HeaderCellStyle;
+  footerCellStyle?: VxeTablePropTypes.FooterCellStyle;
+  rowStyle?: VxeTablePropTypes.RowStyle;
+  headerRowStyle?: VxeTablePropTypes.HeaderRowStyle;
+  footerRowStyle?: VxeTablePropTypes.FooterRowStyle;
+  mergeCells?: VxeTablePropTypes.MergeCell[];
+  mergeFooterItems?: VxeTablePropTypes.MergeFooterItem[];
+  spanMethod?: VxeTablePropTypes.SpanMethod;
+  footerSpanMethod?: VxeTablePropTypes.FooterSpanMethod;
+  showOverflow?: VxeTablePropTypes.ShowOverflow;
+  showHeaderOverflow?: VxeTablePropTypes.ShowHeaderOverflow;
+  showFooterOverflow?: VxeTablePropTypes.ShowFooterOverflow;
+  columnKey?: VxeTablePropTypes.ColumnKey;
+  rowKey?: VxeTablePropTypes.RowKey;
+  rowId?: VxeTablePropTypes.RowId;
+  keepSource?: VxeTablePropTypes.KeepSource;
+  autoResize?: VxeTablePropTypes.AutoResize;
+  syncResize?: VxeTablePropTypes.SyncResize;
+  columnConfig?: VxeTablePropTypes.ColumnConfig;
+  customConfig?: VxeTablePropTypes.CustomConfig;
+  seqConfig?: VxeTablePropTypes.SeqConfig;
+  sortConfig?: VxeTablePropTypes.SortConfig;
+  filterConfig?: VxeTablePropTypes.FilterConfig;
+  radioConfig?: VxeTablePropTypes.RadioConfig;
+  checkboxConfig?: VxeTablePropTypes.CheckboxConfig;
+  tooltipConfig?: VxeTablePropTypes.TooltipConfig;
+  exportConfig?: VxeTablePropTypes.ExportConfig;
+  importConfig?: VxeTablePropTypes.ImportConfig;
+  printConfig?: VxeTablePropTypes.PrintConfig;
+  expandConfig?: VxeTablePropTypes.ExpandConfig;
+  treeConfig?: VxeTablePropTypes.TreeConfig;
+  menuConfig?: VxeTablePropTypes.MenuConfig;
+  mouseConfig?: VxeTablePropTypes.MouseConfig;
+  keyboardConfig?: VxeTablePropTypes.KeyboardConfig;
+  clipConfig?: VxeTablePropTypes.ClipConfig;
+  editConfig?: VxeTablePropTypes.EditConfig;
+  validConfig?: VxeTablePropTypes.ValidConfig;
+  editRules?: VxeTablePropTypes.EditRules;
+  emptyText?: VxeTablePropTypes.EmptyText;
+  emptyRender?: VxeTablePropTypes.EmptyRender;
+  fit?: VxeTablePropTypes.Fit;
+  animat?: VxeTablePropTypes.Animat;
+  delayHover?: VxeTablePropTypes.DelayHover;
+  scrollX?: VxeTablePropTypes.ScrollX;
+  scrollY?: VxeTablePropTypes.ScrollY;
+  params?: VxeTablePropTypes.Params;
 }
 
-export interface CellAreaOptions {
-  main: boolean;
-  startColumn: ColumnInfo;
-  endColumn: ColumnInfo;
-  startRow: RowInfo;
-  endRow: RowInfo;
-  [key: string]: any;
+export type VxeTableEmits = [
+  'update:data',
+  'keydown',
+  'paste',
+  'copy',
+  'cut',
+  'current-change',
+  'radio-change',
+  'checkbox-change',
+  'checkbox-all',
+  'checkbox-range-start',
+  'checkbox-range-change',
+  'checkbox-range-end',
+  'cell-click',
+  'cell-dblclick',
+  'cell-menu',
+  'cell-mouseenter',
+  'cell-mouseleave',
+  'header-cell-click',
+  'header-cell-dblclick',
+  'header-cell-menu',
+  'footer-cell-click',
+  'footer-cell-dblclick',
+  'footer-cell-menu',
+  'sort-change',
+  'filter-change',
+  'resizable-change',
+  'toggle-row-expand',
+  'toggle-tree-expand',
+  'menu-click',
+  'edit-closed',
+  'edit-actived',
+  'edit-disabled',
+  'valid-error',
+  'scroll',
+  'custom',
+
+  'open-fnr',
+  'change-fnr',
+  'cell-area-copy',
+  'cell-area-cut',
+  'cell-area-paste',
+  'cell-area-merge',
+  'cell-area-selection-start',
+  'cell-area-selection-end',
+  'cell-area-extension-start',
+  'cell-area-extension-end'
+]
+
+export namespace VxeTableDefines {
+  export interface SortConfs {
+    field: string;
+    order?: VxeTablePropTypes.SortOrder;
+  }
+
+  export interface MergeOptions {
+    row: any | number;
+    col: VxeTableDefines.ColumnInfo | number;
+    rowspan: number;
+    colspan: number;
+  }
+
+  export interface MergeInfo {
+    row: number;
+    col: number;
+    rowspan: number;
+    colspan: number;
+  }
+
+  /**
+   * 列对象
+   */
+  export class ColumnInfo {
+    property: string;
+
+    type: VxeColumnPropTypes.Type;
+    title: VxeColumnPropTypes.Title;
+    width: VxeColumnPropTypes.Width;
+    minWidth: VxeColumnPropTypes.MinWidth;
+    resizable: VxeColumnPropTypes.Resizable;
+    fixed: VxeColumnPropTypes.Fixed;
+    align: VxeColumnPropTypes.Align;
+    headerAlign: VxeColumnPropTypes.HeaderAlign;
+    footerAlign: VxeColumnPropTypes.FooterAlign;
+    showOverflow: VxeColumnPropTypes.ShowOverflow;
+    showHeaderOverflow: VxeColumnPropTypes.ShowHeaderOverflow;
+    showFooterOverflow: VxeColumnPropTypes.ShowFooterOverflow;
+    className: VxeColumnPropTypes.ClassName;
+    headerClassName: VxeColumnPropTypes.HeaderClassName;
+    footerClassName: VxeColumnPropTypes.FooterClassName;
+    formatter: VxeColumnPropTypes.Formatter;
+    sortable: VxeColumnPropTypes.Sortable;
+    sortBy: VxeColumnPropTypes.SortBy;
+    filters: VxeColumnPropTypes.Filter[];
+    filterMultiple: VxeColumnPropTypes.FilterMultiple;
+    filterMethod: VxeColumnPropTypes.FilterMethod;
+    filterRender: VxeColumnPropTypes.FilterRender;
+    treeNode: VxeColumnPropTypes.TreeNode;
+    visible: VxeColumnPropTypes.Visible;
+    exportMethod: VxeColumnPropTypes.ExportMethod;
+    footerExportMethod: VxeColumnPropTypes.FooterExportMethod;
+    cellType: VxeColumnPropTypes.CellType;
+    cellRender: VxeColumnPropTypes.CellRender;
+    editRender: VxeColumnPropTypes.EditRender;
+    contentRender: VxeColumnPropTypes.ContentRender;
+    params: VxeColumnPropTypes.Params;
+    slots: VxeColumnPropTypes.Slots;
+
+    id: string;
+    parentId: string;
+    level: number;
+    rowSpan: number;
+    colSpan: number;
+    halfVisible: boolean;
+    defaultVisible: any;
+    checked: boolean;
+    halfChecked: boolean;
+    disabled: boolean;
+    order: string;
+    renderWidth: number;
+    renderHeight: number;
+    resizeWidth: number;
+    model: {
+      update: boolean;
+      value: any;
+    };
+    children: ColumnInfo[];
+
+    getTitle(): string;
+  }
+
+  interface TableEventParams extends VxeEvent {
+    $table: VxeTableConstructor;
+  }
+
+  interface TableBaseHeaderCellParams {
+    $rowIndex: number;
+    column: ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+  }
+
+  interface TableBaseCellParams {
+    row: RowInfo;
+    rowIndex: number;
+    $rowIndex: number;
+    column: ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+  }
+
+  interface TableBaseFooterCellParams {
+    $rowIndex: number;
+    column: ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+  }
+
+  export interface KeydownParams { }
+  export interface KeydownEventParams extends TableEventParams, KeydownParams { }
+
+  export interface PasteParams { }
+  export interface PasteEventParams extends TableEventParams, PasteParams { }
+
+  export interface CopyParams { }
+  export interface CopyEventParams extends TableEventParams, CopyParams { }
+
+  export interface CutParams { }
+  export interface CutEventParams extends TableEventParams, CutParams { }
+
+  export interface CurrentChangeParams extends TableBaseCellParams { }
+  export interface CurrentChangeEventParams extends TableEventParams, CurrentChangeParams { }
+
+  export interface RadioChangeParams extends TableBaseCellParams { }
+  export interface RadioChangeEventParams extends TableEventParams, RadioChangeParams { }
+
+  export interface CheckboxChangeParams {
+    checked: boolean;
+    records: RowInfo[];
+    reserves: RowInfo[];
+    indeterminates: RowInfo[];
+  }
+  export interface CheckboxChangeEventParams extends TableEventParams, CheckboxChangeParams { }
+
+  export interface CheckboxAllParams extends CheckboxChangeParams { }
+  export interface CheckboxAllEventParams extends TableEventParams, CheckboxAllParams { }
+
+  export interface CheckboxRangeStartParams {
+    records: any[];
+    reserves: any[];
+  }
+  export interface CheckboxRangeStartEventParams extends TableEventParams, CheckboxRangeStartParams { }
+
+  export interface CheckboxRangeChangeParams extends CheckboxRangeStartParams { }
+  export interface CheckboxRangeChangeEventParams extends TableEventParams, CheckboxRangeChangeParams { }
+
+  export interface CheckboxRangeEndParams extends CheckboxRangeStartParams { }
+
+  export interface CheckboxRangeEndEventParams extends TableEventParams, CheckboxRangeEndParams { }
+
+  export interface CellClickParams extends TableBaseCellParams {
+    triggerRadio: boolean;
+    triggerCheckbox: boolean;
+    triggerTreeNode: boolean;
+    triggerExpandNode: boolean;
+  }
+  export interface CellClickEventParams extends TableEventParams, CellClickParams { }
+
+  export interface CellDBLClickParams extends CellClickParams, CellClickParams { }
+  export interface CellDBLClickEventParams extends TableEventParams, CellDBLClickParams { }
+
+  export interface CellMenuParams extends TableBaseCellParams { }
+  export interface CellMenuEventParams extends TableEventParams, CellMenuParams { }
+
+  export interface CellMouseenterParams extends TableBaseCellParams { }
+  export interface CellMouseenterEventParams extends TableEventParams, CellMouseenterParams { }
+
+  export interface CellMouseleaveParams extends TableBaseCellParams { }
+  export interface CellMouseleaveEventParams extends TableEventParams, CellMouseleaveParams { }
+
+  export interface HeaderCellClickParams extends TableBaseHeaderCellParams { }
+  export interface HeaderCellClickEventParams extends TableEventParams, HeaderCellClickParams { }
+
+  export interface HeaderCellDblclickParams extends TableBaseHeaderCellParams { }
+  export interface HeaderCellDblclickEventParams extends TableEventParams, HeaderCellDblclickParams { }
+
+  export interface HeaderCellMenuParams extends TableBaseHeaderCellParams { }
+  export interface HeaderCellMenuEventParams extends TableEventParams, HeaderCellMenuParams { }
+
+  export interface FooterCellClickParams extends TableBaseFooterCellParams { }
+  export interface FooterCellClickEventParams extends TableEventParams, FooterCellClickParams { }
+
+  export interface FooterCellDblclickParams extends TableBaseFooterCellParams { }
+  export interface FooterCellDblclickEventParams extends TableEventParams, FooterCellDblclickParams { }
+
+  export interface FooterCellMenuParams extends TableBaseFooterCellParams { }
+  export interface FooterCellMenuEventParams extends TableEventParams, FooterCellMenuParams { }
+
+  interface SortParams {
+    column: VxeTablePropTypes.ColumnConfig;
+    property: string;
+    order: VxeTablePropTypes.SortOrder;
+    sortBy: string;
+  }
+  export interface SortChangeParams extends SortParams {
+    sortList: SortParams[];
+  }
+  export interface SortChangeEventParams extends TableEventParams, SortChangeParams { }
+
+  export interface FilterChangeParams extends TableBaseHeaderCellParams { }
+  export interface FilterChangeEventParams extends TableEventParams, FilterChangeParams { }
+
+  export interface ResizableChangeParams extends TableBaseHeaderCellParams { }
+  export interface ResizableChangeEventParams extends TableEventParams, ResizableChangeParams { }
+
+  export interface ToggleRowExpandParams extends TableBaseCellParams { }
+  export interface ToggleRowExpandEventParams extends TableEventParams, ToggleRowExpandParams { }
+
+  export interface ToggleTreeExpandParams extends TableBaseCellParams { }
+  export interface ToggleTreeExpandEventParams extends TableEventParams, ToggleTreeExpandParams { }
+
+  export interface MenuClickParams extends TableBaseCellParams {
+    menu: any;
+    type: string;
+  }
+  export interface MenuClickEventParams extends TableEventParams, MenuClickParams { }
+
+  export interface EditClosedParams extends TableBaseCellParams { }
+  export interface EditClosedEventParams extends TableEventParams, EditClosedParams { }
+
+  export interface EditActivedParams extends TableBaseCellParams { }
+  export interface EditActivedEventParams extends TableEventParams, EditActivedParams { }
+
+  export interface EditDisabledParams extends TableBaseCellParams { }
+  export interface EditDisabledEventParams extends TableEventParams, EditDisabledParams { }
+
+  export interface ValidErrorParams extends TableBaseCellParams {
+    rule: any;
+  }
+  export interface ValidErrorEventParams extends TableEventParams, ValidErrorParams { }
+
+  export interface ScrollParams {
+    type: string;
+    scrollTop: number;
+    scrollLeft: number;
+    isX: boolean;
+    isY: boolean;
+  }
+  export interface ScrollEventParams extends TableEventParams, ScrollParams {
+    target: HTMLDivElement;
+  }
+
+  export interface CustomParams {
+    type: string;
+  }
+  export interface CustomEventParams extends TableEventParams, CustomParams { }
 }
 
-export interface MergeOptions {
-  row: RowInfo | number;
-  col: ColumnInfo | number;
-  rowspan: number;
-  colspan: number;
-}
+export interface VxeTableListeners { }
 
-export interface MergeItem {
-  row: number;
-  col: number;
-  rowspan: number;
-  colspan: number;
-  [key: string]: any;
-}
-
-export interface ActiveCellAreaOptions {
-  column: ColumnInfo;
-  row: RowInfo;
-  [key: string]: any;
-}
-
-/**
- * 按键配置项
- */
-export interface KeyboardConfig {
-  /**
-   * 是否开启非编辑状态下，上下左右移动功能
-   */
-  isArrow?: boolean;
-  /**
-   * 是否开启删除键功能
-   */
-  isDel?: boolean;
-  /**
-   * 是否开启回车移动上下行移动
-   */
-  isEnter?: boolean;
-  /**
-   * 是否开启TAB键左右移动功能
-   */
-  isTab?: boolean;
-  /**
-   * 是否开启单元格选择编辑
-   */
-  isEdit?: boolean;
-  /**
-   * 用于 mouse-config.area，开启复制/剪贴/粘贴功能
-   */
-  isClip?: boolean;
-  /**
-   * 用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能
-   */
-  isChecked?: boolean;
-  /**
-   * 用于 mouse-config.area，是否将回车键行为改成 Tab 键行为
-   */
-  enterToTab?: boolean;
-  /**
-   * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
-   */
-  editMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number, cell: HTMLElement }): boolean;
-}
-
-/**
- * 编辑配置项
- */
-export interface EditConfig {
-  trigger?: 'manual' | 'click' | 'dblclick';
-  mode?: string;
-  showIcon?: boolean;
-  showStatus?: boolean;
-  autoClear?: boolean;
-  /**
-   * 该方法的返回值用来决定该单元格是否允许编辑
-   */
-  activeMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
-}
-
-/**
- * 校验配置项
- */
-export interface ValidConfig {
-  autoPos?: boolean;
-  message?: string;
-  maxWidth?: number;
-}
-
-/**
- * 校验规则配置项
- */
-export interface EditVaildRules {
-  [field: string]: ColumnEditRule[];
+export namespace VxeTableEvents {
+  export type Keydown = (params: VxeTableDefines.KeydownEventParams) => void;
+  export type Paste = (params: VxeTableDefines.PasteEventParams) => void;
+  export type Copy = (params: VxeTableDefines.CopyEventParams) => void;
+  export type Cut = (params: VxeTableDefines.CutEventParams) => void;
+  export type CurrentChange = (params: VxeTableDefines.CurrentChangeEventParams) => void;
+  export type RadioChange = (params: VxeTableDefines.RadioChangeEventParams) => void;
+  export type CheckboxChange = (params: VxeTableDefines.CheckboxChangeEventParams) => void;
+  export type CheckboxAll = (params: VxeTableDefines.CheckboxAllEventParams) => void;
+  export type CheckboxRangeStart = (params: VxeTableDefines.CheckboxRangeStartEventParams) => void;
+  export type CheckboxRangeChange = (params: VxeTableDefines.CheckboxRangeChangeEventParams) => void;
+  export type CheckboxRangeEnd = (params: VxeTableDefines.CheckboxRangeEndEventParams) => void;
+  export type CellClick = (params: VxeTableDefines.CellClickEventParams) => void;
+  export type CellDBLClick = (params: VxeTableDefines.CellDBLClickEventParams) => void;
+  export type CellMenu = (params: VxeTableDefines.CellMenuEventParams) => void;
+  export type CellMouseenter = (params: VxeTableDefines.CellMouseenterEventParams) => void;
+  export type CellMouseleave = (params: VxeTableDefines.CellMouseleaveEventParams) => void;
+  export type HeaderCellClick = (params: VxeTableDefines.HeaderCellClickEventParams) => void;
+  export type HeaderCellDblclick = (params: VxeTableDefines.HeaderCellDblclickEventParams) => void;
+  export type HeaderCellMenu = (params: VxeTableDefines.HeaderCellMenuEventParams) => void;
+  export type FooterCellClick = (params: VxeTableDefines.FooterCellClickEventParams) => void;
+  export type FooterCellDblclick = (params: VxeTableDefines.FooterCellDblclickEventParams) => void;
+  export type FooterCellMenu = (params: VxeTableDefines.FooterCellMenuEventParams) => void;
+  export type SortChange = (params: VxeTableDefines.SortChangeEventParams) => void;
+  export type FilterChange = (params: VxeTableDefines.FilterChangeEventParams) => void;
+  export type ResizableChange = (params: VxeTableDefines.ResizableChangeEventParams) => void;
+  export type ToggleRowExpand = (params: VxeTableDefines.ToggleRowExpandEventParams) => void;
+  export type ToggleTreeExpand = (params: VxeTableDefines.ToggleTreeExpandEventParams) => void;
+  export type MenuClick = (params: VxeTableDefines.MenuClickEventParams) => void;
+  export type EditClosed = (params: VxeTableDefines.EditClosedEventParams) => void;
+  export type EditActived = (params: VxeTableDefines.EditActivedEventParams) => void;
+  export type EditDisabled = (params: VxeTableDefines.EditDisabledEventParams) => void;
+  export type ValidError = (params: VxeTableDefines.ValidErrorEventParams) => void;
+  export type Scroll = (params: VxeTableDefines.ScrollEventParams) => void;
+  export type Custom = (params: VxeTableDefines.CustomEventParams) => void;
 }

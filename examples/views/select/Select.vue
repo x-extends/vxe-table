@@ -4,31 +4,31 @@
     <p class="tip">下拉框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'select'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
 
     <p>
-      <vxe-select v-model="value10" placeholder="默认尺寸">
+      <vxe-select v-model="demo1.value10" placeholder="默认尺寸">
         <vxe-option v-for="num in 15" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value11" placeholder="中等尺寸" size="medium">
+      <vxe-select v-model="demo1.value11" placeholder="中等尺寸" size="medium">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value12" placeholder="小型尺寸" size="small">
+      <vxe-select v-model="demo1.value12" placeholder="小型尺寸" size="small">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value13" placeholder="超小尺寸" size="mini">
+      <vxe-select v-model="demo1.value13" placeholder="超小尺寸" size="mini">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
     </p>
 
     <p>
-      <vxe-select v-model="value20" placeholder="请选择" prefix-icon="fa fa-user-o">
+      <vxe-select v-model="demo1.value20" placeholder="请选择" prefix-icon="fa fa-user-o">
         <vxe-option v-for="num in 3" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value21" placeholder="可清除" clearable>
+      <vxe-select v-model="demo1.value21" placeholder="可清除" clearable>
         <vxe-option v-for="num in 5" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value22" placeholder="请选择" clearable>
+      <vxe-select v-model="demo1.value22" placeholder="请选择" clearable>
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value23" placeholder="分组" clearable transfer>
+      <vxe-select v-model="demo1.value23" placeholder="分组" clearable transfer>
         <vxe-optgroup label="选项2">
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -42,17 +42,17 @@
     </p>
 
     <p>
-      <vxe-select v-model="value30" placeholder="禁用" disabled>
+      <vxe-select v-model="demo1.value30" placeholder="禁用" disabled>
         <vxe-option value="1" label="选项1"></vxe-option>
         <vxe-option value="2" label="选项2"></vxe-option>
         <vxe-option value="3" label="选项3"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value31" placeholder="禁用选项" clearable>
+      <vxe-select v-model="demo1.value31" placeholder="禁用选项" clearable>
         <vxe-option value="1" label="选项1"></vxe-option>
         <vxe-option value="2" label="选项2" disabled></vxe-option>
         <vxe-option value="3" label="选项3"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value32" placeholder="禁用分组" clearable transfer>
+      <vxe-select v-model="demo1.value32" placeholder="禁用分组" clearable transfer>
         <vxe-optgroup label="选项2" disabled>
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -75,14 +75,14 @@
           <vxe-option value="5-4" label="选项5-4"></vxe-option>
         </vxe-optgroup>
       </vxe-select>
-      <vxe-select v-model="value33" placeholder="多选" multiple>
+      <vxe-select v-model="demo1.value33" placeholder="多选" multiple>
         <vxe-option value="1" label="选项1"></vxe-option>
         <vxe-option value="2" label="选项2"></vxe-option>
         <vxe-option value="3" label="选项3"></vxe-option>
         <vxe-option value="4" label="选项4"></vxe-option>
         <vxe-option value="5" label="选项5"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value34" placeholder="多选可清除" multiple clearable>
+      <vxe-select v-model="demo1.value34" placeholder="多选可清除" multiple clearable>
         <vxe-option value="1" label="选项1"></vxe-option>
         <vxe-option value="2" label="选项2"></vxe-option>
         <vxe-option value="3" label="选项3"></vxe-option>
@@ -101,39 +101,39 @@
     </p>
 
     <p>
-      <vxe-select v-model="value40" placeholder="空数据" :options="list40"></vxe-select>
-      <vxe-select v-model="value41" placeholder="分组配置式" :option-groups="list41"></vxe-select>
-      <vxe-select v-model="value42" placeholder="禁用选项" :options="list42"></vxe-select>
-      <vxe-select v-model="value43" placeholder="禁用分组" :option-groups="list43" transfer></vxe-select>
-      <vxe-select v-model="value44" placeholder="多选" :options="list44" multiple clearable transfer></vxe-select>
+      <vxe-select v-model="demo1.value40" placeholder="空数据" :options="demo1.list40"></vxe-select>
+      <vxe-select v-model="demo1.value41" placeholder="分组配置式" :option-groups="demo1.list41"></vxe-select>
+      <vxe-select v-model="demo1.value42" placeholder="禁用选项" :options="demo1.list42"></vxe-select>
+      <vxe-select v-model="demo1.value43" placeholder="禁用分组" :option-groups="demo1.list43" transfer></vxe-select>
+      <vxe-select v-model="demo1.value44" placeholder="多选" :options="demo1.list44" multiple clearable transfer></vxe-select>
     </p>
 
     <pre>
-      <code>
+      <pre-code>
         | Tab | 切换到上一个 |
         | Shift Tab | 切换到下一个 |
         | Arrow Up ↑ | 展开下拉面板、如果已展开则移动到上一个选项 |
         | Arrow Down ↓ | 展开下拉面板、如果已展开则移动到下一个选项 |
         | Enter | 展开下拉面板、选中选项 |
         | Esc | 关闭下拉面板 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="html">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="html">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive } from 'vue'
 
-export default {
-  data () {
-    return {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
       value10: 12,
       value11: null,
       value12: null,
@@ -220,35 +220,38 @@ export default {
         { label: '9999', value: '9', disabled: false },
         { label: '1010', value: '10', disabled: false },
         { label: '1111', value: '11', disabled: false }
-      ],
+      ]
+    })
+    return {
+      demo1,
       demoCodes: [
         `
         <p>
-          <vxe-select v-model="value10" placeholder="默认尺寸">
+          <vxe-select v-model="demo1.value10" placeholder="默认尺寸">
             <vxe-option v-for="num in 15" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value11" placeholder="中等尺寸" size="medium">
+          <vxe-select v-model="demo1.value11" placeholder="中等尺寸" size="medium">
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value12" placeholder="小型尺寸" size="small">
+          <vxe-select v-model="demo1.value12" placeholder="小型尺寸" size="small">
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value13" placeholder="超小尺寸" size="mini">
+          <vxe-select v-model="demo1.value13" placeholder="超小尺寸" size="mini">
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
         </p>
 
         <p>
-          <vxe-select v-model="value20" placeholder="请选择" prefix-icon="fa fa-user-o">
+          <vxe-select v-model="demo1.value20" placeholder="请选择" prefix-icon="fa fa-user-o">
             <vxe-option v-for="num in 3" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value21" placeholder="可清除" clearable>
+          <vxe-select v-model="demo1.value21" placeholder="可清除" clearable>
             <vxe-option v-for="num in 5" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value22" placeholder="请选择" clearable>
+          <vxe-select v-model="demo1.value22" placeholder="请选择" clearable>
             <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value23" placeholder="分组" clearable transfer>
+          <vxe-select v-model="demo1.value23" placeholder="分组" clearable transfer>
             <vxe-optgroup label="选项2">
               <vxe-option value="2-1" label="选项2-1"></vxe-option>
               <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -262,17 +265,17 @@ export default {
         </p>
 
         <p>
-          <vxe-select v-model="value30" placeholder="禁用" disabled>
+          <vxe-select v-model="demo1.value30" placeholder="禁用" disabled>
             <vxe-option value="1" label="选项1"></vxe-option>
             <vxe-option value="2" label="选项2"></vxe-option>
             <vxe-option value="3" label="选项3"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value31" placeholder="禁用选项" clearable>
+          <vxe-select v-model="demo1.value31" placeholder="禁用选项" clearable>
             <vxe-option value="1" label="选项1"></vxe-option>
             <vxe-option value="2" label="选项2" disabled></vxe-option>
             <vxe-option value="3" label="选项3"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value32" placeholder="禁用分组" clearable transfer>
+          <vxe-select v-model="demo1.value32" placeholder="禁用分组" clearable transfer>
             <vxe-optgroup label="选项2" disabled>
               <vxe-option value="2-1" label="选项2-1"></vxe-option>
               <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -295,14 +298,14 @@ export default {
               <vxe-option value="5-4" label="选项5-4"></vxe-option>
             </vxe-optgroup>
           </vxe-select>
-          <vxe-select v-model="value33" placeholder="多选" multiple>
+          <vxe-select v-model="demo1.value33" placeholder="多选" multiple>
             <vxe-option value="1" label="选项1"></vxe-option>
             <vxe-option value="2" label="选项2"></vxe-option>
             <vxe-option value="3" label="选项3"></vxe-option>
             <vxe-option value="4" label="选项4"></vxe-option>
             <vxe-option value="5" label="选项5"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value34" placeholder="多选可清除" multiple clearable>
+          <vxe-select v-model="demo1.value34" placeholder="多选可清除" multiple clearable>
             <vxe-option value="1" label="选项1"></vxe-option>
             <vxe-option value="2" label="选项2"></vxe-option>
             <vxe-option value="3" label="选项3"></vxe-option>
@@ -321,17 +324,19 @@ export default {
         </p>
 
         <p>
-          <vxe-select v-model="value40" placeholder="空数据" :options="list40"></vxe-select>
-          <vxe-select v-model="value41" placeholder="分组配置式" :option-groups="list41"></vxe-select>
-          <vxe-select v-model="value42" placeholder="禁用选项" :options="list42"></vxe-select>
-          <vxe-select v-model="value43" placeholder="禁用分组" :option-groups="list43" transfer></vxe-select>
-          <vxe-select v-model="value44" placeholder="多选" :options="list44" multiple clearable transfer></vxe-select>
+          <vxe-select v-model="demo1.value40" placeholder="空数据" :options="demo1.list40"></vxe-select>
+          <vxe-select v-model="demo1.value41" placeholder="分组配置式" :option-groups="demo1.list41"></vxe-select>
+          <vxe-select v-model="demo1.value42" placeholder="禁用选项" :options="demo1.list42"></vxe-select>
+          <vxe-select v-model="demo1.value43" placeholder="禁用分组" :option-groups="demo1.list43" transfer></vxe-select>
+          <vxe-select v-model="demo1.value44" placeholder="多选" :options="demo1.list44" multiple clearable transfer></vxe-select>
         </p>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
               value10: 12,
               value11: null,
               value12: null,
@@ -419,17 +424,15 @@ export default {
                 { label: '1010', value: '10', disabled: false },
                 { label: '1111', value: '11', disabled: false }
               ]
+            })
+            return {
+              demo1
             }
           }
-        }
+        })
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
-}
+})
 </script>

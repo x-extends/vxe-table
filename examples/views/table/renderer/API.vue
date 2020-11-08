@@ -38,11 +38,11 @@
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-export default {
-  data () {
+export default defineComponent({
+  setup () {
     return {
       nativeRenderList: [
         {
@@ -99,12 +99,12 @@ export default {
           list: []
         },
         {
-          name: 'mixin(map)',
+          name: 'mixin(options)',
           desc: '添加多个',
           version: '',
           type: '',
           enum: '',
-          defVal: 'map',
+          defVal: 'options',
           list: []
         },
         {
@@ -118,11 +118,6 @@ export default {
         }
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
-}
+})
 </script>

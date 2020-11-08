@@ -2,10 +2,10 @@
   <div>
     <vxe-toolbar
       custom
-      :loading="loading"
+      :loading="apiData.loading"
       :refresh="{query: loadList}">
-      <template v-slot:buttons>
-        <vxe-input clearable class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
+      <template #buttons>
+        <vxe-input clearable class="search-input" v-model="apiData.filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
       </template>
     </vxe-toolbar>
 
@@ -20,25 +20,25 @@
       id="document_api"
       class="api-table"
       row-id="id"
-      :loading="loading"
+      :loading="apiData.loading"
       :cell-class-name="cellClassNameFunc"
-      :data="apiList"
+      :data="apiData.apiList"
       :custom-config="{storage: true, checkMethod: checkColumnMethod}"
-      :tree-config="{children: 'list', expandRowKeys: defaultExpandRowKeys}"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod: menuVisibleMethod}"
+      :tree-config="{children: 'list', expandRowKeys: apiData.defaultExpandRowKeys}"
+      :menu-config="{header: {options: apiData.headerMenus}, body: {options: apiData.bodyMenus}, visibleMethod: menuVisibleMethod}"
       :tooltip-config="{contentMethod: showTooltipMethod}"
-      @header-cell-context-menu="headerCellContextMenuEvent"
-      @cell-context-menu="cellContextMenuEvent"
-      @context-menu-click="contextMenuClickEvent">
-      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" show-overflow :title-help="{message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'}" :filters="nameFilters" tree-node></vxe-table-column>
+      @header-cell-menu="headerCellContextMenuEvent"
+      @cell-menu="cellContextMenuEvent"
+      @menu-click="contextMenuClickEvent">
+      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" show-overflow :title-help="{message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'}" :filters="apiData.nameFilters" tree-node></vxe-table-column>
       <vxe-table-column field="desc" title="app.api.title.desc" type="html" min-width="200"></vxe-table-column>
       <vxe-table-column field="type" title="app.api.title.type" type="html" min-width="140"></vxe-table-column>
       <vxe-table-column field="enum" :title="$t('app.api.title.enum')" type="html" min-width="150"></vxe-table-column>
       <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160" :title-help="{message: '部分参数可支持全局设置，具体请查阅相关说明'}"></vxe-table-column>
       <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120" :title-help="{message: '该文档与最新版本保持同步，如果遇到参数无效时，需要检查当前使用的版本号是否支持该参数'}">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <template v-if="row.version === 'pro'">
-            <a class="link pro" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">pro 专业版</a>
+            <a class="link pro" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">pro</a>
           </template>
            <template v-else-if="row.disabled">
             <span class="disabled">已废弃</span>
@@ -51,18 +51,27 @@
           </template>
         </template>
       </vxe-table-column>
-      <template v-slot:empty>
+      <template #empty>
         <span class="red">找不对应 API，请输入正确的关键字！</span>
       </template>
     </vxe-table>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { computed, defineComponent, nextTick, reactive, watch, ref, Ref } from 'vue'
+import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
+import { VXETable } from '../../../packages/vxe-table'
+import i18n from '@/i18n'
+import router from '@/router'
 import XEUtils from 'xe-utils'
 import pack from '../../../package.json'
+
+import { VxeTableInstance } from '../../../types/vxe-table'
+
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
+import tableColgroupAPI from '../../api/table-colgroup'
 import tableColumnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
@@ -88,12 +97,19 @@ import switchAPI from '../../api/switch'
 import listAPI from '../../api/list'
 import pulldownAPI from '../../api/pulldown'
 
-// import i18n from '../../i18n'
-// const attributes = window.attributes = {}
-// const tags = window.tags = {}
+// declare global {
+//   interface Window {
+//     attributes: any;
+//     tags: any;
+//   }
+// }
+
+// const attributes: any = window.attributes = {}
+// const tags: any = window.tags = {}
 
 // const tagMaps = [
 //   ['vxe-table', tableAPI, { subtags: ['vxe-table-column'], description: '基础表格' }],
+//   ['vxe-table-colgroup', tableColgroupAPI, { description: '基础表格 - 分组列' }],
 //   ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
 //   ['vxe-grid', gridAPI, { description: '高级表格' }],
 //   ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
@@ -118,27 +134,29 @@ import pulldownAPI from '../../api/pulldown'
 // ]
 
 // tagMaps.forEach(confs => {
-//   const props = confs[1].find(item => item.name === 'Props').list
-//   const keys = []
-//   props.forEach(item => {
+//   const props = confs[1].find((item: any) => item.name === 'Props').list
+//   const keys: any[] = []
+//   props.forEach((item: any) => {
 //     const name = XEUtils.kebabCase(item.name)
 //     attributes[`${confs[0]}/${name}`] = {
 //       type: XEUtils.toString(item.type).toLowerCase(),
-//       description: item.descKey ? i18n.t(item.descKey) : item.desc
+//       description: item.descKey ? i18n.global.t(item.descKey) : item.desc
 //     }
 //     keys.push(name)
 //   })
 //   tags[confs[0]] = Object.assign({ attributes: keys }, confs[2])
 // })
 
-export default {
-  data () {
-    return {
-      filterName: (this.$route.query.q || this.$route.query.filterName) ? decodeURIComponent(this.$route.query.q || this.$route.query.filterName) : '',
-      apiList: [],
-      defaultExpandRowKeys: [],
+export default defineComponent({
+  setup () {
+    const q = (router.currentRoute.value.query.q || router.currentRoute.value.query.filterName) as string
+    const apiData = reactive({
+      filterName: q ? decodeURIComponent(q) : '',
+      apiList: [] as any[],
+      defaultExpandRows: [] as string[],
+      defaultExpandRowKeys: [] as string[],
       loading: false,
-      tableData: [],
+      tableData: [] as any[],
       nameFilters: [
         { label: 'Props', value: 'Props' },
         { label: 'Slots', value: 'Slots' },
@@ -204,33 +222,101 @@ export default {
           }
         ]
       ]
+    })
+
+    const xTable = ref() as Ref<VxeTableInstance>
+
+    const apiName = computed(() => {
+      const $route = router.currentRoute.value
+      return $route.params.name
+    })
+
+    const cellClassNameFunc = ({ row, column }: any) => {
+      return {
+        'api-pro': row.version === 'pro',
+        'api-disabled': row.disabled,
+        'api-abandoned': row.abandoned,
+        'disabled-line-through': (row.disabled) && column.property === 'name'
+      }
     }
-  },
-  computed: {
-    apiName () {
-      return this.$route.params.name
+
+    const checkColumnMethod = ({ column }: any) => {
+      if (['name', 'desc'].includes(column.property)) {
+        return false
+      }
+      return true
     }
-  },
-  watch: {
-    apiName () {
-      this.loadList()
-    },
-    '$i18n.locale' () {
-      this.loadList()
+
+    const showTooltipMethod = ({ type, row, column }: any) => {
+      if (type === 'body') {
+        if (column.property === 'name') {
+          if (row.disabled) {
+            return '该参数已经被废弃了，除非不打算更新版本，否则不应该被使用'
+          } else if (row.abandoned) {
+            return '该参数属于评估阶段，谨慎使用，后续有可能会被废弃的风险'
+          } else if (row.version === 'pro') {
+            return '该参数属于 pro 版本功能，需获取授权，如有需要可联系邮件：xu_liangzhan@163.com'
+          }
+        }
+      }
+      return null
     }
-  },
-  created () {
-    this.loadList()
-  },
-  methods: {
-    loadList () {
-      this.loading = true
+
+    const headerCellContextMenuEvent = ({ column }: any) => {
+      const $table = xTable.value
+      $table.setCurrentColumn(column)
+    }
+
+    const cellContextMenuEvent = ({ row }: any) => {
+      const $table = xTable.value
+      $table.setCurrentRow(row)
+    }
+
+    const handleSearch = () => {
+      const filterName = XEUtils.toString(apiData.filterName).trim().toLowerCase()
+      if (filterName) {
+        const filterRE = new RegExp(filterName, 'gi')
+        const options = { children: 'list' }
+        const searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
+        const rest = XEUtils.searchTree(apiData.tableData, (item: any) => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
+        XEUtils.eachTree(rest, item => {
+          searchProps.forEach(key => {
+            item[key] = item[key].replace(filterRE, (match: any) => `<span class="keyword-lighten">${match}</span>`)
+          })
+        }, options)
+        apiData.apiList = rest
+        nextTick(() => {
+          const $table = xTable.value
+          if ($table) {
+            $table.setAllTreeExpand(true)
+          }
+        })
+      } else {
+        apiData.apiList = apiData.tableData
+        nextTick(() => {
+          const $table = xTable.value
+          if ($table) {
+            $table.setTreeExpand(apiData.defaultExpandRows, true)
+          }
+        })
+      }
+    }
+
+    // 调用频率间隔 500 毫秒
+    const searchEvent = XEUtils.debounce(handleSearch, 500, { leading: false, trailing: true })
+
+    const loadList = () => {
+      const $route = router.currentRoute.value
+      apiData.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          let apis = []
-          switch (this.$route.params.name) {
+          let apis: any[] = []
+          switch ($route.params.name) {
             case 'table':
               apis = tableAPI
+              break
+            case 'table-colgroup':
+              apis = tableColgroupAPI
               break
             case 'table-column':
               apis = tableColumnAPI
@@ -308,161 +394,127 @@ export default {
           // 生成唯一 id
           let index = 1
           const searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-          this.tableData = XEUtils.clone(apis, true)
-          XEUtils.eachTree(this.tableData, item => {
+          apiData.tableData = XEUtils.clone(apis, true)
+          XEUtils.eachTree(apiData.tableData, (item: any) => {
             item.id = index++
-            item.desc = item.descKey ? this.$t(item.descKey) : item.desc
+            item.desc = item.descKey ? i18n.global.t(item.descKey) : item.desc
             searchProps.forEach(key => {
               item[key] = XEUtils.escape(item[key])
             })
           }, { children: 'list' })
           // 默认展开一级
-          this.defaultExpandRows = this.tableData.filter(item => item.list && item.list.length)
-          this.defaultExpandRowKeys = this.defaultExpandRows.map(item => item.id)
-          this.loading = false
-          this.handleSearch()
+          apiData.defaultExpandRows = apiData.tableData.filter((item: any) => item.list && item.list.length)
+          apiData.defaultExpandRowKeys = apiData.defaultExpandRows.map((item: any) => item.id)
+          apiData.loading = false
+          handleSearch()
           resolve()
         }, 100)
       })
-    },
-    cellClassNameFunc ({ row, column }) {
-      return {
-        'api-pro': row.version === 'pro',
-        'api-disabled': row.disabled,
-        'api-abandoned': row.abandoned,
-        'disabled-line-through': (row.disabled) && column.property === 'name'
-      }
-    },
-    checkColumnMethod ({ column }) {
-      if (['name', 'desc'].includes(column.property)) {
-        return false
-      }
-      return true
-    },
-    showTooltipMethod ({ type, row, column }) {
-      if (type === 'body') {
-        if (column.property === 'name') {
-          if (row.disabled) {
-            return '该参数已经被废弃了，除非不打算更新版本，否则不应该被使用'
-          } else if (row.abandoned) {
-            return '该参数属于评估阶段，谨慎使用，后续有可能会被废弃的风险'
-          } else if (row.version === 'pro') {
-            return '该参数属于 pro 版本功能，开源版本不支持该功能，如有需要可联系邮件：xu_liangzhan@163.com'
-          }
-        }
-      }
-      return null
-    },
-    headerCellContextMenuEvent ({ column }) {
-      this.$refs.xTable.setCurrentColumn(column)
-    },
-    cellContextMenuEvent ({ row }) {
-      this.$refs.xTable.setCurrentRow(row)
-    },
-    contextMenuClickEvent ({ menu, row, column }) {
-      const xTable = this.$refs.xTable
+    }
+
+    const contextMenuClickEvent = ({ menu, row, column }: any) => {
+      const $table = xTable.value
       switch (menu.code) {
         case 'hideColumn':
-          xTable.hideColumn(column)
+          $table.hideColumn(column)
           break
         case 'showAllColumn':
-          xTable.resetColumn({ visible: true })
+          $table.resetColumn({ visible: true })
           break
         case 'resetColumn':
-          xTable.resetColumn(true)
+          $table.resetColumn(true)
           break
         case 'exportHTMLAPI':
-          xTable.exportData({
+          $table.exportData({
             type: 'html',
-            data: XEUtils.toTreeArray(this.tableData, { children: 'list' }),
-            filename: `vxe-${this.apiName}_v${pack.version}`
+            data: XEUtils.toTreeArray(apiData.tableData, { children: 'list' }),
+            filename: `vxe-${apiName.value}_v${pack.version}`
           })
           break
         case 'exportXLSXAPI':
-          xTable.exportData({
+          $table.exportData({
             type: 'xlsx',
-            data: XEUtils.toTreeArray(this.tableData, { children: 'list' }),
-            filename: `vxe-${this.apiName}_v${pack.version}`
+            data: XEUtils.toTreeArray(apiData.tableData, { children: 'list' }),
+            filename: `vxe-${apiName.value}_v${pack.version}`
           })
           break
         case 'copy':
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
-              this.$XModal.message({ message: this.$t('app.body.msg.copyToClipboard'), status: 'success' })
+              VXETable.modal.message({ message: i18n.global.t('app.body.msg.copyToClipboard'), status: 'success' })
             }
           }
           break
         case 'resize':
-          this.filterName = ''
-          this.tableData = []
-          this.$nextTick(() => {
-            xTable.clearAll()
-            this.loadList()
+          apiData.filterName = ''
+          apiData.tableData = []
+          nextTick(() => {
+            $table.clearAll()
+            loadList()
           })
           break
         case 'exportAPI':
-          xTable.exportData({
-            filename: `vxe-${this.apiName}_v${pack.version}.csv`
+          $table.exportData({
+            filename: `vxe-${apiName.value}_v${pack.version}.csv`
           })
           break
         case 'allExpand':
-          xTable.setAllTreeExpand(true)
+          $table.setAllTreeExpand(true)
           break
         case 'allShrink':
-          xTable.clearTreeExpand()
+          $table.clearTreeExpand()
           break
       }
-    },
-    menuVisibleMethod ({ options, column }) {
-      const isDisabled = !this.checkColumnMethod({ column })
-      options.forEach(list => {
-        list.forEach(item => {
+    }
+
+    const menuVisibleMethod = ({ options, column }: any) => {
+      const isDisabled = !checkColumnMethod({ column })
+      options.forEach((list: any) => {
+        list.forEach((item: any) => {
           if (['hideColumn'].includes(item.code)) {
             item.disabled = isDisabled
           }
         })
       })
       return true
-    },
-    handleSearch () {
-      const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
-      if (filterName) {
-        const filterRE = new RegExp(filterName, 'gi')
-        const options = { children: 'list' }
-        const searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-        const rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
-        XEUtils.eachTree(rest, item => {
-          searchProps.forEach(key => {
-            item[key] = item[key].replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
-          })
-        }, options)
-        this.apiList = rest
-        this.$nextTick(() => {
-          if (this.$refs.xTable) {
-            this.$refs.xTable.setAllTreeExpand(true)
-          }
-        })
-      } else {
-        this.apiList = this.tableData
-        this.$nextTick(() => {
-          if (this.$refs.xTable) {
-            this.$refs.xTable.setTreeExpand(this.defaultExpandRows, true)
-          }
-        })
-      }
-    },
-    // 调用频率间隔 500 毫秒
-    searchEvent: XEUtils.debounce(function () {
-      this.handleSearch()
-    }, 500, { leading: false, trailing: true })
-  },
-  beforeRouteUpdate (to, from, next) {
-    next()
-    this.filterName = ''
-    if (this.$refs.xTable) {
-      this.$refs.xTable.clearAll()
     }
-    this.handleSearch()
+
+    watch(apiName, () => {
+      loadList()
+    })
+
+    watch(i18n.global.locale, () => {
+      loadList()
+    })
+
+    nextTick(() => {
+      loadList()
+    })
+
+    return {
+      xTable,
+      apiData,
+      apiName,
+
+      loadList,
+      cellClassNameFunc,
+      checkColumnMethod,
+      showTooltipMethod,
+      headerCellContextMenuEvent,
+      cellContextMenuEvent,
+      contextMenuClickEvent,
+      menuVisibleMethod,
+      searchEvent
+    }
+  },
+  beforeRouteUpdate (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
+    next()
+    // this.filterName = ''
+    // const xTable: any = this.$refs.xTable
+    // if (xTable) {
+    //   xTable.clearAll()
+    // }
+    // this.handleSearch()
   }
-}
+})
 </script>

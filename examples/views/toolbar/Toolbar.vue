@@ -1,57 +1,53 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.toolbar') }}</h2>
-    <p class="tip">工具栏模块，需要与表格组合使用，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'toolbar'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
+    <p class="tip">工具栏模块，与表格组合使用，通过调用 connect() 方法与表格建立连接</p>
 
     <p>
       <vxe-toolbar>
-        <template v-slot:buttons>
-          <vxe-button>默认尺寸</vxe-button>
-          <vxe-button>
-            <template v-slot>下拉按钮</template>
-            <template v-slot:dropdowns>
-              <vxe-button type="text">按钮1</vxe-button>
-              <vxe-button type="text">按钮2</vxe-button>
-              <vxe-button type="text">按钮3</vxe-button>
+        <template #buttons>
+          <vxe-button content="默认尺寸"></vxe-button>
+          <vxe-button content="下拉按钮">
+            <template #dropdowns>
+              <vxe-button type="text" content="按钮1"></vxe-button>
+              <vxe-button type="text" content="按钮2"></vxe-button>
+              <vxe-button type="text" content="按钮3"></vxe-button>
             </template>
           </vxe-button>
         </template>
       </vxe-toolbar>
       <vxe-toolbar size="medium">
-        <template v-slot:buttons>
-          <vxe-button>中等尺寸</vxe-button>
-          <vxe-button>
-            <template v-slot>下拉按钮</template>
-            <template v-slot:dropdowns>
-              <vxe-button type="text">按钮1</vxe-button>
-              <vxe-button type="text">按钮2</vxe-button>
-              <vxe-button type="text">按钮3</vxe-button>
+        <template #buttons>
+          <vxe-button content="中等尺寸">中等尺寸</vxe-button>
+          <vxe-button content="下拉按钮">
+            <template #dropdowns>
+              <vxe-button type="text" content="按钮1"></vxe-button>
+              <vxe-button type="text" content="按钮2"></vxe-button>
+              <vxe-button type="text" content="按钮3"></vxe-button>
             </template>
           </vxe-button>
         </template>
       </vxe-toolbar>
       <vxe-toolbar size="small">
-        <template v-slot:buttons>
-          <vxe-button>小型尺寸</vxe-button>
-          <vxe-button>
-            <template v-slot>下拉按钮</template>
-            <template v-slot:dropdowns>
-              <vxe-button type="text">按钮1</vxe-button>
-              <vxe-button type="text">按钮2</vxe-button>
-              <vxe-button type="text">按钮3</vxe-button>
+        <template #buttons>
+          <vxe-button content="小型尺寸">小型尺寸</vxe-button>
+          <vxe-button content="下拉按钮">
+            <template #dropdowns>
+              <vxe-button type="text" content="按钮1"></vxe-button>
+              <vxe-button type="text" content="按钮2"></vxe-button>
+              <vxe-button type="text" content="按钮3"></vxe-button>
             </template>
           </vxe-button>
         </template>
       </vxe-toolbar>
       <vxe-toolbar size="mini">
-        <template v-slot:buttons>
-          <vxe-button>超小尺寸</vxe-button>
-          <vxe-button>
-            <template v-slot>下拉按钮</template>
-            <template v-slot:dropdowns>
-              <vxe-button type="text">按钮1</vxe-button>
-              <vxe-button type="text">按钮2</vxe-button>
-              <vxe-button type="text">按钮3</vxe-button>
+        <template #buttons>
+          <vxe-button content="超小尺寸"></vxe-button>
+          <vxe-button content="下拉按钮">
+            <template #dropdowns>
+              <vxe-button type="text" content="按钮1"></vxe-button>
+              <vxe-button type="text" content="按钮2"></vxe-button>
+              <vxe-button type="text" content="按钮3"></vxe-button>
             </template>
           </vxe-button>
         </template>
@@ -60,110 +56,133 @@
 
     <p>
       <vxe-toolbar perfect>
-        <template v-slot:buttons>
-          <vxe-button type="text" icon="fa fa-plus">新增</vxe-button>
-          <vxe-button type="text" icon="fa fa-trash-o">删除</vxe-button>
-          <vxe-button type="text" icon="fa fa-save">保存</vxe-button>
+        <template #buttons>
+          <vxe-button type="text" icon="fa fa-plus" content="新增"></vxe-button>
+          <vxe-button type="text" icon="fa fa-trash-o" content="删除"></vxe-button>
+          <vxe-button type="text" icon="fa fa-save" content="保存"></vxe-button>
         </template>
       </vxe-toolbar>
 
       <vxe-toolbar perfect>
-        <template v-slot:buttons>
-          <vxe-button icon="fa fa-plus" status="perfect">新增</vxe-button>
-          <vxe-button icon="fa fa-trash-o" status="perfect">删除</vxe-button>
-          <vxe-button icon="fa fa-save" status="perfect">保存</vxe-button>
+        <template #buttons>
+          <vxe-button icon="fa fa-plus" status="perfect" content="新增"></vxe-button>
+          <vxe-button icon="fa fa-trash-o" status="perfect" content="删除"></vxe-button>
+          <vxe-button icon="fa fa-save" status="perfect" content="保存"></vxe-button>
         </template>
       </vxe-toolbar>
 
-      <vxe-toolbar :refresh="{ query: findList }">
-        <template v-slot:buttons>
-          <vxe-button>自定义模板</vxe-button>
-          <vxe-button>按钮2</vxe-button>
-          <vxe-button>按钮3</vxe-button>
-          <vxe-button>
-            <template v-slot>下拉按钮</template>
-            <template v-slot:dropdowns>
-              <vxe-button>按钮1</vxe-button>
-              <vxe-button>按钮2</vxe-button>
-              <vxe-button>按钮3</vxe-button>
+      <vxe-toolbar ref="xToolbar" custom>
+        <template #buttons>
+          <vxe-button content="自定义模板"></vxe-button>
+          <vxe-button content="按钮2"></vxe-button>
+          <vxe-button content="按钮3"></vxe-button>
+          <vxe-button content="下拉按钮">
+            <template #dropdowns>
+              <vxe-button content="按钮1"></vxe-button>
+              <vxe-button content="按钮2"></vxe-button>
+              <vxe-button content="按钮3"></vxe-button>
             </template>
           </vxe-button>
         </template>
-        <template v-slot:tools>
+        <template #tools>
           <vxe-button type="text" icon="vxe-icon--question" class="tool-btn"></vxe-button>
           <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn"></vxe-button>
         </template>
       </vxe-toolbar>
+
+      <vxe-table ref="xTable" :data="demo1.tableData">
+        <vxe-table-column field="name" title="Name"></vxe-table-column>
+        <vxe-table-column field="role" title="Role"></vxe-table-column>
+        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      </vxe-table>
     </p>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="html">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <pre-code class="html">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, ref, Ref, reactive, nextTick } from 'vue'
+import { VxeTableInstance, VxeToolbarInstance } from '../../../types/vxe-table'
 
-export default {
-  data  () {
+export default defineComponent({
+  setup  () {
+    const demo1 = reactive({
+      tableData: [
+        { name: 'Test1', role: '前端', sex: '男' },
+        { name: 'Test2', role: '后端', sex: '男' },
+        { name: 'Test3', role: '测试', sex: '男' },
+        { name: 'Test4', role: '设计师', sex: '女' }
+      ]
+    })
+
+    const xTable = ref() as Ref<VxeTableInstance>
+    const xToolbar = ref() as Ref<VxeToolbarInstance>
+
+    nextTick(() => {
+      // 将表格和工具栏进行关联
+      const $table = xTable.value
+      const $toolbar = xToolbar.value
+      $table.connect($toolbar)
+    })
+
     return {
-      loading: false,
+      demo1,
+      xTable,
+      xToolbar,
       demoCodes: [
         `
         <p>
           <vxe-toolbar>
-            <template v-slot:buttons>
-              <vxe-button>默认尺寸</vxe-button>
-              <vxe-button>
-                <template v-slot>下拉按钮</template>
-                <template v-slot:dropdowns>
-                  <vxe-button type="text">按钮1</vxe-button>
-                  <vxe-button type="text">按钮2</vxe-button>
-                  <vxe-button type="text">按钮3</vxe-button>
+            <template #buttons>
+              <vxe-button content="默认尺寸"></vxe-button>
+              <vxe-button content="下拉按钮">
+                <template #dropdowns>
+                  <vxe-button type="text" content="按钮1"></vxe-button>
+                  <vxe-button type="text" content="按钮2"></vxe-button>
+                  <vxe-button type="text" content="按钮3"></vxe-button>
                 </template>
               </vxe-button>
             </template>
           </vxe-toolbar>
           <vxe-toolbar size="medium">
-            <template v-slot:buttons>
-              <vxe-button>中等尺寸</vxe-button>
-              <vxe-button>
-                <template v-slot>下拉按钮</template>
-                <template v-slot:dropdowns>
-                  <vxe-button type="text">按钮1</vxe-button>
-                  <vxe-button type="text">按钮2</vxe-button>
-                  <vxe-button type="text">按钮3</vxe-button>
+            <template #buttons>
+              <vxe-button content="中等尺寸">中等尺寸</vxe-button>
+              <vxe-button content="下拉按钮">
+                <template #dropdowns>
+                  <vxe-button type="text" content="按钮1"></vxe-button>
+                  <vxe-button type="text" content="按钮2"></vxe-button>
+                  <vxe-button type="text" content="按钮3"></vxe-button>
                 </template>
               </vxe-button>
             </template>
           </vxe-toolbar>
           <vxe-toolbar size="small">
-            <template v-slot:buttons>
-              <vxe-button>小型尺寸</vxe-button>
-              <vxe-button>
-                <template v-slot>下拉按钮</template>
-                <template v-slot:dropdowns>
-                  <vxe-button type="text">按钮1</vxe-button>
-                  <vxe-button type="text">按钮2</vxe-button>
-                  <vxe-button type="text">按钮3</vxe-button>
+            <template #buttons>
+              <vxe-button content="小型尺寸">小型尺寸</vxe-button>
+              <vxe-button content="下拉按钮">
+                <template #dropdowns>
+                  <vxe-button type="text" content="按钮1"></vxe-button>
+                  <vxe-button type="text" content="按钮2"></vxe-button>
+                  <vxe-button type="text" content="按钮3"></vxe-button>
                 </template>
               </vxe-button>
             </template>
           </vxe-toolbar>
           <vxe-toolbar size="mini">
-            <template v-slot:buttons>
-              <vxe-button>超小尺寸</vxe-button>
-              <vxe-button>
-                <template v-slot>下拉按钮</template>
-                <template v-slot:dropdowns>
-                  <vxe-button type="text">按钮1</vxe-button>
-                  <vxe-button type="text">按钮2</vxe-button>
-                  <vxe-button type="text">按钮3</vxe-button>
+            <template #buttons>
+              <vxe-button content="超小尺寸"></vxe-button>
+              <vxe-button content="下拉按钮">
+                <template #dropdowns>
+                  <vxe-button type="text" content="按钮1"></vxe-button>
+                  <vxe-button type="text" content="按钮2"></vxe-button>
+                  <vxe-button type="text" content="按钮3"></vxe-button>
                 </template>
               </vxe-button>
             </template>
@@ -172,60 +191,79 @@ export default {
 
         <p>
           <vxe-toolbar perfect>
-            <template v-slot:buttons>
-              <vxe-button type="text" icon="fa fa-plus">新增</vxe-button>
-              <vxe-button type="text" icon="fa fa-trash-o">删除</vxe-button>
-              <vxe-button type="text" icon="fa fa-save">保存</vxe-button>
+            <template #buttons>
+              <vxe-button type="text" icon="fa fa-plus" content="新增"></vxe-button>
+              <vxe-button type="text" icon="fa fa-trash-o" content="删除"></vxe-button>
+              <vxe-button type="text" icon="fa fa-save" content="保存"></vxe-button>
             </template>
           </vxe-toolbar>
 
           <vxe-toolbar perfect>
-            <template v-slot:buttons>
-              <vxe-button icon="fa fa-plus" status="perfect">新增</vxe-button>
-              <vxe-button icon="fa fa-trash-o" status="perfect">删除</vxe-button>
-              <vxe-button icon="fa fa-save" status="perfect">保存</vxe-button>
+            <template #buttons>
+              <vxe-button icon="fa fa-plus" status="perfect" content="新增"></vxe-button>
+              <vxe-button icon="fa fa-trash-o" status="perfect" content="删除"></vxe-button>
+              <vxe-button icon="fa fa-save" status="perfect" content="保存"></vxe-button>
             </template>
           </vxe-toolbar>
 
-          <vxe-toolbar :refresh="{ query: findList }">
-            <template v-slot:buttons>
-              <vxe-button>自定义模板</vxe-button>
-              <vxe-button>按钮2</vxe-button>
-              <vxe-button>按钮3</vxe-button>
-              <vxe-button>
-                <template v-slot>下拉按钮</template>
-                <template v-slot:dropdowns>
-                  <vxe-button>按钮1</vxe-button>
-                  <vxe-button>按钮2</vxe-button>
-                  <vxe-button>按钮3</vxe-button>
+          <vxe-toolbar ref="xToolbar" custom>
+            <template #buttons>
+              <vxe-button content="自定义模板"></vxe-button>
+              <vxe-button content="按钮2"></vxe-button>
+              <vxe-button content="按钮3"></vxe-button>
+              <vxe-button content="下拉按钮">
+                <template #dropdowns>
+                  <vxe-button content="按钮1"></vxe-button>
+                  <vxe-button content="按钮2"></vxe-button>
+                  <vxe-button content="按钮3"></vxe-button>
                 </template>
               </vxe-button>
             </template>
-            <template v-slot:tools>
+            <template #tools>
               <vxe-button type="text" icon="vxe-icon--question" class="tool-btn"></vxe-button>
               <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn"></vxe-button>
             </template>
           </vxe-toolbar>
+
+          <vxe-table ref="xTable" :data="demo1.tableData">
+            <vxe-table-column field="name" title="Name"></vxe-table-column>
+            <vxe-table-column field="role" title="Role"></vxe-table-column>
+            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          </vxe-table>
         </p>
         `,
         `
-        export default {
-          data () {
+        import { defineComponent, ref, Ref, reactive, nextTick } from 'vue'
+        import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+
+        export default defineComponent({
+          setup  () {
+            const demo1 = reactive({
+              tableData: [
+                { name: 'Test1', role: '前端', sex: '男' },
+                { name: 'Test2', role: '后端', sex: '男' },
+                { name: 'Test3', role: '测试', sex: '男' },
+                { name: 'Test4', role: '设计师', sex: '女' }
+              ]
+            })
+
+            const xTable = ref() as Ref<VxeTableInstance>
+            const xToolbar = ref() as Ref<VxeToolbarInstance>
+
+            nextTick(() => {
+              // 将表格和工具栏进行关联
+              const $table = xTable.value
+              const $toolbar = xToolbar.value
+              $table.connect($toolbar)
+            })
+
             return {
-              loading: false
-            }
-          },
-          methods: {
-            findList () {
-              this.loading = true
-              return new Promise(resolve => {
-                this.loading = false
-                this.$XModal.message({ message: '刷新成功！', status: 'success' })
-                setTimeout(resolve, 800)
-              })
+              demo1,
+              xTable,
+              xToolbar
             }
           }
-        }
+        })
         `,
         `
         .tool-btn {
@@ -238,23 +276,8 @@ export default {
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    findList () {
-      this.loading = true
-      return new Promise(resolve => {
-        this.loading = false
-        this.$XModal.message({ message: '刷新成功！', status: 'success' })
-        setTimeout(resolve, 800)
-      })
-    }
   }
-}
+})
 </script>
 
 <style scoped>

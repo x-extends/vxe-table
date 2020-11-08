@@ -5,7 +5,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
         <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
@@ -16,8 +16,8 @@
       border
       resizable
       ref="xTree1"
-      :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-      :data="tableData">
+      :tree-config="demo1.tableTreeConfig"
+      :data="demo1.tableData">
       <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -27,8 +27,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">更多自定义</p>
@@ -37,10 +37,10 @@
       resizable
       show-overflow
       ref="xTree2"
-      :tree-config="{children: 'children', iconOpen: 'fa fa-minus-circle', iconClose: 'fa fa-plus-circle'}"
-      :data="tableData">
+      :tree-config="demo2.tableTreeConfig"
+      :data="demo2.tableData">
       <vxe-table-column field="name" title="Name" tree-node>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>
             <template v-if="row.children && row.children.length">
               <i class="tree-node-icon fa" :class="$refs.xTree2.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
@@ -60,9 +60,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
-      <code class="css">{{ demoCodes[4] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[4] }}</pre-code>
     </pre>
 
     <p class="tip">还可以通过 <table-api-link prop="tree-config"/>={<table-api-link prop="toggleMethod"/>} 方法实现展开与关闭的细节处理，返回值用来决定是否允许继续执行</p>
@@ -70,8 +70,8 @@
     <vxe-table
       resizable
       show-overflow
-      :tree-config="{children: 'children', toggleMethod: toggleTreeMethod}"
-      :data="tableData">
+      :tree-config="demo3.tableTreeConfig"
+      :data="demo3.tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -81,72 +81,245 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[5] }}</code>
-      <code class="javascript">{{ demoCodes[6] }}</code>
+      <pre-code class="xml">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[6] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive, ref, Ref } from 'vue'
+import { VXETable } from '../../../../packages/vxe-table'
+import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/vxe-table'
 
-export default {
-  data () {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
+      tableData: [
+        { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          children: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'Test96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              children: [
+                { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
+      tableTreeConfig: {
+        children: 'children',
+        iconOpen: 'fa fa-minus-square-o',
+        iconClose: 'fa fa-plus-square-o'
+      } as VxeTablePropTypes.TreeConfig
+    })
+
+    const xTree1 = ref() as Ref<VxeTableInstance>
+
+    const getTreeExpansionEvent = () => {
+      const $table = xTree1.value
+      const treeExpandRecords = $table.getTreeExpandRecords()
+      VXETable.modal.alert(`${treeExpandRecords.length}`)
+    }
+
+    const demo2 = reactive({
+      tableData: [
+        { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          children: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'Test96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              children: [
+                { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
+      tableTreeConfig: {
+        children: 'children',
+        iconOpen: 'fa fa-minus-circle',
+        iconClose: 'fa fa-plus-circle'
+      } as VxeTablePropTypes.TreeConfig
+    })
+
+    const demo3 = reactive({
+      tableData: [
+        { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          children: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'Test96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              children: [
+                { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
+      tableTreeConfig: {
+        children: 'children',
+        toggleMethod ({ expanded, row }) {
+          if (expanded) {
+            if (row.date === '2019-10-22') {
+              VXETable.modal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+              return false
+            }
+          } else {
+            if (row.date === '2019-03-04') {
+              VXETable.modal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+              return false
+            }
+          }
+          return true
+        }
+      } as VxeTablePropTypes.TreeConfig
+    })
+
     return {
-      tableData: [],
+      demo1,
+      xTree1,
+      getTreeExpansionEvent,
+      demo2,
+      demo3,
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
-            <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
-            <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
+            <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
+            <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
           </template>
         </vxe-toolbar>
 
         <vxe-table
           border
           resizable
-          ref="xTree"
-          :tree-config="{children: 'children', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-          :data="tableData">
-          <vxe-table-column field="name" title="app.body.label.name"  tree-node></vxe-table-column>
+          ref="xTree1"
+          :tree-config="demo1.tableTreeConfig"
+          :data="demo1.tableData">
+          <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
-              tableData: []
+        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
+              tableData: [
+                { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'Test96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+              ],
+              tableTreeConfig: {
+                children: 'children',
+                iconOpen: 'fa fa-minus-square-o',
+                iconClose: 'fa fa-plus-square-o'
+              } as VxeTablePropTypes.TreeConfig
+            })
+
+            const xTree1 = ref() as Ref<VxeTableInstance>
+
+            const getTreeExpansionEvent = () => {
+              const $table = xTree1.value
+              const treeExpandRecords = $table.getTreeExpandRecords()
+              VXETable.modal.alert(\`\${treeExpandRecords.length}\`)
             }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
-          },
-          methods: {
-            getTreeExpansionEvent () {
-              let treeExpandRecords = this.$refs.xTree.getTreeExpandRecords()
-              this.$XModal.alert(treeExpandRecords.length)
+
+            return {
+              demo1,
+              xTree1,
+              getTreeExpansionEvent
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
           resizable
           show-overflow
-          ref="xTree"
-          :tree-config="{children: 'children', iconOpen: 'fa fa-minus-circle', iconClose: 'fa fa-plus-circle'}"
-          :data="tableData">
+          ref="xTree2"
+          :tree-config="demo2.tableTreeConfig"
+          :data="demo2.tableData">
           <vxe-table-column field="name" title="Name" tree-node>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>
                 <template v-if="row.children && row.children.length">
-                  <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
+                  <i class="tree-node-icon fa" :class="$refs.xTree2.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
                 </template>
                 <template v-else>
                   <i class="tree-node-icon fa fa-file-o"></i>
@@ -161,16 +334,52 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
+        import { defineComponent, reactive } from 'vue'
+        import { VxeTablePropTypes } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo2 = reactive({
+              tableData: [
+                { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'Test96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+              ],
+              tableTreeConfig: {
+                children: 'children',
+                iconOpen: 'fa fa-minus-circle',
+                iconClose: 'fa fa-plus-circle'
+              } as VxeTablePropTypes.TreeConfig
+            })
+
             return {
-              tableData: []
+              demo2
             }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
           }
-        }
+        })
         `,
         `
         .tree-node-icon {
@@ -181,8 +390,8 @@ export default {
         <vxe-table
           resizable
           show-overflow
-          :tree-config="{children: 'children', toggleMethod: toggleTreeMethod}"
-          :data="tableData">
+          :tree-config="demo3.tableTreeConfig"
+          :data="demo3.tableData">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -190,65 +399,69 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
+        import { defineComponent, reactive } from 'vue'
+        import { VXETable, VxeTablePropTypes } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo3 = reactive({
+              tableData: [
+                { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'Test96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+              ],
+              tableTreeConfig: {
+                children: 'children',
+                toggleMethod ({ expanded, row }) {
+                  if (expanded) {
+                    if (row.date === '2019-10-22') {
+                      VXETable.modal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+                      return false
+                    }
+                  } else {
+                    if (row.date === '2019-03-04') {
+                      VXETable.modal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+                      return false
+                    }
+                  }
+                  return true
+                }
+              } as VxeTablePropTypes.TreeConfig
+            })
+
             return {
-              tableData: []
-            }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
-          },
-          methods: {
-            toggleTreeMethod ({ expanded, row }) {
-              if (expanded) {
-                if (row.date === '2019-10-22') {
-                  this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
-                  return false
-                }
-              } else {
-                if (row.date === '2019-03-04') {
-                  this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
-                  return false
-                }
-              }
-              return true
+              demo3
             }
           }
-        }
+        })
         `
       ]
     }
-  },
-  created () {
-    this.tableData = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    getTreeExpansionEvent () {
-      const treeExpandRecords = this.$refs.xTree1.getTreeExpandRecords()
-      this.$XModal.alert(treeExpandRecords.length)
-    },
-    toggleTreeMethod ({ expanded, row }) {
-      if (expanded) {
-        if (row.date === '2019-10-22') {
-          this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
-          return false
-        }
-      } else {
-        if (row.date === '2019-03-04') {
-          this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
-          return false
-        }
-      }
-      return true
-    }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -1,39 +1,66 @@
-import { VXETableModule } from './component'
+import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
+import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
- * 开关
+ * 组件 - 开关
  */
-export declare class Switch extends VXETableModule {
-  /**
-   * 绑定值
-   */
-  value?: string | number | boolean;
-  /**
-   * 是否禁用
-   */
-  disabled?: boolean;
-  /**
-   * 打开时显示的文字
-   */
-  onLabel?: string;
-  /**
-   * 关闭时显示的文字
-   */
-  offLabel?: string;
-  /**
-   * 打开时的值
-   */
-  onValue?: string | number | boolean;
-  /**
-   * 关闭时的值
-   */
-  offValue?: string | number | boolean;
-  /**
-   * 打开时的图标
-   */
-  onIcon?: string;
-  /**
-   * 关闭时的图标
-   */
-  offIcon?: string;
+export interface Switch extends VXETableComponent { }
+
+export type VxeSwitchInstance = ComponentPublicInstance<VxeSwitchProps, VxeSwitchConstructor>;
+
+export interface VxeSwitchConstructor extends VxeComponentInstance, VxeSwitchMethods {
+  props: VxeSwitchProps;
+  context: SetupContext<VxeSwitchEmits>;
+  reactData: SwitchReactData;
+  renderVN: RenderFunction;
 }
+
+export interface SwitchReactData {
+  hasAnimat: boolean;
+  offsetLeft: number;
+}
+
+export interface VxeSwitchOptions extends VxeSwitchProps, VxeSwitchListeners { }
+
+export interface VxeSwitchProps {
+  size?: SizeType;
+  modelValue?: string | number | boolean;
+  disabled?: boolean;
+  openLabel?: string;
+  closeLabel?: string;
+  openValue?: string | number | boolean;
+  closeValue?: string | number | boolean;
+  openIcon?: string;
+  closeIcon?: string;
+}
+
+export interface SwitchMethods {
+  dispatchEvent(type: ValueOf<VxeSwitchEmits>, params: any, evnt: Event): void;
+  /**
+   * 获取焦点
+   */
+  focus(): Promise<any>;
+  /**
+   * 失去焦点
+   */
+  blur(): Promise<any>;
+}
+export interface VxeSwitchMethods extends SwitchMethods { }
+
+export interface SwitchPrivateMethods { }
+export interface VxeSwitchPrivateMethods extends SwitchPrivateMethods { }
+
+export type VxeSwitchEmits = [
+  'update:modelValue',
+  'change'
+]
+
+export namespace VxeSwitchDefines {
+  interface SwitchEventParams extends VxeEvent {
+    $switch: VxeSwitchConstructor;
+  }
+}
+
+export interface VxeSwitchListeners { }
+
+export namespace VxeSwitchEvents { }

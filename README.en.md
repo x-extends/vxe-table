@@ -20,12 +20,10 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
   * Designed for single row table editing, supports addition, deletion, modification and query as well as more expansion, with powerful functions and performance at the same time
 
 * [Donation](#donation)
-  * [x] v1.0 100% Based on vue2.6+, it supports all mainstream browsers and realizes all practical functions of tables
-  * [x] v2.0 &nbsp;100% Based on vue2.6+, it supports all mainstream browsers with both functions and performance
-  * [x] v3.0 &nbsp;&nbsp;100% Based on vue2.6+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
+  * [x] v1.0 Based on vue2.6+, it supports all mainstream browsers and realizes all practical functions of tables
+  * [x] v2.0 Based on vue2.6+, it supports all mainstream browsers with both functions and performance
+  * [x] v3.0 Based on vue2.6+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
   * [x] v4.0 &nbsp;&nbsp;10% Based on vue3+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
-
-👉 If you have a better suggestion, optimization point or Bug, please feel free to ask [Issues](https://github.com/x-extends/vxe-table/issues/390)
 
 ## Browser Support
 
@@ -53,6 +51,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Select
 * [x] Switch
 * [x] Sorting
+* [x] Multi field sorting
 * [x] Filter
 * [x] Merged cells
 * [x] Merged footer items
@@ -74,7 +73,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Data Proxy
 * [x] Keyboard navigation
 * [x] Modal
-* [x] Renderer
+* [x] VxeGlobalRenderer
 * [x] Virtual scroller
 * [x] Virtual merger
 * [x] (pro) Cell area selection
@@ -83,7 +82,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## Installing
 
-Dependent: [vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.7+
+Version: [vue](https://www.npmjs.com/package/vue) 3.x, Dependent: [xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
 
 ```shell
 npm install xe-utils vxe-table
@@ -118,27 +117,33 @@ Vue.use(VXETable)
 ```html
 <template>
   <div>
-    <vxe-table :data="tableData">
+    <vxe-table :data="demo1.tableData">
       <vxe-table-column type="seq" title="Seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
+      <vxe-table-column field="role" title="Role"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="address" title="Address"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
       tableData: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
       ]
+    })
+    return {
+      demo1
     }
   }
-}
+})
 </script>
 ```
 
@@ -153,7 +158,7 @@ export default {
 If you feel that our open source software is helpful to you, please scan the QR code below to enjoy a cup of coffee.☕  
 
 Because maintaining an open source project takes a lot of effort and time, if you are using the project, your donation will help keep the project going.  
-[👉 This component is helpful to me and I would like to donate it💰](https://x-extends.github.io/vxe-table/#/donation/api)  
+[👉 This component is helpful to me and supports the author💰](https://x-extends.github.io/vxe-table/#/donation/api)  
 
 ## License
 

@@ -3,9 +3,9 @@
     <p class="tip">单选表格，用户手动选中时会触发事件 <table-api-link prop="radio-change"/>，还通过 <table-api-link prop="highlight"/> 设置高亮选中行</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
-        <vxe-button @click="clearRadioRowEevnt">取消选中</vxe-button>
+        <vxe-button @click="clearRadioRowEevnt1">取消选中</vxe-button>
         <vxe-button @click="getRadioEvent1">获取选中</vxe-button>
       </template>
     </vxe-toolbar>
@@ -14,13 +14,13 @@
       border
       ref="xTable1"
       height="300"
-      :data="tableData"
+      :data="demo1.tableData"
       :radio-config="{highlight: true}"
-      @cell-click="cellClickEvent"
-      @radio-change="radioChangeEvent">
+      @cell-click="cellClickEvent1"
+      @radio-change="radioChangeEvent1">
       <vxe-table-column type="radio" width="60">
-        <template v-slot:header>
-          <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
+        <template #header>
+          <vxe-button type="text" @click="clearRadioRowEevnt1" :disabled="!demo1.selectRow">取消</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -31,8 +31,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -40,7 +40,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable2.setRadioRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
         <vxe-button @click="$refs.xTable2.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.clearRadioRow()">清除所有行选中</vxe-button>
@@ -51,8 +51,8 @@
       border
       ref="xTable2"
       height="300"
-      :radio-config="{labelField: 'name', checkMethod: checkRadioMethod}"
-      :data="tableData">
+      :radio-config="{labelField: 'name', checkMethod: checkRadioMethod2}"
+      :data="demo2.tableData">
       <vxe-table-column type="radio" title="请选择" width="100"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -62,8 +62,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -75,8 +75,8 @@
       border
       height="300"
       row-id="id"
-      :data="tableData"
-      :radio-config="{checkRowKey: defaultSelecteRow}">
+      :data="demo3.tableData"
+      :radio-config="{checkRowKey: demo3.defaultSelecteRow3}">
       <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column field="id" title="ID"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -87,8 +87,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 高亮方式</p>
@@ -97,8 +97,8 @@
       border
       highlight-current-row
       height="300"
-      :data="tableData"
-      @current-change="currentChangeEvent">
+      :data="demo4.tableData"
+      @current-change="currentChangeEvent4">
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -108,8 +108,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
     </pre>
 
     <p class="tip">两种方式混合使用</p>
@@ -119,7 +119,7 @@
       highlight-current-row
       height="300"
       :radio-config="{labelField: 'name'}"
-      :data="tableData">
+      :data="demo5.tableData">
       <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -130,8 +130,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[8] }}</code>
-      <code class="javascript">{{ demoCodes[9] }}</code>
+      <pre-code class="xml">{{ demoCodes[8] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[9] }}</pre-code>
     </pre>
 
     <p class="tip">当然也可以两种方式同时使用</p>
@@ -142,7 +142,7 @@
       highlight-current-row
       height="300"
       :radio-config="{labelField: 'name', trigger: 'row'}"
-      :data="tableData">
+      :data="demo6.tableData">
       <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -153,18 +153,20 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[10] }}</code>
-      <code class="javascript">{{ demoCodes[11] }}</code>
+      <pre-code class="xml">{{ demoCodes[10] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[11] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive, ref, Ref } from 'vue'
+import { VXETable } from '../../../../packages/vxe-table'
+import { VxeTableInstance, VxeTableEvents } from '../../../../types/vxe-table'
 
-export default {
-  data () {
-    return {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
       tableData: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -175,14 +177,125 @@ export default {
         { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
         { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
       ],
-      defaultSelecteRow: 10002,
-      selectRow: null,
+      selectRow: null as any
+    })
+
+    const xTable1 = ref() as Ref<VxeTableInstance>
+
+    const cellClickEvent1: VxeTableEvents.CellClick = () => {
+      console.log('单元格点击事件')
+    }
+
+    const radioChangeEvent1: VxeTableEvents.RadioChange = ({ row }) => {
+      demo1.selectRow = row
+      console.log('单选事件')
+    }
+
+    const clearRadioRowEevnt1 = () => {
+      const $table = xTable1.value
+      demo1.selectRow = null
+      $table.clearRadioRow()
+    }
+
+    const getRadioEvent1 = () => {
+      const $table = xTable1.value
+      VXETable.modal.alert(JSON.stringify($table.getRadioRecord()))
+    }
+
+    const demo2 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+      ]
+    })
+
+    const checkRadioMethod2 = ({ row }: any) => {
+      return row.age > 26
+    }
+
+    const demo3 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+      ],
+      defaultSelecteRow3: 10002
+    })
+
+    const demo4 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+      ]
+    })
+
+    const currentChangeEvent4: VxeTableEvents.CurrentChange = ({ rowIndex }) => {
+      console.log(`行选中事件 ${rowIndex}`)
+    }
+
+    const demo5 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+      ]
+    })
+
+    const demo6 = reactive({
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+      ]
+    })
+
+    return {
+      demo1,
+      xTable1,
+      cellClickEvent1,
+      radioChangeEvent1,
+      clearRadioRowEevnt1,
+      getRadioEvent1,
+      demo2,
+      checkRadioMethod2,
+      demo3,
+      demo4,
+      currentChangeEvent4,
+      demo5,
+      demo6,
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
-            <vxe-button @click="clearRadioRowEevnt">取消选中</vxe-button>
+            <vxe-button @click="clearRadioRowEevnt1">取消选中</vxe-button>
             <vxe-button @click="getRadioEvent1">获取选中</vxe-button>
           </template>
         </vxe-toolbar>
@@ -191,13 +304,13 @@ export default {
           border
           ref="xTable1"
           height="300"
-          :data="tableData"
+          :data="demo1.tableData"
           :radio-config="{highlight: true}"
-          @cell-click="cellClickEvent"
-          @radio-change="radioChangeEvent">
+          @cell-click="cellClickEvent1"
+          @radio-change="radioChangeEvent1">
           <vxe-table-column type="radio" width="60">
-            <template v-slot:header>
-              <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
+            <template #header>
+              <vxe-button type="text" @click="clearRadioRowEevnt1" :disabled="!demo1.selectRow">取消</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -206,9 +319,12 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { VXETable, VxeTableInstance, VxeTableEvents } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -219,30 +335,45 @@ export default {
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ],
-              selectRow: null
-            }
-          },
-          methods: {
-            cellClickEvent () {
+              selectRow: null as any
+            })
+
+            const xTable1 = ref() as Ref<VxeTableInstance>
+
+            const cellClickEvent1: VxeTableEvents.CellClick = () => {
               console.log('单元格点击事件')
-            },
-            radioChangeEvent ({ row }) {
-              this.selectRow = row
+            }
+
+            const radioChangeEvent1: VxeTableEvents.RadioChange = ({ row }) => {
+              demo1.selectRow = row
               console.log('单选事件')
-            },
-            clearRadioRowEevnt () {
-              this.selectRow = null
-              this.$refs.xTable1.clearRadioRow()
-            },
-            getRadioEvent1 () {
-              this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRecord()))
+            }
+
+            const clearRadioRowEevnt1 = () => {
+              const $table = xTable1.value
+              demo1.selectRow = null
+              $table.clearRadioRow()
+            }
+
+            const getRadioEvent1 = () => {
+              const $table = xTable1.value
+              VXETable.modal.alert(JSON.stringify($table.getRadioRecord()))
+            }
+
+            return {
+              demo1,
+              xTable1,
+              cellClickEvent1,
+              radioChangeEvent1,
+              clearRadioRowEevnt1,
+              getRadioEvent1
             }
           }
-        }
+        })
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable2.setRadioRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
             <vxe-button @click="$refs.xTable2.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable2.clearRadioRow()">清除所有行选中</vxe-button>
@@ -253,8 +384,8 @@ export default {
           border
           ref="xTable2"
           height="300"
-          :radio-config="{labelField: 'name', checkMethod: checkRadioMethod}"
-          :data="tableData">
+          :radio-config="{labelField: 'name', checkMethod: checkRadioMethod2}"
+          :data="demo2.tableData">
           <vxe-table-column type="radio" title="请选择" width="100"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -262,9 +393,11 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive, ref, Ref } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo2 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -275,22 +408,26 @@ export default {
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
-            }
-          },
-          methods: {
-            checkRadioMethod ({ row }) {
+            })
+
+            const checkRadioMethod2 = ({ row }: any) => {
               return row.age > 26
             }
+
+            return {
+              demo2,
+              checkRadioMethod2
+            }
           }
-        }
+        })
         `,
         `
         <vxe-table
           border
           height="300"
           row-id="id"
-          :data="tableData"
-          :radio-config="{checkRowKey: defaultSelecteRow}">
+          :data="demo3.tableData"
+          :radio-config="{checkRowKey: demo3.defaultSelecteRow3}">
           <vxe-table-column type="radio" width="60"></vxe-table-column>
           <vxe-table-column field="id" title="ID"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -299,10 +436,11 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
-              defaultSelecteRow: 10002,
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo3 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -312,18 +450,23 @@ export default {
                 { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
-              ]
+              ],
+              defaultSelecteRow3: 10002
+            })
+
+            return {
+              demo3
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
           border
           highlight-current-row
           height="300"
-          :data="tableData"
-          @current-change="currentChangeEvent">
+          :data="demo4.tableData"
+          @current-change="currentChangeEvent4">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -331,9 +474,12 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+        import { VxeTableEvents } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo4 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -344,14 +490,18 @@ export default {
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+
+            const currentChangeEvent4: VxeTableEvents.CurrentChange = ({ rowIndex }) => {
+              console.log(\`行选中事件 \${rowIndex}\`)
             }
-          },
-          methods: {
-            currentChangeEvent ({ row }) {
-              console.log('行选中事件')
+
+            return {
+              demo4,
+              currentChangeEvent4
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
@@ -359,7 +509,7 @@ export default {
           highlight-current-row
           height="300"
           :radio-config="{labelField: 'name'}"
-          :data="tableData">
+          :data="demo5.tableData">
           <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -368,9 +518,11 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo5 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -381,9 +533,13 @@ export default {
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+
+            return {
+              demo5
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
@@ -392,7 +548,7 @@ export default {
           highlight-current-row
           height="300"
           :radio-config="{labelField: 'name', trigger: 'row'}"
-          :data="tableData">
+          :data="demo6.tableData">
           <vxe-table-column type="radio" title="还可以这样" width="120"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -401,9 +557,11 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo6 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -414,39 +572,16 @@ export default {
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+
+            return {
+              demo6
             }
           }
-        }
+        })
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    checkRadioMethod ({ row }) {
-      return row.age > 26
-    },
-    cellClickEvent () {
-      console.log('单元格点击事件')
-    },
-    currentChangeEvent ({ rowIndex }) {
-      console.log(`行选中事件 ${rowIndex}`)
-    },
-    radioChangeEvent ({ row }) {
-      this.selectRow = row
-      console.log('单选事件')
-    },
-    clearRadioRowEevnt () {
-      this.selectRow = null
-      this.$refs.xTable1.clearRadioRow()
-    },
-    getRadioEvent1 () {
-      this.$XModal.alert(JSON.stringify(this.$refs.xTable1.getRadioRecord()))
-    }
   }
-}
+})
 </script>

@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
         <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
         <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
@@ -20,8 +20,8 @@
       highlight-hover-row
       ref="xTable"
       height="400"
-      :loading="loading"
-      :data="tableData">
+      :loading="demo1.loading"
+      :data="demo1.tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column
         field="name"
@@ -35,9 +35,9 @@
         sortable
         :filters="[{ data: '' }]"
         :filter-method="filterRoleMethod">
-        <template v-slot:filter="{ $panel, column }">
+        <template #filter="{ $panel, column }">
           <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="$panel.changeOption($event, !!option.data, option)">
-            <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
+            <option v-for="(label, cIndex) in demo1.roleList" :key="cIndex" :value="label">{{ label }}</option>
           </select>
         </template>
       </vxe-table-column>
@@ -48,10 +48,8 @@
         :filter-multiple="false"
         :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
-        <template v-slot:filter="{ $panel, column }">
-          <template v-for="(option, index) in column.filters">
-            <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
-          </template>
+        <template #filter="{ $panel, column }">
+          <input class="my-input" type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
         </template>
       </vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
@@ -66,27 +64,113 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, reactive, ref, Ref } from 'vue'
+import { VxeTableInstance, VxeColumnPropTypes, VxeButtonEvents } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
 
-export default {
-  data () {
-    return {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
       loading: false,
-      tableData: [],
-      roleList: ['', '前端', '后端', '设计师'],
+      tableData: [] as any[],
+      roleList: ['', '前端', '后端', '设计师']
+    })
+
+    const xTable = ref() as Ref<VxeTableInstance>
+
+    const findList = () => {
+      demo1.loading = true
+      return new Promise(resolve => {
+        setTimeout(() => {
+          demo1.tableData = [
+            { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+            { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+            { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+            { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+            { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
+            { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' },
+            { id: 10007, name: 'Test7', role: 'PM', sex: 'Man ', age: 32, address: 'Shanghai' },
+            { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 30, address: 'Guangzhou' },
+            { id: 10009, name: 'Test9', role: 'Test', sex: 'Women ', age: 28, address: 'vxe-table 从入门到放弃' },
+            { id: 100010, name: 'Test10', role: 'Test', sex: 'Man ', age: 24, address: 'Shanghai' }
+          ]
+          demo1.loading = false
+          resolve()
+        }, 300)
+      })
+    }
+
+    const filterNameMethod: VxeColumnPropTypes.FilterMethod = ({ value, row }) => {
+      return XEUtils.toString(row.name).toLowerCase().indexOf(value) > -1
+    }
+
+    const filterRoleMethod: VxeColumnPropTypes.FilterMethod = ({ option, row }) => {
+      return row.role === option.data
+    }
+
+    const filterAgeMethod: VxeColumnPropTypes.FilterMethod = ({ option, row }) => {
+      return row.age === Number(option.data)
+    }
+
+    const updateNameFilterEvent: VxeButtonEvents.Click = () => {
+      const $table = xTable.value
+      const column = $table.getColumnByField('name')
+      // 修改筛选列表，并默认设置为选中状态
+      $table.setFilter(column, [
+        { label: '包含 a', value: 'a' },
+        { label: '包含 b', value: 'b' },
+        { label: '包含 c', value: 'c', checked: true },
+        { label: '包含 h', value: 'h' },
+        { label: '包含 j', value: 'j' }
+      ])
+      // 修改条件之后，需要手动调用 updateData 处理表格数据
+      $table.updateData()
+    }
+
+    const filterNameEvent: VxeButtonEvents.Click = () => {
+      const $table = xTable.value
+      const column = $table.getColumnByField('name')
+      // 修改第二个选项为勾选状态
+      const option = column.filters[1]
+      option.checked = true
+      // 修改条件之后，需要手动调用 updateData 处理表格数据
+      $table.updateData()
+    }
+
+    const filterAgeEvent: VxeButtonEvents.Click = () => {
+      const $table = xTable.value
+      const column = $table.getColumnByField('age')
+      // 修改第一个选项为勾选状态
+      const option = column.filters[0]
+      option.data = '26'
+      option.checked = true
+      // 修改条件之后，需要手动调用 updateData 处理表格数据
+      $table.updateData()
+    }
+
+    findList()
+
+    return {
+      demo1,
+      xTable,
+      filterNameMethod,
+      filterRoleMethod,
+      filterAgeMethod,
+      updateNameFilterEvent,
+      filterNameEvent,
+      filterAgeEvent,
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
             <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
             <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
@@ -100,8 +184,8 @@ export default {
           highlight-hover-row
           ref="xTable"
           height="400"
-          :loading="loading"
-          :data="tableData">
+          :loading="demo1.loading"
+          :data="demo1.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column
             field="name"
@@ -115,9 +199,9 @@ export default {
             sortable
             :filters="[{ data: '' }]"
             :filter-method="filterRoleMethod">
-            <template v-slot:filter="{ $panel, column }">
+            <template #filter="{ $panel, column }">
               <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="$panel.changeOption($event, !!option.data, option)">
-                <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
+                <option v-for="(label, cIndex) in demo1.roleList" :key="cIndex" :value="label">{{ label }}</option>
               </select>
             </template>
           </vxe-table-column>
@@ -128,10 +212,8 @@ export default {
             :filter-multiple="false"
             :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
-            <template v-slot:filter="{ $panel, column }">
-              <template v-for="(option, index) in column.filters">
-                <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
-              </template>
+            <template #filter="{ $panel, column }">
+              <input class="my-input" type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
             </template>
           </vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
@@ -144,42 +226,59 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { VxeTableInstance, VxeButtonEvents, VxeColumnPropTypes } from 'vxe-table'
+        import XEUtils from 'xe-utils'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
               loading: false,
-              tableData: [],
+              tableData: [] as any[],
               roleList: ['', '前端', '后端', '设计师']
-            }
-          },
-          created () {
-            this.findList()
-          },
-          methods: {
-            findList () {
-              this.loading = true
+            })
+
+            const xTable = ref() as Ref<VxeTableInstance>
+
+            const findList = () => {
+              demo1.loading = true
               return new Promise(resolve => {
                 setTimeout(() => {
-                  this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
-                  this.loading = false
+                  demo1.tableData = [
+                    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+                    { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
+                    { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' },
+                    { id: 10007, name: 'Test7', role: 'PM', sex: 'Man ', age: 32, address: 'Shanghai' },
+                    { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 30, address: 'Guangzhou' },
+                    { id: 10009, name: 'Test9', role: 'Test', sex: 'Women ', age: 28, address: 'vxe-table 从入门到放弃' },
+                    { id: 100010, name: 'Test10', role: 'Test', sex: 'Man ', age: 24, address: 'Shanghai' }
+                  ]
+                  demo1.loading = false
                   resolve()
                 }, 300)
               })
-            },
-            filterNameMethod ({ value, row, column }) {
+            }
+
+            const filterNameMethod: VxeColumnPropTypes.FilterMethod = ({ value, row }) => {
               return XEUtils.toString(row.name).toLowerCase().indexOf(value) > -1
-            },
-            filterRoleMethod ({ option, row }) {
+            }
+
+            const filterRoleMethod: VxeColumnPropTypes.FilterMethod = ({ option, row }) => {
               return row.role === option.data
-            },
-            filterAgeMethod ({ option, row }) {
+            }
+
+            const filterAgeMethod: VxeColumnPropTypes.FilterMethod = ({ option, row }) => {
               return row.age === Number(option.data)
-            },
-            updateNameFilterEvent () {
-              const xTable = this.$refs.xTable
-              const column = xTable.getColumnByField('name')
+            }
+
+            const updateNameFilterEvent: VxeButtonEvents.Click = () => {
+              const $table = xTable.value
+              const column = $table.getColumnByField('name')
               // 修改筛选列表，并默认设置为选中状态
-              xTable.setFilter(column, [
+              $table.setFilter(column, [
                 { label: '包含 a', value: 'a' },
                 { label: '包含 b', value: 'b' },
                 { label: '包含 c', value: 'c', checked: true },
@@ -187,26 +286,41 @@ export default {
                 { label: '包含 j', value: 'j' }
               ])
               // 修改条件之后，需要手动调用 updateData 处理表格数据
-              xTable.updateData()
-            },
-            filterNameEvent () {
-              const xTable = this.$refs.xTable
-              const column = xTable.getColumnByField('name')
+              $table.updateData()
+            }
+
+            const filterNameEvent: VxeButtonEvents.Click = () => {
+              const $table = xTable.value
+              const column = $table.getColumnByField('name')
               // 修改第二个选项为勾选状态
               const option = column.filters[1]
               option.checked = true
               // 修改条件之后，需要手动调用 updateData 处理表格数据
-              xTable.updateData()
-            },
-            filterAgeEvent () {
-              const xTable = this.$refs.xTable
-              const column = xTable.getColumnByField('age')
+              $table.updateData()
+            }
+
+            const filterAgeEvent: VxeButtonEvents.Click = () => {
+              const $table = xTable.value
+              const column = $table.getColumnByField('age')
               // 修改第一个选项为勾选状态
               const option = column.filters[0]
               option.data = '26'
               option.checked = true
               // 修改条件之后，需要手动调用 updateData 处理表格数据
-              xTable.updateData()
+              $table.updateData()
+            }
+
+            findList()
+
+            return {
+              demo1,
+              xTable,
+              filterNameMethod,
+              filterRoleMethod,
+              filterAgeMethod,
+              updateNameFilterEvent,
+              filterNameEvent,
+              filterAgeEvent
             }
           }
         }
@@ -225,70 +339,8 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.findList()
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    findList () {
-      this.loading = true
-      return new Promise(resolve => {
-        setTimeout(() => {
-          this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
-          this.loading = false
-          resolve()
-        }, 300)
-      })
-    },
-    filterNameMethod ({ value, row }) {
-      return XEUtils.toString(row.name).toLowerCase().indexOf(value) > -1
-    },
-    filterRoleMethod ({ option, row }) {
-      return row.role === option.data
-    },
-    filterAgeMethod ({ option, row }) {
-      return row.age === Number(option.data)
-    },
-    updateNameFilterEvent () {
-      const xTable = this.$refs.xTable
-      const column = xTable.getColumnByField('name')
-      // 修改筛选列表，并默认设置为选中状态
-      xTable.setFilter(column, [
-        { label: '包含 a', value: 'a' },
-        { label: '包含 b', value: 'b' },
-        { label: '包含 c', value: 'c', checked: true },
-        { label: '包含 h', value: 'h' },
-        { label: '包含 j', value: 'j' }
-      ])
-      // 修改条件之后，需要手动调用 updateData 处理表格数据
-      xTable.updateData()
-    },
-    filterNameEvent () {
-      const xTable = this.$refs.xTable
-      const column = xTable.getColumnByField('name')
-      // 修改第二个选项为勾选状态
-      const option = column.filters[1]
-      option.checked = true
-      // 修改条件之后，需要手动调用 updateData 处理表格数据
-      xTable.updateData()
-    },
-    filterAgeEvent () {
-      const xTable = this.$refs.xTable
-      const column = xTable.getColumnByField('age')
-      // 修改第一个选项为勾选状态
-      const option = column.filters[0]
-      option.data = '26'
-      option.checked = true
-      // 修改条件之后，需要手动调用 updateData 处理表格数据
-      xTable.updateData()
-    }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -5,12 +5,21 @@
     <p class="tip">
       轻提示框、提示框、弹出窗口，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
       对于某些场景如果需要动态创建的窗口，可以通过以下 API 全局调用：<br>
-      open(options: ModalOptions) 动态创建窗口<br>
-      message(message: string, title?: string, options?: ModalOptions) 动态创建消息框<br>
-      alert(message: string, title?: string, options?: ModalOptions) 动态创建提示框<br>
-      confirm(message: string, title?: string, options?: ModalOptions) 动态创建确认框<br>
-      close(id?: string) 手动关闭当前活动的窗口<br>
-      全局实例对象：this.$XModal || VXETable.modal 或者 ModalController<br>
+      打开窗口：<br>
+      open(options: ModalOptions)<br>
+      打开消息框：<br>
+      message(options: ModalOptions)<br>
+      message(message: string, title?: string)<br>
+      打开提示框：<br>
+      alert(options: ModalOptions) 打开提示框<br>
+      alert(message: string, title?: string)<br>
+      打开确认框：<br>
+      confirm(options: ModalOptions) 打开确认框<br>
+      confirm(message: string, title?: string)<br>
+      手动关闭当前活动的窗口：<br>
+      close(id?: string)<br>
+      给 vue 实例挂载属性：<br>
+      Vue.prototype.$XModal = VXETable.modal
     </p>
 
     <p>
@@ -38,33 +47,33 @@
     </p>
 
     <p>
-      <vxe-button @click="value1 = true">默认尺寸</vxe-button>
-      <vxe-modal v-model="value1">
-        <template v-slot>
+      <vxe-button @click="demo1.value1 = true">默认尺寸</vxe-button>
+      <vxe-modal v-model="demo1.value1">
+        <template #default>
           <div>默认尺寸</div>
           <div>xxxxxxxxx</div>
           <div>xxxxxxxxxx</div>
         </template>
       </vxe-modal>
-      <vxe-button @click="value2 = true" size="medium">中等尺寸</vxe-button>
-      <vxe-modal v-model="value2" size="medium">
-        <template v-slot>
+      <vxe-button @click="demo1.value2 = true" size="medium">中等尺寸</vxe-button>
+      <vxe-modal v-model="demo1.value2" size="medium">
+        <template #default>
           <div>中等尺寸</div>
           <div>xxxxxxxxx</div>
           <div>xxxxxxxxxx</div>
         </template>
       </vxe-modal>
-      <vxe-button @click="value3 = true" size="small">小型尺寸</vxe-button>
-      <vxe-modal v-model="value3" size="small">
-        <template v-slot>
+      <vxe-button @click="demo1.value3 = true" size="small">小型尺寸</vxe-button>
+      <vxe-modal v-model="demo1.value3" size="small">
+        <template #default>
           <div>小型尺寸</div>
           <div>xxxxxxxxx</div>
           <div>xxxxxxxxxx</div>
         </template>
       </vxe-modal>
-      <vxe-button @click="value4 = true" size="mini">超小尺寸</vxe-button>
-      <vxe-modal v-model="value4" size="mini">
-        <template v-slot>
+      <vxe-button @click="demo1.value4 = true" size="mini">超小尺寸</vxe-button>
+      <vxe-modal v-model="demo1.value4" size="mini">
+        <template #default>
           <div>超小尺寸</div>
           <div>xxxxxxxxx</div>
           <div>xxxxxxxxxx</div>
@@ -76,18 +85,18 @@
       <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
       <vxe-button @click="$XModal.alert({ message: '按 Esc 键可以关闭', escClosable: true })">按 Esc 键可以关闭</vxe-button>
       <vxe-button @click="$XModal.alert({ message: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
-      <vxe-button @click="$XModal.alert({ message: '不锁界面不要遮罩层（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">不锁界面不要遮罩层</vxe-button>
+      <vxe-button @click="$XModal.alert({ message: '多窗口、叠加窗口', lockView: false, mask: false })">多窗口、叠加窗口</vxe-button>
     </p>
 
     <p>
-      <vxe-button @click="value5 = true">基本窗口</vxe-button>
-      <vxe-modal v-model="value5" width="600" show-footer>
-        <template v-slot>
+      <vxe-button @click="demo1.value5 = true">基本窗口</vxe-button>
+      <vxe-modal v-model="demo1.value5" width="600" show-footer>
+        <template #default>
           <vxe-table
             show-overflow
             height="300"
-            :sync-resize="value5"
-            :data="tableData">
+            :sync-resize="demo1.value5"
+            :data="demo1.tableData">
             <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
             <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -96,14 +105,14 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value6 = true">窗口初始位置</vxe-button>
-      <vxe-modal v-model="value6" width="600" :position="{top: 200, left: 200}">
-        <template v-slot>
+      <vxe-button @click="demo1.value6 = true">窗口初始位置</vxe-button>
+      <vxe-modal v-model="demo1.value6" width="600" :position="{top: 200, left: 200}">
+        <template #default>
           <vxe-table
             show-overflow
             height="300"
-            :sync-resize="value6"
-            :data="tableData">
+            :sync-resize="demo1.value6"
+            :data="demo1.tableData">
             <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
             <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -112,9 +121,9 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value7 = true">拖动窗口调整大小</vxe-button>
-      <vxe-modal v-model="value7" resize>
-        <template v-slot>
+      <vxe-button @click="demo1.value7 = true">拖动窗口调整大小</vxe-button>
+      <vxe-modal v-model="demo1.value7" resize>
+        <template #default>
           <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>
           <div style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</div>
           <div style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</div>
@@ -124,19 +133,19 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value8 = true">记忆功能的窗口</vxe-button>
-      <vxe-modal v-model="value8" title="记忆功能的窗口" width="600" height="400" resize remember>
-        <template v-slot>
-          <vxe-form :data="formData3" :rules="formRules3" title-align="right" title-width="60">
+      <vxe-button @click="demo1.value8 = true">记忆功能的窗口</vxe-button>
+      <vxe-modal v-model="demo1.value8" title="记忆功能的窗口" width="600" height="400" resize remember>
+        <template #default>
+          <vxe-form :data="demo1.formData3" :rules="demo1.formRules3" title-align="right" title-width="60">
             <vxe-form-item title="基本信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
             <vxe-form-item title="名称" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
             <vxe-form-item title="昵称" field="nickname" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入昵称'}}"></vxe-form-item>
-            <vxe-form-item title="性别" field="sex" span="12" :item-render="{name: '$select', options: sexList}"></vxe-form-item>
+            <vxe-form-item title="性别" field="sex" span="12" :item-render="{name: '$select', options: demo1.sexList}"></vxe-form-item>
             <vxe-form-item title="年龄" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
             <vxe-form-item title="其他信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-info-circle'}"></vxe-form-item>
             <vxe-form-item title="地址" field="address" span="24" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
             <vxe-form-item align="center" span="24">
-              <template v-slot>
+              <template #default>
                 <vxe-button type="submit" status="primary">提交</vxe-button>
                 <vxe-button type="reset">重置</vxe-button>
               </template>
@@ -145,9 +154,9 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value9 = true">最大化显示</vxe-button>
-      <vxe-modal v-model="value9" title="最大化显示" width="600" height="400" resize remember fullscreen>
-        <template v-slot>
+      <vxe-button @click="demo1.value9 = true">最大化显示</vxe-button>
+      <vxe-modal v-model="demo1.value9" title="最大化显示" width="600" height="400" resize remember fullscreen>
+        <template #default>
           <div style="color: red">默认最大化显示</div>
           <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>
           <div style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</div>
@@ -158,17 +167,17 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value10 = true">缩放表格的窗口</vxe-button>
-      <vxe-modal v-model="value10" title="缩放表格的窗口" width="800" height="400" resize>
-        <template v-slot>
+      <vxe-button @click="demo1.value10 = true">阻止关闭</vxe-button>
+      <vxe-modal v-model="demo1.value10" title="阻止关闭" width="800" height="400" :before-hide-method="beforeHideMethod" resize>
+        <template #default>
           <vxe-table
             border
             resizable
             show-overflow
             auto-resize
             height="auto"
-            :sync-resize="value10"
-            :data="tableData">
+            :sync-resize="demo1.value10"
+            :data="demo1.tableData">
             <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
             <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -177,50 +186,50 @@
         </template>
       </vxe-modal>
 
-      <vxe-button @click="value11 = true">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
-      <vxe-modal v-model="value11" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage transfer>
-        <template v-slot:title>
+      <vxe-button @click="demo1.value11 = true">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
+      <vxe-modal v-model="demo1.value11" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage transfer>
+        <template #title>
           <span style="color: red;">完整功能的窗口（移动、拖动、状态保存）</span>
           <span style="color: red;">通过设置 transfer 将弹框容器插入 body</span>
         </template>
-        <template v-slot>
+        <template #default>
           <vxe-grid
             border
             resizable
             show-overflow
             auto-resize
             height="auto"
-            :sync-resize="value11"
-            :pager-config="tablePage"
-            :proxy-config="tableProxy"
-            :columns="tableColumn"
-            :toolbar="tableToolbar"></vxe-grid>
+            :sync-resize="demo1.value11"
+            :pager-config="demo1.tablePage"
+            :columns="demo1.tableColumn"
+            :toolbar="demo1.tableToolbar"
+            :data="demo1.tableData"></vxe-grid>
         </template>
       </vxe-modal>
     </p>
 
     <pre>
-      <code>
+      <pre-code>
         | Esc | 如果开启配置，则支持关闭窗口 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="html">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="html">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import XEAjax from 'xe-ajax'
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive } from 'vue'
+import { VXETable } from '../../../packages/vxe-table'
 
-export default {
-  data  () {
-    return {
+export default defineComponent({
+  setup  () {
+    const demo1 = reactive({
       value1: false,
       value2: false,
       value3: false,
@@ -259,15 +268,6 @@ export default {
       tablePage: {
         pageSize: 10
       },
-      tableProxy: {
-        props: {
-          result: 'result',
-          total: 'page.total'
-        },
-        ajax: {
-          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`)
-        }
-      },
       tableToolbar: {
         buttons: [
           { code: 'myBtn1', name: '按钮1' },
@@ -276,6 +276,12 @@ export default {
         refresh: true,
         custom: true
       },
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+      ],
       tableColumn: [
         { type: 'checkbox', width: 50 },
         { type: 'seq', width: 60 },
@@ -296,7 +302,28 @@ export default {
           ]
         },
         { field: 'describe', title: 'Describe' }
-      ],
+      ]
+    })
+
+    const beforeHideMethod = async () => {
+      const type = await VXETable.modal.confirm('您确定要关闭吗？')
+      if (type === 'confirm') {
+        VXETable.modal.message({ message: `允许关闭 ${type}`, status: 'success' })
+      } else {
+        VXETable.modal.message({ message: `禁止关闭 ${type}`, status: 'error' })
+        return new Error()
+      }
+    }
+
+    const confirmEvent = async () => {
+      const type = await VXETable.modal.confirm('您确定要删除吗？')
+      await VXETable.modal.message({ message: `点击了 ${type}` })
+    }
+
+    return {
+      demo1,
+      beforeHideMethod,
+      confirmEvent,
       demoCodes: [
         `
         <p>
@@ -324,33 +351,33 @@ export default {
         </p>
 
         <p>
-          <vxe-button @click="value1 = true">默认尺寸</vxe-button>
-          <vxe-modal v-model="value1">
-            <template v-slot>
+          <vxe-button @click="demo1.value1 = true">默认尺寸</vxe-button>
+          <vxe-modal v-model="demo1.value1">
+            <template #default>
               <div>默认尺寸</div>
               <div>xxxxxxxxx</div>
               <div>xxxxxxxxxx</div>
             </template>
           </vxe-modal>
-          <vxe-button @click="value2 = true" size="medium">中等尺寸</vxe-button>
-          <vxe-modal v-model="value2" size="medium">
-            <template v-slot>
+          <vxe-button @click="demo1.value2 = true" size="medium">中等尺寸</vxe-button>
+          <vxe-modal v-model="demo1.value2" size="medium">
+            <template #default>
               <div>中等尺寸</div>
               <div>xxxxxxxxx</div>
               <div>xxxxxxxxxx</div>
             </template>
           </vxe-modal>
-          <vxe-button @click="value3 = true" size="small">小型尺寸</vxe-button>
-          <vxe-modal v-model="value3" size="small">
-            <template v-slot>
+          <vxe-button @click="demo1.value3 = true" size="small">小型尺寸</vxe-button>
+          <vxe-modal v-model="demo1.value3" size="small">
+            <template #default>
               <div>小型尺寸</div>
               <div>xxxxxxxxx</div>
               <div>xxxxxxxxxx</div>
             </template>
           </vxe-modal>
-          <vxe-button @click="value4 = true" size="mini">超小尺寸</vxe-button>
-          <vxe-modal v-model="value4" size="mini">
-            <template v-slot>
+          <vxe-button @click="demo1.value4 = true" size="mini">超小尺寸</vxe-button>
+          <vxe-modal v-model="demo1.value4" size="mini">
+            <template #default>
               <div>超小尺寸</div>
               <div>xxxxxxxxx</div>
               <div>xxxxxxxxxx</div>
@@ -362,18 +389,18 @@ export default {
           <vxe-button @click="$XModal.alert({ message: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
           <vxe-button @click="$XModal.alert({ message: '按 Esc 键可以关闭', escClosable: true })">按 Esc 键可以关闭</vxe-button>
           <vxe-button @click="$XModal.alert({ message: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
-          <vxe-button @click="$XModal.alert({ message: '不锁界面不要遮罩层（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">不锁界面不要遮罩层</vxe-button>
+          <vxe-button @click="$XModal.alert({ message: '多窗口、叠加窗口（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">多窗口、叠加窗口</vxe-button>
         </p>
 
         <p>
-          <vxe-button @click="value5 = true">基本窗口</vxe-button>
-          <vxe-modal v-model="value5" width="600" show-footer>
-            <template v-slot>
+          <vxe-button @click="demo1.value5 = true">基本窗口</vxe-button>
+          <vxe-modal v-model="demo1.value5" width="600" show-footer>
+            <template #default>
               <vxe-table
                 show-overflow
                 height="300"
-                :sync-resize="value5"
-                :data="tableData">
+                :sync-resize="demo1.value5"
+                :data="demo1.tableData">
                 <vxe-table-column type="seq" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
                 <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -382,14 +409,14 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value6 = true">窗口初始位置</vxe-button>
-          <vxe-modal v-model="value6" width="600" :position="{top: 200, left: 200}">
-            <template v-slot>
+          <vxe-button @click="demo1.value6 = true">窗口初始位置</vxe-button>
+          <vxe-modal v-model="demo1.value6" width="600" :position="{top: 200, left: 200}">
+            <template #default>
               <vxe-table
                 show-overflow
                 height="300"
-                :sync-resize="value6"
-                :data="tableData">
+                :sync-resize="demo1.value6"
+                :data="demo1.tableData">
                 <vxe-table-column type="seq" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
                 <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -398,9 +425,9 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value7 = true">拖动窗口调整大小</vxe-button>
-          <vxe-modal v-model="value7" resize>
-            <template v-slot>
+          <vxe-button @click="demo1.value7 = true">拖动窗口调整大小</vxe-button>
+          <vxe-modal v-model="demo1.value7" resize>
+            <template #default>
               <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>
               <div style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</div>
               <div style="color: red">按住右边距拖动！！！！！！！！！！！！！！！</div>
@@ -410,19 +437,19 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value8 = true">记忆功能的窗口</vxe-button>
-          <vxe-modal v-model="value8" title="记忆功能的窗口" width="600" height="400" resize remember>
-            <template v-slot>
-              <vxe-form :data="formData3" :rules="formRules3" title-align="right" title-width="60">
+          <vxe-button @click="demo1.value8 = true">记忆功能的窗口</vxe-button>
+          <vxe-modal v-model="demo1.value8" title="记忆功能的窗口" width="600" height="400" resize remember>
+            <template #default>
+              <vxe-form :data="demo1.formData3" :rules="demo1.formRules3" title-align="right" title-width="60">
                 <vxe-form-item title="基本信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
                 <vxe-form-item title="名称" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
                 <vxe-form-item title="昵称" field="nickname" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入昵称'}}"></vxe-form-item>
-                <vxe-form-item title="性别" field="sex" span="12" :item-render="{name: '$select', options: sexList}"></vxe-form-item>
+                <vxe-form-item title="性别" field="sex" span="12" :item-render="{name: '$select', options: demo1.sexList}"></vxe-form-item>
                 <vxe-form-item title="年龄" field="age" span="12" :item-render="{name: 'input', attrs: {type: 'number', placeholder: '请输入年龄'}}"></vxe-form-item>
                 <vxe-form-item title="其他信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-info-circle'}"></vxe-form-item>
                 <vxe-form-item title="地址" field="address" span="24" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
                 <vxe-form-item align="center" span="24">
-                  <template v-slot>
+                  <template #default>
                     <vxe-button type="submit" status="primary">提交</vxe-button>
                     <vxe-button type="reset">重置</vxe-button>
                   </template>
@@ -431,9 +458,9 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value9 = true">最大化显示</vxe-button>
-          <vxe-modal v-model="value9" title="最大化显示" width="600" height="400" resize remember fullscreen>
-            <template v-slot>
+          <vxe-button @click="demo1.value9 = true">最大化显示</vxe-button>
+          <vxe-modal v-model="demo1.value9" title="最大化显示" width="600" height="400" resize remember fullscreen>
+            <template #default>
               <div style="color: red">默认最大化显示</div>
               <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>
               <div style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</div>
@@ -444,17 +471,17 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value10 = true">缩放表格的窗口</vxe-button>
-          <vxe-modal v-model="value10" title="缩放表格的窗口" width="800" height="400" resize>
-            <template v-slot>
+          <vxe-button @click="demo1.value10 = true">阻止关闭</vxe-button>
+          <vxe-modal v-model="demo1.value10" title="阻止关闭" width="800" height="400" :before-hide-method="beforeHideMethod" resize>
+            <template #default>
               <vxe-table
                 border
                 resizable
                 show-overflow
                 auto-resize
                 height="auto"
-                :sync-resize="value10"
-                :data="tableData">
+                :sync-resize="demo1.value10"
+                :data="demo1.tableData">
                 <vxe-table-column type="seq" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
                 <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
@@ -463,32 +490,35 @@ export default {
             </template>
           </vxe-modal>
 
-          <vxe-button @click="value11 = true">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
-          <vxe-modal v-model="value11" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage transfer>
-            <template v-slot:title>
+          <vxe-button @click="demo1.value11 = true">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
+          <vxe-modal v-model="demo1.value11" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage transfer>
+            <template #title>
               <span style="color: red;">完整功能的窗口（移动、拖动、状态保存）</span>
               <span style="color: red;">通过设置 transfer 将弹框容器插入 body</span>
             </template>
-            <template v-slot>
+            <template #default>
               <vxe-grid
                 border
                 resizable
                 show-overflow
                 auto-resize
                 height="auto"
-                :sync-resize="value11"
-                :pager-config="tablePage"
-                :proxy-config="tableProxy"
-                :columns="tableColumn"
-                :toolbar="tableToolbar"></vxe-grid>
+                :sync-resize="demo1.value11"
+                :pager-config="demo1.tablePage"
+                :columns="demo1.tableColumn"
+                :toolbar="demo1.tableToolbar"
+                :data="demo1.tableData"></vxe-grid>
             </template>
           </vxe-modal>
         </p>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+        import { VXETable } from 'vxe-table'
+
+        export default defineComponent({
+          setup  () {
+            const demo1 = reactive({
               value1: false,
               value2: false,
               value3: false,
@@ -527,15 +557,6 @@ export default {
               tablePage: {
                 pageSize: 10
               },
-              tableProxy: {
-                props: {
-                  result: 'result',
-                  total: 'page.total'
-                },
-                ajax: {
-                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`)
-                }
-              },
               tableToolbar: {
                 buttons: [
                   { code: 'myBtn1', name: '按钮1' },
@@ -544,6 +565,12 @@ export default {
                 refresh: true,
                 custom: true
               },
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+              ],
               tableColumn: [
                 { type: 'checkbox', width: 50 },
                 { type: 'seq', width: 60 },
@@ -565,37 +592,33 @@ export default {
                 },
                 { field: 'describe', title: 'Describe' }
               ]
+            })
+
+            const beforeHideMethod = async () => {
+              const type = await VXETable.modal.confirm('您确定要关闭吗？')
+              if (type === 'confirm') {
+                VXETable.modal.message({ message: \`允许关闭 \${type}\`, status: 'success' })
+              } else {
+                VXETable.modal.message({ message: \`禁止关闭 \${type}\`, status: 'error' })
+                return new Error()
+              }
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
-          },
-          methods: {
-            confirmEvent () {
-              this.$XModal.confirm('您确定要删除吗？').then(type => {
-                this.$XModal.message({ message: \`点击了 \${type}\` })
-              })
+
+            const confirmEvent = async () => {
+              const type = await VXETable.modal.confirm('您确定要删除吗？')
+              await VXETable.modal.message({ message: \`点击了 \${type}\` })
+            }
+
+            return {
+              demo1,
+              beforeHideMethod,
+              confirmEvent
             }
           }
         }
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  methods: {
-    confirmEvent () {
-      this.$XModal.confirm('您确定要删除吗？').then(type => {
-        this.$XModal.message({ message: `点击了 ${type}` })
-      })
-    }
   }
-}
+})
 </script>

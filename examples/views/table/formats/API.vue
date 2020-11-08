@@ -16,48 +16,59 @@
     </vxe-table>
     <h2>示例</h2>
     <pre>
-      <code class="html">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="javascript">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="html">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 
-export default {
-  data () {
+export default defineComponent({
+  setup () {
+    const tableData = ref([
+      {
+        name: 'add(name, callback)',
+        desc: '添加一个',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: 'name: string, callback: (params) => string | number',
+        list: []
+      },
+      {
+        name: 'mixin(options)',
+        desc: '添加多个',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: 'options: { [name: string]: (params) => string | number }',
+        list: []
+      },
+      {
+        name: 'delete(name)',
+        desc: '删除',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: 'name',
+        list: []
+      }
+    ])
     return {
-      tableData: [
-        {
-          name: 'add(name, callback)',
-          desc: '添加一个',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: 'name: string, callback: (params) => string | number',
-          list: []
-        },
-        {
-          name: 'mixin(options)',
-          desc: '添加多个',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: 'options: { [name: string]: (params) => string | number }',
-          list: []
-        },
-        {
-          name: 'delete(name)',
-          desc: '删除',
-          version: '',
-          type: '',
-          enum: '',
-          defVal: 'name',
-          list: []
-        }
-      ],
+      tableData,
       demoCodes: [
+        `
+        import VXETable from 'vxe-table'
+        import XEUtils from 'xe-utils'
+
+        // 格式金额，默认2位数
+        VXETable.formats.add('myAmount', ({ cellValue }, digits = 2) => {
+          return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
+        })
+        `,
         `
         <vxe-table
           border
@@ -69,31 +80,24 @@ export default {
         </vxe-table>
         `,
         `
-        // 格式金额，默认2位数
-        VXETable.formats.add('myAmount', ({ cellValue }, digits) => {
-          return XEUtils.commafy(cellValue, { digits: digits || 2 })
-        })
+        import { defineComponent, ref } from 'vue'
 
-        export default {
-          data () {
+        export default defineComponent({
+          setup () {
+            const tableData = ref([
+              { id: 10001, name: 'Test1', role: 'Develop', num2: 22, num1: 28, address: 'Shenzhen' },
+              { id: 10002, name: 'Test2', role: 'Test', num2: 10, num1: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', num2: 5, num1: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', num2: 20, num1: 24, address: 'Shanghai' }
+            ]
             return {
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', num2: 22, num1: 28, address: 'Shenzhen' },
-                { id: 10002, name: 'Test2', role: 'Test', num2: 10, num1: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', num2: 5, num1: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', num2: 20, num1: 24, address: 'Shanghai' }
-              ]
+              tableData
             }
           }
-        }
+        })
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
-}
+})
 </script>
