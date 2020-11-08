@@ -94,7 +94,7 @@
           <li>1. 全面支持 vue 3.0 Component API</li>
           <li>2. 全面支持 ts，使用 Typescript 完全重写</li>
           <li>3. 不再支持 IE，面向现代浏览器</li>
-          <li>4. 重写虚拟渲染，更快、更少的渲染次数</li>
+          <li>4. 重写虚拟渲染</li>
           <li>5. 重写渲染器：移除 h 参数</li>
           <li>6. 高级用法：支持 Hooks 扩展</li>
         </ul>
