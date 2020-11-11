@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, Ref } from 'vue'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { VxePulldownInstance, VxeGridEvents } from '../../../types/vxe-table'
 
 interface ItemVO1 {
@@ -118,7 +118,7 @@ export default defineComponent({
       list1: data1
     })
 
-    const xDown1 = ref() as Ref<VxePulldownInstance>
+    const xDown1 = ref({} as VxePulldownInstance)
 
     const focusEvent1 = () => {
       const $pulldown1 = xDown1.value
@@ -156,7 +156,7 @@ export default defineComponent({
       list2: data2
     })
 
-    const xDown2 = ref() as Ref<VxePulldownInstance>
+    const xDown2 = ref({} as VxePulldownInstance)
 
     const focusEvent2 = () => {
       const $pulldown2 = xDown2.value
@@ -184,7 +184,7 @@ export default defineComponent({
       ]
     })
 
-    const xDown3 = ref() as Ref<VxePulldownInstance>
+    const xDown3 = ref({} as VxePulldownInstance)
 
     const clickEvent3 = () => {
       const $pulldown3 = xDown3.value
@@ -216,7 +216,7 @@ export default defineComponent({
       }
     })
 
-    const xDown4 = ref() as Ref<VxePulldownInstance>
+    const xDown4 = ref({} as VxePulldownInstance)
 
     const focusEvent4 = () => {
       const $pulldown4 = xDown4.value
@@ -342,7 +342,7 @@ export default defineComponent({
         </p>
         `,
         `
-        import { defineComponent, onMounted, reactive, ref, Ref } from 'vue'
+        import { defineComponent, onMounted, reactive, ref } from 'vue'
         import { VxePulldownInstance } from 'vxe-table'
 
         interface ItemVO {
@@ -372,7 +372,7 @@ export default defineComponent({
               list1: data1
             })
 
-            const xDown1 = ref() as Ref<VxePulldownInstance>
+            const xDown1 = ref({} as VxePulldownInstance)
 
             const focusEvent1 = () => {
               const $pulldown1 = xDown1.value
@@ -411,7 +411,7 @@ export default defineComponent({
               list2: data2
             })
 
-            const xDown2 = ref() as Ref<VxePulldownInstance>
+            const xDown2 = ref({} as VxePulldownInstance)
 
             const focusEvent2 = () => {
               const $pulldown2 = xDown2.value
@@ -439,7 +439,7 @@ export default defineComponent({
               ]
             })
 
-            const xDown3 = ref() as Ref<VxePulldownInstance>
+            const xDown3 = ref({} as VxePulldownInstance)
 
             const clickEvent3 = () => {
               const $pulldown3 = xDown3.value
@@ -471,7 +471,7 @@ export default defineComponent({
               }
             })
 
-            const xDown4 = ref() as Ref<VxePulldownInstance>
+            const xDown4 = ref({} as VxePulldownInstance)
 
             const focusEvent4 = () => {
               const $pulldown4 = xDown4.value

@@ -23,13 +23,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeGridInstance, VxeGridOptions } from '../../../types/vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref() as Ref<VxeGridInstance>
+    const xGrid = ref({} as VxeGridInstance)
 
     const findList = (): Promise<any> => {
       return new Promise(resolve => {
@@ -142,13 +142,13 @@ export default defineComponent({
         </vxe-grid>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeGridInstance, VxeGridOptions } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
-            const xGrid = ref() as Ref<VxeGridInstance>
+            const xGrid = ref({} as VxeGridInstance)
 
             const findList = () => {
               return new Promise(resolve => {

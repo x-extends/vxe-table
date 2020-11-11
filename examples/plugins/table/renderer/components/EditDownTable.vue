@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, ref, Ref } from 'vue'
+import { defineComponent, PropType, reactive, ref } from 'vue'
 import { VxePulldownInstance, VxeTableEvents, VxeColumnOptions, VxePagerEvents, VxeGlobalRendererHandles } from '../../../../../types/vxe-table'
 
 export default defineComponent({
@@ -51,7 +51,7 @@ export default defineComponent({
       }
     })
 
-    const xDown = ref() as Ref<VxePulldownInstance>
+    const xDown = ref({} as VxePulldownInstance)
 
     const getData = (): Promise<any[]> => {
       return new Promise(resolve => {

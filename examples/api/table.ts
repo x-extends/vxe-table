@@ -1731,7 +1731,7 @@ const apis = [
         name: 'clip-config',
         descKey: 'app.api.table.desc.clipConfig',
         version: 'pro',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.clipConfig',
         list: [
@@ -3122,7 +3122,7 @@ const apis = [
         version: '',
         type: '{item, items, index, parent}',
         enum: '',
-        defVal: 'cell: Element',
+        defVal: 'cell: HTMLTableDataCellElement | HTMLTableHeaderCellElement',
         list: []
       },
       {

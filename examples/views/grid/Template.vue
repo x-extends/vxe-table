@@ -192,14 +192,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, h, reactive, ref, Ref } from 'vue'
+import { defineComponent, h, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/vxe-table'
 import { VxeGridInstance, VxeGridOptions, VxeTableEvents } from '../../../types/vxe-table'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref() as Ref<VxeGridInstance>
+    const xGrid = ref({} as VxeGridInstance)
 
     const addressClickEvent = (row: any) => {
       VXETable.modal.alert(`address点击事件：${row.address}`)
@@ -515,13 +515,13 @@ export default defineComponent({
         </vxe-modal>
         `,
         `
-        import { defineComponent, h, reactive, ref, Ref } from 'vue'
+        import { defineComponent, h, reactive, ref } from 'vue'
         import { VXETable, VxeGridInstance, VxeGridOptions, VxeTableEvents } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
-            const xGrid = ref() as Ref<VxeGridInstance>
+            const xGrid = ref({} as VxeGridInstance)
 
             const addressClickEvent = (row: any) => {
               VXETable.modal.alert(\`address点击事件：\${row.address}\`)

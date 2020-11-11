@@ -1,11 +1,11 @@
 import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance } from 'vue'
 import { VxeColumnOptions } from './column'
-import { VxeFormOptions } from './form'
+import { VxeFormInstance, VxeFormOptions } from './form'
 import { VxeFormItemOptions } from './form-item'
-import { VxeToolbarOptions, VxeToolbarPropTypes } from './toolbar'
-import { VxePagerOptions } from './pager'
+import { VxeToolbarInstance, VxeToolbarOptions, VxeToolbarPropTypes } from './toolbar'
+import { VxePagerInstance, VxePagerOptions } from './pager'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, RowInfo, SizeType, ValueOf } from './component'
-import { VxeTableDefines, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods } from './table'
+import { VxeTableInstance, VxeTableDefines, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
  * 组件 - 高级表格
@@ -18,18 +18,26 @@ export interface VxeGridConstructor extends VxeComponentInstance, VxeGridMethods
   props: VxeGridProps;
   context: SetupContext<VxeGridEmits>;
   reactData: GridReactData;
-  refMaps: GridPrivateRef,
+  refMaps: GridPrivateRef;
   computeMaps: GridPrivateComputed;
   renderVN: RenderFunction;
 }
 
 export interface GridPrivateRef {
   refElem: Ref<HTMLDivElement>;
+  refTable: Ref<ComponentPublicInstance<VxeTableProps, VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods>>;
+  refForm: Ref<VxeFormInstance>;
+  refToolbar: Ref<VxeToolbarInstance>;
+  refPager: Ref<VxePagerInstance>;
 }
 export interface VxeGridPrivateRef extends GridPrivateRef { }
 
 export interface GridPrivateComputed {
-  computeProxyOpts: ComputedRef<VxeGridPropTypes.ProxyConfig>;
+  computeProxyOpts: ComputedRef<VxeGridPropTypes.ProxyOpts>;
+  computePagerOpts: ComputedRef<VxeGridPropTypes.PagerOpts>;
+  computeFormOpts: ComputedRef<VxeGridPropTypes.FormOpts>;
+  computeToolbarOpts: ComputedRef<VxeGridPropTypes.ToolbarOpts>;
+  computeZoomOpts: ComputedRef<VxeGridPropTypes.ZoomOpts>;
 }
 
 export interface VxeGridPrivateComputed extends GridPrivateComputed { }
@@ -40,9 +48,9 @@ export interface GridReactData {
   isZMax: boolean;
   tableData: any[];
   pendingRecords: any[];
-  filterData: any[];
+  filterData: VxeTableDefines.FilterCheckedParams[];
   formData: any;
-  sortData: any[];
+  sortData: VxeTableDefines.SortCheckedParams[];
   tZindex: number;
   tablePage: {
     total: number;
@@ -158,10 +166,11 @@ export interface GridPublicMethods {
    * 获取数据代理信息
    */
   getProxyInfo(): {
-    data: any;
+    data: any[];
     filter: any;
     form: any;
-    sort: any;
+    sort: VxeTableDefines.SortCheckedParams | {};
+    sorts: VxeTableDefines.SortCheckedParams[];
     pager: any;
     pendingRecords: RowInfo[];
   } | null;
@@ -170,6 +179,7 @@ export interface GridPublicMethods {
 export interface VxeGridMethods extends GridMethods, TablePublicMethods { }
 
 export interface GridPrivateMethods {
+  extendTableMethods: <T>(methodKeys: T[]) => any;
   triggerToolbarBtnEvent(button: VxeToolbarPropTypes.ButtonConfig, evnt: Event): void;
   triggerZoomEvent(evnt: Event): void;
   getParentHeight(): number;
@@ -180,7 +190,7 @@ export interface VxeGridPrivateMethods extends GridPrivateMethods { }
 
 export namespace VxeGridPropTypes {
   export type Size = SizeType;
-  
+
   export interface ColumnOptions extends VxeColumnOptions { }
   export type Columns = ColumnOptions[];
 
@@ -189,44 +199,48 @@ export namespace VxeGridPropTypes {
   }
   export interface PagerOpts extends PagerConfig { }
 
-
   interface ProxyAjaxQueryPageParams {
     pageSize: number;
     currentPage: number;
   }
-  interface ProxyAjaxQuerySortParams {
+
+  interface ProxyAjaxQuerySortCheckedParams {
     column: VxeTableDefines.ColumnInfo;
     order: string;
     sortBy: string;
     property: string;
   }
+
   interface ProxyAjaxQueryFiltersParams {
     field: string;
     property: string;
     values: any[];
   }
-  
+
   interface ProxyAjaxQueryParams {
     page: ProxyAjaxQueryPageParams;
-    sort: ProxyAjaxQuerySortParams;
-    sorts: ProxyAjaxQuerySortParams[];
+    sort: ProxyAjaxQuerySortCheckedParams;
+    sorts: ProxyAjaxQuerySortCheckedParams[];
     filters: ProxyAjaxQueryFiltersParams[];
     form: any;
   }
+
   interface ProxyAjaxQueryAllParams {
     $table: VxeTableConstructor;
     $grid: VxeGridConstructor;
-    sort: ProxyAjaxQuerySortParams;
-    sorts: ProxyAjaxQuerySortParams[];
+    sort: ProxyAjaxQuerySortCheckedParams;
+    sorts: ProxyAjaxQuerySortCheckedParams[];
     filters: ProxyAjaxQueryFiltersParams[];
     form: any;
     options: any;
   }
+
   interface ProxyAjaxDeleteParams {
     body: {
       removeRecords: any[];
     }
   }
+
   interface ProxyAjaxSaveParams {
     body: {
       insertRecords: any[];
@@ -235,6 +249,7 @@ export namespace VxeGridPropTypes {
       pendingRecords: any[];
     }
   }
+
   export interface ProxyConfig {
     autoLoad?: boolean;
     message?: boolean;
@@ -281,6 +296,7 @@ export namespace VxeGridPropTypes {
   export interface ZoomConfig {
     escRestore?: boolean;
   }
+  export interface ZoomOpts extends ZoomConfig { }
 }
 
 export interface VxeGridProps extends VxeTableProps {

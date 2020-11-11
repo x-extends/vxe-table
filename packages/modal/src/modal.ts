@@ -6,7 +6,7 @@ import { useSize } from '../../hooks/size'
 import GlobalConfig from '../../conf'
 import VxeButtonConstructor from '../../button/src/button'
 
-import { SizeType, VxeModalConstructor, ModalReactData, VxeModalEmits, ModalPosition, ModalType, ModalStatus, ModalSlots, ModalEventTypes, VxeButtonInstance, ModalMethods } from '../../../types/vxe-table'
+import { SizeType, VxeModalConstructor, ModalReactData, VxeModalEmits, ModalPosition, ModalType, ModalStatus, ModalSlots, ModalEventTypes, VxeButtonInstance, ModalMethods, ModalPrivateRef, VxeModalMethods } from '../../../types/vxe-table'
 
 export const allActivedModals: VxeModalConstructor[] = []
 export const msgQueue: VxeModalConstructor[] = []
@@ -86,12 +86,17 @@ export default defineComponent({
     const refConfirmBtn = ref() as Ref<VxeButtonInstance>
     const refCancelBtn = ref() as Ref<VxeButtonInstance>
 
+    const refMaps: ModalPrivateRef = {
+      refElem
+    }
+
     const $xemodal = {
       xID,
       props,
       context,
-      reactData
-    } as VxeModalConstructor
+      reactData,
+      refMaps
+    } as VxeModalConstructor & VxeModalMethods
 
     let modalMethods = {} as ModalMethods
 

@@ -1,4 +1,4 @@
-import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
+import { SetupContext, RenderFunction, ComponentPublicInstance, Ref } from 'vue'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
@@ -13,8 +13,14 @@ export interface VxeSelectConstructor extends VxeComponentInstance, VxeSelectMet
   props: VxeSelectProps;
   context: SetupContext<VxeSelectEmits>;
   reactData: SelectReactData;
+  refMaps: SelectPrivateRef;
   renderVN: RenderFunction;
 }
+
+export interface SelectPrivateRef {
+  refElem: Ref<HTMLDivElement>;
+}
+export interface VxeSelectPrivateRef extends SelectPrivateRef { }
 
 export interface SelectReactData {
   inited: boolean;

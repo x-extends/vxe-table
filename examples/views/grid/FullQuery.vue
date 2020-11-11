@@ -31,14 +31,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeGridInstance, VxeGridOptions } from '../../../types/vxe-table'
 import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref() as Ref<VxeGridInstance>
+    const xGrid = ref({} as VxeGridInstance)
 
     const searchEvent = () => {
       const $grid = xGrid.value
@@ -204,14 +204,14 @@ export default defineComponent({
         </vxe-grid>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeGridInstance, VxeGridOptions } from 'vxe-table'
         import XEUtils from 'xe-utils'
         import XEAjax from 'xe-ajax'
 
         export default defineComponent({
           setup () {
-            const xGrid = ref() as Ref<VxeGridInstance>
+            const xGrid = ref({} as VxeGridInstance)
 
             const searchEvent = () => {
               const $grid = xGrid.value

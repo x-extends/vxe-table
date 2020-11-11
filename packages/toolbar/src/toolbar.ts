@@ -5,7 +5,7 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, TablePrivateMethods, ToolbarPrivateRef } from '../../../types/vxe-table'
+import { SizeType, VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods } from '../../../types/vxe-table'
 
 export default defineComponent({
   name: 'VxeToolbar',
@@ -62,7 +62,7 @@ export default defineComponent({
     let toolbarMethods = {} as ToolbarMethods
 
     const $xegrid = inject('$xegrid', null as (VxeGridConstructor & GridPrivateMethods) | null)
-    let $xetable: VxeTableConstructor & TablePrivateMethods
+    let $xetable: VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods
 
     const computeRefreshOpts = computed(() => {
       return Object.assign({}, GlobalConfig.toolbar.refresh, props.refresh) as VxeToolbarPropTypes.RefreshOpts

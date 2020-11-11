@@ -48,13 +48,17 @@ export interface TableFilterMethods {
   /**
    * 获取当前筛选的所有列信息
    */
-  getCheckedFilters(): any[];
+  getCheckedFilters(): VxeTableDefines.FilterCheckedParams[];
 }
 
 export interface TableFilterPrivateMethods {
   checkFilterOptions(): void;
   handleClearFilter(column: any): void;
   triggerFilterEvent(evnt: any, column: any, params: any): void;
+}
+
+declare module './grid' {
+  interface VxeGridMethods extends TableFilterMethods { }
 }
 
 declare module './table' {

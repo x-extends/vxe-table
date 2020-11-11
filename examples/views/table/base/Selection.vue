@@ -218,7 +218,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeTableInstance, VxeTableEvents, VxeTablePropTypes } from '../../../../types/vxe-table'
 
@@ -234,7 +234,7 @@ export default defineComponent({
       ]
     })
 
-    const xTable1 = ref() as Ref<VxeTableInstance>
+    const xTable1 = ref({} as VxeTableInstance)
 
     const selectAllChangeEvent1: VxeTableEvents.CheckboxAll = ({ checked, records }) => {
       console.log(checked ? '所有勾选事件' : '所有取消事件', records)
@@ -373,7 +373,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance, VxeTableEvents } from 'vxe-table'
 
         export default defineComponent({
@@ -388,7 +388,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable1 = ref() as Ref<VxeTableInstance>
+            const xTable1 = ref({} as VxeTableInstance)
 
             const selectAllChangeEvent1: VxeTableEvents.CheckboxAll = ({ checked, records }: any) => {
               console.log(checked ? '所有勾选事件' : '所有取消事件', records)

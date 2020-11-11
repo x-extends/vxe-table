@@ -163,7 +163,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeTableInstance, VxeTableEvents, VxeColumnPropTypes, VxeTablePropTypes, VxeCheckboxEvents } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
@@ -195,7 +195,7 @@ export default defineComponent({
       }
     })
 
-    const xTable = ref() as Ref<VxeTableInstance>
+    const xTable = ref({} as VxeTableInstance)
 
     const formatDate = (value: any) => {
       return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')
@@ -400,7 +400,7 @@ export default defineComponent({
         </vxe-modal>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance, VxeTableEvents, VxeColumnPropTypes, VxeTablePropTypes, VxeCheckboxEvents } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
@@ -431,7 +431,7 @@ export default defineComponent({
               }
             })
 
-            const xTable = ref() as Ref<VxeTableInstance>
+            const xTable = ref({} as VxeTableInstance)
 
             const formatDate = (value: any) => {
               return XEUtils.toDateString(value, 'yyyy-MM-dd HH:mm:ss.S')

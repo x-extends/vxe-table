@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VNodeStyle, VxePulldownConstructor, VxePulldownEmits, PulldownReactData, PulldownMethods } from '../../../types/vxe-table'
+import { SizeType, VNodeStyle, VxePulldownConstructor, VxePulldownEmits, PulldownReactData, PulldownMethods, PulldownPrivateRef, VxePulldownMethods } from '../../../types/vxe-table'
 
 export default defineComponent({
   name: 'VxePulldown',
@@ -39,12 +39,17 @@ export default defineComponent({
     const refPulldowContent = ref() as Ref<HTMLDivElement>
     const refPulldowPnanel = ref() as Ref<HTMLDivElement>
 
+    const refMaps: PulldownPrivateRef = {
+      refElem
+    }
+
     const $xepulldown = {
       xID,
       props,
       context,
-      reactData
-    } as VxePulldownConstructor
+      reactData,
+      refMaps
+    } as VxePulldownConstructor & VxePulldownMethods
 
     let pulldownMethods = {} as PulldownMethods
 

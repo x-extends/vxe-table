@@ -237,7 +237,7 @@ const apis = [
         name: 'sort-by',
         descKey: 'app.api.tableColumn.desc.sortBy',
         version: '',
-        type: 'string',
+        type: 'string | ((row) => string | number)',
         enum: '',
         defVal: '',
         list: []

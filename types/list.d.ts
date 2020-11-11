@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance } from 'vue'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
@@ -13,8 +13,14 @@ export interface VxeListConstructor extends VxeComponentInstance, VxeListMethods
   context: SetupContext<VxeListEmits>;
   reactData: ListReactData;
   internalData: ListInternalData;
+  refMaps: ListPrivateRef;
   renderVN: RenderFunction;
 }
+
+export interface ListPrivateRef {
+  refElem: Ref<HTMLDivElement>;
+}
+export interface VxeListPrivateRef extends ListPrivateRef { }
 
 export interface ListReactData {
   scrollYLoad: boolean;

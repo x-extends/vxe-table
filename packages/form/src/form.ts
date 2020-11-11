@@ -6,7 +6,7 @@ import { UtilTools } from '../../tools'
 import { createItem } from './util'
 import { useSize } from '../../hooks/size'
 
-import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods } from '../../../types/vxe-table'
+import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods } from '../../../types/vxe-table'
 
 class Rule {
   constructor (rule: any) {
@@ -77,12 +77,17 @@ export default defineComponent({
 
     const refElem = ref() as Ref<HTMLFormElement>
 
+    const refMaps: FormPrivateRef = {
+      refElem
+    }
+
     const $xeform = {
       xID,
       props,
       context,
-      reactData
-    } as VxeFormConstructor
+      reactData,
+      refMaps
+    } as VxeFormConstructor & VxeFormPrivateMethods
 
     let formMethods = {} as FormMethods
 

@@ -33,8 +33,10 @@ class Rule {
   [key: string]: any
 }
 
+const tableValidatorMethodKeys: (keyof TableValidatorMethods)[] = ['fullValidate', 'validate', 'clearValidate']
+
 const validatorHook: VxeGlobalHooksHandles.HookOptions = {
-  setup ($xetable) {
+  setupTable ($xetable) {
     const { props, reactData, internalData, refMaps, computeMaps } = $xetable
     const { refValidTooltip } = refMaps
     const { computeValidOpts, computeTreeOpts, computeEditOpts } = computeMaps
@@ -90,7 +92,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
         }
       }
       const rowValids: any = []
-      internalData.lastCallTime = Date.now()
+      internalData._lastCallTime = Date.now()
       validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
       validatorMethods.clearValidate()
       if (editRules) {
@@ -356,6 +358,9 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     return { ...validatorMethods, ...validatorPrivateMethods }
+  },
+  setupGrid ($xegrid) {
+    return $xegrid.extendTableMethods(tableValidatorMethodKeys)
   }
 }
 

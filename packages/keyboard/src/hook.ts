@@ -6,7 +6,7 @@ import { VxeGlobalHooksHandles, TableKeyboardPrivateMethods } from '../../../typ
 const browse = DomTools.browse
 
 const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
-  setup ($xetable) {
+  setupTable ($xetable) {
     const { props, reactData, internalData, refMaps, computeMaps } = $xetable
     const { refElem } = refMaps
     const { computeEditOpts, computeCheckboxOpts, computeMouseOpts, computeTreeOpts } = computeMaps

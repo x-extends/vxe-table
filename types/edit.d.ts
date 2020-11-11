@@ -114,6 +114,10 @@ export interface TableEditPrivateMethods {
   addCellSelectedClass(): void;
 }
 
+declare module './grid' {
+  interface VxeGridMethods extends TableEditMethods { }
+}
+
 declare module './table' {
   interface VxeTableMethods extends TableEditMethods { }
   interface VxeTablePrivateMethods extends TableEditPrivateMethods { }

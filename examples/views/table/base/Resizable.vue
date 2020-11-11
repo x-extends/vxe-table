@@ -4,7 +4,7 @@
 
     <vxe-table
       resizable
-      :data="tableData">
+      :data="demo1.tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -26,7 +26,7 @@
       border
       resizable
       highlight-hover-row
-      :data="tableData">
+      :data="demo2.tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
@@ -47,7 +47,7 @@
     <vxe-table
       border
       resizable
-      :data="tableData">
+      :data="demo3.tableData">
       <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
@@ -72,7 +72,7 @@
     <vxe-table
       border
       resizable
-      :data="tableData">
+      :data="demo4.tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
       <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
@@ -99,7 +99,7 @@
       border
       resizable
       show-overflow
-      :data="tableData">
+      :data="demo5.tableData">
       <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
@@ -125,7 +125,7 @@
     <vxe-table
       border
       resizable
-      :data="tableData">
+      :data="demo6.tableData">
       <vxe-table-colgroup title="基本信息">
         <vxe-table-column type="seq" width="60"></vxe-table-column>
         <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -153,7 +153,7 @@
     <vxe-table
       border
       resizable
-      :data="tableData">
+      :data="demo7.tableData">
       <vxe-table-colgroup title="基本信息" fixed="left">
         <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
         <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
@@ -181,27 +181,32 @@
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, reactive } from 'vue'
 
-export default {
-  data () {
-    return {
+export default defineComponent({
+  setup () {
+    const demo1 = reactive({
       tableData: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-        { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
-      ],
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' }
+      ]
+    })
+    return {
+      demo1,
+      demo2: demo1,
+      demo3: demo1,
+      demo4: demo1,
+      demo5: demo1,
+      demo6: demo1,
+      demo7: demo1,
       demoCodes: [
         `
         <vxe-table
           resizable
-          :data="tableData">
+          :data="demo1.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -211,29 +216,30 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+            return {
+              demo1
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
           border
           resizable
           highlight-hover-row
-          :data="tableData">
+          :data="demo2.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
@@ -243,28 +249,29 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo2 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+            return {
+              demo2
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
           border
           resizable
-          :data="tableData">
+          :data="demo3.tableData">
           <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
@@ -278,28 +285,29 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo3 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+            return {
+              demo3
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
           border
           resizable
-          :data="tableData">
+          :data="demo4.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
@@ -314,29 +322,30 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo4 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+            return {
+              demo4
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
           border
           resizable
           show-overflow
-          :data="tableData">
+          :data="demo5.tableData">
           <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="100" fixed="left"></vxe-table-column>
@@ -351,28 +360,29 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo5 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+            return {
+              demo5
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
           border
           resizable
-          :data="tableData">
+          :data="demo6.tableData">
           <vxe-table-colgroup title="基本信息">
             <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -389,28 +399,29 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo6 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+            return {
+              demo6
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
           border
           resizable
-          :data="tableData">
+          :data="demo7.tableData">
           <vxe-table-colgroup title="基本信息" fixed="left">
             <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
             <vxe-table-column field="name" title="Name" fixed="left" width="100"></vxe-table-column>
@@ -430,30 +441,26 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const demo7 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+            return {
+              demo7
             }
           }
-        }
+        })
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
-}
+})
 </script>

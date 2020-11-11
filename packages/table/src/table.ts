@@ -1,4 +1,4 @@
-import { defineComponent, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef } from 'vue'
+import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef } from 'vue'
 import XEUtils from 'xe-utils/ctor'
 import { UtilTools, DomTools, GlobalEvent, createResizeEvent, XEResizeObserver } from '../../tools'
 import { useSize } from '../../hooks/size'
@@ -11,7 +11,7 @@ import tableProps from './props'
 import tableEmits from './emits'
 import { eqCellNull, getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible } from './util'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods } from '../../../types/vxe-table'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance } from '../../../types/vxe-table'
 
 const { setCellValue, getCellLabel, hasChildrenList, getColumnList } = UtilTools
 const { browse, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
@@ -37,6 +37,8 @@ export default defineComponent({
     const xID = XEUtils.uniqueId()
 
     const computeSize = useSize(props)
+
+    const instance = getCurrentInstance()
 
     const reactData = reactive({
       // 低性能的静态列
@@ -219,7 +221,7 @@ export default defineComponent({
       }
     } as TableReactData)
 
-    const internalData = reactive({
+    const internalData: TableInternalData = {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -273,15 +275,9 @@ export default defineComponent({
       fullColumnFieldData: {},
       tooltipActive: false,
       tooltipTimeout: null,
-      _lastResizeTime: null,
-      _isResize: false,
-      _keyCtx: false,
       inited: false,
-      isActivated: false,
-      lastCallTime: null,
-      _importResolve: null,
-      _importReject: null
-    } as TableInternalData)
+      isActivated: false
+    }
 
     let tableMethods = {} as TableMethods
     let tablePrivateMethods = {} as TablePrivateMethods
@@ -290,7 +286,7 @@ export default defineComponent({
     const refTooltip = ref() as Ref<VxeTooltipInstance>
     const refValidTooltip = ref() as Ref<VxeTooltipInstance>
     const refTableFilter = ref() as Ref<ComponentPublicInstance>
-    const refTableMenu = ref() as Ref<ComponentPublicInstance>
+    const refTableMenu = ref() as Ref<VxeMenuPanelInstance>
 
     const refTableHeader = ref() as Ref<ComponentPublicInstance>
     const refTableBody = ref() as Ref<ComponentPublicInstance>
@@ -549,6 +545,7 @@ export default defineComponent({
       xID,
       props,
       context,
+      instance,
       reactData,
       internalData,
       refMaps,
@@ -3434,7 +3431,7 @@ export default defineComponent({
         if (!(editOpts.autoClear === false)) {
           if ($validTooltip && getEventTargetNode(evnt, $validTooltip.$el as HTMLDivElement).flag) {
             // 如果是激活状态，且点击了校验提示框
-          } else if (!internalData.lastCallTime || internalData.lastCallTime + 50 < Date.now()) {
+          } else if (!internalData._lastCallTime || internalData._lastCallTime + 50 < Date.now()) {
             // 如果是激活状态，且点击了下拉选项
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
               // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
@@ -3476,7 +3473,7 @@ export default defineComponent({
           }
         }
       } else if (mouseConfig) {
-        if (!getEventTargetNode(evnt, el).flag && (!tableMenu || !getEventTargetNode(evnt, tableMenu.$el as HTMLDivElement).flag)) {
+        if (!getEventTargetNode(evnt, el).flag && (!tableMenu || !getEventTargetNode(evnt, tableMenu.refMaps.refElem.value).flag)) {
           $xetable.clearSelected()
           if ($xetable.clearCellAreas) {
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
@@ -3490,7 +3487,7 @@ export default defineComponent({
       }
       // 如果配置了快捷菜单且，点击了其他地方则关闭
       if ($xetable.closeMenu) {
-        if (ctxMenuStore.visible && tableMenu && !getEventTargetNode(evnt, tableMenu.$el as HTMLDivElement).flag) {
+        if (ctxMenuStore.visible && tableMenu && !getEventTargetNode(evnt, tableMenu.refMaps.refElem.value).flag) {
           $xetable.closeMenu()
         }
       }
@@ -4762,9 +4759,12 @@ export default defineComponent({
     })
 
     VXETable.hooks.forEach((options) => {
-      const hookRest = options.setup($xetable)
-      if (hookRest && XEUtils.isObject(hookRest)) {
-        Object.assign($xetable, hookRest)
+      const { setupTable } = options
+      if (setupTable) {
+        const hookRest = setupTable($xetable)
+        if (hookRest && XEUtils.isObject(hookRest)) {
+          Object.assign($xetable, hookRest)
+        }
       }
     })
 
@@ -4919,7 +4919,6 @@ export default defineComponent({
       const mouseOpts = computeMouseOpts.value
       const validOpts = computeValidOpts.value
       const validTipOpts = computeValidTipOpts.value
-      const menuOpts = computeMenuOpts.value
       const isMenu = computeIsMenu.value
       return h('div', {
         ref: refElem,
@@ -5061,9 +5060,7 @@ export default defineComponent({
          * 快捷菜单
          */
         ctxMenuStore.visible && isMenu ? h(resolveComponent('vxe-table-context-menu') as ComponentOptions, {
-          ref: refTableMenu,
-          ctxMenuStore,
-          menuOpts
+          ref: refTableMenu
         }) : createCommentVNode(),
         /**
          * 校验提示

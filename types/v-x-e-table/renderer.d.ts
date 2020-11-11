@@ -1,6 +1,6 @@
 import { VNode } from 'vue'
 import { RowInfo } from '../component'
-import { VxeTableDefines, VxeTableConstructor, VxeTablePropTypes } from '../table'
+import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeColumnPropTypes } from '../column'
 import { VxeFilterPanel } from '../filter'
@@ -51,7 +51,7 @@ export namespace VxeGlobalRendererHandles {
   export type RenderFilterOptions = VxeColumnPropTypes.FilterRender;
 
   export type RenderFilterParams = {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $panel: VxeFilterPanel;
     column: VxeTableDefines.ColumnInfo & {
       filters: VxeTableDefines.FilterOption[];
@@ -69,7 +69,7 @@ export namespace VxeGlobalRendererHandles {
   };
 
   export interface FilterResetMethodParams {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     options: VxeTableDefines.FilterOption[];
     column: VxeTableDefines.ColumnInfo;
   }
@@ -82,7 +82,6 @@ export namespace VxeGlobalRendererHandles {
     $columnIndex: number;
     $rowIndex: number;
   }
-
 
   export type RenderDefaultOptions = VxeColumnPropTypes.EditRender;
   export type RenderDefaultParams = RenderEditParams;
@@ -145,7 +144,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderButtonOptions extends VxeGlobalRendererHandles.RenderOptions { }
   export interface RenderButtonParams {
     $grid: VxeGridConstructor | null;
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     button: VxeToolbarPropTypes.ButtonConfig;
   }
 
@@ -159,7 +158,7 @@ export namespace VxeGlobalRendererHandles {
   export type RenderEmptyOptions = VxeTablePropTypes.EmptyRender;
 
   export interface RenderEmptyParams {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
   }
 
   /**

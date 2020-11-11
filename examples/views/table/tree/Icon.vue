@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/vxe-table'
 
@@ -130,7 +130,7 @@ export default defineComponent({
       } as VxeTablePropTypes.TreeConfig
     })
 
-    const xTree1 = ref() as Ref<VxeTableInstance>
+    const xTree1 = ref({} as VxeTableInstance)
 
     const getTreeExpansionEvent = () => {
       const $table = xTree1.value
@@ -251,7 +251,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
 
         export default defineComponent({
@@ -292,7 +292,7 @@ export default defineComponent({
               } as VxeTablePropTypes.TreeConfig
             })
 
-            const xTree1 = ref() as Ref<VxeTableInstance>
+            const xTree1 = ref({} as VxeTableInstance)
 
             const getTreeExpansionEvent = () => {
               const $table = xTree1.value

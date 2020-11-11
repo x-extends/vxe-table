@@ -272,10 +272,10 @@ import ModulePrint from '../views/print/Print.vue'
 // import TablePluginAntdPage from '../views/table/plugin/AntdPage.vue'
 // import TablePluginShortcutKey from '../views/table/plugin/ShortcutKey.vue'
 // import TablePluginCharts from '../views/table/plugin/Charts.vue'
-// import TablePluginExportXLSX from '../views/table/plugin/ExportXLSX.vue'
-// import TablePluginExportPDF from '../views/table/plugin/ExportPDF.vue'
+import TablePluginExportXLSX from '../views/table/plugin/ExportXLSX.vue'
+import TablePluginExportPDF from '../views/table/plugin/ExportPDF.vue'
 // import TablePluginRenderer from '../views/table/plugin/Renderer.vue'
-// import TablePluginMenus from '../views/table/plugin/Menus.vue'
+import TablePluginMenus from '../views/table/plugin/Menus.vue'
 // import TablePluginExcel from '../views/table/plugin/Excel.vue'
 // import TablePluginTreeRows from '../views/table/plugin/TreeRows'
 // import TablePluginTreeCols from '../views/table/plugin/TreeCols'
@@ -1594,26 +1594,26 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TablePluginCharts',
   //   component: TablePluginCharts
   // },
-  // {
-  //   path: '/table/plugin/exportXLSX',
-  //   name: 'TablePluginExportXLSX',
-  //   component: TablePluginExportXLSX
-  // },
-  // {
-  //   path: '/table/plugin/exportPDF',
-  //   name: 'TablePluginExportPDF',
-  //   component: TablePluginExportPDF
-  // },
+  {
+    path: '/table/plugin/exportXLSX',
+    name: 'TablePluginExportXLSX',
+    component: TablePluginExportXLSX
+  },
+  {
+    path: '/table/plugin/exportPDF',
+    name: 'TablePluginExportPDF',
+    component: TablePluginExportPDF
+  },
   // {
   //   path: '/table/plugin/renderer',
   //   name: 'TablePluginRenderer',
   //   component: TablePluginRenderer
   // },
-  // {
-  //   path: '/table/plugin/menus',
-  //   name: 'TablePluginMenus',
-  //   component: TablePluginMenus
-  // },
+  {
+    path: '/table/plugin/menus',
+    name: 'TablePluginMenus',
+    component: TablePluginMenus
+  },
   // {
   //   path: '/table/plugin/excel',
   //   name: 'TablePluginExcel',

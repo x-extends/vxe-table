@@ -56,4 +56,3 @@ export interface VxeRadioGroupListeners {
 export namespace VxeRadioGroupEvents {
   export type Change = (params: VxeRadioGroupDefines.ChangeEventParams) => void;
 }
-

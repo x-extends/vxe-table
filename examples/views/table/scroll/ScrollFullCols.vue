@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, reactive, ref, Ref } from 'vue'
+import { defineComponent, nextTick, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeGridInstance } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
@@ -70,7 +70,7 @@ export default defineComponent({
       tableData: []
     })
 
-    const xGrid = ref() as Ref<VxeGridInstance>
+    const xGrid = ref({} as VxeGridInstance)
 
     const mockColumns = (colSize: number): Promise<any[]> => {
       return new Promise(resolve => {
@@ -216,7 +216,7 @@ export default defineComponent({
         </vxe-grid>
         `,
         `
-        import { defineComponent, nextTick, reactive, ref, Ref } from 'vue'
+        import { defineComponent, nextTick, reactive, ref } from 'vue'
         import { VXETable, VxeGridInstance } from '../../../../types/vxe-table'
         import XEUtils from 'xe-utils'
 
@@ -230,7 +230,7 @@ export default defineComponent({
               tableData: []
             })
 
-            const xGrid = ref() as Ref<VxeGridInstance>
+            const xGrid = ref({} as VxeGridInstance)
 
             const mockColumns = (colSize: number): Promise<any[]> => {
               return new Promise(resolve => {

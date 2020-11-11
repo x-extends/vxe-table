@@ -36,7 +36,7 @@ export interface TableExportMethods {
   importByFile(file: File, options: VxeTablePropTypes.ImportConfig): Promise<any>;
   /**
    * 保存文件到本地
-   * @param options 
+   * @param options
    */
   saveFile: SaveFileFunction;
   /**
@@ -57,6 +57,10 @@ export interface TableExportMethods {
 }
 
 export interface TableExportPrivateMethods { }
+
+declare module './grid' {
+  interface VxeGridMethods extends TableExportMethods { }
+}
 
 declare module './table' {
   interface VxeTableMethods extends TableExportMethods { }
@@ -161,6 +165,8 @@ declare module './table' {
        * 是否需要表尾
        */
       isFooter?: boolean;
+      isMerge?: boolean;
+      isColgroup?: boolean;
       /**
        * 是否马上下载，如果设置为 false 则通过返回结果为内容的 Promise
        */

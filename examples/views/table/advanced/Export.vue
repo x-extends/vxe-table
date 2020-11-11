@@ -138,7 +138,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxePagerEvents, VxeButtonEvents } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
 
@@ -156,7 +156,7 @@ export default defineComponent({
       ]
     })
 
-    const xTable1 = ref() as Ref<VxeTableInstance>
+    const xTable1 = ref({} as VxeTableInstance)
 
     const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
       if (cellValue === '1') {
@@ -212,7 +212,7 @@ export default defineComponent({
       ]
     })
 
-    const xTable2 = ref() as Ref<VxeTableInstance>
+    const xTable2 = ref({} as VxeTableInstance)
 
     const exportDataEvent2: VxeButtonEvents.Click = () => {
       const $table = xTable2.value
@@ -237,7 +237,7 @@ export default defineComponent({
       ]
     })
 
-    const xTable3 = ref() as Ref<VxeTableInstance>
+    const xTable3 = ref({} as VxeTableInstance)
 
     const exportDataEvent3: VxeButtonEvents.Click = () => {
       const $table = xTable3.value
@@ -259,7 +259,7 @@ export default defineComponent({
       }
     })
 
-    const xTable4 = ref() as Ref<VxeTableInstance>
+    const xTable4 = ref({} as VxeTableInstance)
 
     const findList4 = () => {
       demo4.loading = true
@@ -384,7 +384,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance, VxeButtonEvents } from 'vxe-table'
 
         export default defineComponent({
@@ -401,7 +401,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable1 = ref() as Ref<VxeTableInstance>
+            const xTable1 = ref({} as VxeTableInstance)
 
             const exportDataEvent: VxeButtonEvents.Click = () => {
               const $table = xTable1.value
@@ -450,7 +450,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance, VxeButtonEvents } from 'vxe-table'
 
         export default defineComponent({
@@ -468,7 +468,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable2 = ref() as Ref<VxeTableInstance>
+            const xTable2 = ref({} as VxeTableInstance)
 
             const exportDataEvent2: VxeButtonEvents.Click = () => {
               const $table = xTable2.value
@@ -510,7 +510,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxeButtonEvents } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
@@ -553,7 +553,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable3 = ref() as Ref<VxeTableInstance>
+            const xTable3 = ref({} as VxeTableInstance)
 
             const exportDataEvent3: VxeButtonEvents.Click = () => {
               const $table = xTable3.value
@@ -610,7 +610,7 @@ export default defineComponent({
         </vxe-pager>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxePagerEvents, VxeButtonEvents } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
@@ -650,7 +650,7 @@ export default defineComponent({
               }
             })
 
-            const xTable4 = ref() as Ref<VxeTableInstance>
+            const xTable4 = ref({} as VxeTableInstance)
 
             const findList4 = () => {
               demo4.loading = true

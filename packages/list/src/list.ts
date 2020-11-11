@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { useSize } from '../../hooks/size'
 
-import { VxeListConstructor, VxeListPropTypes, VxeListEmits, ListReactData, ListInternalData, ListMethods } from '../../../types/vxe-table'
+import { VxeListConstructor, VxeListPropTypes, VxeListEmits, ListReactData, ListInternalData, ListMethods, ListPrivateRef, VxeListMethods } from '../../../types/vxe-table'
 
 const { browse } = DomTools
 
@@ -56,13 +56,18 @@ export default defineComponent({
       }
     }
 
+    const refMaps: ListPrivateRef = {
+      refElem
+    }
+
     const $xelist = {
       xID,
       props,
       context,
       reactData,
-      internalData
-    } as VxeListConstructor
+      internalData,
+      refMaps
+    } as VxeListConstructor & VxeListMethods
 
     let listMethods = {} as ListMethods
 

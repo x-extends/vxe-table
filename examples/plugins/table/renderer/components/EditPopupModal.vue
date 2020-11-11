@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, ref, Ref } from 'vue'
+import { defineComponent, PropType, reactive, ref } from 'vue'
 import { VxeGridInstance, VxeColumnOptions, VxePagerEvents, VxeGlobalRendererHandles } from '../../../../../types/vxe-table'
 
 export default defineComponent({
@@ -54,7 +54,7 @@ export default defineComponent({
         pageSize: 10
       }
     })
-    const xGrid = ref() as Ref<VxeGridInstance>
+    const xGrid = ref({} as VxeGridInstance)
 
     const getData = (): Promise<any[]> => {
       return new Promise(resolve => {

@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeTooltipInstance } from '../../../types/vxe-table'
 
 export default defineComponent({
@@ -71,7 +71,7 @@ export default defineComponent({
         { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
       ]
     })
-    const xTip5 = ref() as Ref<VxeTooltipInstance>
+    const xTip5 = ref({} as VxeTooltipInstance)
     const cellMouseenterEvent = ({ cell }: any) => {
       const $tooltip5 = xTip5.value
       $tooltip5.open(cell, `自定义提示内容：${cell.innerText}`)
@@ -132,7 +132,7 @@ export default defineComponent({
         </p>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTooltipInstance } from 'vxe-table'
 
         export default defineComponent({
@@ -146,7 +146,7 @@ export default defineComponent({
                 { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
               ]
             })
-            const xTip5 = ref() as Ref<VxeTooltipInstance>
+            const xTip5 = ref({} as VxeTooltipInstance)
             const cellMouseenterEvent = ({ cell }: any) => {
               const $tooltip5 = xTip5.value
               $tooltip5.open(cell, \`自定义提示内容：\${cell.innerText}\`)

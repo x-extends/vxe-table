@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, Ref, ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/vxe-table'
 import { VxeTableInstance } from '../../../types/vxe-table'
 import QRCode from 'qrcode'
@@ -88,7 +88,7 @@ import jsbarcode from 'jsbarcode'
 
 export default defineComponent({
   setup () {
-    const xTable = ref() as Ref<VxeTableInstance>
+    const xTable = ref({} as VxeTableInstance)
 
     // 打印样式
     const printStyle = `
@@ -414,12 +414,12 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, Ref, ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
-            const xTable = ref() as Ref<VxeTableInstance>
+            const xTable = ref({} as VxeTableInstance)
 
             // 打印样式
             const printStyle = \`
@@ -524,7 +524,7 @@ export default defineComponent({
         </vxe-toolbar>
         `,
         `
-        import { defineComponent, reactive, Ref, ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable } from 'vxe-table'
         import jsbarcode from 'jsbarcode'
 
@@ -592,7 +592,7 @@ export default defineComponent({
         </vxe-toolbar>
         `,
         `
-        import { defineComponent, reactive, Ref, ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable } from 'vxe-table'
         import QRCode from 'qrcode'
 
@@ -637,7 +637,7 @@ export default defineComponent({
         </vxe-toolbar>
         `,
         `
-        import { defineComponent, reactive, Ref, ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable } from 'vxe-table'
 
         export default defineComponent({

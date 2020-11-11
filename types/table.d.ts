@@ -1,10 +1,11 @@
-import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance } from 'vue'
+import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance } from 'vue'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, RowInfo, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeColumnOptions, VxeColumnPropTypes } from './column'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
 import { VxeTooltipInstance } from './tooltip'
 import { VxeGridConstructor } from './grid'
+import { VxeMenuPanelInstance } from './menu'
 
 /**
  * 组件 - 表格
@@ -16,6 +17,7 @@ export type VxeTableInstance = ComponentPublicInstance<VxeTableProps, VxeTableCo
 export interface VxeTableConstructor extends VxeComponentInstance, VxeTableMethods {
   props: VxeTableProps;
   context: SetupContext<VxeTableEmits>;
+  instance: ComponentInternalInstance;
   reactData: TableReactData;
   internalData: TableInternalData;
   refMaps: TablePrivateRef;
@@ -29,7 +31,7 @@ export interface TablePrivateRef {
   refTooltip: Ref<VxeTooltipInstance>;
   refValidTooltip: Ref<VxeTooltipInstance>;
   refTableFilter: Ref<ComponentPublicInstance>;
-  refTableMenu: Ref<ComponentPublicInstance>;
+  refTableMenu: Ref<VxeMenuPanelInstance>;
   refTableHeader: Ref<ComponentPublicInstance>;
   refTableBody: Ref<ComponentPublicInstance>;
   refTableFooter: Ref<ComponentPublicInstance>;
@@ -429,7 +431,7 @@ export interface TablePublicMethods {
   clearSort(column: VxeTableDefines.ColumnInfo | null): Promise<any>;
   /**
    * 判断指定列是否为排序状态，如果为空则判断所有列
-   * @param columnOrField 
+   * @param columnOrField
    */
   isSort(): boolean;
   isSort(field: string): boolean;
@@ -912,14 +914,18 @@ export interface TableInternalData {
   // 特殊标识
   tooltipActive: boolean;
   tooltipTimeout: any;
-  _lastResizeTime: any;
-  _isResize: boolean;
-  _keyCtx: any;
   inited: boolean;
   isActivated: boolean;
-  lastCallTime: any;
-  _importResolve: any;
-  _importReject: any;
+
+  // 内部属性
+  _lastResizeTime?: any;
+  _isResize?: boolean;
+  _keyCtx?: any;
+  _lastCallTime?: any;
+  _importResolve?: Function | null;
+  _importReject?: Function | null;
+  _currFilterParams?: any;
+  _currMenuParams?: any;
 }
 
 export interface VxeTableOptions extends VxeTableProps, VxeTableListeners { }
@@ -947,7 +953,7 @@ export namespace VxeTablePropTypes {
   export type ShowFooter = boolean;
 
   export type FooterMethod = (params: {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $grid: VxeGridConstructor | null;
     columns: VxeTableDefines.ColumnInfo[];
     data: any[];
@@ -972,14 +978,14 @@ export namespace VxeTablePropTypes {
   }) => null | string | { [key: string]: boolean });
 
   export type HeaderRowClassName = string | ((params: {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     fixed?: string;
     type: string;
   }) => null | string | { [key: string]: boolean });
 
   export type HeaderCellClassName = string | ((params: {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     column: VxeTableDefines.ColumnInfo;
     fixed?: string;
@@ -987,7 +993,7 @@ export namespace VxeTablePropTypes {
   }) => null | string | { [key: string]: boolean });
 
   export type FooterRowClassName = string | ((params: {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     _rowIndex: number;
     fixed?: string;
@@ -995,7 +1001,7 @@ export namespace VxeTablePropTypes {
   }) => null | string | { [key: string]: boolean });
 
   export type FooterCellClassName = string | ((params: {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     _rowIndex: number;
     column: VxeTableDefines.ColumnInfo;
@@ -1016,7 +1022,7 @@ export namespace VxeTablePropTypes {
   }) => null | string | { [key: string]: boolean });
 
   export type HeaderCellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
   }) => null | string | { [key: string]: boolean });
 
@@ -1036,14 +1042,14 @@ export namespace VxeTablePropTypes {
   }) => null | string | { [key: string]: boolean });
 
   export type HeaderRowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
-    $table: VxeTableConstructor;
+    $table: & VxeTablePrivateMethods;
     $rowIndex: number;
     fixed?: string;
     type: string;
   }) => null | string | { [key: string]: boolean });
 
   export type FooterRowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     _rowIndex: number;
     fixed?: string;
@@ -1137,7 +1143,7 @@ export namespace VxeTablePropTypes {
     defaultSort?: SortConfigDefaultSort | SortConfigDefaultSort[];
     orders?: SortOrder[];
     sortMethod?(params: {
-      $table: VxeTableConstructor;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
       data: any[];
       sortList: any[];
     }): any[];
@@ -1236,13 +1242,13 @@ export namespace VxeTablePropTypes {
     lazy?: boolean;
     reserve?: boolean;
     loadMethod?(params: {
-      $table: VxeTableConstructor;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
       row: RowInfo;
       rowIndex: number;
       $rowIndex: number;
     }): Promise<any>;
     toggleMethod?(params: {
-      $table: VxeTableConstructor;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
       expanded: boolean;
       row: RowInfo;
       rowIndex: number;
@@ -1252,7 +1258,7 @@ export namespace VxeTablePropTypes {
       $columnIndex: number;
     }): boolean;
     visibleMethod?(params: {
-      $table: VxeTableConstructor;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
       expanded: boolean;
       row: RowInfo;
       rowIndex: number;
@@ -1283,11 +1289,11 @@ export namespace VxeTablePropTypes {
     hasChild?: string;
     reserve?: boolean;
     loadMethod?(params: {
-      $table: VxeTableConstructor;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
       row: RowInfo
     }): Promise<any[]>;
     toggleMethod?(params: {
-      $table: VxeTableConstructor;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
       expanded: boolean;
       row: RowInfo;
       column: VxeTableDefines.ColumnInfo;
@@ -1699,7 +1705,7 @@ export namespace VxeTableDefines {
   }
 
   interface TableEventParams extends VxeEvent {
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
   }
 
   interface TableBaseHeaderCellParams {
@@ -1805,18 +1811,27 @@ export namespace VxeTableDefines {
   export interface FooterCellMenuParams extends TableBaseFooterCellParams { }
   export interface FooterCellMenuEventParams extends TableEventParams, FooterCellMenuParams { }
 
-  interface SortParams {
+  export interface SortCheckedParams {
     column: VxeTablePropTypes.ColumnConfig;
     property: string;
     order: VxeTablePropTypes.SortOrder;
     sortBy: string;
   }
-  export interface SortChangeParams extends SortParams {
-    sortList: SortParams[];
+  export interface SortChangeParams extends SortCheckedParams {
+    sortList: SortCheckedParams[];
   }
   export interface SortChangeEventParams extends TableEventParams, SortChangeParams { }
 
-  export interface FilterChangeParams extends TableBaseHeaderCellParams { }
+
+  export interface FilterCheckedParams {
+    column: VxeTableDefines.ColumnInfo;
+    property: string;
+    values: any[];
+    datas: any[];
+  }
+  export interface FilterChangeParams extends FilterCheckedParams {
+    filterList: FilterCheckedParams[]
+  }
   export interface FilterChangeEventParams extends TableEventParams, FilterChangeParams { }
 
   export interface ResizableChangeParams extends TableBaseHeaderCellParams { }

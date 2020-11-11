@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance } from 'vue'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeFormItemOptions } from './form-item'
 
@@ -13,8 +13,14 @@ export interface VxeFormConstructor extends VxeComponentInstance, VxeFormMethods
   props: VxeFormProps;
   context: SetupContext<VxeFormEmits>;
   reactData: FormReactData;
+  refMaps: FormPrivateRef;
   renderVN: RenderFunction;
 }
+
+export interface FormPrivateRef {
+  refElem: Ref<HTMLFormElement>;
+}
+export interface VxeFormPrivateRef extends FormPrivateRef { }
 
 export interface FormReactData {
   collapseAll: boolean;

@@ -2,11 +2,7 @@ import XEUtils from 'xe-utils/ctor'
 
 import { VxeGlobalInterceptor, VxeGlobalInterceptorHandles } from '../../../types/v-x-e-table'
 
-function toType (type: string) {
-  return XEUtils.toString('event.' + type).replace('_', '').toLowerCase()
-}
-
-const eventTypes = 'clearActived,clearFilter,showMenu,keydown,export,import'.split(',').map(toType)
+const eventTypes = 'clearActived,clearFilter,showMenu,keydown,export,import'.split(',').map(name => `event.${name}`)
 const storeMap: { [type: string]: VxeGlobalInterceptorHandles.InterceptorCallback[] } = {}
 
 const interceptor: VxeGlobalInterceptor = {
@@ -15,10 +11,9 @@ const interceptor: VxeGlobalInterceptor = {
     return interceptor
   },
   get (type) {
-    return storeMap[toType(type)] || []
+    return storeMap[type] || []
   },
   add (type, callback) {
-    type = toType(type)
     if (callback && eventTypes.indexOf(type) > -1) {
       let eList = storeMap[type]
       if (!eList) {
@@ -29,7 +24,6 @@ const interceptor: VxeGlobalInterceptor = {
     return interceptor
   },
   delete (type, callback) {
-    type = toType(type)
     const eList = storeMap[type]
     if (eList) {
       if (callback) {

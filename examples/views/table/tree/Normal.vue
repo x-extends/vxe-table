@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import XEUtils from 'xe-utils'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeTableInstance } from '../../../../types/vxe-table'
@@ -134,7 +134,7 @@ export default defineComponent({
       ]
     })
 
-    const xTree1 = ref() as Ref<VxeTableInstance>
+    const xTree1 = ref({} as VxeTableInstance)
 
     const getTreeRadioEvent = () => {
       const $table = xTree1.value
@@ -210,7 +210,7 @@ export default defineComponent({
       ]
     })
 
-    const xTree3 = ref() as Ref<VxeTableInstance>
+    const xTree3 = ref({} as VxeTableInstance)
 
     const removeRowEvent = (row: any) => {
       VXETable.modal.confirm('您确定要删除吗？').then(type => {
@@ -255,7 +255,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import XEUtils from 'xe-utils'
         import { VXETable, VxeTableInstance } from 'vxe-table'
 
@@ -292,7 +292,7 @@ export default defineComponent({
               ]
             })
 
-            const xTree1 = ref() as Ref<VxeTableInstance>
+            const xTree1 = ref({} as VxeTableInstance)
 
             const getTreeRadioEvent = () => {
               const $table = xTree1.value
@@ -404,7 +404,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import XEUtils from 'xe-utils'
         import { VXETable, VxeTableInstance } from 'vxe-table'
 
@@ -441,7 +441,7 @@ export default defineComponent({
               ]
             })
 
-            const xTree3 = ref() as Ref<VxeTableInstance>
+            const xTree3 = ref({} as VxeTableInstance)
 
             const removeRowEvent = (row: any) => {
               VXETable.modal.confirm('您确定要删除吗？').then(type => {

@@ -28,12 +28,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeGridInstance } from '../../../../types/vxe-table'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref() as Ref<VxeGridInstance>
+    const xGrid = ref({} as VxeGridInstance)
 
     const findList = () => {
       return new Promise(resolve => {
@@ -121,7 +121,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xGrid = ref() as Ref<VxeGridInstance>
+            const xGrid = ref({} as VxeGridInstance)
 
             const findList = () => {
               return new Promise(resolve => {

@@ -1,5 +1,4 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance } from 'vue'
-import { number } from 'vue-i18n';
 import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, VNodeStyle, ValueOf } from './component'
 
 /**

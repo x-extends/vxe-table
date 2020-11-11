@@ -1,25 +1,42 @@
-import { defineComponent, h, Teleport, inject } from 'vue'
+import { defineComponent, h, Teleport, inject, ref, Ref } from 'vue'
 import { UtilTools } from '../../tools'
+import XEUtils from 'xe-utils/ctor'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/vxe-table'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeMenuPanelConstructor, VxeMenuPanelPrivateRef } from '../../../types/vxe-table'
 
 export default defineComponent({
   name: 'VxeTableContextMenu',
-  props: {
-    ctxMenuStore: Object as any,
-    menuOpts: Object as any
-  },
-  setup (props) {
+  setup (props, context) {
+    const xID = XEUtils.uniqueId()
+
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
+    const { reactData: tableReactData, computeMaps: tableComputeMaps } = $xetable
+
+    const refElem = ref() as Ref<HTMLDivElement>
+
+    const refMaps: VxeMenuPanelPrivateRef = {
+      refElem
+    }
+
+    const $xemenupanel = {
+      xID,
+      props,
+      context,
+      refMaps
+    } as VxeMenuPanelConstructor
+
     const renderVN = () => {
-      const { menuOpts, ctxMenuStore } = props
+      const { ctxMenuStore } = tableReactData
+      const { computeMenuOpts } = tableComputeMaps
+      const menuOpts = computeMenuOpts.value
 
       return h(Teleport, {
         to: 'body',
         disabled: false
       }, [
         h('div', {
+          ref: refElem,
           class: ['vxe-table--context-menu-wrapper', menuOpts.className],
           style: ctxMenuStore.style
         }, ctxMenuStore.list.map((options: any, gIndex: any) => {
@@ -37,16 +54,14 @@ export default defineComponent({
             }, [
               h('a', {
                 class: 'vxe-context-menu--link',
-                on: {
-                  click (evnt: Event) {
-                    $xetable.ctxMenuLinkEvent(evnt, item)
-                  },
-                  mouseover (evnt: Event) {
-                    $xetable.ctxMenuMouseoverEvent(evnt, item)
-                  },
-                  mouseout (evnt: Event) {
-                    $xetable.ctxMenuMouseoutEvent(evnt, item)
-                  }
+                onClick (evnt: Event) {
+                  $xetable.ctxMenuLinkEvent(evnt, item)
+                },
+                onMouseover (evnt: Event) {
+                  $xetable.ctxMenuMouseoverEvent(evnt, item)
+                },
+                onMouseout (evnt: Event) {
+                  $xetable.ctxMenuMouseoutEvent(evnt, item)
                 }
               }, [
                 h('i', {
@@ -73,16 +88,14 @@ export default defineComponent({
                 }, [
                   h('a', {
                     class: 'vxe-context-menu--link',
-                    on: {
-                      click (evnt: Event) {
-                        $xetable.ctxMenuLinkEvent(evnt, child)
-                      },
-                      mouseover (evnt: Event) {
-                        $xetable.ctxMenuMouseoverEvent(evnt, item, child)
-                      },
-                      mouseout (evnt: Event) {
-                        $xetable.ctxMenuMouseoutEvent(evnt, item)
-                      }
+                    onClick (evnt: Event) {
+                      $xetable.ctxMenuLinkEvent(evnt, child)
+                    },
+                    onMouseover (evnt: Event) {
+                      $xetable.ctxMenuMouseoverEvent(evnt, item, child)
+                    },
+                    onMouseout (evnt: Event) {
+                      $xetable.ctxMenuMouseoutEvent(evnt, item)
                     }
                   }, [
                     h('i', {
@@ -100,6 +113,11 @@ export default defineComponent({
       ])
     }
 
-    return renderVN
+    $xemenupanel.renderVN = renderVN
+
+    return $xemenupanel
+  },
+  render () {
+    return this.renderVN()
   }
 })

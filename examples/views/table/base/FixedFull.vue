@@ -102,7 +102,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeTableInstance } from '../../../../types/vxe-table'
 
 export default defineComponent({
@@ -141,7 +141,7 @@ export default defineComponent({
       ]
     })
 
-    const xTable2 = ref() as Ref<VxeTableInstance>
+    const xTable2 = ref({} as VxeTableInstance)
 
     const toggleFixedColumn = (index: number, type: 'left' | 'right') => {
       const $table = xTable2.value
@@ -250,7 +250,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance } from 'vxe-table'
 
         export default defineComponent({
@@ -272,7 +272,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable2 = ref() as Ref<VxeTableInstance>
+            const xTable2 = ref({} as VxeTableInstance)
 
             const toggleFixedColumn = (index: number, type: 'left' | 'right') => {
               const $table = xTable2.value

@@ -12,7 +12,7 @@ export default defineComponent({
   },
   setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
-    const { reactData: tableReactData, computeMaps: tableComputeMaps } = $xetable
+    const { reactData: tableReactData, internalData: tableInternalData, computeMaps: tableComputeMaps } = $xetable
     const { computeFilterOpts } = tableComputeMaps
 
     const computeHasCheckOption = computed(() => {
@@ -55,7 +55,8 @@ export default defineComponent({
         $xetable.handleTableData(true)
         $xetable.checkSelectionStatus()
       }
-      $xetable.dispatchEvent('filter-change', { column, property, values, datas, filters: $xetable.getCheckedFilters() }, evnt)
+      const filterList = $xetable.getCheckedFilters()
+      $xetable.dispatchEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
       $xetable.updateFooter()
       if (scrollXLoad || scrollYLoad) {
         $xetable.clearScroll()
@@ -143,9 +144,9 @@ export default defineComponent({
 
     const renderOptions = (filterRender: any, compConf: any) => {
       const { filterStore } = props
-      const { args, column, multiple } = filterStore
+      const { column, multiple } = filterStore
       const { slots } = column
-      const params = Object.assign({ $panel, $table: $xetable }, args)
+      const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xetable })
       if (slots && slots.filter) {
         return [
           h('div', {

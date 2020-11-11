@@ -21,15 +21,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, Ref } from 'vue'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/vxe-table'
-import { VxeGridConstructor, VxeGridOptions } from '../../../types/vxe-table'
+import { VxeGridInstance, VxeGridOptions } from '../../../types/vxe-table'
 import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 
 export default defineComponent({
   setup () {
-    const xGrid = ref() as Ref<VxeGridConstructor>
+    const xGrid = ref({} as VxeGridInstance)
 
     const gridOptions = reactive({
       border: true,
@@ -285,13 +285,13 @@ export default defineComponent({
         `,
         `
         import { defineComponent, onMounted, reactive, ref, Ref } from 'vue'
-        import { VXETable, VxeGridConstructor, VxeGridOptions } from 'vxe-table'
+        import { VXETable, VxeGridInstance, VxeGridOptions } from 'vxe-table'
         import XEUtils from 'xe-utils'
         import XEAjax from 'xe-ajax'
 
         export default defineComponent({
           setup () {
-            const xGrid = ref() as Ref<VxeGridConstructor>
+            const xGrid = ref({} as VxeGridInstance)
 
             const gridOptions = reactive({
               border: true,

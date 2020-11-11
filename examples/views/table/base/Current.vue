@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeTableInstance, VxeTableEvents } from '../../../../types/vxe-table'
 
@@ -49,7 +49,7 @@ export default defineComponent({
       ]
     })
 
-    const xTable = ref() as Ref<VxeTableInstance>
+    const xTable = ref({} as VxeTableInstance)
 
     const currentChangeEvent: VxeTableEvents.CurrentChange = ({ rowIndex }) => {
       console.log(`行选中事件 ${rowIndex}`)
@@ -90,7 +90,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance, VxeTableEvents } from 'vxe-table'
 
         export default defineComponent({
@@ -104,7 +104,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable = ref() as Ref<VxeTableInstance>
+            const xTable = ref({} as VxeTableInstance)
 
             const currentChangeEvent: VxeTableEvents.CurrentChange = ({ rowIndex }: any) => {
               console.log(\`行选中事件 \${rowIndex}\`)

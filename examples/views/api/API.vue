@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, reactive, watch, ref, Ref } from 'vue'
+import { computed, defineComponent, nextTick, reactive, watch, ref } from 'vue'
 import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
 import { VXETable } from '../../../packages/vxe-table'
 import i18n from '@/i18n'
@@ -224,7 +224,7 @@ export default defineComponent({
       ]
     })
 
-    const xTable = ref() as Ref<VxeTableInstance>
+    const xTable = ref({} as VxeTableInstance)
 
     const apiName = computed(() => {
       const $route = router.currentRoute.value

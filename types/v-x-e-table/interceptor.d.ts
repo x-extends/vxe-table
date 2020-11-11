@@ -1,12 +1,12 @@
-import { number } from 'vue-i18n'
-import { VxeTableDefines, VxeTablePropTypes } from '../table'
-import { VxeGridConstructor } from '../grid'
+import { VxeTableConstructor, VxeTableDefines, VxeTablePropTypes, VxeTablePrivateMethods } from '../table'
+import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
 
 export namespace VxeGlobalInterceptorHandles {
-  export type InterceptorCallback = (params: any, event: Event) => any;
+  export type InterceptorCallback = (params: any, event: KeyboardEvent) => any;
 
-  export interface InterceptorParams {
-    $grid?: VxeGridConstructor;
+  interface InterceptorParams {
+    $grid?: VxeGridConstructor & VxeGridPrivateMethods;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $event: Event;
   }
 
@@ -15,6 +15,7 @@ export namespace VxeGlobalInterceptorHandles {
   export interface InterceptorExportParams extends InterceptorParams {
     options: VxeTablePropTypes.ExportConfig;
     columns: VxeTableDefines.ColumnInfo[];
+    colgroups: VxeTableDefines.ColumnInfo[][];
     datas: any[];
   }
 

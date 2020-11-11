@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { VxeTableInstance, VxeColumnPropTypes } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
 
@@ -97,7 +97,7 @@ export default defineComponent({
       { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
     ])
 
-    const xTable2 = ref() as Ref<VxeTableInstance>
+    const xTable2 = ref({} as VxeTableInstance)
     const tableData2 = ref([
       { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
       { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -153,7 +153,7 @@ export default defineComponent({
         import { defineComponent, ref } from 'vue'
 
         export default defineComponent({
-          data () {
+          setup () {
             const tableData1 = ref([
               { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
               { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -217,7 +217,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xTable2 = ref() as Ref<VxeTableInstance>
+            const xTable2 = ref({} as VxeTableInstance)
 
             const tableData2 = ref([
               { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },

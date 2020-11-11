@@ -27,7 +27,7 @@ export class VXETableInstance {
   /**
    * 读取内置国际化
    */
-  public t(key: string, args?: any): any;
+  public t(key: string, args?: any): string;
   /**
    * 设置全局参数/获取所有参数
    */
@@ -78,7 +78,7 @@ export class VXETableInstance {
 }
 
 /**
- * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...  
+ * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...
  */
 export const VXETable: VXETableInstance
 
@@ -97,7 +97,7 @@ export interface VXETableByVueProperty {
   /**
    * 读取内置国际化
    */
-  t(key: string): any;
+  t(key: string, args?: any): string;
   /**
    * 全局的模态窗口
    */
@@ -111,6 +111,12 @@ export interface VXETableByVueProperty {
 declare module 'vue' {
   export interface ComponentCustomProperties {
     $vxe: VXETableByVueProperty;
+  }
+}
+
+declare global {
+  interface Window {
+    VXETable: VXETableInstance;
   }
 }
 

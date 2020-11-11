@@ -1,10 +1,32 @@
-import { VXETableComponent } from './component'
+import { RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
+import { VXETableComponent, VxeComponentInstance } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
  * 表格扩展 - 快捷菜单
  */
 export interface Menu extends VXETableComponent { }
+
+export type VxeMenuPanelInstance = ComponentPublicInstance<VxeMenuPanelProps, VxeMenuPanelConstructor>;
+
+export interface VxeMenuPanelConstructor extends VxeComponentInstance, VxeMenuPanelMethods {
+  props: VxeMenuPanelProps;
+  context: SetupContext;
+  refMaps: MenuPanelPrivateRef;
+  renderVN: RenderFunction;
+}
+
+export interface MenuPanelPrivateRef {
+  refElem: Ref<HTMLDivElement>;
+}
+export interface VxeMenuPanelPrivateRef extends MenuPanelPrivateRef { }
+
+export interface VxeMenuPanelMethods { }
+
+export interface VxeMenuPanelProps { 
+  ctxMenuStore: any;
+  menuOpts: any;
+}
 
 export interface TableMenuMethods {
   /**
@@ -19,6 +41,10 @@ export interface TableMenuPrivateMethods {
   ctxMenuMouseoverEvent(evnt: any, item: any, child?: any): void;
   ctxMenuMouseoutEvent(evnt: any, item: any): void;
   ctxMenuLinkEvent(evnt: any, menu: any): void;
+}
+
+declare module './grid' {
+  interface VxeGridMethods extends TableMenuMethods { }
 }
 
 declare module './table' {

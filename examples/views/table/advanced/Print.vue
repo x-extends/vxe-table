@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeTableInstance, VxeTablePropTypes, VxeButtonEvents } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
 
@@ -62,7 +62,7 @@ export default defineComponent({
       ]
     })
 
-    const xTable = ref() as Ref<VxeTableInstance>
+    const xTable = ref({} as VxeTableInstance)
 
     const printEvent1: VxeButtonEvents.Click = () => {
       const $table = xTable.value
@@ -143,7 +143,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance, VxeTablePropTypes, VxeButtonEvents } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
@@ -162,7 +162,7 @@ export default defineComponent({
               ]
             })
 
-            const xTable = ref() as Ref<VxeTableInstance>
+            const xTable = ref({} as VxeTableInstance)
 
             const printEvent1: VxeButtonEvents.Click = () => {
               const $table = xTable.value

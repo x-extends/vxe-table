@@ -1744,134 +1744,134 @@ export default defineComponent({
         //     }
         //   ]
         // },
-        // {
-        //   label: 'app.aside.nav.plugin',
-        //   value: 'plugin',
-        //   expand: false,
-        //   children: [
-        //     {
-        //       label: 'app.aside.nav.elementPlugin',
-        //       demoUrl: 'https://jsrun.pro/dwbKp/edit',
-        //       locat: {
-        //         name: 'TablePluginElementConfig'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.elementFilterPlugin',
-        //       demoUrl: 'https://jsrun.pro/BWWKpv/edit',
-        //       locat: {
-        //         name: 'TablePluginElementFilter'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.elementPluginMore',
-        //       demoUrl: 'https://jsrun.pro/uWWKp/edit',
-        //       locat: {
-        //         name: 'TablePluginElementPage'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.iviewPlugin',
-        //       demoUrl: 'https://jsrun.pro/HPWKp/edit',
-        //       locat: {
-        //         name: 'TablePluginIviewConfig'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.iviewFilter',
-        //       demoUrl: 'https://jsrun.pro/nPWKp/edit',
-        //       locat: {
-        //         name: 'TablePluginIviewFilter'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.iviewPluginMore',
-        //       demoUrl: 'https://jsrun.pro/rPWKp/edit',
-        //       locat: {
-        //         name: 'TablePluginIviewPage'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.antdPlugin',
-        //       demoUrl: 'https://jsrun.pro/APWKp/edit',
-        //       locat: {
-        //         name: 'TablePluginAntdConfig'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.antdFilter',
-        //       locat: {
-        //         name: 'TablePluginAntdFilter'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.antdPluginMore',
-        //       locat: {
-        //         name: 'TablePluginAntdPage'
-        //       }
-        //     },
-        //     // {
-        //     //   label: 'app.aside.nav.shortcutKeyPlugin',
-        //     //   disabled: true,
-        //     //   locat: {
-        //     //     name: 'TablePluginShortcutKey'
-        //     //   }
-        //     // },
-        //     // {
-        //     //   label: 'app.aside.nav.chartsPlugin',
-        //     //   disabled: true,
-        //     //   demoUrl: 'https://jsrun.pro/9aWKp/edit',
-        //     //   locat: {
-        //     //     name: 'TablePluginCharts'
-        //     //   }
-        //     // },
-        //     {
-        //       label: 'app.aside.nav.exportXLSXPlugin',
-        //       demoUrl: 'https://jsrun.pro/PIWKp/edit',
-        //       locat: {
-        //         name: 'TablePluginExportXLSX'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.exportPDFPlugin',
-        //       demoUrl: 'https://jsrun.pro/I8WKp/edit',
-        //       locat: {
-        //         name: 'TablePluginExportPDF'
-        //       }
-        //     },
-        //     // {
-        //     //   label: 'app.aside.nav.rendererPlugin',
-        //     //   disabled: true,
-        //     //   locat: {
-        //     //     name: 'TablePluginRenderer'
-        //     //   }
-        //     // },
-        //     {
-        //       label: 'app.aside.nav.menusPlugin',
-        //       locat: {
-        //         name: 'TablePluginMenus'
-        //       }
-        //     },
-        //     // {
-        //     //   label: 'app.aside.nav.excelPlugin',
-        //     //   locat: {
-        //     //     name: 'TablePluginExcel'
-        //     //   }
-        //     // },
-        //     {
-        //       label: 'app.aside.nav.treeRowPlugin',
-        //       locat: {
-        //         name: 'TablePluginTreeRows'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.treeColPlugin',
-        //       locat: {
-        //         name: 'TablePluginTreeCols'
-        //       }
-        //     }
-        //   ]
-        // },
+        {
+          label: 'app.aside.nav.plugin',
+          value: 'plugin',
+          expand: false,
+          children: [
+            // {
+            //   label: 'app.aside.nav.elementPlugin',
+            //   demoUrl: 'https://jsrun.pro/dwbKp/edit',
+            //   locat: {
+            //     name: 'TablePluginElementConfig'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.elementFilterPlugin',
+            //   demoUrl: 'https://jsrun.pro/BWWKpv/edit',
+            //   locat: {
+            //     name: 'TablePluginElementFilter'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.elementPluginMore',
+            //   demoUrl: 'https://jsrun.pro/uWWKp/edit',
+            //   locat: {
+            //     name: 'TablePluginElementPage'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.iviewPlugin',
+            //   demoUrl: 'https://jsrun.pro/HPWKp/edit',
+            //   locat: {
+            //     name: 'TablePluginIviewConfig'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.iviewFilter',
+            //   demoUrl: 'https://jsrun.pro/nPWKp/edit',
+            //   locat: {
+            //     name: 'TablePluginIviewFilter'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.iviewPluginMore',
+            //   demoUrl: 'https://jsrun.pro/rPWKp/edit',
+            //   locat: {
+            //     name: 'TablePluginIviewPage'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.antdPlugin',
+            //   demoUrl: 'https://jsrun.pro/APWKp/edit',
+            //   locat: {
+            //     name: 'TablePluginAntdConfig'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.antdFilter',
+            //   locat: {
+            //     name: 'TablePluginAntdFilter'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.antdPluginMore',
+            //   locat: {
+            //     name: 'TablePluginAntdPage'
+            //   }
+            // },
+            // // {
+            // //   label: 'app.aside.nav.shortcutKeyPlugin',
+            // //   disabled: true,
+            // //   locat: {
+            // //     name: 'TablePluginShortcutKey'
+            // //   }
+            // // },
+            // // {
+            // //   label: 'app.aside.nav.chartsPlugin',
+            // //   disabled: true,
+            // //   demoUrl: 'https://jsrun.pro/9aWKp/edit',
+            // //   locat: {
+            // //     name: 'TablePluginCharts'
+            // //   }
+            // // },
+            {
+              label: 'app.aside.nav.exportXLSXPlugin',
+              demoUrl: 'https://jsrun.pro/PIWKp/edit',
+              locat: {
+                name: 'TablePluginExportXLSX'
+              }
+            },
+            {
+              label: 'app.aside.nav.exportPDFPlugin',
+              demoUrl: 'https://jsrun.pro/I8WKp/edit',
+              locat: {
+                name: 'TablePluginExportPDF'
+              }
+            },
+            // // {
+            // //   label: 'app.aside.nav.rendererPlugin',
+            // //   disabled: true,
+            // //   locat: {
+            // //     name: 'TablePluginRenderer'
+            // //   }
+            // // },
+            {
+              label: 'app.aside.nav.menusPlugin',
+              locat: {
+                name: 'TablePluginMenus'
+              }
+            }
+            // // {
+            // //   label: 'app.aside.nav.excelPlugin',
+            // //   locat: {
+            // //     name: 'TablePluginExcel'
+            // //   }
+            // // },
+            // {
+            //   label: 'app.aside.nav.treeRowPlugin',
+            //   locat: {
+            //     name: 'TablePluginTreeRows'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.treeColPlugin',
+            //   locat: {
+            //     name: 'TablePluginTreeCols'
+            //   }
+            // }
+          ]
+        },
         {
           label: 'app.aside.nav.formats',
           value: 'formats',

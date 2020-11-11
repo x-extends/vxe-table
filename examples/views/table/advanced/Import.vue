@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeTableInstance, VxeColumnPropTypes, VxeButtonEvents } from '../../../../types/vxe-table'
 
 export default defineComponent({
@@ -60,7 +60,7 @@ export default defineComponent({
       { label: '男', value: '1' }
     ]
 
-    const xTable = ref() as Ref<VxeTableInstance>
+    const xTable = ref({} as VxeTableInstance)
 
     const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
       const item = sexList.find(item => item.value === cellValue)
@@ -115,7 +115,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance, VxeColumnPropTypes, VxeButtonEvents } from 'vxe-table'
 
         export default defineComponent({
@@ -138,7 +138,7 @@ export default defineComponent({
               { label: '男', value: '1' }
             ]
 
-            const xTable = ref() as Ref<VxeTableInstance>
+            const xTable = ref({} as VxeTableInstance)
 
             const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
               const item = sexList.find(item => item.value === cellValue)

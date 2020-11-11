@@ -5,8 +5,10 @@ import { UtilTools, DomTools } from '../../tools'
 
 import { VxeGlobalHooksHandles, TableEditMethods, TableEditPrivateMethods } from '../../../types/vxe-table'
 
+const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getActiveRecord', 'getSelectedCell', 'clearActived', 'clearSelected', 'isActiveByRow', 'setActiveRow', 'setActiveCell', 'setSelectCell']
+
 const editHook: VxeGlobalHooksHandles.HookOptions = {
-  setup ($xetable) {
+  setupTable ($xetable) {
     const { props, reactData, internalData, refMaps, computeMaps } = $xetable
     const { refElem } = refMaps
     const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeSYOpts, computeTreeOpts } = computeMaps
@@ -372,7 +374,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
               const cell = $xetable.getCell(row, column)
               if (cell) {
                 editPrivateMethods.handleActived({ row, rowIndex: $xetable.getRowIndex(row), column, columnIndex: $xetable.getColumnIndex(column), cell, $table: $xetable })
-                internalData.lastCallTime = Date.now()
+                internalData._lastCallTime = Date.now()
               }
             }
             return nextTick()
@@ -554,6 +556,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     return { ...editMethods, ...editPrivateMethods }
+  },
+  setupGrid ($xegrid) {
+    return $xegrid.extendTableMethods(tableEditMethodKeys)
   }
 }
 

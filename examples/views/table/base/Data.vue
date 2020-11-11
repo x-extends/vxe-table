@@ -60,58 +60,64 @@
   </div>
 </template>
 
-<script>
-import hljs from 'highlight.js'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 
-export default {
-  data () {
+export default defineComponent({
+  setup () {
+    const tableData1 = ref([
+      { name: 'Test2', age: 28, sex: '男', role: '后端', content: '<img height="40" src="/vxe-table/static/other/img1.gif">' },
+      { name: 'Test4', age: 26, sex: '男', role: '前端', content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' },
+      { name: 'Test3', age: 20, sex: '女', role: '程序员鼓励师', content: '<img height="40" src="/vxe-table/static/other/img2.gif">' },
+      { name: 'Test1', age: 22, sex: '女', role: '设计师', content: '<div><span style="color: red">我是 Htmp 片段</span></div>' }
+    ])
+
+    const tableData2 = ref([
+      {
+        userInfo: { name: 'Test1', age: 22 },
+        other: [
+          { sex: '女' },
+          { more: { content: '<div><span style="color: red">我是 Htmp 片段</span></div>' } }
+        ],
+        role: '设计师'
+      },
+      {
+        userInfo: { name: 'Test2', age: 28 },
+        other: [
+          { sex: '男' },
+          { more: { content: '<img height="40" src="/vxe-table/static/other/img1.gif">' } }
+        ],
+        role: '后端'
+      },
+      {
+        userInfo: { name: 'Test3', age: 20 },
+        other: [
+          { sex: '女' },
+          { more: { content: '<img height="40" src="/vxe-table/static/other/img2.gif">' } }
+        ],
+        role: '程序员鼓励师'
+      },
+      {
+        userInfo: { name: 'Test4', age: 26 },
+        other: [
+          { sex: '男' },
+          { more: { content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' } }
+        ],
+        role: '前端'
+      }
+    ])
+
+    const tableData3 = ref([
+      [101, 'Test4', '男', 26, '<a href="https://github.com/x-extends/vxe-table">我是链接</a>', '前端'],
+      [102, 'Test2', '男', 28, '<img height="40" src="/vxe-table/static/other/img1.gif">', '后端'],
+      [103, 'Test1', '女', 22, '<div><span style="color: red">我是 Htmp 片段</span></div>', '设计师'],
+      [104, 'Test3', '女', 20, '<img height="40" src="/vxe-table/static/other/img2.gif">', '程序员鼓励师']
+    ])
+
     return {
-      tableData1: [
-        { name: 'Test2', age: 28, sex: '男', role: '后端', content: '<img height="40" src="/vxe-table/static/other/img1.gif">' },
-        { name: 'Test4', age: 26, sex: '男', role: '前端', content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' },
-        { name: 'Test3', age: 20, sex: '女', role: '程序员鼓励师', content: '<img height="40" src="/vxe-table/static/other/img2.gif">' },
-        { name: 'Test1', age: 22, sex: '女', role: '设计师', content: '<div><span style="color: red">我是 Htmp 片段</span></div>' }
-      ],
-      tableData2: [
-        {
-          userInfo: { name: 'Test1', age: 22 },
-          other: [
-            { sex: '女' },
-            { more: { content: '<div><span style="color: red">我是 Htmp 片段</span></div>' } }
-          ],
-          role: '设计师'
-        },
-        {
-          userInfo: { name: 'Test2', age: 28 },
-          other: [
-            { sex: '男' },
-            { more: { content: '<img height="40" src="/vxe-table/static/other/img1.gif">' } }
-          ],
-          role: '后端'
-        },
-        {
-          userInfo: { name: 'Test3', age: 20 },
-          other: [
-            { sex: '女' },
-            { more: { content: '<img height="40" src="/vxe-table/static/other/img2.gif">' } }
-          ],
-          role: '程序员鼓励师'
-        },
-        {
-          userInfo: { name: 'Test4', age: 26 },
-          other: [
-            { sex: '男' },
-            { more: { content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' } }
-          ],
-          role: '前端'
-        }
-      ],
-      tableData3: [
-        [101, 'Test4', '男', 26, '<a href="https://github.com/x-extends/vxe-table">我是链接</a>', '前端'],
-        [102, 'Test2', '男', 28, '<img height="40" src="/vxe-table/static/other/img1.gif">', '后端'],
-        [103, 'Test1', '女', 22, '<div><span style="color: red">我是 Htmp 片段</span></div>', '设计师'],
-        [104, 'Test3', '女', 20, '<img height="40" src="/vxe-table/static/other/img2.gif">', '程序员鼓励师']
-      ],
+      tableData1,
+      tableData2,
+      tableData3,
       demoCodes: [
         `
         <vxe-table
@@ -125,18 +131,22 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
+        import { defineComponent, ref } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const tableData1 = ref([
+              { name: 'Test2', age: 28, sex: '男', role: '后端', content: '<img height="40" src="/vxe-table/static/other/img1.gif">' },
+              { name: 'Test4', age: 26, sex: '男', role: '前端', content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' },
+              { name: 'Test3', age: 20, sex: '女', role: '程序员鼓励师', content: '<img height="40" src="/vxe-table/static/other/img2.gif">' },
+              { name: 'Test1', age: 22, sex: '女', role: '设计师', content: '<div><span style="color: red">我是 Htmp 片段</span></div>' }
+            ])
+
             return {
-              tableData: [
-                { name: 'Test2', age: 28, sex: '男', role: '后端', content: '<img height="40" src="/vxe-table/static/other/img1.gif">' },
-                { name: 'Test4', age: 26, sex: '男', role: '前端', content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' },
-                { name: 'Test3', age: 20, sex: '女', role: '程序员鼓励师', content: '<img height="40" src="/vxe-table/static/other/img2.gif">' },
-                { name: 'Test1', age: 22, sex: '女', role: '设计师', content: '<div><span style="color: red">我是 Htmp 片段</span></div>' }
-              ]
+              tableData1
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
@@ -150,46 +160,50 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
+        import { defineComponent, ref } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const tableData2 = ref([
+              {
+                userInfo: { name: 'Test1', age: 22 },
+                other: [
+                  { sex: '女' },
+                  { more: { content: '<div><span style="color: red">我是 Htmp 片段</span></div>' } }
+                ],
+                role: '设计师'
+              },
+              {
+                userInfo: { name: 'Test2', age: 28 },
+                other: [
+                  { sex: '男' },
+                  { more: { content: '<img height="40" src="/vxe-table/static/other/img1.gif">' } }
+                ],
+                role: '后端'
+              },
+              {
+                userInfo: { name: 'Test3', age: 20 },
+                other: [
+                  { sex: '女' },
+                  { more: { content: '<img height="40" src="/vxe-table/static/other/img2.gif">' } }
+                ],
+                role: '程序员鼓励师'
+              },
+              {
+                userInfo: { name: 'Test4', age: 26 },
+                other: [
+                  { sex: '男' },
+                  { more: { content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' } }
+                ],
+                role: '前端'
+              }
+            ])
+
             return {
-              tableData: [
-                {
-                  userInfo: { name: 'Test1', age: 22 },
-                  other: [
-                    { sex: '女' },
-                    { more: { content: '<div><span style="color: red">我是 Htmp 片段</span></div>' } }
-                  ],
-                  role: '设计师'
-                },
-                {
-                  userInfo: { name: 'Test2', age: 28 },
-                  other: [
-                    { sex: '男' },
-                    { more: { content: '<img height="40" src="/vxe-table/static/other/img1.gif">' } }
-                  ],
-                  role: '后端'
-                },
-                {
-                  userInfo: { name: 'Test3', age: 20 },
-                  other: [
-                    { sex: '女' },
-                    { more: { content: '<img height="40" src="/vxe-table/static/other/img2.gif">' } }
-                  ],
-                  role: '程序员鼓励师'
-                },
-                {
-                  userInfo: { name: 'Test4', age: 26 },
-                  other: [
-                    { sex: '男' },
-                    { more: { content: '<a href="https://github.com/x-extends/vxe-table">我是链接</a>' } }
-                  ],
-                  role: '前端'
-                }
-              ]
+              tableData2
             }
           }
-        }
+        })
         `,
         `
         <vxe-table
@@ -204,27 +218,25 @@ export default {
         </vxe-table>
         `,
         `
-        export default {
-          data () {
+        import { defineComponent, ref } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const tableData3 = ref([
+              [101, 'Test4', '男', 26, '<a href="https://github.com/x-extends/vxe-table">我是链接</a>', '前端'],
+              [102, 'Test2', '男', 28, '<img height="40" src="/vxe-table/static/other/img1.gif">', '后端'],
+              [103, 'Test1', '女', 22, '<div><span style="color: red">我是 Htmp 片段</span></div>', '设计师'],
+              [104, 'Test3', '女', 20, '<img height="40" src="/vxe-table/static/other/img2.gif">', '程序员鼓励师']
+            ])
+
             return {
-              // 将第0个设置为主键，可以为 null 或者自定义主键值
-              tableData: [
-                [101, 'Test4', '男', 26, '<a href="https://github.com/x-extends/vxe-table">我是链接</a>', '前端'],
-                [102, 'Test2', '男', 28, '<img height="40" src="/vxe-table/static/other/img1.gif">', '后端'],
-                [103, 'Test1', '女', 22, '<div><span style="color: red">我是 Htmp 片段</span></div>', '设计师'],
-                [104, 'Test3', '女', 20, '<img height="40" src="/vxe-table/static/other/img2.gif">', '程序员鼓励师']
-              ]
+              tableData3
             }
           }
-        }
+        })
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
-}
+})
 </script>

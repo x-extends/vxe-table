@@ -32,7 +32,7 @@ const getConvertColumns = (columns: any) => {
   return result
 }
 
-const convertToRows = (originColumns: any) => {
+const convertToRows = (originColumns: any): any[][] => {
   let maxLevel = 1
   const traverse = (column: any, parent?: any) => {
     if (parent) {
@@ -276,8 +276,10 @@ function checkImportData (columns: any[], fields: string[]) {
   return fields.some(field => tableFields.indexOf(field) > -1)
 }
 
+const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'importByFile', 'importData', 'saveFile', 'readFile', 'print', 'openImport', 'openExport', 'openPrint']
+
 const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
-  setup ($xetable) {
+  setupTable ($xetable) {
     const { props, reactData, internalData, computeMaps } = $xetable
     const { computeTreeOpts, computePrintOpts, computeExportOpts, computeImportOpts, computeCustomOpts, computeSeqOpts, computeRadioOpts, computeCheckboxOpts } = computeMaps
 
@@ -1235,6 +1237,9 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     return exportMethods
+  },
+  setupGrid ($xegrid) {
+    return $xegrid.extendTableMethods(tableExportMethodKeys)
   }
 }
 

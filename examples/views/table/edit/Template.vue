@@ -120,7 +120,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeTableInstance, VxeTableEvents, VxePulldownInstance } from '../../../../types/vxe-table'
 
 export default defineComponent({
@@ -145,8 +145,8 @@ export default defineComponent({
       }
     })
 
-    const xTable = ref() as Ref<VxeTableInstance>
-    const xDown1 = ref() as Ref<VxePulldownInstance>
+    const xTable = ref({} as VxeTableInstance)
+    const xDown1 = ref({} as VxePulldownInstance)
 
     const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
       const $table = xTable.value
@@ -300,7 +300,7 @@ export default defineComponent({
         </vxe-pager>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance, VxeTableEvents, VxePulldownInstance } from 'vxe-table'
 
         export default defineComponent({
@@ -325,8 +325,8 @@ export default defineComponent({
               }
             })
 
-            const xTable = ref() as Ref<VxeTableInstance>
-            const xDown1 = ref() as Ref<VxePulldownInstance>
+            const xTable = ref({} as VxeTableInstance)
+            const xDown1 = ref({} as VxePulldownInstance)
 
             const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
               const $table = xTable.value

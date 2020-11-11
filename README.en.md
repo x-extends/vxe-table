@@ -85,7 +85,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 Version: [vue](https://www.npmjs.com/package/vue) 3.x, Dependent: [xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
 
 ```shell
-npm install xe-utils vxe-table
+npm install xe-utils@@3.0.1 vxe-table@next
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
@@ -93,22 +93,23 @@ Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.ne
 ### npm
 
 ```javascript
-import Vue from 'vue'
+import { createApp } from 'vue'
 import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 
-Vue.use(VXETable)
+const app = createApp(App)
+app.use(VXETable)
 ```
 
 ### CDN
 
 ```HTML
 <!-- Style -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
+<link rel="stylesheet" href="https://unpkg.com/vxe-table@next/lib/style.css">
 <!-- Script -->
-<script src="https://unpkg.com/xe-utils"></script>
-<script src="https://unpkg.com/vxe-table"></script>
+<script src="https://unpkg.com/xe-utils@@3.0.1"></script>
+<script src="https://unpkg.com/vxe-table@next"></script>
 <!-- It is recommended that users introduced by CDN lock the version on the link address to avoid the impact of incompatible updates -->
 ```
 

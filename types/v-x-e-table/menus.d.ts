@@ -1,9 +1,15 @@
-import { VxeTableDefines } from '../table'
+import { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../table'
+import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
 import { VxeGlobalRendererHandles } from '../v-x-e-table';
 
 export namespace VxeGlobalMenusHandles {
   export type MenusCallback = (params: MenusCallbackParams, event: Event) => any;
-  export interface MenusCallbackParams extends VxeGlobalRendererHandles.RenderCellParams {
+
+  interface MenusParams {
+    $grid?: VxeGridConstructor & VxeGridPrivateMethods;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
+  }
+  export interface MenusCallbackParams extends MenusParams, VxeGlobalRendererHandles.RenderCellParams {
     menu: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption;
   }
 }

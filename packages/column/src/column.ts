@@ -44,7 +44,7 @@ export const columnProps = {
   // 是否允许排序
   sortable: Boolean,
   // 自定义排序的属性
-  sortBy: String,
+  sortBy: [String, Function],
   // 配置筛选条件数组
   filters: { type: Array, default: null },
   // 筛选是否允许多选

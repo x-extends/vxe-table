@@ -44,7 +44,7 @@ export interface VxeCheckboxProps {
   disabled?: boolean;
 }
 
-export interface CheckboxMethods { 
+export interface CheckboxMethods {
   dispatchEvent(type: ValueOf<VxeCheckboxEmits>, params: any, evnt: Event): void;
 }
 export interface VxeCheckboxMethods extends CheckboxMethods { }

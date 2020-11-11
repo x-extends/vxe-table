@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance } from 'vue'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXETableComponent, VxeComponentInstance, SizeType, VNodeStyle, VxeEvent, ValueOf } from './component'
 
 /**
@@ -12,8 +12,14 @@ export interface VxePulldownConstructor extends VxeComponentInstance, VxePulldow
   props: VxePulldownProps;
   context: SetupContext<VxePulldownEmits>;
   reactData: PulldownReactData;
+  refMaps: PulldownPrivateRef;
   renderVN: RenderFunction;
 }
+
+export interface PulldownPrivateRef {
+  refElem: Ref<HTMLDivElement>;
+}
+export interface VxePulldownPrivateRef extends PulldownPrivateRef { }
 
 export interface PulldownReactData {
   inited: boolean;

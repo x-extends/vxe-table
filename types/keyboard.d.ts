@@ -16,6 +16,10 @@ export interface TableKeyboardPrivateMethods {
   triggerCellMousedownEvent(evnt: any, params: any): void;
  }
 
+declare module './grid' {
+  interface VxeGridMethods extends TableKeyboardMethods { }
+}
+
 declare module './table' {
   interface VxeTableMethods extends TableKeyboardMethods { }
   interface VxeTablePrivateMethods extends TableKeyboardPrivateMethods { }

@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, reactive, ref, Ref } from 'vue'
+import { defineComponent, nextTick, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeTableInstance } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
@@ -91,7 +91,7 @@ export default defineComponent({
       tableData: []
     })
 
-    const xTable = ref() as Ref<VxeTableInstance>
+    const xTable = ref({} as VxeTableInstance)
 
     const mockList = (rowSize: number): Promise<any[]> => {
       return new Promise(resolve => {
@@ -207,7 +207,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, nextTick, reactive, ref, Ref } from 'vue'
+        import { defineComponent, nextTick, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance } from '../../../../types/vxe-table'
         import XEUtils from 'xe-utils'
 
@@ -220,7 +220,7 @@ export default defineComponent({
               tableData: []
             })
 
-            const xTable = ref() as Ref<VxeTableInstance>
+            const xTable = ref({} as VxeTableInstance)
 
             const mockList = (rowSize: number): Promise<any[]> => {
               return new Promise(resolve => {

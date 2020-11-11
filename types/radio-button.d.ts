@@ -46,7 +46,7 @@ export namespace VxeRadioButtonDefines {
   export interface ChangeParams {
     label: any;
   }
-  export interface ChangeEventParams extends RadioButtonEventParams,ChangeParams { }
+  export interface ChangeEventParams extends RadioButtonEventParams, ChangeParams { }
 }
 
 export interface VxeRadioButtonListeners {

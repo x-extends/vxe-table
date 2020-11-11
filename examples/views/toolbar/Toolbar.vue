@@ -108,7 +108,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, reactive, nextTick } from 'vue'
+import { defineComponent, ref, reactive, nextTick } from 'vue'
 import { VxeTableInstance, VxeToolbarInstance } from '../../../types/vxe-table'
 
 export default defineComponent({
@@ -122,8 +122,8 @@ export default defineComponent({
       ]
     })
 
-    const xTable = ref() as Ref<VxeTableInstance>
-    const xToolbar = ref() as Ref<VxeToolbarInstance>
+    const xTable = ref({} as VxeTableInstance)
+    const xToolbar = ref({} as VxeToolbarInstance)
 
     nextTick(() => {
       // 将表格和工具栏进行关联
@@ -233,7 +233,7 @@ export default defineComponent({
         </p>
         `,
         `
-        import { defineComponent, ref, Ref, reactive, nextTick } from 'vue'
+        import { defineComponent, ref, reactive, nextTick } from 'vue'
         import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
 
         export default defineComponent({
@@ -247,8 +247,8 @@ export default defineComponent({
               ]
             })
 
-            const xTable = ref() as Ref<VxeTableInstance>
-            const xToolbar = ref() as Ref<VxeToolbarInstance>
+            const xTable = ref({} as VxeTableInstance)
+            const xToolbar = ref({} as VxeToolbarInstance)
 
             nextTick(() => {
               // 将表格和工具栏进行关联

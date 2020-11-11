@@ -1,4 +1,4 @@
-import { VNode, RenderFunction, SetupContext, ComponentPublicInstance } from 'vue'
+import { VNode, RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
@@ -12,8 +12,14 @@ export interface VxeModalConstructor extends VxeComponentInstance, VxeModalMetho
   props: VxeModalProps;
   context: SetupContext<VxeModalEmits>;
   reactData: ModalReactData;
+  refMaps: ModalPrivateRef;
   renderVN: RenderFunction;
 }
+
+export interface ModalPrivateRef {
+  refElem: Ref<HTMLDivElement>;
+}
+export interface VxeModalPrivateRef extends ModalPrivateRef { }
 
 export interface ModalReactData {
   inited: boolean;
@@ -106,6 +112,7 @@ export namespace VxeModalPropTypes {
   export type Loading = boolean;
   export type Status = ModalStatus;
   export type IconStatus = string;
+  export type ClassName = string;
   export type Top = number | string;
   export type Position = ModalPosition;
   export type Title = string;
@@ -146,6 +153,7 @@ export interface VxeModalProps {
   loading?: VxeModalPropTypes.Loading;
   status?: VxeModalPropTypes.Status;
   iconStatus?: VxeModalPropTypes.IconStatus;
+  className?: VxeModalPropTypes.ClassName;
   top?: VxeModalPropTypes.Top;
   position?: VxeModalPropTypes.Position;
   title?: VxeModalPropTypes.Title;

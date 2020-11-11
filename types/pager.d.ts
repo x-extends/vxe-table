@@ -89,10 +89,31 @@ export type PageSizeItemType = number | {
 
 export interface PagerMethods {
   dispatchEvent(type: ValueOf<VxePagerEmits>, params: any, evnt?: Event): void;
+  /**
+   * 上一页
+   */
+  prevPage(): Promise<any>;
+  /**
+   * 下一页
+   */
+  nextPage(): Promise<any>;
+  /**
+   * 向上翻页
+   */
+  prevJump(): Promise<any>;
+  /**
+   * 向下翻页
+   */
+  nextJump(): Promise<any>;
 }
 export interface VxePagerMethods extends PagerMethods { }
 
-export interface PagerPrivateMethods { }
+export interface PagerPrivateMethods {
+  handlePrevPage(evnt: Event): void,
+  handleNextPage(evnt: Event): void,
+  handlePrevJump(evnt: Event): void,
+  handleNextJump(evnt: Event): void,
+}
 export interface VxePagerPrivateMethods extends PagerPrivateMethods { }
 
 export type VxePagerEmits = [

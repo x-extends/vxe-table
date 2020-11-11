@@ -1,12 +1,12 @@
 import { VxeGridConstructor } from '../grid'
 import { VxeToolbarPropTypes } from '../toolbar'
-import { VxeTableConstructor } from '../table'
+import { VxeTableConstructor, VxeTablePrivateMethods } from '../table'
 
 export namespace VxeGlobalCommandsHandles {
   export type CommandsCallback = (params: CommandsOptions, ...args: any[]) => any;
   export interface CommandsOptions {
     $grid?: VxeGridConstructor;
-    $table: VxeTableConstructor;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     code: string;
     button?: VxeToolbarPropTypes.ButtonConfig | null;
   }

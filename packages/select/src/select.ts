@@ -4,7 +4,7 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeGlobalRendererHandles, SelectMethods } from '../../../types/vxe-table'
+import { SizeType, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeGlobalRendererHandles, SelectMethods, SelectPrivateRef, VxeSelectMethods } from '../../../types/vxe-table'
 
 function isOptionVisible (option: any) {
   return option.visible !== false
@@ -65,16 +65,21 @@ export default defineComponent({
       isActivated: false
     } as SelectReactData)
 
+    const refElem = ref() as Ref<HTMLDivElement>
+    const refOptionWrapper = ref() as Ref<HTMLDivElement>
+    const refOptionPanel = ref() as Ref<HTMLDivElement>
+
+    const refMaps: SelectPrivateRef = {
+      refElem
+    }
+
     const $xeselect = {
       xID,
       props,
       context,
-      reactData
-    } as VxeSelectConstructor
-
-    const refElem = ref() as Ref<HTMLDivElement>
-    const refOptionWrapper = ref() as Ref<HTMLDivElement>
-    const refOptionPanel = ref() as Ref<HTMLDivElement>
+      reactData,
+      refMaps
+    } as VxeSelectConstructor & VxeSelectMethods
 
     let selectMethods = {} as SelectMethods
 

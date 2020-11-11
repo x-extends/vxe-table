@@ -1,4 +1,4 @@
-import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode } from 'vue'
+import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance } from 'vue'
 import XEUtils from 'xe-utils/ctor'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import GlobalConfig from '../../conf'
@@ -8,7 +8,7 @@ import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
 import { clearTableDefaultStatus, clearTableAllStatus } from '../../table/src/util'
 
-import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeTableInstance, VxeToolbarInstance, GridPrivateRef } from '../../../types/vxe-table'
+import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents } from '../../../types/vxe-table'
 
 function getOffsetHeight (elem: HTMLElement) {
   return elem ? elem.offsetHeight : 0
@@ -23,7 +23,7 @@ function getPaddingTopBottomSize (elem: HTMLElement) {
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
-const tableComponentMethodKeys = 'clearAll,syncData,updateData,loadData,reloadData,reloadRow,loadColumn,reloadColumn,getRowNode,getColumnNode,getRowIndex,getVTRowIndex,getVMRowIndex,getColumnIndex,getVTColumnIndex,getVMColumnIndex,createData,createRow,revertData,clearData,isInsertByRow,isUpdateByRow,getColumns,getColumnById,getColumnByField,getTableColumn,getData,getCheckboxRecords,getRowById,getRowid,getTableData,hideColumn,showColumn,resetColumn,refreshColumn,refreshScroll,recalculate,clostTooltip,isAllCheckboxChecked,isCheckboxIndeterminate,getCheckboxIndeterminateRecords,setCheckboxRow,isCheckedByCheckboxRow,toggleCheckboxRow,setAllCheckboxRow,getRadioReserveRecord,clearRadioReserve,getCheckboxReserveRecords,clearCheckboxReserve,toggleAllCheckboxRow,clearCheckboxRow,setCurrentRow,isCheckedByRadioRow,setRadioRow,clearCurrentRow,clearRadioRow,getCurrentRecord,getRadioRecord,getCurrentColumn,setCurrentColumn,clearCurrentColumn,sort,clearSort,isSort,getSortColumns,closeFilter,isFilter,isRowExpandLoaded,clearRowExpandLoaded,reloadExpandContent,toggleRowExpand,setAllRowExpand,setRowExpand,isExpandByRow,clearRowExpand,clearRowExpandReserve,getRowExpandRecords,getTreeExpandRecords,isTreeExpandLoaded,clearTreeExpandLoaded,reloadTreeChilds,toggleTreeExpand,setAllTreeExpand,setTreeExpand,isTreeExpandByRow,clearTreeExpand,clearTreeExpandReserve,getScroll,scrollTo,scrollToRow,scrollToColumn,clearScroll,updateFooter,updateStatus,setMergeCells,removeMergeCells,getMergeCells,clearMergeCells,setMergeFooterItems,removeMergeFooterItems,getMergeFooterItems,clearMergeFooterItems,focus,blur,connect'.split(',') as (keyof TableMethods)[]
+const tableComponentMethodKeys: (keyof TableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getRowById', 'getRowid', 'getTableData', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'clostTooltip', 'isAllCheckboxChecked', 'isCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadExpandContent', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'focus', 'blur', 'connect']
 
 export default defineComponent({
   name: 'VxeGrid',
@@ -77,8 +77,10 @@ export default defineComponent({
     } as GridReactData)
 
     const refElem = ref() as Ref<HTMLDivElement>
-    const refTable = ref() as Ref<VxeTableInstance>
+    const refTable = ref() as Ref<ComponentPublicInstance<VxeTableProps, VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods>>
+    const refForm = ref() as Ref<VxeFormInstance>
     const refToolbar = ref() as Ref<VxeToolbarInstance>
+    const refPager = ref() as Ref<VxePagerInstance>
 
     const refFormWrapper = ref() as Ref<HTMLDivElement>
     const refToolbarWrapper = ref() as Ref<HTMLDivElement>
@@ -86,7 +88,18 @@ export default defineComponent({
     const refBottomWrapper = ref() as Ref<HTMLDivElement>
     const refPagerWrapper = ref() as Ref<HTMLDivElement>
 
-    const gridExtendTableMethods = {} as TableMethods
+    const extendTableMethods = <T>(methodKeys: T[]) => {
+      const funcs: any = {}
+      methodKeys.forEach(name => {
+        funcs[name] = (...args: any[]) => {
+          const $xetable: any = refTable.value
+          return $xetable && $xetable[name](...args)
+        }
+      })
+      return funcs
+    }
+
+    const gridExtendTableMethods = extendTableMethods(tableComponentMethodKeys) as TableMethods
 
     tableComponentMethodKeys.forEach(name => {
       gridExtendTableMethods[name] = (...args: any[]) => {
@@ -134,11 +147,19 @@ export default defineComponent({
     })
 
     const refMaps: GridPrivateRef = {
-      refElem
+      refElem,
+      refTable,
+      refForm,
+      refToolbar,
+      refPager
     }
 
     const computeMaps: VxeGridPrivateComputed = {
-      computeProxyOpts
+      computeProxyOpts,
+      computePagerOpts,
+      computeFormOpts,
+      computeToolbarOpts,
+      computeZoomOpts
     }
 
     const $xegrid = {
@@ -283,7 +304,7 @@ export default defineComponent({
       return Promise.resolve()
     }
 
-    const pageChangeEvent = (params: any) => {
+    const pageChangeEvent: VxePagerEvents.PageChange = (params) => {
       const { proxyConfig } = props
       const { tablePage } = reactData
       const { currentPage, pageSize } = params
@@ -295,7 +316,7 @@ export default defineComponent({
       }
     }
 
-    const sortChangeEvent = (params: any) => {
+    const sortChangeEvent: VxeTableEvents.SortChange = (params) => {
       const $xetable = refTable.value
       const { proxyConfig } = props
       const { computeMaps: tableComputeMaps } = $xetable
@@ -312,7 +333,7 @@ export default defineComponent({
       gridMethods.dispatchEvent('sort-change', params)
     }
 
-    const filterChangeEvent = (params: any) => {
+    const filterChangeEvent: VxeTableEvents.FilterChange = (params) => {
       const $xetable = refTable.value
       const { proxyConfig } = props
       const { computeMaps: tableComputeMaps } = $xetable
@@ -329,7 +350,7 @@ export default defineComponent({
       gridMethods.dispatchEvent('filter-change', params)
     }
 
-    const submitEvent = (params: any) => {
+    const submitFormEvent: VxeFormEvents.Submit = (params) => {
       const { proxyConfig } = props
       if (proxyConfig) {
         gridMethods.commitProxy('reload')
@@ -337,7 +358,7 @@ export default defineComponent({
       gridMethods.dispatchEvent('form-submit', params)
     }
 
-    const resetEvent = (params: any) => {
+    const resetFormEvent: VxeFormEvents.Reset = (params) => {
       const { proxyConfig } = props
       if (proxyConfig) {
         gridMethods.commitProxy('reload')
@@ -345,11 +366,11 @@ export default defineComponent({
       gridMethods.dispatchEvent('form-reset', params)
     }
 
-    const submitInvalidEvent = (params: any) => {
+    const submitInvalidEvent: VxeFormEvents.SubmitInvalid = (params) => {
       gridMethods.dispatchEvent('form-submit-invalid', params)
     }
 
-    const togglCollapseEvent = (params: any) => {
+    const togglCollapseEvent: VxeFormEvents.ToggleCollapse = (params) => {
       nextTick(() => gridExtendTableMethods.recalculate(true))
       gridMethods.dispatchEvent('form-toggle-collapse', params)
     }
@@ -391,11 +412,12 @@ export default defineComponent({
             }
             slotVNs.push(
               h(FormComponent, {
+                ref: refForm,
                 ...Object.assign({}, formOpts, {
                   data: proxyConfig && proxyOpts.form ? formData : formOpts.data
                 }),
-                onSubmit: submitEvent,
-                onReset: resetEvent,
+                onSubmit: submitFormEvent,
+                onReset: resetFormEvent,
                 onSubmitInvalid: submitInvalidEvent,
                 onToggleCollapse: togglCollapseEvent
               })
@@ -556,6 +578,7 @@ export default defineComponent({
           }
           slotVNs.push(
             h(PagerComponent, {
+              ref: refPager,
               ...pagerProps,
               onPageChange: pageChangeEvent
             }, pagerSlots)
@@ -879,6 +902,7 @@ export default defineComponent({
     }
 
     const gridPrivateMethods: GridPrivateMethods = {
+      extendTableMethods,
       /**
        * 获取需要排除的高度
        */
@@ -935,12 +959,22 @@ export default defineComponent({
       }
     }
 
+    VXETable.hooks.forEach((options) => {
+      const { setupGrid } = options
+      if (setupGrid) {
+        const hookRest = setupGrid($xegrid)
+        if (hookRest && XEUtils.isObject(hookRest)) {
+          Object.assign($xegrid, hookRest)
+        }
+      }
+    })
+
     nextTick(() => {
       const { data, columns, proxyConfig } = props
       const proxyOpts = computeProxyOpts.value
       const formOpts = computeFormOpts.value
       if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
-        console.error('[vxe-grid] There is a conflict between the props proxy-config and data.')
+        UtilTools.error('errConflicts', ['grid.data', 'grid.proxy-config'])
       }
       if (columns && columns.length) {
         gridMethods.loadColumn(columns)

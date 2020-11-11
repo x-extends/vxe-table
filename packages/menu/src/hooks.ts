@@ -5,8 +5,10 @@ import VXETable from '../../v-x-e-table'
 
 import { VxeGlobalHooksHandles, TableMenuMethods, TableMenuPrivateMethods } from '../../../types/vxe-table'
 
+const tableMenuMethodKeys: (keyof TableMenuMethods)[] = ['closeMenu']
+
 const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
-  setup ($xetable) {
+  setupTable ($xetable) {
     const { xID, props, reactData, internalData, refMaps, computeMaps } = $xetable
     const { refElem, refTableFilter, refTableMenu } = refMaps
     const { computeMouseOpts, computeMenuOpts } = computeMaps
@@ -36,8 +38,8 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
               let top = evnt.clientY + scrollTop
               let left = evnt.clientX + scrollLeft
               const handleVisible = () => {
+                internalData._currMenuParams = params
                 Object.assign(ctxMenuStore, {
-                  args: params,
                   visible: true,
                   list: options,
                   selected: null,
@@ -51,7 +53,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
                 })
                 nextTick(() => {
                   const tableMenu = refTableMenu.value
-                  const ctxElem = tableMenu.$el as HTMLDivElement
+                  const ctxElem = tableMenu.refMaps.refElem.value
                   const clientHeight = ctxElem.clientHeight
                   const clientWidth = ctxElem.clientWidth
                   const { boundingTop, boundingLeft } = DomTools.getAbsolutePos(ctxElem)
@@ -159,7 +161,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
         const { selected } = editStore
         const layoutList = ['header', 'body', 'footer']
         if (menuConfig) {
-          if (ctxMenuStore.visible && tableMenu && DomTools.getEventTargetNode(evnt, tableMenu.$el).flag) {
+          if (ctxMenuStore.visible && tableMenu && DomTools.getEventTargetNode(evnt, tableMenu.refMaps.refElem.value).flag) {
             evnt.preventDefault()
             return
           }
@@ -280,9 +282,8 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
        */
       ctxMenuLinkEvent (evnt, menu) {
         if (!menu.disabled && (!menu.children || !menu.children.length)) {
-          const { ctxMenuStore } = reactData
           const ctxMenuMethod = VXETable.menus.get(menu.code)
-          const params = Object.assign({ menu, $table: $xetable, $event: evnt }, ctxMenuStore.args)
+          const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xetable, $event: evnt })
           if (ctxMenuMethod) {
             ctxMenuMethod(params, evnt)
           }
@@ -293,6 +294,9 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     return { ...menuMethods, ...menuPrivateMethods }
+  },
+  setupGrid ($xegrid) {
+    return $xegrid.extendTableMethods(tableMenuMethodKeys)
   }
 }
 

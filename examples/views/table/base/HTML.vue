@@ -16,7 +16,8 @@
         type="html"
         sortable
         :filters="[{label:'包含 aa', value: 'aa'}, {label:'包含 bb', value: 'bb'}]"
-        :filter-method="filterDescribeMethod"></vxe-table-column>
+        :filter-method="filterDescribeMethod"
+        :sort-by="sortDescribeMethod"></vxe-table-column>
       <vxe-table-column field="role" type="html" title="HTML 标签与格式化" :formatter="formatRole"></vxe-table-column>
     </vxe-table>
 
@@ -53,10 +54,16 @@ export default defineComponent({
       return XEUtils.toString(row.html1).indexOf(value) > -1
     }
 
+    const sortDescribeMethod: VxeColumnPropTypes.SortBy = (row) => {
+      // 自定义其他字段值进行排序
+      return row.describe
+    }
+
     return {
       demo1,
       formatRole,
       filterDescribeMethod,
+      sortDescribeMethod,
       demoCodes: [
         `
         <vxe-table
@@ -71,7 +78,8 @@ export default defineComponent({
             type="html"
             sortable
             :filters="[{label:'包含 aa', value: 'aa'}, {label:'包含 bb', value: 'bb'}]"
-            :filter-method="filterDescribeMethod"></vxe-table-column>
+            :filter-method="filterDescribeMethod"
+            :sort-by="sortDescribeMethod"></vxe-table-column>
           <vxe-table-column field="role" type="html" title="HTML 标签与格式化" :formatter="formatRole"></vxe-table-column>
         </vxe-table>
         `,
@@ -99,10 +107,16 @@ export default defineComponent({
               return XEUtils.toString(row.html1).indexOf(value) > -1
             }
 
+            const sortDescribeMethod: VxeColumnPropTypes.SortBy = (row) => {
+              // 自定义其他字段值进行排序
+              return row.describe
+            }
+
             return {
               demo1,
               formatRole,
-              filterDescribeMethod
+              filterDescribeMethod,
+              sortDescribeMethod
             }
           }
         })

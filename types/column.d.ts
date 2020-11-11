@@ -37,9 +37,9 @@ export namespace VxeColumnPropTypes {
     column: VxeTableDefines.ColumnInfo;
     row: any;
   }) => string | number) | any[] | string;
-  
+
   export type Sortable = boolean;
-  export type SortBy = string;
+  export type SortBy = string | ((row: any) => string | number);
 
   export interface Filter {
     label?: string | number;

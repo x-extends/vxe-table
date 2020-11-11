@@ -160,7 +160,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeTableInstance, VxeTableEvents } from '../../../../types/vxe-table'
 
@@ -180,7 +180,7 @@ export default defineComponent({
       selectRow: null as any
     })
 
-    const xTable1 = ref() as Ref<VxeTableInstance>
+    const xTable1 = ref({} as VxeTableInstance)
 
     const cellClickEvent1: VxeTableEvents.CellClick = () => {
       console.log('单元格点击事件')
@@ -319,7 +319,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance, VxeTableEvents } from 'vxe-table'
 
         export default defineComponent({
@@ -338,7 +338,7 @@ export default defineComponent({
               selectRow: null as any
             })
 
-            const xTable1 = ref() as Ref<VxeTableInstance>
+            const xTable1 = ref({} as VxeTableInstance)
 
             const cellClickEvent1: VxeTableEvents.CellClick = () => {
               console.log('单元格点击事件')

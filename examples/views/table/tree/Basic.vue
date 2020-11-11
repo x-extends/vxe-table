@@ -80,14 +80,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import XEUtils from 'xe-utils'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeTableInstance } from '../../../../types/vxe-table'
 
 export default defineComponent({
   setup () {
-    const xTree = ref() as Ref<VxeTableInstance>
+    const xTree = ref({} as VxeTableInstance)
 
     const demo1 = reactive({
       defaultExpandKeys: [1005],
@@ -161,13 +161,13 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import XEUtils from 'xe-utils'
         import { VXETable, VxeTableInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
-            const xTree = ref() as Ref<VxeTableInstance>
+            const xTree = ref({} as VxeTableInstance)
 
             const demo1 = reactive({
               tableData: [
@@ -292,12 +292,12 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
-            const xTree = ref() as Ref<VxeTableInstance>
+            const xTree = ref({} as VxeTableInstance)
 
             const demo1 = reactive({
               tableData: [

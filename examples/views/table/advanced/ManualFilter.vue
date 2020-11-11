@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { VxeTableInstance, VxeColumnPropTypes, VxeButtonEvents } from '../../../../types/vxe-table'
 import XEUtils from 'xe-utils'
 
@@ -84,7 +84,7 @@ export default defineComponent({
       roleList: ['', '前端', '后端', '设计师']
     })
 
-    const xTable = ref() as Ref<VxeTableInstance>
+    const xTable = ref({} as VxeTableInstance)
 
     const findList = () => {
       demo1.loading = true
@@ -226,7 +226,7 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref, Ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance, VxeButtonEvents, VxeColumnPropTypes } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
@@ -238,7 +238,7 @@ export default defineComponent({
               roleList: ['', '前端', '后端', '设计师']
             })
 
-            const xTable = ref() as Ref<VxeTableInstance>
+            const xTable = ref({} as VxeTableInstance)
 
             const findList = () => {
               demo1.loading = true

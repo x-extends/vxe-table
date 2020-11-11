@@ -35,7 +35,7 @@
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
-    <p class="tip">配置 <table-column-api-link prop="sort-by"/> 指定字段排序</p>
+    <p class="tip">配置 <table-column-api-link prop="sort-by"/> 指定字段排序、或者方法返回自定义排序的值</p>
 
     <vxe-table
       border
@@ -43,7 +43,7 @@
       height="300"
       :data="tableData2">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :sort-by="sortNameMethod2" sortable></vxe-table-column>
       <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
       <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
     </vxe-table>
@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeTableEvents } from '../../../../types/vxe-table'
+import { VxeColumnPropTypes, VxeTableEvents } from '../../../../types/vxe-table'
 
 export default defineComponent({
   setup () {
@@ -122,27 +122,32 @@ export default defineComponent({
     ])
 
     const tableData2 = ref([
-      { name: '小红', role: '前端', num: 7 },
-      { name: '老王', role: '后端', num: 6 },
-      { name: '小红', role: '后端', num: 1 },
-      { name: '小明', role: '前端', num: 2 },
-      { name: '老徐', role: '测试', num: 3 },
-      { name: '老王', role: '前端', num: 3 },
-      { name: '老徐', role: '测试', num: 4 },
-      { name: '小明', role: '前端', num: 4 },
-      { name: '小明', role: '前端', num: 8 },
-      { name: '小明', role: '测试', num: 6 },
-      { name: '小红', role: '后端', num: 9 },
-      { name: '老徐', role: '前端', num: 5 },
-      { name: '老徐', role: '测试', num: 1 },
-      { name: '小红', role: '前端', num: 4 },
-      { name: '小红', role: '前端', num: 2 },
-      { name: '小明', role: '测试', num: 3 },
-      { name: '老王', role: '前端', num: 6 },
-      { name: '老王', role: '后端', num: 4 },
-      { name: '老徐', role: '前端', num: 8 },
-      { name: '小明', role: '测试', num: 7 }
+      { name: '小红11', role: '前端', num: 7 },
+      { name: '老王1', role: '后端', num: 6 },
+      { name: '小红111111', role: '后端', num: 1 },
+      { name: '小明11', role: '前端', num: 2 },
+      { name: '老徐111', role: '测试', num: 3 },
+      { name: '老王11', role: '前端', num: 3 },
+      { name: '老徐11111111', role: '测试', num: 4 },
+      { name: '小明111111111', role: '前端', num: 4 },
+      { name: '小明1', role: '前端', num: 8 },
+      { name: '小明111', role: '测试', num: 6 },
+      { name: '小红11111', role: '后端', num: 9 },
+      { name: '老徐11', role: '前端', num: 5 },
+      { name: '老徐11', role: '测试', num: 1 },
+      { name: '小红1111', role: '前端', num: 4 },
+      { name: '小红111', role: '前端', num: 2 },
+      { name: '小明111', role: '测试', num: 3 },
+      { name: '老王1', role: '前端', num: 6 },
+      { name: '老王1111', role: '后端', num: 4 },
+      { name: '老徐11', role: '前端', num: 8 },
+      { name: '小明111111', role: '测试', num: 7 }
     ])
+
+    const sortNameMethod2: VxeColumnPropTypes.SortBy = (row) => {
+      // 按名称长度进行排序
+      return row.name.length
+    }
 
     const tableData3 = ref([
       { name: '小红', role: '前端', num: 7 },
@@ -178,6 +183,7 @@ export default defineComponent({
     return {
       tableData,
       tableData2,
+      sortNameMethod2,
       tableData3,
       sortChangeEvent3,
       sortChangeEvent4,
@@ -233,7 +239,7 @@ export default defineComponent({
           height="300"
           :data="tableData2">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :sort-by="sortNameMethod2" sortable></vxe-table-column>
           <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
           <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
         </vxe-table>
@@ -244,29 +250,36 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const tableData2 = ref([
-              { name: '小红', role: '前端', num: 7 },
-              { name: '老王', role: '后端', num: 6 },
-              { name: '小红', role: '后端', num: 1 },
-              { name: '小明', role: '前端', num: 2 },
-              { name: '老徐', role: '测试', num: 3 },
-              { name: '老王', role: '前端', num: 3 },
-              { name: '老徐', role: '测试', num: 4 },
-              { name: '小明', role: '前端', num: 4 },
-              { name: '小明', role: '前端', num: 8 },
-              { name: '小明', role: '测试', num: 6 },
-              { name: '小红', role: '后端', num: 9 },
-              { name: '老徐', role: '前端', num: 5 },
-              { name: '老徐', role: '测试', num: 1 },
-              { name: '小红', role: '前端', num: 4 },
-              { name: '小红', role: '前端', num: 2 },
-              { name: '小明', role: '测试', num: 3 },
-              { name: '老王', role: '前端', num: 6 },
-              { name: '老王', role: '后端', num: 4 },
-              { name: '老徐', role: '前端', num: 8 },
-              { name: '小明', role: '测试', num: 7 }
+              { name: '小红11', role: '前端', num: 7 },
+              { name: '老王1', role: '后端', num: 6 },
+              { name: '小红111111', role: '后端', num: 1 },
+              { name: '小明11', role: '前端', num: 2 },
+              { name: '老徐111', role: '测试', num: 3 },
+              { name: '老王11', role: '前端', num: 3 },
+              { name: '老徐11111111', role: '测试', num: 4 },
+              { name: '小明111111111', role: '前端', num: 4 },
+              { name: '小明1', role: '前端', num: 8 },
+              { name: '小明111', role: '测试', num: 6 },
+              { name: '小红11111', role: '后端', num: 9 },
+              { name: '老徐11', role: '前端', num: 5 },
+              { name: '老徐11', role: '测试', num: 1 },
+              { name: '小红1111', role: '前端', num: 4 },
+              { name: '小红111', role: '前端', num: 2 },
+              { name: '小明111', role: '测试', num: 3 },
+              { name: '老王1', role: '前端', num: 6 },
+              { name: '老王1111', role: '后端', num: 4 },
+              { name: '老徐11', role: '前端', num: 8 },
+              { name: '小明111111', role: '测试', num: 7 }
             ])
+            
+            const sortNameMethod2: VxeColumnPropTypes.SortBy = (row) => {
+              // 按名称长度进行排序
+              return row.name.length
+            }
+
             return {
-              tableData2
+              tableData2,
+              sortNameMethod2
             }
           }
         })

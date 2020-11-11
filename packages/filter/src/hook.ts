@@ -7,8 +7,10 @@ import { VxeGlobalHooksHandles, TableFilterMethods, TableFilterPrivateMethods } 
 
 const { toFilters } = UtilTools
 
+const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['setFilter', 'clearFilter', 'getCheckedFilters']
+
 const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
-  setup ($xetable) {
+  setupTable ($xetable) {
     const { reactData, internalData, refMaps, computeMaps } = $xetable
     const { refTableBody, refTableFilter } = refMaps
     const { computeFilterOpts } = computeMaps
@@ -35,8 +37,8 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
         } else {
           const { target: targetElem, pageX } = evnt
           const { visibleWidth } = DomTools.getDomNode()
+          internalData._currFilterParams = params
           Object.assign(filterStore, {
-            args: params,
             multiple: column.filterMultiple,
             options: column.filters,
             column,
@@ -172,6 +174,9 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     return { ...filterMethods, ...filterPrivateMethods }
+  },
+  setupGrid ($xegrid) {
+    return $xegrid.extendTableMethods(tableFilterMethodKeys)
   }
 }
 
