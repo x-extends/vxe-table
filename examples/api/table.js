@@ -2695,8 +2695,18 @@ const apis = [
       },
       {
         name: 'cell-context-menu',
+        disabled: true,
         descKey: 'app.api.table.desc.cellContextmenu',
         version: '',
+        type: '',
+        enum: '',
+        defVal: '{ type, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
+        list: []
+      },
+      {
+        name: 'cell-menu',
+        descKey: 'app.api.table.desc.cellMenu',
+        version: '2.9.27',
         type: '',
         enum: '',
         defVal: '{ type, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
@@ -2740,8 +2750,18 @@ const apis = [
       },
       {
         name: 'header-cell-context-menu',
+        disabled: true,
         descKey: 'app.api.table.desc.headerCellContextmenu',
         version: '',
+        type: '',
+        enum: '',
+        defVal: '{ type, column, columnIndex, $event }',
+        list: []
+      },
+      {
+        name: 'header-cell-menu',
+        descKey: 'app.api.table.desc.headerCellMenu',
+        version: '2.9.27',
         type: '',
         enum: '',
         defVal: '{ type, column, columnIndex, $event }',
@@ -2767,8 +2787,18 @@ const apis = [
       },
       {
         name: 'footer-cell-context-menu',
+        disabled: true,
         descKey: 'app.api.table.desc.footerCellContextmenu',
         version: '',
+        type: '',
+        enum: '',
+        defVal: '{ type, column, columnIndex, $event }',
+        list: []
+      },
+      {
+        name: 'footer-cell-menu',
+        descKey: 'app.api.table.desc.footerCellMenu',
+        version: '2.9.27',
         type: '',
         enum: '',
         defVal: '{ type, column, columnIndex, $event }',

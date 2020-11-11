@@ -3618,7 +3618,7 @@ const Methods = {
     const { scrollYStore } = this
     const { adaptive, offsetSize, visibleSize } = scrollYStore
     // webkit 浏览器使用最佳的渲染方式
-    if (isWebkit && adaptive && (offsetSize * 2 + visibleSize) <= 40) {
+    if (isWebkit && adaptive && (offsetSize * 2 + visibleSize) <= 80) {
       this.loadScrollYData(evnt)
     } else {
       this.debounceScrollY(evnt)
