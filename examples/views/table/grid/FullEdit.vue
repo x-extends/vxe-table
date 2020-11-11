@@ -14,8 +14,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -23,7 +23,6 @@
 <script>
 import XEAjax from 'xe-ajax'
 import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
 
 export default {
   data () {
@@ -117,11 +116,11 @@ export default {
         },
         columns: [
           { type: 'checkbox', title: 'ID', width: 120 },
-          { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
+          { field: 'name', title: 'Name', sortable: true, editRender: { name: 'input' } },
           {
             field: 'role',
             title: 'Role',
-            remoteSort: true,
+            sortable: true,
             filters: [
               { label: '前端开发', value: '前端' },
               { label: '后端开发', value: '后端' },
@@ -134,10 +133,10 @@ export default {
           { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
           { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
           { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-          { field: 'age', title: 'Age', visible: false, remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
+          { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
           { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
-          { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
-          { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
+          { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
+          { field: 'createDate', title: 'Create Date', width: 160, visible: false, sortable: true, formatter: this.formatDate }
         ],
         importConfig: {
           remote: true,
@@ -272,11 +271,11 @@ export default {
                 },
                 columns: [
                   { type: 'checkbox', title: 'ID', width: 120 },
-                  { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
+                  { field: 'name', title: 'Name', sortable: true, editRender: { name: 'input' } },
                   {
                     field: 'role',
                     title: 'Role',
-                    remoteSort: true,
+                    sortable: true,
                     filters: [
                       { label: '前端开发', value: '前端' },
                       { label: '后端开发', value: '后端' },
@@ -289,10 +288,10 @@ export default {
                   { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
                   { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                   { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-                  { field: 'age', title: 'Age', visible: false, remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
+                  { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
                   { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
-                  { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
-                  { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
+                  { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
+                  { field: 'createDate', title: 'Create Date', width: 160, visible: false, sortable: true, formatter: this.formatDate }
                 ],
                 importConfig: {
                   remote: true,
@@ -415,11 +414,6 @@ export default {
   },
   created () {
     this.findSexList()
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     async findSexList () {

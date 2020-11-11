@@ -8,16 +8,16 @@
       show-overflow
       resizable
       height="400"
-      :context-menu="{}"
+      :menu-config="{}"
       :data="tableData"
       @header-cell-click="headerCellClickEvent"
       @header-cell-dblclick="headerCellDBLClickEvent"
-      @header-cell-context-menu="headerCellContextMenuEvent"
+      @header-cell-menu="headerCellContextMenuEvent"
       @cell-click="cellClickEvent"
       @cell-dblclick="cellDBLClickEvent"
       @cell-mouseenter="cellMouseenterEvent"
       @cell-mouseleave="cellMouseleaveEvent"
-      @cell-context-menu="cellContextMenuEvent"
+      @cell-menu="cellContextMenuEvent"
       @scroll="scrollEvent">
       <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
@@ -60,16 +60,16 @@ export default {
           show-overflow
           resizable
           height="400"
-          :context-menu="{}"
+          :menu-config="{}"
           :data="tableData"
           @header-cell-click="headerCellClickEvent"
           @header-cell-dblclick="headerCellDBLClickEvent"
-          @header-cell-context-menu="headerCellContextMenuEvent"
+          @header-cell-menu="headerCellContextMenuEvent"
           @cell-click="cellClickEvent"
           @cell-dblclick="cellDBLClickEvent"
           @cell-mouseenter="cellMouseenterEvent"
           @cell-mouseleave="cellMouseleaveEvent"
-          @cell-context-menu="cellContextMenuEvent"
+          @cell-menu="cellContextMenuEvent"
           @scroll="scrollEvent">
           <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>

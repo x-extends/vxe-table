@@ -23,7 +23,7 @@
       :data="tableData"
       :mouse-config="{selected: true}"
       :checkbox-config="{range: true}"
-      :context-menu="tableMenu"
+      :menu-config="tableMenu"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -115,7 +115,7 @@ export default {
           :data="tableData"
           :mouse-config="{selected: true}"
           :checkbox-config="{range: true}"
-          :context-menu="tableMenu"
+          :menu-config="tableMenu"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>

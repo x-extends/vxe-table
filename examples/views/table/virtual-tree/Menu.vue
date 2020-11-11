@@ -10,11 +10,11 @@
       :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
       :tree-config="{children: 'children'}"
       :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
+      :menu-config="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
       :edit-config="{trigger: 'click', mode: 'row'}"
       :data="tableData"
       :columns="tableColumn"
-      @context-menu-click="contextMenuClickEvent">
+      @menu-click="contextMenuClickEvent">
       <template v-slot:toolbar_buttons>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
       </template>
@@ -99,11 +99,11 @@ export default {
           :toolbar="{custom: true, slots: {buttons: 'toolbar_buttons'}}"
           :tree-config="{children: 'children'}"
           :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
+          :menu-config="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
           :edit-config="{trigger: 'click', mode: 'row'}"
           :data="tableData"
           :columns="tableColumn"
-          @context-menu-click="contextMenuClickEvent">
+          @menu-click="contextMenuClickEvent">
           <template v-slot:toolbar_buttons>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
           </template>

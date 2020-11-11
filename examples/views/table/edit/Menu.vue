@@ -19,9 +19,9 @@
       height="400"
       :loading="loading"
       :data="tableData"
-      :context-menu="tableMenu"
+      :menu-config="tableMenu"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-      @context-menu-click="contextMenuClickEvent">
+      @menu-click="contextMenuClickEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -87,9 +87,9 @@ export default {
           height="400"
           :loading="loading"
           :data="tableData"
-          :context-menu="tableMenu"
+          :menu-config="tableMenu"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-          @context-menu-click="contextMenuClickEvent">
+          @menu-click="contextMenuClickEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>

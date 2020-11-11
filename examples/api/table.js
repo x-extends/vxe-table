@@ -1722,7 +1722,7 @@ const apis = [
         name: 'clip-config',
         descKey: 'app.api.table.desc.clipConfig',
         version: 'pro',
-        type: 'Object',
+        type: 'any',
         enum: '',
         defVal: '继承 setup.table.clipConfig',
         list: [
@@ -2504,8 +2504,8 @@ const apis = [
         list: []
       },
       {
-        name: 'cell-context-menu',
-        descKey: 'app.api.table.desc.cellContextmenu',
+        name: 'cell-menu',
+        descKey: 'app.api.table.desc.cellMenu',
         version: '',
         type: '',
         enum: '',
@@ -2549,8 +2549,8 @@ const apis = [
         list: []
       },
       {
-        name: 'header-cell-context-menu',
-        descKey: 'app.api.table.desc.headerCellContextmenu',
+        name: 'header-cell-menu',
+        descKey: 'app.api.table.desc.headerCellMenu',
         version: '',
         type: '',
         enum: '',
@@ -2576,8 +2576,8 @@ const apis = [
         list: []
       },
       {
-        name: 'footer-cell-context-menu',
-        descKey: 'app.api.table.desc.footerCellContextmenu',
+        name: 'footer-cell-menu',
+        descKey: 'app.api.table.desc.footerCellMenu',
         version: '',
         type: '',
         enum: '',
@@ -3104,7 +3104,7 @@ const apis = [
         version: '',
         type: '{item, items, index, parent}',
         enum: '',
-        defVal: 'cell: Element',
+        defVal: 'cell: HTMLTableDataCellElement | HTMLTableHeaderCellElement',
         list: []
       },
       {

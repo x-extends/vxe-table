@@ -10,10 +10,10 @@
       ref="xTree"
       row-id="id"
       :loading="loading"
-      :context-menu="{body: {options: bodyMenus}, visibleMethod}"
+      :menu-config="{body: {options: bodyMenus}, visibleMethod}"
       :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData"
-      @context-menu-click="contextMenuClickEvent">
+      @menu-click="contextMenuClickEvent">
       <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -70,10 +70,10 @@ export default {
           ref="xTree"
           row-id="id"
           :loading="loading"
-          :context-menu="{body: {options: bodyMenus}, visibleMethod}"
+          :menu-config="{body: {options: bodyMenus}, visibleMethod}"
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="tableData"
-          @context-menu-click="contextMenuClickEvent">
+          @menu-click="contextMenuClickEvent">
           <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>

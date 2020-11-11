@@ -12,9 +12,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
 
     <p class="tip">更多配置<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
@@ -31,16 +31,14 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
-      <code class="css">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[5] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -244,11 +242,6 @@ export default {
       { id: 10010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: 'Man ', age: 50, rate: 5, address: 'Shenzhen', date3: '20:30', updateTime: '2017-09-16', createTime: '2020-09-16' }
     ]
     this.reverseTable2(myColumns2, myData2)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     // 将行与列进行反转
