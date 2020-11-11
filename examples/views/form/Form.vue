@@ -194,7 +194,7 @@
         </vxe-form-item>
         <vxe-form-item title="是否禁用" field="active" span="8">
           <template v-slot>
-            <vxe-switch v-model="formData3.active" on-label="是" off-label="否"></vxe-switch>
+            <vxe-switch v-model="formData3.active" open-label="是" close-label="否"></vxe-switch>
           </template>
         </vxe-form-item>
         <vxe-form-item title="体重" field="weight" span="8" folding>
@@ -507,7 +507,7 @@ export default {
             </vxe-form-item>
             <vxe-form-item title="是否禁用" field="active" span="8">
               <template v-slot>
-                <vxe-switch v-model="formData3.active" on-label="是" off-label="否"></vxe-switch>
+                <vxe-switch v-model="formData3.active" open-label="是" close-label="否"></vxe-switch>
               </template>
             </vxe-form-item>
             <vxe-form-item title="体重" field="weight" span="8" folding>

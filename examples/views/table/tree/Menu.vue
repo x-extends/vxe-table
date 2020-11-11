@@ -10,10 +10,10 @@
       keep-source
       ref="xTree"
       :tree-config="treeConfig"
-      :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
+      :menu-config="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="tableData"
-      @context-menu-click="contextMenuClickEvent">
+      @menu-click="contextMenuClickEvent">
       <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -75,10 +75,10 @@ export default {
           keep-source
           ref="xTree"
           :tree-config="treeConfig"
-          :context-menu="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
+          :menu-config="{header: {options: headerMenus}, body: {options: bodyMenus}, visibleMethod}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="tableData"
-          @context-menu-click="contextMenuClickEvent">
+          @menu-click="contextMenuClickEvent">
           <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>

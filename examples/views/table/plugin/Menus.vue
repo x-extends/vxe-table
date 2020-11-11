@@ -12,7 +12,7 @@
       show-footer
       :footer-method="footerMethod"
       :data="tableData"
-      :context-menu="tableMenu"
+      :menu-config="tableMenu"
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
@@ -115,7 +115,7 @@ export default {
           show-footer
           :footer-method="footerMethod"
           :data="tableData"
-          :context-menu="tableMenu"
+          :menu-config="tableMenu"
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">

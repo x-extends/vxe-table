@@ -16,8 +16,7 @@
         type="html"
         sortable
         :filters="[{label:'包含 aa', value: 'aa'}, {label:'包含 bb', value: 'bb'}]"
-        :filter-method="filterDescribeMethod"
-        :sort-method="sortDescribeMethod"></vxe-table-column>
+        :filter-method="filterDescribeMethod"></vxe-table-column>
       <vxe-table-column field="role" type="html" title="HTML 标签与格式化" :formatter="formatRole"></vxe-table-column>
     </vxe-table>
 
@@ -57,8 +56,7 @@ export default {
             type="html"
             sortable
             :filters="[{label:'包含 aa', value: 'aa'}, {label:'包含 bb', value: 'bb'}]"
-            :filter-method="filterDescribeMethod"
-            :sort-method="sortDescribeMethod"></vxe-table-column>
+            :filter-method="filterDescribeMethod"></vxe-table-column>
           <vxe-table-column field="role" type="html" title="HTML 标签与格式化" :formatter="formatRole"></vxe-table-column>
         </vxe-table>
         `,

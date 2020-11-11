@@ -43,6 +43,9 @@ export default {
           { required: true, message: '角色必须填写' }
         ]
       },
+      sortConfig: {
+        remote: true
+      },
       tablePage: {
         pageSize: 15,
         pageSizes: [5, 10, 20, 50, 100, 200, 500, 1000]
@@ -107,8 +110,8 @@ export default {
       tableColumn: [
         { type: 'seq', width: 60, fixed: 'left' },
         { type: 'checkbox', title: 'ID', width: 140, fixed: 'left' },
-        { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
-        { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input' } },
+        { field: 'name', title: 'Name', sortable: true, editRender: { name: 'input' } },
+        { field: 'age', title: 'Age', sortable: true, editRender: { name: 'input' } },
         {
           field: 'type',
           title: 'Type',
@@ -156,7 +159,7 @@ export default {
         {
           field: 'role',
           title: 'Role',
-          remoteSort: true,
+          sortable: true,
           width: 200,
           filters: [
             { label: '前端开发', value: '前端' },
@@ -181,6 +184,9 @@ export default {
                 resizable: true,
                 height: 528,
                 filterConfig: {
+                  remote: true
+                },
+                sortConfig: {
                   remote: true
                 },
                 checkboxConfig: {
@@ -246,16 +252,16 @@ export default {
                 columns: [
                   { type: 'seq', width: 60, fixed: 'left' },
                   { type: 'checkbox', title: 'ID', width: 140, fixed: 'left' },
-                  { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
-                  { field: 'age', title: 'Age', remoteSort: true, editRender: { name: 'input' } },
+                  { field: 'name', title: 'Name', sortable: true, editRender: { name: 'input' } },
+                  { field: 'age', title: 'Age', sortable: true, editRender: { name: 'input' } },
                   // 单元格渲染，自动读取字典配置
                   { field: 'type', title: 'Type', cellRender: { name: 'DICT', props: { code: 'OPERATE_STATUS' } } },
                   // 单元格编辑渲染，自动读取字典配置
                   { field: 'status', title: 'Status', editRender: { name: '$select', options: { dict: 'COLOR_STATUS' } } },
                   // 单元格编辑渲染，自动请求异步配置
-                  { field: 'sex', title: 'Sex', remoteSort: true, editRender: { name: '$select', options: { url: '/api/conf/sex/list' } } },
+                  { field: 'sex', title: 'Sex', sortable: true, editRender: { name: '$select', options: { url: '/api/conf/sex/list' } } },
                   // 筛选渲染，自动请求异步配置
-                  { field: 'role', title: 'Role', remoteSort: true, width: 200, filters: { url: '/api/conf/role/list' }, filterMultiple: false, editRender: { name: 'input' } },
+                  { field: 'role', title: 'Role', sortable: true, width: 200, filters: { url: '/api/conf/role/list' }, filterMultiple: false, editRender: { name: 'input' } },
                   { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
                 ]
               }

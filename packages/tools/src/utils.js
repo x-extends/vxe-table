@@ -49,6 +49,22 @@ class ColumnInfo {
         UtilTools.error('vxe.error.expandContent')
       }
     }
+
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      // 在 v3.0 中废弃 remoteSort
+      if (_vm.remoteSort) {
+        UtilTools.warn('vxe.error.delProp', ['column.remote-sort', 'sort-config.remote'])
+      }
+      // 在 v3.0 中废弃 sortMethod
+      if (_vm.sortMethod) {
+        UtilTools.warn('vxe.error.delProp', ['column.sort-method', 'sort-config.sortMethod'])
+      }
+      // 在 v3.0 中 sortBy 只能是字符串
+      if (_vm.sortBy && !XEUtils.isString(_vm.sortBy)) {
+        UtilTools.warn('vxe.error.errProp', [`column.sort-by=${JSON.stringify(_vm.sortBy)}`, `column.sort-by="${_vm.sortBy[0]}"`])
+      }
+    }
+
     if (formatter) {
       if (XEUtils.isString(formatter)) {
         let globalFunc = formats.get(formatter)

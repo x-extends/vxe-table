@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">右键快捷菜单，支持表头菜单、内容菜单、表尾菜单，自定义样式，配置项 <table-api-link prop="context-menu"/>={header,body,footer}</p>
+    <p class="tip">右键快捷菜单，支持表头菜单、内容菜单、表尾菜单，自定义样式，配置项 <table-api-link prop="menu-config"/>={header,body,footer}</p>
 
     <vxe-table
       border
@@ -10,8 +10,8 @@
       ref="xTable"
       :footer-method="footerMethod"
       :data="tableData"
-      :context-menu="tableMenu"
-      @context-menu-click="contextMenuClickEvent">
+      :menu-config="tableMenu"
+      @menu-click="contextMenuClickEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -106,8 +106,8 @@ export default {
           ref="xTable"
           :footer-method="footerMethod"
           :data="tableData"
-          :context-menu="tableMenu"
-          @context-menu-click="contextMenuClickEvent">
+          :menu-config="tableMenu"
+          @menu-click="contextMenuClickEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

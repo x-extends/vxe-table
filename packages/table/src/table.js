@@ -748,11 +748,48 @@ export default {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
     if (this.mouseOpts.area && !this.handleUpdateCellAreas) {
-      return UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+      console.error('[vxe-table] This feature requires use the "vxe-table.pro"')
+      return
     }
     if (mouseOpts.checked && mouseOpts.area) {
       UtilTools.error('vxe.error.errProp', ['mouse-config.checked', 'mouse-config.area'])
     }
+
+    // v3 中只支持对象类型
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      // 在 v3.0 中废弃 context-menu
+      if (this.contextMenu) {
+        UtilTools.warn('vxe.error.delProp', ['context-menu', 'menu-config'])
+        if (!XEUtils.isObject(this.contextMenu)) {
+          UtilTools.warn('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
+        }
+      }
+      if ((this.menuConfig) && !XEUtils.isObject(this.menuConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.menu-config=${this.menuConfig}`, 'table.menu-config={}'])
+      }
+      if (this.exportConfig && !XEUtils.isObject(this.exportConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.export-config=${this.exportConfig}`, 'table.export-config={}'])
+      }
+      if (this.importConfig && !XEUtils.isObject(this.importConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.import-config=${this.importConfig}`, 'table.import-config={}'])
+      }
+      if (this.printConfig && !XEUtils.isObject(this.printConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.print-config=${this.printConfig}`, 'table.print-config={}'])
+      }
+      if (this.treeConfig && !XEUtils.isObject(this.treeConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.tree-config=${this.treeConfig}`, 'table.tree-config={}'])
+      }
+      if (this.customConfig && !XEUtils.isObject(this.customConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.custom-config=${this.customConfig}`, 'table.custom-config={}'])
+      }
+      if (this.editConfig && !XEUtils.isObject(this.editConfig)) {
+        UtilTools.warn('vxe.error.errProp', [`table.edit-config=${this.editConfig}`, 'table.edit-config={}'])
+      }
+      if (this.emptyRender && !XEUtils.isObject(this.emptyRender)) {
+        UtilTools.warn('vxe.error.errProp', [`table.empty-render=${this.emptyRender}`, 'table.empty-render={}'])
+      }
+    }
+
     if (this.mouseConfig && this.editConfig) {
       if (mouseOpts.checked && editOpts.trigger !== 'dblclick') {
         UtilTools.warn('vxe.error.errProp', ['mouse-config.checked', 'edit-config.trigger=dblclick'])

@@ -58,6 +58,7 @@ export default {
         },
         sortConfig: {
           trigger: 'cell',
+          remote: true,
           defaultSort: {
             field: 'name',
             order: 'desc'
@@ -120,14 +121,14 @@ export default {
         columns: [
           { type: 'seq', width: 60, fixed: 'left' },
           { type: 'radio', title: 'ID', width: 120, fixed: 'left' },
-          { field: 'name', title: 'Name', minWidth: 160, remoteSort: true },
+          { field: 'name', title: 'Name', minWidth: 160, sortable: true },
           { field: 'email', title: 'Email', minWidth: 160, editRender: { name: 'input' } },
-          { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 160 },
-          { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
+          { field: 'nickname', title: 'Nickname', sortable: true, minWidth: 160 },
+          { field: 'age', title: 'Age', visible: false, sortable: true, width: 100 },
           {
             field: 'role',
             title: 'Role',
-            remoteSort: true,
+            sortable: true,
             minWidth: 160,
             filters: [
               { label: '前端开发', value: '前端' },
@@ -138,8 +139,8 @@ export default {
             filterMultiple: false
           },
           { field: 'amount', title: 'Amount', width: 140, formatter: this.formatAmount },
-          { field: 'updateDate', title: 'Update Date', visible: false, width: 160, remoteSort: true, formatter: this.formatDate },
-          { field: 'createDate', title: 'Create Date', visible: false, width: 160, remoteSort: true, formatter: this.formatDate }
+          { field: 'updateDate', title: 'Update Date', visible: false, width: 160, sortable: true, formatter: this.formatDate },
+          { field: 'createDate', title: 'Create Date', visible: false, width: 160, sortable: true, formatter: this.formatDate }
         ]
       },
       demoCodes: [
@@ -187,6 +188,7 @@ export default {
                 },
                 sortConfig: {
                   trigger: 'cell',
+                  remote: true,
                   defaultSort: {
                     field: 'name',
                     order: 'desc'
@@ -249,14 +251,14 @@ export default {
                 columns: [
                   { type: 'seq', width: 60, fixed: 'left' },
                   { type: 'radio', title: 'ID', width: 120, fixed: 'left' },
-                  { field: 'name', title: 'Name', minWidth: 160, remoteSort: true },
+                  { field: 'name', title: 'Name', minWidth: 160, sortable: true },
                   { field: 'email', title: 'Email', minWidth: 160, editRender: { name: 'input' } },
-                  { field: 'nickname', title: 'Nickname', remoteSort: true, minWidth: 160 },
-                  { field: 'age', title: 'Age', visible: false, remoteSort: true, width: 100 },
+                  { field: 'nickname', title: 'Nickname', sortable: true, minWidth: 160 },
+                  { field: 'age', title: 'Age', visible: false, sortable: true, width: 100 },
                   {
                     field: 'role',
                     title: 'Role',
-                    remoteSort: true,
+                    sortable: true,
                     minWidth: 160,
                     filters: [
                       { label: '前端开发', value: '前端' },
@@ -267,8 +269,8 @@ export default {
                     filterMultiple: false
                   },
                   { field: 'amount', title: 'Amount', width: 140, formatter: this.formatAmount },
-                  { field: 'updateDate', title: 'Update Date', visible: false, width: 160, remoteSort: true, formatter: this.formatDate },
-                  { field: 'createDate', title: 'Create Date', visible: false, width: 160, remoteSort: true, formatter: this.formatDate }
+                  { field: 'updateDate', title: 'Update Date', visible: false, width: 160, sortable: true, formatter: this.formatDate },
+                  { field: 'createDate', title: 'Create Date', visible: false, width: 160, sortable: true, formatter: this.formatDate }
                 ]
               }
             }

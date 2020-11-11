@@ -12,7 +12,7 @@
       :data="tableData"
       :mouse-config="{ selected: true, checked: true }"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
-      :context-menu="{body: {options: bodyMenus}}"
+      :menu-config="{body: {options: bodyMenus}}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -126,7 +126,7 @@ export default {
           :data="tableData"
           :mouse-config="{ selected: true, checked: true }"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
-          :context-menu="{body: {options: bodyMenus}}"
+          :menu-config="{body: {options: bodyMenus}}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="nickname" title="Nickname" :edit-render="{name: 'input'}"></vxe-table-column>

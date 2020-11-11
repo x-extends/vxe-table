@@ -52,7 +52,8 @@ export default {
           ]
         },
         sortConfig: {
-          trigger: 'cell'
+          trigger: 'cell',
+          remote: true
         },
         filterConfig: {
           remote: true
@@ -117,11 +118,11 @@ export default {
         },
         columns: [
           { type: 'checkbox', title: 'ID', width: 120 },
-          { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
+          { field: 'name', title: 'Name', sortable: true, editRender: { name: 'input' } },
           {
             field: 'role',
             title: 'Role',
-            remoteSort: true,
+            sortable: true,
             filters: [
               { label: '前端开发', value: '前端' },
               { label: '后端开发', value: '后端' },
@@ -134,10 +135,10 @@ export default {
           { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
           { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
           { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-          { field: 'age', title: 'Age', visible: false, remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
+          { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
           { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
-          { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
-          { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
+          { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
+          { field: 'createDate', title: 'Create Date', width: 160, visible: false, sortable: true, formatter: this.formatDate }
         ],
         importConfig: {
           remote: true,
@@ -207,7 +208,8 @@ export default {
                   ]
                 },
                 sortConfig: {
-                  trigger: 'cell'
+                  trigger: 'cell',
+                  remote: true
                 },
                 filterConfig: {
                   remote: true
@@ -272,11 +274,11 @@ export default {
                 },
                 columns: [
                   { type: 'checkbox', title: 'ID', width: 120 },
-                  { field: 'name', title: 'Name', remoteSort: true, editRender: { name: 'input' } },
+                  { field: 'name', title: 'Name', sortable: true, editRender: { name: 'input' } },
                   {
                     field: 'role',
                     title: 'Role',
-                    remoteSort: true,
+                    sortable: true,
                     filters: [
                       { label: '前端开发', value: '前端' },
                       { label: '后端开发', value: '后端' },
@@ -289,10 +291,10 @@ export default {
                   { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
                   { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
                   { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-                  { field: 'age', title: 'Age', visible: false, remoteSort: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
+                  { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
                   { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
-                  { field: 'updateDate', title: 'Update Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate },
-                  { field: 'createDate', title: 'Create Date', width: 160, visible: false, remoteSort: true, formatter: this.formatDate }
+                  { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
+                  { field: 'createDate', title: 'Create Date', width: 160, visible: false, sortable: true, formatter: this.formatDate }
                 ],
                 importConfig: {
                   remote: true,

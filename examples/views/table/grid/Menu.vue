@@ -11,9 +11,9 @@
       :footer-method="footerMethod"
       :columns="tableColumn"
       :data="tableData"
-      :context-menu="tableMenu"
-      @cell-context-menu="cellContextMenuEvent"
-      @context-menu-click="contextMenuClickEvent"></vxe-grid>
+      :menu-config="tableMenu"
+      @cell-menu="cellContextMenuEvent"
+      @menu-click="contextMenuClickEvent"></vxe-grid>
 
     <pre>
       <code>
@@ -92,9 +92,9 @@ export default {
           :footer-method="footerMethod"
           :columns="tableColumn"
           :data="tableData"
-          :context-menu="tableMenu"
-          @cell-context-menu="cellContextMenuEvent"
-          @context-menu-click="contextMenuClickEvent"></vxe-grid>
+          :menu-config="tableMenu"
+          @cell-menu="cellContextMenuEvent"
+          @menu-click="contextMenuClickEvent"></vxe-grid>
         `,
         `
         export default {

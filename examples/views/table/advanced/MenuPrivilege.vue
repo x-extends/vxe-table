@@ -10,10 +10,10 @@
       ref="xTable"
       :footer-method="footerMethod"
       :data="tableData"
-      :context-menu="tableMenu"
-      @header-cell-context-menu="headerCellContextMenuEvent"
-      @cell-context-menu="cellContextMenuEvent"
-      @context-menu-click="contextMenuClickEvent">
+      :menu-config="tableMenu"
+      @header-cell-menu="headerCellContextMenuEvent"
+      @cell-menu="cellContextMenuEvent"
+      @menu-click="contextMenuClickEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -114,10 +114,10 @@ export default {
           ref="xTable"
           :footer-method="footerMethod"
           :data="tableData"
-          :context-menu="tableMenu"
-          @header-cell-context-menu="headerCellContextMenuEvent"
-          @cell-context-menu="cellContextMenuEvent"
-          @context-menu-click="contextMenuClickEvent">
+          :menu-config="tableMenu"
+          @header-cell-menu="headerCellContextMenuEvent"
+          @cell-menu="cellContextMenuEvent"
+          @menu-click="contextMenuClickEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>

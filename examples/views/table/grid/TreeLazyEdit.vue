@@ -11,10 +11,10 @@
       :proxy-config="tableProxy"
       :columns="tableColumn"
       :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
-      :context-menu="{body: {options: bodyMenus}, visibleMethod}"
+      :menu-config="{body: {options: bodyMenus}, visibleMethod}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
-      @context-menu-click="contextMenuClickEvent">
+      @menu-click="contextMenuClickEvent">
       <template v-slot:toolbar_buttons>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
@@ -85,10 +85,10 @@ export default {
           :proxy-config="tableProxy"
           :columns="tableColumn"
           :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
-          :context-menu="{body: {options: bodyMenus}, visibleMethod}"
+          :menu-config="{body: {options: bodyMenus}, visibleMethod}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
-          @context-menu-click="contextMenuClickEvent">
+          @menu-click="contextMenuClickEvent">
           <template v-slot:toolbar_buttons>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>

@@ -58,7 +58,7 @@ export default {
         `
         <vxe-table
           border
-          :context-menu="tableMenu"
+          :menu-config="tableMenu"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>

@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       通过给需要排序功能的列加上 <table-api-link prop="sortable"/> 属性可以支持排序，还可以通过设置 <table-api-link prop="sort-by"/> 多字段进行排序<br>
-      如果是服务端排序，只需加上 <table-column-api-link prop="remote-sort"/> 和 <table-api-link prop="sort-change"/> 事件就可以实现<br>
+      如果是服务端排序，只需加上 <table-api-link prop="sort-config"/>={remote: true} 和 <table-api-link prop="sort-change"/> 事件就可以实现<br>
       还可以通过调用 <table-api-link prop="sort"/> 方法实现手动排序
     </p>
 
