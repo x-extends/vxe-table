@@ -43,7 +43,7 @@ const props = {
   // 在 v3 中废弃
   remoteSort: { type: Boolean, default: null },
   // 在 v3 中只支持字符串类型
-  sortBy: [String, Array],
+  sortBy: [String, Function],
   // 在 v3 中废弃
   sortMethod: Function,
   // 配置筛选条件数组

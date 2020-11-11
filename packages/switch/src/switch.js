@@ -54,22 +54,22 @@ export default {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       const { propsData } = this.$options
       if (propsData.onLabel) {
-        UtilTools.warn('vxe.error.delProp', ['on-label', 'open-label'])
+        UtilTools.error('vxe.error.delProp', ['on-label', 'open-label'])
       }
       if (propsData.offLabel) {
-        UtilTools.warn('vxe.error.delProp', ['off-label', 'close-label'])
+        UtilTools.error('vxe.error.delProp', ['off-label', 'close-label'])
       }
       if (propsData.onValue) {
-        UtilTools.warn('vxe.error.delProp', ['on-value', 'open-value'])
+        UtilTools.error('vxe.error.delProp', ['on-value', 'open-value'])
       }
       if (propsData.offValue) {
-        UtilTools.warn('vxe.error.delProp', ['off-value', 'close-value'])
+        UtilTools.error('vxe.error.delProp', ['off-value', 'close-value'])
       }
       if (propsData.onIcon) {
-        UtilTools.warn('vxe.error.delProp', ['on-icon', 'open-icon'])
+        UtilTools.error('vxe.error.delProp', ['on-icon', 'open-icon'])
       }
       if (propsData.offIcon) {
-        UtilTools.warn('vxe.error.delProp', ['off-icon', 'close-icon'])
+        UtilTools.error('vxe.error.delProp', ['off-icon', 'close-icon'])
       }
     }
     if (browse.msie) {

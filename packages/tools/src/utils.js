@@ -36,9 +36,6 @@ class ColumnInfo {
       if (_vm.sortMethod) {
         UtilTools.warn('vxe.error.delProp', ['column.sort-method', 'sort-config.sortMethod'])
       }
-      if (_vm.sortBy && !XEUtils.isString(_vm.sortBy)) {
-        UtilTools.warn('vxe.error.errProp', [`column.sort-by=${JSON.stringify(_vm.sortBy)}`, `column.sort-by="${_vm.sortBy[0]}"`])
-      }
       if (formatter) {
         if (XEUtils.isString(formatter)) {
           const globalFunc = formats.get(formatter) || XEUtils[formatter]

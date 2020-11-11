@@ -700,7 +700,8 @@ export default {
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (this.mouseOpts.area && !this.handleUpdateCellAreas) {
-        return UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+        console.error('[vxe-table] This feature requires use the "vxe-table.pro"')
+        return
       }
       if (this.treeConfig && this.mouseOpts.area) {
         UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
