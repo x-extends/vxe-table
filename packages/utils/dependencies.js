@@ -156,7 +156,7 @@ import getYearWeek from 'xe-utils/methods/date/getYearWeek'
 import escape from 'xe-utils/methods/string/escape'
 // import unescape from 'xe-utils/methods/string/unescape'
 import camelCase from 'xe-utils/methods/string/camelCase'
-// import kebabCase from 'xe-utils/methods/string/kebabCase'
+import kebabCase from 'xe-utils/methods/string/kebabCase'
 // import startsWith from 'xe-utils/methods/string/startsWith'
 // import endsWith from 'xe-utils/methods/string/endsWith'
 import template from 'xe-utils/methods/string/template'
@@ -340,7 +340,7 @@ export default {
   escape,
   // unescape,
   camelCase,
-  // kebabCase,
+  kebabCase,
   // startsWith,
   // endsWith,
   template,
