@@ -2891,7 +2891,7 @@ const apis = [
       {
         name: 'cell-selected',
         descKey: 'app.api.table.desc.cellSelected',
-        version: '2.9.27',
+        version: '2.9.10',
         type: '',
         enum: '',
         defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }',
