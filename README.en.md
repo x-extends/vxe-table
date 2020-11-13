@@ -85,7 +85,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 Version: [vue](https://www.npmjs.com/package/vue) 3.x, Dependent: [xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
 
 ```shell
-npm install xe-utils@@3.0.1 vxe-table@next
+npm install xe-utils vxe-table@next
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
@@ -108,7 +108,7 @@ app.use(VXETable)
 <!-- Style -->
 <link rel="stylesheet" href="https://unpkg.com/vxe-table@next/lib/style.css">
 <!-- Script -->
-<script src="https://unpkg.com/xe-utils@@3.0.1"></script>
+<script src="https://unpkg.com/xe-utils"></script>
 <script src="https://unpkg.com/vxe-table@next"></script>
 <!-- It is recommended that users introduced by CDN lock the version on the link address to avoid the impact of incompatible updates -->
 ```

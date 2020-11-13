@@ -4,13 +4,13 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeTooltipPropTypes, VxeTooltipConstructor, VxeTooltipEmits, TooltipReactData, TooltipMethods, TooltipPrivateRef } from '../../../types/vxe-table'
+import { VxeTooltipPropTypes, VxeTooltipConstructor, VxeTooltipEmits, TooltipReactData, TooltipMethods, TooltipPrivateRef } from '../../../types/vxe-table'
 
 export default defineComponent({
   name: 'VxeTooltip',
   props: {
     modelValue: Boolean,
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
+    size: { type: String as PropType<VxeTooltipPropTypes.Size>, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
     trigger: { type: String as PropType<VxeTooltipPropTypes.Trigger>, default: () => GlobalConfig.tooltip.trigger },
     theme: { type: String as PropType<VxeTooltipPropTypes.Theme>, default: () => GlobalConfig.tooltip.theme },
     content: [String, Number] as PropType<VxeTooltipPropTypes.Content>,
@@ -87,7 +87,7 @@ export default defineComponent({
       }
     }
 
-    const update = (value: any) => {
+    const updateValue = (value: VxeTooltipPropTypes.ModelValue) => {
       if (value !== reactData.visible) {
         reactData.visible = value
         reactData.isUpdate = true
@@ -149,8 +149,8 @@ export default defineComponent({
       dispatchEvent (type, params, evnt) {
         emit(type, Object.assign({ $tooltip: $xetooltip, $event: evnt }, params))
       },
-      open (target?: HTMLElement, message?: string | number) {
-        return tooltipMethods.toVisible(target || reactData.target, message)
+      open (target?: HTMLElement, message?: VxeTooltipPropTypes.Content) {
+        return tooltipMethods.toVisible(target || reactData.target as HTMLElement, message)
       },
       close () {
         reactData.tipTarget = null
@@ -159,10 +159,10 @@ export default defineComponent({
           placement: '',
           arrowStyle: null
         })
-        update(false)
+        updateValue(false)
         return nextTick()
       },
-      toVisible (target: any, message?: any) {
+      toVisible (target: HTMLElement, message?: VxeTooltipPropTypes.Content) {
         targetActive = true
         if (target) {
           const { tipStore } = reactData
@@ -175,7 +175,7 @@ export default defineComponent({
             reactData.message = message
           }
           reactData.tipTarget = target
-          update(true)
+          updateValue(true)
           updateZindex()
           tipStore.placement = 'top'
           tipStore.style = { width: 'auto', left: 0, top: 0, zIndex: props.zIndex || reactData.tipZindex }

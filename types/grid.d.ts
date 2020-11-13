@@ -1,4 +1,4 @@
-import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance } from 'vue'
+import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance } from 'vue'
 import { VxeColumnOptions } from './column'
 import { VxeFormInstance, VxeFormOptions } from './form'
 import { VxeFormItemOptions } from './form-item'
@@ -17,6 +17,7 @@ export type VxeGridInstance = ComponentPublicInstance<VxeGridProps, VxeGridConst
 export interface VxeGridConstructor extends VxeComponentInstance, VxeGridMethods {
   props: VxeGridProps;
   context: SetupContext<VxeGridEmits>;
+  instance: ComponentInternalInstance;
   reactData: GridReactData;
   refMaps: GridPrivateRef;
   computeMaps: GridPrivateComputed;

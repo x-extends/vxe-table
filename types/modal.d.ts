@@ -118,6 +118,8 @@ export namespace VxeModalPropTypes {
   export type Title = string;
   export type Duration = number | string;
   export type Message = string;
+  export type CancelButtonText = string;
+  export type ConfirmButtonText = string;
   export type LockView = boolean;
   export type LockScroll = boolean;
   export type Mask = boolean;
@@ -159,6 +161,8 @@ export interface VxeModalProps {
   title?: VxeModalPropTypes.Title;
   duration?: VxeModalPropTypes.Duration;
   message?: VxeModalPropTypes.Message;
+  cancelButtonText?: VxeModalPropTypes.CancelButtonText;
+  confirmButtonText?: VxeModalPropTypes.ConfirmButtonText;
   lockView?: VxeModalPropTypes.LockView;
   lockScroll?: VxeModalPropTypes.LockScroll;
   mask?: VxeModalPropTypes.Mask;

@@ -32,56 +32,72 @@ export interface ButtonReactData {
 
 export interface VxeButtonOptions extends VxeButtonProps, VxeButtonListeners { }
 
+export namespace VxeButtonPropTypes {
+  export type Size = SizeType;
+  export type Type = string;
+  export type Name = string | number;
+  export type Content = string;
+  export type Placement = string;
+  export type Status = string;
+  export type Icon = string;
+  export type Round = boolean;
+  export type Circle = boolean;
+  export type Disabled = boolean;
+  export type Loading = boolean;
+  export type DestroyOnClose = boolean;
+  export type Transfer = boolean;
+}
+
 export interface VxeButtonProps {
-  size?: SizeType;
+  size?: VxeButtonPropTypes.Size;
   /**
    * 按钮类型
    */
-  type: string;
+  type: VxeButtonPropTypes.Type;
   /**
    * 用来标识这一项
    */
-  name: string | number;
+  name: VxeButtonPropTypes.Name;
   /**
    * 按钮内容
    */
-  content: string;
+  content: VxeButtonPropTypes.Content;
   /**
    * 固定显示下拉面板的方向
    */
-  placement: string;
+  placement: VxeButtonPropTypes.Placement;
   /**
    * 按钮状态
    */
-  status: string;
+  status: VxeButtonPropTypes.Status;
   /**
    * 按钮的图标
    */
-  icon: string;
+  icon: VxeButtonPropTypes.Icon;
   /**
    * 圆角边框
    */
-  round: boolean;
+  round: VxeButtonPropTypes.Round;
   /**
    * 圆角按钮
    */
-  circle: boolean;
+  circle: VxeButtonPropTypes.Circle;
   /**
    * 是否禁用
    */
-  disabled: boolean;
+  disabled: VxeButtonPropTypes.Disabled;
   /**
    * 是否加载中
    */
-  loading: boolean;
+  loading: VxeButtonPropTypes.Loading;
   /**
    * 在下拉面板关闭时销毁内容
    */
-  destroyOnClose: boolean;
+  destroyOnClose: VxeButtonPropTypes.DestroyOnClose;
   /**
    * 是否将弹框容器插入于 body 内
    */
-  transfer: boolean;
+  transfer: VxeButtonPropTypes.Transfer;
 }
 
 export interface ButtonMethods {

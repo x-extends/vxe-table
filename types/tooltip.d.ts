@@ -71,8 +71,8 @@ export interface TooltipMethods {
    * @param target 自定义目标元素
    * @param message 自定义消息
    */
-  open(target?: any, message?: string | number): Promise<any>;
-  toVisible(target?: any, message?: string | number): Promise<any>;
+  open(target?: any, message?: VxeTooltipPropTypes.Content): Promise<any>;
+  toVisible(target?: HTMLElement, message?: VxeTooltipPropTypes.Content): Promise<any>;
   /**
    * 隐藏
    */

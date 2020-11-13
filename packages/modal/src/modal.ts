@@ -6,7 +6,7 @@ import { useSize } from '../../hooks/size'
 import GlobalConfig from '../../conf'
 import VxeButtonConstructor from '../../button/src/button'
 
-import { SizeType, VxeModalConstructor, ModalReactData, VxeModalEmits, ModalPosition, ModalType, ModalStatus, ModalSlots, ModalEventTypes, VxeButtonInstance, ModalMethods, ModalPrivateRef, VxeModalMethods } from '../../../types/vxe-table'
+import { VxeModalConstructor, VxeModalPropTypes, ModalReactData, VxeModalEmits, ModalEventTypes, VxeButtonInstance, ModalMethods, ModalPrivateRef, VxeModalMethods } from '../../../types/vxe-table'
 
 export const allActivedModals: VxeModalConstructor[] = []
 export const msgQueue: VxeModalConstructor[] = []
@@ -14,46 +14,46 @@ export const msgQueue: VxeModalConstructor[] = []
 export default defineComponent({
   name: 'VxeModal',
   props: {
-    modelValue: Boolean,
-    id: String,
-    type: { type: String as PropType<ModalType>, default: 'modal' },
-    loading: { type: Boolean, default: null },
-    status: String as PropType<ModalStatus>,
-    iconStatus: String,
-    className: String,
-    top: { type: [Number, String], default: 15 },
-    position: [String, Object] as PropType<ModalPosition>,
-    title: String,
-    duration: { type: [Number, String], default: () => GlobalConfig.modal.duration },
-    message: String,
-    cancelButtonText: String,
-    confirmButtonText: String,
-    lockView: { type: Boolean, default: () => GlobalConfig.modal.lockView },
-    lockScroll: Boolean,
-    mask: { type: Boolean, default: () => GlobalConfig.modal.mask },
-    maskClosable: Boolean,
-    escClosable: Boolean,
-    resize: Boolean,
-    showHeader: { type: Boolean, default: true },
-    showFooter: Boolean,
-    dblclickZoom: { type: Boolean, default: () => GlobalConfig.modal.dblclickZoom },
-    width: [Number, String],
-    height: [Number, String],
-    minWidth: { type: [Number, String], default: () => GlobalConfig.modal.minWidth },
-    minHeight: { type: [Number, String], default: () => GlobalConfig.modal.minHeight },
-    zIndex: Number,
-    marginSize: { type: [Number, String], default: GlobalConfig.modal.marginSize },
-    fullscreen: Boolean,
+    modelValue: Boolean as PropType<VxeModalPropTypes.ModelValue>,
+    id: String as PropType<VxeModalPropTypes.ID>,
+    type: { type: String as PropType<VxeModalPropTypes.Type>, default: 'modal' },
+    loading: { type: Boolean as PropType<VxeModalPropTypes.Loading>, default: null },
+    status: String as PropType<VxeModalPropTypes.Status>,
+    iconStatus: String as PropType<VxeModalPropTypes.IconStatus>,
+    className: String as PropType<VxeModalPropTypes.ClassName>,
+    top: { type: [Number, String] as PropType<VxeModalPropTypes.Top>, default: 15 },
+    position: [String, Object] as PropType<VxeModalPropTypes.Position>,
+    title: String as PropType<VxeModalPropTypes.Title>,
+    duration: { type: [Number, String] as PropType<VxeModalPropTypes.Duration>, default: () => GlobalConfig.modal.duration },
+    message: String as PropType<VxeModalPropTypes.Message>,
+    cancelButtonText: String as PropType<VxeModalPropTypes.CancelButtonText>,
+    confirmButtonText: String as PropType<VxeModalPropTypes.ConfirmButtonText>,
+    lockView: { type: Boolean as PropType<VxeModalPropTypes.LockView>, default: () => GlobalConfig.modal.lockView },
+    lockScroll: Boolean as PropType<VxeModalPropTypes.LockScroll>,
+    mask: { type: Boolean as PropType<VxeModalPropTypes.Mask>, default: () => GlobalConfig.modal.mask },
+    maskClosable: Boolean as PropType<VxeModalPropTypes.MaskClosable>,
+    escClosable: Boolean as PropType<VxeModalPropTypes.EscClosable>,
+    resize: Boolean as PropType<VxeModalPropTypes.Resize>,
+    showHeader: { type: Boolean as PropType<VxeModalPropTypes.ShowHeader>, default: true },
+    showFooter: Boolean as PropType<VxeModalPropTypes.ShowFooter>,
+    dblclickZoom: { type: Boolean as PropType<VxeModalPropTypes.DblclickZoom>, default: () => GlobalConfig.modal.dblclickZoom },
+    width: [Number, String] as PropType<VxeModalPropTypes.Width>,
+    height: [Number, String] as PropType<VxeModalPropTypes.Height>,
+    minWidth: { type: [Number, String] as PropType<VxeModalPropTypes.MinWidth>, default: () => GlobalConfig.modal.minWidth },
+    minHeight: { type: [Number, String] as PropType<VxeModalPropTypes.MinHeight>, default: () => GlobalConfig.modal.minHeight },
+    zIndex: Number as PropType<VxeModalPropTypes.ZIndex>,
+    marginSize: { type: [Number, String] as PropType<VxeModalPropTypes.MarginSize>, default: GlobalConfig.modal.marginSize },
+    fullscreen: Boolean as PropType<VxeModalPropTypes.Fullscreen>,
     remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
-    destroyOnClose: Boolean,
-    showTitleOverflow: { type: Boolean, default: () => GlobalConfig.modal.showTitleOverflow },
-    transfer: { type: Boolean, default: () => GlobalConfig.modal.transfer },
-    storage: { type: Boolean, default: () => GlobalConfig.modal.storage },
-    storageKey: { type: String, default: () => GlobalConfig.modal.storageKey },
-    animat: { type: Boolean, default: () => GlobalConfig.modal.animat },
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.modal.size || GlobalConfig.size },
-    beforeHideMethod: Function,
-    slots: Object as PropType<ModalSlots>
+    destroyOnClose: Boolean as PropType<VxeModalPropTypes.DestroyOnClose>,
+    showTitleOverflow: { type: Boolean as PropType<VxeModalPropTypes.ShowTitleOverflow>, default: () => GlobalConfig.modal.showTitleOverflow },
+    transfer: { type: Boolean as PropType<VxeModalPropTypes.Transfer>, default: () => GlobalConfig.modal.transfer },
+    storage: { type: Boolean as PropType<VxeModalPropTypes.Storage>, default: () => GlobalConfig.modal.storage },
+    storageKey: { type: String as PropType<VxeModalPropTypes.StorageKey>, default: () => GlobalConfig.modal.storageKey },
+    animat: { type: Boolean as PropType<VxeModalPropTypes.Animat>, default: () => GlobalConfig.modal.animat },
+    size: { type: String as PropType<VxeModalPropTypes.Size>, default: () => GlobalConfig.modal.size || GlobalConfig.size },
+    beforeHideMethod: Function as PropType<VxeModalPropTypes.BeforeHideMethod>,
+    slots: Object as PropType<VxeModalPropTypes.Slots>
   },
   emits: [
     'update:modelValue',
@@ -372,7 +372,7 @@ export default defineComponent({
       return nextTick()
     }
 
-    const selfClickEvent = (evnt: any) => {
+    const selfClickEvent = (evnt: Event) => {
       const el = refElem.value
       if (props.maskClosable && evnt.target === el) {
         const type = 'mask'
@@ -380,9 +380,9 @@ export default defineComponent({
       }
     }
 
-    const handleGlobalKeydownEvent = (evnt: any) => {
+    const handleGlobalKeydownEvent = (evnt: KeyboardEvent) => {
       if (evnt.keyCode === 27) {
-        const lastModal = XEUtils.max(allActivedModals, (item: any) => item.reactData.modalZindex)
+        const lastModal = XEUtils.max(allActivedModals, (item) => item.reactData.modalZindex)
         // 多个时，只关掉最上层的窗口
         if (lastModal) {
           setTimeout(() => {
@@ -444,7 +444,7 @@ export default defineComponent({
       return null
     }
 
-    const setPosition = (top: any, left: any) => {
+    const setPosition = (top?: number, left?: number) => {
       const isMsg = computeIsMsg.value
       if (!isMsg) {
         const boxElem = getBox()
@@ -465,7 +465,7 @@ export default defineComponent({
       }
     }
 
-    const mousedownEvent = (evnt: any) => {
+    const mousedownEvent = (evnt: MouseEvent) => {
       const { remember, storage } = props
       const { zoomLocat } = reactData
       const marginSize = XEUtils.toNumber(props.marginSize)
@@ -514,12 +514,13 @@ export default defineComponent({
       }
     }
 
-    const dragEvent = (evnt: any) => {
+    const dragEvent = (evnt: MouseEvent) => {
       evnt.preventDefault()
       const { remember, storage } = props
       const { visibleHeight, visibleWidth } = DomTools.getDomNode()
       const marginSize = XEUtils.toNumber(props.marginSize)
-      const type = evnt.target.dataset.type
+      const targetElem = evnt.target as HTMLSpanElement
+      const type = targetElem.dataset.type
       const minWidth = XEUtils.toNumber(props.minWidth)
       const minHeight = XEUtils.toNumber(props.minHeight)
       const maxWidth = visibleWidth
@@ -698,15 +699,14 @@ export default defineComponent({
       const headerSlot = slots.header || propSlots.header
       const headVNs: any[] = []
       if (props.showHeader) {
-        const headerOns: any = {
-          onMousedown: mousedownEvent
-        }
+        const headerOns: any = {}
         if (resize && props.dblclickZoom && props.type === 'modal') {
           headerOns.onDblclick = toggleZoomEvent
         }
         headVNs.push(
           h('div', {
             class: ['vxe-modal--header', !isMsg && props.showTitleOverflow ? 'is--ellipsis' : ''],
+            onMousedown: mousedownEvent,
             ...headerOns
           }, headerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : headerSlot({ $modal: $xemodal })) : renderTitles())
         )

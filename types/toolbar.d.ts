@@ -37,7 +37,7 @@ export namespace VxeToolbarPropTypes {
   export interface ResizableOpts extends ResizableConfig { }
 
   interface RefreshConfig {
-    query?(params: { page: any, sort: any, filters: any, form: any }): Promise<any>;
+    query?(params: {}): Promise<any>;
     icon?: string;
     iconLoading?: string;
   }
@@ -93,7 +93,7 @@ export namespace VxeToolbarPropTypes {
     visible?: boolean;
     disabled?: boolean;
     icon?: string;
-    dropdowns?: string;
+    dropdowns?: ButtonConfig[];
     buttonRender?: VxeGlobalRendererHandles.RenderButtonOptions;
     [key: string]: any;
   }

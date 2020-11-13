@@ -85,7 +85,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 版本：[vue](https://www.npmjs.com/package/vue) 3.x, 依賴庫：[xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
 
 ```shell
-npm install xe-utils@3.0.1 vxe-table@next
+npm install xe-utils vxe-table@next
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
@@ -108,7 +108,7 @@ app.use(VXETable)
 <!-- 引入樣式 -->
 <link rel="stylesheet" href="https://unpkg.com/vxe-table@next/lib/style.css">
 <!-- 引入腳本 -->
-<script src="https://unpkg.com/xe-utils@3.0.1"></script>
+<script src="https://unpkg.com/xe-utils"></script>
 <script src="https://unpkg.com/vxe-table@next"></script>
 <!-- 建議使用 CDN 管道引入的用戶在連結位址上鎖定版本，避免受到非相容性更新的影響 -->
 ```

@@ -22,11 +22,11 @@ export interface InputReactData {
   visiblePanel: boolean;
   animatVisible: boolean;
   panelStyle: VNodeStyle | null;
-  panelPlacement: string;
+  panelPlacement: VxeInputPropTypes.Placement;
   isActivated: boolean;
   inputValue: string;
   datetimePanelValue: any;
-  datePanelValue: any;
+  datePanelValue: Date | null;
   datePanelLabel: string;
   datePanelType: string;
   selectMonth: any;
@@ -37,7 +37,7 @@ export interface VxeInputOptions extends VxeInputProps, VxeInputListeners { }
 
 export namespace VxeInputPropTypes {
   export type Size = SizeType;
-  export type ModelValue = string | number | Date;
+  export type ModelValue = string | number | Date | null;
   export type Name = string;
   export type Type = 'text' | 'search' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'time' | 'datetime' | 'week' | 'month' | 'year';
   export type Clearable = boolean;
@@ -64,7 +64,7 @@ export namespace VxeInputPropTypes {
   export type DisabledMethod = (params: VxeInputDefines.DateDisabledParams) => boolean;
   export type PrefixIcon = string;
   export type SuffixIcon = string;
-  export type Placement = string;
+  export type Placement = 'top' | 'bottom' | '' | null;
   export type Transfer = boolean;
 }
 
@@ -150,18 +150,23 @@ export type VxeInputEmits = [
 
 export namespace VxeInputDefines {
 
-  /**
-   * 日期节日对象
-   */
-  export interface DateFestivalInfo {
+  interface DateFestivalItem {
     /**
-     * 节日名称，如果重叠使用逗号隔开
+     * 显示名称
      */
     label?: string;
     /**
-     * 标记为重要节日
+     * 标记为重要信息
      */
     important?: boolean;
+    className?: string;
+    style?: VNodeStyle;
+  }
+
+  /**
+   * 日期节日对象
+   */
+  export interface DateFestivalInfo extends DateFestivalItem {
     /**
      * 显示左上角小圆点通知
      */
@@ -169,16 +174,7 @@ export namespace VxeInputDefines {
     /**
      * 显示右上角信息
      */
-    extra?: string | {
-      /**
-       * 显示名称
-       */
-      label?: string;
-      /**
-       * 标记为重要信息
-       */
-      important?: boolean;
-    };
+    extra?: string | DateFestivalItem;
   }
 
   export interface DateFestivalParams {
@@ -187,6 +183,7 @@ export namespace VxeInputDefines {
   }
 
   export interface DateDisabledParams {
+    type: VxeInputPropTypes.Type;
     date: Date;
   }
 

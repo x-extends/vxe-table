@@ -1,4 +1,4 @@
-import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance } from 'vue'
+import { defineComponent, h, PropType, ref, Ref, computed, provide, getCurrentInstance, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance } from 'vue'
 import XEUtils from 'xe-utils/ctor'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import GlobalConfig from '../../conf'
@@ -8,7 +8,7 @@ import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
 import { clearTableDefaultStatus, clearTableAllStatus } from '../../table/src/util'
 
-import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents } from '../../../types/vxe-table'
+import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, ValueOf } from '../../../types/vxe-table'
 
 function getOffsetHeight (elem: HTMLElement) {
   return elem ? elem.offsetHeight : 0
@@ -25,6 +25,17 @@ const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
 const tableComponentMethodKeys: (keyof TableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getRowById', 'getRowid', 'getTableData', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'clostTooltip', 'isAllCheckboxChecked', 'isCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadExpandContent', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'focus', 'blur', 'connect']
 
+const gridComponentEmits: VxeGridEmits = [
+  ...tableComponentEmits,
+  'page-change',
+  'form-submit',
+  'form-submit-invalid',
+  'form-reset',
+  'form-toggle-collapse',
+  'toolbar-button-click',
+  'zoom'
+]
+
 export default defineComponent({
   name: 'VxeGrid',
   props: {
@@ -37,16 +48,7 @@ export default defineComponent({
     zoomConfig: Object as PropType<VxeGridPropTypes.ZoomConfig>,
     size: { type: String as PropType<VxeGridPropTypes.Size>, default: () => GlobalConfig.grid.size || GlobalConfig.size }
   },
-  emits: [
-    ...tableComponentEmits,
-    'page-change',
-    'form-submit',
-    'form-submit-invalid',
-    'form-reset',
-    'form-toggle-collapse',
-    'toolbar-button-click',
-    'zoom'
-  ] as VxeGridEmits,
+  emits: gridComponentEmits,
   setup (props, context) {
     const TableComponent = resolveComponent('vxe-table') as ComponentOptions
     const FormComponent = resolveComponent('vxe-form') as ComponentOptions
@@ -56,6 +58,8 @@ export default defineComponent({
     const { slots, emit } = context
 
     const xID = XEUtils.uniqueId()
+
+    const instance = getCurrentInstance()
 
     const computeSize = useSize(props)
 
@@ -166,6 +170,7 @@ export default defineComponent({
       xID,
       props,
       context,
+      instance,
       reactData,
       refMaps,
       computeMaps
@@ -506,9 +511,18 @@ export default defineComponent({
       const tableProps = computeTableProps.value
       const proxyOpts = computeProxyOpts.value
       const ons: any = {}
-      // getOnKeys().forEach(type => {
-      //   ons[getOnName(type)] = (...args: any[]) => emit(type, ...args)
-      // })
+      if (instance) {
+        XEUtils.each(instance.attrs, (val, key) => {
+          const matchRests = key.match(/on([A-Z]{1}.*)/)
+          if (matchRests) {
+            const onName = matchRests[0]
+            const name = XEUtils.kebabCase(matchRests[1]) as ValueOf<VxeGridEmits>
+            if (gridComponentEmits.includes(name)) {
+              ons[onName] = (...args: any[]) => emit(name, ...args)
+            }
+          }
+        })
+      }
       if (proxyConfig) {
         if (proxyOpts.sort) {
           ons.onSortChange = sortChangeEvent

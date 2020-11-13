@@ -5,7 +5,7 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods } from '../../../types/vxe-table'
+import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData } from '../../../types/vxe-table'
 
 export default defineComponent({
   name: 'VxeToolbar',
@@ -19,7 +19,7 @@ export default defineComponent({
     custom: [Boolean, Object] as PropType<VxeToolbarPropTypes.Custom>,
     buttons: { type: Array as PropType<VxeToolbarPropTypes.Buttons>, default: () => GlobalConfig.toolbar.buttons },
     perfect: { type: Boolean as PropType<VxeToolbarPropTypes.Perfect>, default: () => GlobalConfig.toolbar.perfect },
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.toolbar.size || GlobalConfig.size }
+    size: { type: String as PropType<VxeToolbarPropTypes.Size>, default: () => GlobalConfig.toolbar.size || GlobalConfig.size }
   },
   emits: [
     'button-click'
@@ -33,8 +33,8 @@ export default defineComponent({
 
     const reactData = reactive({
       isRefresh: false,
-      columns: [] as any[]
-    })
+      columns: []
+    } as ToolbarReactData)
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refCustomWrapper = ref() as Ref<HTMLDivElement>
@@ -101,8 +101,8 @@ export default defineComponent({
       const { computeCustomOpts: computeTableCustomOpts } = tableComputeMaps
       const tableCustomOpts = computeTableCustomOpts.value
       const { checkMethod } = tableCustomOpts
-      customStore.isAll = columns.every((column: any) => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
-      customStore.isIndeterminate = !customStore.isAll && columns.some((column: any) => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
+      customStore.isAll = columns.every((column) => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
+      customStore.isIndeterminate = !customStore.isAll && columns.some((column) => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
     }
 
     const showCustom = () => {
@@ -159,7 +159,7 @@ export default defineComponent({
       const { computeCustomOpts: computeTableCustomOpts } = tableComputeMaps
       const tableCustomOpts = computeTableCustomOpts.value
       const { checkMethod } = tableCustomOpts
-      XEUtils.eachTree(columns, (column: any) => {
+      XEUtils.eachTree(columns, (column) => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = column.defaultVisible
           column.halfVisible = false
@@ -205,7 +205,7 @@ export default defineComponent({
       const tableCustomOpts = computeTableCustomOpts.value
       const { checkMethod } = tableCustomOpts
       const isAll = !customStore.isAll
-      XEUtils.eachTree(columns, (column: any) => {
+      XEUtils.eachTree(columns, (column) => {
         if (!checkMethod || checkMethod({ column })) {
           column.visible = isAll
           column.halfVisible = false
@@ -215,14 +215,14 @@ export default defineComponent({
       checkCustomStatus()
     }
 
-    const handleGlobalMousedownEvent = (evnt: any) => {
+    const handleGlobalMousedownEvent = (evnt: MouseEvent) => {
       const customWrapperElem = refCustomWrapper.value
       if (!DomTools.getEventTargetNode(evnt, customWrapperElem).flag) {
         customColseEvent(evnt)
       }
     }
 
-    const handleGlobalBlurEvent = (evnt: any) => {
+    const handleGlobalBlurEvent = (evnt: Event) => {
       customColseEvent(evnt)
     }
 
@@ -253,7 +253,7 @@ export default defineComponent({
       customOpenEvent(evnt)
     }
 
-    const handleWrapperMouseleaveEvent = (evnt: any) => {
+    const handleWrapperMouseleaveEvent = (evnt: Event) => {
       customStore.activeWrapper = false
       setTimeout(() => {
         if (!customStore.activeBtn && !customStore.activeWrapper) {
@@ -270,7 +270,7 @@ export default defineComponent({
         if (query) {
           reactData.isRefresh = true
           try {
-            Promise.resolve(query({} as any)).catch((e: any) => e).then(() => {
+            Promise.resolve(query({})).catch((e) => e).then(() => {
               reactData.isRefresh = false
             })
           } catch (e) {
@@ -278,7 +278,7 @@ export default defineComponent({
           }
         } else if ($xegrid) {
           reactData.isRefresh = true
-          $xegrid.commitProxy('reload').catch((e: any) => e).then(() => {
+          $xegrid.commitProxy('reload').catch((e) => e).then(() => {
             reactData.isRefresh = false
           })
         }
@@ -291,7 +291,7 @@ export default defineComponent({
       }
     }
 
-    const btnEvent = (evnt: Event, item: any) => {
+    const btnEvent = (evnt: Event, item: VxeToolbarPropTypes.ButtonConfig) => {
       const { code } = item
       if (code) {
         if ($xegrid) {
@@ -325,28 +325,30 @@ export default defineComponent({
       }
     }
 
-    const renderDropdowns = (item: any) => {
+    const renderDropdowns = (item: VxeToolbarPropTypes.ButtonConfig) => {
       const { dropdowns } = item
       const downVNs: VNode[] = []
       const ButtonComponent = resolveComponent('vxe-button') as ComponentOptions
-      dropdowns.forEach((child: any, index: number) => {
-        if (child.visible !== false) {
-          downVNs.push(
-            h(ButtonComponent, {
-              key: index,
-              disabled: child.disabled,
-              loading: child.loading,
-              type: child.type,
-              icon: child.icon,
-              circle: child.circle,
-              round: child.round,
-              status: child.status,
-              content: UtilTools.getFuncText(child.name),
-              onClick: (evnt: Event) => btnEvent(evnt, child)
-            })
-          )
-        }
-      })
+      if (dropdowns) {
+        dropdowns.forEach((child: any, index: number) => {
+          if (child.visible !== false) {
+            downVNs.push(
+              h(ButtonComponent, {
+                key: index,
+                disabled: child.disabled,
+                loading: child.loading,
+                type: child.type,
+                icon: child.icon,
+                circle: child.circle,
+                round: child.round,
+                status: child.status,
+                content: UtilTools.getFuncText(child.name),
+                onClick: (evnt: Event) => btnEvent(evnt, child)
+              })
+            )
+          }
+        })
+      }
       return downVNs
     }
 
@@ -361,11 +363,11 @@ export default defineComponent({
       const VxeButtonConstructor = resolveComponent('vxe-button') as ComponentOptions
       const btnVNs: VNode[] = []
       if (buttons) {
-        buttons.forEach((item: any) => {
+        buttons.forEach((item) => {
           const { dropdowns, buttonRender } = item
-          const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
           if (item.visible !== false) {
-            if (compConf && compConf.renderButton) {
+            const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
+            if (buttonRender && compConf && compConf.renderButton) {
               btnVNs.push(
                 h('span', {
                   class: 'vxe-button--item'

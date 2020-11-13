@@ -15,6 +15,7 @@ export interface VxeColumnOptions extends VxeColumnProps {
 }
 
 export namespace VxeColumnPropTypes {
+  export type ColId = string | number;
   export type Type = 'seq' | 'radio' | 'checkbox' | 'expand' | 'html';
   export type Field = string;
   export type Title = string;
@@ -87,6 +88,11 @@ export namespace VxeColumnPropTypes {
     _columnIndex: number;
   }
   export type FooterExportMethod = (params: FooterExportParams) => string | number;
+
+  export interface TitleHelp {
+    message?: string | number;
+    icon?: string;
+  }
 
   export type CellType = 'auto' | 'number' | 'string';
 
@@ -196,6 +202,7 @@ export namespace VxeColumnPropTypes {
 }
 
 export interface VxeColumnProps {
+  colId?: VxeColumnPropTypes.ColId;
   /**
    * 渲染类型
    */
@@ -304,6 +311,10 @@ export interface VxeColumnProps {
    * 自定义表尾单元格数据导出方法
    */
   footerExportMethod?: VxeColumnPropTypes.FooterExportMethod;
+  /**
+   * 标题帮助图标配置项
+   */
+  titleHelp?: VxeColumnPropTypes.TitleHelp;
   /**
    * 单元格值类型
    */

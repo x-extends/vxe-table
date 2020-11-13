@@ -4,16 +4,16 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VNodeStyle, VxePulldownConstructor, VxePulldownEmits, PulldownReactData, PulldownMethods, PulldownPrivateRef, VxePulldownMethods } from '../../../types/vxe-table'
+import { VNodeStyle, VxePulldownConstructor, VxePulldownPropTypes, VxePulldownEmits, PulldownReactData, PulldownMethods, PulldownPrivateRef, VxePulldownMethods } from '../../../types/vxe-table'
 
 export default defineComponent({
   name: 'VxePulldown',
   props: {
-    disabled: Boolean,
-    placement: String,
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.size },
-    destroyOnClose: Boolean,
-    transfer: Boolean
+    disabled: Boolean as PropType<VxePulldownPropTypes.Disabled>,
+    placement: String as PropType<VxePulldownPropTypes.Placement>,
+    size: { type: String as PropType<VxePulldownPropTypes.Size>, default: () => GlobalConfig.size },
+    destroyOnClose: Boolean as PropType<VxePulldownPropTypes.DestroyOnClose>,
+    transfer: Boolean as PropType<VxePulldownPropTypes.Transfer>
   },
   emits: [
     'hide-panel'

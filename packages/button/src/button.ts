@@ -4,7 +4,7 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeButtonConstructor, VxeButtonEmits, ButtonReactData, ButtonMethods, ButtonPrivateRef } from '../../../types/vxe-table'
+import { VxeButtonConstructor, VxeButtonPropTypes, VxeButtonEmits, ButtonReactData, ButtonMethods, ButtonPrivateRef } from '../../../types/vxe-table'
 
 export default defineComponent({
   name: 'VxeButton',
@@ -12,55 +12,55 @@ export default defineComponent({
     /**
      * 按钮类型
      */
-    type: String,
+    type: String as PropType<VxeButtonPropTypes.Type>,
     /**
      * 按钮尺寸
      */
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.button.size || GlobalConfig.size },
+    size: { type: String as PropType<VxeButtonPropTypes.Size>, default: () => GlobalConfig.button.size || GlobalConfig.size },
     /**
      * 用来标识这一项
      */
-    name: [String, Number],
+    name: [String, Number] as PropType<VxeButtonPropTypes.Name>,
     /**
      * 按钮内容
      */
-    content: String,
+    content: String as PropType<VxeButtonPropTypes.Content>,
     /**
      * 固定显示下拉面板的方向
      */
-    placement: String,
+    placement: String as PropType<VxeButtonPropTypes.Placement>,
     /**
      * 按钮状态
      */
-    status: String,
+    status: String as PropType<VxeButtonPropTypes.Status>,
     /**
      * 按钮的图标
      */
-    icon: String,
+    icon: String as PropType<VxeButtonPropTypes.Icon>,
     /**
      * 圆角边框
      */
-    round: Boolean,
+    round: Boolean as PropType<VxeButtonPropTypes.Round>,
     /**
      * 圆角按钮
      */
-    circle: Boolean,
+    circle: Boolean as PropType<VxeButtonPropTypes.Circle>,
     /**
      * 是否禁用
      */
-    disabled: Boolean,
+    disabled: Boolean as PropType<VxeButtonPropTypes.Disabled>,
     /**
      * 是否加载中
      */
-    loading: Boolean,
+    loading: Boolean as PropType<VxeButtonPropTypes.Loading>,
     /**
      * 在下拉面板关闭时销毁内容
      */
-    destroyOnClose: Boolean,
+    destroyOnClose: Boolean as PropType<VxeButtonPropTypes.DestroyOnClose>,
     /**
      * 是否将弹框容器插入于 body 内
      */
-    transfer: { type: Boolean, default: () => GlobalConfig.button.transfer }
+    transfer: { type: Boolean as PropType<VxeButtonPropTypes.Transfer>, default: () => GlobalConfig.button.transfer }
   },
   emits: [
     'click',

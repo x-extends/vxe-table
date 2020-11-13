@@ -43,7 +43,11 @@
       height="300"
       :data="tableData2">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :sort-by="sortNameMethod2" sortable></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :sort-by="sortNameMethod2" sortable>
+        <template #default="{ row }">
+          <span style="color: red;">名字：{{ row.name }}</span>
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
       <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
     </vxe-table>
@@ -239,7 +243,11 @@ export default defineComponent({
           height="300"
           :data="tableData2">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :sort-by="sortNameMethod2" sortable></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :sort-by="sortNameMethod2" sortable>
+            <template #default="{ row }">
+              <span style="color: red;">名字：{{ row.name }}</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
           <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
         </vxe-table>
