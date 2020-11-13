@@ -29,7 +29,7 @@
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
-      <vxe-table-column field="date3" title="Date" formatter="toDateString"></vxe-table-column>
+      <vxe-table-column field="date3" title="Date" formatter="formatDate"></vxe-table-column>
       <vxe-table-column title="操作" width="200">
         <template v-slot="{ row, rowIndex }">
           <template v-if="!row.date3">
@@ -88,7 +88,7 @@ export default {
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
-          <vxe-table-column field="date3" title="Date" formatter="toDateString"></vxe-table-column>
+          <vxe-table-column field="date3" title="Date" formatter="formatDate"></vxe-table-column>
           <vxe-table-column title="操作" width="200">
             <template v-slot="{ row, rowIndex }">
               <template v-if="!row.date3">
