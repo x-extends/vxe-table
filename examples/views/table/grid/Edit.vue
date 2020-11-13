@@ -6,6 +6,7 @@
       border
       resizable
       keep-source
+      show-overflow
       ref="xGrid"
       height="530"
       :loading="loading"
@@ -66,6 +67,7 @@ export default {
           border
           resizable
           keep-source
+          show-overflow
           ref="xGrid"
           height="530"
           :loading="loading"

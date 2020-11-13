@@ -5,6 +5,7 @@
     <vxe-grid
       resizable
       border
+      show-overflow
       height="400"
       :export-config="{}"
       :pager-config="tablePage"
@@ -66,6 +67,7 @@ export default {
         <vxe-grid
           resizable
           border
+          show-overflow
           height="400"
           :export-config="{}"
           :loading="loading"

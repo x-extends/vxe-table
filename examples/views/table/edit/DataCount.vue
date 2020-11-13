@@ -8,6 +8,7 @@
     <vxe-table
       border
       resizable
+      show-overflow
       show-footer
       :data="tableData"
       :footer-method="footerMethod"
@@ -50,6 +51,7 @@ export default {
         <vxe-table
           border
           resizable
+          show-overflow
           show-footer
           :data="tableData"
           :footer-method="footerMethod"

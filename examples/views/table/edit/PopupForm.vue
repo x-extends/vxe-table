@@ -12,6 +12,7 @@
       border
       resizable
       row-key
+      show-overflow
       highlight-hover-row
       ref="xTable"
       height="500"
@@ -110,6 +111,7 @@ export default {
           border
           resizable
           row-key
+          show-overflow
           highlight-hover-row
           ref="xTable"
           height="500"

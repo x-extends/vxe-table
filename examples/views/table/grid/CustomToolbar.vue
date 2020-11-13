@@ -6,6 +6,7 @@
       border
       resizable
       keep-source
+      show-overflow
       ref="xGrid"
       height="530"
       id="toolbar_demo_2"
@@ -74,6 +75,7 @@ export default {
           border
           resizable
           keep-source
+          show-overflow
           ref="xGrid"
           height="530"
           id="toolbar_demo_2"

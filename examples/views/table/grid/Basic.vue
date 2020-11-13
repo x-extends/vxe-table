@@ -7,6 +7,7 @@
     <vxe-grid
       border
       resizable
+      show-overflow
       height="300"
       :align="allAlign"
       :columns="tableColumn"
@@ -54,6 +55,7 @@ export default {
         <vxe-grid
           border
           resizable
+          show-overflow
           height="300"
           :align="allAlign"
           :columns="tableColumn"

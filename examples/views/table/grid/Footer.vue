@@ -9,6 +9,7 @@
       border
       stripe
       resizable
+      show-overflow
       show-footer
       height="500"
       :export-config="{}"
@@ -50,6 +51,7 @@ export default {
           border
           stripe
           resizable
+          show-overflow
           show-footer
           height="500"
           :export-config="{}"

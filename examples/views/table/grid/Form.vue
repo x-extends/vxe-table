@@ -5,6 +5,7 @@
     <vxe-grid
       resizable
       border
+      show-overflow
       height="400"
       :export-config="{}"
       :loading="loading"
@@ -61,6 +62,7 @@ export default {
         <vxe-grid
           resizable
           border
+          show-overflow
           height="400"
           :export-config="{}"
           :loading="loading"

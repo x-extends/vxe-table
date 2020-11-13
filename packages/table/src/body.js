@@ -365,9 +365,6 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
 
 /**
  * 同步滚动条
- * scroll 方式：可以使固定列与内容保持一致的滚动效果，实现相对麻烦
- * mousewheel 方式：对于同步滚动效果就略差了，左右滚动，内容跟随即可
- * css3 translate 方式：对于同步滚动效果会有产生卡顿感觉，虽然可以利用硬件加速，渲染性能略优，但失去table布局能力
  */
 let scrollProcessTimeout
 function syncBodyScroll (scrollTop, elem1, elem2) {
@@ -388,7 +385,7 @@ function syncBodyScroll (scrollTop, elem1, elem2) {
       if (elem2) {
         elem2.onscroll = elem2._onscroll
       }
-    }, 100)
+    }, 300)
   }
 }
 
@@ -577,14 +574,6 @@ export default {
       }
       if (scrollXLoad && isX) {
         $xetable.triggerScrollXEvent(evnt)
-        if (headerElem && scrollLeft + bodyElem.clientWidth >= bodyElem.scrollWidth - 80) {
-          // 修复拖动滚动条时可能存在不同步问题
-          this.$nextTick(() => {
-            if (bodyElem.scrollLeft !== headerElem.scrollLeft) {
-              headerElem.scrollLeft = bodyElem.scrollLeft
-            }
-          })
-        }
       }
       if (scrollYLoad && isY) {
         $xetable.triggerScrollYEvent(evnt)

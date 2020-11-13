@@ -26,6 +26,7 @@
     <vxe-table
       border
       resizable
+      show-overflow
       :loading="loading"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
@@ -86,6 +87,7 @@ export default {
         <vxe-table
           border
           resizable
+          show-overflow
           :loading="loading"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">

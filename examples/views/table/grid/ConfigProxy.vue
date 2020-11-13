@@ -5,6 +5,7 @@
     <vxe-grid
       resizable
       keep-source
+      show-overflow
       height="528"
       :filter-config="{remote: true}"
       :toolbar-config="tableToolbar"
@@ -181,6 +182,7 @@ export default {
             return {
               xGridOptions: {
                 resizable: true,
+                showOverflow: true,
                 height: 528,
                 filterConfig: {
                   remote: true
