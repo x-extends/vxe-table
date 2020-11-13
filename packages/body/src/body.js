@@ -449,7 +449,7 @@ function syncBodyScroll (scrollTop, elem1, elem2) {
       if (elem2) {
         elem2.onscroll = elem2._onscroll
       }
-    }, 100)
+    }, 300)
   }
 }
 

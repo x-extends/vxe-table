@@ -492,6 +492,9 @@ export default {
               this.handleIndexChecked([[cell.parentNode.querySelector('.col--seq')]])
             }
             this.focus()
+            if (evnt) {
+              this.emitEvent('cell-selected', params, evnt)
+            }
           }
         }
         return this.$nextTick()

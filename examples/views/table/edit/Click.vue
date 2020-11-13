@@ -5,6 +5,7 @@
     <vxe-table
       border
       resizable
+      show-overflow
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -81,6 +82,7 @@ export default {
         <vxe-table
           border
           resizable
+          show-overflow
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>

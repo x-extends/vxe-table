@@ -11,6 +11,7 @@
     <vxe-table
       border
       resizable
+      show-overflow
       ref="xTable"
       max-height="400"
       :data="tableData"
@@ -68,6 +69,7 @@ export default {
         <vxe-table
           border
           resizable
+          show-overflow
           ref="xTable"
           max-height="400"
           :data="tableData"

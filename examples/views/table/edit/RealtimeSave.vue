@@ -6,6 +6,7 @@
       border
       resizable
       keep-source
+      show-overflow
       ref="xTable"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil'}"
@@ -42,6 +43,7 @@ export default {
           border
           resizable
           keep-source
+          show-overflow
           ref="xTable"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil'}"
