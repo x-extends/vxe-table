@@ -76,7 +76,7 @@
 
 ## 安装
 
-依赖库：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.7+
+依赖库：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils)
 
 ```shell
 npm install xe-utils vxe-table

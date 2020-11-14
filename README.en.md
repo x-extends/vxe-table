@@ -76,7 +76,7 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
 
 ## Installing
 
-Dependent: [vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.7+
+Dependent: [vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils)
 
 ```shell
 npm install xe-utils vxe-table
