@@ -91,8 +91,8 @@
     <vxe-modal v-model="newVersionVisible" title="v4.x 预发布" width="500" min-height="200" min-width="400" :position="{left: 20, top: 20}" :mask="false" :lock-view="false" show-footer resize>
       <template v-slot>
         <ul>
-          <li>1. 全面支持 vue 3.0 Component API</li>
-          <li>2. 全面支持 ts，使用 Typescript 完全重写</li>
+          <li>1. 支持 vue 3.0 Component API</li>
+          <li>2. 使用 Typescript 重写组件</li>
           <li>3. 不再支持 IE，面向现代浏览器</li>
           <li>4. 重写虚拟渲染</li>
           <li>5. 重写渲染器：移除 h 参数</li>
@@ -120,8 +120,8 @@
         <div class="vxe-row support-group">
           <div class="vxe-col--24 support-group-item">
             <div class="support-name">高级用户</div>
-            <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供使用过程中相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
-            <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;">&nbsp;/年</span><vxe-tooltip content="提供使用过程中相关问题的技术支持，有效期一年"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+            <div v-if="supportDiscountPrice" class="support-price">¥ {{ supportDiscountPrice }}<span v-if="supportDiscountPrice" class="support-original-price">¥ {{ supportGroupPrice }}</span><span style="font-size: 12px;color: #606266;"></span><vxe-tooltip content="提供使用过程中相关问题的技术支持"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
+            <div v-else class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;"></span><vxe-tooltip content="提供使用过程中相关问题的技术支持"><i class="fa fa-question-circle price-help-icon"></i></vxe-tooltip></div>
             <vxe-button class="support-btn" status="primary" @click="addQQGroup" :disabled="disabledSupport">申请成为高级用户</vxe-button>
             <ul class="support-describe">
               <li>优质的技术支持群</li>

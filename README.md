@@ -76,7 +76,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 ## 安装
 
-版本：[vue](https://www.npmjs.com/package/vue) 2.6.x, 依赖库：[xe-utils](https://www.npmjs.com/package/xe-utils) 3.x
+版本：[vue](https://www.npmjs.com/package/vue) 2.6.x, 依赖库：[xe-utils](https://www.npmjs.com/package/xe-utils)
 
 ```shell
 npm install xe-utils vxe-table
