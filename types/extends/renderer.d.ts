@@ -47,7 +47,8 @@ export interface RendererMapOptions {
   renderButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): VNode[] | string[];
 
   // 表单-项渲染
-  renderItem?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
+  renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
+  renderItemContent?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
   itemVisibleMethod?(params: FormItemVisibleParams): boolean;
   itemResetMethod?(params: FormItemResetParams): void;
 

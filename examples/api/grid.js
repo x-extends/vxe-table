@@ -59,6 +59,7 @@ const apis = [
       },
       {
         name: 'toolbar',
+        disabled: true,
         descKey: 'app.api.grid.desc.toolbar',
         version: '',
         type: 'Boolean, Object',
@@ -96,11 +97,11 @@ const apis = [
       {
         name: 'toolbar-config',
         descKey: 'app.api.grid.desc.toolbarConfig',
-        version: '',
+        version: '2.9.26',
         type: 'Boolean, Object',
         enum: '',
         defVal: '继承 setup.grid.toolbarConfig',
-        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
+        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list.filter(item => !['id', 'resizable', 'setting'].includes(item.name)), true).concat([{
           name: 'zoom',
           desc: '是否允许最大化显示',
           version: '2.7.0',
