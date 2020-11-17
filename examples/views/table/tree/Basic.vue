@@ -17,7 +17,7 @@
       resizable
       border="inner"
       ref="xTree"
-      :tree-config="{}"
+      :tree-config="{children: 'childs'}"
       :data="demo1.tableData"
       @toggle-tree-expand="toggleExpandChangeEvent">
       <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
@@ -38,8 +38,8 @@
     <vxe-table
       resizable
       row-id="id"
-      :tree-config="{children: 'children', expandRowKeys: demo1.defaultExpandKeys}"
-      :data="demo1.tableData">
+      :tree-config="{children: 'children', expandRowKeys: demo2.defaultExpandKeys}"
+      :data="demo2.tableData">
       <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -59,8 +59,8 @@
       border
       show-overflow
       row-id="id"
-      :data="demo1.tableData"
-      :tree-config="{children: 'children', expandAll: true}">
+      :data="demo3.tableData"
+      :tree-config="{children: 'list', expandAll: true}">
       <vxe-table-column type="seq" width="180" title="序号" tree-node></vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-colgroup title="基本信息">
@@ -90,6 +90,37 @@ export default defineComponent({
     const xTree = ref({} as VxeTableInstance)
 
     const demo1 = reactive({
+      tableData: [
+        { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          childs: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'Test96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              childs: [
+                { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+      ]
+    })
+
+    const demo2 = reactive({
       defaultExpandKeys: [1005],
       tableData: [
         { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
@@ -132,9 +163,42 @@ export default defineComponent({
       VXETable.modal.alert(XEUtils.toString(treeExpandRecords.length))
     }
 
+    const demo3 = reactive({
+      tableData: [
+        { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          list: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'Test96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              list: [
+                { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+      ]
+    })
+
     return {
       xTree,
       demo1,
+      demo2,
+      demo3,
       toggleExpandChangeEvent,
       getTreeExpansionEvent,
       demoCodes: [
@@ -151,8 +215,8 @@ export default defineComponent({
           resizable
           border="inner"
           ref="xTree"
-          :tree-config="{}"
-          :data="tableData"
+          :tree-config="{children: 'childs'}"
+          :data="demo1.tableData"
           @toggle-tree-expand="toggleExpandChangeEvent">
           <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -178,7 +242,7 @@ export default defineComponent({
                   type: 'mp4',
                   size: null,
                   date: '2021-04-01',
-                  children: [
+                  childs: [
                     { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
                     { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
                     {
@@ -187,7 +251,7 @@ export default defineComponent({
                       type: 'avi',
                       size: null,
                       date: '2021-04-01',
-                      children: [
+                      childs: [
                         { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
                         { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
                         { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
@@ -224,8 +288,8 @@ export default defineComponent({
         <vxe-table
           resizable
           row-id="id"
-          :tree-config="{children: 'children', expandRowKeys: defaultExpandKeys}"
-          :data="tableData">
+          :tree-config="{children: 'children', expandRowKeys: demo2.defaultExpandKeys}"
+          :data="demo2.tableData">
           <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -237,7 +301,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const demo1 = reactive({
+            const demo2 = reactive({
               defaultExpandKeys: [1005],
               tableData: [
                 { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
@@ -270,7 +334,7 @@ export default defineComponent({
             })
 
             return {
-              demo1
+              demo2
             }
           }
         }
@@ -280,8 +344,8 @@ export default defineComponent({
           border
           show-overflow
           row-id="id"
-          :data="tableData"
-          :tree-config="{children: 'children', expandAll: true}">
+          :data="demo3.tableData"
+          :tree-config="{children: 'list', expandAll: true}">
           <vxe-table-column type="seq" width="180" title="序号" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-colgroup title="基本信息">
@@ -299,7 +363,7 @@ export default defineComponent({
           setup () {
             const xTree = ref({} as VxeTableInstance)
 
-            const demo1 = reactive({
+            const demo3 = reactive({
               tableData: [
                 { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
                 {
@@ -308,7 +372,7 @@ export default defineComponent({
                   type: 'mp4',
                   size: null,
                   date: '2021-04-01',
-                  children: [
+                  list: [
                     { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
                     { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
                     {
@@ -317,7 +381,7 @@ export default defineComponent({
                       type: 'avi',
                       size: null,
                       date: '2021-04-01',
-                      children: [
+                      list: [
                         { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
                         { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
                         { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
@@ -332,7 +396,7 @@ export default defineComponent({
 
             return {
               xTree,
-              demo1
+              demo3
             }
           }
         }

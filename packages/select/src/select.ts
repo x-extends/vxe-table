@@ -720,7 +720,7 @@ export default defineComponent({
           onClick: togglePanelEvent,
           onFocus: focusEvent,
           onBlur: blurEvent,
-          'onSuffix-click': togglePanelEvent
+          onSuffixClick: togglePanelEvent
         }),
         h(Teleport, {
           to: 'body',

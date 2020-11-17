@@ -11,8 +11,8 @@
       :loading="demo1.loading1"
       :data="demo1.tableData1"
       :edit-config="{trigger: 'manual', mode: 'row'}">
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="nickname" title="Role" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+      <vxe-table-column field="nickname" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: demo1.sexList1}"></vxe-table-column>
       <vxe-table-column field="sex2" title="多选下拉" :edit-render="{name: '$select', options: demo1.sexList1, props: {multiple: true}}"></vxe-table-column>
       <vxe-table-column field="num1" title="Amount" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
@@ -118,8 +118,8 @@ export default defineComponent({
           :loading="demo1.loading1"
           :data="demo1.tableData1"
           :edit-config="{trigger: 'manual', mode: 'row'}">
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="nickname" title="Role" :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+          <vxe-table-column field="nickname" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: demo1.sexList1}"></vxe-table-column>
           <vxe-table-column field="sex2" title="多选下拉" :edit-render="{name: '$select', options: demo1.sexList1, props: {multiple: true}}"></vxe-table-column>
           <vxe-table-column field="num1" title="Amount" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>

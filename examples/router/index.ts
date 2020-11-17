@@ -106,20 +106,20 @@ import GridTemplate from '../views/grid/Template.vue'
 import GridFooter from '../views/grid/Footer.vue'
 // import GridPage from '../views/grid/Page.vue'
 import GridFullQuery from '../views/grid/FullQuery.vue'
-// import GridProxy from '../views/grid/Proxy.vue'
-// import GridPageProxy from '../views/grid/PageProxy.vue'
+import GridProxy from '../views/grid/Proxy.vue'
+import GridPageProxy from '../views/grid/PageProxy.vue'
 // import GridConfigProxy from '../views/grid/ConfigProxy.vue'
 // import GridEdit from '../views/grid/Edit.vue'
 // import GridCellDisable from '../views/grid/CellDisable.vue'
 // import GridRowDisable from '../views/grid/RowDisable.vue'
 // import GridForm from '../views/grid/Form.vue'
 // import GridFormProxy from '../views/grid/FormProxy.vue'
-// import GridToolbar from '../views/grid/Toolbar.vue'
-// import GridCustomToolbar from '../views/grid/CustomToolbar.vue'
-// import GridToolbarIcon from '../views/grid/ToolbarIcon.vue'
+import GridToolbar from '../views/grid/Toolbar.vue'
+import GridCustomToolbar from '../views/grid/CustomToolbar.vue'
+import GridToolbarIcon from '../views/grid/ToolbarIcon.vue'
 import GridFullscreen from '../views/grid/Fullscreen.vue'
 // import GridDynamic from '../views/grid/Dynamic.vue'
-// import GridMenu from '../views/grid/Menu.vue'
+import GridMenu from '../views/grid/Menu.vue'
 // import GridSpan from '../views/grid/Span.vue'
 // import GridUpload from '../views/grid/Upload.vue'
 // import GridTree from '../views/grid/Tree.vue'
@@ -1013,16 +1013,16 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'GridPage',
   //   component: GridPage
   // },
-  // {
-  //   path: '/table/grid/proxy',
-  //   name: 'GridProxy',
-  //   component: GridProxy
-  // },
-  // {
-  //   path: '/table/grid/pageProxy',
-  //   name: 'GridPageProxy',
-  //   component: GridPageProxy
-  // },
+  {
+    path: '/table/grid/proxy',
+    name: 'GridProxy',
+    component: GridProxy
+  },
+  {
+    path: '/table/grid/pageProxy',
+    name: 'GridPageProxy',
+    component: GridPageProxy
+  },
   // {
   //   path: '/table/grid/configProxy',
   //   name: 'GridConfigProxy',
@@ -1053,21 +1053,21 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'GridFormProxy',
   //   component: GridFormProxy
   // },
-  // {
-  //   path: '/table/grid/toolbar',
-  //   name: 'GridToolbar',
-  //   component: GridToolbar
-  // },
-  // {
-  //   path: '/table/grid/customToolbar',
-  //   name: 'GridCustomToolbar',
-  //   component: GridCustomToolbar
-  // },
-  // {
-  //   path: '/table/grid/toolbarIcon',
-  //   name: 'GridToolbarIcon',
-  //   component: GridToolbarIcon
-  // },
+  {
+    path: '/table/grid/toolbar',
+    name: 'GridToolbar',
+    component: GridToolbar
+  },
+  {
+    path: '/table/grid/customToolbar',
+    name: 'GridCustomToolbar',
+    component: GridCustomToolbar
+  },
+  {
+    path: '/table/grid/toolbarIcon',
+    name: 'GridToolbarIcon',
+    component: GridToolbarIcon
+  },
   {
     path: '/table/grid/fullscreen',
     name: 'GridFullscreen',
@@ -1078,11 +1078,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'GridDynamic',
   //   component: GridDynamic
   // },
-  // {
-  //   path: '/table/grid/menu',
-  //   name: 'GridMenu',
-  //   component: GridMenu
-  // },
+  {
+    path: '/table/grid/menu',
+    name: 'GridMenu',
+    component: GridMenu
+  },
   // {
   //   path: '/table/grid/span',
   //   name: 'GridSpan',

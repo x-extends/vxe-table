@@ -1310,20 +1310,20 @@ export default defineComponent({
             //     name: 'GridForm'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.proxy',
-            //   // demoUrl: 'https://jsrun.pro/XwWKp/edit',
-            //   locat: {
-            //     name: 'GridProxy'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.proxyPage',
-            //   // demoUrl: 'https://jsrun.pro/ywWKp/edit',
-            //   locat: {
-            //     name: 'GridPageProxy'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.proxy',
+              // demoUrl: 'https://jsrun.pro/XwWKp/edit',
+              locat: {
+                name: 'GridProxy'
+              }
+            },
+            {
+              label: 'app.aside.nav.proxyPage',
+              // demoUrl: 'https://jsrun.pro/ywWKp/edit',
+              locat: {
+                name: 'GridPageProxy'
+              }
+            },
             // {
             //   label: 'app.aside.nav.formProxy',
             //   locat: {
@@ -1348,24 +1348,24 @@ export default defineComponent({
             //     name: 'GridRowDisable'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.crudToolbar',
-            //   locat: {
-            //     name: 'GridToolbar'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.customToolbar',
-            //   locat: {
-            //     name: 'GridCustomToolbar'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.toolbarIcon',
-            //   locat: {
-            //     name: 'GridToolbarIcon'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.crudToolbar',
+              locat: {
+                name: 'GridToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.customToolbar',
+              locat: {
+                name: 'GridCustomToolbar'
+              }
+            },
+            {
+              label: 'app.aside.nav.toolbarIcon',
+              locat: {
+                name: 'GridToolbarIcon'
+              }
+            },
             {
               label: 'app.aside.nav.fullscreen',
               locat: {
@@ -1378,13 +1378,13 @@ export default defineComponent({
             //     name: 'GridDynamic'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.contextMenu',
-            //   // demoUrl: 'https://jsrun.pro/m6WKp/edit',
-            //   locat: {
-            //     name: 'GridMenu'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.contextMenu',
+              // demoUrl: 'https://jsrun.pro/m6WKp/edit',
+              locat: {
+                name: 'GridMenu'
+              }
+            },
             // // {
             // //   label: 'app.aside.nav.span',
             // //   disabled: true,

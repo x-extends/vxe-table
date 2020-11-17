@@ -416,7 +416,7 @@ const importDataAPI = [
   }
 ]
 
-const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod'].includes(item.name)).concat([
+const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod', 'beforeExportMethod', 'afterExportMethod'].includes(item.name)).concat([
   {
     name: 'content',
     desc: '自定义打印的内容',
@@ -4031,16 +4031,16 @@ const apis = [
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: Row | Row[], callback?: Function',
+        defVal: 'rows?: boolean | Row | Row[], callback?: Function',
         list: []
       },
       {
         name: 'fullValidate(rows, callback)',
-        desc: '完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验',
+        desc: '完整校验，和 validate 的区别就是默认校验当前表格数据并且给有效数据中的每一行进行校验',
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: Row | Row[], callback?: Function',
+        defVal: 'rows?: boolean | Row | Row[], callback?: Function',
         list: []
       },
       {

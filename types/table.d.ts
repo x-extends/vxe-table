@@ -1325,7 +1325,7 @@ export namespace VxeTablePropTypes {
     className?: string;
     visibleMethod?(params: {
       type: string;
-      options: VxeTableDefines.MenuFirstOption[];
+      options: (VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption)[][];
       columns: VxeTableDefines.ColumnInfo[];
       row?: RowInfo;
       rowIndex?: number;
@@ -1844,7 +1844,7 @@ export namespace VxeTableDefines {
   export interface ToggleTreeExpandEventParams extends TableEventParams, ToggleTreeExpandParams { }
 
   export interface MenuClickParams extends TableBaseCellParams {
-    menu: any;
+    menu: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption;
     type: string;
   }
   export interface MenuClickEventParams extends TableEventParams, MenuClickParams { }
@@ -1880,7 +1880,42 @@ export namespace VxeTableDefines {
   export interface CustomEventParams extends TableEventParams, CustomParams { }
 }
 
-export interface VxeTableListeners { }
+export interface VxeTableListeners {
+  onKeydown?: VxeTableEvents.Keydown;
+  onPaste?: VxeTableEvents.Paste;
+  onCopy?: VxeTableEvents.Copy;
+  onCut?: VxeTableEvents.Cut;
+  onCurrentChange?: VxeTableEvents.CurrentChange;
+  onRadioChange?: VxeTableEvents.RadioChange;
+  onCheckboxChange?: VxeTableEvents.CheckboxChange;
+  onCheckboxAll?: VxeTableEvents.CheckboxAll;
+  onCheckboxRangeStart?: VxeTableEvents.CheckboxRangeStart;
+  onCheckboxRangeChange?: VxeTableEvents.CheckboxRangeChange;
+  onCheckboxRangeEnd?: VxeTableEvents.CheckboxRangeEnd;
+  onCellClick?: VxeTableEvents.CellClick;
+  onCellDBLClick?: VxeTableEvents.CellDBLClick;
+  onCellMenu?: VxeTableEvents.CellMenu;
+  onCellMouseenter?: VxeTableEvents.CellMouseenter;
+  onCellMouseleave?: VxeTableEvents.CellMouseleave;
+  onHeaderCellClick?: VxeTableEvents.HeaderCellClick;
+  onHeaderCellDblclick?: VxeTableEvents.HeaderCellDblclick;
+  onHeaderCellMenu?: VxeTableEvents.HeaderCellMenu;
+  onFooterCellClick?: VxeTableEvents.FooterCellClick;
+  onFooterCellDblclick?: VxeTableEvents.FooterCellDblclick;
+  onFooterCellMenu?: VxeTableEvents.FooterCellMenu;
+  onSortChange?: VxeTableEvents.SortChange;
+  onFilterChange?: VxeTableEvents.FilterChange;
+  onResizableChange?: VxeTableEvents.ResizableChange;
+  onToggleRowExpand?: VxeTableEvents.ToggleRowExpand;
+  onToggleTreeExpand?: VxeTableEvents.ToggleTreeExpand;
+  onMenuClick?: VxeTableEvents.MenuClick;
+  onEditClosed?: VxeTableEvents.EditClosed;
+  onEditActived?: VxeTableEvents.EditActived;
+  onEditDisabled?: VxeTableEvents.EditDisabled;
+  onValidError?: VxeTableEvents.ValidError;
+  onScroll?: VxeTableEvents.Scroll;
+  onCustom?: VxeTableEvents.Custom;
+}
 
 export namespace VxeTableEvents {
   export type Keydown = (params: VxeTableDefines.KeydownEventParams) => void;

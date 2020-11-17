@@ -86,7 +86,7 @@
         </template>
         <template #tools>
           <vxe-button type="text" icon="vxe-icon--question" class="tool-btn"></vxe-button>
-          <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn"></vxe-button>
+          <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn" @click="funnelEvent"></vxe-button>
         </template>
       </vxe-toolbar>
 
@@ -109,6 +109,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, nextTick } from 'vue'
+import { VXETable } from '../../../packages/vxe-table'
 import { VxeTableInstance, VxeToolbarInstance } from '../../../types/vxe-table'
 
 export default defineComponent({
@@ -125,6 +126,10 @@ export default defineComponent({
     const xTable = ref({} as VxeTableInstance)
     const xToolbar = ref({} as VxeToolbarInstance)
 
+    const funnelEvent = () => {
+      VXETable.modal.alert({ message: '点击事件' })
+    }
+
     nextTick(() => {
       // 将表格和工具栏进行关联
       const $table = xTable.value
@@ -136,6 +141,7 @@ export default defineComponent({
       demo1,
       xTable,
       xToolbar,
+      funnelEvent,
       demoCodes: [
         `
         <p>
@@ -221,7 +227,7 @@ export default defineComponent({
             </template>
             <template #tools>
               <vxe-button type="text" icon="vxe-icon--question" class="tool-btn"></vxe-button>
-              <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn"></vxe-button>
+              <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn" @click="funnelEvent"></vxe-button>
             </template>
           </vxe-toolbar>
 
@@ -234,7 +240,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, ref, reactive, nextTick } from 'vue'
-        import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+        import { VXETable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
 
         export default defineComponent({
           setup  () {
@@ -250,6 +256,10 @@ export default defineComponent({
             const xTable = ref({} as VxeTableInstance)
             const xToolbar = ref({} as VxeToolbarInstance)
 
+            const funnelEvent = () => {
+              VXETable.modal.alert({ message: '点击事件' })
+            }
+
             nextTick(() => {
               // 将表格和工具栏进行关联
               const $table = xTable.value
@@ -260,7 +270,8 @@ export default defineComponent({
             return {
               demo1,
               xTable,
-              xToolbar
+              xToolbar,
+              funnelEvent
             }
           }
         })

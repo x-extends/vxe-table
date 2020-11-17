@@ -1,9 +1,9 @@
 import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance } from 'vue'
 import { VxeColumnOptions } from './column'
-import { VxeFormInstance, VxeFormOptions } from './form'
+import { VxeFormInstance, VxeFormOptions, VxeFormDefines } from './form'
 import { VxeFormItemOptions } from './form-item'
 import { VxeToolbarInstance, VxeToolbarOptions, VxeToolbarPropTypes } from './toolbar'
-import { VxePagerInstance, VxePagerOptions } from './pager'
+import { VxePagerInstance, VxePagerOptions, VxePagerDefines } from './pager'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, RowInfo, SizeType, ValueOf } from './component'
 import { VxeTableInstance, VxeTableDefines, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
@@ -314,20 +314,145 @@ export namespace VxeGridDefines {
     $grid: VxeGridConstructor;
   }
 
-  export interface CellClickEventParams extends GridEventParams, VxeTableDefines.CellClickEventParams { }
-
-  export interface CellDBLClickEventParams extends GridEventParams, VxeTableDefines.CellDBLClickEventParams { }
-
+  export interface KeydownEventParams extends GridEventParams, VxeTableDefines.KeydownEventParams { }
+  export interface PasteEventParams extends GridEventParams, VxeTableDefines.PasteEventParams { }
+  export interface CopyEventParams extends GridEventParams, VxeTableDefines.CopyEventParams { }
+  export interface CutEventParams extends GridEventParams, VxeTableDefines.CutEventParams { }
+  export interface CurrentChangeEventParams extends GridEventParams, VxeTableDefines.CurrentChangeEventParams { }
+  export interface RadioChangeEventParams extends GridEventParams, VxeTableDefines.RadioChangeEventParams { }
   export interface CheckboxChangeEventParams extends GridEventParams, VxeTableDefines.CheckboxChangeEventParams { }
-
   export interface CheckboxAllEventParams extends GridEventParams, VxeTableDefines.CheckboxAllEventParams { }
+  export interface CheckboxRangeStartEventParams extends GridEventParams, VxeTableDefines.CheckboxRangeStartEventParams { }
+  export interface CheckboxRangeChangeEventParams extends GridEventParams, VxeTableDefines.CheckboxRangeChangeEventParams { }
+  export interface CheckboxRangeEndEventParams extends GridEventParams, VxeTableDefines.CheckboxRangeEndEventParams { }
+  export interface CellClickEventParams extends GridEventParams, VxeTableDefines.CellClickEventParams { }
+  export interface CellDBLClickEventParams extends GridEventParams, VxeTableDefines.CellDBLClickEventParams { }
+  export interface CellMenuEventParams extends GridEventParams, VxeTableDefines.CellMenuEventParams { }
+  export interface CellMouseenterEventParams extends GridEventParams, VxeTableDefines.CellMouseenterEventParams { }
+  export interface CellMouseleaveEventParams extends GridEventParams, VxeTableDefines.CellMouseleaveEventParams { }
+  export interface HeaderCellClickEventParams extends GridEventParams, VxeTableDefines.HeaderCellClickEventParams { }
+  export interface HeaderCellDblclickEventParams extends GridEventParams, VxeTableDefines.HeaderCellDblclickEventParams { }
+  export interface HeaderCellMenuEventParams extends GridEventParams, VxeTableDefines.HeaderCellMenuEventParams { }
+  export interface FooterCellClickEventParams extends GridEventParams, VxeTableDefines.FooterCellClickEventParams { }
+  export interface FooterCellDblclickEventParams extends GridEventParams, VxeTableDefines.FooterCellDblclickEventParams { }
+  export interface FooterCellMenuEventParams extends GridEventParams, VxeTableDefines.FooterCellMenuEventParams { }
+  export interface SortChangeEventParams extends GridEventParams, VxeTableDefines.SortChangeEventParams { }
+  export interface FilterChangeEventParams extends GridEventParams, VxeTableDefines.FilterChangeEventParams { }
+  export interface ResizableChangeEventParams extends GridEventParams, VxeTableDefines.ResizableChangeEventParams { }
+  export interface ToggleRowExpandEventParams extends GridEventParams, VxeTableDefines.ToggleRowExpandEventParams { }
+  export interface ToggleTreeExpandEventParams extends GridEventParams, VxeTableDefines.ToggleTreeExpandEventParams { }
+  export interface MenuClickEventParams extends GridEventParams, VxeTableDefines.MenuClickEventParams { }
+  export interface EditClosedEventParams extends GridEventParams, VxeTableDefines.EditClosedEventParams { }
+  export interface EditActivedEventParams extends GridEventParams, VxeTableDefines.EditActivedEventParams { }
+  export interface EditDisabledEventParams extends GridEventParams, VxeTableDefines.EditDisabledEventParams { }
+  export interface ValidErrorEventParams extends GridEventParams, VxeTableDefines.ValidErrorEventParams { }
+  export interface ScrollEventParams extends GridEventParams, VxeTableDefines.ScrollEventParams { }
+  export interface CustomEventParams extends GridEventParams, VxeTableDefines.CustomEventParams { }
+
+
+  export interface PageChangeEventParams extends GridEventParams, VxePagerDefines.PageChangeEventParams { }
+  export interface FormSubmitEventParams extends GridEventParams, VxeFormDefines.SubmitEventParams { }
+  export interface FormSubmitInvalidEventParams extends GridEventParams, VxeFormDefines.SubmitInvalidParams { }
+  export interface FormResetEventParams extends GridEventParams, VxeFormDefines.ResetEventParams { }
+  export interface FormToggleCollapseEventParams extends GridEventParams, VxeFormDefines.ToggleCollapseEventParams { }
+
+  export interface ToolbarButtonClickParams {
+    code: string;
+  }
+  export interface ToolbarButtonClickEventParams extends GridEventParams, ToolbarButtonClickParams { }
+
+  export interface ZoomParams {
+    type: string;
+  }
+  export interface ZoomEventParams extends GridEventParams, ZoomParams { }
 }
 
-export interface VxeGridListeners { }
+export interface VxeGridListeners {
+  onKeydown?: VxeGridEvents.Keydown;
+  onPaste?: VxeGridEvents.Paste;
+  onCopy?: VxeGridEvents.Copy;
+  onCut?: VxeGridEvents.Cut;
+  onCurrentChange?: VxeGridEvents.CurrentChange;
+  onRadioChange?: VxeGridEvents.RadioChange;
+  onCheckboxChange?: VxeGridEvents.CheckboxChange;
+  onCheckboxAll?: VxeGridEvents.CheckboxAll;
+  onCheckboxRangeStart?: VxeGridEvents.CheckboxRangeStart;
+  onCheckboxRangeChange?: VxeGridEvents.CheckboxRangeChange;
+  onCheckboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd;
+  onCellClick?: VxeGridEvents.CellClick;
+  onCellDBLClick?: VxeGridEvents.CellDBLClick;
+  onCellMenu?: VxeGridEvents.CellMenu;
+  onCellMouseenter?: VxeGridEvents.CellMouseenter;
+  onCellMouseleave?: VxeGridEvents.CellMouseleave;
+  onHeaderCellClick?: VxeGridEvents.HeaderCellClick;
+  onHeaderCellDblclick?: VxeGridEvents.HeaderCellDblclick;
+  onHeaderCellMenu?: VxeGridEvents.HeaderCellMenu;
+  onFooterCellClick?: VxeGridEvents.FooterCellClick;
+  onFooterCellDblclick?: VxeGridEvents.FooterCellDblclick;
+  onFooterCellMenu?: VxeGridEvents.FooterCellMenu;
+  onSortChange?: VxeGridEvents.SortChange;
+  onFilterChange?: VxeGridEvents.FilterChange;
+  onResizableChange?: VxeGridEvents.ResizableChange;
+  onToggleRowExpand?: VxeGridEvents.ToggleRowExpand;
+  onToggleTreeExpand?: VxeGridEvents.ToggleTreeExpand;
+  onMenuClick?: VxeGridEvents.MenuClick;
+  onEditClosed?: VxeGridEvents.EditClosed;
+  onEditActived?: VxeGridEvents.EditActived;
+  onEditDisabled?: VxeGridEvents.EditDisabled;
+  onValidError?: VxeGridEvents.ValidError;
+  onScroll?: VxeGridEvents.Scroll;
+  onCustom?: VxeGridEvents.Custom;
+
+  onPageChange?: VxeGridEvents.PageChange;
+  onFormSubmitEvent?: VxeGridEvents.FormSubmitEvent;
+  onFormSubmitInvalid?: VxeGridEvents.FormSubmitInvalid;
+  onFormReset?: VxeGridEvents.FormReset;
+  onFormToggleCollapse?: VxeGridEvents.FormToggleCollapse;
+  onToolbarButtonClick?: VxeGridEvents.ToolbarButtonClick;
+  onZoom?: VxeGridEvents.Zoom;
+}
 
 export namespace VxeGridEvents {
-  export type CellClick = (params: VxeGridDefines.CellClickEventParams) => void;
-  export type CellDBLClick = (params: VxeGridDefines.CellDBLClickEventParams) => void;
+  export type Keydown = (params: VxeGridDefines.KeydownEventParams) => void;
+  export type Paste = (params: VxeGridDefines.PasteEventParams) => void;
+  export type Copy = (params: VxeGridDefines.CopyEventParams) => void;
+  export type Cut = (params: VxeGridDefines.CutEventParams) => void;
+  export type CurrentChange = (params: VxeGridDefines.CurrentChangeEventParams) => void;
+  export type RadioChange = (params: VxeGridDefines.RadioChangeEventParams) => void;
   export type CheckboxChange = (params: VxeGridDefines.CheckboxChangeEventParams) => void;
   export type CheckboxAll = (params: VxeGridDefines.CheckboxAllEventParams) => void;
+  export type CheckboxRangeStart = (params: VxeGridDefines.CheckboxRangeStartEventParams) => void;
+  export type CheckboxRangeChange = (params: VxeGridDefines.CheckboxRangeChangeEventParams) => void;
+  export type CheckboxRangeEnd = (params: VxeGridDefines.CheckboxRangeEndEventParams) => void;
+  export type CellClick = (params: VxeGridDefines.CellClickEventParams) => void;
+  export type CellDBLClick = (params: VxeGridDefines.CellDBLClickEventParams) => void;
+  export type CellMenu = (params: VxeGridDefines.CellMenuEventParams) => void;
+  export type CellMouseenter = (params: VxeGridDefines.CellMouseenterEventParams) => void;
+  export type CellMouseleave = (params: VxeGridDefines.CellMouseleaveEventParams) => void;
+  export type HeaderCellClick = (params: VxeGridDefines.HeaderCellClickEventParams) => void;
+  export type HeaderCellDblclick = (params: VxeGridDefines.HeaderCellDblclickEventParams) => void;
+  export type HeaderCellMenu = (params: VxeGridDefines.HeaderCellMenuEventParams) => void;
+  export type FooterCellClick = (params: VxeGridDefines.FooterCellClickEventParams) => void;
+  export type FooterCellDblclick = (params: VxeGridDefines.FooterCellDblclickEventParams) => void;
+  export type FooterCellMenu = (params: VxeGridDefines.FooterCellMenuEventParams) => void;
+  export type SortChange = (params: VxeGridDefines.SortChangeEventParams) => void;
+  export type FilterChange = (params: VxeGridDefines.FilterChangeEventParams) => void;
+  export type ResizableChange = (params: VxeGridDefines.ResizableChangeEventParams) => void;
+  export type ToggleRowExpand = (params: VxeGridDefines.ToggleRowExpandEventParams) => void;
+  export type ToggleTreeExpand = (params: VxeGridDefines.ToggleTreeExpandEventParams) => void;
+  export type MenuClick = (params: VxeGridDefines.MenuClickEventParams) => void;
+  export type EditClosed = (params: VxeGridDefines.EditClosedEventParams) => void;
+  export type EditActived = (params: VxeGridDefines.EditActivedEventParams) => void;
+  export type EditDisabled = (params: VxeGridDefines.EditDisabledEventParams) => void;
+  export type ValidError = (params: VxeGridDefines.ValidErrorEventParams) => void;
+  export type Scroll = (params: VxeGridDefines.ScrollEventParams) => void;
+  export type Custom = (params: VxeGridDefines.CustomEventParams) => void;
+
+  export type PageChange = (params: VxeGridDefines.PageChangeEventParams) => void;
+  export type FormSubmitEvent = (params: VxeGridDefines.FormSubmitEventParams) => void;
+  export type FormSubmitInvalid = (params: VxeGridDefines.FormSubmitInvalidParams) => void;
+  export type FormReset = (params: VxeGridDefines.FormResetParams) => void;
+  export type FormToggleCollapse = (params: VxeGridDefines.FormToggleCollapseParams) => void;
+  export type ToolbarButtonClick = (params: VxeGridDefines.ToolbarButtonClickParams) => void;
+  export type Zoom = (params: VxeGridDefines.ZoomParams) => void;
 }
