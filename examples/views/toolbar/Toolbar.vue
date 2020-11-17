@@ -86,7 +86,7 @@
         </template>
         <template v-slot:tools>
           <vxe-button type="text" icon="vxe-icon--question" class="tool-btn"></vxe-button>
-          <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn"></vxe-button>
+          <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn" @click="funnelEvent"></vxe-button>
         </template>
       </vxe-toolbar>
 
@@ -203,7 +203,7 @@ export default {
             </template>
             <template v-slot:tools>
               <vxe-button type="text" icon="vxe-icon--question" class="tool-btn"></vxe-button>
-              <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn"></vxe-button>
+              <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn" @click="funnelEvent"></vxe-button>
             </template>
           </vxe-toolbar>
 
@@ -233,6 +233,11 @@ export default {
               const xTable = this.$refs.xTable
               xTable.connect(this.$refs.xToolbar)
             })
+          },
+          methods: {
+            funnelEvent () {
+              this.$XModal.alert({ message: '点击事件' })
+            }
           }
         }
         `,
@@ -254,6 +259,11 @@ export default {
       const xTable = this.$refs.xTable
       xTable.connect(this.$refs.xToolbar)
     })
+  },
+  methods: {
+    funnelEvent () {
+      this.$XModal.alert({ message: '点击事件' })
+    }
   }
 }
 </script>

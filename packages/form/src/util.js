@@ -27,7 +27,7 @@ class ItemConfig {
     })
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       const compConf = _vm.itemRender ? VXETable.renderer.get(_vm.itemRender.name) : null
-      if (compConf && compConf.renderItem) {
+      if (compConf && !compConf.renderItemContent && compConf.renderItem) {
         UtilTools.warn('vxe.error.delProp', ['item-render.renderItem', 'item-render.renderItemContent'])
       }
     }

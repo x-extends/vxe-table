@@ -8,13 +8,14 @@
       max-height="600"
       :loading="loading"
       :data="tableData"
+      :sort-config="{remote: true}"
       :tree-config="{children: 'children'}"
       @sort-change="sortChangeEvent">
       <vxe-table-column field="id" title="ID" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="名称" tree-node></vxe-table-column>
       <vxe-table-column field="size" title="大小" width="140"></vxe-table-column>
       <vxe-table-column field="type" title="类型" width="140"></vxe-table-column>
-      <vxe-table-column field="date" title="修改日期" width="260" sortable remote-sort></vxe-table-column>
+      <vxe-table-column field="date" title="修改日期" width="260" sortable></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -43,13 +44,14 @@ export default {
           max-height="600"
           :loading="loading"
           :data="tableData"
+          :sort-config="{remote: true}"
           :tree-config="{children: 'children'}"
           @sort-change="sortChangeEvent">
           <vxe-table-column field="id" title="ID" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="名称" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="大小" width="140"></vxe-table-column>
           <vxe-table-column field="type" title="类型" width="140"></vxe-table-column>
-          <vxe-table-column field="date" title="修改日期" width="260" sortable remote-sort></vxe-table-column>
+          <vxe-table-column field="date" title="修改日期" width="260" sortable></vxe-table-column>
         </vxe-table>
         `,
         `
