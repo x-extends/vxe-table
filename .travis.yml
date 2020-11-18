@@ -1,5 +1,5 @@
 language: node_js
-node_js: stable
+node_js: 14
 script: npm run build && npm run lib
 notifications:
   email: false
