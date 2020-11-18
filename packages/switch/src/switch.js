@@ -27,6 +27,7 @@ export default {
   },
   data () {
     return {
+      isActivated: false,
       hasAnimat: false,
       offsetLeft: 0
     }

@@ -512,6 +512,8 @@ export default {
           if (isEsc || isTab) {
             this.hideOptionPanel()
           } else if (isEnter) {
+            evnt.preventDefault()
+            evnt.stopPropagation()
             this.changeOptionEvent(evnt, currentValue)
           } else if (isUpArrow || isDwArrow) {
             evnt.preventDefault()
@@ -550,6 +552,9 @@ export default {
     },
     blurEvent () {
       this.isActivated = false
+    },
+    isPanelVisible () {
+      return this.visiblePanel
     },
     togglePanelEvent (params) {
       const { $event } = params
@@ -659,11 +664,13 @@ export default {
       })
     },
     focus () {
-      this.showOptionPanel()
+      this.isActivated = true
+      this.$refs.input.focus()
       return this.$nextTick()
     },
     blur () {
-      this.hideOptionPanel()
+      this.$refs.input.blur()
+      this.isActivated = false
       return this.$nextTick()
     }
   }

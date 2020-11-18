@@ -710,13 +710,19 @@ export default {
     },
     dateValue () {
       const { value, isDatePicker, type, dateValueFormat } = this
+      let val = null
       if (value && isDatePicker) {
+        let date
         if (type === 'time') {
-          return toStringTime(value, dateValueFormat)
+          date = toStringTime(value)
+        } else {
+          date = XEUtils.toStringDate(value, dateValueFormat)
         }
-        return XEUtils.toStringDate(value, dateValueFormat)
+        if (XEUtils.isValidDate(date)) {
+          val = date
+        }
       }
-      return null
+      return val
     },
     dateTimeLabel () {
       const { datetimePanelValue } = this
@@ -1033,11 +1039,13 @@ export default {
   },
   methods: {
     focus () {
+      this.isActivated = true
       this.$refs.input.focus()
       return this.$nextTick()
     },
     blur () {
       this.$refs.input.blur()
+      this.isActivated = false
       return this.$nextTick()
     },
     triggerEvent (evnt) {
@@ -1064,6 +1072,9 @@ export default {
     },
     blurEvent (evnt) {
       this.afterCheckValue()
+      if (!this.visiblePanel) {
+        this.isActivated = false
+      }
       this.triggerEvent(evnt)
     },
     keydownEvent (evnt) {
