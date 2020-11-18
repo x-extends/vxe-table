@@ -450,9 +450,9 @@ export namespace VxeGridEvents {
 
   export type PageChange = (params: VxeGridDefines.PageChangeEventParams) => void;
   export type FormSubmitEvent = (params: VxeGridDefines.FormSubmitEventParams) => void;
-  export type FormSubmitInvalid = (params: VxeGridDefines.FormSubmitInvalidParams) => void;
-  export type FormReset = (params: VxeGridDefines.FormResetParams) => void;
-  export type FormToggleCollapse = (params: VxeGridDefines.FormToggleCollapseParams) => void;
-  export type ToolbarButtonClick = (params: VxeGridDefines.ToolbarButtonClickParams) => void;
-  export type Zoom = (params: VxeGridDefines.ZoomParams) => void;
+  export type FormSubmitInvalid = (params: VxeGridDefines.FormSubmitInvalidEventParams) => void;
+  export type FormReset = (params: VxeGridDefines.FormResetEventParams) => void;
+  export type FormToggleCollapse = (params: VxeGridDefines.FormToggleCollapseEventParams) => void;
+  export type ToolbarButtonClick = (params: VxeGridDefines.ToolbarButtonClickEventParams) => void;
+  export type Zoom = (params: VxeGridDefines.ZoomEventParams) => void;
 }
