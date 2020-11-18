@@ -9,7 +9,7 @@ const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 const yearSize = 20
 const monthSize = 20
 
-function toStringTime (str) {
+function toStringTimeDate (str) {
   if (str) {
     const rest = new Date()
     let h, m, s
@@ -709,13 +709,19 @@ export default {
     },
     dateValue () {
       const { value, isDatePicker, type, dateValueFormat } = this
+      let val = null
       if (value && isDatePicker) {
+        let date
         if (type === 'time') {
-          return toStringTime(value, dateValueFormat)
+          date = toStringTimeDate(value)
+        } else {
+          date = XEUtils.toStringDate(value, dateValueFormat)
         }
-        return XEUtils.toStringDate(value, dateValueFormat)
+        if (XEUtils.isValidDate(date)) {
+          val = date
+        }
       }
-      return null
+      return val
     },
     dateTimeLabel () {
       const { datetimePanelValue } = this
@@ -1029,11 +1035,13 @@ export default {
   },
   methods: {
     focus () {
+      this.isActivated = true
       this.$refs.input.focus()
       return this.$nextTick()
     },
     blur () {
       this.$refs.input.blur()
+      this.isActivated = false
       return this.$nextTick()
     },
     triggerEvent (evnt) {
@@ -1060,6 +1068,9 @@ export default {
     },
     blurEvent (evnt) {
       this.afterCheckValue()
+      if (!this.visiblePanel) {
+        this.isActivated = false
+      }
       this.triggerEvent(evnt)
     },
     keydownEvent (evnt) {
@@ -1164,7 +1175,7 @@ export default {
           let inpVal = inputValue
           if (inpVal) {
             if (type === 'time') {
-              inpVal = toStringTime(inpVal, dateLabelFormat)
+              inpVal = toStringTimeDate(inpVal, dateLabelFormat)
             } else {
               inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
             }
@@ -1465,7 +1476,7 @@ export default {
       let dLabel = ''
       if (date) {
         if (type === 'time') {
-          dValue = toStringTime(date, parseFormat)
+          dValue = toStringTimeDate(date, parseFormat)
         } else {
           dValue = XEUtils.toStringDate(date, parseFormat)
         }

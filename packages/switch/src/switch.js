@@ -1,5 +1,4 @@
 import { UtilTools, DomTools } from '../../tools'
-import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 
@@ -17,31 +16,24 @@ export default {
     openValue: { type: [String, Number, Boolean], default: true },
     closeValue: { type: [String, Number, Boolean], default: false },
     openIcon: String,
-    closeIcon: String,
-
-    // 在 v4 中废弃 onLabel、offLabel、onValue、offValue、onIcon、offIcon
-    onLabel: String,
-    offLabel: String,
-    onValue: { type: [String, Number, Boolean], default: true },
-    offValue: { type: [String, Number, Boolean], default: false },
-    onIcon: String,
-    offIcon: String
+    closeIcon: String
   },
   data () {
     return {
+      isActivated: false,
       hasAnimat: false,
       offsetLeft: 0
     }
   },
   computed: {
     isChecked () {
-      return XEUtils.isBoolean(this.onValue) ? this.value === this.openValue : this.value === this.onValue
+      return this.value === this.openValue
     },
     onShowLabel () {
-      return UtilTools.getFuncText(this.openLabel || this.onLabel)
+      return UtilTools.getFuncText(this.openLabel)
     },
     offShowLabel () {
-      return UtilTools.getFuncText(this.closeLabel || this.offLabel)
+      return UtilTools.getFuncText(this.closeLabel)
     },
     styles () {
       return browse.msie && this.isChecked ? {
@@ -50,34 +42,12 @@ export default {
     }
   },
   created () {
-    // 在 v3 中废弃 onLabel、offLabel、onValue、offValue、onIcon、offIcon
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      const { propsData } = this.$options
-      if (propsData.onLabel) {
-        UtilTools.error('vxe.error.delProp', ['on-label', 'open-label'])
-      }
-      if (propsData.offLabel) {
-        UtilTools.error('vxe.error.delProp', ['off-label', 'close-label'])
-      }
-      if (propsData.onValue) {
-        UtilTools.error('vxe.error.delProp', ['on-value', 'open-value'])
-      }
-      if (propsData.offValue) {
-        UtilTools.error('vxe.error.delProp', ['off-value', 'close-value'])
-      }
-      if (propsData.onIcon) {
-        UtilTools.error('vxe.error.delProp', ['on-icon', 'open-icon'])
-      }
-      if (propsData.offIcon) {
-        UtilTools.error('vxe.error.delProp', ['off-icon', 'close-icon'])
-      }
-    }
     if (browse.msie) {
       this.$nextTick(() => this.updateStyle())
     }
   },
   render (h) {
-    const { isChecked, vSize, disabled, openIcon, onIcon, closeIcon, offIcon } = this
+    const { isChecked, vSize, disabled, openIcon, closeIcon } = this
     return h('div', {
       class: ['vxe-switch', isChecked ? 'is--on' : 'is--off', {
         [`size--${vSize}`]: vSize,
@@ -93,22 +63,24 @@ export default {
           disabled: disabled
         },
         on: {
-          click: this.clickEvent
+          click: this.clickEvent,
+          focus: this.focusEvent,
+          blur: this.blurEvent
         }
       }, [
         h('span', {
           class: 'vxe-switch--label vxe-switch--label-on'
         }, [
-          (openIcon || onIcon) ? h('i', {
-            class: ['vxe-switch--label-icon', openIcon || onIcon]
+          openIcon ? h('i', {
+            class: ['vxe-switch--label-icon', openIcon]
           }) : null,
           this.onShowLabel
         ]),
         h('span', {
           class: 'vxe-switch--label vxe-switch--label-off'
         }, [
-          (closeIcon || offIcon) ? h('i', {
-            class: ['vxe-switch--label-icon', closeIcon || offIcon]
+          closeIcon ? h('i', {
+            class: ['vxe-switch--label-icon', closeIcon]
           }) : null,
           this.offShowLabel
         ]),
@@ -128,7 +100,7 @@ export default {
     clickEvent (evnt) {
       if (!this.disabled) {
         clearTimeout(this.activeTimeout)
-        const value = this.isChecked ? (XEUtils.isBoolean(this.offValue) ? this.closeValue : this.offValue) : (XEUtils.isBoolean(this.onValue) ? this.openValue : this.onValue)
+        const value = this.isChecked ? this.closeValue : this.openValue
         this.hasAnimat = true
         if (browse.msie) {
           this.updateStyle()
@@ -139,6 +111,14 @@ export default {
           this.hasAnimat = false
         }, 400)
       }
+    },
+    focusEvent (evnt) {
+      this.isActivated = true
+      this.$emit('focus', { value: this.value, $event: evnt })
+    },
+    blurEvent (evnt) {
+      this.isActivated = false
+      this.$emit('blur', { value: this.value, $event: evnt })
     }
   }
 }
