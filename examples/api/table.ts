@@ -878,16 +878,16 @@ const apis = [
         defVal: '默认 false，继承 setup.table.keepSource',
         list: []
       },
-      {
-        name: 'z-index',
-        abandoned: true,
-        descKey: 'app.api.table.desc.zIndex',
-        version: '',
-        type: 'number',
-        enum: '',
-        defVal: '继承 setup.table.zIndex',
-        list: []
-      },
+      // {
+      //   name: 'z-index',
+      //   abandoned: true,
+      //   descKey: 'app.api.table.desc.zIndex',
+      //   version: '',
+      //   type: 'number',
+      //   enum: '',
+      //   defVal: '继承 setup.table.zIndex',
+      //   list: []
+      // },
       {
         name: 'column-config',
         desc: '列的默认参数',
@@ -2243,36 +2243,36 @@ const apis = [
           }
         ]
       },
-      {
-        name: 'animat',
-        abandoned: true,
-        desc: '表格动画效果开关（关闭后视觉效果更快）',
-        version: '',
-        type: 'boolean',
-        enum: '',
-        defVal: '默认 true，继承 setup.table.animat',
-        list: []
-      },
-      {
-        name: 'cloak',
-        abandoned: true,
-        desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
-        version: '',
-        type: 'boolean',
-        enum: '',
-        defVal: '默认 false，继承 setup.table.cloak',
-        list: []
-      },
-      {
-        name: 'delay-hover',
-        abandoned: true,
-        desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
-        version: '',
-        type: 'number',
-        enum: '',
-        defVal: '默认 250，继承 setup.table.delayHover',
-        list: []
-      },
+      // {
+      //   name: 'animat',
+      //   abandoned: true,
+      //   desc: '表格动画效果开关（关闭后视觉效果更快）',
+      //   version: '',
+      //   type: 'boolean',
+      //   enum: '',
+      //   defVal: '默认 true，继承 setup.table.animat',
+      //   list: []
+      // },
+      // {
+      //   name: 'cloak',
+      //   abandoned: true,
+      //   desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
+      //   version: '',
+      //   type: 'boolean',
+      //   enum: '',
+      //   defVal: '默认 false，继承 setup.table.cloak',
+      //   list: []
+      // },
+      // {
+      //   name: 'delay-hover',
+      //   abandoned: true,
+      //   desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
+      //   version: '',
+      //   type: 'number',
+      //   enum: '',
+      //   defVal: '默认 250，继承 setup.table.delayHover',
+      //   list: []
+      // },
       {
         name: 'scroll-x',
         desc: '横向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）',

@@ -40,7 +40,7 @@ interface DateHourMinuteSecondItem {
 const yearSize = 20
 const monthSize = 20
 
-function toStringTime (str: VxeInputPropTypes.ModelValue) {
+function toStringTimeDate (str: VxeInputPropTypes.ModelValue) {
   if (str) {
     const rest = new Date()
     let h = 0
@@ -233,13 +233,19 @@ export default defineComponent({
       const { modelValue, type } = props
       const isDatePickerType = computeIsDatePickerType.value
       const dateValueFormat = computeDateValueFormat.value
+      let val = null
       if (modelValue && isDatePickerType) {
+        let date
         if (type === 'time') {
-          return toStringTime(modelValue)
+          date = toStringTimeDate(modelValue)
+        } else {
+          date = XEUtils.toStringDate(modelValue, dateValueFormat)
         }
-        return XEUtils.toStringDate(modelValue, dateValueFormat)
+        if (XEUtils.isValidDate(date)) {
+          val = date
+        }
       }
-      return null
+      return val
     })
 
     const computeIsDisabledPrevDateBtn = computed(() => {
@@ -596,7 +602,7 @@ export default defineComponent({
       let dLabel = ''
       if (value) {
         if (type === 'time') {
-          dValue = toStringTime(value)
+          dValue = toStringTimeDate(value)
         } else {
           dValue = XEUtils.toStringDate(value, parseFormat)
         }
@@ -704,7 +710,7 @@ export default defineComponent({
           inpVal = inputValue
           if (inpVal) {
             if (type === 'time') {
-              inpVal = toStringTime(inpVal)
+              inpVal = toStringTimeDate(inpVal)
             } else {
               inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
             }
@@ -739,6 +745,9 @@ export default defineComponent({
 
     const blurEvent = (evnt: Event & { type: 'blur' }) => {
       afterCheckValue()
+      if (!reactData.visiblePanel) {
+        reactData.isActivated = false
+      }
       triggerEvent(evnt)
     }
 
@@ -1952,12 +1961,14 @@ export default defineComponent({
 
       focus () {
         const inputElem = refInputTarget.value
+        reactData.isActivated = true
         inputElem.focus()
         return nextTick()
       },
       blur () {
         const inputElem = refInputTarget.value
         inputElem.blur()
+        reactData.isActivated = false
         return nextTick()
       }
     }

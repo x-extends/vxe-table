@@ -4,6 +4,26 @@ import router from './router'
 import store from './store'
 import i18n from './i18n'
 
+import 'font-awesome/css/font-awesome.css'
+import './assets/style/index.scss'
+import './plugins'
+
+import PreCode from './components/PreCode.vue'
+import GridAPILink from './components/GridAPILink.vue'
+import TableAPILink from './components/TableAPILink.vue'
+import TableColumnAPILink from './components/TableColumnAPILink.vue'
+import ToolbarAPILink from './components/ToolbarAPILink.vue'
+import PagerAPILink from './components/PagerAPILink.vue'
+import VirtualTreeAPILink from './components/VirtualTreeAPILink.vue'
+
+import EditDownTable from './plugins/table/renderer/components/EditDownTable.vue'
+import EditPopupModal from './plugins/table/renderer/components/EditPopupModal.vue'
+import EditDownModal from './plugins/table/renderer/components/EditDownModal.vue'
+import FilterInput from './plugins/table/renderer/components/FilterInput.vue'
+import FilterContent from './plugins/table/renderer/components/FilterContent.vue'
+import FilterComplex from './plugins/table/renderer/components/FilterComplex.vue'
+import FilterExcel from './plugins/table/renderer/components/FilterExcel.vue'
+
 import {
   VXETable,
   Table,
@@ -33,26 +53,6 @@ import {
   Keyboard,
   Validator
 } from '../packages/vxe-table'
-
-import 'font-awesome/css/font-awesome.css'
-import './assets/style/index.scss'
-import './plugins'
-
-import PreCode from './components/PreCode.vue'
-import GridAPILink from './components/GridAPILink.vue'
-import TableAPILink from './components/TableAPILink.vue'
-import TableColumnAPILink from './components/TableColumnAPILink.vue'
-import ToolbarAPILink from './components/ToolbarAPILink.vue'
-import PagerAPILink from './components/PagerAPILink.vue'
-import VirtualTreeAPILink from './components/VirtualTreeAPILink.vue'
-
-import EditDownTable from './plugins/table/renderer/components/EditDownTable.vue'
-import EditPopupModal from './plugins/table/renderer/components/EditPopupModal.vue'
-import EditDownModal from './plugins/table/renderer/components/EditDownModal.vue'
-import FilterInput from './plugins/table/renderer/components/FilterInput.vue'
-import FilterContent from './plugins/table/renderer/components/FilterContent.vue'
-import FilterComplex from './plugins/table/renderer/components/FilterComplex.vue'
-import FilterExcel from './plugins/table/renderer/components/FilterExcel.vue'
 
 const app = createApp(App)
 

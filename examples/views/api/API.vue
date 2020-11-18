@@ -483,7 +483,7 @@ export default defineComponent({
       loadList()
     })
 
-    watch(i18n.global.locale, () => {
+    watch(() => i18n.global.locale, () => {
       loadList()
     })
 

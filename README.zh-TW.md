@@ -19,7 +19,7 @@
   * 模組化表格、按需加載、擴展介面
   * 為單行編輯表格而設計，支持增删改查及更多擴展，强大的功能的同時兼具效能
 
-* [計劃](#donation)
+* 計劃
   * [x] v1.0 基於 vue2.6+，支持所有主流的瀏覽器，實現表格的一切實用的功能
   * [x] v2.0 基於 vue2.6+，支持所有主流的瀏覽器，同時兼具功能與效能
   * [x] v3.0 基於 vue2.6+，只支持現代瀏覽器，不支持IE，渲染效能大幅提升
@@ -118,7 +118,7 @@ app.use(VXETable)
 ```html
 <template>
   <div>
-    <vxe-table :data="demo1.tableData">
+    <vxe-table :data="tableData">
       <vxe-table-column type="seq" title="Seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -129,19 +129,17 @@ app.use(VXETable)
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   setup () {
-    const demo1 = reactive({
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
-      ]
-    })
+    const tableData = ref([
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
+    ])
     return {
-      demo1
+      tableData
     }
   }
 })
@@ -154,12 +152,11 @@ export default defineComponent({
 [👉 查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic)  
 [👉 查看檔案](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)
 
-## Donation
+## 捐贈
 
-如果您覺得我們的開源軟件對妳有所幫助，請掃下方二維碼打賞我們壹杯咖啡。☕  
+如果您覺得我們的開源軟件對您有所幫助，可以掃下方二維碼支持我們。☕  
 
-由於維護一個開源項目需要花費非常大的精力與時間，如果您正在使用該項目，您的捐贈會幫助該項目能持續發展下去  
-[👉 該組件對我有幫助，支持作者💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
+[👉 支持作者💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 
 ## License
 

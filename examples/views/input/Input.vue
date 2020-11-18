@@ -28,7 +28,7 @@
     </p>
 
     <p>
-      <vxe-input v-model="demo1.value400" placeholder="日期选择" type="date"></vxe-input>
+      <vxe-input v-model="demo1.value400" placeholder="日期选择" type="date" parse-format="yyyy-dd-MM"></vxe-input>
       <vxe-input v-model="demo1.value401" placeholder="周选择" type="week" clearable></vxe-input>
       <vxe-input v-model="demo1.value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
       <vxe-input v-model="demo1.value403" placeholder="年选择" type="year" clearable></vxe-input>
@@ -118,7 +118,7 @@ export default defineComponent({
       value301: '',
       value302: '',
       value303: '',
-      value400: '2018-01-09',
+      value400: '2018-09-01',
       value401: '',
       value402: '',
       value403: '',

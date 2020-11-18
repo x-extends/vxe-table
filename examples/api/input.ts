@@ -216,15 +216,15 @@ const apis = [
         defVal: '继承 setup.input.labelFormat',
         list: []
       },
-      {
-        name: 'parse-format',
-        desc: '只对 type=date|datetime|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
-        version: '',
-        type: 'string',
-        enum: '',
-        defVal: '继承 setup.input.parseFormat',
-        list: []
-      },
+      // {
+      //   name: 'parse-format',
+      //   desc: '只对 type=date|datetime|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
+      //   version: '',
+      //   type: 'string',
+      //   enum: '',
+      //   defVal: '继承 setup.input.parseFormat',
+      //   list: []
+      // },
       {
         name: 'value-format',
         desc: '只对 type=date|datetime|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',

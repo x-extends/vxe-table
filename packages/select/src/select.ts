@@ -4,7 +4,7 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeGlobalRendererHandles, SelectMethods, SelectPrivateRef, VxeSelectMethods } from '../../../types/vxe-table'
+import { SizeType, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeGlobalRendererHandles, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor } from '../../../types/vxe-table'
 
 function isOptionVisible (option: any) {
   return option.visible !== false
@@ -66,6 +66,7 @@ export default defineComponent({
     } as SelectReactData)
 
     const refElem = ref() as Ref<HTMLDivElement>
+    const refInput = ref() as Ref<VxeInputConstructor>
     const refOptionWrapper = ref() as Ref<HTMLDivElement>
     const refOptionPanel = ref() as Ref<HTMLDivElement>
 
@@ -499,6 +500,8 @@ export default defineComponent({
           if (isEsc || isTab) {
             hideOptionPanel()
           } else if (isEnter) {
+            evnt.preventDefault()
+            evnt.stopPropagation()
             changeOptionEvent(evnt, currentValue)
           } else if (isUpArrow || isDwArrow) {
             evnt.preventDefault()
@@ -631,12 +634,40 @@ export default defineComponent({
       dispatchEvent (type, params, evnt) {
         emit(type, Object.assign({ $select: $xeselect, $event: evnt }, params))
       },
+      isPanelVisible () {
+        return reactData.visiblePanel
+      },
+      togglePanel () {
+        if (reactData.visiblePanel) {
+          hideOptionPanel()
+        } else {
+          showOptionPanel()
+        }
+        return nextTick()
+      },
+      hidePanel () {
+        if (reactData.visiblePanel) {
+          hideOptionPanel()
+        }
+        return nextTick()
+      },
+      showPanel () {
+        if (!reactData.visiblePanel) {
+          showOptionPanel()
+        }
+        return nextTick()
+      },
+      refreshOption,
       focus () {
-        showOptionPanel()
+        const $input = refInput.value
+        reactData.isActivated = true
+        $input.blur()
         return nextTick()
       },
       blur () {
-        hideOptionPanel()
+        const $input = refInput.value
+        $input.blur()
+        reactData.isActivated = false
         return nextTick()
       }
     }
@@ -707,7 +738,7 @@ export default defineComponent({
           ref: 'hideOption'
         }, slots.default ? slots.default({}) : []),
         h(InputComponent, {
-          ref: 'input',
+          ref: refInput,
           clearable: props.clearable,
           placeholder: props.placeholder,
           readonly: true,

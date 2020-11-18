@@ -19,7 +19,7 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
   * Modular tables, on-demand loading, extended interfaces
   * Designed for single row table editing, supports addition, deletion, modification and query as well as more expansion, with powerful functions and performance at the same time
 
-* [Donation](#donation)
+* Plan
   * [x] v1.0 Based on vue2.6+, it supports all mainstream browsers and realizes all practical functions of tables
   * [x] v2.0 Based on vue2.6+, it supports all mainstream browsers with both functions and performance
   * [x] v3.0 Based on vue2.6+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
@@ -118,7 +118,7 @@ app.use(VXETable)
 ```html
 <template>
   <div>
-    <vxe-table :data="demo1.tableData">
+    <vxe-table :data="tableData">
       <vxe-table-column type="seq" title="Seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -129,19 +129,17 @@ app.use(VXETable)
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   setup () {
-    const demo1 = reactive({
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
-      ]
-    })
+    const tableData = ref([
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
+    ])
     return {
-      demo1
+      tableData
     }
   }
 })
@@ -154,12 +152,11 @@ export default defineComponent({
 [👉 View example](https://x-extends.github.io/vxe-table/#/table/base/basic)  
 [👉 View API](https://x-extends.github.io/vxe-table/#/table/api)
 
-## Donation
+## Donate
 
-If you feel that our open source software is helpful to you, please scan the QR code below to enjoy a cup of coffee.☕  
+If you think our open source software is helpful to you, you can scan the QR code below to support us.☕  
 
-Because maintaining an open source project takes a lot of effort and time, if you are using the project, your donation will help keep the project going.  
-[👉 This component is helpful to me and supports the author💰](https://x-extends.github.io/vxe-table/#/donation/api)  
+[👉 Supports the author💰](https://x-extends.github.io/vxe-table/#/donation/api)  
 
 ## License
 

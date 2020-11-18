@@ -2442,7 +2442,7 @@ export default defineComponent({
       setTimeout(() => defaultExpand(), 1500)
     }
 
-    watch(i18n.global.locale, (value) => {
+    watch(() => i18n.global.locale, (value) => {
       localStorage.setItem('language', value)
       loadList()
       defaultExpand()

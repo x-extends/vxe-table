@@ -21,7 +21,9 @@ export default defineComponent({
   },
   emits: [
     'update:modelValue',
-    'change'
+    'change',
+    'focus',
+    'blur'
   ] as VxeSwitchEmits,
   setup (props, context) {
     const { emit } = context
@@ -31,6 +33,7 @@ export default defineComponent({
     const computeSize = useSize(props)
 
     const reactData = reactive({
+      isActivated: false,
       hasAnimat: false,
       offsetLeft: 0
     } as SwitchReactData)
@@ -59,7 +62,7 @@ export default defineComponent({
     })
 
     let _atimeout: any
-    const clickEvent = (evnt: any) => {
+    const clickEvent = (evnt: Event) => {
       if (!props.disabled) {
         const isChecked = computeIsChecked.value
         clearTimeout(_atimeout)
@@ -73,18 +76,30 @@ export default defineComponent({
       }
     }
 
+    const focusEvent = (evnt: Event) => {
+      reactData.isActivated = true
+      switchMethods.dispatchEvent('focus', { value: props.modelValue }, evnt)
+    }
+
+    const blurEvent = (evnt: Event) => {
+      reactData.isActivated = false
+      switchMethods.dispatchEvent('blur', { value: props.modelValue }, evnt)
+    }
+
     switchMethods = {
       dispatchEvent (type, params, evnt) {
         emit(type, Object.assign({ $switch: $xeswitch, $event: evnt }, params))
       },
       focus () {
         const btnElem = refButton.value
+        reactData.isActivated = true
         btnElem.focus()
         return nextTick()
       },
       blur () {
         const btnElem = refButton.value
         btnElem.blur()
+        reactData.isActivated = false
         return nextTick()
       }
     }
@@ -109,7 +124,9 @@ export default defineComponent({
           class: 'vxe-switch--button',
           type: 'button',
           disabled,
-          onClick: clickEvent
+          onClick: clickEvent,
+          onFocus: focusEvent,
+          onBlur: blurEvent
         }, [
           h('span', {
             class: 'vxe-switch--label vxe-switch--label-on'

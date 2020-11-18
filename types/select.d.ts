@@ -63,6 +63,26 @@ export interface VxeSelectProps {
 export interface SelectMethods {
   dispatchEvent(type: ValueOf<VxeSelectEmits>, params: any, evnt?: Event): void;
   /**
+   * 判断下拉面板是否可视
+   */
+  isPanelVisible(): boolean;
+  /**
+   * 切换下拉面板
+   */
+  togglePanel(): Promise<any>;
+  /**
+   * 显示下拉面板
+   */
+  showPanel(): Promise<any>;
+  /**
+   * 隐藏下拉面板
+   */
+  hidePanel(): Promise<any>;
+  /**
+   * 刷新选项，当选项被动态显示/隐藏时可能会用到
+   */
+  refreshOption(): Promise<any>;
+  /**
    * 获取焦点
    */
   focus(): Promise<any>;

@@ -16,6 +16,7 @@ export interface VxeSwitchConstructor extends VxeComponentInstance, VxeSwitchMet
 }
 
 export interface SwitchReactData {
+  isActivated: boolean;
   hasAnimat: boolean;
   offsetLeft: number;
 }
@@ -52,7 +53,9 @@ export interface VxeSwitchPrivateMethods extends SwitchPrivateMethods { }
 
 export type VxeSwitchEmits = [
   'update:modelValue',
-  'change'
+  'change',
+  'focus',
+  'blur'
 ]
 
 export namespace VxeSwitchDefines {

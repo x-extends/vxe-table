@@ -208,6 +208,51 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'isPanelVisible()',
+        desc: '判断下拉面板是否可视',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'togglePanel()',
+        desc: '切换下拉面板',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'showPanel()',
+        desc: '显示下拉面板',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'hidePanel()',
+        desc: '隐藏下拉面板',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'refreshOption()',
+        desc: '刷新选项（对于动态修改显示/隐藏选项等场景下可能会用到）',
+        version: '',
+        type: 'Promise',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'focus()',
         desc: '使下拉框获取焦点',
         version: '',
@@ -219,15 +264,6 @@ const apis = [
       {
         name: 'blur()',
         desc: '使下拉框失去焦点',
-        version: '',
-        type: 'Promise',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
-        name: 'refreshOption()',
-        desc: '刷新选项（对于动态修改显示/隐藏选项等场景下可能会用到）',
         version: '',
         type: 'Promise',
         enum: '',
