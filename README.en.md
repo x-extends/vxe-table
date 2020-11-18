@@ -137,12 +137,11 @@ export default {
 [👉 View example](https://x-extends.github.io/vxe-table/#/table/base/basic)  
 [👉 View API](https://x-extends.github.io/vxe-table/#/table/api)
 
-## Donation
+## Donate
 
-If you feel that our open source software is helpful to you, please scan the QR code below to enjoy a cup of coffee.☕  
+If you think our open source software is helpful to you, you can scan the QR code below to support us.☕  
 
-Because maintaining an open source project takes a lot of effort and time, if you are using the project, your donation will help keep the project going.  
-[👉 This component is helpful to me and supports the author💰](https://x-extends.github.io/vxe-table/#/donation/api)
+[👉 Supports the author💰](https://x-extends.github.io/vxe-table/#/donation/api)
 
 ## License
 

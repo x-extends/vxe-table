@@ -868,16 +868,16 @@ const apis = [
         defVal: '默认 false，继承 setup.table.keepSource',
         list: []
       },
-      {
-        name: 'z-index',
-        abandoned: true,
-        descKey: 'app.api.table.desc.zIndex',
-        version: '1.15.9',
-        type: 'Number',
-        enum: '',
-        defVal: '继承 setup.table.zIndex',
-        list: []
-      },
+      // {
+      //   name: 'z-index',
+      //   abandoned: true,
+      //   descKey: 'app.api.table.desc.zIndex',
+      //   version: '1.15.9',
+      //   type: 'Number',
+      //   enum: '',
+      //   defVal: '继承 setup.table.zIndex',
+      //   list: []
+      // },
       {
         name: 'column-config',
         desc: '列的默认参数',
@@ -2205,36 +2205,36 @@ const apis = [
         enum: '',
         defVal: '继承 setup.optimization',
         list: [
-          {
-            name: 'animat',
-            disabled: true,
-            desc: '即将废弃，请使用 animat',
-            version: '',
-            type: 'Object',
-            enum: '',
-            defVal: 'true',
-            list: []
-          },
-          {
-            name: 'cloak',
-            disabled: true,
-            desc: '即将废弃，请使用 cloak',
-            version: '1.15.27',
-            type: 'Boolean',
-            enum: '',
-            defVal: 'false',
-            list: []
-          },
-          {
-            name: 'delayHover',
-            disabled: true,
-            desc: '即将废弃，请使用 delay-hover',
-            version: '1.14.16',
-            type: 'Number',
-            enum: '',
-            defVal: '250',
-            list: []
-          },
+          // {
+          //   name: 'animat',
+          //   disabled: true,
+          //   desc: '即将废弃，请使用 animat',
+          //   version: '',
+          //   type: 'Object',
+          //   enum: '',
+          //   defVal: 'true',
+          //   list: []
+          // },
+          // {
+          //   name: 'cloak',
+          //   disabled: true,
+          //   desc: '即将废弃，请使用 cloak',
+          //   version: '1.15.27',
+          //   type: 'Boolean',
+          //   enum: '',
+          //   defVal: 'false',
+          //   list: []
+          // },
+          // {
+          //   name: 'delayHover',
+          //   disabled: true,
+          //   desc: '即将废弃，请使用 delay-hover',
+          //   version: '1.14.16',
+          //   type: 'Number',
+          //   enum: '',
+          //   defVal: '250',
+          //   list: []
+          // },
           {
             name: 'scrollX',
             disabled: true,
@@ -2257,36 +2257,36 @@ const apis = [
           }
         ]
       },
-      {
-        name: 'animat',
-        abandoned: true,
-        desc: '表格动画效果开关（关闭后视觉效果更快）',
-        version: '1.15.28',
-        type: 'Object',
-        enum: '',
-        defVal: '默认 true，继承 setup.table.animat',
-        list: []
-      },
-      {
-        name: 'cloak',
-        abandoned: true,
-        desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
-        version: '1.15.28',
-        type: 'Boolean',
-        enum: '',
-        defVal: '默认 false，继承 setup.table.cloak',
-        list: []
-      },
-      {
-        name: 'delay-hover',
-        abandoned: true,
-        desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
-        version: '1.15.28',
-        type: 'Number',
-        enum: '',
-        defVal: '默认 250，继承 setup.table.delayHover',
-        list: []
-      },
+      // {
+      //   name: 'animat',
+      //   abandoned: true,
+      //   desc: '表格动画效果开关（关闭后视觉效果更快）',
+      //   version: '1.15.28',
+      //   type: 'Object',
+      //   enum: '',
+      //   defVal: '默认 true，继承 setup.table.animat',
+      //   list: []
+      // },
+      // {
+      //   name: 'cloak',
+      //   abandoned: true,
+      //   desc: '用于低性能的浏览器，可以设置为 true 来避免初始化渲染时的闪动',
+      //   version: '1.15.28',
+      //   type: 'Boolean',
+      //   enum: '',
+      //   defVal: '默认 false，继承 setup.table.cloak',
+      //   list: []
+      // },
+      // {
+      //   name: 'delay-hover',
+      //   abandoned: true,
+      //   desc: '当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件',
+      //   version: '1.15.28',
+      //   type: 'Number',
+      //   enum: '',
+      //   defVal: '默认 250，继承 setup.table.delayHover',
+      //   list: []
+      // },
       {
         name: 'scroll-x',
         desc: '横向虚拟滚动配置（tree-config 启用后无效）',
