@@ -17,7 +17,7 @@ export interface TableEditMethods {
    * @param records 新数据
    * @param row 指定行
    */
-  insertAt(records: RecordInfo | RecordInfo[], row: RowInfo | number | null): Promise<{ row: RowInfo, rows: RowInfo[] }>;
+  insertAt(records: RecordInfo | RecordInfo[], row: RowInfo | -1 | null): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
    * 删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据
    * @param rows 指定行

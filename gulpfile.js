@@ -87,6 +87,9 @@ gulp.task('build_modules', () => {
 })
 
 gulp.task('build_i18n', () => {
+  languages.forEach(code => {
+    fs.writeFileSync(`lib/locale/lang/${code}.d.ts`, `declare const langMsgs: { [key: string]: any }\nexport default langMsgs`)
+  })
   const rest = languages.map(code => {
     const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
     const isZHTC = ['zh-HK', 'zh-MO', 'zh-TW'].includes(code)
@@ -142,7 +145,7 @@ gulp.task('build_lib', () => {
         suffix: '.common.dev',
         extname: '.js'
       }))
-    .pipe(gulp.dest('lib')),
+      .pipe(gulp.dest('lib')),
     gulp.src('lib_dev/index.umd.js')
       .pipe(gulp.dest('lib')),
     gulp.src('lib_pro/index.umd.min.js')
@@ -163,7 +166,7 @@ gulp.task('build_lib', () => {
 })
 
 gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {
-   const rest = components.map(name => {
+  const rest = components.map(name => {
     return gulp.src(`styles/${name}.scss`)
       .pipe(replace(/(\/\*\*Variable\*\*\/)/, `@import './variable.scss';\n`))
       .pipe(sass())
@@ -291,26 +294,26 @@ gulp.task('update_plugin_docs', gulp.series('build_html_docs', 'build_css_docs',
 
 gulp.task('copy_docs_v1', () => {
   return gulp.src('docs/v1/index.html')
-  .pipe(rename({
-    basename: '404'
-  }))
-  .pipe(gulp.dest('docs/v1'))
+    .pipe(rename({
+      basename: '404'
+    }))
+    .pipe(gulp.dest('docs/v1'))
 })
 
 gulp.task('copy_docs_v2', () => {
   return gulp.src('docs/v2/index.html')
-  .pipe(rename({
-    basename: '404'
-  }))
-  .pipe(gulp.dest('docs/v2'))
+    .pipe(rename({
+      basename: '404'
+    }))
+    .pipe(gulp.dest('docs/v2'))
 })
 
 gulp.task('copy_docs_v3', () => {
   return gulp.src('docs/v3/index.html')
-  .pipe(rename({
-    basename: '404'
-  }))
-  .pipe(gulp.dest('docs/v3'))
+    .pipe(rename({
+      basename: '404'
+    }))
+    .pipe(gulp.dest('docs/v3'))
 })
 
 gulp.task('copy_docs_index', gulp.parallel('copy_docs_v1', 'copy_docs_v2', 'copy_docs_v3', () => {

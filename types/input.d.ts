@@ -57,7 +57,6 @@ export namespace VxeInputPropTypes {
   export type MaxDate = string | number | Date;
   export type StartWeek = number;
   export type LabelFormat = string;
-  export type ParseFormat = string;
   export type ValueFormat = string;
   export type Editable = boolean;
   export type FestivalMethod = (params: VxeInputDefines.DateFestivalParams) => VxeInputDefines.DateFestivalInfo | null | void;
@@ -98,7 +97,6 @@ export interface VxeInputProps {
   maxDate?: VxeInputPropTypes.MaxDate;
   startWeek?: VxeInputPropTypes.StartWeek;
   labelFormat?: VxeInputPropTypes.LabelFormat;
-  parseFormat?: VxeInputPropTypes.ParseFormat;
   valueFormat?: VxeInputPropTypes.ValueFormat;
   editable?: VxeInputPropTypes.Editable;
   festivalMethod?: VxeInputPropTypes.FestivalMethod;

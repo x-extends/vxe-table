@@ -99,7 +99,6 @@ export default defineComponent({
     maxDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MaxDate>, default: () => GlobalConfig.input.maxDate },
     startWeek: { type: Number as PropType<VxeInputPropTypes.StartWeek>, default: () => GlobalConfig.input.startWeek },
     labelFormat: { type: String as PropType<VxeInputPropTypes.LabelFormat>, default: () => GlobalConfig.input.labelFormat },
-    parseFormat: { type: String as PropType<VxeInputPropTypes.ParseFormat>, default: () => GlobalConfig.input.parseFormat },
     valueFormat: { type: String as PropType<VxeInputPropTypes.ValueFormat>, default: () => GlobalConfig.input.valueFormat },
     editable: { type: Boolean as PropType<VxeInputPropTypes.Editable>, default: true },
     festivalMethod: { type: Function as PropType<VxeInputPropTypes.FestivalMethod>, default: () => GlobalConfig.input.festivalMethod },
@@ -596,7 +595,7 @@ export default defineComponent({
 
     const dateParseValue = (value?: VxeInputPropTypes.ModelValue) => {
       const { type } = props
-      const { parseFormat } = props
+      const { valueFormat } = props
       const dateLabelFormat = computeDateLabelFormat.value
       let dValue: Date | null = null
       let dLabel = ''
@@ -604,7 +603,7 @@ export default defineComponent({
         if (type === 'time') {
           dValue = toStringTimeDate(value)
         } else {
-          dValue = XEUtils.toStringDate(value, parseFormat)
+          dValue = XEUtils.toStringDate(value, valueFormat)
         }
       }
       if (XEUtils.isValidDate(dValue)) {
