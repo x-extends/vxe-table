@@ -61,10 +61,6 @@ export declare class Input extends VXETableComponent {
    */
   labelFormat?: string;
   /**
-   * 只对 type=date|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到
-   */
-  parseFormat?: string;
-  /**
    * 只对 type=date|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串
    */
   valueFormat?: string;

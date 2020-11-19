@@ -626,7 +626,6 @@ export default {
     maxDate: { type: [String, Number, Date], default: () => GlobalConfig.input.maxDate },
     startWeek: { type: Number, default: () => GlobalConfig.input.startWeek },
     labelFormat: { type: String, default: () => GlobalConfig.input.labelFormat },
-    parseFormat: { type: String, default: () => GlobalConfig.input.parseFormat },
     valueFormat: { type: String, default: () => GlobalConfig.input.valueFormat },
     editable: { type: Boolean, default: true },
     festivalMethod: { type: Function, default: () => GlobalConfig.input.festivalMethod },
@@ -1471,14 +1470,14 @@ export default {
       }
     },
     dateParseValue (date) {
-      const { type, dateLabelFormat, parseFormat } = this
+      const { type, dateLabelFormat, valueFormat } = this
       let dValue = null
       let dLabel = ''
       if (date) {
         if (type === 'time') {
-          dValue = toStringTimeDate(date, parseFormat)
+          dValue = toStringTimeDate(date, valueFormat)
         } else {
-          dValue = XEUtils.toStringDate(date, parseFormat)
+          dValue = XEUtils.toStringDate(date, valueFormat)
         }
       }
       if (XEUtils.isValidDate(dValue)) {
