@@ -1475,14 +1475,14 @@ export default {
       }
     },
     dateParseValue (date) {
-      const { type, dateLabelFormat, parseFormat } = this
+      const { type, dateLabelFormat, valueFormat, parseFormat } = this
       let dValue = null
       let dLabel = ''
       if (date) {
         if (type === 'time') {
-          dValue = toStringTime(date, parseFormat || this.dateOpts.parseFormat)
+          dValue = toStringTime(date, valueFormat || parseFormat || this.dateOpts.parseFormat)
         } else {
-          dValue = XEUtils.toStringDate(date, parseFormat || this.dateOpts.parseFormat)
+          dValue = XEUtils.toStringDate(date, valueFormat || parseFormat || this.dateOpts.parseFormat)
         }
       }
       if (XEUtils.isValidDate(dValue)) {

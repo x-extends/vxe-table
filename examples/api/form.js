@@ -190,7 +190,7 @@ const apis = [
       },
       {
         name: 'prevent-submit',
-        desc: '禁用默认提交方式，禁用后配合 validate() 方法可以更加自由的控制提交逻辑',
+        desc: '是否禁用默认的回车提交方式，禁用后配合 validate() 方法可以更加自由的控制提交逻辑',
         version: '2.9.15',
         type: 'boolean',
         enum: '',
