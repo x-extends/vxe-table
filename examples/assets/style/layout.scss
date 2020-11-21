@@ -2,6 +2,7 @@
 
 body {
   color: #000;
+  font-size: 14px;
   font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
   // filter: grayscale(100%);
   * {
@@ -9,8 +10,10 @@ body {
   }
   ul {
     list-style: none;
+    padding: 0;
   }
   .link {
+    cursor: pointer;
     color: $themeColor;
     text-decoration: none;
     &:hover {
@@ -163,6 +166,14 @@ body,
     color: #333;
     margin-left: 10px;
     background-color: #f6ca9d;
+    &.is-disabled {
+      color: #666;
+      background-color: #d6cabd;
+      cursor: no-drop;
+      &:after {
+        display: none;
+      }
+    }
     &:after {
       content: "";
       position: absolute;
