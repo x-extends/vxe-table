@@ -22,7 +22,7 @@
     </vxe-table>
 
     <pre>
-      <code>
+      <pre-code>
         | Arrow Up ↑ | 移动到上一个菜单选项 |
         | Arrow Down ↓ | 移动到下一个菜单选项 |
         | Arrow Left ← | 关闭二级菜单 |
@@ -30,7 +30,7 @@
         | Esc | 关闭菜单选项 |
         | Enter | 选中当前菜单选项 |
         | Spacebar | 选中当前菜单选项 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>

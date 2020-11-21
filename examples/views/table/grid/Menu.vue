@@ -43,12 +43,18 @@ import XEClipboard from 'xe-clipboard'
 export default {
   data () {
     return {
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+      ],
       tableColumn: [
         { type: 'seq', width: 50 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'age', title: 'app.body.label.age' },
-        { field: 'date3', title: 'Date', showOverflow: true }
+        { field: 'nickname', title: 'Nickname', showOverflow: true }
       ],
       tableMenu: {
         header: {
@@ -99,12 +105,18 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+              ],
               tableColumn: [
                 { type: 'seq', width: 50 },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'age', title: 'app.body.label.age' },
-                { field: 'date3', title: 'Date', showOverflow: true }
+                { field: 'nickname', title: 'Nickname', showOverflow: true }
               ],
               tableMenu: {
                 header: {
@@ -137,9 +149,6 @@ export default {
                 visibleMethod: this.visibleMethod
               }
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
           },
           methods: {
             visibleMethod ({ type, options, column }) {
@@ -201,9 +210,6 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
   },
   methods: {
     visibleMethod ({ options, column }) {

@@ -43,7 +43,6 @@
 export default {
   data () {
     return {
-      tableData: [],
       tableColumn: [
         { type: 'seq', width: 50 },
         { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
@@ -57,6 +56,13 @@ export default {
         { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input', attrs: { disabled: false } } },
         { field: 'age', title: 'Age', editRender: { name: 'input', attrs: { disabled: false } } },
         { field: 'address', title: 'Address', editRender: { name: 'input' } }
+      ],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
       ],
       demoCodes: [
         `
@@ -73,18 +79,21 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
               tableColumn: [
                 { type: 'seq', width: 50 },
                 { field: 'name', title: 'app.body.label.name', editRender: { name: 'input' } },
                 { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input' } },
                 { field: 'age', title: 'Age', editRender: { name: 'input' } },
                 { field: 'address', title: 'Address', editRender: { name: 'input' } }
+              ],
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
               ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
             activeRowMethod ({ row, rowIndex }) {
@@ -114,18 +123,21 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
               tableColumn: [
                 { type: 'seq', width: 50 },
                 { field: 'name', title: 'app.body.label.name', editRender: { name: 'input', attrs: { disabled: false } } },
                 { field: 'sex', title: 'app.body.label.sex', editRender: { name: 'input', attrs: { disabled: false } } },
                 { field: 'age', title: 'Age', editRender: { name: 'input', attrs: { disabled: false } } },
                 { field: 'address', title: 'Address', editRender: { name: 'input' } }
+              ],
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
               ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
             editActivedEvent ({ row }) {
@@ -149,9 +161,6 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
   },
   methods: {
     activeRowMethod ({ rowIndex }) {

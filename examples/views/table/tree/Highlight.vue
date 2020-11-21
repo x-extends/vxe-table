@@ -16,12 +16,12 @@
     </vxe-table>
 
     <pre>
-      <code>
+      <pre-code>
         | Arrow Up ↑ | 移动到高亮行的上一行 |
         | Arrow Down ↓ | 移动到高亮行的下一行 |
         | Enter | 展开节点，进入子节点 |
         | Backspace | 关闭节点，返回到父节点 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
