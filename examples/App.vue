@@ -34,7 +34,8 @@
             <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
-          <a class="link support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
+          <a v-if="disabledSupport" class="link support is-disabled" title="当前不在支持的时间之内">{{ $t('app.header.label.support') }}</a>
+          <a v-else class="link support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
         </div>
       </div>
     </header>
@@ -109,9 +110,9 @@
         <div class="support-declare">vxe-table 使用完全免费。如果该项目帮助了您，您可以通过加入技术支持群的方式来支持作者！</div>
         <div class="vxe-row support-group">
           <div class="vxe-col--24 support-group-item">
-            <div class="support-name">高级用户</div>
+            <div class="support-name">成为高级用户</div>
             <div class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;"></span></div>
-            <vxe-button class="support-btn" status="primary" @click="addQQGroup" :disabled="disabledSupport">申请成为高级用户</vxe-button>
+            <vxe-button class="support-btn" status="primary" @click="addQQGroup" :disabled="disabledSupport">申请加入技术支持群</vxe-button>
             <ul class="support-describe">
               <li>优质的技术支持群</li>
             </ul>

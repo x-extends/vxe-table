@@ -2926,7 +2926,7 @@ const Methods = {
   handleDefaultSort () {
     const { sortOpts } = this
     let { defaultSort } = sortOpts
-    if (!sortOpts.remote && defaultSort) {
+    if (defaultSort) {
       if (!XEUtils.isArray(defaultSort)) {
         defaultSort = [defaultSort]
       }
@@ -2940,7 +2940,9 @@ const Methods = {
             }
           }
         })
-        this.handleTableData(true).then(this.updateStyle)
+        if (!sortOpts.remote) {
+          this.handleTableData(true).then(this.updateStyle)
+        }
       }
     }
   },
