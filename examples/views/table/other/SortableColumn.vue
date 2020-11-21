@@ -20,9 +20,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -44,15 +44,14 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
-      <code class="css">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[5] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
 import XEUtils from 'xe-utils'
 import Sortable from 'sortablejs'
 
@@ -70,7 +69,13 @@ export default {
       tableToolbar: {
         custom: true
       },
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+      ],
       demoCodes: [
         `
         <vxe-table
@@ -89,11 +94,14 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           beforeDestroy () {
             if (this.sortable) {
@@ -167,11 +175,14 @@ export default {
               tableToolbar: {
                 custom: true
               },
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           beforeDestroy () {
             if (this.sortable) {
@@ -247,14 +258,8 @@ export default {
     }
   },
   created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
     this.columnDrop1()
     this.columnDrop2()
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   beforeDestroy () {
     if (this.sortable1) {
