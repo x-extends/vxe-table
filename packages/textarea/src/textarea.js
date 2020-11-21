@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import { UtilTools } from '../../tools'
 
-const autoTxtElem = document.createElement('div')
+let autoTxtElem
 
 export default {
   name: 'VxeTextarea',
@@ -119,6 +119,9 @@ export default {
     updateAutoTxt () {
       const { $refs, value, size, autosize } = this
       if (autosize) {
+        if (!autoTxtElem) {
+          autoTxtElem = document.createElement('div')
+        }
         if (!autoTxtElem.parentNode) {
           document.body.appendChild(autoTxtElem)
         }

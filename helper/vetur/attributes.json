@@ -141,19 +141,19 @@
   },
   "vxe-table/merge-cells": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）"
+    "description": "临时合并指定的单元格 (不能用于展开行、树形结构，不建议用于固定列)"
   },
   "vxe-table/merge-footer-items": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并表尾（不能用于树形结构、展开行,不建议用于固定列）"
+    "description": "临时合并表尾 (不能用于展开行、树形结构，不建议用于固定列)"
   },
   "vxe-table/span-method": {
     "type": "({ row, rowindex, $rowindex, _rowindex, column, columnindex, $columnindex, _columnindex, data }) => { rowspan: number, colspan: number}",
-    "description": "自定义合并函数，返回计算后的值，不能用于虚拟滚动、树形结构、展开行、固定列"
+    "description": "自定义合并函数，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)"
   },
   "vxe-table/footer-span-method": {
     "type": "({ $rowindex, column, columnindex, $columnindex, _columnindex, data }) => { rowspan: number, colspan: number}",
-    "description": "表尾合并行或列，返回计算后的值，不能用于虚拟滚动、树形结构、展开行、固定列"
+    "description": "表尾合并行或列，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)"
   },
   "vxe-table/show-overflow": {
     "type": "boolean | string",
@@ -182,10 +182,6 @@
   "vxe-table/keep-source": {
     "type": "boolean",
     "description": "保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等（开启后影响性能，具体取决于数据量）"
-  },
-  "vxe-table/z-index": {
-    "type": "number",
-    "description": "自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）"
   },
   "vxe-table/column-config": {
     "type": "any",
@@ -235,12 +231,12 @@
     "type": "any",
     "description": "树形结构配置项"
   },
-  "vxe-table/context-menu": {
+  "vxe-table/menu-config": {
     "type": "any",
     "description": "快捷菜单配置项"
   },
   "vxe-table/clip-config": {
-    "type": "object",
+    "type": "any",
     "description": "复制粘贴配置项"
   },
   "vxe-table/mouse-config": {
@@ -274,14 +270,6 @@
   "vxe-table/custom-config": {
     "type": "any",
     "description": "自定义列配置项"
-  },
-  "vxe-table/animat": {
-    "type": "boolean",
-    "description": "表格动画效果开关（关闭后视觉效果更快）"
-  },
-  "vxe-table/delay-hover": {
-    "type": "number",
-    "description": "当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件"
   },
   "vxe-table/scroll-x": {
     "type": "any",
@@ -424,7 +412,7 @@
     "description": "是否允许列排序"
   },
   "vxe-table-column/sort-by": {
-    "type": "string",
+    "type": "string | ((row) => string | number)",
     "description": "只对 sortable 有效，自定义排序的属性"
   },
   "vxe-table-column/filters": {
@@ -629,19 +617,19 @@
   },
   "vxe-grid/merge-cells": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）"
+    "description": "临时合并指定的单元格 (不能用于展开行、树形结构，不建议用于固定列)"
   },
   "vxe-grid/merge-footer-items": {
     "type": "array<{ row: number, col: number, rowspan: number, colspan: number }>",
-    "description": "临时合并表尾（不能用于树形结构、展开行,不建议用于固定列）"
+    "description": "临时合并表尾 (不能用于展开行、树形结构，不建议用于固定列)"
   },
   "vxe-grid/span-method": {
     "type": "({ row, rowindex, $rowindex, _rowindex, column, columnindex, $columnindex, _columnindex, data }) => { rowspan: number, colspan: number}",
-    "description": "自定义合并函数，返回计算后的值，不能用于虚拟滚动、树形结构、展开行、固定列"
+    "description": "自定义合并函数，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)"
   },
   "vxe-grid/footer-span-method": {
     "type": "({ $rowindex, column, columnindex, $columnindex, _columnindex, data }) => { rowspan: number, colspan: number}",
-    "description": "表尾合并行或列，返回计算后的值，不能用于虚拟滚动、树形结构、展开行、固定列"
+    "description": "表尾合并行或列，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)"
   },
   "vxe-grid/show-overflow": {
     "type": "boolean | string",
@@ -670,10 +658,6 @@
   "vxe-grid/keep-source": {
     "type": "boolean",
     "description": "保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等（开启后影响性能，具体取决于数据量）"
-  },
-  "vxe-grid/z-index": {
-    "type": "number",
-    "description": "自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）"
   },
   "vxe-grid/column-config": {
     "type": "any",
@@ -723,12 +707,12 @@
     "type": "any",
     "description": "树形结构配置项"
   },
-  "vxe-grid/context-menu": {
+  "vxe-grid/menu-config": {
     "type": "any",
     "description": "快捷菜单配置项"
   },
   "vxe-grid/clip-config": {
-    "type": "object",
+    "type": "any",
     "description": "复制粘贴配置项"
   },
   "vxe-grid/mouse-config": {
@@ -762,14 +746,6 @@
   "vxe-grid/custom-config": {
     "type": "any",
     "description": "自定义列配置项"
-  },
-  "vxe-grid/animat": {
-    "type": "boolean",
-    "description": "表格动画效果开关（关闭后视觉效果更快）"
-  },
-  "vxe-grid/delay-hover": {
-    "type": "number",
-    "description": "当表格发生拖动、滚动...等行为时，至少多少毫秒之后才允许触发 hover 事件"
   },
   "vxe-grid/scroll-x": {
     "type": "any",
@@ -1517,7 +1493,7 @@
   },
   "vxe-form/prevent-submit": {
     "type": "boolean",
-    "description": "禁用默认提交方式，禁用后配合 validate() 方法可以更加自由的控制提交逻辑"
+    "description": "是否禁用默认的回车提交方式，禁用后配合 validate() 方法可以更加自由的控制提交逻辑"
   },
   "vxe-form/valid-config": {
     "type": "any",
@@ -1553,7 +1529,7 @@
   },
   "vxe-form-item/visible-method": {
     "type": "function",
-    "description": "该方法 Function({data, property}) 的返回值用来决定该项是否显示"
+    "description": "该方法的返回值用来决定该项是否显示"
   },
   "vxe-form-item/folding": {
     "type": "boolean",
