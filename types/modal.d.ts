@@ -117,7 +117,7 @@ export namespace VxeModalPropTypes {
   export type Position = ModalPosition;
   export type Title = string;
   export type Duration = number | string;
-  export type Message = string;
+  export type Message = number | string;
   export type CancelButtonText = string;
   export type ConfirmButtonText = string;
   export type LockView = boolean;
@@ -222,7 +222,7 @@ export interface ModalController {
    * @param title 标题
    * @param options 参数
    */
-  alert(message: string, title?: string, options?: VxeModalOptions): Promise<string>;
+  alert(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalOptions): Promise<string>;
   /**
    * 创建提示框
    * @param options 参数
@@ -234,7 +234,7 @@ export interface ModalController {
    * @param title 标题
    * @param options 参数
    */
-  confirm(message: string, title?: string, options?: VxeModalOptions): Promise<string>;
+  confirm(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalOptions): Promise<string>;
   /**
    * 创建确认框
    * @param options 参数
@@ -246,7 +246,7 @@ export interface ModalController {
    * @param title 标题
    * @param options 参数
    */
-  message(message: string, options?: VxeModalOptions): Promise<string>;
+  message(message: VxeModalPropTypes.Message, options?: VxeModalOptions): Promise<string>;
   /**
    * 创建消息提示
    * @param options 参数
@@ -261,7 +261,7 @@ export interface ModalController {
    * 关闭动态的活动窗口，如果为空则关闭所有
    * @param id 窗口唯一标识
    */
-  close(id?: string): Promise<any>;
+  close(id?: VxeModalPropTypes.ID): Promise<any>;
 }
 
 export interface ModalDefaultSlotParams {

@@ -4,7 +4,7 @@ import VxeModalComponent, { allActivedModals } from './src/modal'
 import VXETable from '../v-x-e-table'
 import { dynamicApp, dynamicStore, checkDynamic } from '../dynamics'
 
-import { VxeModalOptions, ModalEventTypes } from '../../types/vxe-table'
+import { VxeModalOptions, VxeModalPropTypes, ModalEventTypes } from '../../types/vxe-table'
 
 declare module '../../types/vxe-table' {
   interface VxeModalOptions {
@@ -37,7 +37,7 @@ function openModal (options: VxeModalOptions): Promise<ModalEventTypes> {
   })
 }
 
-function getModal (id: string) {
+function getModal (id: VxeModalPropTypes.ID) {
   return XEUtils.find(allActivedModals, $modal => $modal.props.id === id)
 }
 
@@ -46,7 +46,7 @@ function getModal (id: string) {
  * 如果传 id 则关闭指定的窗口
  * 如果不传则关闭所有窗口
  */
-function closeModal (id?: string) {
+function closeModal (id?: VxeModalPropTypes.ID) {
   const modals = id ? [getModal(id)] : allActivedModals
   const restPromises: any[] = []
   modals.forEach($modal => {
@@ -57,24 +57,24 @@ function closeModal (id?: string) {
   return Promise.all(restPromises)
 }
 
-function handleOpen (defOpts: VxeModalOptions, message: string | VxeModalOptions, title?: string, options?: VxeModalOptions) {
+function handleOpen (defOpts: VxeModalOptions, message: VxeModalPropTypes.Message | VxeModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalOptions) {
   let opts
-  if (XEUtils.isString(message)) {
-    opts = { message, title }
-  } else {
+  if (XEUtils.isObject(message)) {
     opts = message
+  } else {
+    opts = { message: XEUtils.toString(message), title }
   }
   return openModal({ ...defOpts, ...options, ...opts })
 }
 
-function openAlert (message: string | VxeModalOptions, title?: string, options?: VxeModalOptions) {
+function openAlert (message: VxeModalPropTypes.Message | VxeModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalOptions) {
   return handleOpen({
     type: 'alert',
     showFooter: true
   }, message, title, options)
 }
 
-function openConfirm (message: string | VxeModalOptions, title?: string, options?: VxeModalOptions) {
+function openConfirm (message: VxeModalPropTypes.Message | VxeModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalOptions) {
   return handleOpen({
     type: 'confirm',
     status: 'question',
@@ -82,7 +82,7 @@ function openConfirm (message: string | VxeModalOptions, title?: string, options
   }, message, title, options)
 }
 
-function openMessage (message: string | VxeModalOptions, options?: VxeModalOptions) {
+function openMessage (message: VxeModalPropTypes.Message | VxeModalOptions, options?: VxeModalOptions) {
   return handleOpen({
     type: 'message',
     mask: false,

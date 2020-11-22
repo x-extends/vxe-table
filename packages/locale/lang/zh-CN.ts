@@ -209,6 +209,8 @@ export default {
       expColgroupTitle: '如果存在，则支持带有分组结构的表头',
       expOptMerge: '单元格合并',
       expMergeTitle: '如果存在，则支持带有合并结构的单元格',
+      expOptAllExpand: '展开所有层级',
+      expAllExpandTitle: '如果存在，则支持将带有层级结构的数据全部展开',
       expOptOriginal: '源数据',
       expOriginalTitle: '如果为源数据，则支持导入到表格中',
       expPrint: '打印',

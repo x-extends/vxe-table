@@ -142,7 +142,7 @@ import TableTreeIcon from '../views/table/tree/Icon.vue'
 // import TableTreeGroupSummaryCount from '../views/table/tree/GroupSummaryCount.vue'
 // import TableTreeExpand from '../views/table/tree/Expand.vue'
 // import TableTreeExpandLazy from '../views/table/tree/ExpandLazy.vue'
-// import TableTreeToolbar from '../views/table/tree/Toolbar.vue'
+import TableTreeToolbar from '../views/table/tree/Toolbar.vue'
 // import TableTreeInsert from '../views/table/tree/Insert.vue'
 // import TableTreeMenu from '../views/table/tree/Menu.vue'
 // import TableTreeSpan from '../views/table/tree/Span.vue'
@@ -204,10 +204,10 @@ import TableEditClick from '../views/table/edit/Click.vue'
 import TableEditDBLClick from '../views/table/edit/DBLClick.vue'
 import TableEditSelect from '../views/table/edit/Select.vue'
 import TableAutoClearManual from '../views/table/edit/AutoClear.vue'
-// import TableEditInsert from '../views/table/edit/Insert.vue'
+import TableEditInsert from '../views/table/edit/Insert.vue'
 // import TableEditRemove from '../views/table/edit/Remove.vue'
 // import TableEditRevert from '../views/table/edit/Revert.vue'
-// import TableEditStatus from '../views/table/edit/Status.vue'
+import TableEditStatus from '../views/table/edit/Status.vue'
 // import TableEditCellDisable from '../views/table/edit/CellDisable.vue'
 // import TableEditRowDisable from '../views/table/edit/RowDisable.vue'
 // import TableEditHighlightCell from '../views/table/edit/HighlightCell.vue'
@@ -838,11 +838,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableTreeExpandLazy',
   //   component: TableTreeExpandLazy
   // },
-  // {
-  //   path: '/table/tree/toolbar',
-  //   name: 'TableTreeToolbar',
-  //   component: TableTreeToolbar
-  // },
+  {
+    path: '/table/tree/toolbar',
+    name: 'TableTreeToolbar',
+    component: TableTreeToolbar
+  },
   // {
   //   path: '/table/tree/insert',
   //   name: 'TableTreeInsert',
@@ -1274,11 +1274,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableAutoClearManual',
     component: TableAutoClearManual
   },
-  // {
-  //   path: '/table/edit/insert',
-  //   name: 'TableEditInsert',
-  //   component: TableEditInsert
-  // },
+  {
+    path: '/table/edit/insert',
+    name: 'TableEditInsert',
+    component: TableEditInsert
+  },
   // {
   //   path: '/table/edit/remove',
   //   name: 'TableEditRemove',
@@ -1289,11 +1289,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableEditRevert',
   //   component: TableEditRevert
   // },
-  // {
-  //   path: '/table/edit/status',
-  //   name: 'TableEditStatus',
-  //   component: TableEditStatus
-  // },
+  {
+    path: '/table/edit/status',
+    name: 'TableEditStatus',
+    component: TableEditStatus
+  },
   // {
   //   path: '/table/edit/cellDisable',
   //   name: 'TableEditCellDisable',

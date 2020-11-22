@@ -6,9 +6,10 @@
       Vue.prototype.$XPrint = VXETable.print<br>
     </p>
 
-    <vxe-toolbar>
+    <vxe-toolbar print>
       <template #buttons>
-        <vxe-button @click="printEvent1">打印出货单据</vxe-button>
+        <vxe-button @click="printEvent1">打印表格</vxe-button>
+        <vxe-button @click="printSelectEvent1">打印勾选行</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -32,6 +33,28 @@
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
+    <p class="tip">打印 HTML 元素</p>
+
+    <vxe-toolbar>
+      <template #buttons>
+        <vxe-button @click="printEvent5">打印下面的区域</vxe-button>
+      </template>
+    </vxe-toolbar>
+
+    <div id="myPrint5">
+      <div>
+        <p>将当前渲染的<span style="color: #20f320">内容</span>打印出来，仅<span style="color: blue;font-size: 20px">打印</span>内联<span style="color: red">样式</span></p>
+        <p>内容<span style="font-size: 30px;font-weight: 700">区域</span></p>
+      </div>
+    </div>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+    </pre>
+
     <p class="tip">打印条形码：先用第三方 <a class="link" href="https://www.npmjs.com/package/jsbarcode" target="_blank">jsbarcode</a> 库生成条形码，再用打印模块输出打印</p>
 
     <vxe-toolbar>
@@ -43,8 +66,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">打印二维码：先用第三方 <a class="link" href="https://www.npmjs.com/package/qrcode" target="_blank">qrcode</a> 库生成二维码，再用打印模块输出打印</p>
@@ -58,8 +81,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
     </pre>
 
     <p class="tip">打印合同</p>
@@ -73,8 +96,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+      <pre-code class="xml">{{ demoCodes[8] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[9] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -164,6 +187,25 @@ export default defineComponent({
       $table.print({
         sheetName: '打印出货单据',
         style: printStyle,
+        columns: [
+          { type: 'seq' },
+          { field: 'name' },
+          { field: 'role' },
+          { field: 'address' }
+        ],
+        beforePrintMethod: ({ content }) => {
+          // 拦截打印之前，返回自定义的 html 内容
+          return topHtml + content + bottomHtml
+        }
+      })
+    }
+
+    const printSelectEvent1 = () => {
+      const $table = xTable.value
+      $table.print({
+        sheetName: '打印勾选行',
+        style: printStyle,
+        mode: 'selected',
         columns: [
           { type: 'seq' },
           { field: 'name' },
@@ -385,18 +427,29 @@ export default defineComponent({
       })
     }
 
+    const printEvent5 = () => {
+      const divEl = document.getElementById('myPrint5') as HTMLDivElement
+      VXETable.print({
+        sheetName: '打印下面区域',
+        content: divEl.innerHTML
+      })
+    }
+
     return {
       xTable,
       demo1,
       printEvent1,
+      printSelectEvent1,
       printEvent2,
       printEvent3,
       printEvent4,
+      printEvent5,
       demoCodes: [
         `
-        <vxe-toolbar>
+        <vxe-toolbar print>
           <template #buttons>
-            <vxe-button @click="printEvent1">打印出货单据</vxe-button>
+            <vxe-button @click="printEvent1">打印表格</vxe-button>
+            <vxe-button @click="printSelectEvent1">打印勾选行</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -508,13 +561,65 @@ export default defineComponent({
               })
             }
 
+            const printSelectEvent1 = () => {
+              const $table = xTable.value
+              $table.print({
+                sheetName: '打印勾选行',
+                style: printStyle,
+                mode: 'selected',
+                columns: [
+                  { type: 'seq' },
+                  { field: 'name' },
+                  { field: 'role' },
+                  { field: 'address' }
+                ],
+                beforePrintMethod: ({ content }) => {
+                  // 拦截打印之前，返回自定义的 html 内容
+                  return topHtml + content + bottomHtml
+                }
+              })
+            }
+
             return {
               xTable,
               demo1,
-              printEvent1
+              printEvent1,
+              printSelectEvent1
             }
           }
-        }
+        })
+        `,
+        `
+        <vxe-toolbar>
+          <template #buttons>
+            <vxe-button @click="printEvent5">打印下面的区域</vxe-button>
+          </template>
+        </vxe-toolbar>
+
+        <div id="myPrint5">
+          <div>
+            <p>将当前渲染的<span style="color: #20f320">内容</span>打印出来，仅<span style="color: blue;font-size: 20px">打印</span>内联<span style="color: red">样式</span></p>
+            <p>内容<span style="font-size: 30px;font-weight: 700">区域</span></p>
+          </div>
+        </div>
+        `,
+        `
+        import { defineComponent } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const printEvent5 = () => {
+              const divEl = document.getElementById('myPrint5') as HTMLDivElement
+              VXETable.print({
+                sheetName: '打印下面区域',
+                content: divEl.innerHTML
+              })
+            }
+            return {
+              printEvent5
+            }
+          }
+        })
         `,
         `
         <vxe-toolbar>
@@ -582,7 +687,8 @@ export default defineComponent({
             return {
               printEvent2
             }
-          })
+          }
+        })
         `,
         `
         <vxe-toolbar>
@@ -627,7 +733,8 @@ export default defineComponent({
             return {
               printEvent3
             }
-          })
+          }
+        })
         `,
         `
         <vxe-toolbar>
@@ -778,7 +885,8 @@ export default defineComponent({
             return {
               printEvent4
             }
-          })
+          }
+        })
         `
       ]
     }

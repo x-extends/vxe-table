@@ -98,19 +98,25 @@ export interface TablePublicMethods {
    * 加载数据
    * @param data 数据
    */
-  loadData(data: RecordInfo[]): Promise<any>;
+  loadData(data: any[]): Promise<any>;
   /**
    * 加载数据并恢复到初始状态
    * @param data 数据
    */
-  reloadData(data: RecordInfo[]): Promise<any>;
+  reloadData(data: any[]): Promise<any>;
   /**
    * 局部加载行数据并恢复到初始状态
    * @param rows 行对象
    * @param record 新数据
    * @param field 指定字段名
    */
-  reloadRow(rows: RowInfo | RowInfo[], record?: RecordInfo, field?: string): Promise<any>;
+  reloadRow(rows: any | any[], record?: any, field?: string): Promise<any>;
+  /**
+   * 用于树结构，给行数据加载子节点
+   * @param row 行对象
+   * @param children 子节点
+   */
+  loadChildren(row: any, children: any[]): Promise<any[]>;
   /**
    * 加载列配置
    * @param columns 列对象
@@ -667,6 +673,7 @@ export interface TablePrivateMethods {
   setHoverRow(row: any): void;
   clearHoverRow(): void;
   getCell(row: any, column: any): HTMLTableDataCellElement | null;
+  eqRow(row1: any, row2: any): boolean;
 }
 
 export interface VxeTablePrivateMethods extends TablePrivateMethods { }
@@ -912,9 +919,10 @@ export interface TableInternalData {
   fullColumnFieldData: { [key: string]: any };
 
   // 特殊标识
+  inited: boolean;
   tooltipActive: boolean;
   tooltipTimeout: any;
-  inited: boolean;
+  initStatus: boolean;
   isActivated: boolean;
 
   // 内部属性

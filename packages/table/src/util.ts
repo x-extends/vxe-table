@@ -89,7 +89,7 @@ export function mergeBodyMethod (mergeList: any[], _rowIndex: number, _columnInd
 
 export function clearTableDefaultStatus ($xetable: VxeTableConstructor) {
   const { props, internalData } = $xetable
-  internalData.inited = false
+  internalData.initStatus = false
   $xetable.clearSort()
   $xetable.clearCurrentRow()
   $xetable.clearCurrentColumn()
@@ -115,7 +115,7 @@ export function clearTableDefaultStatus ($xetable: VxeTableConstructor) {
 
 export function clearTableAllStatus ($xetable: VxeTableConstructor) {
   if ($xetable.clearFilter) {
-    return $xetable.clearFilter()
+    $xetable.clearFilter()
   }
   return clearTableDefaultStatus($xetable)
 }

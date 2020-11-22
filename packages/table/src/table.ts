@@ -204,6 +204,7 @@ export default defineComponent({
         isPrint: false,
         hasFooter: false,
         hasMerge: false,
+        hasTree: false,
         hasColgroup: false,
         visible: false
       },
@@ -214,6 +215,7 @@ export default defineComponent({
         type: '',
         isColgroup: false,
         isMerge: false,
+        isAllExpand: false,
         original: false,
         message: true,
         isHeader: false,
@@ -273,9 +275,10 @@ export default defineComponent({
       fullColumnMap: new Map(),
       fullColumnIdData: {},
       fullColumnFieldData: {},
+      inited: false,
       tooltipActive: false,
       tooltipTimeout: null,
-      inited: false,
+      initStatus: false,
       isActivated: false
     }
 
@@ -841,38 +844,6 @@ export default defineComponent({
       }
     }
 
-    const appendTreeCache = (row: any, childs: any) => {
-      const { keepSource } = props
-      const { fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = internalData
-      const { tableSourceData } = internalData
-      const treeOpts = computeTreeOpts.value
-      const { children, hasChild } = treeOpts
-      const rowkey = getRowkey($xetable)
-      const rowid = getRowid($xetable, row)
-      let matchObj: any
-      if (keepSource) {
-        matchObj = XEUtils.findTree(tableSourceData, item => rowid === getRowid($xetable, item), treeOpts)
-      }
-      XEUtils.eachTree(childs, (row: any, index, items, path, parent) => {
-        let rowid = getRowid($xetable, row)
-        if (!rowid) {
-          rowid = getRowUniqueId()
-          XEUtils.set(row, rowkey, rowid)
-        }
-        if (row[hasChild] && XEUtils.isUndefined(row[children])) {
-          row[children] = null
-        }
-        const rest = { row, rowid, index: -1, items, parent }
-        fullDataRowIdData[rowid] = rest
-        fullDataRowMap.set(row, rest)
-        fullAllDataRowIdData[rowid] = rest
-        fullAllDataRowMap.set(row, rest)
-      }, treeOpts)
-      if (matchObj) {
-        matchObj.item[children] = XEUtils.clone(childs, true)
-      }
-    }
-
     /**
      * 更新数据列的 Map
      * 牺牲数据组装的耗时，用来换取使用过程中的流畅
@@ -1393,7 +1364,7 @@ export default defineComponent({
       if (sortConfig) {
         const sortOpts = computeSortOpts.value
         let { defaultSort } = sortOpts
-        if (!sortOpts.remote && defaultSort) {
+        if (defaultSort) {
           if (!XEUtils.isArray(defaultSort)) {
             defaultSort = [defaultSort]
           }
@@ -1407,7 +1378,9 @@ export default defineComponent({
                 }
               }
             })
-            tablePrivateMethods.handleTableData(true).then(updateStyle)
+            if (!sortOpts.remote) {
+              tablePrivateMethods.handleTableData(true).then(updateStyle)
+            }
           }
         }
       }
@@ -1585,28 +1558,28 @@ export default defineComponent({
       const { fullAllDataRowMap } = internalData
       const treeOpts = computeTreeOpts.value
       const checkboxOpts = computeCheckboxOpts.value
-      const { loadMethod, children } = treeOpts
+      const { loadMethod } = treeOpts
       const { checkStrictly } = checkboxOpts
       const rest = fullAllDataRowMap.get(row)
       return new Promise(resolve => {
         if (loadMethod) {
           treeLazyLoadeds.push(row)
-          loadMethod({ $table: $xetable, row }).catch(() => []).then((childs: any) => {
+          loadMethod({ $table: $xetable, row }).catch(() => []).then((childRecords: any) => {
             rest.treeLoaded = true
             XEUtils.remove(treeLazyLoadeds, item => item === row)
-            if (!XEUtils.isArray(childs)) {
-              childs = []
+            if (!XEUtils.isArray(childRecords)) {
+              childRecords = []
             }
-            if (childs) {
-              row[children] = childs
-              appendTreeCache(row, childs)
-              if (childs.length && treeExpandeds.indexOf(row) === -1) {
-                treeExpandeds.push(row)
-              }
-              // 如果当前节点已选中，则展开后子节点也被选中
-              if (!checkStrictly && tableMethods.isCheckedByCheckboxRow(row)) {
-                tableMethods.setCheckboxRow(childs, true)
-              }
+            if (childRecords) {
+              tableMethods.loadChildren(row, childRecords).then(childRows => {
+                if (childRows.length && treeExpandeds.indexOf(row) === -1) {
+                  treeExpandeds.push(row)
+                }
+                // 如果当前节点已选中，则展开后子节点也被选中
+                if (!checkStrictly && tableMethods.isCheckedByCheckboxRow(row)) {
+                  tableMethods.setCheckboxRow(childRows, true)
+                }
+              })
             }
             resolve(nextTick().then(() => tableMethods.recalculate()))
           })
@@ -1771,7 +1744,6 @@ export default defineComponent({
     const handleDefaults = () => {
       handleDefaultSelectionChecked()
       handleDefaultRadioChecked()
-      handleDefaultSort()
       handleDefaultRowExpand()
       handleDefaultTreeExpand()
       handleDefaultMergeCells()
@@ -1902,11 +1874,12 @@ export default defineComponent({
        */
       loadData (datas: any[]) {
         return loadTableData(datas).then(() => {
-          if (!internalData.inited) {
-            internalData.inited = true
+          internalData.inited = true
+          if (!internalData.initStatus) {
+            internalData.initStatus = true
             handleDefaults()
           }
-          tableMethods.recalculate()
+          return tableMethods.recalculate()
         })
       },
       /**
@@ -1917,9 +1890,13 @@ export default defineComponent({
         return tableMethods.clearAll()
           .then(() => {
             internalData.inited = true
+            internalData.initStatus = true
             return loadTableData(datas)
           })
-          .then(() => handleDefaults())
+          .then(() => {
+            handleDefaults()
+            return tableMethods.recalculate()
+          })
       },
       /**
        * 局部加载行数据并恢复到初始状态
@@ -1954,6 +1931,34 @@ export default defineComponent({
           UtilTools.warn('vxe.error.reqProp', ['keep-source'])
         }
         return nextTick()
+      },
+      /**
+       * 用于树结构，给行数据加载子节点
+       */
+      loadChildren (row, childRecords) {
+        return this.createData(childRecords).then((rows) => {
+          const { keepSource } = props
+          const { fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = internalData
+          const { tableSourceData } = internalData
+          const treeOpts = computeTreeOpts.value
+          const { children } = treeOpts
+          if (keepSource) {
+            const rowid = getRowid($xetable, row)
+            const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid($xetable, item), treeOpts)
+            if (matchObj) {
+              matchObj.item[children] = XEUtils.clone(rows, true)
+            }
+          }
+          XEUtils.eachTree(rows, (childRow, index, items, path, parent) => {
+            const rowid = getRowid($xetable, childRow)
+            const rest = { row: childRow, rowid, index: -1, items, parent }
+            fullDataRowIdData[rowid] = rest
+            fullDataRowMap.set(childRow, rest)
+            fullAllDataRowIdData[rowid] = rest
+            fullAllDataRowMap.set(childRow, rest)
+          }, treeOpts)
+          return rows
+        })
       },
       /**
        * 加载列配置
@@ -2053,8 +2058,10 @@ export default defineComponent({
        * @param {Array} records 新数据
        */
       createData (records: any) {
-        const rowkey = getRowkey($xetable)
-        const rows = records.map((record: any) => tablePrivateMethods.defineField(Object.assign({}, record, { [rowkey]: null })))
+        const { treeConfig } = props
+        const treeOpts = computeTreeOpts.value
+        const handleRrecord = (record: any) => tablePrivateMethods.defineField(Object.assign({}, record))
+        const rows = treeConfig ? XEUtils.mapTree(records, handleRrecord, treeOpts) : records.map(handleRrecord)
         return nextTick().then(() => rows)
       },
       /**
@@ -3444,7 +3451,7 @@ export default defineComponent({
                     const rowTargetNode = getEventTargetNode(evnt, el, 'vxe-body--row')
                     const rowNodeRest = rowTargetNode.flag ? tableMethods.getRowNode(rowTargetNode.targetElem) : null
                     // row 方式，如果点击了不同行
-                    isClear = rowNodeRest ? rowNodeRest.item !== actived.args.row : false
+                    isClear = rowNodeRest ? !$xetable.eqRow(rowNodeRest.item, actived.args.row) : false
                   } else {
                     // cell 方式，如果是非编辑列
                     isClear = !getEventTargetNode(evnt, el, 'col--edit').flag
@@ -4645,6 +4652,15 @@ export default defineComponent({
           return bodyElem.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
         }
         return null
+      },
+      eqRow (row1, row2) {
+        if (row1 && row2) {
+          if (row1 === row2) {
+            return true
+          }
+          return getRowid($xetable, row1) === getRowid($xetable, row2)
+        }
+        return false
       }
     }
 
@@ -4714,8 +4730,8 @@ export default defineComponent({
     watch(() => props.data, (value) => {
       loadTableData(value || []).then(() => {
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
-        if (!internalData.inited) {
-          internalData.inited = true
+        if (!internalData.initStatus) {
+          internalData.initStatus = true
           handleDefaults()
         }
         if ((scrollXLoad || scrollYLoad) && expandColumn) {
@@ -4854,8 +4870,10 @@ export default defineComponent({
       loadTableData(data || []).then(() => {
         if (data && data.length) {
           internalData.inited = true
+          internalData.initStatus = true
           handleDefaults()
         }
+        handleDefaultSort()
         updateStyle()
       })
 

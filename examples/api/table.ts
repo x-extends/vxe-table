@@ -215,7 +215,7 @@ const exportDataAPI = [
   },
   {
     name: 'isHeader',
-    desc: '是否导出表头',
+    desc: '是否需要表头',
     version: '',
     type: 'boolean',
     enum: '',
@@ -224,7 +224,7 @@ const exportDataAPI = [
   },
   {
     name: 'isColgroup',
-    desc: '如果存在，则导出带有分组结构的表头',
+    desc: '如果存在，则支持带有分组结构的表头',
     version: '',
     type: 'boolean',
     enum: '',
@@ -233,7 +233,7 @@ const exportDataAPI = [
   },
   {
     name: 'isFooter',
-    desc: '是否导出表尾',
+    desc: '是否需要表尾',
     version: '',
     type: 'boolean',
     enum: '',
@@ -242,7 +242,16 @@ const exportDataAPI = [
   },
   {
     name: 'isMerge',
-    desc: '如果存在，则导出带有合并结构的单元格',
+    desc: '如果存在，则支持临时合并的单元格',
+    version: '',
+    type: 'boolean',
+    enum: '',
+    defVal: 'false',
+    list: []
+  },
+  {
+    name: 'isAllExpand',
+    desc: '如果存在，则强制展开所有树层级',
     version: '',
     type: 'boolean',
     enum: '',
@@ -2882,6 +2891,15 @@ const apis = [
         defVal: 'rows: Row | Row[]',
         list: []
       },
+      // {
+      //   name: 'loadChildren(row, children)',
+      //   desc: '用于树结构，给行数据加载子节点',
+      //   version: '',
+      //   type: 'Promise',
+      //   enum: '',
+      //   defVal: 'row: Row, children: any[]',
+      //   list: []
+      // },
       {
         name: 'loadColumn(columns)',
         desc: '加载列配置（对于表格列需要重载、局部递增场景下可能会用到）',

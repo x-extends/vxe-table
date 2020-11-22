@@ -156,6 +156,7 @@ body,
   .support {
     padding: 3px 15px;
     border-radius: 15px;
+    user-select: none;
   }
   .donation {
     color: #fff;
@@ -166,6 +167,14 @@ body,
     color: #333;
     margin-left: 10px;
     background-color: #f6ca9d;
+    &.is-disabled {
+      color: #666;
+      background-color: #d6cabd;
+      cursor: no-drop;
+      &:after {
+        display: none;
+      }
+    }
     &:after {
       content: "";
       position: absolute;

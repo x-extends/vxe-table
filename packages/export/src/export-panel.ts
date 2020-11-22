@@ -145,7 +145,7 @@ export default defineComponent({
     const renderVN = () => {
       const { defaultOptions, storeData } = props
       const { isAll, isIndeterminate } = reactData
-      const { hasMerge, isPrint, hasColgroup } = storeData
+      const { hasTree, hasMerge, isPrint, hasColgroup } = storeData
       const { isHeader } = defaultOptions
       const cols: any[] = []
       const checkedAll = computeCheckedAll.value
@@ -333,6 +333,14 @@ export default defineComponent({
                           'onUpdate:modelValue' (value: any) {
                             defaultOptions.isFooter = value
                           }
+                        }),
+                        h(VxeCheckboxConstructor, {
+                          modelValue: defaultOptions.original,
+                          title: GlobalConfig.i18n('vxe.export.expOriginalTitle'),
+                          content: GlobalConfig.i18n('vxe.export.expOptOriginal'),
+                          'onUpdate:modelValue' (value: any) {
+                            defaultOptions.original = value
+                          }
                         })
                       ]),
                       h('div', {
@@ -357,11 +365,12 @@ export default defineComponent({
                           }
                         }),
                         h(VxeCheckboxConstructor, {
-                          modelValue: defaultOptions.original,
-                          title: GlobalConfig.i18n('vxe.export.expOriginalTitle'),
-                          content: GlobalConfig.i18n('vxe.export.expOptOriginal'),
+                          modelValue: hasTree ? defaultOptions.isAllExpand : false,
+                          disabled: !hasTree,
+                          title: GlobalConfig.i18n('vxe.export.expAllExpandTitle'),
+                          content: GlobalConfig.i18n('vxe.export.expOptAllExpand'),
                           'onUpdate:modelValue' (value: any) {
-                            defaultOptions.original = value
+                            defaultOptions.isAllExpand = value
                           }
                         })
                       ])

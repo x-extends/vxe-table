@@ -939,12 +939,12 @@ export default defineComponent({
             //     name: 'TableTreeExpandLazy'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.crudToolbar',
-            //   locat: {
-            //     name: 'TableTreeToolbar'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.crudToolbar',
+              locat: {
+                name: 'TableTreeToolbar'
+              }
+            },
             // {
             //   label: 'app.aside.nav.insert',
             //   locat: {
@@ -1087,13 +1087,13 @@ export default defineComponent({
                 name: 'TableAutoClearManual'
               }
             },
-            // {
-            //   label: 'app.aside.nav.insert',
-            //   // demoUrl: 'https://jsrun.pro/vcWKp/edit',
-            //   locat: {
-            //     name: 'TableEditInsert'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.insert',
+              // demoUrl: 'https://jsrun.pro/vcWKp/edit',
+              locat: {
+                name: 'TableEditInsert'
+              }
+            },
             // {
             //   label: 'app.aside.nav.delete',
             //   // demoUrl: 'https://jsrun.pro/6cWKp/edit',
@@ -1107,12 +1107,12 @@ export default defineComponent({
             //     name: 'TableEditRevert'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.status',
-            //   locat: {
-            //     name: 'TableEditStatus'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.status',
+              locat: {
+                name: 'TableEditStatus'
+              }
+            },
             // {
             //   label: 'app.aside.nav.cellDisable',
             //   locat: {

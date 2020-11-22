@@ -6,7 +6,7 @@ import { useSize } from '../../hooks/size'
 
 import { SizeType, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits } from '../../../types/vxe-table'
 
-const autoTxtElem = document.createElement('div')
+let autoTxtElem: HTMLDivElement
 
 export default defineComponent({
   name: 'VxeTextarea',
@@ -64,6 +64,9 @@ export default defineComponent({
     const updateAutoTxt = () => {
       const { modelValue, size, autosize } = props
       if (autosize) {
+        if (!autoTxtElem) {
+          autoTxtElem = document.createElement('div')
+        }
         if (!autoTxtElem.parentNode) {
           document.body.appendChild(autoTxtElem)
         }

@@ -25,7 +25,7 @@ export default defineComponent({
     position: [String, Object] as PropType<VxeModalPropTypes.Position>,
     title: String as PropType<VxeModalPropTypes.Title>,
     duration: { type: [Number, String] as PropType<VxeModalPropTypes.Duration>, default: () => GlobalConfig.modal.duration },
-    message: String as PropType<VxeModalPropTypes.Message>,
+    message: [Number, String] as PropType<VxeModalPropTypes.Message>,
     cancelButtonText: String as PropType<VxeModalPropTypes.CancelButtonText>,
     confirmButtonText: String as PropType<VxeModalPropTypes.ConfirmButtonText>,
     lockView: { type: Boolean as PropType<VxeModalPropTypes.LockView>, default: () => GlobalConfig.modal.lockView },

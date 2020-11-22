@@ -297,6 +297,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     const getLabelData = (opts: any, columns: any[], datas: any[]) => {
+      const { isAllExpand } = opts
       const { treeConfig } = props
       const radioOpts = computeRadioOpts.value
       const checkboxOpts = computeCheckboxOpts.value
@@ -307,59 +308,65 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       if (treeConfig) {
         // 如果是树表格只允许导出数据源
         const rest: any[] = []
-        XEUtils.eachTree(datas, (row, rowIndex, items, path, parent, nodes) => {
-          const item: any = {
-            _row: row,
-            _level: nodes.length - 1,
-            _hasChild: hasTreeChildren(row)
-          }
-          columns.forEach((column: any, columnIndex: any) => {
-            let cellValue: string | boolean = ''
-            const renderOpts = column.editRender || column.cellRender
-            let exportLabelMethod = column.exportMethod
-            if (!exportLabelMethod && renderOpts && renderOpts.name) {
-              const compConf = VXETable.renderer.get(renderOpts.name)
-              if (compConf) {
-                exportLabelMethod = compConf.exportMethod
-              }
+        XEUtils.eachTree(datas, (item, rowIndex, items, path, parent, nodes) => {
+          const row = item._row || item
+          const parentRow = parent && parent._row ? parent._row : parent
+          if ((isAllExpand || !parentRow || $xetable.isTreeExpandByRow(parentRow))) {
+            const hasRowChild = hasTreeChildren(row)
+            const item: any = {
+              _row: row,
+              _level: nodes.length - 1,
+              _hasChild: hasRowChild,
+              _expand: hasRowChild && $xetable.isTreeExpandByRow(row)
             }
-            if (exportLabelMethod) {
-              cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
-            } else {
-              switch (column.type) {
-                case 'seq':
-                  cellValue = getSeq(row, rowIndex, column, columnIndex)
-                  break
-                case 'checkbox':
-                  cellValue = $xetable.isCheckedByCheckboxRow(row)
-                  item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
-                  item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
-                  break
-                case 'radio':
-                  cellValue = $xetable.isCheckedByRadioRow(row)
-                  item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
-                  item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
-                  break
-                default:
-                  if (opts.original) {
-                    cellValue = UtilTools.getCellValue(row, column)
-                  } else {
-                    cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
-                    if (column.type === 'html') {
-                      htmlCellElem.innerHTML = cellValue
-                      cellValue = htmlCellElem.innerText.trim()
+            columns.forEach((column: any, columnIndex: any) => {
+              let cellValue: string | boolean = ''
+              const renderOpts = column.editRender || column.cellRender
+              let exportLabelMethod = column.exportMethod
+              if (!exportLabelMethod && renderOpts && renderOpts.name) {
+                const compConf = VXETable.renderer.get(renderOpts.name)
+                if (compConf) {
+                  exportLabelMethod = compConf.exportMethod
+                }
+              }
+              if (exportLabelMethod) {
+                cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
+              } else {
+                switch (column.type) {
+                  case 'seq':
+                    cellValue = getSeq(row, rowIndex, column, columnIndex)
+                    break
+                  case 'checkbox':
+                    cellValue = $xetable.isCheckedByCheckboxRow(row)
+                    item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
+                    item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
+                    break
+                  case 'radio':
+                    cellValue = $xetable.isCheckedByRadioRow(row)
+                    item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
+                    item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
+                    break
+                  default:
+                    if (opts.original) {
+                      cellValue = UtilTools.getCellValue(row, column)
                     } else {
-                      const cell = $xetable.getCell(row, column)
-                      if (cell) {
-                        cellValue = cell.innerText.trim()
+                      cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+                      if (column.type === 'html') {
+                        htmlCellElem.innerHTML = cellValue
+                        cellValue = htmlCellElem.innerText.trim()
+                      } else {
+                        const cell = $xetable.getCell(row, column)
+                        if (cell) {
+                          cellValue = cell.innerText.trim()
+                        }
                       }
                     }
-                  }
+                }
               }
-            }
-            item[column.id] = XEUtils.toString(cellValue)
-          })
-          rest.push(Object.assign(item, row))
+              item[column.id] = XEUtils.toString(cellValue)
+            })
+            rest.push(Object.assign(item, row))
+          }
         }, treeOpts)
         return rest
       }
@@ -568,7 +575,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                 if (column.treeNode) {
                   let treeIcon = ''
                   if (item._hasChild) {
-                    treeIcon = '<i class="vxe-table--tree-icon"></i>'
+                    treeIcon = `<i class="${item._expand ? 'vxe-table--tree-fold-icon' : 'vxe-table--tree-unfold-icon'}"></i>`
                   }
                   classNames.push('vxe-table--tree-node')
                   if (column.type === 'radio') {
@@ -879,10 +886,11 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       const { treeConfig } = props
       const { initStore, mergeList, isGroup, footerData, exportStore, exportParams } = reactData
       const { collectColumn } = internalData
+      const hasTree = treeConfig
       const customOpts = computeCustomOpts.value
       const selectRecords = $xetable.getCheckboxRecords()
       const hasFooter = !!footerData.length
-      const hasMerge = !treeConfig && mergeList.length
+      const hasMerge = !hasTree && mergeList.length
       const defOpts = Object.assign({ message: true, isHeader: true }, options)
       const types = defOpts.types || VXETable.exportTypes
       const checkMethod = customOpts.checkMethod
@@ -936,23 +944,16 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         modeList,
         hasFooter,
         hasMerge,
+        hasTree,
         isPrint,
         hasColgroup: isGroup,
         visible: true
       })
       // 重置参数
       Object.assign(exportParams, {
-        filename: defOpts.filename || '',
-        sheetName: defOpts.sheetName || '',
-        type: defOpts.type || typeList[0].value,
-        mode: selectRecords.length ? 'selected' : 'current',
-        original: defOpts.original,
-        message: defOpts.message,
-        isHeader: defOpts.isHeader,
-        isFooter: hasFooter && (XEUtils.isBoolean(defOpts.isFooter) ? defOpts.isFooter : true),
-        isColgroup: XEUtils.isBoolean(defOpts.isColgroup) ? defOpts.isColgroup : true,
-        isMerge: hasMerge && defOpts.isMerge,
-        isPrint: defOpts.isPrint
+        type: defOpts.type || typeList[0].value
+      }, defOpts, {
+        mode: selectRecords.length ? 'selected' : 'current'
       })
       initStore.export = true
       return nextTick()
@@ -979,7 +980,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           isHeader: true,
           isFooter: true,
           isColgroup: true,
-          isMerge: false,
+          // isMerge: false,
+          // isAllExpand: false,
           download: true,
           type: 'csv',
           mode: 'current'
@@ -1079,7 +1081,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           if (mode === 'selected') {
             const selectRecords = $xetable.getCheckboxRecords()
             if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
-              opts.data = XEUtils.searchTree($xetable.getTableData().fullData, item => selectRecords.indexOf(item) > -1, treeOpts)
+              opts.data = XEUtils.searchTree($xetable.getTableData().fullData, item => selectRecords.indexOf(item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
             } else {
               opts.data = selectRecords
             }
