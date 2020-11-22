@@ -328,11 +328,12 @@ const Methods = {
    */
   loadData (datas) {
     return this.loadTableData(datas).then(() => {
-      if (!this.inited) {
-        this.inited = true
+      this.inited = true
+      if (!this.initStatus) {
+        this.initStatus = true
         this.handleDefaults()
       }
-      this.recalculate()
+      return this.recalculate()
     })
   },
   /**
@@ -343,9 +344,13 @@ const Methods = {
     return this.clearAll()
       .then(() => {
         this.inited = true
+        this.initStatus = true
         return this.loadTableData(datas)
       })
-      .then(this.handleDefaults)
+      .then(() => {
+        this.handleDefaults()
+        return this.recalculate()
+      })
   },
   /**
    * 局部加载行数据并恢复到初始状态
@@ -459,33 +464,28 @@ const Methods = {
       tableFullData.forEach(handleCache)
     }
   },
-  appendTreeCache (row, childs) {
-    const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
-    const { children, hasChild } = treeOpts
-    const rowkey = getRowkey(this)
-    const rowid = getRowid(this, row)
-    let matchObj
-    if (keepSource) {
-      matchObj = XEUtils.findTree(tableSourceData, item => rowid === getRowid(this, item), treeOpts)
-    }
-    XEUtils.eachTree(childs, (row, index, items, path, parent) => {
-      let rowid = getRowid(this, row)
-      if (!rowid) {
-        rowid = getRowUniqueId()
-        XEUtils.set(row, rowkey, rowid)
+  loadChildren (row, childRecords) {
+    return this.createData(childRecords).then((rows) => {
+      const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+      const { children } = treeOpts
+      if (keepSource) {
+        const rowid = getRowid(this, row)
+        const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid(this, item), treeOpts)
+        if (matchObj) {
+          matchObj.item[children] = XEUtils.clone(rows, true)
+        }
       }
-      if (row[hasChild] && XEUtils.isUndefined(row[children])) {
-        row[children] = null
-      }
-      const rest = { row, rowid, index: -1, items, parent }
-      fullDataRowIdData[rowid] = rest
-      fullDataRowMap.set(row, rest)
-      fullAllDataRowIdData[rowid] = rest
-      fullAllDataRowMap.set(row, rest)
-    }, treeOpts)
-    if (matchObj) {
-      matchObj.item[children] = XEUtils.clone(childs, true)
-    }
+      XEUtils.eachTree(rows, (childRow, index, items, path, parent) => {
+        const rowid = getRowid(this, childRow)
+        const rest = { row: childRow, rowid, index: -1, items, parent }
+        fullDataRowIdData[rowid] = rest
+        fullDataRowMap.set(childRow, rest)
+        fullAllDataRowIdData[rowid] = rest
+        fullAllDataRowMap.set(childRow, rest)
+      }, treeOpts)
+      row[children] = rows
+      return rows
+    })
   },
   /**
    * 更新数据列的 Map
@@ -714,8 +714,9 @@ const Methods = {
    * @param {Array} records 新数据
    */
   createData (records) {
-    const rowkey = getRowkey(this)
-    const rows = records.map(record => this.defineField(Object.assign({}, record, { [rowkey]: null })))
+    const { treeConfig, treeOpts } = this
+    const handleRrecord = record => this.defineField(Object.assign({}, record))
+    const rows = treeConfig ? XEUtils.mapTree(records, handleRrecord, treeOpts) : records.map(handleRrecord)
     return this.$nextTick().then(() => rows)
   },
   /**
@@ -1035,9 +1036,6 @@ const Methods = {
     }
     if (this.radioConfig) {
       this.handleDefaultRadioChecked()
-    }
-    if (this.sortConfig) {
-      this.handleDefaultSort()
     }
     if (this.expandConfig) {
       this.handleDefaultRowExpand()
@@ -3342,27 +3340,27 @@ const Methods = {
   },
   handleAsyncTreeExpandChilds (row) {
     const { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds, checkboxOpts } = this
-    const { loadMethod, children } = treeOpts
+    const { loadMethod } = treeOpts
     const { checkStrictly } = checkboxOpts
     const rest = fullAllDataRowMap.get(row)
     return new Promise(resolve => {
       treeLazyLoadeds.push(row)
-      loadMethod({ $table: this, row }).catch(() => []).then(childs => {
+      loadMethod({ $table: this, row }).catch(() => []).then(childRecords => {
         rest.treeLoaded = true
         XEUtils.remove(treeLazyLoadeds, item => item === row)
-        if (!XEUtils.isArray(childs)) {
-          childs = []
+        if (!XEUtils.isArray(childRecords)) {
+          childRecords = []
         }
-        if (childs) {
-          row[children] = childs
-          this.appendTreeCache(row, childs)
-          if (childs.length && treeExpandeds.indexOf(row) === -1) {
-            treeExpandeds.push(row)
-          }
-          // 如果当前节点已选中，则展开后子节点也被选中
-          if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
-            this.setCheckboxRow(childs, true)
-          }
+        if (childRecords) {
+          this.loadChildren(row, childRecords).then(childRows => {
+            if (childRows.length && treeExpandeds.indexOf(row) === -1) {
+              treeExpandeds.push(row)
+            }
+            // 如果当前节点已选中，则展开后子节点也被选中
+            if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
+              this.setCheckboxRow(childRows, true)
+            }
+          })
         }
         resolve(this.$nextTick().then(this.recalculate))
       })

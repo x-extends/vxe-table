@@ -209,6 +209,8 @@ export default {
       expColgroupTitle: 'If it exists, headers with grouping structure are supported',
       expOptMerge: 'Cell merge',
       expMergeTitle: 'If it exists, cells with merged structures are supported',
+      expOptAllExpand: 'Expand all nodes',
+      expAllExpandTitle: 'If it exists, all data with tree structure can be expanded',
       expOptOriginal: 'Source data',
       expOriginalTitle: 'If it is source data, import into the table is supported',
       expPrint: 'Print',

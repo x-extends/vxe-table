@@ -7,7 +7,7 @@ import { mergeBodyMethod } from '../../table/src/util'
 const { formatText } = UtilTools
 
 // 默认导出或打印的 HTML 样式
-const defaultHtmlStyle = 'body{margin:0;color:#333333}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;text-align:left;font-size:14px;border-spacing:0}.vxe-table:not(.is--print){table-layout:fixed}.vxe-table.is--print{width:100%}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-top:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-left:1px solid #e8eaec}.vxe-table.border--outer,.vxe-table.border--default th,.vxe-table.border--default td,.vxe-table.border--full th,.vxe-table.border--full td,.vxe-table.border--outer th,.vxe-table.border--inner th,.vxe-table.border--inner td{border-bottom:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--outer,.vxe-table.border--full th,.vxe-table.border--full td{border-right:1px solid #e8eaec}.vxe-table.border--default th,.vxe-table.border--full th,.vxe-table.border--outer th{background-color:#f8f8f9}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.vxe-table:not(.is--print) .col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-icon{position:absolute;left:0;top:.3em;width:0;height:0;border-style:solid;border-width:.5em;border-top-color:#939599;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.vxe-table--tree-cell{display:block;padding-left:1.5em}.vxe-table input[type="checkbox"]{margin:0}.vxe-table input[type="checkbox"],.vxe-table input[type="radio"],.vxe-table input[type="checkbox"]+span,.vxe-table input[type="radio"]+span{vertical-align:middle;padding-left: 0.4em}'
+const defaultHtmlStyle = 'body{margin:0;color:#333333}body *{-webkit-box-sizing:border-box;box-sizing:border-box}.vxe-table{border:0;border-collapse:separate;text-align:left;font-size:14px;border-spacing:0}.vxe-table:not(.is--print){table-layout:fixed}.vxe-table.is--print{width:100%}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-top:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--full,.vxe-table.border--outer{border-left:1px solid #e8eaec}.vxe-table.border--outer,.vxe-table.border--default th,.vxe-table.border--default td,.vxe-table.border--full th,.vxe-table.border--full td,.vxe-table.border--outer th,.vxe-table.border--inner th,.vxe-table.border--inner td{border-bottom:1px solid #e8eaec}.vxe-table.border--default,.vxe-table.border--outer,.vxe-table.border--full th,.vxe-table.border--full td{border-right:1px solid #e8eaec}.vxe-table.border--default th,.vxe-table.border--full th,.vxe-table.border--outer th{background-color:#f8f8f9}.vxe-table td>div,.vxe-table th>div{padding:.5em .4em}.col--center{text-align:center}.col--right{text-align:right}.vxe-table:not(.is--print) .col--ellipsis>div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}.vxe-table--tree-node{text-align:left}.vxe-table--tree-node-wrapper{position:relative}.vxe-table--tree-icon-wrapper{position:absolute;top:50%;width:1em;height:1em;text-align:center;-webkit-transform:translateY(-50%);transform:translateY(-50%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:pointer}.vxe-table--tree-unfold-icon,.vxe-table--tree-fold-icon{position:absolute;width:0;height:0;border-style:solid;border-width:.5em;border-right-color:transparent;border-bottom-color:transparent;}.vxe-table--tree-unfold-icon{left:.3em;top:0;border-left-color:#939599;border-top-color:transparent;}.vxe-table--tree-fold-icon{left:0;top:.3em;border-left-color:transparent;border-top-color:#939599;}.vxe-table--tree-cell{display:block;padding-left:1.5em}.vxe-table input[type="checkbox"]{margin:0}.vxe-table input[type="checkbox"],.vxe-table input[type="radio"],.vxe-table input[type="checkbox"]+span,.vxe-table input[type="radio"]+span{vertical-align:middle;padding-left:0.4em}'
 
 let htmlCellElem
 
@@ -36,7 +36,7 @@ function getExportBlobByContent (content, options) {
 
 function hasTreeChildren ($xetable, row) {
   const treeOpts = $xetable.treeOpts
-  return row[treeOpts.children] && row[treeOpts.children].length
+  return row[treeOpts.children] && row[treeOpts.children].length > 0
 }
 
 function getSeq ($xetable, row, rowIndex, column, columnIndex) {
@@ -60,6 +60,7 @@ function toTableBorder (border) {
 }
 
 function getLabelData ($xetable, opts, columns, datas) {
+  const { isAllExpand } = opts
   const { treeConfig, treeOpts, radioOpts, checkboxOpts } = $xetable
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
@@ -67,59 +68,65 @@ function getLabelData ($xetable, opts, columns, datas) {
   if (treeConfig) {
     // 如果是树表格只允许导出数据源
     const rest = []
-    XEUtils.eachTree(datas, (row, rowIndex, items, path, parent, nodes) => {
-      const item = {
-        _row: row,
-        _level: nodes.length - 1,
-        _hasChild: hasTreeChildren($xetable, row)
-      }
-      columns.forEach((column, columnIndex) => {
-        let cellValue = ''
-        const renderOpts = column.editRender || column.cellRender
-        let exportLabelMethod = column.exportMethod
-        if (!exportLabelMethod && renderOpts && renderOpts.name) {
-          const compConf = VXETable.renderer.get(renderOpts.name)
-          if (compConf) {
-            exportLabelMethod = compConf.exportMethod || compConf.cellExportMethod
-          }
+    XEUtils.eachTree(datas, (item, rowIndex, items, path, parent, nodes) => {
+      const row = item._row || item
+      const parentRow = parent && parent._row ? parent._row : parent
+      if ((isAllExpand || !parentRow || $xetable.isTreeExpandByRow(parentRow))) {
+        const hasRowChild = hasTreeChildren($xetable, row)
+        const item = {
+          _row: row,
+          _level: nodes.length - 1,
+          _hasChild: hasRowChild,
+          _expand: hasRowChild && $xetable.isTreeExpandByRow(row)
         }
-        if (exportLabelMethod) {
-          cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
-        } else {
-          switch (column.type) {
-            case 'seq':
-              cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
-              break
-            case 'checkbox':
-              cellValue = $xetable.isCheckedByCheckboxRow(row)
-              item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
-              item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
-              break
-            case 'radio':
-              cellValue = $xetable.isCheckedByRadioRow(row)
-              item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
-              item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
-              break
-            default:
-              if (opts.original) {
-                cellValue = UtilTools.getCellValue(row, column)
-              } else {
-                cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
-                if (column.type === 'html') {
-                  htmlCellElem.innerHTML = cellValue
-                  cellValue = htmlCellElem.innerText.trim()
+        columns.forEach((column, columnIndex) => {
+          let cellValue = ''
+          const renderOpts = column.editRender || column.cellRender
+          let exportLabelMethod = column.exportMethod
+          if (!exportLabelMethod && renderOpts && renderOpts.name) {
+            const compConf = VXETable.renderer.get(renderOpts.name)
+            if (compConf) {
+              exportLabelMethod = compConf.exportMethod || compConf.cellExportMethod
+            }
+          }
+          if (exportLabelMethod) {
+            cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
+          } else {
+            switch (column.type) {
+              case 'seq':
+                cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
+                break
+              case 'checkbox':
+                cellValue = $xetable.isCheckedByCheckboxRow(row)
+                item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
+                item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
+                break
+              case 'radio':
+                cellValue = $xetable.isCheckedByRadioRow(row)
+                item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
+                item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
+                break
+              default:
+                if (opts.original) {
+                  cellValue = UtilTools.getCellValue(row, column)
                 } else {
-                  const cell = $xetable.getCell(row, column)
-                  if (cell) {
-                    cellValue = cell.innerText.trim()
+                  cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+                  if (column.type === 'html') {
+                    htmlCellElem.innerHTML = cellValue
+                    cellValue = htmlCellElem.innerText.trim()
+                  } else {
+                    const cell = $xetable.getCell(row, column)
+                    if (cell) {
+                      cellValue = cell.innerText.trim()
+                    }
                   }
                 }
-              }
+            }
           }
-        }
-        item[column.id] = XEUtils.toString(cellValue)
-      })
-      rest.push(Object.assign(item, row))
+          item[column.id] = XEUtils.toString(cellValue)
+        })
+        rest.push(Object.assign(item, row))
+      }
     }, treeOpts)
     return rest
   }
@@ -376,7 +383,7 @@ function toHtml ($xetable, opts, columns, datas) {
             if (column.treeNode) {
               let treeIcon = ''
               if (item._hasChild) {
-                treeIcon = '<i class="vxe-table--tree-icon"></i>'
+                treeIcon = `<i class="${item._expand ? 'vxe-table--tree-fold-icon' : 'vxe-table--tree-unfold-icon'}"></i>`
               }
               classNames.push('vxe-table--tree-node')
               if (column.type === 'radio') {
@@ -942,7 +949,8 @@ function handleExportAndPrint ($xetable, options, isPrint) {
   const { customOpts, collectColumn, footerData, treeConfig, mergeList, isGroup } = $xetable
   const selectRecords = $xetable.getCheckboxRecords()
   const hasFooter = !!footerData.length
-  const hasMerge = !treeConfig && mergeList.length
+  const hasTree = treeConfig
+  const hasMerge = !hasTree && mergeList.length
   const defOpts = Object.assign({ message: true, isHeader: true }, options)
   const types = defOpts.types || VXETable.exportTypes
   const checkMethod = customOpts.checkMethod
@@ -996,23 +1004,16 @@ function handleExportAndPrint ($xetable, options, isPrint) {
     modeList,
     hasFooter,
     hasMerge,
+    hasTree,
     isPrint,
     hasColgroup: isGroup,
     visible: true
   })
   // 重置参数
   Object.assign($xetable.exportParams, {
-    filename: defOpts.filename || '',
-    sheetName: defOpts.sheetName || '',
-    type: defOpts.type || typeList[0].value,
-    mode: selectRecords.length ? 'selected' : 'current',
-    original: defOpts.original,
-    message: defOpts.message,
-    isHeader: defOpts.isHeader,
-    isFooter: hasFooter && (XEUtils.isBoolean(defOpts.isFooter) ? defOpts.isFooter : true),
-    isColgroup: XEUtils.isBoolean(defOpts.isColgroup) ? defOpts.isColgroup : true,
-    isMerge: hasMerge && defOpts.isMerge,
-    isPrint: defOpts.isPrint
+    type: defOpts.type || typeList[0].value
+  }, defOpts, {
+    mode: selectRecords.length ? 'selected' : 'current'
   })
   $xetable.initStore.export = true
   return $xetable.$nextTick()
@@ -1095,6 +1096,7 @@ export default {
         isFooter: true,
         isColgroup: true,
         isMerge: false,
+        isAllExpand: false,
         download: true,
         type: 'csv',
         mode: 'current'
@@ -1194,7 +1196,7 @@ export default {
         if (mode === 'selected') {
           const selectRecords = this.getCheckboxRecords()
           if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
-            opts.data = XEUtils.searchTree(this.getTableData().fullData, item => selectRecords.indexOf(item) > -1, treeOpts)
+            opts.data = XEUtils.searchTree(this.getTableData().fullData, (item) => selectRecords.indexOf(item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
           } else {
             opts.data = selectRecords
           }

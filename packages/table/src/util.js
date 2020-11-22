@@ -46,7 +46,7 @@ export function mergeBodyMethod (mergeList, _rowIndex, _columnIndex) {
 }
 
 export function clearTableDefaultStatus (_vm) {
-  _vm.inited = false
+  _vm.initStatus = false
   _vm.clearSort()
   _vm.clearCurrentRow()
   _vm.clearCurrentColumn()
@@ -57,13 +57,13 @@ export function clearTableDefaultStatus (_vm) {
   _vm.clearRowExpand()
   _vm.clearTreeExpand()
   _vm.clearTreeExpandReserve()
-  if (VXETable._edit) {
+  if (_vm.clearActived && VXETable._edit) {
     _vm.clearActived()
   }
-  if (_vm.keyboardConfig || _vm.mouseConfig) {
+  if (_vm.clearSelected && (_vm.keyboardConfig || _vm.mouseConfig)) {
     _vm.clearSelected()
   }
-  if (_vm.mouseConfig) {
+  if (_vm.clearCellAreas && _vm.mouseConfig) {
     _vm.clearCellAreas()
     _vm.clearCopyCellArea()
   }
@@ -71,8 +71,8 @@ export function clearTableDefaultStatus (_vm) {
 }
 
 export function clearTableAllStatus (_vm) {
-  if (VXETable._filter) {
-    return _vm.clearFilter()
+  if (_vm.clearFilter && VXETable._filter) {
+    _vm.clearFilter()
   }
   return clearTableDefaultStatus(_vm)
 }

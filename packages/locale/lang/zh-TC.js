@@ -209,6 +209,8 @@ export default {
       expColgroupTitle: '如果存在，則支持帶有分組結構的表頭',
       expOptMerge: '儲存格合併',
       expMergeTitle: '如果存在，則支持帶有合併結構的儲存格',
+      expOptAllExpand: '展開所有層級',
+      expAllExpandTitle: '如果存在，則支持將帶有樹結構的數據全部展開',
       expOptOriginal: '源數據',
       expOriginalTitle: '如果為源數據，則支持導入到表格中',
       expPrint: '列印',

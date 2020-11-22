@@ -411,6 +411,7 @@ export default {
         columns: [],
         isPrint: false,
         hasFooter: false,
+        hasTree: false,
         hasMerge: false,
         hasColgroup: false,
         visible: false
@@ -422,6 +423,7 @@ export default {
         type: '',
         isColgroup: false,
         isMerge: false,
+        isAllExpand: false,
         original: false,
         message: true,
         isHeader: false,
@@ -576,8 +578,9 @@ export default {
   watch: {
     data (value) {
       this.loadTableData(value).then(() => {
-        if (!this.inited) {
-          this.inited = true
+        this.inited = true
+        if (!this.initStatus) {
+          this.initStatus = true
           this.handleDefaults()
         }
         if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
@@ -772,8 +775,11 @@ export default {
     })
     this.loadTableData(data).then(() => {
       if (data && data.length) {
-        this.inited = true
+        this.initStatus = true
         this.handleDefaults()
+      }
+      if (this.sortConfig) {
+        this.handleDefaultSort()
       }
       this.updateStyle()
     })

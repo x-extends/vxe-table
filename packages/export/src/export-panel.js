@@ -44,7 +44,7 @@ export default {
   },
   render (h) {
     const { _e, checkedAll, isAll, isIndeterminate, showSheet, supportMerge, defaultOptions, storeData } = this
-    const { hasMerge, isPrint, hasColgroup } = storeData
+    const { hasTree, hasMerge, isPrint, hasColgroup } = storeData
     const { isHeader } = defaultOptions
     const cols = []
     XEUtils.eachTree(storeData.columns, column => {
@@ -269,6 +269,18 @@ export default {
                           defaultOptions.isFooter = value
                         }
                       }
+                    }),
+                    h('vxe-checkbox', {
+                      props: {
+                        value: defaultOptions.original,
+                        title: GlobalConfig.i18n('vxe.export.expOriginalTitle'),
+                        content: GlobalConfig.i18n('vxe.export.expOptOriginal')
+                      },
+                      on: {
+                        input (value) {
+                          defaultOptions.original = value
+                        }
+                      }
                     })
                   ]),
                   h('div', {
@@ -302,13 +314,14 @@ export default {
                     }),
                     h('vxe-checkbox', {
                       props: {
-                        value: defaultOptions.original,
-                        title: GlobalConfig.i18n('vxe.export.expOriginalTitle'),
-                        content: GlobalConfig.i18n('vxe.export.expOptOriginal')
+                        value: hasTree ? defaultOptions.isAllExpand : false,
+                        disabled: !hasTree,
+                        title: GlobalConfig.i18n('vxe.export.expAllExpandTitle'),
+                        content: GlobalConfig.i18n('vxe.export.expOptAllExpand')
                       },
                       on: {
                         input (value) {
-                          defaultOptions.original = value
+                          defaultOptions.isAllExpand = value
                         }
                       }
                     })
