@@ -143,7 +143,7 @@ export default {
 
 ## Donate
 
-如果您覺得我們的開源軟件對您有所幫助，可以掃下方二維碼支持我們。☕  
+如果該開源軟件對您有所幫助，可以掃下方二維碼支持我們。☕  
 
 [👉 支持作者💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
 

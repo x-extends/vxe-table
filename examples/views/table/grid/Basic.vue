@@ -38,7 +38,8 @@ export default {
         { type: 'seq', width: 50 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
-        { field: 'address', title: 'Address', showOverflow: true }
+        { field: 'address', title: 'Address', showOverflow: true },
+        { field: 'age', title: 'Age', cellRender: { name: 'ProgressBar' } }
       ],
       tableData: [
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },

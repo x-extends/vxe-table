@@ -392,7 +392,7 @@ export default {
           })
         }
       })
-      this.$refs.xTable.loadColumn(columns)
+      return this.$refs.xTable.loadColumn(columns)
     },
     reloadColumn (columns) {
       this.clearAll()

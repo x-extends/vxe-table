@@ -86,11 +86,11 @@
       <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
     </pre>
 
-    <p class="tip">打印合同</p>
+    <p class="tip">打印自定义模板</p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-button @click="printEvent4">打印合同</vxe-button>
+        <vxe-button @click="printEvent4">打印自定义模板</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -448,7 +448,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-button @click="printEvent4">打印合同</vxe-button>
+            <vxe-button @click="printEvent4">打印自定义模板</vxe-button>
           </template>
         </vxe-toolbar>
         `,
@@ -582,7 +582,7 @@ export default {
               </div>
               \`
               this.$XPrint({
-                sheetName: '打印合同模板',
+                sheetName: '打印自定义模板',
                 style: printStyle,
                 content: printTmpl
               })
@@ -816,7 +816,7 @@ export default {
       </div>
       `
       this.$XPrint({
-        sheetName: '打印合同模板',
+        sheetName: '打印自定义模板',
         style: printStyle,
         content: printTmpl
       })

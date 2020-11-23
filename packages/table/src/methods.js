@@ -1879,7 +1879,7 @@ const Methods = {
       this.preventEvent(evnt, 'event.keydown', null, () => {
         const { isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
         const { selected, actived } = editStore
-        const keyCode = evnt.keyCode
+        const { keyCode } = evnt
         const isBack = keyCode === 8
         const isTab = keyCode === 9
         const isEnter = keyCode === 13
@@ -1892,9 +1892,10 @@ const Methods = {
         const isDel = keyCode === 46
         const isF2 = keyCode === 113
         const isContextMenu = keyCode === 93
-        const isCtrlKey = evnt.ctrlKey
-        const isShiftKey = evnt.shiftKey
-        const isAltKey = evnt.altKey
+        const hasMetaKey = evnt.metaKey
+        const hasCtrlKey = evnt.ctrlKey
+        const hasShiftKey = evnt.shiftKey
+        const hasAltKey = evnt.altKey
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         const isEditStatus = editConfig && actived.column && actived.row
@@ -1945,9 +1946,9 @@ const Methods = {
           this.keyCtxTimeout = setTimeout(() => {
             this._keyCtx = false
           }, 1000)
-        } else if (isEnter && !isAltKey && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
+        } else if (isEnter && !hasAltKey && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
           // 退出选中
-          if (isCtrlKey) {
+          if (hasCtrlKey) {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
               params = actived.args
@@ -1961,15 +1962,15 @@ const Methods = {
             // 如果是激活状态，退则出到上一行/下一行
             if (selected.row || actived.row) {
               const targetArgs = selected.row ? selected.args : actived.args
-              if (isShiftKey) {
+              if (hasShiftKey) {
                 if (keyboardConfig.enterToTab) {
-                  this.moveTabSelected(targetArgs, isShiftKey, evnt)
+                  this.moveTabSelected(targetArgs, hasShiftKey, evnt)
                 } else {
                   this.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
                 }
               } else {
                 if (keyboardConfig.enterToTab) {
-                  this.moveTabSelected(targetArgs, isShiftKey, evnt)
+                  this.moveTabSelected(targetArgs, hasShiftKey, evnt)
                 } else {
                   this.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
                 }
@@ -2000,9 +2001,9 @@ const Methods = {
         } else if (isTab && keyboardConfig.isTab) {
           // 如果按下了 Tab 键切换
           if (selected.row || selected.column) {
-            this.moveTabSelected(selected.args, isShiftKey, evnt)
+            this.moveTabSelected(selected.args, hasShiftKey, evnt)
           } else if (actived.row || actived.column) {
-            this.moveTabSelected(actived.args, isShiftKey, evnt)
+            this.moveTabSelected(actived.args, hasShiftKey, evnt)
           }
         } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
           if (!isEditStatus) {
@@ -2024,7 +2025,7 @@ const Methods = {
               }
             }
           }
-        } else if (keyboardConfig.isEdit && !isCtrlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+        } else if (keyboardConfig.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           // 启用编辑后，空格键功能将失效
           // if (isSpacebar) {
           //   evnt.preventDefault()
