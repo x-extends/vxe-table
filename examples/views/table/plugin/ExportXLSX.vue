@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar ref="xToolbar" custom import export>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="demo1.tableData = []">清空数据</vxe-button>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
       </template>
@@ -113,7 +113,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-toolbar ref="xToolbar" custom import export>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="demo1.tableData = []">清空数据</vxe-button>
             <vxe-button @click="exportDataEvent">导出数据</vxe-button>
           </template>

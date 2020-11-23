@@ -275,16 +275,23 @@ export default defineComponent({
     const handleSearch = () => {
       const filterName = XEUtils.toString(apiData.filterName).trim().toLowerCase()
       if (filterName) {
-        const filterRE = new RegExp(filterName, 'gi')
         const options = { children: 'list' }
-        const searchProps = ['name', 'desc', 'type', 'enum', 'defVal']
-        const rest = XEUtils.searchTree(apiData.tableData, (item: any) => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
-        XEUtils.eachTree(rest, item => {
-          searchProps.forEach(key => {
-            item[key] = item[key].replace(filterRE, (match: any) => `<span class="keyword-lighten">${match}</span>`)
-          })
-        }, options)
-        apiData.apiList = rest
+        if (filterName === 'pro') {
+          const rest = XEUtils.searchTree(apiData.tableData, item => item.version === filterName, options)
+          apiData.apiList = rest
+        } else {
+          const filterRE = new RegExp(filterName, 'gi')
+          const searchProps = ['name', 'desc', 'type', 'enum', 'defVal', 'version']
+          const rest = XEUtils.searchTree(apiData.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
+          XEUtils.eachTree(rest, item => {
+            searchProps.forEach(key => {
+              if (key !== 'version') {
+                item[key] = item[key].replace(filterRE, (match: string) => `<span class="keyword-lighten">${match}</span>`)
+              }
+            })
+          }, options)
+          apiData.apiList = rest
+        }
         nextTick(() => {
           const $table = xTable.value
           if ($table) {

@@ -30,7 +30,14 @@ export const GlobalEvent = {
   off (comp: VxeComponentInstance, type: string) {
     XEUtils.remove(eventStore, item => item.comp === comp && item.type === type)
   },
-  trigger: triggerEvent
+  trigger: triggerEvent,
+  eqKeypad (evnt: KeyboardEvent, keyVal: string) {
+    const { key } = evnt
+    if (keyVal.toLowerCase() === key.toLowerCase()) {
+      return true
+    }
+    return false
+  }
 }
 
 if (browse.isDoc) {

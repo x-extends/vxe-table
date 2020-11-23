@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
         <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
         <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>
@@ -102,7 +102,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
             <vxe-button @click="insertEvent(tableData[2])">在第3行插入并激活 Sex 单元格</vxe-button>
             <vxe-button @click="insertEvent(-1)">在最后行插入</vxe-button>

@@ -7,7 +7,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button icon="fa fa-plus" @click="insertEvent">新增</vxe-button>
         <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -39,7 +39,7 @@
         </template>
       </vxe-table-column>
       <vxe-table-column title="操作" width="200">
-        <template v-slot="{ row, rowIndex }">
+        <template #default="{ row, rowIndex }">
           <template v-if="!row.date12">
             <vxe-button @click="saveEvent2(row)" :loading="row.loading">更新并替换新数据</vxe-button>
           </template>
@@ -167,7 +167,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button icon="fa fa-plus" @click="insertEvent">新增</vxe-button>
             <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -199,7 +199,7 @@ export default defineComponent({
             </template>
           </vxe-table-column>
           <vxe-table-column title="操作" width="200">
-            <template v-slot="{ row, rowIndex }">
+            <template #default="{ row, rowIndex }">
               <template v-if="!row.date12">
                 <vxe-button @click="saveEvent2(row)" :loading="row.loading">更新并替换新数据</vxe-button>
               </template>

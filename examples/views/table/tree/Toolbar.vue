@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar ref="xToolbar" :refresh="{query: searchMethod}" export print custom>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button @click="saveEvent">保存</vxe-button>
       </template>
@@ -138,7 +138,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-toolbar ref="xToolbar" :refresh="{query: searchMethod}" export print custom>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
             <vxe-button @click="saveEvent">保存</vxe-button>
           </template>

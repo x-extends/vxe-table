@@ -23,7 +23,7 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
   * [x] v1.0 Based on vue2.6+, it supports all mainstream browsers and realizes all practical functions of tables
   * [x] v2.0 Based on vue2.6+, it supports all mainstream browsers with both functions and performance
   * [x] v3.0 Based on vue2.6+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
-  * [x] v4.0 &nbsp;&nbsp;10% Based on vue3+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
+  * [x] v4.0 &nbsp;&nbsp;60% Based on vue3+, only modern browser is supported, ie is not supported, rendering performance is greatly improved
 
 ## Browser Support
 
@@ -154,7 +154,7 @@ export default defineComponent({
 
 ## Donate
 
-If you think our open source software is helpful to you, you can scan the QR code below to support us.☕  
+If the open source software is helpful to you, you can scan the QR code below to support us.☕  
 
 [👉 Supports the author💰](https://x-extends.github.io/vxe-table/#/donation/api)  
 

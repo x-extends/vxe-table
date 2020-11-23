@@ -3,7 +3,7 @@
     <p class="tip">工具栏：通过 <grid-api-link prop="toolbar"/> 属性开启，还可以使用 <grid-api-link prop="slot"/> 插槽自定义模板</p>
 
     <vxe-grid v-bind="gridOptions">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
         <vxe-button status="primary">搜索</vxe-button>
         <vxe-button>刷新</vxe-button>
@@ -86,7 +86,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-grid v-bind="gridOptions">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
             <vxe-button status="primary">搜索</vxe-button>
             <vxe-button>刷新</vxe-button>

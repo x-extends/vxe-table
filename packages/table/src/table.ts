@@ -3556,8 +3556,9 @@ export default defineComponent({
           const isDel = keyCode === 46
           const isF2 = keyCode === 113
           const isContextMenu = keyCode === 93
-          const isCtrlKey = evnt.ctrlKey
-          const isShiftKey = evnt.shiftKey
+          const hasMetaKey = evnt.metaKey
+          const hasCtrlKey = evnt.ctrlKey
+          const hasShiftKey = evnt.shiftKey
           const isAltKey = evnt.altKey
           const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
           const operCtxMenu = isMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
@@ -3613,7 +3614,7 @@ export default defineComponent({
             }, 1000)
           } else if (isEnter && !isAltKey && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
             // 退出选中
-            if (isCtrlKey) {
+            if (hasCtrlKey) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 params = actived.args
@@ -3627,15 +3628,15 @@ export default defineComponent({
               // 如果是激活状态，退则出到上一行/下一行
               if (selected.row || actived.row) {
                 const targetArgs = selected.row ? selected.args : actived.args
-                if (isShiftKey) {
+                if (hasShiftKey) {
                   if (keyboardOpts.enterToTab) {
-                    $xetable.moveTabSelected(targetArgs, isShiftKey, evnt)
+                    $xetable.moveTabSelected(targetArgs, hasShiftKey, evnt)
                   } else {
                     $xetable.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
                   }
                 } else {
                   if (keyboardOpts.enterToTab) {
-                    $xetable.moveTabSelected(targetArgs, isShiftKey, evnt)
+                    $xetable.moveTabSelected(targetArgs, hasShiftKey, evnt)
                   } else {
                     $xetable.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
                   }
@@ -3666,9 +3667,9 @@ export default defineComponent({
           } else if (isTab && keyboardOpts.isTab) {
             // 如果按下了 Tab 键切换
             if (selected.row || selected.column) {
-              $xetable.moveTabSelected(selected.args, isShiftKey, evnt)
+              $xetable.moveTabSelected(selected.args, hasShiftKey, evnt)
             } else if (actived.row || actived.column) {
-              $xetable.moveTabSelected(actived.args, isShiftKey, evnt)
+              $xetable.moveTabSelected(actived.args, hasShiftKey, evnt)
             }
           } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack)) {
             if (!isEditStatus) {
@@ -3690,7 +3691,7 @@ export default defineComponent({
                 }
               }
             }
-          } else if (keyboardOpts.isEdit && !isCtrlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+          } else if (keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
             // 启用编辑后，空格键功能将失效
             // if (isSpacebar) {
             //   evnt.preventDefault()
