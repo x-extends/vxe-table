@@ -22,6 +22,13 @@ export const GlobalEvent = {
         cb.call(comp, evnt)
       }
     })
+  },
+  eqKeypad (evnt, keyVal) {
+    const { key } = evnt
+    if (keyVal.toLowerCase() === key.toLowerCase()) {
+      return true
+    }
+    return false
   }
 }
 

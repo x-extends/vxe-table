@@ -1882,8 +1882,9 @@ const Methods = {
         const isA = keyCode === 65
         const isF2 = keyCode === 113
         const isContextMenu = keyCode === 93
-        const isCtrlKey = evnt.ctrlKey
-        const isShiftKey = evnt.shiftKey
+        const hasMetaKey = evnt.metaKey
+        const hasCtrlKey = evnt.ctrlKey
+        const hasShiftKey = evnt.shiftKey
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         const isEditStatus = editConfig && actived.column && actived.row
@@ -1938,7 +1939,7 @@ const Methods = {
           }, 1000)
         } else if (isEnter && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
           // 退出选中
-          if (isCtrlKey) {
+          if (hasCtrlKey) {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
               params = actived.args
@@ -1952,15 +1953,15 @@ const Methods = {
             // 如果是激活状态，退则出到上一行/下一行
             if (selected.row || actived.row) {
               const targetArgs = selected.row ? selected.args : actived.args
-              if (isShiftKey) {
+              if (hasShiftKey) {
                 if (keyboardConfig.enterToTab) {
-                  this.moveTabSelected(targetArgs, isShiftKey, evnt)
+                  this.moveTabSelected(targetArgs, hasShiftKey, evnt)
                 } else {
                   this.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
                 }
               } else {
                 if (keyboardConfig.enterToTab) {
-                  this.moveTabSelected(targetArgs, isShiftKey, evnt)
+                  this.moveTabSelected(targetArgs, hasShiftKey, evnt)
                 } else {
                   this.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
                 }
@@ -1991,9 +1992,9 @@ const Methods = {
         } else if (isTab && keyboardConfig.isTab) {
           // 如果按下了 Tab 键切换
           if (selected.row || selected.column) {
-            this.moveTabSelected(selected.args, isShiftKey, evnt)
+            this.moveTabSelected(selected.args, hasShiftKey, evnt)
           } else if (actived.row || actived.column) {
-            this.moveTabSelected(actived.args, isShiftKey, evnt)
+            this.moveTabSelected(actived.args, hasShiftKey, evnt)
           }
         } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
           if (!isEditStatus) {
@@ -2015,14 +2016,14 @@ const Methods = {
               }
             }
           }
-        } else if (keyboardConfig && isCtrlKey && isA) {
+        } else if (keyboardConfig && hasCtrlKey && isA) {
           if (!isEditStatus) {
             // 如果开启复制功能
             if (keyboardConfig.isCut && this.mouseConfig && this.mouseOpts.checked) {
               this.handleAllChecked(evnt)
             }
           }
-        } else if (keyboardConfig.isEdit && !isCtrlKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+        } else if (keyboardConfig.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           // 启用编辑后，空格键功能将失效
           // if (isSpacebar) {
           //   evnt.preventDefault()
