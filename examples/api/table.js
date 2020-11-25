@@ -1856,6 +1856,70 @@ const apis = [
         ]
       },
       {
+        name: 'fnr-config',
+        descKey: 'app.api.table.desc.fnrConfig',
+        version: 'pro',
+        type: 'any',
+        enum: '',
+        defVal: '继承 setup.table.fnrConfig',
+        list: [
+          {
+            name: 'isFind',
+            desc: '是否启用查找功能',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'findMethod',
+            desc: '自定义单元格查询方法',
+            version: 'pro',
+            type: '({ cellValue, isWhole, isRE, isSensitive, findValue: findCellValue, findRE }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'beforeFindMethod',
+            desc: '自定义单元格替换之前的方法，可以通过返回 false 阻止替换行为',
+            version: 'pro',
+            type: '({ findValue }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'isReplace',
+            desc: '是否启用替换功能',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'replaceMethod',
+            desc: '自定义单元格替换方法',
+            version: 'pro',
+            type: '({ row, column, cellValue }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'beforeReplaceMethod',
+            desc: '自定义单元格替换之前的方法，可以通过返回 false 阻止替换行为',
+            version: 'pro',
+            type: '({ findValue, replaceValue }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'mouse-config',
         descKey: 'app.api.table.desc.mouseConfig',
         version: '',

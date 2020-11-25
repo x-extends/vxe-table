@@ -205,8 +205,10 @@ export default {
     mouseConfig: Object,
     // 按键配置项
     keyboardConfig: Object,
-    // 复制粘贴配置项
+    // 复制/粘贴配置项
     clipConfig: Object,
+    // 查找/替换配置项
+    fnrConfig: Object,
     // 编辑配置项
     editConfig: [Boolean, Object],
     // 校验配置项
@@ -475,10 +477,13 @@ export default {
       return Object.assign({}, GlobalConfig.table.mouseConfig, this.mouseConfig)
     },
     keyboardOpts () {
-      return Object.assign({}, this.keyboardConfig)
+      return Object.assign({}, GlobalConfig.table.keyboardConfig, this.keyboardConfig)
     },
     clipOpts () {
-      return Object.assign({}, this.clipConfig)
+      return Object.assign({}, GlobalConfig.table.clipConfig, this.clipConfig)
+    },
+    fnrOpts () {
+      return Object.assign({}, GlobalConfig.table.fnrConfig, this.fnrConfig)
     },
     // 是否使用了分组表头
     isGroup () {
@@ -661,6 +666,14 @@ export default {
           })
         })
       }
+    },
+    mergeCells (value) {
+      this.clearMergeCells()
+      this.setMergeCells(value)
+    },
+    mergeFooterItems (value) {
+      this.clearMergeFooterItems()
+      this.setMergeFooterItems(value)
     }
   },
   created () {

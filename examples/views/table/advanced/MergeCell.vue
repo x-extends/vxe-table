@@ -5,6 +5,8 @@
       <span class="red">（注意：合并数据属于临时行为，例如：操作数据源、显示隐藏列、固定列...等操作都会导致合并状态被取消）</span>
     </p>
 
+    <vxe-toolbar print></vxe-toolbar>
+
     <vxe-table
       border
       resizable
@@ -12,6 +14,7 @@
       ref="xTable"
       height="800"
       align="center"
+      :print-config="{}"
       :column-config="{width: 90}"
       :merge-cells="mergeCells"
       :merge-footer-items="mergeFooterItems"
@@ -83,66 +86,12 @@ export default {
   data () {
     return {
       tableData: [],
-      mergeCells: [
-        { row: 0, col: 0, rowspan: 2, colspan: 1 },
-        { row: 0, col: 1, rowspan: 2, colspan: 1 },
-        { row: 0, col: 2, rowspan: 2, colspan: 1 },
-        { row: 0, col: 3, rowspan: 2, colspan: 1 },
-        { row: 0, col: 4, rowspan: 2, colspan: 1 },
-        { row: 0, col: 5, rowspan: 2, colspan: 1 },
-        { row: 0, col: 6, rowspan: 2, colspan: 1 },
-        { row: 0, col: 7, rowspan: 2, colspan: 1 },
-        { row: 0, col: 8, rowspan: 2, colspan: 1 },
-        { row: 0, col: 9, rowspan: 2, colspan: 1 },
-        { row: 0, col: 15, rowspan: 10, colspan: 1 },
-        { row: 0, col: 16, rowspan: 10, colspan: 1 },
-        { row: 0, col: 18, rowspan: 2, colspan: 1 },
-        { row: 0, col: 19, rowspan: 2, colspan: 1 },
-        { row: 0, col: 20, rowspan: 2, colspan: 1 },
-        { row: 0, col: 21, rowspan: 2, colspan: 1 },
-        { row: 1, col: 11, rowspan: 1, colspan: 4 },
-
-        { row: 2, col: 0, rowspan: 4, colspan: 2 },
-        { row: 2, col: 2, rowspan: 4, colspan: 1 },
-        { row: 2, col: 3, rowspan: 4, colspan: 1 },
-        { row: 2, col: 6, rowspan: 4, colspan: 1 },
-        { row: 2, col: 7, rowspan: 4, colspan: 1 },
-        { row: 2, col: 8, rowspan: 4, colspan: 1 },
-        { row: 2, col: 9, rowspan: 4, colspan: 1 },
-        { row: 2, col: 17, rowspan: 4, colspan: 1 },
-        { row: 2, col: 18, rowspan: 3, colspan: 1 },
-        { row: 2, col: 19, rowspan: 3, colspan: 1 },
-        { row: 2, col: 20, rowspan: 3, colspan: 2 },
-        { row: 3, col: 4, rowspan: 2, colspan: 2 },
-        { row: 4, col: 11, rowspan: 2, colspan: 4 },
-        { row: 5, col: 18, rowspan: 1, colspan: 4 },
-
-        { row: 6, col: 0, rowspan: 3, colspan: 1 },
-        { row: 6, col: 1, rowspan: 3, colspan: 1 },
-        { row: 6, col: 4, rowspan: 3, colspan: 1 },
-        { row: 6, col: 5, rowspan: 3, colspan: 1 },
-        { row: 6, col: 6, rowspan: 3, colspan: 1 },
-        { row: 6, col: 7, rowspan: 3, colspan: 1 },
-        { row: 6, col: 8, rowspan: 3, colspan: 1 },
-        { row: 6, col: 9, rowspan: 3, colspan: 1 },
-        { row: 6, col: 18, rowspan: 3, colspan: 1 },
-        { row: 6, col: 19, rowspan: 3, colspan: 1 },
-        { row: 6, col: 20, rowspan: 3, colspan: 1 },
-        { row: 6, col: 21, rowspan: 3, colspan: 1 },
-        { row: 6, col: 2, rowspan: 1, colspan: 2 },
-        { row: 8, col: 2, rowspan: 1, colspan: 2 },
-        { row: 9, col: 0, rowspan: 1, colspan: 15 },
-
-        { row: 11, col: 5, rowspan: 4, colspan: 12 }
-      ],
-      mergeFooterItems: [
-        { row: 0, col: 1, rowspan: 1, colspan: 2 },
-        { row: 0, col: 6, rowspan: 1, colspan: 2 },
-        { row: 0, col: 14, rowspan: 2, colspan: 5 },
-        { row: 1, col: 4, rowspan: 1, colspan: 8 }
-      ],
+      mergeCells: [],
+      mergeFooterItems: [],
       demoCodes: [
         `
+        <vxe-toolbar print></vxe-toolbar>
+
         <vxe-table
           border
           resizable
@@ -150,6 +99,7 @@ export default {
           ref="xTable"
           height="800"
           align="center"
+          :print-config="{}"
           :column-config="{width: 90}"
           :merge-cells="mergeCells"
           :merge-footer-items="mergeFooterItems"
@@ -210,7 +160,49 @@ export default {
           data () {
             return {
               tableData: [],
-              mergeCells: [
+              mergeCells: [],
+              mergeFooterItems: []
+            }
+          },
+          created () {
+            this.loadList()
+          },
+          methods: {
+            loadList () {
+              const list = []
+              for (let index = 0; index < 15; index++) {
+                list.push({
+                  a: 'a' + index,
+                  b: 'b' + index,
+                  c: 'c' + index,
+                  d: 'd' + index,
+                  e: 'e' + index,
+                  f: 'f' + index,
+                  g: 'g' + index,
+                  h: 'h' + index,
+                  i: 'i' + index,
+                  j: 'j' + index,
+                  k: 'k' + index,
+                  l: 'l' + index,
+                  m: 'm' + index,
+                  n: 'n' + index,
+                  o: 'o' + index,
+                  p: 'p' + index,
+                  q: 'q' + index,
+                  r: 'r' + index,
+                  s: 's' + index,
+                  t: 't' + index,
+                  u: 'u' + index,
+                  v: 'v' + index,
+                  w: 'w' + index
+                })
+              }
+              this.tableData = list
+              this.handleMerge()
+            },
+            handleMerge () {
+              // 根据行数据计算合并规则
+              const mergeCells = [
                 { row: 0, col: 0, rowspan: 2, colspan: 1 },
                 { row: 0, col: 1, rowspan: 2, colspan: 1 },
                 { row: 0, col: 2, rowspan: 2, colspan: 1 },
@@ -261,47 +253,17 @@ export default {
                 { row: 9, col: 0, rowspan: 1, colspan: 15 },
 
                 { row: 11, col: 5, rowspan: 4, colspan: 12 }
-              ],
-              mergeFooterItems: [
+              ]
+              // 根据行数据计算表尾合并规则
+              const mergeFooterItems = [
                 { row: 0, col: 1, rowspan: 1, colspan: 2 },
                 { row: 0, col: 6, rowspan: 1, colspan: 2 },
                 { row: 0, col: 14, rowspan: 2, colspan: 5 },
                 { row: 1, col: 4, rowspan: 1, colspan: 8 }
               ]
-            }
-          },
-          created () {
-            const list = []
-            for (let index = 0; index < 15; index++) {
-              list.push({
-                a: 'a' + index,
-                b: 'b' + index,
-                c: 'c' + index,
-                d: 'd' + index,
-                e: 'e' + index,
-                f: 'f' + index,
-                g: 'g' + index,
-                h: 'h' + index,
-                i: 'i' + index,
-                j: 'j' + index,
-                k: 'k' + index,
-                l: 'l' + index,
-                m: 'm' + index,
-                n: 'n' + index,
-                o: 'o' + index,
-                p: 'p' + index,
-                q: 'q' + index,
-                r: 'r' + index,
-                s: 's' + index,
-                t: 't' + index,
-                u: 'u' + index,
-                v: 'v' + index,
-                w: 'w' + index
-              })
-            }
-            this.tableData = list
-          },
-          methods: {
+              this.mergeCells = mergeCells
+              this.mergeFooterItems = mergeFooterItems
+            },
             footerMethod ({ columns }) {
               return [
                 columns.map((column, index) => index),
@@ -315,35 +277,7 @@ export default {
     }
   },
   created () {
-    const list = []
-    for (let index = 0; index < 15; index++) {
-      list.push({
-        a: 'a' + index,
-        b: 'b' + index,
-        c: 'c' + index,
-        d: 'd' + index,
-        e: 'e' + index,
-        f: 'f' + index,
-        g: 'g' + index,
-        h: 'h' + index,
-        i: 'i' + index,
-        j: 'j' + index,
-        k: 'k' + index,
-        l: 'l' + index,
-        m: 'm' + index,
-        n: 'n' + index,
-        o: 'o' + index,
-        p: 'p' + index,
-        q: 'q' + index,
-        r: 'r' + index,
-        s: 's' + index,
-        t: 't' + index,
-        u: 'u' + index,
-        v: 'v' + index,
-        w: 'w' + index
-      })
-    }
-    this.tableData = list
+    this.loadList()
   },
   mounted () {
     Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
@@ -351,6 +285,102 @@ export default {
     })
   },
   methods: {
+    loadList () {
+      const list = []
+      for (let index = 0; index < 15; index++) {
+        list.push({
+          a: 'a' + index,
+          b: 'b' + index,
+          c: 'c' + index,
+          d: 'd' + index,
+          e: 'e' + index,
+          f: 'f' + index,
+          g: 'g' + index,
+          h: 'h' + index,
+          i: 'i' + index,
+          j: 'j' + index,
+          k: 'k' + index,
+          l: 'l' + index,
+          m: 'm' + index,
+          n: 'n' + index,
+          o: 'o' + index,
+          p: 'p' + index,
+          q: 'q' + index,
+          r: 'r' + index,
+          s: 's' + index,
+          t: 't' + index,
+          u: 'u' + index,
+          v: 'v' + index,
+          w: 'w' + index
+        })
+      }
+      this.tableData = list
+      this.handleMerge()
+    },
+    handleMerge () {
+      // 根据行数据计算合并规则
+      const mergeCells = [
+        { row: 0, col: 0, rowspan: 2, colspan: 1 },
+        { row: 0, col: 1, rowspan: 2, colspan: 1 },
+        { row: 0, col: 2, rowspan: 2, colspan: 1 },
+        { row: 0, col: 3, rowspan: 2, colspan: 1 },
+        { row: 0, col: 4, rowspan: 2, colspan: 1 },
+        { row: 0, col: 5, rowspan: 2, colspan: 1 },
+        { row: 0, col: 6, rowspan: 2, colspan: 1 },
+        { row: 0, col: 7, rowspan: 2, colspan: 1 },
+        { row: 0, col: 8, rowspan: 2, colspan: 1 },
+        { row: 0, col: 9, rowspan: 2, colspan: 1 },
+        { row: 0, col: 15, rowspan: 10, colspan: 1 },
+        { row: 0, col: 16, rowspan: 10, colspan: 1 },
+        { row: 0, col: 18, rowspan: 2, colspan: 1 },
+        { row: 0, col: 19, rowspan: 2, colspan: 1 },
+        { row: 0, col: 20, rowspan: 2, colspan: 1 },
+        { row: 0, col: 21, rowspan: 2, colspan: 1 },
+        { row: 1, col: 11, rowspan: 1, colspan: 4 },
+
+        { row: 2, col: 0, rowspan: 4, colspan: 2 },
+        { row: 2, col: 2, rowspan: 4, colspan: 1 },
+        { row: 2, col: 3, rowspan: 4, colspan: 1 },
+        { row: 2, col: 6, rowspan: 4, colspan: 1 },
+        { row: 2, col: 7, rowspan: 4, colspan: 1 },
+        { row: 2, col: 8, rowspan: 4, colspan: 1 },
+        { row: 2, col: 9, rowspan: 4, colspan: 1 },
+        { row: 2, col: 17, rowspan: 4, colspan: 1 },
+        { row: 2, col: 18, rowspan: 3, colspan: 1 },
+        { row: 2, col: 19, rowspan: 3, colspan: 1 },
+        { row: 2, col: 20, rowspan: 3, colspan: 2 },
+        { row: 3, col: 4, rowspan: 2, colspan: 2 },
+        { row: 4, col: 11, rowspan: 2, colspan: 4 },
+        { row: 5, col: 18, rowspan: 1, colspan: 4 },
+
+        { row: 6, col: 0, rowspan: 3, colspan: 1 },
+        { row: 6, col: 1, rowspan: 3, colspan: 1 },
+        { row: 6, col: 4, rowspan: 3, colspan: 1 },
+        { row: 6, col: 5, rowspan: 3, colspan: 1 },
+        { row: 6, col: 6, rowspan: 3, colspan: 1 },
+        { row: 6, col: 7, rowspan: 3, colspan: 1 },
+        { row: 6, col: 8, rowspan: 3, colspan: 1 },
+        { row: 6, col: 9, rowspan: 3, colspan: 1 },
+        { row: 6, col: 18, rowspan: 3, colspan: 1 },
+        { row: 6, col: 19, rowspan: 3, colspan: 1 },
+        { row: 6, col: 20, rowspan: 3, colspan: 1 },
+        { row: 6, col: 21, rowspan: 3, colspan: 1 },
+        { row: 6, col: 2, rowspan: 1, colspan: 2 },
+        { row: 8, col: 2, rowspan: 1, colspan: 2 },
+        { row: 9, col: 0, rowspan: 1, colspan: 15 },
+
+        { row: 11, col: 5, rowspan: 4, colspan: 12 }
+      ]
+      // 根据行数据计算表尾合并规则
+      const mergeFooterItems = [
+        { row: 0, col: 1, rowspan: 1, colspan: 2 },
+        { row: 0, col: 6, rowspan: 1, colspan: 2 },
+        { row: 0, col: 14, rowspan: 2, colspan: 5 },
+        { row: 1, col: 4, rowspan: 1, colspan: 8 }
+      ]
+      this.mergeCells = mergeCells
+      this.mergeFooterItems = mergeFooterItems
+    },
     footerMethod ({ columns }) {
       return [
         columns.map((column, index) => index),

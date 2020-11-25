@@ -283,8 +283,8 @@ export default {
         $xetable._isResize = false
         $xetable._lastResizeTime = Date.now()
         $xetable.analyColumnWidth()
-        $xetable.saveCustomResizable()
         $xetable.recalculate(true).then(() => {
+          $xetable.saveCustomResizable()
           $xetable.updateCellAreas()
         })
         DomTools.removeClass($xetable.$el, 'drag--resize')
