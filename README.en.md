@@ -139,7 +139,7 @@ export default {
 
 ## Donate
 
-If you think our open source software is helpful to you, you can scan the QR code below to support us.☕  
+If the open source software is helpful to you, you can scan the QR code below to support us.☕  
 
 [👉 Supports the author💰](https://x-extends.github.io/vxe-table/#/donation/api)
 
