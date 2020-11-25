@@ -38,10 +38,12 @@ import VXETablePluginVirtualTree from 'vxe-table-plugin-virtual-tree'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
 import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
 import VXETablePluginExportPDF from 'vxe-table-plugin-export-pdf'
+import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
 import 'vxe-table-plugin-virtual-tree/dist/style.css'
+import 'vxe-table-plugin-renderer/dist/style.css'
 
 // 设置默认参数
 VXETable.setup({
@@ -100,3 +102,4 @@ VXETable.use(VXETablePluginVirtualTree)
 VXETable.use(VXETablePluginMenus)
 VXETable.use(VXETablePluginExportXLSX)
 VXETable.use(VXETablePluginExportPDF)
+VXETable.use(VXETablePluginRenderer)

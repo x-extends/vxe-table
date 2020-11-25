@@ -556,23 +556,3 @@ body,
     padding: 0 5px 0 20px;
   }
 }
-
-
-.vxe-renderer--progress-bar {
-  display: block;
-  width: 100%;
-  height: 1.2em;
-}
-.vxe-renderer--progress-bar-chart,
-.vxe-renderer--progress-bar-label {
-  float: left;
-  height: 100%;
-}
-.vxe-renderer--progress-bar-chart {
-  background-color: #409eff;
-}
-.vxe-renderer--progress-bar-label {
-  line-height: 1.2em;
-  padding: 0 0.2em;
-  text-align: center;
-}

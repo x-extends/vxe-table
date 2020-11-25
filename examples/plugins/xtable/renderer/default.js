@@ -11,24 +11,3 @@ VXETable.renderer.add('MyLink', {
     ]
   }
 })
-
-VXETable.renderer.add('ProgressBar', {
-  renderDefault (h, renderOpts, params) {
-    const { row, column } = params
-    return [
-      h('span', {
-        class: 'vxe-renderer--progress-bar'
-      }, [
-        h('span', {
-          class: 'vxe-renderer--progress-bar-chart',
-          style: {
-            width: `${row[column.property]}%`
-          }
-        }),
-        h('span', {
-          class: 'vxe-renderer--progress-bar-label'
-        }, row[column.property])
-      ])
-    ]
-  }
-})
