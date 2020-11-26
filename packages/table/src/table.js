@@ -1180,6 +1180,17 @@ export default {
           ref: 'ctxWrapper'
         }) : _e(),
         /**
+         * 公用提示
+         */
+        hasTip ? h('vxe-tooltip', {
+          key: 'cTip',
+          ref: 'commTip',
+          props: {
+            isArrow: false,
+            enterable: false
+          }
+        }) : _e(),
+        /**
          * 单元格溢出的提示
          */
         hasTip ? h('vxe-tooltip', {

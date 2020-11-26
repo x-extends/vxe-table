@@ -1874,7 +1874,7 @@ const apis = [
           },
           {
             name: 'findMethod',
-            desc: '自定义单元格查询方法',
+            desc: '自定义单元格查找方法',
             version: 'pro',
             type: '({ cellValue, isWhole, isRE, isSensitive, findValue: findCellValue, findRE }) => boolean',
             enum: '',
@@ -4847,6 +4847,15 @@ const apis = [
             list: []
           }
         ]
+      },
+      {
+        name: 'openTooltip(target, content)',
+        desc: '如果功能被支持，用于 mouse-config.area，打开单元格查找功能',
+        version: '1.10.4',
+        type: 'Promise',
+        enum: '',
+        defVal: 'target: HTMLElement, content: string | number',
+        list: []
       },
       {
         name: 'openFind()',

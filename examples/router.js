@@ -268,12 +268,10 @@ import TablePluginAntdConfig from './views/table/plugin/AntdConfig.vue'
 import TablePluginAntdFilter from './views/table/plugin/AntdFilter.vue'
 import TablePluginAntdPage from './views/table/plugin/AntdPage.vue'
 import TablePluginShortcutKey from './views/table/plugin/ShortcutKey.vue'
-import TablePluginCharts from './views/table/plugin/Charts.vue'
 import TablePluginExportXLSX from './views/table/plugin/ExportXLSX.vue'
 import TablePluginExportPDF from './views/table/plugin/ExportPDF.vue'
 import TablePluginRenderer from './views/table/plugin/Renderer.vue'
 import TablePluginMenus from './views/table/plugin/Menus.vue'
-import TablePluginExcel from './views/table/plugin/Excel.vue'
 import TablePluginTreeRows from './views/table/plugin/TreeRows'
 import TablePluginTreeCols from './views/table/plugin/TreeCols'
 
@@ -1572,11 +1570,6 @@ export default new Router({
       component: TablePluginShortcutKey
     },
     {
-      path: '/table/plugin/charts',
-      name: 'TablePluginCharts',
-      component: TablePluginCharts
-    },
-    {
       path: '/table/plugin/exportXLSX',
       name: 'TablePluginExportXLSX',
       component: TablePluginExportXLSX
@@ -1595,11 +1588,6 @@ export default new Router({
       path: '/table/plugin/menus',
       name: 'TablePluginMenus',
       component: TablePluginMenus
-    },
-    {
-      path: '/table/plugin/excel',
-      name: 'TablePluginExcel',
-      component: TablePluginExcel
     },
     {
       path: '/table/plugin/treeRows',
