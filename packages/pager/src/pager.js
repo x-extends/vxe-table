@@ -31,6 +31,7 @@ export default {
     perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect },
     // 当只有一页时隐藏
     autoHidden: { type: Boolean, default: () => GlobalConfig.pager.autoHidden },
+    transfer: { type: Boolean, default: () => GlobalConfig.pager.transfer },
     // 自定义图标
     iconPrevPage: String,
     iconJumpPrev: String,
@@ -209,6 +210,7 @@ export default {
         props: {
           value: this.pageSize,
           placement: 'top',
+          transfer: this.transfer,
           options: this.sizeList
         },
         on: {

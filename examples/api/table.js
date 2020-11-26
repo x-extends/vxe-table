@@ -1792,7 +1792,7 @@ const apis = [
           },
           {
             name: 'findMethod',
-            desc: '自定义单元格查询方法',
+            desc: '自定义单元格查找方法',
             version: 'pro',
             type: '({ cellValue, isWhole, isRE, isSensitive, findValue: findCellValue, findRE }) => boolean',
             enum: '',
@@ -2878,7 +2878,7 @@ const apis = [
         name: 'loadData(data)',
         desc: '加载数据（对于表格数据需要重载、局部递增场景下可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'data: array',
         list: []
@@ -2887,7 +2887,7 @@ const apis = [
         name: 'reloadData(data)',
         desc: '加载数据并清除所有状态（对于表格数据需要重载、局部递增的场景中可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'data: array',
         list: []
@@ -2896,7 +2896,7 @@ const apis = [
         name: 'updateData()',
         desc: '手动处理数据（对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -2905,7 +2905,7 @@ const apis = [
         name: 'syncData()',
         desc: '同步 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑（对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -2914,7 +2914,7 @@ const apis = [
         name: 'reloadRow(rows, record, field)',
         desc: '局部加载行数据并恢复到初始状态（对于行数据需要局部更改的场景中可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'rows: Row | Row[], record: object, field?: string',
         list: []
@@ -2923,7 +2923,7 @@ const apis = [
         name: 'reloadExpandContent(rows)',
         desc: '用于懒加载展开行，重新加载展开行的内容',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'rows: Row | Row[]',
         list: []
@@ -2932,7 +2932,7 @@ const apis = [
         name: 'reloadTreeChilds(rows)',
         desc: '用于懒加载树表格，重新加载子节点',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'rows: Row | Row[]',
         list: []
@@ -2941,7 +2941,7 @@ const apis = [
       //   name: 'loadChildren(row, children)',
       //   desc: '用于树结构，给行数据加载子节点',
       //   version: '3.0.1',
-      //   type: 'Promise',
+      //   type: 'Promise<any>',
       //   enum: '',
       //   defVal: 'row: Row, children: any[]',
       //   list: []
@@ -2950,7 +2950,7 @@ const apis = [
         name: 'loadColumn(columns)',
         desc: '加载列配置（对于表格列需要重载、局部递增场景下可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'columns: array',
         list: []
@@ -2959,7 +2959,7 @@ const apis = [
         name: 'reloadColumn(columns)',
         desc: '加载列配置并恢复到初始状态（对于表格列需要重载、局部递增场景下可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'columns: array',
         list: []
@@ -2968,7 +2968,7 @@ const apis = [
         name: 'refreshColumn()',
         desc: '刷新列配置（对于动态修改属性、显示/隐藏列等场景下可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3013,7 +3013,7 @@ const apis = [
         name: 'revertData(rows, field)',
         desc: '只对 keep-source 开启有效，还原指定行 row 或者整个表格的数据',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'rows: Row | Array<Row>, field?: string',
         list: []
@@ -3544,7 +3544,7 @@ const apis = [
         name: 'setFilter(column, options)',
         desc: '用于 filters，修改筛选列表（在筛选条件更新之后可以调用 updateData 函数处理表格数据）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'column: Column, options: []',
         list: []
@@ -3553,7 +3553,7 @@ const apis = [
         name: 'setActiveRow(row)',
         desc: '用于 edit-config，激活行编辑，如果是 mode=cell 则默认激活第一个单元格',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -3562,7 +3562,7 @@ const apis = [
         name: 'setActiveCell(row, field)',
         desc: '用于 edit-config，激活单元格编辑',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row, field: string',
         list: []
@@ -3571,7 +3571,7 @@ const apis = [
         name: 'setSelectCell(row, field)',
         desc: '用于 mouse-config.selected，选中指定的单元格',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row, field: string',
         list: []
@@ -3580,7 +3580,7 @@ const apis = [
         name: 'setCellAreas(areas)',
         desc: '如果功能被支持，用于 mouse-config.area，选择指定区域的单元格',
         version: 'pro',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'areas: CellAreaOptions',
         list: []
@@ -3589,7 +3589,7 @@ const apis = [
         name: 'setMergeCells(merges)',
         desc: '临时合并单元格，如果为数组则合并多个',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'merges: TableMergeConfig | TableMergeConfig[]',
         list: []
@@ -3598,7 +3598,7 @@ const apis = [
         name: 'setMergeFooterItems(merges)',
         desc: '临时合并表尾，如果为数组则合并多个',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'merges: TableMergeConfig | TableMergeConfig[]',
         list: []
@@ -3607,7 +3607,7 @@ const apis = [
         name: 'setRowExpand(rows, checked)',
         desc: '用于 expand-config，设置展开行，二个参数设置这一行展开与否',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'rows: Row | Array<Row>, checked: boolean',
         list: []
@@ -3616,7 +3616,7 @@ const apis = [
         name: 'setAllRowExpand(checked)',
         desc: '用于 expand-config，设置所有行的展开与否（如果是关闭所有行，可以使用 clearRowExpand 快速清除）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'checked: boolean',
         list: []
@@ -3625,7 +3625,7 @@ const apis = [
         name: 'setTreeExpand(rows, checked)',
         desc: '用于 tree-config，设置展开树形节点，二个参数设置这一行展开与否',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'rows: Row | Array<Row>, checked: boolean',
         list: []
@@ -3634,7 +3634,7 @@ const apis = [
         name: 'setAllTreeExpand(checked)',
         desc: '用于 tree-config，设置所有树节点的展开与否（如果是关闭所有树节点，可以使用 clearTreeExpand 快速清除）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'checked: boolean',
         list: []
@@ -3643,7 +3643,7 @@ const apis = [
         name: 'setCurrentRow(row)',
         desc: '用于 highlight-current-row，设置某一行为高亮状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -3652,7 +3652,7 @@ const apis = [
         name: 'setCurrentColumn(column)',
         desc: '用于 highlight-current-column，设置某列行为高亮状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'column: ColumnConfig',
         list: []
@@ -3661,7 +3661,7 @@ const apis = [
         name: 'setRadioRow(row)',
         desc: '用于 type=radio，设置某一行为选中状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -3670,7 +3670,7 @@ const apis = [
         name: 'setCheckboxRow(rows, checked)',
         desc: '用于 type=checkbox，设置行为选中状态，第二个参数为选中与否',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'rows: Row | Array<Row>, checked: boolean',
         list: []
@@ -3679,7 +3679,7 @@ const apis = [
         name: 'setAllCheckboxRow(checked)',
         desc: '用于 type=checkbox，设置所有行的选中状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'checked: boolean',
         list: []
@@ -3688,7 +3688,7 @@ const apis = [
         name: 'toggleCheckboxRow(row)',
         desc: '用于 type=checkbox，切换某一行的选中状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -3697,7 +3697,7 @@ const apis = [
         name: 'toggleAllCheckboxRow()',
         desc: '用于 type=checkbox，切换所有行的选中状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3706,7 +3706,7 @@ const apis = [
         name: 'toggleRowExpand(row)',
         desc: '用于 type=expand，切换展开行的状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -3715,7 +3715,7 @@ const apis = [
         name: 'toggleTreeExpand(row)',
         desc: '用于 tree-config，切换展开树形节点的状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -3724,7 +3724,7 @@ const apis = [
         name: 'clearMergeCells()',
         desc: '手动清除临时合并的单元格',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3733,7 +3733,7 @@ const apis = [
         name: 'clearMergeFooterItems()',
         desc: '手动清除临时合并的表尾',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3742,7 +3742,7 @@ const apis = [
         name: 'clearCurrentRow()',
         desc: '用于 highlight-current-row，手动清空当前高亮的状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3751,7 +3751,7 @@ const apis = [
         name: 'clearCurrentColumn()',
         desc: '用于 highlight-current-column，手动清空当前高亮的状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3760,7 +3760,7 @@ const apis = [
         name: 'clearRadioRow()',
         desc: '用于 type=radio，手动清空用户的选择',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3769,7 +3769,7 @@ const apis = [
         name: 'clearRadioReserve()',
         desc: '用于 radio-config.reserve，手动清空用户保留选中的行数据',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3778,7 +3778,7 @@ const apis = [
         name: 'clearCheckboxRow()',
         desc: '用于 type=checkbox，手动清空用户的选择',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3787,7 +3787,7 @@ const apis = [
         name: 'clearCheckboxReserve()',
         desc: '用于 checkbox-config.reserve，手动清空用户保留选中的行数据',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3796,7 +3796,7 @@ const apis = [
         name: 'clearRowExpand()',
         desc: '用于 type=expand，手动清空展开行状态，数据会恢复成未展开的状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3805,7 +3805,7 @@ const apis = [
         name: 'clearRowExpandLoaded(row)',
         desc: '用于 expand-config.lazy，手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: any',
         list: []
@@ -3814,7 +3814,7 @@ const apis = [
         name: 'clearTreeExpand(row)',
         desc: '用于 tree-config，手动清空树形节点的展开状态，数据会恢复成未展开的状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: any',
         list: []
@@ -3823,7 +3823,7 @@ const apis = [
         name: 'clearTreeExpandLoaded(row)',
         desc: '用于 tree-config.lazy，手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: any',
         list: []
@@ -3832,7 +3832,7 @@ const apis = [
         name: 'clearSort()',
         desc: '手动清空排序条件，数据会恢复成未排序的状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3841,7 +3841,7 @@ const apis = [
         name: 'clearFilter(column)',
         desc: '手动清空筛选条件（如果不传 column 则清空所有筛选条件），数据会恢复成未筛选的状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'column?: ColumnConfig',
         list: []
@@ -3850,7 +3850,7 @@ const apis = [
         name: 'clearSelected()',
         desc: '手动清除单元格选中状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3859,7 +3859,7 @@ const apis = [
         name: 'clearActived()',
         desc: '手动清除单元格激活状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3867,7 +3867,7 @@ const apis = [
       // {
       //   name: 'clearCopyed()',
       //   desc: '手动清空已复制的内容',
-      //   type: 'Promise',
+      //   type: 'Promise<any>',
       //   enum: '',
       //   defVal: '',
       //   list: []
@@ -3876,7 +3876,7 @@ const apis = [
         name: 'clearCellAreas()',
         desc: '如果功能被支持，用于 mouse-config.area，手动清除鼠标选择的区域',
         version: 'pro',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3885,7 +3885,7 @@ const apis = [
         name: 'clearCopyCellArea()',
         desc: '如果功能被支持，用于 mouse-config.area，手动清除标记为复制粘贴的区域',
         version: 'pro',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3894,7 +3894,7 @@ const apis = [
         name: 'clearData(rows, field)',
         desc: '手动清空单元格内容，如果不创参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'rows?: Row | Array<Row>, field?: string',
         list: []
@@ -3903,7 +3903,7 @@ const apis = [
         name: 'clearScroll()',
         desc: '手动清除滚动相关信息，还原到初始状态',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3912,7 +3912,7 @@ const apis = [
         name: 'clearValidate()',
         desc: '手动清除校验',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3921,7 +3921,7 @@ const apis = [
         name: 'clearAll()',
         desc: '手动清除表格所有条件，还原到初始状态（对于增删改查的场景中可能会用到，比如在数据保存之后清除表格缓存）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3930,7 +3930,7 @@ const apis = [
         name: 'resetColumn(options)',
         desc: '手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态（如果已关联工具栏，则会同步更新）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'options: boolean | object',
         list: [
@@ -3958,7 +3958,7 @@ const apis = [
         name: 'closeFilter()',
         desc: '手动关闭筛选面板（某些特殊场景可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3967,7 +3967,7 @@ const apis = [
         name: 'clostTooltip()',
         desc: '手动关闭 tooltip 提示（某些特殊场景可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3976,7 +3976,7 @@ const apis = [
         name: 'closeMenu()',
         desc: '手动关闭快捷菜单（某些特殊场景可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3985,7 +3985,7 @@ const apis = [
         name: 'updateFooter()',
         desc: '手动更新表尾（对于某些需要频繁更新的场景下可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -3994,7 +3994,7 @@ const apis = [
         name: 'updateStatus(scope)',
         desc: '更新单元格状态（当使用自定义渲染时可能会用到）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'scope: { row, column }',
         list: []
@@ -4003,7 +4003,7 @@ const apis = [
         name: 'hideColumn(column)',
         desc: '隐藏指定列',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'column: ColumnConfig',
         list: []
@@ -4012,7 +4012,7 @@ const apis = [
         name: 'showColumn(column)',
         desc: '显示指定列',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'column: ColumnConfig',
         list: []
@@ -4021,7 +4021,7 @@ const apis = [
         name: 'scrollTo(scrollLeft, scrollTop)',
         desc: '如果有滚动条，则滚动到对应的位置',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'scrollLeft?: number, scrollTop?: number',
         list: []
@@ -4030,7 +4030,7 @@ const apis = [
         name: 'scrollToRow(row, column)',
         desc: '如果有滚动条，则滚动到对应的行（对于某些特定的场景可能会用到，比如定位到某一行）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'row: Row, column?: ColumnConfig',
         list: []
@@ -4039,7 +4039,7 @@ const apis = [
         name: 'scrollToColumn(column)',
         desc: '如果有滚动条，则滚动到对应的列（对于某些特定的场景可能会用到，比如定位到某一列）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'column: ColumnConfig',
         list: []
@@ -4048,7 +4048,7 @@ const apis = [
       //   name: 'scrollToTreeRow(row)',
       //   desc: '对于树形结构中，可以直接滚动到指定深层节点中（对于某些特定的场景可能会用到，比如定位到某一节点）',
       //   version: '',
-      //   type: 'Promise',
+      //   type: 'Promise<any>',
       //   enum: '',
       //   defVal: 'column: ColumnConfig',
       //   list: []
@@ -4057,7 +4057,7 @@ const apis = [
         name: 'sort(sortConfs, order)',
         desc: '手动对表格进行排序（如果 order 为空则自动切换排序）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'sortConfs: string | { field: string | ColumnInfo, order: \'desc\' | \'asc\' | null } | { field: string | ColumnInfo, order?: \'desc\' | \'asc\' | null }[], order?: \'desc\' | \'asc\' | null',
         list: []
@@ -4075,7 +4075,7 @@ const apis = [
         name: 'recalculate(refull)',
         desc: '重新计算表格，如果传 true 则进行完整计算（对于某些特殊场景可能会用到，比如隐藏的表格、重新计算列宽...等）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'refull?: boolean',
         list: []
@@ -4084,7 +4084,7 @@ const apis = [
         name: 'refreshScroll()',
         desc: '刷新滚动操作，手动同步滚动相关位置（对于某些特殊的操作，比如滚动条错位、固定列不同步）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -4111,7 +4111,7 @@ const apis = [
         name: 'exportData(options)',
         desc: '将表格数据导出（树结构和虚拟滚动只允许导出数据源）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'options: object',
         list: XEUtils.clone(exportDataAPI, true)
@@ -4120,7 +4120,7 @@ const apis = [
         name: 'openExport(options)',
         desc: '打开高级导出（只对 export-config 启用后有效）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'options: object',
         list: XEUtils.clone(exportDataAPI.filter(item => !['data', 'download', 'columnFilterMethod', 'dataFilterMethod', 'footerFilterMethod'].includes(item.name)), true)
@@ -4129,7 +4129,7 @@ const apis = [
         name: 'importData(options)',
         desc: '将数据导入表格（只支持基本数据结构，目前不支持分组、合并等）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'options: object',
         list: XEUtils.clone(importDataAPI, true)
@@ -4138,7 +4138,7 @@ const apis = [
         name: 'openImport(options)',
         desc: '打开高级导入（只对 import-config 启用后有效）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'options: object',
         list: XEUtils.clone(importDataAPI, true)
@@ -4147,7 +4147,7 @@ const apis = [
         name: 'print(options)',
         desc: '打印（只支持基本数据结构，目前不支持分组、合并等）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'options: object',
         list: XEUtils.clone(printAPI, true)
@@ -4156,7 +4156,7 @@ const apis = [
         name: 'openPrint(options)',
         desc: '打开高级打印（只对 print-config 启用后有效）',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'options: object',
         list: XEUtils.clone(printAPI, true)
@@ -4236,10 +4236,19 @@ const apis = [
         ]
       },
       {
+        name: 'openTooltip(target, content)',
+        desc: '如果功能被支持，用于 mouse-config.area，打开单元格查找功能',
+        version: '3.0.3',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: 'target: HTMLElement, content: string | number',
+        list: []
+      },
+      {
         name: 'openFind()',
         desc: '如果功能被支持，用于 mouse-config.area，打开单元格查找功能',
         version: 'pro',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -4248,7 +4257,7 @@ const apis = [
         name: 'openReplace()',
         desc: '如果功能被支持，用于 mouse-config.area，打开单元格替换功能',
         version: 'pro',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -4257,7 +4266,7 @@ const apis = [
         name: 'connect(toolbar)',
         desc: '连接工具栏',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: 'toolbar: Toolbar',
         list: []
@@ -4266,7 +4275,7 @@ const apis = [
         name: 'focus()',
         desc: '使表格获取焦点',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []
@@ -4275,7 +4284,7 @@ const apis = [
         name: 'blur()',
         desc: '使表格失去焦点',
         version: '',
-        type: 'Promise',
+        type: 'Promise<any>',
         enum: '',
         defVal: '',
         list: []

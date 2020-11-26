@@ -1043,6 +1043,17 @@ export default {
         }
       }) : _e(),
       /**
+       * 通用提示
+       */
+      hasTip ? h('vxe-tooltip', {
+        key: 'cTip',
+        ref: 'commTip',
+        props: {
+          isArrow: false,
+          enterable: false
+        }
+      }) : _e(),
+      /**
        * 工具提示
        */
       hasTip ? h('vxe-tooltip', {

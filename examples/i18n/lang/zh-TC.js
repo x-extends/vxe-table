@@ -209,7 +209,7 @@ export default {
         chartsPlugin: 'plugin-charts 图表工具',
         exportXLSXPlugin: 'plugin-export 导出 xlsx',
         exportPDFPlugin: 'plugin-export 导出 pdf',
-        rendererPlugin: 'plugin-renderer 更多渲染器',
+        rendererPlugin: 'plugin-renderer 更多渲染',
         menusPlugin: 'plugin-menus 快捷菜单集',
         excelPlugin: 'plugin-excel 简单的 Excel',
         treeRowPlugin: 'plugin-virtual-tree 虚拟树',

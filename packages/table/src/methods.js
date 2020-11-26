@@ -2205,12 +2205,21 @@ const Methods = {
     }
     return this.$nextTick()
   },
+  openTooltip (target, content) {
+    const { $refs } = this
+    const commTip = $refs.commTip
+    if (commTip) {
+      return commTip.open(target, content)
+    }
+    return this.$nextTick()
+  },
   /**
    * 关闭 tooltip
    */
   clostTooltip () {
     const { $refs, tooltipStore } = this
     const tooltip = $refs.tooltip
+    const commTip = $refs.commTip
     if (tooltipStore.visible) {
       Object.assign(tooltipStore, {
         row: null,
@@ -2221,6 +2230,9 @@ const Methods = {
       if (tooltip) {
         tooltip.close()
       }
+    }
+    if (commTip) {
+      commTip.close()
     }
     return this.$nextTick()
   },

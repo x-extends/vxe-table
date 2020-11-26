@@ -472,6 +472,12 @@ export declare class Table extends VXETableComponent {
    */
   recalculate(refull?: boolean): Promise<any>;
   /**
+   * 打开 tooltip 提示
+   * @param target 目标元素
+   * @param content 内容
+   */
+  openTooltip (target: HTMLElement, content: string | number): Promise<any>;
+  /**
    * 手动关闭 tooltip 提示
    */
   clostTooltip(): Promise<any>;

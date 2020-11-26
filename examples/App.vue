@@ -1770,14 +1770,6 @@ export default {
             //     name: 'TablePluginShortcutKey'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.chartsPlugin',
-            //   disabled: true,
-            //   demoUrl: 'https://jsrun.pro/9aWKp/edit',
-            //   locat: {
-            //     name: 'TablePluginCharts'
-            //   }
-            // },
             {
               label: 'app.aside.nav.exportXLSXPlugin',
               demoUrl: 'https://jsrun.pro/PIWKp/edit',
@@ -1804,12 +1796,6 @@ export default {
                 name: 'TablePluginMenus'
               }
             },
-            // {
-            //   label: 'app.aside.nav.excelPlugin',
-            //   locat: {
-            //     name: 'TablePluginExcel'
-            //   }
-            // },
             {
               label: 'app.aside.nav.treeRowPlugin',
               locat: {
