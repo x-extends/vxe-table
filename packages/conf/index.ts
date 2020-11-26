@@ -88,6 +88,10 @@ export const GlobalConfig: VXETableGlobalConfig = {
     mouseConfig: {
       extension: true
     },
+    fnrConfig: {
+      isFind: true,
+      isReplace: true
+    },
     scrollX: {
       gt: 60
       // oSize: 0

@@ -1852,12 +1852,6 @@ export default defineComponent({
                 name: 'TablePluginMenus'
               }
             }
-            // // {
-            // //   label: 'app.aside.nav.excelPlugin',
-            // //   locat: {
-            // //     name: 'TablePluginExcel'
-            // //   }
-            // // },
             // {
             //   label: 'app.aside.nav.treeRowPlugin',
             //   locat: {

@@ -72,6 +72,7 @@ export interface VxePagerProps {
    * 当只有一页时隐藏
    */
   autoHidden?: boolean;
+  transfer?: boolean;
   /**
    * 自定义图标
    */

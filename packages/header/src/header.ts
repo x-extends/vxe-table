@@ -113,8 +113,8 @@ export default defineComponent({
         tableInternalData._isResize = false
         tableInternalData._lastResizeTime = Date.now()
         $xetable.analyColumnWidth()
-        $xetable.saveCustomResizable()
         $xetable.recalculate(true).then(() => {
+          $xetable.saveCustomResizable()
           $xetable.updateCellAreas()
         })
         DomTools.removeClass(tableEl, 'drag--resize')

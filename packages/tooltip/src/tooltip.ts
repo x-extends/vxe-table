@@ -275,8 +275,9 @@ export default defineComponent({
       }
       return h('div', {
         ref: refElem,
-        class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, `placement--${tipStore.placement}`, {
+        class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, {
           [`size--${vSize}`]: vSize,
+          [`placement--${tipStore.placement}`]: tipStore.placement,
           'is--enterable': enterable,
           'is--visible': visible,
           'is--arrow': isArrow,

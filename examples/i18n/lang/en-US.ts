@@ -447,6 +447,7 @@ export default {
           menuConfig: 'context menu configuration',
           contextMenu: 'Obsolete, please use "menu-config"',
           clipConfig: 'Copy and paste configuration',
+          fnrConfig: 'find and replace configuration',
           mouseConfig: 'Mouse configuration',
           keyboardConfig: 'Keyboard configuration',
           editConfig: 'Editable configuration',

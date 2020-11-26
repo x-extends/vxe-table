@@ -129,8 +129,10 @@ export default {
   mouseConfig: Object as PropType<VxeTablePropTypes.MouseConfig>,
   // 按键配置项
   keyboardConfig: Object as PropType<VxeTablePropTypes.KeyboardConfig>,
-  // 复制粘贴配置项
+  // 复制粘/贴配置项
   clipConfig: Object as PropType<VxeTablePropTypes.ClipConfig>,
+  // 查找/替换配置项
+  fnrConfig: Object as PropType<VxeTablePropTypes.FNRConfig>,
   // 编辑配置项
   editConfig: Object as PropType<VxeTablePropTypes.EditConfig>,
   // 校验配置项

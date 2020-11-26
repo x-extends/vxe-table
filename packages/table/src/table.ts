@@ -287,6 +287,7 @@ export default defineComponent({
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refTooltip = ref() as Ref<VxeTooltipInstance>
+    const refCommTooltip = ref() as Ref<VxeTooltipInstance>
     const refValidTooltip = ref() as Ref<VxeTooltipInstance>
     const refTableFilter = ref() as Ref<ComponentPublicInstance>
     const refTableMenu = ref() as Ref<VxeMenuPanelInstance>
@@ -388,11 +389,15 @@ export default defineComponent({
     })
 
     const computeKeyboardOpts = computed(() => {
-      return Object.assign({}, props.keyboardConfig) as VxeTablePropTypes.KeyboardOpts
+      return Object.assign({}, GlobalConfig.table.keyboardConfig, props.keyboardConfig) as VxeTablePropTypes.KeyboardOpts
     })
 
     const computeClipOpts = computed(() => {
-      return Object.assign({}, props.clipConfig) as VxeTablePropTypes.ClipOpts
+      return Object.assign({}, GlobalConfig.table.clipConfig, props.clipConfig) as VxeTablePropTypes.ClipOpts
+    })
+
+    const computeFNROpts = computed(() => {
+      return Object.assign({}, GlobalConfig.table.fnrConfig, props.fnrConfig) as VxeTablePropTypes.FNROpts
     })
 
     const computeMenuOpts = computed(() => {
@@ -533,6 +538,7 @@ export default defineComponent({
       computeMouseOpts,
       computeKeyboardOpts,
       computeClipOpts,
+      computeFNROpts,
       computeMenuOpts,
       computeExportOpts,
       computeImportOpts,
@@ -2471,12 +2477,20 @@ export default defineComponent({
         }
         return computeScrollLoad()
       },
+      openTooltip (target, content) {
+        const $commTip = refCommTooltip.value
+        if ($commTip) {
+          return $commTip.open(target, content)
+        }
+        return nextTick()
+      },
       /**
        * 关闭 tooltip
        */
       clostTooltip () {
         const { tooltipStore } = internalData
         const $tooltip = refTooltip.value
+        const $commTip = refCommTooltip.value
         if (tooltipStore.visible) {
           Object.assign(tooltipStore, {
             row: null,
@@ -2487,6 +2501,9 @@ export default defineComponent({
           if ($tooltip) {
             $tooltip.close()
           }
+        }
+        if ($commTip) {
+          $commTip.close()
         }
         return nextTick()
       },
@@ -4779,6 +4796,20 @@ export default defineComponent({
       }
     })
 
+    watch(() => props.mergeCells, (value) => {
+      tableMethods.clearMergeCells()
+      if (value) {
+        tableMethods.setMergeCells(value)
+      }
+    })
+
+    watch(() => props.mergeFooterItems, (value) => {
+      tableMethods.clearMergeFooterItems()
+      if (value) {
+        tableMethods.setMergeFooterItems(value)
+      }
+    })
+
     VXETable.hooks.forEach((options) => {
       const { setupTable } = options
       if (setupTable) {
@@ -5086,9 +5117,17 @@ export default defineComponent({
           ref: refTableMenu
         }) : createCommentVNode(),
         /**
+         * 通用提示
+         */
+        TooltipComponent ? h(TooltipComponent, {
+          ref: refCommTooltip,
+          isArrow: false,
+          enterable: false
+        }) : createCommentVNode(),
+        /**
          * 校验提示
          */
-        props.editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') && TooltipComponent ? h(TooltipComponent, {
+        TooltipComponent && props.editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h(TooltipComponent, {
           ref: refValidTooltip,
           class: 'vxe-table--valid-error',
           ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {})

@@ -61,6 +61,7 @@ export interface TablePrivateComputed {
   computeMouseOpts: ComputedRef<VxeTablePropTypes.MouseOpts>;
   computeKeyboardOpts: ComputedRef<VxeTablePropTypes.KeyboardOpts>;
   computeClipOpts: ComputedRef<VxeTablePropTypes.ClipOpts>;
+  computeFNROpts: ComputedRef<VxeTablePropTypes.FNROpts>;
   computeMenuOpts: ComputedRef<VxeTablePropTypes.MenuConfig>;
   computeExportOpts: ComputedRef<VxeTablePropTypes.ExportOpts>;
   computeImportOpts: ComputedRef<VxeTablePropTypes.ImportOpts>;
@@ -301,7 +302,13 @@ export interface TablePublicMethods {
    */
   recalculate(refull?: boolean): Promise<any>;
   /**
-   * 手动关闭 tooltip 提示
+   * 打开 tooltip 提示
+   * @param target 目标元素
+   * @param content 内容
+   */
+  openTooltip (target: HTMLElement, content: string | number): Promise<any>;
+  /**
+   * 关闭 tooltip 提示
    */
   clostTooltip(): Promise<any>;
   /**
@@ -1409,7 +1416,7 @@ export namespace VxeTablePropTypes {
   export interface KeyboardOpts extends KeyboardConfig { }
 
   /**
-   * 复制粘贴配置项
+   * 复制/粘贴配置项
    */
   export interface ClipConfig {
     getMethod?(params: {
@@ -1431,6 +1438,15 @@ export namespace VxeTablePropTypes {
     }): boolean;
   }
   export interface ClipOpts extends ClipConfig { }
+
+  /**
+   * 查找/替换配置项
+   */
+  export interface FNRConfig {
+    isFind?: boolean;
+    isReplace?: boolean;
+  }
+  export interface FNROpts extends FNRConfig {}
 
   /**
    * 编辑配置项
@@ -1566,6 +1582,7 @@ export interface VxeTableProps {
   treeConfig?: VxeTablePropTypes.TreeConfig;
   menuConfig?: VxeTablePropTypes.MenuConfig;
   mouseConfig?: VxeTablePropTypes.MouseConfig;
+  fnrConfig?: VxeTablePropTypes.FNRConfig;
   keyboardConfig?: VxeTablePropTypes.KeyboardConfig;
   clipConfig?: VxeTablePropTypes.ClipConfig;
   editConfig?: VxeTablePropTypes.EditConfig;

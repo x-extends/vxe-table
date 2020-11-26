@@ -89,7 +89,13 @@ export default defineComponent({
     const demo1 = reactive({
       loading: false,
       tableData: [] as any[],
-      mergeCells: [
+      mergeCells: [] as VxeTablePropTypes.MergeCell[],
+      mergeFooterItems: [] as VxeTablePropTypes.MergeFooterItem[]
+    })
+
+    const handleMerge = () => {
+      // 根据行数据计算合并规则
+      const mergeCells = [
         { row: 0, col: 0, rowspan: 2, colspan: 1 },
         { row: 0, col: 1, rowspan: 2, colspan: 1 },
         { row: 0, col: 2, rowspan: 2, colspan: 1 },
@@ -140,14 +146,17 @@ export default defineComponent({
         { row: 9, col: 0, rowspan: 1, colspan: 15 },
 
         { row: 11, col: 5, rowspan: 4, colspan: 12 }
-      ],
-      mergeFooterItems: [
+      ]
+      // 根据行数据计算表尾合并规则
+      const mergeFooterItems = [
         { row: 0, col: 1, rowspan: 1, colspan: 2 },
         { row: 0, col: 6, rowspan: 1, colspan: 2 },
         { row: 0, col: 14, rowspan: 2, colspan: 5 },
         { row: 1, col: 4, rowspan: 1, colspan: 8 }
       ]
-    })
+      demo1.mergeCells = mergeCells
+      demo1.mergeFooterItems = mergeFooterItems
+    }
 
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns }) => {
       return [
@@ -188,6 +197,7 @@ export default defineComponent({
       }
       demo1.loading = false
       demo1.tableData = list
+      handleMerge()
     }, 100)
 
     return {
@@ -270,7 +280,13 @@ export default defineComponent({
             const demo1 = reactive({
               loading: false,
               tableData: [] as any[],
-              mergeCells: [
+              mergeCells: [] as VxeTablePropTypes.MergeCell[],
+              mergeFooterItems: [] as VxeTablePropTypes.MergeFooterItem[]
+            })
+
+            const handleMerge = () => {
+              // 根据行数据计算合并规则
+              const mergeCells = [
                 { row: 0, col: 0, rowspan: 2, colspan: 1 },
                 { row: 0, col: 1, rowspan: 2, colspan: 1 },
                 { row: 0, col: 2, rowspan: 2, colspan: 1 },
@@ -321,14 +337,17 @@ export default defineComponent({
                 { row: 9, col: 0, rowspan: 1, colspan: 15 },
 
                 { row: 11, col: 5, rowspan: 4, colspan: 12 }
-              ],
-              mergeFooterItems: [
+              ]
+              // 根据行数据计算表尾合并规则
+              const mergeFooterItems = [
                 { row: 0, col: 1, rowspan: 1, colspan: 2 },
                 { row: 0, col: 6, rowspan: 1, colspan: 2 },
                 { row: 0, col: 14, rowspan: 2, colspan: 5 },
                 { row: 1, col: 4, rowspan: 1, colspan: 8 }
               ]
-            })
+              demo1.mergeCells = mergeCells
+              demo1.mergeFooterItems = mergeFooterItems
+            }
 
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns }) => {
               return [
@@ -369,6 +388,7 @@ export default defineComponent({
               }
               demo1.loading = false
               demo1.tableData = list
+              handleMerge()
             }, 100)
 
             return {

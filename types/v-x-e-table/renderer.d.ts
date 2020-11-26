@@ -77,6 +77,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderHeaderOptions extends VxeGlobalRendererHandles.RenderOptions { }
 
   export interface RenderHeaderParams {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     column: VxeTableDefines.ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
@@ -89,6 +90,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderFooterOptions extends VxeGlobalRendererHandles.RenderOptions { }
 
   export interface RenderFooterParams {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     column: VxeTableDefines.ColumnInfo;
     columnIndex: number;
     _columnIndex: number;
@@ -114,6 +116,7 @@ export namespace VxeGlobalRendererHandles {
   export type RenderEditOptions = VxeColumnPropTypes.EditRender;
 
   export interface RenderEditParams {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     column: VxeTableDefines.ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
@@ -127,6 +130,7 @@ export namespace VxeGlobalRendererHandles {
 
   export type RenderCellOptions = VxeColumnPropTypes.EditRender;
   export type RenderCellParams = {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     column: VxeTableDefines.ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
@@ -181,6 +185,10 @@ export namespace VxeGlobalRendererHandles {
      * 目标组件渲染的事件
      */
     events?: { [key: string]: Function };
+    /**
+     * 多目标渲染
+     */
+    children?: any[];
   }
 
   /**

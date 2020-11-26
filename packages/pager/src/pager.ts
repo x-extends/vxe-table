@@ -33,6 +33,7 @@ export default defineComponent({
     perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect },
     // 当只有一页时隐藏
     autoHidden: { type: Boolean, default: () => GlobalConfig.pager.autoHidden },
+    transfer: { type: Boolean, default: () => GlobalConfig.pager.transfer },
     // 自定义图标
     iconPrevPage: String,
     iconJumpPrev: String,
@@ -311,6 +312,7 @@ export default defineComponent({
         class: 'vxe-pager--sizes',
         modelValue: props.pageSize,
         placement: 'top',
+        transfer: props.transfer,
         options: sizeList,
         onChange: pageSizeEvent
       })
