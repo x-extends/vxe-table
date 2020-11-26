@@ -1758,14 +1758,6 @@ export default {
             //     name: 'TablePluginShortcutKey'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.chartsPlugin',
-            //   demoUrl: 'https://jsrun.pro/9aWKp/edit',
-            //   disabled: true,
-            //   locat: {
-            //     name: 'TablePluginCharts'
-            //   }
-            // },
             {
               label: 'app.aside.nav.exportXLSXPlugin',
               demoUrl: 'https://jsrun.pro/PIWKp/edit',
