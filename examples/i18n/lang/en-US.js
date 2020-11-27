@@ -13,7 +13,7 @@ export default {
         icon: 'Icon',
         basics: 'Basic table',
         base: 'Basics table',
-        autoBreak: '自动换行',
+        autoBreak: 'Word wrap',
         size: 'Size',
         ellipsis: 'Cell overflow ellipsis',
         tooltips: 'Cell tooltip',
@@ -76,7 +76,7 @@ export default {
         toolbar: 'Toolbar',
         customs: 'Show, hide, and collapsed columns',
         customStorage: 'Custom column + localStorage',
-        customlWidthStorage: '完整自定义列 + localStorage',
+        customlWidthStorage: 'Full custom column + localStorage',
         search: 'Table search',
         groupBy: 'Row group',
         details: 'Popup displays details',
@@ -85,7 +85,7 @@ export default {
         pageIcon: 'Pagination + custom icon',
         rangeSelect: 'The range of the checkbox is checked',
         tabs: 'Switch tabs',
-        keepAlives: '显示隐藏 + keep-alive',
+        keepAlives: 'Show hide + keep-alive',
 
         grid: 'Advanced table',
         reverse: 'Reverse table',
@@ -148,11 +148,11 @@ export default {
         insert: 'Insert',
         delete: 'Delete',
         revert: 'Revert',
-        status: '数据状态',
-        cellDisable: '禁用编辑 + 单元格',
-        rowDisable: '禁用编辑 + 行',
-        cellValid: '数据校验 + 单元格',
-        rowValid: '数据校验 + 行',
+        status: 'Cell status',
+        cellDisable: 'Disable editing + Cell',
+        rowDisable: 'Disable editing + Row',
+        cellValid: 'Verification + Cell',
+        rowValid: 'Verification + Row',
         forceCellValid: 'Validate cell + lock',
         forceRowValid: 'Validate row + lock',
         highlightCell: 'Highlighting the editor',
@@ -164,7 +164,7 @@ export default {
         realtimeSave: 'Realtime save',
         upload: 'File upload',
 
-        excel: '更多实现',
+        excel: 'More implementation',
         cell: 'Cell',
 
         bad: 'Bad usage',
@@ -232,8 +232,8 @@ export default {
         interceptor: '(Compatibility) Event interceptor',
 
         optimize: 'Optimization and suggestion',
-        optimizeScroller: '虚拟滚动优化',
-        optimizeEdit: '可编辑优化',
+        optimizeScroller: 'Virtual rolling optimization',
+        optimizeEdit: 'Editable optimization',
 
         api: 'API',
         vxeTable: 'vxe-table',
@@ -317,10 +317,10 @@ export default {
         v3: '3.x (vue 2.6.x Latest)',
         v4: '4.x (vue 3.x Next)',
         plan: {
-          vv1: 'v1 Based on vue2.6+, support all the mainstream browsers, to achieve all the practical functions of the table',
-          v2: 'v2 Based on vue2.6+, support all mainstream browsing, both function and performance',
-          v3: 'v3 Based on vue2.6+, only support H5 browser, do not support IE, rendering performance significantly improved',
-          v4: 'v4 Based on vue3+, only support H5 browser, do not support IE, rendering performance significantly improved'
+          v1: 'v1 Based on vue2.6+, Support for all major browsers',
+          v2: 'v2 Based on vue2.6+, Support for all major browsers',
+          v3: 'v3 Based on vue2.6+, Only supports modern browsers, not IE, improving rendering performance',
+          v4: 'v4 Based on vue3.0+, Only supports modern browsers, not IE, improving rendering performance'
         },
         ways: {
           wechat: 'Donate via the following wechat code scanning',
@@ -413,10 +413,10 @@ export default {
           footerRowStyle: 'Attach a style to the end of a table',
           showFooter: 'Whether to display table footer',
           footerMethod: 'The data method at table footer, return a two-dimensional array',
-          mergeCells: '临时合并指定的单元格（不能用于树形结构、展开行，不建议用于固定列）',
-          mergeFooterItems: '临时合并表尾（不能用于树形结构、展开行，不建议用于固定列）',
-          spanMethod: 'User defined merge function. returns the calculated value，不能用于虚拟滚动、树形结构、展开行、固定列',
-          footerSpanMethod: 'Footer merge rows or columns, 不能用于虚拟滚动、树形结构、展开行、固定列',
+          mergeCells: 'Temporary merge of specified cells (cannot be used to expand rows, tree structures, not recommended for fixed columns)',
+          mergeFooterItems: 'Temporary consolidated suffix (cannot be used to expand rows, tree structures, not recommended for fixed columns)',
+          spanMethod: 'User defined merge function. returns the calculated value (cannot be used for virtual scrolling and expanding rows, not recommended for fixed columns and tree structures)',
+          footerSpanMethod: 'Footer merge rows or columns (cannot be used for virtual scrolling and expanding rows, not recommended for fixed columns and tree structures)',
           showOverflow: 'Sets all content to appear as ellipses if it is too long',
           showHeaderOverflow: 'Sets the header to show ellipsis when all content is too long',
           showAllOverflow: 'It is about to be abandoned, please use "show-overflow"',
@@ -447,6 +447,7 @@ export default {
           menuConfig: 'context menu configuration',
           contextMenu: 'Obsolete, please use "menu-config"',
           clipConfig: 'Copy and paste configuration',
+          fnrConfig: 'find and replace configuration',
           mouseConfig: 'Mouse configuration',
           keyboardConfig: 'Keyboard configuration',
           editConfig: 'Editable configuration',
@@ -624,6 +625,7 @@ export default {
       input: {
         desc: {
           value: 'Binding values',
+          immediate: 'By default the input will synchronize the value in real time. This will cause delays in complex renderings and can be set to false before synchronizing the value after change',
           size: 'Size',
           disabled: 'Whether to disable',
           prefixIcon: 'Prefix icon',
@@ -652,8 +654,8 @@ export default {
           title: 'Message title (support internationalization)',
           type: 'Message type',
           status: 'Only valid for type=alert | confirm | message, message status',
-          iconStatus: '自定义状态图标',
-          message: '显示的文本（支持开启国际化）',
+          iconStatus: 'Custom status icon',
+          message: 'Displayed text',
           showHeader: 'Whether to display the head',
           showFooter: 'Whether to show bottom',
           lockView: 'Whether or not the page is locked does not allow any action outside the modal',
@@ -669,7 +671,7 @@ export default {
           minWidth: 'The minimum width of the modal window',
           minHeight: 'The minimum height of the modal window',
           top: 'Valid only for type=message, message from top',
-          position: '只对 type=modal 有效，窗口的默认位置，可以设置为 center 居中显示',
+          position: 'Only valid for type=modal. The default position of the window can be set to center display',
           zIndex: 'Custom style z-index (may be used for special situations, such as occlusion)',
           showTitleOverflow: 'Set the title content to appear as an ellipsis when it is too long',
           fullscreen: 'Default maximized display',
@@ -689,7 +691,7 @@ export default {
           titleAlign: 'All title align',
           titleWidth: 'All title width',
           titleColon: 'Whether to display the title colon',
-          titleAsterisk: '是否显示必填字段的红色星号',
+          titleAsterisk: 'Show red asterisk for required fields',
           rules: 'Checksum rule configuration entries'
         }
       },
@@ -721,7 +723,7 @@ export default {
           disabled: 'Whether to disable',
           prefixIcon: 'Prefix icon',
           placement: 'Fix the direction of the display drop - down panel',
-          transfer: 'Whether to insert the popup container into the body（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
+          transfer: 'Whether to insert the popup container into the body'
         }
       },
       optgroup: {
@@ -743,15 +745,15 @@ export default {
         desc: {
           value: 'Binding values',
           size: 'Size',
-          disabled: '是否禁用',
-          onLabel: '打开时显示的文字',
-          offLabel: '关闭时显示的文字',
-          onValue: '打开时的值',
-          offValue: '关闭时的值',
-          onIcon: '打开时的图标',
-          offIcon: '关闭时的图标',
-          onClass: '打开时的 className',
-          offClass: '关闭时的 className'
+          disabled: 'Disable',
+          onLabel: 'Text displayed on open',
+          offLabel: 'Text displayed on close',
+          onValue: 'Open value',
+          offValue: 'Value on close',
+          onIcon: 'Icon on open',
+          offIcon: 'Icon on close',
+          onClass: 'Classname on open',
+          offClass: 'Classname on shutdown'
         }
       },
       list: {
@@ -762,11 +764,11 @@ export default {
       },
       pulldown: {
         desc: {
-          data: '列表数据',
-          size: '尺寸',
-          disabled: '是否禁用',
-          placement: '固定显示下拉面板的方向',
-          transfer: '是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）'
+          data: 'List data',
+          size: 'Size',
+          disabled: 'Disable',
+          placement: 'Fixed display direction of drop-down panel',
+          transfer: 'Whether to insert the pop-up container into the body'
         }
       }
     }
