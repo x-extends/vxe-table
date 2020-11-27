@@ -678,6 +678,7 @@ export default {
   },
   created () {
     const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseOpts, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+      isSC: false,
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息

@@ -109,6 +109,7 @@ export default {
   },
   watch,
   created () {
+    this.$xetable.isSC = true
     this.columnConfig = this.createColumn(this.$xetable, this)
   },
   mounted () {

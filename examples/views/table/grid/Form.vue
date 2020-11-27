@@ -4,9 +4,9 @@
 
     <vxe-grid
       resizable
-      export-config
       border
       height="400"
+      :export-config="{}"
       :loading="loading"
       :form-config="tableForm"
       :toolbar-config="tableToolbar"
@@ -61,9 +61,9 @@ export default {
         `
         <vxe-grid
           resizable
-          export-config
           border
           height="400"
+          :export-config="{}"
           :loading="loading"
           :form-config="tableForm"
           :toolbar-config="tableToolbar"
