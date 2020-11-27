@@ -331,7 +331,7 @@ export default {
         releases: 'Releases',
         donation: 'Donation',
         donationTitle: 'Donation method：',
-        issuesTitle: '该群供大家交流问题，作者很忙基本没有时间去看群，<br>如果有问题请通过 issues 反馈',
+        issuesTitle: '該群供大家交流問題，若人满则剔除不活跃的<br>作者很忙基本沒有時間去看群，如果有问题请通过 issues 反馈',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'this release is being refactored. Stay tuned!'
       },
