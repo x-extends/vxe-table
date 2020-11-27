@@ -20,7 +20,7 @@
         <div class="content">
           <span v-if="appData.usedJSHeapSize && appData.usedJSHeapSize !== '0'" class="performance">Memory used: {{ appData.usedJSHeapSize }} MB.</span>
           <span>{{ $t('app.body.label.translations') }}:</span>
-          <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale.value">
+          <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
             <vxe-option value="zh_CN" label="中文"></vxe-option>
             <vxe-option value="zh_TC" label="繁體中文"></vxe-option>
             <vxe-option value="en_US" label="English"></vxe-option>

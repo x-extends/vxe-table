@@ -11,8 +11,13 @@ export type VxeTextareaInstance = ComponentPublicInstance<VxeTextareaProps, VxeT
 export interface VxeTextareaConstructor extends VxeComponentInstance, VxeTextareaMethods {
   props: VxeTextareaProps;
   context: SetupContext<VxeTextareaEmits>;
+  reactData: TextareaReactData;
   refMaps: TextareaPrivateRef;
   renderVN: RenderFunction;
+}
+
+export interface TextareaReactData {
+  inputValue: any;
 }
 
 export interface TextareaPrivateRef { }
@@ -26,6 +31,7 @@ export interface VxeTextareaProps {
    * 绑定值
    */
   modelValue?: string | number;
+  immediate?: boolean;
   /**
    * 原生 name 属性
    */

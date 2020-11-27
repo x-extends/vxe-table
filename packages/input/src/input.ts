@@ -71,9 +71,10 @@ export default defineComponent({
   name: 'VxeInput',
   props: {
     modelValue: [String, Number, Date] as PropType<VxeInputPropTypes.ModelValue>,
+    immediate: { type: Boolean as PropType<VxeInputPropTypes.Immediate>, default: true },
     name: String as PropType<VxeInputPropTypes.Name>,
     type: { type: String as PropType<VxeInputPropTypes.Type>, default: 'text' },
-    clearable: { type: Boolean, default: () => GlobalConfig.input.clearable },
+    clearable: { type: Boolean as PropType<VxeInputPropTypes.Clearable>, default: () => GlobalConfig.input.clearable },
     readonly: Boolean as PropType<VxeInputPropTypes.Readonly>,
     disabled: Boolean as PropType<VxeInputPropTypes.Disabled>,
     placeholder: String as PropType<VxeInputPropTypes.Placeholder>,
@@ -146,7 +147,7 @@ export default defineComponent({
       panelStyle: null,
       panelPlacement: '',
       isActivated: false,
-      inputValue: '',
+      inputValue: props.modelValue,
       datetimePanelValue: null,
       datePanelValue: null,
       datePanelLabel: '',
@@ -525,11 +526,18 @@ export default defineComponent({
       return isNumType && !XEUtils.toNumber(maxlength) ? 16 : maxlength
     })
 
+    function getNumberValue (val: any) {
+      const { type } = props
+      const digitsValue = computeDigitsValue.value
+      return type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toString(val)
+    }
+
     const triggerEvent = (evnt: Event & { type: 'input' | 'change' | 'keydown' | 'keyup' | 'mousewheel' | 'click' | 'focus' | 'blur' }) => {
       inputMethods.dispatchEvent(evnt.type, { value: props.modelValue }, evnt)
     }
 
     const emitUpdate = (value: VxeInputPropTypes.ModelValue, evnt: Event | { type: string }) => {
+      reactData.inputValue = value
       emit('update:modelValue', value)
       if (XEUtils.toString(props.modelValue) !== value) {
         inputMethods.dispatchEvent('change', { value }, evnt)
@@ -537,14 +545,26 @@ export default defineComponent({
     }
 
     const inputEvent = (evnt: Event & { type: 'input' }) => {
+      const { immediate } = props
       const isDatePickerType = computeIsDatePickerType.value
       const inputElem = evnt.target as HTMLInputElement
       const value = inputElem.value
       reactData.inputValue = value
-      if (!isDatePickerType) {
-        emitUpdate(value, evnt)
+      if (immediate) {
+        if (!isDatePickerType) {
+          emitUpdate(value, evnt)
+        }
       }
       inputMethods.dispatchEvent('input', { value }, evnt)
+    }
+
+    const changeEvent = (evnt: Event & { type: 'change' }) => {
+      const { immediate } = props
+      if (immediate) {
+        triggerEvent(evnt)
+      } else {
+        emitUpdate(reactData.inputValue, evnt)
+      }
     }
 
     const focusEvent = (evnt: Event & { type: 'focus' }) => {
@@ -630,15 +650,16 @@ export default defineComponent({
      * 检查初始值
      */
     const initValue = () => {
-      const { type, modelValue } = props
+      const { type } = props
+      const { inputValue } = reactData
       const isDatePickerType = computeIsDatePickerType.value
       const digitsValue = computeDigitsValue.value
       if (isDatePickerType) {
         changeValue()
       } else if (type === 'float') {
-        if (modelValue) {
-          const validValue = XEUtils.toFixed(XEUtils.floor(modelValue as number, digitsValue), digitsValue)
-          if (modelValue !== validValue) {
+        if (inputValue) {
+          const validValue = XEUtils.toFixed(XEUtils.floor(inputValue, digitsValue), digitsValue)
+          if (inputValue !== validValue) {
             emitUpdate(validValue, { type: 'init' })
           }
         }
@@ -685,25 +706,23 @@ export default defineComponent({
     }
 
     const afterCheckValue = () => {
-      const { type, min, max } = props
+      const { modelValue, type, min, max } = props
       const { inputValue, datetimePanelValue } = reactData
       const isNumType = computeIsNumType.value
       const isDatePickerType = computeIsDatePickerType.value
-      const digitsValue = computeDigitsValue.value
       const dateLabelFormat = computeDateLabelFormat.value
       const isReadonly = computeIsReadonly.value
-      const value = props.modelValue
       let inpVal: VxeInputPropTypes.ModelValue
       if (!isReadonly) {
         if (isNumType) {
-          if (value) {
-            inpVal = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
+          if (inputValue) {
+            inpVal = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
             if (!vaildMinNum(inpVal)) {
               inpVal = min
             } else if (!vaildMaxNum(inpVal)) {
               inpVal = max
             }
-            emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(inpVal, digitsValue), digitsValue) : XEUtils.toString(inpVal), { type: 'check' })
+            emitUpdate(getNumberValue(inpVal), { type: 'check' })
           }
         } else if (isDatePickerType) {
           inpVal = inputValue
@@ -716,12 +735,12 @@ export default defineComponent({
             if (XEUtils.isValidDate(inpVal)) {
               if (type === 'time') {
                 inpVal = XEUtils.toDateString(inpVal, dateLabelFormat)
-                if (value !== inpVal) {
+                if (modelValue !== inpVal) {
                   emitUpdate(inpVal, { type: 'check' })
                 }
                 reactData.inputValue = inpVal
               } else {
-                if (!XEUtils.isDateSame(value, inpVal, dateLabelFormat)) {
+                if (!XEUtils.isDateSame(modelValue, inpVal, dateLabelFormat)) {
                   if (type === 'datetime') {
                     datetimePanelValue.setHours(inpVal.getHours())
                     datetimePanelValue.setMinutes(inpVal.getMinutes())
@@ -729,7 +748,7 @@ export default defineComponent({
                   }
                   dateChange(inpVal)
                 } else {
-                  reactData.inputValue = XEUtils.toDateString(value, dateLabelFormat)
+                  reactData.inputValue = XEUtils.toDateString(modelValue, dateLabelFormat)
                 }
               }
             } else {
@@ -743,11 +762,16 @@ export default defineComponent({
     }
 
     const blurEvent = (evnt: Event & { type: 'blur' }) => {
+      const { immediate } = props
+      const { inputValue } = reactData
+      if (!immediate) {
+        emitUpdate(inputValue, evnt)
+      }
       afterCheckValue()
       if (!reactData.visiblePanel) {
         reactData.isActivated = false
       }
-      triggerEvent(evnt)
+      inputMethods.dispatchEvent('blur', { value: inputValue }, evnt)
     }
 
     // 密码
@@ -770,14 +794,17 @@ export default defineComponent({
 
     // 数值
     const numberChange = (isPlus: boolean, evnt: Event) => {
-      const { type } = props
+      const { min, max, type } = props
+      const { inputValue } = reactData
       const stepValue = computeStepValue.value
-      const digitsValue = computeDigitsValue.value
-      const value = props.modelValue
-      const inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
-      const newValue = isPlus ? XEUtils.add(inputValue, stepValue) : XEUtils.subtract(inputValue, stepValue)
-      if (vaildMinNum(newValue) && vaildMaxNum(newValue)) {
-        emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(newValue, digitsValue), digitsValue) : XEUtils.toString(newValue), evnt)
+      const numValue = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
+      const newValue = isPlus ? XEUtils.add(numValue, stepValue) : XEUtils.subtract(numValue, stepValue)
+      if (!vaildMinNum(newValue)) {
+        emitUpdate(getNumberValue(min), evnt)
+      } else if (!vaildMaxNum(newValue)) {
+        emitUpdate(getNumberValue(max), evnt)
+      } else {
+        emitUpdate(getNumberValue(newValue), evnt)
       }
     }
 
@@ -1408,43 +1435,6 @@ export default defineComponent({
       }
     }
 
-    const renderInput = (value?: VxeInputPropTypes.ModelValue) => {
-      const { name, disabled, autocomplete } = props
-      const isReadonly = computeIsReadonly.value
-      const inpMaxlength = computeInpMaxlength.value
-      const inputType = computeInputType.value
-      const inpPlaceholder = computeInpPlaceholder.value
-      return h('input', {
-        ref: refInputTarget,
-        class: 'vxe-input--inner',
-        value,
-        name,
-        type: inputType,
-        placeholder: inpPlaceholder,
-        maxlength: inpMaxlength,
-        readonly: isReadonly,
-        disabled,
-        autocomplete,
-        onKeydown: keydownEvent,
-        onKeyup: keyupEvent,
-        onMousewheel: mousewheelEvent,
-        onClick: clickEvent,
-        onInput: inputEvent,
-        onFocus: focusEvent,
-        onBlu: blurEvent
-      })
-    }
-
-    const renderDefaultInput = () => {
-      const { modelValue } = props
-      return renderInput(modelValue)
-    }
-
-    const renderDateInput = () => {
-      const { inputValue } = reactData
-      return renderInput(inputValue)
-    }
-
     const renderDateLabel = (item: DateYearItem | DateMonthItem | DateDayItem, label: string | number) => {
       const { festivalMethod } = props
       if (festivalMethod) {
@@ -1974,7 +1964,8 @@ export default defineComponent({
 
     Object.assign($xeinput, inputMethods)
 
-    watch(() => props.modelValue, () => {
+    watch(() => props.modelValue, (val) => {
+      reactData.inputValue = val
       changeValue()
     })
 
@@ -2001,11 +1992,14 @@ export default defineComponent({
     initValue()
 
     const renderVN = () => {
-      const { controls, type, align, disabled } = props
-      const { visiblePanel, isActivated } = reactData
+      const { controls, type, align, name, disabled, autocomplete } = props
+      const { inputValue, visiblePanel, isActivated } = reactData
       const vSize = computeSize.value
       const isDatePickerType = computeIsDatePickerType.value
       const isReadonly = computeIsReadonly.value
+      const inpMaxlength = computeInpMaxlength.value
+      const inputType = computeInputType.value
+      const inpPlaceholder = computeInpPlaceholder.value
       const childs = []
       const prefix = rendePrefixIcon()
       const suffix = renderSuffixIcon()
@@ -2014,7 +2008,28 @@ export default defineComponent({
         childs.push(prefix)
       }
       // 输入框
-      childs.push(isDatePickerType ? renderDateInput() : renderDefaultInput())
+      childs.push(
+        h('input', {
+          ref: refInputTarget,
+          class: 'vxe-input--inner',
+          value: inputValue,
+          name,
+          type: inputType,
+          placeholder: inpPlaceholder,
+          maxlength: inpMaxlength,
+          readonly: isReadonly,
+          disabled,
+          autocomplete,
+          onKeydown: keydownEvent,
+          onKeyup: keyupEvent,
+          onMousewheel: mousewheelEvent,
+          onClick: clickEvent,
+          onInput: inputEvent,
+          onChange: changeEvent,
+          onFocus: focusEvent,
+          onBlu: blurEvent
+        })
+      )
       // 后缀图标
       if (suffix) {
         childs.push(suffix)

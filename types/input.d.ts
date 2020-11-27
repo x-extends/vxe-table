@@ -24,7 +24,7 @@ export interface InputReactData {
   panelStyle: VNodeStyle | null;
   panelPlacement: VxeInputPropTypes.Placement;
   isActivated: boolean;
-  inputValue: string;
+  inputValue: any;
   datetimePanelValue: any;
   datePanelValue: Date | null;
   datePanelLabel: string;
@@ -38,6 +38,7 @@ export interface VxeInputOptions extends VxeInputProps, VxeInputListeners { }
 export namespace VxeInputPropTypes {
   export type Size = SizeType;
   export type ModelValue = string | number | Date | null;
+  export type Immediate = boolean;
   export type Name = string;
   export type Type = 'text' | 'search' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'time' | 'datetime' | 'week' | 'month' | 'year';
   export type Clearable = boolean;
@@ -70,6 +71,7 @@ export namespace VxeInputPropTypes {
 export interface VxeInputProps {
   size?: VxeInputPropTypes.Size;
   modelValue?: VxeInputPropTypes.ModelValue;
+  immediate?: VxeInputPropTypes.Immediate;
   name?: VxeInputPropTypes.Name;
   type?: VxeInputPropTypes.Type;
   clearable?: VxeInputPropTypes.Clearable;

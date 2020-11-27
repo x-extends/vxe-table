@@ -1,10 +1,10 @@
-import { defineComponent, h, ref, Ref, computed, nextTick, watch, PropType } from 'vue'
+import { defineComponent, h, ref, Ref, computed, nextTick, watch, PropType, reactive } from 'vue'
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits } from '../../../types/vxe-table'
+import { SizeType, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits } from '../../../types/vxe-table'
 
 let autoTxtElem: HTMLDivElement
 
@@ -12,6 +12,7 @@ export default defineComponent({
   name: 'VxeTextarea',
   props: {
     modelValue: [String, Number],
+    immediate: { type: Boolean, default: true },
     name: String,
     readonly: Boolean,
     disabled: Boolean,
@@ -38,10 +39,15 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
+    const reactData = reactive({
+      inputValue: props.modelValue
+    } as TextareaReactData)
+
     const $xetextarea = {
       xID,
       props,
-      context
+      context,
+      reactData
     } as VxeTextareaConstructor
 
     const refTextarea = ref() as Ref<HTMLTextAreaElement>
@@ -49,7 +55,7 @@ export default defineComponent({
     let textareaMethods = {} as TextareaMethods
 
     const computeInputCount = computed(() => {
-      return XEUtils.getSize(props.modelValue)
+      return XEUtils.getSize(reactData.inputValue)
     })
 
     const computeIsCountError = computed(() => {
@@ -62,7 +68,8 @@ export default defineComponent({
     })
 
     const updateAutoTxt = () => {
-      const { modelValue, size, autosize } = props
+      const { size, autosize } = props
+      const { inputValue } = reactData
       if (autosize) {
         if (!autoTxtElem) {
           autoTxtElem = document.createElement('div')
@@ -75,7 +82,7 @@ export default defineComponent({
         autoTxtElem.className = ['vxe-textarea--autosize', size ? `size--${size}` : ''].join(' ')
         autoTxtElem.style.width = `${textElem.clientWidth}px`
         autoTxtElem.style.padding = textStyle.padding
-        autoTxtElem.innerHTML = ('' + (modelValue || '　')).replace(/\n$/, '\n　')
+        autoTxtElem.innerHTML = ('' + (inputValue || '　')).replace(/\n$/, '\n　')
       }
     }
 
@@ -106,20 +113,47 @@ export default defineComponent({
       }
     }
 
+    const triggerEvent = (evnt: Event & { type: 'focus' | 'blur' | 'change' }) => {
+      const value = reactData.inputValue
+      $xetextarea.dispatchEvent(evnt.type, { value }, evnt)
+    }
+
+    const emitUpdate = (value: string, evnt: Event) => {
+      reactData.inputValue = value
+      emit('update:modelValue', value)
+      if (XEUtils.toString(props.modelValue) !== value) {
+        textareaMethods.dispatchEvent('change', { value }, evnt)
+      }
+    }
+
     const inputEvent = (evnt: InputEvent) => {
+      const { immediate } = props
       const textElem = evnt.target as HTMLTextAreaElement
       const value = textElem.value
-      const isChange = props.modelValue !== value
-      emit('update:modelValue', value)
-      $xetextarea.dispatchEvent('input', { value }, evnt)
-      if (isChange) {
-        $xetextarea.dispatchEvent('change', { value }, evnt)
+      reactData.inputValue = value
+      if (immediate) {
+        emitUpdate(value, evnt)
       }
+      $xetextarea.dispatchEvent('input', { value }, evnt)
       handleResize()
     }
 
-    const triggerEvent = (evnt: Event & { type: 'focus' | 'blur' }) => {
-      $xetextarea.dispatchEvent(evnt.type, { value: props.modelValue }, evnt)
+    const changeEvent = (evnt: Event & { type: 'change' }) => {
+      const { immediate } = props
+      if (immediate) {
+        triggerEvent(evnt)
+      } else {
+        emitUpdate(reactData.inputValue, evnt)
+      }
+    }
+
+    const blurEvent = (evnt: Event & { type: 'blur' }) => {
+      const { immediate } = props
+      const { inputValue } = reactData
+      if (!immediate) {
+        emitUpdate(inputValue, evnt)
+      }
+      $xetextarea.dispatchEvent('blur', { value: inputValue }, evnt)
     }
 
     textareaMethods = {
@@ -142,10 +176,14 @@ export default defineComponent({
 
     Object.assign($xetextarea, textareaMethods)
 
-    watch(() => props.modelValue, updateAutoTxt)
+    watch(() => props.modelValue, (val) => {
+      reactData.inputValue = val
+      updateAutoTxt()
+    })
 
     nextTick(() => {
-      if (props.modelValue) {
+      const { inputValue } = reactData
+      if (inputValue) {
         updateAutoTxt()
         handleResize()
       }
@@ -153,6 +191,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { resize, placeholder, disabled, maxlength, autosize, showWordCount } = props
+      const { inputValue } = reactData
       const vSize = computeSize.value
       const isCountError = computeIsCountError.value
       const inputCount = computeInputCount.value
@@ -166,7 +205,7 @@ export default defineComponent({
         h('textarea', {
           ref: refTextarea,
           class: 'vxe-textarea--inner',
-          value: props.modelValue,
+          value: inputValue,
           name: props.name,
           placeholder: placeholder ? UtilTools.getFuncText(placeholder) : null,
           maxlength,
@@ -176,8 +215,9 @@ export default defineComponent({
             resize
           } : null,
           onInput: inputEvent,
+          onChange: changeEvent,
           onFocus: triggerEvent,
-          onBlur: triggerEvent
+          onBlur: blurEvent
         }),
         showWordCount ? h('span', {
           class: ['vxe-textarea--count', {

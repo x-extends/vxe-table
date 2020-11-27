@@ -7,27 +7,33 @@ import { VxeGlobalRenderer } from '../../../types/vxe-table'
 
 const { getOnName } = VNTools
 
-const elementDefaultModalEvents = 'input'
-const elementModalEvents: any = {
-  select: 'change'
-}
+const lazyInputComponents = ['$input', '$textarea']
+const componentDefaultModelProp = 'modelValue'
 
-const elementDefaultChangeEvents = 'change'
-const elementChangeEvents: any = {
-  input: 'input'
-}
-
-const componentDefaultChangeEvents = 'modelValue'
-
-const inputEventTypes = ['input', 'textarea']
 const defaultCompProps = { transfer: true }
 
 function isEmptyValue (cellValue: any) {
   return cellValue === null || cellValue === undefined || cellValue === ''
 }
 
+function getModelEvent (renderOpts: any) {
+  switch (renderOpts.name) {
+    case 'input':
+    case 'textarea':
+      return 'input'
+  }
+  return 'update:modelValue'
+}
+
 function getChangeEvent (renderOpts: any) {
-  return inputEventTypes.indexOf(renderOpts.name) > -1 ? 'input' : 'change'
+  switch (renderOpts.name) {
+    case 'input':
+    case 'textarea':
+    case '$input':
+    case '$textarea':
+      return 'input'
+  }
+  return 'change'
 }
 
 function parseDate (value: any, props: any) {
@@ -65,11 +71,15 @@ function getNativeAttrs (renderOpts: any) {
 }
 
 function getCellEditFilterProps (renderOpts: any, params: any, value: any, defaultProps?: any) {
-  return XEUtils.assign({}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultChangeEvents]: value })
+  return XEUtils.assign({}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
 
 function getComponentFormItemProps (renderOpts: any, params: any, value: any, defaultProps?: any) {
-  return XEUtils.assign({}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultChangeEvents]: value })
+  return XEUtils.assign({}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
+}
+
+function isSyncCell (renderOpts: any, params: any) {
+  return renderOpts.immediate || params.$type === 'cell'
 }
 
 /**
@@ -80,9 +90,9 @@ function getComponentFormItemProps (renderOpts: any, params: any, value: any, de
  * @param changeFunc
  */
 function getElementOns (renderOpts: any, params: any, modelFunc?: any, changeFunc?: any) {
-  const { name, events } = renderOpts
-  const modelEvent = elementModalEvents[name] || elementDefaultModalEvents
-  const changeEvent = elementChangeEvents[name] || elementDefaultChangeEvents
+  const { events } = renderOpts
+  const modelEvent = getModelEvent(renderOpts)
+  const changeEvent = getChangeEvent(renderOpts)
   const isSameEvent = changeEvent === modelEvent
   const ons: any = {}
   if (events) {
@@ -123,7 +133,7 @@ function getElementOns (renderOpts: any, params: any, modelFunc?: any, changeFun
  */
 function getComponentOns (renderOpts: any, params: any, modelFunc?: any, changeFunc?: any) {
   const { events } = renderOpts
-  const modelEvent = 'update:modelValue'
+  const modelEvent = getModelEvent(renderOpts)
   const changeEvent = getChangeEvent(renderOpts)
   const ons: any = {}
   XEUtils.objectEach(events, (func, key: any) => {
@@ -152,9 +162,15 @@ function getComponentOns (renderOpts: any, params: any, modelFunc?: any, changeF
 
 function getEditOns (renderOpts: any, params: any) {
   const { $table, row, column } = params
-  return getComponentOns(renderOpts, params, (value: any) => {
+  const { model } = column
+  return getComponentOns(renderOpts, params, (cellValue: any) => {
     // 处理 model 值双向绑定
-    XEUtils.set(row, column.property, value)
+    if (lazyInputComponents.indexOf(renderOpts.name) === -1 || isSyncCell(renderOpts, params)) {
+      UtilTools.setCellValue(row, column, cellValue)
+    } else {
+      model.update = true
+      model.value = cellValue
+    }
   }, () => {
     // 处理 change 事件相关逻辑
     $table.updateStatus(params)
@@ -179,10 +195,6 @@ function getItemOns (renderOpts: any, params: any) {
     // 处理 change 事件相关逻辑
     $form.updateStatus(params)
   })
-}
-
-function isSyncCell (renderOpts: any, params: any) {
-  return renderOpts.immediate || params.$type === 'cell'
 }
 
 function getNativeEditOns (renderOpts: any, params: any) {
