@@ -218,7 +218,7 @@ export default {
               })
             },
             openExportEvent () {
-              this.$refs.xTable1.openExport({ isPrint: false })
+              this.$refs.xTable1.openExport()
             }
           }
         }
@@ -533,7 +533,7 @@ export default {
       })
     },
     openExportEvent () {
-      this.$refs.xTable1.openExport({ isPrint: false })
+      this.$refs.xTable1.openExport()
     },
     exportDataEvent2 () {
       this.$refs.xTable2.exportData({

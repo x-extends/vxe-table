@@ -17,6 +17,15 @@ const apis = [
         list: []
       },
       {
+        name: 'immediate',
+        descKey: 'app.api.input.desc.immediate',
+        version: '3.0.4',
+        type: 'boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'size',
         descKey: 'app.api.input.desc.size',
         version: '',
@@ -291,7 +300,7 @@ const apis = [
     list: [
       {
         name: 'change',
-        desc: '在值发生变化时触发该事件',
+        desc: '在键盘输入值发生变化时触发该事件',
         version: '',
         type: '',
         enum: '',
@@ -300,7 +309,7 @@ const apis = [
       },
       {
         name: 'keydown',
-        desc: '在键盘按下时触发该事件',
+        desc: '在键盘输入按下时触发该事件',
         version: '',
         type: '',
         enum: '',
@@ -309,7 +318,7 @@ const apis = [
       },
       {
         name: 'keyup',
-        desc: '在键盘按下弹起时触发该事件',
+        desc: '在键盘输入按下弹起时触发该事件',
         version: '',
         type: '',
         enum: '',

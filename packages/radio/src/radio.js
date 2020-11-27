@@ -26,7 +26,7 @@ export default {
     }
   },
   render (h) {
-    const { $slots, $xeradiogroup, isDisabled, title, vSize, value, label, name, content } = this
+    const { $scopedSlots, $xeradiogroup, isDisabled, title, vSize, value, label, name, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -67,7 +67,7 @@ export default {
       }),
       h('span', {
         class: 'vxe-radio--label'
-      }, $slots.default || [UtilTools.getFuncText(content)])
+      }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [UtilTools.getFuncText(content)])
     ])
   },
   methods: {

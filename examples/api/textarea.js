@@ -17,6 +17,15 @@ const apis = [
         list: []
       },
       {
+        name: 'immediate',
+        descKey: 'app.api.input.desc.immediate',
+        version: '3.0.4',
+        type: 'boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'size',
         descKey: 'app.api.input.desc.size',
         version: '',

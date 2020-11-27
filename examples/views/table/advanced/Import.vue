@@ -18,7 +18,7 @@
       highlight-hover-row
       ref="xTable"
       height="400"
-      :export-config="{isPrint: false}"
+      :export-config="{}"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -68,7 +68,7 @@ export default {
           highlight-hover-row
           ref="xTable"
           height="400"
-          :export-config="{isPrint: false}"
+          :export-config="{}"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>

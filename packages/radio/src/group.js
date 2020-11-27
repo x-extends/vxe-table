@@ -24,9 +24,10 @@ export default {
     }
   },
   render (h) {
+    const { $scopedSlots } = this
     return h('div', {
       class: 'vxe-radio-group'
-    }, this.$slots.default)
+    }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [])
   },
   methods: {
     handleChecked (params) {

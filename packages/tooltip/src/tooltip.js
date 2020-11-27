@@ -110,7 +110,7 @@ export default {
     }
   },
   render (h) {
-    const { vSize, theme, message, isHover, isArrow, visible, tipStore, enterable } = this
+    const { $scopedSlots, vSize, theme, message, isHover, isArrow, visible, tipStore, enterable } = this
     let on
     if (enterable) {
       on = {
@@ -133,12 +133,12 @@ export default {
     }, [
       h('div', {
         class: 'vxe-table--tooltip-content'
-      }, this.$slots.content || message),
+      }, $scopedSlots.content ? $scopedSlots.content.call(this, {}) : message),
       h('div', {
         class: 'vxe-table--tooltip-arrow',
         style: tipStore.arrowStyle
       })
-    ].concat(this.$slots.default))
+    ].concat($scopedSlots.default ? $scopedSlots.default.call(this, {}) : []))
   },
   methods: {
     open (target, message) {

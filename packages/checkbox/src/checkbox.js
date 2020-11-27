@@ -29,7 +29,7 @@ export default {
     }
   },
   render (h) {
-    const { $slots, $xecheckboxgroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content } = this
+    const { $scopedSlots, $xecheckboxgroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -60,7 +60,7 @@ export default {
       }),
       h('span', {
         class: 'vxe-checkbox--label'
-      }, $slots.default || [UtilTools.getFuncText(content)])
+      }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [UtilTools.getFuncText(content)])
     ])
   },
   methods: {

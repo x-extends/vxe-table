@@ -2,15 +2,33 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 
-const inputEventTypes = ['input', 'textarea', '$input', '$textarea']
 const defaultCompProps = { transfer: true }
+
+const lazyInputComponents = ['$input', '$textarea']
+const componentDefaultModelProp = 'value'
 
 function isEmptyValue (cellValue) {
   return cellValue === null || cellValue === undefined || cellValue === ''
 }
 
+function getModelEvent (renderOpts) {
+  switch (renderOpts.name) {
+    case '$input':
+    case '$textarea':
+      return 'modelValue'
+  }
+  return 'input'
+}
+
 function getChangeEvent (renderOpts) {
-  return inputEventTypes.indexOf(renderOpts.name) > -1 ? 'input' : 'change'
+  switch (renderOpts.name) {
+    case 'input':
+    case 'textarea':
+    case '$input':
+    case '$textarea':
+      return 'input'
+  }
+  return 'change'
 }
 
 function parseDate (value, props) {
@@ -42,14 +60,32 @@ function getNativeAttrs ({ name, attrs }) {
   return attrs
 }
 
-function getCellEditFilterProps (renderOpts, params, value, defaultProps) {
+function isSyncCell (renderOpts, params) {
+  return renderOpts.immediate || params.$type === 'cell'
+}
+
+function getCellEditProps (renderOpts, params, value, defaultProps) {
   const { vSize } = params.$table
-  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { value })
+  const defProps = {}
+  switch (renderOpts.name) {
+    case 'input':
+    case 'textarea':
+    case '$input':
+    case '$textarea':
+      defProps.immediate = renderOpts.immediate === true
+      break
+  }
+  return XEUtils.assign(defProps, vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
+}
+
+function getFilterProps (renderOpts, params, value, defaultProps) {
+  const { vSize } = params.$table
+  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
 
 function getItemProps (renderOpts, params, value, defaultProps) {
   const { vSize } = params.$form
-  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { value })
+  return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
 
 function getNativeOns (renderOpts, params) {
@@ -65,7 +101,7 @@ function getNativeOns (renderOpts, params) {
 
 function getOns (renderOpts, params, inputFunc, changeFunc) {
   const { events } = renderOpts
-  const modelEvent = 'input'
+  const modelEvent = getModelEvent(renderOpts)
   const changeEvent = getChangeEvent(renderOpts)
   const isSameEvent = changeEvent === modelEvent
   const ons = {}
@@ -98,9 +134,15 @@ function getOns (renderOpts, params, inputFunc, changeFunc) {
 
 function getEditOns (renderOpts, params) {
   const { $table, row, column } = params
-  return getOns(renderOpts, params, (value) => {
+  const { model } = column
+  return getOns(renderOpts, params, (cellValue) => {
     // 处理 model 值双向绑定
-    XEUtils.set(row, column.property, value)
+    if (lazyInputComponents.indexOf(renderOpts.name) === -1 || isSyncCell(renderOpts, params)) {
+      UtilTools.setCellValue(row, column, cellValue)
+    } else {
+      model.update = true
+      model.value = cellValue
+    }
   }, () => {
     // 处理 change 事件相关逻辑
     $table.updateStatus(params)
@@ -125,10 +167,6 @@ function getItemOns (renderOpts, params) {
     // 处理 change 事件相关逻辑
     $form.updateStatus(params)
   })
-}
-
-function isSyncCell (renderOpts, params) {
-  return renderOpts.immediate || params.$type === 'cell'
 }
 
 function getNativeEditOns (renderOpts, params) {
@@ -197,7 +235,7 @@ function defaultEditRender (h, renderOpts, params) {
   const cellValue = UtilTools.getCellValue(row, column)
   return [
     h(getDefaultComponentName(renderOpts), {
-      props: getCellEditFilterProps(renderOpts, params, cellValue),
+      props: getCellEditProps(renderOpts, params, cellValue),
       on: getEditOns(renderOpts, params),
       nativeOn: getNativeOns(renderOpts, params)
     })
@@ -207,7 +245,7 @@ function defaultEditRender (h, renderOpts, params) {
 function defaultButtonEditRender (h, renderOpts, params) {
   return [
     h('vxe-button', {
-      props: getCellEditFilterProps(renderOpts, params),
+      props: getCellEditProps(renderOpts, params),
       on: getOns(renderOpts, params),
       nativeOn: getNativeOns(renderOpts, params)
     })
@@ -280,7 +318,7 @@ function defaultFilterRender (h, renderOpts, params) {
     const optionValue = option.data
     return h(getDefaultComponentName(renderOpts), {
       key: oIndex,
-      props: getCellEditFilterProps(renderOpts, renderOpts, optionValue),
+      props: getFilterProps(renderOpts, renderOpts, optionValue),
       on: getFilterOns(renderOpts, params, option)
     })
   })
@@ -310,7 +348,7 @@ function defaultSelectEditRender (h, renderOpts, params) {
   const cellValue = UtilTools.getCellValue(row, column)
   return [
     h(getDefaultComponentName(renderOpts), {
-      props: getCellEditFilterProps(renderOpts, params, cellValue, { options, optionProps, optionGroups, optionGroupProps }),
+      props: getCellEditProps(renderOpts, params, cellValue, { options, optionProps, optionGroups, optionGroupProps }),
       on: getEditOns(renderOpts, params)
     })
   ]
@@ -552,7 +590,7 @@ const renderMap = {
         const optionValue = option.data
         return h(getDefaultComponentName(renderOpts), {
           key: oIndex,
-          props: getCellEditFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
+          props: getFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
           on: getFilterOns(renderOpts, params, option),
           nativeOn
         })

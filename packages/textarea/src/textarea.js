@@ -8,8 +8,13 @@ let autoTxtElem
 export default {
   name: 'VxeTextarea',
   mixins: [vSize],
+  model: {
+    prop: 'value',
+    event: 'modelValue'
+  },
   props: {
     value: [String, Number],
+    immediate: { type: Boolean, default: true },
     name: String,
     readonly: Boolean,
     disabled: Boolean,
@@ -22,9 +27,14 @@ export default {
     resize: { type: String, default: () => GlobalConfig.textarea.resize },
     size: { type: String, default: () => GlobalConfig.textarea.size || GlobalConfig.size }
   },
+  data () {
+    return {
+      inputValue: this.value
+    }
+  },
   computed: {
     inputCount () {
-      return XEUtils.getSize(this.value)
+      return XEUtils.getSize(this.inputValue)
     },
     isCountError () {
       return this.maxlength && this.inputCount > XEUtils.toNumber(this.maxlength)
@@ -32,11 +42,13 @@ export default {
     defaultEvents () {
       const evnts = {}
       XEUtils.each(this.$listeners, (cb, name) => {
-        if (['change'].indexOf(name) === -1) {
+        if (['input', 'change', 'blur'].indexOf(name) === -1) {
           evnts[name] = this.triggerEvent
         }
       })
       evnts.input = this.inputEvent
+      evnts.change = this.changeEvent
+      evnts.blur = this.blurEvent
       return evnts
     },
     sizeOpts () {
@@ -44,18 +56,20 @@ export default {
     }
   },
   watch: {
-    value () {
+    value (val) {
+      this.inputValue = val
       this.updateAutoTxt()
     }
   },
   mounted () {
-    if (this.value) {
+    const { inputValue } = this
+    if (inputValue) {
       this.updateAutoTxt()
       this.handleResize()
     }
   },
   render (h) {
-    const { defaultEvents, value, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount } = this
+    const { defaultEvents, inputValue, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount } = this
     const attrs = {
       name,
       form,
@@ -78,7 +92,7 @@ export default {
         ref: 'textarea',
         class: 'vxe-textarea--inner',
         domProps: {
-          value
+          value: inputValue
         },
         attrs,
         style: resize ? {
@@ -103,21 +117,43 @@ export default {
       return this.$nextTick()
     },
     triggerEvent (evnt) {
-      const { value } = this
-      this.$emit(evnt.type, { value, $event: evnt })
+      const { inputValue } = this
+      this.$emit(evnt.type, { value: inputValue, $event: evnt })
     },
     emitUpdate (value, evnt) {
+      this.inputValue = value
+      this.$emit('modelValue', value)
       if (this.value !== value) {
-        this.$emit('input', value)
         this.$emit('change', { value, $event: evnt })
       }
     },
     inputEvent (evnt) {
-      this.emitUpdate(evnt.target.value, evnt)
+      const { immediate } = this
+      const value = evnt.target.value
+      this.inputValue = value
+      if (immediate) {
+        this.emitUpdate(value, evnt)
+      }
       this.handleResize()
+      this.triggerEvent(evnt)
+    },
+    changeEvent (evnt) {
+      const { immediate } = this
+      if (immediate) {
+        this.triggerEvent(evnt)
+      } else {
+        this.emitUpdate(this.inputValue, evnt)
+      }
+    },
+    blurEvent (evnt) {
+      const { inputValue, immediate } = this
+      if (!immediate) {
+        this.emitUpdate(inputValue, evnt)
+      }
+      this.$emit('blur', { value: inputValue, $event: evnt })
     },
     updateAutoTxt () {
-      const { $refs, value, size, autosize } = this
+      const { $refs, inputValue, size, autosize } = this
       if (autosize) {
         if (!autoTxtElem) {
           autoTxtElem = document.createElement('div')
@@ -130,7 +166,7 @@ export default {
         autoTxtElem.className = ['vxe-textarea--autosize', size ? `size--${size}` : ''].join(' ')
         autoTxtElem.style.width = `${textElem.clientWidth}px`
         autoTxtElem.style.padding = textStyle.padding
-        autoTxtElem.innerHTML = ('' + (value || '　')).replace(/\n$/, '\n　')
+        autoTxtElem.innerHTML = ('' + (inputValue || '　')).replace(/\n$/, '\n　')
       }
     },
     handleResize () {

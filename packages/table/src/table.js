@@ -1046,7 +1046,6 @@ export default {
        * 通用提示
        */
       hasTip ? h('vxe-tooltip', {
-        key: 'cTip',
         ref: 'commTip',
         props: {
           isArrow: false,
@@ -1057,7 +1056,6 @@ export default {
        * 工具提示
        */
       hasTip ? h('vxe-tooltip', {
-        key: 'mTip',
         ref: 'tooltip',
         props: tooltipOpts
       }) : _e(),
@@ -1065,7 +1063,6 @@ export default {
        * 校验提示
        */
       hasTip && this.editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
-        key: 'vTip',
         ref: 'validTip',
         class: 'vxe-table--valid-error',
         props: validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : null

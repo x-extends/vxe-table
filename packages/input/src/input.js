@@ -34,30 +34,9 @@ function toStringTimeDate (str) {
   return new Date('')
 }
 
-function renderDefaultInput (h, _vm) {
-  const { inpAttrs, inpEvents, value } = _vm
-  return h('input', {
-    ref: 'input',
-    class: 'vxe-input--inner',
-    domProps: {
-      value
-    },
-    attrs: inpAttrs,
-    on: inpEvents
-  })
-}
-
-function renderDateInput (h, _vm) {
-  const { inpAttrs, inpEvents, inputValue } = _vm
-  return h('input', {
-    ref: 'input',
-    class: 'vxe-input--inner',
-    domProps: {
-      value: inputValue
-    },
-    attrs: inpAttrs,
-    on: inpEvents
-  })
+function getNumberValue (_vm, val) {
+  const { type, digitsValue } = _vm
+  return type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toString(val)
 }
 
 function renderDateLabel (h, _vm, item, label) {
@@ -541,7 +520,7 @@ function rendePrefixIcon (h, _vm) {
 }
 
 function renderSuffixIcon (h, _vm) {
-  const { $scopedSlots, value, isClearable, disabled, suffixIcon } = _vm
+  const { $scopedSlots, inputValue, isClearable, disabled, suffixIcon } = _vm
   const icons = []
   if ($scopedSlots.suffix) {
     icons.push(
@@ -565,7 +544,7 @@ function renderSuffixIcon (h, _vm) {
   }
   return icons.length ? h('span', {
     class: ['vxe-input--suffix', {
-      'is--clear': isClearable && !disabled && !(value === '' || XEUtils.eqNull(value))
+      'is--clear': isClearable && !disabled && !(inputValue === '' || XEUtils.eqNull(inputValue))
     }],
     on: {
       click: _vm.clickSuffixEvent
@@ -595,8 +574,13 @@ function renderExtraSuffixIcon (h, _vm) {
 export default {
   name: 'VxeInput',
   mixins: [vSize],
+  model: {
+    prop: 'value',
+    event: 'modelValue'
+  },
   props: {
     value: [String, Number, Date],
+    immediate: { type: Boolean, default: true },
     name: String,
     type: { type: String, default: 'text' },
     clearable: { type: Boolean, default: () => GlobalConfig.input.clearable },
@@ -645,7 +629,7 @@ export default {
       panelStyle: null,
       panelPlacement: null,
       isActivated: false,
-      inputValue: '',
+      inputValue: this.value,
       datetimePanelValue: null,
       datePanelValue: null,
       datePanelLabel: '',
@@ -707,14 +691,14 @@ export default {
       return this.maxDate ? XEUtils.toStringDate(this.maxDate) : null
     },
     dateValue () {
-      const { value, isDatePicker, type, dateValueFormat } = this
+      const { inputValue, isDatePicker, type, dateValueFormat } = this
       let val = null
-      if (value && isDatePicker) {
+      if (inputValue && isDatePicker) {
         let date
         if (type === 'time') {
-          date = toStringTimeDate(value)
+          date = toStringTimeDate(inputValue)
         } else {
-          date = XEUtils.toStringDate(value, dateValueFormat)
+          date = XEUtils.toStringDate(inputValue, dateValueFormat)
         }
         if (XEUtils.isValidDate(date)) {
           val = date
@@ -942,7 +926,7 @@ export default {
     inpEvents () {
       const evnts = {}
       XEUtils.each(this.$listeners, (cb, name) => {
-        if (['change', 'clear', 'prefix-click', 'suffix-click'].indexOf(name) === -1) {
+        if (['input', 'change', 'blur', 'clear', 'prefix-click', 'suffix-click'].indexOf(name) === -1) {
           evnts[name] = this.triggerEvent
         }
       })
@@ -953,13 +937,15 @@ export default {
         evnts.click = this.clickEvent
       }
       evnts.input = this.inputEvent
+      evnts.change = this.changeEvent
       evnts.focus = this.focusEvent
       evnts.blur = this.blurEvent
       return evnts
     }
   },
   watch: {
-    value () {
+    value (val) {
+      this.inputValue = val
       this.changeValue()
     },
     dateLabelFormat () {
@@ -998,7 +984,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { controls, isDatePicker, visiblePanel, isActivated, vSize, type, align, readonly, disabled } = this
+    const { controls, inputValue, isDatePicker, visiblePanel, isActivated, vSize, type, align, readonly, disabled, inpAttrs, inpEvents } = this
     const childs = []
     const prefix = rendePrefixIcon(h, this)
     const suffix = renderSuffixIcon(h, this)
@@ -1007,7 +993,17 @@ export default {
       childs.push(prefix)
     }
     // 输入框
-    childs.push(isDatePicker ? renderDateInput(h, this) : renderDefaultInput(h, this))
+    childs.push(
+      h('input', {
+        ref: 'input',
+        class: 'vxe-input--inner',
+        domProps: {
+          value: inputValue
+        },
+        attrs: inpAttrs,
+        on: inpEvents
+      })
+    )
     // 后缀图标
     if (suffix) {
       childs.push(suffix)
@@ -1044,21 +1040,33 @@ export default {
       return this.$nextTick()
     },
     triggerEvent (evnt) {
-      const { $refs, value } = this
-      this.$emit(evnt.type, { $panel: $refs.panel, value, $event: evnt })
+      const { $refs, inputValue } = this
+      this.$emit(evnt.type, { $panel: $refs.panel, value: inputValue, $event: evnt })
     },
     emitUpdate (value, evnt) {
+      this.inputValue = value
+      this.$emit('modelValue', value)
       if (XEUtils.toString(this.value) !== value) {
-        this.$emit('input', value)
         this.$emit('change', { value, $event: evnt })
       }
     },
     inputEvent (evnt) {
-      const { isDatePicker } = this
+      const { immediate, isDatePicker } = this
       const value = evnt.target.value
       this.inputValue = value
-      if (!isDatePicker) {
-        this.emitUpdate(value, evnt)
+      if (immediate) {
+        if (!isDatePicker) {
+          this.emitUpdate(value, evnt)
+        }
+      }
+      this.triggerEvent(evnt)
+    },
+    changeEvent (evnt) {
+      const { immediate } = this
+      if (immediate) {
+        this.triggerEvent(evnt)
+      } else {
+        this.emitUpdate(this.inputValue, evnt)
       }
     },
     focusEvent (evnt) {
@@ -1066,11 +1074,16 @@ export default {
       this.triggerEvent(evnt)
     },
     blurEvent (evnt) {
+      const { inputValue, immediate } = this
+      const value = inputValue
+      if (!immediate) {
+        this.emitUpdate(value, evnt)
+      }
       this.afterCheckValue()
       if (!this.visiblePanel) {
         this.isActivated = false
       }
-      this.triggerEvent(evnt)
+      this.$emit('blur', { value, $event: evnt })
     },
     keydownEvent (evnt) {
       if (this.isNumber) {
@@ -1106,19 +1119,19 @@ export default {
       this.triggerEvent(evnt)
     },
     clickPrefixEvent (evnt) {
-      const { $refs, disabled, value } = this
+      const { $refs, disabled, inputValue } = this
       if (!disabled) {
-        this.$emit('prefix-click', { $panel: $refs.panel, value, $event: evnt })
+        this.$emit('prefix-click', { $panel: $refs.panel, value: inputValue, $event: evnt })
       }
     },
     clickSuffixEvent (evnt) {
-      const { $refs, disabled, value } = this
+      const { $refs, disabled, inputValue } = this
       if (!disabled) {
         if (DomTools.hasClass(evnt.currentTarget, 'is--clear')) {
           this.emitUpdate('', evnt)
           this.clearValueEvent(evnt, '')
         } else {
-          this.$emit('suffix-click', { $panel: $refs.panel, value, $event: evnt })
+          this.$emit('suffix-click', { $panel: $refs.panel, value: inputValue, $event: evnt })
         }
       }
     },
@@ -1136,13 +1149,13 @@ export default {
      * 检查初始值
      */
     initValue () {
-      const { type, isDatePicker, value, digitsValue } = this
+      const { type, isDatePicker, inputValue, digitsValue } = this
       if (isDatePicker) {
         this.changeValue()
       } else if (type === 'float') {
-        if (value) {
-          const validValue = XEUtils.toFixed(XEUtils.floor(value, digitsValue), digitsValue)
-          if (value !== validValue) {
+        if (inputValue) {
+          const validValue = XEUtils.toFixed(XEUtils.floor(inputValue, digitsValue), digitsValue)
+          if (inputValue !== validValue) {
             this.emitUpdate(validValue, { type: 'init' })
           }
         }
@@ -1153,22 +1166,22 @@ export default {
      */
     changeValue () {
       if (this.isDatePicker) {
-        this.dateParseValue(this.value)
+        this.dateParseValue(this.inputValue)
         this.inputValue = this.datePanelLabel
       }
     },
     afterCheckValue () {
-      const { type, inpAttrs, value, inputValue, isDatePicker, isNumber, datetimePanelValue, dateLabelFormat, min, max, digitsValue } = this
+      const { type, inpAttrs, inputValue, isDatePicker, isNumber, datetimePanelValue, dateLabelFormat, min, max } = this
       if (!inpAttrs.readonly) {
         if (isNumber) {
-          if (value) {
-            let inpVal = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
+          if (inputValue) {
+            let inpVal = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
             if (!this.vaildMinNum(inpVal)) {
               inpVal = min
             } else if (!this.vaildMaxNum(inpVal)) {
               inpVal = max
             }
-            this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(inpVal, digitsValue), digitsValue) : XEUtils.toString(inpVal), { type: 'check' })
+            this.emitUpdate(getNumberValue(this, inpVal), { type: 'check' })
           }
         } else if (isDatePicker) {
           let inpVal = inputValue
@@ -1181,12 +1194,12 @@ export default {
             if (XEUtils.isValidDate(inpVal)) {
               if (type === 'time') {
                 inpVal = XEUtils.toDateString(inpVal, dateLabelFormat)
-                if (value !== inpVal) {
+                if (inputValue !== inpVal) {
                   this.emitUpdate(inpVal, { type: 'check' })
                 }
                 this.inputValue = inpVal
               } else {
-                if (!XEUtils.isDateSame(value, inpVal, dateLabelFormat)) {
+                if (!XEUtils.isDateSame(inputValue, inpVal, dateLabelFormat)) {
                   if (type === 'datetime') {
                     datetimePanelValue.setHours(inpVal.getHours())
                     datetimePanelValue.setMinutes(inpVal.getMinutes())
@@ -1194,7 +1207,7 @@ export default {
                   }
                   this.dateChange(inpVal)
                 } else {
-                  this.inputValue = XEUtils.toDateString(value, dateLabelFormat)
+                  this.inputValue = XEUtils.toDateString(inputValue, dateLabelFormat)
                 }
               }
             } else {
@@ -1293,11 +1306,15 @@ export default {
       this.$emit('next-number', { $event: evnt })
     },
     numberChange (isPlus, evnt) {
-      const { type, digitsValue, value, stepValue } = this
-      const inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
-      const newValue = isPlus ? XEUtils.add(inputValue, stepValue) : XEUtils.subtract(inputValue, stepValue)
-      if (this.vaildMinNum(newValue) && this.vaildMaxNum(newValue)) {
-        this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(newValue, digitsValue), digitsValue) : XEUtils.toString(newValue), evnt)
+      const { min, max, type, inputValue, stepValue } = this
+      const numValue = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
+      const newValue = isPlus ? XEUtils.add(numValue, stepValue) : XEUtils.subtract(numValue, stepValue)
+      if (!this.vaildMinNum(newValue)) {
+        this.emitUpdate(getNumberValue(this, min), evnt)
+      } else if (!this.vaildMaxNum(newValue)) {
+        this.emitUpdate(getNumberValue(this, max), evnt)
+      } else {
+        this.emitUpdate(getNumberValue(this, newValue), evnt)
       }
     },
     // 数值
