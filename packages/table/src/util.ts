@@ -127,7 +127,7 @@ export function rowToVisible ($xetable: VxeTableConstructor, row: any) {
   const { afterFullData, scrollYStore } = internalData
   const tableBody = refTableBody.value
   const bodyElem = tableBody.$el as HTMLDivElement
-  const trElem: HTMLTableRowElement | null = bodyElem.querySelector(`[data-rowid="${getRowid($xetable, row)}"]`)
+  const trElem: HTMLTableRowElement | null = bodyElem.querySelector(`[rowid="${getRowid($xetable, row)}"]`)
   if (trElem) {
     const bodyHeight = bodyElem.clientHeight
     const bodySrcollTop = bodyElem.scrollTop

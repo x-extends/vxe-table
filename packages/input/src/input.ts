@@ -1797,7 +1797,7 @@ export default defineComponent({
               'animat--leave': animatVisible,
               'animat--enter': visiblePanel
             }],
-            'data-placement': panelPlacement,
+            placement: panelPlacement,
             style: panelStyle
           }, renders)
         ])

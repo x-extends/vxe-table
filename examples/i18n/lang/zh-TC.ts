@@ -330,7 +330,7 @@ export default {
         releases: '更新日誌',
         donation: '捐贈',
         donationTitle: '捐贈管道：',
-        issuesTitle: '該群供大家交流問題，作者很忙基本沒有時間去看群，<br>如果有問題請通過 issues 迴響',
+        issuesTitle: '該群供大家交流問題，若人满则剔除不活跃的<br>作者很忙基本沒有時間去看群，如果有問題請通過 issues 迴響',
         newFunc: '由於作者很忙，後續有時間可能會支持該功能！',
         newDevelopment: '該版本正在重構中，敬請期待！'
       },

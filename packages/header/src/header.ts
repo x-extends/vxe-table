@@ -155,7 +155,7 @@ export default defineComponent({
       return h('div', {
         ref: refElem,
         class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-        'data-tid': xID
+        xid: xID
       }, [
         fixedType ? createCommentVNode() : h('div', {
           ref: refHeaderXSpace,
@@ -164,7 +164,7 @@ export default defineComponent({
         h('table', {
           ref: refHeaderTable,
           class: 'vxe-table--header',
-          'data-tid': xID,
+          xid: xID,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -236,7 +236,7 @@ export default defineComponent({
                 headerClassName ? (XEUtils.isFunction(headerClassName) ? headerClassName(params) : headerClassName) : '',
                 headerCellClassName ? (XEUtils.isFunction(headerCellClassName) ? headerCellClassName(params) : headerCellClassName) : ''
                 ],
-                'data-colid': column.id,
+                colid: column.id,
                 colspan: column.colSpan > 1 ? column.colSpan : null,
                 rowspan: column.rowSpan > 1 ? column.rowSpan : null,
                 style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
@@ -262,7 +262,7 @@ export default defineComponent({
               ])
             }).concat(scrollbarWidth ? [
               h('th', {
-                class: 'col--gutter'
+                class: 'vxe-header--gutter col--gutter'
               })
             ] : []))
           }))

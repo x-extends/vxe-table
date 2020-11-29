@@ -192,7 +192,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
             const layout = layoutList[index] as 'header' | 'body' | 'footer'
             const columnTargetNode = DomTools.getEventTargetNode(evnt, el, `vxe-${layout}--column`, (target: any) => {
               // target=td|th，直接向上找 table 去匹配即可
-              return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === xID
+              return target.parentNode.parentNode.parentNode.getAttribute('xid') === xID
             })
             const params: any = { type: layout, $table: $xetable, columns: visibleColumn.slice(0), $event: evnt }
             if (columnTargetNode.flag) {
@@ -216,7 +216,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
               openContextMenu(evnt, layout, params)
               $xetable.dispatchEvent(eventType, params, evnt)
               return
-            } else if (DomTools.getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === xID).flag) {
+            } else if (DomTools.getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === xID).flag) {
               if (menuOpts.trigger === 'cell') {
                 evnt.preventDefault()
               } else {

@@ -135,7 +135,7 @@ export default defineComponent({
       const cellAlign = align || allAlign
       const hasValidError = validStore.row === row && validStore.column === column
       const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
-      const attrs: any = { 'data-colid': column.id }
+      const attrs: any = { colid: column.id }
       const params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
       // 虚拟滚动不支持动态高度
       if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
@@ -324,7 +324,7 @@ export default defineComponent({
               'row--radio': radioOpts.highlight && selectRow === row,
               'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
             }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : ''],
-            'data-rowid': rowid,
+            rowid: rowid,
             style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
             key: rowKey || treeConfig ? rowid : $rowIndex,
             ...trOn
@@ -525,7 +525,7 @@ export default defineComponent({
       return h('div', {
         ref: refElem,
         class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-        'data-tid': xID
+        xid: xID
       }, [
         fixedType ? createCommentVNode() : h('div', {
           ref: refBodyXSpace,
@@ -538,7 +538,7 @@ export default defineComponent({
         h('table', {
           ref: refBodyTable,
           class: 'vxe-table--body',
-          'data-tid': xID,
+          xid: xID,
           cellspacing: 0,
           cellpadding: 0,
           border: 0

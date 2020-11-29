@@ -1992,7 +1992,7 @@ export default defineComponent({
       getRowNode (tr) {
         if (tr) {
           const { fullAllDataRowIdData } = internalData
-          const rowid: any = tr.getAttribute('data-rowid')
+          const rowid: any = tr.getAttribute('rowid')
           const rest = fullAllDataRowIdData[rowid]
           if (rest) {
             return { rowid: rest.rowid, item: rest.row, index: rest.index, items: rest.items, parent: rest.parent }
@@ -2007,7 +2007,7 @@ export default defineComponent({
       getColumnNode (cell: any) {
         if (cell) {
           const { fullColumnIdData } = internalData
-          const colid = cell.getAttribute('data-colid')
+          const colid = cell.getAttribute('colid')
           const rest = fullColumnIdData[colid]
           if (rest) {
             return { colid: rest.colid, item: rest.column, index: rest.index, items: rest.items, parent: rest.parent }
@@ -2741,7 +2741,7 @@ export default defineComponent({
         tableMethods.clearCurrentColumn()
         reactData.currentRow = row
         if (props.highlightCurrentRow) {
-          XEUtils.arrayEach(el.querySelectorAll(`[data-rowid="${getRowid($xetable, row)}"]`), elem => addClass(elem, 'row--current'))
+          XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xetable, row)}"]`), elem => addClass(elem, 'row--current'))
         }
         return nextTick()
       },
@@ -4638,7 +4638,7 @@ export default defineComponent({
         const rowid = getRowid($xetable, row)
         const el = refElem.value
         tablePrivateMethods.clearHoverRow()
-        XEUtils.arrayEach(el.querySelectorAll(`[data-rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
+        XEUtils.arrayEach(el.querySelectorAll(`[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
         internalData.hoverRow = row
       },
       clearHoverRow () {
@@ -4667,7 +4667,7 @@ export default defineComponent({
           bodyElem = tableBody.$el as HTMLDivElement
         }
         if (bodyElem) {
-          return bodyElem.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+          return bodyElem.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
         }
         return null
       },
@@ -5010,45 +5010,49 @@ export default defineComponent({
           class: 'vxe-table-slots'
         }, slots.default ? slots.default({}) : []),
         h('div', {
-          class: 'vxe-table--main-wrapper'
+          class: 'vxe-table--render-wrapper'
         }, [
-          /**
-           * 表头
-           */
-          showHeader ? h(TableHeaderComponent, {
-            ref: refTableHeader,
-            tableData,
-            tableColumn,
-            tableGroupColumn
-          }) : createCommentVNode(),
-          /**
-           * 表体
-           */
-          h(TableBodyComponent as ComponentOptions, {
-            ref: refTableBody,
-            tableData,
-            tableColumn
-          }),
-          /**
-           * 表尾
-           */
-          showFooter ? h(TableFooterComponent, {
-            ref: refTableFooter,
-            footerData,
-            tableColumn
-          }) : createCommentVNode()
-        ]),
-        h('div', {
-          class: 'vxe-table--fixed-wrapper'
-        }, [
-          /**
-           * 左侧固定区域
-           */
-          leftList && leftList.length && overflowX ? renderFixed('left') : createCommentVNode(),
-          /**
-           * 右侧固定区域
-           */
-          rightList && rightList.length && overflowX ? renderFixed('right') : createCommentVNode()
+          h('div', {
+            class: 'vxe-table--main-wrapper'
+          }, [
+            /**
+             * 表头
+             */
+            showHeader ? h(TableHeaderComponent, {
+              ref: refTableHeader,
+              tableData,
+              tableColumn,
+              tableGroupColumn
+            }) : createCommentVNode(),
+            /**
+             * 表体
+             */
+            h(TableBodyComponent as ComponentOptions, {
+              ref: refTableBody,
+              tableData,
+              tableColumn
+            }),
+            /**
+             * 表尾
+             */
+            showFooter ? h(TableFooterComponent, {
+              ref: refTableFooter,
+              footerData,
+              tableColumn
+            }) : createCommentVNode()
+          ]),
+          h('div', {
+            class: 'vxe-table--fixed-wrapper'
+          }, [
+            /**
+             * 左侧固定区域
+             */
+            leftList && leftList.length && overflowX ? renderFixed('left') : createCommentVNode(),
+            /**
+             * 右侧固定区域
+             */
+            rightList && rightList.length && overflowX ? renderFixed('right') : createCommentVNode()
+          ])
         ]),
         /**
          * 空数据

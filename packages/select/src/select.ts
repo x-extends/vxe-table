@@ -218,7 +218,7 @@ export default defineComponent({
         if (option) {
           const optWrapperElem = refOptionWrapper.value
           const panelElem = refOptionPanel.value
-          const optElem = panelElem.querySelector(`[data-optid='${getOptid(option)}']`) as HTMLElement
+          const optElem = panelElem.querySelector(`[optid='${getOptid(option)}']`) as HTMLElement
           if (optWrapperElem && optElem) {
             const wrapperHeight = optWrapperElem.offsetHeight
             const offsetPadding = 5
@@ -569,7 +569,7 @@ export default defineComponent({
             'is--hover': currentValue === optionValue
           }],
           // attrs
-          'data-optid': optid,
+          optid: optid,
           // event
           onClick: (evnt: any) => {
             if (!isDisabled) {
@@ -599,7 +599,7 @@ export default defineComponent({
             'is--disabled': isGroupDisabled
           }],
           // attrs
-          'data-optid': optid
+          optid: optid
         }, [
           h('div', {
             class: 'vxe-optgroup--title'
@@ -765,7 +765,7 @@ export default defineComponent({
               'animat--leave': reactData.animatVisible,
               'animat--enter': visiblePanel
             }],
-            'data-placement': reactData.panelPlacement,
+            placement: reactData.panelPlacement,
             style: reactData.panelStyle
           }, inited ? [
             h('div', {

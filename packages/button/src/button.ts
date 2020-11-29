@@ -349,7 +349,7 @@ export default defineComponent({
                 'animat--leave': reactData.animatVisible,
                 'animat--enter': showPanel
               }],
-              'data-placement': reactData.panelPlacement,
+              placement: reactData.panelPlacement,
               style: reactData.panelStyle
             }, inited ? [
               h('div', {

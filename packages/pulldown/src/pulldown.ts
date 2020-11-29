@@ -283,7 +283,7 @@ export default defineComponent({
               'animat--leave': animatVisible,
               'animat--enter': visiblePanel
             }],
-            'data-placement': panelPlacement,
+            placement: panelPlacement,
             style: panelStyle
           }, slots.dropdown ? (!inited || (destroyOnClose && !visiblePanel && !animatVisible) ? [] : slots.dropdown({ $pulldown: $xepulldown })) : [])
         ])

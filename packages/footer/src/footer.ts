@@ -104,7 +104,7 @@ export default defineComponent({
       return h('div', {
         ref: refElem,
         class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-        'data-tid': xID,
+        xid: xID,
         onScroll: scrollEvent
       }, [
         fixedType ? createCommentVNode() : h('div', {
@@ -114,7 +114,7 @@ export default defineComponent({
         h('table', {
           ref: refFooterTable,
           class: 'vxe-table--footer',
-          'data-tid': xID,
+          xid: xID,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -155,7 +155,7 @@ export default defineComponent({
               const showTitle = footOverflow === 'title'
               const showTooltip = footOverflow === true || footOverflow === 'tooltip'
               let hasEllipsis = showTitle || showTooltip || showEllipsis
-              const attrs: any = { 'data-colid': column.id }
+              const attrs: any = { colid: column.id }
               const tfOns: any = {}
               const columnIndex = $xetable.getColumnIndex(column)
               const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -239,7 +239,7 @@ export default defineComponent({
               ])
             }).concat(scrollbarWidth ? [
               h('td', {
-                class: 'col--gutter'
+                class: 'vxe-footer--gutter col--gutter'
               })
             ] : []))
           }))

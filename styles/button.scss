@@ -351,7 +351,7 @@ $btnThemeList: (
     transform-origin: center top;
     backface-visibility: hidden;
     transform-style: preserve-3d;
-    &[data-placement="top"] {
+    &[placement="top"] {
       transform-origin: center bottom;
     }
   }
