@@ -2144,7 +2144,7 @@ const apis = [
             desc: '数据校验的类型',
             version: '',
             type: 'string',
-            enum: 'number, string',
+            enum: 'number, string, array',
             defVal: 'string',
             list: []
           },
@@ -2829,7 +2829,7 @@ const apis = [
         list: []
       },
       {
-        name: 'cell-area-select-start',
+        name: 'cell-area-selection-start',
         desc: '只对 mouse-config.area 配置时有效，在单元格区域选取开始时会触发该事件',
         version: 'pro',
         type: '',
@@ -2838,7 +2838,7 @@ const apis = [
         list: []
       },
       {
-        name: 'cell-area-select-end',
+        name: 'cell-area-selection-end',
         desc: '只对 mouse-config.area 配置时有效，在单元格区域选取结束时会触发该事件',
         version: 'pro',
         type: '',
