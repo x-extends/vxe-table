@@ -31,10 +31,12 @@ $vxe-table-popup-border-color: #DADCE0;
 /*table*/
 $vxe-table-font-color: $vxe-font-color;
 $vxe-table-border-radius: $vxe-border-radius;
-$vxe-table-header-background-color: #f8f8f9;
 $vxe-table-border-color: #e8eaec;
 $vxe-table-resizable-color: #D9DDDF;
 $vxe-table-background-color: #ffffff;
+$vxe-table-header-background-color: #f8f8f9;
+$vxe-table-body-background-color: $vxe-table-background-color;
+$vxe-table-footer-background-color: $vxe-table-background-color;
 $vxe-table-tree-node-line-color:#909399;
 $vxe-table-header-font-weight: 700;
 

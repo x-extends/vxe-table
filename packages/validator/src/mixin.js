@@ -263,13 +263,14 @@ export default {
                   }
                 }
               } else {
-                const isNumber = rule.type === 'number'
-                const numVal = isNumber ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
-                if (rule.required && (cellValue === null || cellValue === undefined || cellValue === '')) {
+                const isNumType = rule.type === 'number'
+                const isArrType = rule.type === 'array'
+                const numVal = isNumType ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+                if (rule.required && (isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : (cellValue === null || cellValue === undefined || cellValue === ''))) {
                   this.validRuleErr = true
                   errorRules.push(new Rule(rule))
                 } else if (
-                  (isNumber && isNaN(cellValue)) ||
+                  (isNumType && isNaN(cellValue)) ||
                   (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
                   (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
                   (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue))

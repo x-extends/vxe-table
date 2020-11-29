@@ -194,7 +194,7 @@ export default {
             ])
           }).concat(scrollbarWidth ? [
             h('th', {
-              class: 'col--gutter'
+              class: 'vxe-header--gutter col--gutter'
             })
           ] : []))
         }))
