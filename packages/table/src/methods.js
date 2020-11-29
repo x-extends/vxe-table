@@ -581,7 +581,7 @@ const Methods = {
   getRowNode (tr) {
     if (tr) {
       const { fullAllDataRowIdData } = this
-      const rowid = tr.getAttribute('data-rowid')
+      const rowid = tr.getAttribute('rowid')
       const rest = fullAllDataRowIdData[rowid]
       if (rest) {
         return { rowid: rest.rowid, item: rest.row, index: rest.index, items: rest.items, parent: rest.parent }
@@ -596,7 +596,7 @@ const Methods = {
   getColumnNode (cell) {
     if (cell) {
       const { fullColumnIdData } = this
-      const colid = cell.getAttribute('data-colid')
+      const colid = cell.getAttribute('colid')
       const rest = fullColumnIdData[colid]
       if (rest) {
         return { colid: rest.colid, item: rest.column, index: rest.index, items: rest.items, parent: rest.parent }
@@ -2720,7 +2720,7 @@ const Methods = {
     this.clearCurrentColumn()
     this.currentRow = row
     if (this.highlightCurrentRow) {
-      XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${getRowid(this, row)}"]`), elem => addClass(elem, 'row--current'))
+      XEUtils.arrayEach(this.$el.querySelectorAll(`[rowid="${getRowid(this, row)}"]`), elem => addClass(elem, 'row--current'))
     }
     return this.$nextTick()
   },
@@ -2777,7 +2777,7 @@ const Methods = {
   setHoverRow (row) {
     const rowid = getRowid(this, row)
     this.clearHoverRow()
-    XEUtils.arrayEach(this.$el.querySelectorAll(`[data-rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
+    XEUtils.arrayEach(this.$el.querySelectorAll(`[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
     this.hoverRow = row
   },
   clearHoverRow () {
@@ -3930,7 +3930,7 @@ const Methods = {
     const rowid = getRowid(this, row)
     const bodyElem = $refs[`${column.fixed || 'table'}Body`] || $refs.tableBody
     if (bodyElem && bodyElem.$el) {
-      return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
+      return bodyElem.$el.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
     }
     return null
   }

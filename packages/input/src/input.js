@@ -416,7 +416,7 @@ function renderPanel (h, _vm) {
         'animat--enter': visiblePanel
       }],
       attrs: {
-        'data-placement': panelPlacement
+        placement: panelPlacement
       },
       style: panelStyle
     }, renders)

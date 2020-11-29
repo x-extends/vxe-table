@@ -78,7 +78,7 @@ export const DomTools = {
   },
   rowToVisible ($xetable, row) {
     const bodyElem = $xetable.$refs.tableBody.$el
-    const trElem = bodyElem.querySelector(`[data-rowid="${getRowid($xetable, row)}"]`)
+    const trElem = bodyElem.querySelector(`[rowid="${getRowid($xetable, row)}"]`)
     if (trElem) {
       const bodyHeight = bodyElem.clientHeight
       const bodySrcollTop = bodyElem.scrollTop

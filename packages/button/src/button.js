@@ -95,7 +95,7 @@ export default {
           'animat--enter': showPanel
         }],
         attrs: {
-          'data-placement': panelPlacement
+          placement: panelPlacement
         },
         style: this.panelStyle
       }, inited ? [

@@ -70,7 +70,7 @@ export default {
     return h('div', {
       class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
-        'data-tid': tId
+        xid: tId
       },
       on: {
         scroll: this.scrollEvent
@@ -83,7 +83,7 @@ export default {
       h('table', {
         class: 'vxe-table--footer',
         attrs: {
-          'data-tid': tId,
+          xid: tId,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -130,7 +130,7 @@ export default {
             const showTitle = footOverflow === 'title'
             const showTooltip = footOverflow === true || footOverflow === 'tooltip'
             let hasEllipsis = showTitle || showTooltip || showEllipsis
-            const attrs = { 'data-colid': column.id }
+            const attrs = { colid: column.id }
             const tfOns = {}
             const columnIndex = $xetable.getColumnIndex(column)
             const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -218,7 +218,7 @@ export default {
             ])
           }).concat(scrollbarWidth ? [
             h('td', {
-              class: 'col--gutter'
+              class: 'vxe-footer--gutter col--gutter'
             })
           ] : []))
         }))

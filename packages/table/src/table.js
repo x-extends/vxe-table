@@ -917,54 +917,58 @@ export default {
         ref: 'hideColumn'
       }, this.$slots.default),
       h('div', {
-        class: 'vxe-table--main-wrapper'
+        class: 'vxe-table--render-wrapper'
       }, [
-        /**
-         * 表头
-         */
-        showHeader ? h('vxe-table-header', {
-          ref: 'tableHeader',
-          props: {
-            tableData,
-            tableColumn,
-            tableGroupColumn,
-            size: vSize
-          }
-        }) : _e(),
-        /**
-         * 表体
-         */
-        h('vxe-table-body', {
-          ref: 'tableBody',
-          props: {
-            tableData,
-            tableColumn,
-            size: vSize
-          }
-        }),
-        /**
-         * 表尾
-         */
-        showFooter ? h('vxe-table-footer', {
-          ref: 'tableFooter',
-          props: {
-            footerData,
-            tableColumn,
-            size: vSize
-          }
-        }) : _e()
-      ]),
-      h('div', {
-        class: 'vxe-table--fixed-wrapper'
-      }, [
-        /**
-         * 左侧固定区域
-         */
-        leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : _e(),
-        /**
-         * 右侧固定区域
-         */
-        rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e()
+        h('div', {
+          class: 'vxe-table--main-wrapper'
+        }, [
+          /**
+           * 表头
+           */
+          showHeader ? h('vxe-table-header', {
+            ref: 'tableHeader',
+            props: {
+              tableData,
+              tableColumn,
+              tableGroupColumn,
+              size: vSize
+            }
+          }) : _e(),
+          /**
+           * 表体
+           */
+          h('vxe-table-body', {
+            ref: 'tableBody',
+            props: {
+              tableData,
+              tableColumn,
+              size: vSize
+            }
+          }),
+          /**
+           * 表尾
+           */
+          showFooter ? h('vxe-table-footer', {
+            ref: 'tableFooter',
+            props: {
+              footerData,
+              tableColumn,
+              size: vSize
+            }
+          }) : _e()
+        ]),
+        h('div', {
+          class: 'vxe-table--fixed-wrapper'
+        }, [
+          /**
+           * 左侧固定区域
+           */
+          leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : _e(),
+          /**
+           * 右侧固定区域
+           */
+          rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e()
+        ])
       ]),
       /**
        * 空数据

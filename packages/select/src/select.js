@@ -129,7 +129,7 @@ export function renderOption (h, _vm, list, group) {
         'is--hover': currentValue === optionValue
       }],
       attrs: {
-        'data-optid': optid
+        optid: optid
       },
       on: {
         click: (evnt) => {
@@ -158,7 +158,7 @@ export function renderOptgroup (h, _vm) {
         'is--disabled': isGroupDisabled
       }],
       attrs: {
-        'data-optid': optid
+        optid: optid
       }
     }, [
       h('div', {
@@ -365,7 +365,7 @@ export default {
           'animat--enter': visiblePanel
         }],
         attrs: {
-          'data-placement': this.panelPlacement
+          placement: this.panelPlacement
         },
         style: this.panelStyle
       }, inited ? [
@@ -419,7 +419,7 @@ export default {
         if (option) {
           const { $refs } = this
           const optWrapperElem = $refs.optWrapper
-          const optElem = $refs.panel.querySelector(`[data-optid='${getOptid(this, option)}']`)
+          const optElem = $refs.panel.querySelector(`[optid='${getOptid(this, option)}']`)
           if (optWrapperElem && optElem) {
             const wrapperHeight = optWrapperElem.offsetHeight
             const offsetPadding = 5

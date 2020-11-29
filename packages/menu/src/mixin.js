@@ -86,7 +86,7 @@ export default {
           const layout = layoutList[index]
           const columnTargetNode = DomTools.getEventTargetNode(evnt, this.$el, `vxe-${layout}--column`, target => {
             // target=td|th，直接向上找 table 去匹配即可
-            return target.parentNode.parentNode.parentNode.getAttribute('data-tid') === tId
+            return target.parentNode.parentNode.parentNode.getAttribute('xid') === tId
           })
           const params = { type: layout, $grid: this.$xegrid, $table: this, columns: this.visibleColumn.slice(0), $event: evnt }
           if (columnTargetNode.flag) {
@@ -111,7 +111,7 @@ export default {
               this.emitEvent(`${typePrefix}cell-menu`, params, evnt)
             }
             return
-          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('data-tid') === tId).flag) {
+          } else if (DomTools.getEventTargetNode(evnt, this.$el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === tId).flag) {
             if (ctxMenuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {

@@ -86,7 +86,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const cellAlign = align || allAlign
   const hasValidError = validStore.row === row && validStore.column === column
   const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
-  const attrs = { 'data-colid': column.id }
+  const attrs = { colid: column.id }
   const bindMouseenter = tableListeners['cell-mouseenter']
   const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
@@ -306,7 +306,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
           'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
         }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : ''],
         attrs: {
-          'data-rowid': rowid
+          rowid: rowid
         },
         style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
         key: rowKey || treeConfig ? rowid : $rowIndex,
@@ -443,7 +443,7 @@ export default {
     return h('div', {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
-        'data-tid': tId
+        xid: tId
       }
     }, [
       fixedType ? _e() : h('div', {
@@ -457,7 +457,7 @@ export default {
       h('table', {
         class: 'vxe-table--body',
         attrs: {
-          'data-tid': tId,
+          xid: tId,
           cellspacing: 0,
           cellpadding: 0,
           border: 0

@@ -51,7 +51,7 @@ export default {
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
-        'data-tid': tId
+        xid: tId
       }
     }, [
       fixedType ? _e() : h('div', {
@@ -61,7 +61,7 @@ export default {
       h('table', {
         class: 'vxe-table--header',
         attrs: {
-          'data-tid': tId,
+          xid: tId,
           cellspacing: 0,
           cellpadding: 0,
           border: 0
@@ -141,7 +141,7 @@ export default {
                 'col--current': currentColumn === column
               }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],
               attrs: {
-                'data-colid': column.id,
+                colid: column.id,
                 colspan: column.colSpan > 1 ? column.colSpan : null,
                 rowspan: column.rowSpan > 1 ? column.rowSpan : null
               },
@@ -170,7 +170,7 @@ export default {
             ])
           }).concat(scrollbarWidth ? [
             h('th', {
-              class: 'col--gutter'
+              class: 'vxe-header--gutter col--gutter'
             })
           ] : []))
         }))

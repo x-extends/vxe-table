@@ -65,7 +65,7 @@ export default {
           'animat--enter': visiblePanel
         }],
         attrs: {
-          'data-placement': panelPlacement
+          placement: panelPlacement
         },
         style: panelStyle
       }, downSlot ? (!inited || (destroyOnClose && !visiblePanel && !animatVisible) ? [] : downSlot.call(this, { $pulldown: this }, h)) : [])
