@@ -3075,7 +3075,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ $event}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, $event}',
         list: []
       },
       {
@@ -3093,7 +3093,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ $event}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, $event}',
         list: []
       },
       {
