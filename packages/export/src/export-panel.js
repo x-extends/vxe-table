@@ -98,7 +98,7 @@ export default {
         loading: this.loading
       },
       on: {
-        modelValue (value) {
+        input (value) {
           storeData.visible = value
         },
         show: this.showEvent
@@ -169,7 +169,7 @@ export default {
                       placeholder: GlobalConfig.i18n('vxe.export.expSheetNamePlaceholder')
                     },
                     on: {
-                      input (value) {
+                      modelValue (value) {
                         defaultOptions.sheetName = value
                       }
                     }

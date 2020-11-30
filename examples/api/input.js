@@ -299,6 +299,15 @@ const apis = [
     defVal: '',
     list: [
       {
+        name: 'input',
+        desc: '在键盘输入时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
         name: 'change',
         desc: '在键盘输入值发生变化时触发该事件',
         version: '',
