@@ -1736,8 +1736,8 @@ const apis = [
         defVal: '继承 setup.table.clipConfig',
         list: [
           {
-            name: 'getMethod',
-            desc: '自定义单元格复制取值的方法，将单元格复制到剪贴板',
+            name: 'copyMethod',
+            desc: '重写单元格复制取值的方法，将单元格复制到剪贴板',
             version: 'pro',
             type: '({ row, column }) => string',
             enum: '',
@@ -1745,7 +1745,7 @@ const apis = [
             list: []
           },
           {
-            name: 'beforeGetMethod',
+            name: 'beforeCopyMethod',
             desc: '自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
             type: '({ targetAreas }) => boolean',
@@ -1754,8 +1754,8 @@ const apis = [
             list: []
           },
           {
-            name: 'setMethod',
-            desc: '自定义单元格粘贴赋值的方法，从剪贴板赋值到单元格',
+            name: 'pasteMethod',
+            desc: '重写单元格粘贴赋值的方法，从剪贴板赋值到单元格',
             version: 'pro',
             type: '({ row, column, cellValue }) => void',
             enum: '',
@@ -1763,7 +1763,7 @@ const apis = [
             list: []
           },
           {
-            name: 'beforeSetMethod',
+            name: 'beforePasteMethod',
             desc: '自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
             type: '({ currentAreas, targetAreas, cellValues }) => boolean',

@@ -278,7 +278,14 @@ export default {
               this.handleFocus(params, evnt)
             })
           }
-          this.emitEvent(type, params, evnt)
+          this.emitEvent(type, {
+            row,
+            rowIndex: this.getRowIndex(row),
+            $rowIndex: this.getVMRowIndex(row),
+            column,
+            columnIndex: this.getColumnIndex(column),
+            $columnIndex: this.getVMColumnIndex(column)
+          }, evnt)
         } else {
           const { column: oldColumn } = actived
           if (mouseConfig) {
@@ -325,7 +332,7 @@ export default {
     _clearActived (evnt) {
       const { tableColumn, editStore, editOpts } = this
       const { actived } = editStore
-      const { args, row, column } = actived
+      const { row, column } = actived
       if (row || column) {
         if (editOpts.mode === 'row') {
           tableColumn.forEach(column => this._setColumnModel(row, column))
@@ -333,7 +340,14 @@ export default {
           this._setColumnModel(row, column)
         }
         this.updateFooter()
-        this.emitEvent('edit-closed', args, evnt)
+        this.emitEvent('edit-closed', {
+          row,
+          rowIndex: this.getRowIndex(row),
+          $rowIndex: this.getVMRowIndex(row),
+          column,
+          columnIndex: this.getColumnIndex(column),
+          $columnIndex: this.getVMColumnIndex(column)
+        }, evnt)
       }
       actived.args = null
       actived.row = null
