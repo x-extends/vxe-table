@@ -9,7 +9,7 @@
         <span>👀{{ $t('app.body.other.releases') }}</span>
       </a>
     </div>
-    <div class="desc">
+    <!-- <div class="desc">
       <div class="title">
         <span style="vertical-align: middle;padding-left: 0.4em;">🔥{{ $t('app.body.label.plan') }}</span>
       </div>
@@ -19,28 +19,18 @@
         <li><i class="fa fa-battery-4"></i>{{ $t('app.body.other.plan.v3') }}</li>
         <li><i class="fa fa-battery-3"></i>{{ $t('app.body.other.plan.v4') }}</li>
       </ul>
-    </div>
+    </div> -->
     <div class="content" style="padding-top: 50px">
-      <div style="display: inline-block;text-align: left;">
+      <div style="float: left;padding-left: 5em;">
         <div>
-          <div>😘<span v-html="$t('app.body.other.donationTitle')"></span></div>
-          <ul>
-            <li>1. <span v-html="$t('app.body.other.ways.alipay')"></span></li>
-            <li>2. <span v-html="$t('app.body.other.ways.wechat')"></span></li>
-            <li>3. <span v-html="$t('app.body.other.ways.gitee')"></span></li>
-          </ul>
-        </div>
-        <div>
-          <img src="/vxe-table/static/donation/pay.jpg">
-        </div>
-      </div>
-      <div style="display: inline-block;margin-left: 20em;">
-        <div>
-          <span style="font-size: 22px;font-weight: 700;">QQ群</span>
+          <span style="font-size: 22px;font-weight: 700;">QQ交流群</span>
           <br>
           <span v-html="$t('app.body.other.issuesTitle')"></span>
         </div>
         <img src="/vxe-table/static/donation/qq.png">
+      </div>
+      <div style="float: right;padding-right: 5em;">
+        <img src="/vxe-table/static/donation/pay.jpg">
       </div>
     </div>
   </div>

@@ -1,6 +1,12 @@
 /**Variable**/
 
 /*快捷菜单*/
+.vxe-table--context-menu-wrapper {
+  display: none;
+  &.is--visible {
+    display: block;
+  }
+}
 .vxe-table--context-menu-wrapper,
 .vxe-table--context-menu-clild-wrapper {
   position: absolute;

@@ -3282,11 +3282,7 @@ export default defineComponent({
           tableBodyElem.scrollTop = 0
           tableBodyElem.scrollLeft = 0
         }
-        return new Promise(resolve => {
-          requestAnimationFrame(() => {
-            resolve(nextTick())
-          })
-        })
+        return nextTick()
       },
       /**
        * 更新表尾合计
@@ -4964,7 +4960,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig } = props
-      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerData, initStore, columnStore, filterStore, ctxMenuStore } = reactData
+      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerData, initStore, columnStore, filterStore } = reactData
       const { leftList, rightList } = columnStore
       const tooltipOpts = computeTooltipOpts.value
       const treeOpts = computeTreeOpts.value
@@ -5117,7 +5113,7 @@ export default defineComponent({
         /**
          * 快捷菜单
          */
-        ctxMenuStore.visible && isMenu ? h(resolveComponent('vxe-table-context-menu') as ComponentOptions, {
+        isMenu ? h(resolveComponent('vxe-table-context-menu') as ComponentOptions, {
           ref: refTableMenu
         }) : createCommentVNode(),
         /**

@@ -1745,8 +1745,8 @@ const apis = [
         defVal: '继承 setup.table.clipConfig',
         list: [
           {
-            name: 'getMethod',
-            desc: '自定义单元格复制取值的方法，将单元格复制到剪贴板',
+            name: 'copyMethod',
+            desc: '重写单元格复制取值的方法，将单元格复制到剪贴板',
             version: 'pro',
             type: '({ row, column }) => string',
             enum: '',
@@ -1754,7 +1754,7 @@ const apis = [
             list: []
           },
           {
-            name: 'beforeGetMethod',
+            name: 'beforeCopyMethod',
             desc: '自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
             type: '({ targetAreas }) => boolean',
@@ -1763,8 +1763,8 @@ const apis = [
             list: []
           },
           {
-            name: 'setMethod',
-            desc: '自定义单元格粘贴赋值的方法，从剪贴板赋值到单元格',
+            name: 'pasteMethod',
+            desc: '重写单元格粘贴赋值的方法，从剪贴板赋值到单元格',
             version: 'pro',
             type: '({ row, column, cellValue }) => void',
             enum: '',
@@ -1772,7 +1772,7 @@ const apis = [
             list: []
           },
           {
-            name: 'beforeSetMethod',
+            name: 'beforePasteMethod',
             desc: '自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
             type: '({ currentAreas, targetAreas, cellValues }) => boolean',
@@ -2153,7 +2153,7 @@ const apis = [
             desc: '数据校验的类型',
             version: '',
             type: 'string',
-            enum: 'number, string',
+            enum: 'number, string, array',
             defVal: 'string',
             list: []
           },
@@ -2847,16 +2847,16 @@ const apis = [
         list: []
       },
       {
-        name: 'cell-area-select-start',
+        name: 'cell-area-selection-start',
         desc: '只对 mouse-config.area 配置时有效，在单元格区域选取开始时会触发该事件',
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ $event}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, $event}',
         list: []
       },
       {
-        name: 'cell-area-select-end',
+        name: 'cell-area-selection-end',
         desc: '只对 mouse-config.area 配置时有效，在单元格区域选取结束时会触发该事件',
         version: 'pro',
         type: '',
@@ -2870,7 +2870,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ $event}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, $event}',
         list: []
       },
       {

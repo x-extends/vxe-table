@@ -321,7 +321,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { editStore, tableColumn } = reactData
         const editOpts = computeEditOpts.value
         const { actived } = editStore
-        const { args, row, column } = actived
+        const { row, column } = actived
         if (row || column) {
           if (editOpts.mode === 'row') {
             tableColumn.forEach((column: any) => setEditColumnModel(row, column))
@@ -329,7 +329,14 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             setEditColumnModel(row, column)
           }
           $xetable.updateFooter()
-          $xetable.dispatchEvent('edit-closed', args, evnt || null)
+          $xetable.dispatchEvent('edit-closed', {
+            row,
+            rowIndex: $xetable.getRowIndex(row),
+            $rowIndex: $xetable.getVMRowIndex(row),
+            column,
+            columnIndex: $xetable.getColumnIndex(column),
+            $columnIndex: $xetable.getVMColumnIndex(column)
+          }, evnt || null)
         }
         actived.args = null
         actived.row = null
@@ -442,7 +449,14 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
                 editPrivateMethods.handleFocus(params, evnt)
               })
             }
-            $xetable.dispatchEvent(type, params, evnt)
+            $xetable.dispatchEvent(type, {
+              row,
+              rowIndex: $xetable.getRowIndex(row),
+              $rowIndex: $xetable.getVMRowIndex(row),
+              column,
+              columnIndex: $xetable.getColumnIndex(column),
+              $columnIndex: $xetable.getVMColumnIndex(column)
+            }, evnt)
           } else {
             const { column: oldColumn } = actived
             if (mouseConfig) {

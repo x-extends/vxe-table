@@ -37,7 +37,9 @@ export default defineComponent({
       }, [
         h('div', {
           ref: refElem,
-          class: ['vxe-table--context-menu-wrapper', menuOpts.className],
+          class: ['vxe-table--context-menu-wrapper', menuOpts.className, {
+            'is--visible': ctxMenuStore.visible
+          }],
           style: ctxMenuStore.style
         }, ctxMenuStore.list.map((options: any, gIndex: any) => {
           return h('ul', {
