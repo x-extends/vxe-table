@@ -289,7 +289,14 @@ export default {
               this.handleFocus(params, evnt)
             })
           }
-          this.emitEvent(type, params, evnt)
+          this.emitEvent(type, Object.assign({}, params, {
+            row,
+            rowIndex: this.getRowIndex(row),
+            $rowIndex: this.getVMRowIndex(row),
+            column,
+            columnIndex: this.getColumnIndex(column),
+            $columnIndex: this.getVMColumnIndex(column)
+          }), evnt)
         } else {
           const { column: oldColumn } = actived
           if (mouseConfig) {
@@ -346,7 +353,14 @@ export default {
           this._setColumnModel(row, column)
         }
         this.updateFooter()
-        this.emitEvent('edit-closed', args, evnt)
+        this.emitEvent('edit-closed', Object.assign({}, args, {
+          row,
+          rowIndex: this.getRowIndex(row),
+          $rowIndex: this.getVMRowIndex(row),
+          column,
+          columnIndex: this.getColumnIndex(column),
+          $columnIndex: this.getVMColumnIndex(column)
+        }), evnt)
       }
       actived.args = null
       actived.row = null

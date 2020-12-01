@@ -3924,7 +3924,7 @@ const Methods = {
       tableBodyElem.scrollLeft = 0
     }
     return new Promise(resolve => {
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         resolve(this.$nextTick())
       })
     })

@@ -286,9 +286,9 @@ export default {
         $xetable.recalculate(true).then(() => {
           $xetable.saveCustomResizable()
           $xetable.updateCellAreas()
+          $xetable.emitEvent('resizable-change', params, evnt)
         })
         DomTools.removeClass($xetable.$el, 'drag--resize')
-        $xetable.emitEvent('resizable-change', params, evnt)
       }
       updateEvent(evnt)
       $xetable.closeMenu()
