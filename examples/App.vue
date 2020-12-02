@@ -33,8 +33,9 @@
             <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
             <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
-          <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
-          <a v-if="!disabledSupport" class="link support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
+          <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
+          <a v-if="disabledSupport" class="link support is-disabled" title="当前不在支持的时间之内">{{ $t('app.header.label.support') }}</a>
+          <a v-else class="link support" :title="$t('app.body.support.title')" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡{{ $t('app.header.label.support') }}</a>
         </div>
       </div>
     </header>
@@ -103,32 +104,6 @@
         <vxe-button status="primary" @click="viewNewVersionEvent">查看更多</vxe-button>
       </template>
     </vxe-modal>
-
-    <vxe-modal v-model="supportVisible" :loading="supportLoading" title="💡技术支持" width="700" position="center">
-      <template v-slot>
-        <div class="support-declare">vxe-table 使用完全免费。如果该项目帮助了您，您可以通过加入技术支持群的方式来支持作者！</div>
-        <div class="vxe-row support-group">
-          <div class="vxe-col--24 support-group-item">
-            <div class="support-name">成为高级用户</div>
-            <div class="support-price">¥ {{ supportGroupPrice }}<span style="font-size: 12px;color: #606266;"></span></div>
-            <vxe-button class="support-btn" status="primary" @click="addQQGroup" :disabled="disabledSupport">申请加入技术支持群</vxe-button>
-            <ul class="support-describe">
-              <li>优质的技术支持群</li>
-            </ul>
-          </div>
-        </div>
-      </template>
-    </vxe-modal>
-    <vxe-modal v-model="supportGroupVisible" title="申请成为高级用户" width="600" height="700" position="center">
-      <template v-slot>
-        <div class="support-pay-step">
-          <p style="font-size: 12px;">联系邮件： <a class="link" href="mailto:xu_liangzhan@163.com">xu_liangzhan@163.com</a></p>
-          <p class="title">1. 扫码申请加入 QQ 群<br><img src="/vxe-table/static/support/qq.png"></p>
-          <p class="title">2. 通过支付宝或微信付费：¥{{ supportGroupPrice }}<br>3. 付费完成后点击 "联系收款方"，留言QQ号即可<br><img src="/vxe-table/static/donation/pay.jpg"></p>
-          <p class="title">（注意：必须留言QQ号，否则将无法审批通过）</p>
-        </div>
-      </template>
-    </vxe-modal>
   </div>
 </template>
 
@@ -139,11 +114,6 @@ import XEAjax from 'xe-ajax'
 export default {
   data () {
     return {
-      supportGroupPrice: 288,
-      supportLoading: false,
-      supportVisible: false,
-      supportQuestion: '',
-      supportGroupVisible: false,
       showLeft: true,
       selected: null,
       filterName: '',
@@ -2365,19 +2335,6 @@ export default {
       if (!item.disabled) {
         item.expand = !item.expand
       }
-    },
-    supportEvent () {
-      this.supportVisible = true
-    },
-    addQQGroup () {
-      this.supportLoading = true
-      setTimeout(() => {
-        this.supportLoading = false
-        this.supportGroupVisible = true
-      }, 300)
-    },
-    openEvent (tmplName) {
-      open(`https://xuliangzhan_admin.gitee.io/vxe-template/${tmplName}/`)
     },
     claseNewVersionEvent () {
       this.newVersionVisible = false
