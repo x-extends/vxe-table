@@ -265,8 +265,8 @@ export default {
     },
     header: {
       label: {
-        donation: '捐贈',
-        support: '獲取支持'
+        donation: '支持我们',
+        support: '付费插件'
       }
     },
     body: {
@@ -321,15 +321,9 @@ export default {
           v3: 'v3 基於 vue2.6+，只支持現代瀏覽器，不支持IE，提升渲染效能',
           v4: 'v4 基於 vue3.0+，只支持現代瀏覽器，不支持IE，提升渲染效能'
         },
-        ways: {
-          wechat: '通過以下 微信掃碼 捐贈',
-          alipay: '通過以下 支付寶掃碼 捐贈',
-          gitee: '通過 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table#donation" target="_blank">Gitee 捐贈</a>'
-        },
         compatibility: '相容性變動',
         releases: '更新日誌',
-        donation: '捐贈',
-        donationTitle: '捐贈管道：',
+        donation: '支持我们',
         issuesTitle: '該群供大家交流問題，若人满则剔除不活跃的<br>作者很忙基本沒有時間去看群，如果有問題請通過 issues 迴響',
         newFunc: '由於作者很忙，後續有時間可能會支持該功能！',
         newDevelopment: '該版本正在重構中，敬請期待！'
@@ -354,7 +348,7 @@ export default {
       }
     },
     footer: {
-      donation: '捐贈',
+      donation: '支持我们',
       donationDesc: 'vxe-table 使用完全免費。為了使項目能够健康持續的發展下去，您可以通過捐贈來支持作者。'
     },
     api: {
