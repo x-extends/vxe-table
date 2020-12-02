@@ -129,6 +129,7 @@ export default {
         'is--animat': animat,
         'lock--scroll': lockScroll,
         'lock--view': lockView,
+        'is--resize': resize,
         'is--mask': mask,
         'is--maximize': zoomLocat,
         'is--visible': contentVisible,
@@ -557,7 +558,7 @@ export default {
       evnt.preventDefault()
       const { $listeners, marginSize, events = {}, remember, storage } = this
       const { visibleHeight, visibleWidth } = DomTools.getDomNode()
-      const type = evnt.target.dataset.type
+      const type = evnt.target.getAttribute('type')
       const minWidth = XEUtils.toNumber(this.minWidth)
       const minHeight = XEUtils.toNumber(this.minHeight)
       const maxWidth = visibleWidth

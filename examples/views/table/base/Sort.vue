@@ -253,7 +253,7 @@ export default {
             }
           },
           methods: {
-            sortNameMethod (row) {
+            sortNameMethod2 (row) {
               // 按名称长度进行排序
               return row.name.length
             }
@@ -353,15 +353,15 @@ export default {
     }
   },
   methods: {
+    sortNameMethod2 (row) {
+      // 按名称长度进行排序
+      return row.name.length
+    },
     sortChangeEvent3 ({ sortList }) {
       console.info(sortList.map((item) => `${item.property},${item.order}`).join('; '))
     },
     sortChangeEvent4 ({ property, order }) {
       console.info(property, order)
-    },
-    sortNameMethod (row) {
-      // 按名称长度进行排序
-      return row.name.length
     }
   }
 }
