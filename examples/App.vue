@@ -34,8 +34,7 @@
             <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">💰{{ $t('app.header.label.donation') }}</router-link>
-          <a v-if="disabledSupport" class="link support is-disabled" title="当前不在支持的时间之内">{{ $t('app.header.label.support') }}</a>
-          <a v-else class="link support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
+          <a v-if="!disabledSupport" class="link support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a>
         </div>
       </div>
     </header>
