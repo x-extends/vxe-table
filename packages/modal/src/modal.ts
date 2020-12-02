@@ -520,7 +520,7 @@ export default defineComponent({
       const { visibleHeight, visibleWidth } = DomTools.getDomNode()
       const marginSize = XEUtils.toNumber(props.marginSize)
       const targetElem = evnt.target as HTMLSpanElement
-      const type = targetElem.dataset.type
+      const type = targetElem.getAttribute('type')
       const minWidth = XEUtils.toNumber(props.minWidth)
       const minHeight = XEUtils.toNumber(props.minHeight)
       const maxWidth = visibleWidth
@@ -855,7 +855,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { className, type, animat, loading, status, lockScroll, lockView, mask } = props
+      const { className, type, animat, loading, status, lockScroll, lockView, mask, resize } = props
       const { inited, zoomLocat, modalTop, contentVisible, visible } = reactData
       const vSize = computeSize.value
       return h(Teleport, {
@@ -870,6 +870,7 @@ export default defineComponent({
             'is--animat': animat,
             'lock--scroll': lockScroll,
             'lock--view': lockView,
+            'is--resize': resize,
             'is--mask': mask,
             'is--maximize': zoomLocat,
             'is--visible': contentVisible,
