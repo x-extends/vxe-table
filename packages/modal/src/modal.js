@@ -132,6 +132,7 @@ export default {
         'is--animat': animat,
         'lock--scroll': lockScroll,
         'lock--view': lockView,
+        'is--resize': resize,
         'is--mask': mask,
         'is--maximize': zoomLocat,
         'is--visible': contentVisible,

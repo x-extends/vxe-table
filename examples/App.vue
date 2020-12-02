@@ -2215,9 +2215,9 @@ export default {
         }
       }, 3000)
     }
-    setTimeout(() => {
-      this.newVersionVisible = localStorage.getItem('VXE_TABLE_NEW_VERSION') !== '3'
-    }, 5000)
+    // setTimeout(() => {
+    //   this.newVersionVisible = localStorage.getItem('VXE_TABLE_NEW_VERSION') !== '3'
+    // }, 5000)
     this.init()
   },
   methods: {

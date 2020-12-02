@@ -922,7 +922,7 @@ const apis = [
             list: []
           },
           {
-            name: 'min-width',
+            name: 'minWidth',
             desc: '列的默认最小宽度',
             version: '',
             type: 'Number, String',
