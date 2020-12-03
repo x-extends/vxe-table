@@ -50,12 +50,12 @@ export default defineComponent({
         }
       })
       filterStore.visible = false
+      const filterList = $xetable.getCheckedFilters()
       // 如果是服务端筛选，则跳过本地筛选处理
-      if (!(filterOpts.remote)) {
+      if (!filterOpts.remote) {
         $xetable.handleTableData(true)
         $xetable.checkSelectionStatus()
       }
-      const filterList = $xetable.getCheckedFilters()
       $xetable.dispatchEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
       $xetable.updateFooter()
       if (scrollXLoad || scrollYLoad) {
@@ -226,7 +226,7 @@ export default defineComponent({
       const filterRender = column.filterRender
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
-      return multiple && (!compConf || compConf.isFooter !== false) ? [
+      return multiple && (!compConf || compConf.showFilterFooter !== false) ? [
         h('div', {
           class: 'vxe-table--filter-footer'
         }, [

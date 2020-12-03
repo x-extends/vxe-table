@@ -102,15 +102,17 @@ export default defineComponent({
         },
         ajax: {
           // 接收 Promise 对象
-          query: ({ page, sort, filters }) => {
+          query: ({ page, sorts, filters }) => {
+            const queryParams: any = Object.assign({}, formData)
             // 处理排序条件
-            const queryParams: any = Object.assign({
-              sort: sort.property,
-              order: sort.order
-            }, formData)
+            const firstSort = sorts[0]
+            if (firstSort) {
+              queryParams.sort = firstSort.property
+              queryParams.order = firstSort.order
+            }
             // 处理筛选条件
-            filters.forEach(({ field, values }) => {
-              queryParams[field] = values.join(',')
+            filters.forEach(({ property, values }) => {
+              queryParams[property] = values.join(',')
             })
             return XEAjax.get(`https://api.xuliangzhan.com:10443/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           },
@@ -275,15 +277,17 @@ export default defineComponent({
                 },
                 ajax: {
                   // 接收 Promise 对象
-                  query: ({ page, sort, filters }) => {
+                  query: ({ page, sorts, filters }) => {
+                    const queryParams: any = Object.assign({}, formData)
                     // 处理排序条件
-                    const queryParams = Object.assign({
-                      sort: sort.property,
-                      order: sort.order
-                    }, formData)
+                    const firstSort = sorts[0]
+                    if (firstSort) {
+                      queryParams.sort = firstSort.property
+                      queryParams.order = firstSort.order
+                    }
                     // 处理筛选条件
-                    filters.forEach(({ field, values }) => {
-                      queryParams[field] = values.join(',')
+                    filters.forEach(({ property, values }) => {
+                      queryParams[property] = values.join(',')
                     })
                     return XEAjax.get(\`https://api.xuliangzhan.com:10443/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                   },

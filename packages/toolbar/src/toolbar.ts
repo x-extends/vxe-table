@@ -367,11 +367,11 @@ export default defineComponent({
           const { dropdowns, buttonRender } = item
           if (item.visible !== false) {
             const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
-            if (buttonRender && compConf && compConf.renderButton) {
+            if (buttonRender && compConf && compConf.renderToolbarButton) {
               btnVNs.push(
                 h('span', {
                   class: 'vxe-button--item'
-                }, compConf.renderButton(buttonRender, { $grid: $xegrid, $table: $xetable, button: item }))
+                }, compConf.renderToolbarButton(buttonRender, { $grid: $xegrid, $table: $xetable, button: item }))
               )
             } else {
               btnVNs.push(

@@ -346,7 +346,7 @@ export default defineComponent({
       const filterOpts = computeFilterOpts.value
       // 如果是服务端过滤
       if (filterOpts.remote) {
-        reactData.filterData = params.filters
+        reactData.filterData = params.filterList
         if (proxyConfig) {
           reactData.tablePage.currentPage = 1
           gridMethods.commitProxy('query')
@@ -742,7 +742,12 @@ export default defineComponent({
                   if (!XEUtils.isArray(defaultSort)) {
                     defaultSort = [defaultSort]
                   }
-                  sortParams = defaultSort
+                  sortParams = defaultSort.map((item: any) => {
+                    return {
+                      property: item.field,
+                      order: item.order
+                    }
+                  })
                 }
                 reactData.sortData = params.sorts = sortParams
                 reactData.filterData = params.filters = isInited ? checkedFilters : []

@@ -91,14 +91,17 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
         if (column) {
           const { filters, filterRender } = column
           if (filters) {
+            const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+            const filterResetMethod = compConf ? compConf.filterResetMethod : null
             filters.forEach((item: any) => {
               item._checked = false
               item.checked = false
-              item.data = XEUtils.clone(item.resetValue, true)
+              if (!filterResetMethod) {
+                item.data = XEUtils.clone(item.resetValue, true)
+              }
             })
-            const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-            if (compConf && compConf.filterResetMethod) {
-              compConf.filterResetMethod({ options: filters, column, $table: $xetable })
+            if (filterResetMethod) {
+              filterResetMethod({ options: filters, column, $table: $xetable })
             }
           }
         }

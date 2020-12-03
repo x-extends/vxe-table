@@ -65,6 +65,13 @@ export default defineComponent({
               <filter-input params={ params }></filter-input>
             ]
           },
+          // 重置数据方法
+          filterResetMethod (params) {
+            const { options } = params
+            options.forEach((option) => {
+              option.data = ''
+            })
+          },
           // 筛选方法
           filterMethod (params) {
             const { option, row, column } = params

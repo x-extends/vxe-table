@@ -1837,10 +1837,10 @@ export namespace VxeTableDefines {
   export interface FooterCellMenuEventParams extends TableEventParams, FooterCellMenuParams { }
 
   export interface SortCheckedParams {
-    column: VxeTablePropTypes.ColumnConfig;
-    property: string;
+    column: VxeTableDefines.ColumnInfo;
+    property: VxeColumnPropTypes.Field;
+    sortBy: VxeColumnPropTypes.SortBy;
     order: VxeTablePropTypes.SortOrder;
-    sortBy: string;
   }
   export interface SortChangeParams extends SortCheckedParams {
     sortList: SortCheckedParams[];
@@ -1850,7 +1850,7 @@ export namespace VxeTableDefines {
 
   export interface FilterCheckedParams {
     column: VxeTableDefines.ColumnInfo;
-    property: string;
+    property: VxeColumnPropTypes.Field;
     values: any[];
     datas: any[];
   }

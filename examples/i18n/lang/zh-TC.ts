@@ -219,7 +219,7 @@ export default {
         commands: '(全局) 指令注册',
         menus: '(全局) 快捷菜单',
 
-        renderer: '(复用) 渲染器',
+        renderer: '(高级用法) 渲染器',
         rendererFilter: '筛选渲染',
         rendererDefault: '单元格渲染',
         rendererEdit: '可编辑渲染',
@@ -228,7 +228,7 @@ export default {
         rendererForm: '表单渲染',
         rendererEmpty: '空数据渲染',
 
-        interceptor: '(兼容) 事件拦截',
+        interceptor: '(高级用法) 事件拦截',
 
         optimize: '优化建议',
         optimizeScroller: '虚拟滚动优化',

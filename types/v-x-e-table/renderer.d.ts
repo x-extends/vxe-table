@@ -12,9 +12,10 @@ type RendererOptions = DefineRendererOption<VxeGlobalRendererHandles.RenderResul
 interface DefineRendererOption<T> {
   // 筛选渲染
   className?: string;
-  isFooter?: boolean;
+  showFilterFooter?: boolean;
   renderFilter?(renderOpts: VxeGlobalRendererHandles.RenderFilterOptions, params: VxeGlobalRendererHandles.RenderFilterParams): T;
   filterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean;
+  filterRemoteMethod?(params: VxeGlobalRendererHandles.FilterRemoteMethod): boolean;
   filterResetMethod?(params: VxeGlobalRendererHandles.FilterResetMethodParams): void;
 
   // 单元格渲染
@@ -33,7 +34,7 @@ interface DefineRendererOption<T> {
   renderExpand?(renderOpts: VxeGlobalRendererHandles.RenderExpandOptions, params: VxeGlobalRendererHandles.RenderExpandParams): T;
 
   // 工具栏-按钮渲染
-  renderButton?(renderOpts: VxeGlobalRendererHandles.RenderButtonOptions, params: VxeGlobalRendererHandles.RenderButtonParams): T;
+  renderToolbarButton?(renderOpts: VxeGlobalRendererHandles.RenderButtonOptions, params: VxeGlobalRendererHandles.RenderButtonParams): T;
 
   // 表单-项渲染
   renderItemTitle?(renderOpts: VxeGlobalRendererHandles.RenderItemTitleOptions, params: VxeGlobalRendererHandles.RenderItemTitleParams): T;
@@ -62,11 +63,16 @@ export namespace VxeGlobalRendererHandles {
   };
 
   export type FilterMethodParams = {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     value: any;
     option: VxeTableDefines.FilterOption;
     row: any;
     column: VxeTableDefines.ColumnInfo;
   };
+
+  export interface FilterRemoteMethod extends VxeTableDefines.FilterChangeParams {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
+  }
 
   export interface FilterResetMethodParams {
     $table: VxeTableConstructor & VxeTablePrivateMethods;

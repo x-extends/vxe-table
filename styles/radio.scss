@@ -106,7 +106,9 @@
 }
 
 .vxe-radio-button {
-  background-color: #fff;
+  .vxe-radio--label {
+    background-color: #fff;
+  }
   &:first-child {
     .vxe-radio--label {
       border-left: 1px solid $vxe-input-border-color;

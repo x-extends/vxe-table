@@ -108,12 +108,14 @@ export default defineComponent({
         },
         ajax: {
           // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
-          query: ({ page, sort, filters, form }) => {
+          query: ({ page, sorts, filters, form }) => {
+            const queryParams: any = Object.assign({}, form)
             // 处理排序条件
-            const queryParams = Object.assign({
-              sort: sort.property,
-              order: sort.order
-            }, form)
+            const firstSort = sorts[0]
+            if (firstSort) {
+              queryParams.sort = firstSort.property
+              queryParams.order = firstSort.order
+            }
             // 处理筛选条件
             filters.forEach(({ property, values }) => {
               queryParams[property] = values.join(',')
@@ -371,11 +373,13 @@ export default defineComponent({
                 ajax: {
                   // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
                   query: ({ page, sort, filters, form }) => {
+                    const queryParams: any = Object.assign({}, form)
                     // 处理排序条件
-                    const queryParams = Object.assign({
-                      sort: sort.property,
-                      order: sort.order
-                    }, form)
+                    const firstSort = sorts[0]
+                    if (firstSort) {
+                      queryParams.sort = firstSort.property
+                      queryParams.order = firstSort.order
+                    }
                     // 处理筛选条件
                     filters.forEach(({ property, values }) => {
                       queryParams[property] = values.join(',')

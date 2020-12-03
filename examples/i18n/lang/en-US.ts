@@ -216,11 +216,11 @@ export default {
         treeRowPlugin: 'plugin-virtual-tree Virtual tree',
         treeColPlugin: 'plugin-virtual-tree Horizontal and vertical',
 
-        formats: '(Global) Formatter',
-        commands: '(Global) Command register',
-        menus: '(Global) Context menu',
+        formats: '(全局复用) Formatter',
+        commands: '(全局复用) Command register',
+        menus: '(全局复用) Context menu',
 
-        renderer: '(Reusable) VxeRenderer',
+        renderer: '(高级用法) VxeRenderer',
         rendererFilter: 'Filter renderer',
         rendererDefault: 'Cell renderer',
         rendererEdit: 'Edit renderer',
@@ -229,7 +229,7 @@ export default {
         rendererForm: 'Form renderer',
         rendererEmpty: 'No data renderer',
 
-        interceptor: '(Compatibility) Event interceptor',
+        interceptor: '(高级用法) Event interceptor',
 
         optimize: 'Optimization and suggestion',
         optimizeScroller: 'Virtual rolling optimization',
