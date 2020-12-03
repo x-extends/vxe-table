@@ -50,7 +50,7 @@
   border-width: 0.1em;
   border-style: solid;
   border-color: inherit;
-  background-color: #fff;
+  background-color: $vxe-icon-background-color;
   &:before,
   &:after {
     @extend %PseudoClass;
@@ -92,7 +92,7 @@
     border-width: 0.1em;
     border-style: solid;
     border-color: inherit;
-    background-color: #fff;
+    background-color: $vxe-icon-background-color;
   }
 }
 
@@ -438,7 +438,7 @@
     bottom: 0;
     width: 100%;
     text-align: center;
-    color: #fff;
+    color: $vxe-icon-background-color;
     transform: rotate(-10deg) scale(0.75);
   }
 }
@@ -483,7 +483,7 @@
     content: "\2713";
     left: 0.25em;
     bottom: 0;
-    color: #fff;
+    color: $vxe-icon-background-color;
     font-size: 0.65em;
   }
 }
@@ -500,7 +500,7 @@
     bottom: 0;
     width: 100%;
     text-align: center;
-    color: #fff;
+    color: $vxe-icon-background-color;
     line-height: 1.4em;
     font-size: 0.8em;
   }
@@ -519,7 +519,7 @@
     width: 100%;
     text-align: center;
     line-height: 1.5em;
-    color: #fff;
+    color: $vxe-icon-background-color;
     font-size: 0.7em;
   }
 }
@@ -537,7 +537,7 @@
     width: 100%;
     line-height: 1.4em;
     text-align: center;
-    color: #fff;
+    color: $vxe-icon-background-color;
     font-size: 0.8em;
   }
 }
@@ -681,7 +681,7 @@
     left: 0.2em;
     bottom: -0.2em;
     box-shadow: inset 0 0 0 0.1em;
-    background-color: #fff;
+    background-color: $vxe-icon-background-color;
   }
 }
 

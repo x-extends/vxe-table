@@ -140,7 +140,6 @@
       left: 50%;
       top: 0;
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(0,0,0,.2);
       .vxe-modal--header {
         cursor: move;
       }
@@ -168,9 +167,9 @@
   .vxe-modal--box {
     visibility: hidden;
     width: 420px;
-    background-color: #fff;
+    background-color: $vxe-modal-body-background-color;
     border-radius: $vxe-border-radius;
-    border: 1px solid #ebeef5;
+    border: 1px solid $vxe-modal-border-color;
     text-align: left;
     pointer-events: auto;
     opacity: 0;
@@ -244,7 +243,7 @@
     font-size: 1.1em;
     font-weight: 700;
     padding: 0.6em 2.8em 0.6em 1em;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $vxe-modal-border-color;
     background-color: $vxe-modal-header-background-color;
     border-radius: $vxe-border-radius $vxe-border-radius 0 0;
     user-select: none;

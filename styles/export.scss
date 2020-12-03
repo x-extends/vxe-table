@@ -61,9 +61,9 @@
     }
     .vxe-export--panel-column-header {
       padding: 0.1em 0;
-      background-color: #f8f8f9;
+      background-color: $vxe-table-header-background-color;
       font-weight: 700;
-      border-bottom: 1px solid #DADCE0;
+      border-bottom: 1px solid $vxe-table-border-color;
     }
     .vxe-export--panel-column-body {
       padding: 0.2em 0;
