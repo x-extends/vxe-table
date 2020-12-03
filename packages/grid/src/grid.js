@@ -520,7 +520,12 @@ export default {
                 if (!XEUtils.isArray(defaultSort)) {
                   defaultSort = [defaultSort]
                 }
-                sortParams = defaultSort
+                sortParams = defaultSort.map((item) => {
+                  return {
+                    property: item.field,
+                    order: item.order
+                  }
+                })
               }
               this.sortData = params.sorts = sortParams
               this.filterData = params.filters = isInited ? checkedFilters : []
@@ -743,10 +748,10 @@ export default {
       this.$emit('sort-change', Object.assign({ $grid: this }, params))
     },
     filterChangeEvent (params) {
-      const { $table, filters } = params
+      const { $table, filterList } = params
       // 如果是服务端过滤
       if ($table.filterOpts.remote) {
-        this.filterData = filters
+        this.filterData = filterList
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1
           this.commitProxy('query')
