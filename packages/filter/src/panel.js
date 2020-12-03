@@ -1,6 +1,7 @@
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
+import XEUtils from 'xe-utils/ctor'
 
 export default {
   name: 'VxeTableFilter',
@@ -117,7 +118,7 @@ export default {
       const filterRender = column.filterRender
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
-      return multiple && (!compConf || compConf.isFooter !== false) ? [
+      return multiple && (!compConf || (XEUtils.isBoolean(compConf.showFilterFooter) ? compConf.showFilterFooter !== false : compConf.isFooter !== false)) ? [
         h('div', {
           class: 'vxe-table--filter-footer'
         }, [

@@ -20,6 +20,12 @@ VXETable.renderer.add('FilterInput', {
       <filter-input params={ params }></filter-input>
     ]
   },
+  // 重置数据方法
+  filterResetMethod ({ options }) {
+    options.forEach(option => {
+      option.data = ''
+    })
+  },
   // 筛选方法
   filterMethod ({ option, row, column }) {
     const { data } = option

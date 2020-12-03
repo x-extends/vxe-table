@@ -112,7 +112,7 @@ export default {
      * @param {Event} evnt 事件
      */
     confirmFilterEvent (evnt) {
-      const { filterStore, remoteFilter, filterOpts, scrollXLoad, scrollYLoad } = this
+      const { filterStore, filterOpts, scrollXLoad, scrollYLoad } = this
       const { column } = filterStore
       const { property } = column
       const values = []
@@ -124,12 +124,13 @@ export default {
         }
       })
       filterStore.visible = false
+      const filterList = this.getCheckedFilters()
       // 如果是服务端筛选，则跳过本地筛选处理
-      if (!(filterOpts.remote || remoteFilter)) {
+      if (!filterOpts.remote) {
         this.handleTableData(true)
         this.checkSelectionStatus()
       }
-      this.emitEvent('filter-change', { column, property, values, datas, filters: this.getCheckedFilters() }, evnt)
+      this.emitEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
       this.updateFooter()
       if (scrollXLoad || scrollYLoad) {
         this.clearScroll()
@@ -147,14 +148,17 @@ export default {
       if (column) {
         const { filters, filterRender } = column
         if (filters) {
-          filters.forEach(item => {
+          const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+          const filterResetMethod = compConf ? compConf.filterResetMethod : null
+          filters.forEach((item) => {
             item._checked = false
             item.checked = false
-            item.data = XEUtils.clone(item.resetValue, true)
+            if (!filterResetMethod) {
+              item.data = XEUtils.clone(item.resetValue, true)
+            }
           })
-          const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-          if (compConf && compConf.filterResetMethod) {
-            compConf.filterResetMethod({ options: filters, column, $table: this })
+          if (filterResetMethod) {
+            filterResetMethod({ options: filters, column, $table: this })
           }
         }
       }
