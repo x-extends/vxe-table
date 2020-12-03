@@ -2874,7 +2874,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ column, property, order, $event }',
+        defVal: '{ column, property, order, sortBy, sortList, $event }',
         list: []
       },
       {
@@ -2883,7 +2883,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ column, property, values, datas, filters, $event }',
+        defVal: '{ column, property, values, datas, filterList, $event }',
         list: []
       },
       {
