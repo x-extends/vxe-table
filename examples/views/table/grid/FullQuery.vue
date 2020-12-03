@@ -94,12 +94,14 @@ export default {
           },
           ajax: {
             // 接收 Promise 对象
-            query: ({ page, sort, filters }) => {
+            query: ({ page, sorts, filters }) => {
+              const queryParams = Object.assign({}, this.formData)
               // 处理排序条件
-              const queryParams = Object.assign({
-                sort: sort.property,
-                order: sort.order
-              }, this.formData)
+              const firstSort = sorts[0]
+              if (firstSort) {
+                queryParams.sort = firstSort.property
+                queryParams.order = firstSort.order
+              }
               // 处理筛选条件
               filters.forEach(({ property, values }) => {
                 queryParams[property] = values.join(',')
@@ -224,12 +226,14 @@ export default {
                   },
                   ajax: {
                     // 接收 Promise 对象
-                    query: ({ page, sort, filters }) => {
+                    query: ({ page, sorts, filters }) => {
+                      const queryParams = Object.assign({}, this.formData)
                       // 处理排序条件
-                      const queryParams = Object.assign({
-                        sort: sort.property,
-                        order: sort.order
-                      }, this.formData)
+                      const firstSort = sorts[0]
+                      if (firstSort) {
+                        queryParams.sort = firstSort.property
+                        queryParams.order = firstSort.order
+                      }
                       // 处理筛选条件
                       filters.forEach(({ property, values }) => {
                         queryParams[property] = values.join(',')

@@ -543,7 +543,7 @@ export default {
               button,
               $grid: this,
               sort: sortData,
-              sorts: proxyOpts.sort ? [this.sortData] : [],
+              sorts: proxyOpts.sort && sortData && (sortData.property || sortData.order) ? [sortData] : [],
               filters: filterData,
               form: formData,
               options: ajaxMethods
@@ -571,7 +571,7 @@ export default {
               this.filterData = params.filters = []
               this.pendingRecords = []
               if (proxyOpts.sort) {
-                params.sorts = [params.sort]
+                params.sorts = sortParams && (sortParams.property || sortParams.order) ? [sortParams] : []
               }
               this.clearAll()
             }
@@ -805,10 +805,10 @@ export default {
       this.$emit('sort-change', Object.assign({ $grid: this }, params))
     },
     filterChangeEvent (params) {
-      const { $table, filters } = params
+      const { $table, filterList } = params
       // 如果是服务端过滤
       if ($table.filterOpts.remote || this.remoteFilter) {
-        this.filterData = filters
+        this.filterData = filterList
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1
           this.commitProxy('query')
