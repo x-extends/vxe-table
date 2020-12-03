@@ -18,10 +18,13 @@ function renderBtns (h, _vm) {
     if (item.visible === false) {
       return _e()
     }
-    if (compConf && compConf.renderButton) {
-      return h('span', {
-        class: 'vxe-button--item'
-      }, compConf.renderButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item }))
+    if (compConf) {
+      const renderToolbarButton = compConf.renderToolbarButton || compConf.renderButton
+      if (renderToolbarButton) {
+        return h('span', {
+          class: 'vxe-button--item'
+        }, renderToolbarButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item }))
+      }
     }
     return h('vxe-button', {
       on: {
@@ -266,6 +269,17 @@ export default {
       }
       if ($xetable) {
         $xetable.connect(this)
+      }
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (this.buttons) {
+          this.buttons.forEach(item => {
+            const { buttonRender } = item
+            const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
+            if (compConf && compConf.renderButton) {
+              UtilTools.warn('vxe.error.delFunc', ['renderButton', 'renderToolbarButton'])
+            }
+          })
+        }
       }
     })
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
