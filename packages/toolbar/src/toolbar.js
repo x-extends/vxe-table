@@ -17,10 +17,13 @@ function renderBtns (h, _vm) {
     if (visible === false) {
       return _e()
     }
-    if (compConf && compConf.renderButton) {
-      return h('span', {
-        class: 'vxe-button--item'
-      }, compConf.renderButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item }, { $grid: $xegrid, $table: $xetable }))
+    if (compConf) {
+      const renderToolbarButton = compConf.renderToolbarButton || compConf.renderButton
+      if (renderToolbarButton) {
+        return h('span', {
+          class: 'vxe-button--item'
+        }, renderToolbarButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item }, { $grid: $xegrid, $table: $xetable }))
+      }
     }
     return h('vxe-button', {
       on: {

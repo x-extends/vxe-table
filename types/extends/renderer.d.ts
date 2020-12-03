@@ -44,7 +44,7 @@ export interface RendererMapOptions {
   renderExpand?(h: CreateElement, renderOpts: ColumnContentRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
 
   // 工具栏-按钮渲染
-  renderButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): VNode[] | string[];
+  renderToolbarButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): VNode[] | string[];
 
   // 表单-项渲染
   renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
