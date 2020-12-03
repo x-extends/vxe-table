@@ -45,6 +45,10 @@
 .vxe-cell,
 .vxe-table--filter-wrapper {
   .vxe-default-input,
+  .vxe-default-textarea {
+    background-color: $vxe-table-body-background-color;
+  }
+  .vxe-default-input,
   .vxe-default-textarea,
   .vxe-default-select {
     outline: 0;

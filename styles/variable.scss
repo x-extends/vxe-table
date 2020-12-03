@@ -11,6 +11,7 @@ $vxe-border-radius: 4px;
 
 /*icon*/
 $vxe-icon-font-family: Verdana,Arial,Tahoma;
+$vxe-icon-background-color: #fff;
 
 /*color*/
 $vxe-primary-color: #409eff;
@@ -106,10 +107,13 @@ $vxe-table-validate-tooltip-error-background-color: $vxe-table-validate-error-co
 $vxe-grid-maximize-background-color: #fff;
 
 /*toolbar*/
+$vxe-toolbar-background-color: #fff;
 $vxe-toolbar-height-default: 52px;
 $vxe-toolbar-height-medium: 50px;
 $vxe-toolbar-height-small: 48px;
 $vxe-toolbar-height-mini: 46px;
+$vxe-toolbar-custom-active-background-color: #D9DADB;
+$vxe-toolbar-panel-background-color: #fff;
 
 /*tooltip*/
 $vxe-tooltip-dark-color: #fff;
@@ -118,8 +122,13 @@ $vxe-tooltip-light-background-color: #fff;
 $vxe-tooltip-validate-error-color: #fff;
 $vxe-tooltip-validate-error-background-color: #f56c6c;
 
+/*pager*/
+$vxe-pager-background-color: #fff;
+
 /*modal*/
 $vxe-modal-header-background-color: #F8F8F8;
+$vxe-modal-body-background-color: #fff;
+$vxe-modal-border-color: #ebeef5;
 
 /*checkbox*/
 $vxe-checkbox-font-size-default: 16px;
