@@ -55,8 +55,8 @@ export default defineComponent({
         { label: '项目2', value: '2' },
         { label: '项目3', value: '3' }
       ],
-      pnameList: [],
-      cachePnameList: []
+      pnameList: [] as any[],
+      cachePnameList: [] as any[]
     })
 
     const insertEvent = () => {
@@ -68,9 +68,9 @@ export default defineComponent({
     // 格式化显示名称
     const formatPanmeLabel: VxeColumnPropTypes.Formatter = ({ cellValue, row }) => {
       const ptype = row.attr3
-      const ptypeItem = demo1.cachePnameList.find(item => item.ptype === ptype)
-      if (ptypeItem && ptypeItem.pnameList) {
-        const pnameItem = ptypeItem.pnameList.find(item => item.value === cellValue)
+      const cacheItem = demo1.cachePnameList.find(item => item.ptype === ptype)
+      if (cacheItem && cacheItem.pnameList) {
+        const pnameItem = cacheItem.pnameList.find((item: any) => item.value === cellValue)
         if (pnameItem) {
           return pnameItem.label
         }
@@ -81,7 +81,7 @@ export default defineComponent({
     // 更新级联选项列表
     const updatePnameList = (row: any) => {
       const ptype = row.attr3
-      let pnameList = []
+      let pnameList: any[] = []
       if (ptype) {
         const item = demo1.cachePnameList.find(item => item.ptype === ptype)
         if (item) {
@@ -162,8 +162,8 @@ export default defineComponent({
                 { label: '项目2', value: '2' },
                 { label: '项目3', value: '3' }
               ],
-              pnameList: [],
-              cachePnameList: []
+              pnameList: [] as any[],
+              cachePnameList: [] as any[]
             })
 
             const insertEvent = () => {
@@ -175,9 +175,9 @@ export default defineComponent({
             // 格式化显示名称
             const formatPanmeLabel: VxeColumnPropTypes.Formatter = ({ cellValue, row }) => {
               const ptype = row.attr3
-              const ptypeItem = demo1.cachePnameList.find(item => item.ptype === ptype)
-              if (ptypeItem && ptypeItem.pnameList) {
-                const pnameItem = ptypeItem.pnameList.find(item => item.value === cellValue)
+              const cacheItem = demo1.cachePnameList.find(item => item.ptype === ptype)
+              if (cacheItem && cacheItem.pnameList) {
+                const pnameItem = cacheItem.pnameList.find((item: any) => item.value === cellValue)
                 if (pnameItem) {
                   return pnameItem.label
                 }
@@ -188,7 +188,7 @@ export default defineComponent({
             // 更新级联选项列表
             const updatePnameList = (row: any) => {
               const ptype = row.attr3
-              let pnameList = []
+              let pnameList: any[] = []
               if (ptype) {
                 const item = demo1.cachePnameList.find(item => item.ptype === ptype)
                 if (item) {
