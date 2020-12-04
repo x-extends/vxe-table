@@ -324,7 +324,7 @@ export default {
         compatibility: '兼容性变动',
         releases: '更新日志',
         donation: '支持我们',
-        issuesTitle: '該群供大家交流問題，若人满则剔除不活跃的<br>作者很忙基本沒有時間去看群，如果有问题请通过 issues 反馈',
+        issuesTitle: '該群供大家交流問題，若人满则剔除不活跃的<br>作者很忙基本沒有時間去看群，如果有 bug 请通过 issues 反馈',
         newFunc: '由于作者很忙，后续有时间可能会支持该功能！',
         newDevelopment: '该版本正在重构中，敬请期待！'
       },
