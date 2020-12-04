@@ -179,9 +179,10 @@ export default defineComponent({
     let gridMethods = {} as GridMethods
 
     const handleRowClassName = (params: any) => {
+      const { pendingRecords } = reactData
       const rowClassName = props.rowClassName
       const clss = []
-      if (reactData.pendingRecords.some((item: any) => item === params.row)) {
+      if (pendingRecords.some((item: any) => item === params.row)) {
         clss.push('row--pending')
       }
       return clss.push(rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : '')
@@ -189,8 +190,10 @@ export default defineComponent({
 
     const handleActiveMethod = (params: any) => {
       const { editConfig } = props
+      const { pendingRecords } = reactData
+      const $xetable = refTable.value
       const activeMethod = editConfig ? editConfig.activeMethod : null
-      return reactData.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
+      return $xetable.findRowIndexOf(pendingRecords, params.row) === -1 && (!activeMethod || activeMethod(params))
     }
 
     const computeTableProps = computed(() => {
@@ -266,7 +269,7 @@ export default defineComponent({
           }
         })
         if (minus.length) {
-          reactData.pendingRecords = pendingRecords.filter((item) => minus.indexOf(item) === -1).concat(plus)
+          reactData.pendingRecords = pendingRecords.filter((item) => $xetable.findRowIndexOf(minus, item) === -1).concat(plus)
         } else if (plus.length) {
           reactData.pendingRecords = pendingRecords.concat(plus)
         }
@@ -517,7 +520,7 @@ export default defineComponent({
           if (matchRests) {
             const onName = matchRests[0]
             const name = XEUtils.kebabCase(matchRests[1]) as ValueOf<VxeGridEmits>
-            if (gridComponentEmits.includes(name)) {
+            if (gridComponentEmits.indexOf(name) > -1) {
               ons[onName] = (...args: any[]) => emit(name, ...args)
             }
           }
@@ -798,7 +801,7 @@ export default defineComponent({
                   return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                     .then(rest => {
                       reactData.tableLoading = false
-                      reactData.pendingRecords = reactData.pendingRecords.filter((row) => removeRecords.indexOf(row) === -1)
+                      reactData.pendingRecords = reactData.pendingRecords.filter((row) => $xetable.findRowIndexOf(removeRecords, row) === -1)
                       if (isMsg) {
                         VXETable.modal.message({ message: getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                       }
@@ -833,11 +836,11 @@ export default defineComponent({
               const applyArgs = [{ $grid: $xegrid, code, button, body, options: ajaxMethods }].concat(args)
               // 排除掉新增且标记为删除的数据
               if (insertRecords.length) {
-                body.pendingRecords = pendingRecords.filter((row: any) => insertRecords.indexOf(row) === -1)
+                body.pendingRecords = pendingRecords.filter((row: any) => $xetable.findRowIndexOf(insertRecords, row) === -1)
               }
               // 排除已标记为删除的数据
               if (pendingRecords.length) {
-                body.insertRecords = insertRecords.filter((row: any) => pendingRecords.indexOf(row) === -1)
+                body.insertRecords = insertRecords.filter((row: any) => $xetable.findRowIndexOf(pendingRecords, row) === -1)
               }
               // 只校验新增和修改的数据
               return $xetable.validate(body.insertRecords.concat(updateRecords)).then(() => {

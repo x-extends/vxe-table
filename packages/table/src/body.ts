@@ -282,7 +282,7 @@ export default defineComponent({
     }
 
     const renderRows = ($seq: any, rowLevel: any, fixedType: any, tableData: any, tableColumn: any) => {
-      const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, treeConfig } = tableProps
+      const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
       const { treeExpandeds, scrollYLoad, editStore, rowExpandeds, expandColumn, selectRow } = tableReactData
       const { scrollYStore } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
@@ -320,7 +320,7 @@ export default defineComponent({
           h('tr', {
             class: ['vxe-body--row', {
               'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
-              'is--new': editStore.insertList.indexOf(row) > -1,
+              'is--new': editConfig && $xetable.findRowIndexOf(editStore.insertList, row) > -1,
               'row--radio': radioOpts.highlight && selectRow === row,
               'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
             }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : ''],
@@ -333,7 +333,7 @@ export default defineComponent({
           }))
         )
         // 如果行被展开了
-        if (expandColumn && rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
+        if (expandColumn && rowExpandeds.length && $xetable.findRowIndexOf(rowExpandeds, row) > -1) {
           let cellStyle
           if (treeConfig) {
             cellStyle = {
@@ -370,7 +370,7 @@ export default defineComponent({
         // 如果是树形表格
         if (treeConfig && treeExpandeds.length) {
           const rowChildren = row[treeOpts.children]
-          if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
+          if (rowChildren && rowChildren.length && $xetable.findRowIndexOf(treeExpandeds, row) > -1) {
             rows.push(...renderRows($seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
           }
         }

@@ -599,7 +599,7 @@ export default defineComponent({
       const { fullDataRowIdData } = internalData
       const reserveList: any[] = []
       XEUtils.each(reserveRowMap, (item, rowid) => {
-        if (fullDataRowIdData[rowid] && reserveList.indexOf(fullDataRowIdData[rowid].row) === -1) {
+        if (fullDataRowIdData[rowid] && $xetable.findRowIndexOf(reserveList, fullDataRowIdData[rowid].row) === -1) {
           reserveList.push(fullDataRowIdData[rowid].row)
         }
       })
@@ -708,7 +708,7 @@ export default defineComponent({
                 mergeItem._rowspan = rowspan
                 mergeItem._colspan = colspan
               } else {
-                const mergeRowIndex = rowList ? rowList.indexOf(row) : row
+                const mergeRowIndex = rowList ? $xetable.findRowIndexOf(rowList, row) : row
                 const mergeColIndex = visibleColumn.indexOf(col)
                 mList.push({
                   row: mergeRowIndex,
@@ -1397,7 +1397,7 @@ export default defineComponent({
       const checkboxOpts = computeCheckboxOpts.value
       const { checkField: property } = checkboxOpts
       const { row } = params
-      const value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
+      const value = property ? !XEUtils.get(row, property) : $xetable.findRowIndexOf(selection, row) === -1
       if (evnt) {
         tablePrivateMethods.triggerCheckRowEvent(evnt, params, value)
       } else {
@@ -1578,7 +1578,7 @@ export default defineComponent({
             }
             if (childRecords) {
               tableMethods.loadChildren(row, childRecords).then(childRows => {
-                if (childRows.length && treeExpandeds.indexOf(row) === -1) {
+                if (childRows.length && $xetable.findRowIndexOf(treeExpandeds, row) === -1) {
                   treeExpandeds.push(row)
                 }
                 // 如果当前节点已选中，则展开后子节点也被选中
@@ -2028,14 +2028,16 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       getVTRowIndex (row: any) {
-        return internalData.afterFullData.indexOf(row)
+        const { afterFullData } = internalData
+        return $xetable.findRowIndexOf(afterFullData, row)
       },
       /**
        * 根据 row 获取渲染中的虚拟索引
        * @param {Row} row 行对象
        */
       getVMRowIndex (row: any) {
-        return reactData.tableData.indexOf(row)
+        const { tableData } = reactData
+        return $xetable.findRowIndexOf(tableData, row)
       },
       /**
        * 根据 column 获取相对于 columns 中的索引
@@ -2099,7 +2101,7 @@ export default defineComponent({
             }
             rows.forEach((row: any) => {
               if (!tableMethods.isInsertByRow(row)) {
-                const rowIndex = tableFullData.indexOf(row)
+                const rowIndex = $xetable.findRowIndexOf(tableFullData, row)
                 const oRow = tableSourceData[rowIndex]
                 if (oRow && row) {
                   if (field) {
@@ -2152,7 +2154,8 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       isInsertByRow (row) {
-        return reactData.editStore.insertList.indexOf(row) > -1
+        const { editStore } = reactData
+        return $xetable.findRowIndexOf(editStore.insertList, row) > -1
       },
       /**
        * 检查行或列数据是否发生改变
@@ -2257,9 +2260,9 @@ export default defineComponent({
         } else {
           const { selection } = reactData
           if (treeConfig) {
-            rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeOpts)
+            rowList = XEUtils.filterTree(tableFullData, row => $xetable.findRowIndexOf(selection, row) > -1, treeOpts)
           } else {
-            rowList = tableFullData.filter((row: any) => selection.indexOf(row) > -1)
+            rowList = tableFullData.filter((row: any) => $xetable.findRowIndexOf(selection, row) > -1)
           }
         }
         return rowList
@@ -2543,12 +2546,13 @@ export default defineComponent({
         return nextTick()
       },
       isCheckedByCheckboxRow (row: any) {
+        const { selection } = reactData
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField: property } = checkboxOpts
         if (property) {
           return XEUtils.get(row, property)
         }
-        return reactData.selection.indexOf(row) > -1
+        return $xetable.findRowIndexOf(selection, row) > -1
       },
       /**
        * 多选，切换某一行的选中状态
@@ -2569,7 +2573,7 @@ export default defineComponent({
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField: property, reserve, checkStrictly, checkMethod } = checkboxOpts
         let selectRows = []
-        const beforeSelection = treeConfig ? [] : selection.filter((row: any) => afterFullData.indexOf(row) === -1)
+        const beforeSelection = treeConfig ? [] : selection.filter((row: any) => $xetable.findRowIndexOf(afterFullData, row) === -1)
         if (checkStrictly) {
           reactData.isAllSelected = value
         } else {
@@ -2616,7 +2620,7 @@ export default defineComponent({
                  */
                 if (checkMethod) {
                   XEUtils.eachTree(afterFullData, (row) => {
-                    if (checkMethod({ row }) ? 0 : selection.indexOf(row) > -1) {
+                    if (checkMethod({ row }) ? 0 : $xetable.findRowIndexOf(selection, row) > -1) {
                       selectRows.push(row)
                     }
                   }, treeOpts)
@@ -2630,7 +2634,7 @@ export default defineComponent({
                  * 如果不存在选中方法，则添加所有数据到临时集合中
                  */
                 if (checkMethod) {
-                  selectRows = afterFullData.filter((row: any) => selection.indexOf(row) > -1 || checkMethod({ row }))
+                  selectRows = afterFullData.filter((row: any) => $xetable.findRowIndexOf(selection, row) > -1 || checkMethod({ row }))
                 } else {
                   selectRows = afterFullData.slice(0)
                 }
@@ -2641,7 +2645,7 @@ export default defineComponent({
                  * 如果不存在选中方法，无需处理，临时集合默认为空
                  */
                 if (checkMethod) {
-                  selectRows = afterFullData.filter((row: any) => checkMethod({ row }) ? 0 : selection.indexOf(row) > -1)
+                  selectRows = afterFullData.filter((row: any) => checkMethod({ row }) ? 0 : $xetable.findRowIndexOf(selection, row) > -1)
                 }
               }
             }
@@ -2944,7 +2948,7 @@ export default defineComponent({
         const { expandLazyLoadeds } = reactData
         const expandOpts = computeExpandOpts.value
         const { lazy } = expandOpts
-        if (lazy && expandLazyLoadeds.indexOf(row) === -1) {
+        if (lazy && $xetable.findRowIndexOf(expandLazyLoadeds, row) === -1) {
           tableMethods.clearRowExpandLoaded(row)
             .then(() => handleAsyncRowExpand(row))
         }
@@ -2991,9 +2995,9 @@ export default defineComponent({
           const validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xetable, expanded, column, columnIndex, $columnIndex, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) })) : rows
           if (expanded) {
             validRows.forEach((row: any) => {
-              if (rowExpandeds.indexOf(row) === -1) {
+              if ($xetable.findRowIndexOf(rowExpandeds, row) === -1) {
                 const rest = fullAllDataRowMap.get(row)
-                const isLoad = lazy && !rest.expandLoaded && expandLazyLoadeds.indexOf(row) === -1
+                const isLoad = lazy && !rest.expandLoaded && $xetable.findRowIndexOf(expandLazyLoadeds, row) === -1
                 if (isLoad) {
                   lazyRests.push(handleAsyncRowExpand(row))
                 } else {
@@ -3002,7 +3006,7 @@ export default defineComponent({
               }
             })
           } else {
-            XEUtils.remove(rowExpandeds, row => validRows.indexOf(row) > -1)
+            XEUtils.remove(rowExpandeds, row => $xetable.findRowIndexOf(validRows, row) > -1)
           }
           if (reserve) {
             validRows.forEach((row: any) => handleRowExpandReserve(row, expanded))
@@ -3016,7 +3020,8 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       isExpandByRow (row: any) {
-        return reactData.rowExpandeds.indexOf(row) > -1
+        const { rowExpandeds } = reactData
+        return $xetable.findRowIndexOf(rowExpandeds, row) > -1
       },
       /**
        * 手动清空展开行状态，数据会恢复成未展开的状态
@@ -3076,7 +3081,7 @@ export default defineComponent({
         const { treeLazyLoadeds } = reactData
         const treeOpts = computeTreeOpts.value
         const { lazy, hasChild } = treeOpts
-        if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
+        if (lazy && row[hasChild] && $xetable.findRowIndexOf(treeLazyLoadeds, row) === -1) {
           tableMethods.clearTreeExpandLoaded(row)
             .then(() => handleAsyncTreeExpandChilds(row))
         }
@@ -3136,9 +3141,9 @@ export default defineComponent({
             }
             if (expanded) {
               validRows.forEach((row: any) => {
-                if (treeExpandeds.indexOf(row) === -1) {
+                if ($xetable.findRowIndexOf(treeExpandeds, row) === -1) {
                   const rest = fullAllDataRowMap.get(row)
-                  const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
+                  const isLoad = lazy && row[hasChild] && !rest.treeLoaded && $xetable.findRowIndexOf(treeLazyLoadeds, row) === -1
                   // 是否使用懒加载
                   if (isLoad) {
                     result.push(handleAsyncTreeExpandChilds(row))
@@ -3150,7 +3155,7 @@ export default defineComponent({
                 }
               })
             } else {
-              XEUtils.remove(treeExpandeds, row => validRows.indexOf(row) > -1)
+              XEUtils.remove(treeExpandeds, row => $xetable.findRowIndexOf(validRows, row) > -1)
             }
             if (reserve) {
               validRows.forEach((row: any) => handleTreeExpandReserve(row, expanded))
@@ -3168,7 +3173,7 @@ export default defineComponent({
        */
       isTreeExpandByRow (row: any) {
         const { treeExpandeds } = reactData
-        return treeExpandeds.indexOf(row) > -1
+        return $xetable.findRowIndexOf(treeExpandeds, row) > -1
       },
       /**
        * 手动清空树形节点的展开状态，数据会恢复成未展开的状态
@@ -4057,9 +4062,9 @@ export default defineComponent({
             )
             if (treeConfig) {
               if (halfField) {
-                isIndeterminate = !isAllSelected && afterFullData.some((row: any) => XEUtils.get(row, checkField) || XEUtils.get(row, halfField) || treeIndeterminates.indexOf(row) > -1)
+                isIndeterminate = !isAllSelected && afterFullData.some((row: any) => XEUtils.get(row, checkField) || XEUtils.get(row, halfField) || $xetable.findRowIndexOf(treeIndeterminates, row) > -1)
               } else {
-                isIndeterminate = !isAllSelected && afterFullData.some((row: any) => XEUtils.get(row, checkField) || treeIndeterminates.indexOf(row) > -1)
+                isIndeterminate = !isAllSelected && afterFullData.some((row: any) => XEUtils.get(row, checkField) || $xetable.findRowIndexOf(treeIndeterminates, row) > -1)
               }
             } else {
               if (halfField) {
@@ -4071,13 +4076,13 @@ export default defineComponent({
           } else {
             isAllSelected = afterFullData.length > 0 && afterFullData.every(
               checkMethod
-                ? (row: any) => !checkMethod({ row }) || selection.indexOf(row) > -1
-                : (row: any) => selection.indexOf(row) > -1
+                ? (row: any) => !checkMethod({ row }) || $xetable.findRowIndexOf(selection, row) > -1
+                : (row: any) => $xetable.findRowIndexOf(selection, row) > -1
             )
             if (treeConfig) {
-              isIndeterminate = !isAllSelected && afterFullData.some((row: any) => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
+              isIndeterminate = !isAllSelected && afterFullData.some((row: any) => $xetable.findRowIndexOf(treeIndeterminates, row) > -1 || $xetable.findRowIndexOf(selection, row) > -1)
             } else {
-              isIndeterminate = !isAllSelected && afterFullData.some((row: any) => selection.indexOf(row) > -1)
+              isIndeterminate = !isAllSelected && afterFullData.some((row: any) => $xetable.findRowIndexOf(selection, row) > -1)
             }
           }
           reactData.isAllSelected = isAllSelected
@@ -4098,7 +4103,7 @@ export default defineComponent({
         if (property) {
           if (treeConfig && !checkStrictly) {
             if (value === -1) {
-              if (treeIndeterminates.indexOf(row) === -1) {
+              if ($xetable.findRowIndexOf(treeIndeterminates, row) === -1) {
                 treeIndeterminates.push(row)
               }
               XEUtils.set(row, property, false)
@@ -4117,12 +4122,12 @@ export default defineComponent({
             if (matchObj && matchObj.parent) {
               let parentStatus
               const vItems = checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
-              const indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
+              const indeterminatesItem = XEUtils.find(matchObj.items, item => $xetable.findRowIndexOf(treeIndeterminates, item) > -1)
               if (indeterminatesItem) {
                 parentStatus = -1
               } else {
                 const selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
-                parentStatus = selectItems.filter(item => vItems.indexOf(item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+                parentStatus = selectItems.filter(item => $xetable.findRowIndexOf(vItems, item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
               }
               return tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus)
             }
@@ -4135,7 +4140,7 @@ export default defineComponent({
         } else {
           if (treeConfig && !checkStrictly) {
             if (value === -1) {
-              if (treeIndeterminates.indexOf(row) === -1) {
+              if ($xetable.findRowIndexOf(treeIndeterminates, row) === -1) {
                 treeIndeterminates.push(row)
               }
               XEUtils.remove(selection, item => item === row)
@@ -4158,19 +4163,19 @@ export default defineComponent({
             if (matchObj && matchObj.parent) {
               let parentStatus
               const vItems = checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
-              const indeterminatesItem = XEUtils.find(matchObj.items, item => treeIndeterminates.indexOf(item) > -1)
+              const indeterminatesItem = XEUtils.find(matchObj.items, item => $xetable.findRowIndexOf(treeIndeterminates, item) > -1)
               if (indeterminatesItem) {
                 parentStatus = -1
               } else {
-                const selectItems = matchObj.items.filter(item => selection.indexOf(item) > -1)
-                parentStatus = selectItems.filter(item => vItems.indexOf(item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+                const selectItems = matchObj.items.filter(item => $xetable.findRowIndexOf(selection, item) > -1)
+                parentStatus = selectItems.filter(item => $xetable.findRowIndexOf(vItems, item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
               }
               return tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus)
             }
           } else {
             if (!checkMethod || checkMethod({ row })) {
               if (value) {
-                if (selection.indexOf(row) === -1) {
+                if ($xetable.findRowIndexOf(selection, row) === -1) {
                   selection.push(row)
                 }
               } else {
@@ -4434,7 +4439,7 @@ export default defineComponent({
         const expandOpts = computeExpandOpts.value
         const { row } = params
         const { lazy } = expandOpts
-        if (!lazy || expandLazyLoadeds.indexOf(row) === -1) {
+        if (!lazy || $xetable.findRowIndexOf(expandLazyLoadeds, row) === -1) {
           const expanded = !tableMethods.isExpandByRow(row)
           const columnIndex = tableMethods.getColumnIndex(column)
           const $columnIndex = tableMethods.getVMColumnIndex(column)
@@ -4450,7 +4455,7 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const { row, column } = params
         const { lazy } = treeOpts
-        if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
+        if (!lazy || $xetable.findRowIndexOf(treeLazyLoadeds, row) === -1) {
           const expanded = !tableMethods.isTreeExpandByRow(row)
           const columnIndex = tableMethods.getColumnIndex(column)
           const $columnIndex = tableMethods.getVMColumnIndex(column)
@@ -4666,6 +4671,9 @@ export default defineComponent({
           return bodyElem.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
         }
         return null
+      },
+      findRowIndexOf (list, row) {
+        return row ? XEUtils.findIndexOf(list, item => $xetable.eqRow(item, row)) : -1
       },
       eqRow (row1, row2) {
         if (row1 && row2) {

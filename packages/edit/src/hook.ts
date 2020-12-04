@@ -92,12 +92,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             if (treeConfig) {
               throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
             }
-            const afIndex = afterFullData.indexOf(row)
+            const afIndex = $xetable.findRowIndexOf(afterFullData, row)
             if (afIndex === -1) {
               throw new Error(UtilTools.error('vxe.error.unableInsert'))
             }
             afterFullData.splice(afIndex, 0, ...newRecords)
-            tableFullData.splice(tableFullData.indexOf(row), 0, ...newRecords)
+            tableFullData.splice($xetable.findRowIndexOf(tableFullData, row), 0, ...newRecords)
             // 刷新单元格合并
             mergeList.forEach((mergeItem: any) => {
               const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
@@ -155,7 +155,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         // 如果绑定了多选属性，则更新状态
         if (!property) {
           rows.forEach((row: any) => {
-            const sIndex = selection.indexOf(row)
+            const sIndex = $xetable.findRowIndexOf(selection, row)
             if (sIndex > -1) {
               selection.splice(sIndex, 1)
             }
@@ -169,12 +169,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           $xetable.clearMergeCells()
         } else {
           rows.forEach((row: any) => {
-            const tfIndex = tableFullData.indexOf(row)
+            const tfIndex = $xetable.findRowIndexOf(tableFullData, row)
             if (tfIndex > -1) {
               const rItems = tableFullData.splice(tfIndex, 1)
               rest.push(rItems[0])
             }
-            const afIndex = afterFullData.indexOf(row)
+            const afIndex = $xetable.findRowIndexOf(afterFullData, row)
             if (afIndex > -1) {
               // 刷新单元格合并
               mergeList.forEach((mergeItem: any) => {
@@ -190,12 +190,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           })
         }
         // 如果当前行被激活编辑，则清除激活状态
-        if (actived.row && rows.indexOf(actived.row) > -1) {
+        if (actived.row && $xetable.findRowIndexOf(rows, actived.row) > -1) {
           editMethods.clearActived()
         }
         // 从新增中移除已删除的数据
         rows.forEach((row: any) => {
-          const iIndex = insertList.indexOf(row)
+          const iIndex = $xetable.findRowIndexOf(insertList, row)
           if (iIndex > -1) {
             insertList.splice(iIndex, 1)
           }
@@ -262,7 +262,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const insertRecords: any[] = []
         if (insertList.length) {
           tableFullData.forEach((row: any) => {
-            if (insertList.indexOf(row) > -1) {
+            if ($xetable.findRowIndexOf(insertList, row) > -1) {
               insertRecords.push(row)
             }
           })
@@ -298,7 +298,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { afterFullData } = internalData
         const el = refElem.value
         const { args, row } = editStore.actived
-        if (args && afterFullData.indexOf(row) > -1 && el.querySelectorAll('.vxe-body--column.col--actived').length) {
+        if (args && $xetable.findRowIndexOf(afterFullData, row) > -1 && el.querySelectorAll('.vxe-body--column.col--actived').length) {
           return Object.assign({}, args)
         }
         return null
@@ -398,7 +398,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const editOpts = computeEditOpts.value
         if (row && field && editOpts.trigger !== 'manual') {
           const column = XEUtils.find(visibleColumn, column => column.property === field)
-          const rowIndex = tableData.indexOf(row)
+          const rowIndex = $xetable.findRowIndexOf(tableData, row)
           if (rowIndex > -1 && column) {
             const cell = $xetable.getCell(row, column)
             const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }

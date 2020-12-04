@@ -1,1 +1,1 @@
-import 'highlight.js/styles/agate.css'
+import 'highlight.js/styles/androidstudio.css'

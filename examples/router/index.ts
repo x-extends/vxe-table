@@ -211,8 +211,8 @@ import TableEditStatus from '../views/table/edit/Status.vue'
 // import TableEditCellDisable from '../views/table/edit/CellDisable.vue'
 // import TableEditRowDisable from '../views/table/edit/RowDisable.vue'
 // import TableEditHighlightCell from '../views/table/edit/HighlightCell.vue'
-// import TableEditKeyboard from '../views/table/edit/Keyboard.vue'
-// import TableEditKeyboardEdit from '../views/table/edit/KeyboardEdit.vue'
+import TableEditKeyboard from '../views/table/edit/Keyboard.vue'
+import TableEditKeyboardEdit from '../views/table/edit/KeyboardEdit.vue'
 // import TableEditCellValid from '../views/table/edit/CellValid.vue'
 // import TableEditRowValid from '../views/table/edit/RowValid.vue'
 // import TableEditForceCellValid from '../views/table/edit/ForceCellValid.vue'
@@ -1308,16 +1308,16 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableEditHighlightCell',
   //   component: TableEditHighlightCell
   // },
-  // {
-  //   path: '/table/edit/keyboard',
-  //   name: 'TableEditKeyboard',
-  //   component: TableEditKeyboard
-  // },
-  // {
-  //   path: '/table/edit/keyboardEdit',
-  //   name: 'TableEditKeyboardEdit',
-  //   component: TableEditKeyboardEdit
-  // },
+  {
+    path: '/table/edit/keyboard',
+    name: 'TableEditKeyboard',
+    component: TableEditKeyboard
+  },
+  {
+    path: '/table/edit/keyboardEdit',
+    name: 'TableEditKeyboardEdit',
+    component: TableEditKeyboardEdit
+  },
   // {
   //   path: '/table/edit/cellValid',
   //   name: 'TableEditCellValid',

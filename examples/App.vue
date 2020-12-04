@@ -1065,18 +1065,18 @@ export default defineComponent({
             //     name: 'TableEditHighlightCell'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.keyboard',
-            //   locat: {
-            //     name: 'TableEditKeyboard'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.keyboardEdit',
-            //   locat: {
-            //     name: 'TableEditKeyboardEdit'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableEditKeyboard'
+              }
+            },
+            {
+              label: 'app.aside.nav.keyboardEdit',
+              locat: {
+                name: 'TableEditKeyboardEdit'
+              }
+            },
             // {
             //   label: 'app.aside.nav.footer',
             //   locat: {

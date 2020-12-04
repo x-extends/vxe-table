@@ -680,6 +680,7 @@ export interface TablePrivateMethods {
   setHoverRow(row: any): void;
   clearHoverRow(): void;
   getCell(row: any, column: any): HTMLTableDataCellElement | null;
+  findRowIndexOf(list: any[], row: any): number;
   eqRow(row1: any, row2: any): boolean;
 }
 

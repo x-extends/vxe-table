@@ -1081,7 +1081,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           if (mode === 'selected') {
             const selectRecords = $xetable.getCheckboxRecords()
             if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
-              opts.data = XEUtils.searchTree($xetable.getTableData().fullData, item => selectRecords.indexOf(item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
+              opts.data = XEUtils.searchTree($xetable.getTableData().fullData, item => $xetable.findRowIndexOf(selectRecords, item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
             } else {
               opts.data = selectRecords
             }
