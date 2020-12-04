@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      高级打印，可以将任意视图直接输出打印<br>
+      高级打印，可以将任意视图的 HTML 片段输出打印<br>
       给 vue 实例挂载属性：<br>
       Vue.prototype.$XPrint = VXETable.print<br>
     </p>
@@ -432,7 +432,7 @@ export default {
                 <p class="title">扫一扫二维码</p>
                 <div class="qrcode">
                   <img src="\${url}">
-                  <div style="margin-top: 15px;">如果对您有帮助，点击右上角捐赠打赏我们一杯咖啡！</div>
+                  <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
                 </div>
                 \`
                 this.$XPrint({
@@ -578,7 +578,7 @@ export default {
                 <div class="list-desc">...省略</div>
                 <h2>三：工作时间和休息休假</h2>
                 <div class="list-desc">...省略</div>
-                <div style="margin-top: 15px;">如果对您有帮助，点击右上角捐赠打赏我们一杯咖啡！</div>
+                <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
               </div>
               \`
               this.$XPrint({
@@ -679,7 +679,7 @@ export default {
         <p class="title">扫一扫二维码</p>
         <div class="qrcode">
           <img src="${url}">
-          <div style="margin-top: 15px;">如果对您有帮助，点击右上角捐赠打赏我们一杯咖啡！</div>
+          <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
         </div>
         `
         this.$XPrint({
@@ -812,7 +812,7 @@ export default {
         <div class="list-desc">...省略</div>
         <h2>三：工作时间和休息休假</h2>
         <div class="list-desc">...省略</div>
-        <div style="margin-top: 15px;">如果对您有帮助，点击右上角捐赠打赏我们一杯咖啡！</div>
+        <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
       </div>
       `
       this.$XPrint({

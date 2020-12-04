@@ -287,27 +287,27 @@ const exportDataAPI = [
   },
   {
     name: 'columnFilterMethod',
-    desc: '列过滤方法，该函数 Function({ column, $columnIndex }) 的返回值用来决定是否过滤掉列',
+    desc: '列过滤方法，该函数的返回值用来决定是否过滤掉列',
     version: '',
-    type: 'Function',
+    type: '(params: { column, $columnIndex }) > boolean',
     enum: '',
     defVal: '默认过滤掉 type=seq,checkbox,radio 和 field 为空的列',
     list: []
   },
   {
     name: 'dataFilterMethod',
-    desc: '数据过滤方法，该函数 Function({ row, $rowIndex }) 的返回值用来决定是否过滤掉数据行',
+    desc: '数据过滤方法，该函数的返回值用来决定是否过滤掉数据行',
     version: '',
-    type: 'Function',
+    type: '(params: { row, $rowIndex }) => boolean',
     enum: '',
     defVal: '',
     list: []
   },
   {
     name: 'footerFilterMethod',
-    desc: '表尾过滤方法，该函数 Function({ items, $rowIndex }) 的返回值用来决定是否过滤掉表尾行',
+    desc: '表尾过滤方法，该函数的返回值用来决定是否过滤掉表尾行',
     version: '',
-    type: 'Function',
+    type: '(params: { items, $rowIndex }) => boolean',
     enum: '',
     defVal: '',
     list: []
@@ -334,7 +334,7 @@ const exportDataAPI = [
     name: 'exportMethod',
     desc: '只对 remote=true 有效，该函数用于自定义导出或服务端导出，返回 Promise',
     version: '',
-    type: '({ options }) => Promise<any>',
+    type: '(params: { options }) => Promise<any>',
     enum: '',
     defVal: '',
     list: []
@@ -343,7 +343,7 @@ const exportDataAPI = [
     name: 'beforeExportMethod',
     desc: '该方法会在导出之前触发',
     version: '',
-    type: '({ options }) => void',
+    type: '(params: { options }) => void',
     enum: '',
     defVal: '',
     list: []
@@ -352,7 +352,7 @@ const exportDataAPI = [
     name: 'afterExportMethod',
     desc: '该方法会在导出之后触发',
     version: '',
-    type: '({ options }) => viod',
+    type: '(params: { options }) => viod',
     enum: '',
     defVal: '',
     list: []
@@ -400,7 +400,7 @@ const importDataAPI = [
     name: 'importMethod',
     desc: '只对 remote=true 有效，该函数用于自定义导入或服务端导入，返回 Promise',
     version: '',
-    type: '({ file, options }) => Promise<any>',
+    type: '(params: { file, options }) => Promise<any>',
     enum: '',
     defVal: '',
     list: []
@@ -409,7 +409,7 @@ const importDataAPI = [
     name: 'beforeImportMethod',
     desc: '该方法会在导入之前触发',
     version: '',
-    type: '({ options }) => void',
+    type: '(params: { options }) => void',
     enum: '',
     defVal: '',
     list: []
@@ -418,7 +418,7 @@ const importDataAPI = [
     name: 'afterImportMethod',
     desc: '该方法会在导入之后触发',
     version: '',
-    type: '({ options }) => viod',
+    type: '(params: { options }) => viod',
     enum: '',
     defVal: '',
     list: []
@@ -437,9 +437,9 @@ const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'do
   },
   {
     name: 'beforePrintMethod',
-    desc: '该函数 Function({ content, options }) 会在打印之前触发，可以通过返回自定义打印的内容',
+    desc: '该函数会在打印之前触发，可以通过返回自定义打印的内容',
     version: '',
-    type: '({ content, options }) => string',
+    type: '(params: { content, options }) => string',
     enum: '',
     defVal: '',
     list: []
@@ -658,7 +658,7 @@ const apis = [
         name: 'row-class-name',
         descKey: 'app.api.table.desc.rowClassName',
         version: '',
-        type: 'string | (({ row, rowIndex, $rowIndex }) => any)',
+        type: 'string | ((params: { row, rowIndex, $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -667,7 +667,7 @@ const apis = [
         name: 'cell-class-name',
         descKey: 'app.api.table.desc.cellClassName',
         version: '',
-        type: 'string | (({ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) => any)',
+        type: 'string | ((params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -676,7 +676,7 @@ const apis = [
         name: 'header-row-class-name',
         descKey: 'app.api.table.desc.headerRowClassName',
         version: '',
-        type: 'string | (({ $rowIndex }) => any)',
+        type: 'string | ((params: { $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -685,7 +685,7 @@ const apis = [
         name: 'header-cell-class-name',
         descKey: 'app.api.table.desc.headerCellClassName',
         version: '',
-        type: 'string | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
+        type: 'string | ((params: { $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -694,7 +694,7 @@ const apis = [
         name: 'footer-row-class-name',
         descKey: 'app.api.table.desc.footerRowClassName',
         version: '',
-        type: 'string | (({ $rowIndex }) => any)',
+        type: 'string | ((params: { $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -703,7 +703,7 @@ const apis = [
         name: 'footer-cell-class-name',
         descKey: 'app.api.table.desc.footerCellClassName',
         version: '',
-        type: 'string | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
+        type: 'string | ((params: { $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -713,7 +713,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.cellStyle',
         version: '',
-        type: 'any | (({ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) => any)',
+        type: 'any | ((params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -723,7 +723,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.headerCellStyle',
         version: '',
-        type: 'any | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
+        type: 'any | ((params: { $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -733,7 +733,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.footerCellStyle',
         version: '',
-        type: 'any | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
+        type: 'any | ((params: { $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -743,7 +743,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.rowStyle',
         version: '',
-        type: 'any | (({ row, rowIndex, $rowIndex }) => any)',
+        type: 'any | ((params: { row, rowIndex, $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -753,7 +753,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.headerRowStyle',
         version: '',
-        type: 'any | (({ $rowIndex, column, columnIndex, $columnIndex }) => any)',
+        type: 'any | ((params: { $rowIndex, column, columnIndex, $columnIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -763,7 +763,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.footerRowStyle',
         version: '',
-        type: 'any | (({ $rowIndex }) => any)',
+        type: 'any | ((params: { $rowIndex }) => any)',
         enum: '',
         defVal: '',
         list: []
@@ -781,7 +781,7 @@ const apis = [
         name: 'footer-method',
         descKey: 'app.api.table.desc.footerMethod',
         version: '',
-        type: '({ columns, data }) => any[][]',
+        type: '(params: { columns, data }) => any[][]',
         enum: '',
         defVal: '',
         list: []
@@ -809,7 +809,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.spanMethod',
         version: '',
-        type: '({ row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, data }) => { rowspan: number, colspan: number}',
+        type: '(params: { row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, data }) => { rowspan: number, colspan: number}',
         enum: '',
         defVal: '{ rowspan: 1, colspan: 1}',
         list: []
@@ -819,7 +819,7 @@ const apis = [
         abandoned: true,
         descKey: 'app.api.table.desc.footerSpanMethod',
         version: '',
-        type: '({ $rowIndex, column, columnIndex, $columnIndex, _columnIndex, data }) => { rowspan: number, colspan: number}',
+        type: '(params: { $rowIndex, column, columnIndex, $columnIndex, _columnIndex, data }) => { rowspan: number, colspan: number}',
         enum: '',
         defVal: '{ rowspan: 1, colspan: 1}',
         list: []
@@ -944,9 +944,9 @@ const apis = [
           },
           {
             name: 'seqMethod',
-            desc: '自定义序号的方法 Function({ row, rowIndex, column, columnIndex }) 返回处理后的值',
+            desc: '自定义序号的方法返回处理后的值',
             version: '',
-            type: 'Function',
+            type: '(params: { row, rowIndex, column, columnIndex }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1000,9 +1000,9 @@ const apis = [
           },
           {
             name: 'sortMethod',
-            desc: '全局排序方法，当触发排序时会调用该函数 Function({ data, column, property, order }) 返回排序后的列表',
+            desc: '全局排序方法，当触发排序时会调用该函数返回排序后的列表',
             version: '',
-            type: 'Function',
+            type: '(params: { data, column, property, order }) => any[]',
             enum: '',
             defVal: '',
             list: []
@@ -1073,9 +1073,9 @@ const apis = [
           },
           {
             name: 'filterMethod',
-            desc: '全局筛选方法，当触发筛选时会调用该函数 Function({ value, row, column }) 返回是否有效',
+            desc: '全局筛选方法，当触发筛选时会调用该函数返回是否有效',
             version: '',
-            type: 'Function',
+            type: '(params: { value, row, column }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1173,9 +1173,9 @@ const apis = [
           },
           {
             name: 'checkMethod',
-            desc: '是否允许选中的方法，该方法 Function({ row }) 的返回值用来决定这一行的 Radio 是否可以选中',
+            desc: '是否允许选中的方法，该方法的返回值用来决定这一行的 Radio 是否可以选中',
             version: '',
-            type: 'Function',
+            type: '(params: { row }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1273,9 +1273,9 @@ const apis = [
           },
           {
             name: 'checkMethod',
-            desc: '是否允许勾选的方法，该方法 Function({ row }) 的返回值用来决定这一行的 checkbox 是否可以勾选',
+            desc: '是否允许勾选的方法，该方法的返回值用来决定这一行的 checkbox 是否可以勾选',
             version: '',
-            type: 'Function',
+            type: '(params: { row }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1364,9 +1364,9 @@ const apis = [
           },
           {
             name: 'contentMethod',
-            desc: '该方法 Function({ items?, row?, rowIndex?, $rowIndex, column, columnIndex, $columnIndex, type, cell, $event }) 接收一个字符串，可以通过返回值来重写默认的提示内容',
+            desc: '该方法接收一个字符串，可以通过返回值来重写默认的提示内容',
             version: '',
-            type: 'Function',
+            type: '(params: { items?, row?, rowIndex?, $rowIndex, column, columnIndex, $columnIndex, type, cell, $event }) => string',
             enum: '',
             defVal: '',
             list: []
@@ -1437,27 +1437,27 @@ const apis = [
           },
           {
             name: 'loadMethod',
-            desc: '该方法 Function({ row, rowIndex?, $rowIndex? }) 用于异步加载展开后的内容（必须返回 Promise<any[]> 对象）',
+            desc: '该方法用于异步加载展开后的内容（必须返回 Promise<any[]> 对象）',
             version: '',
-            type: 'Function',
+            type: '({ row, rowIndex?, $rowIndex? }) => Promise<any[]',
             enum: '',
             defVal: '',
             list: []
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({ expanded, column, columnIndex, row, rowIndex? }) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '',
-            type: 'Function',
+            type: '(params: { expanded, column, columnIndex, row, rowIndex? }) => boolean',
             enum: '',
             defVal: '',
             list: []
           },
           {
             name: 'visibleMethod',
-            desc: '该函数 Function({ column, columnIndex, row, rowIndex? }) 的返回值用来决定是否允许显示展开按钮',
+            desc: '该函数的返回值用来决定是否允许显示展开按钮',
             version: '',
-            type: 'Function',
+            type: '({ column, columnIndex, row, rowIndex? }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1600,18 +1600,18 @@ const apis = [
           },
           {
             name: 'loadMethod',
-            desc: '该方法 Function({ row }) 用于异步加载子节点（必须返回 Promise<any[]> 对象）',
+            desc: '该方法用于异步加载子节点（必须返回 Promise<any[]> 对象）',
             version: '',
-            type: 'Function',
+            type: '(params: { row }) => Promise<any[]>',
             enum: '',
             defVal: '',
             list: []
           },
           {
             name: 'toggleMethod',
-            desc: '该方法 Function({ expanded, row, column, columnIndex }) 在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
+            desc: '该方法在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行',
             version: '',
-            type: 'Function',
+            type: '(params: { expanded, row, column, columnIndex }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1709,9 +1709,9 @@ const apis = [
           },
           {
             name: 'visibleMethod',
-            desc: '该函数 Function({ type, options, columns, row?, rowIndex?, column?, columnIndex? }) 的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）',
+            desc: '该函数的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）',
             version: '',
-            type: 'Function',
+            type: '(params: { type, options, columns, row?, rowIndex?, column?, columnIndex? }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1739,7 +1739,7 @@ const apis = [
             name: 'copyMethod',
             desc: '重写单元格复制取值的方法，将单元格复制到剪贴板',
             version: 'pro',
-            type: '({ row, column }) => string',
+            type: '(params: { row, column }) => string',
             enum: '',
             defVal: '',
             list: []
@@ -1748,7 +1748,7 @@ const apis = [
             name: 'beforeCopyMethod',
             desc: '自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
-            type: '({ targetAreas }) => boolean',
+            type: '(params: { targetAreas }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1757,7 +1757,7 @@ const apis = [
             name: 'pasteMethod',
             desc: '重写单元格粘贴赋值的方法，从剪贴板赋值到单元格',
             version: 'pro',
-            type: '({ row, column, cellValue }) => void',
+            type: '(params: { row, column, cellValue }) => void',
             enum: '',
             defVal: '',
             list: []
@@ -1766,7 +1766,7 @@ const apis = [
             name: 'beforePasteMethod',
             desc: '自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
-            type: '({ currentAreas, targetAreas, cellValues }) => boolean',
+            type: '(params: { currentAreas, targetAreas, cellValues }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1794,7 +1794,7 @@ const apis = [
             name: 'findMethod',
             desc: '自定义单元格查找方法',
             version: 'pro',
-            type: '({ cellValue, isWhole, isRE, isSensitive, findValue: findCellValue, findRE }) => boolean',
+            type: '(params: { cellValue, isWhole, isRE, isSensitive, findValue: findCellValue, findRE }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1803,7 +1803,7 @@ const apis = [
             name: 'beforeFindMethod',
             desc: '自定义单元格替换之前的方法，可以通过返回 false 阻止替换行为',
             version: 'pro',
-            type: '({ findValue }) => boolean',
+            type: '(params: { findValue }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1821,7 +1821,7 @@ const apis = [
             name: 'replaceMethod',
             desc: '自定义单元格替换方法',
             version: 'pro',
-            type: '({ row, column, cellValue }) => boolean',
+            type: '(params: { row, column, cellValue }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1830,7 +1830,7 @@ const apis = [
             name: 'beforeReplaceMethod',
             desc: '自定义单元格替换之前的方法，可以通过返回 false 阻止替换行为',
             version: 'pro',
-            type: '({ findValue, replaceValue }) => boolean',
+            type: '(params: { findValue, replaceValue }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1974,9 +1974,9 @@ const apis = [
           },
           {
             name: 'editMethod',
-            desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({ row, rowIndex, column, columnIndex }) 可以返回 false 来阻止默认行为',
+            desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数可以返回 false 来阻止默认行为',
             version: '',
-            type: 'Function',
+            type: '(params: { row, rowIndex, column, columnIndex }) => boolean | void',
             enum: '',
             defVal: '',
             list: []
@@ -2047,9 +2047,9 @@ const apis = [
           },
           {
             name: 'activeMethod',
-            desc: '该方法 Function({ row, rowIndex, column, columnIndex }) 的返回值用来决定该单元格是否允许编辑',
+            desc: '该方法的返回值用来决定该单元格是否允许编辑',
             version: '',
-            type: 'Function',
+            type: '(params: { row, rowIndex, column, columnIndex }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -2159,9 +2159,9 @@ const apis = [
           },
           {
             name: 'validator',
-            desc: '自定义校验方法 Function({ cellValue, rule, rules, row, rowIndex，column, columnIndex }) 返回一个 Error 或者 Promise<new Error("提示消息")>',
+            desc: '自定义校验方法返回一个 Error 或者 Promise<new Error("提示消息")>',
             version: '',
-            type: 'Function',
+            type: '(params: { cellValue, rule, rules, row, rowIndex，column, columnIndex }) => Error | Promise<any>',
             enum: '',
             defVal: '',
             list: []
@@ -2299,9 +2299,9 @@ const apis = [
           },
           {
             name: 'checkMethod',
-            desc: '自定义列是否允许列选中的方法，该方法 Function({ column }) 的返回值用来决定这一列的 checkbox 是否可以选中',
+            desc: '自定义列是否允许列选中的方法，该方法的返回值用来决定这一列的 checkbox 是否可以选中',
             version: '',
-            type: 'Function',
+            type: '(params: { column }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -4095,7 +4095,7 @@ const apis = [
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: boolean | Row | Row[], callback?: Function',
+        defVal: 'rows?: boolean | Row | Row[], callback?: callback?: (errMap) => void',
         list: []
       },
       {
@@ -4104,7 +4104,7 @@ const apis = [
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: boolean | Row | Row[], callback?: Function',
+        defVal: 'rows?: boolean | Row | Row[], callback?: callback?: (errMap) => void',
         list: []
       },
       {
