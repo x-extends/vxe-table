@@ -1095,12 +1095,12 @@ export default defineComponent({
             //     name: 'TableEditExpand'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.contextMenu',
-            //   locat: {
-            //     name: 'TableEditMenu'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.contextMenu',
+              locat: {
+                name: 'TableEditMenu'
+              }
+            },
             // {
             //   label: 'app.aside.nav.span',
             //   locat: {
@@ -1132,18 +1132,18 @@ export default defineComponent({
             //     name: 'TableEditDataCount'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.uniqueSelect',
-            //   locat: {
-            //     name: 'TableEditUniqueSelect'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.cascadingSelect',
-            //   locat: {
-            //     name: 'TableEditCascadingSelect'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.uniqueSelect',
+              locat: {
+                name: 'TableEditUniqueSelect'
+              }
+            },
+            {
+              label: 'app.aside.nav.cascadingSelect',
+              locat: {
+                name: 'TableEditCascadingSelect'
+              }
+            },
             // {
             //   label: 'app.aside.nav.events',
             //   // demoUrl: 'https://jsrun.pro/QIWKp/edit',

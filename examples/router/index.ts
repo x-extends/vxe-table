@@ -220,14 +220,14 @@ import TableEditKeyboardEdit from '../views/table/edit/KeyboardEdit.vue'
 // import TableEditFooter from '../views/table/edit/Footer.vue'
 // import TableEditFooterImmediately from '../views/table/edit/FooterImmediately.vue'
 // import TableEditExpand from '../views/table/edit/Expand.vue'
-// import TableEditMenu from '../views/table/edit/Menu.vue'
+import TableEditMenu from '../views/table/edit/Menu.vue'
 // import TableEditSpan from '../views/table/edit/Span.vue'
 // import TableEditForm from '../views/table/edit/Form.vue'
 // import TableEditUpload from '../views/table/edit/Upload.vue'
 // import TableEditRealtimeSave from '../views/table/edit/RealtimeSave.vue'
 // import TableEditDataCount from '../views/table/edit/DataCount.vue'
-// import TableEditUniqueSelect from '../views/table/edit/UniqueSelect.vue'
-// import TableEditCascadingSelect from '../views/table/edit/CascadingSelect.vue'
+import TableEditUniqueSelect from '../views/table/edit/UniqueSelect.vue'
+import TableEditCascadingSelect from '../views/table/edit/CascadingSelect.vue'
 // import TableEditEvents from '../views/table/edit/Events.vue'
 import TableEditTemplate from '../views/table/edit/Template.vue'
 // import TableEditFull from '../views/table/edit/Full.vue'
@@ -1353,11 +1353,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableEditExpand',
   //   component: TableEditExpand
   // },
-  // {
-  //   path: '/table/edit/menu',
-  //   name: 'TableEditMenu',
-  //   component: TableEditMenu
-  // },
+  {
+    path: '/table/edit/menu',
+    name: 'TableEditMenu',
+    component: TableEditMenu
+  },
   // {
   //   path: '/table/edit/span',
   //   name: 'TableEditSpan',
@@ -1383,16 +1383,16 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableEditDataCount',
   //   component: TableEditDataCount
   // },
-  // {
-  //   path: '/table/edit/uniqueSelect',
-  //   name: 'TableEditUniqueSelect',
-  //   component: TableEditUniqueSelect
-  // },
-  // {
-  //   path: '/table/edit/cascadingSelect',
-  //   name: 'TableEditCascadingSelect',
-  //   component: TableEditCascadingSelect
-  // },
+  {
+    path: '/table/edit/uniqueSelect',
+    name: 'TableEditUniqueSelect',
+    component: TableEditUniqueSelect
+  },
+  {
+    path: '/table/edit/cascadingSelect',
+    name: 'TableEditCascadingSelect',
+    component: TableEditCascadingSelect
+  },
   // {
   //   path: '/table/edit/events',
   //   name: 'TableEditEvents',
