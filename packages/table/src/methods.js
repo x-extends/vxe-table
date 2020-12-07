@@ -1877,7 +1877,7 @@ const Methods = {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
-        const { isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
+        const { filterStore, isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
         const { selected, actived } = editStore
         const { keyCode } = evnt
         const isBack = keyCode === 8
@@ -1900,6 +1900,12 @@ const Methods = {
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         const isEditStatus = editConfig && actived.column && actived.row
         let params
+        if (filterStore.visible) {
+          if (isEsc) {
+            this.closeFilter()
+          }
+          return
+        }
         if (operCtxMenu) {
           // 如果配置了右键菜单; 支持方向键操作、回车
           evnt.preventDefault()
@@ -2045,9 +2051,9 @@ const Methods = {
     }
   },
   handleGlobalPasteEvent (evnt) {
-    const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore } = this
+    const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore, filterStore } = this
     const { actived } = editStore
-    if (isActivated) {
+    if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
         if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
           this.handlePasteCellAreaEvent(evnt)
@@ -2057,9 +2063,9 @@ const Methods = {
     }
   },
   handleGlobalCopyEvent (evnt) {
-    const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore } = this
+    const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore, filterStore } = this
     const { actived } = editStore
-    if (isActivated) {
+    if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
         if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
           this.handleCopyCellAreaEvent(evnt)
@@ -2069,9 +2075,9 @@ const Methods = {
     }
   },
   handleGlobalCutEvent (evnt) {
-    const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore } = this
+    const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore, filterStore } = this
     const { actived } = editStore
-    if (isActivated) {
+    if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
         if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
           this.handleCutCellAreaEvent(evnt)
