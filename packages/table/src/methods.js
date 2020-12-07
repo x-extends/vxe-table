@@ -1866,7 +1866,7 @@ const Methods = {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
-        const { isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig = {}, keyboardConfig = {}, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
+        const { filterStore, isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
         const { selected, actived } = editStore
         const keyCode = evnt.keyCode
         const isBack = keyCode === 8
@@ -1889,6 +1889,12 @@ const Methods = {
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         const isEditStatus = editConfig && actived.column && actived.row
         let params
+        if (filterStore.visible) {
+          if (isEsc) {
+            this.closeFilter()
+          }
+          return
+        }
         if (operCtxMenu) {
           // 如果配置了右键菜单; 支持方向键操作、回车
           evnt.preventDefault()
@@ -1897,9 +1903,9 @@ const Methods = {
           } else {
             this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
           }
-        } else if (keyboardConfig && this.mouseConfig && this.mouseOpts.area && this.handleKeyboardEvent) {
+        } else if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardEvent) {
           this.handleKeyboardEvent(evnt)
-        } else if (isSpacebar && (keyboardConfig.isArrow || keyboardConfig.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
+        } else if (isSpacebar && keyboardConfig && (keyboardOpts.isArrow || keyboardOpts.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
           // 在 v3.0 中废弃 type=selection
           // 空格键支持选中复选框
           evnt.preventDefault()
@@ -1918,7 +1924,7 @@ const Methods = {
             params = actived.args
             this.clearActived(evnt)
             // 如果配置了选中功能，则为选中状态
-            if (mouseConfig.selected) {
+            if (mouseConfig && mouseOpts.selected) {
               this.$nextTick(() => this.handleSelected(params, evnt))
             }
           }
@@ -1937,7 +1943,7 @@ const Methods = {
           this.keyCtxTimeout = setTimeout(() => {
             this._keyCtx = false
           }, 1000)
-        } else if (isEnter && keyboardConfig.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
+        } else if (isEnter && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
           // 退出选中
           if (hasCtrlKey) {
             // 如果是激活编辑状态，则取消编辑
@@ -1945,7 +1951,7 @@ const Methods = {
               params = actived.args
               this.clearActived(evnt)
               // 如果配置了选中功能，则为选中状态
-              if (mouseConfig.selected) {
+              if (mouseConfig && mouseOpts.selected) {
                 this.$nextTick(() => this.handleSelected(params, evnt))
               }
             }
@@ -1954,13 +1960,13 @@ const Methods = {
             if (selected.row || actived.row) {
               const targetArgs = selected.row ? selected.args : actived.args
               if (hasShiftKey) {
-                if (keyboardConfig.enterToTab) {
+                if (keyboardOpts.enterToTab) {
                   this.moveTabSelected(targetArgs, hasShiftKey, evnt)
                 } else {
                   this.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
                 }
               } else {
-                if (keyboardConfig.enterToTab) {
+                if (keyboardOpts.enterToTab) {
                   this.moveTabSelected(targetArgs, hasShiftKey, evnt)
                 } else {
                   this.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
@@ -1979,7 +1985,7 @@ const Methods = {
               }
             }
           }
-        } else if (operArrow && keyboardConfig.isArrow) {
+        } else if (operArrow && keyboardConfig && keyboardOpts.isArrow) {
           if (!isEditStatus) {
             // 如果按下了方向键
             if (selected.row && selected.column) {
@@ -1989,22 +1995,22 @@ const Methods = {
               this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
             }
           }
-        } else if (isTab && keyboardConfig.isTab) {
+        } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
           // 如果按下了 Tab 键切换
           if (selected.row || selected.column) {
             this.moveTabSelected(selected.args, hasShiftKey, evnt)
           } else if (actived.row || actived.column) {
             this.moveTabSelected(actived.args, hasShiftKey, evnt)
           }
-        } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardConfig.isArrow : isBack)) {
+        } else if (keyboardConfig && (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
           if (!isEditStatus) {
             // 如果是删除键
-            if (keyboardConfig.isDel && (selected.row || selected.column)) {
+            if (keyboardOpts.isDel && (selected.row || selected.column)) {
               setCellValue(selected.row, selected.column, null)
               if (isBack) {
                 this.handleActived(selected.args, evnt)
               }
-            } else if (isBack && keyboardConfig.isArrow && treeConfig && highlightCurrentRow && currentRow) {
+            } else if (isBack && keyboardOpts.isArrow && treeConfig && highlightCurrentRow && currentRow) {
               // 如果树形表格回退键关闭当前行返回父节点
               const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
               if (parentRow) {
@@ -2019,18 +2025,18 @@ const Methods = {
         } else if (keyboardConfig && hasCtrlKey && isA) {
           if (!isEditStatus) {
             // 如果开启复制功能
-            if (keyboardConfig.isCut && this.mouseConfig && this.mouseOpts.checked) {
+            if (keyboardOpts.isCut && mouseConfig && mouseOpts.checked) {
               this.handleAllChecked(evnt)
             }
           }
-        } else if (keyboardConfig.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+        } else if (keyboardConfig && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           // 启用编辑后，空格键功能将失效
           // if (isSpacebar) {
           //   evnt.preventDefault()
           // }
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && selected.column.editRender) {
-            if (!keyboardConfig.editMethod || !(keyboardConfig.editMethod(selected.args, evnt) === false)) {
+            if (!keyboardOpts.editMethod || !(keyboardOpts.editMethod(selected.args, evnt) === false)) {
               if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
                 setCellValue(selected.row, selected.column, null)
                 this.handleActived(selected.args, evnt)
@@ -2043,13 +2049,13 @@ const Methods = {
     }
   },
   handleGlobalPasteEvent (evnt) {
-    const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
+    const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore, filterStore } = this
     const { actived } = editStore
-    if (isActivated) {
+    if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
-        if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
+        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && this.handlePasteCellAreaEvent) {
           this.handlePasteCellAreaEvent(evnt)
-        } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
+        } else if (keyboardConfig && keyboardOpts.isCut && mouseConfig && mouseOpts.checked) {
           this.handlePaste(evnt)
         }
       }
@@ -2057,13 +2063,13 @@ const Methods = {
     }
   },
   handleGlobalCopyEvent (evnt) {
-    const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
+    const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore, filterStore } = this
     const { actived } = editStore
-    if (isActivated) {
+    if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
-        if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
+        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && this.handleCopyCellAreaEvent) {
           this.handleCopyCellAreaEvent(evnt)
-        } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
+        } else if (keyboardConfig && keyboardOpts.isCut && mouseConfig && mouseOpts.checked) {
           this.handleCopyed(false, evnt)
         }
       }
@@ -2071,13 +2077,13 @@ const Methods = {
     }
   },
   handleGlobalCutEvent (evnt) {
-    const { isActivated, keyboardConfig, mouseConfig, mouseOpts, editStore } = this
+    const { isActivated, keyboardConfig, keyboardOpts, mouseConfig, mouseOpts, editStore, filterStore } = this
     const { actived } = editStore
-    if (isActivated) {
+    if (isActivated && !filterStore.visible) {
       if (!(actived.row || actived.column)) {
-        if (keyboardConfig && keyboardConfig.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
+        if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && this.handleCutCellAreaEvent) {
           this.handleCutCellAreaEvent(evnt)
-        } else if (keyboardConfig && keyboardConfig.isCut && mouseConfig && mouseOpts.checked) {
+        } else if (keyboardConfig && keyboardOpts.isCut && mouseConfig && mouseOpts.checked) {
           this.handleCopyed(true, evnt)
         }
       }
