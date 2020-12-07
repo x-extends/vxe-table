@@ -113,7 +113,7 @@ export default {
   methods: {
     // 上一页
     renderPrevPage (h) {
-      return h('span', {
+      return h('button', {
         class: ['vxe-pager--prev-btn', {
           'is--disabled': this.currentPage <= 1
         }],
@@ -131,7 +131,7 @@ export default {
     },
     // 向上翻页
     renderPrevJump (h, tagName) {
-      return h(tagName || 'span', {
+      return h(tagName || 'button', {
         class: ['vxe-pager--jump-prev', {
           'is--fixed': !tagName,
           'is--disabled': this.currentPage <= 1
@@ -153,19 +153,19 @@ export default {
     },
     // number
     renderNumber (h) {
-      return h('ul', {
+      return h('span', {
         class: 'vxe-pager--btn-wrapper'
       }, this.renderPageBtn(h))
     },
     // jumpNumber
     renderJumpNumber (h) {
-      return h('ul', {
+      return h('span', {
         class: 'vxe-pager--btn-wrapper'
       }, this.renderPageBtn(h, true))
     },
     // 向下翻页
     renderNextJump (h, tagName) {
-      return h(tagName || 'span', {
+      return h(tagName || 'button', {
         class: ['vxe-pager--jump-next', {
           'is--fixed': !tagName,
           'is--disabled': this.currentPage >= this.pageCount
@@ -187,7 +187,7 @@ export default {
     },
     // 下一页
     renderNextPage (h) {
-      return h('span', {
+      return h('button', {
         class: ['vxe-pager--next-btn', {
           'is--disabled': this.currentPage >= this.pageCount
         }],
@@ -285,20 +285,20 @@ export default {
       }
       if (showJump && isLt) {
         nums.push(
-          h('li', {
+          h('button', {
             class: 'vxe-pager--num-btn',
             on: {
               click: () => this.jumpPage(1)
             }
           }, 1),
-          this.renderPrevJump(h, 'li')
+          this.renderPrevJump(h, 'span')
         )
       }
       numList.forEach((item, index) => {
         const number = startNumber + index
         if (number <= pageCount) {
           nums.push(
-            h('li', {
+            h('button', {
               class: ['vxe-pager--num-btn', {
                 'is--active': currentPage === number
               }],
@@ -312,8 +312,8 @@ export default {
       })
       if (showJump && isGt) {
         nums.push(
-          this.renderNextJump(h, 'li'),
-          h('li', {
+          this.renderNextJump(h, 'button'),
+          h('button', {
             class: 'vxe-pager--num-btn',
             on: {
               click: () => this.jumpPage(pageCount)

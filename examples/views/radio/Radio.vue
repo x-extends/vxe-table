@@ -52,7 +52,7 @@
     <pre>
       <pre-code>
         | Tab | 切换到上一个 |
-        | Shift Tab | 切换到下一个 |
+        | Shift + Tab | 切换到下一个 |
         | Arrow Up ↑ | 如果在分组内则移动到上一个选项 |
         | Arrow Left ← | 如果在分组内则移动到上一个选项 |
         | Arrow Down ↓ | 如果在分组内则移动到下一个选项 |
