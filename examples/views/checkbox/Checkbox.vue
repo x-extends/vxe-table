@@ -33,7 +33,7 @@
     <pre>
       <pre-code>
         | Tab | 切换到上一个 |
-        | Shift Tab | 切换到下一个 |
+        | Shift + Tab | 切换到下一个 |
         | Spacebar | 按下勾选 |
       </pre-code>
     </pre>

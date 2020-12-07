@@ -3552,7 +3552,7 @@ export default defineComponent({
       if (internalData.isActivated) {
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
           const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow } = props
-          const { ctxMenuStore, editStore, currentRow } = reactData
+          const { filterStore, ctxMenuStore, editStore, currentRow } = reactData
           const isMenu = computeIsMenu.value
           const bodyMenu = computeBodyMenu.value
           const keyboardOpts = computeKeyboardOpts.value
@@ -3582,6 +3582,12 @@ export default defineComponent({
           const operCtxMenu = isMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
           const isEditStatus = editConfig && actived.column && actived.row
           let params: any
+          if (filterStore.visible) {
+            if (isEsc) {
+              tableMethods.closeFilter()
+            }
+            return
+          }
           if (operCtxMenu) {
             // 如果配置了右键菜单; 支持方向键操作、回车
             evnt.preventDefault()
@@ -3592,7 +3598,7 @@ export default defineComponent({
             }
           } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xetable.handleKeyboardEvent) {
             $xetable.handleKeyboardEvent(evnt)
-          } else if (isSpacebar && (keyboardOpts.isArrow || keyboardOpts.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
+          } else if (isSpacebar && keyboardConfig && (keyboardOpts.isArrow || keyboardOpts.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
             // 空格键支持选中复选框
             evnt.preventDefault()
             if (selected.column.type === 'checkbox') {
@@ -3630,7 +3636,7 @@ export default defineComponent({
             keyCtxTimeout = setTimeout(() => {
               internalData._keyCtx = false
             }, 1000)
-          } else if (isEnter && !isAltKey && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
+          } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
             // 退出选中
             if (hasCtrlKey) {
               // 如果是激活编辑状态，则取消编辑
@@ -3672,7 +3678,7 @@ export default defineComponent({
                 }
               }
             }
-          } else if (operArrow && keyboardOpts.isArrow) {
+          } else if (operArrow && keyboardConfig && keyboardOpts.isArrow) {
             if (!isEditStatus) {
               // 如果按下了方向键
               if (selected.row && selected.column) {
@@ -3682,14 +3688,14 @@ export default defineComponent({
                 $xetable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
               }
             }
-          } else if (isTab && keyboardOpts.isTab) {
+          } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
             // 如果按下了 Tab 键切换
             if (selected.row || selected.column) {
               $xetable.moveTabSelected(selected.args, hasShiftKey, evnt)
             } else if (actived.row || actived.column) {
               $xetable.moveTabSelected(actived.args, hasShiftKey, evnt)
             }
-          } else if (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack)) {
+          } else if (keyboardConfig && (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
             if (!isEditStatus) {
               // 如果是删除键
               if (keyboardOpts.isDel && (selected.row || selected.column)) {
@@ -3709,7 +3715,7 @@ export default defineComponent({
                 }
               }
             }
-          } else if (keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+          } else if (keyboardConfig && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
             // 启用编辑后，空格键功能将失效
             // if (isSpacebar) {
             //   evnt.preventDefault()
@@ -3731,12 +3737,12 @@ export default defineComponent({
 
     const handleGlobalPasteEvent = (evnt: ClipboardEvent) => {
       const { keyboardConfig, mouseConfig } = props
-      const { editStore } = reactData
+      const { editStore, filterStore } = reactData
       const { isActivated } = internalData
       const mouseOpts = computeMouseOpts.value
       const keyboardOpts = computeKeyboardOpts.value
       const { actived } = editStore
-      if (isActivated) {
+      if (isActivated && !filterStore.visible) {
         if (!(actived.row || actived.column)) {
           if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xetable.handlePasteCellAreaEvent) {
             $xetable.handlePasteCellAreaEvent(evnt)
@@ -3748,12 +3754,12 @@ export default defineComponent({
 
     const handleGlobalCopyEvent = (evnt: ClipboardEvent) => {
       const { keyboardConfig, mouseConfig } = props
-      const { editStore } = reactData
+      const { editStore, filterStore } = reactData
       const { isActivated } = internalData
       const mouseOpts = computeMouseOpts.value
       const keyboardOpts = computeKeyboardOpts.value
       const { actived } = editStore
-      if (isActivated) {
+      if (isActivated && !filterStore.visible) {
         if (!(actived.row || actived.column)) {
           if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xetable.handleCopyCellAreaEvent) {
             $xetable.handleCopyCellAreaEvent(evnt)
@@ -3765,12 +3771,12 @@ export default defineComponent({
 
     const handleGlobalCutEvent = (evnt: ClipboardEvent) => {
       const { keyboardConfig, mouseConfig } = props
-      const { editStore } = reactData
+      const { editStore, filterStore } = reactData
       const { isActivated } = internalData
       const mouseOpts = computeMouseOpts.value
       const keyboardOpts = computeKeyboardOpts.value
       const { actived } = editStore
-      if (isActivated) {
+      if (isActivated && !filterStore.visible) {
         if (!(actived.row || actived.column)) {
           if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xetable.handleCutCellAreaEvent) {
             $xetable.handleCutCellAreaEvent(evnt)

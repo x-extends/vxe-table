@@ -177,7 +177,7 @@ export default defineComponent({
 
     // 上一页
     const renderPrevPage = () => {
-      return h('span', {
+      return h('button', {
         class: ['vxe-pager--prev-btn', {
           'is--disabled': props.currentPage <= 1
         }],
@@ -192,7 +192,7 @@ export default defineComponent({
 
     // 向上翻页
     const renderPrevJump = (tagName?: string) => {
-      return h(tagName || 'span', {
+      return h(tagName || 'button', {
         class: ['vxe-pager--jump-prev', {
           'is--fixed': !tagName,
           'is--disabled': props.currentPage <= 1
@@ -212,7 +212,7 @@ export default defineComponent({
     // 向下翻页
     const renderNextJump = (tagName?: string) => {
       const pageCount = computePageCount.value
-      return h(tagName || 'span', {
+      return h(tagName || 'button', {
         class: ['vxe-pager--jump-next', {
           'is--fixed': !tagName,
           'is--disabled': props.currentPage >= pageCount
@@ -232,7 +232,7 @@ export default defineComponent({
     // 下一页
     const renderNextPage = () => {
       const pageCount = computePageCount.value
-      return h('span', {
+      return h('button', {
         class: ['vxe-pager--next-btn', {
           'is--disabled': props.currentPage >= pageCount
         }],
@@ -265,18 +265,18 @@ export default defineComponent({
       }
       if (showJump && isLt) {
         nums.push(
-          h('li', {
+          h('button', {
             class: 'vxe-pager--num-btn',
             onClick: (evnt: Event) => jumpPageEvent(evnt, 1)
           }, 1),
-          renderPrevJump('li')
+          renderPrevJump('span')
         )
       }
       numList.forEach((item, index) => {
         const number = startNumber + index
         if (number <= pageCount) {
           nums.push(
-            h('li', {
+            h('button', {
               key: number,
               class: ['vxe-pager--num-btn', {
                 'is--active': currentPage === number
@@ -288,14 +288,14 @@ export default defineComponent({
       })
       if (showJump && isGt) {
         nums.push(
-          renderNextJump('li'),
-          h('li', {
+          renderNextJump('button'),
+          h('button', {
             class: 'vxe-pager--num-btn',
             onClick: (evnt: Event) => jumpPageEvent(evnt, pageCount)
           }, pageCount)
         )
       }
-      return h('ul', {
+      return h('span', {
         class: 'vxe-pager--btn-wrapper'
       }, nums)
     }

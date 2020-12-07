@@ -6,7 +6,7 @@
       Vue.prototype.$XPrint = VXETable.print<br>
     </p>
 
-    <vxe-toolbar print>
+    <vxe-toolbar ref="xToolbar" print>
       <template #buttons>
         <vxe-button @click="printEvent1">打印表格</vxe-button>
         <vxe-button @click="printSelectEvent1">打印勾选行</vxe-button>
@@ -17,6 +17,7 @@
       border
       ref="xTable"
       height="300"
+      :print-config="{}"
       :data="demo1.tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -103,15 +104,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, nextTick } from 'vue'
 import { VXETable } from '../../../packages/vxe-table'
-import { VxeTableInstance } from '../../../types/vxe-table'
+import { VxeTableInstance, VxeToolbarInstance } from '../../../types/vxe-table'
 import QRCode from 'qrcode'
 import jsbarcode from 'jsbarcode'
 
 export default defineComponent({
   setup () {
     const xTable = ref({} as VxeTableInstance)
+    const xToolbar = ref({} as VxeToolbarInstance)
 
     // 打印样式
     const printStyle = `
@@ -218,6 +220,13 @@ export default defineComponent({
         }
       })
     }
+
+    nextTick(() => {
+      // 将表格和工具栏进行关联
+      const $table = xTable.value
+      const $toolbar = xToolbar.value
+      $table.connect($toolbar)
+    })
 
     const codeList = [
       { name: '某年xx1', price: 340, code: '1201545742000' },
@@ -437,6 +446,7 @@ export default defineComponent({
 
     return {
       xTable,
+      xToolbar,
       demo1,
       printEvent1,
       printSelectEvent1,
@@ -446,7 +456,7 @@ export default defineComponent({
       printEvent5,
       demoCodes: [
         `
-        <vxe-toolbar print>
+        <vxe-toolbar ref="xToolbar" print>
           <template #buttons>
             <vxe-button @click="printEvent1">打印表格</vxe-button>
             <vxe-button @click="printSelectEvent1">打印勾选行</vxe-button>
@@ -457,7 +467,8 @@ export default defineComponent({
           border
           ref="xTable"
           height="300"
-          :data="tableData">
+          :print-config="{}"
+          :data="demo1.tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -467,12 +478,13 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeTableInstance } from 'vxe-table'
+        import { defineComponent, reactive, ref, nextTick } from 'vue'
+        import { VXETable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
             const xTable = ref({} as VxeTableInstance)
+            const xToolbar = ref({} as VxeToolbarInstance)
 
             // 打印样式
             const printStyle = \`
@@ -580,8 +592,16 @@ export default defineComponent({
               })
             }
 
+            nextTick(() => {
+              // 将表格和工具栏进行关联
+              const $table = xTable.value
+              const $toolbar = xToolbar.value
+              $table.connect($toolbar)
+            })
+
             return {
               xTable,
+              xToolbar,
               demo1,
               printEvent1,
               printSelectEvent1
