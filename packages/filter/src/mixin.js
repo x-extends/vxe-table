@@ -175,19 +175,20 @@ export default {
     /**
      * 清空指定列的筛选条件
      * 如果为空则清空所有列的筛选条件
-     * @param {String} column 列
+     * @param {String} fieldOrColumn 列
      */
-    _clearFilter (column) {
-      if (arguments.length && XEUtils.isString(column)) {
-        column = this.getColumnByField(column)
-      }
-      const filterStore = this.filterStore
-      if (column) {
-        this.handleClearFilter(column)
+    _clearFilter (fieldOrColumn) {
+      const { filterStore } = this
+      let column
+      if (fieldOrColumn) {
+        column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+        if (column) {
+          this.handleClearFilter(column)
+        }
       } else {
         this.visibleColumn.forEach(this.handleClearFilter)
       }
-      if (!column || column !== filterStore.column) {
+      if (!fieldOrColumn || column !== filterStore.column) {
         Object.assign(filterStore, {
           isAllSelected: false,
           isIndeterminate: false,

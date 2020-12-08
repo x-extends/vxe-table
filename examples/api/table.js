@@ -1739,7 +1739,7 @@ const apis = [
             name: 'copyMethod',
             desc: '重写单元格复制取值的方法，将单元格复制到剪贴板',
             version: 'pro',
-            type: '(params: { row, column }) => string',
+            type: '(params: { row, column, cellValue }) => string',
             enum: '',
             defVal: '',
             list: []
@@ -3532,12 +3532,12 @@ const apis = [
         list: []
       },
       {
-        name: 'isFilter(column)',
+        name: 'isFilter(fieldOrColumn)',
         desc: '判断指定列是否为筛选状态，如果为空则判断所有列',
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: 'column?: string | ColumnInfo',
+        defVal: 'fieldOrColumn?: string | ColumnInfo',
         list: []
       },
       {
@@ -3559,21 +3559,21 @@ const apis = [
         list: []
       },
       {
-        name: 'setActiveCell(row, field)',
+        name: 'setActiveCell(row, fieldOrColumn)',
         desc: '用于 edit-config，激活单元格编辑',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'row: Row, field: string',
+        defVal: 'row: Row, fieldOrColumn: string | ColumnInfo',
         list: []
       },
       {
-        name: 'setSelectCell(row, field)',
+        name: 'setSelectCell(row, fieldOrColumn)',
         desc: '用于 mouse-config.selected，选中指定的单元格',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'row: Row, field: string',
+        defVal: 'row: Row, fieldOrColumn: string | ColumnInfo',
         list: []
       },
       {
@@ -3829,21 +3829,21 @@ const apis = [
         list: []
       },
       {
-        name: 'clearSort()',
+        name: 'clearSort(fieldOrColumn)',
         desc: '手动清空排序条件，数据会恢复成未排序的状态',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: '',
+        defVal: 'fieldOrColumn?: string | ColumnConfig',
         list: []
       },
       {
-        name: 'clearFilter(column)',
+        name: 'clearFilter(fieldOrColumn)',
         desc: '手动清空筛选条件（如果不传 column 则清空所有筛选条件），数据会恢复成未筛选的状态',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'column?: ColumnConfig',
+        defVal: 'fieldOrColumn?: string | ColumnConfig',
         list: []
       },
       {
@@ -4063,12 +4063,12 @@ const apis = [
         list: []
       },
       {
-        name: 'isSort(column)',
+        name: 'isSort(fieldOrColumn)',
         desc: '判断指定列是否为排序状态，如果为空则判断所有列',
         version: '',
         type: 'Boolean',
         enum: '',
-        defVal: 'column?: string | ColumnInfo',
+        defVal: 'fieldOrColumn?: string | ColumnInfo',
         list: []
       },
       {

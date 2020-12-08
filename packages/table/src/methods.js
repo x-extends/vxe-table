@@ -4,8 +4,9 @@ import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 import { clearTableAllStatus } from './util'
+import formats from '../../v-x-e-table/src/formats'
 
-const { getRowid, getRowkey, setCellValue, getCellLabel, hasChildrenList, getColumnList } = UtilTools
+const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
 const { browse, calcHeight, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
 
 const isWebkit = browse['-webkit'] && !browse.edge
@@ -965,15 +966,9 @@ const Methods = {
         const sortRests = allSortMethod({ data: tableData, column: firstOrderColumn.column, property: firstOrderColumn.property, order: firstOrderColumn.order, sortList: orderColumns, $table: this })
         tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
       } else {
-        const params = { $table: this }
         // 兼容 v4
         if (sortMultiple) {
-          tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, property, order }) => {
-            return {
-              field: (column.sortBy ? (XEUtils.isArray(column.sortBy) ? column.sortBy[0] : column.sortBy) : null) || (column.formatter ? (row) => getCellLabel(row, column, params) : property),
-              order
-            }
-          }))
+          tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, property, order }) => [(column.sortBy ? (XEUtils.isArray(column.sortBy) ? column.sortBy[0] : column.sortBy) : null) || (column.formatter ? (row) => this.getCellLabel(row, column) : property), order]))
         } else {
           // 兼容 v2，在 v4 中废弃， sortBy 不能为数组
           let sortByConfs
@@ -985,12 +980,7 @@ const Methods = {
               }
             })
           }
-          tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, property, order }) => {
-            return {
-              field: column.formatter ? (row) => getCellLabel(row, column, params) : property,
-              order
-            }
-          }))
+          tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, property, order }) => [column.formatter ? (row) => this.getCellLabel(row, column) : property, order]))
         }
       }
     }
@@ -3028,13 +3018,13 @@ const Methods = {
    * 如果为空则清空所有列的排序条件
    * @param {String} column 列或字段名
    */
-  clearSort (column) {
+  clearSort (fieldOrColumn) {
     const { sortOpts } = this
-    if (column && XEUtils.isString(column)) {
-      column = this.getColumnByField(column)
-    }
-    if (column) {
-      column.order = null
+    if (fieldOrColumn) {
+      const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+      if (column) {
+        column.order = null
+      }
     } else {
       clearAllSort(this)
     }
@@ -3048,11 +3038,10 @@ const Methods = {
     UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
     return XEUtils.find(this.visibleColumn, column => (column.sortable || column.remoteSort) && column.order)
   },
-  isSort (columnOrField) {
-    let column
-    if (columnOrField) {
-      column = XEUtils.isString(columnOrField) ? this.getColumnByField(columnOrField) : columnOrField
-      return column && column.sortable && column.order
+  isSort (fieldOrColumn) {
+    if (fieldOrColumn) {
+      const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+      return column && column.sortable && !!column.order
     }
     return this.getSortColumns().length > 0
   },
@@ -3081,15 +3070,14 @@ const Methods = {
   },
   /**
    * 判断指定列是否为筛选状态，如果为空则判断所有列
-   * @param {String} field 字段名
+   * @param {String} fieldOrColumn 字段名
    */
-  isFilter (columnOrField) {
-    let column
-    if (columnOrField) {
-      column = XEUtils.isString(columnOrField) ? this.getColumnByField(columnOrField) : columnOrField
-      return column && column.filters && column.filters.some(option => option.checked)
+  isFilter (fieldOrColumn) {
+    const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+    if (column) {
+      return column.filters && column.filters.some(option => option.checked)
     }
-    return this.getCheckedFilters().length
+    return this.getCheckedFilters().length > 0
   },
   /**
    * 判断展开行是否懒加载完成
@@ -3935,6 +3923,43 @@ const Methods = {
       return bodyElem.$el.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
     }
     return null
+  },
+  getCellLabel (row, column) {
+    const formatter = column.formatter
+    const cellValue = UtilTools.getCellValue(row, column)
+    let cellLabel = cellValue
+    if (formatter) {
+      let rest, formatData
+      const { fullAllDataRowMap } = this
+      const colid = column.id
+      const cacheFormat = fullAllDataRowMap.has(row)
+      const formatParams = { cellValue, row, column }
+      if (cacheFormat) {
+        rest = fullAllDataRowMap.get(row)
+        formatData = rest.formatData
+        if (!formatData) {
+          formatData = fullAllDataRowMap.get(row).formatData = {}
+        }
+        if (rest && formatData[colid]) {
+          if (formatData[colid].value === cellValue) {
+            return formatData[colid].label
+          }
+        }
+      }
+      if (XEUtils.isString(formatter)) {
+        const globalFunc = formats.get(formatter)
+        cellLabel = globalFunc ? globalFunc(formatParams) : ''
+      } else if (XEUtils.isArray(formatter)) {
+        const globalFunc = formats.get(formatter[0])
+        cellLabel = globalFunc ? globalFunc(formatParams, ...formatter.slice(1)) : ''
+      } else {
+        cellLabel = formatter(formatParams)
+      }
+      if (formatData) {
+        formatData[colid] = { value: cellValue, label: cellLabel }
+      }
+    }
+    return cellLabel
   }
   /*************************
    * Publish methods

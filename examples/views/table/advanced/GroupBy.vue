@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">行分组，例如：按日期分组显示<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
+    <p class="tip">行分组<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-table
       resizable
