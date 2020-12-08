@@ -350,7 +350,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                     if (opts.original) {
                       cellValue = UtilTools.getCellValue(row, column)
                     } else {
-                      cellValue =  $xetable.getCellLabel(row, column)
+                      cellValue = $xetable.getCellLabel(row, column)
                       if (column.type === 'html') {
                         htmlCellElem.innerHTML = cellValue
                         cellValue = htmlCellElem.innerText.trim()
@@ -405,7 +405,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                 if (opts.original) {
                   cellValue = UtilTools.getCellValue(row, column)
                 } else {
-                  cellValue =  $xetable.getCellLabel(row, column)
+                  cellValue = $xetable.getCellLabel(row, column)
                   if (column.type === 'html') {
                     htmlCellElem.innerHTML = cellValue
                     cellValue = htmlCellElem.innerText.trim()
