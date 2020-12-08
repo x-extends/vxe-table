@@ -1821,7 +1821,7 @@ const apis = [
             name: 'copyMethod',
             desc: '重写单元格复制取值的方法，将单元格复制到剪贴板',
             version: 'pro',
-            type: '({ row, column }) => string',
+            type: '({ row, column, cellValue }) => string',
             enum: '',
             defVal: '',
             list: []

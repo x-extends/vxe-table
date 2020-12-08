@@ -105,7 +105,7 @@ function getLabelData ($xetable, opts, columns, datas) {
               if (opts.original) {
                 cellValue = UtilTools.getCellValue(row, column)
               } else {
-                cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+                cellValue = $xetable.getCellLabel(row, column)
                 if (column.type === 'html') {
                   htmlCellElem.innerHTML = cellValue
                   cellValue = htmlCellElem.innerText.trim()
@@ -156,7 +156,7 @@ function getLabelData ($xetable, opts, columns, datas) {
             if (opts.original) {
               cellValue = UtilTools.getCellValue(row, column)
             } else {
-              cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+              cellValue = $xetable.getCellLabel(row, column)
               if (column.type === 'html') {
                 htmlCellElem.innerHTML = cellValue
                 cellValue = htmlCellElem.innerText.trim()

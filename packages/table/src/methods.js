@@ -3,8 +3,9 @@ import GlobalConfig from '../../conf'
 import Cell from '../../cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
+import formats from '../../v-x-e-table/src/formats'
 
-const { getRowid, getRowkey, setCellValue, getCellLabel, hasChildrenList } = UtilTools
+const { getRowid, getRowkey, setCellValue, hasChildrenList } = UtilTools
 const { browse, calcHeight, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
 
 const isWebkit = browse['-webkit'] && !browse.edge
@@ -897,8 +898,7 @@ const Methods = {
         if (allSortMethod) {
           tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, sortList: orderColumns, $table: this }) || tableData
         } else {
-          const params = { $table: this }
-          const rest = column.sortMethod ? tableData.sort(column.sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => getCellLabel(row, column, params) : column.property)))
+          const rest = column.sortMethod ? tableData.sort(column.sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => this.getCellLabel(row, column) : column.property)))
           tableData = column.order === 'desc' ? rest.reverse() : rest
         }
       }
@@ -3105,12 +3105,12 @@ const Methods = {
   },
   /**
    * 判断指定列是否为筛选状态，如果为空则判断所有列
-   * @param {String} field 字段名
+   * @param {String} fieldOrColumn 字段名或列
    */
-  isFilter (field) {
-    if (field) {
-      const column = this.getColumnByField(field)
-      return column && column.filters && column.filters.some(option => option.checked)
+  isFilter (fieldOrColumn) {
+    const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+    if (column) {
+      return column.filters && column.filters.some(option => option.checked)
     }
     return this.visibleColumn.some(column => column.filters && column.filters.some(option => option.checked))
   },
@@ -4100,6 +4100,53 @@ const Methods = {
       return bodyElem.$el.querySelector(`.vxe-body--row[data-rowid="${rowid}"] .${column.id}`)
     }
     return null
+  },
+  getCellLabel (row, column) {
+    const { formatter } = column
+    const cellValue = UtilTools.getCellValue(row, column)
+    let cellLabel = cellValue
+    if (formatter) {
+      let rest, formatData
+      const colid = column.id
+      const fullAllDataRowMap = this.fullAllDataRowMap
+      const cacheFormat = fullAllDataRowMap.has(row)
+      const formatParams = { cellValue, row, column }
+      if (cacheFormat) {
+        rest = fullAllDataRowMap.get(row)
+        formatData = rest.formatData
+        if (!formatData) {
+          formatData = fullAllDataRowMap.get(row).formatData = {}
+        }
+        if (rest && formatData[colid]) {
+          if (formatData[colid].value === cellValue) {
+            return formatData[colid].label
+          }
+        }
+      }
+      if (XEUtils.isString(formatter)) {
+        if (XEUtils[formatter]) {
+          cellLabel = XEUtils[formatter](cellValue)
+        } else if (formats.get(formatter)) {
+          cellLabel = formats.get(formatter)(formatParams)
+        } else {
+          cellLabel = ''
+        }
+      } else if (XEUtils.isArray(formatter)) {
+        if (XEUtils[formatter[0]]) {
+          cellLabel = XEUtils[formatter[0]](cellValue, ...formatter.slice(1))
+        } else if (formats.get(formatter[0])) {
+          cellLabel = formats.get(formatter[0])(formatParams, ...formatter.slice(1))
+        } else {
+          cellLabel = ''
+        }
+      } else {
+        cellLabel = formatter(formatParams)
+      }
+      if (formatData) {
+        formatData[colid] = { value: cellValue, label: cellLabel }
+      }
+    }
+    return cellLabel
   }
   /*************************
    * Publish methods

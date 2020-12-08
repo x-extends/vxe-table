@@ -294,7 +294,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
           'c--ellipsis': showEllipsis
         }],
         attrs: {
-          title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
+          title: showTitle ? $xetable.getCellLabel(row, column) : null
         }
       }, column.renderCell(h, params)),
       hasDefaultTip ? hasValidError ? h('div', {

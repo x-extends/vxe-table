@@ -437,28 +437,26 @@ export default {
     /**
      * 激活单元格编辑
      */
-    _setActiveCell (row, field) {
-      return this.scrollToRow(row, true).then(() => {
-        if (row && field) {
-          const column = XEUtils.find(this.visibleColumn, column => column.property === field)
-          if (column && column.editRender) {
-            const cell = this.getCell(row, column)
-            if (cell) {
-              this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
-              this.lastCallTime = Date.now()
-            }
+    _setActiveCell (row, fieldOrColumn) {
+      const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+      if (row && column && column.editRender) {
+        return this.scrollToRow(row, true).then(() => {
+          const cell = this.getCell(row, column)
+          if (cell) {
+            this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
+            this.lastCallTime = Date.now()
           }
-        }
-        return this.$nextTick()
-      })
+        })
+      }
+      return this.$nextTick()
     },
     /**
      * 只对 trigger=dblclick 有效，选中单元格
      */
-    _setSelectCell (row, field) {
+    _setSelectCell (row, fieldOrColumn) {
       const { tableData, editOpts, visibleColumn } = this
-      if (row && field && editOpts.trigger !== 'manual') {
-        const column = XEUtils.find(visibleColumn, column => column.property === field)
+      const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+      if (row && column && editOpts.trigger !== 'manual') {
         const rowIndex = tableData.indexOf(row)
         if (rowIndex > -1 && column) {
           const cell = this.getCell(row, column)

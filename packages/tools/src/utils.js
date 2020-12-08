@@ -246,54 +246,6 @@ export const UtilTools = {
   getCellValue (row, column) {
     return XEUtils.get(row, column.property)
   },
-  getCellLabel (row, column, params) {
-    const { formatter } = column
-    const cellValue = UtilTools.getCellValue(row, column)
-    let cellLabel = cellValue
-    if (params && formatter) {
-      let rest, formatData
-      const { $table } = params
-      const colid = column.id
-      const fullAllDataRowMap = $table.fullAllDataRowMap
-      const cacheFormat = fullAllDataRowMap.has(row)
-      const formatParams = { cellValue, row, column }
-      if (cacheFormat) {
-        rest = fullAllDataRowMap.get(row)
-        formatData = rest.formatData
-        if (!formatData) {
-          formatData = fullAllDataRowMap.get(row).formatData = {}
-        }
-        if (rest && formatData[colid]) {
-          if (formatData[colid].value === cellValue) {
-            return formatData[colid].label
-          }
-        }
-      }
-      if (XEUtils.isString(formatter)) {
-        if (XEUtils[formatter]) {
-          cellLabel = XEUtils[formatter](cellValue)
-        } else if (formats.get(formatter)) {
-          cellLabel = formats.get(formatter)(formatParams)
-        } else {
-          cellLabel = ''
-        }
-      } else if (XEUtils.isArray(formatter)) {
-        if (XEUtils[formatter[0]]) {
-          cellLabel = XEUtils[formatter[0]](cellValue, ...formatter.slice(1))
-        } else if (formats.get(formatter[0])) {
-          cellLabel = formats.get(formatter[0])(formatParams, ...formatter.slice(1))
-        } else {
-          cellLabel = ''
-        }
-      } else {
-        cellLabel = formatter(formatParams)
-      }
-      if (formatData) {
-        formatData[colid] = { value: cellValue, label: cellLabel }
-      }
-    }
-    return cellLabel
-  },
   setCellValue (row, column, value) {
     return XEUtils.set(row, column.property, value)
   },
