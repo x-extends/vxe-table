@@ -44,7 +44,7 @@ export interface TableFilterMethods {
    * 如果不传 column 则清空所有筛选条件，数据会恢复成未筛选的状态
    * @param column 字段名
    */
-  clearFilter(column?: VxeTableDefines.ColumnInfo | string): Promise<any>;
+  clearFilter(column?: VxeTableDefines.ColumnInfo | string | null): Promise<any>;
   /**
    * 获取当前筛选的所有列信息
    */

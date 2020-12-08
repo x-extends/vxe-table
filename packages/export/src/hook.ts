@@ -127,7 +127,7 @@ function getElementsByTagName (elem: any, qualifiedName: any) {
   return elem.getElementsByTagName(qualifiedName)
 }
 
-function getTxtCellKey (now: any) {
+function getTxtCellKey (now: number) {
   return `#${now}@${XEUtils.uniqueId()}`
 }
 
@@ -165,7 +165,7 @@ function parseCsvAndTxt (columns: any[], content: string, cellSeparator: string)
         } else {
           cells.forEach((val, colIndex) => {
             if (colIndex < fields.length) {
-              item[fields[colIndex]] = getTxtCellValue(val, vMaps)
+              item[fields[colIndex]] = getTxtCellValue(val.trim(), vMaps)
             }
           })
           rows.push(item)
@@ -350,7 +350,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                     if (opts.original) {
                       cellValue = UtilTools.getCellValue(row, column)
                     } else {
-                      cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+                      cellValue =  $xetable.getCellLabel(row, column)
                       if (column.type === 'html') {
                         htmlCellElem.innerHTML = cellValue
                         cellValue = htmlCellElem.innerText.trim()
@@ -405,7 +405,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                 if (opts.original) {
                   cellValue = UtilTools.getCellValue(row, column)
                 } else {
-                  cellValue = UtilTools.getCellLabel(row, column, { $table: $xetable })
+                  cellValue =  $xetable.getCellLabel(row, column)
                   if (column.type === 'html') {
                     htmlCellElem.innerHTML = cellValue
                     cellValue = htmlCellElem.innerText.trim()

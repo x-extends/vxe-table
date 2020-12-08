@@ -123,21 +123,22 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
       /**
        * 清空指定列的筛选条件
        * 如果为空则清空所有列的筛选条件
-       * @param {String} column 列或字段名
+       * @param {String} fieldOrColumn 列或字段名
        */
-      clearFilter (column) {
+      clearFilter (fieldOrColumn) {
         const { filterStore } = reactData
         const { tableFullColumn } = internalData
         const filterOpts = computeFilterOpts.value
-        if (column && XEUtils.isString(column)) {
-          column = $xetable.getColumnByField(column)
-        }
-        if (column) {
-          filterPrivateMethods.handleClearFilter(column)
+        let column
+        if (fieldOrColumn) {
+          column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
+          if (column) {
+            filterPrivateMethods.handleClearFilter(column)
+          }
         } else {
           tableFullColumn.forEach(filterPrivateMethods.handleClearFilter)
         }
-        if (!column || column !== filterStore.column) {
+        if (!fieldOrColumn || column !== filterStore.column) {
           Object.assign(filterStore, {
             isAllSelected: false,
             isIndeterminate: false,

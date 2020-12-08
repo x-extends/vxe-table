@@ -82,8 +82,8 @@ function getFooterContent (params: any) {
 }
 
 function getDefaultCellLabel (params: any) {
-  const { row, column } = params
-  return UtilTools.formatText(UtilTools.getCellLabel(row, column, params), 1)
+  const { $table, row, column } = params
+  return UtilTools.formatText($table.getCellLabel(row, column), 1)
 }
 
 export const Cell = {

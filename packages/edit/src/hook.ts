@@ -367,22 +367,19 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       setActiveRow (row) {
         const { visibleColumn } = internalData
-        return $xetable.setActiveCell(row, XEUtils.find(visibleColumn, column => column.editRender).property)
+        return $xetable.setActiveCell(row, XEUtils.find(visibleColumn, column => column.editRender))
       },
       /**
        * 激活单元格编辑
        */
-      setActiveCell (row, field) {
-        const { visibleColumn } = internalData
-        if (row && field) {
-          const column = XEUtils.find(visibleColumn, column => column.property === field)
+      setActiveCell (row, fieldOrColumn) {
+        const column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
+        if (row && column && column.editRender) {
           return $xetable.scrollToRow(row, column).then(() => {
-            if (column && column.editRender) {
-              const cell = $xetable.getCell(row, column)
-              if (cell) {
-                editPrivateMethods.handleActived({ row, rowIndex: $xetable.getRowIndex(row), column, columnIndex: $xetable.getColumnIndex(column), cell, $table: $xetable })
-                internalData._lastCallTime = Date.now()
-              }
+            const cell = $xetable.getCell(row, column)
+            if (cell) {
+              editPrivateMethods.handleActived({ row, rowIndex: $xetable.getRowIndex(row), column, columnIndex: $xetable.getColumnIndex(column), cell, $table: $xetable })
+              internalData._lastCallTime = Date.now()
             }
             return nextTick()
           })
@@ -392,12 +389,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       /**
        * 只对 trigger=dblclick 有效，选中单元格
        */
-      setSelectCell (row, field) {
+      setSelectCell (row, fieldOrColumn) {
         const { tableData } = reactData
         const { visibleColumn } = internalData
         const editOpts = computeEditOpts.value
-        if (row && field && editOpts.trigger !== 'manual') {
-          const column = XEUtils.find(visibleColumn, column => column.property === field)
+        const column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
+        if (row && column && editOpts.trigger !== 'manual') {
           const rowIndex = $xetable.findRowIndexOf(tableData, row)
           if (rowIndex > -1 && column) {
             const cell = $xetable.getCell(row, column)

@@ -439,16 +439,12 @@ export interface TablePublicMethods {
   /**
    * 手动清空排序条件，数据会恢复成未排序的状态
    */
-  clearSort(): Promise<any>;
-  clearSort(field: string | null): Promise<any>;
-  clearSort(column: VxeTableDefines.ColumnInfo | null): Promise<any>;
+  clearSort(fieldOrColumn?: string | VxeTableDefines.ColumnInfo | null): Promise<any>;
   /**
    * 判断指定列是否为排序状态，如果为空则判断所有列
    * @param columnOrField
    */
-  isSort(): boolean;
-  isSort(field: string): boolean;
-  isSort(column: VxeTableDefines.ColumnInfo): boolean;
+  isSort(fieldOrColumn: string | VxeTableDefines.ColumnInfo): boolean;
   /**
    * 获取当前排序的列信息
    */
@@ -461,8 +457,7 @@ export interface TablePublicMethods {
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param column 列对象
    */
-  isFilter(field: string): boolean;
-  isFilter(column: VxeTableDefines.ColumnInfo): boolean;
+  isFilter(fieldOrColumn: string | VxeTableDefines.ColumnInfo): boolean;
   /**
    * 用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成
    * @param row 指定行
@@ -679,7 +674,8 @@ export interface TablePrivateMethods {
   triggerHoverEvent(evnt: any, params: any): void;
   setHoverRow(row: any): void;
   clearHoverRow(): void;
-  getCell(row: any, column: any): HTMLTableDataCellElement | null;
+  getCell(row: any, column: VxeTableDefines.ColumnInfo): HTMLTableDataCellElement | null;
+  getCellLabel (row: any, column: VxeTableDefines.ColumnInfo): any;
   findRowIndexOf(list: any[], row: any): number;
   eqRow(row1: any, row2: any): boolean;
 }
@@ -1717,7 +1713,7 @@ export namespace VxeTableDefines {
     checked: boolean;
     halfChecked: boolean;
     disabled: boolean;
-    order: string;
+    order: VxeTablePropTypes.SortOrder;
     renderWidth: number;
     renderHeight: number;
     resizeWidth: number;

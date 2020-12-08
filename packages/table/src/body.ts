@@ -241,7 +241,7 @@ export default defineComponent({
               'c--tooltip': showTooltip,
               'c--ellipsis': showEllipsis
             }],
-            title: showTitle ? UtilTools.getCellLabel(row, column, params) : null
+            title: showTitle ? $xetable.getCellLabel(row, column) : null
           }, column.renderCell(params))
         )
         if (hasDefaultTip && hasValidError) {

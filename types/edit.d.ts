@@ -98,13 +98,13 @@ export interface TableEditMethods {
    * @param row 指定行
    * @param field 字段名
    */
-  setActiveCell(row: RowInfo, field: string): Promise<any>;
+  setActiveCell(row: RowInfo, fieldOrColumn: string | VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 用于 mouse-config.mouse-config，选中某个单元格
    * @param row 指定行
    * @param field 字段名
    */
-  setSelectCell(row: RowInfo, field: string): Promise<any>;
+  setSelectCell(row: RowInfo, fieldOrColumn: string | VxeTableDefines.ColumnInfo): Promise<any>;
 }
 
 export interface TableEditPrivateMethods {

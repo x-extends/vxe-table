@@ -2,6 +2,7 @@ import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPu
 import XEUtils from 'xe-utils/ctor'
 import { UtilTools, DomTools, GlobalEvent, createResizeEvent, XEResizeObserver } from '../../tools'
 import { useSize } from '../../hooks/size'
+import formats from '../../v-x-e-table/src/formats'
 
 import Cell from './cell'
 import GlobalConfig from '../../conf'
@@ -13,7 +14,7 @@ import { eqCellNull, getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, r
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance } from '../../../types/vxe-table'
 
-const { setCellValue, getCellLabel, hasChildrenList, getColumnList } = UtilTools
+const { setCellValue, hasChildrenList, getColumnList } = UtilTools
 const { browse, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
 
 const isWebkit = browse['-webkit'] && !browse.edge
@@ -1116,13 +1117,7 @@ export default defineComponent({
             const sortRests = allSortMethod({ data: tableData, sortList: orderColumns, $table: $xetable })
             tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
           } else {
-            const params = { $table: $xetable }
-            tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, property, order }) => {
-              return {
-                field: column.sortBy || (column.formatter ? (row: any) => getCellLabel(row, column, params) : property),
-                order
-              }
-            }))
+            tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, property, order }) => [column.sortBy || (column.formatter ? (row: any) => tablePrivateMethods.getCellLabel(row, column) : property), order]))
           }
         }
       }
@@ -2857,15 +2852,15 @@ export default defineComponent({
       /**
        * 清空指定列的排序条件
        * 如果为空则清空所有列的排序条件
-       * @param {String} columnOrField 列或字段名
+       * @param {String} fieldOrColumn 列或字段名
        */
-      clearSort (columnOrField?: any) {
+      clearSort (fieldOrColumn) {
         const sortOpts = computeSortOpts.value
-        if (columnOrField && XEUtils.isString(columnOrField)) {
-          columnOrField = tableMethods.getColumnByField(columnOrField)
-        }
-        if (columnOrField) {
-          columnOrField.order = null
+        if (fieldOrColumn) {
+          const column = XEUtils.isString(fieldOrColumn) ? tableMethods.getColumnByField(fieldOrColumn) : fieldOrColumn
+          if (column) {
+            column.order = null
+          }
         } else {
           clearAllSort()
         }
@@ -2874,11 +2869,10 @@ export default defineComponent({
         }
         return nextTick()
       },
-      isSort (columnOrField?: any) {
-        let column
-        if (columnOrField) {
-          column = XEUtils.isString(columnOrField) ? tableMethods.getColumnByField(columnOrField) : columnOrField
-          return column && column.sortable && column.order
+      isSort (fieldOrColumn) {
+        if (fieldOrColumn) {
+          const column = XEUtils.isString(fieldOrColumn) ? tableMethods.getColumnByField(fieldOrColumn) : fieldOrColumn
+          return column && column.sortable && !!column.order
         }
         return tableMethods.getSortColumns().length > 0
       },
@@ -2909,15 +2903,14 @@ export default defineComponent({
       },
       /**
        * 判断指定列是否为筛选状态，如果为空则判断所有列
-       * @param {String} field 字段名
+       * @param {String} fieldOrColumn 字段名
        */
-      isFilter (columnOrField: any) {
-        let column
-        if (columnOrField) {
-          column = XEUtils.isString(columnOrField) ? tableMethods.getColumnByField(columnOrField) : columnOrField
-          return column && column.filters && column.filters.some((option: any) => option.checked)
+      isFilter (fieldOrColumn) {
+        const column = XEUtils.isString(fieldOrColumn) ? tableMethods.getColumnByField(fieldOrColumn) : fieldOrColumn
+        if (column) {
+          return column.filters && column.filters.some((option) => option.checked)
         }
-        return $xetable.getCheckedFilters().length
+        return $xetable.getCheckedFilters().length > 0
       },
       /**
        * 判断展开行是否懒加载完成
@@ -4677,6 +4670,43 @@ export default defineComponent({
           return bodyElem.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
         }
         return null
+      },
+      getCellLabel (row, column) {
+        const formatter = column.formatter
+        const cellValue = UtilTools.getCellValue(row, column)
+        let cellLabel = cellValue
+        if (formatter) {
+          let rest, formatData
+          const { fullAllDataRowMap } = internalData
+          const colid = column.id
+          const cacheFormat = fullAllDataRowMap.has(row)
+          const formatParams = { cellValue, row, column }
+          if (cacheFormat) {
+            rest = fullAllDataRowMap.get(row)
+            formatData = rest.formatData
+            if (!formatData) {
+              formatData = fullAllDataRowMap.get(row).formatData = {}
+            }
+            if (rest && formatData[colid]) {
+              if (formatData[colid].value === cellValue) {
+                return formatData[colid].label
+              }
+            }
+          }
+          if (XEUtils.isString(formatter)) {
+            const globalFunc = formats.get(formatter)
+            cellLabel = globalFunc ? globalFunc(formatParams) : ''
+          } else if (XEUtils.isArray(formatter)) {
+            const globalFunc = formats.get(formatter[0])
+            cellLabel = globalFunc ? globalFunc(formatParams, ...formatter.slice(1)) : ''
+          } else {
+            cellLabel = formatter(formatParams)
+          }
+          if (formatData) {
+            formatData[colid] = { value: cellValue, label: cellLabel }
+          }
+        }
+        return cellLabel
       },
       findRowIndexOf (list, row) {
         return row ? XEUtils.findIndexOf(list, item => $xetable.eqRow(item, row)) : -1

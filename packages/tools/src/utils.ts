@@ -1,6 +1,5 @@
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
-import formats from '../../v-x-e-table/src/formats'
 
 import { VxeTableConstructor } from '../../../types/vxe-table'
 
@@ -61,45 +60,6 @@ export const UtilTools = {
   },
   getCellValue (row: any, column: any) {
     return XEUtils.get(row, column.property)
-  },
-  getCellLabel (row: any, column: any, params: { $table: VxeTableConstructor }) {
-    const formatter: string | any[] | Function = column.formatter
-    const cellValue = UtilTools.getCellValue(row, column)
-    let cellLabel = cellValue
-    if (params && formatter) {
-      let rest, formatData
-      const { $table } = params
-      const { internalData } = $table
-      const { fullAllDataRowMap } = internalData
-      const colid = column.id
-      const cacheFormat = fullAllDataRowMap.has(row)
-      const formatParams = { cellValue, row, column }
-      if (cacheFormat) {
-        rest = fullAllDataRowMap.get(row)
-        formatData = rest.formatData
-        if (!formatData) {
-          formatData = fullAllDataRowMap.get(row).formatData = {}
-        }
-        if (rest && formatData[colid]) {
-          if (formatData[colid].value === cellValue) {
-            return formatData[colid].label
-          }
-        }
-      }
-      if (XEUtils.isString(formatter)) {
-        const globalFunc = formats.get(formatter)
-        cellLabel = globalFunc ? globalFunc(formatParams) : ''
-      } else if (XEUtils.isArray(formatter)) {
-        const globalFunc = formats.get(formatter[0])
-        cellLabel = globalFunc ? globalFunc(formatParams, ...formatter.slice(1)) : ''
-      } else {
-        cellLabel = formatter(formatParams)
-      }
-      if (formatData) {
-        formatData[colid] = { value: cellValue, label: cellLabel }
-      }
-    }
-    return cellLabel
   },
   setCellValue (row: any, column: any, value: any) {
     return XEUtils.set(row, column.property, value)
