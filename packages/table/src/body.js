@@ -68,7 +68,8 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     editRules,
     validOpts,
     editStore,
-    validStore
+    validStore,
+    tooltipConfig
   } = $xetable
   const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
@@ -96,7 +97,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     showEllipsis = hasEllipsis = true
   }
   // hover 进入事件
-  if (showTitle || showTooltip || enabled || bindMouseenter) {
+  if (showTitle || showTooltip || enabled || bindMouseenter || tooltipConfig) {
     tdOns.mouseenter = evnt => {
       if (isOperateMouse($xetable)) {
         return
@@ -113,7 +114,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // hover 退出事件
-  if (showTooltip || enabled || bindMouseleave) {
+  if (showTooltip || enabled || bindMouseleave || tooltipConfig) {
     tdOns.mouseleave = evnt => {
       if (isOperateMouse($xetable)) {
         return
