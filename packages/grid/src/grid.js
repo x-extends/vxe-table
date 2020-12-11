@@ -210,7 +210,7 @@ export default {
           data: tableData,
           rowClassName: this.handleRowClassName
         })
-        if ((proxyOpts.seq || proxyOpts.index) && pagerConfig) {
+        if ((proxyOpts.seq || proxyOpts.index) && UtilTools.isEnableConf(pagerConfig)) {
           props.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
@@ -291,11 +291,11 @@ export default {
   },
   render (h) {
     const { $scopedSlots, vSize, isZMax } = this
-    const hasForm = !!($scopedSlots.form || this.formConfig)
-    const hasToolbar = !!($scopedSlots.toolbar || this.toolbarConfig || this.toolbar)
+    const hasForm = !!($scopedSlots.form || UtilTools.isEnableConf(this.formConfig))
+    const hasToolbar = !!($scopedSlots.toolbar || UtilTools.isEnableConf(this.toolbarConfig) || this.toolbar)
     const hasTop = !!$scopedSlots.top
     const hasBottom = !!$scopedSlots.bottom
-    const hasPager = !!($scopedSlots.pager || this.pagerConfig)
+    const hasPager = !!($scopedSlots.pager || UtilTools.isEnableConf(this.pagerConfig))
     return h('div', {
       class: ['vxe-grid', {
         [`size--${vSize}`]: vSize,
@@ -446,7 +446,7 @@ export default {
     initProxy () {
       const { proxyInited, proxyConfig, proxyOpts, formConfig, formOpts } = this
       if (proxyConfig) {
-        if (formConfig && proxyOpts.form && formOpts.items) {
+        if (UtilTools.isEnableConf(formConfig) && proxyOpts.form && formOpts.items) {
           const formData = {}
           formOpts.items.forEach(({ field, itemRender }) => {
             if (field) {
@@ -552,7 +552,9 @@ export default {
               if (isReload) {
                 tablePage.currentPage = 1
               }
-              params.page = tablePage
+              if (UtilTools.isEnableConf(pagerConfig)) {
+                params.page = tablePage
+              }
             }
             if (isInited || isReload) {
               const defaultSort = $xetable.sortOpts.defaultSort
@@ -582,7 +584,7 @@ export default {
               .then(rest => {
                 this.tableLoading = false
                 if (rest) {
-                  if (pagerConfig) {
+                  if (UtilTools.isEnableConf(pagerConfig)) {
                     tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
                     this.tableData = XEUtils.get(rest, props.result || props.data || 'result') || []
                   } else {
@@ -726,7 +728,7 @@ export default {
     },
     getFormItems (index) {
       const { formConfig } = this
-      const items = formConfig && formConfig.items ? formConfig.items : []
+      const items = UtilTools.isEnableConf(formConfig) && formConfig.items ? formConfig.items : []
       return arguments.length ? items[index] : items
     },
     getPendingRecords () {

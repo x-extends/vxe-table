@@ -177,13 +177,19 @@ const GlobalConfig = {
     // zoomConfig: {
     //   escRestore: true
     // },
-    // pagerConfig: {
-    //   perfect: false
-    // },
-    // toolbarConfig: {
-    //   perfect: false
-    // },
+    formConfig: {
+      enabled: true
+    },
+    pagerConfig: {
+      enabled: true
+      // perfect: false
+    },
+    toolbarConfig: {
+      enabled: true
+      // perfect: false
+    },
     proxyConfig: {
+      enabled: true,
       autoLoad: true,
       message: true,
       props: {

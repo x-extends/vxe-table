@@ -2035,7 +2035,7 @@ const Methods = {
           //   evnt.preventDefault()
           // }
           // 如果是按下非功能键之外允许直接编辑
-          if (selected.column && selected.row && UtilTools.isEditCol(selected.column)) {
+          if (selected.column && selected.row && UtilTools.isEnableConf(selected.column.editRender)) {
             if (!keyboardOpts.editMethod || !(keyboardOpts.editMethod(selected.args, evnt) === false)) {
               if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
                 setCellValue(selected.row, selected.column, null)

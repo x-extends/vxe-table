@@ -340,6 +340,15 @@ const apis = [
         enum: '',
         defVal: 'false',
         list: []
+      },
+      {
+        name: 'before-hide-method',
+        desc: '在窗口隐藏之前执行，可以返回 Error 阻止关闭，支持异步',
+        version: '2.10.6',
+        type: 'Function/Promise<any>',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },

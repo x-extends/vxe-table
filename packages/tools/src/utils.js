@@ -295,8 +295,8 @@ export const UtilTools = {
   },
   getColMinWidth (_vm, column) {
     const { sortOpts, filterOpts, editOpts } = _vm
-    const { type, filters, sortable, remoteSort, titleHelp } = column
-    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(UtilTools.isEditCol(column) && editOpts.showIcon, 32)
+    const { type, filters, sortable, remoteSort, titleHelp, editRender } = column
+    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(UtilTools.isEnableConf(editRender) && editOpts.showIcon, 32)
   },
   parseFile (file) {
     const name = file.name
@@ -308,8 +308,8 @@ export const UtilTools = {
   isNumVal (num) {
     return !isNaN(parseFloat('' + num))
   },
-  isEditCol (column) {
-    return column && column.editRender && column.editRender.editable !== false
+  isEnableConf (conf) {
+    return conf && conf.enabled !== false
   }
 }
 

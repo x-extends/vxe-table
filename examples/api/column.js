@@ -614,9 +614,9 @@ const apis = [
             list: []
           },
           {
-            name: 'editable',
-            desc: '是否启用编辑',
-            version: '2.10.5',
+            name: 'enabled',
+            desc: '是否启用',
+            version: '2.10.6',
             type: 'boolean',
             enum: '',
             defVal: 'true',
