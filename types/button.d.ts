@@ -135,7 +135,10 @@ export namespace VxeButtonDefines {
 
 export interface VxeButtonListeners {
   onClick?: VxeButtonEvents.Click;
+  click?: VxeButtonEvents.Click;
+
   onDropdownClick?: VxeButtonEvents.DropdownClick;
+  dropdownClick?: VxeButtonEvents.DropdownClick;
 }
 
 export namespace VxeButtonEvents {

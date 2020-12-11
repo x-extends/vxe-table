@@ -171,7 +171,7 @@ export default defineComponent({
               importDataEvent
             }
           }
-        }
+        })
         `
       ]
     }

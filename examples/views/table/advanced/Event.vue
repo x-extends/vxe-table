@@ -1,13 +1,16 @@
 <template>
   <div>
-    <p class="tip">表格事件绑定，通过设置 <table-api-link prop="cell-click"/>、<table-api-link prop="cell-dblclick"/> ...等常用事件</p>
+    <p class="tip">
+      表格事件绑定，通过设置 <table-api-link prop="cell-click"/>、<table-api-link prop="cell-dblclick"/> ...等常用事件<br>
+      <span class="red">（注：部分特殊事件需要开启对应的参数后才能有效）</span>
+    </p>
 
     <vxe-table
       border
       highlight-hover-row
-      show-overflow
       resizable
       height="400"
+      :tooltip-config="{}"
       :menu-config="{}"
       :data="tableData"
       @header-cell-click="headerCellClickEvent"
@@ -18,6 +21,9 @@
       @cell-mouseenter="cellMouseenterEvent"
       @cell-mouseleave="cellMouseleaveEvent"
       @cell-menu="cellContextMenuEvent"
+      @footer-cell-click="footerCellClickEvent"
+      @footer-cell-dblclick="footerCellDBLClickEvent"
+      @footer-cell-menu="footerCellContextMenuEvent"
       @scroll="scrollEvent">
       <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
@@ -64,7 +70,7 @@ export default defineComponent({
     }
 
     const headerCellContextMenuEvent: VxeTableEvents.HeaderCellMenu = ({ column }) => {
-      console.log(`右键列 ${column.title}`)
+      console.log(`表头单元格右键 ${column.title}`)
     }
 
     const cellClickEvent: VxeTableEvents.CellClick = ({ column }) => {
@@ -76,15 +82,27 @@ export default defineComponent({
     }
 
     const cellMouseenterEvent: VxeTableEvents.CellMouseenter = ({ column }) => {
-      console.log(`鼠标进入单元格${column.title}`)
+      console.log(`单元格鼠标进入${column.title}`)
     }
 
     const cellMouseleaveEvent: VxeTableEvents.CellMouseleave = ({ column }) => {
-      console.log(`鼠标离开单元格${column.title}`)
+      console.log(`单元格鼠标离开${column.title}`)
     }
 
     const cellContextMenuEvent: VxeTableEvents.CellMenu = ({ row }) => {
-      console.log(`右键行 ${row.name}`)
+      console.log(`单元格右键行 ${row.name}`)
+    }
+
+    const footerCellClickEvent: VxeTableEvents.FooterCellClick = ({ column }) => {
+      console.log(`表尾单元格点击${column.title}`)
+    }
+
+    const footerCellDBLClickEvent: VxeTableEvents.FooterCellDblclick = ({ column }) => {
+      console.log(`表尾单元格双击${column.title}`)
+    }
+
+    const footerCellContextMenuEvent: VxeTableEvents.FooterCellMenu = ({ column }) => {
+      console.log(`表尾单元格右键 ${column.title}`)
     }
 
     const scrollEvent: VxeTableEvents.Scroll = ({ scrollTop, scrollLeft }) => {
@@ -101,15 +119,18 @@ export default defineComponent({
       cellMouseenterEvent,
       cellMouseleaveEvent,
       cellContextMenuEvent,
+      footerCellClickEvent,
+      footerCellDBLClickEvent,
+      footerCellContextMenuEvent,
       scrollEvent,
       demoCodes: [
         `
         <vxe-table
           border
           highlight-hover-row
-          show-overflow
           resizable
           height="400"
+          :tooltip-config="{}"
           :menu-config="{}"
           :data="tableData"
           @header-cell-click="headerCellClickEvent"
@@ -120,6 +141,9 @@ export default defineComponent({
           @cell-mouseenter="cellMouseenterEvent"
           @cell-mouseleave="cellMouseleaveEvent"
           @cell-menu="cellContextMenuEvent"
+          @footer-cell-click="footerCellClickEvent"
+          @footer-cell-dblclick="footerCellDBLClickEvent"
+          @footer-cell-menu="footerCellContextMenuEvent"
           @scroll="scrollEvent">
           <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
@@ -157,7 +181,7 @@ export default defineComponent({
             }
 
             const headerCellContextMenuEvent: VxeTableEvents.HeaderCellMenu = ({ column }) => {
-              console.log(\`右键列 \${column.title}\`)
+              console.log(\`表头单元格右键 \${column.title}\`)
             }
 
             const cellClickEvent: VxeTableEvents.CellClick = ({ column }) => {
@@ -169,15 +193,27 @@ export default defineComponent({
             }
 
             const cellMouseenterEvent: VxeTableEvents.CellMouseenter = ({ column }) => {
-              console.log(\`鼠标进入单元格\${column.title}\`)
+              console.log(\`单元格鼠标进入\${column.title}\`)
             }
 
             const cellMouseleaveEvent: VxeTableEvents.CellMouseleave = ({ column }) => {
-              console.log(\`鼠标离开单元格\${column.title}\`)
+              console.log(\`单元格鼠标离开\${column.title}\`)
             }
 
             const cellContextMenuEvent: VxeTableEvents.CellMenu = ({ row }) => {
-              console.log(\`右键行 \${row.name}\`)
+              console.log(\`单元格右键行 \${row.name}\`)
+            }
+
+            const footerCellClickEvent: VxeTableEvents.FooterCellClick = ({ column }) => {
+              console.log(\`表尾单元格点击\${column.title}\`)
+            }
+
+            const footerCellDBLClickEvent: VxeTableEvents.FooterCellDblclick = ({ column }) => {
+              console.log(\`表尾单元格双击\${column.title}\`)
+            }
+
+            const footerCellContextMenuEvent: VxeTableEvents.FooterCellMenu = ({ column }) => {
+              console.log(\`表尾单元格右键 \${column.title}\`)
             }
 
             const scrollEvent: VxeTableEvents.Scroll = ({ scrollTop, scrollLeft }) => {
@@ -194,10 +230,13 @@ export default defineComponent({
               cellMouseenterEvent,
               cellMouseleaveEvent,
               cellContextMenuEvent,
+              footerCellClickEvent,
+              footerCellDBLClickEvent,
+              footerCellContextMenuEvent,
               scrollEvent
             }
           }
-        }
+        })
         `
       ]
     }

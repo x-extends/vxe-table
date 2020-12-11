@@ -71,6 +71,7 @@ export namespace VxeCheckboxDefines {
 
 export interface VxeCheckboxListeners {
   onChange?: VxeCheckboxEvents.Change;
+  change?: VxeCheckboxEvents.Change;
 }
 
 export namespace VxeCheckboxEvents {

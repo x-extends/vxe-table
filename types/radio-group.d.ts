@@ -51,6 +51,7 @@ export namespace VxeRadioGroupDefines {
 
 export interface VxeRadioGroupListeners {
   onChange?: VxeRadioGroupEvents.Change;
+  change?: VxeRadioGroupEvents.Change;
 }
 
 export namespace VxeRadioGroupEvents {

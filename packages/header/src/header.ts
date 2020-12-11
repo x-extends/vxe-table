@@ -1,7 +1,8 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, watch } from 'vue'
 import XEUtils from 'xe-utils/ctor'
-import { UtilTools, DomTools } from '../../tools'
+import { DomTools } from '../../tools'
 import { convertToRows } from './util'
+import { getColMinWidth } from '../../table/src/util'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/vxe-table'
 
@@ -52,7 +53,7 @@ export default defineComponent({
       const pos = DomTools.getOffsetPos(dragBtnElem, wrapperElem)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
-      const minInterval = UtilTools.getColMinWidth($xetable, column) - dragBtnOffsetWidth // 列之间的最小间距
+      const minInterval = getColMinWidth($xetable, column) - dragBtnOffsetWidth // 列之间的最小间距
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
       let dragPosLeft = pos.left + dragBtnOffsetWidth
       const domMousemove = document.onmousemove

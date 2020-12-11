@@ -304,11 +304,22 @@ export namespace VxeModalDefines {
 
 export interface VxeModalListeners {
   onShow?: VxeModalEvents.Show;
+  show?: VxeModalEvents.Show;
+
   onHide?: VxeModalEvents.Hide;
+  hide?: VxeModalEvents.Hide;
+
   onConfirm?: VxeModalEvents.Confirm;
+  confirm?: VxeModalEvents.Confirm;
+
   onCancel?: VxeModalEvents.Cancel;
+  cancel?: VxeModalEvents.Cancel;
+
   onClose?: VxeModalEvents.Close;
+  close?: VxeModalEvents.Close;
+
   onZoom?: VxeModalEvents.Zoom;
+  zoom?: VxeModalEvents.Zoom;
 }
 
 export namespace VxeModalEvents {

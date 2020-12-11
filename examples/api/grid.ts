@@ -52,6 +52,15 @@ const apis = [
         defVal: '继承 setup.grid.formConfig',
         list: XEUtils.clone(formProps, true).list.map((item: any) => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
           {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'items',
             desc: '项配置',
             version: '',
@@ -71,34 +80,46 @@ const apis = [
         type: 'any',
         enum: '',
         defVal: '继承 setup.grid.toolbarConfig',
-        list: XEUtils.clone(toolbarProps.list, true).concat([{
-          name: 'zoom',
-          desc: '是否允许最大化显示',
-          version: '',
-          type: 'any',
-          enum: '',
-          defVal: '',
-          list: [
-            {
-              name: 'iconIn',
-              desc: '自定义最大化图标',
-              version: '',
-              type: 'string',
-              enum: '',
-              defVal: '',
-              list: []
-            },
-            {
-              name: 'iconOut',
-              desc: '自定义还原图标',
-              version: '',
-              type: 'string',
-              enum: '',
-              defVal: '',
-              list: []
-            }
-          ]
-        }, toolbarSlots])
+        list: XEUtils.clone(toolbarProps.list, true).concat([
+          {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'zoom',
+            desc: '是否允许最大化显示',
+            version: '',
+            type: 'any',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'iconIn',
+                desc: '自定义最大化图标',
+                version: '',
+                type: 'string',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'iconOut',
+                desc: '自定义还原图标',
+                version: '',
+                type: 'string',
+                enum: '',
+                defVal: '',
+                list: []
+              }
+            ]
+          },
+          toolbarSlots
+        ])
       },
       {
         name: 'pager-config',
@@ -108,6 +129,15 @@ const apis = [
         enum: '',
         defVal: '继承 setup.grid.pagerConfig',
         list: XEUtils.mapTree(pagerProps.list.filter((item: any) => !['size', 'loading'].includes(item.name)), (item: any) => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
+          {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
           pagerSlots
         ])
       },
@@ -119,6 +149,15 @@ const apis = [
         enum: '',
         defVal: '继承 setup.grid.proxyConfig',
         list: [
+          {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
           {
             name: 'autoLoad',
             desc: '是否自动加载查询数据',

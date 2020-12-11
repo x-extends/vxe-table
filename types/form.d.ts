@@ -183,7 +183,19 @@ export namespace VxeFormDefines {
   export interface ResetEventParams extends FormEventParams, ToggleCollapseParams { }
 }
 
-export interface VxeFormListeners { }
+export interface VxeFormListeners {
+  onToggleCollapse?: VxeFormEvents.ToggleCollapse;
+  toggleCollapse?: VxeFormEvents.ToggleCollapse;
+
+  onSubmit?: VxeFormEvents.Submit;
+  submit?: VxeFormEvents.Submit;
+  
+  onSubmitInvalid?: VxeFormEvents.SubmitInvalid;
+  submitInvalid?: VxeFormEvents.SubmitInvalid;
+  
+  onReset?: VxeFormEvents.Reset;
+  reset?: VxeFormEvents.Reset;
+}
 
 export namespace VxeFormEvents {
   export type ToggleCollapse = (params: VxeFormDefines.ToggleCollapseEventParams) => void;

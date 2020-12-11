@@ -428,6 +428,7 @@ export default defineComponent({
     const renderItems = () => {
       const { rules, data } = props
       const { formItems, collapseAll } = reactData
+      const validOpts = computeValidOpts.value
       return formItems.map((item: any, index: any) => {
         const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
         const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
@@ -490,7 +491,7 @@ export default defineComponent({
                     class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
                   })
                 ]) : null,
-                errRule ? h('div', {
+                errRule && validOpts.showMessage ? h('div', {
                   class: 'vxe-form--item-valid',
                   style: errRule.maxWidth ? {
                     width: `${errRule.maxWidth}px`

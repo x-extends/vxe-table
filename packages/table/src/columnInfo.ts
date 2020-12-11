@@ -23,6 +23,12 @@ export class ColumnInfo {
       if (_vm.type && types.indexOf(_vm.type) === -1) {
         UtilTools.warn('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
       }
+      if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
+        UtilTools.warn('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
+      }
+      if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
+        UtilTools.warn('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
+      }
       if (_vm.cellRender && _vm.editRender) {
         UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
       }

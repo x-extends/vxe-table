@@ -113,7 +113,10 @@ export namespace VxeSelectDefines {
   export interface ChangeEventParams extends SelectEventParams, ChangeParams { }
 }
 
-export interface VxeSelectListeners { }
+export interface VxeSelectListeners {
+  onChange?: VxeSelectEvents.Change;
+  change?: VxeSelectEvents.Change;
+}
 
 export namespace VxeSelectEvents {
   export type Change = (params: VxeSelectDefines.ChangeEventParams) => void;

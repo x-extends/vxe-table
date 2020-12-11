@@ -1,14 +1,8 @@
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 
-import { VxeTableConstructor } from '../../../types/vxe-table'
-
 let zindexIndex = 0
 let lastZindex = 1
-
-function getColFuncWidth (isExists: any, defaultWidth = 16) {
-  return isExists ? defaultWidth : 0
-}
 
 function getLog (message: string, params?: any) {
   return `[vxe-table] ${GlobalConfig.i18n(message, params)}`
@@ -66,15 +60,6 @@ export const UtilTools = {
   },
   hasChildrenList (item: any) {
     return item && item.children && item.children.length > 0
-  },
-  getColMinWidth ($xetable: VxeTableConstructor, column: any) {
-    const { computeMaps } = $xetable
-    const { computeSortOpts, computeFilterOpts, computeEditOpts } = computeMaps
-    const sortOpts = computeSortOpts.value
-    const filterOpts = computeFilterOpts.value
-    const editOpts = computeEditOpts.value
-    const { type, filters, sortable, editRender, titleHelp } = column
-    return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable) && sortOpts.showIcon) + getColFuncWidth(editRender && editOpts.showIcon, 32)
   },
   parseFile (file: any) {
     const name = file.name

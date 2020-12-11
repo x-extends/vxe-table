@@ -137,7 +137,10 @@ export namespace VxeListDefines {
   export interface ScrollEventParams extends ListEventParams, ScrollParams { }
 }
 
-export interface VxeListListeners { }
+export interface VxeListListeners {
+  onScroll?: VxeListEvents.Scroll;
+  scroll?: VxeListEvents.Scroll;
+}
 
 export namespace VxeListEvents {
   export type Scroll = (params: VxeListDefines.ScrollEventParams) => void;

@@ -136,7 +136,10 @@ export namespace VxePagerDefines {
   export interface PageChangeEventParams extends PagerEventParams, PageChangeParams { }
 }
 
-export interface VxePagerListeners { }
+export interface VxePagerListeners {
+  onPageChange?: VxePagerEvents.PageChange;
+  pageChange?: VxePagerEvents.PageChange;
+}
 
 export namespace VxePagerEvents {
   export type PageChange = (params: VxePagerDefines.PageChangeEventParams) => void;

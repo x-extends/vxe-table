@@ -38,9 +38,10 @@ export const GlobalConfig: VXETableGlobalConfig = {
     //   theme: 'dark',
     //   enterable: false
     // },
-    // validConfig: {
-    //   message: 'default'
-    // },
+    validConfig: {
+      showMessage: true,
+      message: 'default'
+    },
     // menuConfig: {
     //   visibleMethod () {}
     // },
@@ -175,13 +176,19 @@ export const GlobalConfig: VXETableGlobalConfig = {
     // zoomConfig: {
     //   escRestore: true
     // },
-    // pagerConfig: {
-    //   perfect: false
-    // },
-    // toolbarConfig: {
-    //   perfect: false
-    // },
+    formConfig: {
+      enabled: true
+    },
+    pagerConfig: {
+      enabled: true
+      // perfect: false
+    },
+    toolbarConfig: {
+      enabled: true
+      // perfect: false
+    },
     proxyConfig: {
+      enabled: true,
       autoLoad: true,
       message: true,
       props: {
@@ -217,9 +224,10 @@ export const GlobalConfig: VXETableGlobalConfig = {
   },
   form: {
     // preventSubmit: false,
-    // validConfig: {
-    //   autoPos: true
-    // },
+    validConfig: {
+      showMessage: true,
+      autoPos: true
+    },
     // size: null,
     // colon: false,
     titleAsterisk: true

@@ -108,6 +108,7 @@ export namespace VxeColumnPropTypes {
    * 编辑渲染配置项
    */
   export interface EditRender extends VxeGlobalRendererHandles.RenderOptions {
+    enabled?: boolean;
     options?: any[];
     optionProps?: VxeGlobalRendererHandles.RenderOptionProps;
     optionGroups?: any[];

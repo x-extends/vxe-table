@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { createColumn } from './util'
+import { createColumn, isEnableConf } from './util'
 
 import { VxeTableConstructor } from '../../../types/vxe-table'
 
@@ -664,7 +664,7 @@ export const Cell = {
     const { computeEditOpts } = computeMaps
     const { editRules } = props
     const editOpts = computeEditOpts.value
-    const { sortable, filters } = column
+    const { sortable, filters, editRender } = column
     let isRequired
     if (editRules) {
       const columnRules = XEUtils.get(editRules, params.column.property)
@@ -676,7 +676,7 @@ export const Cell = {
       isRequired && editOpts.showAsterisk ? h('i', {
         class: 'vxe-cell--required-icon'
       }) : null,
-      editOpts.showIcon ? h('i', {
+      isEnableConf(editRender) && editOpts.showIcon ? h('i', {
         class: ['vxe-cell--edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
       }) : null
     ].concat(Cell.renderDefaultHeader(params))
@@ -685,22 +685,24 @@ export const Cell = {
   },
   // 行格编辑模式
   renderRowEdit (params: any) {
-    const { $table } = params
+    const { $table, column } = params
     const { reactData } = $table
     const { editStore } = reactData
     const { actived } = editStore
-    return Cell.runRenderer(params, actived && actived.row === params.row)
+    const { editRender } = column
+    return Cell.runRenderer(params, isEnableConf(editRender) && actived && actived.row === params.row)
   },
   renderTreeRowEdit (params: any) {
     return Cell.renderTreeIcon(params, Cell.renderRowEdit(params))
   },
   // 单元格编辑模式
   renderCellEdit (params: any) {
-    const { $table } = params
+    const { $table, column } = params
     const { reactData } = $table
     const { editStore } = reactData
     const { actived } = editStore
-    return Cell.runRenderer(params, actived && actived.row === params.row && actived.column === params.column)
+    const { editRender } = column
+    return Cell.runRenderer(params, isEnableConf(editRender) && actived && actived.row === params.row && actived.column === params.column)
   },
   renderTreeCellEdit (params: any) {
     return Cell.renderTreeIcon(params, Cell.renderCellEdit(params))

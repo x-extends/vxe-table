@@ -2,6 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils/ctor'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
+import { isEnableConf } from '../../table/src/util'
 
 import { VxeGlobalHooksHandles, TableEditMethods, TableEditPrivateMethods } from '../../../types/vxe-table'
 
@@ -120,6 +121,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         }
         return nextTick().then(() => {
           $xetable.recalculate()
+          $xetable.updateCellAreas()
           return {
             row: newRecords.length ? newRecords[newRecords.length - 1] : null,
             rows: newRecords
@@ -210,6 +212,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         }
         return nextTick().then(() => {
           $xetable.recalculate()
+          $xetable.updateCellAreas()
           return { row: rest.length ? rest[rest.length - 1] : null, rows: rest }
         })
       },
@@ -367,14 +370,14 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       setActiveRow (row) {
         const { visibleColumn } = internalData
-        return $xetable.setActiveCell(row, XEUtils.find(visibleColumn, column => column.editRender))
+        return $xetable.setActiveCell(row, XEUtils.find(visibleColumn, column => isEnableConf(column.editRender)))
       },
       /**
        * 激活单元格编辑
        */
       setActiveCell (row, fieldOrColumn) {
         const column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
-        if (row && column && column.editRender) {
+        if (row && column && isEnableConf(column.editRender)) {
           return $xetable.scrollToRow(row, column).then(() => {
             const cell = $xetable.getCell(row, column)
             if (cell) {
@@ -418,7 +421,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { actived } = editStore
         const { row, column, cell } = params
         const { editRender } = column
-        if (editRender && cell) {
+        if (isEnableConf(editRender) && cell) {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-actived' = 'edit-disabled'
@@ -489,7 +492,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       handleFocus (params) {
         const { row, column, cell } = params
         const { editRender } = column
-        if (editRender) {
+        if (isEnableConf(editRender)) {
           const compRender = VXETable.renderer.get(editRender.name)
           const { autofocus, autoselect } = editRender
           let inputElem

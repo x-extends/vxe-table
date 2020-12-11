@@ -51,6 +51,7 @@ export namespace VxeRadioButtonDefines {
 
 export interface VxeRadioButtonListeners {
   onChange?: VxeRadioButtonEvents.Change;
+  change?: VxeRadioButtonEvents.Change;
 }
 
 export namespace VxeRadioButtonEvents {

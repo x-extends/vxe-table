@@ -94,15 +94,16 @@ import TablePrint from '../views/table/advanced/Print.vue'
 // import TableHighlight from '../views/table/advanced/Highlight.vue'
 // import TableRangeSelect from '../views/table/advanced/RangeSelect.vue'
 // import TableTabs from '../views/table/advanced/Tabs.vue'
-// import TableKeepAlives from '../views/table/advanced/KeepAlives.vue'
-// import TableKeepAliveTable1 from '../views/table/advanced/keepAlives/Table1.vue'
-// import TableKeepAliveTable2 from '../views/table/advanced/keepAlives/Table2.vue'
-// import TableKeepAliveTable3 from '../views/table/advanced/keepAlives/Table3.vue'
+import TableKeepAlives from '../views/table/advanced/KeepAlives.vue'
+import TableKeepAliveTable1 from '../views/table/advanced/keepAlives/Table1.vue'
+import TableKeepAliveTable2 from '../views/table/advanced/keepAlives/Table2.vue'
+import TableKeepAliveTable3 from '../views/table/advanced/keepAlives/Table3.vue'
 
 import GridBasic from '../views/grid/Basic.vue'
 import GridGroup from '../views/grid/Group.vue'
 import GridReverse from '../views/grid/Reverse.vue'
 import GridTemplate from '../views/grid/Template.vue'
+import GridEvent from '../views/grid/Event.vue'
 import GridFooter from '../views/grid/Footer.vue'
 // import GridPage from '../views/grid/Page.vue'
 import GridFullQuery from '../views/grid/FullQuery.vue'
@@ -746,27 +747,27 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableTabs',
   //   component: TableTabs
   // },
-  // {
-  //   path: '/table/advanced/keepAlives',
-  //   component: TableKeepAlives,
-  //   children: [
-  //     {
-  //       path: 'table1',
-  //       name: 'TableKeepAliveTable1',
-  //       component: TableKeepAliveTable1
-  //     },
-  //     {
-  //       path: 'table2',
-  //       name: 'TableKeepAliveTable2',
-  //       component: TableKeepAliveTable2
-  //     },
-  //     {
-  //       path: 'table3',
-  //       name: 'TableKeepAliveTable3',
-  //       component: TableKeepAliveTable3
-  //     }
-  //   ]
-  // },
+  {
+    path: '/table/advanced/keepAlives',
+    component: TableKeepAlives,
+    children: [
+      {
+        path: 'table1',
+        name: 'TableKeepAliveTable1',
+        component: TableKeepAliveTable1
+      },
+      {
+        path: 'table2',
+        name: 'TableKeepAliveTable2',
+        component: TableKeepAliveTable2
+      },
+      {
+        path: 'table3',
+        name: 'TableKeepAliveTable3',
+        component: TableKeepAliveTable3
+      }
+    ]
+  },
   {
     path: '/table/tree/basic',
     name: 'TableTreeBasic',
@@ -1001,6 +1002,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/grid/template',
     name: 'GridTemplate',
     component: GridTemplate
+  },
+  {
+    path: '/table/grid/event',
+    name: 'GridEvent',
+    component: GridEvent
   },
   {
     path: '/table/grid/footer',

@@ -6,9 +6,9 @@ import VXETable from '../../v-x-e-table'
 import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
-import { clearTableDefaultStatus, clearTableAllStatus } from '../../table/src/util'
+import { clearTableDefaultStatus, clearTableAllStatus, isEnableConf } from '../../table/src/util'
 
-import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, ValueOf } from '../../../types/vxe-table'
+import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableListeners } from '../../../types/vxe-table'
 
 function getOffsetHeight (elem: HTMLElement) {
   return elem ? elem.offsetHeight : 0
@@ -213,7 +213,7 @@ export default defineComponent({
         tableProps.loading = loading || tableLoading
         tableProps.data = tableData
         tableProps.rowClassName = handleRowClassName
-        if ((proxyOpts.seq || proxyOpts.index) && pagerConfig) {
+        if ((proxyOpts.seq || proxyOpts.index) && isEnableConf(pagerConfig)) {
           tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
@@ -403,7 +403,7 @@ export default defineComponent({
       const proxyOpts = computeProxyOpts.value
       const formOpts = computeFormOpts.value
       const restVNs = []
-      if (formConfig || slots.form) {
+      if (isEnableConf(formConfig) || slots.form) {
         let slotVNs = []
         if (slots.form) {
           slotVNs = slots.form({ $grid: $xegrid })
@@ -449,7 +449,7 @@ export default defineComponent({
       const { toolbarConfig } = props
       const toolbarOpts = computeToolbarOpts.value
       const restVNs = []
-      if (toolbarConfig || slots.toolbar) {
+      if (isEnableConf(toolbarConfig) || slots.toolbar) {
         let slotVNs = []
         if (slots.toolbar) {
           slotVNs = slots.toolbar({ $grid: $xegrid })
@@ -506,6 +506,12 @@ export default defineComponent({
       return []
     }
 
+    const tableCompEvents: VxeTableListeners = {}
+    tableComponentEmits.forEach(name => {
+      const type = XEUtils.camelCase(`on-${name}`) as keyof VxeTableListeners
+      tableCompEvents[type] = (...args: any[]) => emit(name, ...args)
+    })
+
     /**
      * 渲染表格
      */
@@ -513,32 +519,20 @@ export default defineComponent({
       const { proxyConfig } = props
       const tableProps = computeTableProps.value
       const proxyOpts = computeProxyOpts.value
-      const ons: any = {}
-      if (instance) {
-        XEUtils.each(instance.attrs, (val, key) => {
-          const matchRests = key.match(/on([A-Z]{1}.*)/)
-          if (matchRests) {
-            const onName = matchRests[0]
-            const name = XEUtils.kebabCase(matchRests[1]) as ValueOf<VxeGridEmits>
-            if (gridComponentEmits.indexOf(name) > -1) {
-              ons[onName] = (...args: any[]) => emit(name, ...args)
-            }
-          }
-        })
-      }
+      const tableOns = Object.assign({}, tableCompEvents)
       if (proxyConfig) {
         if (proxyOpts.sort) {
-          ons.onSortChange = sortChangeEvent
+          tableOns.onSortChange = sortChangeEvent
         }
         if (proxyOpts.filter) {
-          ons.onFilterChange = filterChangeEvent
+          tableOns.onFilterChange = filterChangeEvent
         }
       }
       return [
         h(TableComponent, {
           ref: refTable,
           ...tableProps,
-          ...ons
+          ...tableOns
         }, {
           empty: () => slots.empty ? slots.empty({}) : []
         })
@@ -568,7 +562,7 @@ export default defineComponent({
       const pagerProps = computePagerProps.value
       const pagerOpts = computePagerOpts.value
       const restVNs = []
-      if (pagerConfig || slots.pager) {
+      if (isEnableConf(pagerConfig) || slots.pager) {
         let slotVNs = []
         if (slots.pager) {
           slotVNs = slots.pager({ $grid: $xegrid })
@@ -617,7 +611,7 @@ export default defineComponent({
       const proxyOpts = computeProxyOpts.value
       const formOpts = computeFormOpts.value
       if (proxyConfig) {
-        if (formConfig && proxyOpts.form && formOpts.items) {
+        if (isEnableConf(formConfig) && proxyOpts.form && formOpts.items) {
           const formData: any = {}
           formOpts.items.forEach(({ field, itemRender }: any) => {
             if (field) {
@@ -731,7 +725,9 @@ export default defineComponent({
                 if (isReload) {
                   tablePage.currentPage = 1
                 }
-                params.page = tablePage
+                if (isEnableConf(pagerConfig)) {
+                  params.page = tablePage
+                }
               }
               if (isInited || isReload) {
                 const checkedFilters = isInited ? $xetable.getCheckedFilters() : []
@@ -771,7 +767,7 @@ export default defineComponent({
                 .then(rest => {
                   reactData.tableLoading = false
                   if (rest) {
-                    if (pagerConfig) {
+                    if (isEnableConf(pagerConfig)) {
                       tablePage.total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
                       reactData.tableData = XEUtils.get(rest, proxyProps.result || 'result') || []
                     } else {
@@ -904,7 +900,7 @@ export default defineComponent({
         const formOpts = computeFormOpts.value
         const { formConfig } = props
         const { items } = formOpts
-        return formConfig && items ? items : []
+        return isEnableConf(formConfig) && items ? items : []
       },
       getPendingRecords () {
         return reactData.pendingRecords

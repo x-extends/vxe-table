@@ -244,7 +244,7 @@
       <pre-code>
         | Tab | 切换到上一个 |
         | Shift Tab | 切换到下一个 |
-        | Enter | （prevent-submit 不为 false）如果有存在提交按钮则提交表单 |
+        | Enter | （prevent-submit=true时）如果有存在提交按钮则回车后自动提交表单 |
       </pre-code>
     </pre>
 

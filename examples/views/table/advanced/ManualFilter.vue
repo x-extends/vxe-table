@@ -323,7 +323,7 @@ export default defineComponent({
               filterAgeEvent
             }
           }
-        }
+        })
         `,
         `
         .my-select {

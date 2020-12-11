@@ -37,7 +37,7 @@ export default defineComponent({
       }
     }
 
-    const keyupEvent: VxeInputEvents.KeyupMethod = ({ $event }) => {
+    const keyupEvent: VxeInputEvents.Keyup = ({ $event }) => {
       const { params } = props
       if (params) {
         const { $panel } = params

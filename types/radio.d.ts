@@ -70,6 +70,7 @@ export namespace VxeRadioDefines {
 
 export interface VxeRadioListeners {
   onChange?: VxeRadioEvents.Change;
+  change?: VxeRadioEvents.Change;
 }
 
 export namespace VxeRadioEvents {

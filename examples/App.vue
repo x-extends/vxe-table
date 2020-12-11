@@ -605,7 +605,7 @@ export default defineComponent({
               locat: {
                 name: 'TablePrint'
               }
-            }
+            },
             // {
             //   label: 'app.aside.nav.customPrint',
             //   locat: {
@@ -741,12 +741,12 @@ export default defineComponent({
             //     name: 'TableTabs'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.keepAlives',
-            //   locat: {
-            //     name: 'TableKeepAliveTable1'
-            //   }
-            // }
+            {
+              label: 'app.aside.nav.keepAlives',
+              locat: {
+                name: 'TableKeepAliveTable1'
+              }
+            }
           ]
         },
         {
@@ -1190,6 +1190,12 @@ export default defineComponent({
               demoUrl: 'https://jsrun.pro/zIWKp/edit',
               locat: {
                 name: 'GridReverse'
+              }
+            },
+            {
+              label: 'app.aside.nav.events',
+              locat: {
+                name: 'GridEvent'
               }
             },
             {

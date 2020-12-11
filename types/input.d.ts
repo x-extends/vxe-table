@@ -187,19 +187,41 @@ export namespace VxeInputDefines {
     date: Date;
   }
 
-  interface InputEventParams extends VxeEvent {
+  interface InputKeyboardEventParams {
     $input: VxeInputConstructor;
-  }
-
-  export type KeyupParams = {}
-  export interface KeyupEventParams extends InputEventParams, KeyupParams {
     $event: KeyboardEvent
   }
 
+  export type InputParams = {}
+  export interface InputEventParams extends InputKeyboardEventParams, InputParams {}
+
+  export type ChangeParams = {}
+  export interface ChangeEventParams extends InputKeyboardEventParams, ChangeParams {}
+
+  export type KeyupParams = {}
+  export interface KeyupEventParams extends InputKeyboardEventParams, KeyupParams {}
+
+  export type KeydownParams = {}
+  export interface KeydownEventParams extends InputKeyboardEventParams, KeydownParams {}
 }
 
-export interface VxeInputListeners { }
+export interface VxeInputListeners {
+  onInput?: VxeInputEvents.Input;
+  input?: VxeInputEvents.Input;
+
+  onChange?: VxeInputEvents.Change;
+  change?: VxeInputEvents.Change;
+
+  onKeydown?: VxeInputEvents.Keydown;
+  keydown?: VxeInputEvents.Keydown;
+
+  onKeyup?: VxeInputEvents.Keyup;
+  keyup?: VxeInputEvents.Keyup;
+}
 
 export namespace VxeInputEvents {
-  export type KeyupMethod = (params: VxeInputDefines.KeyupEventParams) => void;
+  export type Input = (params: VxeInputDefines.InputEventParams) => void;
+  export type Change = (params: VxeInputDefines.ChangeEventParams) => void;
+  export type Keydown = (params: VxeInputDefines.KeydownEventParams) => void;
+  export type Keyup = (params: VxeInputDefines.KeyupEventParams) => void;
 }

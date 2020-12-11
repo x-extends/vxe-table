@@ -35,6 +35,24 @@ export interface XEColumnInstance {
   column: ColumnInfo;
 }
 
+export function isEnableConf (conf: any): boolean {
+  return conf && conf.enabled !== false
+}
+
+function getColFuncWidth (isExists: any, defaultWidth = 16) {
+  return isExists ? defaultWidth : 0
+}
+
+export function getColMinWidth ($xetable: VxeTableConstructor, column: any) {
+  const { computeMaps } = $xetable
+  const { computeSortOpts, computeFilterOpts, computeEditOpts } = computeMaps
+  const sortOpts = computeSortOpts.value
+  const filterOpts = computeFilterOpts.value
+  const editOpts = computeEditOpts.value
+  const { type, filters, sortable, titleHelp, editRender } = column
+  return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable) && sortOpts.showIcon) + getColFuncWidth(isEnableConf(editRender) && editOpts.showIcon, 32)
+}
+
 export function isColumnInfo (column: any): column is ColumnInfo {
   return column && (column.constructor === ColumnInfo || column instanceof ColumnInfo)
 }

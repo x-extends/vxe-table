@@ -57,6 +57,7 @@ export namespace VxeCheckboxGroupDefines {
 
 export interface VxeCheckboxGroupListeners {
   onChange?: VxeCheckboxGroupEvents.Change;
+  change?: VxeCheckboxGroupEvents.Change;
 }
 
 export namespace VxeCheckboxGroupEvents {

@@ -10,7 +10,7 @@ import VXETable from '../../v-x-e-table'
 import TableBodyComponent from './body'
 import tableProps from './props'
 import tableEmits from './emits'
-import { eqCellNull, getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible } from './util'
+import { eqCellNull, getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, isEnableConf } from './util'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance } from '../../../types/vxe-table'
 
@@ -312,7 +312,7 @@ export default defineComponent({
     let $xetoolbar: VxeToolbarConstructor
 
     const computeValidOpts = computed(() => {
-      return Object.assign({ message: 'default' }, GlobalConfig.table.validConfig, props.validConfig) as VxeTablePropTypes.ValidOpts
+      return Object.assign({}, GlobalConfig.table.validConfig, props.validConfig) as VxeTablePropTypes.ValidOpts
     })
 
     const computeSXOpts = computed(() => {
@@ -3495,7 +3495,7 @@ export default defineComponent({
           }
         }
       } else if (mouseConfig) {
-        if (!getEventTargetNode(evnt, el).flag && (!tableMenu || !getEventTargetNode(evnt, tableMenu.refMaps.refElem.value).flag)) {
+        if (!getEventTargetNode(evnt, el).flag && !(tableMenu && getEventTargetNode(evnt, tableMenu.refMaps.refElem.value).flag) && !($xetoolbar && getEventTargetNode(evnt, $xetoolbar.refMaps.refElem.value).flag)) {
           $xetable.clearSelected()
           if ($xetable.clearCellAreas) {
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
@@ -3714,7 +3714,7 @@ export default defineComponent({
             //   evnt.preventDefault()
             // }
             // 如果是按下非功能键之外允许直接编辑
-            if (selected.column && selected.row && selected.column.editRender) {
+            if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
               if (!keyboardOpts.editMethod || !(keyboardOpts.editMethod(selected.args) === false)) {
                 if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
                   setCellValue(selected.row, selected.column, null)
@@ -3859,14 +3859,14 @@ export default defineComponent({
        * 定义行数据中的列属性，如果不存在则定义
        * @param {Row} record 行数据
        */
-      defineField (record: any) {
+      defineField (record) {
         const { treeConfig } = props
         const expandOpts = computeExpandOpts.value
         const treeOpts = computeTreeOpts.value
         const radioOpts = computeRadioOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const rowkey = getRowkey($xetable)
-        internalData.visibleColumn.forEach(({ property, editRender }: any) => {
+        internalData.visibleColumn.forEach(({ property, editRender }) => {
           if (property && !XEUtils.has(record, property)) {
             XEUtils.set(record, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
           }
@@ -4795,6 +4795,7 @@ export default defineComponent({
         if ((scrollXLoad || scrollYLoad) && expandColumn) {
           UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
         }
+        tableMethods.recalculate()
       })
     })
 
@@ -5171,7 +5172,7 @@ export default defineComponent({
         /**
          * 校验提示
          */
-        TooltipComponent && props.editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h(TooltipComponent, {
+        TooltipComponent && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h(TooltipComponent, {
           ref: refValidTooltip,
           class: 'vxe-table--valid-error',
           ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {})

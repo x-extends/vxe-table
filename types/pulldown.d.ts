@@ -104,6 +104,7 @@ export namespace VxePulldownDefines {
 
 export interface VxePulldownListeners {
   onHidePanel?: VxePulldownEvents.HidePanel;
+  hidePanel?: VxePulldownEvents.HidePanel;
 }
 
 export namespace VxePulldownEvents {
