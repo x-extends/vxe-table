@@ -46,6 +46,15 @@ const apis = [
         defVal: '继承 setup.grid.formConfig',
         list: XEUtils.clone(formAPI.find(item => item.name === 'Props'), true).list.map(item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
           {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '3.0.11',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'items',
             desc: '项配置',
             version: '',
@@ -58,43 +67,46 @@ const apis = [
           }
         ])
       },
-      {
-        name: 'toolbar',
-        disabled: true,
-        descKey: 'app.api.grid.desc.toolbar',
-        version: '',
-        type: 'any',
-        enum: '',
-        defVal: '继承 setup.grid.toolbarConfig',
-        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
-          name: 'zoom',
-          desc: '是否允许最大化显示',
-          version: '',
-          type: 'any',
-          enum: '',
-          defVal: '',
-          list: [
-            {
-              name: 'iconIn',
-              desc: '自定义最大化图标',
-              version: '',
-              type: 'string',
-              enum: '',
-              defVal: '',
-              list: []
-            },
-            {
-              name: 'iconOut',
-              desc: '自定义还原图标',
-              version: '',
-              type: 'string',
-              enum: '',
-              defVal: '',
-              list: []
-            }
-          ]
-        }, toolbarSlots])
-      },
+      // {
+      //   name: 'toolbar',
+      //   disabled: true,
+      //   descKey: 'app.api.grid.desc.toolbar',
+      //   version: '',
+      //   type: 'any',
+      //   enum: '',
+      //   defVal: '继承 setup.grid.toolbarConfig',
+      //   list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([
+      //     {
+      //       name: 'zoom',
+      //       desc: '是否允许最大化显示',
+      //       version: '',
+      //       type: 'any',
+      //       enum: '',
+      //       defVal: '',
+      //       list: [
+      //         {
+      //           name: 'iconIn',
+      //           desc: '自定义最大化图标',
+      //           version: '',
+      //           type: 'string',
+      //           enum: '',
+      //           defVal: '',
+      //           list: []
+      //         },
+      //         {
+      //           name: 'iconOut',
+      //           desc: '自定义还原图标',
+      //           version: '',
+      //           type: 'string',
+      //           enum: '',
+      //           defVal: '',
+      //           list: []
+      //         }
+      //       ]
+      //     },
+      //     toolbarSlots
+      //   ])
+      // },
       {
         name: 'toolbar-config',
         descKey: 'app.api.grid.desc.toolbarConfig',
@@ -102,34 +114,46 @@ const apis = [
         type: 'any',
         enum: '',
         defVal: '继承 setup.grid.toolbarConfig',
-        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([{
-          name: 'zoom',
-          desc: '是否允许最大化显示',
-          version: '',
-          type: 'any',
-          enum: '',
-          defVal: '',
-          list: [
-            {
-              name: 'iconIn',
-              desc: '自定义最大化图标',
-              version: '',
-              type: 'string',
-              enum: '',
-              defVal: '',
-              list: []
-            },
-            {
-              name: 'iconOut',
-              desc: '自定义还原图标',
-              version: '',
-              type: 'string',
-              enum: '',
-              defVal: '',
-              list: []
-            }
-          ]
-        }, toolbarSlots])
+        list: XEUtils.clone(toolbarAPI.find(item => item.name === 'Props').list, true).concat([
+          {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '3.0.11',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'zoom',
+            desc: '是否允许最大化显示',
+            version: '',
+            type: 'any',
+            enum: '',
+            defVal: '',
+            list: [
+              {
+                name: 'iconIn',
+                desc: '自定义最大化图标',
+                version: '',
+                type: 'string',
+                enum: '',
+                defVal: '',
+                list: []
+              },
+              {
+                name: 'iconOut',
+                desc: '自定义还原图标',
+                version: '',
+                type: 'string',
+                enum: '',
+                defVal: '',
+                list: []
+              }
+            ]
+          },
+          toolbarSlots
+        ])
       },
       {
         name: 'pager-config',
@@ -139,6 +163,15 @@ const apis = [
         enum: '',
         defVal: '继承 setup.grid.pagerConfig',
         list: XEUtils.mapTree(pagerAPI.find(item => item.name === 'Props').list.filter(item => !['size', 'loading'].includes(item.name)), item => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
+          {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '3.0.11',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
           pagerSlots
         ])
       },

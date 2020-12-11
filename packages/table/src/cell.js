@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { isEditCol } from './util'
+import { isEnableConf } from './util'
 
 function renderHelpIcon (h, params) {
   const { $table, column } = params
@@ -646,7 +646,7 @@ export const Cell = {
   renderEditHeader (h, params) {
     const { $table, column } = params
     const { editRules, editOpts } = $table
-    const { sortable, remoteSort, filters } = column
+    const { sortable, remoteSort, filters, editRender } = column
     let isRequired
     if (editRules) {
       const columnRules = XEUtils.get(editRules, params.column.property)
@@ -658,7 +658,7 @@ export const Cell = {
       isRequired && editOpts.showAsterisk ? h('i', {
         class: 'vxe-cell--required-icon'
       }) : null,
-      isEditCol(column) && editOpts.showIcon ? h('i', {
+      isEnableConf(editRender) && editOpts.showIcon ? h('i', {
         class: ['vxe-cell--edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
       }) : null
     ].concat(Cell.renderDefaultHeader(h, params))
@@ -668,8 +668,9 @@ export const Cell = {
   // 行格编辑模式
   renderRowEdit (h, params) {
     const { $table, column } = params
+    const { editRender } = column
     const { actived } = $table.editStore
-    return Cell.runRenderer(h, params, this, isEditCol(column) && actived && actived.row === params.row)
+    return Cell.runRenderer(h, params, this, isEnableConf(editRender) && actived && actived.row === params.row)
   },
   renderTreeRowEdit (h, params) {
     return Cell.renderTreeIcon(h, params, Cell.renderRowEdit(h, params))
@@ -677,8 +678,9 @@ export const Cell = {
   // 单元格编辑模式
   renderCellEdit (h, params) {
     const { $table, column } = params
+    const { editRender } = column
     const { actived } = $table.editStore
-    return Cell.runRenderer(h, params, this, isEditCol(column) && actived && actived.row === params.row && actived.column === params.column)
+    return Cell.runRenderer(h, params, this, isEnableConf(editRender) && actived && actived.row === params.row && actived.column === params.column)
   },
   renderTreeCellEdit (h, params) {
     return Cell.renderTreeIcon(h, params, Cell.renderCellEdit(h, params))

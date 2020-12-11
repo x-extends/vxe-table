@@ -6,8 +6,8 @@ const lineOffsetSizes = {
   medium: 1
 }
 
-export function isEditCol (column) {
-  return column && column.editRender && column.editRender.editable !== false
+export function isEnableConf (conf) {
+  return conf && conf.enabled !== false
 }
 
 function getColFuncWidth (isExists, defaultWidth = 16) {
@@ -16,8 +16,8 @@ function getColFuncWidth (isExists, defaultWidth = 16) {
 
 export function getColMinWidth ($xetable, column) {
   const { sortOpts, filterOpts, editOpts } = $xetable
-  const { type, filters, sortable, remoteSort, titleHelp } = column
-  return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(isEditCol(column) && editOpts.showIcon, 32)
+  const { type, filters, sortable, remoteSort, titleHelp, editRender } = column
+  return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(isEnableConf(editRender) && editOpts.showIcon, 32)
 }
 
 function countTreeExpand (prevRow, params) {

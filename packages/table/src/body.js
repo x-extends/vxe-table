@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod, isEditCol } from './util'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod, isEnableConf } from './util'
 
 const cellType = 'body'
 
@@ -76,7 +76,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { enabled } = tooltipOpts
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
-  const isEdit = isEditCol(column)
+  const isEdit = isEnableConf(editRender)
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'

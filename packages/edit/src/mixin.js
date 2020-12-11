@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils/ctor'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { isEditCol } from '../../table/src/util'
+import { isEnableConf } from '../../table/src/util'
 
 export default {
   methods: {
@@ -254,7 +254,8 @@ export default {
       const { mode, activeMethod } = editOpts
       const { actived } = editStore
       const { row, column, cell } = params
-      if (isEditCol(column) && cell) {
+      const { editRender } = column
+      if (isEnableConf(editRender) && cell) {
         if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
@@ -377,7 +378,7 @@ export default {
     handleFocus (params) {
       const { row, column, cell } = params
       const { editRender } = column
-      if (isEditCol(column)) {
+      if (isEnableConf(editRender)) {
         const compRender = VXETable.renderer.get(editRender.name)
         const { autofocus, autoselect } = editRender
         let inputElem
@@ -411,14 +412,14 @@ export default {
      * 激活行编辑
      */
     _setActiveRow (row) {
-      return this.setActiveCell(row, XEUtils.find(this.visibleColumn, column => isEditCol(column)))
+      return this.setActiveCell(row, XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender)))
     },
     /**
      * 激活单元格编辑
      */
     _setActiveCell (row, fieldOrColumn) {
       const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
-      if (row && column && isEditCol(column)) {
+      if (row && column && isEnableConf(column.editRender)) {
         return this.scrollToRow(row, true).then(() => {
           const cell = this.getCell(row, column)
           if (cell) {

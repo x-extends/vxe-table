@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { clearTableAllStatus, isEditCol } from './util'
+import { clearTableAllStatus, isEnableConf } from './util'
 import formats from '../../v-x-e-table/src/formats'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
@@ -2027,7 +2027,7 @@ const Methods = {
           //   evnt.preventDefault()
           // }
           // 如果是按下非功能键之外允许直接编辑
-          if (selected.column && selected.row && isEditCol(selected.column)) {
+          if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
             if (!keyboardOpts.editMethod || !(keyboardOpts.editMethod(selected.args) === false)) {
               if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
                 setCellValue(selected.row, selected.column, null)

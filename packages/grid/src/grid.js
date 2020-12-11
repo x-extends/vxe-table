@@ -4,7 +4,7 @@ import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
-import { clearTableDefaultStatus, clearTableAllStatus } from '../../table/src/util'
+import { clearTableDefaultStatus, clearTableAllStatus, isEnableConf } from '../../table/src/util'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
@@ -22,7 +22,7 @@ function getPaddingTopBottomSize (elem) {
 
 function renderDefaultForm (h, _vm) {
   const { proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
-  if (formConfig && formOpts.items && formOpts.items.length) {
+  if (isEnableConf(formConfig) && formOpts.items && formOpts.items.length) {
     if (!formOpts.inited) {
       formOpts.inited = true
       const beforeItem = proxyOpts.beforeItem
@@ -203,7 +203,7 @@ export default {
         tableProps.loading = loading || tableLoading
         tableProps.data = tableData
         tableProps.rowClassName = this.handleRowClassName
-        if ((proxyOpts.seq || proxyOpts.index) && pagerConfig) {
+        if ((proxyOpts.seq || proxyOpts.index) && isEnableConf(pagerConfig)) {
           tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
@@ -267,9 +267,9 @@ export default {
   },
   render (h) {
     const { $scopedSlots, vSize, isZMax } = this
-    const hasForm = !!($scopedSlots.form || this.formConfig)
-    const hasToolbar = !!($scopedSlots.toolbar || this.toolbarConfig || this.toolbar)
-    const hasPager = !!($scopedSlots.pager || this.pagerConfig)
+    const hasForm = !!($scopedSlots.form || isEnableConf(this.formConfig))
+    const hasToolbar = !!($scopedSlots.toolbar || isEnableConf(this.toolbarConfig) || this.toolbar)
+    const hasPager = !!($scopedSlots.pager || isEnableConf(this.pagerConfig))
     return h('div', {
       class: ['vxe-grid', {
         [`size--${vSize}`]: vSize,
@@ -421,7 +421,7 @@ export default {
     initProxy () {
       const { proxyInited, proxyConfig, proxyOpts, formConfig, formOpts } = this
       if (proxyConfig) {
-        if (formConfig && proxyOpts.form && formOpts.items) {
+        if (isEnableConf(formConfig) && proxyOpts.form && formOpts.items) {
           const formData = {}
           formOpts.items.forEach(({ field, itemRender }) => {
             if (field) {
@@ -509,7 +509,9 @@ export default {
               if (isReload) {
                 tablePage.currentPage = 1
               }
-              params.page = tablePage
+              if (isEnableConf(pagerConfig)) {
+                params.page = tablePage
+              }
             }
             if (isInited || isReload) {
               const checkedFilters = isInited ? this.getCheckedFilters() : []
@@ -546,7 +548,7 @@ export default {
               .then(rest => {
                 this.tableLoading = false
                 if (rest) {
-                  if (pagerConfig) {
+                  if (isEnableConf(pagerConfig)) {
                     tablePage.total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
                     this.tableData = XEUtils.get(rest, proxyProps.result || 'result') || []
                   } else {
@@ -689,7 +691,7 @@ export default {
     },
     getFormItems (index) {
       const { formConfig, formOpts } = this
-      const items = formConfig && formOpts.items ? formOpts.items : []
+      const items = isEnableConf(formConfig) && formOpts.items ? formOpts.items : []
       return arguments.length ? items[index] : items
     },
     getPendingRecords () {
