@@ -6,7 +6,7 @@
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
 
-        // 局部修改变量
+        // 修改样式变量
         $vxe-font-size: 14px;
         $vxe-font-color: #666;
         $vxe-primary-color: #409eff;
@@ -23,7 +23,7 @@
       <code class="scss">
         @import 'vxe-table/styles/variable.scss';
 
-        // 局部修改变量
+        // 修改样式变量
         $vxe-font-size: 14px;
         $vxe-font-color: #666;
         $vxe-primary-color: #409eff;
