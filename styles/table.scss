@@ -789,6 +789,11 @@
       overflow-x: hidden;
     }
   }
+  .vxe-table--fixed-left-wrapper {
+    .vxe-table--body-wrapper {
+      width: calc(100% + 40px);
+    }
+  }
   &.show--head {
     .vxe-table--fixed-left-wrapper,
     .vxe-table--fixed-right-wrapper {
