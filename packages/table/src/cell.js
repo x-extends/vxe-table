@@ -667,9 +667,9 @@ export const Cell = {
   },
   // 行格编辑模式
   renderRowEdit (h, params) {
-    const { $table } = params
+    const { $table, column } = params
     const { actived } = $table.editStore
-    return Cell.runRenderer(h, params, this, actived && actived.row === params.row)
+    return Cell.runRenderer(h, params, this, isEditCol(column) && actived && actived.row === params.row)
   },
   renderTreeRowEdit (h, params) {
     return Cell.renderTreeIcon(h, params, Cell.renderRowEdit(h, params))
