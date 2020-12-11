@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { clearTableAllStatus } from './util'
+import { clearTableAllStatus, isEditCol } from './util'
 import formats from '../../v-x-e-table/src/formats'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
@@ -1766,7 +1766,7 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    const { $el, $refs, mouseConfig, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
+    const { $el, $refs, $toolbar, mouseConfig, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
     const { actived } = editStore
     const { ctxWrapper, filterWrapper, validTip } = $refs
     if (filterWrapper) {
@@ -1792,32 +1792,32 @@ const Methods = {
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
               // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
               this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
-                let isClear
+                let isClearActived
                 if (editOpts.mode === 'row') {
                   const rowNode = getEventTargetNode(evnt, $el, 'vxe-body--row')
                   // row 方式，如果点击了不同行
-                  isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== actived.args.row : false
+                  isClearActived = rowNode.flag ? getRowNode(rowNode.targetElem).item !== actived.args.row : false
                 } else {
                   // cell 方式，如果是非编辑列
-                  isClear = !getEventTargetNode(evnt, $el, 'col--edit').flag
+                  isClearActived = !getEventTargetNode(evnt, $el, 'col--edit').flag
                 }
                 // 如果点击表头行，则清除激活状态
-                if (!isClear) {
-                  isClear = getEventTargetNode(evnt, $el, 'vxe-header--row').flag
+                if (!isClearActived) {
+                  isClearActived = getEventTargetNode(evnt, $el, 'vxe-header--row').flag
                 }
                 // 如果点击表尾行，则清除激活状态
-                if (!isClear) {
-                  isClear = getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
+                if (!isClearActived) {
+                  isClearActived = getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
                 }
                 // 如果固定了高度且点击了行之外的空白处，则清除激活状态
-                if (!isClear && this.height && !this.overflowY) {
+                if (!isClearActived && this.height && !this.overflowY) {
                   const bodyWrapperElem = evnt.target
                   if (hasClass(bodyWrapperElem, 'vxe-table--body-wrapper')) {
-                    isClear = evnt.offsetY < bodyWrapperElem.clientHeight
+                    isClearActived = evnt.offsetY < bodyWrapperElem.clientHeight
                   }
                 }
                 if (
-                  isClear ||
+                  isClearActived ||
                     // 如果点击了当前表格之外
                     !getEventTargetNode(evnt, $el).flag
                 ) {
@@ -1829,7 +1829,7 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!getEventTargetNode(evnt, $el).flag && (!ctxWrapper || !getEventTargetNode(evnt, ctxWrapper.$el).flag)) {
+      if (!getEventTargetNode(evnt, $el).flag && !(ctxWrapper && getEventTargetNode(evnt, ctxWrapper.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
         this.clearSelected()
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
           this.preventEvent(evnt, 'event.clearAreas', {}, () => {
@@ -2027,7 +2027,7 @@ const Methods = {
           //   evnt.preventDefault()
           // }
           // 如果是按下非功能键之外允许直接编辑
-          if (selected.column && selected.row && selected.column.editRender) {
+          if (selected.column && selected.row && isEditCol(selected.column)) {
             if (!keyboardOpts.editMethod || !(keyboardOpts.editMethod(selected.args) === false)) {
               if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
                 setCellValue(selected.row, selected.column, null)

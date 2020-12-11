@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod } from './util'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod, isEditCol } from './util'
 
 const cellType = 'body'
 
@@ -76,6 +76,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { enabled } = tooltipOpts
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
+  const isEdit = isEditCol(column)
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -86,7 +87,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const tdOns = {}
   const cellAlign = align || allAlign
   const hasValidError = validStore.row === row && validStore.column === column
-  const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
+  const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs = { colid: column.id }
   const bindMouseenter = tableListeners['cell-mouseenter']
   const bindMouseleave = tableListeners['cell-mouseleave']
@@ -215,7 +216,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
         }
       }, column.renderCell(h, params))
     )
-    if (hasDefaultTip && hasValidError) {
+    if (showValidTip && hasValidError) {
       tdVNs.push(
         h('div', {
           class: 'vxe-cell--valid',
@@ -236,11 +237,11 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
       [`col--${type}`]: type,
       'col--last': $columnIndex === columns.length - 1,
       'col--tree-node': treeNode,
-      'col--edit': !!editRender,
+      'col--edit': isEdit,
       'col--ellipsis': hasEllipsis,
       'fixed--hidden': fixedHiddenColumn,
       'col--dirty': isDirty,
-      'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
+      'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
       'col--valid-error': hasValidError,
       'col--current': currentColumn === column
     }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],

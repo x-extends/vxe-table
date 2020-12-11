@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils/ctor'
 import { UtilTools, DomTools } from '../../tools'
 import { convertToRows } from './util'
+import { getColMinWidth } from '../../table/src/util'
 
 const cellType = 'header'
 
@@ -200,7 +201,7 @@ export default {
       const pos = DomTools.getOffsetPos(dragBtnElem, $el)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
-      const minInterval = UtilTools.getColMinWidth($xetable, column) - dragBtnOffsetWidth // 列之间的最小间距
+      const minInterval = getColMinWidth($xetable, column) - dragBtnOffsetWidth // 列之间的最小间距
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
       let dragPosLeft = pos.left + dragBtnOffsetWidth
       const domMousemove = document.onmousemove

@@ -97,7 +97,7 @@ function renderTitle (h, _vm, item) {
 }
 
 function renderItems (h, _vm) {
-  const { _e, rules, formItems, data, collapseAll } = _vm
+  const { _e, rules, formItems, data, collapseAll, validOpts } = _vm
   return formItems.map((item, index) => {
     const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
     const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
@@ -164,7 +164,7 @@ function renderItems (h, _vm) {
                 class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
               })
             ]) : null,
-            errRule ? h('div', {
+            errRule && validOpts.showMessage ? h('div', {
               class: 'vxe-form--item-valid',
               style: errRule.maxWidth ? {
                 width: `${errRule.maxWidth}px`
@@ -376,7 +376,7 @@ export default {
           if (callback) {
             callback(validRest)
           }
-          if (validOpts.autoPos !== false) {
+          if (validOpts.autoPos) {
             this.$nextTick(() => {
               this.handleFocus(validFields)
             })

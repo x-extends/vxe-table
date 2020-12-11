@@ -5,10 +5,6 @@ import formats from '../../v-x-e-table/src/formats'
 let zindexIndex = 0
 let lastZindex = 1
 
-function getColFuncWidth (isExists, defaultWidth = 16) {
-  return isExists ? defaultWidth : 0
-}
-
 class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xetable, _vm, { renderHeader, renderCell, renderFooter, renderData } = {}) {
@@ -21,6 +17,12 @@ class ColumnInfo {
       const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
       if (_vm.type && types.indexOf(_vm.type) === -1) {
         UtilTools.warn('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
+      }
+      if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
+        UtilTools.warn('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
+      }
+      if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
+        UtilTools.warn('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
       }
       if (_vm.cellRender && _vm.editRender) {
         UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
@@ -235,11 +237,6 @@ export const UtilTools = {
   },
   hasChildrenList (item) {
     return item && item.children && item.children.length > 0
-  },
-  getColMinWidth (_vm, column) {
-    const { sortOpts, filterOpts, editOpts } = _vm
-    const { type, filters, sortable, remoteSort, editRender, titleHelp } = column
-    return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(editRender && editOpts.showIcon, 32)
   },
   parseFile (file) {
     const name = file.name

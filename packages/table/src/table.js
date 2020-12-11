@@ -591,6 +591,7 @@ export default {
         if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
           UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
         }
+        this.recalculate()
       })
     },
     staticColumns (value) {
@@ -733,7 +734,7 @@ export default {
           UtilTools.warn('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
         }
       }
-      if ((this.menuConfig) && !XEUtils.isObject(this.menuConfig)) {
+      if (this.menuConfig && !XEUtils.isObject(this.menuConfig)) {
         UtilTools.warn('vxe.error.errProp', [`table.menu-config=${this.menuConfig}`, 'table.menu-config={}'])
       }
       if (this.exportConfig && !XEUtils.isObject(this.exportConfig)) {
@@ -1066,7 +1067,7 @@ export default {
       /**
        * 校验提示
        */
-      hasTip && this.editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
+      hasTip && this.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
         ref: 'validTip',
         class: 'vxe-table--valid-error',
         props: validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : null

@@ -554,6 +554,15 @@ const apis = [
             list: []
           },
           {
+            name: 'editable',
+            desc: '是否启用编辑',
+            version: '3.0.10',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'props',
             desc: '渲染的参数（请查看目标渲染的 Props）',
             version: '',

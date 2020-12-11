@@ -34,9 +34,10 @@ const GlobalConfig = {
     //   theme: 'dark',
     //   enterable: false
     // },
-    // validConfig: {
-    //   message: 'default'
-    // },
+    validConfig: {
+      showMessage: true,
+      message: 'default'
+    },
     // menuConfig: {
     //   visibleMethod () {}
     // },
@@ -213,9 +214,10 @@ const GlobalConfig = {
   },
   form: {
     // preventSubmit: false,
-    // validConfig: {
-    //   autoPos: true
-    // },
+    validConfig: {
+      showMessage: true,
+      autoPos: true
+    },
     // size: null,
     // colon: false,
     titleAsterisk: true

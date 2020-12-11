@@ -121,7 +121,7 @@ export default {
         virtualTree: '虛擬樹表格',
         big: '虚拟滚动',
 
-        scroll: '大數據表格',
+        scroll: '虚拟滚动',
         bigData: '虚拟滚动',
         scrollRows: '纵向',
         scrollFullRows: '纵向 + 复杂渲染',

@@ -122,7 +122,7 @@ export default {
         virtualTree: 'Virtual tree table',
         big: 'Virtual scroll',
 
-        scroll: 'Big table',
+        scroll: 'Virtual Scroller',
         bigData: 'Virtual Scroller',
         scrollRows: 'vertical',
         scrollFullRows: 'vertical + complicated',
