@@ -669,7 +669,7 @@ export const Cell = {
       isRequired && editOpts.showAsterisk ? h('i', {
         class: 'vxe-cell--required-icon'
       }) : null,
-      editOpts.showIcon ? h('i', {
+      UtilTools.isEditCol(column) && editOpts.showIcon ? h('i', {
         class: ['vxe-cell--edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
       }) : null
     ].concat(Cell.renderDefaultHeader(h, params))
@@ -687,9 +687,9 @@ export const Cell = {
   },
   // 单元格编辑模式
   renderCellEdit (h, params) {
-    const { $table } = params
+    const { $table, column } = params
     const { actived } = $table.editStore
-    return Cell.runRenderer(h, params, this, actived && actived.row === params.row && actived.column === params.column)
+    return Cell.runRenderer(h, params, this, UtilTools.isEditCol(column) && actived && actived.row === params.row && actived.column === params.column)
   },
   renderTreeCellEdit (h, params) {
     return Cell.renderTreeIcon(h, params, Cell.renderCellEdit(h, params))

@@ -778,7 +778,7 @@ export default {
           UtilTools.warn('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
         }
       }
-      if ((this.menuConfig) && !XEUtils.isObject(this.menuConfig)) {
+      if (this.menuConfig && !XEUtils.isObject(this.menuConfig)) {
         UtilTools.warn('vxe.error.errProp', [`table.menu-config=${this.menuConfig}`, 'table.menu-config={}'])
       }
       if (this.exportConfig && !XEUtils.isObject(this.exportConfig)) {
@@ -889,6 +889,7 @@ export default {
         this.handleDefaults()
       }
       this.updateStyle()
+      this.recalculate()
     })
     GlobalEvent.on(this, 'paste', this.handleGlobalPasteEvent)
     GlobalEvent.on(this, 'copy', this.handleGlobalCopyEvent)
@@ -1205,7 +1206,7 @@ export default {
          * 单元格校验不通过的提示
          * 仅用于一行数据时有效，多行数据使用内部的提示框
          */
-        hasTip && editRules && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
+        hasTip && editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
           class: 'vxe-table--valid-error',
           props: validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : null,
           ref: 'validTip'

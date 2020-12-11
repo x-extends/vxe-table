@@ -213,6 +213,15 @@ const apis = [
             enum: '',
             defVal: 'true',
             list: []
+          },
+          {
+            name: 'showMessage',
+            desc: '是否显示错误显示',
+            version: '2.10.5',
+            type: 'bolean',
+            enum: '',
+            defVal: 'true',
+            list: []
           }
         ]
       }

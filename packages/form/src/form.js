@@ -205,7 +205,7 @@ export default {
           if (callback) {
             callback(validRest)
           }
-          if (validOpts.autoPos !== false) {
+          if (validOpts.autoPos) {
             this.$nextTick(() => {
               this.handleFocus(validFields)
             })

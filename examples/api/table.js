@@ -1956,7 +1956,7 @@ const apis = [
           },
           {
             name: 'extension',
-            desc: '只对 area 启用后有效，是否开启区域延伸选取功能，开启后可以通过鼠标左键按住右下角延伸按钮，将区域横向或纵向扩大',
+            desc: '只对 area 启用后有效，是否开启区域扩展选取功能，开启后可以通过鼠标左键按住右下角扩展按钮，将区域横向或纵向扩大',
             version: 'pro',
             type: 'boolean',
             enum: '',
@@ -2183,15 +2183,24 @@ const apis = [
             list: []
           },
           {
-            name: 'message',
-            abandoned: true,
-            desc: '校验提示框的方式',
-            version: '',
-            type: 'String',
-            enum: 'default（如果不设置高度，则默认第一行使用 tooltip，之后使用 inline）, none（关闭提示）, inline（强制使用内联的提示）, tooltip（强制使用 tooltip 提示）',
-            defVal: 'default',
+            name: 'showMessage',
+            desc: '是否显示错误显示',
+            version: '2.10.5',
+            type: 'bolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
+          // {
+          //   name: 'message',
+          //   abandoned: true,
+          //   desc: '校验提示框的方式',
+          //   version: '',
+          //   type: 'String',
+          //   enum: 'default（如果不设置高度，则默认第一行使用 tooltip，之后使用 inline）, none（关闭提示）, inline（强制使用内联的提示）, tooltip（强制使用 tooltip 提示）',
+          //   defVal: 'default',
+          //   list: []
+          // },
           {
             name: 'maxWidth',
             abandoned: true,
@@ -3089,7 +3098,7 @@ const apis = [
       },
       {
         name: 'cell-area-extension-start',
-        desc: '只对 mouse-config.extension 配置时有效，在单元格区域延伸开始时会触发该事件',
+        desc: '只对 mouse-config.extension 配置时有效，在单元格区域扩展开始时会触发该事件',
         version: 'pro',
         type: '',
         enum: '',
@@ -3098,7 +3107,7 @@ const apis = [
       },
       {
         name: 'cell-area-extension-end',
-        desc: '只对 mouse-config.extension 配置时有效，在单元格区域延伸结束时会触发该事件',
+        desc: '只对 mouse-config.extension 配置时有效，在单元格区域扩展结束时会触发该事件',
         version: 'pro',
         type: '',
         enum: '',

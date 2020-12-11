@@ -51,6 +51,14 @@ class ColumnInfo {
     }
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      // 在 v3.0 中 cellRender 只能是对象类型
+      if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
+        UtilTools.warn('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
+      }
+      // 在 v3.0 中 editRender 只能是对象类型
+      if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
+        UtilTools.warn('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
+      }
       // 在 v3.0 中废弃 remoteSort
       if (_vm.remoteSort) {
         UtilTools.warn('vxe.error.delProp', ['column.remote-sort', 'sort-config.remote'])
@@ -287,8 +295,8 @@ export const UtilTools = {
   },
   getColMinWidth (_vm, column) {
     const { sortOpts, filterOpts, editOpts } = _vm
-    const { type, filters, sortable, remoteSort, editRender, titleHelp } = column
-    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(editRender && editOpts.showIcon, 32)
+    const { type, filters, sortable, remoteSort, titleHelp } = column
+    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(UtilTools.isEditCol(column) && editOpts.showIcon, 32)
   },
   parseFile (file) {
     const name = file.name
@@ -299,6 +307,9 @@ export const UtilTools = {
   },
   isNumVal (num) {
     return !isNaN(parseFloat('' + num))
+  },
+  isEditCol (column) {
+    return column && column.editRender && column.editRender.editable !== false
   }
 }
 

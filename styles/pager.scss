@@ -186,6 +186,7 @@
     border-radius: $vxe-border-radius;
     margin: 0 0.25em;
     user-select: none;
+    background-color: $vxe-pager-background-color;
     &:not(.is--disabled) {
       &:hover {
         color: lighten($vxe-primary-color, 6%);

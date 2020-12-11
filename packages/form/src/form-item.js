@@ -191,7 +191,7 @@ export default {
                 class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
               })
             ]) : null,
-            showRule ? h('div', {
+            showRule && $vxeform.validOpts.showMessage ? h('div', {
               class: 'vxe-form--item-valid',
               style: showRule.maxWidth ? {
                 width: `${showRule.maxWidth}px`

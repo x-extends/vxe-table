@@ -142,6 +142,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const { enabled } = tooltipOpts
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
+  const isEdit = UtilTools.isEditCol(column)
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
   let showEllipsis = cellOverflow === 'ellipsis'
@@ -152,7 +153,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const tdOns = {}
   const cellAlign = align || allAlign
   const hasValidError = validStore.row === row && validStore.column === column
-  const hasDefaultTip = editRules && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
+  const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs = { 'data-colid': column.id }
   const bindMouseenter = tableListeners['cell-mouseenter']
   const bindMouseleave = tableListeners['cell-mouseleave']
@@ -264,11 +265,11 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
       [`col--${type}`]: type,
       'col--last': $columnIndex === columns.length - 1,
       'col--tree-node': treeNode,
-      'col--edit': !!editRender,
+      'col--edit': isEdit,
       'col--ellipsis': hasEllipsis,
       'fixed--hidden': fixedHiddenColumn,
       'col--dirty': isDirty,
-      'col--actived': editConfig && editRender && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
+      'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
       'col--valid-error': hasValidError,
       'col--current': currentColumn === column
     }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
@@ -297,7 +298,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
           title: showTitle ? $xetable.getCellLabel(row, column) : null
         }
       }, column.renderCell(h, params)),
-      hasDefaultTip ? hasValidError ? h('div', {
+      showValidTip ? hasValidError ? h('div', {
         class: 'vxe-cell--valid',
         style: validStore.rule && validStore.rule.maxWidth ? {
           width: `${validStore.rule.maxWidth}px`

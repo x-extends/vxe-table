@@ -24,68 +24,84 @@
       resizable
       highlight-hover-row
       :data="nativeRenderList">
-      <vxe-table-column field="name" title="渲染器名称" min-width="200"></vxe-table-column>
-      <vxe-table-column field="desc" title="描述说明" min-width="280"></vxe-table-column>
+      <vxe-table-column field="name" title="渲染器名称" min-width="100">
+        <template #default="{ row }">
+          <a class="link" :href="row.apiUrl" target="_blank">{{ row.name }}</a>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="desc" title="说明" min-width="280"></vxe-table-column>
     </vxe-table>
     <h2>内置渲染器</h2>
     <vxe-table
       resizable
       highlight-hover-row
       :data="xRenderList">
-      <vxe-table-column field="name" title="渲染器名称" min-width="200"></vxe-table-column>
-      <vxe-table-column field="desc" title="描述说明" min-width="280"></vxe-table-column>
+      <vxe-table-column field="name" title="渲染器名称" min-width="100">
+        <template #default="{ row }">
+          <router-link class="link" :to="{name: 'VXEAPI', params: { name: row.compName }}">{{ row.name }}</router-link>
+        </template>
+      </vxe-table-column>
+      <vxe-table-column field="desc" title="说明" min-width="280"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
       nativeRenderList: [
         {
           name: 'input',
+          apiUrl: 'https://www.w3school.com.cn/tags/tag_input.asp',
           desc: '原生-输入框'
         },
         {
           name: 'textarea',
+          apiUrl: 'https://www.w3school.com.cn/tags/tag_textarea.asp',
           desc: '原生-文本域'
         },
         {
           name: 'select',
+          apiUrl: 'https://www.w3school.com.cn/tags/tag_select.asp',
           desc: '原生-下拉框'
         }
       ],
       xRenderList: [
         {
           name: '$button',
-          desc: '模块-按钮'
+          compName: 'button',
+          desc: '功能模块-按钮'
         },
         {
           name: '$buttons',
-          desc: '模块-按钮列表'
+          compName: 'button',
+          desc: '功能模块-按钮列表'
         },
         {
           name: '$input',
-          desc: '模块-输入框'
+          compName: 'input',
+          desc: '功能模块-输入框'
         },
         {
           name: '$select',
-          desc: '模块-下拉框'
+          compName: 'select',
+          desc: '功能模块-下拉框'
         },
         {
           name: '$radio',
-          desc: '模块-复选框列表'
+          compName: 'radio',
+          desc: '功能模块-复选框列表'
         },
         {
           name: '$checkbox',
-          desc: '模块-复选框列表'
+          compName: 'checkbox',
+          desc: '功能模块-复选框列表'
         },
         {
           name: '$switch',
-          desc: '模块-开关'
+          compName: 'switch',
+          desc: '功能模块-开关'
         }
       ],
       tableData: [
@@ -118,11 +134,6 @@ export default {
         }
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
 }
 </script>
