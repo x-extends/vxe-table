@@ -281,7 +281,7 @@ const Methods = {
   loadTableData (datas) {
     const { keepSource, treeConfig, editStore, sYOpts, scrollYStore, scrollXStore } = this
     const tableFullData = datas ? datas.slice(0) : []
-    const scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
+    const scrollYLoad = !treeConfig && sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
     scrollYStore.startIndex = 0
     scrollYStore.endIndex = 1
     scrollXStore.startIndex = 0
@@ -1270,24 +1270,28 @@ const Methods = {
       })
     }
     const visibleColumn = leftList.concat(centerList).concat(rightList)
-    let scrollXLoad = sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+    let scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad && isGroup) {
       scrollXLoad = false
-      UtilTools.warn('vxe.error.scrollXNotGroup')
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        UtilTools.warn('vxe.error.scrollXNotGroup')
+      }
     }
     if (scrollXLoad) {
-      if (this.showHeader && !this.showHeaderOverflow) {
-        UtilTools.warn('vxe.error.reqProp', ['show-header-overflow'])
-      }
-      if (this.showFooter && !this.showFooterOverflow) {
-        UtilTools.warn('vxe.error.reqProp', ['show-footer-overflow'])
-      }
-      if (this.spanMethod) {
-        UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
-      }
-      if (this.footerSpanMethod) {
-        UtilTools.warn('vxe.error.scrollErrProp', ['footer-span-method'])
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (this.showHeader && !this.showHeaderOverflow) {
+          UtilTools.warn('vxe.error.reqProp', ['show-header-overflow'])
+        }
+        if (this.showFooter && !this.showFooterOverflow) {
+          UtilTools.warn('vxe.error.reqProp', ['show-footer-overflow'])
+        }
+        if (this.spanMethod) {
+          UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
+        }
+        if (this.footerSpanMethod) {
+          UtilTools.warn('vxe.error.scrollErrProp', ['footer-span-method'])
+        }
       }
       const { visibleSize } = computeVirtualX(this)
       scrollXStore.startIndex = 0

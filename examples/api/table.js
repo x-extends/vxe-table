@@ -2346,6 +2346,15 @@ const apis = [
         defVal: '继承 setup.table.scrollX',
         list: [
           {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '3.0.12',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'gt',
             desc: '指定大于指定列时自动启动横向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用横向虚拟滚动之后将不能支持分组表头）',
             version: '',
@@ -2373,6 +2382,15 @@ const apis = [
         enum: '',
         defVal: '继承 setup.table.scrollY',
         list: [
+          {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '3.0.12',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
           {
             name: 'gt',
             desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用纵向虚拟滚动之后将不能支持动态行高）',

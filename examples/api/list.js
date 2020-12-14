@@ -70,8 +70,17 @@ const apis = [
         defVal: '',
         list: [
           {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '3.0.12',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'gt',
-            desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭',
+            desc: '指定大于指定行时自动启动纵向虚拟滚动',
             version: '',
             type: 'number',
             enum: '',
