@@ -40,7 +40,7 @@
       border
       resizable
       height="300"
-      :scroll-y="{gt: -1}"
+      :scroll-y="{enabled: false}"
       :span-method="colspanMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -63,7 +63,7 @@
       border
       resizable
       height="300"
-      :scroll-y="{gt: -1}"
+      :scroll-y="{enabled: false}"
       :span-method="mergeRowMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -155,7 +155,7 @@ export default {
           border
           resizable
           height="300"
-          :scroll-y="{gt: -1}"
+          :scroll-y="{enabled: false}"
           :span-method="colspanMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -199,7 +199,7 @@ export default {
           border
           resizable
           height="300"
-          :scroll-y="{gt: -1}"
+          :scroll-y="{enabled: false}"
           :span-method="mergeRowMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>

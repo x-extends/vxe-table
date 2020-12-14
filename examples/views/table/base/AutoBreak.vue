@@ -1,10 +1,10 @@
 <template>
   <div>
-    <p class="tip">单元格超出指定宽度自动换行，通过设置 <table-api-link prop="scroll-x"/>="{gt: -1} 和 <table-api-link prop="scroll-y"/>="{gt: -1} 启用自动换行</p>
+    <p class="tip">单元格超出指定宽度自动换行，通过设置 <table-api-link prop="scroll-x"/>="{enabled: false} 和 <table-api-link prop="scroll-y"/>="{enabled: false} 启用自动换行</p>
 
     <vxe-table
       :data="tableData"
-      :scroll-y="{gt: -1}">
+      :scroll-y="{enabled: false}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -37,7 +37,7 @@ export default {
         `
         <vxe-table
           :data="tableData"
-          :scroll-y="{gt: -1}">
+          :scroll-y="{enabled: false}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>

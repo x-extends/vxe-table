@@ -68,7 +68,6 @@ import tableColumnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
 import virtualTreeAPI from '../../api/virtual-tree'
-import excelAPI from '../../api/excel'
 import pagerAPI from '../../api/pager'
 import radioAPI from '../../api/radio'
 import radioGroupAPI from '../../api/radio-group'
@@ -249,9 +248,6 @@ export default {
             case 'virtual-tree':
               apis = virtualTreeAPI
               break
-            case 'excel':
-              apis = excelAPI
-              break
             case 'pager':
               apis = pagerAPI
               break
@@ -430,16 +426,16 @@ export default {
       return true
     },
     handleSearch () {
-      const filterName = XEUtils.kebabCase(XEUtils.toString(this.filterName).trim()).toLowerCase()
+      const filterName = XEUtils.toString(this.filterName).trim()
       if (filterName) {
         const options = { children: 'list' }
-        if (filterName === 'pro') {
-          const rest = XEUtils.searchTree(this.tableData, item => item.version === filterName, options)
+        if (/pro/i.test(filterName)) {
+          const rest = XEUtils.searchTree(this.tableData, item => item.version === 'pro', options)
           this.apiList = rest
         } else {
-          const filterRE = new RegExp(filterName, 'gi')
+          const filterRE = new RegExp(`${filterName}|${XEUtils.camelCase(filterName)}|${XEUtils.kebabCase(filterName)}`, 'i')
           const searchProps = ['name', 'desc', 'type', 'enum', 'defVal', 'version']
-          const rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
+          const rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => filterRE.test(item[key])), options)
           XEUtils.eachTree(rest, item => {
             searchProps.forEach(key => {
               if (key !== 'version') {
@@ -449,11 +445,11 @@ export default {
           }, options)
           this.apiList = rest
         }
-        this.$nextTick(() => {
+        setTimeout(() => {
           if (this.$refs.xTable) {
             this.$refs.xTable.setAllTreeExpand(true)
           }
-        })
+        }, 100)
       } else {
         this.apiList = this.tableData
         this.$nextTick(() => {
