@@ -1,8 +1,9 @@
 <template>
   <div>
     <p class="tip">
-      <table-api-link name="vxe-table"/> 方式：使用 <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 实现列移动，由于直接操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="column-key"/><br>
-      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
+      表格不支持拖动功能；例如 <table-api-link name="vxe-table"/> 简单示例： <a class="link" href="https://www.npmjs.com/package/sortablejs" target="_blank">sortablejs</a> 等库实现列移动<br>
+      由于直接操作了 Dom 节点，需要与 Vue 的数据同步，必须设置 <table-api-link prop="column-key"/>，并且自行根据 vue 的规则自行实现数据同步<br>
+      <span class="red">（注：该示例仅供参考，具体请自行实现）</span>
     </p>
 
     <vxe-table
@@ -27,8 +28,8 @@
     </pre>
 
     <p class="tip">
-      <grid-api-link name="vxe-grid"/> 方式，更加简单的配置式调用<br>
-      <span class="red">（注：该示例仅供参考，具体逻辑请自行实现，例如：固定列是无法拖动等...）</span>
+      例如 <table-api-link name="vxe-grid"/> 简单示例：<br>
+      <span class="red">（注：该示例仅供参考，具体请自行实现）</span>
     </p>
 
     <vxe-grid
