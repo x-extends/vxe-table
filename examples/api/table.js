@@ -2073,10 +2073,28 @@ const apis = [
             list: []
           },
           {
+            name: 'delMethod',
+            desc: '只对 isDel=true 有效，用于删除键清空单元格内容方法',
+            version: '2.10.8',
+            type: '(params: { row, column }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'backMethod',
+            desc: '只对 isDel=true 有效，用于重写回退键清空单元格内容并激活为编辑状态方法',
+            version: '2.10.8',
+            type: '(params: { row, column }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'editMethod',
-            desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数 Function({row, rowIndex, column, columnIndex, cell}) 可以返回 false 来阻止默认行为',
+            desc: '只对 isEdit=true 有效，用于重写编辑单元格方法',
             version: '',
-            type: 'Function',
+            type: '(params: { row, column }) => void',
             enum: '',
             defVal: '',
             list: []

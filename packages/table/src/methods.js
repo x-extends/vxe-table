@@ -2004,11 +2004,20 @@ const Methods = {
           }
         } else if (keyboardConfig && (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
           if (!isEditStatus) {
+            const { delMethod, backMethod } = keyboardOpts
             // 如果是删除键
             if (keyboardOpts.isDel && (selected.row || selected.column)) {
-              setCellValue(selected.row, selected.column, null)
+              if (delMethod) {
+                delMethod({ row: selected.row, column: selected.column, $table: this })
+              } else {
+                setCellValue(selected.row, selected.column, null)
+              }
               if (isBack) {
-                this.handleActived(selected.args, evnt)
+                if (backMethod) {
+                  backMethod({ row: selected.row, column: selected.column, $table: this })
+                } else {
+                  this.handleActived(selected.args, evnt)
+                }
               }
             } else if (isBack && keyboardOpts.isArrow && treeConfig && highlightCurrentRow && currentRow) {
               // 如果树形表格回退键关闭当前行返回父节点
@@ -2036,8 +2045,8 @@ const Methods = {
           // }
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && UtilTools.isEnableConf(selected.column.editRender)) {
-            if (!keyboardOpts.editMethod || !(keyboardOpts.editMethod(selected.args, evnt) === false)) {
-              if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
+            if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
+              if (!keyboardOpts.editMethod || !(keyboardOpts.editMethod(selected.args, evnt) === false)) {
                 setCellValue(selected.row, selected.column, null)
                 this.handleActived(selected.args, evnt)
               }
