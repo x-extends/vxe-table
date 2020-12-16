@@ -1905,7 +1905,7 @@ const Methods = {
           }
         } else if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardEvent) {
           this.handleKeyboardEvent(evnt)
-        } else if (isSpacebar && keyboardConfig && (keyboardOpts.isArrow || keyboardOpts.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
+        } else if (isSpacebar && keyboardConfig && keyboardOpts.isChecked && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'selection' || selected.column.type === 'radio')) {
           // 在 v3.0 中废弃 type=selection
           // 空格键支持选中复选框
           evnt.preventDefault()
@@ -2008,13 +2008,25 @@ const Methods = {
             // 如果是删除键
             if (keyboardOpts.isDel && (selected.row || selected.column)) {
               if (delMethod) {
-                delMethod({ row: selected.row, column: selected.column, $table: this })
+                delMethod({
+                  row: selected.row,
+                  rowIndex: this.getRowIndex(selected.row),
+                  column: selected.column,
+                  columnIndex: this.getColumnIndex(selected.column),
+                  $table: this
+                })
               } else {
                 setCellValue(selected.row, selected.column, null)
               }
               if (isBack) {
                 if (backMethod) {
-                  backMethod({ row: selected.row, column: selected.column, $table: this })
+                  backMethod({
+                    row: selected.row,
+                    rowIndex: this.getRowIndex(selected.row),
+                    column: selected.column,
+                    columnIndex: this.getColumnIndex(selected.column),
+                    $table: this
+                  })
                 } else {
                   this.handleActived(selected.args, evnt)
                 }
@@ -2039,6 +2051,7 @@ const Methods = {
             }
           }
         } else if (keyboardConfig && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+          const { editMethod } = keyboardOpts
           // 启用编辑后，空格键功能将失效
           // if (isSpacebar) {
           //   evnt.preventDefault()
@@ -2046,7 +2059,15 @@ const Methods = {
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && UtilTools.isEnableConf(selected.column.editRender)) {
             if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
-              if (!keyboardOpts.editMethod || !(keyboardOpts.editMethod(selected.args, evnt) === false)) {
+              if (editMethod) {
+                editMethod({
+                  row: selected.row,
+                  rowIndex: this.getRowIndex(selected.row),
+                  column: selected.column,
+                  columnIndex: this.getColumnIndex(selected.column),
+                  $table: this
+                })
+              } else {
                 setCellValue(selected.row, selected.column, null)
                 this.handleActived(selected.args, evnt)
               }
