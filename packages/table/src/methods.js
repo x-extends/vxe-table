@@ -1910,7 +1910,7 @@ const Methods = {
           }
         } else if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardEvent) {
           this.handleKeyboardEvent(evnt)
-        } else if (keyboardConfig && isSpacebar && (keyboardOpts.isArrow || keyboardOpts.isTab) && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
+        } else if (keyboardConfig && isSpacebar && keyboardOpts.isChecked && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
           // 空格键支持选中复选框
           evnt.preventDefault()
           if (selected.column.type === 'checkbox') {
@@ -2011,13 +2011,25 @@ const Methods = {
             // 如果是删除键
             if (keyboardOpts.isDel && (selected.row || selected.column)) {
               if (delMethod) {
-                delMethod({ row: selected.row, column: selected.column, $table: this })
+                delMethod({
+                  row: selected.row,
+                  rowIndex: this.getRowIndex(selected.row),
+                  column: selected.column,
+                  columnIndex: this.getColumnIndex(selected.column),
+                  $table: this
+                })
               } else {
                 setCellValue(selected.row, selected.column, null)
               }
               if (isBack) {
                 if (backMethod) {
-                  backMethod({ row: selected.row, column: selected.column, $table: this })
+                  backMethod({
+                    row: selected.row,
+                    rowIndex: this.getRowIndex(selected.row),
+                    column: selected.column,
+                    columnIndex: this.getColumnIndex(selected.column),
+                    $table: this
+                  })
                 } else {
                   this.handleActived(selected.args, evnt)
                 }
@@ -2044,7 +2056,13 @@ const Methods = {
           if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
             if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
               if (editMethod) {
-                editMethod({ row: selected.row, column: selected.column, $table: this })
+                editMethod({
+                  row: selected.row,
+                  rowIndex: this.getRowIndex(selected.row),
+                  column: selected.column,
+                  columnIndex: this.getColumnIndex(selected.column),
+                  $table: this
+                })
               } else {
                 setCellValue(selected.row, selected.column, null)
                 this.handleActived(selected.args, evnt)

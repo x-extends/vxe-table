@@ -1956,8 +1956,8 @@ const apis = [
           },
           {
             name: 'isChecked',
-            desc: '如果功能被支持，用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
-            version: 'pro',
+            desc: '如果功能被支持，用于 column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
+            version: '3.0.14',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -1976,7 +1976,7 @@ const apis = [
             name: 'delMethod',
             desc: '只对 isDel=true 有效，用于删除键清空单元格内容方法',
             version: '3.0.14',
-            type: '(params: { row, column }) => void',
+            type: '(params: { row, rowIndex, column, columnIndex }) => void',
             enum: '',
             defVal: '',
             list: []
@@ -1985,7 +1985,7 @@ const apis = [
             name: 'backMethod',
             desc: '只对 isDel=true 有效，用于重写回退键清空单元格内容并激活为编辑状态方法',
             version: '3.0.14',
-            type: '(params: { row, column }) => void',
+            type: '(params: { row, rowIndex, column, columnIndex }) => void',
             enum: '',
             defVal: '',
             list: []
@@ -1994,7 +1994,7 @@ const apis = [
             name: 'editMethod',
             desc: '只对 isEdit=true 有效，用于重写编辑单元格方法',
             version: '',
-            type: '(params: { row, column }) => boolean | void',
+            type: '(params: { row, rowIndex, column, columnIndex }) => void',
             enum: '',
             defVal: '',
             list: []
