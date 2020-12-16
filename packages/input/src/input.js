@@ -143,6 +143,7 @@ function renderDateWeekTable (h, _vm) {
         }))
       ]),
       h('tbody', weekDates.map(rows => {
+        console.log(dateValue)
         const isSelected = rows.some(item => XEUtils.isDateSame(dateValue, item.date, matchFormat))
         const isHover = rows.some(item => XEUtils.isDateSame(datePanelValue, item.date, matchFormat))
         return h('tr', rows.map(item => {
@@ -691,14 +692,14 @@ export default {
       return this.maxDate ? XEUtils.toStringDate(this.maxDate) : null
     },
     dateValue () {
-      const { inputValue, isDatePicker, type, dateValueFormat } = this
+      const { inputValue, value, isDatePicker, type, dateValueFormat } = this
       let val = null
       if (inputValue && isDatePicker) {
         let date
         if (type === 'time') {
           date = toStringTimeDate(inputValue)
         } else {
-          date = XEUtils.toStringDate(inputValue, dateValueFormat)
+          date = XEUtils.toStringDate(type === 'week' ? value : inputValue, dateValueFormat)
         }
         if (XEUtils.isValidDate(date)) {
           val = date
@@ -1205,10 +1206,10 @@ export default {
                     datetimePanelValue.setMinutes(inpVal.getMinutes())
                     datetimePanelValue.setSeconds(inpVal.getSeconds())
                   }
-                  this.dateChange(inpVal)
                 } else {
-                  this.inputValue = XEUtils.toDateString(inputValue, dateLabelFormat)
+                  this.inputValue = XEUtils.toDateString(inpVal, dateLabelFormat)
                 }
+                this.dateChange(inpVal)
               }
             } else {
               this.dateRevert()

@@ -34,7 +34,7 @@
             <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
-          <a class="link support" :title="$t('app.body.support.title')" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡{{ $t('app.header.label.support') }}</a>
+          <a class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡{{ $t('app.header.label.support') }}</a>
         </div>
       </div>
     </header>
@@ -1752,12 +1752,12 @@ export default {
                 name: 'TablePluginExportPDF'
               }
             },
-            // {
-            //   label: 'app.aside.nav.rendererPlugin',
-            //   locat: {
-            //     name: 'TablePluginRenderer'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.rendererPlugin',
+              locat: {
+                name: 'TablePluginRenderer'
+              }
+            },
             {
               label: 'app.aside.nav.menusPlugin',
               locat: {

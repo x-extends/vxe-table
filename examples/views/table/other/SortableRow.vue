@@ -10,6 +10,7 @@
       row-key
       ref="xTable1"
       class="sortable-row-demo"
+      :scroll-y="{enabled: false}"
       :data="tableData">
       <vxe-table-column width="60">
         <template v-slot>
@@ -138,6 +139,7 @@ export default {
           row-key
           ref="xTable1"
           class="sortable-row-demo"
+          :scroll-y="{enabled: false}"
           :data="tableData">
           <vxe-table-column width="60">
             <template v-slot>
