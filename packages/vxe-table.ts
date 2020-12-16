@@ -80,7 +80,7 @@ declare module './v-x-e-table' {
 
 // 默认中文
 VXETable.setup({
-  i18n: (key: string, args: any) => XEUtils.template(XEUtils.get(zhCN, key), args, { tmplRE: /\{([.\w[\]\s]+)\}/g })
+  i18n: (key: string, args: any) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 })
 
 VXETable.install = install

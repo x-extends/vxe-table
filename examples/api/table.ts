@@ -1965,8 +1965,8 @@ const apis = [
           },
           {
             name: 'isChecked',
-            desc: '如果功能被支持，用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
-            version: 'pro',
+            desc: '如果功能被支持，用于 column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
+            version: '',
             type: 'Boolean',
             enum: '',
             defVal: 'false',
@@ -1982,10 +1982,28 @@ const apis = [
             list: []
           },
           {
-            name: 'editMethod',
-            desc: '只对 isEdit=true 有效，用于重写选中编辑处理逻辑，该函数可以返回 false 来阻止默认行为',
+            name: 'delMethod',
+            desc: '只对 isDel=true 有效，用于删除键清空单元格内容方法',
             version: '',
-            type: '(params: { row, rowIndex, column, columnIndex }) => boolean | void',
+            type: '(params: { row, rowIndex, column, columnIndex }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'backMethod',
+            desc: '只对 isDel=true 有效，用于重写回退键清空单元格内容并激活为编辑状态方法',
+            version: '',
+            type: '(params: { row, rowIndex, column, columnIndex }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'editMethod',
+            desc: '只对 isEdit=true 有效，用于重写编辑单元格方法',
+            version: '',
+            type: '(params: { row, rowIndex, column, columnIndex }) => void',
             enum: '',
             defVal: '',
             list: []
@@ -2364,6 +2382,15 @@ const apis = [
         defVal: '继承 setup.table.scrollX',
         list: [
           {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'gt',
             desc: '指定大于指定列时自动启动横向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用横向虚拟滚动之后将不能支持分组表头）',
             version: '',
@@ -2391,6 +2418,15 @@ const apis = [
         enum: '',
         defVal: '继承 setup.table.scrollY',
         list: [
+          {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
           {
             name: 'gt',
             desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用纵向虚拟滚动之后将不能支持动态行高）',

@@ -246,7 +246,7 @@ export default defineComponent({
         scrollYStore.startIndex = 0
         scrollYStore.visibleIndex = 0
         internalData.fullData = fullData
-        reactData.scrollYLoad = sYOpts.gt > -1 && sYOpts.gt <= fullData.length
+        reactData.scrollYLoad = sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt <= fullData.length
         handleData()
         return computeScrollLoad().then(() => {
           refreshScroll()

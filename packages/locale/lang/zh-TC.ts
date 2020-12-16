@@ -5,7 +5,7 @@ export default {
       groupMouseRange: '分组表頭與 "{0}" 不能同時使用，這可能會出現錯誤',
       groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
       scrollErrProp: '啟用虛擬滾動後不支持該參數 "{0}"',
-      scrollXNotGroup: '橫向虛擬滾動不支持分組表頭，請修改正確 "scroll-x.gt" 的參數，否則可能會導致出現錯誤',
+      scrollXNotGroup: '橫向虛擬滾動不支持分組表頭，需要設定 "scroll-x.enabled=false" 參數，否則可能會導致出現錯誤',
       errConflicts: '參數 "{0}" 與 "{1}" 有衝突',
       unableInsert: '無法插入到指定位置，請檢查參數是否正確',
       useErr: '安裝 "{0}" 模組時發生錯誤，可能順序不正確，依賴的模組需要在Table之前安裝',

@@ -69,14 +69,14 @@ export function watchColumn (props: any, column: ColumnInfo) {
   })
 }
 
-export function assemColumn ($xetable: VxeTableConstructor, $el: HTMLElement, column: ColumnInfo, colgroup?: XEColumnInstance | null) {
+export function assemColumn ($xetable: VxeTableConstructor, elem: HTMLElement, column: ColumnInfo, colgroup?: XEColumnInstance | null) {
   const { reactData } = $xetable
   const { staticColumns } = reactData
-  const parentElem = $el.parentNode
+  const parentElem = elem.parentNode
   const parentColumn = colgroup ? colgroup.column : null
   const parentCols = parentColumn ? parentColumn.children : staticColumns
   if (parentElem && parentCols) {
-    parentCols.splice(XEUtils.arrayIndexOf(parentElem.children, $el), 0, column)
+    parentCols.splice(XEUtils.arrayIndexOf(parentElem.children, elem), 0, column)
     reactData.staticColumns = staticColumns.slice(0)
   }
 }

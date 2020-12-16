@@ -1400,14 +1400,34 @@ export namespace VxeTablePropTypes {
      */
     enterToTab?: boolean;
     /**
-     * 只对 isEdit=true 有效，用于重写选中编辑处理逻辑，可以返回 false 来阻止默认行为
+     * 只对 isDel=true 有效，用于删除键清空单元格内容方法
+     */
+    delMethod?(params: {
+      row: RowInfo;
+      rowIndex: number;
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }): void;
+    /**
+     * 只对 isDel=true 有效，用于重写回退键清空单元格内容并激活为编辑状态方法
+     */
+    backMethod?(params: {
+      row: RowInfo;
+      rowIndex: number;
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }): void;
+    /**
+     * 只对 isEdit=true 有效，用于重写编辑单元格方法
      */
     editMethod?(params: {
       row: RowInfo;
       rowIndex: number;
       column: VxeTableDefines.ColumnInfo;
       columnIndex: number;
-      cell: HTMLElement;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
   }
   export interface KeyboardOpts extends KeyboardConfig { }

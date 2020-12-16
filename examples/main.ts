@@ -24,6 +24,12 @@ import FilterContent from './plugins/table/renderer/components/FilterContent.vue
 import FilterComplex from './plugins/table/renderer/components/FilterComplex.vue'
 import FilterExcel from './plugins/table/renderer/components/FilterExcel.vue'
 
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
+
+import ElementPlus from 'element-plus'
+import 'element-plus/lib/theme-chalk/index.css'
+
 import {
   VXETable,
   Table,
@@ -97,6 +103,9 @@ app.use(Export)
 app.use(Keyboard)
 app.use(Validator)
 app.use(Table)
+
+app.use(Antd)
+app.use(ElementPlus)
 
 app.use(store)
 app.use(router)

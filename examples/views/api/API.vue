@@ -76,7 +76,6 @@ import tableColumnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
 import virtualTreeAPI from '../../api/virtual-tree'
-import excelAPI from '../../api/excel'
 import pagerAPI from '../../api/pager'
 import radioAPI from '../../api/radio'
 import radioGroupAPI from '../../api/radio-group'
@@ -273,16 +272,16 @@ export default defineComponent({
     }
 
     const handleSearch = () => {
-      const filterName = XEUtils.toString(apiData.filterName).trim().toLowerCase()
+      const filterName = XEUtils.toString(apiData.filterName).trim()
       if (filterName) {
         const options = { children: 'list' }
-        if (filterName === 'pro') {
-          const rest = XEUtils.searchTree(apiData.tableData, item => item.version === filterName, options)
+        if (/pro/i.test(filterName)) {
+          const rest = XEUtils.searchTree(apiData.tableData, item => item.version === 'pro', options)
           apiData.apiList = rest
         } else {
-          const filterRE = new RegExp(filterName, 'gi')
+          const filterRE = new RegExp(`${filterName}|${XEUtils.camelCase(filterName)}|${XEUtils.kebabCase(filterName)}`, 'i')
           const searchProps = ['name', 'desc', 'type', 'enum', 'defVal', 'version']
-          const rest = XEUtils.searchTree(apiData.tableData, item => searchProps.some(key => item[key].toLowerCase().indexOf(filterName) > -1), options)
+          const rest = XEUtils.searchTree(apiData.tableData, item => searchProps.some(key => filterRE.test(item[key])), options)
           XEUtils.eachTree(rest, item => {
             searchProps.forEach(key => {
               if (key !== 'version') {
@@ -292,12 +291,12 @@ export default defineComponent({
           }, options)
           apiData.apiList = rest
         }
-        nextTick(() => {
+        setTimeout(() => {
           const $table = xTable.value
           if ($table) {
             $table.setAllTreeExpand(true)
           }
-        })
+        }, 300)
       } else {
         apiData.apiList = apiData.tableData
         nextTick(() => {
@@ -336,9 +335,6 @@ export default defineComponent({
               break
             case 'virtual-tree':
               apis = virtualTreeAPI
-              break
-            case 'excel':
-              apis = excelAPI
               break
             case 'pager':
               apis = pagerAPI
@@ -511,17 +507,18 @@ export default defineComponent({
       cellContextMenuEvent,
       contextMenuClickEvent,
       menuVisibleMethod,
-      searchEvent
+      searchEvent,
+      handleSearch
     }
   },
   beforeRouteUpdate (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     next()
-    // this.filterName = ''
-    // const xTable: any = this.$refs.xTable
-    // if (xTable) {
-    //   xTable.clearAll()
-    // }
-    // this.handleSearch()
+    this.apiData.filterName = ''
+    const xTable: any = this.$refs.xTable
+    if (xTable) {
+      xTable.clearAll()
+    }
+    this.handleSearch()
   }
 })
 </script>

@@ -94,10 +94,12 @@ export const GlobalConfig: VXETableGlobalConfig = {
       isReplace: true
     },
     scrollX: {
+      enabled: true,
       gt: 60
       // oSize: 0
     },
     scrollY: {
+      enabled: true,
       gt: 100
       // oSize: 0
     }
@@ -299,6 +301,7 @@ export const GlobalConfig: VXETableGlobalConfig = {
   list: {
     // size: null,
     scrollY: {
+      enabled: true,
       gt: 100
       // oSize: 0
     }

@@ -1634,7 +1634,7 @@ export default defineComponent({
         //       locat: {
         //         name: 'TableOtherAntd'
         //       }
-        //     },
+        //     }
         //     {
         //       label: 'app.aside.nav.sortablejsRow',
         //       locat: {
@@ -1751,13 +1751,13 @@ export default defineComponent({
                 name: 'TablePluginExportPDF'
               }
             },
-            // // {
-            // //   label: 'app.aside.nav.rendererPlugin',
-            // //   disabled: true,
-            // //   locat: {
-            // //     name: 'TablePluginRenderer'
-            // //   }
-            // // },
+            // {
+            //   label: 'app.aside.nav.rendererPlugin',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TablePluginRenderer'
+            //   }
+            // },
             {
               label: 'app.aside.nav.menusPlugin',
               locat: {

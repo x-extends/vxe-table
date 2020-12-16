@@ -169,45 +169,45 @@ export default defineComponent({
         <p>
           <vxe-pager
             align="left"
-            :current-page.sync="page1.currentPage"
-            :page-size.sync="page1.pageSize"
+            v-model:current-page="page1.currentPage"
+            v-model:page-size="page1.pageSize"
             :total="page1.totalResult">
           </vxe-pager>
           <vxe-pager
             align="left"
             size="medium"
-            :current-page.sync="page2.currentPage"
-            :page-size.sync="page2.pageSize"
+            v-model:current-page="page2.currentPage"
+            v-model:page-size="page2.pageSize"
             :total="page2.totalResult">
           </vxe-pager>
           <vxe-pager
             align="left"
             size="small"
-            :current-page.sync="page2.currentPage"
-            :page-size.sync="page2.pageSize"
+            v-model:current-page="page2.currentPage"
+            v-model:page-size="page2.pageSize"
             :total="page2.totalResult">
           </vxe-pager>
           <vxe-pager
             align="left"
             size="mini"
-            :current-page.sync="page2.currentPage"
-            :page-size.sync="page2.pageSize"
+            v-model:current-page="page2.currentPage"
+            v-model:page-size="page2.pageSize"
             :total="page2.totalResult">
           </vxe-pager>
         </p>
 
         <p>
           <vxe-pager
-            :current-page.sync="page4.currentPage"
-            :page-size.sync="page4.pageSize"
+            v-model:current-page="page4.currentPage"
+            v-model:page-size="page4.pageSize"
             :total="page4.totalResult"
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
           </vxe-pager>
 
           <vxe-pager
             background
-            :current-page.sync="page5.currentPage"
-            :page-size.sync="page5.pageSize"
+            v-model:current-page="page5.currentPage"
+            v-model:page-size="page5.pageSize"
             :total="page5.totalResult"
             :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
           </vxe-pager>
@@ -226,8 +226,8 @@ export default defineComponent({
           </vxe-table>
           <vxe-pager
             perfect
-            :current-page.sync="page6.currentPage"
-            :page-size.sync="page6.pageSize"
+            v-model:current-page="page6.currentPage"
+            v-model:page-size="page6.pageSize"
             :total="page6.totalResult"
             :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">

@@ -231,15 +231,16 @@ export default defineComponent({
 
     const computeDateValue = computed(() => {
       const { modelValue, type } = props
+      const { inputValue } = reactData
       const isDatePickerType = computeIsDatePickerType.value
       const dateValueFormat = computeDateValueFormat.value
       let val = null
-      if (modelValue && isDatePickerType) {
+      if (inputValue && isDatePickerType) {
         let date
         if (type === 'time') {
-          date = toStringTimeDate(modelValue)
+          date = toStringTimeDate(inputValue)
         } else {
-          date = XEUtils.toStringDate(modelValue, dateValueFormat)
+          date = XEUtils.toStringDate(type === 'week' ? modelValue : inputValue, dateValueFormat)
         }
         if (XEUtils.isValidDate(date)) {
           val = date
@@ -533,7 +534,8 @@ export default defineComponent({
     }
 
     const triggerEvent = (evnt: Event & { type: 'input' | 'change' | 'keydown' | 'keyup' | 'mousewheel' | 'click' | 'focus' | 'blur' }) => {
-      inputMethods.dispatchEvent(evnt.type, { value: props.modelValue }, evnt)
+      const { inputValue } = reactData
+      inputMethods.dispatchEvent(evnt.type, { value: inputValue }, evnt)
     }
 
     const emitUpdate = (value: VxeInputPropTypes.ModelValue, evnt: Event | { type: string }) => {
@@ -575,7 +577,8 @@ export default defineComponent({
     const clickPrefixEvent = (evnt: Event) => {
       const { disabled } = props
       if (!disabled) {
-        inputMethods.dispatchEvent('prefix-click', { value: props.modelValue }, evnt)
+        const { inputValue } = reactData
+        inputMethods.dispatchEvent('prefix-click', { value: inputValue }, evnt)
       }
     }
 
@@ -608,7 +611,8 @@ export default defineComponent({
           emitUpdate('', evnt)
           clearValueEvent(evnt, '')
         } else {
-          inputMethods.dispatchEvent('suffix-click', { value: props.modelValue }, evnt)
+          const { inputValue } = reactData
+          inputMethods.dispatchEvent('suffix-click', { value: inputValue }, evnt)
         }
       }
     }
@@ -640,8 +644,9 @@ export default defineComponent({
      */
     const changeValue = () => {
       const isDatePickerType = computeIsDatePickerType.value
+      const { inputValue } = reactData
       if (isDatePickerType) {
-        dateParseValue(props.modelValue)
+        dateParseValue(inputValue)
         reactData.inputValue = reactData.datePanelLabel
       }
     }
@@ -706,7 +711,7 @@ export default defineComponent({
     }
 
     const afterCheckValue = () => {
-      const { modelValue, type, min, max } = props
+      const { type, min, max } = props
       const { inputValue, datetimePanelValue } = reactData
       const isNumType = computeIsNumType.value
       const isDatePickerType = computeIsDatePickerType.value
@@ -735,21 +740,21 @@ export default defineComponent({
             if (XEUtils.isValidDate(inpVal)) {
               if (type === 'time') {
                 inpVal = XEUtils.toDateString(inpVal, dateLabelFormat)
-                if (modelValue !== inpVal) {
+                if (inputValue !== inpVal) {
                   emitUpdate(inpVal, { type: 'check' })
                 }
                 reactData.inputValue = inpVal
               } else {
-                if (!XEUtils.isDateSame(modelValue, inpVal, dateLabelFormat)) {
+                if (!XEUtils.isDateSame(inputValue, inpVal, dateLabelFormat)) {
                   if (type === 'datetime') {
                     datetimePanelValue.setHours(inpVal.getHours())
                     datetimePanelValue.setMinutes(inpVal.getMinutes())
                     datetimePanelValue.setSeconds(inpVal.getSeconds())
                   }
-                  dateChange(inpVal)
                 } else {
-                  reactData.inputValue = XEUtils.toDateString(modelValue, dateLabelFormat)
+                  reactData.inputValue = XEUtils.toDateString(inpVal, dateLabelFormat)
                 }
+                dateChange(inpVal)
               }
             } else {
               dateRevert()
@@ -1889,7 +1894,8 @@ export default defineComponent({
     }
 
     const renderSuffixIcon = () => {
-      const { modelValue, disabled, suffixIcon } = props
+      const { disabled, suffixIcon } = props
+      const { inputValue } = reactData
       const isClearable = computeIsClearable.value
       const icons = []
       if (slots.suffix) {
@@ -1914,7 +1920,7 @@ export default defineComponent({
       }
       return icons.length ? h('span', {
         class: ['vxe-input--suffix', {
-          'is--clear': isClearable && !disabled && !(modelValue === '' || XEUtils.eqNull(modelValue))
+          'is--clear': isClearable && !disabled && !(inputValue === '' || XEUtils.eqNull(inputValue))
         }],
         onClick: clickSuffixEvent
       }, icons) : null

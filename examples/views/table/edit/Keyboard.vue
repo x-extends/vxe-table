@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       设置 <table-api-link prop="mouse-config"/>={selected: true} 启用单元格选中功能<span class="red">（只能用于 <table-api-link prop="edit-config"/>.<table-api-link prop="mode"/>=cell 有效）</span><br>
-      设置 <table-api-link prop="keyboard-config"/>={isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true} 启用按键功能及任意键编辑功能，方向键、回车键、Tab 键、Esc 键、F2 键、Del、Back 键<br>
+      设置 <table-api-link prop="keyboard-config"/>={isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, isChecked: true} 启用按键功能及任意键编辑功能，方向键、回车键、Tab 键、Esc 键、F2 键、Del、Back 键<br>
       <span class="red">（注：isEdit 启用任意键覆盖式编辑的）</span>
     </p>
 
@@ -24,7 +24,7 @@
       :mouse-config="{selected: true}"
       :checkbox-config="{range: true}"
       :menu-config="demo1.tableMenu"
-      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, isChecked: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -59,7 +59,7 @@
           | Shift + ArrowRight | （isArrow）如果存在，则往右边扩展单元格区域 |
           | Tab | （isTab）如果存在，则移动到右边单元格；如果存在区域，则在指定区域内移动；如果移动到最后一列，则从下一行开始移到，以此循环 |
           | Tab + Shift | （isTab）如果存在，则移动到左边单元格，则在指定区域内移动；如果移动到第一列，则从上一行开始移到，以此循环 |
-          | Spacebar | (isChecked) 如果选取的区域存在复选框，则切换勾选状态 |
+          | Spacebar | (isChecked) 如果选选中复选框或单选框，则切换勾选状态 |
           | Enter | （isEnter）如果存在，取消单元格编辑并移动到下面的单元格，则在指定区域内移动；如果移动到最后一行，则从下一列开始移到，以此循环 |
           | Enter + Shift | （isEnter）如果存在，取消单元格编辑并移动到上面的单元格，则在指定区域内移动；如果移动到第一行，则从上一列开始移到，以此循环 |
           | Delete | （isDel）清空单元格内容 |
@@ -164,7 +164,7 @@ export default defineComponent({
           :mouse-config="{selected: true}"
           :checkbox-config="{range: true}"
           :menu-config="demo1.tableMenu"
-          :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
+          :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, isChecked: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>

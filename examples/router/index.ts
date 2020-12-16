@@ -255,9 +255,9 @@ import ModulePulldown from '../views/pulldown/Pulldown.vue'
 import ModuleFile from '../views/file/File.vue'
 import ModulePrint from '../views/print/Print.vue'
 
-// import TableOtherElement from '../views/table/other/Element.vue'
+import TableOtherElement from '../views/table/other/Element.vue'
 // import TableOtherIview from '../views/table/other/Iview.vue'
-// import TableOtherAntd from '../views/table/other/Antd.vue'
+import TableOtherAntd from '../views/table/other/Antd.vue'
 // import TableSortableColumn from '../views/table/other/SortableColumn.vue'
 // import TableSortableRow from '../views/table/other/SortableRow.vue'
 // import TableXlsx from '../views/table/other/Xlsx.vue'
@@ -1514,21 +1514,21 @@ const routes: Array<RouteRecordRaw> = [
     name: 'ModulePrint',
     component: ModulePrint
   },
-  // {
-  //   path: '/table/other/element',
-  //   name: 'TableOtherElement',
-  //   component: TableOtherElement
-  // },
+  {
+    path: '/table/other/element',
+    name: 'TableOtherElement',
+    component: TableOtherElement
+  },
   // {
   //   path: '/table/other/iview',
   //   name: 'TableOtherIview',
   //   component: TableOtherIview
   // },
-  // {
-  //   path: '/table/other/antd',
-  //   name: 'TableOtherAntd',
-  //   component: TableOtherAntd
-  // },
+  {
+    path: '/table/other/antd',
+    name: 'TableOtherAntd',
+    component: TableOtherAntd
+  },
   // {
   //   path: '/table/other/sortableColumn',
   //   name: 'TableSortableColumn',
