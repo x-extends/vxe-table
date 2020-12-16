@@ -10,6 +10,7 @@
       column-key
       ref="xTable1"
       class="sortable-column-demo"
+      :scroll-x="{enabled: false}"
       :data="tableData">
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="150"></vxe-table-column>
@@ -36,6 +37,7 @@
       show-footer
       ref="xTable2"
       class="sortable-column-demo"
+      :scroll-x="{enabled: false}"
       :footer-method="footerMethod"
       :toolbar-config="tableToolbar"
       :columns="tableColumn"
@@ -83,6 +85,7 @@ export default {
           column-key
           ref="xTable"
           class="sortable-column-demo"
+          :scroll-x="{enabled: false}"
           :data="tableData">
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="150"></vxe-table-column>
@@ -155,6 +158,7 @@ export default {
           show-footer
           ref="xTable"
           class="sortable-column-demo"
+          :scroll-x="{enabled: false}"
           :footer-method="footerMethod"
           :toolbar-config="tableToolbar"
           :columns="tableColumn"
