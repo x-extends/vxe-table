@@ -2007,11 +2007,20 @@ const Methods = {
           }
         } else if (keyboardConfig && (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
           if (!isEditStatus) {
+            const { delMethod, backMethod } = keyboardOpts
             // 如果是删除键
             if (keyboardOpts.isDel && (selected.row || selected.column)) {
-              setCellValue(selected.row, selected.column, null)
+              if (delMethod) {
+                delMethod({ row: selected.row, column: selected.column, $table: this })
+              } else {
+                setCellValue(selected.row, selected.column, null)
+              }
               if (isBack) {
-                this.handleActived(selected.args, evnt)
+                if (backMethod) {
+                  backMethod({ row: selected.row, column: selected.column, $table: this })
+                } else {
+                  this.handleActived(selected.args, evnt)
+                }
               }
             } else if (isBack && keyboardOpts.isArrow && treeConfig && highlightCurrentRow && currentRow) {
               // 如果树形表格回退键关闭当前行返回父节点
@@ -2026,14 +2035,17 @@ const Methods = {
             }
           }
         } else if (keyboardConfig && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+          const { editMethod } = keyboardOpts
           // 启用编辑后，空格键功能将失效
           // if (isSpacebar) {
           //   evnt.preventDefault()
           // }
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
-            if (!keyboardOpts.editMethod || !(keyboardOpts.editMethod(selected.args) === false)) {
-              if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
+            if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
+              if (editMethod) {
+                editMethod({ row: selected.row, column: selected.column, $table: this })
+              } else {
                 setCellValue(selected.row, selected.column, null)
                 this.handleActived(selected.args, evnt)
               }

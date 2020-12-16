@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       设置 <table-api-link prop="mouse-config"/>={selected: true} 启用单元格选中功能<span class="red">（只能用于 <table-api-link prop="edit-config"/>.<table-api-link prop="mode"/>=cell 有效）</span><br>
-      通过 <table-api-link prop="keyboard-config"/>={<table-api-link prop="editMethod"/>} 重写默认的编辑行为，改为追加的方式
+      通过 <table-api-link prop="keyboard-config"/>={<table-api-link prop="editMethod"/>} 重写默认的编辑方法，改为追加的方式
     </p>
 
     <vxe-table
@@ -73,8 +73,6 @@ export default {
             editMethod ({ row, column }) {
               // 重写默认的覆盖式，改为追加式
               this.$refs.xTable.setActiveCell(row, column.property)
-              // 返回 false 阻止默认行为
-              return false
             }
           }
         }
@@ -94,8 +92,6 @@ export default {
     editMethod ({ row, column }) {
       // 重写默认的覆盖式，改为追加式
       this.$refs.xTable.setActiveCell(row, column.property)
-      // 返回 false 阻止默认行为
-      return false
     }
   }
 }
