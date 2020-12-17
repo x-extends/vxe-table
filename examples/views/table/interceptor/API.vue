@@ -185,7 +185,7 @@ export default {
         },
         {
           name: 'event.import',
-          desc: '导入之前触发，允许返回 false 阻止默认行为',
+          desc: '工具栏中导入之前触发，允许返回 false 阻止默认行为',
           version: '',
           type: 'Boolean',
           enum: '',
@@ -194,7 +194,7 @@ export default {
         },
         {
           name: 'event.export',
-          desc: '导出之前触发，允许返回 false 阻止默认行为',
+          desc: '工具栏中导出之前触发，允许返回 false 阻止默认行为',
           version: '',
           type: 'Boolean',
           enum: '',
