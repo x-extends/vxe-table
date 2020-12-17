@@ -95,14 +95,16 @@
 
 <script>
 import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 
 export default {
   data () {
     return {
       loading: false,
       dataSource: [],
-      sexList: [],
+      sexList: [
+        { value: '1', label: '男' },
+        { value: '0', label: '女' }
+      ],
       regionList: [],
       restaurants: [
         { value: '前端', name: '前端' },
@@ -221,22 +223,8 @@ export default {
               ]
               this.loading = false
             }, 500)
-            this.findSexList()
-            this.findRegionList()
           },
           methods: {
-            findSexList () {
-              return XEAjax.get('/api/conf/sex/list').then(data => {
-                this.sexList = data
-                return data
-              })
-            },
-            findRegionList () {
-              return XEAjax.get('/api/conf/region/list').then(data => {
-                this.regionList = data
-                return data
-              })
-            },
             formatDate (value, format) {
               return value ? value.format(format) : null
             },
@@ -327,22 +315,8 @@ export default {
       ]
       this.loading = false
     }, 500)
-    this.findSexList()
-    this.findRegionList()
   },
   methods: {
-    findSexList () {
-      return XEAjax.get('/api/conf/sex/list').then(data => {
-        this.sexList = data
-        return data
-      })
-    },
-    findRegionList () {
-      return XEAjax.get('/api/conf/region/list').then(data => {
-        this.regionList = data
-        return data
-      })
-    },
     formatDate (value, format) {
       return value ? value.format(format) : null
     },

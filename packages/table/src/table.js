@@ -354,13 +354,6 @@ export default {
         titles: {
           columns: []
         },
-        // 所有选中
-        checked: {
-          rows: [],
-          columns: [],
-          tRows: [],
-          tColumns: []
-        },
         // 选中源
         selected: {
           row: null,

@@ -34,16 +34,13 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -90,10 +87,29 @@ export default {
           },
           created () {
             this.loading = true
-            XEAjax.mockList(1000).then(data => {
+            this.mockList(1000).then(data => {
               this.loading = false
               this.tableData = data
             })
+          },
+          methods: {
+            mockList (size) {
+              return new Promise(resolve => {
+                const list = []
+                for (let index = 0; index < size; index++) {
+                  list.push({
+                    name: \`名称\${index}\`,
+                    sex: '0',
+                    num: 123,
+                    age: 18,
+                    num2: 234,
+                    rate: 3,
+                    address: 'shenzhen'
+                  })
+                }
+                resolve(list)
+              })
+            }
           }
         }
         `
@@ -102,15 +118,29 @@ export default {
   },
   created () {
     this.loading = true
-    XEAjax.mockList(1000).then(data => {
+    this.mockList(1000).then(data => {
       this.loading = false
       this.tableData = data
     })
   },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
+  methods: {
+    mockList (size) {
+      return new Promise(resolve => {
+        const list = []
+        for (let index = 0; index < size; index++) {
+          list.push({
+            name: `名称${index}`,
+            sex: '0',
+            num: 123,
+            age: 18,
+            num2: 234,
+            rate: 3,
+            address: 'shenzhen'
+          })
+        }
+        resolve(list)
+      })
+    }
   }
 }
 </script>

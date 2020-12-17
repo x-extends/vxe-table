@@ -30,8 +30,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">设置分页 border 样式</p>
@@ -66,8 +66,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">设置分页 background 样式，自定义每页大小</p>
@@ -103,8 +103,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -152,16 +152,13 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -236,14 +233,19 @@ export default {
           },
           methods: {
             findList1 () {
-              this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage1.pageSize}/\${this.tablePage1.currentPage}\`)then(({ page, result }) => {
-                this.tableData1 = result
-                this.tablePage1.totalResult = page.totalResult
+              this.loading1 = true
+              setTimeout(() => {
                 this.loading1 = false
-              }).catch(e => {
-                this.loading1 = false
-              })
+                this.tablePage1.totalResult = 6
+                this.tableData1 = [
+                  { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
+                  { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
+                  { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
+                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', age: 23, address: 'Shenzhen' },
+                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', age: 30, address: 'Shanghai' },
+                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Develop', sex: '0', age: 27, address: 'Shanghai' }
+                ]
+              }, 300)
             },
             handlePageChange1 ({ currentPage, pageSize }) {
               this.tablePage1.currentPage = currentPage
@@ -299,14 +301,19 @@ export default {
           },
           methods: {
             findList2 () {
-              this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage2.pageSize}/\${this.tablePage2.currentPage}\`)then(({ page, result }) => {
-                this.tableData2 = result
-                this.tablePage2.totalResult = page.totalResult
+              this.loading2 = true
+              setTimeout(() => {
                 this.loading2 = false
-              }).catch(e => {
-                this.loading2 = false
-              })
+                this.tablePage2.totalResult = 6
+                this.tableData2 = [
+                  { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
+                  { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
+                  { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
+                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', age: 23, address: 'Shenzhen' },
+                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', age: 30, address: 'Shanghai' },
+                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Develop', sex: '0', age: 27, address: 'Shanghai' }
+                ]
+              }, 300)
             },
             handlePageChange2 ({ currentPage, pageSize }) {
               this.tablePage2.currentPage = currentPage
@@ -364,13 +371,18 @@ export default {
           methods: {
             findList3 () {
               this.loading3 = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage3.pageSize}/\${this.tablePage3.currentPage}\`)then(({ page, result }) => {
-                this.tableData3 = result
-                this.tablePage3.totalResult = page.totalResult
+              setTimeout(() => {
                 this.loading3 = false
-              }).catch(e => {
-                this.loading3 = false
-              })
+                this.tablePage3.totalResult = 6
+                this.tableData3 = [
+                  { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
+                  { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
+                  { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
+                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', age: 23, address: 'Shenzhen' },
+                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', age: 30, address: 'Shanghai' },
+                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Develop', sex: '0', age: 27, address: 'Shanghai' }
+                ]
+              }, 300)
             },
             handlePageChange3 ({ currentPage, pageSize }) {
               this.tablePage3.currentPage = currentPage
@@ -435,14 +447,19 @@ export default {
           },
           methods: {
             findList4 () {
-              this.loading = true
-              XEAjax.get(\`/api/user/page/list/\${this.tablePage4.pageSize}/\${this.tablePage4.currentPage}\`)then(({ page, result }) => {
-                this.tableData4 = result
-                this.tablePage4.totalResult = page.totalResult
+              this.loading4 = true
+              setTimeout(() => {
                 this.loading4 = false
-              }).catch(() => {
-                this.loading4 = false
-              })
+                this.tablePage4.totalResult = 6
+                this.tableData4 = [
+                  { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
+                  { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
+                  { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
+                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', age: 23, address: 'Shenzhen' },
+                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', age: 30, address: 'Shanghai' },
+                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Develop', sex: '0', age: 27, address: 'Shanghai' }
+                ]
+              }, 300)
             },
             handlePageChange4 ({ currentPage, pageSize }) {
               this.tablePage4.currentPage = currentPage
@@ -465,51 +482,66 @@ export default {
     this.findList3()
     this.findList4()
   },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
   methods: {
     findList1 () {
       this.loading1 = true
-      XEAjax.get(`/api/user/page/list/${this.tablePage1.pageSize}/${this.tablePage1.currentPage}`).then(({ page, result }) => {
-        this.tableData1 = result
-        this.tablePage1.totalResult = page.totalResult
+      setTimeout(() => {
         this.loading1 = false
-      }).catch(() => {
-        this.loading1 = false
-      })
+        this.tablePage1.totalResult = 6
+        this.tableData1 = [
+          { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
+          { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
+          { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
+          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', age: 23, address: 'Shenzhen' },
+          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', age: 30, address: 'Shanghai' },
+          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Develop', sex: '0', age: 27, address: 'Shanghai' }
+        ]
+      }, 300)
     },
     findList2 () {
       this.loading2 = true
-      XEAjax.get(`/api/user/page/list/${this.tablePage2.pageSize}/${this.tablePage2.currentPage}`).then(({ page, result }) => {
-        this.tableData2 = result
-        this.tablePage2.totalResult = page.totalResult
+      setTimeout(() => {
         this.loading2 = false
-      }).catch(() => {
-        this.loading2 = false
-      })
+        this.tablePage2.totalResult = 6
+        this.tableData2 = [
+          { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
+          { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
+          { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
+          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', age: 23, address: 'Shenzhen' },
+          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', age: 30, address: 'Shanghai' },
+          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Develop', sex: '0', age: 27, address: 'Shanghai' }
+        ]
+      }, 300)
     },
     findList3 () {
       this.loading3 = true
-      XEAjax.get(`/api/user/page/list/${this.tablePage3.pageSize}/${this.tablePage3.currentPage}`).then(({ page, result }) => {
-        this.tableData3 = result
-        this.tablePage3.totalResult = page.totalResult
+      setTimeout(() => {
         this.loading3 = false
-      }).catch(() => {
-        this.loading3 = false
-      })
+        this.tablePage3.totalResult = 6
+        this.tableData3 = [
+          { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
+          { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
+          { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
+          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', age: 23, address: 'Shenzhen' },
+          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', age: 30, address: 'Shanghai' },
+          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Develop', sex: '0', age: 27, address: 'Shanghai' }
+        ]
+      }, 300)
     },
     findList4 () {
       this.loading4 = true
-      XEAjax.get(`/api/user/page/list/${this.tablePage4.pageSize}/${this.tablePage4.currentPage}`).then(({ page, result }) => {
-        this.tableData4 = result
-        this.tablePage4.totalResult = page.totalResult
+      setTimeout(() => {
         this.loading4 = false
-      }).catch(() => {
-        this.loading4 = false
-      })
+        this.tablePage4.totalResult = 6
+        this.tableData4 = [
+          { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
+          { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
+          { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
+          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', age: 23, address: 'Shenzhen' },
+          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', age: 30, address: 'Shanghai' },
+          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Develop', sex: '0', age: 27, address: 'Shanghai' }
+        ]
+      }, 300)
     },
     handlePageChange1 ({ currentPage, pageSize }) {
       this.tablePage1.currentPage = currentPage

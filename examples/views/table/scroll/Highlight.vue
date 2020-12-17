@@ -24,24 +24,22 @@
     </vxe-table>
 
     <pre>
-      <code>
+      <pre-code>
         | Arrow Up ↑ | 移动到高亮行的上一行 |
         | Arrow Down ↓ | 移动到高亮行的下一行 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -79,13 +77,33 @@ export default {
           created () {
             this.loading = true
             setTimeout(() => {
-              let tableData = window.MOCK_DATA_LIST.slice(0, 600)
-              // 使用函数式加载，阻断 vue 对大数组的监听，大数据性能翻倍提升
-              if (this.$refs.xTable) {
-                this.$refs.xTable.loadData(tableData)
-              }
-              this.loading = false
+              this.mockList(600).then(data => {
+                // 阻断 vue 对大数组的监听，大数据性能翻倍提升
+                if (this.$refs.xTable) {
+                  this.$refs.xTable.loadData(data)
+                }
+                this.loading = false
+              })
             }, 300)
+          },
+          methods: {
+            mockList (size) {
+              return new Promise(resolve => {
+                const list = []
+                for (let index = 0; index < size; index++) {
+                  list.push({
+                    name: \`名称\${index}\`,
+                    sex: '0',
+                    num: 123,
+                    age: 18,
+                    num2: 234,
+                    rate: 3,
+                    address: 'shenzhen'
+                  })
+                }
+                resolve(list)
+              })
+            }
           }
         }
         `
@@ -95,17 +113,33 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      // 阻断 vue 对大数组的监听，大数据性能翻倍提升
-      if (this.$refs.xTable) {
-        this.$refs.xTable.loadData(window.MOCK_DATA_LIST.slice(0, 600))
-      }
-      this.loading = false
+      this.mockList(600).then(data => {
+        // 阻断 vue 对大数组的监听，大数据性能翻倍提升
+        if (this.$refs.xTable) {
+          this.$refs.xTable.loadData(data)
+        }
+        this.loading = false
+      })
     }, 300)
   },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
+  methods: {
+    mockList (size) {
+      return new Promise(resolve => {
+        const list = []
+        for (let index = 0; index < size; index++) {
+          list.push({
+            name: `名称${index}`,
+            sex: '0',
+            num: 123,
+            age: 18,
+            num2: 234,
+            rate: 3,
+            address: 'shenzhen'
+          })
+        }
+        resolve(list)
+      })
+    }
   }
 }
 </script>

@@ -64,15 +64,13 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -153,15 +151,30 @@ export default {
               this.loading = true
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let tableData = window.MOCK_DATA_LIST.slice(0, 600)
+                  const data = this.mockList(600)
                   // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
                   if (this.$refs.xTable) {
-                    this.$refs.xTable.loadData(tableData)
+                    this.$refs.xTable.loadData(data)
                   }
                   resolve()
                   this.loading = false
                 }, 300)
               })
+            },
+            mockList (size) {
+              const list = []
+              for (let index = 0; index < size; index++) {
+                list.push({
+                  name: \`名称\${index}\`,
+                  sex: '0',
+                  num: 123,
+                  age: 18,
+                  num2: 234,
+                  rate: 3,
+                  address: 'shenzhen'
+                })
+              }
+              return list
             },
             insertEvent (row) {
               let xTable = this.$refs.xTable
@@ -193,24 +206,35 @@ export default {
   created () {
     this.findList()
   },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
   methods: {
     findList () {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
+          const data = this.mockList(600)
           // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable) {
-            this.$refs.xTable.loadData(window.MOCK_DATA_LIST.slice(0, 600))
+            this.$refs.xTable.loadData(data)
           }
           resolve()
           this.loading = false
         }, 300)
       })
+    },
+    mockList (size) {
+      const list = []
+      for (let index = 0; index < size; index++) {
+        list.push({
+          name: `名称${index}`,
+          sex: '0',
+          num: 123,
+          age: 18,
+          num2: 234,
+          rate: 3,
+          address: 'shenzhen'
+        })
+      }
+      return list
     },
     insertEvent (row) {
       const xTable = this.$refs.xTable

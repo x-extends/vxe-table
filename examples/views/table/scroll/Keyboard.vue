@@ -72,7 +72,7 @@
     </vxe-table>
 
     <pre>
-      <code>
+      <pre-code>
         | Arrow Up ↑ | 移动到当前活动单元格上面的单元格 |
         | Arrow Down ↓ | 移动到当前活动单元格下面的单元格 |
         | Arrow Left ← | 移动到当前活动单元格左边的单元格 |
@@ -89,21 +89,19 @@
         | Page Down | 向下翻页滚动 |
         | Home | 滚动到顶部 |
         | End | 滚动到底部 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -212,7 +210,7 @@ export default {
               this.loading = true
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let tableData = window.MOCK_DATA_LIST.slice(0, 600)
+                  const tableData = this.mockList(600)
                   // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
                   if (this.$refs.xTable) {
                     this.$refs.xTable.loadData(tableData)
@@ -221,6 +219,21 @@ export default {
                   this.loading = false
                 }, 300)
               })
+            },
+            mockList (size) {
+              const list = []
+              for (let index = 0; index < size; index++) {
+                list.push({
+                  name: \`名称\${index}\`,
+                  sex: '0',
+                  num: 123,
+                  age: 18,
+                  num2: 234,
+                  rate: 3,
+                  address: 'shenzhen'
+                })
+              }
+              return list
             },
             validEvent () {
               this.$refs.xTable.validate((errMap) => {
@@ -306,17 +319,12 @@ export default {
   created () {
     this.findList()
   },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
   methods: {
     findList () {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          const tableData = window.MOCK_DATA_LIST.slice(0, 600)
+          const tableData = this.mockList(600)
           // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable) {
             this.$refs.xTable.loadData(tableData)
@@ -325,6 +333,21 @@ export default {
           this.loading = false
         }, 300)
       })
+    },
+    mockList (size) {
+      const list = []
+      for (let index = 0; index < size; index++) {
+        list.push({
+          name: `名称${index}`,
+          sex: '0',
+          num: 123,
+          age: 18,
+          num2: 234,
+          rate: 3,
+          address: 'shenzhen'
+        })
+      }
+      return list
     },
     validEvent () {
       this.$refs.xTable.validate((errMap) => {

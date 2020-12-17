@@ -2,7 +2,7 @@
   <div>
     <p class="tip">表单</p>
 
-    <vxe-form :data="formData" @submit="findList">
+    <vxe-form :data="formData" @submit="submitEvent">
       <vxe-form-item title="app.body.label.name" field="name">
         <template v-slot>
           <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
@@ -40,16 +40,13 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -58,10 +55,19 @@ export default {
         name: '',
         sex: ''
       },
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+      ],
       demoCodes: [
         `
-        <vxe-form :data="formData" @submit="findList">
+        <vxe-form :data="formData" @submit="submitEvent">
           <vxe-form-item title="app.body.label.name" field="name">
             <template v-slot>
               <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
@@ -105,19 +111,21 @@ export default {
                 name: '',
                 sex: ''
               },
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+              ]
             }
           },
-          created () {
-            this.findList()
-          },
           methods: {
-            findList () {
-              this.loading = true
-              XEAjax.get('/api/user/list', this.formData).then(data => {
-                this.tableData = data
-                this.loading = false
-              })
+            submitEvent () {
+              console.log('submit')
             }
           }
         }
@@ -125,21 +133,9 @@ export default {
       ]
     }
   },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
-  created () {
-    this.findList()
-  },
   methods: {
-    findList () {
-      this.loading = true
-      XEAjax.get('/api/user/list', this.formData).then(data => {
-        this.tableData = data
-        this.loading = false
-      })
+    submitEvent () {
+      console.log('submit')
     }
   }
 }

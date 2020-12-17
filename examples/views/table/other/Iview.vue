@@ -100,15 +100,42 @@
 
 <script>
 import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 
 export default {
   data () {
     return {
       loading: false,
       tableData: [],
-      sexList: [],
-      regionList: [],
+      sexList: [
+        { value: '1', label: '男' },
+        { value: '0', label: '女' }
+      ],
+      regionList: [
+        {
+          label: '北京',
+          value: 1,
+          children: [
+            { value: 3, label: '东城区' },
+            { value: 4, label: '西城区' }
+          ]
+        },
+        {
+          label: '上海',
+          value: 21,
+          children: [
+            { value: 23, label: '黄浦区' },
+            { value: 24, label: '卢湾区' }
+          ]
+        },
+        {
+          label: '广东',
+          value: 42,
+          children: [
+            { value: 43, label: '广州市' },
+            { value: 67, label: '深圳市' }
+          ]
+        }
+      ],
       restaurants: ['前端', '后端'],
       demoCodes: [
         `
@@ -222,22 +249,8 @@ export default {
               ]
               this.loading = false
             }, 500)
-            this.findSexList()
-            this.findRegionList()
           },
           methods: {
-            findSexList () {
-              return XEAjax.get('/api/conf/sex/list').then(data => {
-                this.sexList = data
-                return data
-              })
-            },
-            findRegionList () {
-              return XEAjax.get('/api/conf/region/list').then(data => {
-                this.regionList = data
-                return data
-              })
-            },
             formatDate (value, format) {
               return XEUtils.toDateString(value, format)
             },
@@ -316,22 +329,8 @@ export default {
       ]
       this.loading = false
     }, 500)
-    this.findSexList()
-    this.findRegionList()
   },
   methods: {
-    findSexList () {
-      return XEAjax.get('/api/conf/sex/list').then(data => {
-        this.sexList = data
-        return data
-      })
-    },
-    findRegionList () {
-      return XEAjax.get('/api/conf/region/list').then(data => {
-        this.regionList = data
-        return data
-      })
-    },
     formatDate (value, format) {
       return XEUtils.toDateString(value, format)
     },

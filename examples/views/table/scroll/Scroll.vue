@@ -23,8 +23,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -76,7 +76,7 @@
     </vxe-table>
 
     <pre>
-      <code>
+      <pre-code>
         | Arrow Up ↑ | 匀速向上滚动数据 |
         | Arrow Down ↓ | 匀速向下滚动数据 |
         | Arrow Left ← | 匀速向左滚动数据 |
@@ -86,22 +86,20 @@
         | Spacebar | 翻页滚动 |
         | Home | 滚动到顶部 |
         | End | 滚动到底部 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
 
 export default {
   data () {
@@ -132,9 +130,28 @@ export default {
             }
           },
           created () {
-            XEAjax.mockList(500).then(data => {
+            this.mockList(500).then(data => {
               this.tableData = data
             })
+          },
+          methods: {
+            mockList (size) {
+              return new Promise(resolve => {
+                const list = []
+                for (let index = 0; index < size; index++) {
+                  list.push({
+                    name: \`名称\${index}\`,
+                    sex: '0',
+                    num: 123,
+                    age: 18,
+                    num2: 234,
+                    rate: 3,
+                    address: 'shenzhen'
+                  })
+                }
+                resolve(list)
+              })
+            }
           }
         }
         `,
@@ -190,11 +207,28 @@ export default {
             }
           },
           created () {
-            XEAjax.mockList(200).then(data => {
+            this.mockList(500).then(data => {
               this.tableData = data
             })
           },
           methods: {
+            mockList (size) {
+              return new Promise(resolve => {
+                const list = []
+                for (let index = 0; index < size; index++) {
+                  list.push({
+                    name: \`名称\${index}\`,
+                    sex: '0',
+                    num: 123,
+                    age: 18,
+                    num2: 234,
+                    rate: 3,
+                    address: 'shenzhen'
+                  })
+                }
+                resolve(list)
+              })
+            },
             footerMethod ({ columns, data }) {
               // 返回一个二维数组的表尾合计
               console.log(data.length)
@@ -221,19 +255,31 @@ export default {
     }
   },
   created () {
-    XEAjax.mockList(500).then(data => {
+    this.mockList(500).then(data => {
       this.tableData = data
     })
-    XEAjax.mockList(200).then(data => {
+    this.mockList(200).then(data => {
       this.tableData2 = data
     })
   },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
   methods: {
+    mockList (size) {
+      return new Promise(resolve => {
+        const list = []
+        for (let index = 0; index < size; index++) {
+          list.push({
+            name: `名称${index}`,
+            sex: '0',
+            num: 123,
+            age: 18,
+            num2: 234,
+            rate: 3,
+            address: 'shenzhen'
+          })
+        }
+        resolve(list)
+      })
+    },
     footerMethod ({ columns, data }) {
       // 返回一个二维数组的表尾合计
       return [

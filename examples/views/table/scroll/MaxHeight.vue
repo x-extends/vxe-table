@@ -23,8 +23,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">当数据超过最大高度时自动显示滚动条</p>
@@ -49,15 +49,13 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -96,7 +94,7 @@ export default {
               this.loading = true
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let tableData = window.MOCK_DATA_LIST.slice(0, 3)
+                  let tableData = this.mockList(3)
                   // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
                   if (this.$refs.xTable) {
                     this.$refs.xTable.loadData(tableData)
@@ -105,6 +103,21 @@ export default {
                   this.loading = false
                 }, 300)
               })
+            },
+            mockList (size) {
+              const list = []
+              for (let index = 0; index < size; index++) {
+                list.push({
+                  name: \`名称\${index}\`,
+                  sex: '0',
+                  num: 123,
+                  age: 18,
+                  num2: 234,
+                  rate: 3,
+                  address: 'shenzhen'
+                })
+              }
+              return list
             }
           }
         }
@@ -143,7 +156,7 @@ export default {
               this.loading = true
               return new Promise(resolve => {
                 setTimeout(() => {
-                  let tableData = window.MOCK_DATA_LIST.slice(0, 600)
+                  let tableData = this.mockList(600)
                   // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
                   if (this.$refs.xTable) {
                     this.$refs.xTable.loadData(tableData)
@@ -152,6 +165,21 @@ export default {
                   this.loading = false
                 }, 300)
               })
+            },
+            mockList (size) {
+              const list = []
+              for (let index = 0; index < size; index++) {
+                list.push({
+                  name: \`名称\${index}\`,
+                  sex: '0',
+                  num: 123,
+                  age: 18,
+                  num2: 234,
+                  rate: 3,
+                  address: 'shenzhen'
+                })
+              }
+              return list
             }
           }
         }
@@ -163,17 +191,12 @@ export default {
     this.findList1()
     this.findList2()
   },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
   methods: {
     findList1 () {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          const tableData = window.MOCK_DATA_LIST.slice(0, 3)
+          const tableData = this.mockList(3)
           // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable1) {
             this.$refs.xTable1.loadData(tableData)
@@ -187,7 +210,7 @@ export default {
       this.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          const tableData = window.MOCK_DATA_LIST.slice(0, 600)
+          const tableData = this.mockList(600)
           // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
           if (this.$refs.xTable2) {
             this.$refs.xTable2.loadData(tableData)
@@ -196,6 +219,21 @@ export default {
           this.loading = false
         }, 300)
       })
+    },
+    mockList (size) {
+      const list = []
+      for (let index = 0; index < size; index++) {
+        list.push({
+          name: `名称${index}`,
+          sex: '0',
+          num: 123,
+          age: 18,
+          num2: 234,
+          rate: 3,
+          address: 'shenzhen'
+        })
+      }
+      return list
     }
   }
 }

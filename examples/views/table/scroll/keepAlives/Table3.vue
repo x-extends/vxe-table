@@ -30,9 +30,26 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      this.tableData = window.MOCK_DATA_LIST.slice(0, 1500)
+      this.tableData = this.mockList(2000)
       this.loading = false
     }, 300)
+  },
+  methods: {
+    mockList (size) {
+      const list = []
+      for (let index = 0; index < size; index++) {
+        list.push({
+          name: `名称${index}`,
+          sex: '0',
+          num: 123,
+          age: 18,
+          num2: 234,
+          rate: 3,
+          address: 'shenzhen'
+        })
+      }
+      return list
+    }
   }
 }
 </script>

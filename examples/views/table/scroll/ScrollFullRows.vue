@@ -56,7 +56,7 @@
     </vxe-table>
 
     <pre>
-      <code>
+      <pre-code>
         | Arrow Up ↑ | 匀速向上滚动数据 |
         | Arrow Down ↓ | 匀速向下滚动数据 |
         | Arrow Left ← | 匀速向左滚动数据 |
@@ -66,21 +66,20 @@
         | Spacebar | 翻页滚动 |
         | Home | 滚动到顶部 |
         | End | 滚动到底部 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
 import XEAjax from 'xe-ajax'
-import hljs from 'highlight.js'
 
 export default {
   data () {
@@ -173,11 +172,6 @@ export default {
   },
   created () {
     this.loadList(600)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     loadList (size) {
