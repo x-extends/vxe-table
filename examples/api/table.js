@@ -1828,6 +1828,33 @@ const apis = [
         defVal: '继承 setup.table.clipConfig',
         list: [
           {
+            name: 'isCopy',
+            desc: '是否启用复制功能',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'isCut',
+            desc: '是否启用剪贴功能',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'isPaste',
+            desc: '是否启用粘贴功能',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'copyMethod',
             desc: '重写单元格复制取值的方法，将单元格复制到剪贴板',
             version: 'pro',
@@ -1840,7 +1867,7 @@ const apis = [
             name: 'beforeCopyMethod',
             desc: '自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
-            type: '({ targetAreas }) => boolean',
+            type: '({ isCut, targetAreas }) => boolean',
             enum: '',
             defVal: '',
             list: []
