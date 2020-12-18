@@ -690,6 +690,9 @@ export default {
       if (treeConfig && this.stripe) {
         UtilTools.warn('vxe.error.noTree', ['stripe'])
       }
+      if (this.tooltipOpts.enabled) {
+        UtilTools.warn('vxe.error.delProp', ['tooltip-config.enabled', 'tooltip-config.showAll'])
+      }
       // 检查导入导出类型
       const { exportConfig, exportOpts, importConfig, importOpts } = this
       if (importConfig && importOpts.types && !XEUtils.includeArrays(VXETable.importTypes, importOpts.types)) {

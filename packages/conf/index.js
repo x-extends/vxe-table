@@ -85,6 +85,11 @@ const GlobalConfig = {
     mouseConfig: {
       extension: true
     },
+    clipConfig: {
+      isCopy: true,
+      isCut: true,
+      isPaste: true
+    },
     fnrConfig: {
       isFind: true,
       isReplace: true
