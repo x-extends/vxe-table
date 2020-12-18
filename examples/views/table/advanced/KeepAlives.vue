@@ -13,7 +13,7 @@
       <router-link class="link" :to="{name: 'TableKeepAliveTable3'}">表格3</router-link>
     </p>
 
-    <router-view v-slot="{ Component }">
+    <router-view #default="{ Component }">
       <keep-alive>
         <component :is="Component" />
       </keep-alive>

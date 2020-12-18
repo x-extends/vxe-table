@@ -3,7 +3,7 @@
     <p class="tip">实现简单的级联下拉选项列表<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="insertEvent()">新增</vxe-button>
       </template>
     </vxe-toolbar>
@@ -120,7 +120,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="insertEvent()">新增</vxe-button>
           </template>
         </vxe-toolbar>

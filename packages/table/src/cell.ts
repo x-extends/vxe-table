@@ -30,29 +30,29 @@ function renderTitleContent (params: any, content: any) {
   const { showHeaderOverflow: allColumnHeaderOverflow } = props
   const { showHeaderOverflow } = column
   const tooltipOpts = computeTooltipOpts.value
-  const { enabled } = tooltipOpts
+  const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
   const showTitle = headOverflow === 'title'
   const showTooltip = headOverflow === true || headOverflow === 'tooltip'
   const ons: any = {}
-  if (showTitle || showTooltip || enabled) {
+  if (showTitle || showTooltip || showAllTip) {
     ons.onMouseenter = (evnt: MouseEvent) => {
       if (internalData._isResize) {
         return
       }
       if (showTitle) {
         DomTools.updateCellTitle(evnt.currentTarget, column)
-      } else if (showTooltip || enabled) {
+      } else if (showTooltip || showAllTip) {
         $table.triggerHeaderTooltipEvent(evnt, params)
       }
     }
   }
-  if (showTooltip || enabled) {
+  if (showTooltip || showAllTip) {
     ons.onMouseleave = (evnt: MouseEvent) => {
       if (internalData._isResize) {
         return
       }
-      if (showTooltip || enabled) {
+      if (showTooltip || showAllTip) {
         $table.handleTargetLeaveEvent(evnt)
       }
     }

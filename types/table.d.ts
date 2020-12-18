@@ -788,14 +788,6 @@ export interface TableReactData {
     titles: {
       columns: any[];
     },
-    // 所有选中
-    checked: {
-      rows: any[];
-      columns: any[];
-      tRows: any[];
-      tColumns: any[];
-      [key: string]: any;
-    },
     // 选中源
     selected: {
       row: any;
@@ -1220,7 +1212,7 @@ export namespace VxeTablePropTypes {
    * 提示信息配置项
    */
   export interface TooltipConfig {
-    enabled?: boolean;
+    showAll?: boolean;
     theme?: 'dark' | 'light';
     enterable?: boolean;
     leaveDelay?: number;
@@ -1436,6 +1428,9 @@ export namespace VxeTablePropTypes {
    * 复制/粘贴配置项
    */
   export interface ClipConfig {
+    isCopy?: boolean;
+    isCut?: boolean;
+    isPaste?: boolean;
     getMethod?(params: {
       row: any;
       column: VxeTableDefines.ColumnInfo;

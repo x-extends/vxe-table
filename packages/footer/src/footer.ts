@@ -146,7 +146,7 @@ export default defineComponent({
               style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }) : footerRowStyle) : null
             }, tableColumn.map((column: any, $columnIndex: any) => {
               const { type, showFooterOverflow, footerAlign, align, footerClassName } = column
-              const { enabled } = tooltipOpts
+              const showAllTip = tooltipOpts.showAll
               const isColGroup = column.children && column.children.length
               const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
               const footOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
@@ -165,18 +165,18 @@ export default defineComponent({
               if (scrollXLoad && !hasEllipsis) {
                 showEllipsis = hasEllipsis = true
               }
-              if (showTitle || showTooltip || enabled) {
+              if (showTitle || showTooltip || showAllTip) {
                 tfOns.onMouseenter = (evnt: any) => {
                   if (showTitle) {
                     DomTools.updateCellTitle(evnt.currentTarget, column)
-                  } else if (showTooltip || enabled) {
+                  } else if (showTooltip || showAllTip) {
                     $xetable.triggerFooterTooltipEvent(evnt, params)
                   }
                 }
               }
-              if (showTooltip || enabled) {
+              if (showTooltip || showAllTip) {
                 tfOns.onMouseleave = () => {
-                  if (showTooltip || enabled) {
+                  if (showTooltip || showAllTip) {
                     $xetable.handleTargetLeaveEvent()
                   }
                 }

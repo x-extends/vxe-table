@@ -221,23 +221,37 @@ export default defineComponent({
           reactData.showPanel = true
           updateZindex()
           updatePlacement()
+          setTimeout(() => {
+            if (reactData.showPanel) {
+              updatePlacement()
+            }
+          }, 50)
         }
       }, 10)
     }
 
-    const mouseleaveEvent = () => {
+    const closePanel = () => {
       const panelElem = refBtnPanel.value
-      panelElem.dataset.active = 'N'
-      setTimeout(() => {
-        if (panelElem.dataset.active !== 'Y') {
-          reactData.showPanel = false
-          setTimeout(() => {
-            if (panelElem.dataset.active !== 'Y') {
-              reactData.animatVisible = false
-            }
-          }, 350)
-        }
-      }, 100)
+      if (panelElem) {
+        panelElem.dataset.active = 'N'
+        setTimeout(() => {
+          if (panelElem.dataset.active !== 'Y') {
+            reactData.showPanel = false
+            setTimeout(() => {
+              if (panelElem.dataset.active !== 'Y') {
+                reactData.animatVisible = false
+              }
+            }, 350)
+          }
+        }, 100)
+      } else {
+        reactData.animatVisible = false
+        reactData.showPanel = false
+      }
+    }
+
+    const mouseleaveEvent = () => {
+      closePanel()
     }
 
     const renderContent = () => {
@@ -294,7 +308,7 @@ export default defineComponent({
       GlobalEvent.on($xebutton, 'mousewheel', (evnt: Event) => {
         const panelElem = refBtnPanel.value
         if (reactData.showPanel && !DomTools.getEventTargetNode(evnt, panelElem).flag) {
-          updatePlacement()
+          closePanel()
         }
       })
     })

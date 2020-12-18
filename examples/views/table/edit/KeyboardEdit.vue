@@ -62,7 +62,6 @@ export default defineComponent({
         isEnter: true,
         isTab: true,
         isEdit: true,
-        isChecked: true,
         editMethod ({ row, column }) {
           const $table = xTable.value
           // 重写默认的覆盖式，改为追加式
@@ -124,7 +123,6 @@ export default defineComponent({
                 isEnter: true,
                 isTab: true,
                 isEdit: true,
-                isChecked: true,
                 editMethod ({ row, column }) {
                   const $table = xTable.value
                   // 重写默认的覆盖式，改为追加式

@@ -121,7 +121,7 @@ export default defineComponent({
       const tooltipOpts = computeTooltipOpts.value
       const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
       const { actived } = editStore
-      const { enabled } = tooltipOpts
+      const showAllTip = tooltipOpts.showAll
       const columnIndex = $xetable.getColumnIndex(column)
       const _columnIndex = $xetable.getVTColumnIndex(column)
       const isEdit = isEnableConf(editRender)
@@ -143,14 +143,14 @@ export default defineComponent({
         showEllipsis = hasEllipsis = true
       }
       // hover 进入事件
-      if (showTitle || showTooltip || enabled || tooltipConfig) {
+      if (showTitle || showTooltip || showAllTip || tooltipConfig) {
         tdOns.onMouseenter = (evnt: any) => {
           if (isOperateMouse()) {
             return
           }
           if (showTitle) {
             DomTools.updateCellTitle(evnt.currentTarget, column)
-          } else if (showTooltip || enabled) {
+          } else if (showTooltip || showAllTip) {
             // 如果配置了显示 tooltip
             $xetable.triggerBodyTooltipEvent(evnt, params)
           }
@@ -158,12 +158,12 @@ export default defineComponent({
         }
       }
       // hover 退出事件
-      if (showTooltip || enabled || tooltipConfig) {
+      if (showTooltip || showAllTip || tooltipConfig) {
         tdOns.onMouseleave = (evnt: any) => {
           if (isOperateMouse()) {
             return
           }
-          if (showTooltip || enabled) {
+          if (showTooltip || showAllTip) {
             $xetable.handleTargetLeaveEvent()
           }
           $xetable.dispatchEvent('cell-mouseleave', Object.assign({ cell: evnt.currentTarget }, params), evnt)

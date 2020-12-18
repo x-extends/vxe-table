@@ -44,27 +44,25 @@
         </vxe-form>
       </template>
 
-      <!--自定义插槽 toolbar 插槽-->
-      <template #toolbar>
-        <vxe-toolbar custom>
-          <template #buttons>
-            <vxe-form>
-              <vxe-form-item>
-                <template #default>
-                  <vxe-input v-model="demo1.searchVal1" placeholder="搜索"></vxe-input>
-                </template>
-              </vxe-form-item>
-              <vxe-form-item>
-                <template #default>
-                  <vxe-button status="primary">查询</vxe-button>
-                </template>
-              </vxe-form-item>
-            </vxe-form>
-          </template>
-          <template #tools>
-            <vxe-input v-model="demo1.searchVal2" placeholder="搜索"></vxe-input>
-          </template>
-        </vxe-toolbar>
+      <!--自定义插槽 toolbar buttons 插槽-->
+      <template #toolbar_buttons>
+        <vxe-form>
+          <vxe-form-item>
+            <template #default>
+              <vxe-input placeholder="搜索"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item>
+            <template #default>
+              <vxe-button status="primary">查询</vxe-button>
+            </template>
+          </vxe-form-item>
+        </vxe-form>
+      </template>
+
+      <!--自定义插槽 toolbar tools 插槽-->
+      <template #toolbar_tools>
+        <vxe-input placeholder="搜索"></vxe-input>
       </template>
 
       <!--使用 top 插槽-->
@@ -245,6 +243,13 @@ export default defineComponent({
         { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man ', age: 29, address: 'Shenzhen', img1: '' },
         { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man ', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
       ],
+      toolbarConfig: {
+        custom: true,
+        slots: {
+          buttons: 'toolbar_buttons',
+          tools: 'toolbar_tools'
+        }
+      },
       columns: [
         { type: 'checkbox', width: 60 },
         { field: 'name', title: 'Name' },
@@ -377,27 +382,25 @@ export default defineComponent({
             </vxe-form>
           </template>
 
-          <!--自定义插槽 toolbar 插槽-->
-          <template #toolbar>
-            <vxe-toolbar custom>
-              <template #buttons>
-                <vxe-form>
-                  <vxe-form-item>
-                    <template #default>
-                      <vxe-input v-model="demo1.searchVal1" placeholder="搜索"></vxe-input>
-                    </template>
-                  </vxe-form-item>
-                  <vxe-form-item>
-                    <template #default>
-                      <vxe-button status="primary">查询</vxe-button>
-                    </template>
-                  </vxe-form-item>
-                </vxe-form>
-              </template>
-              <template #tools>
-                <vxe-input v-model="demo1.searchVal2" placeholder="搜索"></vxe-input>
-              </template>
-            </vxe-toolbar>
+          <!--自定义插槽 toolbar buttons 插槽-->
+          <template #toolbar_buttons>
+            <vxe-form>
+              <vxe-form-item>
+                <template #default>
+                  <vxe-input placeholder="搜索"></vxe-input>
+                </template>
+              </vxe-form-item>
+              <vxe-form-item>
+                <template #default>
+                  <vxe-button status="primary">查询</vxe-button>
+                </template>
+              </vxe-form-item>
+            </vxe-form>
+          </template>
+
+          <!--自定义插槽 toolbar tools 插槽-->
+          <template #toolbar_tools>
+            <vxe-input placeholder="搜索"></vxe-input>
           </template>
 
           <!--使用 top 插槽-->
@@ -567,6 +570,13 @@ export default defineComponent({
                 { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man ', age: 29, address: 'Shenzhen', img1: '' },
                 { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man ', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
               ],
+              toolbarConfig: {
+                custom: true,
+                slots: {
+                  buttons: 'toolbar_buttons',
+                  tools: 'toolbar_tools'
+                }
+              },
               columns: [
                 { type: 'checkbox', width: 60 },
                 { field: 'name', title: 'Name' },

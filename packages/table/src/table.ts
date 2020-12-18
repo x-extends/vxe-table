@@ -145,13 +145,6 @@ export default defineComponent({
         titles: {
           columns: []
         },
-        // 所有选中
-        checked: {
-          rows: [],
-          columns: [],
-          tRows: [],
-          tColumns: []
-        },
         // 选中源
         selected: {
           row: null,
@@ -3818,6 +3811,7 @@ export default defineComponent({
         $xetable.closeMenu()
       }
       tableMethods.recalculate(true)
+      tablePrivateMethods.updateCellAreas()
     }
 
     const handleTargetEnterEvent = () => {
@@ -3837,13 +3831,13 @@ export default defineComponent({
       const { tooltipStore } = internalData
       const tooltipOpts = computeTooltipOpts.value
       const { column, row } = params
-      const { enabled, contentMethod } = tooltipOpts
+      const { showAll, contentMethod } = tooltipOpts
       const $tooltip = refTooltip.value
       const customContent = contentMethod ? contentMethod(params) : null
       const useCustom = contentMethod && !XEUtils.eqNull(customContent)
       const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
       const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
-      if (content && (enabled || useCustom || isCellOverflow)) {
+      if (content && (showAll || useCustom || isCellOverflow)) {
         Object.assign(tooltipStore, {
           row,
           column,
