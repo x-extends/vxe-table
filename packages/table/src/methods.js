@@ -2113,6 +2113,7 @@ const Methods = {
   handleGlobalResizeEvent () {
     this.closeMenu()
     this.recalculate(true)
+    this.updateCellAreas()
   },
   handleTooltipLeaveMethod () {
     const tooltipOpts = this.tooltipOpts

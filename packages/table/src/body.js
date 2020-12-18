@@ -73,7 +73,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   } = $xetable
   const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
-  const { enabled } = tooltipOpts
+  const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
   const isEdit = isEnableConf(editRender)
@@ -98,14 +98,14 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     showEllipsis = hasEllipsis = true
   }
   // hover 进入事件
-  if (showTitle || showTooltip || enabled || bindMouseenter || tooltipConfig) {
+  if (showTitle || showTooltip || showAllTip || bindMouseenter || tooltipConfig) {
     tdOns.mouseenter = evnt => {
       if (isOperateMouse($xetable)) {
         return
       }
       if (showTitle) {
         DomTools.updateCellTitle(evnt.currentTarget, column)
-      } else if (showTooltip || enabled) {
+      } else if (showTooltip || showAllTip) {
         // 如果配置了显示 tooltip
         $xetable.triggerBodyTooltipEvent(evnt, params)
       }
@@ -115,12 +115,12 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // hover 退出事件
-  if (showTooltip || enabled || bindMouseleave || tooltipConfig) {
+  if (showTooltip || showAllTip || bindMouseleave || tooltipConfig) {
     tdOns.mouseleave = evnt => {
       if (isOperateMouse($xetable)) {
         return
       }
-      if (showTooltip || enabled) {
+      if (showTooltip || showAllTip) {
         $xetable.handleTargetLeaveEvent(evnt)
       }
       if (bindMouseleave) {
