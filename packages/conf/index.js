@@ -66,6 +66,9 @@ const GlobalConfig = {
       indent: 20,
       showIcon: true
     },
+    keyboardConfig: {
+      isChecked: true
+    },
     expandConfig: {
       // trigger: 'default',
       showIcon: true

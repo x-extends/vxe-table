@@ -19,6 +19,7 @@
       :footer-method="footerMethod"
       :columns="tableColumn"
       :data="tableData"
+      :toolbar-config="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}"
       @checkbox-change="checkboxChangeEvent"
       @checkbox-all="checkboxChangeEvent">
@@ -51,27 +52,25 @@
         </vxe-form>
       </template>
 
-      <!--自定义插槽 toolbar 插槽-->
-      <template v-slot:toolbar>
-        <vxe-toolbar custom>
-          <template v-slot:buttons>
-            <vxe-form>
-              <vxe-form-item>
-                <template v-slot>
-                  <vxe-input placeholder="搜索"></vxe-input>
-                </template>
-              </vxe-form-item>
-              <vxe-form-item>
-                <template v-slot>
-                  <vxe-button status="primary">查询</vxe-button>
-                </template>
-              </vxe-form-item>
-            </vxe-form>
-          </template>
-          <template v-slot:tools>
-            <vxe-input placeholder="搜索"></vxe-input>
-          </template>
-        </vxe-toolbar>
+      <!--自定义插槽 toolbar buttons 插槽-->
+      <template v-slot:toolbar_buttons>
+        <vxe-form>
+          <vxe-form-item>
+            <template v-slot>
+              <vxe-input placeholder="搜索"></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item>
+            <template v-slot>
+              <vxe-button status="primary">查询</vxe-button>
+            </template>
+          </vxe-form-item>
+        </vxe-form>
+      </template>
+
+      <!--自定义插槽 toolbar tools 插槽-->
+      <template v-slot:toolbar_tools>
+        <vxe-input placeholder="搜索"></vxe-input>
       </template>
 
       <!--使用 top 插槽-->
@@ -215,6 +214,13 @@ export default {
         pageSize: 10
       },
       tableData: [],
+      tableToolbar: {
+        custom: true,
+        slots: {
+          buttons: 'toolbar_buttons',
+          tools: 'toolbar_tools'
+        }
+      },
       tableColumn: [
         { type: 'checkbox', width: 60 },
         // 对应自定义插槽的名称
@@ -334,6 +340,7 @@ export default {
           :footer-method="footerMethod"
           :columns="tableColumn"
           :data="tableData"
+          :toolbar-config="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil-square-o'}"
           @checkbox-change="checkboxChangeEvent"
           @checkbox-all="checkboxChangeEvent">
@@ -366,27 +373,25 @@ export default {
             </vxe-form>
           </template>
 
-          <!--自定义插槽 toolbar 插槽-->
-          <template v-slot:toolbar>
-            <vxe-toolbar custom>
-              <template v-slot:buttons>
-                <vxe-form>
-                  <vxe-form-item>
-                    <template v-slot>
-                      <vxe-input placeholder="搜索"></vxe-input>
-                    </template>
-                  </vxe-form-item>
-                  <vxe-form-item>
-                    <template v-slot>
-                      <vxe-button status="primary">查询</vxe-button>
-                    </template>
-                  </vxe-form-item>
-                </vxe-form>
-              </template>
-              <template v-slot:tools>
-                <vxe-input placeholder="搜索"></vxe-input>
-              </template>
-            </vxe-toolbar>
+          <!--自定义插槽 toolbar buttons 插槽-->
+          <template v-slot:toolbar_buttons>
+            <vxe-form>
+              <vxe-form-item>
+                <template v-slot>
+                  <vxe-input placeholder="搜索"></vxe-input>
+                </template>
+              </vxe-form-item>
+              <vxe-form-item>
+                <template v-slot>
+                  <vxe-button status="primary">查询</vxe-button>
+                </template>
+              </vxe-form-item>
+            </vxe-form>
+          </template>
+
+          <!--自定义插槽 toolbar tools 插槽-->
+          <template v-slot:toolbar_tools>
+            <vxe-input placeholder="搜索"></vxe-input>
           </template>
 
           <!--使用 top 插槽-->
@@ -517,6 +522,13 @@ export default {
                 pageSize: 10
               },
               tableData: [],
+              tableToolbar: {
+                custom: true,
+                slots: {
+                  buttons: 'toolbar_buttons',
+                  tools: 'toolbar_tools'
+                }
+              },
               tableColumn: [
                 { type: 'checkbox', width: 60 },
                 // 对应自定义插槽的名称

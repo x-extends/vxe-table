@@ -1344,8 +1344,18 @@ const apis = [
         defVal: '继承 setup.table.tooltipConfig',
         list: [
           {
-            name: 'enabled',
+            name: 'showAll',
             desc: '所有单元格开启 tooltip 显示',
+            version: '2.10.8',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'enabled',
+            disabled: true,
+            desc: '即将废弃，请使用 showAll',
             version: '2.9.6',
             type: 'Boolean',
             enum: '',
@@ -2060,7 +2070,7 @@ const apis = [
             version: '2.10.8',
             type: 'Boolean',
             enum: '',
-            defVal: 'false',
+            defVal: 'true',
             list: []
           },
           {
@@ -4895,7 +4905,7 @@ const apis = [
       },
       {
         name: 'openTooltip(target, content)',
-        desc: '如果功能被支持，用于 mouse-config.area，打开单元格查找功能',
+        desc: '打开 tooltip 提示',
         version: '1.10.4',
         type: 'Promise',
         enum: '',

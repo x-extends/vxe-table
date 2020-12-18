@@ -167,7 +167,7 @@ export default {
     },
     handleGlobalMousewheelEvent (evnt) {
       if (this.showPanel && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
-        this.updatePlacement()
+        this.closePanel()
       }
     },
     updateZindex () {
@@ -205,22 +205,35 @@ export default {
           this.showPanel = true
           this.updateZindex()
           this.updatePlacement()
+          setTimeout(() => {
+            if (this.showPanel) {
+              this.updatePlacement()
+            }
+          }, 50)
         }
       }, 10)
     },
     mouseleaveEvent () {
+      this.closePanel()
+    },
+    closePanel () {
       const panelElem = this.$refs.panel
-      panelElem.dataset.active = 'N'
-      setTimeout(() => {
-        if (panelElem.dataset.active !== 'Y') {
-          this.showPanel = false
-          setTimeout(() => {
-            if (panelElem.dataset.active !== 'Y') {
-              this.animatVisible = false
-            }
-          }, 350)
-        }
-      }, 100)
+      if (panelElem) {
+        panelElem.dataset.active = 'N'
+        setTimeout(() => {
+          if (panelElem.dataset.active !== 'Y') {
+            this.showPanel = false
+            setTimeout(() => {
+              if (panelElem.dataset.active !== 'Y') {
+                this.animatVisible = false
+              }
+            }, 350)
+          }
+        }, 100)
+      } else {
+        this.animatVisible = false
+        this.showPanel = false
+      }
     },
     updatePlacement () {
       return this.$nextTick().then(() => {
