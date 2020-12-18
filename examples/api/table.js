@@ -1858,7 +1858,7 @@ const apis = [
             name: 'copyMethod',
             desc: '重写单元格复制取值的方法，将单元格复制到剪贴板',
             version: 'pro',
-            type: '({ row, column, cellValue }) => string',
+            type: '({ isCut, row, column, cellValue }) => string',
             enum: '',
             defVal: '',
             list: []
@@ -1876,7 +1876,7 @@ const apis = [
             name: 'pasteMethod',
             desc: '重写单元格粘贴赋值的方法，从剪贴板赋值到单元格',
             version: 'pro',
-            type: '({ row, column, cellValue }) => void',
+            type: '({ isCut, row, column, cellValue }) => void',
             enum: '',
             defVal: '',
             list: []
@@ -1885,7 +1885,7 @@ const apis = [
             name: 'beforePasteMethod',
             desc: '自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
-            type: '({ currentAreas, targetAreas, cellValues }) => boolean',
+            type: '({ isCut, cutAreas, currentAreas, targetAreas, cellValues }) => boolean',
             enum: '',
             defVal: '',
             list: []
