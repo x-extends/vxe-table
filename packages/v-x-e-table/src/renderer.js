@@ -11,15 +11,6 @@ function isEmptyValue (cellValue) {
   return cellValue === null || cellValue === undefined || cellValue === ''
 }
 
-function getModelEvent (renderOpts) {
-  switch (renderOpts.name) {
-    case '$input':
-    case '$textarea':
-      return 'modelValue'
-  }
-  return 'input'
-}
-
 function getChangeEvent (renderOpts) {
   switch (renderOpts.name) {
     case 'input':
@@ -100,8 +91,8 @@ function getNativeOns (renderOpts, params) {
 }
 
 function getOns (renderOpts, params, inputFunc, changeFunc) {
-  const { events } = renderOpts
-  const modelEvent = getModelEvent(renderOpts)
+  const { name, events } = renderOpts
+  const modelEvent = 'input'
   const changeEvent = getChangeEvent(renderOpts)
   const isSameEvent = changeEvent === modelEvent
   const ons = {}
@@ -112,7 +103,8 @@ function getOns (renderOpts, params, inputFunc, changeFunc) {
   })
   if (inputFunc) {
     ons[modelEvent] = function (targetEvnt) {
-      inputFunc(targetEvnt)
+      // 对输入框进行优化
+      inputFunc(name === '$input' || name === '$textarea' ? targetEvnt.value : targetEvnt)
       if (events && events[modelEvent]) {
         events[modelEvent](params, targetEvnt)
       }
