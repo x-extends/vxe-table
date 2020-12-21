@@ -546,11 +546,9 @@ export default defineComponent({
       }
     }
 
-    const inputEvent = (evnt: Event & { type: 'input' }) => {
-      const { immediate } = props
+    const emitInputEvent = (value: any, evnt: Event) => {
       const isDatePickerType = computeIsDatePickerType.value
-      const inputElem = evnt.target as HTMLInputElement
-      const value = inputElem.value
+      const { immediate } = props
       reactData.inputValue = value
       if (immediate) {
         if (!isDatePickerType) {
@@ -558,6 +556,12 @@ export default defineComponent({
         }
       }
       inputMethods.dispatchEvent('input', { value }, evnt)
+    }
+
+    const inputEvent = (evnt: Event & { type: 'input' }) => {
+      const inputElem = evnt.target as HTMLInputElement
+      const value = inputElem.value
+      emitInputEvent(value, evnt)
     }
 
     const changeEvent = (evnt: Event & { type: 'change' }) => {
@@ -804,13 +808,15 @@ export default defineComponent({
       const stepValue = computeStepValue.value
       const numValue = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
       const newValue = isPlus ? XEUtils.add(numValue, stepValue) : XEUtils.subtract(numValue, stepValue)
+      let restNum: number | string
       if (!vaildMinNum(newValue)) {
-        emitUpdate(getNumberValue(min), evnt)
+        restNum = min
       } else if (!vaildMaxNum(newValue)) {
-        emitUpdate(getNumberValue(max), evnt)
+        restNum = max
       } else {
-        emitUpdate(getNumberValue(newValue), evnt)
+        restNum = newValue
       }
+      emitInputEvent(getNumberValue(restNum), evnt as (Event & { type: 'input' }))
     }
 
     let downbumTimeout: number

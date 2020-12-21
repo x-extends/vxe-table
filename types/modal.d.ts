@@ -128,6 +128,7 @@ export namespace VxeModalPropTypes {
   export type Resize = boolean;
   export type ShowHeader = boolean;
   export type ShowFooter = boolean;
+  export type ShowZoom = boolean;
   export type DblclickZoom = boolean;
   export type Width = number | string;
   export type Height = number | string;
@@ -171,6 +172,7 @@ export interface VxeModalProps {
   resize?: VxeModalPropTypes.Resize;
   showHeader?: VxeModalPropTypes.ShowHeader;
   showFooter?: VxeModalPropTypes.ShowFooter;
+  showZoom?: VxeModalPropTypes.ShowZoom;
   dblclickZoom?: VxeModalPropTypes.DblclickZoom;
   width?: VxeModalPropTypes.Width;
   height?: VxeModalPropTypes.Height;

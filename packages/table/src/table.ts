@@ -1742,7 +1742,7 @@ export default defineComponent({
       handleDefaultTreeExpand()
       handleDefaultMergeCells()
       handleDefaultMergeFooterItems()
-      nextTick(() => requestAnimationFrame(() => tableMethods.recalculate()))
+      nextTick(() => setTimeout(() => tableMethods.recalculate()))
     }
 
     const handleTableColumn = () => {
@@ -3484,7 +3484,7 @@ export default defineComponent({
                       // 如果点击了当前表格之外
                       !getEventTargetNode(evnt, el).flag
                   ) {
-                    requestAnimationFrame(() => $xetable.clearActived(evnt))
+                    setTimeout(() => $xetable.clearActived(evnt))
                   }
                 })
               }
@@ -4708,7 +4708,6 @@ export default defineComponent({
           const { fullAllDataRowMap } = internalData
           const colid = column.id
           const cacheFormat = fullAllDataRowMap.has(row)
-          const formatParams = { cellValue, row, column }
           if (cacheFormat) {
             rest = fullAllDataRowMap.get(row)
             formatData = rest.formatData
@@ -4721,6 +4720,7 @@ export default defineComponent({
               }
             }
           }
+          const formatParams = { cellValue, row, rowIndex: tableMethods.getRowIndex(row), column, columnIndex: tableMethods.getColumnIndex(column) }
           if (XEUtils.isString(formatter)) {
             const globalFunc = formats.get(formatter)
             cellLabel = globalFunc ? globalFunc(formatParams) : ''

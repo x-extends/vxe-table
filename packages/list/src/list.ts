@@ -150,7 +150,7 @@ export default defineComponent({
         scrollBodyElem.scrollTop = 0
       }
       return new Promise(resolve => {
-        requestAnimationFrame(() => {
+        setTimeout(() => {
           resolve(nextTick())
         })
       })

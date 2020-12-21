@@ -419,8 +419,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const editOpts = computeEditOpts.value
         const { mode, activeMethod } = editOpts
         const { actived } = editStore
-        const { row, column, cell } = params
+        const { row, column } = params
         const { editRender } = column
+        const cell = params.cell = (params.cell || $xetable.getCell(row, column))
         if (isEnableConf(editRender) && cell) {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑

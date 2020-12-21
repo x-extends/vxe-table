@@ -36,6 +36,7 @@ export default defineComponent({
     resize: Boolean as PropType<VxeModalPropTypes.Resize>,
     showHeader: { type: Boolean as PropType<VxeModalPropTypes.ShowHeader>, default: true },
     showFooter: Boolean as PropType<VxeModalPropTypes.ShowFooter>,
+    showZoom: Boolean as PropType<VxeModalPropTypes.ShowZoom>,
     dblclickZoom: { type: Boolean as PropType<VxeModalPropTypes.DblclickZoom>, default: () => GlobalConfig.modal.dblclickZoom },
     width: [Number, String] as PropType<VxeModalPropTypes.Width>,
     height: [Number, String] as PropType<VxeModalPropTypes.Height>,
@@ -291,7 +292,7 @@ export default defineComponent({
 
     const maximize = () => {
       return nextTick().then(() => {
-        if (props.resize && !reactData.zoomLocat) {
+        if (props.showZoom && !reactData.zoomLocat) {
           const marginSize = XEUtils.toNumber(props.marginSize)
           const boxElem = getBox()
           const { visibleHeight, visibleWidth } = DomTools.getDomNode()
@@ -666,7 +667,7 @@ export default defineComponent({
     }
 
     const renderTitles = () => {
-      const { slots: propSlots = {}, resize, title } = props
+      const { slots: propSlots = {}, showZoom, title } = props
       const { zoomLocat } = reactData
       const titleSlot = slots.title || propSlots.title
       const titVNs: any[] = titleSlot ? titleSlot({ $modal: $xemodal }) : [
@@ -674,7 +675,7 @@ export default defineComponent({
           class: 'vxe-modal--title'
         }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))
       ]
-      if (resize) {
+      if (showZoom) {
         titVNs.push(
           h('i', {
             class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
@@ -694,13 +695,13 @@ export default defineComponent({
     }
 
     const renderHeaders = () => {
-      const { slots: propSlots = {}, resize } = props
+      const { slots: propSlots = {}, showZoom } = props
       const isMsg = computeIsMsg.value
       const headerSlot = slots.header || propSlots.header
       const headVNs: any[] = []
       if (props.showHeader) {
         const headerOns: any = {}
-        if (resize && props.dblclickZoom && props.type === 'modal') {
+        if (showZoom && props.dblclickZoom && props.type === 'modal') {
           headerOns.onDblclick = toggleZoomEvent
         }
         headVNs.push(
