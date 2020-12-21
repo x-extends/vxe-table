@@ -1039,7 +1039,7 @@ const Methods = {
     if (this.mergeFooterItems) {
       this.handleDefaultMergeFooterItems()
     }
-    this.$nextTick(() => requestAnimationFrame(this.recalculate))
+    this.$nextTick(() => setTimeout(this.recalculate))
   },
   /**
    * 隐藏指定列
@@ -1825,7 +1825,7 @@ const Methods = {
                     // 如果点击了当前表格之外
                     !getEventTargetNode(evnt, $el).flag
                 ) {
-                  requestAnimationFrame(() => this.clearActived(evnt))
+                  setTimeout(() => this.clearActived(evnt))
                 }
               })
             }
@@ -3968,7 +3968,6 @@ const Methods = {
       const { fullAllDataRowMap } = this
       const colid = column.id
       const cacheFormat = fullAllDataRowMap.has(row)
-      const formatParams = { cellValue, row, column }
       if (cacheFormat) {
         rest = fullAllDataRowMap.get(row)
         formatData = rest.formatData
@@ -3981,6 +3980,7 @@ const Methods = {
           }
         }
       }
+      const formatParams = { cellValue, row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column) }
       if (XEUtils.isString(formatter)) {
         const globalFunc = formats.get(formatter)
         cellLabel = globalFunc ? globalFunc(formatParams) : ''

@@ -21,7 +21,7 @@ function eventHandle () {
         if (rWidth || rHeight) {
           observer.width = clientWidth
           observer.heighe = clientHeight
-          requestAnimationFrame(item.callback)
+          setTimeout(item.callback)
         }
       })
     })

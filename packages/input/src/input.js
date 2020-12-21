@@ -1051,16 +1051,19 @@ export default {
         this.$emit('change', { value, $event: evnt })
       }
     },
-    inputEvent (evnt) {
+    emitInputEvent (value, evnt) {
       const { immediate, isDatePicker } = this
-      const value = evnt.target.value
       this.inputValue = value
       if (immediate) {
         if (!isDatePicker) {
           this.emitUpdate(value, evnt)
         }
       }
-      this.triggerEvent(evnt)
+      this.$emit('input', { value, $event: evnt })
+    },
+    inputEvent (evnt) {
+      const value = evnt.target.value
+      this.emitInputEvent(value, evnt)
     },
     changeEvent (evnt) {
       const { immediate } = this
@@ -1310,13 +1313,15 @@ export default {
       const { min, max, type, inputValue, stepValue } = this
       const numValue = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
       const newValue = isPlus ? XEUtils.add(numValue, stepValue) : XEUtils.subtract(numValue, stepValue)
+      let restNum
       if (!this.vaildMinNum(newValue)) {
-        this.emitUpdate(getNumberValue(this, min), evnt)
+        restNum = min
       } else if (!this.vaildMaxNum(newValue)) {
-        this.emitUpdate(getNumberValue(this, max), evnt)
+        restNum = max
       } else {
-        this.emitUpdate(getNumberValue(this, newValue), evnt)
+        restNum = newValue
       }
+      this.emitInputEvent(getNumberValue(this, restNum), evnt)
     },
     // 数值
 

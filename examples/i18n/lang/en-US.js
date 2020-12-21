@@ -657,6 +657,7 @@ export default {
           mask: 'Whether to display the mask layer',
           maskClosable: 'Click the mask layer to close the modal',
           escClosable: 'Whether Esc key is allowed to close the modal',
+          showZoom: 'Allow Windows to be maximized and restored',
           resize: 'Allow drag to resize modal window',
           duration: 'Only valid for type=message, auto-closed delay, if -1 is disabled automatically closed',
           size: 'Size',

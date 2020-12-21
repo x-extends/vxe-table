@@ -29,9 +29,10 @@ export default {
     mask: { type: Boolean, default: () => GlobalConfig.modal.mask },
     maskClosable: Boolean,
     escClosable: Boolean,
-    resize: Boolean,
+    resize: { type: Boolean, default: () => GlobalConfig.modal.resize },
     showHeader: { type: Boolean, default: true },
     showFooter: Boolean,
+    showZoom: { type: Boolean, default: null },
     dblclickZoom: { type: Boolean, default: () => GlobalConfig.modal.dblclickZoom },
     width: [Number, String],
     height: [Number, String],
@@ -111,7 +112,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, slots = {}, inited, vSize, className, type, resize, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
+    const { $scopedSlots, slots = {}, inited, vSize, className, type, resize, showZoom, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
     const headerSlot = $scopedSlots.header || slots.header
@@ -119,7 +120,7 @@ export default {
     const headerOns = {
       mousedown: this.mousedownEvent
     }
-    if (resize && dblclickZoom && type === 'modal') {
+    if (showZoom && dblclickZoom && type === 'modal') {
       headerOns.dblclick = this.toggleZoomEvent
     }
     return h('div', {
@@ -158,7 +159,7 @@ export default {
           titleSlot ? titleSlot.call(this, { $modal: this }, h) : h('span', {
             class: 'vxe-modal--title'
           }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
-          resize ? h('i', {
+          showZoom ? h('i', {
             class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
             attrs: {
               title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`)
@@ -428,7 +429,7 @@ export default {
     },
     maximize () {
       return this.$nextTick().then(() => {
-        if (this.resize && !this.zoomLocat) {
+        if (this.showZoom && !this.zoomLocat) {
           const marginSize = this.marginSize
           const modalBoxElem = this.getBox()
           const { visibleHeight, visibleWidth } = DomTools.getDomNode()

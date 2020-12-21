@@ -656,6 +656,7 @@ export default {
           mask: '是否显示遮罩层',
           maskClosable: '是否允许点击遮罩层关闭窗口',
           escClosable: '是否允许按 Esc 键关闭窗口',
+          showZoom: '是否允许窗口最大化与还原',
           resize: '是否允许拖动调整窗口大小',
           duration: '只对 type=message 有效，自动关闭的延时，如果为 -1 禁用自动关闭',
           size: '尺寸',
