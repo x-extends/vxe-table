@@ -4141,7 +4141,6 @@ const Methods = {
       const colid = column.id
       const fullAllDataRowMap = this.fullAllDataRowMap
       const cacheFormat = fullAllDataRowMap.has(row)
-      const formatParams = { cellValue, row, column }
       if (cacheFormat) {
         rest = fullAllDataRowMap.get(row)
         formatData = rest.formatData
@@ -4154,6 +4153,7 @@ const Methods = {
           }
         }
       }
+      const formatParams = { cellValue, row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column) }
       if (XEUtils.isString(formatter)) {
         if (XEUtils[formatter]) {
           cellLabel = XEUtils[formatter](cellValue)

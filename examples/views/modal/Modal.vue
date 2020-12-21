@@ -114,7 +114,7 @@
       </vxe-modal>
 
       <vxe-button @click="value7 = true">拖动窗口调整大小</vxe-button>
-      <vxe-modal v-model="value7" resize>
+      <vxe-modal v-model="value7" show-zoom resize>
         <template v-slot>
           <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>
           <div style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</div>
@@ -126,7 +126,7 @@
       </vxe-modal>
 
       <vxe-button @click="value8 = true">记忆功能的窗口</vxe-button>
-      <vxe-modal v-model="value8" title="记忆功能的窗口" width="600" height="400" resize remember>
+      <vxe-modal v-model="value8" title="记忆功能的窗口" width="600" height="400" show-zoom resize remember>
         <template v-slot>
           <vxe-form :data="formData3" :rules="formRules3" title-align="right" title-width="60">
             <vxe-form-item title="基本信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
@@ -147,7 +147,7 @@
       </vxe-modal>
 
       <vxe-button @click="value9 = true">最大化显示</vxe-button>
-      <vxe-modal v-model="value9" title="最大化显示" width="600" height="400" resize remember fullscreen>
+      <vxe-modal v-model="value9" title="最大化显示" width="600" height="400" show-zoom resize remember fullscreen>
         <template v-slot>
           <div style="color: red">默认最大化显示</div>
           <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>
@@ -160,7 +160,7 @@
       </vxe-modal>
 
       <vxe-button @click="value10 = true">缩放表格的窗口</vxe-button>
-      <vxe-modal v-model="value10" title="缩放表格的窗口" width="800" height="400" resize>
+      <vxe-modal v-model="value10" title="缩放表格的窗口" width="800" height="400" show-zoom resize>
         <template v-slot>
           <vxe-table
             border
@@ -179,7 +179,7 @@
       </vxe-modal>
 
       <vxe-button @click="value11 = true">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
-      <vxe-modal v-model="value11" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage transfer>
+      <vxe-modal v-model="value11" id="myModal6" width="800" height="400" min-width="460" min-height="320" show-zoom resize remember storage transfer>
         <template v-slot:title>
           <span style="color: red;">完整功能的窗口（移动、拖动、状态保存）</span>
           <span style="color: red;">通过设置 transfer 将弹框容器插入 body</span>
@@ -400,7 +400,7 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value7 = true">拖动窗口调整大小</vxe-button>
-          <vxe-modal v-model="value7" resize>
+          <vxe-modal v-model="value7" show-zoom resize>
             <template v-slot>
               <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>
               <div style="color: blue">按住左边距拖动！！！！！！！！！！！！！！！</div>
@@ -412,7 +412,7 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value8 = true">记忆功能的窗口</vxe-button>
-          <vxe-modal v-model="value8" title="记忆功能的窗口" width="600" height="400" resize remember>
+          <vxe-modal v-model="value8" title="记忆功能的窗口" width="600" height="400" show-zoom resize remember>
             <template v-slot>
               <vxe-form :data="formData3" :rules="formRules3" title-align="right" title-width="60">
                 <vxe-form-item title="基本信息" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
@@ -433,7 +433,7 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value9 = true">最大化显示</vxe-button>
-          <vxe-modal v-model="value9" title="最大化显示" width="600" height="400" resize remember fullscreen>
+          <vxe-modal v-model="value9" title="最大化显示" width="600" height="400" show-zoom resize remember fullscreen>
             <template v-slot>
               <div style="color: red">默认最大化显示</div>
               <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>
@@ -446,7 +446,7 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value10 = true">缩放表格的窗口</vxe-button>
-          <vxe-modal v-model="value10" title="缩放表格的窗口" width="800" height="400" resize>
+          <vxe-modal v-model="value10" title="缩放表格的窗口" width="800" height="400" show-zoom resize>
             <template v-slot>
               <vxe-table
                 border
@@ -465,7 +465,7 @@ export default {
           </vxe-modal>
 
           <vxe-button @click="value11 = true">完整功能的窗口（移动、拖动、状态保存）</vxe-button>
-          <vxe-modal v-model="value11" id="myModal6" width="800" height="400" min-width="460" min-height="320" resize remember storage transfer>
+          <vxe-modal v-model="value11" id="myModal6" width="800" height="400" min-width="460" min-height="320" show-zoom resize remember storage transfer>
             <template v-slot:title>
               <span style="color: red;">完整功能的窗口（移动、拖动、状态保存）</span>
               <span style="color: red;">通过设置 transfer 将弹框容器插入 body</span>

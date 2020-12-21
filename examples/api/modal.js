@@ -179,6 +179,15 @@ const apis = [
         list: []
       },
       {
+        name: 'show-zoom',
+        descKey: 'app.api.modal.desc.showZoom',
+        version: '2.10.9',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
         name: 'resize',
         descKey: 'app.api.modal.desc.resize',
         version: '2.4.3',
