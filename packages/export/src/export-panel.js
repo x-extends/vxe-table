@@ -35,7 +35,7 @@ export default {
       return this.storeData.columns.every(column => column.checked)
     },
     showSheet () {
-      return ['html', 'xml', 'xlsx'].indexOf(this.defaultOptions.type) > -1
+      return ['html', 'xml', 'xlsx', 'pdf'].indexOf(this.defaultOptions.type) > -1
     },
     supportMerge () {
       const { storeData, defaultOptions } = this
