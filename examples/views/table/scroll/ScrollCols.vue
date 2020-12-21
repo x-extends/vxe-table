@@ -14,16 +14,14 @@
       height="500"
       :loading="loading"
       :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
-      :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
+      :checkbox-config="{checkField: 'checked'}">
       <template v-slot:toolbar_buttons>
-        <vxe-button @click="loadColumnAndData(5000, 5000)">5k列5k条</vxe-button>
-        <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
+        <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(10000, 200000)">1w列20w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(20000, 50000)">2w列5w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(20000, 100000)">2w列10w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(20000, 200000)">2w列20w条</vxe-button>
       </template>
     </vxe-grid>
 
@@ -37,8 +35,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-
 export default {
   data () {
     return {
@@ -53,16 +49,14 @@ export default {
           height="500"
           :loading="loading"
           :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
-          :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
+          :checkbox-config="{checkField: 'checked'}">
           <template v-slot:toolbar_buttons>
-            <vxe-button @click="loadColumnAndData(5000, 5000)">5k列5k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
+            <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(10000, 200000)">1w列20w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(20000, 50000)">2w列5w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(20000, 100000)">2w列10w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(20000, 200000)">2w列20w条</vxe-button>
           </template>
         </vxe-grid>
         `,
@@ -80,8 +74,8 @@ export default {
             loadColumnAndData (colSize, rowSize) {
               this.loading = true
               Promise.all([
-                XEAjax.mockColumns(colSize),
-                XEAjax.mockList(rowSize)
+                this.mockColumns(colSize),
+                this.mockList(rowSize)
               ]).then(rest => {
                 const columns = rest[0]
                 const data = rest[1]
@@ -98,6 +92,44 @@ export default {
                   })
                 }
               })
+            },
+            mockColumns (size) {
+              return new Promise(resolve => {
+                const cols = []
+                for (let index = 0; index < size; index++) {
+                  if (index === 0) {
+                    cols.push({
+                      type: 'checkbox',
+                      width: 80
+                    })
+                  } else {
+                    cols.push({
+                      title: \`Col_\${index}\`,
+                      field: \`col\${index}\`,
+                      width: 160
+                    })
+                  }
+                }
+                resolve(cols)
+              })
+            },
+            mockList (size) {
+              return new Promise(resolve => {
+                const list = []
+                for (let index = 0; index < size; index++) {
+                  list.push({
+                    name: \`名称\${index}\`,
+                    checked: false,
+                    col1: '0',
+                    col2: 123,
+                    col3: 18,
+                    col4: 234,
+                    col5: 3,
+                    col6: 'shenzhen'
+                  })
+                }
+                resolve(list)
+              })
             }
           }
         }
@@ -112,8 +144,8 @@ export default {
     loadColumnAndData (colSize, rowSize) {
       this.loading = true
       Promise.all([
-        XEAjax.mockColumns(colSize),
-        XEAjax.mockList(rowSize)
+        this.mockColumns(colSize),
+        this.mockList(rowSize)
       ]).then(rest => {
         const columns = rest[0]
         const data = rest[1]
@@ -132,6 +164,44 @@ export default {
             this.loading = false
           })
         }
+      })
+    },
+    mockColumns (size) {
+      return new Promise(resolve => {
+        const cols = []
+        for (let index = 0; index < size; index++) {
+          if (index === 0) {
+            cols.push({
+              type: 'checkbox',
+              width: 80
+            })
+          } else {
+            cols.push({
+              title: `Col_${index}`,
+              field: `col${index}`,
+              width: 160
+            })
+          }
+        }
+        resolve(cols)
+      })
+    },
+    mockList (size) {
+      return new Promise(resolve => {
+        const list = []
+        for (let index = 0; index < size; index++) {
+          list.push({
+            name: `名称${index}`,
+            checked: false,
+            col1: '0',
+            col2: 123,
+            col3: 18,
+            col4: 234,
+            col5: 3,
+            col6: 'shenzhen'
+          })
+        }
+        resolve(list)
       })
     }
   }

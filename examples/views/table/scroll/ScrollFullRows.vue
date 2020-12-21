@@ -79,8 +79,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-
 export default {
   data () {
     return {
@@ -148,7 +146,7 @@ export default {
           methods: {
             loadList (size) {
               this.loading = true
-              XEAjax.mockList(size).then(data => {
+              this.mockList(size).then(data => {
                 // 使用函数式加载，阻断 vue 对大数据的监听
                 const xTable = this.$refs.xTable
                 const startTime = Date.now()
@@ -158,6 +156,23 @@ export default {
                     this.loading = false
                   })
                 }
+              })
+            },
+            mockList (size) {
+              return new Promise(resolve => {
+                const list = []
+                for (let index = 0; index < size; index++) {
+                  list.push({
+                    name: \`名称\${index}\`,
+                    sex: '0',
+                    num: 123,
+                    age: 18,
+                    num2: 234,
+                    rate: 3,
+                    address: 'shenzhen'
+                  })
+                }
+                resolve(list)
               })
             },
             getSelectEvent () {
@@ -176,7 +191,7 @@ export default {
   methods: {
     loadList (size) {
       this.loading = true
-      XEAjax.mockList(size).then(data => {
+      this.mockList(size).then(data => {
         // 使用函数式加载，阻断 vue 对大数据的监听
         const xTable = this.$refs.xTable
         const startTime = Date.now()
@@ -186,6 +201,23 @@ export default {
             this.loading = false
           })
         }
+      })
+    },
+    mockList (size) {
+      return new Promise(resolve => {
+        const list = []
+        for (let index = 0; index < size; index++) {
+          list.push({
+            name: `名称${index}`,
+            sex: '0',
+            num: 123,
+            age: 18,
+            num2: 234,
+            rate: 3,
+            address: 'shenzhen'
+          })
+        }
+        resolve(list)
       })
     },
     getSelectEvent () {
