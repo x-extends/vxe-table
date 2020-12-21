@@ -32,7 +32,7 @@ export default {
       return this.size || this.$parent.size || this.$parent.vSize
     },
     showSheet () {
-      return ['html', 'xml', 'xlsx'].indexOf(this.defaultOptions.type) > -1
+      return ['html', 'xml', 'xlsx', 'pdf'].indexOf(this.defaultOptions.type) > -1
     }
   },
   render (h) {
