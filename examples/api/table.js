@@ -304,6 +304,24 @@ const exportDataAPI = [
     list: []
   },
   {
+    name: 'useStyle',
+    desc: '只对 type=html,xlsx 有效，支持带样式',
+    version: '2.10.9',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'false',
+    list: []
+  },
+  // {
+  //   name: 'sheetMethod',
+  //   desc: '只对 type=xlsx 有效，该函数用于自定义工作簿的单元格',
+  //   version: '2.10.9',
+  //   type: '(params: { options, workbook, worksheet }) => void',
+  //   enum: '',
+  //   defVal: '',
+  //   list: []
+  // },
+  {
     name: 'style',
     desc: '只对 type=html 有效，自定义文档的 css 样式信息',
     version: '2.9.23',
@@ -362,7 +380,7 @@ const importDataAPI = [
   }
 ]
 
-const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod', 'beforeExportMethod', 'afterExportMethod'].includes(item.name)).concat([
+const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'sheetMethod', 'exportMethod', 'beforeExportMethod', 'afterExportMethod'].includes(item.name)).concat([
   {
     name: 'content',
     desc: '自定义打印的内容',

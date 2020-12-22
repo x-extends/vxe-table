@@ -85,6 +85,8 @@ export interface TableExportConfig {
    * 只对 remote=true 有效，用于自定义导出逻辑
    */
   exportMethod?(params: { $table: Table, $grid?: Grid, options: ExportParams }): Promise<any>;
+  useStyle?:boolean;
+  sheetMethod?(params: { $table: Table, $grid?: Grid, options: ExportParams, workbook: any, worksheet: any }): void;
 
   [name: string]: any;
 }
