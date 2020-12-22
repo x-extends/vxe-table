@@ -310,6 +310,9 @@ export class ColumnInfo {
   minWidth: number | string;
   resizable: boolean;
   fixed: string;
+  align: ColumnAlign;
+  headerAlign: ColumnAlign;
+  footerAlign: ColumnAlign;
   property: string;
   type: string;
   sortable: boolean;
@@ -343,6 +346,7 @@ export class ColumnInfo {
   children: ColumnInfo[];
 
   getTitle(): string;
+  [key: string]: any;
 }
 
 export class ColumnConfig extends ColumnInfo {}

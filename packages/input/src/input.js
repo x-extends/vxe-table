@@ -143,7 +143,6 @@ function renderDateWeekTable (h, _vm) {
         }))
       ]),
       h('tbody', weekDates.map(rows => {
-        console.log(dateValue)
         const isSelected = rows.some(item => XEUtils.isDateSame(dateValue, item.date, matchFormat))
         const isHover = rows.some(item => XEUtils.isDateSame(datePanelValue, item.date, matchFormat))
         return h('tr', rows.map(item => {

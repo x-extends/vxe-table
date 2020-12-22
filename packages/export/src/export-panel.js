@@ -40,10 +40,14 @@ export default {
     supportMerge () {
       const { storeData, defaultOptions } = this
       return !defaultOptions.original && (storeData.isPrint || ['html', 'xlsx'].indexOf(defaultOptions.type) > -1)
+    },
+    supportStyle () {
+      const { defaultOptions } = this
+      return !defaultOptions.original && ['xlsx'].indexOf(defaultOptions.type) > -1
     }
   },
   render (h) {
-    const { _e, checkedAll, isAll, isIndeterminate, showSheet, supportMerge, defaultOptions, storeData } = this
+    const { _e, checkedAll, isAll, isIndeterminate, showSheet, supportMerge, supportStyle, defaultOptions, storeData } = this
     const { hasTree, hasMerge, isPrint, hasColgroup } = storeData
     const { isHeader } = defaultOptions
     const cols = []
@@ -309,6 +313,19 @@ export default {
                       on: {
                         input (value) {
                           defaultOptions.isMerge = value
+                        }
+                      }
+                    }),
+                    isPrint ? _e() : h('vxe-checkbox', {
+                      props: {
+                        value: supportStyle ? defaultOptions.useStyle : false,
+                        disabled: !supportStyle,
+                        title: GlobalConfig.i18n('vxe.export.expUseStyleTitle'),
+                        content: GlobalConfig.i18n('vxe.export.expOptUseStyle')
+                      },
+                      on: {
+                        input (value) {
+                          defaultOptions.useStyle = value
                         }
                       }
                     }),

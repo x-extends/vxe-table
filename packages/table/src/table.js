@@ -419,6 +419,7 @@ export default {
         isColgroup: false,
         isMerge: false,
         isAllExpand: false,
+        useStyle: false,
         original: false,
         message: true,
         isHeader: false,

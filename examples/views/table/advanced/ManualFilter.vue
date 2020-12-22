@@ -55,12 +55,6 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="amount" title="Amount" sortable></vxe-table-column>
-      <vxe-table-column
-        field="address"
-        title="实现复杂的筛选"
-        :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
-        :filter-render="{name: 'FilterComplex'}">
-      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -134,12 +128,6 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="amount" title="Amount" sortable></vxe-table-column>
-          <vxe-table-column
-            field="address"
-            title="实现复杂的筛选"
-            :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
-            :filter-render="{name: 'FilterComplex'}">
-          </vxe-table-column>
         </vxe-table>
         `,
         `
