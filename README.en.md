@@ -137,7 +137,7 @@ export default {
 [👉 View example](https://x-extends.github.io/vxe-table/#/table/base/basic)  
 [👉 View API](https://x-extends.github.io/vxe-table/#/table/api)
 
-## Donate
+## Support the author
 
 If the open source software is helpful to you, you can scan the QR code below to support us.☕  
 
