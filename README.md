@@ -141,7 +141,7 @@ export default {
 [👉 查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic)  
 [👉 查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api)
 
-## 捐赠
+## 支持作者
 
 如果该开源软件对您有所帮助，可以扫下方二维码支持我们。☕  
 
