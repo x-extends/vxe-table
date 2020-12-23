@@ -4,24 +4,26 @@ import { UtilTools, DomTools } from '../../tools'
 
 function updateTipStyle (_vm) {
   const { $el: wrapperElem, tipTarget, tipStore } = _vm
-  const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
-  const { top, left } = DomTools.getAbsolutePos(tipTarget)
-  const marginSize = 6
-  const offsetHeight = wrapperElem.offsetHeight
-  const offsetWidth = wrapperElem.offsetWidth
-  let tipLeft = left
-  let tipTop = top - offsetHeight - marginSize
-  tipLeft = Math.max(marginSize, left + Math.floor((tipTarget.offsetWidth - offsetWidth) / 2))
-  if (tipLeft + offsetWidth + marginSize > scrollLeft + visibleWidth) {
-    tipLeft = scrollLeft + visibleWidth - offsetWidth - marginSize
+  if (tipTarget) {
+    const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
+    const { top, left } = DomTools.getAbsolutePos(tipTarget)
+    const marginSize = 6
+    const offsetHeight = wrapperElem.offsetHeight
+    const offsetWidth = wrapperElem.offsetWidth
+    let tipLeft = left
+    let tipTop = top - offsetHeight - marginSize
+    tipLeft = Math.max(marginSize, left + Math.floor((tipTarget.offsetWidth - offsetWidth) / 2))
+    if (tipLeft + offsetWidth + marginSize > scrollLeft + visibleWidth) {
+      tipLeft = scrollLeft + visibleWidth - offsetWidth - marginSize
+    }
+    if (top - offsetHeight < scrollTop + marginSize) {
+      tipStore.placement = 'bottom'
+      tipTop = top + tipTarget.offsetHeight + marginSize
+    }
+    tipStore.style.top = `${tipTop}px`
+    tipStore.style.left = `${tipLeft}px`
+    tipStore.arrowStyle.left = `${left - tipLeft + tipTarget.offsetWidth / 2}px`
   }
-  if (top - offsetHeight < scrollTop + marginSize) {
-    tipStore.placement = 'bottom'
-    tipTop = top + tipTarget.offsetHeight + marginSize
-  }
-  tipStore.style.top = `${tipTop}px`
-  tipStore.style.left = `${tipLeft}px`
-  tipStore.arrowStyle.left = `${left - tipLeft + tipTarget.offsetWidth / 2}px`
 }
 
 export default {

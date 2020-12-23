@@ -74,7 +74,7 @@ function install (Vue, options) {
 
 // 默认中文
 VXETable.setup({
-  i18n: (key, args) => XEUtils.template(XEUtils.get(zhCN, key), args, { tmplRE: /\{([.\w[\]\s]+)\}/g })
+  i18n: XEUtils.toFormatString ? (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args) : (key, args) => XEUtils.template(XEUtils.get(zhCN, key), args, { tmplRE: /\{([.\w[\]\s]+)\}/g })
 })
 
 VXETable.install = install
