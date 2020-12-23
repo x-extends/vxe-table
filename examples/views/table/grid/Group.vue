@@ -33,13 +33,13 @@ export default {
               title: '其他信息',
               children: [
                 { field: 'nickname', title: 'Nickname' },
-                { field: 'age', title: 'Age' }
+                { field: 'age', title: 'Age', sortable: true }
               ]
             },
             { field: 'sex', title: 'Sex' }
           ]
         },
-        { field: 'address', title: 'Address', showOverflow: true }
+        { field: 'address', title: 'Address', sortable: true, showOverflow: true }
       ],
       tableData: [
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
@@ -75,13 +75,13 @@ export default {
                       title: '其他信息',
                       children: [
                         { field: 'nickname', title: 'Nickname' },
-                        { field: 'age', title: 'Age' }
+                        { field: 'age', title: 'Age', sortable: true }
                       ]
                     },
                     { field: 'sex', title: 'Sex' }
                   ]
                 },
-                { field: 'address', title: 'Address', showOverflow: true }
+                { field: 'address', title: 'Address', sortable: true, showOverflow: true }
               ],
               tableData: [
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
