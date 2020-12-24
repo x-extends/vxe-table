@@ -1309,8 +1309,11 @@ export default {
 
     // 日期
     datePickerOpenEvent (evnt) {
-      evnt.preventDefault()
-      this.showPanel()
+      const { readonly } = this
+      if (!readonly) {
+        evnt.preventDefault()
+        this.showPanel()
+      }
     },
     dateMonthHandle (date, offsetMonth) {
       this.selectMonth = XEUtils.getWhatMonth(date, offsetMonth, 'first')
@@ -1745,8 +1748,7 @@ export default {
               if (visiblePanel) {
                 this.dateOffsetEvent(evnt)
               } else if (isUpArrow || isDwArrow) {
-                evnt.preventDefault()
-                this.showPanel()
+                this.datePickerOpenEvent(evnt)
               }
             }
           }
@@ -1759,7 +1761,7 @@ export default {
                 this.hidePanel()
               }
             } else if (isActivated) {
-              this.showPanel()
+              this.datePickerOpenEvent(evnt)
             }
           }
         } else if (isPgUp || isPgDn) {
