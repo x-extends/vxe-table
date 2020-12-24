@@ -130,14 +130,14 @@ export default {
      * 显示快捷菜单
      */
     openContextMenu (evnt, type, params) {
-      const { ctxMenuStore, ctxMenuOpts } = this
+      const { isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
       const config = ctxMenuOpts[type]
       const visibleMethod = ctxMenuOpts.visibleMethod
       if (config) {
         const { options, disabled } = config
         if (disabled) {
           evnt.preventDefault()
-        } else if (options && options.length) {
+        } else if (isCtxMenu && options && options.length) {
           params.options = options
           this.preventEvent(evnt, 'event.showMenu', params, null, () => {
             if (!visibleMethod || visibleMethod(params)) {

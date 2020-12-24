@@ -4,6 +4,7 @@ import VXETable from '../../v-x-e-table'
 import VxeTableBody from './body'
 import vSize from '../../mixins/size'
 import { UtilTools, GlobalEvent, createResizeEvent } from '../../tools'
+import { isEnableConf } from './util'
 import methods from './methods'
 
 /**
@@ -504,7 +505,7 @@ export default {
       return footerOpts && footerOpts.options ? footerOpts.options : []
     },
     isCtxMenu () {
-      return this.headerCtxMenu.length || this.bodyCtxMenu.length || this.footerCtxMenu.length
+      return !!((this.contextMenu || this.menuConfig) && isEnableConf(this.ctxMenuOpts) && (this.headerCtxMenu.length || this.bodyCtxMenu.length || this.footerCtxMenu.length))
     },
     ctxMenuOpts () {
       return Object.assign({}, GlobalConfig.table.menuConfig, this.contextMenu, this.menuConfig)
@@ -713,9 +714,20 @@ export default {
     }
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      if (this.mouseOpts.area && !this.handleUpdateCellAreas) {
-        console.error('[vxe-table] This feature requires use the "vxe-table.pro"')
-        return
+      if (!this.handleUpdateCellAreas) {
+        if (this.clipConfig) {
+          UtilTools.warn('vxe.error.notProp', ['clip-config'])
+        }
+        if (this.fnrConfig) {
+          UtilTools.warn('vxe.error.notProp', ['fnr-config'])
+        }
+        if (this.mouseOpts.area) {
+          UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+          return
+        }
+      }
+      if (this.mouseOpts.area && this.mouseOpts.selected) {
+        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
       }
       if (this.treeConfig && this.mouseOpts.area) {
         UtilTools.error('vxe.error.noTree', ['mouse-config.area'])

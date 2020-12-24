@@ -1690,6 +1690,15 @@ const apis = [
         defVal: '继承 setup.table.menuConfig',
         list: [
           {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '3.0.19',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'header',
             desc: '表头的快捷菜单',
             version: '',
