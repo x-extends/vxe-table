@@ -50,6 +50,7 @@
       row-key
       ref="xTable2"
       class="sortable-tree-demo"
+      :scroll-y="{enabled: false}"
       :columns="tableColumn"
       :data="tableTreeData"
       :tree-config="{children: 'children'}"></vxe-grid>
@@ -214,6 +215,7 @@ export default {
           row-key
           ref="xTable2"
           class="sortable-tree-demo"
+          :scroll-y="{enabled: false}"
           :columns="tableColumn"
           :data="tableTreeData"
           :tree-config="{children: 'children'}"></vxe-grid>
