@@ -65,6 +65,16 @@ declare module './grid' {
 declare module './table' {
   interface VxeTableMethods extends TableExportMethods { }
   interface VxeTablePrivateMethods extends TableExportPrivateMethods { }
+  namespace VxeTableDefines {
+    interface ExtortSheetMethodParams {
+      $table: VxeTableConstructor;
+      $grid?: VxeGridConstructor;
+      options: VxeTablePropTypes.ExportHandleOptions;
+      datas: any[];
+      columns: VxeTableDefines.ColumnInfo[];
+      colgroups: VxeTableDefines.ColumnInfo[][];
+    }
+  }
   namespace VxeTablePropTypes {
     /**
      * 导入参数
@@ -112,7 +122,7 @@ declare module './table' {
     export interface ImportHandleOptions extends ImportConfig {
       data: any[];
       columns: VxeTableDefines.ColumnInfo[];
-      colgroups: VxeTableDefines.ColumnInfo[];
+      colgroups: VxeTableDefines.ColumnInfo[][];
     }
 
     interface ExportOrPrintColumnOption {
@@ -196,25 +206,30 @@ declare module './table' {
        */
       remote?: boolean;
       /**
+       * 只对 remote=html,xlsx 有效，是否使用样式
+       */
+      useStyle?: boolean;
+      sheetMethod?(params: VxeTableDefines.ExtortSheetMethodParams): void;
+      /**
        * 只对 remote=true 有效，用于自定义导出逻辑
        */
       exportMethod?(params: {
         $table: VxeTableConstructor;
         $grid?: VxeGridConstructor;
-        options: VxeTablePropTypes.ExportHandleOptions;
+        options: ExportHandleOptions;
       }): Promise<any>;
       beforeExportMethod?(params: {
-        options: VxeTablePropTypes.ExportHandleOptions;
+        options: ExportHandleOptions;
       }): void;
       afterExportMethod?(params: {
-        options: VxeTablePropTypes.ExportHandleOptions;
+        options: ExportHandleOptions;
       }): void;
     }
     export interface ExportOpts extends ExportConfig { }
     export interface ExportHandleOptions extends ExportConfig {
       data: any[];
       columns: VxeTableDefines.ColumnInfo[];
-      colgroups: VxeTableDefines.ColumnInfo[];
+      colgroups: VxeTableDefines.ColumnInfo[][];
     }
 
     /**

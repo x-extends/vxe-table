@@ -38,12 +38,17 @@ export default defineComponent({
 
     const computeShowSheet = computed(() => {
       const { defaultOptions } = props
-      return ['html', 'xml', 'xlsx'].indexOf(defaultOptions.type) > -1
+      return ['html', 'xml', 'xlsx', 'pdf'].indexOf(defaultOptions.type) > -1
     })
 
     const computeSupportMerge = computed(() => {
       const { storeData, defaultOptions } = props
       return !defaultOptions.original && (storeData.isPrint || ['html', 'xlsx'].indexOf(defaultOptions.type) > -1)
+    })
+
+    const computeSupportStyle = computed(() => {
+      const { defaultOptions } = props
+      return !defaultOptions.original && ['xlsx'].indexOf(defaultOptions.type) > -1
     })
 
     const handleOptionCheck = (column: any) => {
@@ -106,7 +111,9 @@ export default defineComponent({
       const { storeData, defaultOptions } = props
       const checkedAll = computeCheckedAll.value
       const columns = XEUtils.searchTree(storeData.columns, (column: any) => column.checked, { children: 'children', mapChildren: 'childNodes', original: true })
-      return Object.assign({ columns }, defaultOptions, { isMerge: checkedAll ? defaultOptions.isMerge : false })
+      return Object.assign({ columns }, defaultOptions, {
+        isMerge: checkedAll ? defaultOptions.isMerge : false
+      })
     }
 
     const printEvent = () => {
@@ -151,6 +158,7 @@ export default defineComponent({
       const checkedAll = computeCheckedAll.value
       const showSheet = computeShowSheet.value
       const supportMerge = computeSupportMerge.value
+      const supportStyle = computeSupportStyle.value
       XEUtils.eachTree(storeData.columns, (column: any) => {
         const colTitle = UtilTools.formatText(column.getTitle(), 1)
         const isColGroup = column.children && column.children.length
@@ -362,6 +370,15 @@ export default defineComponent({
                           content: GlobalConfig.i18n('vxe.export.expOptMerge'),
                           'onUpdate:modelValue' (value: any) {
                             defaultOptions.isMerge = value
+                          }
+                        }),
+                        isPrint ? createCommentVNode() : h(VxeCheckboxConstructor, {
+                          modelValue: supportStyle ? defaultOptions.useStyle : false,
+                          disabled: !supportStyle,
+                          title: GlobalConfig.i18n('vxe.export.expUseStyleTitle'),
+                          content: GlobalConfig.i18n('vxe.export.expOptUseStyle'),
+                          'onUpdate:modelValue' (value: any) {
+                            defaultOptions.useStyle = value
                           }
                         }),
                         h(VxeCheckboxConstructor, {

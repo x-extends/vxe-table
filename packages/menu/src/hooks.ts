@@ -11,7 +11,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
     const { xID, props, reactData, internalData, refMaps, computeMaps } = $xetable
     const { refElem, refTableFilter, refTableMenu } = refMaps
-    const { computeMouseOpts, computeMenuOpts } = computeMaps
+    const { computeMouseOpts, computeIsMenu, computeMenuOpts } = computeMaps
 
     let menuMethods = {} as TableMenuMethods
     let menuPrivateMethods = {} as TableMenuPrivateMethods
@@ -21,6 +21,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
      */
     const openContextMenu = (evnt: any, type: 'header' | 'body' | 'footer', params: any) => {
       const { ctxMenuStore } = reactData
+      const isMenu = computeIsMenu.value
       const menuOpts = computeMenuOpts.value
       const config = menuOpts[type]
       const visibleMethod = menuOpts.visibleMethod
@@ -28,7 +29,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
         const { options, disabled } = config
         if (disabled) {
           evnt.preventDefault()
-        } else if (options && options.length) {
+        } else if (isMenu && options && options.length) {
           params.options = options
           $xetable.preventEvent(evnt, 'event.showMenu', params, null, () => {
             if (!visibleMethod || visibleMethod(params)) {

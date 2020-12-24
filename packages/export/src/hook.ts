@@ -87,6 +87,10 @@ function toTableBorder (border: any) {
   return 'default'
 }
 
+function getBooleanValue (cellValue: any) {
+  return cellValue === 'TRUE' || cellValue === 'true' || cellValue === true
+}
+
 function getHeaderTitle (opts: any, column: any) {
   return (opts.original ? column.property : column.getTitle()) || ''
 }
@@ -296,6 +300,10 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : (seqOpts.startIndex + rowIndex + 1)
     }
 
+    const toBooleanValue = (cellValue: any) => {
+      return XEUtils.isBoolean(cellValue) ? (cellValue ? 'TRUE' : 'FALSE') : cellValue
+    }
+
     const getLabelData = (opts: any, columns: any[], datas: any[]) => {
       const { isAllExpand } = opts
       const { treeConfig } = props
@@ -337,12 +345,12 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                     cellValue = getSeq(row, rowIndex, column, columnIndex)
                     break
                   case 'checkbox':
-                    cellValue = $xetable.isCheckedByCheckboxRow(row)
+                    cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
                     item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
                     item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
                     break
                   case 'radio':
-                    cellValue = $xetable.isCheckedByRadioRow(row)
+                    cellValue = toBooleanValue($xetable.isCheckedByRadioRow(row))
                     item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
                     item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
                     break
@@ -392,12 +400,12 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                 cellValue = getSeq(row, rowIndex, column, columnIndex)
                 break
               case 'checkbox':
-                cellValue = $xetable.isCheckedByCheckboxRow(row)
+                cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
                 item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
                 item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
                 break
               case 'radio':
-                cellValue = $xetable.isCheckedByRadioRow(row)
+                cellValue = toBooleanValue($xetable.isCheckedByRadioRow(row))
                 item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
                 item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
                 break
@@ -579,16 +587,16 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                   }
                   classNames.push('vxe-table--tree-node')
                   if (column.type === 'radio') {
-                    return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._radioLabel}</span></div></div></div></td>`
+                    return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></div></div></td>`
                   } else if (column.type === 'checkbox') {
-                    return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></div></div></td>`
+                    return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell"><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></div></div></td>`
                   }
                   return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><div class="vxe-table--tree-node-wrapper" style="padding-left: ${item._level * treeOpts.indent}px"><div class="vxe-table--tree-icon-wrapper">${treeIcon}</div><div class="vxe-table--tree-cell">${cellValue}</div></div></div></td>`
                 }
                 if (column.type === 'radio') {
-                  return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
+                  return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
                 } else if (column.type === 'checkbox') {
-                  return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
+                  return `<td class="${classNames.join(' ')}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
                 }
                 return `<td class="${classNames.join(' ')}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${formatText(cellValue, true)}</div></td>`
               }).join('') + '</tr>'
@@ -624,9 +632,9 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                   classNames.push(`col--${cellAlign}`)
                 }
                 if (column.type === 'radio') {
-                  return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
+                  return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="radio" name="radio_${id}" ${item._radioDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._radioLabel}</span></div></td>`
                 } else if (column.type === 'checkbox') {
-                  return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${cellValue === true || cellValue === 'true' ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
+                  return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}><input type="checkbox" ${item._checkboxDisabled ? 'disabled ' : ''}${getBooleanValue(cellValue) ? 'checked' : ''}><span>${item._checkboxLabel}</span></div></td>`
                 }
                 return `<td class="${classNames.join(' ')}" rowspan="${rowSpan}" colspan="${colSpan}" title="${cellValue}"><div ${isPrint ? '' : `style="width: ${column.renderWidth}px"`}>${formatText(cellValue, true)}</div></td>`
               }).join('') + '</tr>'

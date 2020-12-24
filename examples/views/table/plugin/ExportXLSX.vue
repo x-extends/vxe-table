@@ -19,6 +19,7 @@
       :loading="demo1.loading"
       :import-config="demo1.tableImport"
       :export-config="demo1.tableExport"
+      :merge-cells="demo1.mergeCells"
       :data="demo1.tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -63,7 +64,8 @@ export default defineComponent({
         type: 'xlsx',
         // 自定义类型
         types: ['xlsx', 'csv', 'html', 'xml', 'txt']
-      } as VxeTablePropTypes.ExpandConfig
+      } as VxeTablePropTypes.ExpandConfig,
+      mergeCells: [] as VxeTablePropTypes.MergeCell[]
     })
 
     const xTable = ref({} as VxeTableInstance)
@@ -101,6 +103,10 @@ export default defineComponent({
         { name: 'name8', role: 'role8', sex: '2', num: 9998, other: 10000000000000000, cardNo: '62221234018523736237' },
         { name: 'name9', role: 'role9', sex: '1', num: 70000, other: 10000, cardNo: '62221230283686397412' }
       ]
+      demo1.mergeCells = [
+        { row: 1, col: 1, rowspan: 2, colspan: 2 },
+        { row: 4, col: 3, rowspan: 1, colspan: 3 }
+      ]
       demo1.loading = false
     }, 100)
 
@@ -126,6 +132,7 @@ export default defineComponent({
           :loading="demo1.loading"
           :import-config="demo1.tableImport"
           :export-config="demo1.tableExport"
+          :merge-cells="demo1.mergeCells"
           :data="demo1.tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -161,7 +168,8 @@ export default defineComponent({
                 type: 'xlsx',
                 // 自定义类型
                 types: ['xlsx', 'csv', 'html', 'xml', 'txt']
-              } as VxeTablePropTypes.ExpandConfig
+              } as VxeTablePropTypes.ExpandConfig,
+              mergeCells: [] as VxeTablePropTypes.MergeCell[]
             })
 
             const xTable = ref({} as VxeTableInstance)
@@ -198,6 +206,10 @@ export default defineComponent({
                 { name: 'name7', role: 'role7', sex: '1', num: 10000000000000000, other: '只需998', cardNo: '62221237123480359633' },
                 { name: 'name8', role: 'role8', sex: '2', num: 9998, other: 10000000000000000, cardNo: '62221234018523736237' },
                 { name: 'name9', role: 'role9', sex: '1', num: 70000, other: 10000, cardNo: '62221230283686397412' }
+              ]
+              demo1.mergeCells = [
+                { row: 1, col: 1, rowspan: 2, colspan: 2 },
+                { row: 4, col: 3, rowspan: 1, colspan: 3 }
               ]
               demo1.loading = false
             }, 100)

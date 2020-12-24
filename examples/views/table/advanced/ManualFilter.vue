@@ -53,12 +53,6 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
-      <vxe-table-column
-        field="nickname"
-        title="实现复杂的筛选"
-        :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
-        :filter-render="{name: 'FilterComplex'}">
-      </vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -217,12 +211,6 @@ export default defineComponent({
             </template>
           </vxe-table-column>
           <vxe-table-column field="time" title="Time" sortable></vxe-table-column>
-          <vxe-table-column
-            field="nickname"
-            title="实现复杂的筛选"
-            :filters="[{data: {type: 'has', isCase: true, name: ''}}]"
-            :filter-render="{name: 'FilterComplex'}">
-          </vxe-table-column>
         </vxe-table>
         `,
         `

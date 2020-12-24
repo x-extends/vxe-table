@@ -38,7 +38,7 @@ export default defineComponent({
         { type: 'seq', width: 60 },
         { field: 'name', title: 'app.body.label.name' },
         { field: 'sex', title: 'app.body.label.sex' },
-        { field: 'age', title: 'Age' },
+        { field: 'age', title: 'Age', sortable: true },
         { field: 'rate', title: 'Rate' }
       ],
       data: [
@@ -103,7 +103,7 @@ export default defineComponent({
                 { type: 'seq', width: 60 },
                 { field: 'name', title: 'app.body.label.name' },
                 { field: 'sex', title: 'app.body.label.sex' },
-                { field: 'age', title: 'Age' },
+                { field: 'age', title: 'Age', sortable: true },
                 { field: 'rate', title: 'Rate' }
               ],
               data: [

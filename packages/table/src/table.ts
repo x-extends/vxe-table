@@ -210,6 +210,7 @@ export default defineComponent({
         isColgroup: false,
         isMerge: false,
         isAllExpand: false,
+        useStyle: false,
         original: false,
         message: true,
         isHeader: false,
@@ -417,10 +418,11 @@ export default defineComponent({
     })
 
     const computeIsMenu = computed(() => {
+      const menuOpts = computeMenuOpts.value
       const headerMenu = computeHeaderMenu.value
       const bodyMenu = computeBodyMenu.value
       const footerMenu = computeFooterMenu.value
-      return headerMenu.length || bodyMenu.length || footerMenu.length
+      return !!(props.menuConfig && isEnableConf(menuOpts) && (headerMenu.length || bodyMenu.length || footerMenu.length))
     })
 
     const computeMenuList = computed(() => {
@@ -533,6 +535,7 @@ export default defineComponent({
       computeKeyboardOpts,
       computeClipOpts,
       computeFNROpts,
+      computeIsMenu,
       computeMenuOpts,
       computeExportOpts,
       computeImportOpts,
@@ -1125,6 +1128,7 @@ export default defineComponent({
       const containerList = ['main', 'left', 'right']
       const emptyPlaceholderElem = refEmptyPlaceholder.value
       const cellOffsetWidth = computeCellOffsetWidth.value
+      const mouseOpts = computeMouseOpts.value
       const bodyWrapperElem = elemStore['main-body-wrapper']
       if (emptyPlaceholderElem) {
         emptyPlaceholderElem.style.top = `${headerHeight}px`
@@ -1326,7 +1330,7 @@ export default defineComponent({
       if (currentRow) {
         tableMethods.setCurrentRow(currentRow)
       }
-      if (mouseConfig && mouseConfig.selected && editStore.selected.row && editStore.selected.column) {
+      if (mouseConfig && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
         $xetable.addCellSelectedClass()
       }
       return nextTick()
@@ -4934,11 +4938,26 @@ export default defineComponent({
       if (props.treeConfig && checkboxOpts.range) {
         UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
       }
-      if (mouseOpts.area && !$xetable.handleUpdateCellAreas) {
-        return UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
-      }
-      if (props.treeConfig && mouseOpts.area) {
-        UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
+
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (!$xetable.handleUpdateCellAreas) {
+          if (props.clipConfig) {
+            UtilTools.warn('vxe.error.notProp', ['clip-config'])
+          }
+          if (props.fnrConfig) {
+            UtilTools.warn('vxe.error.notProp', ['fnr-config'])
+          }
+          if (mouseOpts.area) {
+            UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+            return
+          }
+        }
+        if (mouseOpts.area && mouseOpts.selected) {
+          UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+        }
+        if (props.treeConfig && mouseOpts.area) {
+          UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
+        }
       }
 
       // 检查是否有安装需要的模块

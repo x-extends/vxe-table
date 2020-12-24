@@ -538,8 +538,9 @@ export default defineComponent({
       inputMethods.dispatchEvent(evnt.type, { value: inputValue }, evnt)
     }
 
-    const emitUpdate = (value: VxeInputPropTypes.ModelValue, evnt: Event | { type: string }) => {
+    const emitModel = (value: VxeInputPropTypes.ModelValue, evnt: Event | { type: string }) => {
       reactData.inputValue = value
+      inputMethods.dispatchEvent('input', { value }, evnt)
       emit('update:modelValue', value)
       if (XEUtils.toString(props.modelValue) !== value) {
         inputMethods.dispatchEvent('change', { value }, evnt)
@@ -550,12 +551,12 @@ export default defineComponent({
       const isDatePickerType = computeIsDatePickerType.value
       const { immediate } = props
       reactData.inputValue = value
-      if (immediate) {
-        if (!isDatePickerType) {
-          emitUpdate(value, evnt)
+      if (!isDatePickerType) {
+        if (immediate) {
+          emitModel(value, evnt)
         }
+        inputMethods.dispatchEvent('input', { value }, evnt)
       }
-      inputMethods.dispatchEvent('input', { value }, evnt)
     }
 
     const inputEvent = (evnt: Event & { type: 'input' }) => {
@@ -569,7 +570,7 @@ export default defineComponent({
       if (immediate) {
         triggerEvent(evnt)
       } else {
-        emitUpdate(reactData.inputValue, evnt)
+        emitModel(reactData.inputValue, evnt)
       }
     }
 
@@ -612,7 +613,7 @@ export default defineComponent({
       const { disabled } = props
       if (!disabled) {
         if (DomTools.hasClass(evnt.currentTarget, 'is--clear')) {
-          emitUpdate('', evnt)
+          emitModel('', evnt)
           clearValueEvent(evnt, '')
         } else {
           const { inputValue } = reactData
@@ -669,7 +670,7 @@ export default defineComponent({
         if (inputValue) {
           const validValue = XEUtils.toFixed(XEUtils.floor(inputValue, digitsValue), digitsValue)
           if (inputValue !== validValue) {
-            emitUpdate(validValue, { type: 'init' })
+            emitModel(validValue, { type: 'init' })
           }
         }
       }
@@ -710,7 +711,7 @@ export default defineComponent({
       const inpVal = XEUtils.toDateString(date, dateValueFormat)
       dateCheckMonth(date)
       if (!XEUtils.isEqual(modelValue, inpVal)) {
-        emitUpdate(inpVal, { type: 'update' })
+        emitModel(inpVal, { type: 'update' })
       }
     }
 
@@ -731,7 +732,7 @@ export default defineComponent({
             } else if (!vaildMaxNum(inpVal)) {
               inpVal = max
             }
-            emitUpdate(getNumberValue(inpVal), { type: 'check' })
+            emitModel(getNumberValue(inpVal), { type: 'check' })
           }
         } else if (isDatePickerType) {
           inpVal = inputValue
@@ -745,7 +746,7 @@ export default defineComponent({
               if (type === 'time') {
                 inpVal = XEUtils.toDateString(inpVal, dateLabelFormat)
                 if (inputValue !== inpVal) {
-                  emitUpdate(inpVal, { type: 'check' })
+                  emitModel(inpVal, { type: 'check' })
                 }
                 reactData.inputValue = inpVal
               } else {
@@ -764,7 +765,7 @@ export default defineComponent({
               dateRevert()
             }
           } else {
-            emitUpdate('', { type: 'check' })
+            emitModel('', { type: 'check' })
           }
         }
       }
@@ -774,7 +775,7 @@ export default defineComponent({
       const { immediate } = props
       const { inputValue } = reactData
       if (!immediate) {
-        emitUpdate(inputValue, evnt)
+        emitModel(inputValue, evnt)
       }
       afterCheckValue()
       if (!reactData.visiblePanel) {
@@ -1317,8 +1318,11 @@ export default defineComponent({
     }
 
     const datePickerOpenEvent = (evnt: Event) => {
-      evnt.preventDefault()
-      showPanel()
+      const { readonly } = props
+      if (!readonly) {
+        evnt.preventDefault()
+        showPanel()
+      }
     }
 
     const clickEvent = (evnt: Event & { type: 'click' }) => {
@@ -1384,8 +1388,7 @@ export default defineComponent({
               if (visiblePanel) {
                 dateOffsetEvent(evnt)
               } else if (isUpArrow || isDwArrow) {
-                evnt.preventDefault()
-                showPanel()
+                datePickerOpenEvent(evnt)
               }
             }
           }
@@ -1398,7 +1401,7 @@ export default defineComponent({
                 hidePanel()
               }
             } else if (isActivated) {
-              showPanel()
+              datePickerOpenEvent(evnt)
             }
           }
         } else if (isPgUp || isPgDn) {

@@ -164,7 +164,6 @@ function getEditOns (renderOpts: any, params: any) {
   const { $table, row, column } = params
   const { model } = column
   return getComponentOns(renderOpts, params, (cellValue: any) => {
-    console.log(cellValue)
     // 处理 model 值双向绑定
     if (lazyInputComponents.indexOf(renderOpts.name) === -1 || isSyncCell(renderOpts, params)) {
       UtilTools.setCellValue(row, column, cellValue)

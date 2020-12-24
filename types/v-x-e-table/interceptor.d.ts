@@ -13,7 +13,7 @@ export namespace VxeGlobalInterceptorHandles {
   export interface InterceptorKeydownParams extends InterceptorParams { }
 
   export interface InterceptorExportParams extends InterceptorParams {
-    options: VxeTablePropTypes.ExportConfig;
+    options: VxeTablePropTypes.ExportHandleOptions;
     columns: VxeTableDefines.ColumnInfo[];
     colgroups: VxeTableDefines.ColumnInfo[][];
     datas: any[];
@@ -21,7 +21,7 @@ export namespace VxeGlobalInterceptorHandles {
 
   export interface InterceptorImportParams extends InterceptorParams {
     file: File;
-    options: VxeTablePropTypes.ExportConfig;
+    options: VxeTablePropTypes.ExportHandleOptions;
     columns: VxeTableDefines.ColumnInfo[];
     datas: any[];
   }

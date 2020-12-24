@@ -62,6 +62,7 @@ export interface TablePrivateComputed {
   computeKeyboardOpts: ComputedRef<VxeTablePropTypes.KeyboardOpts>;
   computeClipOpts: ComputedRef<VxeTablePropTypes.ClipOpts>;
   computeFNROpts: ComputedRef<VxeTablePropTypes.FNROpts>;
+  computeIsMenu: ComputedRef<boolean>;
   computeMenuOpts: ComputedRef<VxeTablePropTypes.MenuConfig>;
   computeExportOpts: ComputedRef<VxeTablePropTypes.ExportOpts>;
   computeImportOpts: ComputedRef<VxeTablePropTypes.ImportOpts>;
@@ -854,6 +855,7 @@ export interface TableReactData {
     type: any;
     isColgroup: boolean;
     isMerge: boolean;
+    useStyle: boolean;
     original: boolean;
     message: boolean;
     isHeader: boolean;

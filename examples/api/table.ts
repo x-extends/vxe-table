@@ -331,6 +331,24 @@ const exportDataAPI = [
     list: []
   },
   {
+    name: 'useStyle',
+    desc: '只对 type=html,xlsx 有效，支持带样式',
+    version: '',
+    type: 'Boolean',
+    enum: '',
+    defVal: 'false',
+    list: []
+  },
+  {
+    name: 'sheetMethod',
+    desc: '只对 type=xlsx 有效，该函数用于自定义工作簿的单元格',
+    version: '2.10.9',
+    type: '(params: { options, workbook, worksheet }) => void',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
     name: 'exportMethod',
     desc: '只对 remote=true 有效，该函数用于自定义导出或服务端导出，返回 Promise',
     version: '',
@@ -425,7 +443,7 @@ const importDataAPI = [
   }
 ]
 
-const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'exportMethod', 'beforeExportMethod', 'afterExportMethod'].includes(item.name)).concat([
+const printAPI = exportDataAPI.filter(item => !['filename', 'type', 'types', 'download', 'message', 'remote', 'sheetMethod', 'exportMethod', 'beforeExportMethod', 'afterExportMethod'].includes(item.name)).concat([
   {
     name: 'content',
     desc: '自定义打印的内容',
@@ -1680,6 +1698,15 @@ const apis = [
         enum: '',
         defVal: '继承 setup.table.menuConfig',
         list: [
+          {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
           {
             name: 'header',
             desc: '表头的快捷菜单',

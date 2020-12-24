@@ -80,6 +80,7 @@ export default defineComponent({
           if (currSize < rowSize) {
             for (let i = currSize; i < rowSize; i++) {
               dataList.push({
+                checked: false,
                 attr0: 'attr0_row_' + i,
                 attr1: 'attr1_row_' + i,
                 attr2: 'attr2_row_' + i,
@@ -196,6 +197,7 @@ export default defineComponent({
                   if (currSize < rowSize) {
                     for (let i = currSize; i < rowSize; i++) {
                       dataList.push({
+                        checked: false,
                         attr0: 'attr0_row_' + i,
                         attr1: 'attr1_row_' + i,
                         attr2: 'attr2_row_' + i,
