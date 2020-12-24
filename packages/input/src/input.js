@@ -1043,8 +1043,9 @@ export default {
       const { $refs, inputValue } = this
       this.$emit(evnt.type, { $panel: $refs.panel, value: inputValue, $event: evnt })
     },
-    emitUpdate (value, evnt) {
+    emitModel (value, evnt) {
       this.inputValue = value
+      this.$emit('input', { value, $event: evnt })
       this.$emit('modelValue', value)
       if (XEUtils.toString(this.value) !== value) {
         this.$emit('change', { value, $event: evnt })
@@ -1053,12 +1054,12 @@ export default {
     emitInputEvent (value, evnt) {
       const { immediate, isDatePicker } = this
       this.inputValue = value
-      if (immediate) {
-        if (!isDatePicker) {
-          this.emitUpdate(value, evnt)
+      if (!isDatePicker) {
+        if (immediate) {
+          this.emitModel(value, evnt)
         }
+        this.$emit('input', { value, $event: evnt })
       }
-      this.$emit('input', { value, $event: evnt })
     },
     inputEvent (evnt) {
       const value = evnt.target.value
@@ -1069,7 +1070,7 @@ export default {
       if (immediate) {
         this.triggerEvent(evnt)
       } else {
-        this.emitUpdate(this.inputValue, evnt)
+        this.emitModel(this.inputValue, evnt)
       }
     },
     focusEvent (evnt) {
@@ -1080,7 +1081,7 @@ export default {
       const { inputValue, immediate } = this
       const value = inputValue
       if (!immediate) {
-        this.emitUpdate(value, evnt)
+        this.emitModel(value, evnt)
       }
       this.afterCheckValue()
       if (!this.visiblePanel) {
@@ -1131,7 +1132,7 @@ export default {
       const { $refs, disabled, inputValue } = this
       if (!disabled) {
         if (DomTools.hasClass(evnt.currentTarget, 'is--clear')) {
-          this.emitUpdate('', evnt)
+          this.emitModel('', evnt)
           this.clearValueEvent(evnt, '')
         } else {
           this.$emit('suffix-click', { $panel: $refs.panel, value: inputValue, $event: evnt })
@@ -1159,7 +1160,7 @@ export default {
         if (inputValue) {
           const validValue = XEUtils.toFixed(XEUtils.floor(inputValue, digitsValue), digitsValue)
           if (inputValue !== validValue) {
-            this.emitUpdate(validValue, { type: 'init' })
+            this.emitModel(validValue, { type: 'init' })
           }
         }
       }
@@ -1184,7 +1185,7 @@ export default {
             } else if (!this.vaildMaxNum(inpVal)) {
               inpVal = max
             }
-            this.emitUpdate(getNumberValue(this, inpVal), { type: 'check' })
+            this.emitModel(getNumberValue(this, inpVal), { type: 'check' })
           }
         } else if (isDatePicker) {
           let inpVal = inputValue
@@ -1198,7 +1199,7 @@ export default {
               if (type === 'time') {
                 inpVal = XEUtils.toDateString(inpVal, dateLabelFormat)
                 if (inputValue !== inpVal) {
-                  this.emitUpdate(inpVal, { type: 'check' })
+                  this.emitModel(inpVal, { type: 'check' })
                 }
                 this.inputValue = inpVal
               } else {
@@ -1217,7 +1218,7 @@ export default {
               this.dateRevert()
             }
           } else {
-            this.emitUpdate('', { type: 'check' })
+            this.emitModel('', { type: 'check' })
           }
         }
       }
@@ -1326,8 +1327,11 @@ export default {
 
     // 日期
     datePickerOpenEvent (evnt) {
-      evnt.preventDefault()
-      this.showPanel()
+      const { readonly } = this
+      if (!readonly) {
+        evnt.preventDefault()
+        this.showPanel()
+      }
     },
     dateMonthHandle (date, offsetMonth) {
       this.selectMonth = XEUtils.getWhatMonth(date, offsetMonth, 'first')
@@ -1583,7 +1587,7 @@ export default {
       const inpVal = XEUtils.toDateString(date, dateValueFormat)
       this.dateCheckMonth(date)
       if (!XEUtils.isEqual(value, inpVal)) {
-        this.emitUpdate(inpVal, { type: 'update' })
+        this.emitModel(inpVal, { type: 'update' })
       }
     },
     dateCheckMonth (date) {
@@ -1762,8 +1766,7 @@ export default {
               if (visiblePanel) {
                 this.dateOffsetEvent(evnt)
               } else if (isUpArrow || isDwArrow) {
-                evnt.preventDefault()
-                this.showPanel()
+                this.datePickerOpenEvent(evnt)
               }
             }
           }
@@ -1776,7 +1779,7 @@ export default {
                 this.hidePanel()
               }
             } else if (isActivated) {
-              this.showPanel()
+              this.datePickerOpenEvent(evnt)
             }
           }
         } else if (isPgUp || isPgDn) {

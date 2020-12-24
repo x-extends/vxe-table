@@ -60,6 +60,11 @@ export default {
           i18n: (key, args) => i18n.t(key, args)
         })
 
+        // 需要注意，如果没有使用 vxe-i18n，需要自行解析占位符 '{0}'，例如：
+        //Vue.use(VXETable, {
+        //  i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
+        //})
+
         new Vue({ i18n }).$mount('#app')
         `,
         `
