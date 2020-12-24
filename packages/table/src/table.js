@@ -508,7 +508,7 @@ export default {
       return footerOpts && footerOpts.options ? footerOpts.options : []
     },
     isCtxMenu () {
-      return this.headerCtxMenu.length || this.bodyCtxMenu.length || this.footerCtxMenu.length
+      return (this.contextMenu || this.menuConfig) && UtilTools.isEnableConf(this.ctxMenuOpts) && (this.headerCtxMenu.length || this.bodyCtxMenu.length || this.footerCtxMenu.length)
     },
     ctxMenuOpts () {
       return Object.assign({}, GlobalConfig.table.contextMenu, GlobalConfig.table.menuConfig, this.contextMenu, this.menuConfig)
@@ -761,12 +761,25 @@ export default {
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
-    if (this.mouseOpts.area && !this.handleUpdateCellAreas) {
-      console.error('[vxe-table] This feature requires use the "vxe-table.pro"')
-      return
-    }
-    if (mouseOpts.checked && mouseOpts.area) {
-      UtilTools.error('vxe.error.errProp', ['mouse-config.checked', 'mouse-config.area'])
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (!this.handleUpdateCellAreas) {
+        if (this.clipConfig) {
+          UtilTools.warn('vxe.error.notProp', ['clip-config'])
+        }
+        if (this.fnrConfig) {
+          UtilTools.warn('vxe.error.notProp', ['fnr-config'])
+        }
+        if (this.mouseOpts.area) {
+          UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+          return
+        }
+      }
+      if (mouseOpts.selected && mouseOpts.area) {
+        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+      }
+      if (mouseOpts.checked && mouseOpts.area) {
+        UtilTools.error('vxe.error.errConflicts', ['mouse-config.checked', 'mouse-config.area'])
+      }
     }
 
     // v3 中只支持对象类型
