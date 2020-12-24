@@ -142,6 +142,7 @@ export default {
                 for (let index = 0; index < size; index++) {
                   list.push({
                     name: \`名称\${index}\`,
+                    checked: false,
                     sex: '0',
                     num: 123,
                     age: 18,
@@ -183,6 +184,7 @@ export default {
         for (let index = 0; index < size; index++) {
           list.push({
             name: `名称${index}`,
+            checked: false,
             sex: '0',
             num: 123,
             age: 18,
