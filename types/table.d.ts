@@ -874,7 +874,7 @@ export declare class Table extends VXETableComponent {
    */
   isActiveByRow(row: RowInfo): boolean;
   /**
-   * 用于 edit-config，激活行编辑，如果是 mode=cell 则默认激活第一个单元格
+   * 用于 edit-config，激活行编辑并激活第一个单元格
    * @param row 指定行
    */
   setActiveRow(row: RowInfo): Promise<any>;
