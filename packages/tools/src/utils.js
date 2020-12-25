@@ -50,27 +50,25 @@ class ColumnInfo {
       }
     }
 
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      // 在 v3.0 中 cellRender 只能是对象类型
-      if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
-        UtilTools.warn('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
-      }
-      // 在 v3.0 中 editRender 只能是对象类型
-      if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
-        UtilTools.warn('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
-      }
-      // 在 v3.0 中废弃 remoteSort
-      if (_vm.remoteSort) {
-        UtilTools.warn('vxe.error.delProp', ['column.remote-sort', 'sort-config.remote'])
-      }
-      // 在 v3.0 中废弃 sortMethod
-      if (_vm.sortMethod) {
-        UtilTools.warn('vxe.error.delProp', ['column.sort-method', 'sort-config.sortMethod'])
-      }
-      // 在 v3.0 中 sortBy 只能是字符串
-      if (_vm.sortBy && !XEUtils.isString(_vm.sortBy)) {
-        UtilTools.warn('vxe.error.errProp', [`column.sort-by=${JSON.stringify(_vm.sortBy)}`, `column.sort-by="${_vm.sortBy[0]}"`])
-      }
+    // 在 v3.0 中 cellRender 只能是对象类型
+    if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
+      UtilTools.warn('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
+    }
+    // 在 v3.0 中 editRender 只能是对象类型
+    if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
+      UtilTools.warn('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
+    }
+    // 在 v3.0 中废弃 remoteSort
+    if (_vm.remoteSort) {
+      UtilTools.warn('vxe.error.delProp', ['column.remote-sort', 'sort-config.remote'])
+    }
+    // 在 v3.0 中废弃 sortMethod
+    if (_vm.sortMethod) {
+      UtilTools.warn('vxe.error.delProp', ['column.sort-method', 'sort-config.sortMethod'])
+    }
+    // 在 v3.0 中 sortBy 只能是字符串
+    if (_vm.sortBy && !XEUtils.isString(_vm.sortBy)) {
+      UtilTools.warn('vxe.error.errProp', [`column.sort-by=${JSON.stringify(_vm.sortBy)}`, `column.sort-by="${_vm.sortBy[0]}"`])
     }
 
     if (formatter) {
@@ -269,11 +267,6 @@ export const UtilTools = {
     const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots
     if (groupConfig) {
-      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      //   if ($xecolumn.$options._componentTag === 'vxe-table-column') {
-      //     UtilTools.warn('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
-      //   }
-      // }
       if (!groupConfig.children) {
         groupConfig.children = []
       }

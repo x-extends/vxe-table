@@ -531,9 +531,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   _getRowIndex (row) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['_getRowIndex', 'getVTRowIndex'])
-    }
+    UtilTools.warn('vxe.error.delFunc', ['_getRowIndex', 'getVTRowIndex'])
     return this.getVTRowIndex(row)
   },
   /**
@@ -545,9 +543,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   $getRowIndex (row) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['$getRowIndex', 'getVMRowIndex'])
-    }
+    UtilTools.warn('vxe.error.delFunc', ['$getRowIndex', 'getVMRowIndex'])
     return this.getVMRowIndex(row)
   },
   /**
@@ -566,9 +562,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   _getColumnIndex (column) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['_getColumnIndex', 'getVTColumnIndex'])
-    }
+    UtilTools.warn('vxe.error.delFunc', ['_getColumnIndex', 'getVTColumnIndex'])
     return this.getVTColumnIndex(column)
   },
   /**
@@ -580,9 +574,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   $getColumnIndex (column) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['$getColumnIndex', 'getVMColumnIndex'])
-    }
+    UtilTools.warn('vxe.error.delFunc', ['$getColumnIndex', 'getVMColumnIndex'])
     return this.getVMColumnIndex(column)
   },
   /**

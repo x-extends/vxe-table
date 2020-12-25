@@ -268,14 +268,12 @@ export default {
       }, DomTools.browse ? 500 : 300)
     }
     // 检查错误使用
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      this.$nextTick(() => {
-        const xTable = this.$refs.xTable
-        if (xTable && xTable.isSC) {
-          UtilTools.error('vxe.error.errProp', ['<vxe-table-column ...>', 'columns'])
-        }
-      })
-    }
+    this.$nextTick(() => {
+      const xTable = this.$refs.xTable
+      if (xTable && xTable.isSC) {
+        UtilTools.error('vxe.error.errProp', ['<vxe-table-column ...>', 'columns'])
+      }
+    })
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
   mounted () {

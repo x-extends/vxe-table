@@ -53,26 +53,24 @@ export default {
   },
   created () {
     // 在 v3 中废弃 onLabel、offLabel、onValue、offValue、onIcon、offIcon
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      const { propsData } = this.$options
-      if (propsData.onLabel) {
-        UtilTools.warn('vxe.error.delProp', ['on-label', 'open-label'])
-      }
-      if (propsData.offLabel) {
-        UtilTools.warn('vxe.error.delProp', ['off-label', 'close-label'])
-      }
-      if (propsData.onValue) {
-        UtilTools.warn('vxe.error.delProp', ['on-value', 'open-value'])
-      }
-      if (propsData.offValue) {
-        UtilTools.warn('vxe.error.delProp', ['off-value', 'close-value'])
-      }
-      if (propsData.onIcon) {
-        UtilTools.warn('vxe.error.delProp', ['on-icon', 'open-icon'])
-      }
-      if (propsData.offIcon) {
-        UtilTools.warn('vxe.error.delProp', ['off-icon', 'close-icon'])
-      }
+    const { propsData } = this.$options
+    if (propsData.onLabel) {
+      UtilTools.warn('vxe.error.delProp', ['on-label', 'open-label'])
+    }
+    if (propsData.offLabel) {
+      UtilTools.warn('vxe.error.delProp', ['off-label', 'close-label'])
+    }
+    if (propsData.onValue) {
+      UtilTools.warn('vxe.error.delProp', ['on-value', 'open-value'])
+    }
+    if (propsData.offValue) {
+      UtilTools.warn('vxe.error.delProp', ['off-value', 'close-value'])
+    }
+    if (propsData.onIcon) {
+      UtilTools.warn('vxe.error.delProp', ['on-icon', 'open-icon'])
+    }
+    if (propsData.offIcon) {
+      UtilTools.warn('vxe.error.delProp', ['off-icon', 'close-icon'])
     }
     if (browse.msie) {
       this.$nextTick(() => this.updateStyle())

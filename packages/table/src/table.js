@@ -761,60 +761,56 @@ export default {
     if (this.remoteFilter) {
       UtilTools.warn('vxe.error.delProp', ['remote-filter', 'filter-config.remote'])
     }
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      if (!this.handleUpdateCellAreas) {
-        if (this.clipConfig) {
-          UtilTools.warn('vxe.error.notProp', ['clip-config'])
-        }
-        if (this.fnrConfig) {
-          UtilTools.warn('vxe.error.notProp', ['fnr-config'])
-        }
-        if (this.mouseOpts.area) {
-          UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
-          return
-        }
+    if (!this.handleUpdateCellAreas) {
+      if (this.clipConfig) {
+        UtilTools.warn('vxe.error.notProp', ['clip-config'])
       }
-      if (mouseOpts.selected && mouseOpts.area) {
-        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+      if (this.fnrConfig) {
+        UtilTools.warn('vxe.error.notProp', ['fnr-config'])
       }
-      if (mouseOpts.checked && mouseOpts.area) {
-        UtilTools.error('vxe.error.errConflicts', ['mouse-config.checked', 'mouse-config.area'])
+      if (this.mouseOpts.area) {
+        UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+        return
       }
+    }
+    if (mouseOpts.selected && mouseOpts.area) {
+      UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+    }
+    if (mouseOpts.checked && mouseOpts.area) {
+      UtilTools.error('vxe.error.errConflicts', ['mouse-config.checked', 'mouse-config.area'])
     }
 
     // v3 中只支持对象类型
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      // 在 v3.0 中废弃 context-menu
-      if (this.contextMenu) {
-        UtilTools.warn('vxe.error.delProp', ['context-menu', 'menu-config'])
-        if (!XEUtils.isObject(this.contextMenu)) {
-          UtilTools.warn('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
-        }
+    // 在 v3.0 中废弃 context-menu
+    if (this.contextMenu) {
+      UtilTools.warn('vxe.error.delProp', ['context-menu', 'menu-config'])
+      if (!XEUtils.isObject(this.contextMenu)) {
+        UtilTools.warn('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
       }
-      if (this.menuConfig && !XEUtils.isObject(this.menuConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.menu-config=${this.menuConfig}`, 'table.menu-config={}'])
-      }
-      if (this.exportConfig && !XEUtils.isObject(this.exportConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.export-config=${this.exportConfig}`, 'table.export-config={}'])
-      }
-      if (this.importConfig && !XEUtils.isObject(this.importConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.import-config=${this.importConfig}`, 'table.import-config={}'])
-      }
-      if (this.printConfig && !XEUtils.isObject(this.printConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.print-config=${this.printConfig}`, 'table.print-config={}'])
-      }
-      if (this.treeConfig && !XEUtils.isObject(this.treeConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.tree-config=${this.treeConfig}`, 'table.tree-config={}'])
-      }
-      if (this.customConfig && !XEUtils.isObject(this.customConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.custom-config=${this.customConfig}`, 'table.custom-config={}'])
-      }
-      if (this.editConfig && !XEUtils.isObject(this.editConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.edit-config=${this.editConfig}`, 'table.edit-config={}'])
-      }
-      if (this.emptyRender && !XEUtils.isObject(this.emptyRender)) {
-        UtilTools.warn('vxe.error.errProp', [`table.empty-render=${this.emptyRender}`, 'table.empty-render={}'])
-      }
+    }
+    if (this.menuConfig && !XEUtils.isObject(this.menuConfig)) {
+      UtilTools.warn('vxe.error.errProp', [`table.menu-config=${this.menuConfig}`, 'table.menu-config={}'])
+    }
+    if (this.exportConfig && !XEUtils.isObject(this.exportConfig)) {
+      UtilTools.warn('vxe.error.errProp', [`table.export-config=${this.exportConfig}`, 'table.export-config={}'])
+    }
+    if (this.importConfig && !XEUtils.isObject(this.importConfig)) {
+      UtilTools.warn('vxe.error.errProp', [`table.import-config=${this.importConfig}`, 'table.import-config={}'])
+    }
+    if (this.printConfig && !XEUtils.isObject(this.printConfig)) {
+      UtilTools.warn('vxe.error.errProp', [`table.print-config=${this.printConfig}`, 'table.print-config={}'])
+    }
+    if (this.treeConfig && !XEUtils.isObject(this.treeConfig)) {
+      UtilTools.warn('vxe.error.errProp', [`table.tree-config=${this.treeConfig}`, 'table.tree-config={}'])
+    }
+    if (this.customConfig && !XEUtils.isObject(this.customConfig)) {
+      UtilTools.warn('vxe.error.errProp', [`table.custom-config=${this.customConfig}`, 'table.custom-config={}'])
+    }
+    if (this.editConfig && !XEUtils.isObject(this.editConfig)) {
+      UtilTools.warn('vxe.error.errProp', [`table.edit-config=${this.editConfig}`, 'table.edit-config={}'])
+    }
+    if (this.emptyRender && !XEUtils.isObject(this.emptyRender)) {
+      UtilTools.warn('vxe.error.errProp', [`table.empty-render=${this.emptyRender}`, 'table.empty-render={}'])
     }
 
     if (this.mouseConfig && this.editConfig) {
@@ -826,31 +822,29 @@ export default {
       UtilTools.warn('vxe.error.noTree', ['stripe'])
     }
 
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      // 在 v3.0 中废弃 optimization
-      if (this.optimization) {
-        UtilTools.warn('vxe.error.removeProp', ['optimization'])
-      }
-      // 废弃 optimization.cloak
-      if (this.optimizeOpts.cloak) {
-        UtilTools.warn('vxe.error.delProp', ['optimization.cloak', 'cloak'])
-      }
-      // 废弃 optimization.animat
-      if (this.optimizeOpts.animat) {
-        UtilTools.warn('vxe.error.delProp', ['optimization.animat', 'animat'])
-      }
-      // 废弃 optimization.delayHover
-      if (this.optimizeOpts.delayHover) {
-        UtilTools.warn('vxe.error.delProp', ['optimization.delayHover', 'delay-hover'])
-      }
-      // 废弃 optimization.scrollX
-      if (this.optimizeOpts.scrollX) {
-        UtilTools.warn('vxe.error.delProp', ['optimization.scrollX', 'scroll-x'])
-      }
-      // 废弃 optimization.scrollY
-      if (this.optimizeOpts.scrollY) {
-        UtilTools.warn('vxe.error.delProp', ['optimization.scrollY', 'scroll-y'])
-      }
+    // 在 v3.0 中废弃 optimization
+    if (this.optimization) {
+      UtilTools.warn('vxe.error.removeProp', ['optimization'])
+    }
+    // 废弃 optimization.cloak
+    if (this.optimizeOpts.cloak) {
+      UtilTools.warn('vxe.error.delProp', ['optimization.cloak', 'cloak'])
+    }
+    // 废弃 optimization.animat
+    if (this.optimizeOpts.animat) {
+      UtilTools.warn('vxe.error.delProp', ['optimization.animat', 'animat'])
+    }
+    // 废弃 optimization.delayHover
+    if (this.optimizeOpts.delayHover) {
+      UtilTools.warn('vxe.error.delProp', ['optimization.delayHover', 'delay-hover'])
+    }
+    // 废弃 optimization.scrollX
+    if (this.optimizeOpts.scrollX) {
+      UtilTools.warn('vxe.error.delProp', ['optimization.scrollX', 'scroll-x'])
+    }
+    // 废弃 optimization.scrollY
+    if (this.optimizeOpts.scrollY) {
+      UtilTools.warn('vxe.error.delProp', ['optimization.scrollY', 'scroll-y'])
     }
 
     const customOpts = this.customOpts
