@@ -343,6 +343,9 @@ export default {
         } else {
           this._setColumnModel(row, column)
         }
+        actived.args = null
+        actived.row = null
+        actived.column = null
         this.updateFooter()
         this.emitEvent('edit-closed', {
           row,
@@ -353,14 +356,12 @@ export default {
           $columnIndex: this.getVMColumnIndex(column)
         }, evnt)
       }
-      actived.args = null
-      actived.row = null
-      actived.column = null
       return (VXETable._valid ? this.clearValidate() : this.$nextTick()).then(this.recalculate)
     },
     _getActiveRecord () {
       const { $el, editStore, afterFullData } = this
-      const { args, row } = editStore.actived
+      const { actived } = editStore
+      const { args, row } = actived
       if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }

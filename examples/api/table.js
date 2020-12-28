@@ -944,6 +944,25 @@ const apis = [
         ]
       },
       {
+        name: 'resizable-config',
+        descKey: 'app.api.table.desc.resizableConfig',
+        version: '3.0.20',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.resizableConfig',
+        list: [
+          {
+            name: 'minWidth',
+            desc: '列宽拖动的最小宽度',
+            version: '',
+            type: 'number | string | ((params: { $table, column, columnIndex, cell }) => number | string)',
+            enum: '',
+            defVal: 'auto',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'seq-config',
         descKey: 'app.api.table.desc.seqConfig',
         version: '',
@@ -4226,7 +4245,7 @@ const apis = [
       },
       {
         name: 'importData(options)',
-        desc: '将数据导入表格（只支持基本数据结构，目前不支持分组、合并等）',
+        desc: '将数据导入表格（只支持基本数据结构）',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4244,7 +4263,7 @@ const apis = [
       },
       {
         name: 'print(options)',
-        desc: '打印（只支持基本数据结构，目前不支持分组、合并等）',
+        desc: '打印',
         version: '',
         type: 'Promise<any>',
         enum: '',

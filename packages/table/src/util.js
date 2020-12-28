@@ -1,4 +1,5 @@
 import VXETable from '../../v-x-e-table'
+import XEUtils from 'xe-utils'
 
 const lineOffsetSizes = {
   mini: 3,
@@ -10,14 +11,59 @@ export function isEnableConf (conf) {
   return conf && conf.enabled !== false
 }
 
-function getColFuncWidth (isExists, defaultWidth = 16) {
-  return isExists ? defaultWidth : 0
+function getPaddingLeftRightSize (elem) {
+  if (elem) {
+    const computedStyle = getComputedStyle(elem)
+    const paddingLeft = XEUtils.toNumber(computedStyle.paddingLeft)
+    const paddingRight = XEUtils.toNumber(computedStyle.paddingRight)
+    return paddingLeft + paddingRight
+  }
+  return 0
 }
 
-export function getColMinWidth ($xetable, column) {
-  const { sortOpts, filterOpts, editOpts } = $xetable
-  const { type, filters, sortable, remoteSort, titleHelp, editRender } = column
-  return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(isEnableConf(editRender) && editOpts.showIcon, 32)
+function getElemenMarginWidth (elem) {
+  if (elem) {
+    const computedStyle = getComputedStyle(elem)
+    const marginLeft = XEUtils.toNumber(computedStyle.marginLeft)
+    const marginRight = XEUtils.toNumber(computedStyle.marginRight)
+    return elem.offsetWidth + marginLeft + marginRight
+  }
+  return 0
+}
+
+function queryCellElement (cell, selector) {
+  return cell.querySelector('.vxe-cell' + selector)
+}
+
+export function getColMinWidth (params) {
+  const { $table, column, cell } = params
+  const { showHeaderOverflow: allColumnHeaderOverflow, resizableOpts } = $table
+  const { minWidth } = resizableOpts
+  if (minWidth) {
+    const customMinWidth = XEUtils.isFunction(minWidth) ? minWidth(params) : minWidth
+    if (customMinWidth !== 'auto') {
+      return Math.max(1, XEUtils.toNumber(customMinWidth))
+    }
+  }
+  const { showHeaderOverflow } = column
+  const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+  const showEllipsis = headOverflow === 'ellipsis'
+  const showTitle = headOverflow === 'title'
+  const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+  const hasEllipsis = showTitle || showTooltip || showEllipsis
+  const minTitleWidth = XEUtils.floor((XEUtils.toNumber(getComputedStyle(cell).fontSize) || 14) * 1.6)
+  const paddingLeftRight = getPaddingLeftRightSize(cell) + getPaddingLeftRightSize(queryCellElement(cell, ''))
+  let colMinWidth = minTitleWidth + paddingLeftRight
+  if (hasEllipsis) {
+    const checkboxIconWidth = getPaddingLeftRightSize(queryCellElement(cell, '--title>.vxe-cell--checkbox'))
+    const requiredIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--required-icon'))
+    const editIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--edit-icon'))
+    const helpIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell-help-icon'))
+    const sortIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--sort'))
+    const filterIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--filter'))
+    colMinWidth += checkboxIconWidth + requiredIconWidth + editIconWidth + helpIconWidth + filterIconWidth + sortIconWidth
+  }
+  return colMinWidth
 }
 
 function countTreeExpand (prevRow, params) {

@@ -14,10 +14,13 @@ function getOffsetHeight (elem) {
 }
 
 function getPaddingTopBottomSize (elem) {
-  const computedStyle = getComputedStyle(elem)
-  const paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
-  const paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
-  return paddingTop + paddingBottom
+  if (elem) {
+    const computedStyle = getComputedStyle(elem)
+    const paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
+    const paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
+    return paddingTop + paddingBottom
+  }
+  return 0
 }
 
 function renderDefaultForm (h, _vm) {

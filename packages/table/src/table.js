@@ -181,6 +181,7 @@ export default {
     syncResize: [Boolean, String, Number],
     // 设置列的默认参数，仅对部分支持的属性有效
     columnConfig: Object,
+    resizableConfig: Object,
     // 序号配置项
     seqConfig: Object,
     // 排序配置项
@@ -448,6 +449,9 @@ export default {
     },
     columnOpts () {
       return Object.assign({}, this.columnConfig)
+    },
+    resizableOpts () {
+      return Object.assign({}, GlobalConfig.table.resizableConfig, this.resizableConfig)
     },
     seqOpts () {
       return Object.assign({ startIndex: 0 }, GlobalConfig.table.seqConfig, this.seqConfig)

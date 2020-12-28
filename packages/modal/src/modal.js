@@ -429,7 +429,7 @@ export default {
     },
     maximize () {
       return this.$nextTick().then(() => {
-        if (this.showZoom && !this.zoomLocat) {
+        if (!this.zoomLocat) {
           const marginSize = this.marginSize
           const modalBoxElem = this.getBox()
           const { visibleHeight, visibleWidth } = DomTools.getDomNode()
