@@ -951,6 +951,25 @@ const apis = [
         ]
       },
       {
+        name: 'resizable-config',
+        descKey: 'app.api.table.desc.resizableConfig',
+        version: '2.10.10',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.resizableConfig',
+        list: [
+          {
+            name: 'minWidth',
+            desc: '列宽拖动的最小宽度',
+            version: '',
+            type: 'number | string | ((params: { $table, column, columnIndex, cell }) => number | string)',
+            enum: '',
+            defVal: 'auto',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'seq-config',
         descKey: 'app.api.table.desc.seqConfig',
         version: '2.7',

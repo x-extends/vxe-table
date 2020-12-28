@@ -355,6 +355,9 @@ export default {
         } else {
           this._setColumnModel(row, column)
         }
+        actived.args = null
+        actived.row = null
+        actived.column = null
         this.updateFooter()
         this.emitEvent('edit-closed', Object.assign({}, args, {
           row,
@@ -365,9 +368,6 @@ export default {
           $columnIndex: this.getVMColumnIndex(column)
         }), evnt)
       }
-      actived.args = null
-      actived.row = null
-      actived.column = null
       return (VXETable._valid ? this.clearValidate() : this.$nextTick()).then(this.recalculate)
     },
     // 在 v3.0 中废弃 getActiveRow

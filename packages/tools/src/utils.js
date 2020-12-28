@@ -286,10 +286,27 @@ export const UtilTools = {
   hasChildrenList (item) {
     return item && item.children && item.children.length > 0
   },
-  getColMinWidth (_vm, column) {
-    const { sortOpts, filterOpts, editOpts } = _vm
-    const { type, filters, sortable, remoteSort, titleHelp, editRender } = column
-    return 40 + getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(UtilTools.isEnableConf(editRender) && editOpts.showIcon, 32)
+  getColMinWidth (params) {
+    const { $table, column } = params
+    const { showHeaderOverflow: allColumnHeaderOverflow, resizableOpts, sortOpts, filterOpts, editOpts } = $table
+    const { type, showHeaderOverflow, filters, sortable, remoteSort, titleHelp, editRender } = column
+    const { minWidth } = resizableOpts
+    if (minWidth) {
+      const customMinWidth = XEUtils.isFunction(minWidth) ? minWidth(params) : minWidth
+      if (customMinWidth !== 'auto') {
+        return Math.max(1, XEUtils.toNumber(customMinWidth))
+      }
+    }
+    const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+    const showEllipsis = headOverflow === 'ellipsis'
+    const showTitle = headOverflow === 'title'
+    const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+    const hasEllipsis = showTitle || showTooltip || showEllipsis
+    let colMinWidth = 40
+    if (hasEllipsis) {
+      colMinWidth += getColFuncWidth(type === 'checkbox' || type === 'selection', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable || remoteSort) && sortOpts.showIcon) + getColFuncWidth(UtilTools.isEnableConf(editRender) && editOpts.showIcon, 32)
+    }
+    return colMinWidth
   },
   parseFile (file) {
     const name = file.name
