@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance } from 'vue'
+import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode } from 'vue'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, RowInfo, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeColumnOptions, VxeColumnPropTypes } from './column'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
@@ -20,10 +20,11 @@ export interface VxeTableConstructor extends VxeComponentInstance, VxeTableMetho
   instance: ComponentInternalInstance;
   reactData: TableReactData;
   internalData: TableInternalData;
-  refMaps: TablePrivateRef;
-  computeMaps: TablePrivateComputed;
-  xegrid?: VxeGridConstructor | null;
+  getRefMaps(): TablePrivateRef;
+  getComputeMaps(): TablePrivateComputed;
   renderVN: RenderFunction;
+
+  xegrid?: VxeGridConstructor | null;
 }
 
 export interface TablePrivateRef {
@@ -51,6 +52,7 @@ export interface TablePrivateComputed {
   computeValidOpts: ComputedRef<VxeTablePropTypes.ValidOpts>;
   computeSXOpts: ComputedRef<VxeTablePropTypes.SXOpts>;
   computeSYOpts: ComputedRef<VxeTablePropTypes.SYOpts>;
+  computeResizableOpts: ComputedRef<VxeTablePropTypes.ResizableOpts>;
   computeSeqOpts: ComputedRef<VxeTablePropTypes.SeqOpts>;
   computeRadioOpts: ComputedRef<VxeTablePropTypes.RadioOpts>;
   computeCheckboxOpts: ComputedRef<VxeTablePropTypes.CheckboxOpts>;
@@ -307,7 +309,7 @@ export interface TablePublicMethods {
    * @param target 目标元素
    * @param content 内容
    */
-  openTooltip (target: HTMLElement, content: string | number): Promise<any>;
+  openTooltip(target: HTMLElement, content: string | number): Promise<any>;
   /**
    * 关闭 tooltip 提示
    */
@@ -646,22 +648,22 @@ export interface TablePrivateMethods {
   checkSelectionStatus(): void;
   handleSelectRow(params: any, value: any): void;
   preventEvent(evnt: any, type: any, args?: any, next?: any, end?: any): any;
-  triggerHeaderHelpEvent(evnt: Event, params: any): void;
-  triggerHeaderTooltipEvent(evnt: Event, params: any): void;
-  triggerBodyTooltipEvent(evnt: Event, params: any): void;
-  triggerFooterTooltipEvent(evnt: Event, params: any): void;
-  handleTargetLeaveEvent(): void;
-  triggerHeaderCellClickEvent(evnt: any, params: any): void;
-  triggerHeaderCellDBLClickEvent(evnt: Event, params: any): void;
-  triggerCellClickEvent(evnt: Event, params: any): void;
-  triggerCellDBLClickEvent(evnt: Event, params: any): void;
-  triggerCheckRowEvent(evnt: any, params: any, value: any): void;
-  triggerCheckAllEvent(evnt: any, value: any): void;
-  triggerRadioRowEvent(evnt: any, params: any): void;
-  triggerCurrentRowEvent(evnt: any, params: any): void;
-  triggerRowExpandEvent(evnt: any, params: any): void;
-  triggerTreeExpandEvent(evnt: any, params: any): void;
-  triggerSortEvent(evnt: any, column: VxeTableDefines.ColumnInfo, order: VxeTablePropTypes.SortOrder): void;
+  triggerHeaderHelpEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
+  triggerHeaderTooltipEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
+  triggerBodyTooltipEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams): void;
+  triggerFooterTooltipEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderFooterParams): void;
+  handleTargetLeaveEvent(evnt: MouseEvent): void;
+  triggerHeaderCellClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
+  triggerHeaderCellDBLClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
+  triggerCellClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams): void;
+  triggerCellDBLClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams): void;
+  triggerCheckRowEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams, value: boolean): void;
+  triggerCheckAllEvent(evnt: MouseEvent | null, value: boolean): void;
+  triggerRadioRowEvent(evnt: Event, params: VxeTableDefines.CellRenderBodyParams): void;
+  triggerCurrentRowEvent(evnt: Event, params: VxeTableDefines.CurrentChangeParams): void;
+  triggerRowExpandEvent(evnt: Event, params: VxeTableDefines.CellRenderBodyParams): void;
+  triggerTreeExpandEvent(evnt: Event, params: VxeTableDefines.CellRenderBodyParams): void;
+  triggerSortEvent(evnt: Event, column: VxeTableDefines.ColumnInfo, order: VxeTablePropTypes.SortOrder): void;
   triggerScrollXEvent(evnt: Event): void;
   triggerScrollYEvent(evnt: Event): void;
   scrollToTreeRow(row: any): Promise<any>;
@@ -676,7 +678,7 @@ export interface TablePrivateMethods {
   setHoverRow(row: any): void;
   clearHoverRow(): void;
   getCell(row: any, column: VxeTableDefines.ColumnInfo): HTMLTableDataCellElement | null;
-  getCellLabel (row: any, column: VxeTableDefines.ColumnInfo): any;
+  getCellLabel(row: any, column: VxeTableDefines.ColumnInfo): any;
   findRowIndexOf(list: any[], row: any): number;
   eqRow(row1: any, row2: any): boolean;
 }
@@ -986,7 +988,7 @@ export namespace VxeTablePropTypes {
   export type HeaderRowClassName = string | ((params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
-    fixed?: string;
+    fixed: VxeColumnPropTypes.Fixed;
     type: string;
   }) => null | string | { [key: string]: boolean });
 
@@ -994,7 +996,7 @@ export namespace VxeTablePropTypes {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     column: VxeTableDefines.ColumnInfo;
-    fixed?: string;
+    fixed: VxeColumnPropTypes.Fixed;
     type: string;
   }) => null | string | { [key: string]: boolean });
 
@@ -1002,7 +1004,7 @@ export namespace VxeTablePropTypes {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     _rowIndex: number;
-    fixed?: string;
+    fixed: VxeColumnPropTypes.Fixed;
     type: string;
   }) => null | string | { [key: string]: boolean });
 
@@ -1050,7 +1052,7 @@ export namespace VxeTablePropTypes {
   export type HeaderRowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
     $table: & VxeTablePrivateMethods;
     $rowIndex: number;
-    fixed?: string;
+    fixed: VxeColumnPropTypes.Fixed;
     type: string;
   }) => null | string | { [key: string]: boolean });
 
@@ -1058,7 +1060,7 @@ export namespace VxeTablePropTypes {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     _rowIndex: number;
-    fixed?: string;
+    fixed: VxeColumnPropTypes.Fixed;
     type: string;
   }) => null | string | { [key: string]: boolean });
 
@@ -1073,7 +1075,7 @@ export namespace VxeTablePropTypes {
     rowIndex: number;
     $rowIndex: number;
     isHidden: boolean;
-    fixed: string;
+    fixed: VxeColumnPropTypes.Fixed;
     type: string;
   }) => { rowspan: number, colspan: number };
 
@@ -1118,6 +1120,18 @@ export namespace VxeTablePropTypes {
   }
   export interface CustomOpts extends CustomConfig { }
 
+  export interface ResizableConfig {
+    minWidth?: number | string | ((params: {
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
+      $columnIndex: number;
+      $rowIndex: number;
+      cell: HTMLTableHeaderCellElement;
+    }) => number | string);
+  }
+  export interface ResizableOpts extends ResizableConfig { }
+
   /**
    * 序号配置项
    */
@@ -1131,7 +1145,7 @@ export namespace VxeTablePropTypes {
       rowIndex: number;
       $rowIndex: number;
       isHidden: boolean;
-      fixed: string;
+      fixed: VxeColumnPropTypes.Fixed;
       type: string;
     }): number;
   }
@@ -1263,16 +1277,7 @@ export namespace VxeTablePropTypes {
       columnIndex: number;
       $columnIndex: number;
     }): boolean;
-    visibleMethod?(params: {
-      $table: VxeTableConstructor & VxeTablePrivateMethods;
-      expanded: boolean;
-      row: RowInfo;
-      rowIndex: number;
-      $rowIndex: number;
-      column: VxeTableDefines.ColumnInfo;
-      columnIndex: number;
-      $columnIndex: number;
-    }): boolean;
+    visibleMethod?(params: VxeTableDefines.CellRenderBodyParams): boolean;
     showIcon?: boolean;
     iconOpen?: string;
     iconClose?: string;
@@ -1460,7 +1465,7 @@ export namespace VxeTablePropTypes {
     isFind?: boolean;
     isReplace?: boolean;
   }
-  export interface FNROpts extends FNRConfig {}
+  export interface FNROpts extends FNRConfig { }
 
   /**
    * 编辑配置项
@@ -1468,6 +1473,7 @@ export namespace VxeTablePropTypes {
   export interface EditConfig {
     trigger?: 'manual' | 'click' | 'dblclick';
     mode?: string;
+    icon?: string;
     showIcon?: boolean;
     showStatus?: boolean;
     showAsterisk?: boolean;
@@ -1584,6 +1590,7 @@ export interface VxeTableProps {
   syncResize?: VxeTablePropTypes.SyncResize;
   columnConfig?: VxeTablePropTypes.ColumnConfig;
   customConfig?: VxeTablePropTypes.CustomConfig;
+  resizableConfig?: VxeTablePropTypes.ResizableConfig;
   seqConfig?: VxeTablePropTypes.SeqConfig;
   sortConfig?: VxeTablePropTypes.SortConfig;
   filterConfig?: VxeTablePropTypes.FilterConfig;
@@ -1714,6 +1721,7 @@ export namespace VxeTableDefines {
     visible: VxeColumnPropTypes.Visible;
     exportMethod: VxeColumnPropTypes.ExportMethod;
     footerExportMethod: VxeColumnPropTypes.FooterExportMethod;
+    titleHelp: VxeColumnPropTypes.TitleHelp;
     cellType: VxeColumnPropTypes.CellType;
     cellRender: VxeColumnPropTypes.CellRender;
     editRender: VxeColumnPropTypes.EditRender;
@@ -1741,7 +1749,63 @@ export namespace VxeTableDefines {
     };
     children: ColumnInfo[];
 
+    renderHeader(params: CellRenderHeaderParams): VNode[];
+    renderCell(params: CellRenderCellParams): VNode[];
+    renderData(params: CellRenderDataParams): VNode[];
+    renderFooter(params: CellRenderFooterParams): VNode[];
+
     getTitle(): string;
+  }
+  export interface CellRenderHeaderParams {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
+    $rowIndex: number;
+    column: ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    _columnIndex: number;
+    fixed: VxeColumnPropTypes.Fixed;
+    type: string;
+    isHidden: boolean;
+    hasFilter: boolean;
+  }
+  export interface CellRenderBodyParams {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
+    $seq: string;
+    seq: number;
+    rowid: string;
+    row: any;
+    rowIndex: number;
+    $rowIndex: number;
+    _rowIndex: number;
+    column: ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    _columnIndex: number;
+    fixed: VxeColumnPropTypes.Fixed;
+    type: string
+    isHidden: boolean;
+    level: number;
+    visibleData: any[];
+    data: any[];
+    items: any[];
+  }
+
+  export interface CellRenderDataParams extends CellRenderBodyParams { }
+  export interface CellRenderCellParams extends CellRenderBodyParams { }
+
+  export interface CellRenderFooterParams {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
+    _rowIndex: number;
+    $rowIndex: number;
+    column: ColumnInfo;
+    columnIndex: number;
+    $columnIndex: number;
+    _columnIndex: number;
+    itemIndex: number;
+    items: any[];
+    fixed: VxeColumnPropTypes.Fixed;
+    type: string;
+    data: any[][];
   }
 
   interface TableEventParams extends VxeEvent {
@@ -1783,7 +1847,11 @@ export namespace VxeTableDefines {
   export interface CutParams { }
   export interface CutEventParams extends TableEventParams, CutParams { }
 
-  export interface CurrentChangeParams extends TableBaseCellParams { }
+  export interface CurrentChangeParams {
+    row: RowInfo;
+    rowIndex: number;
+    $rowIndex: number;
+  }
   export interface CurrentChangeEventParams extends TableEventParams, CurrentChangeParams { }
 
   export interface RadioChangeParams extends TableBaseCellParams { }

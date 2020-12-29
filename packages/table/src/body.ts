@@ -5,18 +5,18 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 import { mergeBodyMethod, getRowid, isEnableConf } from './util'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeGlobalRendererHandles, SizeType } from '../../../types/vxe-table'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/vxe-table'
 
 const renderType = 'body'
 
-const lineOffsetSizes: any = {
+const lineOffsetSizes = {
   mini: 3,
   small: 2,
   medium: 1
 }
 
 interface XEBodyScrollElement extends HTMLDivElement {
-  _onscroll: ((evnt: Event) => any) | null;
+  _onscroll: ((evnt: Event) => void) | null;
 }
 
 export default defineComponent({
@@ -25,16 +25,16 @@ export default defineComponent({
     tableData: Array as PropType<any[]>,
     tableColumn: Array as PropType<any[]>,
     fixedColumn: Array as PropType<any[]>,
-    fixedType: String
+    fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
   setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const xesize = inject('xesize', null as ComputedRef<SizeType> | null)
 
-    const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData, refMaps: tableRefMaps, computeMaps: tableComputeMaps } = $xetable
-    const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = tableRefMaps
-    const { computeEditOpts, computeMouseOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts } = tableComputeMaps
+    const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xetable
+    const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xetable.getRefMaps()
+    const { computeEditOpts, computeMouseOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -66,7 +66,7 @@ export default defineComponent({
       return count
     }
 
-    const calcTreeLine = (params: any, items: any) => {
+    const calcTreeLine = (params: any, items: any[]) => {
       const { $rowIndex } = params
       let expandSize = 1
       if ($rowIndex) {
@@ -82,7 +82,7 @@ export default defineComponent({
       return _isResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number))
     }
 
-    const renderLine = (rowLevel: any, items: any, params: any) => {
+    const renderLine = (rowLevel: number, items: any[], params: any) => {
       const { column } = params
       const { treeConfig } = tableProps
       const treeOpts = computeTreeOpts.value
@@ -111,7 +111,7 @@ export default defineComponent({
     /**
      * 渲染列
      */
-    const renderColumn = ($seq: any, seq: any, rowid: any, fixedType: any, rowLevel: any, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any) => {
+    const renderColumn = ($seq: string, seq: number, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
       const { columnKey, height, showOverflow: allColumnOverflow, cellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
       const { tableData, overflowX, scrollXLoad, scrollYLoad, currentColumn, mergeList, editStore, validStore } = tableReactData
       const { afterFullData } = tableInternalData
@@ -137,14 +137,14 @@ export default defineComponent({
       const hasValidError = validStore.row === row && validStore.column === column
       const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
       const attrs: any = { colid: column.id }
-      const params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+      const params: VxeTableDefines.CellRenderBodyParams = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
       // 虚拟滚动不支持动态高度
       if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
         showEllipsis = hasEllipsis = true
       }
       // hover 进入事件
       if (showTitle || showTooltip || showAllTip || tooltipConfig) {
-        tdOns.onMouseenter = (evnt: any) => {
+        tdOns.onMouseenter = (evnt: MouseEvent) => {
           if (isOperateMouse()) {
             return
           }
@@ -159,35 +159,35 @@ export default defineComponent({
       }
       // hover 退出事件
       if (showTooltip || showAllTip || tooltipConfig) {
-        tdOns.onMouseleave = (evnt: any) => {
+        tdOns.onMouseleave = (evnt: MouseEvent) => {
           if (isOperateMouse()) {
             return
           }
           if (showTooltip || showAllTip) {
-            $xetable.handleTargetLeaveEvent()
+            $xetable.handleTargetLeaveEvent(evnt)
           }
           $xetable.dispatchEvent('cell-mouseleave', Object.assign({ cell: evnt.currentTarget }, params), evnt)
         }
       }
       // 按下事件处理
       if (checkboxOpts.range || mouseConfig) {
-        tdOns.onMousedown = (evnt: any) => {
+        tdOns.onMousedown = (evnt: MouseEvent) => {
           $xetable.triggerCellMousedownEvent(evnt, params)
         }
       }
       // 点击事件处理
-      tdOns.onClick = (evnt: any) => {
+      tdOns.onClick = (evnt: MouseEvent) => {
         $xetable.triggerCellClickEvent(evnt, params)
       }
       // 双击事件处理
-      tdOns.onDblclick = (evnt: any) => {
+      tdOns.onDblclick = (evnt: MouseEvent) => {
         $xetable.triggerCellDBLClickEvent(evnt, params)
       }
       // 合并行或列
       if (mergeList.length) {
         const spanRest = mergeBodyMethod(mergeList, _rowIndex, _columnIndex)
         if (spanRest) {
-          const { rowspan, colspan }: any = spanRest
+          const { rowspan, colspan } = spanRest
           if (!rowspan || !colspan) {
             return null
           }
@@ -200,7 +200,7 @@ export default defineComponent({
         }
       } else if (spanMethod) {
         // 自定义合并行或列的方法
-        const { rowspan = 1, colspan = 1 }: any = spanMethod(params) || {}
+        const { rowspan = 1, colspan = 1 } = spanMethod(params) || {}
         if (!rowspan || !colspan) {
           return null
         }
@@ -282,7 +282,7 @@ export default defineComponent({
       }, tdVNs)
     }
 
-    const renderRows = ($seq: any, rowLevel: any, fixedType: any, tableData: any, tableColumn: any) => {
+    const renderRows = ($seq: string, rowLevel: any, fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
       const { treeExpandeds, scrollYLoad, editStore, rowExpandeds, expandColumn, selectRow } = tableReactData
       const { scrollYStore } = tableInternalData

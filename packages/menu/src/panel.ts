@@ -11,7 +11,7 @@ export default defineComponent({
 
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const { reactData: tableReactData, computeMaps: tableComputeMaps } = $xetable
+    const { reactData: tableReactData } = $xetable
 
     const refElem = ref() as Ref<HTMLDivElement>
 
@@ -23,12 +23,12 @@ export default defineComponent({
       xID,
       props,
       context,
-      refMaps
+      getRefMaps: () => refMaps
     } as VxeMenuPanelConstructor
 
     const renderVN = () => {
       const { ctxMenuStore } = tableReactData
-      const { computeMenuOpts } = tableComputeMaps
+      const { computeMenuOpts } = $xetable.getComputeMaps()
       const menuOpts = computeMenuOpts.value
 
       return h(Teleport, {

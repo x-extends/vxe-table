@@ -2,7 +2,7 @@ import { watch } from 'vue'
 import XEUtils from 'xe-utils/ctor'
 import { ColumnInfo } from './columnInfo'
 
-import { VxeTableConstructor } from '../../../types/vxe-table'
+import { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeColumnProps } from '../../../types/vxe-table'
 
 /**
  * 生成行的唯一主键
@@ -39,25 +39,76 @@ export function isEnableConf (conf: any): boolean {
   return conf && conf.enabled !== false
 }
 
-function getColFuncWidth (isExists: any, defaultWidth = 16) {
-  return isExists ? defaultWidth : 0
+function getPaddingLeftRightSize (elem: HTMLElement | null) {
+  if (elem) {
+    const computedStyle = getComputedStyle(elem)
+    const paddingLeft = XEUtils.toNumber(computedStyle.paddingLeft)
+    const paddingRight = XEUtils.toNumber(computedStyle.paddingRight)
+    return paddingLeft + paddingRight
+  }
+  return 0
 }
 
-export function getColMinWidth ($xetable: VxeTableConstructor, column: any) {
-  const { computeMaps } = $xetable
-  const { computeSortOpts, computeFilterOpts, computeEditOpts } = computeMaps
-  const sortOpts = computeSortOpts.value
-  const filterOpts = computeFilterOpts.value
-  const editOpts = computeEditOpts.value
-  const { type, filters, sortable, titleHelp, editRender } = column
-  return 40 + getColFuncWidth(type === 'checkbox', 18) + getColFuncWidth(titleHelp, 18) + getColFuncWidth(filters && filterOpts.showIcon) + getColFuncWidth((sortable) && sortOpts.showIcon) + getColFuncWidth(isEnableConf(editRender) && editOpts.showIcon, 32)
+function getElemenMarginWidth (elem: HTMLElement | null) {
+  if (elem) {
+    const computedStyle = getComputedStyle(elem)
+    const marginLeft = XEUtils.toNumber(computedStyle.marginLeft)
+    const marginRight = XEUtils.toNumber(computedStyle.marginRight)
+    return elem.offsetWidth + marginLeft + marginRight
+  }
+  return 0
+}
+
+function queryCellElement (cell: HTMLTableHeaderCellElement, selector: string) {
+  return cell.querySelector('.vxe-cell' + selector) as HTMLElement | null
+}
+
+export function getColMinWidth (params: {
+  $table: VxeTableConstructor & VxeTablePrivateMethods;
+  column: VxeTableDefines.ColumnInfo;
+  columnIndex: number;
+  $columnIndex: number;
+  $rowIndex: number;
+  cell: HTMLTableHeaderCellElement;
+}) {
+  const { $table, column, cell } = params
+  const { props: tableProps } = $table
+  const { computeResizableOpts } = $table.getComputeMaps()
+  const resizableOpts = computeResizableOpts.value
+  const { minWidth } = resizableOpts
+  if (minWidth) {
+    const customMinWidth = XEUtils.isFunction(minWidth) ? minWidth(params) : minWidth
+    if (customMinWidth !== 'auto') {
+      return Math.max(1, XEUtils.toNumber(customMinWidth))
+    }
+  }
+  const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
+  const { showHeaderOverflow } = column
+  const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+  const showEllipsis = headOverflow === 'ellipsis'
+  const showTitle = headOverflow === 'title'
+  const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+  const hasEllipsis = showTitle || showTooltip || showEllipsis
+  const minTitleWidth = XEUtils.floor((XEUtils.toNumber(getComputedStyle(cell).fontSize) || 14) * 1.6)
+  const paddingLeftRight = getPaddingLeftRightSize(cell) + getPaddingLeftRightSize(queryCellElement(cell, ''))
+  let colMinWidth = minTitleWidth + paddingLeftRight
+  if (hasEllipsis) {
+    const checkboxIconWidth = getPaddingLeftRightSize(queryCellElement(cell, '--title>.vxe-cell--checkbox'))
+    const requiredIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--required-icon'))
+    const editIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--edit-icon'))
+    const helpIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell-help-icon'))
+    const sortIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--sort'))
+    const filterIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--filter'))
+    colMinWidth += checkboxIconWidth + requiredIconWidth + editIconWidth + helpIconWidth + filterIconWidth + sortIconWidth
+  }
+  return colMinWidth
 }
 
 export function isColumnInfo (column: any): column is ColumnInfo {
   return column && (column.constructor === ColumnInfo || column instanceof ColumnInfo)
 }
 
-export function createColumn ($xetable: VxeTableConstructor, options: any, renderOptions: any) {
+export function createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeColumnProps, renderOptions: any) {
   return isColumnInfo(options) ? options : new ColumnInfo($xetable, options, renderOptions)
 }
 
@@ -69,7 +120,7 @@ export function watchColumn (props: any, column: ColumnInfo) {
   })
 }
 
-export function assemColumn ($xetable: VxeTableConstructor, elem: HTMLElement, column: ColumnInfo, colgroup?: XEColumnInstance | null) {
+export function assemColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, elem: HTMLElement, column: ColumnInfo, colgroup?: XEColumnInstance | null) {
   const { reactData } = $xetable
   const { staticColumns } = reactData
   const parentElem = elem.parentNode
@@ -81,7 +132,7 @@ export function assemColumn ($xetable: VxeTableConstructor, elem: HTMLElement, c
   }
 }
 
-export function destroyColumn ($xetable: VxeTableConstructor, column: ColumnInfo) {
+export function destroyColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, column: ColumnInfo) {
   const { reactData } = $xetable
   const { staticColumns } = reactData
   const matchObj = XEUtils.findTree(staticColumns, item => item.id === column.id, { children: 'children' })
@@ -105,7 +156,7 @@ export function mergeBodyMethod (mergeList: any[], _rowIndex: number, _columnInd
   }
 }
 
-export function clearTableDefaultStatus ($xetable: VxeTableConstructor) {
+export function clearTableDefaultStatus ($xetable: VxeTableConstructor & VxeTablePrivateMethods) {
   const { props, internalData } = $xetable
   internalData.initStatus = false
   $xetable.clearSort()
@@ -131,16 +182,16 @@ export function clearTableDefaultStatus ($xetable: VxeTableConstructor) {
   return $xetable.clearScroll()
 }
 
-export function clearTableAllStatus ($xetable: VxeTableConstructor) {
+export function clearTableAllStatus ($xetable: VxeTableConstructor & VxeTablePrivateMethods) {
   if ($xetable.clearFilter) {
     $xetable.clearFilter()
   }
   return clearTableDefaultStatus($xetable)
 }
 
-export function rowToVisible ($xetable: VxeTableConstructor, row: any) {
-  const { reactData, internalData, refMaps } = $xetable
-  const { refTableBody } = refMaps
+export function rowToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
+  const { reactData, internalData } = $xetable
+  const { refTableBody } = $xetable.getRefMaps()
   const { scrollYLoad } = reactData
   const { afterFullData, scrollYStore } = internalData
   const tableBody = refTableBody.value
@@ -169,9 +220,9 @@ export function rowToVisible ($xetable: VxeTableConstructor, row: any) {
   return Promise.resolve()
 }
 
-export function colToVisible ($xetable: VxeTableConstructor, column: any) {
-  const { reactData, internalData, refMaps } = $xetable
-  const { refTableBody } = refMaps
+export function colToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMethods, column: any) {
+  const { reactData, internalData } = $xetable
+  const { refTableBody } = $xetable.getRefMaps()
   const { scrollXLoad } = reactData
   const { visibleColumn } = internalData
   const tableBody = refTableBody.value

@@ -27,7 +27,7 @@
         field="name"
         title="Name"
         sortable
-        :filters="[{ label: '包含 z', value: 'z' }]"
+        :filters="[{ label: '包含 6', value: '6' }, { label: '包含 4', value: '4' }]"
         :filter-method="filterNameMethod"></vxe-table-column>
       <vxe-table-column
         field="role"
@@ -46,7 +46,7 @@
         title="Sex"
         sortable
         :filter-multiple="false"
-        :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
+        :filters="[{label: 'Man', value: 'Man'}, {label: 'Women', value: 'Women'}]"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
         <template #filter="{ $panel, column }">
           <input class="my-input" type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
@@ -75,7 +75,7 @@ export default defineComponent({
     const demo1 = reactive({
       loading: false,
       tableData: [] as any[],
-      roleList: ['', '前端', '后端', '设计师']
+      roleList: ['', 'Develop', 'PM', 'Test']
     })
 
     const xTable = ref({} as VxeTableInstance)
@@ -119,11 +119,11 @@ export default defineComponent({
       const column = $table.getColumnByField('name')
       // 修改筛选列表，并默认设置为选中状态
       $table.setFilter(column, [
-        { label: '包含 a', value: 'a' },
-        { label: '包含 b', value: 'b' },
-        { label: '包含 c', value: 'c', checked: true },
-        { label: '包含 h', value: 'h' },
-        { label: '包含 j', value: 'j' }
+        { label: '包含 0', value: '0' },
+        { label: '包含 1', value: '1' },
+        { label: '包含 2', value: '2', checked: true },
+        { label: '包含 3', value: '3' },
+        { label: '包含 4', value: '4' }
       ])
       // 修改条件之后，需要手动调用 updateData 处理表格数据
       $table.updateData()
@@ -185,7 +185,7 @@ export default defineComponent({
             field="name"
             title="Name"
             sortable
-            :filters="[{ label: '包含 z', value: 'z' }]"
+            :filters="[{ label: '包含 6', value: '6' }, { label: '包含 4', value: '4' }]"
             :filter-method="filterNameMethod"></vxe-table-column>
           <vxe-table-column
             field="role"
@@ -204,7 +204,7 @@ export default defineComponent({
             title="Sex"
             sortable
             :filter-multiple="false"
-            :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
+            :filters="[{label: 'Man', value: 'Man'}, {label: 'Women', value: 'Women'}]"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
             <template #filter="{ $panel, column }">
               <input class="my-input" type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
@@ -223,7 +223,7 @@ export default defineComponent({
             const demo1 = reactive({
               loading: false,
               tableData: [] as any[],
-              roleList: ['', '前端', '后端', '设计师']
+              roleList: ['', 'Develop', 'PM', 'Test']
             })
 
             const xTable = ref({} as VxeTableInstance)
@@ -267,11 +267,11 @@ export default defineComponent({
               const column = $table.getColumnByField('name')
               // 修改筛选列表，并默认设置为选中状态
               $table.setFilter(column, [
-                { label: '包含 a', value: 'a' },
-                { label: '包含 b', value: 'b' },
-                { label: '包含 c', value: 'c', checked: true },
-                { label: '包含 h', value: 'h' },
-                { label: '包含 j', value: 'j' }
+                { label: '包含 0', value: '0' },
+                { label: '包含 1', value: '1' },
+                { label: '包含 2', value: '2', checked: true },
+                { label: '包含 3', value: '3' },
+                { label: '包含 4', value: '4' }
               ])
               // 修改条件之后，需要手动调用 updateData 处理表格数据
               $table.updateData()

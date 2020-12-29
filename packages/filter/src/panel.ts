@@ -12,8 +12,8 @@ export default defineComponent({
   },
   setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
-    const { reactData: tableReactData, internalData: tableInternalData, computeMaps: tableComputeMaps } = $xetable
-    const { computeFilterOpts } = tableComputeMaps
+    const { reactData: tableReactData, internalData: tableInternalData } = $xetable
+    const { computeFilterOpts } = $xetable.getComputeMaps()
 
     const computeHasCheckOption = computed(() => {
       const { filterStore } = props

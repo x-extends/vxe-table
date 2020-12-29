@@ -3,16 +3,16 @@ import { columnProps } from './column'
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
-import { VxeTableConstructor } from '../../../types/vxe-table'
+import { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnProps } from '../../../types/vxe-table'
 
 export default defineComponent({
   name: 'VxeTableColgroup',
   props: columnProps,
   setup (props, { slots }) {
     const refElem = ref() as Ref<HTMLDivElement>
-    const $xetable = inject('$xetable', {} as VxeTableConstructor)
+    const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTablePrivateMethods)
     const colgroup = inject('xecolgroup', null as XEColumnInstance | null)
-    const column = Cell.createColumn($xetable, props)
+    const column = Cell.createColumn($xetable, props as VxeColumnProps)
     const xecolumn: XEColumnInstance = { column }
     column.children = []
 

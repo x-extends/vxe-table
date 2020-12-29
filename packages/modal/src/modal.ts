@@ -96,7 +96,7 @@ export default defineComponent({
       props,
       context,
       reactData,
-      refMaps
+      getRefMaps: () => refMaps
     } as VxeModalConstructor & VxeModalMethods
 
     let modalMethods = {} as ModalMethods
@@ -292,7 +292,7 @@ export default defineComponent({
 
     const maximize = () => {
       return nextTick().then(() => {
-        if (props.showZoom && !reactData.zoomLocat) {
+        if (!reactData.zoomLocat) {
           const marginSize = XEUtils.toNumber(props.marginSize)
           const boxElem = getBox()
           const { visibleHeight, visibleWidth } = DomTools.getDomNode()

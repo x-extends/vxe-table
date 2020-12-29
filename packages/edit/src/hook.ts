@@ -10,9 +10,9 @@ const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', '
 
 const editHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
-    const { props, reactData, internalData, refMaps, computeMaps } = $xetable
-    const { refElem } = refMaps
-    const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeSYOpts, computeTreeOpts } = computeMaps
+    const { props, reactData, internalData } = $xetable
+    const { refElem } = $xetable.getRefMaps()
+    const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeSYOpts, computeTreeOpts } = $xetable.getComputeMaps()
 
     let editMethods = {} as TableEditMethods
     let editPrivateMethods = {} as TableEditPrivateMethods
@@ -331,6 +331,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           } else {
             setEditColumnModel(row, column)
           }
+          actived.args = null
+          actived.row = null
+          actived.column = null
           $xetable.updateFooter()
           $xetable.dispatchEvent('edit-closed', {
             row,
@@ -341,9 +344,6 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             $columnIndex: $xetable.getVMColumnIndex(column)
           }, evnt || null)
         }
-        actived.args = null
-        actived.row = null
-        actived.column = null
         return ($xetable.clearValidate ? $xetable.clearValidate() : nextTick()).then(() => $xetable.recalculate())
       },
       /**

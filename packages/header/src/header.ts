@@ -4,7 +4,7 @@ import { DomTools } from '../../tools'
 import { convertToRows } from './util'
 import { getColMinWidth } from '../../table/src/util'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/vxe-table'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types/vxe-table'
 
 const renderType = 'header'
 
@@ -15,13 +15,13 @@ export default defineComponent({
     tableColumn: Array as PropType<any[]>,
     tableGroupColumn: Array as PropType<any[]>,
     fixedColumn: Array as PropType<any[]>,
-    fixedType: String
+    fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
   setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData, refMaps: tableRefMaps } = $xetable
-    const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar } = tableRefMaps
+    const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xetable
+    const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar } = $xetable.getRefMaps()
 
     const headerColumn = ref([] as any[][])
 
@@ -47,13 +47,13 @@ export default defineComponent({
       const { clientX: dragClientX } = evnt
       const wrapperElem = refElem.value
       const dragBtnElem = evnt.target as HTMLDivElement
-      const cell = dragBtnElem.parentNode as HTMLTableHeaderCellElement
+      const cell = params.cell = dragBtnElem.parentNode as HTMLTableHeaderCellElement
       let dragLeft = 0
       const tableBodyElem = tableBody.$el as HTMLDivElement
       const pos = DomTools.getOffsetPos(dragBtnElem, wrapperElem)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
-      const minInterval = getColMinWidth($xetable, column) - dragBtnOffsetWidth // 列之间的最小间距
+      const minInterval = getColMinWidth(params) - dragBtnOffsetWidth // 列之间的最小间距
       let dragMinLeft = pos.left - cell.clientWidth + dragBtnWidth + minInterval
       let dragPosLeft = pos.left + dragBtnOffsetWidth
       const domMousemove = document.onmousemove
@@ -207,10 +207,10 @@ export default defineComponent({
               const hasFilter = column.filters && column.filters.some((item: any) => item.checked)
               const columnIndex = $xetable.getColumnIndex(column)
               const _columnIndex = $xetable.getVTColumnIndex(column)
-              const params = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
+              const params: VxeTableDefines.CellRenderHeaderParams = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
               const thOns: any = {
-                onClick: (evnt: Event) => $xetable.triggerHeaderCellClickEvent(evnt, params),
-                onDblclick: (evnt: Event) => $xetable.triggerHeaderCellDBLClickEvent(evnt, params)
+                onClick: (evnt: MouseEvent) => $xetable.triggerHeaderCellClickEvent(evnt, params),
+                onDblclick: (evnt: MouseEvent) => $xetable.triggerHeaderCellDBLClickEvent(evnt, params)
               }
               // 虚拟滚动不支持动态高度
               if (scrollXLoad && !hasEllipsis) {

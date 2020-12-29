@@ -65,7 +65,7 @@ export default defineComponent({
       xID,
       props,
       context,
-      refMaps
+      getRefMaps: () => refMaps
     } as VxePagerConstructor & VxePagerPrivateMethods
 
     let pagerMethods = {} as PagerMethods

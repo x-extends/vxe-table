@@ -5,7 +5,7 @@
       <span class="red">（注意：合并数据属于临时行为，例如：操作数据源、显示隐藏列、固定列...等操作都会导致合并状态被取消）</span>
     </p>
 
-    <vxe-toolbar print></vxe-toolbar>
+    <vxe-toolbar ref="xToolbar" print></vxe-toolbar>
 
     <vxe-table
       border
@@ -81,11 +81,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes } from '../../../../types/vxe-table'
+import { defineComponent, reactive, ref, nextTick } from 'vue'
+import { VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance } from '../../../../types/vxe-table'
 
 export default defineComponent({
   setup () {
+    const xTable = ref({} as VxeTableInstance)
+    const xToolbar = ref({} as VxeToolbarInstance)
+
     const demo1 = reactive({
       loading: false,
       tableData: [] as any[],
@@ -200,12 +203,21 @@ export default defineComponent({
       handleMerge()
     }, 100)
 
+    nextTick(() => {
+      // 将表格和工具栏进行关联
+      const $table = xTable.value
+      const $toolbar = xToolbar.value
+      $table.connect($toolbar)
+    })
+
     return {
+      xTable,
+      xToolbar,
       demo1,
       footerMethod,
       demoCodes: [
         `
-        <vxe-toolbar print></vxe-toolbar>
+        <vxe-toolbar ref="xToolbar" print></vxe-toolbar>
 
         <vxe-table
           border

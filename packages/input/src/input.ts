@@ -4,7 +4,7 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMethods, VxeInputPropTypes } from '../../../types/vxe-table'
+import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMethods, VxeInputPropTypes, InputPrivateRef } from '../../../types/vxe-table'
 
 interface DateYearItem {
   date: Date;
@@ -156,19 +156,25 @@ export default defineComponent({
       currentDate: null
     } as InputReactData)
 
-    const $xeinput = {
-      xID,
-      props,
-      context,
-      reactData
-    } as VxeInputConstructor
-
-    let inputMethods = {} as InputMethods
-
     const refElem = ref() as Ref<HTMLDivElement>
     const refInputTarget = ref() as Ref<HTMLInputElement>
     const refInputPanel = ref() as Ref<HTMLDivElement>
     const refInputTimeBody = ref() as Ref<HTMLDivElement>
+
+    const refMaps: InputPrivateRef = {
+      refElem,
+      refInput: refInputTarget
+    }
+
+    const $xeinput = {
+      xID,
+      props,
+      context,
+      reactData,
+      getRefMaps: () => refMaps
+    } as VxeInputConstructor
+
+    let inputMethods = {} as InputMethods
 
     const computeIsDateTimeType = computed(() => {
       const { type } = props
@@ -1108,7 +1114,7 @@ export default defineComponent({
       updateTimePos(evnt.currentTarget as HTMLLIElement)
     }
 
-    const dateHourEvent = (evnt: Event, item: DateHourMinuteSecondItem) => {
+    const dateHourEvent = (evnt: MouseEvent, item: DateHourMinuteSecondItem) => {
       reactData.datetimePanelValue.setHours(item.value)
       dateTimeChangeEvent(evnt)
     }
@@ -1119,12 +1125,12 @@ export default defineComponent({
       hidePanel()
     }
 
-    const dateMinuteEvent = (evnt: Event, item: DateHourMinuteSecondItem) => {
+    const dateMinuteEvent = (evnt: MouseEvent, item: DateHourMinuteSecondItem) => {
       reactData.datetimePanelValue.setMinutes(item.value)
       dateTimeChangeEvent(evnt)
     }
 
-    const dateSecondEvent = (evnt: Event, item: DateHourMinuteSecondItem) => {
+    const dateSecondEvent = (evnt: MouseEvent, item: DateHourMinuteSecondItem) => {
       reactData.datetimePanelValue.setSeconds(item.value)
       dateTimeChangeEvent(evnt)
     }
@@ -1737,7 +1743,7 @@ export default defineComponent({
               class: {
                 'is--selected': datetimePanelValue && datetimePanelValue.getHours() === item.value
               },
-              onClick: (evnt: Event) => dateHourEvent(evnt, item)
+              onClick: (evnt: MouseEvent) => dateHourEvent(evnt, item)
             }, item.label)
           })),
           h('ul', {
@@ -1748,7 +1754,7 @@ export default defineComponent({
               class: {
                 'is--selected': datetimePanelValue && datetimePanelValue.getMinutes() === item.value
               },
-              onClick: (evnt: Event) => dateMinuteEvent(evnt, item)
+              onClick: (evnt: MouseEvent) => dateMinuteEvent(evnt, item)
             }, item.label)
           })),
           h('ul', {
@@ -1759,7 +1765,7 @@ export default defineComponent({
               class: {
                 'is--selected': datetimePanelValue && datetimePanelValue.getSeconds() === item.value
               },
-              onClick: (evnt: Event) => dateSecondEvent(evnt, item)
+              onClick: (evnt: MouseEvent) => dateSecondEvent(evnt, item)
             }, item.label)
           }))
         ])

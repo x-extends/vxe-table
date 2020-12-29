@@ -2,7 +2,7 @@ import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nex
 import XEUtils from 'xe-utils/ctor'
 import { UtilTools, DomTools } from '../../tools'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/vxe-table'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types/vxe-table'
 
 const renderType = 'footer'
 
@@ -23,17 +23,17 @@ function mergeFooterMethod (mergeFooterList: any[], _rowIndex: number, _columnIn
 export default defineComponent({
   name: 'VxeTableFooter',
   props: {
-    footerData: { type: Array as PropType<any[]>, default: () => [] },
+    footerData: { type: Array as PropType<any[][]>, default: () => [] },
     tableColumn: { type: Array as PropType<any[]>, default: () => [] },
     fixedColumn: { type: Array as PropType<any[]>, default: () => [] },
-    fixedType: String
+    fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
   setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData, refMaps: tableRefMaps, computeMaps: tableComputeMaps } = $xetable
-    const { refTableHeader, refTableBody, refValidTooltip } = tableRefMaps
-    const { computeTooltipOpts } = tableComputeMaps
+    const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xetable
+    const { refTableHeader, refTableBody, refValidTooltip } = $xetable.getRefMaps()
+    const { computeTooltipOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterTable = ref() as Ref<HTMLTableElement>
@@ -46,7 +46,7 @@ export default defineComponent({
      * 如果存在列固定左侧，同步更新滚动状态
      * 如果存在列固定右侧，同步更新滚动状态
      */
-    const scrollEvent = (evnt: Event) => {
+    const scrollEvent = (evnt: MouseEvent) => {
       const { fixedType } = props
       const { scrollXLoad } = tableReactData
       const { lastScrollLeft } = tableInternalData
@@ -160,13 +160,13 @@ export default defineComponent({
               const columnIndex = $xetable.getColumnIndex(column)
               const _columnIndex = $xetable.getVTColumnIndex(column)
               const itemIndex = _columnIndex
-              const params = { $table: $xetable, _rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: renderType, data: footerData }
+              const params: VxeTableDefines.CellRenderFooterParams = { $table: $xetable, _rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: renderType, data: footerData }
               // 虚拟滚动不支持动态高度
               if (scrollXLoad && !hasEllipsis) {
                 showEllipsis = hasEllipsis = true
               }
               if (showTitle || showTooltip || showAllTip) {
-                tfOns.onMouseenter = (evnt: any) => {
+                tfOns.onMouseenter = (evnt: MouseEvent) => {
                   if (showTitle) {
                     DomTools.updateCellTitle(evnt.currentTarget, column)
                   } else if (showTooltip || showAllTip) {
@@ -175,16 +175,16 @@ export default defineComponent({
                 }
               }
               if (showTooltip || showAllTip) {
-                tfOns.onMouseleave = () => {
+                tfOns.onMouseleave = (evnt: MouseEvent) => {
                   if (showTooltip || showAllTip) {
-                    $xetable.handleTargetLeaveEvent()
+                    $xetable.handleTargetLeaveEvent(evnt)
                   }
                 }
               }
-              tfOns.onClick = (evnt: any) => {
+              tfOns.onClick = (evnt: MouseEvent) => {
                 $xetable.dispatchEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, params), evnt)
               }
-              tfOns.onDblclick = (evnt: any) => {
+              tfOns.onDblclick = (evnt: MouseEvent) => {
                 $xetable.dispatchEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
               }
               // 合并行或列

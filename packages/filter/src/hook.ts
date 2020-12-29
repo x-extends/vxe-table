@@ -11,9 +11,9 @@ const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['setFilter', 'clear
 
 const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
-    const { reactData, internalData, refMaps, computeMaps } = $xetable
-    const { refTableBody, refTableFilter } = refMaps
-    const { computeFilterOpts } = computeMaps
+    const { reactData, internalData } = $xetable
+    const { refTableBody, refTableFilter } = $xetable.getRefMaps()
+    const { computeFilterOpts } = $xetable.getComputeMaps()
 
     const filterPrivateMethods: TableFilterPrivateMethods = {
       checkFilterOptions () {

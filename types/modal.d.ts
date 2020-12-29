@@ -12,7 +12,7 @@ export interface VxeModalConstructor extends VxeComponentInstance, VxeModalMetho
   props: VxeModalProps;
   context: SetupContext<VxeModalEmits>;
   reactData: ModalReactData;
-  refMaps: ModalPrivateRef;
+  getRefMaps(): ModalPrivateRef;
   renderVN: RenderFunction;
 }
 

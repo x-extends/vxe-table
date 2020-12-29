@@ -128,7 +128,7 @@ export default defineComponent({
       },
       columns: [
         { type: 'checkbox', title: 'ID', width: 120 },
-        { field: 'name', title: 'Name', sortable: true, editRender: { name: 'input' } },
+        { field: 'name', title: 'Name', sortable: true, titleHelp: { message: '名称必须填写！' }, editRender: { name: 'input' } },
         {
           field: 'role',
           title: 'Role',
@@ -392,7 +392,7 @@ export default defineComponent({
               },
               columns: [
                 { type: 'checkbox', title: 'ID', width: 120 },
-                { field: 'name', title: 'Name', sortable: true, editRender: { name: 'input' } },
+                { field: 'name', title: 'Name', sortable: true, titleHelp: { message: '名称必须填写！' }, editRender: { name: 'input' } },
                 {
                   field: 'role',
                   title: 'Role',

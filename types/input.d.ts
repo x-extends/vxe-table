@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance } from 'vue'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, VNodeStyle, ValueOf } from './component'
 
 /**
@@ -12,8 +12,15 @@ export interface VxeInputConstructor extends VxeComponentInstance, VxeInputMetho
   props: VxeInputProps;
   context: SetupContext<VxeInputEmits>;
   reactData: InputReactData;
+  getRefMaps(): InputPrivateRef;
   renderVN: RenderFunction;
 }
+
+export interface InputPrivateRef {
+  refElem: Ref<HTMLDivElement>;
+  refInput: Ref<HTMLInputElement>;
+}
+export interface VxeInputPrivateRef extends InputPrivateRef { }
 
 export interface InputReactData {
   inited: boolean;
@@ -193,16 +200,16 @@ export namespace VxeInputDefines {
   }
 
   export type InputParams = {}
-  export interface InputEventParams extends InputKeyboardEventParams, InputParams {}
+  export interface InputEventParams extends InputKeyboardEventParams, InputParams { }
 
   export type ChangeParams = {}
-  export interface ChangeEventParams extends InputKeyboardEventParams, ChangeParams {}
+  export interface ChangeEventParams extends InputKeyboardEventParams, ChangeParams { }
 
   export type KeyupParams = {}
-  export interface KeyupEventParams extends InputKeyboardEventParams, KeyupParams {}
+  export interface KeyupEventParams extends InputKeyboardEventParams, KeyupParams { }
 
   export type KeydownParams = {}
-  export interface KeydownEventParams extends InputKeyboardEventParams, KeydownParams {}
+  export interface KeydownEventParams extends InputKeyboardEventParams, KeydownParams { }
 }
 
 export interface VxeInputListeners {

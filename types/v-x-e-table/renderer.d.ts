@@ -130,7 +130,7 @@ export namespace VxeGlobalRendererHandles {
     rowIndex: number;
     $rowIndex: number;
     isHidden: boolean;
-    fixed: string;
+    fixed: VxeColumnPropTypes.Fixed;
     type: string;
   }
 
@@ -144,7 +144,7 @@ export namespace VxeGlobalRendererHandles {
     rowIndex: number;
     $rowIndex: number;
     isHidden: boolean;
-    fixed: string;
+    fixed: VxeColumnPropTypes.Fixed;
     type: string;
   };
 

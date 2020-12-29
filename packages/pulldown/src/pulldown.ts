@@ -48,7 +48,7 @@ export default defineComponent({
       props,
       context,
       reactData,
-      refMaps
+      getRefMaps: () => refMaps
     } as VxePulldownConstructor & VxePulldownMethods
 
     let pulldownMethods = {} as PulldownMethods

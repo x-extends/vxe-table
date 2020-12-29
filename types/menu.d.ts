@@ -12,7 +12,7 @@ export type VxeMenuPanelInstance = ComponentPublicInstance<VxeMenuPanelProps, Vx
 export interface VxeMenuPanelConstructor extends VxeComponentInstance, VxeMenuPanelMethods {
   props: VxeMenuPanelProps;
   context: SetupContext;
-  refMaps: MenuPanelPrivateRef;
+  getRefMaps(): MenuPanelPrivateRef;
   renderVN: RenderFunction;
 }
 
@@ -23,10 +23,7 @@ export interface VxeMenuPanelPrivateRef extends MenuPanelPrivateRef { }
 
 export interface VxeMenuPanelMethods { }
 
-export interface VxeMenuPanelProps { 
-  ctxMenuStore: any;
-  menuOpts: any;
-}
+export interface VxeMenuPanelProps { }
 
 export interface TableMenuMethods {
   /**

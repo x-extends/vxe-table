@@ -14,7 +14,7 @@ export interface VxeToolbarConstructor extends VxeComponentInstance, VxeToolbarM
   props: VxeToolbarProps;
   context: SetupContext<VxeToolbarEmits>;
   reactData: ToolbarReactData;
-  refMaps: ToolbarPrivateRef;
+  getRefMaps(): ToolbarPrivateRef;
   renderVN: RenderFunction;
 }
 

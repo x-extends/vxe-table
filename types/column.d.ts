@@ -7,7 +7,7 @@ import { VxeFilterPanel } from './filter'
 /**
  * 组件 - 表格列
  */
-export interface Column extends VXETableComponent {}
+export interface Column extends VXETableComponent { }
 
 export interface VxeColumnOptions extends VxeColumnProps {
   children?: VxeColumnOptions[];
@@ -161,12 +161,7 @@ export namespace VxeColumnPropTypes {
     data: any[][];
   }
 
-  interface HeaderSlotParams {
-    column: VxeTableDefines.ColumnInfo;
-    columnIndex: number;
-    $columnIndex: number;
-    $rowIndex: number;
-  }
+  interface HeaderSlotParams extends VxeTableDefines.CellRenderHeaderParams { }
 
   interface ContentSlotParams {
     column: VxeTableDefines.ColumnInfo;
@@ -176,21 +171,13 @@ export namespace VxeColumnPropTypes {
     rowIndex: number;
     $rowIndex: number;
     isHidden: boolean;
-    fixed: string;
+    fixed: VxeColumnPropTypes.Fixed;
     type: string;
   }
 
-  interface DefaultSlotParams {
-    column: VxeTableDefines.ColumnInfo;
-    columnIndex: number;
-    $columnIndex: number;
-    row: any;
-    rowIndex: number;
-    $rowIndex: number;
-    isHidden: boolean;
-    fixed: string;
-    type: string;
-  }
+  interface DefaultSlotParams extends VxeTableDefines.CellRenderBodyParams { }
+
+  interface IconSlotParams extends DefaultSlotParams { }
 
   export type Slots = {
     default?: string | ((params: DefaultSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
@@ -199,6 +186,7 @@ export namespace VxeColumnPropTypes {
     content?: string | ((params: ContentSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
     filter?: string | ((params: FilterSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
     edit?: string | ((params: EditSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
+    icon?: string | ((params: IconSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
   };
 }
 

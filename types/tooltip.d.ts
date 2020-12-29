@@ -12,7 +12,7 @@ export interface VxeTooltipConstructor extends VxeComponentInstance, VxeTooltipM
   props: VxeTooltipProps;
   context: SetupContext<VxeTooltipEmits>;
   reactData: TooltipReactData;
-  refMaps: TooltipPrivateRef;
+  getRefMaps(): TooltipPrivateRef;
   renderVN: RenderFunction;
 }
 

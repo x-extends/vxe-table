@@ -330,6 +330,10 @@ export default defineComponent({
       return Object.assign({}, props.columnConfig) as VxeTablePropTypes.ColumnOpts
     })
 
+    const computeResizableOpts = computed(() => {
+      return Object.assign({}, GlobalConfig.table.resizableConfig, props.resizableConfig) as VxeTablePropTypes.ResizableOpts
+    })
+
     const computeSeqOpts = computed(() => {
       return Object.assign({ startIndex: 0 }, GlobalConfig.table.seqConfig, props.seqConfig) as VxeTablePropTypes.SeqOpts
     })
@@ -524,6 +528,7 @@ export default defineComponent({
       computeValidOpts,
       computeSXOpts,
       computeSYOpts,
+      computeResizableOpts,
       computeSeqOpts,
       computeRadioOpts,
       computeCheckboxOpts,
@@ -554,8 +559,8 @@ export default defineComponent({
       instance,
       reactData,
       internalData,
-      refMaps,
-      computeMaps,
+      getRefMaps: () => refMaps,
+      getComputeMaps: () => computeMaps,
 
       xegrid: $xegrid
     } as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods
@@ -1551,7 +1556,7 @@ export default defineComponent({
       }
     }
 
-    const handleAsyncTreeExpandChilds = (row: any) => {
+    const handleAsyncTreeExpandChilds = (row: any): Promise<void> => {
       const { treeExpandeds, treeLazyLoadeds } = reactData
       const { fullAllDataRowMap } = internalData
       const treeOpts = computeTreeOpts.value
@@ -1600,7 +1605,7 @@ export default defineComponent({
       }
     }
 
-    const handleAsyncRowExpand = (row: any) => {
+    const handleAsyncRowExpand = (row: any): Promise<void> => {
       const { rowExpandeds, expandLazyLoadeds } = reactData
       const { fullAllDataRowMap } = internalData
       const rest = fullAllDataRowMap.get(row)
@@ -3496,7 +3501,7 @@ export default defineComponent({
           }
         }
       } else if (mouseConfig) {
-        if (!getEventTargetNode(evnt, el).flag && !(tableMenu && getEventTargetNode(evnt, tableMenu.refMaps.refElem.value).flag) && !($xetoolbar && getEventTargetNode(evnt, $xetoolbar.refMaps.refElem.value).flag)) {
+        if (!getEventTargetNode(evnt, el).flag && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xetoolbar && getEventTargetNode(evnt, $xetoolbar.getRefMaps().refElem.value).flag)) {
           $xetable.clearSelected()
           if ($xetable.clearCellAreas) {
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
@@ -3510,12 +3515,12 @@ export default defineComponent({
       }
       // 如果配置了快捷菜单且，点击了其他地方则关闭
       if ($xetable.closeMenu) {
-        if (ctxMenuStore.visible && tableMenu && !getEventTargetNode(evnt, tableMenu.refMaps.refElem.value).flag) {
+        if (ctxMenuStore.visible && tableMenu && !getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) {
           $xetable.closeMenu()
         }
       }
       // 最后激活的表格
-      internalData.isActivated = getEventTargetNode(evnt, $xegrid ? $xegrid.refMaps.refElem.value : el).flag
+      internalData.isActivated = getEventTargetNode(evnt, $xegrid ? $xegrid.getRefMaps().refElem.value : el).flag
     }
 
     /**
@@ -3665,7 +3670,12 @@ export default defineComponent({
                 if (childrens && childrens.length) {
                   evnt.preventDefault()
                   const targetRow = childrens[0]
-                  params = { $table: $xetable, row: targetRow }
+                  params = {
+                    $table: $xetable,
+                    row: targetRow,
+                    rowIndex: tableMethods.getRowIndex(targetRow),
+                    $rowIndex: tableMethods.getVMRowIndex(targetRow)
+                  }
                   tableMethods.setTreeExpand(currentRow, true)
                     .then(() => tableMethods.scrollToRow(targetRow))
                     .then(() => tablePrivateMethods.triggerCurrentRowEvent(evnt, params))
@@ -3723,7 +3733,12 @@ export default defineComponent({
                 const { parent: parentRow } = XEUtils.findTree(internalData.afterFullData, item => item === currentRow, treeOpts)
                 if (parentRow) {
                   evnt.preventDefault()
-                  params = { $table: $xetable, row: parentRow }
+                  params = {
+                    $table: $xetable,
+                    row: parentRow,
+                    rowIndex: tableMethods.getRowIndex(parentRow),
+                    $rowIndex: tableMethods.getVMRowIndex(parentRow)
+                  }
                   tableMethods.setTreeExpand(parentRow, false)
                     .then(() => tableMethods.scrollToRow(parentRow))
                     .then(() => tablePrivateMethods.triggerCurrentRowEvent(evnt, params))
@@ -3864,8 +3879,7 @@ export default defineComponent({
       getParentElem () {
         const el = refElem.value
         if ($xegrid) {
-          const { refMaps: gridRefMaps } = $xegrid
-          const gridEl = gridRefMaps.refElem.value
+          const gridEl = $xegrid.getRefMaps().refElem.value
           return gridEl.parentNode as HTMLElement
         }
         return el.parentNode as HTMLElement
@@ -4218,7 +4232,7 @@ export default defineComponent({
         }
         tablePrivateMethods.checkSelectionStatus()
       },
-      triggerHeaderHelpEvent (evnt: Event, params: any) {
+      triggerHeaderHelpEvent (evnt, params) {
         const { column } = params
         const { titleHelp } = column
         if (titleHelp.message) {
@@ -4235,7 +4249,7 @@ export default defineComponent({
       /**
        * 触发表头 tooltip 事件
        */
-      triggerHeaderTooltipEvent (evnt: Event, params: any) {
+      triggerHeaderTooltipEvent (evnt, params) {
         const { tooltipStore } = internalData
         const { column } = params
         const titleElem = evnt.currentTarget
@@ -4293,7 +4307,7 @@ export default defineComponent({
         if (tooltipOpts.enterable) {
           internalData.tooltipTimeout = setTimeout(() => {
             const $tooltip = refTooltip.value
-            if (!$tooltip.reactData.isHover) {
+            if ($tooltip && !$tooltip.reactData.isHover) {
               tableMethods.clostTooltip()
             }
           }, tooltipOpts.leaveDelay)
@@ -4301,7 +4315,7 @@ export default defineComponent({
           tableMethods.clostTooltip()
         }
       },
-      triggerHeaderCellClickEvent (evnt: any, params: any) {
+      triggerHeaderCellClickEvent (evnt, params) {
         const { _lastResizeTime } = internalData
         const sortOpts = computeSortOpts.value
         const { column } = params
@@ -4317,7 +4331,7 @@ export default defineComponent({
           tableMethods.setCurrentColumn(column)
         }
       },
-      triggerHeaderCellDBLClickEvent (evnt: Event, params: any) {
+      triggerHeaderCellDBLClickEvent (evnt, params) {
         tableMethods.dispatchEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
       },
       /**
@@ -4325,7 +4339,7 @@ export default defineComponent({
        * 如果是单击模式，则激活为编辑状态
        * 如果是双击模式，则单击后选中状态
        */
-      triggerCellClickEvent (evnt: Event, params: any) {
+      triggerCellClickEvent (evnt, params) {
         const { highlightCurrentRow, editConfig } = props
         const { editStore } = reactData
         const expandOpts = computeExpandOpts.value
@@ -4394,13 +4408,13 @@ export default defineComponent({
        * 列双击点击事件
        * 如果是双击模式，则激活为编辑状态
        */
-      triggerCellDBLClickEvent (evnt: Event, params: any) {
+      triggerCellDBLClickEvent (evnt, params) {
         const { editConfig } = props
         const { editStore } = reactData
         const editOpts = computeEditOpts.value
         const { actived } = editStore
         const cell = evnt.currentTarget
-        params.cell = cell
+        params = Object.assign({ cell }, params)
         if (editConfig && editOpts.trigger === 'dblclick') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
             if (editOpts.mode === 'row') {
@@ -4420,7 +4434,7 @@ export default defineComponent({
         }
         tableMethods.dispatchEvent('cell-dblclick', params, evnt)
       },
-      triggerCheckRowEvent (evnt: any, params: any, value: any) {
+      triggerCheckRowEvent (evnt, params, value) {
         const checkboxOpts = computeCheckboxOpts.value
         const { checkMethod } = checkboxOpts
         if (!checkMethod || checkMethod({ row: params.row })) {
@@ -4436,26 +4450,28 @@ export default defineComponent({
       /**
        * 多选，选中所有事件
        */
-      triggerCheckAllEvent (evnt: any, value: any) {
+      triggerCheckAllEvent (evnt, value) {
         tableMethods.setAllCheckboxRow(value)
-        tableMethods.dispatchEvent('checkbox-all', {
-          records: tableMethods.getCheckboxRecords(),
-          reserves: tableMethods.getCheckboxReserveRecords(),
-          indeterminates: tableMethods.getCheckboxIndeterminateRecords(),
-          checked: value
-        }, evnt)
+        if (evnt) {
+          tableMethods.dispatchEvent('checkbox-all', {
+            records: tableMethods.getCheckboxRecords(),
+            reserves: tableMethods.getCheckboxReserveRecords(),
+            indeterminates: tableMethods.getCheckboxIndeterminateRecords(),
+            checked: value
+          }, evnt)
+        }
       },
       /**
        * 单选，行选中事件
        */
-      triggerRadioRowEvent (evnt: any, params: any) {
+      triggerRadioRowEvent (evnt, params) {
         const isChange = reactData.selectRow !== params.row
         tableMethods.setRadioRow(params.row)
         if (isChange) {
           tableMethods.dispatchEvent('radio-change', params, evnt)
         }
       },
-      triggerCurrentRowEvent (evnt: any, params: any) {
+      triggerCurrentRowEvent (evnt, params) {
         const isChange = reactData.currentRow !== params.row
         tableMethods.setCurrentRow(params.row)
         if (isChange) {
@@ -4475,13 +4491,21 @@ export default defineComponent({
           const columnIndex = tableMethods.getColumnIndex(column)
           const $columnIndex = tableMethods.getVMColumnIndex(column)
           tableMethods.setRowExpand(row, expanded)
-          tableMethods.dispatchEvent('toggle-row-expand', { expanded, column, columnIndex, $columnIndex, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }, evnt)
+          tableMethods.dispatchEvent('toggle-row-expand', {
+            expanded,
+            column,
+            columnIndex,
+            $columnIndex,
+            row,
+            rowIndex: tableMethods.getRowIndex(row),
+            $rowIndex: tableMethods.getVMRowIndex(row)
+          }, evnt)
         }
       },
       /**
        * 展开树节点事件
        */
-      triggerTreeExpandEvent (evnt: any, params: any) {
+      triggerTreeExpandEvent (evnt, params) {
         const { treeLazyLoadeds } = reactData
         const treeOpts = computeTreeOpts.value
         const { row, column } = params
@@ -4519,7 +4543,7 @@ export default defineComponent({
       /**
        * 纵向 Y 可视渲染事件处理
        */
-      triggerScrollYEvent (evnt: Event) {
+      triggerScrollYEvent (evnt) {
         const { scrollYStore } = internalData
         const { adaptive, offsetSize, visibleSize } = scrollYStore
         // webkit 浏览器使用最佳的渲染方式，且最高渲染量不能大于 40 条

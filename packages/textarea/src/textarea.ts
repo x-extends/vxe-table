@@ -4,7 +4,7 @@ import GlobalConfig from '../../conf'
 import { UtilTools } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits } from '../../../types/vxe-table'
+import { SizeType, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits, TextareaPrivateRef } from '../../../types/vxe-table'
 
 let autoTxtElem: HTMLDivElement
 
@@ -43,14 +43,21 @@ export default defineComponent({
       inputValue: props.modelValue
     } as TextareaReactData)
 
+    const refElem = ref() as Ref<HTMLDivElement>
+    const refTextarea = ref() as Ref<HTMLTextAreaElement>
+
+    const refMaps: TextareaPrivateRef = {
+      refElem,
+      refTextarea
+    }
+
     const $xetextarea = {
       xID,
       props,
       context,
-      reactData
+      reactData,
+      getRefMaps: () => refMaps
     } as VxeTextareaConstructor
-
-    const refTextarea = ref() as Ref<HTMLTextAreaElement>
 
     let textareaMethods = {} as TextareaMethods
 
@@ -196,6 +203,7 @@ export default defineComponent({
       const isCountError = computeIsCountError.value
       const inputCount = computeInputCount.value
       return h('div', {
+        ref: refElem,
         class: ['vxe-textarea', {
           [`size--${vSize}`]: vSize,
           'is--autosize': autosize,

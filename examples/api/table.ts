@@ -944,6 +944,25 @@ const apis = [
         ]
       },
       {
+        name: 'resizable-config',
+        descKey: 'app.api.table.desc.resizableConfig',
+        version: '',
+        type: 'Object',
+        enum: '',
+        defVal: '继承 setup.table.resizableConfig',
+        list: [
+          {
+            name: 'minWidth',
+            desc: '列宽拖动的最小宽度',
+            version: '',
+            type: 'number | string | ((params: { $table, column, columnIndex, cell }) => number | string)',
+            enum: '',
+            defVal: 'auto',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'seq-config',
         descKey: 'app.api.table.desc.seqConfig',
         version: '',
@@ -3668,7 +3687,7 @@ const apis = [
       },
       {
         name: 'setActiveRow(row)',
-        desc: '用于 edit-config，激活行编辑，如果是 mode=cell 则默认激活第一个单元格',
+        desc: '用于 edit-config，激活行编辑并激活第一个单元格',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -3694,12 +3713,12 @@ const apis = [
         list: []
       },
       {
-        name: 'setCellAreas(areas)',
+        name: 'setCellAreas(areaConfigs, activeArea)',
         desc: '如果功能被支持，用于 mouse-config.area，选择指定区域的单元格',
         version: 'pro',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'areas: CellAreaOptions',
+        defVal: 'areaConfigs: CellAreaConfig[], activeArea?: { area?: CellAreaConfig, row: Row, column: ColumnInfo }',
         list: []
       },
       {
@@ -4244,7 +4263,7 @@ const apis = [
       },
       {
         name: 'importData(options)',
-        desc: '将数据导入表格（只支持基本数据结构，目前不支持分组、合并等）',
+        desc: '将数据导入表格（只支持基本数据结构）',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4262,7 +4281,7 @@ const apis = [
       },
       {
         name: 'print(options)',
-        desc: '打印（只支持基本数据结构，目前不支持分组、合并等）',
+        desc: '打印',
         version: '',
         type: 'Promise<any>',
         enum: '',

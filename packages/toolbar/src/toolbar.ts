@@ -56,7 +56,7 @@ export default defineComponent({
       props,
       context,
       reactData,
-      refMaps
+      getRefMaps: () => refMaps
     } as VxeToolbarConstructor
 
     let toolbarMethods = {} as ToolbarMethods
@@ -97,8 +97,7 @@ export default defineComponent({
 
     const checkCustomStatus = () => {
       const { columns } = reactData
-      const { computeMaps: tableComputeMaps } = $xetable
-      const { computeCustomOpts: computeTableCustomOpts } = tableComputeMaps
+      const { computeCustomOpts: computeTableCustomOpts } = $xetable.getComputeMaps()
       const tableCustomOpts = computeTableCustomOpts.value
       const { checkMethod } = tableCustomOpts
       customStore.isAll = columns.every((column) => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
@@ -155,8 +154,7 @@ export default defineComponent({
 
     const resetCustomEvent = (evnt: Event) => {
       const { columns } = reactData
-      const { computeMaps: tableComputeMaps } = $xetable
-      const { computeCustomOpts: computeTableCustomOpts } = tableComputeMaps
+      const { computeCustomOpts: computeTableCustomOpts } = $xetable.getComputeMaps()
       const tableCustomOpts = computeTableCustomOpts.value
       const { checkMethod } = tableCustomOpts
       XEUtils.eachTree(columns, (column) => {
@@ -200,8 +198,7 @@ export default defineComponent({
 
     const allCustomEvent = () => {
       const { columns } = reactData
-      const { computeMaps: tableComputeMaps } = $xetable
-      const { computeCustomOpts: computeTableCustomOpts } = tableComputeMaps
+      const { computeCustomOpts: computeTableCustomOpts } = $xetable.getComputeMaps()
       const tableCustomOpts = computeTableCustomOpts.value
       const { checkMethod } = tableCustomOpts
       const isAll = !customStore.isAll
@@ -418,8 +415,7 @@ export default defineComponent({
       const customWrapperOns: any = {}
       let checkMethod: any
       if ($xetable) {
-        const { computeMaps: tableComputeMaps } = $xetable
-        const { computeCustomOpts: computeTableCustomOpts } = tableComputeMaps
+        const { computeCustomOpts: computeTableCustomOpts } = $xetable.getComputeMaps()
         const tableCustomOpts = computeTableCustomOpts.value
         checkMethod = tableCustomOpts.checkMethod
       }

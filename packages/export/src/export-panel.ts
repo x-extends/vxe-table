@@ -18,8 +18,7 @@ export default defineComponent({
   },
   setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
-    const { computeMaps: tableComputeMaps } = $xetable
-    const { computeExportOpts, computePrintOpts } = tableComputeMaps
+    const { computeExportOpts, computePrintOpts } = $xetable.getComputeMaps()
 
     const reactData = reactive({
       isAll: false,

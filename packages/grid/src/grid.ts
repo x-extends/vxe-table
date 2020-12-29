@@ -15,10 +15,13 @@ function getOffsetHeight (elem: HTMLElement) {
 }
 
 function getPaddingTopBottomSize (elem: HTMLElement) {
-  const computedStyle = getComputedStyle(elem)
-  const paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
-  const paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
-  return paddingTop + paddingBottom
+  if (elem) {
+    const computedStyle = getComputedStyle(elem)
+    const paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
+    const paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
+    return paddingTop + paddingBottom
+  }
+  return 0
 }
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
@@ -172,8 +175,8 @@ export default defineComponent({
       context,
       instance,
       reactData,
-      refMaps,
-      computeMaps
+      getRefMaps: () => refMaps,
+      getComputeMaps: () => computeMaps
     } as VxeGridConstructor & VxeGridPrivateMethods
 
     let gridMethods = {} as GridMethods
@@ -327,8 +330,7 @@ export default defineComponent({
     const sortChangeEvent: VxeTableEvents.SortChange = (params) => {
       const $xetable = refTable.value
       const { proxyConfig } = props
-      const { computeMaps: tableComputeMaps } = $xetable
-      const { computeSortOpts } = tableComputeMaps
+      const { computeSortOpts } = $xetable.getComputeMaps()
       const sortOpts = computeSortOpts.value
       // 如果是服务端排序
       if (sortOpts.remote) {
@@ -344,8 +346,7 @@ export default defineComponent({
     const filterChangeEvent: VxeTableEvents.FilterChange = (params) => {
       const $xetable = refTable.value
       const { proxyConfig } = props
-      const { computeMaps: tableComputeMaps } = $xetable
-      const { computeFilterOpts } = tableComputeMaps
+      const { computeFilterOpts } = $xetable.getComputeMaps()
       const filterOpts = computeFilterOpts.value
       // 如果是服务端过滤
       if (filterOpts.remote) {
@@ -732,8 +733,7 @@ export default defineComponent({
               if (isInited || isReload) {
                 const checkedFilters = isInited ? $xetable.getCheckedFilters() : []
                 let sortParams: any[] = []
-                const { computeMaps: tableComputeMaps } = $xetable
-                const { computeSortOpts } = tableComputeMaps
+                const { computeSortOpts } = $xetable.getComputeMaps()
                 const sortOpts = computeSortOpts.value
                 let { defaultSort } = sortOpts
                 // 如果使用默认排序

@@ -12,7 +12,8 @@ export interface VxeButtonConstructor extends VxeComponentInstance, VxeButtonMet
   props: VxeButtonProps;
   context: SetupContext<VxeButtonEmits>;
   reactData: ButtonReactData;
-  refMaps: ButtonPrivateRef;
+  internalData: ButtonInternalData;
+  getRefMaps(): ButtonPrivateRef;
   renderVN: RenderFunction;
 }
 
@@ -28,6 +29,10 @@ export interface ButtonReactData {
   panelIndex: number;
   panelStyle: VNodeStyle;
   panelPlacement: any;
+}
+
+export interface ButtonInternalData {
+  showTime: any;
 }
 
 export interface VxeButtonOptions extends VxeButtonProps, VxeButtonListeners { }

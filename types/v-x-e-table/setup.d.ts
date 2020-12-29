@@ -14,7 +14,9 @@ export interface VXETableSetupOptions {
   zIndex?: number;
   version?: number;
   emptyCell?: string;
-  icon?: DefaultOptions;
+  icon?: {
+    [key: string]: string;
+  };
   table?: VxeTableOptions;
   grid?: VxeGridOptions;
   export?: {
@@ -46,7 +48,9 @@ export interface VXETableGlobalConfig extends VXETableSetupOptions {
   zIndex: number;
   version: number;
   emptyCell: string;
-  icon: DefaultOptions;
+  icon: {
+    [key: string]: string;
+  };
   table: VxeTableOptions;
   grid: VxeGridOptions;
   export: {

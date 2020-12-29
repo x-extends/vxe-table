@@ -32,14 +32,22 @@ export interface VxeProPluginMethods {
   clearCopyCellArea(): Promise<any>;
   /**
    * 用于 mouse-config.area，选取指定区域的单元格
-   * @param areas 指定区域
+   * @param areaConfigs 指定区域
    */
-  setCellAreas(areas: VxeTableProDefines.CellAreaOptions): Promise<any>;
+  setCellAreas(areaConfigs: VxeTableProDefines.CellAreaConfig[], activeArea?: {
+    area?: MouseCellArea;
+    column: VxeTableDefines.ColumnInfo;
+    row: RowInfo;
+  }): Promise<any>;
   /**
    * 用于 mouse-config.area，设置活动的区域的单元格
    * @param activeArea
    */
-  setActiveCellArea(activeArea: VxeTableProDefines.ActiveCellAreaOptions): Promise<any>;
+  setActiveCellArea(activeArea: {
+    area: MouseCellArea;
+    column: VxeTableDefines.ColumnInfo;
+    row: RowInfo;
+  }): Promise<any>;
   /**
    * 用于 mouse-config.area，打开单元格查找功能
    */
@@ -85,17 +93,15 @@ export namespace VxeTableProDefines {
     width: number;
     height: number;
   }
+
+  export type CELL_AREA_TYPE = 'main' | 'copy' | 'extend' | 'multi' | 'active'
   
-  export interface CellAreaOptions {
-    main: boolean;
+  export interface CellAreaConfig {
+    type?: CELL_AREA_TYPE;
     startColumn: VxeTableDefines.ColumnInfo;
     endColumn: VxeTableDefines.ColumnInfo;
     startRow: any;
     endRow: any;
   }
   
-  export interface ActiveCellAreaOptions {
-    column: VxeTableDefines.ColumnInfo;
-    row: RowInfo;
-  }
 }

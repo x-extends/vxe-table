@@ -9,9 +9,9 @@ const tableMenuMethodKeys: (keyof TableMenuMethods)[] = ['closeMenu']
 
 const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
-    const { xID, props, reactData, internalData, refMaps, computeMaps } = $xetable
-    const { refElem, refTableFilter, refTableMenu } = refMaps
-    const { computeMouseOpts, computeIsMenu, computeMenuOpts } = computeMaps
+    const { xID, props, reactData, internalData } = $xetable
+    const { refElem, refTableFilter, refTableMenu } = $xetable.getRefMaps()
+    const { computeMouseOpts, computeIsMenu, computeMenuOpts } = $xetable.getComputeMaps()
 
     let menuMethods = {} as TableMenuMethods
     let menuPrivateMethods = {} as TableMenuPrivateMethods
@@ -54,7 +54,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
                 })
                 nextTick(() => {
                   const tableMenu = refTableMenu.value
-                  const ctxElem = tableMenu.refMaps.refElem.value
+                  const ctxElem = tableMenu.getRefMaps().refElem.value
                   const clientHeight = ctxElem.clientHeight
                   const clientWidth = ctxElem.clientWidth
                   const { boundingTop, boundingLeft } = DomTools.getAbsolutePos(ctxElem)
@@ -162,7 +162,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
         const { selected } = editStore
         const layoutList = ['header', 'body', 'footer']
         if (menuConfig) {
-          if (ctxMenuStore.visible && tableMenu && DomTools.getEventTargetNode(evnt, tableMenu.refMaps.refElem.value).flag) {
+          if (ctxMenuStore.visible && tableMenu && DomTools.getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) {
             evnt.preventDefault()
             return
           }

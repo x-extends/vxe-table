@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import formats from '../../v-x-e-table/src/formats'
 import { UtilTools } from '../../tools'
 
-import { VxeTableConstructor } from '../../../types/vxe-table'
+import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/vxe-table'
 
 const { toFilters } = UtilTools
 
@@ -13,7 +13,7 @@ export class ColumnInfo {
   property?: string
 
   /* eslint-disable @typescript-eslint/no-use-before-define */
-  constructor ($xetable: VxeTableConstructor, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
+  constructor ($xetable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
     const $xegrid = $xetable.xegrid
     const formatter: string | any[] = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
@@ -33,9 +33,9 @@ export class ColumnInfo {
         UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
       }
       if (_vm.type === 'expand') {
-        const { props: tableProps, computeMaps: tableComputeMaps } = $xetable
+        const { props: tableProps } = $xetable
         const { treeConfig } = tableProps
-        const { computeTreeOpts } = tableComputeMaps
+        const { computeTreeOpts } = $xetable.getComputeMaps()
         const treeOpts = computeTreeOpts.value
         if (treeConfig && treeOpts.line) {
           UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
@@ -118,8 +118,7 @@ export class ColumnInfo {
       slots: _vm.slots
     })
     if ($xegrid) {
-      const { computeMaps: gridComputeMaps } = $xegrid
-      const { computeProxyOpts } = gridComputeMaps
+      const { computeProxyOpts } = $xegrid.getComputeMaps()
       const proxyOpts = computeProxyOpts.value
       if (proxyOpts.beforeColumn) {
         proxyOpts.beforeColumn({ $grid: $xegrid, column: this })

@@ -101,6 +101,7 @@ export default {
   syncResize: [Boolean, String, Number],
   // 设置列的默认参数，仅对部分支持的属性有效
   columnConfig: Object as PropType<VxeTablePropTypes.ColumnConfig>,
+  resizableConfig: Object as PropType<VxeTablePropTypes.ResizableConfig>,
   // 序号配置项
   seqConfig: Object as PropType<VxeTablePropTypes.SeqConfig>,
   // 排序配置项

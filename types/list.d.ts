@@ -13,7 +13,7 @@ export interface VxeListConstructor extends VxeComponentInstance, VxeListMethods
   context: SetupContext<VxeListEmits>;
   reactData: ListReactData;
   internalData: ListInternalData;
-  refMaps: ListPrivateRef;
+  getRefMaps(): ListPrivateRef;
   renderVN: RenderFunction;
 }
 

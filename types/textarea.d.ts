@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance } from 'vue'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
@@ -12,7 +12,7 @@ export interface VxeTextareaConstructor extends VxeComponentInstance, VxeTextare
   props: VxeTextareaProps;
   context: SetupContext<VxeTextareaEmits>;
   reactData: TextareaReactData;
-  refMaps: TextareaPrivateRef;
+  getRefMaps(): TextareaPrivateRef;
   renderVN: RenderFunction;
 }
 
@@ -20,7 +20,10 @@ export interface TextareaReactData {
   inputValue: any;
 }
 
-export interface TextareaPrivateRef { }
+export interface TextareaPrivateRef {
+  refElem: Ref<HTMLDivElement>;
+  refTextarea: Ref<HTMLTextAreaElement>;
+}
 export interface VxeTextareaPrivateRef extends TextareaPrivateRef { }
 
 export interface VxeTextareaOptions extends VxeTextareaProps, VxeTextareaListeners { }

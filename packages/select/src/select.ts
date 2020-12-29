@@ -79,7 +79,7 @@ export default defineComponent({
       props,
       context,
       reactData,
-      refMaps
+      getRefMaps: () => refMaps
     } as VxeSelectConstructor & VxeSelectMethods
 
     let selectMethods = {} as SelectMethods

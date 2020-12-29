@@ -13,7 +13,7 @@ export interface VxeFormConstructor extends VxeComponentInstance, VxeFormMethods
   props: VxeFormProps;
   context: SetupContext<VxeFormEmits>;
   reactData: FormReactData;
-  refMaps: FormPrivateRef;
+  getRefMaps(): FormPrivateRef;
   renderVN: RenderFunction;
 }
 

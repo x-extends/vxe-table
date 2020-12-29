@@ -284,8 +284,8 @@ const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'impo
 
 const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
-    const { props, reactData, internalData, computeMaps } = $xetable
-    const { computeTreeOpts, computePrintOpts, computeExportOpts, computeImportOpts, computeCustomOpts, computeSeqOpts, computeRadioOpts, computeCheckboxOpts } = computeMaps
+    const { props, reactData, internalData } = $xetable
+    const { computeTreeOpts, computePrintOpts, computeExportOpts, computeImportOpts, computeCustomOpts, computeSeqOpts, computeRadioOpts, computeCheckboxOpts } = $xetable.getComputeMaps()
 
     const $xegrid = inject('$xegrid', null as (VxeGridConstructor & VxeGridPrivateMethods) | null)
 
@@ -1095,8 +1095,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
             }
           } else if (mode === 'all') {
             if ($xegrid && !opts.remote) {
-              const { reactData: gridReactData, computeMaps: gridComputeMaps } = $xegrid
-              const { computeProxyOpts } = gridComputeMaps
+              const { reactData: gridReactData } = $xegrid
+              const { computeProxyOpts } = $xegrid.getComputeMaps()
               const proxyOpts = computeProxyOpts.value
               const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = proxyOpts
               const ajaxMethods = ajax.queryAll

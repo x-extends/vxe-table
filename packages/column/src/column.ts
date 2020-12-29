@@ -2,7 +2,7 @@ import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick, PropType }
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
-import { VxeTableConstructor, VxeColumnPropTypes } from '../../../types/vxe-table'
+import { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, VxeColumnProps } from '../../../types/vxe-table'
 
 export const columnProps = {
   // 列唯一主键
@@ -80,9 +80,9 @@ export default defineComponent({
   props: columnProps,
   setup (props, { slots }) {
     const refElem = ref() as Ref<HTMLDivElement>
-    const $xetable = inject('$xetable', {} as VxeTableConstructor)
+    const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTablePrivateMethods)
     const colgroup = inject('xecolgroup', null as XEColumnInstance | null)
-    const column = Cell.createColumn($xetable, props)
+    const column = Cell.createColumn($xetable, props as VxeColumnProps)
     column.slots = slots
 
     watchColumn(props, column)

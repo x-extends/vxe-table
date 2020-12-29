@@ -12,7 +12,7 @@ export interface VxePulldownConstructor extends VxeComponentInstance, VxePulldow
   props: VxePulldownProps;
   context: SetupContext<VxePulldownEmits>;
   reactData: PulldownReactData;
-  refMaps: PulldownPrivateRef;
+  getRefMaps(): PulldownPrivateRef;
   renderVN: RenderFunction;
 }
 

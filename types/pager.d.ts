@@ -11,7 +11,7 @@ export type VxePagerInstance = ComponentPublicInstance<VxePagerProps, VxePagerCo
 export interface VxePagerConstructor extends VxeComponentInstance, VxePagerMethods {
   props: VxePagerProps;
   context: SetupContext<VxePagerEmits>;
-  refMaps: PagerPrivateRef;
+  getRefMaps(): PagerPrivateRef;
   renderVN: RenderFunction;
 }
 

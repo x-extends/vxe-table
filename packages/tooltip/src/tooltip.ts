@@ -55,7 +55,7 @@ export default defineComponent({
       xID,
       props,
       context,
-      refMaps
+      getRefMaps: () => refMaps
     } as VxeTooltipConstructor
 
     let tooltipMethods = {} as TooltipMethods

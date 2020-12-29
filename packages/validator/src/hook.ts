@@ -37,9 +37,9 @@ const tableValidatorMethodKeys: (keyof TableValidatorMethods)[] = ['fullValidate
 
 const validatorHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
-    const { props, reactData, internalData, refMaps, computeMaps } = $xetable
-    const { refValidTooltip } = refMaps
-    const { computeValidOpts, computeTreeOpts, computeEditOpts } = computeMaps
+    const { props, reactData, internalData } = $xetable
+    const { refValidTooltip } = $xetable.getRefMaps()
+    const { computeValidOpts, computeTreeOpts, computeEditOpts } = $xetable.getComputeMaps()
 
     let validatorMethods = {} as TableValidatorMethods
     let validatorPrivateMethods = {} as TableValidatorPrivateMethods
@@ -147,7 +147,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             const finish = () => {
               if (cb) {
                 cb(validRest)
-                resolve()
+                resolve(null)
               } else {
                 reject(validRest)
               }

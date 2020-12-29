@@ -4,7 +4,7 @@ import GlobalConfig from '../../conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { VxeButtonConstructor, VxeButtonPropTypes, VxeButtonEmits, ButtonReactData, ButtonMethods, ButtonPrivateRef } from '../../../types/vxe-table'
+import { VxeButtonConstructor, VxeButtonPropTypes, VxeButtonEmits, ButtonReactData, ButtonMethods, ButtonPrivateRef, ButtonInternalData } from '../../../types/vxe-table'
 
 export default defineComponent({
   name: 'VxeButton',
@@ -82,6 +82,10 @@ export default defineComponent({
       panelPlacement: ''
     } as ButtonReactData)
 
+    const internalData: ButtonInternalData = {
+      showTime: null
+    }
+
     const refElem = ref() as Ref<HTMLDivElement>
     const refButton = ref() as Ref<HTMLButtonElement>
     const refBtnPanel = ref() as Ref<HTMLDivElement>
@@ -95,7 +99,8 @@ export default defineComponent({
       props,
       context,
       reactData,
-      refMaps
+      internalData,
+      getRefMaps: () => refMaps
     } as VxeButtonConstructor
 
     let buttonMethods = {} as ButtonMethods
@@ -211,9 +216,6 @@ export default defineComponent({
 
     const mouseenterEvent = () => {
       const panelElem = refBtnPanel.value
-      if (!reactData.inited) {
-        reactData.inited = true
-      }
       panelElem.dataset.active = 'Y'
       reactData.animatVisible = true
       setTimeout(() => {
@@ -230,8 +232,24 @@ export default defineComponent({
       }, 10)
     }
 
+    const mouseenterTargetEvent = () => {
+      const panelElem = refBtnPanel.value
+      panelElem.dataset.active = 'Y'
+      if (!reactData.inited) {
+        reactData.inited = true
+      }
+      internalData.showTime = setTimeout(() => {
+        if (panelElem.dataset.active === 'Y') {
+          mouseenterEvent()
+        } else {
+          reactData.animatVisible = false
+        }
+      }, 250)
+    }
+
     const closePanel = () => {
       const panelElem = refBtnPanel.value
+      clearTimeout(internalData.showTime)
       if (panelElem) {
         panelElem.dataset.active = 'N'
         setTimeout(() => {
@@ -344,7 +362,7 @@ export default defineComponent({
             name,
             type: isFormBtn ? type : 'button',
             disabled: disabled || loading,
-            onMouseenter: mouseenterEvent,
+            onMouseenter: mouseenterTargetEvent,
             onMouseleave: mouseleaveEvent,
             onClick: clickEvent
           }, renderContent().concat([

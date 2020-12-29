@@ -19,8 +19,8 @@ export interface VxeGridConstructor extends VxeComponentInstance, VxeGridMethods
   context: SetupContext<VxeGridEmits>;
   instance: ComponentInternalInstance;
   reactData: GridReactData;
-  refMaps: GridPrivateRef;
-  computeMaps: GridPrivateComputed;
+  getRefMaps(): GridPrivateRef;
+  getComputeMaps(): GridPrivateComputed;
   renderVN: RenderFunction;
 }
 

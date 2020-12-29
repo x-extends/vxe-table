@@ -86,7 +86,7 @@ export default defineComponent({
       props,
       context,
       reactData,
-      refMaps
+      getRefMaps: () => refMaps
     } as VxeFormConstructor & VxeFormPrivateMethods
 
     let formMethods = {} as FormMethods

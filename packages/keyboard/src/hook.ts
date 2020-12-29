@@ -7,9 +7,9 @@ const browse = DomTools.browse
 
 const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
-    const { props, reactData, internalData, refMaps, computeMaps } = $xetable
-    const { refElem } = refMaps
-    const { computeEditOpts, computeCheckboxOpts, computeMouseOpts, computeTreeOpts } = computeMaps
+    const { props, reactData, internalData } = $xetable
+    const { refElem } = $xetable.getRefMaps()
+    const { computeEditOpts, computeCheckboxOpts, computeMouseOpts, computeTreeOpts } = $xetable.getComputeMaps()
 
     function getTargetOffset (target: any, container: any) {
       let offsetTop = 0
@@ -315,7 +315,12 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
           targetRow = afterFullData[0]
         }
         if (targetRow) {
-          const params = { $table: $xetable, row: targetRow }
+          const params = {
+            $table: $xetable,
+            row: targetRow,
+            rowIndex: $xetable.getRowIndex(targetRow),
+            $rowIndex: $xetable.getVMRowIndex(targetRow)
+          }
           $xetable.scrollToRow(targetRow)
             .then(() => $xetable.triggerCurrentRowEvent(evnt, params))
         }

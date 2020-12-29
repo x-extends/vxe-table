@@ -13,7 +13,7 @@ export interface VxeSelectConstructor extends VxeComponentInstance, VxeSelectMet
   props: VxeSelectProps;
   context: SetupContext<VxeSelectEmits>;
   reactData: SelectReactData;
-  refMaps: SelectPrivateRef;
+  getRefMaps(): SelectPrivateRef;
   renderVN: RenderFunction;
 }
 
