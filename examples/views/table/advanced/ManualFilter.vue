@@ -27,7 +27,7 @@
         field="name"
         title="Name"
         sortable
-        :filters="[{ label: '包含 z', value: 'z' }]"
+        :filters="[{ label: '包含 6', value: '6' }, { label: '包含 4', value: '4' }]"
         :filter-method="filterNameMethod"></vxe-table-column>
       <vxe-table-column
         field="role"
@@ -75,7 +75,7 @@ export default {
     return {
       loading: false,
       tableData: [],
-      roleList: ['', '前端', '后端', '设计师'],
+      roleList: ['', 'Develop', 'PM', 'Test'],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -100,7 +100,7 @@ export default {
             field="name"
             title="Name"
             sortable
-            :filters="[{ label: '包含 z', value: 'z' }]"
+            :filters="[{ label: '包含 6', value: '6' }, { label: '包含 4', value: '4' }]"
             :filter-method="filterNameMethod"></vxe-table-column>
           <vxe-table-column
             field="role"
@@ -136,7 +136,7 @@ export default {
             return {
               loading: false,
               tableData: [],
-              roleList: ['', '前端', '后端', '设计师']
+              roleList: ['', 'Develop', 'PM', 'Test']
             }
           },
           created () {
@@ -176,11 +176,11 @@ export default {
               const column = xTable.getColumnByField('name')
               // 修改筛选列表，并默认设置为选中状态
               xTable.setFilter(column, [
-                { label: '包含 a', value: 'a' },
-                { label: '包含 b', value: 'b' },
-                { label: '包含 c', value: 'c', checked: true },
-                { label: '包含 h', value: 'h' },
-                { label: '包含 j', value: 'j' }
+                { label: '包含 0', value: '0' },
+                { label: '包含 1', value: '1' },
+                { label: '包含 2', value: '2', checked: true },
+                { label: '包含 3', value: '3' },
+                { label: '包含 4', value: '4' }
               ])
               // 修改条件之后，需要手动调用 updateData 处理表格数据
               xTable.updateData()
@@ -259,11 +259,11 @@ export default {
       const column = xTable.getColumnByField('name')
       // 修改筛选列表，并默认设置为选中状态
       xTable.setFilter(column, [
-        { label: '包含 a', value: 'a' },
-        { label: '包含 b', value: 'b' },
-        { label: '包含 c', value: 'c', checked: true },
-        { label: '包含 h', value: 'h' },
-        { label: '包含 j', value: 'j' }
+        { label: '包含 0', value: '0' },
+        { label: '包含 1', value: '1' },
+        { label: '包含 2', value: '2', checked: true },
+        { label: '包含 3', value: '3' },
+        { label: '包含 4', value: '4' }
       ])
       // 修改条件之后，需要手动调用 updateData 处理表格数据
       xTable.updateData()

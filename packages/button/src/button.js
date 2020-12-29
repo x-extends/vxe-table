@@ -79,7 +79,7 @@ export default {
           disabled: disabled || loading
         },
         on: Object.assign({
-          mouseenter: this.mouseenterEvent,
+          mouseenter: this.mouseenterTargetEvent,
           mouseleave: this.mouseleaveEvent
         }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, { $event: evnt })))
       }, this.renderContent(h).concat([
@@ -183,14 +183,25 @@ export default {
         this.$emit('dropdown-click', { name: targetElem.getAttribute('name'), $event: evnt })
       }
     },
-    mouseenterEvent () {
+    mouseenterTargetEvent () {
       const panelElem = this.$refs.panel
+      panelElem.dataset.active = 'Y'
       if (!this.inited) {
         this.inited = true
         if (this.transfer) {
           document.body.appendChild(panelElem)
         }
       }
+      this.showTime = setTimeout(() => {
+        if (panelElem.dataset.active === 'Y') {
+          this.mouseenterEvent()
+        } else {
+          this.animatVisible = false
+        }
+      }, 250)
+    },
+    mouseenterEvent () {
+      const panelElem = this.$refs.panel
       panelElem.dataset.active = 'Y'
       this.animatVisible = true
       setTimeout(() => {
@@ -204,13 +215,14 @@ export default {
             }
           }, 50)
         }
-      }, 10)
+      }, 20)
     },
     mouseleaveEvent () {
       this.closePanel()
     },
     closePanel () {
       const panelElem = this.$refs.panel
+      clearTimeout(this.showTime)
       if (panelElem) {
         panelElem.dataset.active = 'N'
         setTimeout(() => {

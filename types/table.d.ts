@@ -900,7 +900,20 @@ export declare class Table extends VXETableComponent {
    * 用于 mouse-config.area，选取指定区域的单元格
    * @param areas 指定区域
    */
-  setCellAreas(areas: CellAreaOptions): Promise<any>;
+  setCellAreas(areas: CellAreaOptions, activeArea: {
+    area?: MouseCellArea;
+    column: ColumnInfo;
+    row: RowInfo;
+  }): Promise<any>;
+  /**
+   * 用于 mouse-config.area，设置活动的区域的单元格
+   * @param activeArea
+   */
+  setActiveCellArea(activeArea: {
+    area: MouseCellArea;
+    column: ColumnInfo;
+    row: RowInfo;
+  }): Promise<any>;
   /**
    * 临时合并单元格，如果为数组则合并多个
    */
@@ -909,11 +922,6 @@ export declare class Table extends VXETableComponent {
    * 临时合并表尾，如果为数组则合并多个
    */
   setMergeFooterItems(merges: TableMergeConfig | TableMergeConfig[]): Promise<any>;
-  /**
-   * 用于 mouse-config.area，设置活动的区域的单元格
-   * @param activeArea
-   */
-  setActiveCellArea(activeArea: ActiveCellAreaOptions): Promise<any>;
   /**
    * 手动清除校验
    */
@@ -1306,13 +1314,14 @@ export interface MouseCellArea {
   height: number;
 }
 
+export type CELL_AREA_TYPE = 'main' | 'copy' | 'extend' | 'multi' | 'active'
+
 export interface CellAreaOptions {
-  main: boolean;
+  type?: CELL_AREA_TYPE;
   startColumn: ColumnInfo;
   endColumn: ColumnInfo;
   startRow: RowInfo;
   endRow: RowInfo;
-  [key: string]: any;
 }
 
 export interface TableMergeConfig {
@@ -1328,12 +1337,6 @@ export interface MergeItem {
   col: number;
   rowspan: number;
   colspan: number;
-  [key: string]: any;
-}
-
-export interface ActiveCellAreaOptions {
-  column: ColumnInfo;
-  row: RowInfo;
   [key: string]: any;
 }
 
