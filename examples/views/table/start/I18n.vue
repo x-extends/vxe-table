@@ -36,7 +36,7 @@ export default {
       demoCodes: [
         `
         import Vue from 'vue'
-        import VueI18n from 'vxe-i18n'
+        import VueI18n from 'vue-i18n'
         import VXETable from 'vxe-table'
         import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
         import enUS from 'vxe-table/lib/locale/lang/en-US'
@@ -60,7 +60,7 @@ export default {
           i18n: (key, args) => i18n.t(key, args)
         })
 
-        // 需要注意，如果没有使用 vxe-i18n，需要自行解析占位符 '{0}'，例如：
+        // 需要注意，如果没有使用 vue-i18n，需要自行解析占位符 '{0}'，例如：
         // Vue.use(VXETable, {
         //   i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
         // })
