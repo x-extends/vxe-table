@@ -892,9 +892,9 @@ export declare class Table extends VXETableComponent {
   setSelectCell(row: RowInfo, field: string): Promise<any>;
   /**
    * 用于 mouse-config.area，选取指定区域的单元格
-   * @param areas 指定区域
+   * @param areaConfigs 指定区域
    */
-  setCellAreas(areas: CellAreaOptions): Promise<any>;
+  setCellAreas(areaConfigs: CellAreaConfig[]): Promise<any>;
   /**
    * 临时合并单元格，如果为数组则合并多个
    */
@@ -1302,7 +1302,7 @@ export interface MouseCellArea {
 
 export type CELL_AREA_TYPE = 'main' | 'copy' | 'extend' | 'multi' | 'active'
 
-export interface CellAreaOptions {
+export interface CellAreaConfig {
   type?: CELL_AREA_TYPE;
   startColumn: ColumnInfo;
   endColumn: ColumnInfo;
