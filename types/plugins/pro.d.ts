@@ -35,7 +35,7 @@ export interface VxeProPluginMethods {
    * @param areaConfigs 指定区域
    */
   setCellAreas(areaConfigs: VxeTableProDefines.CellAreaConfig[], activeArea?: {
-    area?: MouseCellArea;
+    area?: VxeTableProDefines.MouseCellArea;
     column: VxeTableDefines.ColumnInfo;
     row: RowInfo;
   }): Promise<any>;
@@ -44,7 +44,7 @@ export interface VxeProPluginMethods {
    * @param activeArea
    */
   setActiveCellArea(activeArea: {
-    area: MouseCellArea;
+    area: VxeTableProDefines.MouseCellArea;
     column: VxeTableDefines.ColumnInfo;
     row: RowInfo;
   }): Promise<any>;
