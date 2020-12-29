@@ -3695,12 +3695,12 @@ const apis = [
         list: []
       },
       {
-        name: 'setCellAreas(areas)',
+        name: 'setCellAreas(areaConfigs, activeArea)',
         desc: '如果功能被支持，用于 mouse-config.area，选择指定区域的单元格',
         version: 'pro',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'areas: CellAreaOptions',
+        defVal: 'areaConfigs: CellAreaConfig[], activeArea?: { area?: CellAreaConfig, row: Row, column: ColumnInfo }',
         list: []
       },
       {
