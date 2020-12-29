@@ -1300,13 +1300,14 @@ export interface MouseCellArea {
   height: number;
 }
 
+export type CELL_AREA_TYPE = 'main' | 'copy' | 'extend' | 'multi' | 'active'
+
 export interface CellAreaOptions {
-  main: boolean;
+  type?: CELL_AREA_TYPE;
   startColumn: ColumnInfo;
   endColumn: ColumnInfo;
   startRow: RowInfo;
   endRow: RowInfo;
-  [key: string]: any;
 }
 
 export interface TableMergeConfig {
