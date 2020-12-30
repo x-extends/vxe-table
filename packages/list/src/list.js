@@ -14,7 +14,7 @@ export default {
     maxHeight: [Number, String],
     loading: Boolean,
     size: { type: String, default: () => GlobalConfig.list.size || GlobalConfig.size },
-    autoResize: Boolean,
+    autoResize: { type: Boolean, default: () => GlobalConfig.list.autoResize },
     syncResize: [Boolean, String, Number],
     scrollY: Object
   },

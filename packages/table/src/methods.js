@@ -298,15 +298,17 @@ const Methods = {
       this.tableSourceData = XEUtils.clone(tableFullData, true)
     }
     this.scrollYLoad = scrollYLoad
-    if (scrollYLoad) {
-      if (!(this.height || this.maxHeight)) {
-        UtilTools.error('vxe.error.reqProp', ['height | max-height'])
-      }
-      if (!this.showOverflow) {
-        UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
-      }
-      if (this.spanMethod) {
-        UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (scrollYLoad) {
+        if (!(this.height || this.maxHeight)) {
+          UtilTools.error('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+        }
+        if (!this.showOverflow) {
+          UtilTools.warn('vxe.error.reqProp', ['table.show-overflow'])
+        }
+        if (this.spanMethod) {
+          UtilTools.warn('vxe.error.scrollErrProp', ['table.span-method'])
+        }
       }
     }
     this.clearMergeCells()
@@ -381,7 +383,9 @@ const Methods = {
       }
       this.tableData = tableData.slice(0)
     } else {
-      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+      }
     }
     return this.$nextTick()
   },
@@ -418,8 +422,10 @@ const Methods = {
     this.clearMergeCells()
     this.clearMergeFooterItems()
     this.handleTableData(true)
-    if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
-      UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
+        UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+      }
     }
     this.$nextTick(() => {
       if (this.$toolbar) {
@@ -506,8 +512,10 @@ const Methods = {
       const { id: colid, property, fixed, type, treeNode } = column
       const rest = { column, colid, index, items, parent }
       if (property) {
-        if (fullColumnFieldData[property]) {
-          UtilTools.error('vxe.error.colRepet', ['field', property])
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (fullColumnFieldData[property]) {
+            UtilTools.error('vxe.error.colRepet', ['field', property])
+          }
         }
         fullColumnFieldData[property] = rest
       }
@@ -565,11 +573,13 @@ const Methods = {
     } else {
       tableFullColumn.forEach(handleFunc)
     }
-    if (expandColumn && hasFixed) {
-      UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
-    }
-    if (expandColumn && this.mouseOpts.area) {
-      UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (expandColumn && hasFixed) {
+        UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
+      }
+      if (expandColumn && this.mouseOpts.area) {
+        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+      }
     }
     this.isGroup = isGroup
     this.treeNodeColumn = treeNodeColumn
@@ -766,7 +776,9 @@ const Methods = {
       }
       return this.reloadData(tableSourceData)
     } else {
-      UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+      }
     }
     return this.$nextTick()
   },
@@ -3070,7 +3082,9 @@ const Methods = {
   },
   // 在 v3 中废弃
   getSortColumn () {
-    UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
+    }
     return XEUtils.find(this.visibleColumn, column => (column.sortable || column.remoteSort) && column.order)
   },
   isSort (fieldOrColumn) {
