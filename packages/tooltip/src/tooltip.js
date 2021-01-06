@@ -11,9 +11,8 @@ function updateTipStyle (_vm) {
     const marginSize = 6
     const offsetHeight = wrapperElem.offsetHeight
     const offsetWidth = wrapperElem.offsetWidth
-    let tipLeft = left
     let tipTop = top - offsetHeight - marginSize
-    tipLeft = Math.max(marginSize, left + Math.floor((tipTarget.offsetWidth - offsetWidth) / 2))
+    let tipLeft = Math.max(marginSize, left + Math.floor((tipTarget.offsetWidth - offsetWidth) / 2))
     if (tipLeft + offsetWidth + marginSize > scrollLeft + visibleWidth) {
       tipLeft = scrollLeft + visibleWidth - offsetWidth - marginSize
     }

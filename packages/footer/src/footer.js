@@ -238,7 +238,7 @@ export default {
       const headerElem = tableHeader ? tableHeader.$el : null
       const footerElem = tableFooter ? tableFooter.$el : null
       const bodyElem = tableBody.$el
-      const scrollLeft = footerElem.scrollLeft
+      const scrollLeft = footerElem ? footerElem.scrollLeft : 0
       const isX = scrollLeft !== lastScrollLeft
       $xetable.lastScrollLeft = scrollLeft
       $xetable.lastScrollTime = Date.now()

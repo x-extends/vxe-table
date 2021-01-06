@@ -1191,7 +1191,7 @@ export default {
           let inpVal = inputValue
           if (inpVal) {
             if (type === 'time') {
-              inpVal = toStringTimeDate(inpVal, dateLabelFormat)
+              inpVal = toStringTimeDate(inpVal)
             } else {
               inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
             }
@@ -1501,7 +1501,7 @@ export default {
       let dLabel = ''
       if (date) {
         if (type === 'time') {
-          dValue = toStringTimeDate(date, valueFormat)
+          dValue = toStringTimeDate(date)
         } else {
           dValue = XEUtils.toStringDate(date, valueFormat)
         }

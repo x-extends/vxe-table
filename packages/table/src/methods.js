@@ -3731,10 +3731,10 @@ const Methods = {
     const bodyTargetElem = rightBodyElem || tableBodyElem
     const tableFooterElem = tableFooter ? tableFooter.$el : null
     const footerTargetElem = tableFooterElem || tableBodyElem
-    if (XEUtils.isNumber(scrollLeft)) {
+    if (footerTargetElem && XEUtils.isNumber(scrollLeft)) {
       footerTargetElem.scrollLeft = scrollLeft
     }
-    if (XEUtils.isNumber(scrollTop)) {
+    if (bodyTargetElem && XEUtils.isNumber(scrollTop)) {
       bodyTargetElem.scrollTop = scrollTop
     }
     if (this.scrollXLoad || this.scrollYLoad) {
