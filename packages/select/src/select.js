@@ -21,7 +21,7 @@ function getOptid (_vm, option) {
   return optid ? encodeURIComponent(optid) : ''
 }
 
-function findOffsetOption (_vm, optionValue, isUpArrow) {
+function findOffsetOption (_vm, optionValue, isUpArrow = false) {
   const { isGroup, visibleOptionList, visibleGroupList, valueField, groupOptionsField } = _vm
   let firstOption
   let prevOption

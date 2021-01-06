@@ -440,7 +440,7 @@ export default {
       const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
       if (row && column && editOpts.trigger !== 'manual') {
         const rowIndex = tableData.indexOf(row)
-        if (column && rowIndex > -1) {
+        if (rowIndex > -1) {
           const cell = this.getCell(row, column)
           const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
