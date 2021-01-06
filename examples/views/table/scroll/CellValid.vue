@@ -48,8 +48,7 @@
       height="300"
       :loading="loading"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
-      :checkbox-config="{checkField: 'checked'}">
+      :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -131,8 +130,7 @@ export default {
           height="300"
           :loading="loading"
           :edit-rules="validRules"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-          :checkbox-config="{checkField: 'checked'}">
+          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>

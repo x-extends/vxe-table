@@ -167,10 +167,11 @@ export default {
                     col4: 234,
                     col5: 3,
                     col6: 'shenzhen',
-                    col599: '3',
-                    col4999: \`rb_\${index}\`,
-                    col9999: \`rk_\${index}\`,
-                    col19999: \`rw_\${index}\`
+                    col599: \`600_\${index}\`,
+                    col999: \`1k_\${index}\`,
+                    col4999: \`5k_\${index}\`,
+                    col9999: \`1w_\${index}\`,
+                    col19999: \`2w_\${index}\`
                   })
                 }
                 resolve(list)
@@ -261,10 +262,11 @@ export default {
             col4: 234,
             col5: 3,
             col6: 'shenzhen',
-            col599: '3',
-            col4999: `rb_${index}`,
-            col9999: `rk_${index}`,
-            col19999: `rw_${index}`
+            col599: `600_${index}`,
+            col999: `1k_${index}`,
+            col4999: `5k_${index}`,
+            col9999: `1w_${index}`,
+            col19999: `2w_${index}`
           })
         }
         resolve(list)

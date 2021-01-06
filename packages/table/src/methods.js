@@ -71,6 +71,18 @@ function handleReserveRow (_vm, reserveRowMap) {
   return reserveList
 }
 
+function restoreScroll (_vm, scrollLeft, scrollTop) {
+  return _vm.clearScroll().then(() => {
+    if (scrollLeft || scrollTop) {
+      // 重置最后滚动状态
+      _vm.lastScrollLeft = 0
+      _vm.lastScrollTop = 0
+      // 还原滚动状态
+      return _vm.scrollTo(scrollLeft, scrollTop)
+    }
+  })
+}
+
 function computeVirtualX (_vm) {
   const { $refs, visibleColumn } = _vm
   const { tableBody } = $refs
@@ -279,7 +291,7 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas) {
-    const { keepSource, treeConfig, editStore, sYOpts, scrollYStore, scrollXStore } = this
+    const { keepSource, treeConfig, editStore, sYOpts, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = this
     const tableFullData = datas ? datas.slice(0) : []
     const scrollYLoad = !treeConfig && sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
     scrollYStore.startIndex = 0
@@ -322,7 +334,7 @@ const Methods = {
       }
       this.handleReserveStatus()
       this.checkSelectionStatus()
-      return this.$nextTick().then(() => this.recalculate()).then(() => this.refreshScroll())
+      return this.$nextTick().then(() => this.recalculate()).then(() => restoreScroll(this, lastScrollLeft, lastScrollTop))
     })
   },
   /**
@@ -1369,15 +1381,7 @@ const Methods = {
    */
   refreshScroll () {
     const { lastScrollLeft, lastScrollTop } = this
-    return this.clearScroll().then(() => {
-      if (lastScrollLeft || lastScrollTop) {
-        // 重置最后滚动状态
-        this.lastScrollLeft = 0
-        this.lastScrollTop = 0
-        // 还原滚动状态
-        return this.scrollTo(lastScrollLeft, lastScrollTop)
-      }
-    })
+    return restoreScroll(this, lastScrollLeft, lastScrollTop)
   },
   /**
    * 计算单元格列宽，动态分配可用剩余空间
