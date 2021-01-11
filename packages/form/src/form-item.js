@@ -155,6 +155,8 @@ export default {
       contentVNs = compConf.renderItem.call(this, h, itemRender, params)
     } else if ($scopedSlots && $scopedSlots.default) {
       contentVNs = $scopedSlots.default.call(this, params, h)
+    } else if (field) {
+      contentVNs = [`${XEUtils.get($vxeform.data, field)}`]
     }
     return h('div', {
       class: ['vxe-form--item', span ? `vxe-col--${span} is--span` : null, {

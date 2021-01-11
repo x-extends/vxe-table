@@ -4834,7 +4834,7 @@ const apis = [
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: Row | Row[], callback?: Function',
+        defVal: 'rows?: Row | Row[] | ((errMap) => void), callback?: Function',
         list: []
       },
       {
