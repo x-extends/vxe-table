@@ -2,6 +2,7 @@
   <div>
     <vxe-toolbar
       custom
+      ref="xToolbar"
       :loading="apiData.loading"
       :refresh="{query: loadList}">
       <template #buttons>
@@ -67,7 +68,7 @@ import router from '@/router'
 import XEUtils from 'xe-utils'
 import pack from '../../../package.json'
 
-import { VxeTableInstance } from '../../../types/vxe-table'
+import { VxeTableInstance, VxeToolbarInstance } from '../../../types/vxe-table'
 
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
@@ -224,6 +225,7 @@ export default defineComponent({
     })
 
     const xTable = ref({} as VxeTableInstance)
+    const xToolbar = ref({} as VxeToolbarInstance)
 
     const apiName = computed(() => {
       const $route = router.currentRoute.value
@@ -491,11 +493,16 @@ export default defineComponent({
     })
 
     nextTick(() => {
+      // 将表格和工具栏进行关联
+      const $table = xTable.value
+      const $toolbar = xToolbar.value
+      $table.connect($toolbar)
       loadList()
     })
 
     return {
       xTable,
+      xToolbar,
       apiData,
       apiName,
 

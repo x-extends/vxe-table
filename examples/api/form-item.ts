@@ -183,6 +183,15 @@ const apis = [
             list: []
           },
           {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'props',
             desc: '渲染的参数（请查看目标渲染的 Props）',
             version: '',

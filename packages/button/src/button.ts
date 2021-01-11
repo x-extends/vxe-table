@@ -229,7 +229,7 @@ export default defineComponent({
             }
           }, 50)
         }
-      }, 10)
+      }, 20)
     }
 
     const mouseenterTargetEvent = () => {

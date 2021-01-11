@@ -35,10 +35,6 @@ export interface XEColumnInstance {
   column: ColumnInfo;
 }
 
-export function isEnableConf (conf: any): boolean {
-  return conf && conf.enabled !== false
-}
-
 function getPaddingLeftRightSize (elem: HTMLElement | null) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)

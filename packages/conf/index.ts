@@ -291,6 +291,8 @@ export const GlobalConfig: VXETableGlobalConfig = {
   },
   modal: {
     // size: null,
+    top: 15,
+    showHeader: true,
     minWidth: 340,
     minHeight: 140,
     lockView: true,

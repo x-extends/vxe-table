@@ -189,11 +189,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
        * 完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验
        */
       fullValidate (rows, cb) {
-        const { afterFullData } = internalData
-        if (XEUtils.isFunction(rows)) {
-          return beginValidate(afterFullData, cb, true)
-        }
-        return beginValidate(rows || afterFullData, cb, true)
+        return beginValidate(rows, cb, true)
       },
       /**
        * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）

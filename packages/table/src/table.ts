@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef } from 'vue'
 import XEUtils from 'xe-utils/ctor'
-import { UtilTools, DomTools, GlobalEvent, createResizeEvent, XEResizeObserver } from '../../tools'
+import { UtilTools, DomTools, GlobalEvent, createResizeEvent, XEResizeObserver, isEnableConf } from '../../tools'
 import { useSize } from '../../hooks/size'
 import formats from '../../v-x-e-table/src/formats'
 
@@ -10,7 +10,7 @@ import VXETable from '../../v-x-e-table'
 import TableBodyComponent from './body'
 import tableProps from './props'
 import tableEmits from './emits'
-import { eqCellNull, getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, isEnableConf } from './util'
+import { eqCellNull, getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible } from './util'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance } from '../../../types/vxe-table'
 
@@ -608,6 +608,18 @@ export default defineComponent({
       return reserveList
     }
 
+    const restoreScroll = (scrollLeft: number, scrollTop: number) => {
+      return tableMethods.clearScroll().then(() => {
+        if (scrollLeft || scrollTop) {
+          // 重置最后滚动状态
+          internalData.lastScrollLeft = 0
+          internalData.lastScrollTop = 0
+          // 还原滚动状态
+          return tableMethods.scrollTo(scrollLeft, scrollTop)
+        }
+      })
+    }
+
     const computeVirtualX = () => {
       const { visibleColumn } = internalData
       const tableBody = refTableBody.value
@@ -871,8 +883,10 @@ export default defineComponent({
         const { id: colid, property, fixed, type, treeNode } = column
         const rest = { column, colid, index, items, parent }
         if (property) {
-          if (fullColumnFieldData[property]) {
-            UtilTools.warn('vxe.error.colRepet', ['field', property])
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (fullColumnFieldData[property]) {
+              UtilTools.warn('vxe.error.colRepet', ['field', property])
+            }
           }
           fullColumnFieldData[property] = rest
         }
@@ -930,8 +944,10 @@ export default defineComponent({
       } else {
         tableFullColumn.forEach(handleFunc)
       }
-      if (expandColumn && hasFixed) {
-        UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (expandColumn && hasFixed) {
+          UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
+        }
       }
       if (expandColumn && mouseOpts.area) {
         UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
@@ -1695,7 +1711,7 @@ export default defineComponent({
     const loadTableData = (datas: any[]) => {
       const { keepSource, treeConfig } = props
       const { editStore } = reactData
-      const { scrollYStore, scrollXStore } = internalData
+      const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const sYOpts = computeSYOpts.value
       const tableFullData = datas ? datas.slice(0) : []
       const scrollYLoad = !treeConfig && sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
@@ -1715,15 +1731,17 @@ export default defineComponent({
         internalData.tableSourceData = XEUtils.clone(tableFullData, true)
       }
       reactData.scrollYLoad = scrollYLoad
-      if (scrollYLoad) {
-        if (!(props.height || props.maxHeight)) {
-          UtilTools.error('vxe.error.reqProp', ['height | max-height'])
-        }
-        if (!props.showOverflow) {
-          UtilTools.warn('vxe.error.reqProp', ['show-overflow'])
-        }
-        if (props.spanMethod) {
-          UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (scrollYLoad) {
+          if (!(props.height || props.maxHeight)) {
+            UtilTools.error('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+          }
+          if (!props.showOverflow) {
+            UtilTools.warn('vxe.error.reqProp', ['table.show-overflow'])
+          }
+          if (props.spanMethod) {
+            UtilTools.warn('vxe.error.scrollErrProp', ['table.span-method'])
+          }
         }
       }
       tableMethods.clearMergeCells()
@@ -1737,7 +1755,7 @@ export default defineComponent({
         }
         handleReserveStatus()
         tablePrivateMethods.checkSelectionStatus()
-        return nextTick().then(() => tableMethods.recalculate()).then(() => tableMethods.refreshScroll())
+        return nextTick().then(() => tableMethods.recalculate()).then(() => restoreScroll(lastScrollLeft, lastScrollTop))
       })
     }
 
@@ -1795,8 +1813,10 @@ export default defineComponent({
       tableMethods.clearMergeCells()
       tableMethods.clearMergeFooterItems()
       tablePrivateMethods.handleTableData(true)
-      if ((reactData.scrollXLoad || reactData.scrollYLoad) && reactData.expandColumn) {
-        UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if ((reactData.scrollXLoad || reactData.scrollYLoad) && reactData.expandColumn) {
+          UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+        }
       }
       nextTick(() => {
         if ($xetoolbar) {
@@ -1931,7 +1951,9 @@ export default defineComponent({
           }
           reactData.tableData = tableData.slice(0)
         } else {
-          UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+          }
         }
         return nextTick()
       },
@@ -2017,8 +2039,15 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       getRowIndex (row: any) {
-        const { fullDataRowMap } = internalData
-        return fullDataRowMap.has(row) ? fullDataRowMap.get(row).index : -1
+        const { fullDataRowIdData } = internalData
+        if (row) {
+          const rowid = getRowid($xetable, row)
+          const rest = fullDataRowIdData[rowid]
+          if (rest) {
+            return rest.index
+          }
+        }
+        return -1
       },
       /**
        * 根据 row 获取相对于当前数据中的索引
@@ -2041,7 +2070,14 @@ export default defineComponent({
        * @param {ColumnInfo} column 列配置
        */
       getColumnIndex (column: any) {
-        return internalData.fullColumnMap.has(column) ? internalData.fullColumnMap.get(column).index : -1
+        const { fullColumnIdData } = internalData
+        if (column) {
+          const rest = fullColumnIdData[column.id]
+          if (rest) {
+            return rest.index
+          }
+        }
+        return -1
       },
       /**
        * 根据 column 获取相对于当前表格列中的索引
@@ -2113,7 +2149,9 @@ export default defineComponent({
           }
           return tableMethods.reloadData(tableSourceData)
         } else {
-          UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+          }
         }
         return nextTick()
       },
@@ -2448,15 +2486,7 @@ export default defineComponent({
        */
       refreshScroll () {
         const { lastScrollLeft, lastScrollTop } = internalData
-        return tableMethods.clearScroll().then(() => {
-          if (lastScrollLeft || lastScrollTop) {
-            // 重置最后滚动状态
-            internalData.lastScrollLeft = 0
-            internalData.lastScrollTop = 0
-            // 还原滚动状态
-            return tableMethods.scrollTo(lastScrollLeft, lastScrollTop)
-          }
-        })
+        return restoreScroll(lastScrollLeft, lastScrollTop)
       },
       /**
        * 计算单元格列宽，动态分配可用剩余空间
@@ -4848,8 +4878,10 @@ export default defineComponent({
           internalData.initStatus = true
           handleDefaults()
         }
-        if ((scrollXLoad || scrollYLoad) && expandColumn) {
-          UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if ((scrollXLoad || scrollYLoad) && expandColumn) {
+            UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+          }
         }
         tableMethods.recalculate()
       })

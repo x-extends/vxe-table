@@ -9,18 +9,13 @@
 }
 
 [class*="vxe-"] {
+  font-variant: tabular-nums;
+  font-feature-settings: 'tnum';
   @extend %boxSizing;
   &:after, &:before,
   *:after, *:before {
     @extend %boxSizing;
   }
-}
-
-body {
-  margin: 0;
-  line-height: 1.5;
-  font-variant: tabular-nums;
-  font-feature-settings: 'tnum';
 }
 
 .vxe-primary-color {

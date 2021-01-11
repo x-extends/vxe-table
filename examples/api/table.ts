@@ -4240,7 +4240,7 @@ const apis = [
         version: '',
         type: 'Promise<ErrMap>',
         enum: '',
-        defVal: 'rows?: boolean | Row | Row[], callback?: (errMap) => void',
+        defVal: 'rows?: boolean | Row | Row[] | ((errMap) => void), callback?: (errMap) => void',
         list: []
       },
       {

@@ -2,8 +2,8 @@ import { h, VNode } from 'vue'
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
-import { createColumn, isEnableConf } from './util'
+import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import { createColumn } from './util'
 
 import { VxeColumnProps, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/vxe-table'
 

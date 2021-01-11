@@ -12,7 +12,7 @@ export interface TableValidatorMethods {
    */
   clearValidate(): Promise<any>;
   /**
-   * 完整校验，和 validate 的区别就是默认校验当前表格数据并且给有效数据中的每一行进行校验
+   * 完整校验，默认校验当前表格数据，和 validate 的区别就是默认校验当前表格数据并且给有效数据中的每一行进行校验
    * @param rows 指定行
    * @param callback 回调函数
    */

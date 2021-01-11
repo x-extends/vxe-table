@@ -16,6 +16,10 @@ function outLog (type: 'log' | 'warn' | 'error') {
   }
 }
 
+export function isEnableConf (conf: any): boolean {
+  return conf && conf.enabled !== false
+}
+
 export const UtilTools = {
   warn: outLog('warn'),
   error: outLog('error'),

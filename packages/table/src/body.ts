@@ -2,8 +2,8 @@ import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nex
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
-import { mergeBodyMethod, getRowid, isEnableConf } from './util'
+import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import { mergeBodyMethod, getRowid } from './util'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/vxe-table'
 

@@ -2,7 +2,7 @@ import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, creat
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools } from '../../tools'
+import { UtilTools, isEnableConf } from '../../tools'
 import { createItem } from './util'
 import { useSize } from '../../hooks/size'
 
@@ -44,8 +44,8 @@ export default defineComponent({
     data: Object as PropType<VxeFormPropTypes.Data>,
     size: { type: String as PropType<VxeFormPropTypes.Size>, default: () => GlobalConfig.form.size || GlobalConfig.size },
     span: [String, Number] as PropType<VxeFormPropTypes.Span>,
-    align: String as PropType<VxeFormPropTypes.Align>,
-    titleAlign: String as PropType<VxeFormPropTypes.TitleAlign>,
+    align: { type: String as PropType<VxeFormPropTypes.Align>, default: () => GlobalConfig.form.align },
+    titleAlign: { type: String as PropType<VxeFormPropTypes.TitleAlign>, default: () => GlobalConfig.form.titleAlign },
     titleWidth: [String, Number] as PropType<VxeFormPropTypes.TitleWidth>,
     titleColon: { type: Boolean as PropType<VxeFormPropTypes.TitleColon>, default: () => GlobalConfig.form.titleColon },
     titleAsterisk: { type: Boolean as PropType<VxeFormPropTypes.TitleAsterisk>, default: () => GlobalConfig.form.titleAsterisk },
@@ -153,7 +153,7 @@ export default defineComponent({
           const { field, resetValue, itemRender } = item
           if (field) {
             XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
-            const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+            const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
             if (compConf && compConf.itemResetMethod) {
               compConf.itemResetMethod({ data, property: field, item, $form: $xeform })
             }
@@ -174,7 +174,7 @@ export default defineComponent({
       const el = refElem.value
       fields.some((property: any) => {
         const item = formItems.find((item: any) => item.field === property)
-        if (item && item.itemRender) {
+        if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
           let inputElem: HTMLInputElement | null = null
@@ -388,7 +388,7 @@ export default defineComponent({
     const renderTitle = (item: any) => {
       const { data } = props
       const { slots, field, itemRender, titlePrefix, titleSuffix } = item
-      const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+      const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
       const params = { data, property: field, item, $form: $xeform }
       const tss = []
       if (titlePrefix) {
@@ -431,7 +431,7 @@ export default defineComponent({
       const validOpts = computeValidOpts.value
       return formItems.map((item: any, index: any) => {
         const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
-        const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+        const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
         const span = item.span || props.span
         const align = item.align || props.align
         const titleAlign = item.titleAlign || props.titleAlign
@@ -456,6 +456,8 @@ export default defineComponent({
           contentVNs = compConf.renderItemContent(itemRender, params)
         } else if (slots && slots.default) {
           contentVNs = slots.default(params)
+        } else if (field) {
+          contentVNs = [`${XEUtils.get(data, field)}`]
         }
         return h('div', {
           class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, {

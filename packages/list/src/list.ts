@@ -16,7 +16,7 @@ export default defineComponent({
     maxHeight: [Number, String] as PropType<VxeListPropTypes.MaxHeight>,
     loading: Boolean as PropType<VxeListPropTypes.Loading>,
     size: { type: String as PropType<VxeListPropTypes.Size>, default: () => GlobalConfig.list.size || GlobalConfig.size },
-    autoResize: Boolean as PropType<VxeListPropTypes.AutoResize>,
+    autoResize: { type: Boolean as PropType<VxeListPropTypes.AutoResize>, default: () => GlobalConfig.list.autoResize },
     syncResize: [Boolean, String, Number] as PropType<VxeListPropTypes.SyncResize>,
     scrollY: Object as PropType<VxeListPropTypes.ScrollY>
   },

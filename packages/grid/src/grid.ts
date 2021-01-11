@@ -1,12 +1,12 @@
 import { defineComponent, h, PropType, ref, Ref, computed, provide, getCurrentInstance, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance } from 'vue'
 import XEUtils from 'xe-utils/ctor'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import { UtilTools, DomTools, GlobalEvent, isEnableConf } from '../../tools'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
-import { clearTableDefaultStatus, clearTableAllStatus, isEnableConf } from '../../table/src/util'
+import { clearTableDefaultStatus, clearTableAllStatus } from '../../table/src/util'
 
 import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableListeners } from '../../../types/vxe-table'
 

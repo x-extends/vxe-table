@@ -111,8 +111,8 @@ import GridProxy from '../views/grid/Proxy.vue'
 import GridPageProxy from '../views/grid/PageProxy.vue'
 // import GridConfigProxy from '../views/grid/ConfigProxy.vue'
 // import GridEdit from '../views/grid/Edit.vue'
-// import GridCellDisable from '../views/grid/CellDisable.vue'
-// import GridRowDisable from '../views/grid/RowDisable.vue'
+import GridCellDisable from '../views/grid/CellDisable.vue'
+import GridRowDisable from '../views/grid/RowDisable.vue'
 // import GridForm from '../views/grid/Form.vue'
 // import GridFormProxy from '../views/grid/FormProxy.vue'
 import GridToolbar from '../views/grid/Toolbar.vue'
@@ -1038,16 +1038,16 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'GridEdit',
   //   component: GridEdit
   // },
-  // {
-  //   path: '/table/grid/cellDisable',
-  //   name: 'GridCellDisable',
-  //   component: GridCellDisable
-  // },
-  // {
-  //   path: '/table/grid/rowDisable',
-  //   name: 'GridRowDisable',
-  //   component: GridRowDisable
-  // },
+  {
+    path: '/table/grid/cellDisable',
+    name: 'GridCellDisable',
+    component: GridCellDisable
+  },
+  {
+    path: '/table/grid/rowDisable',
+    name: 'GridRowDisable',
+    component: GridRowDisable
+  },
   // {
   //   path: '/table/grid/form',
   //   name: 'GridForm',
