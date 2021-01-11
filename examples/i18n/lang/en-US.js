@@ -325,7 +325,7 @@ export default {
         compatibility: 'Compatibility',
         releases: 'Releases',
         donation: '支持我们',
-        issuesTitle: '該群供大家交流問題，若人满则剔除不活跃的<br>作者很忙基本沒有時間去看群，如果有 bug 请通过 issues 反馈',
+        issuesTitle: '该群供大家交流問題，群人数已达上限，将不定期剔除不活跃的<br>，如果有 bug 请通过 issues 反馈',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'this release is being refactored. Stay tuned!'
       },
