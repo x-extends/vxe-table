@@ -108,6 +108,7 @@
 
     <p>
       <vxe-form
+        title-colon
         ref="xForm"
         class="my-form2"
         title-align="right"
@@ -117,15 +118,11 @@
         :loading="loading2"
         @submit="submitEvent2"
         @reset="resetEvent">
-        <vxe-form-item title="名称" field="name" span="24">
-          <template v-slot="scope">
-            <vxe-input v-model="formData2.name" placeholder="请输入名称" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
-          </template>
+        <vxe-form-item title="名称" span="24">
+          <template v-slot>{{ formData2.name }}</template>
         </vxe-form-item>
-        <vxe-form-item title="昵称" field="nickname" span="24">
-          <template v-slot="scope">
-            <vxe-input v-model="formData2.nickname" placeholder="请输入昵称" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
-          </template>
+        <vxe-form-item title="昵称" span="24">
+          <template v-slot>{{ formData2.nickname }}</template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" span="24">
           <template v-slot="scope">
@@ -265,8 +262,8 @@ export default {
       },
       loading2: false,
       formData2: {
-        name: '',
-        nickname: '',
+        name: 'test1',
+        nickname: 'Testing',
         sex: '',
         age: 26,
         date: null,
@@ -419,6 +416,7 @@ export default {
 
         <p>
           <vxe-form
+            title-colon
             ref="xForm"
             class="my-form2"
             title-align="right"
@@ -428,15 +426,11 @@ export default {
             :loading="loading2"
             @submit="submitEvent2"
             @reset="resetEvent">
-            <vxe-form-item title="名称" field="name" span="24">
-              <template v-slot="scope">
-                <vxe-input v-model="formData2.name" placeholder="请输入名称" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
-              </template>
+            <vxe-form-item title="名称" span="24">
+              <template v-slot>{{ formData2.name }}</template>
             </vxe-form-item>
-            <vxe-form-item title="昵称" field="nickname" span="24">
-              <template v-slot="scope">
-                <vxe-input v-model="formData2.nickname" placeholder="请输入昵称" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
-              </template>
+            <vxe-form-item title="昵称" span="24">
+              <template v-slot>{{ formData2.nickname }}</template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" span="24">
               <template v-slot="scope">
@@ -559,8 +553,8 @@ export default {
               },
               loading2: false,
               formData2: {
-                name: '',
-                nickname: '',
+                name: 'test1',
+                nickname: 'Testing',
                 sex: '',
                 age: 26,
                 date: null,

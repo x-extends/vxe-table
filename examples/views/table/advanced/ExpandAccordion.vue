@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">手风琴展开效果，通过配置 expand-config={<table-api-link prop="accordion"/>} 属性来开启同一级的节点，每次只能展开一个</p>
+    <p class="tip">
+      手风琴展开效果，通过配置 expand-config={<table-api-link prop="accordion"/>} 属性来开启同一级的节点，每次只能展开一个<br>
+      <span class="red">（注：展开行不能用于虚拟滚动，该示例仅供参考）</span>
+    </p>
 
     <vxe-table
       border

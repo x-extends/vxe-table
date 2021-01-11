@@ -1,8 +1,8 @@
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod, isEnableConf } from './util'
+import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod } from './util'
 
 const cellType = 'body'
 

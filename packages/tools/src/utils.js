@@ -141,6 +141,10 @@ class ColumnInfo {
   }
 }
 
+export function isEnableConf (conf) {
+  return conf && conf.enabled !== false
+}
+
 function outLog (type) {
   return function (message, params) {
     const msg = UtilTools.getLog(message, params)

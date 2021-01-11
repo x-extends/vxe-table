@@ -324,7 +324,7 @@ export default {
         compatibility: '相容性變動',
         releases: '更新日誌',
         donation: '支持我们',
-        issuesTitle: '該群供大家交流問題，若人满则剔除不活跃的<br>作者很忙基本沒有時間去看群，如果有 bug 請通過 issues 迴響',
+        issuesTitle: '该群供大家交流問題，群人数已达上限，将不定期剔除不活跃的<br>，如果有 bug 请通过 issues 反馈',
         newFunc: '由於作者很忙，後續有時間可能會支持該功能！',
         newDevelopment: '該版本正在重構中，敬請期待！'
       },

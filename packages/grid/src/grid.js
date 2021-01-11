@@ -3,8 +3,8 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
-import { clearTableDefaultStatus, clearTableAllStatus, isEnableConf } from '../../table/src/util'
+import { UtilTools, DomTools, GlobalEvent, isEnableConf } from '../../tools'
+import { clearTableDefaultStatus, clearTableAllStatus } from '../../table/src/util'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)

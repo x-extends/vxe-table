@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
+import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { createItem } from './util'
 
 class Rule {
@@ -55,7 +55,7 @@ function renderSuffixIcon (h, titleSuffix) {
 function renderTitle (h, _vm, item) {
   const { data } = _vm
   const { slots, field, itemRender, titlePrefix, titleSuffix } = item
-  const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+  const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
   const params = { data, property: field, item, $form: _vm }
   const tss = []
   if (titlePrefix) {
@@ -100,7 +100,7 @@ function renderItems (h, _vm) {
   const { _e, rules, formItems, data, collapseAll, validOpts } = _vm
   return formItems.map((item, index) => {
     const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
-    const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+    const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const span = item.span || _vm.span
     const align = item.align || _vm.align
     const titleAlign = item.titleAlign || _vm.titleAlign
@@ -127,6 +127,8 @@ function renderItems (h, _vm) {
       contentVNs = compConf.renderItem.call(_vm, h, itemRender, params)
     } else if (slots && slots.default) {
       contentVNs = slots.default.call(_vm, params, h)
+    } else if (field) {
+      contentVNs = [`${XEUtils.get(data, field)}`]
     }
     return h('div', {
       class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, {
@@ -303,7 +305,7 @@ export default {
           const { field, resetValue, itemRender } = item
           if (field) {
             XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
-            const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
+            const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
             if (compConf && compConf.itemResetMethod) {
               compConf.itemResetMethod({ data, property: field, item, $form: this })
             }
@@ -465,7 +467,7 @@ export default {
       const { $el, formItems } = this
       fields.some(property => {
         const item = formItems.find(item => item.field === property)
-        if (item && item.itemRender) {
+        if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
           let inputElem

@@ -3,8 +3,7 @@ import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from './body'
 import vSize from '../../mixins/size'
-import { UtilTools, GlobalEvent, createResizeEvent } from '../../tools'
-import { isEnableConf } from './util'
+import { UtilTools, GlobalEvent, createResizeEvent, isEnableConf } from '../../tools'
 import methods from './methods'
 
 /**

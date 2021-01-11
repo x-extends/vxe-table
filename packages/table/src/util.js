@@ -7,10 +7,6 @@ const lineOffsetSizes = {
   medium: 1
 }
 
-export function isEnableConf (conf) {
-  return conf && conf.enabled !== false
-}
-
 function getPaddingLeftRightSize (elem) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)

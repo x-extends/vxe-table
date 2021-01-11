@@ -1,8 +1,7 @@
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
-import { isEnableConf } from './util'
+import { UtilTools, DomTools, isEnableConf } from '../../tools'
 
 function renderHelpIcon (h, params) {
   const { $table, column } = params

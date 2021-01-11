@@ -2,8 +2,8 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
-import { clearTableAllStatus, isEnableConf } from './util'
+import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import { clearTableAllStatus } from './util'
 import formats from '../../v-x-e-table/src/formats'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools

@@ -1,7 +1,6 @@
 import XEUtils from 'xe-utils/ctor'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
-import { isEnableConf } from '../../table/src/util'
+import { UtilTools, DomTools, isEnableConf } from '../../tools'
 
 export default {
   methods: {
