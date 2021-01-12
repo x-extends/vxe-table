@@ -354,6 +354,18 @@ export default {
   },
   methods: {
     ...methods,
+    callSlot (slotFunc, params, h, vNodes) {
+      if (slotFunc) {
+        const { $scopedSlots } = this
+        if (XEUtils.isString(slotFunc)) {
+          slotFunc = $scopedSlots[slotFunc] || null
+        }
+        if (XEUtils.isFunction(slotFunc)) {
+          return slotFunc.call(this, params, h, vNodes)
+        }
+      }
+      return []
+    },
     getParentHeight () {
       return (this.isZMax ? DomTools.getDomNode().visibleHeight : this.$el.parentNode.clientHeight) - this.getExcludeHeight()
     },
@@ -378,28 +390,6 @@ export default {
       const { editConfig } = this
       const activeMethod = editConfig ? editConfig.activeMethod : null
       return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
-    },
-    loadColumn (columns) {
-      const { $scopedSlots } = this
-      XEUtils.eachTree(columns, column => {
-        if (column.slots) {
-          XEUtils.each(column.slots, (func, name, colSlots) => {
-            if (!XEUtils.isFunction(func)) {
-              if ($scopedSlots[func]) {
-                colSlots[name] = $scopedSlots[func]
-              } else {
-                colSlots[name] = null
-                UtilTools.error('vxe.error.notSlot', [func])
-              }
-            }
-          })
-        }
-      })
-      return this.$refs.xTable.loadColumn(columns)
-    },
-    reloadColumn (columns) {
-      this.clearAll()
-      return this.loadColumn(columns)
     },
     initToolbar () {
       this.$nextTick(() => {
@@ -822,6 +812,28 @@ export default {
         pager: this.tablePage,
         pendingRecords: this.pendingRecords
       } : null
-    }
+    },
+    // 检查插槽
+    ...(process.env.VUE_APP_VXE_TABLE_ENV === 'development' ? {
+      loadColumn (columns) {
+        const { $scopedSlots } = this
+        XEUtils.eachTree(columns, column => {
+          if (column.slots) {
+            XEUtils.each(column.slots, (func) => {
+              if (!XEUtils.isFunction(func)) {
+                if (!$scopedSlots[func]) {
+                  UtilTools.error('vxe.error.notSlot', [func])
+                }
+              }
+            })
+          }
+        })
+        return this.$refs.xTable.loadColumn(columns)
+      },
+      reloadColumn (columns) {
+        this.clearAll()
+        return this.loadColumn(columns)
+      }
+    } : null)
   }
 }

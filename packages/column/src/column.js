@@ -88,7 +88,8 @@ export default {
   props,
   provide () {
     return {
-      $xecolumn: this
+      $xecolumn: this,
+      $xegrid: null
     }
   },
   inject: {

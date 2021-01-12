@@ -5,7 +5,8 @@ export default {
   extends: VxeTableColumn,
   provide () {
     return {
-      xecolgroup: this
+      xecolgroup: this,
+      $xegrid: null
     }
   }
 }

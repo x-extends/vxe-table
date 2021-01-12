@@ -236,6 +236,18 @@ function clearAllSort (_vm) {
 }
 
 const Methods = {
+  callSlot (slotFunc, params, h, vNodes) {
+    if (slotFunc) {
+      const { $xegrid } = this
+      if ($xegrid) {
+        return $xegrid.callSlot(slotFunc, params, h, vNodes)
+      }
+      if (XEUtils.isFunction(slotFunc)) {
+        return slotFunc.call(this, params, h, vNodes)
+      }
+    }
+    return []
+  },
   /**
    * 获取父容器元素
    */

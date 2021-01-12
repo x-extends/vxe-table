@@ -16,7 +16,7 @@ function renderLine (h, _vm, $xetable, rowLevel, items, params) {
   const { treeOpts, treeConfig } = $xetable
   const { slots, treeNode } = column
   if (slots && slots.line) {
-    return slots.line.call($xetable, params, h)
+    return $xetable.callSlot(slots.line, params, h)
   }
   if (treeConfig && treeNode && treeOpts.line) {
     return [
