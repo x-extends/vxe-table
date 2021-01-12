@@ -1848,7 +1848,7 @@ const Methods = {
    * 全局滚动事件
    */
   handleGlobalMousewheelEvent () {
-    this.clostTooltip()
+    this.closeTooltip()
     this.closeMenu()
   },
   /**
@@ -2121,14 +2121,14 @@ const Methods = {
     const tooltipOpts = this.tooltipOpts
     setTimeout(() => {
       if (!this.tooltipActive) {
-        this.clostTooltip()
+        this.closeTooltip()
       }
     }, tooltipOpts.leaveDelay)
   },
   handleTargetEnterEvent () {
     clearTimeout(this.tooltipTimeout)
     this.tooltipActive = true
-    this.clostTooltip()
+    this.closeTooltip()
   },
   handleTargetLeaveEvent () {
     const tooltipOpts = this.tooltipOpts
@@ -2136,11 +2136,11 @@ const Methods = {
     if (tooltipOpts.enterable) {
       this.tooltipTimeout = setTimeout(() => {
         if (!this.$refs.tooltip.isHover) {
-          this.clostTooltip()
+          this.closeTooltip()
         }
       }, tooltipOpts.leaveDelay)
     } else {
-      this.clostTooltip()
+      this.closeTooltip()
     }
   },
   triggerHeaderHelpEvent (evnt, params) {
@@ -2248,7 +2248,7 @@ const Methods = {
   /**
    * 关闭 tooltip
    */
-  clostTooltip () {
+  closeTooltip () {
     const tooltip = this.$refs.tooltip
     const commTip = this.$refs.commTip
     Object.assign(this.tooltipStore, {
@@ -3650,7 +3650,7 @@ const Methods = {
       }
       scrollXStore.visibleIndex = toVisibleIndex
     }
-    this.clostTooltip()
+    this.closeTooltip()
   },
   /**
    * 纵向 Y 可视渲染事件处理
