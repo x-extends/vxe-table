@@ -4082,7 +4082,7 @@ const apis = [
         list: []
       },
       {
-        name: 'clostTooltip()',
+        name: 'closeTooltip()',
         desc: '手动关闭 tooltip 提示（某些特殊场景可能会用到）',
         version: '',
         type: 'Promise<any>',
