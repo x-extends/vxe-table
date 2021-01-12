@@ -2431,33 +2431,33 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
-          },
-          {
-            name: 'props',
-            desc: '渲染的参数（请查看目标渲染的 Props）',
-            version: '',
-            type: 'Object',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'attrs',
-            desc: '渲染的属性（请查看目标渲染的 Attribute）',
-            version: '',
-            type: 'Object',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'events',
-            desc: '渲染组件的事件（请查看目标渲染的 Events）',
-            version: '',
-            type: 'Object',
-            enum: '',
-            defVal: '{}, ...[目标渲染的 arguments]',
-            list: []
+          // },
+          // {
+          //   name: 'props',
+          //   desc: '渲染的参数（请查看目标渲染的 Props）',
+          //   version: '',
+          //   type: 'Object',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
+          // {
+          //   name: 'attrs',
+          //   desc: '渲染的属性（请查看目标渲染的 Attribute）',
+          //   version: '',
+          //   type: 'Object',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
+          // {
+          //   name: 'events',
+          //   desc: '渲染组件的事件（请查看目标渲染的 Events）',
+          //   version: '',
+          //   type: 'Object',
+          //   enum: '',
+          //   defVal: '{}, ...[目标渲染的 arguments]',
+          //   list: []
           // },
           // {
           //   name: 'nativeEvents',
@@ -2611,7 +2611,7 @@ const apis = [
       // },
       {
         name: 'scroll-x',
-        desc: '横向虚拟滚动配置（tree-config 启用后无效）',
+        desc: '横向虚拟滚动配置（不支持深层结构和展开行）',
         version: '2.9.4',
         type: 'Object',
         enum: '',
@@ -2666,7 +2666,7 @@ const apis = [
       },
       {
         name: 'scroll-y',
-        desc: '纵向虚拟滚动配置（注：当 tree-config 启用后纵向虚拟滚动将无效）',
+        desc: '纵向虚拟滚动配置（不支持深层结构和展开行）',
         version: '2.9.4',
         type: 'Object',
         enum: '',

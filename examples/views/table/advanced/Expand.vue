@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip">通过设置 <table-api-link prop="expand-config"/> 属性和 type=<table-api-link prop="expand"/> 与 <table-column-api-link prop="slot"/> 可以开启展开行功能</p>
+    <p class="tip">
+      通过设置 <table-api-link prop="expand-config"/> 属性和 type=<table-api-link prop="expand"/> 与 <table-column-api-link prop="slot"/> 可以开启展开行功能<br>
+      <span class="red">（注：展开行不能用于虚拟滚动，该示例仅供参考）</span>
+    </p>
 
     <vxe-toolbar>
       <template v-slot:buttons>
