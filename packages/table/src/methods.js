@@ -235,6 +235,13 @@ function clearAllSort (_vm) {
   })
 }
 
+const handleFieldOrColumn = (_vm, fieldOrColumn) => {
+  if (fieldOrColumn) {
+    return XEUtils.isString(fieldOrColumn) ? _vm.getColumnByField(fieldOrColumn) : fieldOrColumn
+  }
+  return null
+}
+
 const Methods = {
   callSlot (slotFunc, params, h, vNodes) {
     if (slotFunc) {
@@ -1079,18 +1086,22 @@ const Methods = {
   },
   /**
    * 隐藏指定列
-   * @param {ColumnInfo} column 列配置
    */
-  hideColumn (column) {
-    column.visible = false
+  hideColumn (fieldOrColumn) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    if (column) {
+      column.visible = false
+    }
     return this.handleCustom()
   },
   /**
    * 显示指定列
-   * @param {ColumnInfo} column 列配置
    */
-  showColumn (column) {
-    column.visible = true
+  showColumn (fieldOrColumn) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    if (column) {
+      column.visible = true
+    }
     return this.handleCustom()
   },
   /**
@@ -2867,12 +2878,15 @@ const Methods = {
   },
   /**
    * 用于当前列，设置某列行为高亮状态
-   * @param {ColumnInfo} column 列配置
+   * @param {ColumnInfo} fieldOrColumn 列配置
    */
-  setCurrentColumn (column) {
-    this.clearCurrentRow()
-    this.clearCurrentColumn()
-    this.currentColumn = column
+  setCurrentColumn (fieldOrColumn) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    if (column) {
+      this.clearCurrentRow()
+      this.clearCurrentColumn()
+      this.currentColumn = column
+    }
     return this.$nextTick()
   },
   /**
@@ -3084,7 +3098,7 @@ const Methods = {
   clearSort (fieldOrColumn) {
     const { sortOpts } = this
     if (fieldOrColumn) {
-      const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+      const column = handleFieldOrColumn(this, fieldOrColumn)
       if (column) {
         column.order = null
       }
@@ -3105,7 +3119,7 @@ const Methods = {
   },
   isSort (fieldOrColumn) {
     if (fieldOrColumn) {
-      const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+      const column = handleFieldOrColumn(this, fieldOrColumn)
       return column && column.sortable && !!column.order
     }
     return this.getSortColumns().length > 0
@@ -3138,7 +3152,7 @@ const Methods = {
    * @param {String} fieldOrColumn 字段名
    */
   isFilter (fieldOrColumn) {
-    const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+    const column = handleFieldOrColumn(this, fieldOrColumn)
     if (column) {
       return column.filters && column.filters.some(option => option.checked)
     }
@@ -3759,7 +3773,7 @@ const Methods = {
    * @param {Row} row 行对象
    * @param {ColumnInfo} column 列配置
    */
-  scrollToRow (row, column) {
+  scrollToRow (row, fieldOrColumn) {
     const rest = []
     if (row) {
       if (this.treeConfig) {
@@ -3768,8 +3782,8 @@ const Methods = {
         rest.push(DomTools.rowToVisible(this, row))
       }
     }
-    if (column) {
-      rest.push(this.scrollToColumn(column))
+    if (fieldOrColumn) {
+      rest.push(this.scrollToColumn(fieldOrColumn))
     }
     return Promise.all(rest)
   },
@@ -3777,7 +3791,8 @@ const Methods = {
    * 如果有滚动条，则滚动到对应的列
    * @param {ColumnInfo} column 列配置
    */
-  scrollToColumn (column) {
+  scrollToColumn (fieldOrColumn) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
     if (column && this.fullColumnMap.has(column)) {
       return DomTools.colToVisible(this, column)
     }

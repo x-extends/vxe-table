@@ -76,7 +76,7 @@ function renderTitle (h, _vm, item) {
   tss.push(
     h('span', {
       class: 'vxe-form--item-title-label'
-    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? slots.title.call(_vm, params) : UtilTools.getFuncText(item.title)))
+    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? _vm.callSlot(slots.title, params) : UtilTools.getFuncText(item.title)))
   )
   if (titleSuffix) {
     tss.push(
@@ -126,7 +126,7 @@ function renderItems (h, _vm) {
     } else if (compConf && compConf.renderItem) {
       contentVNs = compConf.renderItem.call(_vm, h, itemRender, params)
     } else if (slots && slots.default) {
-      contentVNs = slots.default.call(_vm, params, h)
+      contentVNs = _vm.callSlot(slots.default, params, h)
     } else if (field) {
       contentVNs = [`${XEUtils.get(data, field)}`]
     }
@@ -258,22 +258,33 @@ export default {
     ]))
   },
   methods: {
-    loadItem (list) {
-      const { $scopedSlots } = this
-      list.forEach(item => {
-        if (item.slots) {
-          XEUtils.each(item.slots, (func, name, slots) => {
-            if (!XEUtils.isFunction(func)) {
-              if ($scopedSlots[func]) {
-                slots[name] = $scopedSlots[func]
-              } else {
-                slots[name] = null
-                UtilTools.error('vxe.error.notSlot', [func])
-              }
-            }
-          })
+    callSlot (slotFunc, params) {
+      if (slotFunc) {
+        const { $scopedSlots } = this
+        if (XEUtils.isString(slotFunc)) {
+          slotFunc = $scopedSlots[slotFunc] || null
         }
-      })
+        if (XEUtils.isFunction(slotFunc)) {
+          return slotFunc.call(this, params)
+        }
+      }
+      return []
+    },
+    loadItem (list) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        const { $scopedSlots } = this
+        list.forEach(item => {
+          if (item.slots) {
+            XEUtils.each(item.slots, (func) => {
+              if (!XEUtils.isFunction(func)) {
+                if (!$scopedSlots[func]) {
+                  UtilTools.error('vxe.error.notSlot', [func])
+                }
+              }
+            })
+          }
+        })
+      }
       this.staticItems = list.map(item => createItem(this, item))
       return this.$nextTick()
     },
