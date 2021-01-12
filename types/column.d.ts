@@ -7,6 +7,7 @@ import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './extends/foot
 import { ColumnEditRenderOptions, ColumnEditSlotParams } from './extends/edit'
 import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './extends/export'
 import { TableOverflow } from './table'
+
 /**
  * 列
  */
