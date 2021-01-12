@@ -76,7 +76,7 @@ import TablePrint from '../views/table/advanced/Print.vue'
 // import TableFixedType from '../views/table/advanced/FixedType.vue'
 // import TableMenu from '../views/table/advanced/Menu.vue'
 // import TableMenuPrivilege from '../views/table/advanced/MenuPrivilege.vue'
-// import TableExpand from '../views/table/advanced/Expand.vue'
+import TableExpand from '../views/table/advanced/Expand.vue'
 // import TableExpandIcon from '../views/table/advanced/ExpandIcon.vue'
 // import TableExpandLazy from '../views/table/advanced/ExpandLazy.vue'
 // import TableExpandAccordion from '../views/table/advanced/ExpandAccordion.vue'
@@ -657,11 +657,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableMenuPrivilege',
   //   component: TableMenuPrivilege
   // },
-  // {
-  //   path: '/table/advanced/expand',
-  //   name: 'TableExpand',
-  //   component: TableExpand
-  // },
+  {
+    path: '/table/advanced/expand',
+    name: 'TableExpand',
+    component: TableExpand
+  },
   // {
   //   path: '/table/advanced/expandIcon',
   //   name: 'TableExpandIcon',

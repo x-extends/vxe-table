@@ -12,7 +12,7 @@ import tableProps from './props'
 import tableEmits from './emits'
 import { eqCellNull, getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible } from './util'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance } from '../../../types/vxe-table'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines } from '../../../types/vxe-table'
 
 const { setCellValue, hasChildrenList, getColumnList } = UtilTools
 const { browse, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
@@ -606,6 +606,13 @@ export default defineComponent({
         }
       })
       return reserveList
+    }
+
+    const handleFieldOrColumn = (fieldOrColumn: any) => {
+      if (fieldOrColumn) {
+        return XEUtils.isString(fieldOrColumn) ? tableMethods.getColumnByField(fieldOrColumn) : fieldOrColumn as VxeTableDefines.ColumnInfo
+      }
+      return null
     }
 
     const restoreScroll = (scrollLeft: number, scrollTop: number) => {
@@ -2335,18 +2342,22 @@ export default defineComponent({
       },
       /**
        * 隐藏指定列
-       * @param {ColumnInfo} column 列配置
        */
-      hideColumn (column: any) {
-        column.visible = false
+      hideColumn (fieldOrColumn) {
+        const column = handleFieldOrColumn(fieldOrColumn)
+        if (column) {
+          column.visible = false
+        }
         return handleCustom()
       },
       /**
        * 显示指定列
-       * @param {ColumnInfo} column 列配置
        */
-      showColumn (column: any) {
-        column.visible = true
+      showColumn (fieldOrColumn) {
+        const column = handleFieldOrColumn(fieldOrColumn)
+        if (column) {
+          column.visible = true
+        }
         return handleCustom()
       },
       /**
@@ -2830,12 +2841,14 @@ export default defineComponent({
       },
       /**
        * 用于当前列，设置某列行为高亮状态
-       * @param {ColumnInfo} column 列配置
        */
-      setCurrentColumn (column: any) {
-        tableMethods.clearCurrentRow()
-        tableMethods.clearCurrentColumn()
-        reactData.currentColumn = column
+      setCurrentColumn (fieldOrColumn) {
+        const column = handleFieldOrColumn(fieldOrColumn)
+        if (column) {
+          tableMethods.clearCurrentRow()
+          tableMethods.clearCurrentColumn()
+          reactData.currentColumn = column
+        }
         return nextTick()
       },
       /**
@@ -2893,7 +2906,7 @@ export default defineComponent({
       clearSort (fieldOrColumn) {
         const sortOpts = computeSortOpts.value
         if (fieldOrColumn) {
-          const column = XEUtils.isString(fieldOrColumn) ? tableMethods.getColumnByField(fieldOrColumn) : fieldOrColumn
+          const column = handleFieldOrColumn(fieldOrColumn)
           if (column) {
             column.order = null
           }
@@ -2907,8 +2920,8 @@ export default defineComponent({
       },
       isSort (fieldOrColumn) {
         if (fieldOrColumn) {
-          const column = XEUtils.isString(fieldOrColumn) ? tableMethods.getColumnByField(fieldOrColumn) : fieldOrColumn
-          return column && column.sortable && !!column.order
+          const column = handleFieldOrColumn(fieldOrColumn)
+          return column ? column.sortable && !!column.order : false
         }
         return tableMethods.getSortColumns().length > 0
       },
@@ -2942,7 +2955,7 @@ export default defineComponent({
        * @param {String} fieldOrColumn 字段名
        */
       isFilter (fieldOrColumn) {
-        const column = XEUtils.isString(fieldOrColumn) ? tableMethods.getColumnByField(fieldOrColumn) : fieldOrColumn
+        const column = handleFieldOrColumn(fieldOrColumn)
         if (column) {
           return column.filters && column.filters.some((option) => option.checked)
         }
@@ -3269,9 +3282,9 @@ export default defineComponent({
       /**
        * 如果有滚动条，则滚动到对应的行
        * @param {Row} row 行对象
-       * @param {ColumnInfo} column 列配置
+       * @param {ColumnInfo} fieldOrColumn 列配置
        */
-      scrollToRow (row: any, column?: any) {
+      scrollToRow (row, fieldOrColumn) {
         const rest = []
         if (row) {
           if (props.treeConfig) {
@@ -3280,17 +3293,17 @@ export default defineComponent({
             rest.push(rowToVisible($xetable, row))
           }
         }
-        if (column) {
-          rest.push(tableMethods.scrollToColumn(column))
+        if (fieldOrColumn) {
+          rest.push(tableMethods.scrollToColumn(fieldOrColumn))
         }
         return Promise.all(rest)
       },
       /**
        * 如果有滚动条，则滚动到对应的列
-       * @param {ColumnInfo} column 列配置
        */
-      scrollToColumn (column: any) {
+      scrollToColumn (fieldOrColumn) {
         const { fullColumnMap } = internalData
+        const column = handleFieldOrColumn(fieldOrColumn)
         if (column && fullColumnMap.has(column)) {
           return colToVisible($xetable, column)
         }
@@ -3903,6 +3916,17 @@ export default defineComponent({
      * 内部方法
      */
     tablePrivateMethods = {
+      callSlot (slotFunc, params) {
+        if (slotFunc) {
+          if ($xegrid) {
+            return $xegrid.callSlot(slotFunc, params)
+          }
+          if (XEUtils.isFunction(slotFunc)) {
+            return slotFunc(params)
+          }
+        }
+        return []
+      },
       /**
        * 获取父容器元素
        */
@@ -5126,24 +5150,23 @@ export default defineComponent({
           'show--head': showHeader,
           'show--foot': showFooter,
           'is--group': isGroup,
-          'has--height': height,
-          'has--tree-line': treeConfig && treeOpts.line,
-          'fixed--left': leftList.length,
-          'fixed--right': rightList.length,
-          'c--highlight': highlightCell,
-          't--animat': !!props.animat,
+          'is--tree-line': treeConfig && treeOpts.line,
+          'is--fixed-left': leftList.length,
+          'is--fixed-right': rightList.length,
+          'is--animat': !!props.animat,
           'is--round': props.round,
-          't--stripe': !treeConfig && stripe,
-          't--selected': mouseConfig && mouseOpts.selected,
-          'is--area': mouseConfig && mouseOpts.area,
+          'is--stripe': !treeConfig && stripe,
+          'cell--highlight': highlightCell,
+          'cell--selected': mouseConfig && mouseOpts.selected,
+          'cell--area': mouseConfig && mouseOpts.area,
           'row--highlight': highlightHoverRow,
           'column--highlight': highlightHoverColumn,
           'is--loading': loading,
           'is--empty': !loading && !tableData.length,
-          'scroll--y': overflowY,
-          'scroll--x': overflowX,
-          'virtual--x': scrollXLoad,
-          'virtual--y': scrollYLoad
+          'is--scroll-y': overflowY,
+          'is--scroll-x': overflowX,
+          'is--virtual-x': scrollXLoad,
+          'is--virtual-y': scrollYLoad
         }]
       }, [
         /**

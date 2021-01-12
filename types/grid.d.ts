@@ -125,16 +125,6 @@ export interface GridMethods extends GridPublicMethods {
 
 export interface GridPublicMethods {
   /**
-   * 加载列配置
-   * @param columns 列对象
-   */
-  loadColumn(columns: VxeColumnOptions[]): Promise<any>;
-  /**
-   * 加载列配置并恢复到初始状态
-   * @param columns 列对象
-   */
-  reloadColumn(columns: VxeColumnOptions[]): Promise<any>;
-  /**
    * 给数据代理提交指令
    * @param code 指令编码
    */
@@ -180,6 +170,7 @@ export interface GridPublicMethods {
 export interface VxeGridMethods extends GridMethods, TablePublicMethods { }
 
 export interface GridPrivateMethods {
+  callSlot(slotFunc: Function | string | null, params: any): VNode[];
   extendTableMethods: <T>(methodKeys: T[]) => any;
   triggerToolbarBtnEvent(button: VxeToolbarPropTypes.ButtonConfig, evnt: Event): void;
   triggerZoomEvent(evnt: Event): void;
@@ -199,7 +190,7 @@ export namespace VxeGridPropTypes {
     enabled?: boolean;
     slots?: any;
   }
-  export interface PagerOpts extends PagerConfig {}
+  export interface PagerOpts extends PagerConfig { }
 
   interface ProxyAjaxQueryPageParams {
     pageSize: number;

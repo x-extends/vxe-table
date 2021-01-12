@@ -632,28 +632,6 @@ export default defineComponent({
       dispatchEvent (type, params, evnt) {
         emit(type, Object.assign({ $grid: $xegrid, $event: evnt }, params))
       },
-      loadColumn (columns) {
-        const $xetable = refTable.value
-        XEUtils.eachTree(columns, (column) => {
-          if (column.slots) {
-            XEUtils.each(column.slots, (func, name, colSlots: any) => {
-              if (!XEUtils.isFunction(func)) {
-                if (slots[func]) {
-                  colSlots[name] = slots[func]
-                } else {
-                  colSlots[name] = null
-                  UtilTools.error('vxe.error.notSlot', [func])
-                }
-              }
-            })
-          }
-        })
-        return $xetable.loadColumn(columns)
-      },
-      reloadColumn (columns) {
-        gridExtendTableMethods.clearAll()
-        return gridMethods.loadColumn(columns)
-      },
       /**
        * 提交指令，支持 code 或 button
        * @param {String/Object} code 字符串或对象
@@ -919,8 +897,42 @@ export default defineComponent({
       }
     }
 
+    // 检查插槽
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      (gridMethods as any).loadColumn = (columns: any[]): Promise<any> => {
+        const $xetable = refTable.value
+        XEUtils.eachTree(columns, (column) => {
+          if (column.slots) {
+            XEUtils.each(column.slots, (func) => {
+              if (!XEUtils.isFunction(func)) {
+                if (!slots[func]) {
+                  UtilTools.error('vxe.error.notSlot', [func])
+                }
+              }
+            })
+          }
+        })
+        return $xetable.loadColumn(columns)
+      }
+      (gridMethods as any).reloadColumn = (columns: any[]): Promise<any> => {
+        gridExtendTableMethods.clearAll()
+        return (gridMethods as any).loadColumn(columns)
+      }
+    }
+
     const gridPrivateMethods: GridPrivateMethods = {
       extendTableMethods,
+      callSlot (slotFunc, params) {
+        if (slotFunc) {
+          if (XEUtils.isString(slotFunc)) {
+            slotFunc = slots[slotFunc] || null
+          }
+          if (XEUtils.isFunction(slotFunc)) {
+            return slotFunc(params)
+          }
+        }
+        return []
+      },
       /**
        * 获取需要排除的高度
        */
@@ -953,7 +965,7 @@ export default defineComponent({
     Object.assign($xegrid, gridExtendTableMethods, gridMethods, gridPrivateMethods)
 
     watch(() => props.columns, (value) => {
-      nextTick(() => gridMethods.loadColumn(value || []))
+      nextTick(() => $xegrid.loadColumn(value || []))
     })
 
     watch(() => props.toolbarConfig, (value) => {
@@ -996,7 +1008,7 @@ export default defineComponent({
         UtilTools.error('errConflicts', ['grid.data', 'grid.proxy-config'])
       }
       if (columns && columns.length) {
-        gridMethods.loadColumn(columns)
+        $xegrid.loadColumn(columns)
       }
       initToolbar()
       initPages()
@@ -1015,7 +1027,7 @@ export default defineComponent({
         ref: refElem,
         class: ['vxe-grid', {
           [`size--${vSize}`]: vSize,
-          't--animat': !!props.animat,
+          'is--animat': !!props.animat,
           'is--round': props.round,
           'is--maximize': reactData.isZMax,
           'is--loading': props.loading || reactData.tableLoading

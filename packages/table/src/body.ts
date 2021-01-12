@@ -88,7 +88,7 @@ export default defineComponent({
       const treeOpts = computeTreeOpts.value
       const { slots, treeNode } = column
       if (slots && slots.line) {
-        return slots.line(params)
+        return $xetable.callSlot(slots.line, params)
       }
       if (treeConfig && treeNode && treeOpts.line) {
         return [
@@ -513,7 +513,7 @@ export default defineComponent({
       }
       let emptyContent: string | VxeGlobalRendererHandles.RenderResult
       if (slots.empty) {
-        emptyContent = slots.empty({ $table: $xetable })
+        emptyContent = $xetable.callSlot(slots.empty, { $table: $xetable })
       } else {
         const compConf = emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
         if (compConf && compConf.renderEmpty) {

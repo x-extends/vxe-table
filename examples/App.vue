@@ -631,13 +631,13 @@ export default defineComponent({
             //     name: 'TableMenuPrivilege'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.expandRow',
-            //   // demoUrl: 'https://jsrun.pro/eRXKp/edit',
-            //   locat: {
-            //     name: 'TableExpand'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.expandRow',
+              // demoUrl: 'https://jsrun.pro/eRXKp/edit',
+              locat: {
+                name: 'TableExpand'
+              }
+            },
             // {
             //   label: 'app.aside.nav.expandRowIcon',
             //   locat: {

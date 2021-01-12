@@ -336,7 +336,7 @@
   }
   &:not(.is--empty) {
     &.show--foot {
-      &.scroll--x {
+      &.is--scroll-x {
         .vxe-table--body-wrapper {
           overflow-x: scroll;
         }
@@ -372,7 +372,7 @@
       }
     }
   }
-  &.has--tree-line {
+  &.is--tree-line {
     .vxe-body--row {
       &.row--stripe {
         .vxe-tree--btn-wrapper {
@@ -458,7 +458,7 @@
       }
     }
   }
-  &.is--area {
+  &.cell--area {
     .vxe-table--main-wrapper {
       user-select: none;
     }
@@ -485,7 +485,7 @@
       text-align: right;
     }
   }
-  &.has--tree-line {
+  &.is--tree-line {
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
@@ -785,7 +785,7 @@
   }
 
   /*树形节点*/
-  &.has--tree-line {
+  &.is--tree-line {
     .vxe-body--row {
       &:first-child {
         .vxe-tree--line {
@@ -1070,7 +1070,7 @@
 
   /*可编辑*/
   &.vxe-editable {
-    &.c--highlight {
+    &.cell--highlight {
       .vxe-body--column {
         &.col--actived {
           box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;

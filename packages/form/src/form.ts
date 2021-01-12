@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, createCommentVNode, provide, computed, reactive, watch, nextTick, PropType } from 'vue'
+import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, createCommentVNode, provide, computed, reactive, watch, nextTick, PropType, VNode } from 'vue'
 import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import VXETable from '../../v-x-e-table'
@@ -95,22 +95,33 @@ export default defineComponent({
       return Object.assign({}, GlobalConfig.form.validConfig, props.validConfig)
     })
 
+    const callSlot = (slotFunc: Function | string | null, params: any): VNode[] => {
+      if (slotFunc) {
+        if (XEUtils.isString(slotFunc)) {
+          slotFunc = slots[slotFunc] || null
+        }
+        if (XEUtils.isFunction(slotFunc)) {
+          return slotFunc(params)
+        }
+      }
+      return []
+    }
+
     const loadItem = (list: any[]) => {
       if (list.length) {
-        list.forEach((item) => {
-          if (item.slots) {
-            XEUtils.each(item.slots, (func, name, slots) => {
-              if (!XEUtils.isFunction(func)) {
-                if (slots[func]) {
-                  slots[name] = slots[func]
-                } else {
-                  slots[name] = null
-                  UtilTools.error('vxe.error.notSlot', [func])
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          list.forEach((item) => {
+            if (item.slots) {
+              XEUtils.each(item.slots, (func) => {
+                if (!XEUtils.isFunction(func)) {
+                  if (!slots[func]) {
+                    UtilTools.error('vxe.error.notSlot', [func])
+                  }
                 }
-              }
-            })
-          }
-        })
+              })
+            }
+          })
+        }
         reactData.staticItems = list.map((item) => createItem($xeform, item))
       }
       return nextTick()
@@ -390,6 +401,7 @@ export default defineComponent({
       const { slots, field, itemRender, titlePrefix, titleSuffix } = item
       const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
       const params = { data, property: field, item, $form: $xeform }
+      const titleSlot = slots ? slots.title : null
       const tss = []
       if (titlePrefix) {
         tss.push(
@@ -407,7 +419,7 @@ export default defineComponent({
       tss.push(
         h('span', {
           class: 'vxe-form--item-title-label'
-        }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? slots.title(params) : UtilTools.getFuncText(item.title)))
+        }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (titleSlot ? callSlot(titleSlot, params) : UtilTools.getFuncText(item.title)))
       )
       if (titleSuffix) {
         tss.push(
@@ -432,6 +444,7 @@ export default defineComponent({
       return formItems.map((item: any, index: any) => {
         const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
         const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
+        const defaultSlot = slots ? slots.default : null
         const span = item.span || props.span
         const align = item.align || props.align
         const titleAlign = item.titleAlign || props.titleAlign
@@ -451,13 +464,38 @@ export default defineComponent({
             isRequired = itemRules.some((rule: any) => rule.required)
           }
         }
-        let contentVNs = []
+        let contentVNs: any[] = []
         if (compConf && compConf.renderItemContent) {
           contentVNs = compConf.renderItemContent(itemRender, params)
-        } else if (slots && slots.default) {
-          contentVNs = slots.default(params)
+        } else if (defaultSlot) {
+          contentVNs = callSlot(defaultSlot, params)
         } else if (field) {
           contentVNs = [`${XEUtils.get(data, field)}`]
+        }
+        if (collapseNode) {
+          contentVNs.push(
+            h('div', {
+              class: 'vxe-form--item-trigger-node',
+              onClick: toggleCollapseEvent
+            }, [
+              h('span', {
+                class: 'vxe-form--item-trigger-text'
+              }, collapseAll ? GlobalConfig.i18n('vxe.form.unfolding') : GlobalConfig.i18n('vxe.form.folding')),
+              h('i', {
+                class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
+              })
+            ])
+          )
+        }
+        if (errRule && validOpts.showMessage) {
+          contentVNs.push(
+            h('div', {
+              class: 'vxe-form--item-valid',
+              style: errRule.maxWidth ? {
+                width: `${errRule.maxWidth}px`
+              } : null
+            }, errRule.message)
+          )
         }
         return h('div', {
           class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, {
@@ -480,27 +518,7 @@ export default defineComponent({
             }, renderTitle(item)) : null,
             h('div', {
               class: ['vxe-form--item-content', align ? `align--${align}` : null]
-            }, contentVNs.concat(
-              [
-                collapseNode ? h('div', {
-                  class: 'vxe-form--item-trigger-node',
-                  onClick: toggleCollapseEvent
-                }, [
-                  h('span', {
-                    class: 'vxe-form--item-trigger-text'
-                  }, collapseAll ? GlobalConfig.i18n('vxe.form.unfolding') : GlobalConfig.i18n('vxe.form.folding')),
-                  h('i', {
-                    class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
-                  })
-                ]) : null,
-                errRule && validOpts.showMessage ? h('div', {
-                  class: 'vxe-form--item-valid',
-                  style: errRule.maxWidth ? {
-                    width: `${errRule.maxWidth}px`
-                  } : null
-                }, errRule.message) : null
-              ])
-            )
+            }, contentVNs)
           ])
         ])
       })

@@ -97,7 +97,7 @@ export default defineComponent({
             { id: 100010, name: 'Test10', role: 'Test', sex: 'Man ', age: 24, address: 'Shanghai' }
           ]
           demo1.loading = false
-          resolve()
+          resolve(demo1.tableData)
         }, 300)
       })
     }
@@ -245,7 +245,7 @@ export default defineComponent({
                     { id: 100010, name: 'Test10', role: 'Test', sex: 'Man ', age: 24, address: 'Shanghai' }
                   ]
                   demo1.loading = false
-                  resolve()
+                  resolve(demo1.tableData)
                 }, 300)
               })
             }

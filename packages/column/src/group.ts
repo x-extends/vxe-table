@@ -17,6 +17,7 @@ export default defineComponent({
     column.children = []
 
     provide('xecolgroup', xecolumn)
+    provide('$xegrid', null)
 
     watchColumn(props, column)
 

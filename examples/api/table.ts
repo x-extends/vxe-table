@@ -2330,33 +2330,33 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
-          },
-          {
-            name: 'props',
-            desc: '渲染的参数（请查看目标渲染的 Props）',
-            version: '',
-            type: 'any',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'attrs',
-            desc: '渲染的属性（请查看目标渲染的 Attribute）',
-            version: '',
-            type: 'any',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'events',
-            desc: '渲染组件的事件（请查看目标渲染的 Events）',
-            version: '',
-            type: 'any',
-            enum: '',
-            defVal: '{}, ...[目标渲染的 arguments]',
-            list: []
+          // },
+          // {
+          //   name: 'props',
+          //   desc: '渲染的参数（请查看目标渲染的 Props）',
+          //   version: '',
+          //   type: 'any',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
+          // {
+          //   name: 'attrs',
+          //   desc: '渲染的属性（请查看目标渲染的 Attribute）',
+          //   version: '',
+          //   type: 'any',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
+          // {
+          //   name: 'events',
+          //   desc: '渲染组件的事件（请查看目标渲染的 Events）',
+          //   version: '',
+          //   type: 'any',
+          //   enum: '',
+          //   defVal: '{}, ...[目标渲染的 arguments]',
+          //   list: []
           // },
           // {
           //   name: 'nativeEvents',
@@ -2448,7 +2448,7 @@ const apis = [
       // },
       {
         name: 'scroll-x',
-        desc: '横向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）',
+        desc: '横向虚拟滚动配置（不支持深层结构和展开行）',
         version: '',
         type: 'any',
         enum: '',
@@ -2485,7 +2485,7 @@ const apis = [
       },
       {
         name: 'scroll-y',
-        desc: '纵向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）',
+        desc: '纵向虚拟滚动配置（不支持深层结构和展开行）',
         version: '',
         type: 'any',
         enum: '',
@@ -3785,12 +3785,12 @@ const apis = [
         list: []
       },
       {
-        name: 'setCurrentColumn(column)',
+        name: 'setCurrentColumn(fieldOrColumn)',
         desc: '用于 highlight-current-column，设置某列行为高亮状态',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'column: ColumnConfig',
+        defVal: 'fieldOrColumn: string | ColumnInfo',
         list: []
       },
       {
@@ -4136,21 +4136,21 @@ const apis = [
         list: []
       },
       {
-        name: 'hideColumn(column)',
+        name: 'hideColumn(fieldOrColumn)',
         desc: '隐藏指定列',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'column: ColumnConfig',
+        defVal: 'fieldOrColumn: string | ColumnConfig',
         list: []
       },
       {
-        name: 'showColumn(column)',
+        name: 'showColumn(fieldOrColumn)',
         desc: '显示指定列',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'column: ColumnConfig',
+        defVal: 'fieldOrColumn: string | ColumnConfig',
         list: []
       },
       {
@@ -4163,21 +4163,21 @@ const apis = [
         list: []
       },
       {
-        name: 'scrollToRow(row, column)',
+        name: 'scrollToRow(row, fieldOrColumn)',
         desc: '如果有滚动条，则滚动到对应的行（对于某些特定的场景可能会用到，比如定位到某一行）',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'row: Row, column?: ColumnConfig',
+        defVal: 'row: Row, fieldOrColumn?: string | ColumnConfig',
         list: []
       },
       {
-        name: 'scrollToColumn(column)',
+        name: 'scrollToColumn(fieldOrColumn)',
         desc: '如果有滚动条，则滚动到对应的列（对于某些特定的场景可能会用到，比如定位到某一列）',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'column: ColumnConfig',
+        defVal: 'fieldOrColumn: string | ColumnConfig',
         list: []
       },
       // {

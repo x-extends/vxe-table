@@ -1,4 +1,4 @@
-import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick, PropType } from 'vue'
+import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick, PropType, provide } from 'vue'
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
@@ -84,6 +84,8 @@ export default defineComponent({
     const colgroup = inject('xecolgroup', null as XEColumnInstance | null)
     const column = Cell.createColumn($xetable, props as VxeColumnProps)
     column.slots = slots
+
+    provide('$xegrid', null)
 
     watchColumn(props, column)
 

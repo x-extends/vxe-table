@@ -275,14 +275,14 @@ export interface TablePublicMethods {
   };
   /**
    * 隐藏指定列
-   * @param column 列对象
+   * @param columnOrField 列对象或字段名
    */
-  hideColumn(column: VxeTableDefines.ColumnInfo): Promise<any>;
+  hideColumn(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 显示指定列
-   * @param column 列对象
+   * @param columnOrField 列对象或字段名
    */
-  showColumn(column: VxeTableDefines.ColumnInfo): Promise<any>;
+  showColumn(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
@@ -424,9 +424,9 @@ export interface TablePublicMethods {
   getRadioRecord(): RowInfo;
   /**
    * 用于 highlight-current-column，设置某列行为高亮状态
-   * @param column 列对象
+   * @param columnOrField 列对象或字段名
    */
-  setCurrentColumn(column: VxeTableDefines.ColumnInfo): Promise<any>;
+  setCurrentColumn(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 用于 highlight-current-column，手动清空当前高亮的状态
    */
@@ -441,13 +441,14 @@ export interface TablePublicMethods {
   sort(sortConfs: VxeTableDefines.SortConfs[], order?: VxeTablePropTypes.SortOrder): Promise<any>;
   /**
    * 手动清空排序条件，数据会恢复成未排序的状态
+   * @param columnOrField 列对象或字段名
    */
-  clearSort(fieldOrColumn?: string | VxeTableDefines.ColumnInfo | null): Promise<any>;
+  clearSort(fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null): Promise<any>;
   /**
    * 判断指定列是否为排序状态，如果为空则判断所有列
-   * @param columnOrField
+   * @param columnOrField 列对象或字段名
    */
-  isSort(fieldOrColumn: string | VxeTableDefines.ColumnInfo): boolean;
+  isSort(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): boolean;
   /**
    * 获取当前排序的列信息
    */
@@ -458,9 +459,9 @@ export interface TablePublicMethods {
   closeFilter(): Promise<any>;
   /**
    * 判断指定列是否为筛选状态，如果为空则判断所有列
-   * @param column 列对象
+   * @param columnOrField 列对象或字段名
    */
-  isFilter(fieldOrColumn: string | VxeTableDefines.ColumnInfo): boolean;
+  isFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): boolean;
   /**
    * 用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成
    * @param row 指定行
@@ -575,14 +576,14 @@ export interface TablePublicMethods {
   /**
    * 如果有滚动条，则滚动到对应的行
    * @param row 指定行
-   * @param column 列对象
+   * @param columnOrField 列对象或字段名
    */
-  scrollToRow(row: RowInfo, column?: VxeTableDefines.ColumnInfo): Promise<any>;
+  scrollToRow(row: RowInfo, fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 如果有滚动条，则滚动到对应的列
-   * @param column 列对象
+   * @param columnOrField 列对象或字段名
    */
-  scrollToColumn(column: VxeTableDefines.ColumnInfo): Promise<any>;
+  scrollToColumn(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 手动清除滚动相关信息，还原到初始状态
    */
@@ -636,9 +637,10 @@ export interface TablePublicMethods {
 export interface VxeTableMethods extends TableMethods { }
 
 export interface TablePrivateMethods {
-  getParentElem(): any;
-  getParentHeight(): any;
-  getExcludeHeight(): any;
+  callSlot(slotFunc: Function | string | null, params: any): VNode[];
+  getParentElem(): Element;
+  getParentHeight(): number;
+  getExcludeHeight(): number;
   defineField(record: any): any;
   handleTableData(force?: boolean): Promise<any>;
   updateCache(isSource?: boolean): void;
