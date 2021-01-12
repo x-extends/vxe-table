@@ -352,7 +352,7 @@ export default defineComponent({
       const tooltipOpts = computeTooltipOpts.value
       setTimeout(() => {
         if (!internalData.tooltipActive) {
-          tableMethods.clostTooltip()
+          tableMethods.closeTooltip()
         }
       }, tooltipOpts.leaveDelay)
       return false
@@ -1796,7 +1796,7 @@ export default defineComponent({
           tablePrivateMethods.updateScrollXData()
         }
       }
-      tableMethods.clostTooltip()
+      tableMethods.closeTooltip()
     }
 
     const handleColumn = (collectColumn: any) => {
@@ -2521,7 +2521,7 @@ export default defineComponent({
       /**
        * 关闭 tooltip
        */
-      clostTooltip () {
+      closeTooltip () {
         const { tooltipStore } = internalData
         const $tooltip = refTooltip.value
         const $commTip = refCommTooltip.value
@@ -3567,7 +3567,7 @@ export default defineComponent({
      * 全局滚动事件
      */
     const handleGlobalMousewheelEvent = () => {
-      tableMethods.clostTooltip()
+      tableMethods.closeTooltip()
       if ($xetable.closeMenu) {
         $xetable.closeMenu()
       }
@@ -3866,7 +3866,7 @@ export default defineComponent({
     const handleTargetEnterEvent = () => {
       clearTimeout(internalData.tooltipTimeout)
       internalData.tooltipActive = true
-      tableMethods.clostTooltip()
+      tableMethods.closeTooltip()
     }
 
     /**
@@ -4338,11 +4338,11 @@ export default defineComponent({
           internalData.tooltipTimeout = setTimeout(() => {
             const $tooltip = refTooltip.value
             if ($tooltip && !$tooltip.reactData.isHover) {
-              tableMethods.clostTooltip()
+              tableMethods.closeTooltip()
             }
           }, tooltipOpts.leaveDelay)
         } else {
-          tableMethods.clostTooltip()
+          tableMethods.closeTooltip()
         }
       },
       triggerHeaderCellClickEvent (evnt, params) {

@@ -433,7 +433,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
                   $xetable.clearCopyCellArea()
                 }
               }
-              $xetable.clostTooltip()
+              $xetable.closeTooltip()
               editMethods.clearActived(evnt)
               type = 'edit-actived'
               column.renderHeight = cell.offsetHeight

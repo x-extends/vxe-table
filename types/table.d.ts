@@ -313,7 +313,7 @@ export interface TablePublicMethods {
   /**
    * 关闭 tooltip 提示
    */
-  clostTooltip(): Promise<any>;
+  closeTooltip(): Promise<any>;
   /**
    * 用于 type=checkbox，设置行为选中状态，第二个参数为选中与否
    * @param rows 指定行
