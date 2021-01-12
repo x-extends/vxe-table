@@ -276,7 +276,7 @@ export default {
               this.clearCellAreas(evnt)
               this.clearCopyCellArea(evnt)
             }
-            this.clostTooltip()
+            this.closeTooltip()
             this.clearActived(evnt)
             type = 'edit-actived'
             column.renderHeight = cell.offsetHeight
