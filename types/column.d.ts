@@ -1,6 +1,6 @@
 import { VNode } from 'vue'
 import { VXETableComponent } from './component'
-import { VxeTableConstructor, VxeTableDefines } from './table'
+import { VxeTableConstructor, VxeTableDefines, VxeTablePropTypes } from './table'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeFilterPanel } from './filter'
 
@@ -26,9 +26,9 @@ export namespace VxeColumnPropTypes {
   export type Align = 'left' | 'center' | 'right' | null;
   export type HeaderAlign = Align;
   export type FooterAlign = Align;
-  export type ShowOverflow = boolean | string;
-  export type ShowHeaderOverflow = boolean | string;
-  export type ShowFooterOverflow = boolean | string;
+  export type ShowOverflow = VxeTablePropTypes.ShowOverflow;
+  export type ShowHeaderOverflow = ShowOverflow;
+  export type ShowFooterOverflow = ShowOverflow;
   export type ClassName = string | ((params: VxeGlobalRendererHandles.RenderCellParams) => string | any[] | { [key: string]: boolean });
   export type HeaderClassName = string | ((params: VxeGlobalRendererHandles.RenderHeaderParams) => string | any[] | { [key: string]: boolean });
   export type FooterClassName = string | ((params: VxeGlobalRendererHandles.RenderFooterParams) => string | any[] | { [key: string]: boolean });
