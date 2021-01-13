@@ -30,9 +30,9 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-colgroup title="统计信息">
         <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
-        <vxe-table-column field="age1" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-table-column>
-        <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
-        <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+        <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-table-column>
+        <vxe-table-column field="num1" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+        <vxe-table-column field="rate" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -51,7 +51,16 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, rate: 22 },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 23, age: 22, rate: 34 },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'Test', sex: '0', sex2: ['1'], num1: 200, age: 32, rate: 18 },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 23, rate: 13 },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', sex2: ['1', '0'], num1: 20, age: 30, rate: 6 },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '1', sex2: ['0'], num1: 10, age: 21, rate: 33 },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Develop', sex: '0', sex2: ['0'], num1: 5, age: 29, rate: 4 },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'PM', sex: '1', sex2: ['0'], num1: 2, age: 35, rate: 55 }
+      ],
       demoCodes: [
         `
         <vxe-toolbar export>
@@ -78,9 +87,9 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-colgroup title="统计信息">
             <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
-            <vxe-table-column field="age1" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-table-column>
-            <vxe-table-column field="num6" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
-            <vxe-table-column field="rate1" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+            <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-table-column>
+            <vxe-table-column field="num1" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+            <vxe-table-column field="rate" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,
@@ -88,18 +97,27 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, rate: 22 },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 23, age: 22, rate: 34 },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'Test', sex: '0', sex2: ['1'], num1: 200, age: 32, rate: 18 },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 23, rate: 13 },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', sex2: ['1', '0'], num1: 20, age: 30, rate: 6 },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '1', sex2: ['0'], num1: 10, age: 21, rate: 33 },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Develop', sex: '0', sex2: ['0'], num1: 5, age: 29, rate: 4 },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'PM', sex: '1', sex2: ['0'], num1: 2, age: 35, rate: 55 }
+              ]
             }
           },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
-          },
           methods: {
-            footerCellClassName ({ $rowIndex, column, columnIndex }) {
-              if (columnIndex === 0) {
+            footerCellClassName ({ $rowIndex, columnIndex }) {
+              if (columnIndex === 1) {
                 if ($rowIndex === 0) {
                   return 'col-blue'
-                } else {
+                }
+              }
+              if (columnIndex === 2) {
+                if ($rowIndex === 1) {
                   return 'col-red'
                 }
               }
@@ -115,7 +133,9 @@ export default {
                   if (columnIndex === 0) {
                     return '平均'
                   }
-                  if (['age1', 'rate1', 'num6'].includes(column.property)) {
+                  if (['age'].includes(column.property)) {
+                    return XEUtils.toInteger(XEUtils.mean(data, column.property))
+                  } else if (['rate', 'num1'].includes(column.property)) {
                     return XEUtils.mean(data, column.property)
                   }
                   return null
@@ -124,7 +144,7 @@ export default {
                   if (columnIndex === 0) {
                     return '和值'
                   }
-                  if (['rate1', 'num6'].includes(column.property)) {
+                  if (['rate', 'num1'].includes(column.property)) {
                     return XEUtils.sum(data, column.property)
                   }
                   return null
@@ -151,15 +171,15 @@ export default {
       ]
     }
   },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
-  },
   methods: {
     footerCellClassName ({ $rowIndex, columnIndex }) {
-      if (columnIndex === 0) {
+      if (columnIndex === 1) {
         if ($rowIndex === 0) {
           return 'col-blue'
-        } else {
+        }
+      }
+      if (columnIndex === 2) {
+        if ($rowIndex === 1) {
           return 'col-red'
         }
       }
@@ -175,7 +195,9 @@ export default {
           if (columnIndex === 0) {
             return '平均'
           }
-          if (['age1', 'rate1', 'num6'].includes(column.property)) {
+          if (['age'].includes(column.property)) {
+            return XEUtils.toInteger(XEUtils.mean(data, column.property))
+          } else if (['rate', 'num1'].includes(column.property)) {
             return XEUtils.mean(data, column.property)
           }
           return null
@@ -184,7 +206,7 @@ export default {
           if (columnIndex === 0) {
             return '和值'
           }
-          if (['rate1', 'num6'].includes(column.property)) {
+          if (['rate', 'num1'].includes(column.property)) {
             return XEUtils.sum(data, column.property)
           }
           return null

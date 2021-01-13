@@ -47,15 +47,13 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data () {
     const nameValid = ({ cellValue }) => {
@@ -76,7 +74,14 @@ export default {
       }
     }
     return {
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: '0', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: '1', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: '1', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'vxe-table 从入门到放弃' }
+      ],
       validRules: {
         name: [
           { required: true, message: 'app.body.valid.rName' },
@@ -155,7 +160,14 @@ export default {
               }
             }
             return {
-              tableData: [],
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: '0', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: '1', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: '1', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'vxe-table 从入门到放弃' }
+              ],
               validRules: {
                 name: [
                   { required: true, message: 'app.body.valid.rName' },
@@ -173,9 +185,6 @@ export default {
                 ]
               }
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
           },
           methods: {
             async validEvent () {
@@ -264,14 +273,6 @@ export default {
         `
       ]
     }
-  },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     async validEvent () {

@@ -27,6 +27,13 @@ function getElemenMarginWidth (elem) {
   return 0
 }
 
+export function handleFieldOrColumn (_vm, fieldOrColumn) {
+  if (fieldOrColumn) {
+    return XEUtils.isString(fieldOrColumn) ? _vm.getColumnByField(fieldOrColumn) : fieldOrColumn
+  }
+  return null
+}
+
 function queryCellElement (cell, selector) {
   return cell.querySelector('.vxe-cell' + selector)
 }

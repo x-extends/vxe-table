@@ -245,9 +245,10 @@ export default {
           field: 'num1',
           title: 'Num1',
           showHeaderOverflow: true,
+          filters: [{ data: '' }],
           editRender: { autofocus: '.my-input' },
           slots: {
-            // 对应自定义插槽的名称
+            // 使用插槽模板渲染
             default: 'num1_default',
             header: 'num1_height',
             footer: 'num1_footer',
@@ -260,17 +261,10 @@ export default {
           title: 'Address',
           showOverflow: true,
           slots: {
-            // 使用渲染函数
-            default: ({ row }, h) => {
+            // 使用 JSX 渲染
+            default: ({ row }) => {
               return [
-                h('span', {
-                  style: {
-                    color: 'blue'
-                  },
-                  on: {
-                    click: () => this.addressClickEvent(row)
-                  }
-                }, row.address)
+                <span style="color: blue" onClick={ () => this.addressClickEvent(row) }>自定义模板内容</span>
               ]
             }
           }
@@ -503,9 +497,10 @@ export default {
                   field: 'num1',
                   title: 'Num1',
                   showHeaderOverflow: true,
+                  filters: [{ data: '' }],
                   editRender: { autofocus: '.my-input' },
                   slots: {
-                    // 对应自定义插槽的名称
+                    // 使用插槽模板渲染
                     default: 'num1_default',
                     header: 'num1_height',
                     footer: 'num1_footer',
@@ -518,17 +513,10 @@ export default {
                   title: 'Address',
                   showOverflow: true,
                   slots: {
-                    // 使用渲染函数
-                    default: ({ row }, h) => {
+                    // 使用 JSX 渲染
+                    default: ({ row }) => {
                       return [
-                        h('span', {
-                          style: {
-                            color: 'blue'
-                          },
-                          on: {
-                            click: () => this.addressClickEvent(row)
-                          }
-                        }, row.address)
+                        <span style="color: blue" onClick={ () => this.addressClickEvent(row) }>自定义模板内容</span>
                       ]
                     }
                   }

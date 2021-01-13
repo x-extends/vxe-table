@@ -1,16 +1,18 @@
 import XEUtils from 'xe-utils/ctor'
 import { UtilTools, DomTools } from '../../tools'
+import { handleFieldOrColumn } from '../../table/src/util'
 import VXETable from '../../v-x-e-table'
 
 export default {
   methods: {
     /**
      * 修改筛选条件列表
-     * @param {ColumnInfo} column 列
+     * @param {ColumnInfo} fieldOrColumn 列
      * @param {Array} options 选项
      */
-    _setFilter (column, options) {
-      if (column.filters && options) {
+    _setFilter (fieldOrColumn, options) {
+      const column = handleFieldOrColumn(this, fieldOrColumn)
+      if (column && column.filters && options) {
         column.filters = UtilTools.getFilters(options)
       }
       return this.$nextTick()
@@ -181,7 +183,7 @@ export default {
       const { filterStore } = this
       let column
       if (fieldOrColumn) {
-        column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+        column = handleFieldOrColumn(this, fieldOrColumn)
         if (column) {
           this.handleClearFilter(column)
         }

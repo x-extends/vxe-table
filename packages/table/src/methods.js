@@ -3,7 +3,7 @@ import GlobalConfig from '../../conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { clearTableAllStatus } from './util'
+import { clearTableAllStatus, handleFieldOrColumn } from './util'
 import formats from '../../v-x-e-table/src/formats'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
@@ -233,13 +233,6 @@ function clearAllSort (_vm) {
   _vm.tableFullColumn.forEach((column) => {
     column.order = null
   })
-}
-
-const handleFieldOrColumn = (_vm, fieldOrColumn) => {
-  if (fieldOrColumn) {
-    return XEUtils.isString(fieldOrColumn) ? _vm.getColumnByField(fieldOrColumn) : fieldOrColumn
-  }
-  return null
 }
 
 const Methods = {

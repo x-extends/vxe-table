@@ -30,27 +30,33 @@
       <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" sortable :edit-render="{name: 'input', defaultValue: 18}"></vxe-table-column>
+      <vxe-table-column field="date12" title="Date" sortable :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
-      tableData: [],
-      sexList: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 20, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'Test', sex: '0', sex2: ['1'], num1: 200, age: 32, address: 'Shanghai', date12: '2020-09-10', date13: '' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 23, address: 'Shenzhen', date12: '', date13: '2020-12-04' }
+      ],
+      sexList: [
+        { label: '女', value: '0' },
+        { label: '男', value: '1' }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -78,27 +84,30 @@ export default {
           <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" sortable :edit-render="{name: 'input', defaultValue: 18}"></vxe-table-column>
+          <vxe-table-column field="date12" title="Date" sortable :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
-              tableData: [],
-              sexList: []
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 20, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'Test', sex: '0', sex2: ['1'], num1: 200, age: 32, address: 'Shanghai', date12: '2020-09-10', date13: '' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 23, address: 'Shenzhen', date12: '', date13: '2020-12-04' }
+              ],
+              sexList: [
+                { label: '女', value: '0' },
+                { label: '男', value: '1' }
+              ]
             }
           },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
-            this.findSexList()
-          },
           methods: {
-            async findSexList () {
-              this.sexList = await XEAjax.get('/api/conf/sex/list')
-            },
             async insertEvent (row) {
               let record = {
-                sex: '1'
+                sex: '1',
+                date12: '2021-01-01'
               }
               let { row: newRow } = await this.$refs.xTable.insertAt(record, row)
               await this.$refs.xTable.setActiveCell(newRow, 'sex')
@@ -126,22 +135,11 @@ export default {
       ]
     }
   },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
-    this.findSexList()
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  },
   methods: {
-    async findSexList () {
-      this.sexList = await XEAjax.get('/api/conf/sex/list')
-    },
     async insertEvent (row) {
       const record = {
-        sex: '1'
+        sex: '1',
+        date12: '2021-01-01'
       }
       const { row: newRow } = await this.$refs.xTable.insertAt(record, row)
       await this.$refs.xTable.setActiveCell(newRow, 'sex')

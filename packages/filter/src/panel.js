@@ -37,7 +37,7 @@ export default {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, slots.filter.call($xetable, Object.assign({ $panel: this, context: this }, args), h))
+          }, $xetable.callSlot(slots.filter, Object.assign({ $panel: this, context: this }, args), h))
         ]
       } else if (compConf && compConf.renderFilter) {
         return [
