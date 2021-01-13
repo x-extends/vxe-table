@@ -6,6 +6,7 @@ import { ColumnHeaderRenderParams } from './extends/header'
 import { ColumnFooterRenderParams } from './extends/footer'
 import { ColumnEditRenderOptions } from './extends/edit'
 import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './extends/export'
+import { TableOverflow } from './table'
 
 /**
  * 组件 - 表格分组列
@@ -58,15 +59,15 @@ export interface ColgroupProps {
   /**
    * 当内容过长时显示为省略号
    */
-  showOverflow?: boolean | string;
+  showOverflow?: TableOverflow;
   /**
    * 当表头内容过长时显示为省略号
    */
-  showHeaderOverflow?: boolean | string;
+  showHeaderOverflow?: TableOverflow;
   /**
    * 当表尾内容过长时显示为省略号
    */
-  showFooterOverflow?: boolean | string;
+  showFooterOverflow?: TableOverflow;
   /**
    * 给单元格附加 className
    */

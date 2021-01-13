@@ -6,6 +6,7 @@ import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './extends/head
 import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './extends/footer'
 import { ColumnEditRenderOptions, ColumnEditSlotParams } from './extends/edit'
 import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './extends/export'
+import { TableOverflow } from './table'
 
 /**
  * 列
@@ -54,15 +55,15 @@ export declare class Column extends VXETableComponent {
   /**
    * 当内容过长时显示为省略号
    */
-  showOverflow?: boolean | string;
+  showOverflow?: TableOverflow;
   /**
    * 当表头内容过长时显示为省略号
    */
-  showHeaderOverflow?: boolean | string;
+  showHeaderOverflow?: TableOverflow;
   /**
    * 当表尾内容过长时显示为省略号
    */
-  showFooterOverflow?: boolean | string;
+  showFooterOverflow?: TableOverflow;
   /**
    * 给单元格附加 className
    */
