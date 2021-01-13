@@ -954,13 +954,14 @@ export function handlePrint ($xetable, opts, content) {
 }
 
 function handleExportAndPrint ($xetable, options, isPrint) {
-  const { customOpts, collectColumn, footerData, treeConfig, mergeList, isGroup } = $xetable
+  const { initStore, customOpts, collectColumn, footerData, treeConfig, mergeList, isGroup, exportParams } = $xetable
   const selectRecords = $xetable.getCheckboxRecords()
   const hasFooter = !!footerData.length
   const hasTree = treeConfig
   const hasMerge = !hasTree && mergeList.length
   const defOpts = Object.assign({ message: true, isHeader: true }, options)
   const types = defOpts.types || VXETable.exportTypes
+  const modes = defOpts.modes
   const checkMethod = customOpts.checkMethod
   const exportColumns = collectColumn.slice(0)
   const { columns } = defOpts
@@ -971,7 +972,7 @@ function handleExportAndPrint ($xetable, options, isPrint) {
       label: `vxe.export.types.${value}`
     }
   })
-  const modeList = defOpts.modes.map(value => {
+  const modeList = modes.map(value => {
     return {
       value,
       label: `vxe.export.modes.${value}`
@@ -1017,13 +1018,19 @@ function handleExportAndPrint ($xetable, options, isPrint) {
     hasColgroup: isGroup,
     visible: true
   })
-  // 重置参数
-  Object.assign($xetable.exportParams, {
-    type: defOpts.type || typeList[0].value
-  }, defOpts, {
-    mode: selectRecords.length ? 'selected' : 'current'
-  })
-  $xetable.initStore.export = true
+  // 默认参数
+  if (!initStore.export) {
+    Object.assign(exportParams, {
+      mode: selectRecords.length ? 'selected' : 'current'
+    }, defOpts)
+  }
+  if (modes.indexOf(exportParams.mode) === -1) {
+    exportParams.mode = modes[0]
+  }
+  if (types.indexOf(exportParams.type) === -1) {
+    exportParams.type = types[0]
+  }
+  initStore.export = true
   return $xetable.$nextTick()
 }
 
