@@ -43,14 +43,12 @@
       当然还有最简单的用法，只需给弹出面板加上 class=vxe-table--ignore-clear 即可
     </p>
     <pre>
-      <code class="javascript">{{ demoCodes[0] }}</code>
+      <pre-code class="javascript">{{ demoCodes[0] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data () {
     return {
@@ -213,11 +211,6 @@ export default {
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
 }
 </script>

@@ -28,9 +28,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="scss">{{ demoCodes[2] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="scss">{{ demoCodes[2] }}</pre-code>
     </pre>
 
     <p class="tip">树表格搜索功能，非常简单就可以实现树表格内容搜索<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
@@ -62,16 +62,15 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[3] }}</code>
-      <code class="javascript">{{ demoCodes[4] }}</code>
-      <code class="scss">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="scss">{{ demoCodes[5] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
 import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
 
 export default {
   data () {
@@ -251,11 +250,6 @@ export default {
   created () {
     this.tableData1 = window.MOCK_DATA_LIST.slice(0, 50)
     this.tableData2 = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   }
 }
 </script>

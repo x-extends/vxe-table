@@ -34,12 +34,12 @@
         <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         <vxe-table-colgroup title="Group2">
           <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="other" title="默认自动转换" cell-type="auto"></vxe-table-column>
+          <vxe-table-column field="num" title="Num"></vxe-table-column>
         </vxe-table-colgroup>
       </vxe-table-colgroup>
       <vxe-table-colgroup title="Group1">
-        <vxe-table-column field="num" title="导出数值" cell-type="number"></vxe-table-column>
-        <vxe-table-column field="cardNo" title="导出字符串" cell-type="string"></vxe-table-column>
+        <vxe-table-column field="num1" title="数值类型" cell-type="number"></vxe-table-column>
+        <vxe-table-column field="num2" title="字符串类型" cell-type="string"></vxe-table-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -103,12 +103,12 @@ export default {
             <vxe-table-column field="rate" title="Rate"></vxe-table-column>
             <vxe-table-colgroup title="Group2">
               <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
-              <vxe-table-column field="other" title="默认自动转换" cell-type="auto"></vxe-table-column>
+              <vxe-table-column field="num" title="Num"></vxe-table-column>
             </vxe-table-colgroup>
           </vxe-table-colgroup>
           <vxe-table-colgroup title="Group1">
-            <vxe-table-column field="num" title="导出数值" cell-type="number"></vxe-table-column>
-            <vxe-table-column field="cardNo" title="导出字符串" cell-type="string"></vxe-table-column>
+            <vxe-table-column field="num1" title="数值类型" cell-type="number"></vxe-table-column>
+            <vxe-table-column field="num2" title="字符串类型" cell-type="string"></vxe-table-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,
@@ -140,15 +140,15 @@ export default {
               this.loading = true
               setTimeout(() => {
                 this.tableData = [
-                  { name: 'name1', role: 'role1', rate: 1, sex: '0', num: '22', other: false, cardNo: '998' },
-                  { name: 'name2', role: 'role2', rate: 1, sex: '1', num: 32, other: '备注666', cardNo: 10000 },
-                  { name: 'name3', role: 'role3', rate: 6, sex: '1', num: 99999999999999, other: 10, cardNo: '62221234219637458563' },
-                  { name: 'name4', role: 'role4', rate: 3, sex: '0', num: '28', other: '999.99', cardNo: '62227412123789459631' },
-                  { name: 'name5', role: 'role5', rate: 1, sex: '1', num: 24, other: -1, cardNo: '62221234214752459631' },
-                  { name: 'name6', role: 'role6', rate: 4, sex: '1', num: '10000', other: '99999999999999', cardNo: '62221267214853659622' },
-                  { name: 'name7', role: 'role7', rate: 1, sex: '1', num: 10000000000000000, other: '只需998', cardNo: '62221237123480359633' },
-                  { name: 'name8', role: 'role8', rate: 5, sex: '2', num: 9998, other: 10000000000000000, cardNo: '62221234018523736237' },
-                  { name: 'name9', role: 'role9', rate: 8, sex: '1', num: 70000, other: 10000, cardNo: '62221230283686397412' }
+                  { name: 'name1', role: 'role1', rate: 1, sex: '0', num: '22', num1: '22', num2: '22', cardNo: '998' },
+                  { name: 'name2', role: 'role2', rate: 1, sex: '1', num: 32, num1: 32, num2: 32, cardNo: 10000 },
+                  { name: 'name3', role: 'role3', rate: 6, sex: '1', num: 99999999999999, num1: 99999999999999, num2: 99999999999999, cardNo: '62221234219637458563' },
+                  { name: 'name4', role: 'role4', rate: 3, sex: '0', num: '999.99', num1: '999.99', num2: '999.99', cardNo: '62227412123789459631' },
+                  { name: 'name5', role: 'role5', rate: 1, sex: '1', num: -1, num1: -1, num2: -1, cardNo: '62221234214752459631' },
+                  { name: 'name6', role: 'role6', rate: 4, sex: '1', num: '10000', num1: '10000', num2: '10000', cardNo: '62221267214853659622' },
+                  { name: 'name7', role: 'role7', rate: 1, sex: '1', num: 10000000000000.001, num1: 10000000000000.001, num2: 10000000000000.001, cardNo: '62221237123480359633' },
+                  { name: 'name8', role: 'role8', rate: 5, sex: '2', num: 9998, num1: 9998, num2: 9998, cardNo: '62221234018523736237' },
+                  { name: 'name9', role: 'role9', rate: 8, sex: '1', num: 70000, num1: 70000, num2: 70000, cardNo: '62221230283686397412' }
                 ]
                 this.mergeCells = [
                   { row: 1, col: 1, rowspan: 2, colspan: 2 },
@@ -194,15 +194,15 @@ export default {
       this.loading = true
       setTimeout(() => {
         this.tableData = [
-          { name: 'name1', role: 'role1', rate: 1, sex: '0', num: '22', other: false, cardNo: '998' },
-          { name: 'name2', role: 'role2', rate: 1, sex: '1', num: 32, other: '备注666', cardNo: 10000 },
-          { name: 'name3', role: 'role3', rate: 6, sex: '1', num: 99999999999999, other: 10, cardNo: '62221234219637458563' },
-          { name: 'name4', role: 'role4', rate: 3, sex: '0', num: '28', other: '999.99', cardNo: '62227412123789459631' },
-          { name: 'name5', role: 'role5', rate: 1, sex: '1', num: 24, other: -1, cardNo: '62221234214752459631' },
-          { name: 'name6', role: 'role6', rate: 4, sex: '1', num: '10000', other: '99999999999999', cardNo: '62221267214853659622' },
-          { name: 'name7', role: 'role7', rate: 1, sex: '1', num: 10000000000000000, other: '只需998', cardNo: '62221237123480359633' },
-          { name: 'name8', role: 'role8', rate: 5, sex: '2', num: 9998, other: 10000000000000000, cardNo: '62221234018523736237' },
-          { name: 'name9', role: 'role9', rate: 8, sex: '1', num: 70000, other: 10000, cardNo: '62221230283686397412' }
+          { name: 'name1', role: 'role1', rate: 1, sex: '0', num: '22', num1: '22', num2: '22', cardNo: '998' },
+          { name: 'name2', role: 'role2', rate: 1, sex: '1', num: 32, num1: 32, num2: 32, cardNo: 10000 },
+          { name: 'name3', role: 'role3', rate: 6, sex: '1', num: 99999999999999, num1: 99999999999999, num2: 99999999999999, cardNo: '62221234219637458563' },
+          { name: 'name4', role: 'role4', rate: 3, sex: '0', num: '999.99', num1: '999.99', num2: '999.99', cardNo: '62227412123789459631' },
+          { name: 'name5', role: 'role5', rate: 1, sex: '1', num: -1, num1: -1, num2: -1, cardNo: '62221234214752459631' },
+          { name: 'name6', role: 'role6', rate: 4, sex: '1', num: '10000', num1: '10000', num2: '10000', cardNo: '62221267214853659622' },
+          { name: 'name7', role: 'role7', rate: 1, sex: '1', num: 10000000000000.001, num1: 10000000000000.001, num2: 10000000000000.001, cardNo: '62221237123480359633' },
+          { name: 'name8', role: 'role8', rate: 5, sex: '2', num: 9998, num1: 9998, num2: 9998, cardNo: '62221234018523736237' },
+          { name: 'name9', role: 'role9', rate: 8, sex: '1', num: 70000, num1: 70000, num2: 70000, cardNo: '62221230283686397412' }
         ]
         this.mergeCells = [
           { row: 1, col: 1, rowspan: 2, colspan: 2 },

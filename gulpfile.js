@@ -55,7 +55,7 @@ const languages = [
 
 const styleCode = `require('./style.css')`
 
-const commCode = `const VXETable = process.env.NODE_ENV === 'production' ? require('./index.common.dev.js') : require('./index.common.pro.js')
+const commCode = `const VXETable = process.env.NODE_ENV === 'production' ? require('./index.common.pro.js') : require('./index.common.dev.js')
 module.exports = {
   ...VXETable,
   VXETable

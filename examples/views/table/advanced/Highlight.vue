@@ -17,10 +17,10 @@
     </vxe-table>
 
     <pre>
-      <code>
+      <pre-code>
         | Arrow Up ↑ | 移动到高亮行的上一行 |
         | Arrow Down ↓ | 移动到高亮行的下一行 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>

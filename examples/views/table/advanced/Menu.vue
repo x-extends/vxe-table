@@ -20,7 +20,7 @@
     </vxe-table>
 
     <pre>
-      <code>
+      <pre-code>
         | Arrow Up ↑ | 移动到上一个菜单选项 |
         | Arrow Down ↓ | 移动到下一个菜单选项 |
         | Arrow Left ← | 关闭二级菜单 |
@@ -28,21 +28,20 @@
         | Esc | 关闭菜单选项 |
         | Enter | 选中当前菜单选项 |
         | Spacebar | 选中当前菜单选项 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
 import XEUtils from 'xe-utils'
 import XEClipboard from 'xe-clipboard'
 
@@ -228,11 +227,6 @@ export default {
   },
   created () {
     this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     contextMenuClickEvent ({ menu, row, column }) {

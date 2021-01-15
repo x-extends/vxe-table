@@ -806,8 +806,8 @@ function handleFileImport ($xetable, file, opts) {
 
   // 检查类型
   if (!XEUtils.includes(VXETable.importTypes, type)) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.error('vxe.error.notType', [type])
+    if (opts.message !== false) {
+      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
     }
     const params = { status: false }
     return Promise.reject(params)

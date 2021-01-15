@@ -41,6 +41,7 @@
   padding: 4px 0;
   color: $vxe-font-color;
   text-align: left;
+  background-color: $vxe-select-panel-background-color;
   &:not(.is--transfer) {
     min-width: 100%;
   }
@@ -73,7 +74,6 @@
   border-radius: $vxe-border-radius;
   border: 1px solid $vxe-table-popup-border-color;
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
-  background-color: $vxe-select-panel-background-color;
 }
 
 .vxe-optgroup {

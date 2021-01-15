@@ -3,7 +3,7 @@
     <h2>{{ $t('app.aside.nav.icons') }}</h2>
     <p class="tip">如果项目已有适合的图标，例如第三方图标库：font-awesome、inconfont，可通过配置替换并自行调整相关的样式即可</p>
     <pre>
-      <code class="javascript">
+      <pre-code class="javascript">
         import VXETable from 'vxe-table'
 
         VXETable.setup({
@@ -72,19 +72,7 @@
         //   FORM_UNFOLDING: 'vxe-icon--arrow-top'
         // }
       })
-      </code>
+      </pre-code>
     </pre>
   </div>
 </template>
-
-<script>
-import hljs from 'highlight.js'
-
-export default {
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
-  }
-}
-</script>

@@ -30,15 +30,14 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
 import XEAjax from 'xe-ajax'
-import hljs from 'highlight.js'
 
 export default {
   data () {
@@ -252,11 +251,6 @@ export default {
     this.findRegionList()
     this.findSexGroupList()
     this.findTreeSelectList()
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     findSexList () {
