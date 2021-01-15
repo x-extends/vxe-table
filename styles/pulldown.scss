@@ -16,6 +16,7 @@
   padding: 4px 0;
   color: $vxe-font-color;
   text-align: left;
+  background-color: $vxe-pulldown-panel-background-color;
   &:not(.is--transfer) {
     min-width: 100%;
   }
