@@ -453,7 +453,7 @@ export default {
           customConfig: 'Custom configuration',
           optimization: 'Have been obsolete',
 
-          params: 'Additional parameters (Can be used to store some private parameters)',
+          params: '自定义参数（可以用来存放一些数据）',
 
           empty: 'Text content displayed when empty data',
 
