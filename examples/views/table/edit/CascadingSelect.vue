@@ -40,7 +40,10 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', attr3: '', attr4: '', age: 28, address: 'Shenzhen', date12: '', date13: '' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', attr3: '', attr4: '', age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' }
+      ],
       ptypeList: [
         {
           label: '项目1',
@@ -85,7 +88,10 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', attr3: '', attr4: '', age: 28, address: 'Shenzhen', date12: '', date13: '' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', attr3: '', attr4: '', age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' }
+              ],
               ptypeList: [
                 {
                   label: '项目1',
@@ -104,17 +110,9 @@ export default {
               cachePnameList: []
             }
           },
-          created () {
-            this.$nextTick(() => {
-              this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
-              this.updateRoleList()
-            })
-          },
           methods: {
             insertEvent () {
-              let record = {
-
-              }
+              let record = {}
               this.$refs.xTable.insert(record)
             },
             // 格式化显示名称
@@ -164,16 +162,9 @@ export default {
       ]
     }
   },
-  created () {
-    this.$nextTick(() => {
-      this.tableData = window.MOCK_DATA_LIST.slice(0, 4)
-    })
-  },
   methods: {
     insertEvent () {
-      const record = {
-
-      }
+      const record = {}
       this.$refs.xTable.insert(record)
     },
     // 格式化显示名称

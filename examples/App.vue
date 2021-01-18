@@ -34,7 +34,7 @@
             <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
-          <a class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡{{ $t('app.header.label.support') }}</a>
+          <a v-if="showPlugins" class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡{{ $t('app.header.label.support') }}</a>
         </div>
       </div>
     </header>
@@ -2127,6 +2127,17 @@ export default {
     }
   },
   computed: {
+    showPlugins () {
+      const currDate = new Date()
+      const day = currDate.getDay()
+      const hh = currDate.getHours()
+      if (day >= 1 && day <= 5) {
+        if (hh >= 9 && hh <= 20) {
+          return true
+        }
+      }
+      return false
+    },
     demoLink () {
       const { $route, apiList } = this
       for (let gIndex = 0; gIndex < apiList.length; gIndex++) {

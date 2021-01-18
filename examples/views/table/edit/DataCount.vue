@@ -70,7 +70,12 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { name: 'vxe-table 从入门到放弃', amount: 80, number: 5 },
+                { name: 'JavaScript 权威指南', amount: 40, number: 3 },
+                { name: 'Vue 入门到精通', amount: 90, number: 9 },
+                { name: '深入现代 JavaScript 应用开发', amount: 60, number: 1 }
+              ]
             }
           },
           methods: {

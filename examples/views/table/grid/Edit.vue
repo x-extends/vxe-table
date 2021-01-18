@@ -2,19 +2,7 @@
   <div>
     <p class="tip">可编辑表格</p>
 
-    <vxe-grid
-      border
-      resizable
-      keep-source
-      show-overflow
-      ref="xGrid"
-      height="530"
-      :loading="loading"
-      :pager-config="tablePage"
-      :columns="tableColumn"
-      :data="tableData"
-      :edit-config="{trigger: 'manual', mode: 'row', showStatus: true, icon: 'fa fa-file-text-o'}"
-      @page-change="handlePageChange">
+    <vxe-grid ref="xGrid" v-bind="gridOptions" @page-change="handlePageChange">
       <template v-slot:operate="{ row }">
         <template v-if="$refs.xGrid.isActiveByRow(row)">
           <vxe-button icon="fa fa-save" status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
@@ -41,39 +29,40 @@
 export default {
   data () {
     return {
-      loading: false,
-      tablePage: {
-        total: 0,
-        currentPage: 1,
-        pageSize: 10,
-        pageSizes: [10, 20, 50, 100, 200, 500]
+      gridOptions: {
+        border: true,
+        resizable: true,
+        keepSource: true,
+        showOverflow: true,
+        height: 530,
+        loading: false,
+        pagerConfig: {
+          total: 0,
+          currentPage: 1,
+          pageSize: 10,
+          pageSizes: [10, 20, 50, 100, 200, 500]
+        },
+        editConfig: {
+          trigger: 'manual',
+          mode: 'row',
+          showStatus: true,
+          icon: 'fa fa-file-text-o'
+        },
+        columns: [
+          { type: 'seq', width: 60 },
+          { type: 'checkbox', width: 50 },
+          { field: 'name', title: 'Name', editRender: { name: 'input' } },
+          { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+          { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
+          { field: 'role', title: 'Role', editRender: { name: 'input' } },
+          { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } },
+          { title: '操作', width: 200, slots: { default: 'operate' } }
+        ],
+        data: []
       },
-      tableColumn: [
-        { type: 'seq', width: 60 },
-        { type: 'checkbox', width: 50 },
-        { field: 'name', title: 'Name', editRender: { name: 'input' } },
-        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-        { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-        { field: 'role', title: 'Role', editRender: { name: 'input' } },
-        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } },
-        { title: '操作', width: 200, slots: { default: 'operate' } }
-      ],
-      tableData: [],
       demoCodes: [
         `
-        <vxe-grid
-          border
-          resizable
-          keep-source
-          show-overflow
-          ref="xGrid"
-          height="530"
-          :loading="loading"
-          :pager-config="tablePage"
-          :columns="tableColumn"
-          :data="tableData"
-          :edit-config="{trigger: 'manual', mode: 'row', showStatus: true, icon: 'fa fa-file-text-o'}"
-          @page-change="handlePageChange">
+        <vxe-grid ref="xGrid" v-bind="gridOptions" @page-change="handlePageChange">
           <template v-slot:operate="{ row }">
             <template v-if="$refs.xGrid.isActiveByRow(row)">
               <vxe-button icon="fa fa-save" status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
@@ -91,23 +80,37 @@ export default {
         export default {
           data () {
             return {
-              loading: false,
-              tablePage: {
-                total: 0,
-                currentPage: 1,
-                pageSize: 10
-              },
-              tableColumn: [
-                { type: 'seq', width: 60 },
-                { type: 'checkbox', width: 50 },
-                { field: 'name', title: 'Name', editRender: { name: 'input' } },
-                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
-                { field: 'role', title: 'Role', editRender: { name: 'input' } },
-                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } },
-                { title: '操作', width: 200, slots: { default: 'operate' } }
-              ],
-              tableData: []
+              gridOptions: {
+                border: true,
+                resizable: true,
+                keepSource: true,
+                showOverflow: true,
+                height: 530,
+                loading: false,
+                pagerConfig: {
+                  total: 0,
+                  currentPage: 1,
+                  pageSize: 10,
+                  pageSizes: [10, 20, 50, 100, 200, 500]
+                },
+                editConfig: {
+                  trigger: 'manual',
+                  mode: 'row',
+                  showStatus: true,
+                  icon: 'fa fa-file-text-o'
+                },
+                columns: [
+                  { type: 'seq', width: 60 },
+                  { type: 'checkbox', width: 50 },
+                  { field: 'name', title: 'Name', editRender: { name: 'input' } },
+                  { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                  { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
+                  { field: 'role', title: 'Role', editRender: { name: 'input' } },
+                  { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } },
+                  { title: '操作', width: 200, slots: { default: 'operate' } }
+                ],
+                data: []
+              }
             }
           },
           created () {
@@ -125,11 +128,11 @@ export default {
           },
           methods: {
             findList () {
-              this.loading = true
+              this.gridOptions.loading = true
               setTimeout(() => {
-                this.loading = false
-                this.tablePage.total = 10
-                this.tableData = [
+                this.gridOptions.loading = false
+                this.gridOptions.pagerConfig.total = 10
+                this.gridOptions.data = [
                   { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
                   { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
                   { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
@@ -144,12 +147,12 @@ export default {
               }, 300)
             },
             searchEvent () {
-              this.tablePage.currentPage = 1
+              this.gridOptions.pagerConfig.currentPage = 1
               this.findList()
             },
-            handlePageChange ({currentPage, pageSize}) {
-              this.tablePage.currentPage = currentPage
-              this.tablePage.pageSize = pageSize
+            handlePageChange ({ currentPage, pageSize }) {
+              this.gridOptions.pagerConfig.currentPage = currentPage
+              this.gridOptions.pagerConfig.pageSize = pageSize
               this.findList()
             },
             editRowEvent (row) {
@@ -157,9 +160,9 @@ export default {
             },
             saveRowEvent () {
               this.$refs.xGrid.clearActived().then(() => {
-                this.loading = true
+                this.gridOptions.loading = true
                 setTimeout(() => {
-                  this.loading = false
+                  this.gridOptions.loading = false
                   this.$XModal.message({ message: '保存成功！', status: 'success' })
                 }, 300)
               })
@@ -192,11 +195,11 @@ export default {
   },
   methods: {
     findList () {
-      this.loading = true
+      this.gridOptions.loading = true
       setTimeout(() => {
-        this.loading = false
-        this.tablePage.total = 10
-        this.tableData = [
+        this.gridOptions.loading = false
+        this.gridOptions.pagerConfig.total = 10
+        this.gridOptions.data = [
           { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '1', age: 28, address: 'Shenzhen' },
           { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '0', age: 22, address: 'Guangzhou' },
           { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '1', age: 32, address: 'Shanghai' },
@@ -211,12 +214,12 @@ export default {
       }, 300)
     },
     searchEvent () {
-      this.tablePage.currentPage = 1
+      this.gridOptions.pagerConfig.currentPage = 1
       this.findList()
     },
     handlePageChange ({ currentPage, pageSize }) {
-      this.tablePage.currentPage = currentPage
-      this.tablePage.pageSize = pageSize
+      this.gridOptions.pagerConfig.currentPage = currentPage
+      this.gridOptions.pagerConfig.pageSize = pageSize
       this.findList()
     },
     editRowEvent (row) {
@@ -224,9 +227,9 @@ export default {
     },
     saveRowEvent () {
       this.$refs.xGrid.clearActived().then(() => {
-        this.loading = true
+        this.gridOptions.loading = true
         setTimeout(() => {
-          this.loading = false
+          this.gridOptions.loading = false
           this.$XModal.message({ message: '保存成功！', status: 'success' })
         }, 300)
       })

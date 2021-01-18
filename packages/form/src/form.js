@@ -143,7 +143,7 @@ function renderItems (h, _vm) {
       h('div', {
         class: 'vxe-form--item-inner'
       }, [
-        title ? h('div', {
+        title || (slots && slots.title) ? h('div', {
           class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null],
           style: titleWidth ? {
             width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`

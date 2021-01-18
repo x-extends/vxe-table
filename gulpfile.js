@@ -55,11 +55,9 @@ const languages = [
 
 const styleCode = `require('./style.css')`
 
-const commCode = `const VXETable = process.env.NODE_ENV === 'production' ? require('./index.common.pro.js') : require('./index.common.dev.js')
-module.exports = {
-  ...VXETable,
-  VXETable
-}
+const commCode = `const VXETableExport = process.env.NODE_ENV === 'production' ? require('./index.common.pro.js') : require('./index.common.dev.js')
+VXETableExport.VXETable = VXETableExport
+module.exports = VXETableExport
 `
 
 gulp.task('build_modules', () => {

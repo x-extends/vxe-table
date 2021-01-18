@@ -19,8 +19,8 @@
       @edit-actived="editActivedEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-table-column field="role" title="Role" :edit-render="{name: '$select', options: roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-table-column>
+      <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -37,7 +37,10 @@
 export default {
   data () {
     return {
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: '1', age: 28, address: 'Shenzhen', date12: '', date13: '' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: '2', age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' }
+      ],
       roleList: [
         {
           label: '前端',
@@ -84,7 +87,7 @@ export default {
           @edit-actived="editActivedEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-table-column>
+          <vxe-table-column field="role" title="Role" :edit-render="{name: '$select', options: roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-table-column>
           <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,
@@ -92,7 +95,10 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: '1', age: 28, address: 'Shenzhen', date12: '', date13: '' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: '2', age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' }
+              ],
               roleList: [
                 {
                   label: '前端',
@@ -124,7 +130,6 @@ export default {
           },
           created () {
             this.$nextTick(() => {
-              this.tableData = window.MOCK_DATA_LIST.slice(0, 2)
               this.updateRoleList()
             })
           },
@@ -139,7 +144,7 @@ export default {
               this.roleList.forEach(item => {
                 if (item.value) {
                   // 如果当前选项已经被选过，则禁用
-                  item.disabled = fullData.some(row => row.role1 === item.value)
+                  item.disabled = fullData.some(row => row.role === item.value)
                 }
               })
             },
@@ -158,7 +163,6 @@ export default {
   },
   created () {
     this.$nextTick(() => {
-      this.tableData = window.MOCK_DATA_LIST.slice(0, 2)
       this.updateRoleList()
     })
   },
@@ -173,7 +177,7 @@ export default {
       this.roleList.forEach(item => {
         if (item.value) {
           // 如果当前选项已经被选过，则禁用
-          item.disabled = fullData.some(row => row.role1 === item.value)
+          item.disabled = fullData.some(row => row.role === item.value)
         }
       })
     },

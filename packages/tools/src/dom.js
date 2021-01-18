@@ -5,7 +5,6 @@ const { getRowid } = UtilTools
 
 const browse = XEUtils.browse()
 const htmlElem = browse.isDoc ? document.querySelector('html') : 0
-const bodyElem = browse.isDoc ? document.body : 0
 const reClsMap = {}
 
 function getClsRE (cls) {
@@ -20,7 +19,7 @@ function getNodeOffset (elem, container, rest) {
     const parentElem = elem.parentNode
     rest.top += elem.offsetTop
     rest.left += elem.offsetLeft
-    if (parentElem && parentElem !== htmlElem && parentElem !== bodyElem) {
+    if (parentElem && parentElem !== htmlElem && parentElem !== document.body) {
       rest.top -= parentElem.scrollTop
       rest.left -= parentElem.scrollLeft
     }
