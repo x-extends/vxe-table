@@ -445,6 +445,7 @@ export default defineComponent({
         const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
         const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
         const defaultSlot = slots ? slots.default : null
+        const titleSlot = slots ? slots.title : null
         const span = item.span || props.span
         const align = item.align || props.align
         const titleAlign = item.titleAlign || props.titleAlign
@@ -510,7 +511,7 @@ export default defineComponent({
           h('div', {
             class: 'vxe-form--item-inner'
           }, [
-            title ? h('div', {
+            title || titleSlot ? h('div', {
               class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null],
               style: titleWidth ? {
                 width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`

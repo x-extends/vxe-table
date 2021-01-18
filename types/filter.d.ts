@@ -35,16 +35,16 @@ export interface TableFilterMethods {
   /**
    * 用于 filters，修改筛选列表
    * 在筛选条件更新之后可以调用 updateData 函数处理表格数据
-   * @param column 列对象
+   * @param columnOrField 列对象或字段名
    * @param options 选项列表
    */
-  setFilter(column: VxeTableDefines.ColumnInfo, options: VxeColumnPropTypes.Filter[]): Promise<any>;
+  setFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo, options: VxeColumnPropTypes.Filter[]): Promise<any>;
   /**
    * 手动清空筛选条件
    * 如果不传 column 则清空所有筛选条件，数据会恢复成未筛选的状态
    * @param column 字段名
    */
-  clearFilter(column?: VxeTableDefines.ColumnInfo | string | null): Promise<any>;
+  clearFilter(column?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo | null): Promise<any>;
   /**
    * 获取当前筛选的所有列信息
    */

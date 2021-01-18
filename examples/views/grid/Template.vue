@@ -189,8 +189,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, h, reactive, ref } from 'vue'
+<script lang="tsx">
+import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/vxe-table'
 import { VxeGridInstance, VxeGridOptions, VxeTableEvents } from '../../../types/vxe-table'
 import XEUtils from 'xe-utils'
@@ -258,12 +258,13 @@ export default defineComponent({
           field: 'num1',
           title: 'Num1',
           showHeaderOverflow: true,
+          filters: [{ data: '' }],
           editRender: {
             name: 'input',
             autofocus: '.my-input'
           },
           slots: {
-            // 对应自定义插槽的名称
+            // 使用插槽模板渲染
             default: 'num1_default',
             header: 'num1_height',
             footer: 'num1_footer',
@@ -279,12 +280,7 @@ export default defineComponent({
             // 使用渲染函数
             default: ({ row }) => {
               return [
-                h('span', {
-                  style: {
-                    color: 'blue'
-                  },
-                  onClick: () => addressClickEvent(row)
-                }, row.address)
+                <span style="color: blue" onClick={ () => addressClickEvent(row) }>自定义模板内容</span>
               ]
             }
           }
@@ -518,7 +514,7 @@ export default defineComponent({
         </vxe-modal>
         `,
         `
-        import { defineComponent, h, reactive, ref } from 'vue'
+        import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeGridInstance, VxeGridOptions, VxeTableEvents } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
@@ -585,12 +581,13 @@ export default defineComponent({
                   field: 'num1',
                   title: 'Num1',
                   showHeaderOverflow: true,
+                  filters: [{ data: '' }],
                   editRender: {
                     name: 'input',
                     autofocus: '.my-input'
                   },
                   slots: {
-                    // 对应自定义插槽的名称
+                    // 使用插槽模板渲染
                     default: 'num1_default',
                     header: 'num1_height',
                     footer: 'num1_footer',
@@ -603,15 +600,10 @@ export default defineComponent({
                   title: 'Address',
                   showOverflow: true,
                   slots: {
-                    // 使用渲染函数
+                    // 使用 JSX 渲染
                     default: ({ row }) => {
                       return [
-                        h('span', {
-                          style: {
-                            color: 'blue'
-                          },
-                          onClick: () => addressClickEvent(row)
-                        }, row.address)
+                        <span style="color: blue" onClick={ () => addressClickEvent(row) }>自定义模板内容</span>
                       ]
                     }
                   }

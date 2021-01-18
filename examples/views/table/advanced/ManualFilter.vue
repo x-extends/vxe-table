@@ -144,7 +144,7 @@ export default defineComponent({
       const column = $table.getColumnByField('age')
       // 修改第一个选项为勾选状态
       const option = column.filters[0]
-      option.data = '26'
+      option.data = '32'
       option.checked = true
       // 修改条件之后，需要手动调用 updateData 处理表格数据
       $table.updateData()
@@ -292,7 +292,7 @@ export default defineComponent({
               const column = $table.getColumnByField('age')
               // 修改第一个选项为勾选状态
               const option = column.filters[0]
-              option.data = '26'
+              option.data = '32'
               option.checked = true
               // 修改条件之后，需要手动调用 updateData 处理表格数据
               $table.updateData()

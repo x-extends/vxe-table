@@ -704,7 +704,8 @@ export default defineComponent({
         const { treeConfig } = props
         const { visibleColumn } = internalData
         if (treeConfig) {
-          throw new Error(UtilTools.getLog('vxe.error.noTree', ['merge-footer-items']))
+          UtilTools.error('vxe.error.noTree', ['merge-footer-items'])
+          return
         }
         if (!XEUtils.isArray(merges)) {
           merges = [merges]
@@ -3916,6 +3917,7 @@ export default defineComponent({
      * 内部方法
      */
     tablePrivateMethods = {
+      handleFieldOrColumn,
       callSlot (slotFunc, params) {
         if (slotFunc) {
           if ($xegrid) {

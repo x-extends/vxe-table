@@ -637,6 +637,7 @@ export interface TablePublicMethods {
 export interface VxeTableMethods extends TableMethods { }
 
 export interface TablePrivateMethods {
+  handleFieldOrColumn(fieldOrColumn: any): VxeTableDefines.ColumnInfo | null;
   callSlot(slotFunc: Function | string | null, params: any): VNode[];
   getParentElem(): Element;
   getParentHeight(): number;
@@ -974,7 +975,7 @@ export namespace VxeTablePropTypes {
     rowIndex: number;
     $rowIndex: number;
     _rowIndex: number;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type CellClassName = string | ((params: {
     row: RowInfo;
@@ -985,14 +986,14 @@ export namespace VxeTablePropTypes {
     columnIndex: number;
     $columnIndex: number;
     _columnIndex: number;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type HeaderRowClassName = string | ((params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     fixed: VxeColumnPropTypes.Fixed;
     type: string;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type HeaderCellClassName = string | ((params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
@@ -1000,7 +1001,7 @@ export namespace VxeTablePropTypes {
     column: VxeTableDefines.ColumnInfo;
     fixed: VxeColumnPropTypes.Fixed;
     type: string;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type FooterRowClassName = string | ((params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
@@ -1008,7 +1009,7 @@ export namespace VxeTablePropTypes {
     _rowIndex: number;
     fixed: VxeColumnPropTypes.Fixed;
     type: string;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type FooterCellClassName = string | ((params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
@@ -1018,7 +1019,7 @@ export namespace VxeTablePropTypes {
     columnIndex: number;
     $columnIndex: number;
     _columnIndex: number;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type CellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
     row: RowInfo;
@@ -1029,12 +1030,12 @@ export namespace VxeTablePropTypes {
     columnIndex: number;
     $columnIndex: number;
     _columnIndex: number;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type HeaderCellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type FooterCellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
     $rowIndex: number;
@@ -1042,21 +1043,21 @@ export namespace VxeTablePropTypes {
     columnIndex: number;
     $columnIndex: number;
     _columnIndex: number;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type RowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
     row: RowInfo;
     rowIndex: number;
     $rowIndex: number;
     _rowIndex: number;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type HeaderRowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
     $table: & VxeTablePrivateMethods;
     $rowIndex: number;
     fixed: VxeColumnPropTypes.Fixed;
     type: string;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type FooterRowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
@@ -1064,7 +1065,7 @@ export namespace VxeTablePropTypes {
     _rowIndex: number;
     fixed: VxeColumnPropTypes.Fixed;
     type: string;
-  }) => null | string | { [key: string]: boolean });
+  }) => void | null | string | { [key: string]: boolean });
 
   export type MergeCell = VxeTableDefines.MergeOptions;
   export type MergeFooterItem = VxeTableDefines.MergeOptions;

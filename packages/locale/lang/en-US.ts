@@ -182,6 +182,7 @@ export default {
         html: 'Web Page (*.html)',
         xml: 'XML Data(*.xml)',
         txt: 'Text (Tab delimited) (*.txt)',
+        xls: 'Excel 97-2003 Workbook(*.xls)',
         xlsx: 'Excel Workbook (*.xlsx)',
         pdf: 'PDF (*.pdf)'
       },

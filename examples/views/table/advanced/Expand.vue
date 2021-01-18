@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #:buttons>
         <vxe-button @click="$refs.xTable1.toggleRowExpand(demo1.tableData[1])">切换第二行展开</vxe-button>
         <vxe-button @click="$refs.xTable1.setRowExpand([demo1.tableData[2], demo1.tableData[3]], true)">设置第三、四行展开</vxe-button>
         <vxe-button @click="$refs.xTable1.setAllRowExpand(true)">设置所有行展开</vxe-button>
@@ -21,7 +21,7 @@
       @toggle-row-expand="toggleExpandChangeEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
-        <template v-slot:content="{ row, rowIndex }">
+        <template #:content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-table
               border
@@ -73,7 +73,7 @@
       :data="demo2.tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
-        <template v-slot:content="{ row, rowIndex }">
+        <template #:content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-table
               border
@@ -127,7 +127,7 @@
       :expand-config="{labelField: 'name', expandAll: true}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" title="Name">
-        <template v-slot:content="{ row }">
+        <template #:content="{ row }">
           <ul>
             <li>
               <span>ID：</span>
@@ -216,7 +216,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #:buttons>
             <vxe-button @click="$refs.xTable1.toggleRowExpand(demo1.tableData[1])">切换第二行展开</vxe-button>
             <vxe-button @click="$refs.xTable1.setRowExpand([demo1.tableData[2], demo1.tableData[3]], true)">设置第三、四行展开</vxe-button>
             <vxe-button @click="$refs.xTable1.setAllRowExpand(true)">设置所有行展开</vxe-button>
@@ -231,7 +231,7 @@ export default defineComponent({
           @toggle-row-expand="toggleExpandChangeEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="80">
-            <template v-slot:content="{ row, rowIndex }">
+            <template #:content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border
@@ -307,7 +307,7 @@ export default defineComponent({
           :data="demo2.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
-            <template v-slot:content="{ row, rowIndex }">
+            <template #:content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border
@@ -373,7 +373,7 @@ export default defineComponent({
           :expand-config="{labelField: 'name', expandAll: true}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" title="Name">
-            <template v-slot:content="{ row }">
+            <template #:content="{ row }">
               <ul>
                 <li>
                   <span>ID：</span>

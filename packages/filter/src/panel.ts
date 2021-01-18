@@ -146,12 +146,13 @@ export default defineComponent({
       const { filterStore } = props
       const { column, multiple } = filterStore
       const { slots } = column
+      const filterSlot = slots ? slots.filter : null
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xetable })
-      if (slots && slots.filter) {
+      if (filterSlot) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, slots.filter(params))
+          }, $xetable.callSlot(filterSlot, params))
         ]
       } else if (compConf && compConf.renderFilter) {
         return [

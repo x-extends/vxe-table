@@ -452,7 +452,7 @@ export default {
           customConfig: '自定义列配置项',
           optimization: '即将废弃',
 
-          params: '额外的参数（可以用来存放一些私有参数）',
+          params: '自定义参数（可以用来存放一些自定义的数据）',
 
           empty: '空数据时显示的文本内容',
 

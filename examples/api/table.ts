@@ -3677,12 +3677,12 @@ const apis = [
         list: []
       },
       {
-        name: 'setFilter(column, options)',
+        name: 'setFilter(fieldOrColumn, options)',
         desc: '用于 filters，修改筛选列表（在筛选条件更新之后可以调用 updateData 函数处理表格数据）',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'column: Column, options: []',
+        defVal: 'fieldOrColumn: string | ColumnInfo, options: []',
         list: []
       },
       {

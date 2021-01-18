@@ -182,6 +182,7 @@ export default {
         html: '网页(*.html)',
         xml: 'XML 数据(*.xml)',
         txt: '文本文件(制表符分隔)(*.txt)',
+        xls: 'Excel 97-2003 工作簿(*.xls)',
         xlsx: 'Excel 工作簿(*.xlsx)',
         pdf: 'PDF (*.pdf)'
       },

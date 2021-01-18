@@ -111,11 +111,12 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
     const filterMethods: TableFilterMethods = {
       /**
        * 修改筛选条件列表
-       * @param {ColumnInfo} column 列
+       * @param {ColumnInfo} fieldOrColumn 列或字段名
        * @param {Array} options 选项
        */
-      setFilter (column, options) {
-        if (column.filters && options) {
+      setFilter (fieldOrColumn, options) {
+        const column = $xetable.handleFieldOrColumn(fieldOrColumn)
+        if (column && column.filters && options) {
           column.filters = toFilters(options)
         }
         return nextTick()
@@ -131,7 +132,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
         const filterOpts = computeFilterOpts.value
         let column
         if (fieldOrColumn) {
-          column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
+          column = $xetable.handleFieldOrColumn(fieldOrColumn)
           if (column) {
             filterPrivateMethods.handleClearFilter(column)
           }

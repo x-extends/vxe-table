@@ -182,6 +182,7 @@ export default {
         html: 'webページ(*.html)',
         xml: 'XML データ(*.xml)',
         txt: 'テキストファイル（タブ区切り）(*.txt)',
+        xls: 'Excel 97-2003 ワークブック(*.xls)',
         xlsx: 'Excel ワークブック(*.xlsx)',
         pdf: 'PDF (*.pdf)'
       },

@@ -567,13 +567,13 @@ export default defineComponent({
                 name: 'TableMergeCell'
               }
             },
-            // {
-            //   label: 'app.aside.nav.footer',
-            //   demoUrl: 'https://jsrun.pro/dmXKp/edit',
-            //   locat: {
-            //     name: 'TableFooter'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.footer',
+              demoUrl: 'https://jsrun.pro/dmXKp/edit',
+              locat: {
+                name: 'TableFooter'
+              }
+            },
             // {
             //   label: 'app.aside.nav.footerSpan',
             //   locat: {
@@ -618,13 +618,13 @@ export default defineComponent({
             //     name: 'TableFixedType'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.contextMenu',
-            //   // demoUrl: 'https://jsrun.pro/VjXKp/edit',
-            //   locat: {
-            //     name: 'TableMenu'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.contextMenu',
+              // demoUrl: 'https://jsrun.pro/VjXKp/edit',
+              locat: {
+                name: 'TableMenu'
+              }
+            },
             // {
             //   label: 'app.aside.nav.menuPrivilege',
             //   locat: {

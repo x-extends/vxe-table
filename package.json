@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "4.0.0-beta.7",
+  "version": "4.0.0-beta.9",
   "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -63,7 +63,7 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^3.0.2",
-    "highlight.js": "^10.4.1",
+    "highlight.js": "^10.5.0",
     "jsbarcode": "^3.11.0",
     "jspdf": "^2.1.1",
     "node-sass": "^4.14.0",
@@ -78,10 +78,8 @@
     "vxe-table-plugin-export-xlsx": "^3.0.0-alpha.1",
     "vxe-table-plugin-menus": "^3.0.0-alpha.1",
     "xe-ajax": "^4.0.5",
-    "xe-ajax-mock": "^1.12.0",
     "xe-clipboard": "^1.10.1",
-    "xe-utils": "^3.0.4",
-    "xlsx": "^0.16.8"
+    "xe-utils": "^3.1.2"
   },
   "peerDependencies": {
     "vue": ">= 3",

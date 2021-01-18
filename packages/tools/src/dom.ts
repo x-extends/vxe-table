@@ -2,7 +2,6 @@ import XEUtils from 'xe-utils/ctor'
 
 const browse = XEUtils.browse()
 const htmlElem = browse.isDoc ? document.querySelector('html') : 0
-const bodyElem = browse.isDoc ? document.body : 0
 const reClsMap: { [key: string]: any } = {}
 
 function getClsRE (cls: any) {
@@ -17,7 +16,7 @@ function getNodeOffset (elem: any, container: any, rest: any): any {
     const parentElem = elem.parentNode
     rest.top += elem.offsetTop
     rest.left += elem.offsetLeft
-    if (parentElem && parentElem !== htmlElem && parentElem !== bodyElem) {
+    if (parentElem && parentElem !== htmlElem && parentElem !== document.body) {
       rest.top -= parentElem.scrollTop
       rest.left -= parentElem.scrollLeft
     }

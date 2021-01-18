@@ -66,7 +66,7 @@ import TableManualFilter from '../views/table/advanced/ManualFilter.vue'
 // import TableSpan from '../views/table/advanced/Span.vue'
 // import TableSpanRow from '../views/table/advanced/SpanRow.vue'
 import TableMergeCell from '../views/table/advanced/MergeCell.vue'
-// import TableFooter from '../views/table/advanced/Footer.vue'
+import TableFooter from '../views/table/advanced/Footer.vue'
 // import TableFooterSpan from '../views/table/advanced/FooterSpan.vue'
 // import TableFooterMaxHeight from '../views/table/advanced/MaxHeight.vue'
 import TableImport from '../views/table/advanced/Import.vue'
@@ -74,7 +74,7 @@ import TableExport from '../views/table/advanced/Export.vue'
 import TablePrint from '../views/table/advanced/Print.vue'
 // import TableCustomPrint from '../views/table/advanced/CustomPrint.vue'
 // import TableFixedType from '../views/table/advanced/FixedType.vue'
-// import TableMenu from '../views/table/advanced/Menu.vue'
+import TableMenu from '../views/table/advanced/Menu.vue'
 // import TableMenuPrivilege from '../views/table/advanced/MenuPrivilege.vue'
 import TableExpand from '../views/table/advanced/Expand.vue'
 // import TableExpandIcon from '../views/table/advanced/ExpandIcon.vue'
@@ -607,11 +607,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableMergeCell',
     component: TableMergeCell
   },
-  // {
-  //   path: '/table/advanced/footer',
-  //   name: 'TableFooter',
-  //   component: TableFooter
-  // },
+  {
+    path: '/table/advanced/footer',
+    name: 'TableFooter',
+    component: TableFooter
+  },
   // {
   //   path: '/table/advanced/footerSpan',
   //   name: 'TableFooterSpan',
@@ -647,11 +647,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableFixedType',
   //   component: TableFixedType
   // },
-  // {
-  //   path: '/table/advanced/menu',
-  //   name: 'TableMenu',
-  //   component: TableMenu
-  // },
+  {
+    path: '/table/advanced/menu',
+    name: 'TableMenu',
+    component: TableMenu
+  },
   // {
   //   path: '/table/advanced/menuPrivilege',
   //   name: 'TableMenuPrivilege',

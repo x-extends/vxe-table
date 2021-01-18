@@ -823,8 +823,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
 
       // 检查类型
       if (!XEUtils.includes(VXETable.importTypes, type)) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          UtilTools.error('vxe.error.notType', [type])
+        if (opts.message !== false) {
+          VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
         }
         const params = { status: false }
         return Promise.reject(params)
@@ -900,18 +900,19 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       const hasFooter = !!footerData.length
       const hasMerge = !hasTree && mergeList.length
       const defOpts = Object.assign({ message: true, isHeader: true }, options)
-      const types = defOpts.types || VXETable.exportTypes
+      const types: string[] = defOpts.types || VXETable.exportTypes
+      const modes: string[] = defOpts.modes
       const checkMethod = customOpts.checkMethod
       const exportColumns = collectColumn.slice(0)
       const { columns } = defOpts
       // 处理类型
-      const typeList = types.map((value: any) => {
+      const typeList = types.map((value) => {
         return {
           value,
           label: `vxe.export.types.${value}`
         }
       })
-      const modeList = defOpts.modes.map((value: any) => {
+      const modeList = modes.map((value) => {
         return {
           value,
           label: `vxe.export.modes.${value}`
@@ -957,12 +958,18 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         hasColgroup: isGroup,
         visible: true
       })
-      // 重置参数
-      Object.assign(exportParams, {
-        type: defOpts.type || typeList[0].value
-      }, defOpts, {
-        mode: selectRecords.length ? 'selected' : 'current'
-      })
+      // 默认参数
+      if (!initStore.export) {
+        Object.assign(exportParams, {
+          mode: selectRecords.length ? 'selected' : 'current'
+        }, defOpts)
+      }
+      if (modes.indexOf(exportParams.mode) === -1) {
+        exportParams.mode = modes[0]
+      }
+      if (types.indexOf(exportParams.type) === -1) {
+        exportParams.type = types[0]
+      }
       initStore.export = true
       return nextTick()
     }
