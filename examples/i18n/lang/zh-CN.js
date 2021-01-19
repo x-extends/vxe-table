@@ -452,7 +452,7 @@ export default {
           customConfig: '自定义列配置项',
           optimization: '即将废弃',
 
-          params: '自定义参数（可以用来存放一些数据）',
+          params: '自定义参数（可以用来存放一些自定义的数据）',
 
           empty: '空数据时显示的文本内容',
 
@@ -657,8 +657,8 @@ export default {
           mask: '是否显示遮罩层',
           maskClosable: '是否允许点击遮罩层关闭窗口',
           escClosable: '是否允许按 Esc 键关闭窗口',
-          showZoom: '是否允许窗口最大化与还原',
-          resize: '是否允许拖动调整窗口大小',
+          showZoom: '标题是否标显示最大化与还原按钮',
+          resize: '是否允许窗口边缘拖动调整窗口大小',
           duration: '只对 type=message 有效，自动关闭的延时，如果为 -1 禁用自动关闭',
           size: '尺寸',
           width: '窗口的宽度',

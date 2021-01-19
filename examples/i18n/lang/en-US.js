@@ -453,7 +453,7 @@ export default {
           customConfig: 'Custom configuration',
           optimization: 'Have been obsolete',
 
-          params: '自定义参数（可以用来存放一些数据）',
+          params: '自定义参数（可以用来存放一些自定义的数据）',
 
           empty: 'Text content displayed when empty data',
 
@@ -658,8 +658,8 @@ export default {
           mask: 'Whether to display the mask layer',
           maskClosable: 'Click the mask layer to close the modal',
           escClosable: 'Whether Esc key is allowed to close the modal',
-          showZoom: 'Allow Windows to be maximized and restored',
-          resize: 'Allow drag to resize modal window',
+          showZoom: '标题是否标显示最大化与还原按钮',
+          resize: '是否允许窗口边缘拖动调整窗口大小',
           duration: 'Only valid for type=message, auto-closed delay, if -1 is disabled automatically closed',
           size: 'Size',
           width: 'The width of the modal window',
