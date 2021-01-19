@@ -4,7 +4,6 @@ import { UtilTools } from '../../tools'
 
 const defaultCompProps = { transfer: true }
 
-const lazyInputComponents = ['$input', '$textarea']
 const componentDefaultModelProp = 'value'
 
 function isEmptyValue (cellValue) {
@@ -51,22 +50,25 @@ function getNativeAttrs ({ name, attrs }) {
   return attrs
 }
 
+function getInputImmediateModel (renderOpts) {
+  const { name, immediate, props } = renderOpts
+  if (!immediate) {
+    if (name === 'input' || name === '$input') {
+      const { type } = props || {}
+      return !(!type || type === 'text' || type === 'number' || type === 'integer' || type === 'float')
+    }
+    return true
+  }
+  return immediate
+}
+
 function isSyncCell (renderOpts, params) {
-  return renderOpts.immediate || params.$type === 'cell'
+  return params.$type === 'cell' || getInputImmediateModel(renderOpts)
 }
 
 function getCellEditProps (renderOpts, params, value, defaultProps) {
   const { vSize } = params.$table
-  const defProps = {}
-  switch (renderOpts.name) {
-    case 'input':
-    case 'textarea':
-    case '$input':
-    case '$textarea':
-      defProps.immediate = renderOpts.immediate === true
-      break
-  }
-  return XEUtils.assign(defProps, vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
+  return XEUtils.assign({ immediate: getInputImmediateModel(renderOpts) }, vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
 
 function getFilterProps (renderOpts, params, value, defaultProps) {
@@ -129,7 +131,7 @@ function getEditOns (renderOpts, params) {
   const { model } = column
   return getOns(renderOpts, params, (cellValue) => {
     // 处理 model 值双向绑定
-    if (lazyInputComponents.indexOf(renderOpts.name) === -1 || isSyncCell(renderOpts, params)) {
+    if (isSyncCell(renderOpts, params)) {
       UtilTools.setCellValue(row, column, cellValue)
     } else {
       model.update = true

@@ -902,6 +902,10 @@ export default {
     secondList () {
       return this.minuteList
     },
+    inpImmediate () {
+      const { type, immediate } = this
+      return immediate || !(type === 'text' || type === 'number' || type === 'integer' || type === 'float')
+    },
     inpAttrs () {
       const { isDatePicker, isNumber, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd, editable } = this
       let inputType = type
@@ -1052,10 +1056,10 @@ export default {
       }
     },
     emitInputEvent (value, evnt) {
-      const { immediate, isDatePicker } = this
+      const { inpImmediate, isDatePicker } = this
       this.inputValue = value
       if (!isDatePicker) {
-        if (immediate) {
+        if (inpImmediate) {
           this.emitModel(value, evnt)
         }
         this.$emit('input', { value, $event: evnt })
@@ -1066,8 +1070,8 @@ export default {
       this.emitInputEvent(value, evnt)
     },
     changeEvent (evnt) {
-      const { immediate } = this
-      if (immediate) {
+      const { inpImmediate } = this
+      if (inpImmediate) {
         this.triggerEvent(evnt)
       } else {
         this.emitModel(this.inputValue, evnt)
@@ -1078,9 +1082,9 @@ export default {
       this.triggerEvent(evnt)
     },
     blurEvent (evnt) {
-      const { inputValue, immediate } = this
+      const { inputValue, inpImmediate } = this
       const value = inputValue
-      if (!immediate) {
+      if (!inpImmediate) {
         this.emitModel(value, evnt)
       }
       this.afterCheckValue()
@@ -1408,7 +1412,8 @@ export default {
       }
     },
     dateSelectItem (date) {
-      const { immediate, type, datePanelType } = this
+      const { type, datePanelType } = this
+      const isWeekType = type === 'week'
       if (type === 'month') {
         if (datePanelType === 'year') {
           this.datePanelType = 'month'
@@ -1432,7 +1437,7 @@ export default {
           this.hidePanel()
         }
       }
-      if (!immediate) {
+      if (isWeekType) {
         this.changeValue()
       }
     },
