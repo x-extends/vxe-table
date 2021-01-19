@@ -523,10 +523,11 @@ const Methods = {
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
   cacheColumnMap () {
-    const { tableFullColumn, collectColumn, fullColumnMap } = this
+    const { tableFullColumn, collectColumn, fullColumnMap, showOverflow } = this
     const fullColumnIdData = this.fullColumnIdData = {}
     const fullColumnFieldData = this.fullColumnFieldData = {}
     const isGroup = collectColumn.some(hasChildrenList)
+    let isAllOverflow = !!showOverflow
     let expandColumn
     let treeNodeColumn
     let checkboxColumn
@@ -582,6 +583,20 @@ const Methods = {
           }
         }
       }
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (this.showOverflow && column.showOverflow === false) {
+          UtilTools.warn('vxe.error.errConflicts', [`table.show-overflow=${this.showOverflow}`, `column.show-overflow=${column.showOverflow}`])
+        }
+        if (this.showHeaderOverflow && column.showHeaderOverflow === false) {
+          UtilTools.warn('vxe.error.errConflicts', [`table.show-header-overflow=${this.showHeaderOverflow}`, `column.show-header-overflow=${column.showHeaderOverflow}`])
+        }
+        if (this.showFooterOverflow && column.showFooterOverflow === false) {
+          UtilTools.warn('vxe.error.errConflicts', [`table.show-footer-overflow=${this.showFooterOverflow}`, `column.show-footer-overflow=${column.showFooterOverflow}`])
+        }
+      }
+      if (isAllOverflow && column.showOverflow === false) {
+        isAllOverflow = false
+      }
       if (fullColumnIdData[colid]) {
         UtilTools.error('vxe.error.colRepet', ['colId', colid])
       }
@@ -608,6 +623,7 @@ const Methods = {
     this.isGroup = isGroup
     this.treeNodeColumn = treeNodeColumn
     this.expandColumn = expandColumn
+    this.isAllOverflow = isAllOverflow
   },
   /**
    * 根据 tr 元素获取对应的 row 信息

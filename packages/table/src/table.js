@@ -278,6 +278,7 @@ export default {
       parentHeight: 0,
       // 是否使用分组表头
       isGroup: false,
+      isAllOverflow: false,
       // 复选框属性，是否全选
       isAllSelected: false,
       // 复选框属性，有选中且非全选状态

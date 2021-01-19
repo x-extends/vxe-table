@@ -420,15 +420,11 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
     // 如果是固定列与设置了超出隐藏
-    if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-      if (fixedType && allColumnOverflow) {
+    if (fixedType && !mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
+      if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
         tableColumn = fixedColumn
-      } else if (scrollXLoad) {
-        if (fixedType) {
-          tableColumn = fixedColumn
-        }
       }
     }
     let emptyContent

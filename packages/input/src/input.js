@@ -1408,7 +1408,7 @@ export default {
       }
     },
     dateSelectItem (date) {
-      const { type, datePanelType } = this
+      const { immediate, type, datePanelType } = this
       if (type === 'month') {
         if (datePanelType === 'year') {
           this.datePanelType = 'month'
@@ -1431,6 +1431,9 @@ export default {
           this.dateChange(date)
           this.hidePanel()
         }
+      }
+      if (!immediate) {
+        this.changeValue()
       }
     },
     dateMouseenterEvent (item) {
