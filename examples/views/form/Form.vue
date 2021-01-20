@@ -108,6 +108,7 @@
 
     <p>
       <vxe-form
+        title-colon
         ref="xForm"
         class="my-form2"
         title-align="right"
@@ -117,15 +118,9 @@
         :loading="loading2"
         @submit="submitEvent2"
         @reset="resetEvent">
-        <vxe-form-item title="名称" field="name" span="24">
-          <template v-slot="scope">
-            <vxe-input v-model="formData2.name" placeholder="请输入名称" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
-          </template>
-        </vxe-form-item>
-        <vxe-form-item title="昵称" field="nickname" span="24">
-          <template v-slot="scope">
-            <vxe-input v-model="formData2.nickname" placeholder="请输入昵称" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
-          </template>
+        <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
+        <vxe-form-item title="昵称" span="24">
+          <template v-slot>自定义 {{ formData2.nickname }}</template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" span="24">
           <template v-slot="scope">
@@ -238,25 +233,23 @@
     </p>
 
     <pre>
-      <code>
+      <pre-code>
         | Tab | 切换到上一个 |
         | Shift Tab | 切换到下一个 |
         | Enter | （prevent-submit 不为 false）如果有存在提交按钮则提交表单 |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="html">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="html">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-
 export default {
   data  () {
     return {
@@ -267,8 +260,8 @@ export default {
       },
       loading2: false,
       formData2: {
-        name: '',
-        nickname: '',
+        name: 'test1',
+        nickname: 'Testing',
         sex: '',
         age: 26,
         date: null,
@@ -421,6 +414,7 @@ export default {
 
         <p>
           <vxe-form
+            title-colon
             ref="xForm"
             class="my-form2"
             title-align="right"
@@ -430,15 +424,9 @@ export default {
             :loading="loading2"
             @submit="submitEvent2"
             @reset="resetEvent">
-            <vxe-form-item title="名称" field="name" span="24">
-              <template v-slot="scope">
-                <vxe-input v-model="formData2.name" placeholder="请输入名称" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item title="昵称" field="nickname" span="24">
-              <template v-slot="scope">
-                <vxe-input v-model="formData2.nickname" placeholder="请输入昵称" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
-              </template>
+            <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
+            <vxe-form-item title="昵称" span="24">
+              <template v-slot>自定义 {{ formData2.nickname }}</template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" span="24">
               <template v-slot="scope">
@@ -561,8 +549,8 @@ export default {
               },
               loading2: false,
               formData2: {
-                name: '',
-                nickname: '',
+                name: 'test1',
+                nickname: 'Testing',
                 sex: '',
                 age: 26,
                 date: null,
@@ -634,11 +622,6 @@ export default {
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     submitEvent2 () {
