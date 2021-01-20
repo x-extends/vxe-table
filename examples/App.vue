@@ -33,7 +33,7 @@
             <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
             <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
-          <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
+          <!-- <router-link class="donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link> -->
         </div>
       </div>
     </header>
