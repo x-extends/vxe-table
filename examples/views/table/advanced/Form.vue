@@ -3,12 +3,12 @@
     <p class="tip">表单</p>
 
     <vxe-form :data="formData" @submit="findList">
-      <vxe-form-item title="app.body.label.name" field="name">
+      <vxe-form-item title="app.body.label.name" :item-render="{}" field="name">
         <template v-slot>
           <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="性别" field="sex" :title-prefix="{ message: '帮助信息！！！' }">
+      <vxe-form-item title="性别" field="sex" :item-render="{}" :title-prefix="{ message: '帮助信息！！！' }">
         <template v-slot>
           <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
             <vxe-option value="1" label="女"></vxe-option>
@@ -62,12 +62,12 @@ export default {
       demoCodes: [
         `
         <vxe-form :data="formData" @submit="findList">
-          <vxe-form-item title="app.body.label.name" field="name">
+          <vxe-form-item title="app.body.label.name" :item-render="{}" field="name">
             <template v-slot>
               <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="性别" field="sex" :title-prefix="{ message: '帮助信息！！！' }">
+          <vxe-form-item title="性别" field="sex" :item-render="{}" :title-prefix="{ message: '帮助信息！！！' }">
             <template v-slot>
               <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
                 <vxe-option value="1" label="女"></vxe-option>

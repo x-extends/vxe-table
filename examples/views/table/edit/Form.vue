@@ -2,13 +2,13 @@
   <div>
     <p class="tip">表格与表单的组合使用</p>
 
-    <vxe-form :data="formData" @submit="findList">
+    <vxe-form :data="formData" @submit="findList" :item-render="{}">
       <vxe-form-item title="app.body.label.name" field="name">
         <template v-slot>
           <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="性别" field="sex">
+      <vxe-form-item title="性别" field="sex" :item-render="{}">
         <template v-slot>
           <vxe-select v-model="formData.sex" placeholder="请选择性别">
             <vxe-option v-for="(item, index) in sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
@@ -64,12 +64,12 @@ export default {
       demoCodes: [
         `
         <vxe-form :data="formData" @submit="findList">
-          <vxe-form-item title="app.body.label.name" field="name">
+          <vxe-form-item title="app.body.label.name" field="name" :item-render="{}">
             <template v-slot>
               <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
             </template>
           </vxe-form-item>
-          <vxe-form-item title="性别" field="sex">
+          <vxe-form-item title="性别" field="sex" :item-render="{}">
             <template v-slot>
               <vxe-select v-model="formData.sex" placeholder="请选择性别">
                 <vxe-option v-for="(item, index) in sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
