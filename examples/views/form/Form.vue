@@ -1,7 +1,10 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.form') }}</h2>
-    <p class="tip">表单，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'form'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
+    <p class="tip">
+      表单，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'form'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
+      <span class="red">（注：重置功能需要配置 item-render 的项有效，如果不需要自动重置，可以不用设置）</span>
+    </p>
 
     <p>
       <vxe-form :data="formData1" @submit="searchEvent" @reset="resetEvent">
