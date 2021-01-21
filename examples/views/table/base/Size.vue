@@ -14,12 +14,12 @@
     </vxe-toolbar>
 
     <vxe-form :data="formData">
-      <vxe-form-item title="输入框" field="iVal">
+      <vxe-form-item title="输入框" field="iVal" :item-render="{}">
         <template v-slot>
           <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="下拉框" field="sVal">
+      <vxe-form-item title="下拉框" field="sVal" :item-render="{}">
         <template v-slot>
           <vxe-select v-model="formData.sVal">
             <vxe-option value="0" label="女"></vxe-option>
@@ -27,13 +27,13 @@
           </vxe-select>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="复选框" field="cVal">
+      <vxe-form-item title="复选框" field="cVal" :item-render="{}">
         <template v-slot>
           <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
           <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="单选框" field="rVal">
+      <vxe-form-item title="单选框" field="rVal" :item-render="{}">
         <template v-slot>
           <vxe-radio-group v-model="formData.rVal">
             <vxe-radio label="1">选项1</vxe-radio>
@@ -90,12 +90,12 @@
     <p class="tip">设置大小为 medium，默认大小：Table 44px 、Button 32px、Input 32px、Checkbox 15px、Radio 15px</p>
 
     <vxe-form :data="formData" size="medium">
-      <vxe-form-item title="输入框" field="iVal">
+      <vxe-form-item title="输入框" field="iVal" :item-render="{}">
         <template v-slot>
           <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="下拉框" field="sVal">
+      <vxe-form-item title="下拉框" field="sVal" :item-render="{}">
         <template v-slot>
           <vxe-select v-model="formData.sVal">
             <vxe-option value="0" label="女"></vxe-option>
@@ -103,13 +103,13 @@
           </vxe-select>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="复选框" field="cVal">
+      <vxe-form-item title="复选框" field="cVal" :item-render="{}">
         <template v-slot>
           <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
           <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="单选框" field="rVal">
+      <vxe-form-item title="单选框" field="rVal" :item-render="{}">
         <template v-slot>
           <vxe-radio-group v-model="formData.rVal">
             <vxe-radio label="1">选项1</vxe-radio>
@@ -168,12 +168,12 @@
     <p class="tip">设置大小为 small，默认大小：Table 40px 、Button 30px、Input 30px、Checkbox 14px、Radio 14px</p>
 
     <vxe-form :data="formData" size="small">
-      <vxe-form-item title="输入框" field="iVal">
+      <vxe-form-item title="输入框" field="iVal" :item-render="{}">
         <template v-slot>
           <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="下拉框" field="sVal">
+      <vxe-form-item title="下拉框" field="sVal" :item-render="{}">
         <template v-slot>
           <vxe-select v-model="formData.sVal">
             <vxe-option value="0" label="女"></vxe-option>
@@ -181,13 +181,13 @@
           </vxe-select>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="复选框" field="cVal">
+      <vxe-form-item title="复选框" field="cVal" :item-render="{}">
         <template v-slot>
           <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
           <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="单选框" field="rVal">
+      <vxe-form-item title="单选框" field="rVal" :item-render="{}">
         <template v-slot>
           <vxe-radio-group v-model="formData.rVal">
             <vxe-radio label="1">选项1</vxe-radio>
@@ -246,12 +246,12 @@
     <p class="tip">设置大小为 mini，默认大小：Table 36px 、Button 28px、Input 28px、Checkbox 14px、Radio 14px</p>
 
     <vxe-form :data="formData" size="mini">
-      <vxe-form-item title="输入框" field="iVal">
+      <vxe-form-item title="输入框" field="iVal" :item-render="{}">
         <template v-slot>
           <vxe-input v-model="formData.iVal" placeholder="请输入名称" clearable></vxe-input>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="下拉框" field="sVal">
+      <vxe-form-item title="下拉框" field="sVal" :item-render="{}">
         <template v-slot>
           <vxe-select v-model="formData.sVal">
             <vxe-option value="0" label="女"></vxe-option>
@@ -259,13 +259,13 @@
           </vxe-select>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="复选框" field="cVal">
+      <vxe-form-item title="复选框" field="cVal" :item-render="{}">
         <template v-slot>
           <vxe-checkbox v-model="formData.cVal">选项1</vxe-checkbox>
           <vxe-checkbox :indeterminate="formData.ciVal">半选</vxe-checkbox>
         </template>
       </vxe-form-item>
-      <vxe-form-item title="单选框" field="rVal">
+      <vxe-form-item title="单选框" field="rVal" :item-render="{}">
         <template v-slot>
           <vxe-radio-group v-model="formData.rVal">
             <vxe-radio label="1">选项1</vxe-radio>

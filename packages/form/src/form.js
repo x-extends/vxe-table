@@ -314,9 +314,9 @@ export default {
       if (data) {
         formItems.forEach(item => {
           const { field, resetValue, itemRender } = item
-          if (field) {
+          if (field && isEnableConf(itemRender)) {
             XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
-            const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
+            const compConf = VXETable.renderer.get(itemRender.name)
             if (compConf && compConf.itemResetMethod) {
               compConf.itemResetMethod({ data, property: field, item, $form: this })
             }
