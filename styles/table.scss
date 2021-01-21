@@ -615,6 +615,23 @@
       }
     }
   }
+  &.border--default,
+  &.border--full,
+  &.border--outer,
+  &.border--inner {
+    .vxe-table--header-wrapper {
+      .vxe-header--row {
+        &:last-child {
+          .vxe-header--gutter {
+            background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color);
+            background-repeat: no-repeat;
+            background-size: 100% 1px;
+            background-position: right bottom;
+          }
+        }
+      }
+    }
+  }
   &.border--inner,
   &.border--none {
     .vxe-table--header-wrapper {
