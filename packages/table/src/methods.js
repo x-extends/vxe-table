@@ -252,13 +252,15 @@ const Methods = {
    * 获取父容器元素
    */
   getParentElem () {
-    return this.$xegrid ? this.$xegrid.$el.parentNode : this.$el.parentNode
+    const { $el, $xegrid } = this
+    return $xegrid ? $xegrid.$el.parentNode : $el.parentNode
   },
   /**
    * 获取父容器的高度
    */
   getParentHeight () {
-    return this.$xegrid ? this.$xegrid.getParentHeight() : this.getParentElem().clientHeight
+    const { $el, $xegrid } = this
+    return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle($el.parentNode).height))
   },
   /**
    * 获取需要排除的高度
@@ -266,7 +268,8 @@ const Methods = {
    * 如果存在表尾合计滚动条，则需要排除滚动条高度
    */
   getExcludeHeight () {
-    return this.$xegrid ? this.$xegrid.getExcludeHeight() : 0
+    const { $xegrid } = this
+    return $xegrid ? $xegrid.getExcludeHeight() : 0
   },
   /**
    * 重置表格的一切数据状态
@@ -1450,7 +1453,7 @@ const Methods = {
   autoCellWidth (headerElem, bodyElem, footerElem) {
     let tableWidth = 0
     const minCellWidth = 40 // 列宽最少限制 40px
-    const bodyWidth = bodyElem.clientWidth
+    const bodyWidth = bodyElem.clientWidth - 1
     let remainWidth = bodyWidth
     let meanWidth = remainWidth / 100
     const { fit, columnStore } = this
@@ -1523,7 +1526,7 @@ const Methods = {
     }
     const tableHeight = bodyElem.offsetHeight
     const overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
-    this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth : 0
+    this.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyElem.clientWidth : 0
     this.overflowY = overflowY
     this.tableWidth = tableWidth
     this.tableHeight = tableHeight

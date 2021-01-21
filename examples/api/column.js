@@ -113,7 +113,7 @@ const apis = [
         version: '',
         type: 'boolean',
         enum: '',
-        defVal: '',
+        defVal: 'true',
         list: []
       },
       {

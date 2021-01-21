@@ -51,6 +51,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     scrollYLoad,
     highlightCurrentRow,
     showOverflow: allColumnOverflow,
+    isAllOverflow,
     align: allAlign,
     currentColumn,
     cellClassName,
@@ -191,7 +192,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     isDirty = $xetable.isUpdateByRow(row, column.property)
   }
   const tdVNs = []
-  if (allColumnOverflow && fixedHiddenColumn) {
+  if (fixedHiddenColumn && (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
     tdVNs.push(
       h('div', {
         class: ['vxe-cell', {

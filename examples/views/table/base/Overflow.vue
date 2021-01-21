@@ -41,6 +41,7 @@
       show-footer
       show-header-overflow
       highlight-hover-row
+      height="500"
       :footer-method="footerMethod"
       :data="tableData2"
       :tooltip-config="{contentMethod: showTooltipMethod, enterable: true}">
@@ -85,7 +86,14 @@ export default {
         { name: 'Test2', role: '后端', date: '2020-02-22', rate: 2, address: 'address2' },
         { name: 'Test3', role: '前端', date: '2020-01-01', rate: 0, address: '支持多行超出显示 tooltip xxxxxxxxxxxxxxx<br>html换行<br>支持多行超出显示 tooltip xxxxxxxxxxxxxxx' },
         { name: 'Test4', role: '设计师', date: '2020-02-23', rate: 1, address: 'address4<br>html换行<br>换行xx' },
-        { name: 'Test5', role: '前端', date: '2020-01-20', rate: 3, address: 'address5 xxxxxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' }
+        { name: 'Test5', role: '前端', date: '2020-01-20', rate: 3, address: 'address5 xxxxxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+        { name: 'Test6', role: '后端', date: '2021-01-20', rate: 3, address: 'address6 xxx<br>html换行<br>换行xx' },
+        { name: 'Test7', role: '设计师', date: '2020-08-17', rate: 3, address: 'address7 xxxxxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+        { name: 'Test8', role: '前端', date: '2022-01-20', rate: 3, address: 'address8 xxxxxxxx<br>html换行<br>换行xxxxxxxxxxxxxxx' },
+        { name: 'Test9', role: '后端', date: '2021-12-15', rate: 3, address: 'address9 xxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+        { name: 'Test10', role: '前端', date: '2020-09-20', rate: 3, address: 'address10 xxxxxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+        { name: 'Test11', role: '后端', date: '2023-06-01', rate: 3, address: 'address11 xxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+        { name: 'Test12', role: '设计师', date: '2020-07-13', rate: 3, address: 'address12 xxx<br>html换行<br>换行xxzzzzzzzzzzzzzzz' }
       ],
       demoCodes: [
         `
@@ -146,6 +154,7 @@ export default {
           show-footer
           show-header-overflow
           highlight-hover-row
+          height="500"
           :footer-method="footerMethod"
           :data="tableData2"
           :tooltip-config="{contentMethod: showTooltipMethod, enterable: true}">
@@ -174,7 +183,14 @@ export default {
                 { name: 'Test2', role: '后端', date: '2020-02-22', rate: 2, address: 'address2' },
                 { name: 'Test3', role: '前端', date: '2020-01-01', rate: 0, address: '支持多行超出显示 tooltip xxxxxxxxxxxxxxx<br>html换行<br>支持多行超出显示 tooltip xxxxxxxxxxxxxxx' },
                 { name: 'Test4', role: '设计师', date: '2020-02-23', rate: 1, address: 'address4<br>html换行<br>换行xx' },
-                { name: 'Test5', role: '前端', date: '2020-01-20', rate: 3, address: 'address5 xxxxxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' }
+                { name: 'Test5', role: '前端', date: '2020-01-20', rate: 3, address: 'address5 xxxxxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+                { name: 'Test6', role: '后端', date: '2021-01-20', rate: 3, address: 'address6 xxx<br>html换行<br>换行xx' },
+                { name: 'Test7', role: '设计师', date: '2020-08-17', rate: 3, address: 'address7 xxxxxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+                { name: 'Test8', role: '前端', date: '2022-01-20', rate: 3, address: 'address8 xxxxxxxx<br>html换行<br>换行xxxxxxxxxxxxxxx' },
+                { name: 'Test9', role: '后端', date: '2021-12-15', rate: 3, address: 'address9 xxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+                { name: 'Test10', role: '前端', date: '2020-09-20', rate: 3, address: 'address10 xxxxxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+                { name: 'Test11', role: '后端', date: '2023-06-01', rate: 3, address: 'address11 xxxxxxxxxxxxxxxxxxx<br>html换行<br>换行xx' },
+                { name: 'Test12', role: '设计师', date: '2020-07-13', rate: 3, address: 'address12 xxx<br>html换行<br>换行xxzzzzzzzzzzzzzzz' }
               ]
             }
           },

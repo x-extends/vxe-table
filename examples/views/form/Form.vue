@@ -118,11 +118,9 @@
         :loading="loading2"
         @submit="submitEvent2"
         @reset="resetEvent">
-        <vxe-form-item title="名称" span="24">
-          <template v-slot>{{ formData2.name }}</template>
-        </vxe-form-item>
+        <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
         <vxe-form-item title="昵称" span="24">
-          <template v-slot>{{ formData2.nickname }}</template>
+          <template v-slot>自定义 {{ formData2.nickname }}</template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" span="24">
           <template v-slot="scope">
@@ -426,11 +424,9 @@ export default {
             :loading="loading2"
             @submit="submitEvent2"
             @reset="resetEvent">
-            <vxe-form-item title="名称" span="24">
-              <template v-slot>{{ formData2.name }}</template>
-            </vxe-form-item>
+            <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
             <vxe-form-item title="昵称" span="24">
-              <template v-slot>{{ formData2.nickname }}</template>
+              <template v-slot>自定义 {{ formData2.nickname }}</template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" span="24">
               <template v-slot="scope">

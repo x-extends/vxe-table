@@ -367,7 +367,8 @@ export default {
       return []
     },
     getParentHeight () {
-      return (this.isZMax ? DomTools.getDomNode().visibleHeight : this.$el.parentNode.clientHeight) - this.getExcludeHeight()
+      const { $el, isZMax } = this
+      return (isZMax ? DomTools.getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle($el.parentNode).height)) - this.getExcludeHeight()
     },
     /**
      * 获取需要排除的高度

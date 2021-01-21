@@ -22,7 +22,7 @@
     </div> -->
     <div class="content" style="padding-top: 50px">
       <div style="float: left;padding-left: 5em;">
-        <div>
+        <div style="margin-bottom: 15px;">
           <span style="font-size: 22px;font-weight: 700;">QQ交流群</span>
           <br>
           <span v-html="$t('app.body.other.issuesTitle')"></span>
@@ -30,6 +30,11 @@
         <img src="/vxe-table/static/donation/qq.png">
       </div>
       <div style="float: right;padding-right: 5em;">
+        <div style="margin-bottom: 15px;">
+          <span style="font-size: 22px;font-weight: 700;">支持作者</span>
+          <br>
+          <span>如果觉得该项目对您有帮助，请作者喝杯咖啡吧</span>
+        </div>
         <img src="/vxe-table/static/donation/pay.jpg">
       </div>
     </div>
