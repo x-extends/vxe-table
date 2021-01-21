@@ -1373,7 +1373,7 @@ const apis = [
         defVal: '继承 setup.table.tooltipConfig',
         list: [
           {
-            name: 'enabled',
+            name: 'showAll',
             desc: '所有单元格开启 tooltip 显示',
             version: '',
             type: 'boolean',

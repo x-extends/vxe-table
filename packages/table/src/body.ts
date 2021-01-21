@@ -113,7 +113,7 @@ export default defineComponent({
      */
     const renderColumn = ($seq: string, seq: number, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
       const { columnKey, height, showOverflow: allColumnOverflow, cellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
-      const { tableData, overflowX, scrollXLoad, scrollYLoad, currentColumn, mergeList, editStore, validStore } = tableReactData
+      const { tableData, overflowX, scrollXLoad, scrollYLoad, currentColumn, mergeList, editStore, validStore, isAllOverflow } = tableReactData
       const { afterFullData } = tableInternalData
       const validOpts = computeValidOpts.value
       const checkboxOpts = computeCheckboxOpts.value
@@ -222,7 +222,7 @@ export default defineComponent({
         isDirty = $xetable.isUpdateByRow(row, column.property)
       }
       const tdVNs = []
-      if (allColumnOverflow && fixedHiddenColumn) {
+      if (fixedHiddenColumn && (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
         tdVNs.push(
           h('div', {
             class: ['vxe-cell', {
@@ -496,19 +496,15 @@ export default defineComponent({
     const renderVN = () => {
       let { fixedColumn, fixedType, tableColumn } = props
       const { keyboardConfig, showOverflow: allColumnOverflow, spanMethod, mouseConfig, emptyRender } = tableProps
-      const { tableData, mergeList, scrollXLoad } = tableReactData
+      const { tableData, mergeList, scrollXLoad, scrollYLoad, isAllOverflow } = tableReactData
       const { slots } = tableContext
       const emptyOpts = computeEmptyOpts.value
       const keyboardOpts = computeKeyboardOpts.value
       const mouseOpts = computeMouseOpts.value
       // 如果是固定列与设置了超出隐藏
-      if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-        if (fixedType && allColumnOverflow) {
+      if (fixedType && !mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
+        if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
           tableColumn = fixedColumn
-        } else if (scrollXLoad) {
-          if (fixedType) {
-            tableColumn = fixedColumn
-          }
         }
       }
       let emptyContent: string | VxeGlobalRendererHandles.RenderResult

@@ -950,7 +950,7 @@ export default defineComponent({
       },
       getParentHeight () {
         const el = refElem.value
-        return (reactData.isZMax ? DomTools.getDomNode().visibleHeight : (el.parentNode as HTMLElement).clientHeight) - gridPrivateMethods.getExcludeHeight()
+        return (reactData.isZMax ? DomTools.getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height)) - gridPrivateMethods.getExcludeHeight()
       },
       triggerToolbarBtnEvent (button, evnt) {
         gridMethods.commitProxy(button, evnt)

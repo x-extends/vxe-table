@@ -3,11 +3,10 @@ import XEUtils from 'xe-utils/ctor'
 import GlobalConfig from '../../conf'
 import { VNTools, UtilTools } from '../../tools'
 
-import { VxeGlobalRenderer } from '../../../types/vxe-table'
+import { VxeGlobalRendererHandles, VxeGlobalRenderer, VxeColumnPropTypes } from '../../../types/vxe-table'
 
 const { getOnName } = VNTools
 
-const lazyInputComponents = ['$input', '$textarea']
 const componentDefaultModelProp = 'modelValue'
 
 const defaultCompProps = { transfer: true }
@@ -70,6 +69,22 @@ function getNativeAttrs (renderOpts: any) {
   return attrs
 }
 
+function getInputImmediateModel (renderOpts: VxeColumnPropTypes.EditRender) {
+  const { name, immediate, props } = renderOpts
+  if (!immediate) {
+    if (name === 'input' || name === '$input') {
+      const { type } = props || {}
+      return !(!type || type === 'text' || type === 'number' || type === 'integer' || type === 'float')
+    }
+    return true
+  }
+  return immediate
+}
+
+function getCellEditProps (renderOpts: VxeColumnPropTypes.EditRender, params: VxeGlobalRendererHandles.RenderEditParams, value: any, defaultProps?: any) {
+  return XEUtils.assign({ immediate: getInputImmediateModel(renderOpts) }, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
+}
+
 function getCellEditFilterProps (renderOpts: any, params: any, value: any, defaultProps?: any) {
   return XEUtils.assign({}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
@@ -78,8 +93,8 @@ function getComponentFormItemProps (renderOpts: any, params: any, value: any, de
   return XEUtils.assign({}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
 
-function isSyncCell (renderOpts: any, params: any) {
-  return renderOpts.immediate || params.$type === 'cell'
+function isSyncCell (renderOpts: VxeColumnPropTypes.EditRender, params: any) {
+  return params.$type === 'cell' || getInputImmediateModel(renderOpts)
 }
 
 /**
@@ -165,7 +180,7 @@ function getEditOns (renderOpts: any, params: any) {
   const { model } = column
   return getComponentOns(renderOpts, params, (cellValue: any) => {
     // 处理 model 值双向绑定
-    if (lazyInputComponents.indexOf(renderOpts.name) === -1 || isSyncCell(renderOpts, params)) {
+    if (isSyncCell(renderOpts, params)) {
       UtilTools.setCellValue(row, column, cellValue)
     } else {
       model.update = true
@@ -255,12 +270,12 @@ function nativeEditRender (renderOpts: any, params: any) {
   ]
 }
 
-function defaultEditRender (renderOpts: any, params: any) {
+function defaultEditRender (renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
   const { row, column } = params
   const cellValue = UtilTools.getCellValue(row, column)
   return [
     h(getDefaultComponent(renderOpts), {
-      ...getCellEditFilterProps(renderOpts, params, cellValue),
+      ...getCellEditProps(renderOpts, params, cellValue),
       ...getEditOns(renderOpts, params)
     })
   ]
@@ -269,7 +284,7 @@ function defaultEditRender (renderOpts: any, params: any) {
 function defaultButtonEditRender (renderOpts: any, params: any) {
   return [
     h('vxe-button', {
-      ...getCellEditFilterProps(renderOpts, params, null),
+      ...getCellEditProps(renderOpts, params, null),
       ...getComponentOns(renderOpts, params)
     })
   ]
@@ -363,7 +378,7 @@ function defaultSelectEditRender (renderOpts: any, params: any) {
   const cellValue = UtilTools.getCellValue(row, column)
   return [
     h(getDefaultComponent(renderOpts), {
-      ...getCellEditFilterProps(renderOpts, params, cellValue, { options, optionProps, optionGroups, optionGroupProps }),
+      ...getCellEditProps(renderOpts, params, cellValue, { options, optionProps, optionGroups, optionGroupProps }),
       ...getEditOns(renderOpts, params)
     })
   ]

@@ -715,6 +715,7 @@ export interface TableReactData {
   parentHeight: number;
   // 是否使用分组表头
   isGroup: boolean;
+  isAllOverflow: boolean;
   // 复选框属性，是否全选
   isAllSelected: boolean;
   // 复选框属性，有选中且非全选状态

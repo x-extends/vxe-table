@@ -68,6 +68,7 @@ export default defineComponent({
       parentHeight: 0,
       // 是否使用分组表头
       isGroup: false,
+      isAllOverflow: false,
       // 复选框属性，是否全选
       isAllSelected: false,
       // 复选框属性，有选中且非全选状态
@@ -882,6 +883,7 @@ export default defineComponent({
       const fullColumnFieldData: any = internalData.fullColumnFieldData = {}
       const mouseOpts = computeMouseOpts.value
       const isGroup = collectColumn.some(hasChildrenList)
+      let isAllOverflow = !!props.showOverflow
       let expandColumn: any
       let treeNodeColumn: any
       let checkboxColumn: any
@@ -937,6 +939,9 @@ export default defineComponent({
             }
           }
         }
+        if (isAllOverflow && column.showOverflow === false) {
+          isAllOverflow = false
+        }
         if (fullColumnIdData[colid]) {
           UtilTools.error('vxe.error.colRepet', ['colId', colid])
         }
@@ -963,6 +968,7 @@ export default defineComponent({
       reactData.isGroup = isGroup
       reactData.treeNodeColumn = treeNodeColumn
       reactData.expandColumn = expandColumn
+      reactData.isAllOverflow = isAllOverflow
     }
 
     /**
@@ -978,7 +984,7 @@ export default defineComponent({
     const autoCellWidth = (headerElem: any, bodyElem: any, footerElem: any) => {
       let tableWidth = 0
       const minCellWidth = 40 // 列宽最少限制 40px
-      const bodyWidth = bodyElem.clientWidth
+      const bodyWidth = bodyElem.clientWidth - 1
       let remainWidth = bodyWidth
       let meanWidth = remainWidth / 100
       const { fit } = props
@@ -3944,10 +3950,8 @@ export default defineComponent({
        * 获取父容器的高度
        */
       getParentHeight () {
-        if ($xegrid) {
-          return $xegrid.getParentHeight()
-        }
-        return tablePrivateMethods.getParentElem().clientHeight
+        const el = refElem.value
+        return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height))
       },
       /**
        * 获取需要排除的高度

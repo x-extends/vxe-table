@@ -55,6 +55,7 @@ export default defineComponent({
       xID,
       props,
       context,
+      reactData,
       getRefMaps: () => refMaps
     } as VxeTooltipConstructor
 

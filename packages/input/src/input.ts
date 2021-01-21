@@ -533,6 +533,11 @@ export default defineComponent({
       return isNumType && !XEUtils.toNumber(maxlength) ? 16 : maxlength
     })
 
+    const computeInpImmediate = computed(() => {
+      const { type, immediate } = props
+      return immediate || !(type === 'text' || type === 'number' || type === 'integer' || type === 'float')
+    })
+
     function getNumberValue (val: any) {
       const { type } = props
       const digitsValue = computeDigitsValue.value
@@ -555,10 +560,10 @@ export default defineComponent({
 
     const emitInputEvent = (value: any, evnt: Event) => {
       const isDatePickerType = computeIsDatePickerType.value
-      const { immediate } = props
+      const inpImmediate = computeInpImmediate.value
       reactData.inputValue = value
       if (!isDatePickerType) {
-        if (immediate) {
+        if (inpImmediate) {
           emitModel(value, evnt)
         }
         inputMethods.dispatchEvent('input', { value }, evnt)
@@ -572,8 +577,8 @@ export default defineComponent({
     }
 
     const changeEvent = (evnt: Event & { type: 'change' }) => {
-      const { immediate } = props
-      if (immediate) {
+      const inpImmediate = computeInpImmediate.value
+      if (inpImmediate) {
         triggerEvent(evnt)
       } else {
         emitModel(reactData.inputValue, evnt)
@@ -778,9 +783,9 @@ export default defineComponent({
     }
 
     const blurEvent = (evnt: Event & { type: 'blur' }) => {
-      const { immediate } = props
       const { inputValue } = reactData
-      if (!immediate) {
+      const inpImmediate = computeInpImmediate.value
+      if (!inpImmediate) {
         emitModel(inputValue, evnt)
       }
       afterCheckValue()
@@ -1036,8 +1041,8 @@ export default defineComponent({
           hidePanel()
         }
       } else if (type === 'year') {
-        hidePanel()
         dateChange(date)
+        hidePanel()
       } else {
         if (datePanelType === 'month') {
           reactData.datePanelType = type === 'week' ? type : 'day'
