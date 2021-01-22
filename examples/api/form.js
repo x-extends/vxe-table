@@ -1,3 +1,8 @@
+import XEUtils from 'xe-utils'
+import itemAPI from './form-item'
+
+const itemProps = itemAPI.find(item => item.name === 'Props')
+
 const apis = [
   {
     name: 'Props',
@@ -95,7 +100,7 @@ const apis = [
         type: 'Array',
         enum: '',
         defVal: '',
-        list: []
+        list: XEUtils.mapTree(itemProps.list, (item) => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
       },
       {
         name: 'rules',
