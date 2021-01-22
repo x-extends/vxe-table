@@ -33,7 +33,7 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-colgroup title="分组1">
         <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-        <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
+        <vxe-table-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-table-column>
       </vxe-table-colgroup>
       <vxe-table-colgroup title="分组2">
         <vxe-table-colgroup title="分组21">
@@ -128,7 +128,7 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-colgroup title="分组1">
             <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-            <vxe-table-column field="role" title="Role" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-table-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-table-column>
           </vxe-table-colgroup>
           <vxe-table-colgroup title="分组2">
             <vxe-table-colgroup title="分组21">

@@ -32,7 +32,7 @@
       <vxe-table-column type="seq" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="400" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex2" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="sex2" title="Sex" width="200" :edit-render="{name: '$input'}"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="300" fixed="right" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
     </vxe-table>
 
@@ -102,7 +102,7 @@ export default {
           <vxe-table-column type="seq" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="400" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex2" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="sex2" title="Sex" width="200" :edit-render="{name: '$input'}"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300" fixed="right" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
         </vxe-table>
         `,

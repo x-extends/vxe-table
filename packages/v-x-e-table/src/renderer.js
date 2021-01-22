@@ -53,16 +53,19 @@ function getNativeAttrs ({ name, attrs }) {
 function getInputImmediateModel (renderOpts) {
   const { name, immediate, props } = renderOpts
   if (!immediate) {
-    if (name === 'input' || name === '$input') {
+    if (name === '$input') {
       const { type } = props || {}
       return !(!type || type === 'text' || type === 'number' || type === 'integer' || type === 'float')
+    }
+    if (name === 'input' || name === 'textarea' || name === '$textarea') {
+      return false
     }
     return true
   }
   return immediate
 }
 
-function isSyncCell (renderOpts, params) {
+function isImmediateCell (renderOpts, params) {
   return params.$type === 'cell' || getInputImmediateModel(renderOpts)
 }
 
@@ -128,18 +131,24 @@ function getOns (renderOpts, params, inputFunc, changeFunc) {
 
 function getEditOns (renderOpts, params) {
   const { $table, row, column } = params
+  const { name } = renderOpts
   const { model } = column
+  const isImmediate = isImmediateCell(renderOpts, params)
   return getOns(renderOpts, params, (cellValue) => {
     // 处理 model 值双向绑定
-    if (isSyncCell(renderOpts, params)) {
+    if (isImmediate) {
       UtilTools.setCellValue(row, column, cellValue)
     } else {
       model.update = true
       model.value = cellValue
     }
-  }, () => {
+  }, (eventParams) => {
     // 处理 change 事件相关逻辑
-    $table.updateStatus(params)
+    if (!isImmediate && (name === '$input' || name === '$textarea')) {
+      $table.updateStatus(params, eventParams.value)
+    } else {
+      $table.updateStatus(params)
+    }
   })
 }
 
@@ -169,7 +178,7 @@ function getNativeEditOns (renderOpts, params) {
   return getOns(renderOpts, params, (evnt) => {
     // 处理 model 值双向绑定
     const cellValue = evnt.target.value
-    if (isSyncCell(renderOpts, params)) {
+    if (isImmediateCell(renderOpts, params)) {
       UtilTools.setCellValue(row, column, cellValue)
     } else {
       model.update = true
@@ -211,7 +220,7 @@ function nativeEditRender (h, renderOpts, params) {
   const { row, column } = params
   const { name } = renderOpts
   const attrs = getNativeAttrs(renderOpts)
-  const cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
+  const cellValue = isImmediateCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
   return [
     h(name, {
       class: `vxe-default-${name}`,
@@ -273,7 +282,7 @@ function renderNativeOptions (h, options, renderOpts, params) {
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
-  const cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
+  const cellValue = isImmediateCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
   return options.map((option, oIndex) => {
     return h('option', {
       key: oIndex,
