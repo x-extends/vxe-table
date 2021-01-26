@@ -524,6 +524,7 @@ export default {
           seqMethod: '只对 type=seq 有效，自定义索引方法',
           sortable: '是否允许列排序',
           sortBy: '只对 sortable 有效，自定义排序的属性',
+          sortType: '排序的字段类型，比如字符串转数值等',
           sortMethod: '只对 sortable 有效，列的排序方法，该方法的返回值用来决定该行的排序规则',
           remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
           filters: '配置筛选条件（注：筛选只能用于列表，如果是树结构则过滤根节点）',

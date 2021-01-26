@@ -40,6 +40,14 @@
     <div class="page-container">
       <div class="aside" :class="{visible: showLeft}">
         <div class="header">
+          <div class="sponsors" v-if="sponsorList.length">
+            <h4>赞助商</h4>
+            <div v-for="(item, index) in sponsorList" :key="index">
+              <a :href="item.url" :title="item.title" target="_blank">
+                <img :src="item.img" height="50" width="200">
+              </a>
+            </div>
+          </div>
           <div v-if="stableVersionList.length" class="version-list">
             <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
             <vxe-select class="stable-select" v-model="selectStableVersion" size="mini" :options="stableVersionList"></vxe-select>
@@ -124,6 +132,7 @@ export default {
       version: '2',
       usedJSHeapSize: '0',
       newVersionVisible: false,
+      sponsorList: [],
       tableList: [
         {
           label: 'app.aside.nav.start',
@@ -2223,7 +2232,13 @@ export default {
     init () {
       this.getVersion()
       this.loadList()
+      this.loadSponsors()
       setTimeout(() => this.defaultExpand(), 1500)
+    },
+    loadSponsors () {
+      XEAjax.get('https://api.xuliangzhan.com:10443/api/pub/sponsors').then(data => {
+        this.sponsorList = data
+      })
     },
     loadList () {
       this.tableData = XEUtils.clone(this.tableList, true)

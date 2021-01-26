@@ -143,6 +143,23 @@ function removeMerges (_vm, merges, mList, rowList) {
   return rest
 }
 
+function getOrderField (_vm, column) {
+  const { property, sortBy, sortType, formatter } = column
+  if (sortBy) {
+    return sortBy
+  } else if (sortType === 'auto') {
+    return (row) => {
+      const cellValue = _vm.getCellLabel(row, column)
+      return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+    }
+  } else if (sortType === 'number') {
+    return (row) => XEUtils.toNumber(_vm.getCellLabel(row, column))
+  } else if (formatter) {
+    return (row) => _vm.getCellLabel(row, column)
+  }
+  return property
+}
+
 const Methods = {
   /**
    * 获取父容器元素
@@ -890,7 +907,7 @@ const Methods = {
         if (allSortMethod) {
           tableData = allSortMethod({ data: tableData, column, property: column.property, order: column.order, sortList: orderColumns, $table: this }) || tableData
         } else {
-          const rest = column.sortMethod ? tableData.sort(column.sortMethod) : (XEUtils.sortBy(tableData, column.sortBy || (column.formatter ? row => this.getCellLabel(row, column) : column.property)))
+          const rest = column.sortMethod ? tableData.sort(column.sortMethod) : XEUtils.orderBy(tableData, getOrderField(this, column))
           tableData = column.order === 'desc' ? rest.reverse() : rest
         }
       }

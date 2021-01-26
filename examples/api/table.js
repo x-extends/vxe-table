@@ -1919,6 +1919,24 @@ const apis = [
             list: []
           },
           {
+            name: 'cutMethod',
+            desc: '重写单元格剪贴值清除的方法，将剪贴单元格的值清除',
+            version: 'pro',
+            type: '(params: { row, column, cellValue }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'beforeCutMethod',
+            desc: '自定义单元格剪贴值清除之前的方法，可以通过返回 false 阻止清除行为',
+            version: 'pro',
+            type: '(params: { cutAreas, currentAreas }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'pasteMethod',
             desc: '重写单元格粘贴赋值的方法，从剪贴板赋值到单元格',
             version: 'pro',
@@ -1986,7 +2004,7 @@ const apis = [
             name: 'replaceMethod',
             desc: '自定义单元格替换方法',
             version: 'pro',
-            type: '({ row, column, cellValue }) => boolean',
+            type: '({ row, column, cellValue }) => void',
             enum: '',
             defVal: '',
             list: []

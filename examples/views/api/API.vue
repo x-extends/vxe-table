@@ -348,7 +348,7 @@ export default {
           } else if (row.abandoned) {
             return '该参数属于评估阶段，谨慎使用，后续有可能会被废弃的风险'
           } else if (row.version === 'pro') {
-            return '该参数属于 pro 版本功能，需获取授权，如有需要可联系邮件：xu_liangzhan@163.com'
+            return '该参数属于 pro 扩展插件的功能，需获取授权，如有需要可联系邮件：xu_liangzhan@163.com'
           }
         }
       }

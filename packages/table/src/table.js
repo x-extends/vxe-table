@@ -822,6 +822,9 @@ export default {
         UtilTools.warn('vxe.error.errProp', ['mouse-config.checked', 'edit-config.trigger=dblclick'])
       }
     }
+    if (this.mouseOpts.area && this.checkboxOpts.range) {
+      UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
+    }
     if (treeConfig && this.stripe) {
       UtilTools.warn('vxe.error.noTree', ['stripe'])
     }

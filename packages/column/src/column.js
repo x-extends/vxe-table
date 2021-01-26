@@ -52,6 +52,8 @@ const props = {
   remoteSort: { type: Boolean, default: null },
   // 在 v3 中只支持字符串类型
   sortBy: [String, Array],
+  // 排序的字段类型，比如字符串转数值等
+  sortType: String,
   // 在 v3 中废弃
   sortMethod: Function,
   // 配置筛选条件数组

@@ -121,6 +121,7 @@ class ColumnInfo {
       formatter: formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
+      sortType: _vm.sortType,
       sortMethod: _vm.sortMethod,
       remoteSort: _vm.remoteSort,
       filters: UtilTools.getFilters(_vm.filters),
