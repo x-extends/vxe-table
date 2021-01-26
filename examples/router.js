@@ -101,6 +101,7 @@ import TableKeepAliveTable2 from './views/table/advanced/keepAlives/Table2.vue'
 import TableKeepAliveTable3 from './views/table/advanced/keepAlives/Table3.vue'
 
 import GridBasic from './views/table/grid/Basic.vue'
+import GridEvents from './views/table/grid/Events.vue'
 import GridGroup from './views/table/grid/Group.vue'
 import GridReverse from './views/table/grid/Reverse.vue'
 import GridTemplate from './views/table/grid/Template.vue'
@@ -991,6 +992,11 @@ export default new Router({
       path: '/table/grid/basic',
       name: 'GridBasic',
       component: GridBasic
+    },
+    {
+      path: '/table/grid/events',
+      name: 'GridEvents',
+      component: GridEvents
     },
     {
       path: '/table/grid/group',

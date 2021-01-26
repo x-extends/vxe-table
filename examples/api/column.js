@@ -243,6 +243,15 @@ const apis = [
         list: []
       },
       {
+        name: 'sort-type',
+        descKey: 'app.api.tableColumn.desc.sortType',
+        version: '3.1.1',
+        type: 'string',
+        enum: 'auto, number, string',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'filters',
         descKey: 'app.api.tableColumn.desc.filters',
         version: '',

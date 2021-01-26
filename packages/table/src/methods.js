@@ -235,6 +235,23 @@ function clearAllSort (_vm) {
   })
 }
 
+function getOrderField (_vm, column) {
+  const { property, sortBy, sortType, formatter } = column
+  if (sortBy) {
+    return XEUtils.isArray(sortBy) ? sortBy[0] : sortBy
+  } else if (sortType === 'auto') {
+    return (row) => {
+      const cellValue = _vm.getCellLabel(row, column)
+      return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+    }
+  } else if (sortType === 'number') {
+    return (row) => XEUtils.toNumber(_vm.getCellLabel(row, column))
+  } else if (formatter) {
+    return (row) => _vm.getCellLabel(row, column)
+  }
+  return property
+}
+
 const Methods = {
   callSlot (slotFunc, params, h, vNodes) {
     if (slotFunc) {
@@ -1023,19 +1040,14 @@ const Methods = {
       } else {
         // 兼容 v4
         if (sortMultiple) {
-          tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, property, order }) => [(column.sortBy ? (XEUtils.isArray(column.sortBy) ? column.sortBy[0] : column.sortBy) : null) || (column.formatter ? (row) => this.getCellLabel(row, column) : property), order]))
+          tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(this, column), order]))
         } else {
           // 兼容 v2，在 v4 中废弃， sortBy 不能为数组
           let sortByConfs
           if (firstOrderColumn.sortBy) {
-            sortByConfs = (XEUtils.isArray(firstOrderColumn.sortBy) ? firstOrderColumn.sortBy : [firstOrderColumn.sortBy]).map(item => {
-              return {
-                field: item,
-                order: firstOrderColumn.order
-              }
-            })
+            sortByConfs = (XEUtils.isArray(firstOrderColumn.sortBy) ? firstOrderColumn.sortBy : [firstOrderColumn.sortBy]).map(item => [item, firstOrderColumn.order])
           }
-          tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, property, order }) => [column.formatter ? (row) => this.getCellLabel(row, column) : property, order]))
+          tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, order }) => [getOrderField(this, column), order]))
         }
       }
     }

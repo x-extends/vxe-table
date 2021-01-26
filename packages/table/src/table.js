@@ -709,15 +709,14 @@ export default {
       }
     }
 
-    const customOpts = this.customOpts
-    if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
-      UtilTools.error('vxe.error.reqProp', ['id'])
-    }
-    if (this.treeConfig && this.checkboxOpts.range) {
-      UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
-    }
-
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      const customOpts = this.customOpts
+      if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
+        UtilTools.error('vxe.error.reqProp', ['id'])
+      }
+      if (this.treeConfig && this.checkboxOpts.range) {
+        UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
+      }
       if (!this.handleUpdateCellAreas) {
         if (this.clipConfig) {
           UtilTools.warn('vxe.error.notProp', ['clip-config'])
@@ -732,6 +731,9 @@ export default {
       }
       if (this.mouseOpts.area && this.mouseOpts.selected) {
         UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+      }
+      if (this.mouseOpts.area && this.checkboxOpts.range) {
+        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
       }
       if (this.treeConfig && this.mouseOpts.area) {
         UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
