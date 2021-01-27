@@ -40,8 +40,8 @@
       <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
       <vxe-table-column field="attr4" title="Attr4" width="200"></vxe-table-column>
       <vxe-table-column field="attr5" title="Attr5" width="200"></vxe-table-column>
-      <vxe-table-column field="attr6" title="Attr5" width="300"></vxe-table-column>
-      <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
+      <vxe-table-column field="attr6" title="Attr6" width="300" sortable></vxe-table-column>
+      <vxe-table-column field="attr7" title="Attr7" width="200" sortable></vxe-table-column>
       <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
       <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
       <vxe-table-column field="attr10" title="Attr10" width="200"></vxe-table-column>
@@ -107,8 +107,8 @@ export default defineComponent({
                 attr3: 'attr3_row_' + i,
                 attr4: 'attr4_row_' + i,
                 attr5: 'attr5_row_' + i,
-                attr6: 'attr6_row_' + i,
-                attr7: 'attr7_row_' + i,
+                attr6: i,
+                attr7: '' + i,
                 attr8: 'attr8_row_' + i,
                 attr9: 'attr9_row_' + i,
                 attr10: 'attr10_row_' + i,
@@ -187,15 +187,15 @@ export default defineComponent({
           :loading="demo1.loading"
           :sort-config="{trigger: 'cell'}"
           :checkbox-config="{checkField: 'checked'}">
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="attr0" title="Attr0" sortable width="200"></vxe-table-column>
+          <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column field="attr0" title="Attr0" width="200" sortable></vxe-table-column>
           <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
           <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
           <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
           <vxe-table-column field="attr4" title="Attr4" width="200"></vxe-table-column>
           <vxe-table-column field="attr5" title="Attr5" width="200"></vxe-table-column>
-          <vxe-table-column field="attr6" title="Attr5" width="300"></vxe-table-column>
-          <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
+          <vxe-table-column field="attr6" title="Attr6" width="300" sortable></vxe-table-column>
+          <vxe-table-column field="attr7" title="Attr7" width="200" sortable></vxe-table-column>
           <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
           <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
           <vxe-table-column field="attr10" title="Attr10" width="200"></vxe-table-column>
@@ -204,7 +204,7 @@ export default defineComponent({
           <vxe-table-column field="attr13" title="Attr14" width="200"></vxe-table-column>
           <vxe-table-column field="attr14" title="Attr14" width="200"></vxe-table-column>
           <vxe-table-column field="attr15" title="Attr15" width="200"></vxe-table-column>
-          <vxe-table-column field="attr16" title="Attr16" width="200"></vxe-table-column>
+          <vxe-table-column field="attr16" title="Attr16" width="200" fixed="right"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -237,8 +237,8 @@ export default defineComponent({
                         attr3: 'attr3_row_' + i,
                         attr4: 'attr4_row_' + i,
                         attr5: 'attr5_row_' + i,
-                        attr6: 'attr6_row_' + i,
-                        attr7: 'attr7_row_' + i,
+                        attr6: i,
+                        attr7: '' + i,
                         attr8: 'attr8_row_' + i,
                         attr9: 'attr9_row_' + i,
                         attr10: 'attr10_row_' + i,

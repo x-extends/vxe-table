@@ -8,12 +8,21 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'label',
-        desc: '绑定值',
+        name: 'v-model / modelValue',
+        descKey: 'app.api.radio.desc.value',
         version: '',
-        type: 'string | number',
+        type: 'any[]',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'size',
+        descKey: 'app.api.radio.desc.size',
+        version: '',
+        type: 'string',
+        enum: 'medium, small, mini',
+        defVal: '继承上下文',
         list: []
       },
       {

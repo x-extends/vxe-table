@@ -36,10 +36,25 @@ export default defineComponent({
         export: true,
         zoom: true
       },
+      editConfig: {
+        trigger: 'click',
+        mode: 'cell'
+      },
       columns: [
         { type: 'checkbox', width: 50 },
         { type: 'seq', width: 60 },
-        { field: 'name', title: 'Name' },
+        {
+          field: 'name',
+          title: 'Name',
+          editRender: {
+            name: 'input',
+            events: {
+              input: ({ column }) => {
+                console.log(`${column.title} 触发 input 事件`)
+              }
+            }
+          }
+        },
         { field: 'nickname', title: 'Nickname' },
         { field: 'age', title: 'Age' },
         { field: 'rate', title: 'Rate' },
@@ -159,10 +174,25 @@ export default defineComponent({
                 export: true,
                 zoom: true
               },
+              editConfig: {
+                trigger: 'click',
+                mode: 'cell'
+              },
               columns: [
                 { type: 'checkbox', width: 50 },
                 { type: 'seq', width: 60 },
-                { field: 'name', title: 'Name' },
+                {
+                  field: 'name',
+                  title: 'Name',
+                  editRender: {
+                    name: 'input',
+                    events: {
+                      input: ({ column }) => {
+                        console.log(\`\${column.title} 触发 input 事件\`)
+                      }
+                    }
+                  }
+                },
                 { field: 'nickname', title: 'Nickname' },
                 { field: 'age', title: 'Age' },
                 { field: 'rate', title: 'Rate' },

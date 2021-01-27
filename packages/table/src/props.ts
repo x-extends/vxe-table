@@ -47,7 +47,7 @@ export default {
   // 是否显示表尾合计
   showFooter: Boolean as PropType<VxeTablePropTypes.ShowFooter>,
   // 表尾合计的计算方法
-  footerMethod: { type: Function as PropType<VxeTablePropTypes.FooterMethod>, default: () => GlobalConfig.table.footerMethod },
+  footerMethod: { type: Function as PropType<VxeTablePropTypes.FooterMethod>, default: GlobalConfig.table.footerMethod },
   // 给行附加 className
   rowClassName: [String, Function] as PropType<VxeTablePropTypes.RowClassName>,
   // 给单元格附加 className

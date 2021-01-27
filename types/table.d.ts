@@ -1717,6 +1717,7 @@ export namespace VxeTableDefines {
     formatter: VxeColumnPropTypes.Formatter;
     sortable: VxeColumnPropTypes.Sortable;
     sortBy: VxeColumnPropTypes.SortBy;
+    sortType: VxeColumnPropTypes.SortType;
     filters: VxeColumnPropTypes.Filter[];
     filterMultiple: VxeColumnPropTypes.FilterMultiple;
     filterMethod: VxeColumnPropTypes.FilterMethod;

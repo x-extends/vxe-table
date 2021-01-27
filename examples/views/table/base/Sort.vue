@@ -2,6 +2,7 @@
   <div>
     <p class="tip">
       通过给需要排序功能的列加上 <table-api-link prop="sortable"/> 属性可以支持排序，还可以通过设置 <table-column-api-link prop="sort-by"/> 指定字段进行排序<br>
+      如果该列的值为字符串类型，但实际是数值，可以设置 <table-column-api-link prop="sort-type"/>=number|string 按指定类型进行排序，默认 auto 自动转换数值<br>
       如果是服务端排序，只需加上 <table-api-link prop="sort-config"/>.<table-api-link prop="remote"/> 和 <table-api-link prop="sort-change"/> 事件就可以实现<br>
       还可以通过调用 <table-api-link prop="sort"/> 方法实现手动排序
     </p>
@@ -23,8 +24,9 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
       <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
+      <vxe-table-column field="num" title="字符串" sort-type="string" sortable></vxe-table-column>
+      <vxe-table-column field="num2" title="数值" sort-type="number" sortable></vxe-table-column>
       <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
     </vxe-table>
 
@@ -115,14 +117,14 @@ import { VxeColumnPropTypes, VxeTableEvents } from '../../../../types/vxe-table'
 export default defineComponent({
   setup () {
     const tableData = ref([
-      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-      { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-      { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-      { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, num: '3.8', num2: '3.8', address: 'vxe-table 从入门到放弃' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, num: '511', num2: '511', address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, num: '12.8', num2: '12.8', address: 'Shanghai' },
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, num: '103', num2: '103', address: 'vxe-table 从入门到放弃' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, num: '56', num2: '56', address: 'Shanghai' },
+      { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, num: '49', num2: '49', address: 'vxe-table 从入门到放弃' },
+      { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, num: '400.9', num2: '400.9', address: 'vxe-table 从入门到放弃' },
+      { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, num: '5000', num2: '5000', address: 'vxe-table 从入门到放弃' }
     ])
 
     const tableData2 = ref([
@@ -210,8 +212,9 @@ export default defineComponent({
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
           <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
+          <vxe-table-column field="num" title="字符串" sort-type="string" sortable></vxe-table-column>
+          <vxe-table-column field="num2" title="数值" sort-type="number" sortable></vxe-table-column>
           <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
         </vxe-table>
         `,
@@ -221,14 +224,14 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const tableData = ref([
-              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-              { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-              { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, num: '3.8', num2: '3.8', address: 'vxe-table 从入门到放弃' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, num: '511', num2: '511', address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, num: '12.8', num2: '12.8', address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, num: '103', num2: '103', address: 'vxe-table 从入门到放弃' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, num: '56', num2: '56', address: 'Shanghai' },
+              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, num: '49', num2: '49', address: 'vxe-table 从入门到放弃' },
+              { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, num: '400.9', num2: '400.9', address: 'vxe-table 从入门到放弃' },
+              { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, num: '5000', num2: '5000', address: 'vxe-table 从入门到放弃' }
             ])
             return {
               tableData

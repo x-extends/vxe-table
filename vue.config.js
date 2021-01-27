@@ -27,18 +27,18 @@ module.exports = {
   },
   transpileDependencies: ['highlight.js'],
   chainWebpack (config) {
+    const XEUtils = {
+      root: 'XEUtils',
+      commonjs: 'xe-utils/ctor',
+      commonjs2: 'xe-utils/ctor',
+      amd: 'xe-utils'
+    }
     config.resolve.alias
       .set('@', resolve('examples'))
     config.output
       .set('libraryExport', 'default')
       .set('library', 'VXETable')
     if (process.env.npm_lifecycle_event && process.env.npm_lifecycle_event.indexOf('lib') === 0) {
-      const XEUtils = {
-        root: 'XEUtils',
-        commonjs: 'xe-utils/ctor',
-        commonjs2: 'xe-utils/ctor',
-        amd: 'xe-utils'
-      }
       if (config.has('externals')) {
         config.externals
           // .set('xe-utils', XEUtils)
@@ -48,6 +48,28 @@ module.exports = {
           .set('externals', {
             // 'xe-utils': XEUtils,
             'xe-utils/ctor': XEUtils
+          })
+      }
+    } else {
+      if (config.has('externals')) {
+        config.externals
+          .set('xlsx', 'XLSX')
+          .set('exceljs', 'ExcelJS')
+          .set('jspdf', 'jspdf')
+          .set('jsbarcode', 'JsBarcode')
+          .set('qrcode', 'QRCode')
+          .set('moment', 'moment')
+          .set('sortablejs', 'Sortable')
+      } else {
+        config
+          .set('externals', {
+            'xlsx': 'XLSX',
+            'exceljs': 'ExcelJS',
+            'jspdf': 'jspdf',
+            'jsbarcode': 'JsBarcode',
+            'qrcode': 'QRCode',
+            'moment': 'moment',
+            'sortablejs': 'Sortable'
           })
       }
     }

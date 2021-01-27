@@ -1089,6 +1089,24 @@ export default defineComponent({
       }
     }
 
+    const getOrderField = (column: any) => {
+      const { sortBy, sortType } = column
+      if (sortBy) {
+        return sortBy
+      }
+      return (row: any) => {
+        const cellValue = tablePrivateMethods.getCellLabel(row, column)
+        if (!sortType || sortType === 'auto') {
+          return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+        } else if (sortType === 'number') {
+          return XEUtils.toNumber(cellValue)
+        } else if (sortType === 'string') {
+          return XEUtils.toString(cellValue)
+        }
+        return cellValue
+      }
+    }
+
     /**
      * 获取处理后全量的表格数据
      * 如果存在筛选条件，继续处理
@@ -1148,7 +1166,7 @@ export default defineComponent({
             const sortRests = allSortMethod({ data: tableData, sortList: orderColumns, $table: $xetable })
             tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
           } else {
-            tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, property, order }) => [column.sortBy || (column.formatter ? (row: any) => tablePrivateMethods.getCellLabel(row, column) : property), order]))
+            tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(column), order]))
           }
         }
       }
@@ -5004,6 +5022,9 @@ export default defineComponent({
         if (treeConfig && props.stripe) {
           UtilTools.warn('vxe.error.noTree', ['stripe'])
         }
+        if (props.showFooter && !props.footerMethod) {
+          UtilTools.warn('vxe.error.reqProp', ['footer-method'])
+        }
         // 检查导入导出类型
         const { exportConfig, importConfig } = props
         const exportOpts = computeExportOpts.value
@@ -5016,16 +5037,15 @@ export default defineComponent({
         }
       }
 
-      const customOpts = computeCustomOpts.value
-      const mouseOpts = computeMouseOpts.value
-      if (!props.id && props.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
-        UtilTools.error('vxe.error.reqProp', ['id'])
-      }
-      if (props.treeConfig && checkboxOpts.range) {
-        UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
-      }
-
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        const customOpts = computeCustomOpts.value
+        const mouseOpts = computeMouseOpts.value
+        if (!props.id && props.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
+          UtilTools.error('vxe.error.reqProp', ['id'])
+        }
+        if (props.treeConfig && checkboxOpts.range) {
+          UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
+        }
         if (!$xetable.handleUpdateCellAreas) {
           if (props.clipConfig) {
             UtilTools.warn('vxe.error.notProp', ['clip-config'])
@@ -5040,6 +5060,9 @@ export default defineComponent({
         }
         if (mouseOpts.area && mouseOpts.selected) {
           UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+        }
+        if (mouseOpts.area && checkboxOpts.range) {
+          UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
         }
         if (props.treeConfig && mouseOpts.area) {
           UtilTools.error('vxe.error.noTree', ['mouse-config.area'])

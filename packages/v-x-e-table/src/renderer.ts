@@ -72,9 +72,12 @@ function getNativeAttrs (renderOpts: any) {
 function getInputImmediateModel (renderOpts: VxeColumnPropTypes.EditRender) {
   const { name, immediate, props } = renderOpts
   if (!immediate) {
-    if (name === 'input' || name === '$input') {
+    if (name === '$input') {
       const { type } = props || {}
       return !(!type || type === 'text' || type === 'number' || type === 'integer' || type === 'float')
+    }
+    if (name === 'input' || name === 'textarea' || name === '$textarea') {
+      return false
     }
     return true
   }
@@ -93,7 +96,7 @@ function getComponentFormItemProps (renderOpts: any, params: any, value: any, de
   return XEUtils.assign({}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
 
-function isSyncCell (renderOpts: VxeColumnPropTypes.EditRender, params: any) {
+function isImmediateCell (renderOpts: VxeColumnPropTypes.EditRender, params: any) {
   return params.$type === 'cell' || getInputImmediateModel(renderOpts)
 }
 
@@ -177,18 +180,24 @@ function getComponentOns (renderOpts: any, params: any, modelFunc?: any, changeF
 
 function getEditOns (renderOpts: any, params: any) {
   const { $table, row, column } = params
+  const { name } = renderOpts
   const { model } = column
+  const isImmediate = isImmediateCell(renderOpts, params)
   return getComponentOns(renderOpts, params, (cellValue: any) => {
     // 处理 model 值双向绑定
-    if (isSyncCell(renderOpts, params)) {
+    if (isImmediate) {
       UtilTools.setCellValue(row, column, cellValue)
     } else {
       model.update = true
       model.value = cellValue
     }
-  }, () => {
+  }, (eventParams: any) => {
     // 处理 change 事件相关逻辑
-    $table.updateStatus(params)
+    if (!isImmediate && (name === '$input' || name === '$textarea')) {
+      $table.updateStatus(params, eventParams.value)
+    } else {
+      $table.updateStatus(params)
+    }
   })
 }
 
@@ -218,7 +227,7 @@ function getNativeEditOns (renderOpts: any, params: any) {
   return getElementOns(renderOpts, params, (evnt: any) => {
     // 处理 model 值双向绑定
     const cellValue = evnt.target.value
-    if (isSyncCell(renderOpts, params)) {
+    if (isImmediateCell(renderOpts, params)) {
       UtilTools.setCellValue(row, column, cellValue)
     } else {
       model.update = true
@@ -259,7 +268,7 @@ function getNativeItemOns (renderOpts: any, params: any) {
 function nativeEditRender (renderOpts: any, params: any) {
   const { row, column } = params
   const { name } = renderOpts
-  const cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
+  const cellValue = isImmediateCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
   return [
     h(name, {
       class: `vxe-default-${name}`,
@@ -315,7 +324,7 @@ function renderNativeOptions (options: any, renderOpts: any, params: any) {
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
-  const cellValue = isSyncCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
+  const cellValue = isImmediateCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
   return options.map((option: any, oIndex: any) => {
     return h('option', {
       key: oIndex,

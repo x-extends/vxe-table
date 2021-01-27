@@ -395,6 +395,24 @@ export default defineComponent({
       return nextTick().then(() => gridExtendTableMethods.recalculate(true)).then(() => reactData.isZMax)
     }
 
+    const getFuncSlot = (optSlots: any, slotKey: string) => {
+      const funcSlot = optSlots[slotKey]
+      if (funcSlot) {
+        if (XEUtils.isString(funcSlot)) {
+          if (slots[funcSlot]) {
+            return slots[funcSlot]
+          } else {
+            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+              UtilTools.error('vxe.error.notSlot', [funcSlot])
+            }
+          }
+        } else {
+          return funcSlot
+        }
+      }
+      return null
+    }
+
     /**
      * 渲染表单
      */
@@ -460,20 +478,14 @@ export default defineComponent({
           let toolsSlot: any
           const toolbarSlots: { [key: string]: () => VNode[] } = {}
           if (toolbarOptSlots) {
-            buttonsSlot = toolbarOptSlots.buttons
-            toolsSlot = toolbarOptSlots.tools
-            if (buttonsSlot && slots[buttonsSlot]) {
-              buttonsSlot = slots[buttonsSlot]
+            buttonsSlot = getFuncSlot(toolbarOptSlots, 'buttons')
+            toolsSlot = getFuncSlot(toolbarOptSlots, 'tools')
+            if (buttonsSlot) {
+              toolbarSlots.buttons = buttonsSlot
             }
-            if (toolsSlot && slots[toolsSlot]) {
-              toolsSlot = slots[toolsSlot]
+            if (toolsSlot) {
+              toolbarSlots.tools = toolsSlot
             }
-          }
-          if (buttonsSlot) {
-            toolbarSlots.buttons = buttonsSlot
-          }
-          if (toolsSlot) {
-            toolbarSlots.tools = toolsSlot
           }
           slotVNs.push(
             h(ToolbarComponent, {
@@ -573,20 +585,14 @@ export default defineComponent({
           let leftSlot: any
           let rightSlot: any
           if (pagerOptSlots) {
-            leftSlot = pagerOptSlots.left
-            rightSlot = pagerOptSlots.right
-            if (leftSlot && slots[leftSlot]) {
-              leftSlot = slots[leftSlot]
+            leftSlot = getFuncSlot(pagerOptSlots, 'left')
+            rightSlot = getFuncSlot(pagerOptSlots, 'right')
+            if (leftSlot) {
+              pagerSlots.buttons = leftSlot
             }
-            if (rightSlot && slots[rightSlot]) {
-              rightSlot = slots[rightSlot]
+            if (rightSlot) {
+              pagerSlots.tools = rightSlot
             }
-          }
-          if (leftSlot) {
-            pagerSlots.left = leftSlot
-          }
-          if (rightSlot) {
-            pagerSlots.right = rightSlot
           }
           slotVNs.push(
             h(PagerComponent, {

@@ -41,6 +41,7 @@ export namespace VxeColumnPropTypes {
 
   export type Sortable = boolean;
   export type SortBy = string | ((row: any) => string | number);
+  export type SortType = 'string' | 'number' | null;
 
   export interface Filter {
     label?: string | number;
@@ -97,6 +98,7 @@ export namespace VxeColumnPropTypes {
   export type CellType = 'auto' | 'number' | 'string';
 
   export interface CellRender extends VxeGlobalRendererHandles.RenderOptions {
+    events?: { [key: string]: (cellParams: DefaultSlotParams, ...args: any[]) => any };
     options?: any[];
     optionProps?: VxeGlobalRendererHandles.RenderOptionProps;
     optionGroups?: any[];
@@ -108,6 +110,7 @@ export namespace VxeColumnPropTypes {
    * 编辑渲染配置项
    */
   export interface EditRender extends VxeGlobalRendererHandles.RenderOptions {
+    events?: { [key: string]: (cellParams: EditSlotParams, ...args: any[]) => any };
     enabled?: boolean;
     options?: any[];
     optionProps?: VxeGlobalRendererHandles.RenderOptionProps;
@@ -268,6 +271,10 @@ export interface VxeColumnProps {
    * 自定义排序的属性
    */
   sortBy?: VxeColumnPropTypes.SortBy;
+  /**
+   * 排序的字段类型，比如字符串转数值等
+   */
+  sortType?: VxeColumnPropTypes.SortType;
   /**
    * 配置筛选条件数组
    */

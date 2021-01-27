@@ -100,10 +100,10 @@ import TableKeepAliveTable2 from '../views/table/advanced/keepAlives/Table2.vue'
 import TableKeepAliveTable3 from '../views/table/advanced/keepAlives/Table3.vue'
 
 import GridBasic from '../views/grid/Basic.vue'
+import GridEvents from '../views/grid/Events.vue'
 import GridGroup from '../views/grid/Group.vue'
 import GridReverse from '../views/grid/Reverse.vue'
 import GridTemplate from '../views/grid/Template.vue'
-import GridEvent from '../views/grid/Event.vue'
 import GridFooter from '../views/grid/Footer.vue'
 // import GridPage from '../views/grid/Page.vue'
 import GridFullQuery from '../views/grid/FullQuery.vue'
@@ -989,6 +989,11 @@ const routes: Array<RouteRecordRaw> = [
     component: GridBasic
   },
   {
+    path: '/table/grid/events',
+    name: 'GridEvents',
+    component: GridEvents
+  },
+  {
     path: '/table/grid/group',
     name: 'GridGroup',
     component: GridGroup
@@ -1002,11 +1007,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/grid/template',
     name: 'GridTemplate',
     component: GridTemplate
-  },
-  {
-    path: '/table/grid/event',
-    name: 'GridEvent',
-    component: GridEvent
   },
   {
     path: '/table/grid/footer',

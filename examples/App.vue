@@ -41,6 +41,14 @@
     <div class="page-container">
       <div class="aside" :class="{visible: appData.showLeft}">
         <div class="header">
+          <div class="sponsors" v-if="appData.sponsorList.length">
+            <h4>赞助商</h4>
+            <div v-for="(item, index) in appData.sponsorList" :key="index">
+              <a :href="item.url" :title="item.title" target="_blank">
+                <img :src="item.img" height="50" width="200">
+              </a>
+            </div>
+          </div>
           <div class="version-list">
             <template v-if="appData.stableVersionList.length">
               <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
@@ -111,6 +119,7 @@ export default defineComponent({
       stableVersionList: [] as any[],
       version: '4',
       usedJSHeapSize: '0',
+      sponsorList: [],
       tableList: [
         {
           label: 'app.aside.nav.start',
@@ -1179,6 +1188,12 @@ export default defineComponent({
               }
             },
             {
+              label: 'app.aside.nav.events',
+              locat: {
+                name: 'GridEvents'
+              }
+            },
+            {
               label: 'app.aside.nav.group',
               demoUrl: 'https://jsrun.pro/M8WKp/edit',
               locat: {
@@ -1190,12 +1205,6 @@ export default defineComponent({
               demoUrl: 'https://jsrun.pro/zIWKp/edit',
               locat: {
                 name: 'GridReverse'
-              }
-            },
-            {
-              label: 'app.aside.nav.events',
-              locat: {
-                name: 'GridEvent'
               }
             },
             {
@@ -2318,6 +2327,12 @@ export default defineComponent({
       }
     }
 
+    const loadSponsors = () => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/api/pub/sponsors').then(data => {
+        appData.sponsorList = data
+      })
+    }
+
     const loadList = () => {
       appData.tableData = XEUtils.clone(appData.tableList, true)
       XEUtils.eachTree(appData.tableData, (item: any) => {
@@ -2329,6 +2344,7 @@ export default defineComponent({
     const init = () => {
       getVersion()
       loadList()
+      loadSponsors()
       setTimeout(() => defaultExpand(), 1500)
     }
 

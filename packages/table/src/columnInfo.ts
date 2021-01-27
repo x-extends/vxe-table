@@ -77,6 +77,7 @@ export class ColumnInfo {
       formatter: formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
+      sortType: _vm.sortType,
       filters: toFilters(_vm.filters),
       filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
       filterMethod: _vm.filterMethod,

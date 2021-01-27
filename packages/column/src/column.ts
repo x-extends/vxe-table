@@ -45,6 +45,8 @@ export const columnProps = {
   sortable: Boolean as PropType<VxeColumnPropTypes.Sortable>,
   // 自定义排序的属性
   sortBy: [String, Function] as PropType<VxeColumnPropTypes.SortBy>,
+  // 排序的字段类型，比如字符串转数值等
+  sortType: String as PropType<VxeColumnPropTypes.SortType>,
   // 配置筛选条件数组
   filters: { type: Array as PropType<VxeColumnPropTypes.Filter>, default: null },
   // 筛选是否允许多选
