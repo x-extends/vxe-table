@@ -53,6 +53,12 @@ function getToolbarSlots (_vm) {
   // v3.0 中废弃 buttons、tools
   let $buttons = $scopedSlots.buttons
   let $tools = $scopedSlots.tools
+  if ($buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
+    UtilTools.warn('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
+  }
+  if ($tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
+    UtilTools.warn('vxe.error.reqProp', ['toolbar-config.slots.tools'])
+  }
   const slots = {}
   if (toolbarOptSlots) {
     if (!$buttons) {

@@ -45,7 +45,7 @@ function renderFixed (h, $xetable, fixedType) {
       },
       ref: `${fixedType}Body`
     }),
-    showFooter ? h('vxe-table-footer', {
+    showFooter && footerData ? h('vxe-table-footer', {
       props: {
         footerData,
         tableColumn,
@@ -109,7 +109,7 @@ export default {
     // 是否显示表尾合计
     showFooter: Boolean,
     // 表尾合计的计算方法
-    footerMethod: { type: Function, default: () => GlobalConfig.table.footerMethod },
+    footerMethod: { type: Function, default: GlobalConfig.table.footerMethod },
     // 给行附加 className
     rowClassName: [String, Function],
     // 给单元格附加 className
@@ -682,7 +682,6 @@ export default {
   },
   created () {
     const { sXOpts, scrollXStore, sYOpts, scrollYStore, mouseOpts, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
-      isSC: false,
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -748,6 +747,9 @@ export default {
     }
     if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
       UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
+    }
+    if (this.showFooter && !this.footerMethod) {
+      UtilTools.warn('vxe.error.reqProp', ['footer-method'])
     }
     // 在 v3.0 中废弃 customs
     if (this.customs) {

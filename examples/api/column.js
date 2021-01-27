@@ -278,7 +278,7 @@ const apis = [
         version: '2.10.12',
         type: 'string',
         enum: 'auto, number, string',
-        defVal: '',
+        defVal: 'auto',
         list: []
       },
       {

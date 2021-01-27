@@ -144,20 +144,21 @@ function removeMerges (_vm, merges, mList, rowList) {
 }
 
 function getOrderField (_vm, column) {
-  const { property, sortBy, sortType, formatter } = column
+  const { sortBy, sortType } = column
   if (sortBy) {
     return sortBy
-  } else if (sortType === 'auto') {
-    return (row) => {
-      const cellValue = _vm.getCellLabel(row, column)
-      return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
-    }
-  } else if (sortType === 'number') {
-    return (row) => XEUtils.toNumber(_vm.getCellLabel(row, column))
-  } else if (formatter) {
-    return (row) => _vm.getCellLabel(row, column)
   }
-  return property
+  return (row) => {
+    const cellValue = _vm.getCellLabel(row, column)
+    if (!sortType || sortType === 'auto') {
+      return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
+    } else if (sortType === 'number') {
+      return XEUtils.toNumber(cellValue)
+    } else if (sortType === 'string') {
+      return XEUtils.toString(cellValue)
+    }
+    return cellValue
+  }
 }
 
 const Methods = {
