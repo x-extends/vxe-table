@@ -221,7 +221,7 @@ export const UtilTools = {
     if (groupConfig) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if ($xecolumn.$options._componentTag === 'vxe-table-column') {
-          UtilTools.warn('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
+          UtilTools.error('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
         }
       }
       if (!groupConfig.children) {

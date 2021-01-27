@@ -8,7 +8,7 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'v-model',
+        name: 'v-model / value',
         descKey: 'app.api.input.desc.value',
         version: '',
         type: 'any',
@@ -168,7 +168,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       },
       {
@@ -177,7 +177,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       },
       {
@@ -186,7 +186,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       },
       {
@@ -195,7 +195,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       },
       {
@@ -204,7 +204,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       },
       {
@@ -213,7 +213,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       },
       {
@@ -222,7 +222,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       },
       {
@@ -231,7 +231,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       },
       {
@@ -240,7 +240,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ $event }',
+        defVal: '{ value, $event }',
         list: []
       }
     ]

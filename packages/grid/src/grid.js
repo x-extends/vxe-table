@@ -52,52 +52,67 @@ function renderDefaultForm (h, _vm) {
   return []
 }
 
+function getFuncSlot (_vm, optSlots, slotKey) {
+  const { $scopedSlots } = _vm
+  const funcSlot = optSlots[slotKey]
+  if (funcSlot) {
+    if (XEUtils.isString(funcSlot)) {
+      if ($scopedSlots[funcSlot]) {
+        return $scopedSlots[funcSlot]
+      } else {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          UtilTools.error('vxe.error.notSlot', [funcSlot])
+        }
+      }
+    } else {
+      return funcSlot
+    }
+  }
+  return null
+}
+
 function getToolbarSlots (_vm) {
   const { $scopedSlots, toolbarOpts } = _vm
   const toolbarOptSlots = toolbarOpts.slots
-  let $buttons
-  let $tools
+  let buttonsSlot
+  let toolsSlot
   const slots = {}
+  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if ($scopedSlots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
+      UtilTools.warn('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
+    }
+    if ($scopedSlots.tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
+      UtilTools.warn('vxe.error.reqProp', ['toolbar-config.slots.tools'])
+    }
+  }
   if (toolbarOptSlots) {
-    $buttons = toolbarOptSlots.buttons
-    $tools = toolbarOptSlots.tools
-    if ($buttons && $scopedSlots[$buttons]) {
-      $buttons = $scopedSlots[$buttons]
+    buttonsSlot = getFuncSlot(_vm, toolbarOptSlots, 'buttons')
+    toolsSlot = getFuncSlot(_vm, toolbarOptSlots, 'tools')
+    if (buttonsSlot) {
+      slots.buttons = buttonsSlot
     }
-    if ($tools && $scopedSlots[$tools]) {
-      $tools = $scopedSlots[$tools]
+    if (toolsSlot) {
+      slots.tools = toolsSlot
     }
-  }
-  if ($buttons) {
-    slots.buttons = $buttons
-  }
-  if ($tools) {
-    slots.tools = $tools
   }
   return slots
 }
 
 function getPagerSlots (_vm) {
-  const { $scopedSlots, pagerOpts } = _vm
+  const { pagerOpts } = _vm
   const pagerOptSlots = pagerOpts.slots
   const slots = {}
-  let $left
-  let $right
+  let leftSlot
+  let rightSlot
   if (pagerOptSlots) {
-    $left = pagerOptSlots.left
-    $right = pagerOptSlots.right
-    if ($left && $scopedSlots[$left]) {
-      $left = $scopedSlots[$left]
+    leftSlot = getFuncSlot(_vm, pagerOptSlots, 'left')
+    rightSlot = getFuncSlot(_vm, pagerOptSlots, 'right')
+    if (leftSlot) {
+      slots.left = leftSlot
     }
-    if ($right && $scopedSlots[$right]) {
-      $right = $scopedSlots[$right]
+    if (rightSlot) {
+      slots.right = rightSlot
     }
-  }
-  if ($left) {
-    slots.left = $left
-  }
-  if ($right) {
-    slots.right = $right
   }
   return slots
 }

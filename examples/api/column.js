@@ -248,7 +248,7 @@ const apis = [
         version: '3.1.1',
         type: 'string',
         enum: 'auto, number, string',
-        defVal: '',
+        defVal: 'auto',
         list: []
       },
       {

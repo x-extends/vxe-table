@@ -8,7 +8,7 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'v-model',
+        name: 'v-model / value',
         descKey: 'app.api.checkbox.desc.value',
         version: '',
         type: 'any',

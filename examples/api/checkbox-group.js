@@ -8,12 +8,21 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'label',
-        desc: '绑定值',
+        name: 'v-model / value',
+        descKey: 'app.api.checkbox.desc.value',
         version: '',
         type: 'any[]',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'size',
+        descKey: 'app.api.checkbox.desc.size',
+        version: '',
+        type: 'string',
+        enum: 'medium, small, mini',
+        defVal: '继承上下文',
         list: []
       },
       {

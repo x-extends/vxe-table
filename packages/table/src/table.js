@@ -126,7 +126,7 @@ export default {
     // 是否显示表尾合计
     showFooter: Boolean,
     // 表尾合计的计算方法
-    footerMethod: { type: Function, default: () => GlobalConfig.table.footerMethod },
+    footerMethod: { type: Function, default: GlobalConfig.table.footerMethod },
     // 给行附加 className
     rowClassName: [String, Function],
     // 给单元格附加 className
@@ -692,6 +692,9 @@ export default {
       }
       if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
         UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
+      }
+      if (this.showFooter && !this.footerMethod) {
+        UtilTools.warn('vxe.error.reqProp', ['footer-method'])
       }
       if (treeConfig && this.stripe) {
         UtilTools.warn('vxe.error.noTree', ['stripe'])
