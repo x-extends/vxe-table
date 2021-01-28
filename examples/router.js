@@ -64,6 +64,7 @@ import TableCustomSort from './views/table/advanced/CustomSort.vue'
 import TableMultiSort from './views/table/advanced/MultiSort.vue'
 import TableManualFilter from './views/table/advanced/ManualFilter.vue'
 import TableFilterIcon from './views/table/advanced/FilterIcon.vue'
+import TableCustomFilter from './views/table/advanced/CustomFilter.vue'
 import TableSpan from './views/table/advanced/Span.vue'
 import TableSpanRow from './views/table/advanced/SpanRow.vue'
 import TableMergeCell from './views/table/advanced/MergeCell'
@@ -596,6 +597,11 @@ export default new Router({
       path: '/table/advanced/filterIcon',
       name: 'TableFilterIcon',
       component: TableFilterIcon
+    },
+    {
+      path: '/table/advanced/customFilter',
+      name: 'TableCustomFilter',
+      component: TableCustomFilter
     },
     {
       path: '/table/advanced/span',

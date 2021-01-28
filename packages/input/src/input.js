@@ -555,16 +555,16 @@ function renderSuffixIcon (h, _vm) {
 function renderExtraSuffixIcon (h, _vm) {
   const { controls, isPassword, isNumber, isDatePicker, isSearch } = _vm
   let icons
-  if (controls) {
-    if (isPassword) {
-      icons = renderPasswordIcon(h, _vm)
-    } else if (isNumber) {
+  if (isPassword) {
+    icons = renderPasswordIcon(h, _vm)
+  } else if (isNumber) {
+    if (controls) {
       icons = renderNumberIcon(h, _vm)
-    } else if (isDatePicker) {
-      icons = renderDatePickerIcon(h, _vm)
-    } else if (isSearch) {
-      icons = renderSearchIcon(h, _vm)
     }
+  } else if (isDatePicker) {
+    icons = renderDatePickerIcon(h, _vm)
+  } else if (isSearch) {
+    icons = renderSearchIcon(h, _vm)
   }
   return icons ? h('span', {
     class: 'vxe-input--extra-suffix'

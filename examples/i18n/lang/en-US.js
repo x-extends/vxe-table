@@ -56,6 +56,7 @@ export default {
         multiSort: 'Multi-field sort',
         manualFilter: 'Filtering advanced usage',
         filterIcon: 'Custom filter icon',
+        customFilter: '自定义列头筛选',
         span: 'Rowspan and colspan',
         spanRow: 'Merge the list of horizontal trees',
         mergeCell: 'Merge cells',

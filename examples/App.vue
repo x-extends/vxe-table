@@ -573,6 +573,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.customFilter',
+              locat: {
+                name: 'TableCustomFilter'
+              }
+            },
+            {
               label: 'app.aside.nav.span',
               demoUrl: 'https://jsrun.pro/5jXKp/edit',
               locat: {
