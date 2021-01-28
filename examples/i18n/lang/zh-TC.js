@@ -55,6 +55,7 @@ export default {
         multiSort: '多字段组合排序',
         manualFilter: '筛选高级用法',
         filterIcon: '自定义筛选图标',
+        customFilter: '自定义列头筛选',
         span: '合并行或列',
         spanRow: '合并横向树列表',
         mergeCell: '合并单元格',
