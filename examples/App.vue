@@ -44,7 +44,7 @@
             <h4>赞助商</h4>
             <div v-for="(item, index) in sponsorList" :key="index">
               <a :href="item.url" :title="item.title" target="_blank">
-                <img :src="item.img" height="50" width="200">
+                <img :src="item.img" :style="{width: item.width, height: item.height}">
               </a>
             </div>
           </div>
@@ -2251,16 +2251,6 @@ export default {
       const group = this.apiList.find(item => item.value === this.pageKey)
       if (group) {
         group.expand = true
-        this.$nextTick(() => {
-          const navElem = document.querySelector('.nav-link.router-link-active')
-          if (navElem) {
-            if (navElem.scrollIntoViewIfNeeded) {
-              navElem.scrollIntoViewIfNeeded()
-            } else if (navElem.scrollIntoView) {
-              navElem.scrollIntoView()
-            }
-          }
-        })
       }
     },
     getVersion () {

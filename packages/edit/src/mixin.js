@@ -241,12 +241,17 @@ export default {
      * 如果是树表格，子节点更改状态不会影响父节点的更新状态
      */
     _getUpdateRecords () {
-      const { keepSource, tableFullData, isUpdateByRow, treeConfig, treeOpts } = this
+      const { keepSource, tableFullData, isUpdateByRow, treeConfig, treeOpts, editStore } = this
       // 在 v3 中必须要开启 keep-source
       if (!keepSource) {
         UtilTools.warn('vxe.error.reqProp', ['keep-source'])
       }
       if (keepSource) {
+        const { actived } = editStore
+        const { row, column } = actived
+        if (row || column) {
+          this.clearActived()
+        }
         if (treeConfig) {
           return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
         }

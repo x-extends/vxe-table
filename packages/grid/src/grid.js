@@ -277,7 +277,7 @@ export default {
     this.$nextTick(() => {
       const xTable = this.$refs.xTable
       if (xTable && xTable.isSC) {
-        UtilTools.error('vxe.error.errProp', ['<vxe-table-column ...>', 'columns'])
+        UtilTools.warn('vxe.error.errProp', ['<vxe-table-column ...>', 'columns'])
       }
     })
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
