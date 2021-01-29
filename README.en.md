@@ -137,15 +137,15 @@ export default {
 
 ## Docs
 
-[💡 User guide](https://github.com/xuliangzhan/vxe-table-demo)  
-[👉 View example](https://x-extends.github.io/vxe-table/#/table/base/basic)  
-[👉 View API](https://x-extends.github.io/vxe-table/#/table/api)
+💡 [User guide](https://github.com/xuliangzhan/vxe-table-demo)  
+👉 [View example](https://x-extends.github.io/vxe-table/#/table/base/basic)  
+👉 [View API](https://x-extends.github.io/vxe-table/#/table/api)
 
 ## Support the author
 
 If the open source software is helpful to you, you can scan the QR code below to support us.☕  
 
-[👉 Supports the author💰](https://x-extends.github.io/vxe-table/#/donation/api)  
+👉 [Supports the author💰](https://x-extends.github.io/vxe-table/#/donation/api)  
 
 ## License
 
