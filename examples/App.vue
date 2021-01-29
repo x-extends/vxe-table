@@ -40,14 +40,6 @@
     <div class="page-container">
       <div class="aside" :class="{visible: showLeft}">
         <div class="header">
-          <div class="sponsors" v-if="sponsorList.length">
-            <h4>赞助商</h4>
-            <div v-for="(item, index) in sponsorList" :key="index">
-              <a :href="item.url" :title="item.title" target="_blank">
-                <img :src="item.img" :style="{width: item.width, height: item.height}">
-              </a>
-            </div>
-          </div>
           <div v-if="stableVersionList.length" class="version-list">
             <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
             <vxe-select class="stable-select" v-model="selectStableVersion" size="mini" :options="stableVersionList"></vxe-select>
@@ -59,25 +51,35 @@
           <vxe-input clearable v-model="filterName" type="search" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
         </div>
         <div class="body">
-          <template v-if="apiList.length">
-            <ul class="nav-menu">
-              <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
-                <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
-                  <i class="vxe-icon--arrow-right nav-link-icon"></i>
-                  <span v-html="item.label"></span>
-                </a>
-                <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
-                  <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name), 'is-bad': ['TableBadEdit', 'TableBadLineHeight', 'TableBadNonsupport'].includes(child.locat.name)}">
-                    <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
-                    <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </template>
-          <template v-else>
-            <div class="search-nodata">{{ $t('app.body.search.noDataPrefix') }}<span class="keyword-lighten">{{ filterName }}</span>{{ $t('app.body.search.noDataSuffix') }}</div>
-          </template>
+          <div class="sponsors" v-if="appData.sponsorList.length">
+            <h4 class="title">赞助商</h4>
+            <div v-for="(item, index) in appData.sponsorList" :key="index">
+              <a :href="item.url" :title="item.title" target="_blank">
+                <img :src="item.img" :style="{width: item.width, height: item.height}">
+              </a>
+            </div>
+          </div>
+          <div class="docs">
+            <template v-if="apiList.length">
+              <ul class="nav-menu">
+                <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
+                  <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
+                    <i class="vxe-icon--arrow-right nav-link-icon"></i>
+                    <span v-html="item.label"></span>
+                  </a>
+                  <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
+                    <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name), 'is-bad': ['TableBadEdit', 'TableBadLineHeight', 'TableBadNonsupport'].includes(child.locat.name)}">
+                      <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
+                      <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </template>
+            <template v-else>
+              <div class="search-nodata">{{ $t('app.body.search.noDataPrefix') }}<span class="keyword-lighten">{{ filterName }}</span>{{ $t('app.body.search.noDataSuffix') }}</div>
+            </template>
+          </div>
         </div>
       </div>
       <div class="oper-wrapper" v-show="showOperBtn">
