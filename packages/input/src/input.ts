@@ -1953,16 +1953,16 @@ export default defineComponent({
       const isPawdType = computeIsPawdType.value
       const isSearchType = computeIsSearchType.value
       let icons
-      if (controls) {
-        if (isPawdType) {
-          icons = renderPasswordIcon()
-        } else if (isNumType) {
+      if (isPawdType) {
+        icons = renderPasswordIcon()
+      } else if (isNumType) {
+        if (controls) {
           icons = renderNumberIcon()
-        } else if (isDatePickerType) {
-          icons = renderDatePickerIcon()
-        } else if (isSearchType) {
-          icons = renderSearchIcon()
         }
+      } else if (isDatePickerType) {
+        icons = renderDatePickerIcon()
+      } else if (isSearchType) {
+        icons = renderSearchIcon()
       }
       return icons ? h('span', {
         class: 'vxe-input--extra-suffix'

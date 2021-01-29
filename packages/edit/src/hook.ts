@@ -119,8 +119,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           $xetable.updateScrollYSpace()
         }
         return nextTick().then(() => {
-          $xetable.recalculate()
           $xetable.updateCellAreas()
+          return $xetable.recalculate()
+        }).then(() => {
           return {
             row: newRecords.length ? newRecords[newRecords.length - 1] : null,
             rows: newRecords
@@ -210,8 +211,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           $xetable.updateScrollYSpace()
         }
         return nextTick().then(() => {
-          $xetable.recalculate()
           $xetable.updateCellAreas()
+          return $xetable.recalculate()
+        }).then(() => {
           return { row: rest.length ? rest[rest.length - 1] : null, rows: rest }
         })
       },
@@ -285,9 +287,15 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       getUpdateRecords () {
         const { keepSource, treeConfig } = props
+        const { editStore } = reactData
         const { tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
         if (keepSource) {
+          const { actived } = editStore
+          const { row, column } = actived
+          if (row || column) {
+            this.clearActived()
+          }
           if (treeConfig) {
             return XEUtils.filterTree(tableFullData, row => $xetable.isUpdateByRow(row), treeOpts)
           }

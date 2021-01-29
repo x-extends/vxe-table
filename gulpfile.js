@@ -58,8 +58,12 @@ const languages = [
 
 const styleCode = `require('./style.css')`
 
-const commCode = `const VXETableExport = process.env.NODE_ENV === 'production' ? require('./index.common.pro.js') : require('./index.common.dev.js')
-VXETableExport.VXETable = VXETableExport
+const commCode = `const VXETable = process.env.NODE_ENV === 'production' ? require('./index.common.pro.js') : require('./index.common.dev.js')
+const VXETableExport = {
+  default: VXETable,
+  VXETable: VXETable
+}
+Object.defineProperty(VXETableExport, '__esModule', { value: true })
 module.exports = VXETableExport
 `
 
