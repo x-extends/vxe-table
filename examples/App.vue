@@ -51,9 +51,9 @@
           <vxe-input clearable v-model="filterName" type="search" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
         </div>
         <div class="body">
-          <div class="sponsors" v-if="appData.sponsorList.length">
+          <div class="sponsors" v-if="sponsorList.length">
             <h4 class="title">赞助商</h4>
-            <div v-for="(item, index) in appData.sponsorList" :key="index">
+            <div v-for="(item, index) in sponsorList" :key="index">
               <a :href="item.url" :title="item.title" target="_blank">
                 <img :src="item.img" :style="{width: item.width, height: item.height}">
               </a>
