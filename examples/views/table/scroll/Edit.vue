@@ -240,6 +240,7 @@ export default {
         checked: false
       }
       xTable.insertAt(record, row).then(({ row }) => {
+        console.log(111)
         xTable.setActiveRow(row)
       })
     },

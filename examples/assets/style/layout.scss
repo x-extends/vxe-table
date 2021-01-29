@@ -218,9 +218,6 @@ body,
       flex-shrink: 0;
       text-align: center;
       width: 300px;
-      .sponsors {
-        margin-bottom: 10px;
-      }
       .version-list {
         font-size: 12px;
         margin-bottom: 10px;
@@ -247,6 +244,9 @@ body,
       overflow-y: scroll;
       overflow-x: hidden;
       padding: 0 0 15px 20px;
+      .sponsors {
+        margin-bottom: 10px;
+      }
     }
     .search-nodata {
       text-align: center;
@@ -258,6 +258,11 @@ body,
       font-size: 17px;
       margin: 0;
       padding: 0;
+      & > li {
+        & > .nav-link {
+          color: #111;
+        }
+      }
       .nav-link {
         display: block;
         height: 40px;
