@@ -399,7 +399,8 @@ export default {
       if (this.pendingRecords.some(item => item === params.row)) {
         clss.push('row--pending')
       }
-      return clss.concat(rowClassName ? rowClassName(params) : [])
+      clss.push(rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : '')
+      return clss
     },
     handleActiveMethod (params) {
       const activeMethod = this.editConfig.activeMethod
