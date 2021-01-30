@@ -20,6 +20,7 @@
     <vxe-table
       border
       show-overflow
+      keep-source
       ref="xTable"
       class="my_table_insert"
       max-height="400"
@@ -74,6 +75,7 @@ export default {
         <vxe-table
           border
           show-overflow
+          keep-source
           ref="xTable"
           class="my_table_insert"
           max-height="400"
