@@ -221,7 +221,7 @@ export default {
         tableProps.loading = loading || tableLoading
         tableProps.data = tableData
         tableProps.rowClassName = this.handleRowClassName
-        if ((proxyOpts.seq || proxyOpts.index) && isEnableConf(pagerConfig)) {
+        if (proxyOpts.seq && isEnableConf(pagerConfig)) {
           tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
@@ -400,7 +400,8 @@ export default {
       if (this.pendingRecords.some(item => item === params.row)) {
         clss.push('row--pending')
       }
-      return clss.push(rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : '')
+      clss.push(rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : '')
+      return clss
     },
     handleActiveMethod (params) {
       const { editConfig } = this
