@@ -1834,7 +1834,7 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    const { $el, $refs, $toolbar, mouseConfig, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
+    const { $el, $refs, $xegrid, $toolbar, mouseConfig, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
     const { actived } = editStore
     const { ctxWrapper, filterWrapper, validTip } = $refs
     if (filterWrapper) {
@@ -1897,7 +1897,7 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!getEventTargetNode(evnt, $el).flag && !(ctxWrapper && getEventTargetNode(evnt, ctxWrapper.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
+      if (!getEventTargetNode(evnt, $el).flag && !($xegrid && getEventTargetNode(evnt, $xegrid.$el).flag) && !(ctxWrapper && getEventTargetNode(evnt, ctxWrapper.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
         this.clearSelected()
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
           this.preventEvent(evnt, 'event.clearAreas', {}, () => {
@@ -1912,7 +1912,7 @@ const Methods = {
       this.closeMenu()
     }
     // 最后激活的表格
-    this.isActivated = getEventTargetNode(evnt, (this.$xegrid || this).$el).flag
+    this.isActivated = getEventTargetNode(evnt, ($xegrid || this).$el).flag
   },
   /**
    * 窗口失焦事件处理

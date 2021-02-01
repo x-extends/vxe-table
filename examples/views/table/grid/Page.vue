@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      数据代理：通过配置 <grid-api-link prop="proxy-config"/> 启用数据代理将不需要再主动发送请求，由表格代理增删改查的相关调用逻辑，只需要配好对应的接口即可自动渲染<br>
+      分页<br>
       响应结果默认必须是数组，非数组情况下可以通过 <grid-api-link prop="props"/> 修改
     </p>
 
@@ -11,10 +11,18 @@
       height="530"
       :loading="loading"
       :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
-      :pager-config="tablePage"
       :columns="tableColumn"
-      :data="tableData"
-      @page-change="handlePageChange"></vxe-grid>
+      :data="tableData">
+      <template v-slot:pager>
+        <vxe-pager
+          :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
+          :current-page.sync="tablePage.currentPage"
+          :page-size.sync="tablePage.pageSize"
+          :total="tablePage.total"
+          @page-change="handlePageChange">
+        </vxe-pager>
+      </template>
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -33,11 +41,7 @@ export default {
       tablePage: {
         total: 0,
         currentPage: 1,
-        pageSize: 10,
-        align: 'left',
-        pageSizes: [10, 20, 50, 100, 200, 500],
-        layouts: ['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total'],
-        perfect: true
+        pageSize: 10
       },
       tableColumn: [
         { type: 'seq', width: 60 },
@@ -56,10 +60,18 @@ export default {
           height="530"
           :loading="loading"
           :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
-          :pager-config="tablePage"
           :columns="tableColumn"
-          :data="tableData"
-          @page-change="handlePageChange"></vxe-grid>
+          :data="tableData">
+          <template v-slot:pager>
+            <vxe-pager
+              :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
+              :current-page.sync="tablePage.currentPage"
+              :page-size.sync="tablePage.pageSize"
+              :total="tablePage.total"
+              @page-change="handlePageChange">
+            </vxe-pager>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {
@@ -69,11 +81,7 @@ export default {
               tablePage: {
                 total: 0,
                 currentPage: 1,
-                pageSize: 10,
-                align: 'left',
-                pageSizes: [10, 20, 50, 100, 200, 500],
-                layouts: ['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total'],
-                perfect: true
+                pageSize: 10
               },
               tableColumn: [
                 { type: 'seq', width: 60 },
