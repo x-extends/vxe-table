@@ -905,27 +905,26 @@ export default {
     return h('div', {
       class: ['vxe-table', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         'vxe-editable': !!editConfig,
-        'show--head': showHeader,
-        'show--foot': showFooter,
-        'is--group': isGroup,
-        'has--height': height,
-        'has--tree-line': treeConfig && treeOpts.line,
-        'fixed--left': leftList.length,
-        'fixed--right': rightList.length,
-        'c--highlight': highlightCell,
-        't--animat': !!this.animat,
-        'is--round': this.round,
-        't--stripe': !treeConfig && stripe,
-        't--selected': mouseConfig && mouseOpts.selected,
-        'is--area': mouseConfig && mouseOpts.area,
+        'cell--highlight': highlightCell,
+        'cell--selected': mouseConfig && mouseOpts.selected,
+        'cell--area': mouseConfig && mouseOpts.area,
         'row--highlight': highlightHoverRow,
         'column--highlight': highlightHoverColumn,
+        'is--header': showHeader,
+        'is--footer': showFooter,
+        'is--group': isGroup,
+        'is--tree-line': treeConfig && treeOpts.line,
+        'is--fixed-left': leftList.length,
+        'is--fixed-right': rightList.length,
+        'is--animat': !!this.animat,
+        'is--round': this.round,
+        'is--stripe': !treeConfig && stripe,
         'is--loading': loading,
         'is--empty': !loading && !tableData.length,
-        'scroll--y': overflowY,
-        'scroll--x': overflowX,
-        'virtual--x': scrollXLoad,
-        'virtual--y': scrollYLoad
+        'is--scroll-y': overflowY,
+        'is--scroll-x': overflowX,
+        'is--virtual-x': scrollXLoad,
+        'is--virtual-y': scrollYLoad
       }]
     }, [
       /**

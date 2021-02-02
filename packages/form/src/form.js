@@ -76,7 +76,7 @@ function renderTitle (h, _vm, item) {
   tss.push(
     h('span', {
       class: 'vxe-form--item-title-label'
-    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? _vm.callSlot(slots.title, params) : UtilTools.getFuncText(item.title)))
+    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? _vm.callSlot(slots.title, params, h) : UtilTools.getFuncText(item.title)))
   )
   if (titleSuffix) {
     tss.push(
@@ -258,14 +258,14 @@ export default {
     ]))
   },
   methods: {
-    callSlot (slotFunc, params) {
+    callSlot (slotFunc, params, h) {
       if (slotFunc) {
         const { $scopedSlots } = this
         if (XEUtils.isString(slotFunc)) {
           slotFunc = $scopedSlots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc.call(this, params)
+          return slotFunc.call(this, params, h)
         }
       }
       return []

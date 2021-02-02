@@ -244,8 +244,8 @@
       .vxe-table--border-line {
         @extend %AllRadius;
       }
-      &.show--head {
-        &:not(.show--foot) {
+      &.is--header {
+        &:not(.is--footer) {
           .vxe-table--body-wrapper {
             &.fixed-left--wrapper {
               @extend %BottomLeftRadius;
@@ -270,8 +270,8 @@
           }
         }
       }
-      &:not(.show--head) {
-        &:not(.show--foot) {
+      &:not(.is--header) {
+        &:not(.is--footer) {
           .vxe-table--body-wrapper {
             &.body--wrapper {
               @extend %AllRadius;
@@ -279,8 +279,8 @@
           }
         }
       }
-      &.show--foot {
-        &:not(.show--head) {
+      &.is--footer {
+        &:not(.is--header) {
           .vxe-table--body-wrapper {
             &.fixed-left--wrapper {
               @extend %BottomLeftRadius;
@@ -335,8 +335,8 @@
     overflow-y: hidden;
   }
   &:not(.is--empty) {
-    &.show--foot {
-      &.scroll--x {
+    &.is--footer {
+      &.is--scroll-x {
         .vxe-table--body-wrapper {
           overflow-x: scroll;
         }
@@ -372,7 +372,7 @@
       }
     }
   }
-  &.has--tree-line {
+  &.is--tree-line {
     .vxe-body--row {
       &.row--stripe {
         .vxe-tree--btn-wrapper {
@@ -458,7 +458,7 @@
       }
     }
   }
-  &.is--area {
+  &.cell--area {
     .vxe-table--main-wrapper {
       user-select: none;
     }
@@ -485,7 +485,7 @@
       text-align: right;
     }
   }
-  &.has--tree-line {
+  &.is--tree-line {
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
@@ -712,6 +712,7 @@
     z-index: 1;
     overflow: hidden;
     background-color: inherit;
+    transition: 0.3s box-shadow;
     .vxe-table--body-wrapper {
       overflow-x: hidden;
     }
@@ -721,7 +722,7 @@
       width: calc(100% + 40px);
     }
   }
-  &.show--head {
+  &.is--header {
     .vxe-table--fixed-left-wrapper,
     .vxe-table--fixed-right-wrapper {
       .vxe-table--body-wrapper {
@@ -802,7 +803,7 @@
   }
 
   /*树形节点*/
-  &.has--tree-line {
+  &.is--tree-line {
     .vxe-body--row {
       &:first-child {
         .vxe-tree--line {
@@ -1087,7 +1088,7 @@
 
   /*可编辑*/
   &.vxe-editable {
-    &.c--highlight {
+    &.cell--highlight {
       .vxe-body--column {
         &.col--actived {
           box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;

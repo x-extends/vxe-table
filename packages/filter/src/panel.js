@@ -21,7 +21,7 @@ export default {
     const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
     return h('div', {
       class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
-        't--animat': $xetable.animat,
+        'is--animat': $xetable.animat,
         'is--multiple': filterStore.multiple,
         'filter--active': filterStore.visible
       }],

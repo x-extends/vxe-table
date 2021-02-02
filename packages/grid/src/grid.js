@@ -291,7 +291,7 @@ export default {
     return h('div', {
       class: ['vxe-grid', {
         [`size--${vSize}`]: vSize,
-        't--animat': !!this.animat,
+        'is--animat': !!this.animat,
         'is--round': this.round,
         'is--maximize': isZMax,
         'is--loading': this.loading || this.tableLoading
