@@ -1767,7 +1767,7 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    const { $el, $refs, $toolbar, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
+    const { $el, $refs, $xegrid, $toolbar, mouseConfig, mouseOpts, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
     const { actived } = editStore
     const { filterWrapper, validTip } = $refs
     // 在 v3.0 中废弃 mouse-config.checked
@@ -1833,7 +1833,7 @@ const Methods = {
         }
       }
     } else if (mouseConfig) {
-      if (!getEventTargetNode(evnt, $el).flag && !getEventTargetNode(evnt, $refs.tableWrapper).flag && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
+      if (!getEventTargetNode(evnt, $el).flag && !($xegrid && getEventTargetNode(evnt, $xegrid.$el).flag) && !getEventTargetNode(evnt, $refs.tableWrapper).flag && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
         if (isMouseChecked) {
           this.clearIndexChecked()
           this.clearHeaderChecked()
@@ -1853,7 +1853,7 @@ const Methods = {
       this.closeMenu()
     }
     // 最后激活的表格
-    this.isActivated = getEventTargetNode(evnt, (this.$xegrid || this).$el).flag
+    this.isActivated = getEventTargetNode(evnt, ($xegrid || this).$el).flag
   },
   /**
    * 窗口失焦事件处理

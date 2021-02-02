@@ -209,7 +209,7 @@ export default {
         spanPlugin: 'Select merge cells',
         shortcutKeyPlugin: 'plugin-shortcut-key Shortcut key Settings',
         chartsPlugin: 'plugin-charts Chart tools',
-        exportXLSXPlugin: 'plugin-export The export xlsx',
+        exportXLSXPlugin: 'plugin-export The import/export xlsx',
         exportPDFPlugin: 'plugin-export The export pdf',
         rendererPlugin: 'plugin-renderer More renderer',
         menusPlugin: 'plugin-menus Context menus',
