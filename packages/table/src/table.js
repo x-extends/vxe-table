@@ -733,10 +733,10 @@ export default {
         }
       }
       if (this.mouseOpts.area && this.mouseOpts.selected) {
-        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+        UtilTools.warn('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
       }
       if (this.mouseOpts.area && this.checkboxOpts.range) {
-        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
+        UtilTools.warn('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
       }
       if (this.treeConfig && this.mouseOpts.area) {
         UtilTools.error('vxe.error.noTree', ['mouse-config.area'])

@@ -121,12 +121,12 @@ function renderItems (h, _vm) {
       }
     }
     let contentVNs = []
-    if (compConf && compConf.renderItemContent) {
+    if (slots && slots.default) {
+      contentVNs = _vm.callSlot(slots.default, params, h)
+    } else if (compConf && compConf.renderItemContent) {
       contentVNs = compConf.renderItemContent.call(_vm, h, itemRender, params)
     } else if (compConf && compConf.renderItem) {
       contentVNs = compConf.renderItem.call(_vm, h, itemRender, params)
-    } else if (slots && slots.default) {
-      contentVNs = _vm.callSlot(slots.default, params, h)
     } else if (field) {
       contentVNs = [`${XEUtils.get(data, field)}`]
     }
