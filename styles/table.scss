@@ -272,7 +272,7 @@
 
 /*圆角*/
 @if $vxe-table-border-radius {
-  .vxe-table {
+  .vxe-table--render-default {
     &.is--round {
       %AllRadius {
         border-radius: $vxe-table-border-radius;
@@ -365,7 +365,7 @@
 }
 
 /*table*/
-.vxe-table {
+.vxe-table--render-default {
   position: relative;
   font-size: $vxe-font-size;
   color: $vxe-table-font-color;

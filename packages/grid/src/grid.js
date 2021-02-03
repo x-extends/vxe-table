@@ -590,8 +590,14 @@ export default {
                 this.tableLoading = false
                 if (rest) {
                   if (UtilTools.isEnableConf(pagerConfig)) {
-                    tablePage.total = XEUtils.get(rest, props.total || 'page.total') || 0
+                    const total = XEUtils.get(rest, props.total || 'page.total') || 0
+                    tablePage.total = total
                     this.tableData = XEUtils.get(rest, props.result || props.data || 'result') || []
+                    // 检验当前页码，不能超出当前最大页数
+                    const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
+                    if (tablePage.currentPage > pageCount) {
+                      tablePage.currentPage = pageCount
+                    }
                   } else {
                     this.tableData = (props.list ? XEUtils.get(rest, props.list) : rest) || []
                   }
