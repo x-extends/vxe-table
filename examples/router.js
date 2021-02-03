@@ -284,6 +284,7 @@ import TablePluginTreeCols from './views/table/plugin/TreeCols'
 import VXEAPI from './views/api/API.vue'
 import Donation from './views/api/Donation.vue'
 import Run from './views/api/Run.vue'
+import Preview from './views/api/Preview.vue'
 
 Vue.use(Router)
 
@@ -1649,6 +1650,11 @@ export default new Router({
       path: '/api/run',
       name: 'Run',
       component: Run
+    },
+    {
+      path: '/api/preview',
+      name: 'Preview',
+      component: Preview
     }
   ]
 })

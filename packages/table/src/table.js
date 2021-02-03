@@ -903,7 +903,7 @@ export default {
     } = this
     const { leftList, rightList } = columnStore
     return h('div', {
-      class: ['vxe-table', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
+      class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         'vxe-editable': !!editConfig,
         'cell--highlight': highlightCell,
         'cell--selected': mouseConfig && mouseOpts.selected,

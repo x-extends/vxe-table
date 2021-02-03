@@ -34,7 +34,7 @@
             <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
-          <a class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡{{ $t('app.header.label.support') }}</a>
+          <a class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡扩展与支持</a>
         </div>
       </div>
     </header>
@@ -64,6 +64,13 @@
           </div>
           <div class="docs">
             <template v-if="apiList.length">
+              <ul class="nav-child-menu">
+                <li>
+                  <router-link class="nav-link" :to="{name: 'Preview'}">
+                    <span>粘性表格-概念</span>
+                  </router-link>
+                </li>
+              </ul>
               <ul class="nav-menu">
                 <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
                   <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
