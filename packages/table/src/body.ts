@@ -324,7 +324,7 @@ export default defineComponent({
               'is--new': editConfig && $xetable.findRowIndexOf(editStore.insertList, row) > -1,
               'row--radio': radioOpts.highlight && selectRow === row,
               'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
-            }, rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : ''],
+            }, rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''],
             rowid: rowid,
             style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
             key: rowKey || treeConfig ? rowid : $rowIndex,

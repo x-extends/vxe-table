@@ -33,6 +33,10 @@ export interface VxeFormItemOptions {
    */
   titleWidth?: string | number;
   /**
+   * 给表单项附加 className
+   */
+  className?: string;
+  /**
    * 前缀配置项
    */
   titlePrefix?: FormItemTitleOptions;

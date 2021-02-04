@@ -516,7 +516,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         'vxe-table',
         `border--${toTableBorder(border)}`,
         isPrint ? 'is--print' : '',
-        isHeader ? 'show--head' : ''
+        isHeader ? 'is--header' : ''
       ].filter(cls => cls)
       const tables = [
         `<table class="${clss.join(' ')}" border="0" cellspacing="0" cellpadding="0">`,

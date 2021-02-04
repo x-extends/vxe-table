@@ -467,10 +467,10 @@ export default defineComponent({
           }
         }
         let contentVNs: any[] = []
-        if (compConf && compConf.renderItemContent) {
-          contentVNs = compConf.renderItemContent(itemRender, params)
-        } else if (defaultSlot) {
+        if (defaultSlot) {
           contentVNs = callSlot(defaultSlot, params)
+        } else if (compConf && compConf.renderItemContent) {
+          contentVNs = compConf.renderItemContent(itemRender, params)
         } else if (field) {
           contentVNs = [`${XEUtils.get(data, field)}`]
         }
@@ -500,7 +500,7 @@ export default defineComponent({
           )
         }
         return h('div', {
-          class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, {
+          class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, item.className, {
             'is--title': title,
             'is--required': isRequired,
             'is--hidden': folding && collapseAll,

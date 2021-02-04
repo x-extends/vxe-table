@@ -208,7 +208,7 @@ export default {
         spanPlugin: '单元格选中合并',
         shortcutKeyPlugin: 'plugin-shortcut-key 快捷键设置',
         chartsPlugin: 'plugin-charts 图表工具',
-        exportXLSXPlugin: 'plugin-export 导出 xlsx',
+        exportXLSXPlugin: 'plugin-export 导入/导出 xlsx',
         exportPDFPlugin: 'plugin-export 导出 pdf',
         rendererPlugin: 'plugin-renderer 更多渲染',
         menusPlugin: 'plugin-menus 快捷菜单集',

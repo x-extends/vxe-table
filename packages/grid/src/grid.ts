@@ -188,7 +188,8 @@ export default defineComponent({
       if (pendingRecords.some((item: any) => item === params.row)) {
         clss.push('row--pending')
       }
-      return clss.push(rowClassName ? XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName : '')
+      clss.push(rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : '')
+      return clss
     }
 
     const handleActiveMethod = (params: any) => {
@@ -216,7 +217,7 @@ export default defineComponent({
         tableProps.loading = loading || tableLoading
         tableProps.data = tableData
         tableProps.rowClassName = handleRowClassName
-        if ((proxyOpts.seq || proxyOpts.index) && isEnableConf(pagerConfig)) {
+        if (proxyOpts.seq && isEnableConf(pagerConfig)) {
           tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
@@ -752,8 +753,14 @@ export default defineComponent({
                   reactData.tableLoading = false
                   if (rest) {
                     if (isEnableConf(pagerConfig)) {
-                      tablePage.total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
+                      const total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
+                      tablePage.total = total
                       reactData.tableData = XEUtils.get(rest, proxyProps.result || 'result') || []
+                      // 检验当前页码，不能超出当前最大页数
+                      const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
+                      if (tablePage.currentPage > pageCount) {
+                        tablePage.currentPage = pageCount
+                      }
                     } else {
                       reactData.tableData = (proxyProps.list ? XEUtils.get(rest, proxyProps.list) : rest) || []
                     }

@@ -1058,7 +1058,7 @@ export default defineComponent({
       }
       const tableHeight = bodyElem.offsetHeight
       const overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
-      reactData.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyWidth : 0
+      reactData.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyElem.clientWidth : 0
       reactData.overflowY = overflowY
       internalData.tableWidth = tableWidth
       internalData.tableHeight = tableHeight
@@ -1146,15 +1146,17 @@ export default defineComponent({
         if (!allRemoteFilter && filterColumns.length) {
           tableData = tableData.filter((row: any) => {
             return filterColumns.every(({ column, valueList, itemList }) => {
-              let { filterMethod, filterRender } = column
+              const { filterMethod, filterRender } = column
               const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-              if (!filterMethod && compConf && compConf.renderFilter) {
-                filterMethod = compConf.filterMethod
-              }
-              if (allFilterMethod && !filterMethod) {
+              const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
+              if (filterMethod) {
+                return itemList.some((item: any) => filterMethod({ value: item.value, option: item, row, column, $table: $xetable }))
+              } else if (allFilterMethod) {
                 return allFilterMethod({ options: itemList, values: valueList, row, column })
+              } else if (compFilterMethod) {
+                return itemList.some((item: any) => compFilterMethod({ value: item.value, option: item, row, column, $table: $xetable }))
               }
-              return filterMethod ? itemList.some((item: any) => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, column.property)) > -1
+              return valueList.indexOf(XEUtils.get(row, column.property)) > -1
             })
           })
         }
@@ -3569,7 +3571,7 @@ export default defineComponent({
           }
         }
       } else if (mouseConfig) {
-        if (!getEventTargetNode(evnt, el).flag && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xetoolbar && getEventTargetNode(evnt, $xetoolbar.getRefMaps().refElem.value).flag)) {
+        if (!getEventTargetNode(evnt, el).flag && !($xegrid && getEventTargetNode(evnt, $xegrid.getRefMaps().refElem.value).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xetoolbar && getEventTargetNode(evnt, $xetoolbar.getRefMaps().refElem.value).flag)) {
           $xetable.clearSelected()
           if ($xetable.clearCellAreas) {
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
@@ -5059,10 +5061,10 @@ export default defineComponent({
           }
         }
         if (mouseOpts.area && mouseOpts.selected) {
-          UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+          UtilTools.warn('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
         }
         if (mouseOpts.area && checkboxOpts.range) {
-          UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
+          UtilTools.warn('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
         }
         if (props.treeConfig && mouseOpts.area) {
           UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
@@ -5173,11 +5175,16 @@ export default defineComponent({
       const isMenu = computeIsMenu.value
       return h('div', {
         ref: refElem,
-        class: ['vxe-table', `tid_${xID}`, `border--${tableBorder}`, {
+        class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
           [`size--${vSize}`]: vSize,
           'vxe-editable': !!editConfig,
-          'show--head': showHeader,
-          'show--foot': showFooter,
+          'cell--highlight': highlightCell,
+          'cell--selected': mouseConfig && mouseOpts.selected,
+          'cell--area': mouseConfig && mouseOpts.area,
+          'row--highlight': highlightHoverRow,
+          'column--highlight': highlightHoverColumn,
+          'is--header': showHeader,
+          'is--footer': showFooter,
           'is--group': isGroup,
           'is--tree-line': treeConfig && treeOpts.line,
           'is--fixed-left': leftList.length,
@@ -5185,11 +5192,6 @@ export default defineComponent({
           'is--animat': !!props.animat,
           'is--round': props.round,
           'is--stripe': !treeConfig && stripe,
-          'cell--highlight': highlightCell,
-          'cell--selected': mouseConfig && mouseOpts.selected,
-          'cell--area': mouseConfig && mouseOpts.area,
-          'row--highlight': highlightHoverRow,
-          'column--highlight': highlightHoverColumn,
           'is--loading': loading,
           'is--empty': !loading && !tableData.length,
           'is--scroll-y': overflowY,

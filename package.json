@@ -79,7 +79,7 @@
     "vxe-table-plugin-menus": "^3.0.0-alpha.1",
     "xe-ajax": "^4.0.5",
     "xe-clipboard": "^1.10.1",
-    "xe-utils": "^3.1.6"
+    "xe-utils": "^3.1.7"
   },
   "peerDependencies": {
     "vue": ">= 3",
