@@ -1018,16 +1018,17 @@ const Methods = {
       tableData = tableData.filter(row => {
         return filterColumns.every(({ column, valueList, itemList }) => {
           if (valueList.length && !allRemoteFilter) {
-            const { filterRender, property } = column
-            let { filterMethod } = column
+            const { filterMethod, filterRender } = column
             const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-            if (!filterMethod && compConf && compConf.renderFilter) {
-              filterMethod = compConf.filterMethod
-            }
-            if (allFilterMethod && !filterMethod) {
+            const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
+            if (filterMethod) {
+              return itemList.some((item) => filterMethod({ value: item.value, option: item, row, column, $table: this }))
+            } else if (allFilterMethod) {
               return allFilterMethod({ options: itemList, values: valueList, row, column })
+            } else if (compFilterMethod) {
+              return itemList.some((item) => compFilterMethod({ value: item.value, option: item, row, column, $table: this }))
             }
-            return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
+            return valueList.indexOf(XEUtils.get(row, column.property)) > -1
           }
           return true
         })

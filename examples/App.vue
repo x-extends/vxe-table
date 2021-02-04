@@ -64,13 +64,13 @@
           </div>
           <div class="docs">
             <template v-if="apiList.length">
-              <ul class="nav-child-menu">
+              <!-- <ul class="nav-child-menu">
                 <li>
                   <router-link class="nav-link" :to="{name: 'Preview'}">
                     <span>粘性表格-概念</span>
                   </router-link>
                 </li>
-              </ul>
+              </ul> -->
               <ul class="nav-menu">
                 <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
                   <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">

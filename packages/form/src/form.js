@@ -131,7 +131,7 @@ function renderItems (h, _vm) {
       contentVNs = [`${XEUtils.get(data, field)}`]
     }
     return h('div', {
-      class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, {
+      class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, item.className, {
         'is--title': title,
         'is--required': isRequired,
         'is--hidden': folding && collapseAll,
