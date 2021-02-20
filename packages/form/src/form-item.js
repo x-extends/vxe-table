@@ -74,6 +74,7 @@ export default {
     align: String,
     titleAlign: String,
     titleWidth: [String, Number],
+    className: String,
     titlePrefix: Object,
     titleSuffix: Object,
     resetValue: { default: null },
@@ -133,7 +134,7 @@ export default {
     }
   },
   render (h) {
-    const { _e, $scopedSlots, $vxeform, title, folding, visible, visibleMethod, field, collapseNode, itemRender, isRequired, showError, showRule } = this
+    const { _e, $scopedSlots, $vxeform, title, folding, visible, visibleMethod, field, className, collapseNode, itemRender, isRequired, showError, showRule } = this
     const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
     const span = this.span || $vxeform.span
     const align = this.align || $vxeform.align
@@ -159,7 +160,7 @@ export default {
       contentVNs = [`${XEUtils.get($vxeform.data, field)}`]
     }
     return h('div', {
-      class: ['vxe-form--item', span ? `vxe-col--${span} is--span` : null, {
+      class: ['vxe-form--item', span ? `vxe-col--${span} is--span` : null, className, {
         'is--title': title,
         'is--required': isRequired,
         'is--hidden': folding && collapseAll,

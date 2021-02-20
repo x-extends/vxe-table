@@ -131,18 +131,18 @@
           </template>
         </vxe-form-item>
         <vxe-form-item title="年龄" field="age" span="24" :item-render="{}">
-          <template v-slot>
-            <vxe-input v-model="formData2.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
+          <template v-slot="scope">
+            <vxe-input v-model="formData2.age" type="integer" placeholder="请输入年龄" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="日期" field="date" span="24" :item-render="{}">
-          <template v-slot>
-            <vxe-input v-model="formData2.date" type="date" placeholder="请选择日期" clearable></vxe-input>
+          <template v-slot="scope">
+            <vxe-input v-model="formData2.date" type="date" placeholder="请选择日期" clearable @change="$refs.xForm.updateStatus(scope)"></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="地址" field="address" span="24" :item-render="{}">
-          <template v-slot>
-            <vxe-textarea v-model="formData2.address" placeholder="请输入地址" clearable></vxe-textarea>
+          <template v-slot="scope">
+            <vxe-textarea v-model="formData2.address" placeholder="请输入地址" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-textarea>
           </template>
         </vxe-form-item>
         <vxe-form-item align="center" span="24">
@@ -277,6 +277,15 @@ export default {
         ],
         sex: [
           { required: true, message: '请选择性别' }
+        ],
+        age: [
+          { required: true, message: '必填校验' }
+        ],
+        date: [
+          { required: true, message: '必填校验' }
+        ],
+        address: [
+          { required: true, message: '必填校验' }
         ]
       },
       formData3: {
@@ -437,18 +446,18 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item title="年龄" field="age" span="24" :item-render="{}">
-              <template v-slot>
-                <vxe-input v-model="formData2.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
+              <template v-slot="scope">
+                <vxe-input v-model="formData2.age" type="integer" placeholder="请输入年龄" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="日期" field="date" span="24" :item-render="{}">
-              <template v-slot>
-                <vxe-input v-model="formData2.date" type="date" placeholder="请选择日期" clearable></vxe-input>
+              <template v-slot="scope">
+                <vxe-input v-model="formData2.date" type="date" placeholder="请选择日期" clearable @change="$refs.xForm.updateStatus(scope)"></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="地址" field="address" span="24" :item-render="{}">
-              <template v-slot>
-                <vxe-textarea v-model="formData2.address" placeholder="请输入地址" clearable></vxe-textarea>
+              <template v-slot="scope">
+                <vxe-textarea v-model="formData2.address" placeholder="请输入地址" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-textarea>
               </template>
             </vxe-form-item>
             <vxe-form-item align="center" span="24">
@@ -566,6 +575,15 @@ export default {
                 ],
                 sex: [
                   { required: true, message: '请选择性别' }
+                ],
+                age: [
+                  { required: true, message: '必填校验' }
+                ],
+                date: [
+                  { required: true, message: '必填校验' }
+                ],
+                address: [
+                  { required: true, message: '必填校验' }
                 ]
               },
               formData3: {

@@ -886,16 +886,18 @@ const Methods = {
         return filterColumns.every(({ column, valueList, itemList }) => {
           if (valueList.length && !(filterOpts.remote || remoteFilter)) {
             const { filterRender, property } = column
-            let { filterMethod } = column
+            const { filterMethod } = column
             const allFilterMethod = filterOpts.filterMethod
             const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-            if (!filterMethod && compConf && compConf.renderFilter) {
-              filterMethod = compConf.filterMethod
-            }
-            if (allFilterMethod && !filterMethod) {
+            const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
+            if (filterMethod) {
+              return itemList.some((item) => filterMethod({ value: item.value, option: item, row, column, $table: this }))
+            } else if (compFilterMethod) {
+              return itemList.some((item) => compFilterMethod({ value: item.value, option: item, row, column, $table: this }))
+            } else if (allFilterMethod) {
               return allFilterMethod({ options: itemList, values: valueList, row, column })
             }
-            return filterMethod ? itemList.some(item => filterMethod({ value: item.value, option: item, row, column })) : valueList.indexOf(XEUtils.get(row, property)) > -1
+            return valueList.indexOf(XEUtils.get(row, property)) > -1
           }
           return true
         })

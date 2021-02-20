@@ -121,7 +121,7 @@
   }
   &.is--error {
     .vxe-input > .vxe-input--inner,
-    .vxe-textarea > .vxe-input--textarea,
+    .vxe-textarea > .vxe-textarea--inner,
     .vxe-select,
     .vxe-select.is--active > .vxe-input .vxe-input--inner,
     .vxe-default-input,
@@ -130,7 +130,7 @@
       border-color: $vxe-form-validate-error-color;
     }
     .vxe-input>.vxe-input--inner,
-    .vxe-textarea>.vxe-input--textarea,
+    .vxe-textarea>.vxe-textarea--inner,
     .vxe-default-input[type="text"],
     .vxe-default-input[type="search"],
     .vxe-default-textarea,

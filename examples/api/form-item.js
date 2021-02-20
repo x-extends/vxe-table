@@ -103,6 +103,15 @@ const apis = [
         list: []
       },
       {
+        name: 'class-name',
+        desc: '给表单项附加 className',
+        version: '2.10.14',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'visible',
         descKey: 'app.api.formItem.desc.visible',
         version: '2.9.24',
