@@ -73,9 +73,9 @@ export default {
   // 给表尾行附加样式
   footerRowStyle: [Object, Function] as PropType<VxeTablePropTypes.FooterRowStyle>,
   // 合并指定单元格
-  mergeCells: Array as PropType<VxeTablePropTypes.MergeCell[]>,
+  mergeCells: Array as PropType<VxeTablePropTypes.MergeCells>,
   // 合并指定的表尾
-  mergeFooterItems: Array as PropType<VxeTablePropTypes.MergeFooterItem[]>,
+  mergeFooterItems: Array as PropType<VxeTablePropTypes.MergeFooterItems>,
   // 自定义合并行或列的方法
   spanMethod: Function as PropType<VxeTablePropTypes.SpanMethod>,
   // 表尾合并行或列

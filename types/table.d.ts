@@ -1069,7 +1069,9 @@ export namespace VxeTablePropTypes {
   }) => void | null | string | { [key: string]: boolean });
 
   export type MergeCell = VxeTableDefines.MergeOptions;
+  export type MergeCells = MergeCell[];
   export type MergeFooterItem = VxeTableDefines.MergeOptions;
+  export type MergeFooterItems = MergeFooterItem[];
 
   export type SpanMethod = (params: {
     column: VxeTableDefines.ColumnInfo;
@@ -1078,10 +1080,12 @@ export namespace VxeTablePropTypes {
     row: RowInfo;
     rowIndex: number;
     $rowIndex: number;
+    _rowIndex: number;
     isHidden: boolean;
     fixed: VxeColumnPropTypes.Fixed;
     type: string;
-  }) => { rowspan: number, colspan: number };
+    visibleData: any[];
+  }) => void | { rowspan: number, colspan: number };
 
   export type FooterSpanMethod = (params: {
     column: VxeTableDefines.ColumnInfo;
@@ -1089,9 +1093,10 @@ export namespace VxeTablePropTypes {
     _columnIndex: number;
     $columnIndex: number;
     $rowIndex: number;
+    _rowIndex: number;
     items: any[];
     data: any[][];
-  }) => { rowspan: number, colspan: number };
+  }) => void | { rowspan: number, colspan: number };
 
   export type ShowOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | null;
   export type ShowHeaderOverflow = ShowOverflow;
@@ -1579,8 +1584,8 @@ export interface VxeTableProps {
   rowStyle?: VxeTablePropTypes.RowStyle;
   headerRowStyle?: VxeTablePropTypes.HeaderRowStyle;
   footerRowStyle?: VxeTablePropTypes.FooterRowStyle;
-  mergeCells?: VxeTablePropTypes.MergeCell[];
-  mergeFooterItems?: VxeTablePropTypes.MergeFooterItem[];
+  mergeCells?: VxeTablePropTypes.MergeCells;
+  mergeFooterItems?: VxeTablePropTypes.MergeFooterItems;
   spanMethod?: VxeTablePropTypes.SpanMethod;
   footerSpanMethod?: VxeTablePropTypes.FooterSpanMethod;
   showOverflow?: VxeTablePropTypes.ShowOverflow;
@@ -1906,7 +1911,11 @@ export namespace VxeTableDefines {
   export interface CellMouseleaveParams extends TableBaseCellParams { }
   export interface CellMouseleaveEventParams extends TableEventParams, CellMouseleaveParams { }
 
-  export interface HeaderCellClickParams extends TableBaseHeaderCellParams { }
+  export interface HeaderCellClickParams extends TableBaseHeaderCellParams {
+    triggerResizable: boolean;
+    triggerSort: boolean;
+    triggerFilter: boolean;
+  }
   export interface HeaderCellClickEventParams extends TableEventParams, HeaderCellClickParams { }
 
   export interface HeaderCellDblclickParams extends TableBaseHeaderCellParams { }

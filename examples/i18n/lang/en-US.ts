@@ -313,10 +313,12 @@ export default {
         copyToClipboard: 'Copied to clipboard'
       },
       other: {
-        v1: '1.x (Stop the maintenance)',
-        v2: '2.x (vue 2.6.x Stable)',
-        v3: '3.x (vue 2.6.x Latest)',
-        v4: '4.x (vue 3.x Next)',
+        v1: '1.0+ (Stop the maintenance)',
+        v2: '2.0+ (vue 2.6+ LTS)',
+        v3: '3.0+ (vue 2.6+ Latest)',
+        v3d5: '3.5+ (vue 2.6+ Sticky)',
+        v4: '4.0+ (vue 3.0+ next)',
+        v4d5: '4.5+ (vue 3.0+ Sticky)',
         plan: {
           v1: 'v1 Based on vue2.6+, Support for all major browsers',
           v2: 'v2 Based on vue2.6+, Support for all major browsers',

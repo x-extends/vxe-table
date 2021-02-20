@@ -31,7 +31,9 @@
             <vxe-option value="1" :label="$t('app.body.other.v1')"></vxe-option>
             <vxe-option value="2" :label="$t('app.body.other.v2')"></vxe-option>
             <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
+            <!-- <vxe-option value="3.5" :label="$t('app.body.other.v3d5')" disabled></vxe-option> -->
             <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
+            <!-- <vxe-option value="4.5" :label="$t('app.body.other.v4d5')" disabled></vxe-option> -->
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
           <!-- <a class="link support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a> -->
@@ -522,25 +524,25 @@ export default defineComponent({
                 name: 'TableTemplate'
               }
             },
-            // {
-            //   label: 'app.aside.nav.dynamic',
-            //   // demoUrl: 'https://jsrun.pro/SIWKp/edit',
-            //   locat: {
-            //     name: 'TableDynamic'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.sortIcon',
-            //   locat: {
-            //     name: 'TableSortIcon'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.customSort',
-            //   locat: {
-            //     name: 'TableCustomSort'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.dynamic',
+              // demoUrl: 'https://jsrun.pro/SIWKp/edit',
+              locat: {
+                name: 'TableDynamic'
+              }
+            },
+            {
+              label: 'app.aside.nav.sortIcon',
+              locat: {
+                name: 'TableSortIcon'
+              }
+            },
+            {
+              label: 'app.aside.nav.customSort',
+              locat: {
+                name: 'TableCustomSort'
+              }
+            },
             {
               label: 'app.aside.nav.multiSort',
               locat: {
@@ -553,25 +555,25 @@ export default defineComponent({
                 name: 'TableManualFilter'
               }
             },
-            // {
-            //   label: 'app.aside.nav.filterIcon',
-            //   locat: {
-            //     name: 'TableFilterIcon'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.span',
-            //   demoUrl: 'https://jsrun.pro/5jXKp/edit',
-            //   locat: {
-            //     name: 'TableSpan'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.spanRow',
-            //   locat: {
-            //     name: 'TableSpanRow'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.filterIcon',
+              locat: {
+                name: 'TableFilterIcon'
+              }
+            },
+            {
+              label: 'app.aside.nav.span',
+              demoUrl: 'https://jsrun.pro/5jXKp/edit',
+              locat: {
+                name: 'TableSpan'
+              }
+            },
+            {
+              label: 'app.aside.nav.spanRow',
+              locat: {
+                name: 'TableSpanRow'
+              }
+            },
             {
               label: 'app.aside.nav.mergeCell',
               locat: {
@@ -585,18 +587,18 @@ export default defineComponent({
                 name: 'TableFooter'
               }
             },
-            // {
-            //   label: 'app.aside.nav.footerSpan',
-            //   locat: {
-            //     name: 'TableFooterSpan'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.fluidHeight',
-            //   locat: {
-            //     name: 'TableFooterMaxHeight'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.footerSpan',
+              locat: {
+                name: 'TableFooterSpan'
+              }
+            },
+            {
+              label: 'app.aside.nav.fluidHeight',
+              locat: {
+                name: 'TableFooterMaxHeight'
+              }
+            },
             {
               label: 'app.aside.nav.import',
               demoUrl: 'https://jsrun.pro/UaWKp/edit',
@@ -692,24 +694,24 @@ export default defineComponent({
             //     name: 'TableCustomlWidthStorage'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.search',
-            //   locat: {
-            //     name: 'TableSearch'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.search',
+              locat: {
+                name: 'TableSearch'
+              }
+            },
             // {
             //   label: 'app.aside.nav.groupBy',
             //   locat: {
             //     name: 'TableGroupBy'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.details',
-            //   locat: {
-            //     name: 'TableDetails'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.details',
+              locat: {
+                name: 'TableDetails'
+              }
+            },
             // {
             //   label: 'app.aside.nav.popupEdit',
             //   locat: {

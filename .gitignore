@@ -6,6 +6,7 @@ node_modules
 /public/v1
 /public/v2
 /public/v3
+/public/v3.5
 /public/v4
 package-lock.json
 

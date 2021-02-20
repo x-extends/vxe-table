@@ -20,10 +20,11 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
   * Designed for single row table editing, supports addition, deletion, modification and query as well as more expansion, with powerful functions and performance at the same time
 
 * Plan
-  * [x] v1 Based on vue2.6+, Support for all major browsers
-  * [x] v2 Based on vue2.6+, Support for all major browsers
-  * [x] v3 Based on vue2.6+, Only supports modern browsers, not IE, improving rendering performance
-  * [x] v4 Based on vue3.0+, Only supports modern browsers, not IE, improving rendering performance
+  * [x] v1.0 Based on vue2.6+, Support for all major browsers
+  * [x] v2.0 Based on vue2.6+, Support for all major browsers
+  * [x] v3.0 Based on vue2.6+, Only supports modern browsers, not IE, improving rendering performance
+  * [x] v3.5 Based on vue2.6+, Only support modern browser, sticky table, stability and fluency
+  * [x] v4.0 Based on vue3.0+, Only support modern browser, sticky table, stability and fluency
 
 ## Browser Support
 
@@ -100,6 +101,7 @@ import 'vxe-table/lib/style.css'
 
 const app = createApp(App)
 app.use(VXETable)
+app.mount('#app')
 ```
 
 ### CDN

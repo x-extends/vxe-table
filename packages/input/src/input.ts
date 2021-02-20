@@ -565,8 +565,9 @@ export default defineComponent({
       if (!isDatePickerType) {
         if (inpImmediate) {
           emitModel(value, evnt)
+        } else {
+          inputMethods.dispatchEvent('input', { value }, evnt)
         }
-        inputMethods.dispatchEvent('input', { value }, evnt)
       }
     }
 

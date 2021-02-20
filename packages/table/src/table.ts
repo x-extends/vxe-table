@@ -1151,10 +1151,10 @@ export default defineComponent({
               const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
               if (filterMethod) {
                 return itemList.some((item: any) => filterMethod({ value: item.value, option: item, row, column, $table: $xetable }))
-              } else if (allFilterMethod) {
-                return allFilterMethod({ options: itemList, values: valueList, row, column })
               } else if (compFilterMethod) {
                 return itemList.some((item: any) => compFilterMethod({ value: item.value, option: item, row, column, $table: $xetable }))
+              } else if (allFilterMethod) {
+                return allFilterMethod({ options: itemList, values: valueList, row, column })
               }
               return valueList.indexOf(XEUtils.get(row, column.property)) > -1
             })

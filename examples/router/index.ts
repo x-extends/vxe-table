@@ -57,18 +57,18 @@ import TableFull from '../views/table/base/Full.vue'
 
 import TableEvent from '../views/table/advanced/Event.vue'
 import TableTemplate from '../views/table/advanced/Template.vue'
-// import TableDynamic from '../views/table/advanced/Dynamic.vue'
-// import TableSortIcon from '../views/table/advanced/SortIcon.vue'
-// import TableCustomSort from '../views/table/advanced/CustomSort.vue'
+import TableDynamic from '../views/table/advanced/Dynamic.vue'
+import TableSortIcon from '../views/table/advanced/SortIcon.vue'
+import TableCustomSort from '../views/table/advanced/CustomSort.vue'
 import TableMultiSort from '../views/table/advanced/MultiSort.vue'
 import TableManualFilter from '../views/table/advanced/ManualFilter.vue'
-// import TableFilterIcon from '../views/table/advanced/FilterIcon.vue'
-// import TableSpan from '../views/table/advanced/Span.vue'
-// import TableSpanRow from '../views/table/advanced/SpanRow.vue'
+import TableFilterIcon from '../views/table/advanced/FilterIcon.vue'
+import TableSpan from '../views/table/advanced/Span.vue'
+import TableSpanRow from '../views/table/advanced/SpanRow.vue'
 import TableMergeCell from '../views/table/advanced/MergeCell.vue'
 import TableFooter from '../views/table/advanced/Footer.vue'
-// import TableFooterSpan from '../views/table/advanced/FooterSpan.vue'
-// import TableFooterMaxHeight from '../views/table/advanced/MaxHeight.vue'
+import TableFooterSpan from '../views/table/advanced/FooterSpan.vue'
+import TableFooterMaxHeight from '../views/table/advanced/MaxHeight.vue'
 import TableImport from '../views/table/advanced/Import.vue'
 import TableExport from '../views/table/advanced/Export.vue'
 import TablePrint from '../views/table/advanced/Print.vue'
@@ -80,9 +80,9 @@ import TableExpand from '../views/table/advanced/Expand.vue'
 // import TableExpandIcon from '../views/table/advanced/ExpandIcon.vue'
 // import TableExpandLazy from '../views/table/advanced/ExpandLazy.vue'
 // import TableExpandAccordion from '../views/table/advanced/ExpandAccordion.vue'
-// import TableSearch from '../views/table/advanced/Search.vue'
+import TableSearch from '../views/table/advanced/Search.vue'
 // import TableGroupBy from '../views/table/advanced/GroupBy.vue'
-// import TableDetails from '../views/table/advanced/Details.vue'
+import TableDetails from '../views/table/advanced/Details.vue'
 // import TablePopupEdit from '../views/table/advanced/PopupEdit.vue'
 // import Toolbar from '../views/table/advanced/Toolbar.vue'
 // import TableCustom from '../views/table/advanced/Custom.vue'
@@ -562,21 +562,21 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableTemplate',
     component: TableTemplate
   },
-  // {
-  //   path: '/table/advanced/dynamic',
-  //   name: 'TableDynamic',
-  //   component: TableDynamic
-  // },
-  // {
-  //   path: '/table/advanced/sortIcon',
-  //   name: 'TableSortIcon',
-  //   component: TableSortIcon
-  // },
-  // {
-  //   path: '/table/advanced/customSort',
-  //   name: 'TableCustomSort',
-  //   component: TableCustomSort
-  // },
+  {
+    path: '/table/advanced/dynamic',
+    name: 'TableDynamic',
+    component: TableDynamic
+  },
+  {
+    path: '/table/advanced/sortIcon',
+    name: 'TableSortIcon',
+    component: TableSortIcon
+  },
+  {
+    path: '/table/advanced/customSort',
+    name: 'TableCustomSort',
+    component: TableCustomSort
+  },
   {
     path: '/table/advanced/multiSort',
     name: 'TableMultiSort',
@@ -587,21 +587,21 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableManualFilter',
     component: TableManualFilter
   },
-  // {
-  //   path: '/table/advanced/filterIcon',
-  //   name: 'TableFilterIcon',
-  //   component: TableFilterIcon
-  // },
-  // {
-  //   path: '/table/advanced/span',
-  //   name: 'TableSpan',
-  //   component: TableSpan
-  // },
-  // {
-  //   path: '/table/advanced/spanRow',
-  //   name: 'TableSpanRow',
-  //   component: TableSpanRow
-  // },
+  {
+    path: '/table/advanced/filterIcon',
+    name: 'TableFilterIcon',
+    component: TableFilterIcon
+  },
+  {
+    path: '/table/advanced/span',
+    name: 'TableSpan',
+    component: TableSpan
+  },
+  {
+    path: '/table/advanced/spanRow',
+    name: 'TableSpanRow',
+    component: TableSpanRow
+  },
   {
     path: '/table/advanced/mergeCell',
     name: 'TableMergeCell',
@@ -612,16 +612,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableFooter',
     component: TableFooter
   },
-  // {
-  //   path: '/table/advanced/footerSpan',
-  //   name: 'TableFooterSpan',
-  //   component: TableFooterSpan
-  // },
-  // {
-  //   path: '/table/advanced/footerMaxHeight',
-  //   name: 'TableFooterMaxHeight',
-  //   component: TableFooterMaxHeight
-  // },
+  {
+    path: '/table/advanced/footerSpan',
+    name: 'TableFooterSpan',
+    component: TableFooterSpan
+  },
+  {
+    path: '/table/advanced/footerMaxHeight',
+    name: 'TableFooterMaxHeight',
+    component: TableFooterMaxHeight
+  },
   {
     path: '/table/advanced/import',
     name: 'TableImport',
@@ -677,21 +677,21 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableExpandAccordion',
   //   component: TableExpandAccordion
   // },
-  // {
-  //   path: '/table/advanced/search',
-  //   name: 'TableSearch',
-  //   component: TableSearch
-  // },
+  {
+    path: '/table/advanced/search',
+    name: 'TableSearch',
+    component: TableSearch
+  },
   // {
   //   path: '/table/advanced/groupBy',
   //   name: 'TableGroupBy',
   //   component: TableGroupBy
   // },
-  // {
-  //   path: '/table/advanced/details',
-  //   name: 'TableDetails',
-  //   component: TableDetails
-  // },
+  {
+    path: '/table/advanced/details',
+    name: 'TableDetails',
+    component: TableDetails
+  },
   // {
   //   path: '/table/advanced/popupEdit',
   //   name: 'TablePopupEdit',
