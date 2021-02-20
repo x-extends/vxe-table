@@ -4,7 +4,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-input v-model="filterName1" type="search" placeholder="试试全表搜索"></vxe-input>
+        <vxe-input v-model="filterName1" type="search" placeholder="试试全表搜索" @keyup="searchEvent1"></vxe-input>
       </template>
     </vxe-toolbar>
 
@@ -37,7 +37,7 @@
 
     <vxe-toolbar>
       <template v-slot:buttons>
-        <vxe-input v-model="filterName2" type="search" placeholder="试试全表搜索"></vxe-input>
+        <vxe-input v-model="filterName2" type="search" placeholder="试试全表搜索" @keyup="searchEvent2"></vxe-input>
       </template>
     </vxe-toolbar>
 
@@ -75,22 +75,62 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
+      list1: [],
       filterName1: '',
-      tableData1: [],
+      tableData1: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
+        { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 26, amount: 2000, address: 'vxe-table 从入门到放弃' },
+        { id: 100010, name: 'Test10', role: 'Develop', sex: '1 ', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
+      ],
+      list2: [],
       filterName2: '',
-      tableData2: [],
+      tableData2: [
+        { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        {
+          id: 1005,
+          name: 'Test2',
+          type: 'mp4',
+          size: null,
+          date: '2021-04-01',
+          children: [
+            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+            { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+            {
+              id: 10053,
+              name: 'Test96',
+              type: 'avi',
+              size: null,
+              date: '2021-04-01',
+              children: [
+                { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+              ]
+            }
+          ]
+        },
+        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-input v-model="filterName" type="search" placeholder="试试全表搜索"></vxe-input>
+            <vxe-input v-model="filterName1" type="search" placeholder="试试全表搜索" @keyup="searchEvent1"></vxe-input>
           </template>
         </vxe-toolbar>
 
         <vxe-table
           border
           height="300"
-          :data="list">
+          :data="list1">
           <vxe-table-column type="seq" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
           <vxe-table-column field="role" title="Role" type="html"></vxe-table-column>
@@ -108,30 +148,43 @@ export default {
         export default {
           data () {
             return {
+              list1: [],
               filterName: '',
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
+                { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 26, amount: 2000, address: 'vxe-table 从入门到放弃' },
+                { id: 100010, name: 'Test10', role: 'Develop', sex: '1 ', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
+              ]
             }
           },
-          computed: {
-            list () {
-              const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+          created () {
+            this.searchEvent1()
+          },
+          methods: {
+            searchEvent1 () {
+              const filterName = XEUtils.toString(this.filterName1).trim().toLowerCase()
               if (filterName) {
                 const filterRE = new RegExp(filterName, 'gi')
                 const searchProps = ['name', 'role', 'age', 'address']
-                const rest = this.tableData.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
-                return rest.map(row => {
+                const rest = this.tableData1.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
+                this.list1 = rest.map(row => {
                   const item = Object.assign({}, row)
                   searchProps.forEach(key => {
                     item[key] = XEUtils.toString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
                   })
                   return item
                 })
+              } else {
+                this.list1 = this.tableData1
               }
-              return this.tableData
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 50)
           }
         }
         `,
@@ -144,7 +197,7 @@ export default {
         `
         <vxe-toolbar>
           <template v-slot:buttons>
-            <vxe-input v-model="filterName" type="search" placeholder="试试全表搜索"></vxe-input>
+            <vxe-input v-model="filterName2" type="search" placeholder="试试全表搜索" @keyup="searchEvent2"></vxe-input>
           </template>
         </vxe-toolbar>
 
@@ -152,7 +205,7 @@ export default {
           ref="xTree"
           max-height="400"
           :tree-config="{}"
-          :data="list">
+          :data="list2">
           <vxe-table-column type="seq" width="220" title="序号" tree-node></vxe-table-column>
           <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
           <vxe-table-column field="size" title="Size" type="html"></vxe-table-column>
@@ -170,36 +223,66 @@ export default {
         export default {
           data () {
             return {
+              list2: [],
               filterName: '',
-              tableData: []
+              tableData: [
+                { id: 1000, name: 'Test1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                {
+                  id: 1005,
+                  name: 'Test2',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-04-01',
+                  children: [
+                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                    { id: 20045, name: 'Test4', type: 'html', size: 600, date: '2021-04-01' },
+                    {
+                      id: 10053,
+                      name: 'Test96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-04-01',
+                      children: [
+                        { id: 24330, name: 'Test5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+                      ]
+                    }
+                  ]
+                },
+                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, name: 'Test9', type: 'avi', size: 224, date: '2020-10-01' }
+              ]
             }
           },
-          computed: {
-            list () {
-              const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+          created () {
+            this.searchEvent2()
+          },
+          methods: {
+            searchEvent2 () {
+              const filterName = XEUtils.toString(this.filterName2).trim().toLowerCase()
               if (filterName) {
                 const filterRE = new RegExp(filterName, 'gi')
                 const options = { children: 'children' }
                 const searchProps = ['name', 'size', 'type', 'date']
-                const rest = XEUtils.searchTree(this.tableData, item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
+                const rest = XEUtils.searchTree(this.tableData2, item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
                 XEUtils.eachTree(rest, item => {
                   searchProps.forEach(key => {
                     item[key] = XEUtils.toString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
                   })
                 }, options)
+                this.list2 = rest
                 // 搜索之后默认展开所有子节点
                 this.$nextTick(() => {
                   this.$refs.xTree.setAllTreeExpand(true)
                 })
-                return rest
+              } else {
+                this.list2 = this.tableData2
               }
-              return this.tableData
             }
-          },
-          created () {
-            this.tableData = window.MOCK_TREE_DATA_LIST
           }
-        }`,
+        }
+        `,
         `
         .keyword-lighten {
           color: #000;
@@ -209,24 +292,29 @@ export default {
       ]
     }
   },
-  computed: {
-    list1 () {
+  created () {
+    this.searchEvent1()
+    this.searchEvent2()
+  },
+  methods: {
+    searchEvent1 () {
       const filterName = XEUtils.toString(this.filterName1).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const searchProps = ['name', 'role', 'age', 'address']
         const rest = this.tableData1.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
-        return rest.map(row => {
+        this.list1 = rest.map(row => {
           const item = Object.assign({}, row)
           searchProps.forEach(key => {
             item[key] = XEUtils.toString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
           })
           return item
         })
+      } else {
+        this.list1 = this.tableData1
       }
-      return this.tableData1
     },
-    list2 () {
+    searchEvent2 () {
       const filterName = XEUtils.toString(this.filterName2).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
@@ -238,18 +326,15 @@ export default {
             item[key] = XEUtils.toString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
           })
         }, options)
+        this.list2 = rest
         // 搜索之后默认展开所有子节点
         this.$nextTick(() => {
           this.$refs.xTree.setAllTreeExpand(true)
         })
-        return rest
+      } else {
+        this.list2 = this.tableData2
       }
-      return this.tableData2
     }
-  },
-  created () {
-    this.tableData1 = window.MOCK_DATA_LIST.slice(0, 50)
-    this.tableData2 = XEUtils.clone(window.MOCK_TREE_DATA_LIST, true)
   }
 }
 </script>

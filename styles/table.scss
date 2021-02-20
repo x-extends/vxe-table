@@ -593,6 +593,9 @@
     .vxe-table--header-border-line {
       display: none;
     }
+    .vxe-table--footer-wrapper {
+      border-top: 0;
+    }
   }
   
   &.size--medium {

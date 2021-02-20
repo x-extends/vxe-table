@@ -1023,10 +1023,10 @@ const Methods = {
             const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
             if (filterMethod) {
               return itemList.some((item) => filterMethod({ value: item.value, option: item, row, column, $table: this }))
-            } else if (allFilterMethod) {
-              return allFilterMethod({ options: itemList, values: valueList, row, column })
             } else if (compFilterMethod) {
               return itemList.some((item) => compFilterMethod({ value: item.value, option: item, row, column, $table: this }))
+            } else if (allFilterMethod) {
+              return allFilterMethod({ options: itemList, values: valueList, row, column })
             }
             return valueList.indexOf(XEUtils.get(row, column.property)) > -1
           }

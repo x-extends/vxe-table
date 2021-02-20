@@ -205,15 +205,15 @@ export default {
             // 通用行合并函数（将相同多列数据合并为一行）
             rowspanMethod ({ row, _rowIndex, column, visibleData }) {
               const fields = ['name1', 'name2', 'name3']
-              const cellValue = XEUtils.get(row, column.property)
+              const cellValue = row[column.property]
               if (cellValue && fields.includes(column.property)) {
                 const prevRow = visibleData[_rowIndex - 1]
                 let nextRow = visibleData[_rowIndex + 1]
-                if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
+                if (prevRow && prevRow[column.property] === cellValue) {
                   return { rowspan: 0, colspan: 0 }
                 } else {
                   let countRowspan = 1
-                  while (nextRow && XEUtils.get(nextRow, column.property) === cellValue) {
+                  while (nextRow && nextRow[column.property] === cellValue) {
                     nextRow = visibleData[++countRowspan + _rowIndex]
                   }
                   if (countRowspan > 1) {
@@ -350,15 +350,15 @@ export default {
     // 通用行合并函数（将相同多列数据合并为一行）
     rowspanMethod ({ row, _rowIndex, column, visibleData }) {
       const fields = ['name1', 'name2', 'name3']
-      const cellValue = XEUtils.get(row, column.property)
+      const cellValue = row[column.property]
       if (cellValue && fields.includes(column.property)) {
         const prevRow = visibleData[_rowIndex - 1]
         let nextRow = visibleData[_rowIndex + 1]
-        if (prevRow && XEUtils.get(prevRow, column.property) === cellValue) {
+        if (prevRow && prevRow[column.property] === cellValue) {
           return { rowspan: 0, colspan: 0 }
         } else {
           let countRowspan = 1
-          while (nextRow && XEUtils.get(nextRow, column.property) === cellValue) {
+          while (nextRow && nextRow[column.property] === cellValue) {
             nextRow = visibleData[++countRowspan + _rowIndex]
           }
           if (countRowspan > 1) {

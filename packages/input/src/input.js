@@ -1049,8 +1049,8 @@ export default {
     },
     emitModel (value, evnt) {
       this.inputValue = value
-      this.$emit('input', { value, $event: evnt })
       this.$emit('modelValue', value)
+      this.$emit('input', { value, $event: evnt })
       if (XEUtils.toString(this.value) !== value) {
         this.$emit('change', { value, $event: evnt })
       }
@@ -1061,8 +1061,9 @@ export default {
       if (!isDatePicker) {
         if (inpImmediate) {
           this.emitModel(value, evnt)
+        } else {
+          this.$emit('input', { value, $event: evnt })
         }
-        this.$emit('input', { value, $event: evnt })
       }
     },
     inputEvent (evnt) {

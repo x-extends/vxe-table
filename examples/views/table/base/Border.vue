@@ -3,7 +3,9 @@
     <p class="tip">通过设置 <table-api-link prop="border"/>=false|default 默认显示边框</p>
 
     <vxe-table
+      show-footer
       height="200"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -23,7 +25,9 @@
 
     <vxe-table
       border
+      show-footer
       height="200"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -42,8 +46,10 @@
     <p class="tip">通过设置 <table-api-link prop="border"/>=outer 显示外边框</p>
 
     <vxe-table
+      show-footer
       height="200"
       border="outer"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -62,8 +68,10 @@
     <p class="tip">通过设置 <table-api-link prop="border"/>=inner 显示内边框</p>
 
     <vxe-table
+      show-footer
       height="200"
       border="inner"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -82,8 +90,10 @@
     <p class="tip">通过设置 <table-api-link prop="border"/>=none 去掉所有边框</p>
 
     <vxe-table
+      show-footer
       height="200"
       border="none"
+      :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -102,6 +112,8 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
+
 export default {
   data () {
     return {
@@ -114,7 +126,9 @@ export default {
       demoCodes: [
         `
         <vxe-table
+          show-footer
           height="200"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -133,6 +147,20 @@ export default {
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
                 { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
               ]
+            }
+          },
+          methods: {
+            footerMethod ({ columns, data }) {
+              const sums = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  sums.push('和值')
+                } else {
+                  sums.push(XEUtils.sum(data, column.property))
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [sums]
             }
           }
         }
@@ -140,7 +168,9 @@ export default {
         `
         <vxe-table
           border
+          show-footer
           height="200"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -160,13 +190,29 @@ export default {
                 { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
               ]
             }
+          },
+          methods: {
+            footerMethod ({ columns, data }) {
+              const sums = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  sums.push('和值')
+                } else {
+                  sums.push(XEUtils.sum(data, column.property))
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [sums]
+            }
           }
         }
         `,
         `
         <vxe-table
+          show-footer
           height="200"
           border="outer"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -186,13 +232,29 @@ export default {
                 { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
               ]
             }
+          },
+          methods: {
+            footerMethod ({ columns, data }) {
+              const sums = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  sums.push('和值')
+                } else {
+                  sums.push(XEUtils.sum(data, column.property))
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [sums]
+            }
           }
         }
         `,
         `
         <vxe-table
+          show-footer
           height="200"
           border="inner"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -212,13 +274,29 @@ export default {
                 { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
               ]
             }
+          },
+          methods: {
+            footerMethod ({ columns, data }) {
+              const sums = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  sums.push('和值')
+                } else {
+                  sums.push(XEUtils.sum(data, column.property))
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [sums]
+            }
           }
         }
         `,
         `
         <vxe-table
+          show-footer
           height="200"
           border="none"
+          :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -237,11 +315,39 @@ export default {
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
                 { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
               ]
+            }
+          },
+          methods: {
+            footerMethod ({ columns, data }) {
+              const sums = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  sums.push('和值')
+                } else {
+                  sums.push(XEUtils.sum(data, column.property))
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [sums]
             }
           }
         }
         `
       ]
+    }
+  },
+  methods: {
+    footerMethod ({ columns, data }) {
+      const sums = []
+      columns.forEach((column, columnIndex) => {
+        if (columnIndex === 0) {
+          sums.push('和值')
+        } else {
+          sums.push(XEUtils.sum(data, column.property))
+        }
+      })
+      // 返回一个二维数组的表尾合计
+      return [sums]
     }
   }
 }

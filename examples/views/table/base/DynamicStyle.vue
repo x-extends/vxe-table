@@ -8,7 +8,6 @@
     <vxe-table
       border
       :header-cell-style="headerCellStyle"
-      :row-style="rowStyle"
       :cell-style="cellStyle"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -44,7 +43,6 @@ export default {
         <vxe-table
           border
           :header-cell-style="headerCellStyle"
-          :row-style="rowStyle"
           :cell-style="cellStyle"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -76,24 +74,24 @@ export default {
                 }
               }
             },
-            rowStyle ({ row, rowIndex }) {
+            cellStyle ({ row, rowIndex, column }) {
+              if (column.property === 'sex') {
+                if (row.sex === 'Women') {
+                  return {
+                    backgroundColor: '#187',
+                    color: '#ffffff'
+                  }
+                } else if (row.age === 24) {
+                  return {
+                    backgroundColor: '#2db7f5',
+                    color: '#000'
+                  }
+                }
+              }
               if ([2, 3, 5].includes(rowIndex)) {
                 return {
                   backgroundColor: 'red',
                   color: '#ffffff'
-                }
-              }
-            },
-            cellStyle ({ row, rowIndex, column, columnIndex }) {
-              if (column.property === 'sex') {
-                if (row.sex >= '1') {
-                  return {
-                    backgroundColor: '#187'
-                  }
-                } else if (row.age === 26) {
-                  return {
-                    backgroundColor: '#2db7f5'
-                  }
                 }
               }
             }
@@ -112,24 +110,24 @@ export default {
         }
       }
     },
-    rowStyle ({ rowIndex }) {
+    cellStyle ({ row, rowIndex, column }) {
+      if (column.property === 'sex') {
+        if (row.sex === 'Women') {
+          return {
+            backgroundColor: '#187',
+            color: '#ffffff'
+          }
+        } else if (row.age === 24) {
+          return {
+            backgroundColor: '#2db7f5',
+            color: '#000'
+          }
+        }
+      }
       if ([2, 3, 5].includes(rowIndex)) {
         return {
           backgroundColor: 'red',
           color: '#ffffff'
-        }
-      }
-    },
-    cellStyle ({ row, column }) {
-      if (column.property === 'sex') {
-        if (row.sex >= '1') {
-          return {
-            backgroundColor: '#187'
-          }
-        } else if (row.age === 26) {
-          return {
-            backgroundColor: '#2db7f5'
-          }
         }
       }
     }
