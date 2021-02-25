@@ -17,9 +17,8 @@
       keep-source
       ref="xTree"
       row-id="id"
-      :loading="loading"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-      :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod, accordion: true}"
+      :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" width="260" tree-node :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -37,14 +36,15 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-
 export default {
   data () {
     return {
-      loading: false,
-      tableData: [],
-      defaultExpandRowKeys: [],
+      tableData: [
+        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+        { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
@@ -60,9 +60,8 @@ export default {
           keep-source
           ref="xTree"
           row-id="id"
-          :loading="loading"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-          :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod, accordion: true}"
+          :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" width="260" tree-node :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
@@ -74,24 +73,30 @@ export default {
         export default {
           data () {
             return {
-              loading: false,
-              tableData: []
+              tableData: [
+                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+                { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              ]
             }
           },
-          created () {
-            this.findList()
-          },
           methods: {
-            findList () {
-              this.loading = true
-              XEAjax.get('/api/file/node/list', { parentId: null }).then(data => {
-                this.tableData = data
-                this.loading = false
-              })
-            },
             loadChildrenMethod ({ row }) {
               // 异步加载子节点
-              return XEAjax.get('/api/file/node/list', { parentId: row.id })
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  const childs = [
+                    { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+                    { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+                  ]
+                  resolve(childs)
+                }, 500)
+              })
+            },
+            getUpdateEvent () {
+              const updateRecords = this.$refs.xTree.getUpdateRecords()
+              this.$XModal.alert(updateRecords.length)
             }
           }
         }
@@ -99,20 +104,18 @@ export default {
       ]
     }
   },
-  created () {
-    this.findList()
-  },
   methods: {
-    findList () {
-      this.loading = true
-      XEAjax.get('/api/file/node/list', { parentId: null }).then(data => {
-        this.tableData = data
-        this.loading = false
-      })
-    },
     loadChildrenMethod ({ row }) {
       // 异步加载子节点
-      return XEAjax.get('/api/file/node/list', { parentId: row.id })
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const childs = [
+            { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+            { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+          ]
+          resolve(childs)
+        }, 500)
+      })
     },
     getUpdateEvent () {
       const updateRecords = this.$refs.xTree.getUpdateRecords()

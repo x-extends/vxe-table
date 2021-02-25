@@ -36,7 +36,7 @@
             <!-- <vxe-option value="4.5" :label="$t('app.body.other.v4d5')" disabled></vxe-option> -->
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
-          <a class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡扩展与支持</a>
+          <a v-if="showPlugin" class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡扩展与支持</a>
         </div>
       </div>
     </header>
@@ -145,6 +145,7 @@ export default {
       usedJSHeapSize: '0',
       newVersionVisible: false,
       sponsorList: [],
+      showPlugin: false,
       tableList: [
         {
           label: 'app.aside.nav.start',
@@ -2295,6 +2296,7 @@ export default {
     },
     getVersion () {
       XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ tags, versions }) => {
+        this.showPlugin = true
         const stableVersionList = []
         const betaVersionList = []
         if (versions) {

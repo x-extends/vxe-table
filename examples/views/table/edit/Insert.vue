@@ -25,7 +25,7 @@
       class="my_table_insert"
       max-height="400"
       :data="tableData"
-      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}">
+      :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil', showStatus: true}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>
@@ -80,7 +80,7 @@ export default {
           class="my_table_insert"
           max-height="400"
           :data="tableData"
-          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}">
+          :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil', showStatus: true}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable :edit-render="{name: 'input', defaultValue: '默认的名字'}"></vxe-table-column>

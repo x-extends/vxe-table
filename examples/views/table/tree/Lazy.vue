@@ -41,6 +41,7 @@
       border
       resizable
       row-id="id"
+      :loading="loading2"
       :checkbox-config="{labelField: 'name'}"
       :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData2">
@@ -60,12 +61,16 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-
 export default {
   data () {
     return {
-      tableData: [],
+      tableData: [
+        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+        { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+      ],
+      loading2: false,
       tableData2: [],
       defaultExpandRowKeys: [],
       demoCodes: [
@@ -96,21 +101,26 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+                { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              ]
             }
           },
-          created () {
-            this.findList()
-          },
           methods: {
-            findList () {
-              XEAjax.get('/api/file/node/list', { parentId: null }).then(data => {
-                this.tableData = data
-              })
-            },
             loadChildrenMethod ({ row }) {
               // 异步加载子节点
-              return XEAjax.get('/api/file/node/list', { parentId: row.id })
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  const childs = [
+                    { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+                    { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+                  ]
+                  resolve(childs)
+                }, 500)
+              })
             }
           }
         }
@@ -120,9 +130,10 @@ export default {
           border
           resizable
           row-id="id"
+          :loading="loading2"
           :checkbox-config="{labelField: 'name'}"
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-          :data="tableData">
+          :data="tableData2">
           <vxe-table-column type="checkbox" title="Name" width="400" tree-node></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type"></vxe-table-column>
@@ -133,24 +144,37 @@ export default {
         export default {
           data () {
             return {
-              tableData: [],
+              loading2: false,
+              tableData2: [],
               defaultExpandRowKeys: []
             }
           },
           created () {
-            this.findList()
+            this.loading2 = true
+            setTimeout(() => {
+              this.loading2 = false
+              // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
+              this.defaultExpandRowKeys = [1005, 10053]
+              this.tableData2 = [
+                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+                { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              ]
+            }, 300)
           },
           methods: {
-            findList () {
-              XEAjax.get('/api/file/node/list', { parentId: null }).then(data => {
-                // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
-                this.defaultExpandRowKeys = ['10000', '40000']
-                this.tableData = data
-              })
-            },
             loadChildrenMethod ({ row }) {
               // 异步加载子节点
-              return XEAjax.get('/api/file/node/list', { parentId: row.id })
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  const childs = [
+                    { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+                    { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+                  ]
+                  resolve(childs)
+                }, 500)
+              })
             }
           }
         }
@@ -159,25 +183,31 @@ export default {
     }
   },
   created () {
-    this.findList()
-    this.findList2()
+    this.loading2 = true
+    setTimeout(() => {
+      this.loading2 = false
+      // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
+      this.defaultExpandRowKeys = [1005, 10053]
+      this.tableData2 = [
+        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+        { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+      ]
+    }, 300)
   },
   methods: {
-    findList () {
-      XEAjax.get('/api/file/node/list', { parentId: null }).then(data => {
-        this.tableData = data
-      })
-    },
-    findList2 () {
-      XEAjax.get('/api/file/node/list', { parentId: null }).then(data => {
-        // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
-        this.defaultExpandRowKeys = ['10000', '40000']
-        this.tableData2 = data
-      })
-    },
     loadChildrenMethod ({ row }) {
       // 异步加载子节点
-      return XEAjax.get('/api/file/node/list', { parentId: row.id })
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const childs = [
+            { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+            { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+          ]
+          resolve(childs)
+        }, 500)
+      })
     }
   }
 }

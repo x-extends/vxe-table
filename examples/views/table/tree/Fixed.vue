@@ -67,7 +67,26 @@ export default {
             }
           ]
         },
-        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        {
+          id: 23666,
+          name: 'Test23',
+          type: 'mp4',
+          size: null,
+          date: '2021-01-02',
+          children: [
+            {
+              id: 27666,
+              name: 'vxe-table 从入门到放弃96',
+              type: 'avi',
+              size: null,
+              date: '2021-08-04',
+              children: [
+                { id: 29330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-03' },
+                { id: 29331, name: 'Test33', type: 'pdf', size: 512, date: '2020-03-01' }
+              ]
+            }
+          ]
+        },
         { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
       ],
       demoCodes: [
@@ -126,7 +145,26 @@ export default {
                     }
                   ]
                 },
-                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                {
+                  id: 23666,
+                  name: 'Test23',
+                  type: 'mp4',
+                  size: null,
+                  date: '2021-01-02',
+                  children: [
+                    {
+                      id: 27666,
+                      name: 'vxe-table 从入门到放弃96',
+                      type: 'avi',
+                      size: null,
+                      date: '2021-08-04',
+                      children: [
+                        { id: 29330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-03' },
+                        { id: 29331, name: 'Test33', type: 'pdf', size: 512, date: '2020-03-01' }
+                      ]
+                    }
+                  ]
+                },
                 { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
               ]
             }

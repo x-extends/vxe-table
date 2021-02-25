@@ -360,15 +360,17 @@ const Methods = {
     this.clearMergeFooterItems()
     this.handleTableData(true)
     this.updateFooter()
-    return this.computeScrollLoad().then(() => {
-      // 是否加载了数据
-      if (scrollYLoad) {
-        scrollYStore.endIndex = scrollYStore.visibleSize
-      }
-      this.handleReserveStatus()
-      this.checkSelectionStatus()
-      return this.$nextTick().then(() => this.recalculate()).then(() => restoreScroll(this, lastScrollLeft, lastScrollTop))
-    })
+    return this.updateStyle()
+      .then(() => this.computeScrollLoad())
+      .then(() => {
+        // 是否加载了数据
+        if (scrollYLoad) {
+          scrollYStore.endIndex = scrollYStore.visibleSize
+        }
+        this.handleReserveStatus()
+        this.checkSelectionStatus()
+        return this.$nextTick().then(() => this.recalculate()).then(() => restoreScroll(this, lastScrollLeft, lastScrollTop))
+      })
   },
   /**
    * 重新加载数据，不会清空表格状态
