@@ -1,5 +1,5 @@
 import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, RowInfo, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
+import { VXETableComponent, VxeComponentInstance, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeColumnOptions, VxeColumnPropTypes } from './column'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
@@ -137,10 +137,10 @@ export interface TablePublicMethods {
    */
   getRowNode(trElem: HTMLElement): {
     rowid: string;
-    item: RowInfo;
-    items: RowInfo[];
+    item: any;
+    items: any[];
     index: number;
-    parent?: RowInfo;
+    parent?: any;
   } | null;
   /**
    * 根据 th/td 元素获取对应的 column 信息
@@ -157,17 +157,17 @@ export interface TablePublicMethods {
    * 根据 row 获取相对于 data 中的索引
    * @param row 行对象
    */
-  getRowIndex(row: RowInfo): number;
+  getRowIndex(row: any): number;
   /**
    * 根据 row 获取相对于当前数据中的索引
    * @param row 行对象
    */
-  getVTRowIndex(row: RowInfo): number;
+  getVTRowIndex(row: any): number;
   /**
    * 根据 row 获取渲染中的虚拟索引
    * @param row 行对象
    */
-  getVMRowIndex(row: RowInfo): number;
+  getVMRowIndex(row: any): number;
   /**
    * 根据 column 获取相对于 columns 中的索引
    * @param column 列对象
@@ -200,24 +200,24 @@ export interface TablePublicMethods {
    * @param rows 指定行
    * @param field 字段名
    */
-  revertData(rows?: RowInfo | RowInfo[], field?: string): Promise<any>;
+  revertData(rows?: any | any[], field?: string): Promise<any>;
   /**
    * 手动清空单元格内容，如果不传参数，则清空整个表格内容，如果传了行则清空指定行内容，如果传了指定字段，则清空该字段内容
    * @param rows 指定行
    * @param field 字段名
    */
-  clearData(rows?: RowInfo | RowInfo[], field?: string): Promise<any>;
+  clearData(rows?: any | any[], field?: string): Promise<any>;
   /**
    * 用于 edit-config，判断行是否为新增的临时数据
    * @param row 指定行
    */
-  isInsertByRow(row: RowInfo): boolean;
+  isInsertByRow(row: any): boolean;
   /**
    * 只对 keep-source 开启有效，判断行数据是否发生改变
    * @param row 指定行
    * @param field 指定字段
    */
-  isUpdateByRow(row: RowInfo, field?: string): boolean;
+  isUpdateByRow(row: any, field?: string): boolean;
   /**
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
@@ -247,30 +247,30 @@ export interface TablePublicMethods {
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
-  getData(): RowInfo[];
-  getData(rowIndex: number): RowInfo;
+  getData(): any[];
+  getData(rowIndex: number): any;
   /**
    * 用于 type=checkbox，获取已选中的行数据
    */
-  getCheckboxRecords(): RowInfo[];
+  getCheckboxRecords(): any[];
   /**
    * 根据行的唯一主键获取行
    * @param rowid 行主键
    */
-  getRowById(rowid: string | number): RowInfo;
+  getRowById(rowid: string | number): any;
   /**
    * 根据行获取行的唯一主键
    * @param row 行对象
    */
-  getRowid(row: RowInfo): string;
+  getRowid(row: any): string;
   /**
    * 获取当前表格的数据
    * 完整的全量表体数据、处理条件之后的全量表体数据、当前渲染中的表体数据、当前渲染中的表尾数据
    */
   getTableData(): {
-    fullData: RowInfo[];
-    visibleData: RowInfo[];
-    tableData: RowInfo[];
+    fullData: any[];
+    visibleData: any[];
+    tableData: any[];
     footerData: any[][];
   };
   /**
@@ -288,7 +288,7 @@ export interface TablePublicMethods {
    * 如果已关联工具栏，则会同步更新
    * @param options 可选参数
    */
-  resetColumn(options: boolean | { visible?: boolean, resizable?: boolean }): Promise<any>;
+  resetColumn(options?: boolean | { visible?: boolean, resizable?: boolean }): Promise<any>;
   /**
    * 刷新列配置
    * 对于动态修改属性、显示/隐藏列等场景下可能会用到
@@ -319,7 +319,7 @@ export interface TablePublicMethods {
    * @param rows 指定行
    * @param checked 是否选中
    */
-  setCheckboxRow(rows: RowInfo | RowInfo[], checked: boolean): Promise<any>;
+  setCheckboxRow(rows: any | any[], checked: boolean): Promise<any>;
   /**
    * 用于 type=checkbox，判断复选行是否被全部选中
    */
@@ -332,12 +332,12 @@ export interface TablePublicMethods {
    * 用于 type=checkbox，判断复选行数据是否勾选
    * @param row 指定行
    */
-  isCheckedByCheckboxRow(row: RowInfo): boolean;
+  isCheckedByCheckboxRow(row: any): boolean;
   /**
    * 用于 type=checkbox，切换某一行的选中状态
    * @param row 指定行
    */
-  toggleCheckboxRow(row: RowInfo): Promise<any>;
+  toggleCheckboxRow(row: any): Promise<any>;
   /**
    * 用于 type=checkbox，设置所有行的选中状态
    * @param checked 是否选中
@@ -346,7 +346,7 @@ export interface TablePublicMethods {
   /**
    * 用于 radio-config.reserve，获取已保留选中的行数据
    */
-  getRadioReserveRecord(): RowInfo[];
+  getRadioReserveRecord(): any[];
   /**
    * 用于 radio-config.reserve，手动清空用户保留选中的行数据
    */
@@ -354,11 +354,11 @@ export interface TablePublicMethods {
   /**
    * 用于 checkbox-config.reserve，获取已保留选中的行数据
    */
-  getCheckboxReserveRecords(): RowInfo[];
+  getCheckboxReserveRecords(): any[];
   /**
    * 用于 type=checkbox，获取半选状态的行数据
    */
-  getCheckboxIndeterminateRecords(): RowInfo[]
+  getCheckboxIndeterminateRecords(): any[]
   /**
    * 用于 checkbox-config.reserve，手动清空用户保留选中的行数据
    */
@@ -375,17 +375,17 @@ export interface TablePublicMethods {
    * 用于 highlight-current-row，设置某一行为高亮状态
    * @param row 指定行
    */
-  setCurrentRow(row: RowInfo): Promise<any>;
+  setCurrentRow(row: any): Promise<any>;
   /**
    * 用于 type=radio，判断单选行数据是否勾选
    * @param row 指定行
    */
-  isCheckedByRadioRow(row: RowInfo): boolean;
+  isCheckedByRadioRow(row: any): boolean;
   /**
    * 用于 type=radio，设置某一行为选中状态
    * @param row 指定行
    */
-  setRadioRow(row: RowInfo): Promise<any>;
+  setRadioRow(row: any): Promise<any>;
   /**
    * 手动清除临时合并的单元格
    */
@@ -417,11 +417,11 @@ export interface TablePublicMethods {
   /**
    * 用于 highlight-current-row，获取当前行的行数据
    */
-  getCurrentRecord(): RowInfo;
+  getCurrentRecord(): any;
   /**
    * 用于 type=radio，获取当已选中的行数据
    */
-  getRadioRecord(): RowInfo;
+  getRadioRecord(): any;
   /**
    * 用于 highlight-current-column，设置某列行为高亮状态
    * @param columnOrField 列对象或字段名
@@ -466,21 +466,21 @@ export interface TablePublicMethods {
    * 用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成
    * @param row 指定行
    */
-  isRowExpandLoaded(row: RowInfo): boolean;
+  isRowExpandLoaded(row: any): boolean;
   /**
    * 用于 expand-config.lazy，手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
-  clearRowExpandLoaded(row: RowInfo): Promise<any>;
+  clearRowExpandLoaded(row: any): Promise<any>;
   /**
    * 用于懒加载展开行，重新加载展开行的内容
    * @param rows 指定行
    */
-  reloadExpandContent(rows: RowInfo | RowInfo[]): Promise<any>;
+  reloadExpandContent(rows: any | any[]): Promise<any>;
   /**
    * 用于 type=expand，切换展开行的状态
    * @param row 指定行
    */
-  toggleRowExpand(row: RowInfo): Promise<any>;
+  toggleRowExpand(row: any): Promise<any>;
   /**
    * 用于 expand-config，设置所有行的展开与否
    * 如果是关闭所有行，可以使用 clearRowExpand 快速清除
@@ -492,12 +492,12 @@ export interface TablePublicMethods {
    * @param rows 指定行
    * @param checked 是否选中
    */
-  setRowExpand(rows: RowInfo | RowInfo[], checked: boolean): Promise<any>;
+  setRowExpand(rows: any | any[], checked: boolean): Promise<any>;
   /**
    * 用于 expand-config，判断行是否为展开状态
    * @param row 指定行
    */
-  isExpandByRow(row: RowInfo): boolean;
+  isExpandByRow(row: any): boolean;
   /**
    * 用于 type=expand，手动清空展开行状态，数据会恢复成未展开的状态
    */
@@ -509,30 +509,30 @@ export interface TablePublicMethods {
   /**
    * 用于 expand-config，用于展开行，获取已展开的行数据
    */
-  getRowExpandRecords(): RowInfo[];
+  getRowExpandRecords(): any[];
   /**
    * 用于 tree-config，用于树表格，获取已展开的节点
    * 注意，即使父节点被收起，只要该节点还处于展开状态都能获取到
    */
-  getTreeExpandRecords(): RowInfo[];
+  getTreeExpandRecords(): any[];
   /**
    * 用于 tree-config.lazy，用于懒加载树表格，判断树节点是否懒加载完成
    */
-  isTreeExpandLoaded(row: RowInfo): boolean;
+  isTreeExpandLoaded(row: any): boolean;
   /**
    * 用于 tree-config.lazy，手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
-  clearTreeExpandLoaded(row: RowInfo): Promise<any>;
+  clearTreeExpandLoaded(row: any): Promise<any>;
   /**
    * 用于懒加载树表格，重新加载子节点
    * @param rows 指定行
    */
-  reloadTreeChilds(rows: RowInfo | RowInfo[]): Promise<any>;
+  reloadTreeChilds(rows: any | any[]): Promise<any>;
   /**
    * 用于 tree-config，切换展开树形节点的状态
    * @param row 指定行
    */
-  toggleTreeExpand(row: RowInfo): Promise<any>;
+  toggleTreeExpand(row: any): Promise<any>;
   /**
    * 用于 tree-config，设置所有树节点的展开与否
    * 如果是关闭所有树节点，可以使用 clearTreeExpand 快速清除
@@ -544,12 +544,12 @@ export interface TablePublicMethods {
    * @param rows 指定行
    * @param checked 是否选中
    */
-  setTreeExpand(rows: RowInfo | RowInfo, checked: boolean): Promise<any>;
+  setTreeExpand(rows: any | any[], checked: boolean): Promise<any>;
   /**
    * 用于 tree-config，判断行是否为树形节点展开状态
    * @param row 指定行
    */
-  isTreeExpandByRow(row: RowInfo): boolean;
+  isTreeExpandByRow(row: any): boolean;
   /**
    * 用于 tree-config，手动清空树形节点的展开状态，数据会恢复成未展开的状态
    */
@@ -578,7 +578,7 @@ export interface TablePublicMethods {
    * @param row 指定行
    * @param columnOrField 列对象或字段名
    */
-  scrollToRow(row: RowInfo, fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): Promise<any>;
+  scrollToRow(row: any, fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): Promise<any>;
   /**
    * 如果有滚动条，则滚动到对应的列
    * @param columnOrField 列对象或字段名
@@ -598,7 +598,7 @@ export interface TablePublicMethods {
    */
   updateStatus(
     params: {
-      row: RowInfo;
+      row: any;
       column: VxeTableDefines.ColumnInfo;
     },
     cellValue?: any
@@ -972,14 +972,14 @@ export namespace VxeTablePropTypes {
   }) => Array<string | number | null>[];
 
   export type RowClassName = string | ((params: {
-    row: RowInfo;
+    row: any;
     rowIndex: number;
     $rowIndex: number;
     _rowIndex: number;
   }) => void | null | string | { [key: string]: boolean });
 
   export type CellClassName = string | ((params: {
-    row: RowInfo;
+    row: any;
     rowIndex: number;
     $rowIndex: number;
     _rowIndex: number;
@@ -1023,7 +1023,7 @@ export namespace VxeTablePropTypes {
   }) => void | null | string | { [key: string]: boolean });
 
   export type CellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
-    row: RowInfo;
+    row: any;
     rowIndex: number;
     $rowIndex: number;
     _rowIndex: number;
@@ -1047,7 +1047,7 @@ export namespace VxeTablePropTypes {
   }) => void | null | string | { [key: string]: boolean });
 
   export type RowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
-    row: RowInfo;
+    row: any;
     rowIndex: number;
     $rowIndex: number;
     _rowIndex: number;
@@ -1077,7 +1077,7 @@ export namespace VxeTablePropTypes {
     column: VxeTableDefines.ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
-    row: RowInfo;
+    row: any;
     rowIndex: number;
     $rowIndex: number;
     _rowIndex: number;
@@ -1150,7 +1150,7 @@ export namespace VxeTablePropTypes {
       column: VxeTableDefines.ColumnInfo;
       columnIndex: number;
       $columnIndex: number;
-      row: RowInfo;
+      row: any;
       rowIndex: number;
       $rowIndex: number;
       isHidden: boolean;
@@ -1207,7 +1207,9 @@ export namespace VxeTablePropTypes {
     reserve?: boolean;
     labelField?: string;
     checkRowKey?: string | number;
-    checkMethod?(params: { row: RowInfo }): boolean;
+    checkMethod?(params: {
+      row: any;
+    }): boolean;
     trigger?: 'default' | 'cell' | 'row';
     highlight?: boolean;
   }
@@ -1226,7 +1228,9 @@ export namespace VxeTablePropTypes {
     checkRowKeys?: string[] | number[];
     checkStrictly?: boolean;
     strict?: boolean;
-    checkMethod?(params: { row: RowInfo }): boolean;
+    checkMethod?(params: {
+      row: any;
+    }): boolean;
     trigger?: 'default' | 'cell' | 'row';
     highlight?: boolean;
     range?: boolean;
@@ -1244,7 +1248,7 @@ export namespace VxeTablePropTypes {
     leaveMethod?: (params: { $event: Event }) => boolean;
     contentMethod?(params: {
       items: any[];
-      row: RowInfo;
+      row: any;
       rowIndex: number;
       $rowIndex: number;
       _rowIndex: number;
@@ -1272,14 +1276,14 @@ export namespace VxeTablePropTypes {
     reserve?: boolean;
     loadMethod?(params: {
       $table: VxeTableConstructor & VxeTablePrivateMethods;
-      row: RowInfo;
+      row: any;
       rowIndex: number;
       $rowIndex: number;
     }): Promise<any>;
     toggleMethod?(params: {
       $table: VxeTableConstructor & VxeTablePrivateMethods;
       expanded: boolean;
-      row: RowInfo;
+      row: any;
       rowIndex: number;
       $rowIndex: number;
       column: VxeTableDefines.ColumnInfo;
@@ -1310,12 +1314,12 @@ export namespace VxeTablePropTypes {
     reserve?: boolean;
     loadMethod?(params: {
       $table: VxeTableConstructor & VxeTablePrivateMethods;
-      row: RowInfo
+      row: any;
     }): Promise<any[]>;
     toggleMethod?(params: {
       $table: VxeTableConstructor & VxeTablePrivateMethods;
       expanded: boolean;
-      row: RowInfo;
+      row: any;
       column: VxeTableDefines.ColumnInfo;
       columnIndex: number;
       $columnIndex: number;
@@ -1347,7 +1351,7 @@ export namespace VxeTablePropTypes {
       type: string;
       options: (VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption)[][];
       columns: VxeTableDefines.ColumnInfo[];
-      row?: RowInfo;
+      row?: any;
       rowIndex?: number;
       column?: VxeTableDefines.ColumnInfo;
       columnIndex?: number;
@@ -1411,7 +1415,7 @@ export namespace VxeTablePropTypes {
      * 只对 isDel=true 有效，用于删除键清空单元格内容方法
      */
     delMethod?(params: {
-      row: RowInfo;
+      row: any;
       rowIndex: number;
       column: VxeTableDefines.ColumnInfo;
       columnIndex: number;
@@ -1421,7 +1425,7 @@ export namespace VxeTablePropTypes {
      * 只对 isDel=true 有效，用于重写回退键清空单元格内容并激活为编辑状态方法
      */
     backMethod?(params: {
-      row: RowInfo;
+      row: any;
       rowIndex: number;
       column: VxeTableDefines.ColumnInfo;
       columnIndex: number;
@@ -1431,7 +1435,7 @@ export namespace VxeTablePropTypes {
      * 只对 isEdit=true 有效，用于重写编辑单元格方法
      */
     editMethod?(params: {
-      row: RowInfo;
+      row: any;
       rowIndex: number;
       column: VxeTableDefines.ColumnInfo;
       columnIndex: number;
@@ -1491,10 +1495,10 @@ export namespace VxeTablePropTypes {
      * 该方法的返回值用来决定该单元格是否允许编辑
      */
     activeMethod?(params: {
-      row: RowInfo
-      rowIndex: number
-      column: VxeTableDefines.ColumnInfo
-      columnIndex: number
+      row: any;
+      rowIndex: number;
+      column: VxeTableDefines.ColumnInfo;
+      columnIndex: number;
     }): boolean;
   }
   export interface EditOpts extends EditConfig { }
@@ -1830,7 +1834,7 @@ export namespace VxeTableDefines {
   }
 
   interface TableBaseCellParams {
-    row: RowInfo;
+    row: any;
     rowIndex: number;
     $rowIndex: number;
     column: ColumnInfo;
@@ -1858,7 +1862,7 @@ export namespace VxeTableDefines {
   export interface CutEventParams extends TableEventParams, CutParams { }
 
   export interface CurrentChangeParams {
-    row: RowInfo;
+    row: any;
     rowIndex: number;
     $rowIndex: number;
   }
@@ -1869,9 +1873,9 @@ export namespace VxeTableDefines {
 
   export interface CheckboxChangeParams {
     checked: boolean;
-    records: RowInfo[];
-    reserves: RowInfo[];
-    indeterminates: RowInfo[];
+    records: any[];
+    reserves: any[];
+    indeterminates: any[];
   }
   export interface CheckboxChangeEventParams extends TableEventParams, CheckboxChangeParams { }
 

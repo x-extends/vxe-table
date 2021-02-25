@@ -1,4 +1,4 @@
-import { VXETableComponent, RowInfo } from './component'
+import { VXETableComponent } from './component'
 import { VxeTableDefines, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
@@ -16,14 +16,14 @@ export interface TableValidatorMethods {
    * @param rows 指定行
    * @param callback 回调函数
    */
-  fullValidate(rows?: boolean | RowInfo | RowInfo[], callback?: (errMap: VxeTableDefines.ValidatorErrorMapParams) => void): Promise<VxeTableDefines.ValidatorErrorMapParams>;
+  fullValidate(rows?: boolean | any | any[], callback?: (errMap: VxeTableDefines.ValidatorErrorMapParams) => void): Promise<VxeTableDefines.ValidatorErrorMapParams>;
   /**
    * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）；
    * 如果第一个参数为 true 则校验当前表格数据，如果指定 row 或 rows 则校验指定一行或多行，如果不指定数据，则默认只校验临时变动的数据，例如新增或修改。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
    * @param rows 指定行
    * @param callback 回调函数
    */
-  validate(rows?: boolean | RowInfo | RowInfo[], callback?: (errMap?: VxeTableDefines.ValidatorErrorMapParams) => void): Promise<VxeTableDefines.ValidatorErrorMapParams>;
+  validate(rows?: boolean | any | any[], callback?: (errMap?: VxeTableDefines.ValidatorErrorMapParams) => void): Promise<VxeTableDefines.ValidatorErrorMapParams>;
 }
 
 export interface TableValidatorPrivateMethods {

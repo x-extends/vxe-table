@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils/ctor'
 
 import { VxeGlobalInterceptor, VxeGlobalInterceptorHandles } from '../../../types/v-x-e-table'
 
-const eventTypes = 'clearActived,clearFilter,clearAreas,showMenu,keydown,export,import'.split(',').map(name => `event.${name}`)
+const eventTypes = 'created,mounted,activated,beforeDestroy,destroyed'.split(',').concat('clearActived,clearFilter,clearAreas,showMenu,keydown,export,import'.split(',').map(name => `event.${name}`))
 const storeMap: { [type: string]: VxeGlobalInterceptorHandles.InterceptorCallback[] } = {}
 
 const interceptor: VxeGlobalInterceptor = {

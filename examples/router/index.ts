@@ -132,10 +132,10 @@ import GridFullEdit from '../views/grid/FullEdit.vue'
 import TableTreeBasic from '../views/table/tree/Basic.vue'
 import TableTreeNormal from '../views/table/tree/Normal.vue'
 import TableTreeIcon from '../views/table/tree/Icon.vue'
-// import TableTreeAccordion from '../views/table/tree/Accordion.vue'
-// import TableTreeSelection from '../views/table/tree/Selection.vue'
-// import TableTreeRadio from '../views/table/tree/Radio.vue'
-// import TableTreeFixed from '../views/table/tree/Fixed.vue'
+import TableTreeAccordion from '../views/table/tree/Accordion.vue'
+import TableTreeSelection from '../views/table/tree/Selection.vue'
+import TableTreeRadio from '../views/table/tree/Radio.vue'
+import TableTreeFixed from '../views/table/tree/Fixed.vue'
 // import TableTreeMaxHeight from '../views/table/tree/MaxHeight.vue'
 // import TableTreeFilter from '../views/table/tree/Filter.vue'
 // import TableTreeSort from '../views/table/tree/Sort.vue'
@@ -145,14 +145,14 @@ import TableTreeIcon from '../views/table/tree/Icon.vue'
 // import TableTreeExpandLazy from '../views/table/tree/ExpandLazy.vue'
 import TableTreeToolbar from '../views/table/tree/Toolbar.vue'
 // import TableTreeInsert from '../views/table/tree/Insert.vue'
-// import TableTreeMenu from '../views/table/tree/Menu.vue'
+import TableTreeMenu from '../views/table/tree/Menu.vue'
 // import TableTreeSpan from '../views/table/tree/Span.vue'
 // import TableTreeHighlight from '../views/table/tree/Highlight.vue'
 // import TableTreeKeyboard from '../views/table/tree/Keyboard.vue'
-// import TableTreeLazy from '../views/table/tree/Lazy.vue'
-// import TableTreeLazyMenu from '../views/table/tree/LazyMenu.vue'
-// import TableTreeLazyEdit from '../views/table/tree/LazyEdit.vue'
-// import TableTreeLine from '../views/table/tree/Line.vue'
+import TableTreeLazy from '../views/table/tree/Lazy.vue'
+import TableTreeLazyMenu from '../views/table/tree/LazyMenu.vue'
+import TableTreeLazyEdit from '../views/table/tree/LazyEdit.vue'
+import TableTreeLine from '../views/table/tree/Line.vue'
 // import TableTreeEdit from '../views/table/tree/Edit.vue'
 // import TableTreeEditCellValid from '../views/table/tree/CellValid.vue'
 // import TableTreeEditRowValid from '../views/table/tree/RowValid.vue'
@@ -783,26 +783,26 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableTreeIcon',
     component: TableTreeIcon
   },
-  // {
-  //   path: '/table/tree/accordion',
-  //   name: 'TableTreeAccordion',
-  //   component: TableTreeAccordion
-  // },
-  // {
-  //   path: '/table/tree/selection',
-  //   name: 'TableTreeSelection',
-  //   component: TableTreeSelection
-  // },
-  // {
-  //   path: '/table/tree/radio',
-  //   name: 'TableTreeRadio',
-  //   component: TableTreeRadio
-  // },
-  // {
-  //   path: '/table/tree/fixed',
-  //   name: 'TableTreeFixed',
-  //   component: TableTreeFixed
-  // },
+  {
+    path: '/table/tree/accordion',
+    name: 'TableTreeAccordion',
+    component: TableTreeAccordion
+  },
+  {
+    path: '/table/tree/selection',
+    name: 'TableTreeSelection',
+    component: TableTreeSelection
+  },
+  {
+    path: '/table/tree/radio',
+    name: 'TableTreeRadio',
+    component: TableTreeRadio
+  },
+  {
+    path: '/table/tree/fixed',
+    name: 'TableTreeFixed',
+    component: TableTreeFixed
+  },
   // {
   //   path: '/table/tree/maxHeight',
   //   name: 'TableTreeMaxHeight',
@@ -848,11 +848,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableTreeInsert',
   //   component: TableTreeInsert
   // },
-  // {
-  //   path: '/table/tree/menu',
-  //   name: 'TableTreeMenu',
-  //   component: TableTreeMenu
-  // },
+  {
+    path: '/table/tree/menu',
+    name: 'TableTreeMenu',
+    component: TableTreeMenu
+  },
   // {
   //   path: '/table/tree/span',
   //   name: 'TableTreeSpan',
@@ -868,26 +868,26 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableTreeKeyboard',
   //   component: TableTreeKeyboard
   // },
-  // {
-  //   path: '/table/tree/lazy',
-  //   name: 'TableTreeLazy',
-  //   component: TableTreeLazy
-  // },
-  // {
-  //   path: '/table/tree/lazyMenu',
-  //   name: 'TableTreeLazyMenu',
-  //   component: TableTreeLazyMenu
-  // },
-  // {
-  //   path: '/table/tree/lazyEdit',
-  //   name: 'TableTreeLazyEdit',
-  //   component: TableTreeLazyEdit
-  // },
-  // {
-  //   path: '/table/tree/line',
-  //   name: 'TableTreeLine',
-  //   component: TableTreeLine
-  // },
+  {
+    path: '/table/tree/lazy',
+    name: 'TableTreeLazy',
+    component: TableTreeLazy
+  },
+  {
+    path: '/table/tree/lazyMenu',
+    name: 'TableTreeLazyMenu',
+    component: TableTreeLazyMenu
+  },
+  {
+    path: '/table/tree/lazyEdit',
+    name: 'TableTreeLazyEdit',
+    component: TableTreeLazyEdit
+  },
+  {
+    path: '/table/tree/line',
+    name: 'TableTreeLine',
+    component: TableTreeLine
+  },
   // {
   //   path: '/table/tree/edit',
   //   name: 'TableTreeEdit',

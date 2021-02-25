@@ -4,7 +4,7 @@ import { VxeFormInstance, VxeFormOptions, VxeFormDefines } from './form'
 import { VxeFormItemOptions } from './form-item'
 import { VxeToolbarInstance, VxeToolbarOptions, VxeToolbarPropTypes } from './toolbar'
 import { VxePagerInstance, VxePagerOptions, VxePagerDefines } from './pager'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, RowInfo, SizeType, ValueOf } from './component'
+import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeTableInstance, VxeTableDefines, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
@@ -136,7 +136,7 @@ export interface GridPublicMethods {
   /**
    * 获取已标记删除的数据
    */
-  getPendingRecords(): RowInfo[];
+  getPendingRecords(): any[];
   /**
    * 切换表格最大化/还原
    */
@@ -163,7 +163,7 @@ export interface GridPublicMethods {
     sort: VxeTableDefines.SortCheckedParams | {};
     sorts: VxeTableDefines.SortCheckedParams[];
     pager: any;
-    pendingRecords: RowInfo[];
+    pendingRecords: any[];
   } | null;
 }
 

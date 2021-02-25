@@ -786,33 +786,33 @@ export default defineComponent({
                 name: 'TableTreeIcon'
               }
             },
-            // {
-            //   label: 'app.aside.nav.radio',
-            //   // demoUrl: 'https://jsrun.pro/kfWKp/edit',
-            //   locat: {
-            //     name: 'TableTreeRadio'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.accordion',
-            //   locat: {
-            //     name: 'TableTreeAccordion'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.checkbox',
-            //   // demoUrl: 'https://jsrun.pro/B6bKp/edit',
-            //   locat: {
-            //     name: 'TableTreeSelection'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.fixed',
-            //   // demoUrl: 'https://jsrun.pro/ifWKp/edit',
-            //   locat: {
-            //     name: 'TableTreeFixed'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.radio',
+              // demoUrl: 'https://jsrun.pro/kfWKp/edit',
+              locat: {
+                name: 'TableTreeRadio'
+              }
+            },
+            {
+              label: 'app.aside.nav.accordion',
+              locat: {
+                name: 'TableTreeAccordion'
+              }
+            },
+            {
+              label: 'app.aside.nav.checkbox',
+              // demoUrl: 'https://jsrun.pro/B6bKp/edit',
+              locat: {
+                name: 'TableTreeSelection'
+              }
+            },
+            {
+              label: 'app.aside.nav.fixed',
+              // demoUrl: 'https://jsrun.pro/ifWKp/edit',
+              locat: {
+                name: 'TableTreeFixed'
+              }
+            },
             // {
             //   label: 'app.aside.nav.fluidHeight',
             //   locat: {
@@ -870,12 +870,12 @@ export default defineComponent({
             //     name: 'TableTreeInsert'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.contextMenu',
-            //   locat: {
-            //     name: 'TableTreeMenu'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.contextMenu',
+              locat: {
+                name: 'TableTreeMenu'
+              }
+            },
             // // {
             // //   label: 'app.aside.nav.span',
             // //   disabled: true,
@@ -896,30 +896,30 @@ export default defineComponent({
             // //     name: 'TableTreeKeyboard'
             // //   }
             // // },
-            // {
-            //   label: 'app.aside.nav.lazy',
-            //   locat: {
-            //     name: 'TableTreeLazy'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.lazyMenu',
-            //   locat: {
-            //     name: 'TableTreeLazyMenu'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.lazyEdit',
-            //   locat: {
-            //     name: 'TableTreeLazyEdit'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.treeLine',
-            //   locat: {
-            //     name: 'TableTreeLine'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.lazy',
+              locat: {
+                name: 'TableTreeLazy'
+              }
+            },
+            {
+              label: 'app.aside.nav.lazyMenu',
+              locat: {
+                name: 'TableTreeLazyMenu'
+              }
+            },
+            {
+              label: 'app.aside.nav.lazyEdit',
+              locat: {
+                name: 'TableTreeLazyEdit'
+              }
+            },
+            {
+              label: 'app.aside.nav.treeLine',
+              locat: {
+                name: 'TableTreeLine'
+              }
+            },
             // {
             //   label: 'app.aside.nav.edit',
             //   locat: {

@@ -23,14 +23,13 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
   * [x] v1.0 Based on vue2.6+, Support for all major browsers
   * [x] v2.0 Based on vue2.6+, Support for all major browsers
   * [x] v3.0 Based on vue2.6+, Only supports modern browsers, not IE, improving rendering performance
-  * [x] v3.5 Based on vue2.6+, Only support modern browser, sticky table, stability and fluency
-  * [x] v4.0 Based on vue3.0+, Only support modern browser, sticky table, stability and fluency
+  * [x] v4.0 Based on vue3.0+, Only support modern browser, stability and fluency
 
 ## Browser Support
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
-Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
+Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | 8+ ✔ |
 
 ## Features
 

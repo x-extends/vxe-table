@@ -1,4 +1,4 @@
-import { VXETableComponent, RowInfo } from './component'
+import { VXETableComponent } from './component'
 import { VxeTablePropTypes, VxeTableDefines, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from './table'
 import { VxeGridConstructor } from './grid'
 
@@ -196,7 +196,7 @@ declare module './table' {
       /**
        * 数据过滤方法
        */
-      dataFilterMethod?(params: { row: RowInfo, $rowIndex: number }): boolean;
+      dataFilterMethod?(params: { row: any, $rowIndex: number }): boolean;
       /**
        * 表尾过滤方法
        */
@@ -283,7 +283,7 @@ declare module './table' {
       /**
        * 数据过滤方法
        */
-      dataFilterMethod?(params: { row: RowInfo, $rowIndex: number }): boolean;
+      dataFilterMethod?(params: { row: any, $rowIndex: number }): boolean;
       /**
        * 表尾过滤方法
        */

@@ -1608,12 +1608,12 @@ export default defineComponent({
 
     const handleAsyncTreeExpandChilds = (row: any): Promise<void> => {
       const { treeExpandeds, treeLazyLoadeds } = reactData
-      const { fullAllDataRowMap } = internalData
+      const { fullAllDataRowIdData } = internalData
       const treeOpts = computeTreeOpts.value
       const checkboxOpts = computeCheckboxOpts.value
       const { loadMethod } = treeOpts
       const { checkStrictly } = checkboxOpts
-      const rest = fullAllDataRowMap.get(row)
+      const rest = fullAllDataRowIdData[getRowid($xetable, row)]
       return new Promise(resolve => {
         if (loadMethod) {
           treeLazyLoadeds.push(row)
@@ -1657,8 +1657,8 @@ export default defineComponent({
 
     const handleAsyncRowExpand = (row: any): Promise<void> => {
       const { rowExpandeds, expandLazyLoadeds } = reactData
-      const { fullAllDataRowMap } = internalData
-      const rest = fullAllDataRowMap.get(row)
+      const { fullAllDataRowIdData } = internalData
+      const rest = fullAllDataRowIdData[getRowid($xetable, row)]
       return new Promise(resolve => {
         const expandOpts = computeExpandOpts.value
         const { loadMethod } = expandOpts
@@ -1782,15 +1782,17 @@ export default defineComponent({
       tableMethods.clearMergeFooterItems()
       tablePrivateMethods.handleTableData(true)
       tableMethods.updateFooter()
-      return computeScrollLoad().then(() => {
-        // 是否加载了数据
-        if (scrollYLoad) {
-          scrollYStore.endIndex = scrollYStore.visibleSize
-        }
-        handleReserveStatus()
-        tablePrivateMethods.checkSelectionStatus()
-        return nextTick().then(() => tableMethods.recalculate()).then(() => restoreScroll(lastScrollLeft, lastScrollTop))
-      })
+      return updateStyle()
+        .then(() => computeScrollLoad())
+        .then(() => {
+          // 是否加载了数据
+          if (scrollYLoad) {
+            scrollYStore.endIndex = scrollYStore.visibleSize
+          }
+          handleReserveStatus()
+          tablePrivateMethods.checkSelectionStatus()
+          return nextTick().then(() => tableMethods.recalculate()).then(() => restoreScroll(lastScrollLeft, lastScrollTop))
+        })
     }
 
     /**
@@ -2016,6 +2018,7 @@ export default defineComponent({
             fullAllDataRowIdData[rowid] = rest
             fullAllDataRowMap.set(childRow, rest)
           }, treeOpts)
+          row[children] = rows
           return rows
         })
       },
@@ -2349,8 +2352,7 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       getRowid (row: any) {
-        const { fullAllDataRowMap } = internalData
-        return fullAllDataRowMap.has(row) ? fullAllDataRowMap.get(row).rowid : null
+        return getRowid($xetable, row)
       },
       /**
        * 获取处理后的表格数据
@@ -2993,16 +2995,16 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       isRowExpandLoaded (row: any) {
-        const { fullAllDataRowMap } = internalData
-        const rest = fullAllDataRowMap.get(row)
+        const { fullAllDataRowIdData } = internalData
+        const rest = fullAllDataRowIdData[getRowid($xetable, row)]
         return rest && rest.expandLoaded
       },
       clearRowExpandLoaded (row: any) {
         const { expandLazyLoadeds } = reactData
-        const { fullAllDataRowMap } = internalData
+        const { fullAllDataRowIdData } = internalData
         const expandOpts = computeExpandOpts.value
         const { lazy } = expandOpts
-        const rest = fullAllDataRowMap.get(row)
+        const rest = fullAllDataRowIdData[getRowid($xetable, row)]
         if (lazy && rest) {
           rest.expandLoaded = false
           XEUtils.remove(expandLazyLoadeds, item => row === item)
@@ -3046,7 +3048,7 @@ export default defineComponent({
        */
       setRowExpand (rows: any, expanded: boolean) {
         let { rowExpandeds, expandLazyLoadeds, expandColumn: column } = reactData
-        const { fullAllDataRowMap } = internalData
+        const { fullAllDataRowIdData } = internalData
         const expandOpts = computeExpandOpts.value
         const { reserve, lazy, accordion, toggleMethod } = expandOpts
         const lazyRests: any[] = []
@@ -3065,7 +3067,7 @@ export default defineComponent({
           if (expanded) {
             validRows.forEach((row: any) => {
               if ($xetable.findRowIndexOf(rowExpandeds, row) === -1) {
-                const rest = fullAllDataRowMap.get(row)
+                const rest = fullAllDataRowIdData[getRowid($xetable, row)]
                 const isLoad = lazy && !rest.expandLoaded && $xetable.findRowIndexOf(expandLazyLoadeds, row) === -1
                 if (isLoad) {
                   lazyRests.push(handleAsyncRowExpand(row))
@@ -3126,16 +3128,16 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       isTreeExpandLoaded (row: any) {
-        const { fullAllDataRowMap } = internalData
-        const rest = fullAllDataRowMap.get(row)
+        const { fullAllDataRowIdData } = internalData
+        const rest = fullAllDataRowIdData[getRowid($xetable, row)]
         return rest && rest.treeLoaded
       },
       clearTreeExpandLoaded (row: any) {
         const { treeExpandeds } = reactData
-        const { fullAllDataRowMap } = internalData
+        const { fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
         const { lazy } = treeOpts
-        const rest = fullAllDataRowMap.get(row)
+        const rest = fullAllDataRowIdData[getRowid($xetable, row)]
         if (lazy && rest) {
           rest.treeLoaded = false
           XEUtils.remove(treeExpandeds, item => row === item)
@@ -3188,7 +3190,7 @@ export default defineComponent({
        */
       setTreeExpand (rows: any, expanded: boolean) {
         const { treeExpandeds, treeLazyLoadeds, treeNodeColumn } = reactData
-        const { fullAllDataRowMap, tableFullData } = internalData
+        const { fullAllDataRowIdData, tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
         const { reserve, lazy, hasChild, children, accordion, toggleMethod } = treeOpts
         const result: any[] = []
@@ -3211,7 +3213,7 @@ export default defineComponent({
             if (expanded) {
               validRows.forEach((row: any) => {
                 if ($xetable.findRowIndexOf(treeExpandeds, row) === -1) {
-                  const rest = fullAllDataRowMap.get(row)
+                  const rest = fullAllDataRowIdData[getRowid($xetable, row)]
                   const isLoad = lazy && row[hasChild] && !rest.treeLoaded && $xetable.findRowIndexOf(treeLazyLoadeds, row) === -1
                   // 是否使用懒加载
                   if (isLoad) {
@@ -5133,10 +5135,12 @@ export default defineComponent({
 
     onActivated(() => {
       tableMethods.recalculate().then(() => tableMethods.refreshScroll())
+      tablePrivateMethods.preventEvent(null, 'activated')
     })
 
     onDeactivated(() => {
       internalData.isActivated = false
+      tablePrivateMethods.preventEvent(null, 'deactivated')
     })
 
     onBeforeUnmount(() => {
@@ -5147,6 +5151,7 @@ export default defineComponent({
       if ($xetable.closeMenu) {
         $xetable.closeMenu()
       }
+      tablePrivateMethods.preventEvent(null, 'beforeUnmount')
     })
 
     onUnmounted(() => {
@@ -5159,6 +5164,7 @@ export default defineComponent({
       GlobalEvent.off($xetable, 'keydown')
       GlobalEvent.off($xetable, 'resize')
       GlobalEvent.off($xetable, 'contextmenu')
+      tablePrivateMethods.preventEvent(null, 'unmounted')
     })
 
     const renderVN = () => {
@@ -5204,7 +5210,6 @@ export default defineComponent({
          * 隐藏列
          */
         h('div', {
-          ref: 'hideColumn',
           class: 'vxe-table-slots'
         }, slots.default ? slots.default({}) : []),
         h('div', {
