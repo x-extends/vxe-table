@@ -388,6 +388,10 @@ export default defineComponent({
       return Object.assign({}, GlobalConfig.table.mouseConfig, props.mouseConfig) as VxeTablePropTypes.MouseOpts
     })
 
+    const computeAreaOpts = computed(() => {
+      return Object.assign({}, GlobalConfig.table.areaConfig, props.areaConfig) as VxeTablePropTypes.AreaOpts
+    })
+
     const computeKeyboardOpts = computed(() => {
       return Object.assign({}, GlobalConfig.table.keyboardConfig, props.keyboardConfig) as VxeTablePropTypes.KeyboardOpts
     })
@@ -538,6 +542,7 @@ export default defineComponent({
       computeSortOpts,
       computeFilterOpts,
       computeMouseOpts,
+      computeAreaOpts,
       computeKeyboardOpts,
       computeClipOpts,
       computeFNROpts,

@@ -128,6 +128,8 @@ export default {
   menuConfig: Object as PropType<VxeTablePropTypes.MenuConfig>,
   // 鼠标配置项
   mouseConfig: Object as PropType<VxeTablePropTypes.MouseConfig>,
+  // 区域配置项
+  areaConfig: Object as PropType<VxeTablePropTypes.AreaConfig>,
   // 按键配置项
   keyboardConfig: Object as PropType<VxeTablePropTypes.KeyboardConfig>,
   // 复制粘/贴配置项

@@ -1975,6 +1975,25 @@ const apis = [
         ]
       },
       {
+        name: 'area-config',
+        descKey: 'app.api.table.desc.areaConfig',
+        version: 'pro',
+        type: 'any',
+        enum: '',
+        defVal: '继承 setup.table.areaConfig',
+        list: [
+          {
+            name: 'selectCellByHeader',
+            desc: '只对 area 启用后有效，点击列头是否选取当前列的所有单元格',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          }
+        ]
+      },
+      {
         name: 'keyboard-config',
         descKey: 'app.api.table.desc.keyboardConfig',
         version: '',

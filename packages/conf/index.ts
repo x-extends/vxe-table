@@ -89,6 +89,9 @@ export const GlobalConfig: VXETableGlobalConfig = {
     mouseConfig: {
       extension: true
     },
+    areaConfig: {
+      selectCellByHeader: true
+    },
     clipConfig: {
       isCopy: true,
       isCut: true,

@@ -11,6 +11,8 @@ import { Menus } from './menus'
 import { VxeGlobalHooks } from './hooks'
 import { VXETableSetupOptions, VxeGlobalSetup } from './setup'
 
+type translate = (key: string, args?: any) => number | string;
+
 export class VXETableInstance {
   /**
    * 版本号
@@ -27,7 +29,7 @@ export class VXETableInstance {
   /**
    * 读取内置国际化
    */
-  public t(key: string, args?: any): string;
+  public t: translate;
   /**
    * 设置全局参数/获取所有参数
    */
@@ -97,7 +99,7 @@ export interface VXETableByVueProperty {
   /**
    * 读取内置国际化
    */
-  t(key: string, args?: any): string;
+  t: translate;
   /**
    * 全局的模态窗口
    */

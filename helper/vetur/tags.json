@@ -48,6 +48,7 @@
       "row-id",
       "keep-source",
       "column-config",
+      "resizable-config",
       "seq-config",
       "sort-config",
       "filter-config",
@@ -63,6 +64,7 @@
       "clip-config",
       "fnr-config",
       "mouse-config",
+      "area-config",
       "keyboard-config",
       "edit-config",
       "valid-config",
@@ -119,6 +121,7 @@
       "seq-method",
       "sortable",
       "sort-by",
+      "sort-type",
       "filters",
       "filter-multiple",
       "filter-method",
@@ -186,6 +189,7 @@
       "row-id",
       "keep-source",
       "column-config",
+      "resizable-config",
       "seq-config",
       "sort-config",
       "filter-config",
@@ -201,6 +205,7 @@
       "clip-config",
       "fnr-config",
       "mouse-config",
+      "area-config",
       "keyboard-config",
       "edit-config",
       "valid-config",
@@ -258,7 +263,7 @@
   },
   "vxe-radio": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "label",
       "content",
       "size",
@@ -269,13 +274,15 @@
   },
   "vxe-radio-group": {
     "attributes": [
-      "label",
+      "v-model / value",
+      "size",
       "disabled"
     ],
     "description": "单选组"
   },
   "vxe-radio-button": {
     "attributes": [
+      "v-model / value",
       "label",
       "content",
       "disabled"
@@ -284,7 +291,7 @@
   },
   "vxe-checkbox": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "label",
       "content",
       "size",
@@ -296,14 +303,15 @@
   },
   "vxe-checkbox-group": {
     "attributes": [
-      "label",
+      "v-model / value",
+      "size",
       "disabled"
     ],
     "description": "复选组"
   },
   "vxe-switch": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "disabled",
       "size",
       "open-label",
@@ -317,7 +325,7 @@
   },
   "vxe-input": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "size",
       "type",
       "name",
@@ -351,7 +359,7 @@
   },
   "vxe-select": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "size",
       "multiple",
       "multi-char-overflow",
@@ -419,7 +427,7 @@
       "content",
       "trigger",
       "theme",
-      "zindex",
+      "z-index",
       "is-arrow",
       "enterable",
       "leave-delay"
@@ -428,7 +436,7 @@
   },
   "vxe-modal": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "size",
       "loading",
       "id",
@@ -456,7 +464,7 @@
       "min-height",
       "top",
       "position",
-      "zindex",
+      "z-index",
       "show-title-overflow",
       "transfer",
       "fullscreen",
@@ -497,6 +505,7 @@
       "align",
       "title-align",
       "title-width",
+      "class-name",
       "visible",
       "visible-method",
       "folding",

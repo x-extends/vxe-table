@@ -61,6 +61,7 @@ export interface TablePrivateComputed {
   computeSortOpts: ComputedRef<VxeTablePropTypes.SortConfig>;
   computeFilterOpts: ComputedRef<VxeTablePropTypes.FilterOpts>;
   computeMouseOpts: ComputedRef<VxeTablePropTypes.MouseOpts>;
+  computeAreaOpts: ComputedRef<VxeTablePropTypes.AreaOpts>;
   computeKeyboardOpts: ComputedRef<VxeTablePropTypes.KeyboardOpts>;
   computeClipOpts: ComputedRef<VxeTablePropTypes.ClipOpts>;
   computeFNROpts: ComputedRef<VxeTablePropTypes.FNROpts>;
@@ -1372,6 +1373,14 @@ export namespace VxeTablePropTypes {
   export interface MouseOpts extends MouseConfig { }
 
   /**
+   * 区域配置项
+   */
+  export interface AreaConfig {
+    selectCellByHeader?: boolean;
+  }
+  export interface AreaOpts extends AreaConfig { }
+
+  /**
    * 按键配置项
    */
   export interface KeyboardConfig {
@@ -1451,22 +1460,48 @@ export namespace VxeTablePropTypes {
     isCopy?: boolean;
     isCut?: boolean;
     isPaste?: boolean;
-    getMethod?(params: {
+    copyMethod?(params: {
+      isCut: boolean;
       row: any;
       column: VxeTableDefines.ColumnInfo;
+      cellValue: any;
     }): string;
-    beforeGetMethod?(params: {
+    beforeCopyMethod?(params: {
       targetAreas: any[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
-    setMethod?(params: {
+    cutMethod?: (params: {
+      row: any,
+      column: VxeTableDefines.ColumnInfo;
+      cellValue: any;
+    }) => void;
+    beforeCutMethod?: (params: {
+      cutAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      currentAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }) => boolean;
+    pasteMethod?(params: {
       row: any,
       column: VxeTableDefines.ColumnInfo;
       cellValue: any;
     }): void;
-    beforeSetMethod?(params: {
-      currentAreas: any[];
-      targetAreas: any[];
-      cellValues: any[][];
+    beforePasteMethod?(params: {
+      currentAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      targetAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      cellValues: string[][];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
   }
   export interface ClipOpts extends ClipConfig { }
@@ -1476,7 +1511,29 @@ export namespace VxeTablePropTypes {
    */
   export interface FNRConfig {
     isFind?: boolean;
+    findMethod?(params: {
+      cellValue: any;
+      isWhole: boolean;
+      isRE: boolean;
+      isSensitive: boolean;
+      findValue: string | null;
+      findRE: RegExp | null;
+    }): boolean;
+    beforeFindMethod?(params: {
+      findValue: string | null;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }): boolean;
     isReplace?: boolean;
+    replaceMethod?: (params: {
+      row: any;
+      column: VxeTableDefines.ColumnInfo;
+      cellValue: any;
+    }) => void;
+    beforeReplaceMethod?: (params: {
+      findValue: string | null;
+      replaceValue: string;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }) => boolean;
   }
   export interface FNROpts extends FNRConfig { }
 
@@ -1617,6 +1674,7 @@ export interface VxeTableProps {
   treeConfig?: VxeTablePropTypes.TreeConfig;
   menuConfig?: VxeTablePropTypes.MenuConfig;
   mouseConfig?: VxeTablePropTypes.MouseConfig;
+  areaConfig?: VxeTablePropTypes.AreaConfig;
   fnrConfig?: VxeTablePropTypes.FNRConfig;
   keyboardConfig?: VxeTablePropTypes.KeyboardConfig;
   clipConfig?: VxeTablePropTypes.ClipConfig;
