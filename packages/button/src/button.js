@@ -173,10 +173,12 @@ export default {
       const panelElem = this.$refs.panel
       const { flag, targetElem } = DomTools.getEventTargetNode(evnt, dropdownElem, 'vxe-button')
       if (flag) {
-        panelElem.dataset.active = 'N'
+        if (panelElem) {
+          panelElem.dataset.active = 'N'
+        }
         this.showPanel = false
         setTimeout(() => {
-          if (panelElem.dataset.active !== 'Y') {
+          if (!panelElem || panelElem.dataset.active !== 'Y') {
             this.animatVisible = false
           }
         }, 350)

@@ -85,6 +85,9 @@ const GlobalConfig = {
     mouseConfig: {
       extension: true
     },
+    areaConfig: {
+      selectCellByHeader: true
+    },
     clipConfig: {
       isCopy: true,
       isCut: true,

@@ -187,6 +187,10 @@
     "type": "any",
     "description": "列的默认参数"
   },
+  "vxe-table/resizable-config": {
+    "type": "object",
+    "description": "列宽拖动配置项"
+  },
   "vxe-table/seq-config": {
     "type": "any",
     "description": "序号配置项"
@@ -225,11 +229,11 @@
   },
   "vxe-table/expand-config": {
     "type": "any",
-    "description": "展开行配置项"
+    "description": "展开行配置项（不能用于虚拟滚动）"
   },
   "vxe-table/tree-config": {
     "type": "any",
-    "description": "树形结构配置项"
+    "description": "树形结构配置项（不能用于虚拟滚动）"
   },
   "vxe-table/menu-config": {
     "type": "any",
@@ -246,6 +250,10 @@
   "vxe-table/mouse-config": {
     "type": "any",
     "description": "鼠标配置项"
+  },
+  "vxe-table/area-config": {
+    "type": "any",
+    "description": "区域选取配置项"
   },
   "vxe-table/keyboard-config": {
     "type": "any",
@@ -277,15 +285,15 @@
   },
   "vxe-table/scroll-x": {
     "type": "any",
-    "description": "横向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）"
+    "description": "横向虚拟滚动配置（不支持深层结构和展开行）"
   },
   "vxe-table/scroll-y": {
     "type": "any",
-    "description": "纵向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）"
+    "description": "纵向虚拟滚动配置（不支持深层结构和展开行）"
   },
   "vxe-table/params": {
     "type": "any",
-    "description": "额外的参数（可以用来存放一些私有参数）"
+    "description": "自定义参数（可以用来存放一些自定义的数据）"
   },
   "vxe-table-colgroup/field": {
     "type": "string",
@@ -309,7 +317,7 @@
   },
   "vxe-table-colgroup/visible": {
     "type": "boolean",
-    "description": "列是否显示"
+    "description": "默认是否显示"
   },
   "vxe-table-colgroup/fixed": {
     "type": "string",
@@ -361,7 +369,7 @@
   },
   "vxe-table-column/visible": {
     "type": "boolean",
-    "description": "列是否显示"
+    "description": "默认是否显示"
   },
   "vxe-table-column/fixed": {
     "type": "string",
@@ -418,6 +426,10 @@
   "vxe-table-column/sort-by": {
     "type": "string | ((row) => string | number)",
     "description": "只对 sortable 有效，自定义排序的属性"
+  },
+  "vxe-table-column/sort-type": {
+    "type": "string",
+    "description": "排序的字段类型，比如字符串转数值等"
   },
   "vxe-table-column/filters": {
     "type": "any[]",
@@ -667,6 +679,10 @@
     "type": "any",
     "description": "列的默认参数"
   },
+  "vxe-grid/resizable-config": {
+    "type": "object",
+    "description": "列宽拖动配置项"
+  },
   "vxe-grid/seq-config": {
     "type": "any",
     "description": "序号配置项"
@@ -705,11 +721,11 @@
   },
   "vxe-grid/expand-config": {
     "type": "any",
-    "description": "展开行配置项"
+    "description": "展开行配置项（不能用于虚拟滚动）"
   },
   "vxe-grid/tree-config": {
     "type": "any",
-    "description": "树形结构配置项"
+    "description": "树形结构配置项（不能用于虚拟滚动）"
   },
   "vxe-grid/menu-config": {
     "type": "any",
@@ -726,6 +742,10 @@
   "vxe-grid/mouse-config": {
     "type": "any",
     "description": "鼠标配置项"
+  },
+  "vxe-grid/area-config": {
+    "type": "any",
+    "description": "区域选取配置项"
   },
   "vxe-grid/keyboard-config": {
     "type": "any",
@@ -757,15 +777,15 @@
   },
   "vxe-grid/scroll-x": {
     "type": "any",
-    "description": "横向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）"
+    "description": "横向虚拟滚动配置（不支持深层结构和展开行）"
   },
   "vxe-grid/scroll-y": {
     "type": "any",
-    "description": "纵向虚拟滚动配置（注：当 tree-config 启用后自动关闭该功能）"
+    "description": "纵向虚拟滚动配置（不支持深层结构和展开行）"
   },
   "vxe-grid/params": {
     "type": "any",
-    "description": "额外的参数（可以用来存放一些私有参数）"
+    "description": "自定义参数（可以用来存放一些自定义的数据）"
   },
   "vxe-grid/form-config": {
     "type": "any",
@@ -895,7 +915,7 @@
     "type": "string",
     "description": "自定义跳页显示图标"
   },
-  "vxe-radio/v-model": {
+  "vxe-radio/v-model / value": {
     "type": "any",
     "description": "绑定值"
   },
@@ -919,13 +939,21 @@
     "type": "string",
     "description": "原生 name 属性"
   },
-  "vxe-radio-group/label": {
-    "type": "string | number",
+  "vxe-radio-group/v-model / value": {
+    "type": "any[]",
     "description": "绑定值"
+  },
+  "vxe-radio-group/size": {
+    "type": "string",
+    "description": "尺寸"
   },
   "vxe-radio-group/disabled": {
     "type": "boolean",
     "description": "是否禁用"
+  },
+  "vxe-radio-button/v-model / value": {
+    "type": "any",
+    "description": "绑定值"
   },
   "vxe-radio-button/label": {
     "type": "string | number",
@@ -939,7 +967,7 @@
     "type": "boolean",
     "description": "是否禁用"
   },
-  "vxe-checkbox/v-model": {
+  "vxe-checkbox/v-model / value": {
     "type": "any",
     "description": "绑定值"
   },
@@ -967,15 +995,19 @@
     "type": "boolean",
     "description": "是否不确定状态"
   },
-  "vxe-checkbox-group/label": {
+  "vxe-checkbox-group/v-model / value": {
     "type": "any[]",
     "description": "绑定值"
+  },
+  "vxe-checkbox-group/size": {
+    "type": "string",
+    "description": "尺寸"
   },
   "vxe-checkbox-group/disabled": {
     "type": "boolean",
     "description": "是否禁用"
   },
-  "vxe-switch/v-model": {
+  "vxe-switch/v-model / value": {
     "type": "string | number | boolean",
     "description": "绑定值"
   },
@@ -1011,7 +1043,7 @@
     "type": "string",
     "description": "关闭时的图标"
   },
-  "vxe-input/v-model": {
+  "vxe-input/v-model / value": {
     "type": "any",
     "description": "绑定值"
   },
@@ -1127,7 +1159,7 @@
     "type": "boolean",
     "description": "只对 type=date|time|datetime|week|month|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）"
   },
-  "vxe-select/v-model": {
+  "vxe-select/v-model / value": {
     "type": "any",
     "description": "绑定值"
   },
@@ -1291,7 +1323,7 @@
     "type": "string",
     "description": "主题样式"
   },
-  "vxe-tooltip/zindex": {
+  "vxe-tooltip/z-index": {
     "type": "number",
     "description": "自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）"
   },
@@ -1307,7 +1339,7 @@
     "type": "number",
     "description": "鼠标移出后延时多少才隐藏 tooltip"
   },
-  "vxe-modal/v-model": {
+  "vxe-modal/v-model / value": {
     "type": "any",
     "description": "绑定值"
   },
@@ -1385,11 +1417,11 @@
   },
   "vxe-modal/show-zoom": {
     "type": "boolean",
-    "description": "是否允许窗口最大化与还原"
+    "description": "标题是否标显示最大化与还原按钮"
   },
   "vxe-modal/resize": {
     "type": "boolean",
-    "description": "是否允许拖动调整窗口大小"
+    "description": "是否允许窗口边缘拖动调整窗口大小"
   },
   "vxe-modal/duration": {
     "type": "number | string",
@@ -1419,7 +1451,7 @@
     "type": "any",
     "description": "只对 type=modal 有效，窗口的默认位置，可以设置为 center 居中显示"
   },
-  "vxe-modal/zindex": {
+  "vxe-modal/z-index": {
     "type": "number",
     "description": "自定义堆叠顺序（对于某些特殊场景，比如被遮挡时可能会用到）"
   },
@@ -1531,9 +1563,13 @@
     "type": "string | number",
     "description": "标题宽度"
   },
+  "vxe-form-item/class-name": {
+    "type": "string",
+    "description": "给表单项附加 className"
+  },
   "vxe-form-item/visible": {
     "type": "boolean",
-    "description": "是否可视"
+    "description": "默认是否显示"
   },
   "vxe-form-item/visible-method": {
     "type": "function",
