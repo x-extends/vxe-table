@@ -328,7 +328,7 @@ export default {
         compatibility: 'Compatibility',
         releases: 'Releases',
         donation: '支持我们',
-        issuesTitle: '该群供大家交流問題，群人数已达上限，将不定期剔除不活跃的<br>，如果有 bug 请通过 issues 反馈',
+        issuesTitle: '该群供大家交流問題，如果群人数已满，将会不定期剔除不活跃的<br>，如果有 bug 请通过 issues 反馈',
         newFunc: 'Since the author is busy, there may be time to support this function later!',
         newDevelopment: 'this release is being refactored. Stay tuned!'
       },
@@ -447,6 +447,7 @@ export default {
           clipConfig: 'Copy and paste configuration',
           fnrConfig: 'find and replace configuration',
           mouseConfig: 'Mouse configuration',
+          areaConfig: 'Area selection configuration',
           keyboardConfig: 'Keyboard configuration',
           editConfig: 'Editable configuration',
           validConfig: 'Validate configuration',
