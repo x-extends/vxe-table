@@ -327,7 +327,7 @@ export default {
         compatibility: '兼容性变动',
         releases: '更新日志',
         donation: '支持我们',
-        issuesTitle: '该群供大家交流問題，群人数已达上限，将不定期剔除不活跃的<br>，如果有 bug 请通过 issues 反馈',
+        issuesTitle: '该群供大家交流問題，如果群人数已满，将会不定期剔除不活跃的<br>，如果有 bug 请通过 issues 反馈',
         newFunc: '由于作者很忙，后续有时间可能会支持该功能！',
         newDevelopment: '该版本正在重构中，敬请期待！'
       },
@@ -446,6 +446,7 @@ export default {
           clipConfig: '复制/粘贴配置项',
           fnrConfig: '查找/替换配置项',
           mouseConfig: '鼠标配置项',
+          areaConfig: '区域选取配置项',
           keyboardConfig: '按键配置项',
           editConfig: '可编辑配置项',
           validConfig: '校验配置项',

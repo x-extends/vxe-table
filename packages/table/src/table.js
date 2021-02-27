@@ -204,6 +204,8 @@ export default {
     contextMenu: [Boolean, Object],
     // 鼠标配置项
     mouseConfig: Object,
+    // 区域配置项
+    areaConfig: Object,
     // 按键配置项
     keyboardConfig: Object,
     // 复制/粘贴配置项
@@ -479,6 +481,9 @@ export default {
     },
     mouseOpts () {
       return Object.assign({}, GlobalConfig.table.mouseConfig, this.mouseConfig)
+    },
+    areaOpts () {
+      return Object.assign({}, GlobalConfig.table.areaConfig, this.areaConfig)
     },
     keyboardOpts () {
       return Object.assign({}, GlobalConfig.table.keyboardConfig, this.keyboardConfig)
