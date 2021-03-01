@@ -377,11 +377,15 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadData (datas) {
+    const { inited, initStatus } = this
     return this.loadTableData(datas).then(() => {
       this.inited = true
-      if (!this.initStatus) {
-        this.initStatus = true
-        this.handleDefaults()
+      this.initStatus = true
+      if (!initStatus) {
+        this.handleLoadDefaults()
+      }
+      if (!inited) {
+        this.handleInitDefaults()
       }
       return this.recalculate()
     })
@@ -391,6 +395,7 @@ const Methods = {
    * @param {Array} datas 数据
    */
   reloadData (datas) {
+    const { inited } = this
     return this.clearAll()
       .then(() => {
         this.inited = true
@@ -398,7 +403,10 @@ const Methods = {
         return this.loadTableData(datas)
       })
       .then(() => {
-        this.handleDefaults()
+        this.handleLoadDefaults()
+        if (!inited) {
+          this.handleInitDefaults()
+        }
         return this.recalculate()
       })
   },
@@ -452,8 +460,9 @@ const Methods = {
    * @param {ColumnInfo} columns 列配置
    */
   reloadColumn (columns) {
-    this.clearAll()
-    return this.loadColumn(columns)
+    return this.clearAll().then(() => {
+      return this.loadColumn(columns)
+    })
   },
   handleColumn (collectColumn) {
     this.collectColumn = collectColumn
@@ -1089,9 +1098,10 @@ const Methods = {
     }
   },
   /**
-   * 默认行为只允许执行一次，除非被重置
+   * 处理数据加载默认行为
+   * 默认执行一次，除非被重置
    */
-  handleDefaults () {
+  handleLoadDefaults () {
     if (this.checkboxConfig) {
       this.handleDefaultSelectionChecked()
     }
@@ -1111,6 +1121,16 @@ const Methods = {
       this.handleDefaultMergeFooterItems()
     }
     this.$nextTick(() => setTimeout(this.recalculate))
+  },
+  /**
+   * 处理初始化的默认行为
+   * 只会执行一次
+   */
+  handleInitDefaults () {
+    const { sortConfig } = this
+    if (sortConfig) {
+      this.handleDefaultSort()
+    }
   },
   /**
    * 隐藏指定列
@@ -3036,14 +3056,14 @@ const Methods = {
     this.emitEvent('cell-dblclick', params, evnt)
   },
   handleDefaultSort () {
-    const { sortOpts } = this
+    const { sortConfig, sortOpts } = this
     let { defaultSort } = sortOpts
     if (defaultSort) {
       if (!XEUtils.isArray(defaultSort)) {
         defaultSort = [defaultSort]
       }
       if (defaultSort.length) {
-        defaultSort.forEach((item) => {
+        (sortConfig.multiple ? defaultSort : defaultSort.slice(0, 1)).forEach((item) => {
           const { field, order } = item
           if (field && order) {
             const column = this.getColumnByField(field)

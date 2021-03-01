@@ -535,6 +535,8 @@ export default {
           filters: 'Configure filter conditions(note: filtering can only be used for lists, if it is a tree, filter the root node)',
           filterMultiple: 'Works only for filters, filtering whether multiple selections are allowed',
           filterMethod: 'Valid only for filters, the filter method for the column, whose return value is used to determine whether the row is displayed',
+          filterResetMethod: '只对 filters 有效，自定义筛选重置方法',
+          filterRecoverMethod: '只对 filters 有效，自定义筛选复原方法（使用自定义筛选时可能会用到）',
           filterRender: 'Filter renderer config',
           treeNode: 'Only valid for tree-config configuration, specified as the tree node',
           columnKey: 'Obsolete, please use "table.column-key"',

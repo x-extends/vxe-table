@@ -586,11 +586,15 @@ export default {
   },
   watch: {
     data (value) {
+      const { inited, initStatus } = this
       this.loadTableData(value).then(() => {
         this.inited = true
-        if (!this.initStatus) {
-          this.initStatus = true
-          this.handleDefaults()
+        this.initStatus = true
+        if (!initStatus) {
+          this.handleLoadDefaults()
+        }
+        if (!inited) {
+          this.handleInitDefaults()
         }
         if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
           UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
@@ -812,11 +816,10 @@ export default {
     })
     this.loadTableData(data).then(() => {
       if (data && data.length) {
+        this.inited = true
         this.initStatus = true
-        this.handleDefaults()
-      }
-      if (this.sortConfig) {
-        this.handleDefaultSort()
+        this.handleLoadDefaults()
+        this.handleInitDefaults()
       }
       this.updateStyle()
     })

@@ -47,7 +47,7 @@
         sortable
         :filter-multiple="false"
         :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
+      <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
         <template v-slot:filter="{ $panel, column }">
           <template v-for="(option, index) in column.filters">
             <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
@@ -120,7 +120,7 @@ export default {
             sortable
             :filter-multiple="false"
             :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
+          <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
             <template v-slot:filter="{ $panel, column }">
               <template v-for="(option, index) in column.filters">
                 <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
@@ -203,6 +203,10 @@ export default {
               option.checked = true
               // 修改条件之后，需要手动调用 updateData 处理表格数据
               xTable.updateData()
+            },
+            filterAgeRecoverMethod ({ option }) {
+              // 如果是自定义筛选模板，当为点击确认时，该选项将被恢复为默认值
+              option.data = ''
             }
           }
         }
@@ -286,6 +290,10 @@ export default {
       option.checked = true
       // 修改条件之后，需要手动调用 updateData 处理表格数据
       xTable.updateData()
+    },
+    filterAgeRecoverMethod ({ option }) {
+      // 如果是自定义筛选模板，当为点击确认时，该选项将被恢复为默认值
+      option.data = ''
     }
   }
 }

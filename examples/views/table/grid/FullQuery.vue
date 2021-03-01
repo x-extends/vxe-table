@@ -6,7 +6,7 @@
 
       <!--将表单放在工具栏中-->
       <template v-slot:toolbar_buttons>
-        <vxe-form :data="formData" @submit="searchEvent" @reset="searchEvent">
+        <vxe-form :data="formData" @submit="searchEvent" @reset="resetEvent">
           <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
           <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }"></vxe-form-item>
         </vxe-form>
@@ -150,7 +150,7 @@ export default {
 
           <!--将表单放在工具栏中-->
           <template v-slot:toolbar_buttons>
-            <vxe-form :data="formData" @submit="searchEvent" @reset="searchEvent">
+            <vxe-form :data="formData" @submit="searchEvent" @reset="resetEvent">
               <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
               <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }"></vxe-form-item>
             </vxe-form>
@@ -280,6 +280,9 @@ export default {
           },
           methods: {
             searchEvent () {
+              this.$refs.xGrid.commitProxy('query')
+            },
+            resetEvent () {
               this.$refs.xGrid.commitProxy('reload')
             },
             formatAmount ({ cellValue }) {
@@ -296,6 +299,9 @@ export default {
   },
   methods: {
     searchEvent () {
+      this.$refs.xGrid.commitProxy('query')
+    },
+    resetEvent () {
       this.$refs.xGrid.commitProxy('reload')
     },
     formatAmount ({ cellValue }) {

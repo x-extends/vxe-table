@@ -4,7 +4,6 @@ import GlobalConfig from '../../conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent, isEnableConf } from '../../tools'
-import { clearTableDefaultStatus, clearTableAllStatus } from '../../table/src/util'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
@@ -442,7 +441,7 @@ export default {
         }
         if (!proxyInited && proxyOpts.autoLoad !== false) {
           this.proxyInited = true
-          this.$nextTick(() => this.commitProxy('init'))
+          this.$nextTick(() => this.commitProxy('_init'))
         }
       }
     },
@@ -457,7 +456,7 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (proxyTarget, ...args) {
-      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, sortData, filterData, formData, isMsg } = this
+      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, formData, isMsg } = this
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props: proxyProps = {} } = proxyOpts
       const $xetable = $refs.xTable
       let button
@@ -498,61 +497,64 @@ export default {
         case 'reset_custom':
           this.resetColumn(true)
           break
-        case 'init':
+        case '_init':
         case 'reload':
         case 'query': {
-          const isInited = code === 'init'
-          const isReload = code === 'reload'
           const ajaxMethods = ajax.query
           if (ajaxMethods) {
-            const params = {
-              code,
-              button,
-              $grid: this,
-              sort: sortData.length ? sortData[0] : {},
-              sorts: sortData,
-              filters: filterData,
-              form: formData,
-              options: ajaxMethods
-            }
+            const isInited = code === '_init'
+            const isReload = code === 'reload'
+            let sortList = []
+            let filterList = []
+            let pageParams = {}
             if (pagerConfig) {
-              if (isReload) {
+              if (isInited || isReload) {
                 tablePage.currentPage = 1
               }
               if (isEnableConf(pagerConfig)) {
-                params.page = tablePage
+                pageParams = { ...tablePage }
               }
             }
-            if (isInited || isReload) {
-              const checkedFilters = isInited ? this.getCheckedFilters() : []
-              let defaultSort = $xetable.sortOpts.defaultSort
-              let sortParams = []
+            if (isInited) {
+              const { sortOpts } = $xetable
+              let defaultSort = sortOpts.defaultSort
               // 如果使用默认排序
               if (defaultSort) {
                 if (!XEUtils.isArray(defaultSort)) {
                   defaultSort = [defaultSort]
                 }
-                sortParams = defaultSort.map((item) => {
+                sortList = defaultSort.map((item) => {
                   return {
                     property: item.field,
                     order: item.order
                   }
                 })
               }
-              this.sortData = params.sorts = sortParams
-              this.filterData = params.filters = isInited ? checkedFilters : []
-              this.pendingRecords = []
-              params.sort = params.sorts.length ? params.sorts[0] : {}
-              this.$nextTick(() => {
-                if (isInited) {
-                  clearTableDefaultStatus($xetable)
-                } else {
-                  clearTableAllStatus($xetable)
-                }
-              })
+              filterList = $xetable.getCheckedFilters()
+            } else {
+              if (isReload) {
+                this.pendingRecords = []
+                $xetable.clearAll()
+              } else {
+                sortList = $xetable.getSortColumns()
+                filterList = $xetable.getCheckedFilters()
+              }
             }
-            const applyArgs = [params].concat(args)
+            const params = {
+              code,
+              button,
+              $grid: this,
+              page: pageParams,
+              sort: sortList.length ? sortList[0] : {},
+              sorts: sortList,
+              filters: filterList,
+              form: formData,
+              options: ajaxMethods
+            }
+            this.sortData = sortList
+            this.filterData = filterList
             this.tableLoading = true
+            const applyArgs = [params].concat(args)
             return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
               .catch(e => e)
               .then(rest => {
@@ -825,16 +827,19 @@ export default {
       return this.$nextTick().then(() => this.recalculate(true)).then(() => this.isZMax)
     },
     getProxyInfo () {
-      const { sortData } = this
-      return this.proxyConfig ? {
-        data: this.tableData,
-        filter: this.filterData,
-        form: this.formData,
-        sort: sortData.length ? sortData[0] : {},
-        sorts: sortData,
-        pager: this.tablePage,
-        pendingRecords: this.pendingRecords
-      } : null
+      const { sortData, proxyConfig } = this
+      if (proxyConfig) {
+        return {
+          data: this.tableData,
+          filter: this.filterData,
+          form: this.formData,
+          sort: sortData.length ? sortData[0] : {},
+          sorts: sortData,
+          pager: this.tablePage,
+          pendingRecords: this.pendingRecords
+        }
+      }
+      return null
     },
     // 检查插槽
     ...(process.env.VUE_APP_VXE_TABLE_ENV === 'development' ? {

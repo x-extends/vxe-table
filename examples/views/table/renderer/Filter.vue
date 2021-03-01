@@ -8,6 +8,7 @@
       renderFilter (h, renderOpts, <vxe-tooltip content="params: { column, columnIndex, columnIndex, $panel }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 内容<br>
       filterMethod (<vxe-tooltip content="params: { option, row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选数据函数<br>
       filterResetMethod (<vxe-tooltip content="params: { options, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选重置函数<br>
+      filterRecoverMethod (<vxe-tooltip content="params: { option, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选复原函数<br>
       $panel 对象:<br>
       &nbsp;&nbsp;<span class="orange">changeOption(event?: Event, checked: boolean, option: ColumnFilterParams) 更新选项的状态</span><br>
       &nbsp;&nbsp;<span class="orange">confirmFilter(event?: Event) 确认筛选</span><br>
@@ -64,6 +65,10 @@ export default {
             options.forEach((option) => {
               option.data = ''
             })
+          },
+          // 重置筛选复原方法（当未点击确认时，该选项将被恢复为默认值）
+          filterRecoverMethod ({ option }) {
+            option.data = ''
           },
           // 筛选方法
           filterMethod ({ option, row, column }) {
