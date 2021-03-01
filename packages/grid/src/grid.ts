@@ -6,9 +6,8 @@ import VXETable from '../../v-x-e-table'
 import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
-import { clearTableDefaultStatus, clearTableAllStatus } from '../../table/src/util'
 
-import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableListeners } from '../../../types/vxe-table'
+import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableListeners, VxeTableDefines } from '../../../types/vxe-table'
 
 function getOffsetHeight (elem: HTMLElement) {
   return elem ? elem.offsetHeight : 0
@@ -630,7 +629,7 @@ export default defineComponent({
         }
         if (!proxyInited && proxyOpts.autoLoad !== false) {
           reactData.proxyInited = true
-          nextTick(() => gridMethods.commitProxy('init'))
+          nextTick(() => gridMethods.commitProxy('_init'))
         }
       }
     }
@@ -645,7 +644,7 @@ export default defineComponent({
        */
       commitProxy (proxyTarget: string | VxeToolbarPropTypes.ButtonConfig, ...args: any[]) {
         const { toolbarConfig, pagerConfig } = props
-        const { tablePage, sortData, filterData, formData } = reactData
+        const { tablePage, formData } = reactData
         const isMsg = computeIsMsg.value
         const proxyOpts = computeProxyOpts.value
         const toolbarOpts = computeToolbarOpts.value
@@ -690,63 +689,65 @@ export default defineComponent({
           case 'reset_custom':
             $xetable.resetColumn(true)
             break
-          case 'init':
+          case '_init':
           case 'reload':
           case 'query': {
-            const isInited = code === 'init'
-            const isReload = code === 'reload'
             const ajaxMethods = ajax.query
             if (ajaxMethods) {
-              const params: any = {
-                code,
-                button,
-                $grid: $xegrid,
-                sort: sortData.length ? sortData[0] : {},
-                sorts: sortData,
-                filters: filterData,
-                form: formData,
-                options: ajaxMethods
-              }
+              const isInited = code === '_init'
+              const isReload = code === 'reload'
+              let sortList: any[] = []
+              let filterList: VxeTableDefines.FilterCheckedParams[] = []
+              let pageParams = {}
               if (pagerConfig) {
-                if (isReload) {
+                if (isInited || isReload) {
                   tablePage.currentPage = 1
                 }
                 if (isEnableConf(pagerConfig)) {
-                  params.page = tablePage
+                  pageParams = { ...tablePage }
                 }
               }
-              if (isInited || isReload) {
-                const checkedFilters = isInited ? $xetable.getCheckedFilters() : []
-                let sortParams: any[] = []
+              if (isInited) {
                 const { computeSortOpts } = $xetable.getComputeMaps()
                 const sortOpts = computeSortOpts.value
-                let { defaultSort } = sortOpts
+                let defaultSort = sortOpts.defaultSort
                 // 如果使用默认排序
                 if (defaultSort) {
                   if (!XEUtils.isArray(defaultSort)) {
                     defaultSort = [defaultSort]
                   }
-                  sortParams = defaultSort.map((item: any) => {
+                  sortList = defaultSort.map((item) => {
                     return {
                       property: item.field,
                       order: item.order
                     }
                   })
                 }
-                reactData.sortData = params.sorts = sortParams
-                reactData.filterData = params.filters = isInited ? checkedFilters : []
-                reactData.pendingRecords = []
-                params.sort = params.sorts.length ? params.sorts[0] : {}
-                nextTick(() => {
-                  if (isInited) {
-                    clearTableDefaultStatus($xetable)
-                  } else {
-                    clearTableAllStatus($xetable)
-                  }
-                })
+                filterList = $xetable.getCheckedFilters()
+              } else {
+                if (isReload) {
+                  reactData.pendingRecords = []
+                  $xetable.clearAll()
+                } else {
+                  sortList = $xetable.getSortColumns()
+                  filterList = $xetable.getCheckedFilters()
+                }
               }
-              const applyArgs = [params].concat(args)
+              const params: any = {
+                code,
+                button,
+                $grid: $xegrid,
+                page: pageParams,
+                sort: sortList.length ? sortList[0] : {},
+                sorts: sortList,
+                filters: filterList,
+                form: formData,
+                options: ajaxMethods
+              }
+              reactData.sortData = sortList
+              reactData.filterData = filterList
               reactData.tableLoading = true
+              const applyArgs = [params].concat(args)
               return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
                 .catch(e => e)
                 .then(rest => {
@@ -897,16 +898,19 @@ export default defineComponent({
         return reactData.pendingRecords
       },
       getProxyInfo () {
-        const { sortData } = reactData
-        return props.proxyConfig ? {
-          data: reactData.tableData,
-          filter: reactData.filterData,
-          form: reactData.formData,
-          sort: sortData.length ? sortData[0] : {},
-          sorts: sortData,
-          pager: reactData.tablePage,
-          pendingRecords: reactData.pendingRecords
-        } : null
+        if (props.proxyConfig) {
+          const { sortData } = reactData
+          return {
+            data: reactData.tableData,
+            filter: reactData.filterData,
+            form: reactData.formData,
+            sort: sortData.length ? sortData[0] : {},
+            sorts: sortData,
+            pager: reactData.tablePage,
+            pendingRecords: reactData.pendingRecords
+          }
+        }
+        return null
       }
     }
 

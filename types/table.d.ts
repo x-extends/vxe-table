@@ -453,7 +453,7 @@ export interface TablePublicMethods {
   /**
    * 获取当前排序的列信息
    */
-  getSortColumns(): any[];
+  getSortColumns(): VxeTableDefines.SortCheckedParams[];
   /**
    * 手动关闭筛选面板
    */

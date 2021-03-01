@@ -53,6 +53,10 @@ export const columnProps = {
   filterMultiple: { type: Boolean as PropType<VxeColumnPropTypes.FilterMultiple>, default: true },
   // 自定义筛选方法
   filterMethod: Function as PropType<VxeColumnPropTypes.FilterMethod>,
+  // 筛选重置方法
+  filterResetMethod: Function as PropType<VxeColumnPropTypes.FilterResetMethod>,
+  // 筛选复原方法
+  filterRecoverMethod: Function as PropType<VxeColumnPropTypes.FilterRecoverMethod>,
   // 筛选模板配置项
   filterRender: Object as PropType<VxeColumnPropTypes.FilterRender>,
   // 指定为树节点

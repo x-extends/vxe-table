@@ -61,6 +61,18 @@ export namespace VxeColumnPropTypes {
   }
   export type FilterMethod = (params: FilterMethodParams) => boolean;
 
+  interface FilterResetMethodParams {
+    options: VxeTableDefines.FilterOption[];
+    column: VxeTableDefines.ColumnInfo;
+  }
+  export type FilterResetMethod = (params: FilterResetMethodParams) => void;
+
+  interface FilterRecoverMethodParams {
+    option: VxeTableDefines.FilterOption;
+    column: VxeTableDefines.ColumnInfo;
+  }
+  export type FilterRecoverMethod = (params: FilterRecoverMethodParams) => void;
+
   /**
    * 筛选渲染配置项
    */

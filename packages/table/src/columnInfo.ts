@@ -81,6 +81,8 @@ export class ColumnInfo {
       filters: toFilters(_vm.filters),
       filterMultiple: XEUtils.isBoolean(_vm.filterMultiple) ? _vm.filterMultiple : true,
       filterMethod: _vm.filterMethod,
+      filterResetMethod: _vm.filterResetMethod,
+      filterRecoverMethod: _vm.filterRecoverMethod,
       filterRender: _vm.filterRender,
       treeNode: _vm.treeNode,
       cellType: _vm.cellType,

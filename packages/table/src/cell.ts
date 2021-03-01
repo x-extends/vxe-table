@@ -623,13 +623,14 @@ export const Cell = {
     const { computeSortOpts } = $table.getComputeMaps()
     const sortOpts = computeSortOpts.value
     const { showIcon, iconAsc, iconDesc } = sortOpts
+    const { order } = column
     return showIcon ? [
       h('span', {
         class: 'vxe-cell--sort'
       }, [
         h('i', {
           class: ['vxe-sort--asc-btn', iconAsc || GlobalConfig.icon.TABLE_SORT_ASC, {
-            'sort--active': column.order === 'asc'
+            'sort--active': order === 'asc'
           }],
           title: GlobalConfig.i18n('vxe.table.sortAsc'),
           onClick (evnt: Event) {
@@ -638,7 +639,7 @@ export const Cell = {
         }),
         h('i', {
           class: ['vxe-sort--desc-btn', iconDesc || GlobalConfig.icon.TABLE_SORT_DESC, {
-            'sort--active': column.order === 'desc'
+            'sort--active': order === 'desc'
           }],
           title: GlobalConfig.i18n('vxe.table.sortDesc'),
           onClick (evnt: Event) {

@@ -47,7 +47,7 @@
         sortable
         :filter-multiple="false"
         :filters="[{label: 'Man', value: 'Man'}, {label: 'Women', value: 'Women'}]"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
+      <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
         <template #filter="{ $panel, column }">
           <input class="my-input" type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
         </template>
@@ -114,6 +114,11 @@ export default defineComponent({
       return row.age === Number(option.data)
     }
 
+    const filterAgeRecoverMethod: VxeColumnPropTypes.FilterRecoverMethod = ({ option }) => {
+      // 如果是自定义筛选模板，当为点击确认时，该选项将被恢复为默认值
+      option.data = ''
+    }
+
     const updateNameFilterEvent: VxeButtonEvents.Click = () => {
       const $table = xTable.value
       const column = $table.getColumnByField('name')
@@ -158,6 +163,7 @@ export default defineComponent({
       filterNameMethod,
       filterRoleMethod,
       filterAgeMethod,
+      filterAgeRecoverMethod,
       updateNameFilterEvent,
       filterNameEvent,
       filterAgeEvent,
@@ -205,7 +211,7 @@ export default defineComponent({
             sortable
             :filter-multiple="false"
             :filters="[{label: 'Man', value: 'Man'}, {label: 'Women', value: 'Women'}]"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
+          <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
             <template #filter="{ $panel, column }">
               <input class="my-input" type="type" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
             </template>
@@ -262,6 +268,11 @@ export default defineComponent({
               return row.age === Number(option.data)
             }
 
+            const filterAgeRecoverMethod: VxeColumnPropTypes.FilterRecoverMethod = ({ option }) => {
+              // 如果是自定义筛选模板，当为点击确认时，该选项将被恢复为默认值
+              option.data = ''
+            }
+
             const updateNameFilterEvent: VxeButtonEvents.Click = () => {
               const $table = xTable.value
               const column = $table.getColumnByField('name')
@@ -306,6 +317,7 @@ export default defineComponent({
               filterNameMethod,
               filterRoleMethod,
               filterAgeMethod,
+              filterAgeRecoverMethod,
               updateNameFilterEvent,
               filterNameEvent,
               filterAgeEvent

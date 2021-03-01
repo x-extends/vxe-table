@@ -534,6 +534,8 @@ export default {
           filters: '配置筛选条件（注：筛选只能用于列表，如果是树结构则过滤根节点）',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
           filterMethod: '只对 filters 有效，列的筛选方法，该方法的返回值用来决定该行是否显示',
+          filterResetMethod: '只对 filters 有效，自定义筛选重置方法',
+          filterRecoverMethod: '只对 filters 有效，自定义筛选复原方法（使用自定义筛选时可能会用到）',
           filterRender: '筛选渲染器配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: '即将废弃，请使用 table.column-key',

@@ -6,7 +6,7 @@
 
       <!--将表单放在工具栏中-->
       <template #toolbar_buttons>
-        <vxe-form :data="formData" @submit="searchEvent" @reset="searchEvent">
+        <vxe-form :data="formData" @submit="searchEvent" @reset="resetEvent">
           <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
           <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }"></vxe-form-item>
         </vxe-form>
@@ -41,6 +41,11 @@ export default defineComponent({
     const xGrid = ref({} as VxeGridInstance)
 
     const searchEvent = () => {
+      const $grid = xGrid.value
+      $grid.commitProxy('query')
+    }
+
+    const resetEvent = () => {
       const $grid = xGrid.value
       $grid.commitProxy('reload')
     }
@@ -141,7 +146,7 @@ export default defineComponent({
           sortable: true,
           minWidth: 160,
           filters: [
-            { label: '前端开发', value: '前端' },
+            { label: '前端开发', value: '前端', checked: true },
             { label: '后端开发', value: '后端' },
             { label: '测试', value: '测试' },
             { label: '程序员鼓励师', value: '程序员鼓励师' }
@@ -184,6 +189,7 @@ export default defineComponent({
       formData,
       gridOptions,
       searchEvent,
+      resetEvent,
       demoCodes: [
         `
         <vxe-grid ref="xGrid" v-bind="gridOptions">
@@ -217,7 +223,7 @@ export default defineComponent({
 
             const searchEvent = () => {
               const $grid = xGrid.value
-              $grid.commitProxy('reload')
+              $grid.commitProxy('query')
             }
 
             const formData = reactive({
@@ -316,7 +322,7 @@ export default defineComponent({
                   sortable: true,
                   minWidth: 160,
                   filters: [
-                    { label: '前端开发', value: '前端' },
+                    { label: '前端开发', value: '前端', checked: true },
                     { label: '后端开发', value: '后端' },
                     { label: '测试', value: '测试' },
                     { label: '程序员鼓励师', value: '程序员鼓励师' }

@@ -1427,7 +1427,7 @@ export default defineComponent({
             defaultSort = [defaultSort]
           }
           if (defaultSort.length) {
-            defaultSort.forEach((item: any) => {
+            (sortConfig.multiple ? defaultSort : defaultSort.slice(0, 1)).forEach((item: any) => {
               const { field, order } = item
               if (field && order) {
                 const column = tableMethods.getColumnByField(field)
@@ -1801,9 +1801,10 @@ export default defineComponent({
     }
 
     /**
-     * 默认行为只允许执行一次，除非被重置
+     * 处理数据加载默认行为
+     * 默认执行一次，除非被重置
      */
-    const handleDefaults = () => {
+    const handleLoadDefaults = () => {
       handleDefaultSelectionChecked()
       handleDefaultRadioChecked()
       handleDefaultRowExpand()
@@ -1811,6 +1812,14 @@ export default defineComponent({
       handleDefaultMergeCells()
       handleDefaultMergeFooterItems()
       nextTick(() => setTimeout(() => tableMethods.recalculate()))
+    }
+
+    /**
+     * 处理初始化的默认行为
+     * 只会执行一次
+     */
+    const handleInitDefaults = () => {
+      handleDefaultSort()
     }
 
     const handleTableColumn = () => {
@@ -1937,11 +1946,15 @@ export default defineComponent({
        * @param {Array} datas 数据
        */
       loadData (datas: any[]) {
+        const { inited, initStatus } = internalData
         return loadTableData(datas).then(() => {
           internalData.inited = true
-          if (!internalData.initStatus) {
-            internalData.initStatus = true
-            handleDefaults()
+          internalData.initStatus = true
+          if (!initStatus) {
+            handleLoadDefaults()
+          }
+          if (!inited) {
+            handleInitDefaults()
           }
           return tableMethods.recalculate()
         })
@@ -1951,6 +1964,7 @@ export default defineComponent({
        * @param {Array} datas 数据
        */
       reloadData (datas: any[]) {
+        const { inited } = internalData
         return tableMethods.clearAll()
           .then(() => {
             internalData.inited = true
@@ -1958,7 +1972,10 @@ export default defineComponent({
             return loadTableData(datas)
           })
           .then(() => {
-            handleDefaults()
+            handleLoadDefaults()
+            if (!inited) {
+              handleInitDefaults()
+            }
             return tableMethods.recalculate()
           })
       },
@@ -2043,8 +2060,9 @@ export default defineComponent({
        * @param {ColumnInfo} columns 列配置
        */
       reloadColumn (columns: any) {
-        tableMethods.clearAll()
-        return tableMethods.loadColumn(columns)
+        return tableMethods.clearAll().then(() => {
+          return tableMethods.loadColumn(columns)
+        })
       },
       /**
        * 根据 tr 元素获取对应的 row 信息
@@ -2962,7 +2980,7 @@ export default defineComponent({
       getSortColumns () {
         const sortList: any[] = []
         const { visibleColumn } = internalData
-        visibleColumn.forEach((column: any) => {
+        visibleColumn.forEach((column) => {
           const { order } = column
           if (column.sortable && order) {
             sortList.push({ column, sortBy: column.sortBy, property: column.property, order })
@@ -3493,8 +3511,8 @@ export default defineComponent({
        * 连接工具栏
        * @param $toolbar
        */
-      connect ($toolbar: VxeToolbarConstructor) {
-        if ($toolbar && $toolbar.syncUpdate) {
+      connect ($toolbar) {
+        if ($toolbar) {
           $xetoolbar = $toolbar
           $xetoolbar.syncUpdate({ collectColumn: internalData.collectColumn, $table: $xetable })
         } else {
@@ -4929,11 +4947,16 @@ export default defineComponent({
     }
 
     watch(() => props.data, (value) => {
+      const { inited, initStatus } = internalData
       loadTableData(value || []).then(() => {
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
-        if (!internalData.initStatus) {
-          internalData.initStatus = true
-          handleDefaults()
+        internalData.inited = true
+        internalData.initStatus = true
+        if (!initStatus) {
+          handleLoadDefaults()
+        }
+        if (!inited) {
+          handleInitDefaults()
         }
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if ((scrollXLoad || scrollYLoad) && expandColumn) {
@@ -5109,9 +5132,9 @@ export default defineComponent({
         if (data && data.length) {
           internalData.inited = true
           internalData.initStatus = true
-          handleDefaults()
+          handleLoadDefaults()
+          handleInitDefaults()
         }
-        handleDefaultSort()
         updateStyle()
       })
 

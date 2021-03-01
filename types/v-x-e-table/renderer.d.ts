@@ -17,6 +17,7 @@ interface DefineRendererOption<T> {
   filterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean;
   filterRemoteMethod?(params: VxeGlobalRendererHandles.FilterRemoteMethod): boolean;
   filterResetMethod?(params: VxeGlobalRendererHandles.FilterResetMethodParams): void;
+  filterRecoverMethod?(params: VxeGlobalRendererHandles.FilterRecoverMethodParams): void;
 
   // 单元格渲染
   renderHeader?(renderOpts: VxeGlobalRendererHandles.RenderHeaderOptions, params: VxeGlobalRendererHandles.RenderHeaderParams): T;
@@ -77,6 +78,12 @@ export namespace VxeGlobalRendererHandles {
   export interface FilterResetMethodParams {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     options: VxeTableDefines.FilterOption[];
+    column: VxeTableDefines.ColumnInfo;
+  }
+
+  export interface FilterRecoverMethodParams {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
+    option: VxeTableDefines.FilterOption;
     column: VxeTableDefines.ColumnInfo;
   }
 
