@@ -375,6 +375,24 @@ const apis = [
         list: []
       },
       {
+        name: 'filter-reset-method',
+        descKey: 'app.api.tableColumn.desc.filterResetMethod',
+        version: '2.10.15',
+        type: '({ options, column }) => void',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'filter-recover-method',
+        descKey: 'app.api.tableColumn.desc.filterRecoverMethod',
+        version: '2.10.15',
+        type: '({ option, column }) => void',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'filter-render',
         descKey: 'app.api.tableColumn.desc.filterRender',
         version: '',

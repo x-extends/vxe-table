@@ -360,8 +360,9 @@ const Methods = {
    * @param {ColumnInfo} columns 列配置
    */
   reloadColumn (columns) {
-    this.clearAll()
-    return this.loadColumn(columns)
+    return this.clearAll().then(() => {
+      return this.loadColumn(columns)
+    })
   },
   /**
    * 更新数据行的 Map

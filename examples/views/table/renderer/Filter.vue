@@ -67,6 +67,10 @@ export default {
               option.data = ''
             })
           },
+          // 重置筛选复原方法（当未点击确认时，该选项将被恢复为默认值）
+          filterRecoverMethod ({ option }) {
+            option.data = ''
+          },
           // 筛选方法
           filterMethod ({ option, row, column }) {
             const { data } = option

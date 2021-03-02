@@ -59,18 +59,27 @@ export default {
       } else {
         const bodyElem = $refs.tableBody.$el
         const { target: targetElem, pageX } = evnt
+        const { filters, filterMultiple, filterRender } = column
+        const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+        const filterRecoverMethod = column.filterRecoverMethod || (compConf ? compConf.filterRecoverMethod : null)
         const { visibleWidth } = DomTools.getDomNode()
         Object.assign(filterStore, {
           args: params,
-          multiple: column.filterMultiple,
-          options: column.filters,
+          multiple: filterMultiple,
+          options: filters,
           column,
           style: null,
           visible: true
         })
         // 复原状态
         filterStore.options.forEach(option => {
-          option._checked = option.checked
+          const { _checked, checked } = option
+          option._checked = checked
+          if (!checked && _checked !== checked) {
+            if (filterRecoverMethod) {
+              filterRecoverMethod({ option, column, $table: this })
+            }
+          }
         })
         this.checkFilterOptions()
         this.hasFilterPanel = true
@@ -172,7 +181,7 @@ export default {
         const { filters, filterRender } = column
         if (filters) {
           const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-          const filterResetMethod = compConf ? compConf.filterResetMethod : null
+          const filterResetMethod = column.filterResetMethod || (compConf ? compConf.filterResetMethod : null)
           filters.forEach((item) => {
             item._checked = false
             item.checked = false

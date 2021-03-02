@@ -62,6 +62,10 @@ const props = {
   filterMultiple: { type: Boolean, default: true },
   // 自定义筛选方法
   filterMethod: Function,
+  // 筛选重置方法
+  filterResetMethod: Function,
+  // 筛选复原方法
+  filterRecoverMethod: Function,
   // 筛选模板配置项
   filterRender: Object,
   // 指定为树节点

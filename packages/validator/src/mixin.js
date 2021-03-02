@@ -122,32 +122,36 @@ export default {
         }
         return Promise.all(rowValids).then(() => {
           const ruleProps = Object.keys(validRest)
-          if (ruleProps.length) {
-            return Promise.reject(validRest[ruleProps[0]][0])
-          }
-          if (cb) {
-            // 在 v3.0 中废弃 setup.validArgs
-            if (GlobalConfig.validArgs === 'obsolete') {
-              cb(status)
-            } else {
-              cb()
+          return this.$nextTick().then(() => {
+            if (ruleProps.length) {
+              return Promise.reject(validRest[ruleProps[0]][0])
             }
-          }
+            if (cb) {
+              // 在 v3.0 中废弃 setup.validArgs
+              if (GlobalConfig.validArgs === 'obsolete') {
+                cb(status)
+              } else {
+                cb()
+              }
+            }
+          })
         }).catch(firstErrParams => {
           return new Promise((resolve, reject) => {
             const finish = () => {
-              status = false
-              if (cb) {
-                // 在 v3.0 中废弃 setup.validArgs
-                if (GlobalConfig.validArgs === 'obsolete') {
-                  cb(status, validRest)
+              this.$nextTick(() => {
+                status = false
+                if (cb) {
+                  // 在 v3.0 中废弃 setup.validArgs
+                  if (GlobalConfig.validArgs === 'obsolete') {
+                    cb(status, validRest)
+                  } else {
+                    cb(validRest)
+                  }
+                  resolve()
                 } else {
-                  cb(validRest)
+                  reject(validRest)
                 }
-                resolve()
-              } else {
-                reject(validRest)
-              }
+              })
             }
             const posAndFinish = () => {
               firstErrParams.cell = this.getCell(firstErrParams.row, firstErrParams.column)
@@ -175,15 +179,16 @@ export default {
           })
         })
       }
-      if (cb) {
-        // 在 v3.0 中废弃 setup.validArgs
-        if (GlobalConfig.validArgs === 'obsolete') {
-          cb(status)
-        } else {
-          cb()
+      return this.$nextTick().then(() => {
+        if (cb) {
+          // 在 v3.0 中废弃 setup.validArgs
+          if (GlobalConfig.validArgs === 'obsolete') {
+            cb(status)
+          } else {
+            cb()
+          }
         }
-      }
-      return Promise.resolve()
+      })
     },
     hasCellRules (type, row, column) {
       const { editRules } = this
