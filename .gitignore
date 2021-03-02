@@ -9,6 +9,7 @@ node_modules
 /public/v3.5
 /public/v4
 package-lock.json
+yarn.lock
 
 # local env files
 .env.local
