@@ -39,7 +39,7 @@ export default {
     },
     supportMerge () {
       const { storeData, defaultOptions } = this
-      return !defaultOptions.original && (storeData.isPrint || ['html', 'xlsx'].indexOf(defaultOptions.type) > -1)
+      return !defaultOptions.original && defaultOptions.mode === 'current' && (storeData.isPrint || ['html', 'xlsx'].indexOf(defaultOptions.type) > -1)
     },
     supportStyle () {
       const { defaultOptions } = this
@@ -421,9 +421,10 @@ export default {
       this.checkStatus()
     },
     getExportOption () {
-      const { checkedAll, storeData, defaultOptions } = this
-      const columns = XEUtils.searchTree(storeData.columns, column => column.checked, { children: 'children', mapChildren: 'childNodes', original: true })
-      return Object.assign({ columns }, defaultOptions, { isMerge: checkedAll ? defaultOptions.isMerge : false })
+      const { checkedAll, storeData, defaultOptions, supportMerge } = this
+      const { hasMerge, columns } = storeData
+      const expColumns = XEUtils.searchTree(columns, column => column.checked, { children: 'children', mapChildren: 'childNodes', original: true })
+      return Object.assign({ columns: expColumns }, defaultOptions, { isMerge: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false })
     },
     cancelEvent () {
       this.storeData.visible = false

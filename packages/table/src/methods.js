@@ -360,17 +360,20 @@ const Methods = {
     this.clearMergeFooterItems()
     this.handleTableData(true)
     this.updateFooter()
-    return this.updateStyle()
-      .then(() => this.computeScrollLoad())
-      .then(() => {
-        // 是否加载了数据
-        if (scrollYLoad) {
-          scrollYStore.endIndex = scrollYStore.visibleSize
-        }
-        this.handleReserveStatus()
-        this.checkSelectionStatus()
-        return this.$nextTick().then(() => this.recalculate()).then(() => restoreScroll(this, lastScrollLeft, lastScrollTop))
-      })
+    return this.$nextTick().then(() => {
+      this.updateHeight()
+      this.updateStyle()
+    }).then(() => {
+      this.computeScrollLoad()
+    }).then(() => {
+      // 是否加载了数据
+      if (scrollYLoad) {
+        scrollYStore.endIndex = scrollYStore.visibleSize
+      }
+      this.handleReserveStatus()
+      this.checkSelectionStatus()
+      return this.$nextTick().then(() => this.recalculate()).then(() => restoreScroll(this, lastScrollLeft, lastScrollTop))
+    })
   },
   /**
    * 重新加载数据，不会清空表格状态
@@ -1585,12 +1588,15 @@ const Methods = {
       this.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
       this.overflowX = tableWidth > bodyWidth
     }
-    this.customHeight = calcHeight(this, 'height')
-    this.customMaxHeight = calcHeight(this, 'maxHeight')
+    this.updateHeight()
     this.parentHeight = Math.max(this.headerHeight + this.footerHeight + 20, this.getParentHeight())
     if (this.overflowX) {
       this.checkScrolling()
     }
+  },
+  updateHeight () {
+    this.customHeight = calcHeight(this, 'height')
+    this.customMaxHeight = calcHeight(this, 'maxHeight')
   },
   updateStyle () {
     let {
@@ -2982,13 +2988,15 @@ const Methods = {
     const triggerTreeNode = treeNode && getEventTargetNode(evnt, cell, 'vxe-tree--btn-wrapper').flag
     const triggerExpandNode = isExpandType && getEventTargetNode(evnt, cell, 'vxe-table--expanded').flag
     params = Object.assign({ cell, triggerRadio, triggerCheckbox, triggerTreeNode, triggerExpandNode }, params)
-    // 如果是展开行
-    if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
-      this.triggerRowExpandEvent(evnt, params)
-    }
-    // 如果是树形表格
-    if ((treeOpts.trigger === 'row' || (treeNode && treeOpts.trigger === 'cell'))) {
-      this.triggerTreeExpandEvent(evnt, params)
+    if (!triggerCheckbox && !triggerRadio) {
+      // 如果是展开行
+      if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
+        this.triggerRowExpandEvent(evnt, params)
+      }
+      // 如果是树形表格
+      if ((treeOpts.trigger === 'row' || (treeNode && treeOpts.trigger === 'cell'))) {
+        this.triggerTreeExpandEvent(evnt, params)
+      }
     }
     // 如果点击了树节点
     if (!triggerTreeNode) {

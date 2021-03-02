@@ -26,6 +26,7 @@
       :import-config="tableImport"
       :export-config="tableExport"
       :merge-cells="mergeCells"
+      :merge-footer-items="mergeFooterItems"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -72,6 +73,7 @@ export default {
         types: ['xlsx', 'csv', 'html', 'xml', 'txt']
       },
       mergeCells: [],
+      mergeFooterItems: [],
       demoCodes: [
         `
         <vxe-toolbar custom import export>
@@ -95,6 +97,7 @@ export default {
           :import-config="tableImport"
           :export-config="tableExport"
           :merge-cells="mergeCells"
+          :merge-footer-items="mergeFooterItems"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -129,7 +132,8 @@ export default {
                 // 自定义类型
                 types: ['xlsx', 'csv', 'html', 'xml', 'txt']
               },
-              mergeCells: []
+              mergeCells: [],
+              mergeFooterItems: []
             }
           },
           created () {
@@ -150,9 +154,9 @@ export default {
                   { name: 'name8', role: 'role8', rate: 5, sex: '2', num: 9998, num1: 9998, num2: 9998, cardNo: '62221234018523736237' },
                   { name: 'name9', role: 'role9', rate: 8, sex: '1', num: 70000, num1: 70000, num2: 70000, cardNo: '62221230283686397412' }
                 ]
-                this.mergeCells = [
-                  { row: 1, col: 1, rowspan: 2, colspan: 2 },
-                  { row: 4, col: 3, rowspan: 1, colspan: 3 }
+                this.mergeFooterItems = [
+                  { row: 0, col: 1, rowspan: 2, colspan: 2 },
+                  { row: 1, col: 5, rowspan: 1, colspan: 3 }
                 ]
                 this.loading = false
               }, 100)
@@ -168,17 +172,30 @@ export default {
               })
             },
             footerMethod ({ columns, data }) {
-              return [
-                columns.map((column, columnIndex) => {
-                  if (columnIndex === 0) {
-                    return '和值'
+              const means = []
+              const sums = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  means.push('平均')
+                  sums.push('和值')
+                } else {
+                  let meanCell = '-'
+                  let sumCell = '-'
+                  switch (column.property) {
+                    case 'rate':
+                    case 'num':
+                    case 'num1':
+                    case 'num2':
+                      meanCell = parseInt(XEUtils.mean(data, column.property))
+                      sumCell = XEUtils.sum(data, column.property)
+                      break
                   }
-                  if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
-                  }
-                  return ''
-                })
-              ]
+                  means.push(meanCell)
+                  sums.push(sumCell)
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [means, sums]
             }
           }
         }
@@ -208,6 +225,10 @@ export default {
           { row: 1, col: 1, rowspan: 2, colspan: 2 },
           { row: 4, col: 3, rowspan: 1, colspan: 3 }
         ]
+        this.mergeFooterItems = [
+          { row: 0, col: 1, rowspan: 2, colspan: 2 },
+          { row: 1, col: 5, rowspan: 1, colspan: 3 }
+        ]
         this.loading = false
       }, 100)
     },
@@ -222,17 +243,30 @@ export default {
       })
     },
     footerMethod ({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '和值'
+      const means = []
+      const sums = []
+      columns.forEach((column, columnIndex) => {
+        if (columnIndex === 0) {
+          means.push('平均')
+          sums.push('和值')
+        } else {
+          let meanCell = '-'
+          let sumCell = '-'
+          switch (column.property) {
+            case 'rate':
+            case 'num':
+            case 'num1':
+            case 'num2':
+              meanCell = parseInt(XEUtils.mean(data, column.property))
+              sumCell = XEUtils.sum(data, column.property)
+              break
           }
-          if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
-          }
-          return ''
-        })
-      ]
+          means.push(meanCell)
+          sums.push(sumCell)
+        }
+      })
+      // 返回一个二维数组的表尾合计
+      return [means, sums]
     }
   }
 }

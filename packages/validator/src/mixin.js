@@ -46,12 +46,18 @@ export default {
      * 聚焦到校验通过的单元格并弹出校验错误提示
      */
     handleValidError (params) {
-      if (this.validOpts.autoPos === false) {
-        this.emitEvent('valid-error', params)
-      } else {
-        this.handleActived(params, { type: 'valid-error', trigger: 'call' })
-          .then(() => setTimeout(() => this.showValidTooltip(params), 10))
-      }
+      return new Promise(resolve => {
+        if (this.validOpts.autoPos === false) {
+          this.emitEvent('valid-error', params)
+          resolve()
+        } else {
+          this.handleActived(params, { type: 'valid-error', trigger: 'call' }).then(() => {
+            setTimeout(() => {
+              resolve(this.showValidTooltip(params))
+            }, 10)
+          })
+        }
+      })
     },
     /**
      * 对表格数据进行校验
@@ -115,27 +121,30 @@ export default {
         }
         return Promise.all(rowValids).then(() => {
           const ruleProps = Object.keys(validRest)
-          if (ruleProps.length) {
-            return Promise.reject(validRest[ruleProps[0]][0])
-          }
-          if (cb) {
-            cb()
-          }
+          return this.$nextTick().then(() => {
+            if (ruleProps.length) {
+              return Promise.reject(validRest[ruleProps[0]][0])
+            }
+            if (cb) {
+              cb()
+            }
+          })
         }).catch(firstErrParams => {
           return new Promise((resolve, reject) => {
             const finish = () => {
-              if (cb) {
-                cb(validRest)
-                resolve()
-              } else {
-                reject(validRest)
-              }
+              this.$nextTick(() => {
+                if (cb) {
+                  cb(validRest)
+                  resolve()
+                } else {
+                  reject(validRest)
+                }
+              })
             }
             const posAndFinish = () => {
               firstErrParams.cell = this.getCell(firstErrParams.row, firstErrParams.column)
               DomTools.toView(firstErrParams.cell)
-              this.handleValidError(firstErrParams)
-              finish()
+              this.handleValidError(firstErrParams).then(finish)
             }
             /**
              * 当校验不通过时
@@ -157,10 +166,11 @@ export default {
           })
         })
       }
-      if (cb) {
-        cb()
-      }
-      return Promise.resolve()
+      return this.$nextTick().then(() => {
+        if (cb) {
+          cb()
+        }
+      })
     },
     hasCellRules (type, row, column) {
       const { editRules } = this
@@ -299,7 +309,7 @@ export default {
       const { rule, row, column, cell } = params
       const validTip = $refs.validTip
       const content = rule.message
-      this.$nextTick(() => {
+      return this.$nextTick(() => {
         Object.assign(this.validStore, {
           row,
           column,
@@ -307,10 +317,10 @@ export default {
           content,
           visible: true
         })
-        if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
-          validTip.open(cell, content)
-        }
         this.emitEvent('valid-error', params)
+        if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
+          return validTip.open(cell, content)
+        }
       })
     }
   }
