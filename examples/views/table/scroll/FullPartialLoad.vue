@@ -100,7 +100,7 @@ export default {
               this.loading = true
               Promise.all([
                 this.findColumnList(200).then(data => {
-                  this.allColumn = this.allData.concat(data)
+                  this.allColumn = this.allColumn.concat(data)
                   this.$refs.xGrid.loadColumn(this.allColumn)
                 }),
                 this.findDataList(600).then(data => {
@@ -207,7 +207,7 @@ export default {
       this.loading = true
       Promise.all([
         this.findColumnList(200).then(data => {
-          this.allColumn = this.allData.concat(data)
+          this.allColumn = this.allColumn.concat(data)
           if (this.$refs.xGrid) {
             this.$refs.xGrid.loadColumn(this.allColumn)
           }
