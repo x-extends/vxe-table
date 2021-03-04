@@ -49,14 +49,20 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
     /**
      * 聚焦到校验通过的单元格并弹出校验错误提示
      */
-    const handleValidError = (params: any) => {
-      const validOpts = computeValidOpts.value
-      if (validOpts.autoPos === false) {
-        $xetable.dispatchEvent('valid-error', params, null)
-      } else {
-        $xetable.handleActived(params, { type: 'valid-error', trigger: 'call' })
-          .then(() => setTimeout(() => validatorPrivateMethods.showValidTooltip(params), 10))
-      }
+    const handleValidError = (params: any): Promise<void> => {
+      return new Promise(resolve => {
+        const validOpts = computeValidOpts.value
+        if (validOpts.autoPos === false) {
+          $xetable.dispatchEvent('valid-error', params, null)
+          resolve()
+        } else {
+          $xetable.handleActived(params, { type: 'valid-error', trigger: 'call' }).then(() => {
+            setTimeout(() => {
+              resolve(validatorPrivateMethods.showValidTooltip(params))
+            }, 10)
+          })
+        }
+      })
     }
 
     /**
@@ -136,27 +142,30 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
         }
         return Promise.all(rowValids).then(() => {
           const ruleProps = Object.keys(validRest)
-          if (ruleProps.length) {
-            return Promise.reject(validRest[ruleProps[0]][0])
-          }
-          if (cb) {
-            cb()
-          }
+          return nextTick().then(() => {
+            if (ruleProps.length) {
+              return Promise.reject(validRest[ruleProps[0]][0])
+            }
+            if (cb) {
+              cb()
+            }
+          })
         }).catch(firstErrParams => {
           return new Promise((resolve, reject) => {
             const finish = () => {
-              if (cb) {
-                cb(validRest)
-                resolve(null)
-              } else {
-                reject(validRest)
-              }
+              nextTick(() => {
+                if (cb) {
+                  cb(validRest)
+                  resolve(null)
+                } else {
+                  reject(validRest)
+                }
+              })
             }
             const posAndFinish = () => {
               firstErrParams.cell = $xetable.getCell(firstErrParams.row, firstErrParams.column)
               DomTools.toView(firstErrParams.cell)
-              handleValidError(firstErrParams)
-              finish()
+              handleValidError(firstErrParams).then(finish)
             }
             /**
              * 当校验不通过时
@@ -178,10 +187,11 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           })
         })
       }
-      if (cb) {
-        cb()
-      }
-      return Promise.resolve()
+      return nextTick().then(() => {
+        if (cb) {
+          cb()
+        }
+      })
     }
 
     validatorMethods = {
@@ -342,7 +352,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
         const { rule, row, column, cell } = params
         const validTip = refValidTooltip.value
         const content = rule.message
-        nextTick(() => {
+        return nextTick().then(() => {
           Object.assign(validStore, {
             row,
             column,
@@ -350,10 +360,10 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             content,
             visible: true
           })
-          if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
-            validTip.open(cell, content)
-          }
           $xetable.dispatchEvent('valid-error', params, null)
+          if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
+            return validTip.open(cell, content)
+          }
         })
       }
     }

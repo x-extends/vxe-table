@@ -619,18 +619,18 @@ export default defineComponent({
                 name: 'TablePrint'
               }
             },
-            // {
-            //   label: 'app.aside.nav.customPrint',
-            //   locat: {
-            //     name: 'TableCustomPrint'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.fixedType',
-            //   locat: {
-            //     name: 'TableFixedType'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.customPrint',
+              locat: {
+                name: 'TableCustomPrint'
+              }
+            },
+            {
+              label: 'app.aside.nav.fixedType',
+              locat: {
+                name: 'TableFixedType'
+              }
+            },
             {
               label: 'app.aside.nav.contextMenu',
               // demoUrl: 'https://jsrun.pro/VjXKp/edit',
@@ -638,12 +638,12 @@ export default defineComponent({
                 name: 'TableMenu'
               }
             },
-            // {
-            //   label: 'app.aside.nav.menuPrivilege',
-            //   locat: {
-            //     name: 'TableMenuPrivilege'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.menuPrivilege',
+              locat: {
+                name: 'TableMenuPrivilege'
+              }
+            },
             {
               label: 'app.aside.nav.expandRow',
               // demoUrl: 'https://jsrun.pro/eRXKp/edit',
@@ -889,13 +889,13 @@ export default defineComponent({
             //     name: 'TableTreeHighlight'
             //   }
             // },
-            // // {
-            // //   label: 'app.aside.nav.keyboard',
-            // //   disabled: true,
-            // //   locat: {
-            // //     name: 'TableTreeKeyboard'
-            // //   }
-            // // },
+            // {
+            //   label: 'app.aside.nav.keyboard',
+            //   disabled: true,
+            //   locat: {
+            //     name: 'TableTreeKeyboard'
+            //   }
+            // },
             {
               label: 'app.aside.nav.lazy',
               locat: {
@@ -920,12 +920,12 @@ export default defineComponent({
                 name: 'TableTreeLine'
               }
             },
-            // {
-            //   label: 'app.aside.nav.edit',
-            //   locat: {
-            //     name: 'TableTreeEdit'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.edit',
+              locat: {
+                name: 'TableTreeEdit'
+              }
+            },
             // {
             //   label: 'app.aside.nav.cellValid',
             //   locat: {
@@ -1096,18 +1096,18 @@ export default defineComponent({
             //     name: 'TableEditFooter'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.footerImmediately',
-            //   locat: {
-            //     name: 'TableEditFooterImmediately'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.expandRow',
-            //   locat: {
-            //     name: 'TableEditExpand'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.footerImmediately',
+              locat: {
+                name: 'TableEditFooterImmediately'
+              }
+            },
+            {
+              label: 'app.aside.nav.expandRow',
+              locat: {
+                name: 'TableEditExpand'
+              }
+            },
             {
               label: 'app.aside.nav.contextMenu',
               locat: {
@@ -1138,13 +1138,13 @@ export default defineComponent({
             //     name: 'TableEditRealtimeSave'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.dataCount',
-            //   demoUrl: 'https://jsrun.pro/JQWKp/edit',
-            //   locat: {
-            //     name: 'TableEditDataCount'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.dataCount',
+              demoUrl: 'https://jsrun.pro/JQWKp/edit',
+              locat: {
+                name: 'TableEditDataCount'
+              }
+            },
             {
               label: 'app.aside.nav.uniqueSelect',
               locat: {
@@ -1157,13 +1157,13 @@ export default defineComponent({
                 name: 'TableEditCascadingSelect'
               }
             },
-            // {
-            //   label: 'app.aside.nav.events',
-            //   // demoUrl: 'https://jsrun.pro/QIWKp/edit',
-            //   locat: {
-            //     name: 'TableEditEvents'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.events',
+              // demoUrl: 'https://jsrun.pro/QIWKp/edit',
+              locat: {
+                name: 'TableEditEvents'
+              }
+            },
             {
               label: 'app.aside.nav.template',
               locat: {
@@ -1386,37 +1386,37 @@ export default defineComponent({
             //     name: 'TableScrollHighlight'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.fluidHeight',
-            //   locat: {
-            //     name: 'TableScrollMaxHeight'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.group',
-            //   locat: {
-            //     name: 'TableScrollGroup'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.merge',
-            //   locat: {
-            //     name: 'TableScrollMerge'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.keyboard',
-            //   locat: {
-            //     name: 'TableScrollKeyboard'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.edit',
-            //   // demoUrl: 'https://jsrun.pro/MIWKp/edit',
-            //   locat: {
-            //     name: 'TableScrollEdit'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.fluidHeight',
+              locat: {
+                name: 'TableScrollMaxHeight'
+              }
+            },
+            {
+              label: 'app.aside.nav.group',
+              locat: {
+                name: 'TableScrollGroup'
+              }
+            },
+            {
+              label: 'app.aside.nav.merge',
+              locat: {
+                name: 'TableScrollMerge'
+              }
+            },
+            {
+              label: 'app.aside.nav.keyboard',
+              locat: {
+                name: 'TableScrollKeyboard'
+              }
+            },
+            {
+              label: 'app.aside.nav.edit',
+              // demoUrl: 'https://jsrun.pro/MIWKp/edit',
+              locat: {
+                name: 'TableScrollEdit'
+              }
+            },
             // {
             //   label: 'app.aside.nav.cellValid',
             //   locat: {
@@ -1443,20 +1443,20 @@ export default defineComponent({
             // //     name: 'TableScrollForceRowValid'
             // //   }
             // // },
-            // {
-            //   label: 'app.aside.nav.partialLoad',
-            //   // demoUrl: 'https://jsrun.pro/EVWKp/edit',
-            //   locat: {
-            //     name: 'TableScrollPartialLoad'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.fullPartialLoad',
-            //   // demoUrl: 'https://jsrun.pro/sVWKp/edit',
-            //   locat: {
-            //     name: 'TableScrollFullPartialLoad'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.partialLoad',
+              // demoUrl: 'https://jsrun.pro/EVWKp/edit',
+              locat: {
+                name: 'TableScrollPartialLoad'
+              }
+            },
+            {
+              label: 'app.aside.nav.fullPartialLoad',
+              // demoUrl: 'https://jsrun.pro/sVWKp/edit',
+              locat: {
+                name: 'TableScrollFullPartialLoad'
+              }
+            },
             // {
             //   label: 'app.aside.nav.footer',
             //   locat: {
@@ -1475,12 +1475,12 @@ export default defineComponent({
             //     name: 'TableScrollTabs'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.keepAlives',
-            //   locat: {
-            //     name: 'TableScrollKeepAliveTable1'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.keepAlives',
+              locat: {
+                name: 'TableScrollKeepAliveTable1'
+              }
+            },
             {
               label: 'app.aside.nav.scrollRows',
               locat: {
@@ -1674,27 +1674,27 @@ export default defineComponent({
           value: 'plugin',
           expand: false,
           children: [
-            // {
-            //   label: 'app.aside.nav.elementPlugin',
-            //   demoUrl: 'https://jsrun.pro/dwbKp/edit',
-            //   locat: {
-            //     name: 'TablePluginElementConfig'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.elementFilterPlugin',
-            //   demoUrl: 'https://jsrun.pro/BWWKpv/edit',
-            //   locat: {
-            //     name: 'TablePluginElementFilter'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.elementPluginMore',
-            //   demoUrl: 'https://jsrun.pro/uWWKp/edit',
-            //   locat: {
-            //     name: 'TablePluginElementPage'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.elementPlugin',
+              demoUrl: 'https://jsrun.pro/dwbKp/edit',
+              locat: {
+                name: 'TablePluginElementConfig'
+              }
+            },
+            {
+              label: 'app.aside.nav.elementFilterPlugin',
+              demoUrl: 'https://jsrun.pro/BWWKpv/edit',
+              locat: {
+                name: 'TablePluginElementFilter'
+              }
+            },
+            {
+              label: 'app.aside.nav.elementPluginMore',
+              demoUrl: 'https://jsrun.pro/uWWKp/edit',
+              locat: {
+                name: 'TablePluginElementPage'
+              }
+            },
             // {
             //   label: 'app.aside.nav.iviewPlugin',
             //   demoUrl: 'https://jsrun.pro/HPWKp/edit',
@@ -1716,25 +1716,25 @@ export default defineComponent({
             //     name: 'TablePluginIviewPage'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.antdPlugin',
-            //   demoUrl: 'https://jsrun.pro/APWKp/edit',
-            //   locat: {
-            //     name: 'TablePluginAntdConfig'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.antdFilter',
-            //   locat: {
-            //     name: 'TablePluginAntdFilter'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.antdPluginMore',
-            //   locat: {
-            //     name: 'TablePluginAntdPage'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.antdPlugin',
+              demoUrl: 'https://jsrun.pro/APWKp/edit',
+              locat: {
+                name: 'TablePluginAntdConfig'
+              }
+            },
+            {
+              label: 'app.aside.nav.antdFilter',
+              locat: {
+                name: 'TablePluginAntdFilter'
+              }
+            },
+            {
+              label: 'app.aside.nav.antdPluginMore',
+              locat: {
+                name: 'TablePluginAntdPage'
+              }
+            },
             // // {
             // //   label: 'app.aside.nav.shortcutKeyPlugin',
             // //   disabled: true,

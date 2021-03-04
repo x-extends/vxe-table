@@ -412,7 +412,7 @@ export default defineComponent({
           apiData.defaultExpandRowKeys = apiData.defaultExpandRows.map((item: any) => item.id)
           apiData.loading = false
           handleSearch()
-          resolve()
+          resolve(null)
         }, 100)
       })
     }

@@ -117,7 +117,7 @@ export namespace VxeModalPropTypes {
   export type Position = ModalPosition;
   export type Title = string;
   export type Duration = number | string;
-  export type Message = number | string;
+  export type Message = number | string | ((params: { $modal: VxeModalConstructor }) => VNode[] | string[] | JSX.Element[]);
   export type CancelButtonText = string;
   export type ConfirmButtonText = string;
   export type LockView = boolean;

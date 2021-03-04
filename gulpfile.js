@@ -69,6 +69,7 @@ module.exports = VXETableExport
 
 gulp.task('build_modules', () => {
   return gulp.src('packages/**/*.ts')
+    .pipe(replace('process.env.VUE_APP_VXE_TABLE_ENV', 'process.env.NODE_ENV'))
     .pipe(ts({
       strict: true,
       moduleResolution: 'node',

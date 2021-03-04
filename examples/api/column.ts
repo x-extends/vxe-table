@@ -368,15 +368,15 @@ const apis = [
             defVal: '',
             list: []
           },
-          {
-            name: 'attrs',
-            desc: '渲染的属性（请查看目标渲染的 Attribute）',
-            version: '',
-            type: 'Object',
-            enum: '',
-            defVal: '',
-            list: []
-          },
+          // {
+          //   name: 'attrs',
+          //   desc: '渲染的属性（请查看目标渲染的 Attribute）',
+          //   version: '',
+          //   type: 'Object',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
           {
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',
@@ -487,15 +487,15 @@ const apis = [
             defVal: '',
             list: []
           },
-          {
-            name: 'attrs',
-            desc: '渲染的属性（请查看目标渲染的 Attribute）',
-            version: '',
-            type: 'any',
-            enum: '',
-            defVal: '',
-            list: []
-          },
+          // {
+          //   name: 'attrs',
+          //   desc: '渲染的属性（请查看目标渲染的 Attribute）',
+          //   version: '',
+          //   type: 'any',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
           {
             name: 'options',
             desc: '只对 name=select 有效，下拉选项列表',
@@ -596,15 +596,15 @@ const apis = [
             defVal: '',
             list: []
           },
-          {
-            name: 'attrs',
-            desc: '渲染的属性（请查看目标渲染的 Attribute）',
-            version: '',
-            type: 'any',
-            enum: '',
-            defVal: '',
-            list: []
-          },
+          // {
+          //   name: 'attrs',
+          //   desc: '渲染的属性（请查看目标渲染的 Attribute）',
+          //   version: '',
+          //   type: 'any',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
           {
             name: 'options',
             desc: '只对 name=select 有效，下拉选项列表',
@@ -732,15 +732,15 @@ const apis = [
             defVal: '',
             list: []
           },
-          {
-            name: 'attrs',
-            desc: '渲染的属性（请查看目标渲染的 Attribute）',
-            version: '',
-            type: 'any',
-            enum: '',
-            defVal: '',
-            list: []
-          },
+          // {
+          //   name: 'attrs',
+          //   desc: '渲染的属性（请查看目标渲染的 Attribute）',
+          //   version: '',
+          //   type: 'any',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
           {
             name: 'options',
             desc: '只对 name=select 有效，下拉选项列表',

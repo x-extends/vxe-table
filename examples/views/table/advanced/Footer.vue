@@ -56,7 +56,7 @@
     <p class="tip">还可以固定列</p>
 
     <vxe-toolbar>
-      <template #:buttons>
+      <template #buttons>
         <vxe-button @click="demo3.showHeader = !demo3.showHeader">显示/隐藏表头</vxe-button>
         <vxe-button @click="demo3.showFooter = !demo3.showFooter">显示/隐藏表尾</vxe-button>
       </template>
@@ -376,7 +376,7 @@ export default defineComponent({
         `,
         `
         <vxe-toolbar>
-          <template #:buttons>
+          <template #buttons>
             <vxe-button @click="demo3.showHeader = !demo3.showHeader">显示/隐藏表头</vxe-button>
             <vxe-button @click="demo3.showFooter = !demo3.showFooter">显示/隐藏表尾</vxe-button>
           </template>

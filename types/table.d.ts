@@ -1460,6 +1460,8 @@ export namespace VxeTablePropTypes {
     isCopy?: boolean;
     isCut?: boolean;
     isPaste?: boolean;
+    isRowIncrement?: boolean;
+    isColumnIncrement?: boolean;
     copyMethod?(params: {
       isCut: boolean;
       row: any;
@@ -1467,6 +1469,12 @@ export namespace VxeTablePropTypes {
       cellValue: any;
     }): string;
     beforeCopyMethod?(params: {
+      isCut: boolean;
+      targetAreas: any[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }): boolean;
+    afterCopyMethod?(params: {
+      isCut: boolean;
       targetAreas: any[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
@@ -1485,7 +1493,18 @@ export namespace VxeTablePropTypes {
         cols: VxeTableDefines.ColumnInfo[]
       }[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
-    }) => boolean;
+    }) => void;
+    afterCutMethod?: (params: {
+      cutAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      currentAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }) => void;
     pasteMethod?(params: {
       row: any,
       column: VxeTableDefines.ColumnInfo;
@@ -1503,6 +1522,49 @@ export namespace VxeTablePropTypes {
       cellValues: string[][];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
+    afterPasteMethod?(params: {
+      currentAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      targetAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      cellValues: string[][];
+      pasteCells: string[][];
+      insertRows: any[];
+      insertColumns: VxeColumnOptions[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }): boolean;
+    createRowsMethod?(params: {
+      currentAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      targetAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      cellValues: string[][];
+      pasteCells: string[][];
+      insertRows: any[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }): any[];
+    createColumnsMethod?(params: {
+      currentAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      targetAreas: {
+        rows: any[];
+        cols: VxeTableDefines.ColumnInfo[]
+      }[];
+      cellValues: string[][];
+      pasteCells: string[][];
+      insertColumns: VxeColumnOptions[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }): VxeColumnOptions[];
   }
   export interface ClipOpts extends ClipConfig { }
 

@@ -7,7 +7,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="addColumn()">最后增加一列</vxe-button>
         <vxe-button @click="removeColumn()">删除最后一列</vxe-button>
         <vxe-button @click="updateSexFilter()">修改sex列筛选条件</vxe-button>
@@ -122,7 +122,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="addColumn()">最后增加一列</vxe-button>
             <vxe-button @click="removeColumn()">删除最后一列</vxe-button>
             <vxe-button @click="updateSexFilter()">修改sex列筛选条件</vxe-button>

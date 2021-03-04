@@ -5,7 +5,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
     </vxe-toolbar>
@@ -83,7 +83,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>
         </vxe-toolbar>

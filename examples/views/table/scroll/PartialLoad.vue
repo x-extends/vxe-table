@@ -1,0 +1,186 @@
+<template>
+  <div>
+    <p class="tip">局部递增数据</p>
+
+    <vxe-toolbar :loading="demo1.loading">
+      <template #buttons>
+        <vxe-button @click="loadList(20)">+20条</vxe-button>
+        <vxe-button @click="loadList(100)">+100条</vxe-button>
+        <vxe-button @click="loadList(500)">+500条</vxe-button>
+        <vxe-button @click="loadList(1000)">+1000条</vxe-button>
+        <vxe-button @click="loadList(2000)">+2000条</vxe-button>
+        <vxe-button @click="$refs.xTable.scrollTo(null, 4000)">y=4000</vxe-button>
+        <vxe-button @click="$refs.xTable.clearScroll()">清除滚动状态</vxe-button>
+      </template>
+    </vxe-toolbar>
+
+    <vxe-table
+      ref="xTable"
+      border
+      resizable
+      show-overflow
+      height="500"
+      row-id="id"
+      :loading="demo1.loading">
+      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" width="100"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+      <vxe-table-column field="role" title="Role"></vxe-table-column>
+      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-table-column field="address" title="Address"></vxe-table-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+    </pre>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, reactive, ref } from 'vue'
+import { VxeTableInstance } from '../../../../types/vxe-table'
+import XEUtils from 'xe-utils'
+
+export default defineComponent({
+  setup () {
+    let allData: any[] = []
+
+    const xTable = ref({} as VxeTableInstance)
+
+    const demo1 = reactive({
+      loading: false
+    })
+
+    const findList = (size: number): Promise<any[]> => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const list: any[] = []
+          for (let index = 0; index < size; index++) {
+            list.push({
+              id: XEUtils.uniqueId(),
+              name: 'test' + index,
+              role: 'developer',
+              age: 10,
+              date: '2019-05-01',
+              address: 'address abc' + index
+            })
+          }
+          resolve(list)
+        }, 250)
+      })
+    }
+
+    const loadList = (size: number) => {
+      demo1.loading = true
+      findList(size).then(data => {
+        const $table = xTable.value
+        allData = allData.concat(data)// 局部追加并保存所有数据
+        if ($table) {
+          $table.loadData(allData)
+        }
+        demo1.loading = false
+      })
+    }
+
+    loadList(600)
+
+    return {
+      xTable,
+      demo1,
+      loadList,
+      demoCodes: [
+        `
+        <vxe-toolbar :loading="demo1.loading">
+          <template #buttons>
+            <vxe-button @click="loadList(20)">+20条</vxe-button>
+            <vxe-button @click="loadList(100)">+100条</vxe-button>
+            <vxe-button @click="loadList(500)">+500条</vxe-button>
+            <vxe-button @click="loadList(1000)">+1000条</vxe-button>
+            <vxe-button @click="loadList(2000)">+2000条</vxe-button>
+            <vxe-button @click="$refs.xTable.scrollTo(null, 4000)">y=4000</vxe-button>
+            <vxe-button @click="$refs.xTable.clearScroll()">清除滚动状态</vxe-button>
+          </template>
+        </vxe-toolbar>
+
+        <vxe-table
+          ref="xTable"
+          border
+          resizable
+          show-overflow
+          height="500"
+          row-id="id"
+          :loading="demo1.loading">
+          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" width="100"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
+          <vxe-table-column field="role" title="Role"></vxe-table-column>
+          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-table-column field="address" title="Address"></vxe-table-column>
+        </vxe-table>
+        `,
+        `
+        import { defineComponent, reactive, ref } from 'vue'
+        import { VxeTableInstance } from 'vxe-table'
+        import XEUtils from 'xe-utils'
+
+        export default defineComponent({
+          setup () {
+            let allData: any[] = []
+
+            const xTable = ref({} as VxeTableInstance)
+
+            const demo1 = reactive({
+              loading: false
+            })
+
+            const findList = (size: number): Promise<any[]> => {
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  const list: any[] = []
+                  for (let index = 0; index < size; index++) {
+                    list.push({
+                      id: XEUtils.uniqueId(),
+                      name: 'test' + index,
+                      role: 'developer',
+                      age: 10,
+                      date: '2019-05-01',
+                      address: 'address abc' + index
+                    })
+                  }
+                  resolve(list)
+                }, 250)
+              })
+            }
+
+            const loadList = (size: number) => {
+              demo1.loading = true
+              findList(size).then(data => {
+                const $table = xTable.value
+                allData = allData.concat(data)// 局部追加并保存所有数据
+                if ($table) {
+                  $table.loadData(allData)
+                }
+                demo1.loading = false
+              })
+            }
+
+            loadList(600)
+
+            return {
+              xTable,
+              demo1,
+              loadList
+            }
+          }
+        })
+        `
+      ]
+    }
+  }
+})
+</script>

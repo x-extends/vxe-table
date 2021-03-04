@@ -19,7 +19,7 @@
       手动关闭当前活动的窗口：<br>
       close(id?: string)<br>
       给 vue 实例挂载属性：<br>
-      Vue.prototype.$XModal = VXETable.modal
+      app.config.globalProperties.$XModal = VXETable.modal
     </p>
 
     <p>

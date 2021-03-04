@@ -1818,6 +1818,24 @@ const apis = [
             list: []
           },
           {
+            name: 'isRowIncrement',
+            desc: '是否启用行自增，当粘贴的行数超出表格时自动插入新行',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isColumnIncrement',
+            desc: '是否启用列自增，当粘贴的列数超出表格时自动插入新列',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'copyMethod',
             desc: '重写单元格复制取值的方法，将单元格复制到剪贴板',
             version: 'pro',
@@ -1831,6 +1849,15 @@ const apis = [
             desc: '自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
             type: '(params: { isCut, targetAreas }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'afterCopyMethod',
+            desc: '自定义单元格复制到剪贴板之后的方法',
+            version: 'pro',
+            type: '(params: { isCut, targetAreas }) => void',
             enum: '',
             defVal: '',
             list: []
@@ -1854,6 +1881,15 @@ const apis = [
             list: []
           },
           {
+            name: 'afterCutMethod',
+            desc: '自定义单元格剪贴值清除之后的方法',
+            version: 'pro',
+            type: '(params: { cutAreas, currentAreas }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'pasteMethod',
             desc: '重写单元格粘贴赋值的方法，从剪贴板赋值到单元格',
             version: 'pro',
@@ -1866,7 +1902,34 @@ const apis = [
             name: 'beforePasteMethod',
             desc: '自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为',
             version: 'pro',
-            type: '(params: { isCut, cutAreas, currentAreas, targetAreas, cellValues }) => boolean',
+            type: '(params: { isCut, cutAreas, currentAreas, targetAreas, cellValues, pasteCells }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'afterPasteMethod',
+            desc: '自定义单元格粘贴赋值之后的方法',
+            version: 'pro',
+            type: '(params: { isCut, cutAreas, currentAreas, targetAreas, cellValues, pasteCells, insertRows, insertColumns }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'createRowsMethod',
+            desc: '只对 isRowIncrement 有效，自定义创建自增行数据的方法',
+            version: 'pro',
+            type: '(params: { isCut, cutAreas, currentAreas, targetAreas, cellValues, pasteCells, insertRows }) => any[]',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'createColumnsMethod',
+            desc: '只对 isColumnIncrement 有效，自定义创建自增列配置的方法',
+            version: 'pro',
+            type: '(params: { isCut, cutAreas, currentAreas, targetAreas, cellValues, pasteCells, insertColumns }) => any[]',
             enum: '',
             defVal: '',
             list: []

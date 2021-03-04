@@ -103,7 +103,7 @@ export default defineComponent({
             ]
           ]
         }
-      }
+      } as VxeTablePropTypes.MenuConfig
     })
 
     const contextMenuClickEvent: VxeTableEvents.MenuClick = ({ menu, row, column }) => {
@@ -219,7 +219,7 @@ export default defineComponent({
                     ]
                   ]
                 }
-              }
+              } as VxeTablePropTypes.MenuConfig
             })
 
             const contextMenuClickEvent: VxeTableEvents.MenuClick = ({ menu, row, column }) => {

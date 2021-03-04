@@ -72,10 +72,10 @@ import TableFooterMaxHeight from '../views/table/advanced/MaxHeight.vue'
 import TableImport from '../views/table/advanced/Import.vue'
 import TableExport from '../views/table/advanced/Export.vue'
 import TablePrint from '../views/table/advanced/Print.vue'
-// import TableCustomPrint from '../views/table/advanced/CustomPrint.vue'
-// import TableFixedType from '../views/table/advanced/FixedType.vue'
+import TableCustomPrint from '../views/table/advanced/CustomPrint.vue'
+import TableFixedType from '../views/table/advanced/FixedType.vue'
 import TableMenu from '../views/table/advanced/Menu.vue'
-// import TableMenuPrivilege from '../views/table/advanced/MenuPrivilege.vue'
+import TableMenuPrivilege from '../views/table/advanced/MenuPrivilege.vue'
 import TableExpand from '../views/table/advanced/Expand.vue'
 // import TableExpandIcon from '../views/table/advanced/ExpandIcon.vue'
 // import TableExpandLazy from '../views/table/advanced/ExpandLazy.vue'
@@ -153,7 +153,7 @@ import TableTreeLazy from '../views/table/tree/Lazy.vue'
 import TableTreeLazyMenu from '../views/table/tree/LazyMenu.vue'
 import TableTreeLazyEdit from '../views/table/tree/LazyEdit.vue'
 import TableTreeLine from '../views/table/tree/Line.vue'
-// import TableTreeEdit from '../views/table/tree/Edit.vue'
+import TableTreeEdit from '../views/table/tree/Edit.vue'
 // import TableTreeEditCellValid from '../views/table/tree/CellValid.vue'
 // import TableTreeEditRowValid from '../views/table/tree/RowValid.vue'
 // import TableTreeEditForceCellValid from '../views/table/tree/ForceCellValid.vue'
@@ -166,24 +166,24 @@ import TableScrollFullRows from '../views/table/scroll/ScrollFullRows.vue'
 import TableScrollCols from '../views/table/scroll/ScrollCols.vue'
 import TableScrollFullCols from '../views/table/scroll/ScrollFullCols.vue'
 // import TableScrollHighlight from '../views/table/scroll/Highlight.vue'
-// import TableScrollKeyboard from '../views/table/scroll/Keyboard.vue'
-// import TableScrollMaxHeight from '../views/table/scroll/MaxHeight.vue'
-// import TableScrollGroup from '../views/table/scroll/Group.vue'
-// import TableScrollMerge from '../views/table/scroll/Merge.vue'
-// import TableScrollEdit from '../views/table/scroll/Edit.vue'
+import TableScrollKeyboard from '../views/table/scroll/Keyboard.vue'
+import TableScrollMaxHeight from '../views/table/scroll/MaxHeight.vue'
+import TableScrollGroup from '../views/table/scroll/Group.vue'
+import TableScrollMerge from '../views/table/scroll/Merge.vue'
+import TableScrollEdit from '../views/table/scroll/Edit.vue'
 // import TableScrollCellValid from '../views/table/scroll/CellValid.vue'
 // import TableScrollRowValid from '../views/table/scroll/RowValid.vue'
 // import TableScrollForceCellValid from '../views/table/scroll/ForceCellValid.vue'
 // import TableScrollForceRowValid from '../views/table/scroll/ForceRowValid.vue'
-// import TableScrollPartialLoad from '../views/table/scroll/PartialLoad.vue'
-// import TableScrollFullPartialLoad from '../views/table/scroll/FullPartialLoad.vue'
+import TableScrollPartialLoad from '../views/table/scroll/PartialLoad.vue'
+import TableScrollFullPartialLoad from '../views/table/scroll/FullPartialLoad.vue'
 // import TableScrollFooter from '../views/table/scroll/Footer.vue'
 // import TableScrollTemplate from '../views/table/scroll/Template.vue'
 // import TableScrollTabs from '../views/table/scroll/Tabs.vue'
-// import TableScrollKeepAlives from '../views/table/scroll/KeepAlives.vue'
-// import TableScrollKeepAliveTable1 from '../views/table/scroll/keepAlives/Table1.vue'
-// import TableScrollKeepAliveTable2 from '../views/table/scroll/keepAlives/Table2.vue'
-// import TableScrollKeepAliveTable3 from '../views/table/scroll/keepAlives/Table3.vue'
+import TableScrollKeepAlives from '../views/table/scroll/KeepAlives.vue'
+import TableScrollKeepAliveTable1 from '../views/table/scroll/keepAlives/Table1.vue'
+import TableScrollKeepAliveTable2 from '../views/table/scroll/keepAlives/Table2.vue'
+import TableScrollKeepAliveTable3 from '../views/table/scroll/keepAlives/Table3.vue'
 
 // import TableVirtualTreeBasic from '../views/table/virtual-tree/Basic.vue'
 // import TableVirtualTreeNormal from '../views/table/virtual-tree/Normal.vue'
@@ -219,17 +219,17 @@ import TableEditKeyboardEdit from '../views/table/edit/KeyboardEdit.vue'
 // import TableEditForceCellValid from '../views/table/edit/ForceCellValid.vue'
 // import TableEditForceRowValid from '../views/table/edit/ForceRowValid.vue'
 // import TableEditFooter from '../views/table/edit/Footer.vue'
-// import TableEditFooterImmediately from '../views/table/edit/FooterImmediately.vue'
-// import TableEditExpand from '../views/table/edit/Expand.vue'
+import TableEditFooterImmediately from '../views/table/edit/FooterImmediately.vue'
+import TableEditExpand from '../views/table/edit/Expand.vue'
 import TableEditMenu from '../views/table/edit/Menu.vue'
 // import TableEditSpan from '../views/table/edit/Span.vue'
 // import TableEditForm from '../views/table/edit/Form.vue'
 // import TableEditUpload from '../views/table/edit/Upload.vue'
 // import TableEditRealtimeSave from '../views/table/edit/RealtimeSave.vue'
-// import TableEditDataCount from '../views/table/edit/DataCount.vue'
+import TableEditDataCount from '../views/table/edit/DataCount.vue'
 import TableEditUniqueSelect from '../views/table/edit/UniqueSelect.vue'
 import TableEditCascadingSelect from '../views/table/edit/CascadingSelect.vue'
-// import TableEditEvents from '../views/table/edit/Events.vue'
+import TableEditEvents from '../views/table/edit/Events.vue'
 import TableEditTemplate from '../views/table/edit/Template.vue'
 // import TableEditFull from '../views/table/edit/Full.vue'
 
@@ -262,15 +262,15 @@ import TableOtherAntd from '../views/table/other/Antd.vue'
 // import TableSortableRow from '../views/table/other/SortableRow.vue'
 // import TableXlsx from '../views/table/other/Xlsx.vue'
 
-// import TablePluginElementConfig from '../views/table/plugin/ElementConfig.vue'
-// import TablePluginElementFilter from '../views/table/plugin/ElementFilter.vue'
-// import TablePluginElementPage from '../views/table/plugin/ElementPage.vue'
+import TablePluginElementConfig from '../views/table/plugin/ElementConfig.vue'
+import TablePluginElementFilter from '../views/table/plugin/ElementFilter.vue'
+import TablePluginElementPage from '../views/table/plugin/ElementPage.vue'
 // import TablePluginIviewConfig from '../views/table/plugin/IviewConfig.vue'
 // import TablePluginIviewFilter from '../views/table/plugin/IviewFilter.vue'
 // import TablePluginIviewPage from '../views/table/plugin/IviewPage.vue'
-// import TablePluginAntdConfig from '../views/table/plugin/AntdConfig.vue'
-// import TablePluginAntdFilter from '../views/table/plugin/AntdFilter.vue'
-// import TablePluginAntdPage from '../views/table/plugin/AntdPage.vue'
+import TablePluginAntdConfig from '../views/table/plugin/AntdConfig.vue'
+import TablePluginAntdFilter from '../views/table/plugin/AntdFilter.vue'
+import TablePluginAntdPage from '../views/table/plugin/AntdPage.vue'
 // import TablePluginShortcutKey from '../views/table/plugin/ShortcutKey.vue'
 // import TablePluginCharts from '../views/table/plugin/Charts.vue'
 import TablePluginExportXLSX from '../views/table/plugin/ExportXLSX.vue'
@@ -637,26 +637,26 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TablePrint',
     component: TablePrint
   },
-  // {
-  //   path: '/table/advanced/customPrint',
-  //   name: 'TableCustomPrint',
-  //   component: TableCustomPrint
-  // },
-  // {
-  //   path: '/table/advanced/fixedType',
-  //   name: 'TableFixedType',
-  //   component: TableFixedType
-  // },
+  {
+    path: '/table/advanced/customPrint',
+    name: 'TableCustomPrint',
+    component: TableCustomPrint
+  },
+  {
+    path: '/table/advanced/fixedType',
+    name: 'TableFixedType',
+    component: TableFixedType
+  },
   {
     path: '/table/advanced/menu',
     name: 'TableMenu',
     component: TableMenu
   },
-  // {
-  //   path: '/table/advanced/menuPrivilege',
-  //   name: 'TableMenuPrivilege',
-  //   component: TableMenuPrivilege
-  // },
+  {
+    path: '/table/advanced/menuPrivilege',
+    name: 'TableMenuPrivilege',
+    component: TableMenuPrivilege
+  },
   {
     path: '/table/advanced/expand',
     name: 'TableExpand',
@@ -888,11 +888,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableTreeLine',
     component: TableTreeLine
   },
-  // {
-  //   path: '/table/tree/edit',
-  //   name: 'TableTreeEdit',
-  //   component: TableTreeEdit
-  // },
+  {
+    path: '/table/tree/edit',
+    name: 'TableTreeEdit',
+    component: TableTreeEdit
+  },
   // {
   //   path: '/table/tree/editCellValid',
   //   name: 'TableTreeEditCellValid',
@@ -1158,31 +1158,31 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableScrollHighlight',
   //   component: TableScrollHighlight
   // },
-  // {
-  //   path: '/table/scroll/maxHeight',
-  //   name: 'TableScrollMaxHeight',
-  //   component: TableScrollMaxHeight
-  // },
-  // {
-  //   path: '/table/scroll/group',
-  //   name: 'TableScrollGroup',
-  //   component: TableScrollGroup
-  // },
-  // {
-  //   path: '/table/scroll/merge',
-  //   name: 'TableScrollMerge',
-  //   component: TableScrollMerge
-  // },
-  // {
-  //   path: '/table/scroll/keyboard',
-  //   name: 'TableScrollKeyboard',
-  //   component: TableScrollKeyboard
-  // },
-  // {
-  //   path: '/table/scroll/edit',
-  //   name: 'TableScrollEdit',
-  //   component: TableScrollEdit
-  // },
+  {
+    path: '/table/scroll/maxHeight',
+    name: 'TableScrollMaxHeight',
+    component: TableScrollMaxHeight
+  },
+  {
+    path: '/table/scroll/group',
+    name: 'TableScrollGroup',
+    component: TableScrollGroup
+  },
+  {
+    path: '/table/scroll/merge',
+    name: 'TableScrollMerge',
+    component: TableScrollMerge
+  },
+  {
+    path: '/table/scroll/keyboard',
+    name: 'TableScrollKeyboard',
+    component: TableScrollKeyboard
+  },
+  {
+    path: '/table/scroll/edit',
+    name: 'TableScrollEdit',
+    component: TableScrollEdit
+  },
   // {
   //   path: '/table/scroll/cellValid',
   //   name: 'TableScrollCellValid',
@@ -1203,16 +1203,16 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableScrollForceRowValid',
   //   component: TableScrollForceRowValid
   // },
-  // {
-  //   path: '/table/scroll/partialLoad',
-  //   name: 'TableScrollPartialLoad',
-  //   component: TableScrollPartialLoad
-  // },
-  // {
-  //   path: '/table/scroll/fullPartialLoad',
-  //   name: 'TableScrollFullPartialLoad',
-  //   component: TableScrollFullPartialLoad
-  // },
+  {
+    path: '/table/scroll/partialLoad',
+    name: 'TableScrollPartialLoad',
+    component: TableScrollPartialLoad
+  },
+  {
+    path: '/table/scroll/fullPartialLoad',
+    name: 'TableScrollFullPartialLoad',
+    component: TableScrollFullPartialLoad
+  },
   // {
   //   path: '/table/scroll/footer',
   //   name: 'TableScrollFooter',
@@ -1228,27 +1228,27 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableScrollTabs',
   //   component: TableScrollTabs
   // },
-  // {
-  //   path: '/table/scroll/keepAlives',
-  //   component: TableScrollKeepAlives,
-  //   children: [
-  //     {
-  //       path: 'table1',
-  //       name: 'TableScrollKeepAliveTable1',
-  //       component: TableScrollKeepAliveTable1
-  //     },
-  //     {
-  //       path: 'table2',
-  //       name: 'TableScrollKeepAliveTable2',
-  //       component: TableScrollKeepAliveTable2
-  //     },
-  //     {
-  //       path: 'table3',
-  //       name: 'TableScrollKeepAliveTable3',
-  //       component: TableScrollKeepAliveTable3
-  //     }
-  //   ]
-  // },
+  {
+    path: '/table/scroll/keepAlives',
+    component: TableScrollKeepAlives,
+    children: [
+      {
+        path: 'table1',
+        name: 'TableScrollKeepAliveTable1',
+        component: TableScrollKeepAliveTable1
+      },
+      {
+        path: 'table2',
+        name: 'TableScrollKeepAliveTable2',
+        component: TableScrollKeepAliveTable2
+      },
+      {
+        path: 'table3',
+        name: 'TableScrollKeepAliveTable3',
+        component: TableScrollKeepAliveTable3
+      }
+    ]
+  },
   {
     path: '/table/edit/popupForm',
     name: 'TableEditPopupForm',
@@ -1349,16 +1349,16 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableEditFooter',
   //   component: TableEditFooter
   // },
-  // {
-  //   path: '/table/edit/footerImmediately',
-  //   name: 'TableEditFooterImmediately',
-  //   component: TableEditFooterImmediately
-  // },
-  // {
-  //   path: '/table/edit/expand',
-  //   name: 'TableEditExpand',
-  //   component: TableEditExpand
-  // },
+  {
+    path: '/table/edit/footerImmediately',
+    name: 'TableEditFooterImmediately',
+    component: TableEditFooterImmediately
+  },
+  {
+    path: '/table/edit/expand',
+    name: 'TableEditExpand',
+    component: TableEditExpand
+  },
   {
     path: '/table/edit/menu',
     name: 'TableEditMenu',
@@ -1384,11 +1384,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableEditRealtimeSave',
   //   component: TableEditRealtimeSave
   // },
-  // {
-  //   path: '/table/edit/dataCount',
-  //   name: 'TableEditDataCount',
-  //   component: TableEditDataCount
-  // },
+  {
+    path: '/table/edit/dataCount',
+    name: 'TableEditDataCount',
+    component: TableEditDataCount
+  },
   {
     path: '/table/edit/uniqueSelect',
     name: 'TableEditUniqueSelect',
@@ -1399,11 +1399,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableEditCascadingSelect',
     component: TableEditCascadingSelect
   },
-  // {
-  //   path: '/table/edit/events',
-  //   name: 'TableEditEvents',
-  //   component: TableEditEvents
-  // },
+  {
+    path: '/table/edit/events',
+    name: 'TableEditEvents',
+    component: TableEditEvents
+  },
   {
     path: '/table/edit/template',
     name: 'TableEditTemplate',
@@ -1544,21 +1544,21 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableXlsx',
   //   component: TableXlsx
   // },
-  // {
-  //   path: '/table/plugin/elementConfig',
-  //   name: 'TablePluginElementConfig',
-  //   component: TablePluginElementConfig
-  // },
-  // {
-  //   path: '/table/plugin/elementFilter',
-  //   name: 'TablePluginElementFilter',
-  //   component: TablePluginElementFilter
-  // },
-  // {
-  //   path: '/table/plugin/elementPage',
-  //   name: 'TablePluginElementPage',
-  //   component: TablePluginElementPage
-  // },
+  {
+    path: '/table/plugin/elementConfig',
+    name: 'TablePluginElementConfig',
+    component: TablePluginElementConfig
+  },
+  {
+    path: '/table/plugin/elementFilter',
+    name: 'TablePluginElementFilter',
+    component: TablePluginElementFilter
+  },
+  {
+    path: '/table/plugin/elementPage',
+    name: 'TablePluginElementPage',
+    component: TablePluginElementPage
+  },
   // {
   //   path: '/table/plugin/iviewConfig',
   //   name: 'TablePluginIviewConfig',
@@ -1574,21 +1574,21 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TablePluginIviewPage',
   //   component: TablePluginIviewPage
   // },
-  // {
-  //   path: '/table/plugin/antdConfig',
-  //   name: 'TablePluginAntdConfig',
-  //   component: TablePluginAntdConfig
-  // },
-  // {
-  //   path: '/table/plugin/antdFilter',
-  //   name: 'TablePluginAntdFilter',
-  //   component: TablePluginAntdFilter
-  // },
-  // {
-  //   path: '/table/plugin/antdPage',
-  //   name: 'TablePluginAntdPage',
-  //   component: TablePluginAntdPage
-  // },
+  {
+    path: '/table/plugin/antdConfig',
+    name: 'TablePluginAntdConfig',
+    component: TablePluginAntdConfig
+  },
+  {
+    path: '/table/plugin/antdFilter',
+    name: 'TablePluginAntdFilter',
+    component: TablePluginAntdFilter
+  },
+  {
+    path: '/table/plugin/antdPage',
+    name: 'TablePluginAntdPage',
+    component: TablePluginAntdPage
+  },
   // {
   //   path: '/table/plugin/shortcutKey',
   //   name: 'TablePluginShortcutKey',

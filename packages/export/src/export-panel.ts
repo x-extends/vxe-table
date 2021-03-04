@@ -42,7 +42,7 @@ export default defineComponent({
 
     const computeSupportMerge = computed(() => {
       const { storeData, defaultOptions } = props
-      return !defaultOptions.original && (storeData.isPrint || ['html', 'xlsx'].indexOf(defaultOptions.type) > -1)
+      return !defaultOptions.original && defaultOptions.mode === 'current' && (storeData.isPrint || ['html', 'xlsx'].indexOf(defaultOptions.type) > -1)
     })
 
     const computeSupportStyle = computed(() => {
@@ -108,10 +108,12 @@ export default defineComponent({
 
     const getExportOption = () => {
       const { storeData, defaultOptions } = props
+      const { hasMerge, columns } = storeData
       const checkedAll = computeCheckedAll.value
-      const columns = XEUtils.searchTree(storeData.columns, (column: any) => column.checked, { children: 'children', mapChildren: 'childNodes', original: true })
-      return Object.assign({ columns }, defaultOptions, {
-        isMerge: checkedAll ? defaultOptions.isMerge : false
+      const supportMerge = computeSupportMerge.value
+      const expColumns = XEUtils.searchTree(columns, (column: any) => column.checked, { children: 'children', mapChildren: 'childNodes', original: true })
+      return Object.assign({ columns: expColumns }, defaultOptions, {
+        isMerge: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false
       })
     }
 

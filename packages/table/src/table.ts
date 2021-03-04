@@ -976,6 +976,11 @@ export default defineComponent({
       reactData.isAllOverflow = isAllOverflow
     }
 
+    const updateHeight = () => {
+      internalData.customHeight = calcHeight('height')
+      internalData.customMaxHeight = calcHeight('maxHeight')
+    }
+
     /**
      * 列宽算法
      * 支持 px、%、固定 混合分配
@@ -1086,8 +1091,7 @@ export default defineComponent({
         reactData.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
         reactData.overflowX = tableWidth > bodyWidth
       }
-      internalData.customHeight = calcHeight('height')
-      internalData.customMaxHeight = calcHeight('maxHeight')
+      updateHeight()
       reactData.parentHeight = Math.max(internalData.headerHeight + internalData.footerHeight + 20, tablePrivateMethods.getParentHeight())
       if (reactData.overflowX) {
         tablePrivateMethods.checkScrolling()
@@ -1787,17 +1791,20 @@ export default defineComponent({
       tableMethods.clearMergeFooterItems()
       tablePrivateMethods.handleTableData(true)
       tableMethods.updateFooter()
-      return updateStyle()
-        .then(() => computeScrollLoad())
-        .then(() => {
-          // 是否加载了数据
-          if (scrollYLoad) {
-            scrollYStore.endIndex = scrollYStore.visibleSize
-          }
-          handleReserveStatus()
-          tablePrivateMethods.checkSelectionStatus()
-          return nextTick().then(() => tableMethods.recalculate()).then(() => restoreScroll(lastScrollLeft, lastScrollTop))
-        })
+      return nextTick().then(() => {
+        updateHeight()
+        updateStyle()
+      }).then(() => {
+        computeScrollLoad()
+      }).then(() => {
+        // 是否加载了数据
+        if (scrollYLoad) {
+          scrollYStore.endIndex = scrollYStore.visibleSize
+        }
+        handleReserveStatus()
+        tablePrivateMethods.checkSelectionStatus()
+        return nextTick().then(() => tableMethods.recalculate()).then(() => restoreScroll(lastScrollLeft, lastScrollTop))
+      })
     }
 
     /**
@@ -4464,13 +4471,15 @@ export default defineComponent({
         const triggerTreeNode = treeNode && getEventTargetNode(evnt, cell, 'vxe-tree--btn-wrapper').flag
         const triggerExpandNode = isExpandType && getEventTargetNode(evnt, cell, 'vxe-table--expanded').flag
         params = Object.assign({ cell, triggerRadio, triggerCheckbox, triggerTreeNode, triggerExpandNode }, params)
-        // 如果是展开行
-        if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
-          tablePrivateMethods.triggerRowExpandEvent(evnt, params)
-        }
-        // 如果是树形表格
-        if ((treeOpts.trigger === 'row' || (treeNode && treeOpts.trigger === 'cell'))) {
-          tablePrivateMethods.triggerTreeExpandEvent(evnt, params)
+        if (!triggerCheckbox && !triggerRadio) {
+          // 如果是展开行
+          if (!triggerExpandNode && (expandOpts.trigger === 'row' || (isExpandType && expandOpts.trigger === 'cell'))) {
+            tablePrivateMethods.triggerRowExpandEvent(evnt, params)
+          }
+          // 如果是树形表格
+          if ((treeOpts.trigger === 'row' || (treeNode && treeOpts.trigger === 'cell'))) {
+            tablePrivateMethods.triggerTreeExpandEvent(evnt, params)
+          }
         }
         // 如果点击了树节点
         if (!triggerTreeNode) {

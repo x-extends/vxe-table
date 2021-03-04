@@ -16,7 +16,7 @@ export interface VxeColumnOptions extends VxeColumnProps {
 
 export namespace VxeColumnPropTypes {
   export type ColId = string | number;
-  export type Type = 'seq' | 'radio' | 'checkbox' | 'expand' | 'html';
+  export type Type = 'seq' | 'radio' | 'checkbox' | 'expand' | 'html' | null;
   export type Field = string;
   export type Title = string;
   export type Width = number | string;
@@ -149,9 +149,9 @@ export namespace VxeColumnPropTypes {
 
   interface FilterSlotParams {
     $panel: VxeFilterPanel;
-    column: VxeTableDefines.ColumnInfo & {
+    column: {
       filters: VxeTableDefines.FilterOption[];
-    };
+    } & VxeTableDefines.ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
     $rowIndex: number;

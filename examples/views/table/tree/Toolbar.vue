@@ -92,7 +92,7 @@ export default defineComponent({
             { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
           ]
           demo1.loading = false
-          resolve()
+          resolve(null)
         }, 300)
       })
     }
@@ -214,7 +214,7 @@ export default defineComponent({
                     { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
                   ]
                   demo1.loading = false
-                  resolve()
+                  resolve(null)
                 }, 300)
               })
             }

@@ -891,7 +891,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     const handleExportAndPrint = (options: any, isPrint?: boolean) => {
-      const { treeConfig } = props
+      const { treeConfig, showHeader, showFooter } = props
       const { initStore, mergeList, isGroup, footerData, exportStore, exportParams } = reactData
       const { collectColumn } = internalData
       const hasTree = treeConfig
@@ -899,7 +899,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       const selectRecords = $xetable.getCheckboxRecords()
       const hasFooter = !!footerData.length
       const hasMerge = !hasTree && mergeList.length
-      const defOpts = Object.assign({ message: true, isHeader: true }, options)
+      const defOpts = Object.assign({ message: true, isHeader: showHeader, isFooter: showFooter }, options)
       const types: string[] = defOpts.types || VXETable.exportTypes
       const modes: string[] = defOpts.modes
       const checkMethod = customOpts.checkMethod

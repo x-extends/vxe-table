@@ -2,7 +2,7 @@ import { VxeTableConstructor, VxeTableDefines, VxeTablePropTypes, VxeTablePrivat
 import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
 
 export namespace VxeGlobalInterceptorHandles {
-  export type InterceptorCallback = (params: any, event: KeyboardEvent) => any;
+  export type InterceptorCallback = (params: any) => any;
 
   interface InterceptorParams {
     $grid?: VxeGridConstructor & VxeGridPrivateMethods;
@@ -11,6 +11,9 @@ export namespace VxeGlobalInterceptorHandles {
   }
 
   export interface InterceptorKeydownParams extends InterceptorParams { }
+  export interface InterceptorClearFilterParams extends InterceptorParams { }
+  export interface InterceptorClearActivedParams extends InterceptorParams { }
+  export interface InterceptorClearAreasParams extends InterceptorParams { }
 
   export interface InterceptorExportParams extends InterceptorParams {
     options: VxeTablePropTypes.ExportHandleOptions;
@@ -26,7 +29,7 @@ export namespace VxeGlobalInterceptorHandles {
     datas: any[];
   }
 
-  export interface InterceptorMenuParams extends InterceptorParams {
+  export interface InterceptorShowMenuParams extends InterceptorParams {
     type: 'header' | 'body' | 'footer';
     options: VxeTableDefines.MenuFirstOption[][];
     columns: VxeTableDefines.ColumnInfo[];

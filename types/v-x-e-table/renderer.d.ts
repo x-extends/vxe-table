@@ -52,12 +52,14 @@ export namespace VxeGlobalRendererHandles {
 
   export type RenderFilterOptions = VxeColumnPropTypes.FilterRender;
 
+  export interface RenderParams {}
+
   export type RenderFilterParams = {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $panel: VxeFilterPanel;
-    column: VxeTableDefines.ColumnInfo & {
+    column: {
       filters: VxeTableDefines.FilterOption[];
-    };
+    } & VxeTableDefines.ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
     $rowIndex: number;
@@ -133,6 +135,7 @@ export namespace VxeGlobalRendererHandles {
     column: VxeTableDefines.ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
+    rowid: string;
     row: RowInfo;
     rowIndex: number;
     $rowIndex: number;
@@ -147,6 +150,7 @@ export namespace VxeGlobalRendererHandles {
     column: VxeTableDefines.ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
+    rowid: string;
     row: RowInfo;
     rowIndex: number;
     $rowIndex: number;
@@ -210,6 +214,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderOptionProps {
     value?: string;
     label?: string;
+    key?: string;
   }
 
   /**
@@ -218,6 +223,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderOptionGroupProps {
     options?: string;
     label?: string;
+    key?: string;
   }
 }
 

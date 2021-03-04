@@ -3,7 +3,7 @@
     <p class="tip">表格搜索功能，非常简单就可以实现表格内容搜索<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-input v-model="demo1.filterName" type="search" placeholder="试试全表搜索" @keyup="searchEvent1"></vxe-input>
       </template>
     </vxe-toolbar>
@@ -17,7 +17,7 @@
       <vxe-table-column field="role" title="Role" type="html"></vxe-table-column>
       <vxe-table-column field="age" title="Age" type="html"></vxe-table-column>
       <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
-      <template v-slot:empty>
+      <template #empty>
         <span style="color: red;">
           <img src="/vxe-table/static/other/img2.gif">
           <p>没有更多数据了！</p>
@@ -36,7 +36,7 @@
     <p class="tip">树表格搜索功能，非常简单就可以实现树表格内容搜索<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-input v-model="demo2.filterName" type="search" placeholder="试试全表搜索" @keyup="searchEvent2"></vxe-input>
       </template>
     </vxe-toolbar>
@@ -51,7 +51,7 @@
       <vxe-table-column field="size" title="Size" type="html"></vxe-table-column>
       <vxe-table-column field="type" title="Type" type="html"></vxe-table-column>
       <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
-      <template v-slot:empty>
+      <template #empty>
         <span style="color: red;">
           <img src="/vxe-table/static/other/img1.gif">
           <p>搜索不到数据，可能输入的关键字姿势不对！</p>
@@ -182,7 +182,7 @@ export default defineComponent({
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-input v-model="demo1.filterName" type="search" placeholder="试试全表搜索" @keyup="searchEvent1"></vxe-input>
           </template>
         </vxe-toolbar>
@@ -196,7 +196,7 @@ export default defineComponent({
           <vxe-table-column field="role" title="Role" type="html"></vxe-table-column>
           <vxe-table-column field="age" title="Age" type="html"></vxe-table-column>
           <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
-          <template v-slot:empty>
+          <template #empty>
             <span style="color: red;">
               <img src="/vxe-table/static/other/img2.gif">
               <p>没有更多数据了！</p>
@@ -262,7 +262,7 @@ export default defineComponent({
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-input v-model="demo2.filterName" type="search" placeholder="试试全表搜索" @keyup="searchEvent2"></vxe-input>
           </template>
         </vxe-toolbar>
@@ -277,7 +277,7 @@ export default defineComponent({
           <vxe-table-column field="size" title="Size" type="html"></vxe-table-column>
           <vxe-table-column field="type" title="Type" type="html"></vxe-table-column>
           <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
-          <template v-slot:empty>
+          <template #empty>
             <span style="color: red;">
               <img src="/vxe-table/static/other/img1.gif">
               <p>搜索不到数据，可能输入的关键字姿势不对！</p>

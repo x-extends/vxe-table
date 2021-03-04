@@ -18,7 +18,7 @@
     </vxe-table>
 
     <vxe-modal v-model="demo1.showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
-      <template v-slot>
+      <template #default>
         <vxe-table
           border="inner"
           auto-resize
@@ -94,7 +94,7 @@ export default defineComponent({
         </vxe-table>
 
         <vxe-modal v-model="demo1.showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
-          <template v-slot>
+          <template #default>
             <vxe-table
               border="inner"
               auto-resize

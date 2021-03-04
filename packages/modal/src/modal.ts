@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, onBeforeMount, watch, PropType } from 'vue'
+import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, onBeforeMount, watch, PropType, VNode } from 'vue'
 import XEUtils from 'xe-utils/ctor'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
@@ -25,7 +25,7 @@ export default defineComponent({
     position: [String, Object] as PropType<VxeModalPropTypes.Position>,
     title: String as PropType<VxeModalPropTypes.Title>,
     duration: { type: [Number, String] as PropType<VxeModalPropTypes.Duration>, default: () => GlobalConfig.modal.duration },
-    message: [Number, String] as PropType<VxeModalPropTypes.Message>,
+    message: [Number, String, Function] as PropType<VxeModalPropTypes.Message>,
     cancelButtonText: { type: String as PropType<VxeModalPropTypes.CancelButtonText>, default: () => GlobalConfig.modal.cancelButtonText },
     confirmButtonText: { type: String as PropType<VxeModalPropTypes.ConfirmButtonText>, default: () => GlobalConfig.modal.confirmButtonText },
     lockView: { type: Boolean as PropType<VxeModalPropTypes.LockView>, default: () => GlobalConfig.modal.lockView },
@@ -716,7 +716,7 @@ export default defineComponent({
     }
 
     const renderBodys = () => {
-      const { slots: propSlots = {}, status } = props
+      const { slots: propSlots = {}, status, message } = props
       const isMsg = computeIsMsg.value
       const defaultSlot = slots.default || propSlots.default
       const contVNs: any[] = []
@@ -734,7 +734,7 @@ export default defineComponent({
       contVNs.push(
         h('div', {
           class: 'vxe-modal--content'
-        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) : UtilTools.getFuncText(props.message))
+        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) : (XEUtils.isFunction(message) ? message({ $modal: $xemodal }) as VNode[] : UtilTools.getFuncText(message)))
       )
       if (!isMsg) {
         contVNs.push(

@@ -9,31 +9,38 @@
       <template #buttons>
         <vxe-button @click="demo1.tableData = []">清空数据</vxe-button>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
+        <vxe-button @click="demo1.align = 'left'">居左</vxe-button>
+        <vxe-button @click="demo1.align = 'center'">居中</vxe-button>
+        <vxe-button @click="demo1.align = 'right'">居右</vxe-button>
       </template>
     </vxe-toolbar>
 
     <vxe-table
       border
+      show-footer
       ref="xTable"
       height="400"
+      :align="demo1.align"
       :loading="demo1.loading"
       :import-config="demo1.tableImport"
       :export-config="demo1.tableExport"
+      :footer-method="footerMethod"
       :merge-cells="demo1.mergeCells"
+      :merge-footer-items="demo1.mergeFooterItems"
       :data="demo1.tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-colgroup title="Group1">
         <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-        <vxe-table-column field="role" title="Role"></vxe-table-column>
+        <vxe-table-column field="rate" title="Rate"></vxe-table-column>
         <vxe-table-colgroup title="Group2">
           <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="other" title="默认自动转换" cell-type="auto"></vxe-table-column>
+          <vxe-table-column field="num" title="Num"></vxe-table-column>
         </vxe-table-colgroup>
       </vxe-table-colgroup>
       <vxe-table-colgroup title="Group1">
-        <vxe-table-column field="num" title="导出数值" cell-type="number"></vxe-table-column>
-        <vxe-table-column field="cardNo" title="导出字符串" cell-type="string"></vxe-table-column>
+        <vxe-table-column field="num1" title="数值类型" cell-type="number"></vxe-table-column>
+        <vxe-table-column field="num2" title="字符串类型" cell-type="string"></vxe-table-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -49,11 +56,13 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
 import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxeToolbarInstance } from '../../../../types/vxe-table'
+import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
     const demo1 = reactive({
       loading: false,
+      align: null as VxeTablePropTypes.Align,
       tableData: [] as any[],
       tableImport: {
         // 自定义类型
@@ -65,7 +74,8 @@ export default defineComponent({
         // 自定义类型
         types: ['xlsx', 'csv', 'html', 'xml', 'txt']
       } as VxeTablePropTypes.ExpandConfig,
-      mergeCells: [] as VxeTablePropTypes.MergeCell[]
+      mergeCells: [] as VxeTablePropTypes.MergeCells,
+      mergeFooterItems: [] as VxeTablePropTypes.MergeFooterItems
     })
 
     const xTable = ref({} as VxeTableInstance)
@@ -84,6 +94,33 @@ export default defineComponent({
       })
     }
 
+    const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
+      const means: string[] = []
+      const sums: string[] = []
+      columns.forEach((column, columnIndex) => {
+        if (columnIndex === 0) {
+          means.push('平均')
+          sums.push('和值')
+        } else {
+          let meanCell = '-'
+          let sumCell = '-'
+          switch (column.property) {
+            case 'rate':
+            case 'num':
+            case 'num1':
+            case 'num2':
+              meanCell = `${XEUtils.toInteger(XEUtils.mean(data, column.property))}`
+              sumCell = `${XEUtils.sum(data, column.property)}`
+              break
+          }
+          means.push(meanCell)
+          sums.push(sumCell)
+        }
+      })
+      // 返回一个二维数组的表尾合计
+      return [means, sums]
+    }
+
     nextTick(() => {
       const $table = xTable.value
       const $toolbar = xToolbar.value
@@ -93,19 +130,23 @@ export default defineComponent({
     demo1.loading = true
     setTimeout(() => {
       demo1.tableData = [
-        { name: 'name1', role: 'role1', sex: '0', num: '22', other: false, cardNo: '998' },
-        { name: 'name2', role: 'role2', sex: '1', num: 32, other: '备注666', cardNo: 10000 },
-        { name: 'name3', role: 'role3', sex: '1', num: 99999999999999, other: 10, cardNo: '62221234219637458563' },
-        { name: 'name4', role: 'role4', sex: '0', num: '28', other: '999.99', cardNo: '62227412123789459631' },
-        { name: 'name5', role: 'role5', sex: '1', num: 24, other: -1, cardNo: '62221234214752459631' },
-        { name: 'name6', role: 'role6', sex: '1', num: '10000', other: '99999999999999', cardNo: '62221267214853659622' },
-        { name: 'name7', role: 'role7', sex: '1', num: 10000000000000000, other: '只需998', cardNo: '62221237123480359633' },
-        { name: 'name8', role: 'role8', sex: '2', num: 9998, other: 10000000000000000, cardNo: '62221234018523736237' },
-        { name: 'name9', role: 'role9', sex: '1', num: 70000, other: 10000, cardNo: '62221230283686397412' }
+        { name: 'name1', role: 'role1', rate: 1, sex: '0', num: '22', num1: '22', num2: '22', cardNo: '998' },
+        { name: 'name2', role: 'role2', rate: 1, sex: '1', num: 32, num1: 32, num2: 32, cardNo: 10000 },
+        { name: 'name3', role: 'role3', rate: 6, sex: '1', num: 99999999999999, num1: 99999999999999, num2: 99999999999999, cardNo: '62221234219637458563' },
+        { name: 'name4', role: 'role4', rate: 3, sex: '0', num: '999.99', num1: '999.99', num2: '999.99', cardNo: '62227412123789459631' },
+        { name: 'name5', role: 'role5', rate: 1, sex: '1', num: -1, num1: -1, num2: -1, cardNo: '62221234214752459631' },
+        { name: 'name6', role: 'role6', rate: 4, sex: '1', num: '10000', num1: '10000', num2: '10000', cardNo: '62221267214853659622' },
+        { name: 'name7', role: 'role7', rate: 1, sex: '1', num: 10000000000000.001, num1: 10000000000000.001, num2: 10000000000000.001, cardNo: '62221237123480359633' },
+        { name: 'name8', role: 'role8', rate: 5, sex: '2', num: 9998, num1: 9998, num2: 9998, cardNo: '62221234018523736237' },
+        { name: 'name9', role: 'role9', rate: 8, sex: '1', num: 70000, num1: 70000, num2: 70000, cardNo: '62221230283686397412' }
       ]
       demo1.mergeCells = [
         { row: 1, col: 1, rowspan: 2, colspan: 2 },
         { row: 4, col: 3, rowspan: 1, colspan: 3 }
+      ]
+      demo1.mergeFooterItems = [
+        { row: 0, col: 1, rowspan: 2, colspan: 2 },
+        { row: 1, col: 5, rowspan: 1, colspan: 3 }
       ]
       demo1.loading = false
     }, 100)
@@ -116,48 +157,58 @@ export default defineComponent({
       xToolbar,
       formatterSex,
       exportDataEvent,
+      footerMethod,
       demoCodes: [
         `
         <vxe-toolbar ref="xToolbar" custom import export>
           <template #buttons>
             <vxe-button @click="demo1.tableData = []">清空数据</vxe-button>
             <vxe-button @click="exportDataEvent">导出数据</vxe-button>
+            <vxe-button @click="demo1.align = 'left'">居左</vxe-button>
+            <vxe-button @click="demo1.align = 'center'">居中</vxe-button>
+            <vxe-button @click="demo1.align = 'right'">居右</vxe-button>
           </template>
         </vxe-toolbar>
 
         <vxe-table
           border
+          show-footer
           ref="xTable"
           height="400"
+          :align="demo1.align"
           :loading="demo1.loading"
           :import-config="demo1.tableImport"
           :export-config="demo1.tableExport"
+          :footer-method="footerMethod"
           :merge-cells="demo1.mergeCells"
+          :merge-footer-items="demo1.mergeFooterItems"
           :data="demo1.tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-colgroup title="Group1">
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-            <vxe-table-column field="role" title="Role"></vxe-table-column>
+            <vxe-table-column field="rate" title="Rate"></vxe-table-column>
             <vxe-table-colgroup title="Group2">
               <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
-              <vxe-table-column field="other" title="默认自动转换" cell-type="auto"></vxe-table-column>
+              <vxe-table-column field="num" title="Num"></vxe-table-column>
             </vxe-table-colgroup>
           </vxe-table-colgroup>
           <vxe-table-colgroup title="Group1">
-            <vxe-table-column field="num" title="导出数值" cell-type="number"></vxe-table-column>
-            <vxe-table-column field="cardNo" title="导出字符串" cell-type="string"></vxe-table-column>
+            <vxe-table-column field="num1" title="数值类型" cell-type="number"></vxe-table-column>
+            <vxe-table-column field="num2" title="字符串类型" cell-type="string"></vxe-table-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,
         `
         import { defineComponent, reactive, ref, nextTick } from 'vue'
         import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxeToolbarInstance } from 'vxe-table'
+        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
             const demo1 = reactive({
               loading: false,
+              align: null as VxeTablePropTypes.Align,
               tableData: [] as any[],
               tableImport: {
                 // 自定义类型
@@ -169,7 +220,8 @@ export default defineComponent({
                 // 自定义类型
                 types: ['xlsx', 'csv', 'html', 'xml', 'txt']
               } as VxeTablePropTypes.ExpandConfig,
-              mergeCells: [] as VxeTablePropTypes.MergeCell[]
+              mergeCells: [] as VxeTablePropTypes.MergeCells,
+              mergeFooterItems: [] as VxeTablePropTypes.MergeFooterItems
             })
 
             const xTable = ref({} as VxeTableInstance)
@@ -188,6 +240,33 @@ export default defineComponent({
               })
             }
 
+            const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
+              const means: string[] = []
+              const sums: string[] = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  means.push('平均')
+                  sums.push('和值')
+                } else {
+                  let meanCell = '-'
+                  let sumCell = '-'
+                  switch (column.property) {
+                    case 'rate':
+                    case 'num':
+                    case 'num1':
+                    case 'num2':
+                      meanCell = \`\${XEUtils.toInteger(XEUtils.mean(data, column.property))}\`
+                      sumCell = \`\${XEUtils.sum(data, column.property)}\`
+                      break
+                  }
+                  means.push(meanCell)
+                  sums.push(sumCell)
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [means, sums]
+            }
+
             nextTick(() => {
               const $table = xTable.value
               const $toolbar = xToolbar.value
@@ -197,19 +276,23 @@ export default defineComponent({
             demo1.loading = true
             setTimeout(() => {
               demo1.tableData = [
-                { name: 'name1', role: 'role1', sex: '0', num: '22', other: false, cardNo: '998' },
-                { name: 'name2', role: 'role2', sex: '1', num: 32, other: '备注666', cardNo: 10000 },
-                { name: 'name3', role: 'role3', sex: '1', num: 99999999999999, other: 10, cardNo: '62221234219637458563' },
-                { name: 'name4', role: 'role4', sex: '0', num: '28', other: '999.99', cardNo: '62227412123789459631' },
-                { name: 'name5', role: 'role5', sex: '1', num: 24, other: -1, cardNo: '62221234214752459631' },
-                { name: 'name6', role: 'role6', sex: '1', num: '10000', other: '99999999999999', cardNo: '62221267214853659622' },
-                { name: 'name7', role: 'role7', sex: '1', num: 10000000000000000, other: '只需998', cardNo: '62221237123480359633' },
-                { name: 'name8', role: 'role8', sex: '2', num: 9998, other: 10000000000000000, cardNo: '62221234018523736237' },
-                { name: 'name9', role: 'role9', sex: '1', num: 70000, other: 10000, cardNo: '62221230283686397412' }
+                { name: 'name1', role: 'role1', rate: 1, sex: '0', num: '22', num1: '22', num2: '22', cardNo: '998' },
+                { name: 'name2', role: 'role2', rate: 1, sex: '1', num: 32, num1: 32, num2: 32, cardNo: 10000 },
+                { name: 'name3', role: 'role3', rate: 6, sex: '1', num: 99999999999999, num1: 99999999999999, num2: 99999999999999, cardNo: '62221234219637458563' },
+                { name: 'name4', role: 'role4', rate: 3, sex: '0', num: '999.99', num1: '999.99', num2: '999.99', cardNo: '62227412123789459631' },
+                { name: 'name5', role: 'role5', rate: 1, sex: '1', num: -1, num1: -1, num2: -1, cardNo: '62221234214752459631' },
+                { name: 'name6', role: 'role6', rate: 4, sex: '1', num: '10000', num1: '10000', num2: '10000', cardNo: '62221267214853659622' },
+                { name: 'name7', role: 'role7', rate: 1, sex: '1', num: 10000000000000.001, num1: 10000000000000.001, num2: 10000000000000.001, cardNo: '62221237123480359633' },
+                { name: 'name8', role: 'role8', rate: 5, sex: '2', num: 9998, num1: 9998, num2: 9998, cardNo: '62221234018523736237' },
+                { name: 'name9', role: 'role9', rate: 8, sex: '1', num: 70000, num1: 70000, num2: 70000, cardNo: '62221230283686397412' }
               ]
               demo1.mergeCells = [
                 { row: 1, col: 1, rowspan: 2, colspan: 2 },
                 { row: 4, col: 3, rowspan: 1, colspan: 3 }
+              ]
+              demo1.mergeFooterItems = [
+                { row: 0, col: 1, rowspan: 2, colspan: 2 },
+                { row: 1, col: 5, rowspan: 1, colspan: 3 }
               ]
               demo1.loading = false
             }, 100)
@@ -219,7 +302,8 @@ export default defineComponent({
               xTable,
               xToolbar,
               formatterSex,
-              exportDataEvent
+              exportDataEvent,
+              footerMethod
             }
           }
         })
