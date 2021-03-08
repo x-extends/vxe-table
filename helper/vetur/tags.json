@@ -125,6 +125,8 @@
       "filters",
       "filter-multiple",
       "filter-method",
+      "filter-reset-method",
+      "filter-recover-method",
       "filter-render",
       "export-method",
       "footer-export-method",
@@ -263,7 +265,7 @@
   },
   "vxe-radio": {
     "attributes": [
-      "v-model / value",
+      "v-model / model-value",
       "label",
       "content",
       "size",
@@ -274,7 +276,7 @@
   },
   "vxe-radio-group": {
     "attributes": [
-      "v-model / value",
+      "v-model / model-value",
       "size",
       "disabled"
     ],
@@ -282,7 +284,7 @@
   },
   "vxe-radio-button": {
     "attributes": [
-      "v-model / value",
+      "v-model / model-value",
       "label",
       "content",
       "disabled"
@@ -291,7 +293,7 @@
   },
   "vxe-checkbox": {
     "attributes": [
-      "v-model / value",
+      "v-model / model-value",
       "label",
       "content",
       "size",
@@ -303,7 +305,7 @@
   },
   "vxe-checkbox-group": {
     "attributes": [
-      "v-model / value",
+      "v-model / model-value",
       "size",
       "disabled"
     ],
@@ -311,7 +313,7 @@
   },
   "vxe-switch": {
     "attributes": [
-      "v-model / value",
+      "v-model / model-value",
       "disabled",
       "size",
       "open-label",
@@ -325,7 +327,7 @@
   },
   "vxe-input": {
     "attributes": [
-      "v-model / value",
+      "v-model / model-value",
       "size",
       "type",
       "name",
@@ -348,7 +350,6 @@
       "max-date",
       "start-week",
       "label-format",
-      "parse-format",
       "value-format",
       "editable",
       "disabled-method",
@@ -359,7 +360,7 @@
   },
   "vxe-select": {
     "attributes": [
-      "v-model / value",
+      "v-model / model-value",
       "size",
       "multiple",
       "multi-char-overflow",
@@ -436,7 +437,7 @@
   },
   "vxe-modal": {
     "attributes": [
-      "v-model / value",
+      "v-model / model-value",
       "size",
       "loading",
       "id",
