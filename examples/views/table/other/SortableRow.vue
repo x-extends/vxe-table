@@ -326,7 +326,7 @@ export default {
                       tableTreeData.unshift(currRow)
                     }
                     // 如果变动了树层级，需要刷新数据
-                    xTable.syncData()
+                    this.tableTreeData = [...tableTreeData]
                   }
                 })
               })
@@ -409,7 +409,7 @@ export default {
               tableTreeData.unshift(currRow)
             }
             // 如果变动了树层级，需要刷新数据
-            xTable.syncData()
+            this.tableTreeData = [...tableTreeData]
           }
         })
       })
