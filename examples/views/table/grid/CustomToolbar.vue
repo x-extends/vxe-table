@@ -16,7 +16,7 @@
       :columns="tableColumn"
       :toolbar-config="tableToolbar"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
         <vxe-button status="primary" @click="loadData">搜索</vxe-button>
         <vxe-button @click="loadData">刷新</vxe-button>
@@ -85,7 +85,7 @@ export default {
           :columns="tableColumn"
           :toolbar-config="tableToolbar"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
             <vxe-button status="primary" @click="loadData">搜索</vxe-button>
             <vxe-button @click="loadData">刷新</vxe-button>

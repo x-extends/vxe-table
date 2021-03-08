@@ -24,20 +24,20 @@
       @checkbox-change="checkboxChangeEvent"
       @checkbox-all="checkboxChangeEvent">
       <!--使用 form 插槽-->
-      <template v-slot:form>
+      <template #form>
         <vxe-form :data="formData" @submit="searchEvent">
           <vxe-form-item title="名称" field="name">
-            <template v-slot>
+            <template #default>
               <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="昵称" field="nickname">
-            <template v-slot>
+            <template #default>
               <vxe-input v-model="formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex">
-            <template v-slot>
+            <template #default>
               <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
                 <vxe-option value="1" label="女"></vxe-option>
                 <vxe-option value="2" label="男"></vxe-option>
@@ -45,7 +45,7 @@
             </template>
           </vxe-form-item>
           <vxe-form-item>
-            <template v-slot>
+            <template #default>
               <vxe-button status="primary">查询</vxe-button>
             </template>
           </vxe-form-item>
@@ -53,15 +53,15 @@
       </template>
 
       <!--自定义插槽 toolbar buttons 插槽-->
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-form>
           <vxe-form-item>
-            <template v-slot>
+            <template #default>
               <vxe-input placeholder="搜索"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item>
-            <template v-slot>
+            <template #default>
               <vxe-button status="primary">查询</vxe-button>
             </template>
           </vxe-form-item>
@@ -69,12 +69,12 @@
       </template>
 
       <!--自定义插槽 toolbar tools 插槽-->
-      <template v-slot:toolbar_tools>
+      <template #toolbar_tools>
         <vxe-input placeholder="搜索"></vxe-input>
       </template>
 
       <!--使用 top 插槽-->
-      <template v-slot:top>
+      <template #top>
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
@@ -84,7 +84,7 @@
       </template>
 
       <!--自定义插槽 Number-->
-      <template v-slot:num_default="{ row, rowIndex }">
+      <template #num_default="{ row, rowIndex }">
         <template v-if="rowIndex === 2">
           <vxe-switch v-model="row.flag"></vxe-switch>
         </template>
@@ -95,29 +95,29 @@
           <span>{{ row.num1 }}</span>
         </template>
       </template>
-      <template v-slot:num_footer="{ items, _columnIndex }">
+      <template #num_footer="{ items, _columnIndex }">
         <span style="color: red">合计：{{ items[_columnIndex] }}</span>
       </template>
 
-      <template v-slot:num1_default="{ row }">
+      <template #num1_default="{ row }">
         <span>￥{{ row.num1 }}元</span>
       </template>
 
-      <template v-slot:num1_height="{ column }">
+      <template #num1_height="{ column }">
         <span>
           <i>@</i>
           <span style="color: red;" @click="headerClickEvent">{{ column.title }}</span>
         </span>
       </template>
 
-      <template v-slot:num1_footer="{ items, _columnIndex }">
+      <template #num1_footer="{ items, _columnIndex }">
         <span>
           <vxe-button status="primary" size="mini">自定义</vxe-button>
           <span>累计：{{ items[_columnIndex] }}</span>
         </span>
       </template>
 
-      <template v-slot:num1_filter="{ column, $panel }">
+      <template #num1_filter="{ column, $panel }">
         <div>
           <div v-for="(option, index) in column.filters" :key="index">
             <input type="type" v-model="option.data" @input="changeFilterEvent(evnt, option, $panel)"/>
@@ -125,17 +125,17 @@
         </div>
       </template>
 
-      <template v-slot:num1_edit="{ row }">
+      <template #num1_edit="{ row }">
         <input type="number" class="my-input" v-model="row.num1" />
       </template>
 
-      <template v-slot:img1_default="{ row }">
+      <template #img1_default="{ row }">
         <img v-if="row.img1" :src="row.img1" style="width: 100px;"/>
         <span v-else>无</span>
       </template>
 
       <!--使用 bottom 插槽-->
-      <template v-slot:bottom>
+      <template #bottom>
         <div class="alert-message">
           <i class="fa fa-exclamation-circle alert-message-icon"></i>
           <span class="alert-message-content">
@@ -145,13 +145,13 @@
       </template>
 
       <!--自定义插槽 pager 插槽-->
-      <template v-slot:pager>
+      <template #pager>
         <vxe-pager
           perfect
           :current-page="tablePage.currentPage"
           :page-size="tablePage.pageSize"
           :total="tablePage.totalResult">
-          <template v-slot:left>
+          <template #left>
             <span class="page-left">
               <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
               <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
@@ -159,8 +159,8 @@
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
               <vxe-button size="small">
-                <template v-slot>更多操作</template>
-                <template v-slot:dropdowns>
+                <template #default>更多操作</template>
+                <template #dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
                   <vxe-button type="text">批量删除</vxe-button>
@@ -168,7 +168,7 @@
               </vxe-button>
             </span>
           </template>
-          <template v-slot:right>
+          <template #right>
             <span>
               <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
               <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
@@ -182,7 +182,7 @@
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-      <template v-slot>
+      <template #default>
         <div v-if="selectRow" v-html="selectRow.html3"></div>
       </template>
     </vxe-modal>
@@ -288,20 +288,20 @@ export default {
           @checkbox-change="checkboxChangeEvent"
           @checkbox-all="checkboxChangeEvent">
           <!--使用 form 插槽-->
-          <template v-slot:form>
+          <template #form>
             <vxe-form :data="formData" @submit="searchEvent">
               <vxe-form-item title="名称" field="name">
-                <template v-slot>
+                <template #default>
                   <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
                 </template>
               </vxe-form-item>
               <vxe-form-item title="昵称" field="nickname">
-                <template v-slot>
+                <template #default>
                   <vxe-input v-model="formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
                 </template>
               </vxe-form-item>
               <vxe-form-item title="性别" field="sex">
-                <template v-slot>
+                <template #default>
                   <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
                     <vxe-option value="1" label="女"></vxe-option>
                     <vxe-option value="2" label="男"></vxe-option>
@@ -309,7 +309,7 @@ export default {
                 </template>
               </vxe-form-item>
               <vxe-form-item>
-                <template v-slot>
+                <template #default>
                   <vxe-button status="primary">查询</vxe-button>
                 </template>
               </vxe-form-item>
@@ -317,15 +317,15 @@ export default {
           </template>
 
           <!--自定义插槽 toolbar buttons 插槽-->
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-form>
               <vxe-form-item>
-                <template v-slot>
+                <template #default>
                   <vxe-input placeholder="搜索"></vxe-input>
                 </template>
               </vxe-form-item>
               <vxe-form-item>
-                <template v-slot>
+                <template #default>
                   <vxe-button status="primary">查询</vxe-button>
                 </template>
               </vxe-form-item>
@@ -333,12 +333,12 @@ export default {
           </template>
 
           <!--自定义插槽 toolbar tools 插槽-->
-          <template v-slot:toolbar_tools>
+          <template #toolbar_tools>
             <vxe-input placeholder="搜索"></vxe-input>
           </template>
 
           <!--使用 top 插槽-->
-          <template v-slot:top>
+          <template #top>
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
@@ -348,7 +348,7 @@ export default {
           </template>
 
           <!--自定义插槽 Number-->
-          <template v-slot:num_default="{ row, rowIndex }">
+          <template #num_default="{ row, rowIndex }">
             <template v-if="rowIndex === 2">
               <vxe-switch v-model="row.flag"></vxe-switch>
             </template>
@@ -359,29 +359,29 @@ export default {
               <span>{{ row.num1 }}</span>
             </template>
           </template>
-          <template v-slot:num_footer="{ items, _columnIndex }">
+          <template #num_footer="{ items, _columnIndex }">
             <span style="color: red">合计：{{ items[_columnIndex] }}</span>
           </template>
 
-          <template v-slot:num1_default="{ row }">
+          <template #num1_default="{ row }">
             <span>￥{{ row.num1 }}元</span>
           </template>
 
-          <template v-slot:num1_height="{ column }">
+          <template #num1_height="{ column }">
             <span>
               <i>@</i>
               <span style="color: red;" @click="headerClickEvent">{{ column.title }}</span>
             </span>
           </template>
 
-          <template v-slot:num1_footer="{ items, _columnIndex }">
+          <template #num1_footer="{ items, _columnIndex }">
             <span>
               <vxe-button status="primary" size="mini">自定义</vxe-button>
               <span>累计：{{ items[_columnIndex] }}</span>
             </span>
           </template>
 
-          <template v-slot:num1_filter="{ column, $panel }">
+          <template #num1_filter="{ column, $panel }">
             <div>
               <div v-for="(option, index) in column.filters" :key="index">
                 <input type="type" v-model="option.data" @input="changeFilterEvent(evnt, option, $panel)"/>
@@ -389,17 +389,17 @@ export default {
             </div>
           </template>
 
-          <template v-slot:num1_edit="{ row }">
+          <template #num1_edit="{ row }">
             <input type="number" class="my-input" v-model="row.num1" />
           </template>
 
-          <template v-slot:img1_default="{ row }">
+          <template #img1_default="{ row }">
             <img v-if="row.img1" :src="row.img1" style="width: 100px;"/>
             <span v-else>无</span>
           </template>
 
           <!--使用 bottom 插槽-->
-          <template v-slot:bottom>
+          <template #bottom>
             <div class="alert-message">
               <i class="fa fa-exclamation-circle alert-message-icon"></i>
               <span class="alert-message-content">
@@ -409,13 +409,13 @@ export default {
           </template>
 
           <!--自定义插槽 pager 插槽-->
-          <template v-slot:pager>
+          <template #pager>
             <vxe-pager
               perfect
               :current-page="tablePage.currentPage"
               :page-size="tablePage.pageSize"
               :total="tablePage.totalResult">
-              <template v-slot:left>
+              <template #left>
                 <span class="page-left">
                   <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
                   <span class="select-count">已选中 {{ selectRecords.length }} 条</span>
@@ -423,8 +423,8 @@ export default {
                   <vxe-button>管理</vxe-button>
                   <vxe-button>删除</vxe-button>
                   <vxe-button size="small">
-                    <template v-slot>更多操作</template>
-                    <template v-slot:dropdowns>
+                    <template #default>更多操作</template>
+                    <template #dropdowns>
                       <vxe-button type="text">批量修改</vxe-button>
                       <vxe-button type="text">批量管理</vxe-button>
                       <vxe-button type="text">批量删除</vxe-button>
@@ -432,7 +432,7 @@ export default {
                   </vxe-button>
                 </span>
               </template>
-              <template v-slot:right>
+              <template #right>
                 <span>
                   <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
                   <img src="/vxe-table/static/other/img1.gif" style="height: 30px;" />
@@ -446,12 +446,14 @@ export default {
         </vxe-grid>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-          <template v-slot>
+          <template #default>
             <div v-if="selectRow" v-html="selectRow.html3"></div>
           </template>
         </vxe-modal>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

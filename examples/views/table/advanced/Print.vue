@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="printEvent1">打印</vxe-button>
         <vxe-button @click="printSelectEvent">打印选中</vxe-button>
         <vxe-button @click="printEvent2">高级打印</vxe-button>
@@ -61,7 +61,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="printEvent1">打印</vxe-button>
             <vxe-button @click="printSelectEvent">打印选中</vxe-button>
             <vxe-button @click="printEvent2">高级打印</vxe-button>
@@ -89,6 +89,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

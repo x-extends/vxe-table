@@ -33,7 +33,7 @@
     <p class="tip">分组表头与固定列</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="toggleFixedColumn('group0', 'left')">切换第一列固定</vxe-button>
         <vxe-button @click="toggleFixedColumn('group1', 'left')">切换第二列固定</vxe-button>
         <vxe-button @click="toggleFixedColumn('group3', 'right')">切换第四列固定</vxe-button>
@@ -138,7 +138,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="toggleFixedColumn('group0', 'left')">切换第一列固定</vxe-button>
             <vxe-button @click="toggleFixedColumn('group1', 'left')">切换第二列固定</vxe-button>
             <vxe-button @click="toggleFixedColumn('group3', 'right')">切换第四列固定</vxe-button>
@@ -176,6 +176,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

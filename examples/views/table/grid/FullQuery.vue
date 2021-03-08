@@ -5,7 +5,7 @@
     <vxe-grid ref="xGrid" v-bind="gridOptions">
 
       <!--将表单放在工具栏中-->
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-form :data="formData" @submit="searchEvent" @reset="resetEvent">
           <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
           <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }"></vxe-form-item>
@@ -13,7 +13,7 @@
       </template>
 
       <!--自定义空数据模板-->
-      <template v-slot:empty>
+      <template #empty>
         <span style="color: red;">
           <img src="/vxe-table/static/other/img1.gif">
           <p>没有更多数据了！</p>
@@ -149,7 +149,7 @@ export default {
         <vxe-grid ref="xGrid" v-bind="gridOptions">
 
           <!--将表单放在工具栏中-->
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-form :data="formData" @submit="searchEvent" @reset="resetEvent">
               <vxe-form-item field="name" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
               <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }"></vxe-form-item>
@@ -157,7 +157,7 @@ export default {
           </template>
 
           <!--自定义空数据模板-->
-          <template v-slot:empty>
+          <template #empty>
             <span style="color: red;">
               <img src="/vxe-table/static/other/img1.gif">
               <p>没有更多数据了！</p>
@@ -166,6 +166,8 @@ export default {
         </vxe-grid>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

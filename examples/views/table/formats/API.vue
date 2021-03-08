@@ -67,6 +67,9 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        import VXETable from 'vxe-table'
+
         // 格式金额，默认2位数
         VXETable.formats.add('myAmount', ({ cellValue }, digits = 2) => {
           return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })

@@ -8,7 +8,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="loadList(10000)">1w条</vxe-button>
         <vxe-button @click="loadList(50000)">5w条</vxe-button>
         <vxe-button @click="loadList(100000)">10w条</vxe-button>
@@ -86,7 +86,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar export>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="loadList(10000)">1w条</vxe-button>
             <vxe-button @click="loadList(50000)">5w条</vxe-button>
             <vxe-button @click="loadList(100000)">10w条</vxe-button>

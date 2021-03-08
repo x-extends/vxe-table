@@ -10,7 +10,7 @@
       :columns="tableColumn"
       :data="tableData">
       <!--使用自定义模板-->
-      <template v-slot:fileExpand="{ row }">
+      <template #fileExpand="{ row }">
         <ul v-if="row.fileList.length" class="file-list">
           <li v-for="(file, index) in row.fileList" :key="index">
             <span>{{ file.name }}</span>
@@ -21,10 +21,10 @@
         </ul>
         <div v-else class="file-empty">暂无附件</div>
       </template>
-      <template v-slot:cellExpand="{ row }">
+      <template #cellExpand="{ row }">
         <span>（{{ row.fileList.length }}）</span>
       </template>
-      <template v-slot:operation="{ row }">
+      <template #operation="{ row }">
         <vxe-button status="primary" @click="uploadFileEvent(row)">添加附件</vxe-button>
       </template>
     </vxe-grid>
@@ -67,7 +67,7 @@ export default {
           :columns="tableColumn"
           :data="tableData">
           <!--使用自定义模板-->
-          <template v-slot:fileExpand="{ row }">
+          <template #fileExpand="{ row }">
             <ul v-if="row.fileList.length" class="file-list">
               <li v-for="(file, index) in row.fileList" :key="index">
                 <span>{{ file.name }}</span>
@@ -78,15 +78,17 @@ export default {
             </ul>
             <div v-else class="file-empty">暂无附件</div>
           </template>
-          <template v-slot:cellExpand="{ row }">
+          <template #cellExpand="{ row }">
             <span>（{{ row.fileList.length }}）</span>
           </template>
-          <template v-slot:operation="{ row }">
+          <template #operation="{ row }">
             <vxe-button status="primary" @click="uploadFileEvent(row)">添加附件</vxe-button>
           </template>
         </vxe-grid>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

@@ -13,7 +13,7 @@
       :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
       :columns="tableColumn"
       :data="tableData">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="$refs.xVTree.toggleTreeExpand(tableData[0], true)">切换第一个</vxe-button>
         <vxe-button @click="$refs.xVTree.setTreeExpand(tableData[2], true)">展开第三个</vxe-button>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
@@ -57,7 +57,7 @@ export default {
           :checkbox-config="{labelField: 'id', checkField: 'checked', halfField: 'indeterminate'}"
           :columns="tableColumn"
           :data="tableData">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="$refs.xVTree.toggleTreeExpand(tableData[0], true)">切换第一个</vxe-button>
             <vxe-button @click="$refs.xVTree.setTreeExpand(tableData[2], true)">展开第三个</vxe-button>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>

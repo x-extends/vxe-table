@@ -3,10 +3,10 @@
     <p class="tip">可编辑表格</p>
 
     <vxe-toolbar export :refresh="{query: findList}">
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button>
-          <template v-slot>新增操作</template>
-          <template v-slot:dropdowns>
+          <template #default>新增操作</template>
+          <template #dropdowns>
             <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
             <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
             <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
@@ -14,8 +14,8 @@
           </template>
         </vxe-button>
         <vxe-button>
-          <template v-slot>删除操作</template>
-          <template v-slot:dropdowns>
+          <template #default>删除操作</template>
+          <template #dropdowns>
             <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
             <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>
@@ -77,10 +77,10 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar export :refresh="{query: findList}">
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button>
-              <template v-slot>新增操作</template>
-              <template v-slot:dropdowns>
+              <template #default>新增操作</template>
+              <template #dropdowns>
                 <vxe-button type="text" @click="insertEvent(null)">从第一行插入</vxe-button>
                 <vxe-button type="text" @click="insertEvent(-1)">从最后插入</vxe-button>
                 <vxe-button type="text" @click="insertEvent($refs.xTable.getData(100))">插入到 100 行</vxe-button>
@@ -88,8 +88,8 @@ export default {
               </template>
             </vxe-button>
             <vxe-button>
-              <template v-slot>删除操作</template>
-              <template v-slot:dropdowns>
+              <template #default>删除操作</template>
+              <template #dropdowns>
                 <vxe-button type="text" @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
                 <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData(0))">删除第一行</vxe-button>
                 <vxe-button type="text" @click="$refs.xTable.remove($refs.xTable.getData($refs.xTable.getData().length - 1))">删除最后一行</vxe-button>

@@ -13,7 +13,7 @@
       :edit-config="{trigger: 'click', mode: 'row'}"
       :data="tableData"
       :columns="tableColumn">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="insertEvent()">新增</vxe-button>
         <vxe-button @click="removeSelectEvent()">删除选中</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -68,7 +68,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row'}"
           :data="tableData"
           :columns="tableColumn">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="insertEvent()">新增</vxe-button>
             <vxe-button @click="removeSelectEvent()">删除选中</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -78,6 +78,8 @@ export default {
         </vxe-virtual-tree>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

@@ -95,6 +95,9 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        import Sortable from 'sortablejs'
+
         export default {
           data () {
             return {
@@ -169,6 +172,9 @@ export default {
           :data="tableData"></vxe-grid>
         `,
         `
+        import XEUtils from 'xe-utils'
+        import Sortable from 'sortablejs'
+
         export default {
           data () {
             return {

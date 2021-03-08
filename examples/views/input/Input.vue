@@ -53,22 +53,22 @@
 
     <p>
       <vxe-input v-model="value600" placeholder="自定义前缀图标">
-        <template v-slot:prefix>
+        <template #prefix>
           <i class="fa fa-search my-red"></i>
         </template>
       </vxe-input>
       <vxe-input v-model="value601" placeholder="自定义后缀图标">
-        <template v-slot:suffix>
+        <template #suffix>
           <i class="fa fa-search my-green"></i>
         </template>
       </vxe-input>
       <vxe-input v-model="value602" class="my-domain" placeholder="自定义前缀模板">
-        <template v-slot:prefix>
+        <template #prefix>
           <span>Http://</span>
         </template>
       </vxe-input>
       <vxe-input v-model="value603" class="my-search" placeholder="自定义后缀模板">
-        <template v-slot:suffix>
+        <template #suffix>
           <i class="fa fa-search"></i>
         </template>
       </vxe-input>
@@ -250,28 +250,30 @@ export default {
 
         <p>
           <vxe-input v-model="value600" placeholder="自定义前缀图标">
-            <template v-slot:prefix>
+            <template #prefix>
               <i class="fa fa-search my-red"></i>
             </template>
           </vxe-input>
           <vxe-input v-model="value601" placeholder="自定义后缀图标">
-            <template v-slot:suffix>
+            <template #suffix>
               <i class="fa fa-search my-green"></i>
             </template>
           </vxe-input>
           <vxe-input v-model="value602" class="my-domain" placeholder="自定义前缀模板">
-            <template v-slot:prefix>
+            <template #prefix>
               <span>Http://</span>
             </template>
           </vxe-input>
           <vxe-input v-model="value603" class="my-search" placeholder="自定义后缀模板">
-            <template v-slot:suffix>
+            <template #suffix>
               <i class="fa fa-search"></i>
             </template>
           </vxe-input>
         </p>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

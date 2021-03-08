@@ -1,24 +1,24 @@
 <template>
   <vxe-form :data="formData" @submit="searchEvent">
     <vxe-form-item field="name" title="名称">
-      <template v-slot>
+      <template #default>
         <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
       </template>
     </vxe-form-item>
     <vxe-form-item field="sex" title="性别">
-      <template v-slot>
+      <template #default>
         <select class="vxe-select" v-model="formData.sex">
           <option v-for="(item, index) in sexList" :key="index" :value="item.value">{{ item.label }}</option>
         </select>
       </template>
     </vxe-form-item>
     <vxe-form-item field="role" title="角色">
-      <template v-slot>
+      <template #default>
         <vxe-input v-model="formData.role" placeholder="请输入角色" clearable></vxe-input>
       </template>
     </vxe-form-item>
     <vxe-form-item>
-      <template v-slot>
+      <template #default>
         <vxe-button type="submit" status="primary">搜索</vxe-button>
       </template>
     </vxe-form-item>

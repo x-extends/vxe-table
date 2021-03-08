@@ -5,7 +5,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
         <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree1.clearTreeExpand()">关闭所有</vxe-button>
@@ -40,7 +40,7 @@
       :tree-config="{children: 'children', iconOpen: 'fa fa-minus-circle', iconClose: 'fa fa-plus-circle'}"
       :data="tableData">
       <vxe-table-column field="name" title="Name" tree-node>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>
             <template v-if="row.children && row.children.length">
               <i class="tree-node-icon fa" :class="$refs.xTree2.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
@@ -122,7 +122,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
             <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
@@ -191,7 +191,7 @@ export default {
           :tree-config="{children: 'children', iconOpen: 'fa fa-minus-circle', iconClose: 'fa fa-plus-circle'}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" tree-node>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>
                 <template v-if="row.children && row.children.length">
                   <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>

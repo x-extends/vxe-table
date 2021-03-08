@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar custom>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="insertEvent()">插入第一行</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
         <vxe-button @click="saveEvent">保存</vxe-button>
@@ -79,7 +79,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar custom>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="insertEvent()">插入第一行</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
             <vxe-button @click="saveEvent">保存</vxe-button>
@@ -103,6 +103,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

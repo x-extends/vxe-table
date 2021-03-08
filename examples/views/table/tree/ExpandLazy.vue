@@ -12,7 +12,7 @@
       :data="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column type="expand" width="80">
-        <template v-slot:content="{ row }">
+        <template #content="{ row }">
           <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
         </template>
       </vxe-table-column>
@@ -74,7 +74,7 @@ export default {
           :data="tableData">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column type="expand" width="80">
-            <template v-slot:content="{ row }">
+            <template #content="{ row }">
               <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
             </template>
           </vxe-table-column>
@@ -84,6 +84,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

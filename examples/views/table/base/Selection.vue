@@ -3,7 +3,7 @@
     <p class="tip">多选表格，用户手动勾选时会触发事件 <table-api-link prop="checkbox-change"/></p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable1.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable1.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xTable1.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
@@ -37,7 +37,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
         <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
@@ -86,7 +86,7 @@
     <p class="tip">多选表格，通过配置 <table-api-link prop="trigger"/> 设置触发源，使用渲染最快的 <table-api-link prop="checkField"/> 属性绑定方式</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable4.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable4.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xTable4.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
@@ -144,7 +144,7 @@
     <p class="tip">通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，启用后 <table-api-link prop="showHeader"/> 默认为 false</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable6.setCheckboxRow(tableData, true)">设置所有行选中</vxe-button>
         <vxe-button @click="$refs.xTable6.clearCheckboxRow()">清除所有行选中</vxe-button>
       </template>
@@ -234,7 +234,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable1.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable1.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xTable1.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
@@ -285,7 +285,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
             <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable2.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
@@ -358,7 +358,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable4.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable4.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xTable4.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
@@ -428,7 +428,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable6.setCheckboxRow(tableData, true)">设置所有行选中</vxe-button>
             <vxe-button @click="$refs.xTable6.clearCheckboxRow()">清除所有行选中</vxe-button>
           </template>

@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="impotEvent">选择文件</vxe-button>
       </template>
     </vxe-toolbar>
@@ -31,7 +31,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="exportEvent">导出.xlsx</vxe-button>
       </template>
     </vxe-toolbar>
@@ -83,7 +83,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="impotEvent">选择文件</vxe-button>
           </template>
         </vxe-toolbar>
@@ -154,7 +154,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="exportEvent">导出.xlsx</vxe-button>
           </template>
         </vxe-toolbar>

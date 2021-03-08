@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar custom>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button>按钮1</vxe-button>
         <vxe-button>按钮2</vxe-button>
       </template>
@@ -42,7 +42,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar custom>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button>按钮1</vxe-button>
             <vxe-button>按钮2</vxe-button>
           </template>

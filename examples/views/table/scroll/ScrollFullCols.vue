@@ -18,7 +18,7 @@
       :loading="loading"
       :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :checkbox-config="{checkField: 'checked', labelField: 'name'}">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
         <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
@@ -72,7 +72,7 @@ export default {
           :loading="loading"
           :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :checkbox-config="{checkField: 'checked', labelField: 'name'}">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
             <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
             <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>

@@ -9,7 +9,7 @@
       height="400"
       v-model="modalVisible"
       @confirm="confirmEvent">
-      <template v-slot>
+      <template #default>
         <vxe-grid
           highlight-hover-row
           auto-resize

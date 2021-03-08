@@ -15,7 +15,7 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       @menu-click="contextMenuClickEvent">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
     </vxe-grid>
@@ -88,12 +88,14 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           @menu-click="contextMenuClickEvent">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>
         </vxe-grid>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

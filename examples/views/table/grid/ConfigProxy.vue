@@ -177,6 +177,8 @@ export default {
         <vxe-grid v-bind="xGridOptions"></vxe-grid>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

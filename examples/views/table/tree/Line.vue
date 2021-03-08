@@ -87,7 +87,7 @@
       :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}"
       :data="tableData">
       <vxe-table-column type="checkbox" title="Name" tree-node>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>
             <template v-if="row.children && row.children.length">
               <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
@@ -313,7 +313,7 @@ export default {
           :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}"
           :data="tableData">
           <vxe-table-column field="name" title="Name" tree-node>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>
                 <template v-if="row.children && row.children.length">
                   <i class="tree-node-icon fa" :class="$refs.xTree.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>

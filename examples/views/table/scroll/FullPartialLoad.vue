@@ -5,7 +5,7 @@
     </p>
 
     <vxe-toolbar :loading="loading">
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="loadList(20)">+20条</vxe-button>
         <vxe-button @click="loadList(50)">+50条</vxe-button>
         <vxe-button @click="loadList(100)">+100条</vxe-button>
@@ -52,7 +52,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar :loading="loading">
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="loadList(20)">+20条</vxe-button>
             <vxe-button @click="loadList(50)">+50条</vxe-button>
             <vxe-button @click="loadList(100)">+100条</vxe-button>

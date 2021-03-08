@@ -10,10 +10,10 @@
       :tree-config="{children: 'children'}"
       :data="tableData"
       :columns="tableColumn">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
          <vxe-input size="small" placeholder="搜索"></vxe-input>
       </template>
-      <template v-slot:toolbar_tools>
+      <template #toolbar_tools>
         <vxe-button status="primary">操作1</vxe-button>
         <vxe-button status="primary">操作2</vxe-button>
         <vxe-button status="primary">操作3</vxe-button>
@@ -84,10 +84,10 @@ export default {
           :tree-config="{children: 'children'}"
           :data="tableData"
           :columns="tableColumn">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-input size="small" placeholder="搜索"></vxe-input>
           </template>
-          <template v-slot:toolbar_tools>
+          <template #toolbar_tools>
             <vxe-button status="primary">操作1</vxe-button>
             <vxe-button status="primary">操作2</vxe-button>
             <vxe-button status="primary">操作3</vxe-button>
@@ -95,6 +95,8 @@ export default {
         </vxe-virtual-tree>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

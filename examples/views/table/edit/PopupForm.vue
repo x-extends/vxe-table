@@ -3,7 +3,7 @@
     <p class="tip">实现弹框表单编辑功能，双击行可以弹出编辑框<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
       </template>
     </vxe-toolbar>
@@ -24,7 +24,7 @@
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
       <vxe-table-column title="操作" width="100" show-overflow>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-button type="text" icon="fa fa-edit" @click="editEvent(row)"></vxe-button>
           <vxe-button type="text" icon="fa fa-trash-o" @click="removeEvent(row)"></vxe-button>
         </template>
@@ -32,7 +32,7 @@
     </vxe-table>
 
     <vxe-modal v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600" min-height="300" :loading="submitLoading" resize destroy-on-close>
-      <template v-slot>
+      <template #default>
         <vxe-form :data="formData" :items="formItems" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent"></vxe-form>
       </template>
     </vxe-modal>
@@ -105,7 +105,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button icon="fa fa-plus" @click="insertEvent()">新增</vxe-button>
           </template>
         </vxe-toolbar>
@@ -126,7 +126,7 @@ export default {
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
           <vxe-table-column title="操作" width="100" show-overflow>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-button type="text" icon="fa fa-edit" @click="editEvent(row)"></vxe-button>
               <vxe-button type="text" icon="fa fa-trash-o" @click="removeEvent(row)"></vxe-button>
             </template>
@@ -134,7 +134,7 @@ export default {
         </vxe-table>
 
         <vxe-modal v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600" min-height="300" :loading="submitLoading" resize destroy-on-close>
-          <template v-slot>
+          <template #default>
             <vxe-form :data="formData" :items="formItems" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent"></vxe-form>
           </template>
         </vxe-modal>

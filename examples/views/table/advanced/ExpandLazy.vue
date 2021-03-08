@@ -3,7 +3,7 @@
     <p class="tip">展开行的懒加载，通过配置 <table-api-link prop="expand-config"/>={<table-api-link prop="lazy"/>, <table-api-link prop="loadMethod"/>} 加载方法来开启懒加载<br></p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable.toggleRowExpand(tableData[1])">切换第二行展开</vxe-button>
         <vxe-button @click="$refs.xTable.setRowExpand([tableData[2], tableData[3]], true)">设置第三、四行展开</vxe-button>
         <vxe-button @click="$refs.xTable.setAllRowExpand(true)">设置所有行展开</vxe-button>
@@ -18,7 +18,7 @@
       :expand-config="{lazy: true, loadMethod: loadContentMethod}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
-        <template v-slot:content="{ row }">
+        <template #content="{ row }">
           <ul>
             <li v-for="(item, index) in row.detailList" :key="index">
               <span>Role: {{ item.role }}</span>
@@ -48,7 +48,7 @@
       :expand-config="{accordion: true, lazy: true, loadMethod: loadContentMethod2}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
-        <template v-slot:content="{ row }">
+        <template #content="{ row }">
           <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
         </template>
       </vxe-table-column>
@@ -87,7 +87,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable.toggleRowExpand(tableData[1])">切换第二行展开</vxe-button>
             <vxe-button @click="$refs.xTable.setRowExpand([tableData[2], tableData[3]], true)">设置第三、四行展开</vxe-button>
             <vxe-button @click="$refs.xTable.setAllRowExpand(true)">设置所有行展开</vxe-button>
@@ -102,7 +102,7 @@ export default {
           :expand-config="{lazy: true, loadMethod: loadContentMethod}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="80">
-            <template v-slot:content="{ row }">
+            <template #content="{ row }">
               <ul>
                 <li v-for="(item, index) in row.detailList" :key="index">
                   <span>Role: {{ item.role }}</span>
@@ -118,6 +118,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+
         export default {
           data () {
             return {
@@ -156,7 +158,7 @@ export default {
           :expand-config="{accordion: true, lazy: true, loadMethod: loadContentMethod}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="80">
-            <template v-slot:content="{ row }">
+            <template #content="{ row }">
               <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
             </template>
           </vxe-table-column>
@@ -166,6 +168,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

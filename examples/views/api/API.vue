@@ -4,7 +4,7 @@
       custom
       :loading="loading"
       :refresh="{query: loadList}">
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-input clearable class="search-input" v-model="filterName" type="search" :placeholder="`vxe-${apiName} ${$t('app.api.apiSearch')}`" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
       </template>
     </vxe-toolbar>
@@ -36,7 +36,7 @@
       <vxe-table-column field="enum" :title="$t('app.api.title.enum')" type="html" min-width="150"></vxe-table-column>
       <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160" :title-help="{message: '部分参数可支持全局设置，具体请查阅相关说明'}"></vxe-table-column>
       <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120" :title-help="{message: '该文档与最新版本保持同步，如果遇到参数无效时，需要检查当前使用的版本号是否支持该参数'}">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <template v-if="row.version === 'pro'">
             <a class="link pro" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins/#/pro" target="_blank">pro</a>
           </template>
@@ -51,7 +51,7 @@
           </template>
         </template>
       </vxe-table-column>
-      <template v-slot:empty>
+      <template #empty>
         <span class="red">找不对应 API，请输入正确的关键字！</span>
       </template>
     </vxe-table>

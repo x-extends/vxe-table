@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      与 <a class="link" href="https://github.com/x-extends/ant-design-vue">ant-design-vue</a> 组合渲染 + 使用分页<br>
+      与 <a class="link" href="https://github.com/vueComponent/ant-design-vue">ant-design-vue</a> 组合渲染 + 使用分页<br>
       <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 
@@ -20,7 +20,7 @@
     </vxe-form>
 
     <vxe-toolbar export print custom>
-      <template v-slot:buttons>
+      <template #buttons>
         <a-button @click="insertEvent">新增</a-button>
         <a-button @click="saveEvent">保存</a-button>
         <a-button @click="vaildEvent">校验</a-button>
@@ -48,6 +48,7 @@
       ref="xTable"
       height="460"
       :export-config="{}"
+      :print-config="{}"
       :loading="loading"
       :data="tableData"
       :edit-rules="validRules"
@@ -162,7 +163,7 @@ export default {
           </vxe-form>
 
           <vxe-toolbar export print custom>
-            <template v-slot:buttons>
+            <template #buttons>
               <a-button @click="insertEvent">新增</a-button>
               <a-button @click="saveEvent">保存</a-button>
               <a-button @click="vaildEvent">校验</a-button>
@@ -190,6 +191,7 @@ export default {
             ref="xTable"
             height="460"
             :export-config="{}"
+            :print-config="{}"
             :loading="loading"
             :data="tableData"
             :edit-rules="validRules"

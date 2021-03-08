@@ -108,7 +108,7 @@
     </div>
 
     <vxe-modal v-model="newVersionVisible" title="v4.x 预发布" width="500" min-height="200" min-width="400" :position="{left: 20, top: 20}" :mask="false" :lock-view="false" show-footer resize>
-      <template v-slot>
+      <template #default>
         <ul>
           <li>1. 支持 vue 3.0 Component API</li>
           <li>2. 使用 Typescript 重写组件</li>
@@ -117,7 +117,7 @@
           <li>5. 重写渲染器：移除 h 参数</li>
         </ul>
       </template>
-      <template v-slot:footer>
+      <template #footer>
         <vxe-button @click="claseNewVersionEvent">不看</vxe-button>
         <vxe-button status="primary" @click="viewNewVersionEvent">查看更多</vxe-button>
       </template>

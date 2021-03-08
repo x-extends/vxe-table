@@ -3,7 +3,7 @@
     <p class="tip">可编辑表格</p>
 
     <vxe-grid ref="xGrid" v-bind="gridOptions" @page-change="handlePageChange">
-      <template v-slot:operate="{ row }">
+      <template #operate="{ row }">
         <template v-if="$refs.xGrid.isActiveByRow(row)">
           <vxe-button icon="fa fa-save" status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
         </template>
@@ -63,7 +63,7 @@ export default {
       demoCodes: [
         `
         <vxe-grid ref="xGrid" v-bind="gridOptions" @page-change="handlePageChange">
-          <template v-slot:operate="{ row }">
+          <template #operate="{ row }">
             <template v-if="$refs.xGrid.isActiveByRow(row)">
               <vxe-button icon="fa fa-save" status="primary" title="保存" circle @click="saveRowEvent(row)"></vxe-button>
             </template>

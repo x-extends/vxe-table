@@ -56,7 +56,7 @@
     <p class="tip">还可以固定列</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
         <vxe-button @click="showFooter = !showFooter">显示/隐藏表尾</vxe-button>
       </template>
@@ -147,6 +147,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+
         export default {
           data () {
             return {
@@ -214,6 +216,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+
         export default {
           data () {
             return {
@@ -285,7 +289,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
             <vxe-button @click="showFooter = !showFooter">显示/隐藏表尾</vxe-button>
           </template>
@@ -311,6 +315,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

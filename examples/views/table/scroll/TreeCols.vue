@@ -19,7 +19,7 @@
       :radio-config="{labelField: 'name'}"
       :tree-config="{children: 'children'}"
       :columns="tableColumn">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 20000)">1k列2w条</vxe-button>
@@ -63,7 +63,7 @@ export default {
           :radio-config="{labelField: 'name'}"
           :tree-config="{children: 'children'}"
           :columns="tableColumn">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
             <vxe-button @click="loadColumnAndData(2000, 5000)">2k列5k条</vxe-button>
             <vxe-button @click="loadColumnAndData(5000, 10000)">5w列1w条</vxe-button>

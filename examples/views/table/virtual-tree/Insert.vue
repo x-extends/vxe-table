@@ -13,7 +13,7 @@
       :edit-config="{trigger: 'click', mode: 'row'}"
       :data="tableData"
       :columns="tableColumn">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="insertEvent()">插入第一行</vxe-button>
         <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -57,7 +57,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row'}"
           :data="tableData"
           :columns="tableColumn">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="insertEvent()">插入第一行</vxe-button>
             <vxe-button @click="insertAtEvent()">插入指定行</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -66,6 +66,8 @@ export default {
         </vxe-virtual-tree>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

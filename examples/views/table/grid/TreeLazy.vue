@@ -48,6 +48,8 @@ export default {
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"></vxe-grid>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

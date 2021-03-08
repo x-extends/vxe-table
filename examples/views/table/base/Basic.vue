@@ -3,7 +3,7 @@
     <p class="tip"><table-api-link name="vxe-table"/> 基础表格，基于模板方式使用非常简单、便捷</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="allAlign = 'left'">居左</vxe-button>
         <vxe-button @click="allAlign = 'center'">居中</vxe-button>
         <vxe-button @click="allAlign = 'right'">居右</vxe-button>
@@ -65,7 +65,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="allAlign = 'left'">居左</vxe-button>
             <vxe-button @click="allAlign = 'center'">居中</vxe-button>
             <vxe-button @click="allAlign = 'right'">居右</vxe-button>

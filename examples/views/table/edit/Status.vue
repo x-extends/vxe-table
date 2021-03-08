@@ -7,7 +7,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button icon="fa fa-plus" @click="insertEvent">新增</vxe-button>
         <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -31,7 +31,7 @@
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
       <vxe-table-column field="date3" title="Date" formatter="formatDate"></vxe-table-column>
       <vxe-table-column title="操作" width="200">
-        <template v-slot="{ row, rowIndex }">
+        <template #default="{ row, rowIndex }">
           <template v-if="!row.date3">
             <vxe-button @click="saveEvent2(row)" :loading="row.loading">更新并替换新数据</vxe-button>
           </template>
@@ -72,7 +72,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button icon="fa fa-plus" @click="insertEvent">新增</vxe-button>
             <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -96,7 +96,7 @@ export default {
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
           <vxe-table-column field="date3" title="Date" formatter="formatDate"></vxe-table-column>
           <vxe-table-column title="操作" width="200">
-            <template v-slot="{ row, rowIndex }">
+            <template #default="{ row, rowIndex }">
               <template v-if="!row.date3">
                 <vxe-button @click="saveEvent2(row)" :loading="row.loading">更新并替换新数据</vxe-button>
               </template>
@@ -111,6 +111,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

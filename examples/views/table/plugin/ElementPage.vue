@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      与 <a class="link" href="https://github.com/x-extends/element-ui">element-ui</a> 组合渲染 + 使用分页<br>
+      与 <a class="link" href="https://github.com/ElemeFE/element">element-ui</a> 组合渲染 + 使用分页<br>
       <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 
@@ -22,7 +22,7 @@
     </vxe-form>
 
     <vxe-toolbar export print custom>
-      <template v-slot:buttons>
+      <template #buttons>
         <el-button @click="insertEvent">新增</el-button>
         <el-button @click="saveEvent">保存</el-button>
         <el-button @click="vaildEvent">校验</el-button>
@@ -172,7 +172,7 @@ export default {
         </vxe-form>
 
         <vxe-toolbar export print custom>
-          <template v-slot:buttons>
+          <template #buttons>
             <el-button @click="insertEvent">新增</el-button>
             <el-button @click="saveEvent">保存</el-button>
             <el-button @click="vaildEvent">校验</el-button>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      与 <a class="link" href="https://github.com/x-extends/iview">iview</a> 组合渲染 + 使用分页<br>
+      与 <a class="link" href="https://github.com/view-design/ViewUI">iview</a> 组合渲染 + 使用分页<br>
       <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 
@@ -21,7 +21,7 @@
     </vxe-form>
 
     <vxe-toolbar export print custom>
-      <template v-slot:buttons>
+      <template #buttons>
         <Button @click="insertEvent">新增</Button>
         <Button @click="saveEvent">保存</Button>
         <Button @click="vaildEvent">校验</Button>
@@ -166,7 +166,7 @@ export default {
         </vxe-form>
 
         <vxe-toolbar export print custom>
-          <template v-slot:buttons>
+          <template #buttons>
             <Button @click="insertEvent">新增</Button>
             <Button @click="saveEvent">保存</Button>
             <Button @click="vaildEvent">校验</Button>

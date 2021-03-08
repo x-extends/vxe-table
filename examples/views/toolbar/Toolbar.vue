@@ -5,10 +5,10 @@
 
     <p>
       <vxe-toolbar>
-        <template v-slot:buttons>
+        <template #buttons>
           <vxe-button content="默认尺寸"></vxe-button>
           <vxe-button content="下拉按钮">
-            <template v-slot:dropdowns>
+            <template #dropdowns>
               <vxe-button type="text" content="按钮1"></vxe-button>
               <vxe-button type="text" content="按钮2"></vxe-button>
               <vxe-button type="text" content="按钮3"></vxe-button>
@@ -17,10 +17,10 @@
         </template>
       </vxe-toolbar>
       <vxe-toolbar size="medium">
-        <template v-slot:buttons>
+        <template #buttons>
           <vxe-button content="中等尺寸"></vxe-button>
           <vxe-button content="下拉按钮">
-            <template v-slot:dropdowns>
+            <template #dropdowns>
               <vxe-button type="text" content="按钮1"></vxe-button>
               <vxe-button type="text" content="按钮2"></vxe-button>
               <vxe-button type="text" content="按钮3"></vxe-button>
@@ -29,10 +29,10 @@
         </template>
       </vxe-toolbar>
       <vxe-toolbar size="small">
-        <template v-slot:buttons>
+        <template #buttons>
           <vxe-button content="小型尺寸"></vxe-button>
           <vxe-button content="下拉按钮">
-            <template v-slot:dropdowns>
+            <template #dropdowns>
               <vxe-button type="text" content="按钮1"></vxe-button>
               <vxe-button type="text" content="按钮2"></vxe-button>
               <vxe-button type="text" content="按钮3"></vxe-button>
@@ -41,10 +41,10 @@
         </template>
       </vxe-toolbar>
       <vxe-toolbar size="mini">
-        <template v-slot:buttons>
+        <template #buttons>
           <vxe-button content="超小尺寸"></vxe-button>
           <vxe-button content="下拉按钮">
-            <template v-slot:dropdowns>
+            <template #dropdowns>
               <vxe-button type="text" content="按钮1"></vxe-button>
               <vxe-button type="text" content="按钮2"></vxe-button>
               <vxe-button type="text" content="按钮3"></vxe-button>
@@ -56,7 +56,7 @@
 
     <p>
       <vxe-toolbar perfect>
-        <template v-slot:buttons>
+        <template #buttons>
           <vxe-button type="text" icon="fa fa-plus" content="新增"></vxe-button>
           <vxe-button type="text" icon="fa fa-trash-o" content="删除"></vxe-button>
           <vxe-button type="text" icon="fa fa-save" content="保存"></vxe-button>
@@ -64,7 +64,7 @@
       </vxe-toolbar>
 
       <vxe-toolbar perfect>
-        <template v-slot:buttons>
+        <template #buttons>
           <vxe-button icon="fa fa-plus" status="perfect" content="新增"></vxe-button>
           <vxe-button icon="fa fa-trash-o" status="perfect" content="删除"></vxe-button>
           <vxe-button icon="fa fa-save" status="perfect" content="保存"></vxe-button>
@@ -72,19 +72,19 @@
       </vxe-toolbar>
 
       <vxe-toolbar ref="xToolbar" custom>
-        <template v-slot:buttons>
+        <template #buttons>
           <vxe-button content="自定义模板"></vxe-button>
           <vxe-button content="按钮2"></vxe-button>
           <vxe-button content="按钮3"></vxe-button>
           <vxe-button content="下拉按钮">
-            <template v-slot:dropdowns>
+            <template #dropdowns>
               <vxe-button content="按钮1"></vxe-button>
               <vxe-button content="按钮2"></vxe-button>
               <vxe-button content="按钮3"></vxe-button>
             </template>
           </vxe-button>
         </template>
-        <template v-slot:tools>
+        <template #tools>
           <vxe-button type="text" icon="vxe-icon--question" class="tool-btn"></vxe-button>
           <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn" @click="funnelEvent"></vxe-button>
         </template>
@@ -122,10 +122,10 @@ export default {
         `
         <p>
           <vxe-toolbar>
-            <template v-slot:buttons>
+            <template #buttons>
               <vxe-button content="默认尺寸"></vxe-button>
               <vxe-button content="下拉按钮">
-                <template v-slot:dropdowns>
+                <template #dropdowns>
                   <vxe-button type="text" content="按钮1"></vxe-button>
                   <vxe-button type="text" content="按钮2"></vxe-button>
                   <vxe-button type="text" content="按钮3"></vxe-button>
@@ -134,10 +134,10 @@ export default {
             </template>
           </vxe-toolbar>
           <vxe-toolbar size="medium">
-            <template v-slot:buttons>
+            <template #buttons>
               <vxe-button content="中等尺寸"></vxe-button>
               <vxe-button content="下拉按钮">
-                <template v-slot:dropdowns>
+                <template #dropdowns>
                   <vxe-button type="text" content="按钮1"></vxe-button>
                   <vxe-button type="text" content="按钮2"></vxe-button>
                   <vxe-button type="text" content="按钮3"></vxe-button>
@@ -146,10 +146,10 @@ export default {
             </template>
           </vxe-toolbar>
           <vxe-toolbar size="small">
-            <template v-slot:buttons>
+            <template #buttons>
               <vxe-button content="小型尺寸"></vxe-button>
               <vxe-button content="下拉按钮">
-                <template v-slot:dropdowns>
+                <template #dropdowns>
                   <vxe-button type="text" content="按钮1"></vxe-button>
                   <vxe-button type="text" content="按钮2"></vxe-button>
                   <vxe-button type="text" content="按钮3"></vxe-button>
@@ -158,10 +158,10 @@ export default {
             </template>
           </vxe-toolbar>
           <vxe-toolbar size="mini">
-            <template v-slot:buttons>
+            <template #buttons>
               <vxe-button content="超小尺寸"></vxe-button>
               <vxe-button content="下拉按钮">
-                <template v-slot:dropdowns>
+                <template #dropdowns>
                   <vxe-button type="text" content="按钮1"></vxe-button>
                   <vxe-button type="text" content="按钮2"></vxe-button>
                   <vxe-button type="text" content="按钮3"></vxe-button>
@@ -173,7 +173,7 @@ export default {
 
         <p>
           <vxe-toolbar perfect>
-            <template v-slot:buttons>
+            <template #buttons>
               <vxe-button type="text" icon="fa fa-plus" content="新增"></vxe-button>
               <vxe-button type="text" icon="fa fa-trash-o" content="删除"></vxe-button>
               <vxe-button type="text" icon="fa fa-save" content="保存"></vxe-button>
@@ -181,7 +181,7 @@ export default {
           </vxe-toolbar>
 
           <vxe-toolbar perfect>
-            <template v-slot:buttons>
+            <template #buttons>
               <vxe-button icon="fa fa-plus" status="perfect" content="新增"></vxe-button>
               <vxe-button icon="fa fa-trash-o" status="perfect" content="删除"></vxe-button>
               <vxe-button icon="fa fa-save" status="perfect" content="保存"></vxe-button>
@@ -189,19 +189,19 @@ export default {
           </vxe-toolbar>
 
           <vxe-toolbar ref="xToolbar" custom>
-            <template v-slot:buttons>
+            <template #buttons>
               <vxe-button content="自定义模板"></vxe-button>
               <vxe-button content="按钮2"></vxe-button>
               <vxe-button content="按钮3"></vxe-button>
               <vxe-button content="下拉按钮">
-                <template v-slot:dropdowns>
+                <template #dropdowns>
                   <vxe-button content="按钮1"></vxe-button>
                   <vxe-button content="按钮2"></vxe-button>
                   <vxe-button content="按钮3"></vxe-button>
                 </template>
               </vxe-button>
             </template>
-            <template v-slot:tools>
+            <template #tools>
               <vxe-button type="text" icon="vxe-icon--question" class="tool-btn"></vxe-button>
               <vxe-button type="text" icon="vxe-icon--funnel" class="tool-btn" @click="funnelEvent"></vxe-button>
             </template>

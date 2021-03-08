@@ -4,12 +4,12 @@
 
     <vxe-form :data="formData" @submit="submitEvent">
       <vxe-form-item title="app.body.label.name" field="name" :item-render="{}">
-        <template v-slot>
+        <template #default>
           <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
         </template>
       </vxe-form-item>
       <vxe-form-item title="性别" field="sex" :item-render="{}" :title-prefix="{ message: '帮助信息！！！' }">
-        <template v-slot>
+        <template #default>
           <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
             <vxe-option value="1" label="女"></vxe-option>
             <vxe-option value="2" label="男"></vxe-option>
@@ -17,7 +17,7 @@
         </template>
       </vxe-form-item>
       <vxe-form-item>
-        <template v-slot>
+        <template #default>
           <vxe-button type="submit" status="primary">查询</vxe-button>
           <vxe-button type="reset">重置</vxe-button>
         </template>
@@ -69,12 +69,12 @@ export default {
         `
         <vxe-form :data="formData" @submit="submitEvent">
           <vxe-form-item title="app.body.label.name" field="name" :item-render="{}">
-            <template v-slot>
+            <template #default>
               <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex" :item-render="{}" :title-prefix="{ message: '帮助信息！！！' }">
-            <template v-slot>
+            <template #default>
               <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
                 <vxe-option value="1" label="女"></vxe-option>
                 <vxe-option value="2" label="男"></vxe-option>
@@ -82,7 +82,7 @@ export default {
             </template>
           </vxe-form-item>
           <vxe-form-item>
-            <template v-slot>
+            <template #default>
               <vxe-button type="submit" status="primary">查询</vxe-button>
               <vxe-button type="reset">重置</vxe-button>
             </template>

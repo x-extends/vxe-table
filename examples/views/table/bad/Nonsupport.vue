@@ -11,7 +11,7 @@
       :data="tableData">
       <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
-        <template v-slot:content>
+        <template #content>
           <div>xxxxxxxx 被固定列挡住 emmmmm</div>
         </template>
       </vxe-table-column>
@@ -45,7 +45,7 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
           <vxe-table-column type="expand" width="80">
-            <template v-slot:content>
+            <template #content>
               <div>xxxxxxxx 被固定列挡住 emmmmm</div>
             </template>
           </vxe-table-column>

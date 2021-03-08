@@ -61,7 +61,7 @@
     <p class="tip">设置为 <table-api-link prop="auto-resize"/> 响应式就可以自动跟随父容器宽、高动态变化</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="tableWidth = '600px'">宽600px</vxe-button>
         <vxe-button @click="tableWidth = '700px'">宽700px</vxe-button>
         <vxe-button @click="tableWidth = '800px'">宽800px</vxe-button>
@@ -172,7 +172,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="tableWidth = '600px'">宽600px</vxe-button>
             <vxe-button @click="tableWidth = '700px'">宽700px</vxe-button>
             <vxe-button @click="tableWidth = '800px'">宽800px</vxe-button>
@@ -200,6 +200,8 @@ export default {
         </div>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

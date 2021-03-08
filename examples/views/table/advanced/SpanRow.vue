@@ -9,22 +9,22 @@
       :span-method="rowspanMethod"
       :data="tableData">
       <vxe-table-column field="name1" title="功能模块">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-checkbox v-model="row.check1" @change="check1ChangeEvent(row, row.check1)">{{ row.name1 }}</vxe-checkbox>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name2" title="详细功能">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-checkbox v-model="row.check2" @change="check2ChangeEvent(row, row.check2)">{{ row.name2 }}</vxe-checkbox>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name3" title="权限类型">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-checkbox v-model="row.check3" @change="check3ChangeEvent(row, row.check3)">{{ row.name3 }}</vxe-checkbox>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name4" title="权限列表">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-checkbox v-model="row.check4" @change="check4ChangeEvent(row, row.check4)">{{ row.name4 }}</vxe-checkbox>
         </template>
       </vxe-table-column>
@@ -55,28 +55,30 @@ export default {
           :span-method="rowspanMethod"
           :data="tableData">
           <vxe-table-column field="name1" title="功能模块">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-checkbox v-model="row.check1" @change="check1ChangeEvent(row, row.check1)">{{ row.name1 }}</vxe-checkbox>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name2" title="详细功能">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-checkbox v-model="row.check2" @change="check2ChangeEvent(row, row.check2)">{{ row.name2 }}</vxe-checkbox>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name3" title="权限类型">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-checkbox v-model="row.check3" @change="check3ChangeEvent(row, row.check3)">{{ row.name3 }}</vxe-checkbox>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name4" title="权限列表">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-checkbox v-model="row.check4" @change="check4ChangeEvent(row, row.check4)">{{ row.name4 }}</vxe-checkbox>
             </template>
           </vxe-table-column>
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

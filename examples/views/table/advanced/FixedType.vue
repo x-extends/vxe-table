@@ -5,7 +5,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="clearDataEvent">清空数据</vxe-button>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
         <vxe-button @click="importDataEvent">导入数据</vxe-button>
@@ -51,7 +51,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="clearDataEvent">清空数据</vxe-button>
             <vxe-button @click="exportDataEvent">导出数据</vxe-button>
             <vxe-button @click="importDataEvent">导入数据</vxe-button>

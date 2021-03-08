@@ -102,6 +102,8 @@ export default {
           @menu-click="contextMenuClickEvent"></vxe-grid>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

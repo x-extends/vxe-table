@@ -18,7 +18,7 @@
       :columns="tableColumn"
       :toolbar-config="tableToolbar"
       :footer-method="footerMethod">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="$refs.xGrid.maximize()">表格最大化</vxe-button>
         <vxe-button @click="$refs.xGrid.revert()">表格还原</vxe-button>
         <vxe-button @click="$refs.xGrid.zoom()">切换表格最大化/还原</vxe-button>
@@ -89,7 +89,7 @@ export default {
           :columns="tableColumn"
           :toolbar-config="tableToolbar"
           :footer-method="footerMethod">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="$refs.xGrid.maximize()">表格最大化</vxe-button>
             <vxe-button @click="$refs.xGrid.revert()">表格还原</vxe-button>
             <vxe-button @click="$refs.xGrid.zoom()">切换表格最大化/还原</vxe-button>
@@ -97,6 +97,8 @@ export default {
         </vxe-grid>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

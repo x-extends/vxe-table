@@ -9,7 +9,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="exportDataEvent">默认导出</vxe-button>
         <vxe-button @click="exportSelectEvent">导出选中</vxe-button>
         <vxe-button @click="openExportEvent">高级导出</vxe-button>
@@ -40,7 +40,7 @@
     <p class="tip">配置 <table-api-link prop="columnFilterMethod"/> 参数过滤指定列</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="exportDataEvent2">导出指定列 [name,sex]</vxe-button>
       </template>
     </vxe-toolbar>
@@ -67,7 +67,7 @@
     <p class="tip">配置 <table-api-link prop="dataFilterMethod"/> 参数过滤指定行</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="exportDataEvent3">导出 sex=1 的行</vxe-button>
       </template>
     </vxe-toolbar>
@@ -96,7 +96,7 @@
     <p class="tip">不导出表头，指定文件名，导出源数据,格式化数据</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="exportCurrDataEvent4">导出当前页</vxe-button>
         <vxe-button @click="exportDataEvent4">自定义数据导出</vxe-button>
         <vxe-button @click="exportAllDataEvent4">全量导出后台数据</vxe-button>
@@ -172,7 +172,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="exportDataEvent">默认导出</vxe-button>
             <vxe-button @click="exportSelectEvent">导出选中</vxe-button>
             <vxe-button @click="openExportEvent">高级导出</vxe-button>
@@ -194,6 +194,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+
         export default {
           data () {
             return {
@@ -225,7 +227,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="exportDataEvent2">导出指定列 [name,sex]</vxe-button>
           </template>
         </vxe-toolbar>
@@ -243,6 +245,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+
         export default {
           data () {
             return {
@@ -266,7 +270,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="exportDataEvent3">导出指定第10-20行</vxe-button>
           </template>
         </vxe-toolbar>
@@ -286,6 +290,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+
         export default {
           data () {
             return {
@@ -331,7 +337,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="exportCurrDataEvent4">导出当前页</vxe-button>
             <vxe-button @click="exportDataEvent4">自定义数据导出</vxe-button>
             <vxe-button @click="exportAllDataEvent4">全量导出后台数据</vxe-button>
@@ -364,6 +370,8 @@ export default {
         </vxe-pager>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

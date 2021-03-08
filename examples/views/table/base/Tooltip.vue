@@ -15,7 +15,7 @@
       <vxe-table-column field="role" title="角色" :title-help="{message: '自定义图标', icon: 'fa fa-bell'}"></vxe-table-column>
       <vxe-table-column field="date" title="Date"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate">
-        <template v-slot:header>
+        <template #header>
           <span>自定义标题</span>
         </template>
       </vxe-table-column>
@@ -55,7 +55,7 @@ export default {
           <vxe-table-column field="role" title="角色" :title-help="{message: '自定义图标', icon: 'fa fa-bell'}"></vxe-table-column>
           <vxe-table-column field="date" title="Date"></vxe-table-column>
           <vxe-table-column field="rate" title="Rate">
-            <template v-slot:header>
+            <template #header>
               <span>自定义标题</span>
             </template>
           </vxe-table-column>

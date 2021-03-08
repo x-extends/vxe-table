@@ -68,17 +68,17 @@
         :total="page6.totalResult"
         :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
         :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-        <template v-slot:left>
+        <template #left>
           <vxe-button size="small">
-            <template v-slot>更多操作</template>
-            <template v-slot:dropdowns>
+            <template #default>更多操作</template>
+            <template #dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
               <vxe-button type="text">批量删除</vxe-button>
             </template>
           </vxe-button>
         </template>
-        <template v-slot:right>
+        <template #right>
           <img src="/vxe-table/static/other/img1.gif" height="34">
           <img src="/vxe-table/static/other/img1.gif" height="34">
           <img src="/vxe-table/static/other/img1.gif" height="34">
@@ -208,17 +208,17 @@ export default {
             :total="page6.totalResult"
             :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-            <template v-slot:left>
+            <template #left>
               <vxe-button size="small">
-                <template v-slot>更多操作</template>
-                <template v-slot:dropdowns>
+                <template #default>更多操作</template>
+                <template #dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
                   <vxe-button type="text">批量删除</vxe-button>
                 </template>
               </vxe-button>
             </template>
-            <template v-slot:right>
+            <template #right>
               <img src="/vxe-table/static/other/img1.gif" height="34">
               <img src="/vxe-table/static/other/img1.gif" height="34">
               <img src="/vxe-table/static/other/img1.gif" height="34">

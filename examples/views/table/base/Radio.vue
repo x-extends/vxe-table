@@ -3,7 +3,7 @@
     <p class="tip">单选表格，用户手动选中时会触发事件 <table-api-link prop="radio-change"/>，还通过 <table-api-link prop="highlight"/> 设置高亮选中行</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
         <vxe-button @click="clearRadioRowEevnt">取消选中</vxe-button>
         <vxe-button @click="getRadioEvent1">获取选中</vxe-button>
@@ -19,7 +19,7 @@
       @cell-click="cellClickEvent"
       @radio-change="radioChangeEvent">
       <vxe-table-column type="radio" width="60">
-        <template v-slot:header>
+        <template #header>
           <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
         </template>
       </vxe-table-column>
@@ -40,7 +40,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable2.setRadioRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
         <vxe-button @click="$refs.xTable2.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.clearRadioRow()">清除所有行选中</vxe-button>
@@ -178,7 +178,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
             <vxe-button @click="clearRadioRowEevnt">取消选中</vxe-button>
             <vxe-button @click="getRadioEvent1">获取选中</vxe-button>
@@ -194,7 +194,7 @@ export default {
           @cell-click="cellClickEvent"
           @radio-change="radioChangeEvent">
           <vxe-table-column type="radio" width="60">
-            <template v-slot:header>
+            <template #header>
               <vxe-button type="text" @click="clearRadioRowEevnt" :disabled="!selectRow">取消</vxe-button>
             </template>
           </vxe-table-column>
@@ -240,7 +240,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable2.setRadioRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
             <vxe-button @click="$refs.xTable2.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable2.clearRadioRow()">清除所有行选中</vxe-button>

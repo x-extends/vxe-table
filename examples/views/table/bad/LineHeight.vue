@@ -14,7 +14,7 @@
       :scroll-y="{enabled: false}">
       <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name">
-        <template v-slot="{ row, rowIndex }">
+        <template #default="{ row, rowIndex }">
           <template v-if="rowIndex % 4 === 0">
             <div>{{ row.name }}</div>
             <div style="color: red">{{ row.age }}</div>
@@ -30,7 +30,7 @@
       </vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age">
-        <template v-slot="{ row, rowIndex }">
+        <template #default="{ row, rowIndex }">
           <template v-if="rowIndex % 5 === 0">
             <img src="/vxe-table/static/other/img1.gif" style="width: 60px;">
           </template>
@@ -67,7 +67,7 @@ export default {
           :scroll-y="{enabled: false}">
           <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name">
-            <template v-slot="{ row, rowIndex }">
+            <template #default="{ row, rowIndex }">
               <template v-if="rowIndex % 4 === 0">
                 <div>{{ row.name }}</div>
                 <div style="color: red">{{ row.age }}</div>
@@ -83,7 +83,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age">
-            <template v-slot="{ row, rowIndex }">
+            <template #default="{ row, rowIndex }">
               <template v-if="rowIndex % 5 === 0">
                 <img src="/vxe-table/static/other/img1.gif" style="width: 60px;">
               </template>

@@ -15,12 +15,12 @@
       <vxe-table-column field="sex" title="Sex" :cell-render="{name: '$select', options: sexList}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :cell-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="role" title="Role">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-input type="text" v-model="row.role"></vxe-input>
         </template>
       </vxe-table-column>
       <vxe-table-column field="date3" title="Date">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
         </template>
       </vxe-table-column>
@@ -66,12 +66,12 @@ export default {
           <vxe-table-column field="sex" title="Sex" :cell-render="{name: '$select', options: sexList}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :cell-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="role" title="Role">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-input type="text" v-model="row.role"></vxe-input>
             </template>
           </vxe-table-column>
           <vxe-table-column field="date3" title="Date">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
             </template>
           </vxe-table-column>

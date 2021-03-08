@@ -17,7 +17,7 @@
 
     <p>
       <vxe-list height="240" class="my-list" :loading="loading1" :data="list1">
-        <template v-slot="{ items }">
+        <template #default="{ items }">
           <div class="my-list-item" v-for="(item, index) in items" :key="index">{{ item.label }}</div>
         </template>
       </vxe-list>
@@ -26,14 +26,14 @@
     <div class="vxe-row">
       <div class="vxe-col--4">
         <vxe-list class="my-list" height="200" :data="list2">
-          <template v-slot="{ items }">
+          <template #default="{ items }">
             <div class="my-list-item" v-for="(item, index) in items" :key="index">{{ item.label }}</div>
           </template>
         </vxe-list>
       </div>
       <div class="vxe-col--4">
         <vxe-list class="my-list" height="200" :data="list3">
-          <template v-slot="{ items }">
+          <template #default="{ items }">
             <div class="my-list-item" v-for="(item, index) in items" :key="index">
               <img src="/vxe-table/static/other/img2.gif" height="28">
               <span>{{ item.label }}</span>
@@ -43,7 +43,7 @@
       </div>
       <div class="vxe-col--4">
         <vxe-list class="my-ul-list" height="200" :data="list4" :scroll-y="{sItem: 'li'}">
-          <template v-slot="{ items }">
+          <template #default="{ items }">
             <ul>
               <li v-for="(item, index) in items" :key="index">
                 <img src="/vxe-table/static/other/img1.gif" height="28">
@@ -55,7 +55,7 @@
       </div>
       <div class="vxe-col--12">
         <vxe-list class="my-table-list" height="200" :data="list5" :scroll-y="{gt: 60, sItem: '.my-tr'}">
-          <template v-slot="{ items }">
+          <template #default="{ items }">
             <table>
               <tbody>
                 <tr class="my-tr" v-for="item in items" :key="item.id">
@@ -84,7 +84,7 @@
 
     <p>
       <vxe-list height="240" class="my-tree" :loading="loading6" :data="list6">
-        <template v-slot="{ items }">
+        <template #default="{ items }">
           <div
             class="my-tree-item"
             v-for="item in items"
@@ -150,7 +150,7 @@ export default {
 
         <p>
           <vxe-list height="240" class="my-list" :loading="loading1" :data="list1">
-            <template v-slot="{ items }">
+            <template #default="{ items }">
               <div class="my-list-item" v-for="(item, index) in items" :key="index">{{ item.label }}</div>
             </template>
           </vxe-list>
@@ -159,14 +159,14 @@ export default {
         <div class="vxe-row">
           <div class="vxe-col--4">
             <vxe-list class="my-list" height="200" :data="list2">
-              <template v-slot="{ items }">
+              <template #default="{ items }">
                 <div class="my-list-item" v-for="(item, index) in items" :key="index">{{ item.label }}</div>
               </template>
             </vxe-list>
           </div>
           <div class="vxe-col--4">
             <vxe-list class="my-list" height="200" :data="list3">
-              <template v-slot="{ items }">
+              <template #default="{ items }">
                 <div class="my-list-item" v-for="(item, index) in items" :key="index">
                   <img src="/vxe-table/static/other/img2.gif" height="28">
                   <span>{{ item.label }}</span>
@@ -176,7 +176,7 @@ export default {
           </div>
           <div class="vxe-col--4">
             <vxe-list class="my-ul-list" height="200" :data="list4" :scroll-y="{sItem: 'li'}">
-              <template v-slot="{ items }">
+              <template #default="{ items }">
                 <ul>
                   <li v-for="(item, index) in items" :key="index">
                     <img src="/vxe-table/static/other/img1.gif" height="28">
@@ -188,7 +188,7 @@ export default {
           </div>
           <div class="vxe-col--12">
             <vxe-list class="my-table-list" height="200" :data="list5" :scroll-y="{gt: 60, sItem: '.my-tr'}">
-              <template v-slot="{ items }">
+              <template #default="{ items }">
                 <table>
                   <tbody>
                     <tr class="my-tr" v-for="(item, index) in items" :key="index">
@@ -217,7 +217,7 @@ export default {
 
         <p>
           <vxe-list height="240" class="my-tree" :loading="loading6" :data="list6">
-            <template v-slot="{ items }">
+            <template #default="{ items }">
               <div
                 class="my-tree-item"
                 v-for="item in items"
@@ -232,6 +232,8 @@ export default {
         </p>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

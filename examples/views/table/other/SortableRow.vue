@@ -14,12 +14,12 @@
       :scroll-y="{enabled: false}"
       :data="tableData">
       <vxe-table-column width="60">
-        <template v-slot>
+        <template #default>
           <span class="drag-btn">
             <i class="vxe-icon--menu"></i>
           </span>
         </template>
-        <template v-slot:header>
+        <template #header>
           <vxe-tooltip v-model="showHelpTip1" content="按住后可以上下拖动排序！" enterable>
             <i class="vxe-icon--question" @click="showHelpTip1 = !showHelpTip1"></i>
           </vxe-tooltip>
@@ -144,12 +144,12 @@ export default {
           :scroll-y="{enabled: false}"
           :data="tableData">
           <vxe-table-column width="60">
-            <template v-slot>
+            <template #default>
               <span class="drag-btn">
                 <i class="vxe-icon--menu"></i>
               </span>
             </template>
-            <template v-slot:header>
+            <template #header>
               <vxe-tooltip v-model="showHelpTip1" content="按住后可以上下拖动排序！" enterable>
                 <i class="vxe-icon--question" @click="showHelpTip1 = !showHelpTip1"></i>
               </vxe-tooltip>
@@ -162,6 +162,9 @@ export default {
         </vxe-table>
         `,
         `
+        import Sortable from 'sortablejs'
+        import XEUtils from 'xe-utils'
+
         export default {
           data () {
             return {
@@ -221,6 +224,9 @@ export default {
           :tree-config="{children: 'children'}"></vxe-grid>
         `,
         `
+        import Sortable from 'sortablejs'
+        import XEUtils from 'xe-utils'
+
         export default {
           data () {
             return {
@@ -326,7 +332,7 @@ export default {
                       tableTreeData.unshift(currRow)
                     }
                     // 如果变动了树层级，需要刷新数据
-                    xTable.syncData()
+                    this.tableTreeData = [...tableTreeData]
                   }
                 })
               })
@@ -409,7 +415,7 @@ export default {
               tableTreeData.unshift(currRow)
             }
             // 如果变动了树层级，需要刷新数据
-            xTable.syncData()
+            this.tableTreeData = [...tableTreeData]
           }
         })
       })

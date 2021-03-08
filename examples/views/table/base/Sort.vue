@@ -8,7 +8,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable.sort('name', 'asc')">Name 升序</vxe-button>
         <vxe-button @click="$refs.xTable.sort('name', 'desc')">Name 降序</vxe-button>
         <vxe-button @click="$refs.xTable.clearSort()">清除排序</vxe-button>
@@ -171,7 +171,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable.sort('name', 'asc')">Name 升序</vxe-button>
             <vxe-button @click="$refs.xTable.sort('name', 'desc')">Name 降序</vxe-button>
             <vxe-button @click="$refs.xTable.clearSort()">清除排序</vxe-button>

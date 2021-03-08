@@ -15,7 +15,7 @@
       :data="tableData"
       :columns="tableColumn"
       @menu-click="contextMenuClickEvent">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
       </template>
     </vxe-virtual-tree>
@@ -103,12 +103,14 @@ export default {
           :data="tableData"
           :columns="tableColumn"
           @menu-click="contextMenuClickEvent">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
           </template>
         </vxe-virtual-tree>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

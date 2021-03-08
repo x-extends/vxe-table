@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable1.hideColumn($refs.xTable1.getColumnByField('role'))">隐藏role</vxe-button>
         <vxe-button @click="$refs.xTable1.showColumn($refs.xTable1.getColumnByField('role'))">显示role</vxe-button>
         <vxe-button @click="$refs.xTable1.showColumn($refs.xTable1.getColumnByField('sex'))">显示sex</vxe-button>
@@ -104,7 +104,7 @@
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="200">
-        <template v-slot:header>
+        <template #header>
           <i :class="collapsable1 ? 'fa fa-minus-square' : 'fa fa-plus-square'" @click="collapsable1Event"></i>
           <span>Name</span>
         </template>
@@ -112,7 +112,7 @@
       <vxe-table-column field="role" title="Role" :visible="false" width="200"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :visible="false" width="200"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="200">
-        <template v-slot:header>
+        <template #header>
           <i :class="collapsable2 ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" @click="collapsable2Event"></i>
           <span>Age</span>
         </template>
@@ -152,7 +152,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable1.hideColumn($refs.xTable1.getColumnByField('role'))">隐藏role</vxe-button>
             <vxe-button @click="$refs.xTable1.showColumn($refs.xTable1.getColumnByField('role'))">显示role</vxe-button>
             <vxe-button @click="$refs.xTable1.showColumn($refs.xTable1.getColumnByField('sex'))">显示sex</vxe-button>
@@ -307,7 +307,7 @@ export default {
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="200">
-            <template v-slot:header>
+            <template #header>
               <i :class="collapsable1 ? 'fa fa-minus-square' : 'fa fa-plus-square'" @click="collapsable1Event"></i>
               <span>Name</span>
             </template>
@@ -315,7 +315,7 @@ export default {
           <vxe-table-column field="role" title="Role" :visible="false" width="200"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :visible="false" width="200"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="200">
-            <template v-slot:header>
+            <template #header>
               <i :class="collapsable2 ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" @click="collapsable2Event"></i>
               <span>Age</span>
             </template>

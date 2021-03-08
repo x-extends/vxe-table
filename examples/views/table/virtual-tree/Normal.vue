@@ -13,7 +13,7 @@
       :radio-config="{labelField: 'name'}"
       :columns="tableColumn1"
       :data="tableData">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
         <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>
@@ -112,7 +112,7 @@ export default {
           :radio-config="{labelField: 'name'}"
           :columns="tableColumn1"
           :data="tableData">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
             <vxe-button @click="$refs.xVTree1.setAllTreeExpand(true)">展开所有</vxe-button>

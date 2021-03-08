@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
         <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
         <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
@@ -35,7 +35,7 @@
         sortable
         :filters="[{ data: '' }]"
         :filter-method="filterRoleMethod">
-        <template v-slot:filter="{ $panel, column }">
+        <template #filter="{ $panel, column }">
           <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="$panel.changeOption($event, !!option.data, option)">
             <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
           </select>
@@ -48,7 +48,7 @@
         :filter-multiple="false"
         :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
-        <template v-slot:filter="{ $panel, column }">
+        <template #filter="{ $panel, column }">
           <template v-for="(option, index) in column.filters">
             <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
           </template>
@@ -79,7 +79,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="filterNameEvent">筛选 Name</vxe-button>
             <vxe-button @click="filterAgeEvent">筛选 Age</vxe-button>
             <vxe-button @click="updateNameFilterEvent">更改 Name 的筛选条件</vxe-button>
@@ -108,7 +108,7 @@ export default {
             sortable
             :filters="[{ data: '' }]"
             :filter-method="filterRoleMethod">
-            <template v-slot:filter="{ $panel, column }">
+            <template #filter="{ $panel, column }">
               <select class="my-select" v-model="option.data" v-for="(option, index) in column.filters" :key="index" @change="$panel.changeOption($event, !!option.data, option)">
                 <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
               </select>
@@ -121,7 +121,7 @@ export default {
             :filter-multiple="false"
             :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
-            <template v-slot:filter="{ $panel, column }">
+            <template #filter="{ $panel, column }">
               <template v-for="(option, index) in column.filters">
                 <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
               </template>
@@ -131,6 +131,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

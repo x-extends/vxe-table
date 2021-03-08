@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="validEvent">校验</vxe-button>
         <vxe-button @click="fullValidEvent">完整校验</vxe-button>
         <vxe-button @click="selectValidEvent">选中校验</vxe-button>
@@ -87,7 +87,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="validEvent">校验</vxe-button>
             <vxe-button @click="fullValidEvent">完整校验</vxe-button>
             <vxe-button @click="selectValidEvent">选中校验</vxe-button>
@@ -114,6 +114,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

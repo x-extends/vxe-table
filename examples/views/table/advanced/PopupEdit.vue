@@ -15,7 +15,7 @@
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
       <vxe-table-column title="操作" width="100" show-overflow>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-button type="text" icon="fa fa-edit" @click="editEvent(row)"></vxe-button>
           <vxe-button type="text" icon="fa fa-trash-o"></vxe-button>
         </template>
@@ -23,7 +23,7 @@
     </vxe-table>
 
     <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" resize destroy-on-close>
-      <template v-slot>
+      <template #default>
         <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
           <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
           <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
@@ -36,7 +36,7 @@
           <vxe-form-item title="Date" field="date3" span="12" :item-render="{name: '$input', props: {type: 'date', placeholder: '请选择日期'}}"></vxe-form-item>
           <vxe-form-item title="Address" field="address" span="24" :title-suffix="{message: '啦啦啦，就是这么强大！！！', icon: 'fa fa-question-circle'}" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
           <vxe-form-item align="center" span="24">
-            <template v-slot>
+            <template #default>
               <vxe-button type="submit" status="primary">保存</vxe-button>
               <vxe-button type="reset">重置</vxe-button>
               <vxe-button @click="$refs.xModal.close()">取消</vxe-button>
@@ -106,7 +106,7 @@ export default {
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
           <vxe-table-column title="操作" width="100" show-overflow>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-button type="text" icon="fa fa-edit" @click="editEvent(row)"></vxe-button>
               <vxe-button type="text" icon="fa fa-trash-o"></vxe-button>
             </template>
@@ -114,7 +114,7 @@ export default {
         </vxe-table>
 
         <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" resize destroy-on-close>
-          <template v-slot>
+          <template #default>
             <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
               <vxe-form-item title="Basic information" span="24" title-align="left" title-width="200px" :title-prefix="{icon: 'fa fa-address-card-o'}"></vxe-form-item>
               <vxe-form-item title="Name" field="name" span="12" :item-render="{name: 'input', attrs: {placeholder: '请输入名称'}}"></vxe-form-item>
@@ -127,7 +127,7 @@ export default {
               <vxe-form-item title="Date" field="date3" span="12" :item-render="{name: '$input', props: {type: 'date', placeholder: '请选择日期'}}"></vxe-form-item>
               <vxe-form-item title="Address" field="address" span="24" :title-suffix="{message: '啦啦啦，就是这么强大！！！', icon: 'fa fa-question-circle'}" :item-render="{name: 'textarea', attrs: {placeholder: '请输入地址'}}"></vxe-form-item>
               <vxe-form-item align="center" span="24">
-                <template v-slot>
+                <template #default>
                   <vxe-button type="submit" status="primary">保存</vxe-button>
                   <vxe-button type="reset">重置</vxe-button>
                   <vxe-button @click="$refs.xModal.close()">取消</vxe-button>

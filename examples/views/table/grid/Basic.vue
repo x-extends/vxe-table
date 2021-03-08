@@ -5,7 +5,7 @@
     </p>
 
     <vxe-grid v-bind="gridOptions">
-      <template v-slot:toolbar_buttons>
+      <template #toolbar_buttons>
         <vxe-button @click="gridOptions.align = 'left'">居左</vxe-button>
         <vxe-button @click="gridOptions.align = 'center'">居中</vxe-button>
         <vxe-button @click="gridOptions.align = 'right'">居右</vxe-button>
@@ -56,7 +56,7 @@ export default {
       demoCodes: [
         `
         <vxe-grid v-bind="gridOptions">
-          <template v-slot:toolbar_buttons>
+          <template #toolbar_buttons>
             <vxe-button @click="gridOptions.align = 'left'">居左</vxe-button>
             <vxe-button @click="gridOptions.align = 'center'">居中</vxe-button>
             <vxe-button @click="gridOptions.align = 'right'">居右</vxe-button>

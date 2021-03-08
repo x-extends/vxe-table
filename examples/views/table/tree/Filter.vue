@@ -11,7 +11,7 @@
       :data="tableData"
       :tree-config="{children: 'children'}">
       <vxe-table-column field="name" title="名称" tree-node>
-        <template v-slot:header>
+        <template #header>
           <div>名称</div>
           <input v-model="filterName" type="type" placeholder="Filter" @keyup="searchEvent">
         </template>
@@ -49,7 +49,7 @@ export default {
           :data="tableData"
           :tree-config="{children: 'children'}">
           <vxe-table-column field="name" title="名称" tree-node>
-            <template v-slot:header="{ row }">
+            <template #header="{ row }">
               <div>名称</div>
               <input v-model="filterName" type="type" placeholder="Filter" @keyup="searchEvent">
             </template>
@@ -60,6 +60,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

@@ -9,17 +9,17 @@
     <p>
       <vxe-form :data="formData1" @submit="searchEvent" @reset="resetEvent">
         <vxe-form-item title="名称" field="name" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData1.name" placeholder="请输入名称" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="昵称" field="nickname" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData1.nickname" placeholder="请输入昵称"></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-select v-model="formData1.sex" placeholder="请选择性别" clearable>
               <vxe-option value="1" label="女"></vxe-option>
               <vxe-option value="2" label="男"></vxe-option>
@@ -27,24 +27,24 @@
           </template>
         </vxe-form-item>
         <vxe-form-item>
-          <template v-slot>
+          <template #default>
             <vxe-button type="submit" status="primary">默认尺寸</vxe-button>
           </template>
         </vxe-form-item>
       </vxe-form>
       <vxe-form :data="formData1" @submit="searchEvent" @reset="resetEvent" size="medium">
         <vxe-form-item title="名称" field="name" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData1.name" placeholder="请输入名称" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="昵称" field="nickname" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData1.nickname" placeholder="请输入昵称" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-select v-model="formData1.sex" placeholder="请选择性别" clearable>
               <vxe-option value="1" label="女"></vxe-option>
               <vxe-option value="2" label="男"></vxe-option>
@@ -52,24 +52,24 @@
           </template>
         </vxe-form-item>
         <vxe-form-item>
-          <template v-slot>
+          <template #default>
             <vxe-button type="submit" status="primary">中等尺寸</vxe-button>
           </template>
         </vxe-form-item>
       </vxe-form>
       <vxe-form :data="formData1" @submit="searchEvent" @reset="resetEvent" size="small">
         <vxe-form-item title="名称" field="name" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData1.name" placeholder="请输入名称" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="昵称" field="nickname" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData1.nickname" placeholder="请输入昵称" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-select v-model="formData1.sex" placeholder="请选择性别" clearable>
               <vxe-option value="1" label="女"></vxe-option>
               <vxe-option value="2" label="男"></vxe-option>
@@ -77,24 +77,24 @@
           </template>
         </vxe-form-item>
         <vxe-form-item>
-          <template v-slot>
+          <template #default>
             <vxe-button type="submit" status="primary">小型尺寸</vxe-button>
           </template>
         </vxe-form-item>
       </vxe-form>
       <vxe-form :data="formData1" @submit="searchEvent" @reset="resetEvent" size="mini">
         <vxe-form-item title="名称" field="name" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData1.name" placeholder="请输入名称" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="昵称" field="nickname" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData1.nickname" placeholder="请输入昵称" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-select v-model="formData1.sex" placeholder="请选择性别" clearable>
               <vxe-option value="1" label="女"></vxe-option>
               <vxe-option value="2" label="男"></vxe-option>
@@ -102,7 +102,7 @@
           </template>
         </vxe-form-item>
         <vxe-form-item>
-          <template v-slot>
+          <template #default>
             <vxe-button type="submit" status="primary">超小尺寸</vxe-button>
           </template>
         </vxe-form-item>
@@ -123,10 +123,10 @@
         @reset="resetEvent">
         <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
         <vxe-form-item title="昵称" span="24">
-          <template v-slot>自定义 {{ formData2.nickname }}</template>
+          <template #default>自定义 {{ formData2.nickname }}</template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" span="24" :item-render="{}">
-          <template v-slot="scope">
+          <template #default="scope">
             <vxe-select v-model="formData2.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(scope)">
               <vxe-option value="1" label="女"></vxe-option>
               <vxe-option value="2" label="男"></vxe-option>
@@ -134,22 +134,22 @@
           </template>
         </vxe-form-item>
         <vxe-form-item title="年龄" field="age" span="24" :item-render="{}">
-          <template v-slot="scope">
+          <template #default="scope">
             <vxe-input v-model="formData2.age" type="integer" placeholder="请输入年龄" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="日期" field="date" span="24" :item-render="{}">
-          <template v-slot="scope">
+          <template #default="scope">
             <vxe-input v-model="formData2.date" type="date" placeholder="请选择日期" clearable @change="$refs.xForm.updateStatus(scope)"></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="地址" field="address" span="24" :item-render="{}">
-          <template v-slot="scope">
+          <template #default="scope">
             <vxe-textarea v-model="formData2.address" placeholder="请输入地址" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-textarea>
           </template>
         </vxe-form-item>
         <vxe-form-item align="center" span="24" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-button type="submit" status="primary">基本表单</vxe-button>
             <vxe-button type="reset">重置</vxe-button>
           </template>
@@ -160,17 +160,17 @@
     <p>
       <vxe-form :data="formData3" title-align="right" title-width="100" prevent-submit title-colon>
         <vxe-form-item title="名称" field="name" span="8" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData3.name" placeholder="请输入名称" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="昵称" field="nickname" span="8" :item-render="{}" :title-prefix="{ message: '请输入汉字！', icon: 'fa fa-exclamation-circle' }">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData3.nickname" placeholder="请输入昵称" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="性别" field="sex" span="8" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-select v-model="formData3.sex" placeholder="请选择性别" clearable>
               <vxe-option value="1" label="女"></vxe-option>
               <vxe-option value="2" label="男"></vxe-option>
@@ -178,12 +178,12 @@
           </template>
         </vxe-form-item>
         <vxe-form-item title="年龄" field="age" span="8" :item-render="{}" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData3.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="状态" field="status" span="8" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-select v-model="formData3.status" placeholder="请选择状态" clearable>
               <vxe-option value="0" label="失败"></vxe-option>
               <vxe-option value="1" label="成功"></vxe-option>
@@ -191,22 +191,22 @@
           </template>
         </vxe-form-item>
         <vxe-form-item title="是否禁用" field="active" span="8" :item-render="{}">
-          <template v-slot>
+          <template #default>
             <vxe-switch v-model="formData3.active" open-label="是" close-label="否"></vxe-switch>
           </template>
         </vxe-form-item>
         <vxe-form-item title="体重" field="weight" span="8" :item-render="{}" folding>
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData3.weight" type="number" placeholder="请输入体重" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="日期" field="date" span="8" :item-render="{}" folding>
-          <template v-slot>
+          <template #default>
             <vxe-input v-model="formData3.date" type="date" placeholder="请选择日期" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="是否单身" field="single" span="8" :item-render="{}" folding>
-          <template v-slot>
+          <template #default>
             <vxe-radio-group v-model="formData3.single">
               <vxe-radio label="1">是</vxe-radio>
               <vxe-radio label="0">否</vxe-radio>
@@ -214,7 +214,7 @@
           </template>
         </vxe-form-item>
         <vxe-form-item title="兴趣爱好" field="flagList" span="8" :item-render="{}" folding>
-          <template v-slot>
+          <template #default>
             <vxe-checkbox-group v-model="formData3.flagList">
               <vxe-checkbox label="1">爬山</vxe-checkbox>
               <vxe-checkbox label="2">跑步</vxe-checkbox>
@@ -223,7 +223,7 @@
           </template>
         </vxe-form-item>
         <vxe-form-item align="center" span="24" collapse-node>
-          <template v-slot>
+          <template #default>
             <vxe-button status="primary" @click="searchEvent">手动提交方式</vxe-button>
             <vxe-button @click="resetEvent">重置</vxe-button>
           </template>
@@ -324,17 +324,17 @@ export default {
         <p>
           <vxe-form :data="formData1" @submit="searchEvent" @reset="resetEvent">
             <vxe-form-item title="名称" field="name" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData1.name" placeholder="请输入名称" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="昵称" field="nickname" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData1.nickname" placeholder="请输入昵称"></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-select v-model="formData1.sex" placeholder="请选择性别" clearable>
                   <vxe-option value="1" label="女"></vxe-option>
                   <vxe-option value="2" label="男"></vxe-option>
@@ -342,24 +342,24 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item>
-              <template v-slot>
+              <template #default>
                 <vxe-button type="submit" status="primary">默认尺寸</vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
           <vxe-form :data="formData1" @submit="searchEvent" @reset="resetEvent" size="medium">
             <vxe-form-item title="名称" field="name" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData1.name" placeholder="请输入名称" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="昵称" field="nickname" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData1.nickname" placeholder="请输入昵称" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-select v-model="formData1.sex" placeholder="请选择性别" clearable>
                   <vxe-option value="1" label="女"></vxe-option>
                   <vxe-option value="2" label="男"></vxe-option>
@@ -367,24 +367,24 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item>
-              <template v-slot>
+              <template #default>
                 <vxe-button type="submit" status="primary">中等尺寸</vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
           <vxe-form :data="formData1" @submit="searchEvent" @reset="resetEvent" size="small">
             <vxe-form-item title="名称" field="name" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData1.name" placeholder="请输入名称" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="昵称" field="nickname" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData1.nickname" placeholder="请输入昵称" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-select v-model="formData1.sex" placeholder="请选择性别" clearable>
                   <vxe-option value="1" label="女"></vxe-option>
                   <vxe-option value="2" label="男"></vxe-option>
@@ -392,24 +392,24 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item>
-              <template v-slot>
+              <template #default>
                 <vxe-button type="submit" status="primary">小型尺寸</vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
           <vxe-form :data="formData1" @submit="searchEvent" @reset="resetEvent" size="mini">
             <vxe-form-item title="名称" field="name" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData1.name" placeholder="请输入名称" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="昵称" field="nickname" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData1.nickname" placeholder="请输入昵称" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-select v-model="formData1.sex" placeholder="请选择性别" clearable>
                   <vxe-option value="1" label="女"></vxe-option>
                   <vxe-option value="2" label="男"></vxe-option>
@@ -417,7 +417,7 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item>
-              <template v-slot>
+              <template #default>
                 <vxe-button type="submit" status="primary">超小尺寸</vxe-button>
               </template>
             </vxe-form-item>
@@ -438,10 +438,10 @@ export default {
             @reset="resetEvent">
             <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
             <vxe-form-item title="昵称" span="24">
-              <template v-slot>自定义 {{ formData2.nickname }}</template>
+              <template #default>自定义 {{ formData2.nickname }}</template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" span="24" :item-render="{}">
-              <template v-slot="scope">
+              <template #default="scope">
                 <vxe-select v-model="formData2.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(scope)">
                   <vxe-option value="1" label="女"></vxe-option>
                   <vxe-option value="2" label="男"></vxe-option>
@@ -449,22 +449,22 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item title="年龄" field="age" span="24" :item-render="{}">
-              <template v-slot="scope">
+              <template #default="scope">
                 <vxe-input v-model="formData2.age" type="integer" placeholder="请输入年龄" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="日期" field="date" span="24" :item-render="{}">
-              <template v-slot="scope">
+              <template #default="scope">
                 <vxe-input v-model="formData2.date" type="date" placeholder="请选择日期" clearable @change="$refs.xForm.updateStatus(scope)"></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="地址" field="address" span="24" :item-render="{}">
-              <template v-slot="scope">
+              <template #default="scope">
                 <vxe-textarea v-model="formData2.address" placeholder="请输入地址" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-textarea>
               </template>
             </vxe-form-item>
             <vxe-form-item align="center" span="24" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-button type="submit" status="primary">基本表单</vxe-button>
                 <vxe-button type="reset">重置</vxe-button>
               </template>
@@ -475,17 +475,17 @@ export default {
         <p>
           <vxe-form :data="formData3" title-align="right" title-width="100" prevent-submit title-colon>
             <vxe-form-item title="名称" field="name" span="8" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData3.name" placeholder="请输入名称" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="昵称" field="nickname" span="8" :item-render="{}" :title-prefix="{ message: '请输入汉字！', icon: 'fa fa-exclamation-circle' }">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData3.nickname" placeholder="请输入昵称" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="性别" field="sex" span="8" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-select v-model="formData3.sex" placeholder="请选择性别" clearable>
                   <vxe-option value="1" label="女"></vxe-option>
                   <vxe-option value="2" label="男"></vxe-option>
@@ -493,12 +493,12 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item title="年龄" field="age" span="8" :item-render="{}" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData3.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="状态" field="status" span="8" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-select v-model="formData3.status" placeholder="请选择状态" clearable>
                   <vxe-option value="0" label="失败"></vxe-option>
                   <vxe-option value="1" label="成功"></vxe-option>
@@ -506,22 +506,22 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item title="是否禁用" field="active" span="8" :item-render="{}">
-              <template v-slot>
+              <template #default>
                 <vxe-switch v-model="formData3.active" open-label="是" close-label="否"></vxe-switch>
               </template>
             </vxe-form-item>
             <vxe-form-item title="体重" field="weight" span="8" :item-render="{}" folding>
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData3.weight" type="number" placeholder="请输入体重" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="日期" field="date" span="8" :item-render="{}" folding>
-              <template v-slot>
+              <template #default>
                 <vxe-input v-model="formData3.date" type="date" placeholder="请选择日期" clearable></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item title="是否单身" field="single" span="8" :item-render="{}" folding>
-              <template v-slot>
+              <template #default>
                 <vxe-radio-group v-model="formData3.single">
                   <vxe-radio label="1">是</vxe-radio>
                   <vxe-radio label="0">否</vxe-radio>
@@ -529,7 +529,7 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item title="兴趣爱好" field="flagList" span="8" :item-render="{}" folding>
-              <template v-slot>
+              <template #default>
                 <vxe-checkbox-group v-model="formData3.flagList">
                   <vxe-checkbox label="1">爬山</vxe-checkbox>
                   <vxe-checkbox label="2">跑步</vxe-checkbox>
@@ -538,7 +538,7 @@ export default {
               </template>
             </vxe-form-item>
             <vxe-form-item align="center" span="24" collapse-node>
-              <template v-slot>
+              <template #default>
                 <vxe-button status="primary" @click="searchEvent">手动提交方式</vxe-button>
                 <vxe-button @click="resetEvent">重置</vxe-button>
               </template>

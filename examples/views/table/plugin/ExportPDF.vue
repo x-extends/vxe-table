@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar custom :export="tableExport">
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
       </template>
     </vxe-toolbar>
@@ -50,7 +50,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar custom :export="tableExport">
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="exportDataEvent">导出数据</vxe-button>
           </template>
         </vxe-toolbar>

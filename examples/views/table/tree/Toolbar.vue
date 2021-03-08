@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar :refresh="{query: reload}" export print custom>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button @click="saveEvent">保存</vxe-button>
       </template>
@@ -55,7 +55,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar :refresh="{query: reload}" export print custom>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
             <vxe-button @click="saveEvent">保存</vxe-button>
           </template>
@@ -81,6 +81,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

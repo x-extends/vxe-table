@@ -132,6 +132,9 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        import XEClipboard from 'xe-clipboard'
+
         export default {
           data () {
             return {

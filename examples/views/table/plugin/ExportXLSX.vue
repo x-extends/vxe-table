@@ -6,7 +6,7 @@
       </p>
 
     <vxe-toolbar custom import export>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="tableData = []">清空数据</vxe-button>
         <vxe-button @click="exportDataEvent">导出数据</vxe-button>
         <vxe-button @click="align = 'left'">居左</vxe-button>
@@ -77,7 +77,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar custom import export>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="tableData = []">清空数据</vxe-button>
             <vxe-button @click="exportDataEvent">导出数据</vxe-button>
             <vxe-button @click="align = 'left'">居左</vxe-button>
@@ -116,6 +116,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

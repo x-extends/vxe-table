@@ -5,7 +5,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
         <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
         <vxe-button @click="$refs.xTree1.setAllTreeExpand(true)">展开所有</vxe-button>
@@ -63,7 +63,7 @@
       :checkbox-config="{labelField: 'name'}"
       :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
       <vxe-table-column type="checkbox" tree-node>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>
             <template v-if="row.children && row.children.length">
               <i class="tree-node-icon fa" :class="$refs.xTree3.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
@@ -76,7 +76,7 @@
         </template>
       </vxe-table-column>
       <vxe-table-column title="操作" width="140">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-button type="text" icon="fa fa-eye"></vxe-button>
           <vxe-button type="text" icon="fa fa-edit"></vxe-button>
           <vxe-button type="text" icon="fa fa-trash-o" @click="removeRowEvent(row)"></vxe-button>
@@ -160,7 +160,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="getTreeRadioEvent">获取选中</vxe-button>
             <vxe-button @click="getTreeExpansionEvent">获取已展开</vxe-button>
             <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
@@ -237,6 +237,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {
@@ -284,7 +286,7 @@ export default {
           :checkbox-config="{labelField: 'name'}"
           :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
           <vxe-table-column type="checkbox" tree-node>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>
                 <template v-if="row.children && row.children.length">
                   <i class="tree-node-icon fa" :class="$refs.xTree3.isTreeExpandByRow(row) ? 'fa-folder-open-o' : 'fa-folder-o'"></i>
@@ -297,7 +299,7 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column title="操作" width="140">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-button type="text" icon="fa fa-eye"></vxe-button>
               <vxe-button type="text" icon="fa fa-edit"></vxe-button>
               <vxe-button type="text" icon="fa fa-trash-o" @click="removeRowEvent(row)"></vxe-button>

@@ -51,7 +51,7 @@
       :data="tableData"
       @current-change="currentChangeEvent">
       <vxe-table-column type="radio" width="400" tree-node>
-        <template v-slot:header>
+        <template #header>
           <vxe-button type="text" @click="clearCurrentRowEvent" :disabled="!selectRow">取消</vxe-button>
         </template>
       </vxe-table-column>
@@ -207,7 +207,7 @@ export default {
           :data="tableData"
           @current-change="currentChangeEvent">
           <vxe-table-column type="radio" width="400" tree-node>
-            <template v-slot:header>
+            <template #header>
               <vxe-button type="text" @click="clearCurrentRowEvent" :disabled="!selectRow">取消</vxe-button>
             </template>
           </vxe-table-column>

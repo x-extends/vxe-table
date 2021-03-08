@@ -61,6 +61,8 @@ export default {
           :data="tableData"></vxe-grid>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

@@ -22,7 +22,7 @@
     <p class="tip">当纵向或横向内容过多时，自动出现滚动条</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
       </template>
     </vxe-toolbar>
@@ -104,7 +104,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
           </template>
         </vxe-toolbar>

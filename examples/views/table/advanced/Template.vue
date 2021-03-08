@@ -9,17 +9,17 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
         <vxe-button>
-          <template v-slot>下拉按钮</template>
-          <template v-slot:dropdowns>
+          <template #default>下拉按钮</template>
+          <template #dropdowns>
             <vxe-button>删除</vxe-button>
             <vxe-button>保存</vxe-button>
           </template>
         </vxe-button>
       </template>
-      <template v-slot:tools>
+      <template #tools>
         <vxe-input v-model="value2" placeholder="搜索"></vxe-input>
       </template>
     </vxe-toolbar>
@@ -36,48 +36,48 @@
       @checkbox-all="checkboxChangeEvent">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
-        <template v-slot:header>
+        <template #header>
           <div class="first-col">
             <div class="first-col-top">名称</div>
             <div class="first-col-bottom">序号</div>
           </div>
         </template>
-        <template v-slot:footer="{ items, _columnIndex }">
+        <template #footer="{ items, _columnIndex }">
           <vxe-button status="primary" @click="clickFooterItem(items, _columnIndex)" size="mini">支持</vxe-button>
           <vxe-button @click="clickFooterItem(items, _columnIndex)" size="mini">放弃</vxe-button>
         </template>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="app.body.label.name" sortable>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <a href="https://github.com/x-extends/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
-        <template v-slot:header>
+        <template #header>
           <span style="color: red;">自定义头部</span>
         </template>
-        <template v-slot:footer="{ items, _columnIndex }">
+        <template #footer="{ items, _columnIndex }">
           <span style="color: red">累计：{{ items[_columnIndex] }}</span>
         </template>
-        <template v-slot:filter="{ $panel, column }">
+        <template #filter="{ $panel, column }">
           <template v-for="(option, index) in column.filters">
             <input class="my-filter" type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, $panel)">
           </template>
         </template>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>{{ row.sex }} </span>
           <vxe-button type="text">编辑</vxe-button>
           <vxe-button type="text">删除</vxe-button>
         </template>
       </vxe-table-column>
       <vxe-table-column field="time" title="Time">
-        <template v-slot:header>
+        <template #header>
           <vxe-input v-model="value1" placeholder="放个输入框" size="mini"></vxe-input>
         </template>
-        <template v-slot="{ row, rowIndex }">
+        <template #default="{ row, rowIndex }">
           <template v-if="rowIndex === 2">
             <vxe-switch v-model="row.flag"></vxe-switch>
           </template>
@@ -90,7 +90,7 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow>
-        <template v-slot="{ row, rowIndex }">
+        <template #default="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-select v-model="row.flag1" transfer>
               <vxe-option value="Y" label="是"></vxe-option>
@@ -103,17 +103,17 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span v-html="row.html1"></span>
         </template>
-        <template v-slot:footer>
+        <template #footer>
           <span>
             <img src="/vxe-table/static/other/img1.gif" style="width: 36px;">自定义模板<img src="/vxe-table/static/other/img2.gif" style="width: 30px;">
           </span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="img1" title="图片路径" width="120">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <img v-if="row.img1" :src="row.img1" style="width: 100px;">
           <span v-else>无</span>
         </template>
@@ -126,7 +126,7 @@
       :page-size.sync="tablePage.pageSize"
       :total="tablePage.total"
       :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-      <template v-slot:left>
+      <template #left>
         <span class="page-left">
           <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
           <span class="select-count">自定义模板 {{ selectRecords.length }} 条</span>
@@ -134,8 +134,8 @@
           <vxe-button>管理</vxe-button>
           <vxe-button>删除</vxe-button>
           <vxe-button size="small">
-            <template v-slot>更多操作</template>
-            <template v-slot:dropdowns>
+            <template #default>更多操作</template>
+            <template #dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
               <vxe-button type="text">批量删除</vxe-button>
@@ -143,7 +143,7 @@
           </vxe-button>
         </span>
       </template>
-      <template v-slot:right>
+      <template #right>
         <img src="/vxe-table/static/other/img1.gif" height="34">
         <img src="/vxe-table/static/other/img1.gif" height="34">
         <img src="/vxe-table/static/other/img1.gif" height="34">
@@ -151,7 +151,7 @@
     </vxe-pager>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-      <template v-slot>{{ selectRow ? selectRow.name : '' }}</template>
+      <template #default>{{ selectRow ? selectRow.name : '' }}</template>
     </vxe-modal>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -195,17 +195,17 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button>{{ $t('app.body.button.insert') }}</vxe-button>
             <vxe-button>
-              <template v-slot>下拉按钮</template>
-              <template v-slot:dropdowns>
+              <template #default>下拉按钮</template>
+              <template #dropdowns>
                 <vxe-button>删除</vxe-button>
                 <vxe-button>保存</vxe-button>
               </template>
             </vxe-button>
           </template>
-          <template v-slot:tools>
+          <template #tools>
             <vxe-input v-model="value2" placeholder="搜索"></vxe-input>
           </template>
         </vxe-toolbar>
@@ -222,48 +222,48 @@ export default {
           @checkbox-all="checkboxChangeEvent">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
-            <template v-slot:header>
+            <template #header>
               <div class="first-col">
                 <div class="first-col-top">名称</div>
                 <div class="first-col-bottom">序号</div>
               </div>
             </template>
-            <template v-slot:footer="{ items, _columnIndex }">
+            <template #footer="{ items, _columnIndex }">
               <vxe-button status="primary" @click="clickFooterItem(items, _columnIndex)" size="mini">支持</vxe-button>
               <vxe-button @click="clickFooterItem(items, _columnIndex)" size="mini">放弃</vxe-button>
             </template>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="app.body.label.name" sortable>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <a href="https://github.com/x-extends/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
-            <template v-slot:header>
+            <template #header>
               <span style="color: red;">自定义头部</span>
             </template>
-            <template v-slot:footer="{ items, _columnIndex }">
+            <template #footer="{ items, _columnIndex }">
               <span style="color: red">累计：{{ items[_columnIndex] }}</span>
             </template>
-            <template v-slot:filter="{ $panel, column }">
+            <template #filter="{ $panel, column }">
               <template v-for="(option, index) in column.filters">
                 <input class="my-filter" type="type" v-model="option.data" :key="index" @input="changeFilterEvent($event, option, $panel)">
               </template>
             </template>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>{{ row.sex }} </span>
               <vxe-button type="text">编辑</vxe-button>
               <vxe-button type="text">删除</vxe-button>
             </template>
           </vxe-table-column>
           <vxe-table-column field="time" title="Time">
-            <template v-slot:header>
+            <template #header>
               <vxe-input v-model="value1" placeholder="放个输入框" size="mini"></vxe-input>
             </template>
-            <template v-slot="{ row, rowIndex }">
+            <template #default="{ row, rowIndex }">
               <template v-if="rowIndex === 2">
                 <vxe-switch v-model="row.flag"></vxe-switch>
               </template>
@@ -276,7 +276,7 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow>
-            <template v-slot="{ row, rowIndex }">
+            <template #default="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-select v-model="row.flag1" transfer>
                   <vxe-option value="Y" label="是"></vxe-option>
@@ -289,17 +289,17 @@ export default {
             </template>
           </vxe-table-column>
           <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span v-html="row.html1"></span>
             </template>
-            <template v-slot:footer>
+            <template #footer>
               <span>
                 <img src="/vxe-table/static/other/img1.gif" style="width: 36px;">自定义模板<img src="/vxe-table/static/other/img2.gif" style="width: 30px;">
               </span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="img1" title="图片路径" width="120">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <img v-if="row.img1" :src="row.img1" style="width: 100px;">
               <span v-else>无</span>
             </template>
@@ -312,7 +312,7 @@ export default {
           :page-size.sync="tablePage.pageSize"
           :total="tablePage.total"
           :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-          <template v-slot:left>
+          <template #left>
             <span class="page-left">
               <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
               <span class="select-count">自定义模板 {{ selectRecords.length }} 条</span>
@@ -320,8 +320,8 @@ export default {
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
               <vxe-button size="small">
-                <template v-slot>更多操作</template>
-                <template v-slot:dropdowns>
+                <template #default>更多操作</template>
+                <template #dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
                   <vxe-button type="text">批量删除</vxe-button>
@@ -329,7 +329,7 @@ export default {
               </vxe-button>
             </span>
           </template>
-          <template v-slot:right>
+          <template #right>
             <img src="/vxe-table/static/other/img1.gif" height="34">
             <img src="/vxe-table/static/other/img1.gif" height="34">
             <img src="/vxe-table/static/other/img1.gif" height="34">
@@ -337,10 +337,12 @@ export default {
         </vxe-pager>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
-          <template v-slot>{{ selectRow ? selectRow.name : '' }}</template>
+          <template #default>{{ selectRow ? selectRow.name : '' }}</template>
         </vxe-modal>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

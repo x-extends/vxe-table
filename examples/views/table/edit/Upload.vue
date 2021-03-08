@@ -3,7 +3,7 @@
     <p class="tip">文件上传，可以通过调用 <table-api-link prop="readFile"/> 读取本地文件<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button status="primary" @click="insertEvent()">选择文件</vxe-button>
         <vxe-button status="primary" @click="insertEvent({ multiple : true })">选择多个</vxe-button>
         <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
@@ -45,7 +45,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button status="primary" @click="insertEvent()">选择文件</vxe-button>
             <vxe-button status="primary" @click="insertEvent({ multiple : true })">选择多个</vxe-button>
             <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
@@ -69,6 +69,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

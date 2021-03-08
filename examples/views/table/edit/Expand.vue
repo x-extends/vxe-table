@@ -10,7 +10,7 @@
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
-        <template v-slot:content="{ row }">
+        <template #content="{ row }">
           <ul class="expand-form">
             <li>
               <span class="title">Name：</span>
@@ -68,7 +68,7 @@ export default {
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
-            <template v-slot:content="{ row, rowIndex }">
+            <template #content="{ row, rowIndex }">
               <ul class="expand-form">
                 <li>
                   <span class="title">Name：</span>

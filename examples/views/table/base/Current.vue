@@ -3,7 +3,7 @@
     <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 显示高亮行，当前行是唯一的；用户操作点击选项时会触发事件 <table-api-link prop="current-change"/></p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable.setCurrentRow(tableData[1])">设置第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable.clearCurrentRow()">取消选中</vxe-button>
         <vxe-button @click="getCurrentEvent">获取高亮行</vxe-button>
@@ -46,7 +46,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xTable.setCurrentRow(tableData[1])">设置第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable.clearCurrentRow()">取消选中</vxe-button>
             <vxe-button @click="getCurrentEvent">获取高亮行</vxe-button>

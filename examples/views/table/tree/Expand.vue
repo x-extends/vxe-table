@@ -11,7 +11,7 @@
       :data="tableData">
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column type="expand" title="Details" width="80">
-        <template v-slot:content="{ row }">
+        <template #content="{ row }">
           <ul>
             <li>
               <span>ID：</span>
@@ -83,7 +83,7 @@ export default {
           :data="tableData">
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column type="expand" width="60">
-            <template v-slot:content="{ row, rowIndex }">
+            <template #content="{ row, rowIndex }">
               <ul>
                 <li>
                   <span>ID：</span>

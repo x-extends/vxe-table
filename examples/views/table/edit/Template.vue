@@ -22,17 +22,17 @@
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
-        <template v-slot:edit="scope">
+        <template #edit="scope">
           <vxe-input type="text" v-model="scope.row.role" @input="$refs.xTable.updateStatus(scope)"></vxe-input>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
-        <template v-slot:edit="{ row }">
+        <template #edit="{ row }">
           <vxe-pulldown ref="xDown1" transfer>
-            <template v-slot>
+            <template #default>
               <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
             </template>
-            <template v-slot:dropdown>
+            <template #dropdown>
               <ul class="my-downpanel1">
                 <li v-for="item in downList" :key="item.value" @click="changeNameEvent(item, row)">
                   <i class="fa fa-user-o"></i>
@@ -45,19 +45,19 @@
       </vxe-table-column>
       <vxe-table-colgroup title="分组">
         <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
-          <template v-slot:edit="scope">
+          <template #edit="scope">
             <vxe-input type="number" v-model="scope.row.age" @input="$refs.xTable.updateStatus(scope)"></vxe-input>
           </template>
         </vxe-table-column>
         <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
-          <template v-slot:edit="scope">
+          <template #edit="scope">
             <vxe-input type="number" v-model="scope.row.num" @input="$refs.xTable.updateStatus(scope)"></vxe-input>
           </template>
-          <template v-slot="{ row }">￥{{ row.num }}</template>
+          <template #default="{ row }">￥{{ row.num }}</template>
         </vxe-table-column>
       </vxe-table-colgroup>
       <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
-        <template v-slot:edit="scope">
+        <template #edit="scope">
           <template v-if="scope.rowIndex === 0">
             <vxe-input type="date" v-model="scope.row.attr1" placeholder="请选择日期" @input="$refs.xTable.updateStatus(scope)" transfer></vxe-input>
           </template>
@@ -84,7 +84,7 @@
       :page-size.sync="tablePage.pageSize"
       :total="tablePage.total"
       :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-      <template v-slot:left>
+      <template #left>
         <span class="page-left">
           <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
           <span class="select-count">自定义模板 {{ selectRecords.length }} 条</span>
@@ -92,8 +92,8 @@
           <vxe-button>管理</vxe-button>
           <vxe-button>删除</vxe-button>
           <vxe-button size="small">
-            <template v-slot>更多操作</template>
-            <template v-slot:dropdowns>
+            <template #default>更多操作</template>
+            <template #dropdowns>
               <vxe-button type="text">批量修改</vxe-button>
               <vxe-button type="text">批量管理</vxe-button>
               <vxe-button type="text">批量删除</vxe-button>
@@ -101,7 +101,7 @@
           </vxe-button>
         </span>
       </template>
-      <template v-slot:right>
+      <template #right>
         <img src="/vxe-table/static/other/img1.gif" height="34">
         <img src="/vxe-table/static/other/img1.gif" height="34">
         <img src="/vxe-table/static/other/img1.gif" height="34">
@@ -151,17 +151,17 @@ export default {
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
-            <template v-slot:edit="{ row }">
+            <template #edit="{ row }">
               <vxe-input type="text" v-model="row.role"></vxe-input>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
-            <template v-slot:edit="{ row }">
+            <template #edit="{ row }">
               <vxe-pulldown ref="xDown1" transfer>
-                <template v-slot>
+                <template #default>
                   <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
                 </template>
-                <template v-slot:dropdown>
+                <template #dropdown>
                   <ul class="my-downpanel1">
                     <li v-for="item in downList" :key="item.value" @click="changeNameEvent(item, row)">
                       <i class="fa fa-user-o"></i>
@@ -174,19 +174,19 @@ export default {
           </vxe-table-column>
           <vxe-table-colgroup title="分组">
             <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
-              <template v-slot:edit="{ row }">
+              <template #edit="{ row }">
                 <vxe-input type="number" v-model="row.age"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
-              <template v-slot:edit="{ row }">
+              <template #edit="{ row }">
                 <vxe-input type="number" v-model="row.num"></vxe-input>
               </template>
-              <template v-slot="{ row }">￥{{ row.num }}</template>
+              <template #default="{ row }">￥{{ row.num }}</template>
             </vxe-table-column>
           </vxe-table-colgroup>
           <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
-            <template v-slot:edit="{ row, rowIndex }">
+            <template #edit="{ row, rowIndex }">
               <template v-if="rowIndex === 0">
                 <vxe-input type="date" v-model="row.attr1" placeholder="请选择日期" transfer></vxe-input>
               </template>
@@ -213,7 +213,7 @@ export default {
           :page-size.sync="tablePage.pageSize"
           :total="tablePage.total"
           :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
-          <template v-slot:left>
+          <template #left>
             <span class="page-left">
               <vxe-checkbox v-model="isAllChecked" :indeterminate="isIndeterminate" @change="changeAllEvent"></vxe-checkbox>
               <span class="select-count">自定义模板 {{ selectRecords.length }} 条</span>
@@ -221,8 +221,8 @@ export default {
               <vxe-button>管理</vxe-button>
               <vxe-button>删除</vxe-button>
               <vxe-button size="small">
-                <template v-slot>更多操作</template>
-                <template v-slot:dropdowns>
+                <template #default>更多操作</template>
+                <template #dropdowns>
                   <vxe-button type="text">批量修改</vxe-button>
                   <vxe-button type="text">批量管理</vxe-button>
                   <vxe-button type="text">批量删除</vxe-button>
@@ -230,7 +230,7 @@ export default {
               </vxe-button>
             </span>
           </template>
-          <template v-slot:right>
+          <template #right>
             <img src="/vxe-table/static/other/img1.gif" height="34">
             <img src="/vxe-table/static/other/img1.gif" height="34">
             <img src="/vxe-table/static/other/img1.gif" height="34">

@@ -3,7 +3,7 @@
     <p class="tip">局部递增数据</p>
 
     <vxe-toolbar :loading="loading">
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="loadList(20)">+20条</vxe-button>
         <vxe-button @click="loadList(100)">+100条</vxe-button>
         <vxe-button @click="loadList(500)">+500条</vxe-button>
@@ -50,7 +50,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar :loading="loading">
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="loadList(20)">+20条</vxe-button>
             <vxe-button @click="loadList(100)">+100条</vxe-button>
             <vxe-button @click="loadList(500)">+500条</vxe-button>
@@ -79,6 +79,8 @@ export default {
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

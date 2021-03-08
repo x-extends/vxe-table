@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xTable.toggleRowExpand(tableData[1])">切换第二行展开</vxe-button>
         <vxe-button @click="$refs.xTable.setRowExpand([tableData[2], tableData[3]], true)">设置第三、四行展开</vxe-button>
         <vxe-button @click="$refs.xTable.setAllRowExpand(true)">设置所有行展开</vxe-button>
@@ -21,10 +21,10 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" title="Name">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>{{ row.name }}</span>
         </template>
-        <template v-slot:content="{ row, rowIndex }">
+        <template #content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-table
               border
@@ -74,10 +74,10 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" title="Name">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>{{ row.name }}</span>
         </template>
-        <template v-slot:content="{ row, rowIndex }">
+        <template #content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-table
               border
@@ -127,10 +127,10 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" title="Name">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>{{ row.name }}</span>
         </template>
-        <template v-slot:content="{ row, rowIndex }">
+        <template #content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-table
               border
@@ -188,10 +188,10 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" title="Name">
-            <template v-slot="{ row, rowIndex }">
+            <template #default="{ row, rowIndex }">
               <span>{{ row.name }}</span>
             </template>
-            <template v-slot:content="{ row, rowIndex }">
+            <template #content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border
@@ -245,10 +245,10 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" title="Name">
-            <template v-slot="{ row, rowIndex }">
+            <template #default="{ row, rowIndex }">
               <span>{{ row.name }}</span>
             </template>
-            <template v-slot:content="{ row, rowIndex }">
+            <template #content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border
@@ -318,10 +318,10 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" title="Name">
-            <template v-slot="{ row, rowIndex }">
+            <template #default="{ row, rowIndex }">
               <span>{{ row.name }}</span>
             </template>
-            <template v-slot:content="{ row, rowIndex }">
+            <template #content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-table
                   border

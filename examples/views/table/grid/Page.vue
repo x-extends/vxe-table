@@ -13,7 +13,7 @@
       :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
       :columns="tableColumn"
       :data="tableData">
-      <template v-slot:pager>
+      <template #pager>
         <vxe-pager
           :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
           :current-page.sync="tablePage.currentPage"
@@ -62,7 +62,7 @@ export default {
           :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
           :columns="tableColumn"
           :data="tableData">
-          <template v-slot:pager>
+          <template #pager>
             <vxe-pager
               :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
               :current-page.sync="tablePage.currentPage"

@@ -3,7 +3,7 @@
     <p class="tip">可编辑的合并行<br><span class="red">（注：<table-api-link prop="span-method"/> ，不能用于树形结构、展开行、固定列，合并的逻辑都是自行实现的，该示例仅供参考）</span></p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
         <vxe-button @click="saveEvent">保存</vxe-button>
@@ -63,7 +63,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
             <vxe-button @click="saveEvent">保存</vxe-button>

@@ -6,7 +6,7 @@
     </p>
 
     <vxe-toolbar perfect>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button icon="fa fa-plus" status="perfect" @click="insertEvent">新增</vxe-button>
         <vxe-button icon="fa fa-trash-o" status="perfect" @click="removeEvent">移除</vxe-button>
         <vxe-button icon="fa fa-save" status="perfect" @click="saveEvent">保存</vxe-button>
@@ -27,7 +27,7 @@
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column title="操作">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <vxe-button v-if="!$refs.xTable.isInsertByRow(row)" @click="$refs.xTable.revertData(row)">还原</vxe-button>
         </template>
       </vxe-table-column>
@@ -57,7 +57,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar perfect>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button icon="fa fa-plus" status="perfect" @click="insertEvent">新增</vxe-button>
             <vxe-button icon="fa fa-trash-o" status="perfect" @click="removeEvent">移除</vxe-button>
             <vxe-button icon="fa fa-save" status="perfect" @click="saveEvent">保存</vxe-button>
@@ -78,7 +78,7 @@ export default {
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column title="操作">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <vxe-button v-if="!$refs.xTable.isInsertByRow(row)" @click="$refs.xTable.revertData(row)">还原</vxe-button>
             </template>
           </vxe-table-column>

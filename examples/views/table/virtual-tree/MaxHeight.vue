@@ -13,7 +13,7 @@
       :tree-config="{children: 'children'}"
       :columns="tableColumn"
       :data="tableData">
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xVTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
@@ -54,7 +54,7 @@ export default {
           :tree-config="{children: 'children'}"
           :columns="tableColumn"
           :data="tableData">
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xVTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>

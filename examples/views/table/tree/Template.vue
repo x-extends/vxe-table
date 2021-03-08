@@ -5,10 +5,10 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
          <vxe-input size="small" placeholder="搜索"></vxe-input>
       </template>
-      <template v-slot:tools>
+      <template #tools>
         <vxe-button status="primary">操作1</vxe-button>
         <vxe-button status="primary">操作2</vxe-button>
         <vxe-button status="primary">操作3</vxe-button>
@@ -23,17 +23,17 @@
       <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
       <vxe-table-column field="type" title="Type">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>{{ `类型：${row.type || '无'}` }}</span>
         </template>
       </vxe-table-column>
       <vxe-table-column field="attr3" title="Image" tree-node>
-        <template v-slot>
+        <template #default>
           <img src="/vxe-table/static/other/img1.gif" height="50">
         </template>
       </vxe-table-column>
       <vxe-table-column field="date" title="Date">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>{{ formatDate(row.date) }}</span>
         </template>
       </vxe-table-column>
@@ -85,10 +85,10 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-input size="small" placeholder="搜索"></vxe-input>
           </template>
-          <template v-slot:tools>
+          <template #tools>
             <vxe-button status="primary">操作1</vxe-button>
             <vxe-button status="primary">操作2</vxe-button>
             <vxe-button status="primary">操作3</vxe-button>
@@ -103,23 +103,25 @@ export default {
           <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
           <vxe-table-column field="type" title="Type">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>{{ \`类型：\${row.type || '无'}\` }}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="attr3" title="Image" tree-node>
-            <template v-slot>
+            <template #default>
               <img src="/vxe-table/static/other/img1.gif" height="50">
             </template>
           </vxe-table-column>
           <vxe-table-column field="date" title="Date">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>{{ formatDate(row.date) }}</span>
             </template>
           </vxe-table-column>
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+        
         export default {
           data () {
             return {

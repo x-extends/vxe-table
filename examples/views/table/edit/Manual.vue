@@ -21,7 +21,7 @@
       <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
       <vxe-table-column title="操作" width="160">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <template v-if="$refs.xTable.isActiveByRow(row)">
             <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
             <vxe-button @click="cancelRowEvent(row)">取消</vxe-button>
@@ -72,7 +72,7 @@ export default {
           <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
           <vxe-table-column title="操作" width="160">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <template v-if="$refs.xTable.isActiveByRow(row)">
                 <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
                 <vxe-button @click="cancelRowEvent(row)">取消</vxe-button>

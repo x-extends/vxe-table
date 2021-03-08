@@ -14,7 +14,7 @@
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
       <vxe-table-column title="操作" fixed="right" width="200">
-        <template v-slot>
+        <template #default>
           <vxe-button type="text">按钮1</vxe-button>
           <vxe-button type="text">按钮2</vxe-button>
         </template>
@@ -31,7 +31,7 @@
     <p class="tip">固定列建议设置 <table-api-link prop="show-overflow"/> 该值，禁用自动换行，大幅提升渲染速度</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="toggleFixedColumn(0, 'left')">切换第一列固定</vxe-button>
         <vxe-button @click="toggleFixedColumn(1, 'left')">切换第二列固定</vxe-button>
         <vxe-button @click="toggleFixedColumn(4, 'right')">切换第五列固定</vxe-button>
@@ -52,7 +52,7 @@
       <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
       <vxe-table-column field="date" title="Date" width="300" :fixed="colFixeds.col4"></vxe-table-column>
       <vxe-table-column title="操作" width="200" :fixed="colFixeds.col5">
-        <template v-slot>
+        <template #default>
           <vxe-button status="primary">按钮1</vxe-button>
           <vxe-button>按钮2</vxe-button>
         </template>
@@ -133,7 +133,7 @@ export default {
           <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
           <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
           <vxe-table-column title="操作" fixed="right" width="200">
-            <template v-slot>
+            <template #default>
               <vxe-button type="text">按钮1</vxe-button>
               <vxe-button type="text">按钮2</vxe-button>
             </template>
@@ -158,7 +158,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="toggleFixedColumn(0, 'left')">切换第一列固定</vxe-button>
             <vxe-button @click="toggleFixedColumn(1, 'left')">切换第二列固定</vxe-button>
             <vxe-button @click="toggleFixedColumn(4, 'right')">切换第五列固定</vxe-button>

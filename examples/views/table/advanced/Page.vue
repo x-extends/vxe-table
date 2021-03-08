@@ -114,7 +114,7 @@
     </p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button size="mini" @click="getSelectReserveEvent">获取已保留选中的行数据</vxe-button>
       </template>
     </vxe-toolbar>
@@ -394,7 +394,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button size="mini" @click="getSelectReserveEvent">获取已保留选中的行数据</vxe-button>
           </template>
         </vxe-toolbar>

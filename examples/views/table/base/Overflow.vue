@@ -17,7 +17,7 @@
       <vxe-table-column field="role" title="角色" show-overflow></vxe-table-column>
       <vxe-table-column field="date" title="标题溢出，显示为 tooltip xxxxxxxxxx" show-header-overflow show-overflow="title" show-footer-overflow></vxe-table-column>
       <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
-        <template v-slot:header>
+        <template #header>
           <span>标题显示原生 title ___________________________</span>
         </template>
       </vxe-table-column>
@@ -51,7 +51,7 @@
       <vxe-table-column field="date" title="Date" show-header-overflow show-overflow show-footer-overflow></vxe-table-column>
       <vxe-table-colgroup title="基本信息">
         <vxe-table-colgroup field="rate" show-header-overflow="title">
-          <template v-slot:header>
+          <template #header>
             <span>标题溢出显示原生 title xxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
           </template>
         </vxe-table-colgroup>
@@ -107,7 +107,7 @@ export default {
           <vxe-table-column field="role" title="角色" show-overflow></vxe-table-column>
           <vxe-table-column field="date" title="标题溢出，显示为 tooltip xxxxxxxxxx" show-header-overflow show-overflow="title" show-footer-overflow></vxe-table-column>
           <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
-            <template v-slot:header>
+            <template #header>
               <span>标题显示原生 title ___________________________</span>
             </template>
           </vxe-table-column>
@@ -164,7 +164,7 @@ export default {
           <vxe-table-column field="date" title="Date" show-header-overflow show-overflow show-footer-overflow></vxe-table-column>
           <vxe-table-colgroup title="基本信息">
             <vxe-table-colgroup field="rate" show-header-overflow="title">
-              <template v-slot:header>
+              <template #header>
                 <span>标题溢出显示原生 title xxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
               </template>
             </vxe-table-colgroup>

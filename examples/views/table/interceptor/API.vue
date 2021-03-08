@@ -15,7 +15,7 @@
       <vxe-table-column field="enum" title="app.api.title.enum" min-width="150"></vxe-table-column>
       <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
       <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
         </template>
       </vxe-table-column>
@@ -32,7 +32,7 @@
       <vxe-table-column field="enum" title="app.api.title.enum" min-width="150"></vxe-table-column>
       <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
       <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
         </template>
       </vxe-table-column>

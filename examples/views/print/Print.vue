@@ -7,7 +7,7 @@
     </p>
 
     <vxe-toolbar print>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="printEvent1">打印表格</vxe-button>
         <vxe-button @click="printSelectEvent1">打印勾选行</vxe-button>
       </template>
@@ -59,7 +59,7 @@
     <p class="tip">打印条形码：先用第三方 <a class="link" href="https://www.npmjs.com/package/jsbarcode" target="_blank">jsbarcode</a> 库生成条形码，再用打印模块输出打印</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="printEvent2">打印条形码</vxe-button>
       </template>
     </vxe-toolbar>
@@ -74,7 +74,7 @@
     <p class="tip">打印二维码：先用第三方 <a class="link" href="https://www.npmjs.com/package/qrcode" target="_blank">qrcode</a> 库生成二维码，再用打印模块输出打印</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="printEvent3">打印二维码</vxe-button>
       </template>
     </vxe-toolbar>
@@ -89,7 +89,7 @@
     <p class="tip">打印自定义模板</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="printEvent4">打印自定义模板</vxe-button>
       </template>
     </vxe-toolbar>
@@ -189,7 +189,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar print>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="printEvent1">打印表格</vxe-button>
             <vxe-button @click="printSelectEvent1">打印勾选行</vxe-button>
           </template>
@@ -345,7 +345,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="printEvent2">打印条形码</vxe-button>
           </template>
         </vxe-toolbar>
@@ -409,7 +409,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="printEvent3">打印二维码</vxe-button>
           </template>
         </vxe-toolbar>
@@ -447,7 +447,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="printEvent4">打印自定义模板</vxe-button>
           </template>
         </vxe-toolbar>

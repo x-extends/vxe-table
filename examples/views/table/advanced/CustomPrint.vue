@@ -8,7 +8,7 @@
     </p>
 
     <vxe-toolbar print>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="printEvent1">打印出货单据</vxe-button>
       </template>
     </vxe-toolbar>
@@ -37,7 +37,7 @@
     <p class="tip">打印条形码：先用第三方 <a class="link" href="https://www.npmjs.com/package/jsbarcode" target="_blank">jsbarcode</a> 库生成条形码，再用打印模块输出打印</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="printEvent2">打印条形码</vxe-button>
       </template>
     </vxe-toolbar>
@@ -52,7 +52,7 @@
     <p class="tip">打印二维码：先用第三方 <a class="link" href="https://www.npmjs.com/package/qrcode" target="_blank">qrcode</a> 库生成二维码，再用打印模块输出打印</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="printEvent3">打印二维码</vxe-button>
       </template>
     </vxe-toolbar>
@@ -67,7 +67,7 @@
     <p class="tip">打印合同</p>
 
     <vxe-toolbar>
-      <template v-slot:buttons>
+      <template #buttons>
         <vxe-button @click="printEvent4">打印合同</vxe-button>
       </template>
     </vxe-toolbar>
@@ -174,7 +174,7 @@ export default {
       demoCodes: [
         `
         <vxe-toolbar print>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="printEvent1">打印出货单据</vxe-button>
           </template>
         </vxe-toolbar>
@@ -292,7 +292,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="printEvent2">打印条形码</vxe-button>
           </template>
         </vxe-toolbar>
@@ -356,7 +356,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="printEvent3">打印二维码</vxe-button>
           </template>
         </vxe-toolbar>
@@ -394,7 +394,7 @@ export default {
         `,
         `
         <vxe-toolbar>
-          <template v-slot:buttons>
+          <template #buttons>
             <vxe-button @click="printEvent4">打印合同</vxe-button>
           </template>
         </vxe-toolbar>

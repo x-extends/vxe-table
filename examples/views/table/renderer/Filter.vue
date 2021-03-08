@@ -52,6 +52,9 @@ export default {
       ],
       demoCodes: [
         `
+        import XEUtils from 'xe-utils'
+        import VXETable from 'vxe-table'
+
         // 创建一个简单的输入框筛选
         VXETable.renderer.add('FilterInput', {
           // 筛选模板
