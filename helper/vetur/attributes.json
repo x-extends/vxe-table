@@ -443,6 +443,14 @@
     "type": "function",
     "description": "只对 filters 有效，列的筛选方法，该方法的返回值用来决定该行是否显示"
   },
+  "vxe-table-column/filter-reset-method": {
+    "type": "({ options, column }) => void",
+    "description": "只对 filters 有效，自定义筛选重置方法"
+  },
+  "vxe-table-column/filter-recover-method": {
+    "type": "({ option, column }) => void",
+    "description": "只对 filters 有效，自定义筛选复原方法（使用自定义筛选时可能会用到）"
+  },
   "vxe-table-column/filter-render": {
     "type": "any",
     "description": "筛选渲染器配置项"

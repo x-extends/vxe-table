@@ -125,6 +125,8 @@
       "filters",
       "filter-multiple",
       "filter-method",
+      "filter-reset-method",
+      "filter-recover-method",
       "filter-render",
       "export-method",
       "footer-export-method",
