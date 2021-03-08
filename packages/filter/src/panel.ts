@@ -1,6 +1,6 @@
 import { defineComponent, h, computed, inject, nextTick } from 'vue'
-import GlobalConfig from '../../conf'
-import VXETable from '../../v-x-e-table'
+import GlobalConfig from '../../v-x-e-table/src/conf'
+import { VXETable } from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
 import { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../../../types/vxe-table'

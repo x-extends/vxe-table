@@ -1,6 +1,6 @@
-import { VXETableComponent } from './component'
+import { VXEComponentInstall } from './component'
 
 /**
- * 组件 - 图标库
+ * 组件 - 类图标库
  */
-export interface Icon extends VXETableComponent {}
+export const Icon: VXEComponentInstall<{}>;

@@ -258,9 +258,9 @@ import ModulePrint from '../views/print/Print.vue'
 import TableOtherElement from '../views/table/other/Element.vue'
 // import TableOtherIview from '../views/table/other/Iview.vue'
 import TableOtherAntd from '../views/table/other/Antd.vue'
-// import TableSortableColumn from '../views/table/other/SortableColumn.vue'
-// import TableSortableRow from '../views/table/other/SortableRow.vue'
-// import TableXlsx from '../views/table/other/Xlsx.vue'
+import TableSortableColumn from '../views/table/other/SortableColumn.vue'
+import TableSortableRow from '../views/table/other/SortableRow.vue'
+import TableXlsx from '../views/table/other/Xlsx.vue'
 
 import TablePluginElementConfig from '../views/table/plugin/ElementConfig.vue'
 import TablePluginElementFilter from '../views/table/plugin/ElementFilter.vue'
@@ -275,7 +275,7 @@ import TablePluginAntdPage from '../views/table/plugin/AntdPage.vue'
 // import TablePluginCharts from '../views/table/plugin/Charts.vue'
 import TablePluginExportXLSX from '../views/table/plugin/ExportXLSX.vue'
 import TablePluginExportPDF from '../views/table/plugin/ExportPDF.vue'
-// import TablePluginRenderer from '../views/table/plugin/Renderer.vue'
+import TablePluginRenderer from '../views/table/plugin/Renderer.vue'
 import TablePluginMenus from '../views/table/plugin/Menus.vue'
 // import TablePluginTreeRows from '../views/table/plugin/TreeRows'
 // import TablePluginTreeCols from '../views/table/plugin/TreeCols'
@@ -1529,21 +1529,21 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableOtherAntd',
     component: TableOtherAntd
   },
-  // {
-  //   path: '/table/other/sortableColumn',
-  //   name: 'TableSortableColumn',
-  //   component: TableSortableColumn
-  // },
-  // {
-  //   path: '/table/other/sortableRow',
-  //   name: 'TableSortableRow',
-  //   component: TableSortableRow
-  // },
-  // {
-  //   path: '/table/other/xlsx',
-  //   name: 'TableXlsx',
-  //   component: TableXlsx
-  // },
+  {
+    path: '/table/other/sortableColumn',
+    name: 'TableSortableColumn',
+    component: TableSortableColumn
+  },
+  {
+    path: '/table/other/sortableRow',
+    name: 'TableSortableRow',
+    component: TableSortableRow
+  },
+  {
+    path: '/table/other/xlsx',
+    name: 'TableXlsx',
+    component: TableXlsx
+  },
   {
     path: '/table/plugin/elementConfig',
     name: 'TablePluginElementConfig',
@@ -1609,11 +1609,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TablePluginExportPDF',
     component: TablePluginExportPDF
   },
-  // {
-  //   path: '/table/plugin/renderer',
-  //   name: 'TablePluginRenderer',
-  //   component: TablePluginRenderer
-  // },
+  {
+    path: '/table/plugin/renderer',
+    name: 'TablePluginRenderer',
+    component: TablePluginRenderer
+  },
   {
     path: '/table/plugin/menus',
     name: 'TablePluginMenus',

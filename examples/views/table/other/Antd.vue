@@ -2,7 +2,6 @@
   <div>
     <p class="tip">
       自定义渲染 <a class="link" href="https://www.npmjs.com/package/ant-design-vue" target="_blank">ant-design-vue</a> 组件，自定义渲染需要配合 <table-api-link prop="updateStatus"/> 方法使用，在对应单元格的值发生改变时调用更新状态<br>
-      <!-- 建议通过使用 <router-link class="link" :to="{name: 'TablePluginAntdConfig'}">vxe-table-plugin-antd</router-link> 适配插件来解决跨组件渲染的兼容性问题<br> -->
       <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 
@@ -26,12 +25,12 @@
       </vxe-table-column>
       <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{}">
         <template #edit="scope">
-          <a-input v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></a-input>
+          <a-input v-model:value="scope.row.name" @input="$refs.xTable.updateStatus(scope)"></a-input>
         </template>
       </vxe-table-column>
       <vxe-table-column field="role" title="AAutoComplete" min-width="160" :edit-render="{}">
         <template #edit="{ row }">
-          <a-auto-complete v-model="row.role" :options="demo1.searchOptions" @search="handleSearch"/>
+          <a-auto-complete v-model:value="row.role" :options="demo1.searchOptions" @search="handleSearch"/>
         </template>
       </vxe-table-column>
       <vxe-table-column field="age" title="AInputNumber"  width="160" :edit-render="{}">
@@ -39,12 +38,12 @@
           <span>{{ column.title }}</span>
         </template>
         <template #edit="{ row }">
-          <a-input-number v-model="row.age" :max="35" :min="18"></a-input-number>
+          <a-input-number v-model:value="row.age" :max="99" :min="18"></a-input-number>
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{}">
         <template #edit="scope">
-          <a-select v-model="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
+          <a-select v-model:value="scope.row.sex" @change="$refs.xTable.updateStatus(scope)">
             <a-select-option v-for="item in demo1.sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
           </a-select>
         </template>
@@ -52,7 +51,7 @@
       </vxe-table-column>
       <vxe-table-column field="sex1" title="ASelect" width="180" :edit-render="{}">
         <template #edit="scope">
-          <a-select v-model="scope.row.sex1" @change="$refs.xTable.updateStatus(scope)" mode="multiple">
+          <a-select v-model:value="scope.row.sex1" @change="$refs.xTable.updateStatus(scope)" mode="multiple">
             <a-select-option v-for="item in demo1.sexList" :key="item.value" :value="item.value">{{ item.label }}</a-select-option>
           </a-select>
         </template>
@@ -60,24 +59,24 @@
       </vxe-table-column>
       <vxe-table-column field="region" title="ACascader" width="200" :edit-render="{}">
         <template #edit="{ row }">
-          <a-cascader v-model="row.region" :options="demo1.regionList"></a-cascader>
+          <a-cascader v-model:value="row.region" :options="demo1.regionList"></a-cascader>
         </template>
         <template #default="{ row }">{{ getCascaderLabel(row.region, demo1.regionList) }}</template>
       </vxe-table-column>
       <vxe-table-column field="date7" title="ADatePicker" width="200" :edit-render="{}">
         <template #edit="{ row }">
-          <a-date-picker v-model="row.date7" format="YYYY/MM/DD hh:mm:ss"></a-date-picker>
+          <a-date-picker v-model:value="row.date7" format="YYYY/MM/DD hh:mm:ss"></a-date-picker>
         </template>
         <template #default="{ row }">{{ formatDate(row.date7, 'YYYY/MM/DD hh:mm:ss') }}</template>
       </vxe-table-column>
       <vxe-table-column field="rate" title="ARate" width="200">
         <template #default="{ row }">
-          <a-rate v-model="row.rate"></a-rate>
+          <a-rate v-model:value="row.rate"></a-rate>
         </template>
       </vxe-table-column>
       <vxe-table-column field="flag" title="ElSwitch" width="100">
         <template #default="{ row }">
-          <a-switch v-model="row.flag"></a-switch>
+          <a-switch v-model:checked="row.flag"></a-switch>
         </template>
       </vxe-table-column>
     </vxe-table>
@@ -106,7 +105,7 @@ export default defineComponent({
       sexList: [
         { value: '1', label: '男' },
         { value: '0', label: '女' }
-      ] as any[],
+      ],
       regionList: [
         {
           label: '北京',
@@ -132,10 +131,6 @@ export default defineComponent({
             { value: 67, label: '深圳市' }
           ]
         }
-      ] as any[],
-      restaurants: [
-        { value: '前端', name: '前端' },
-        { value: '后端', name: '后端' }
       ],
       tableData: [] as any[]
     })
@@ -214,16 +209,16 @@ export default defineComponent({
     demo1.loading = true
     setTimeout(() => {
       demo1.tableData = [
-        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex1: [], region: [], age: 28, date: '', date1: '', date2: '', date7: '', color1: '', rate: 5, flag: false, address: 'Shenzhen' },
-        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '1', sex1: [], region: [], age: 22, date: '', date1: '', date2: '', date7: '', color1: '', rate: 2, flag: false, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '0', sex1: [], region: [], age: 32, date: '', date1: '', date2: '', date7: '', color1: '', rate: 3, flag: false, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', sex1: ['1', '0'], region: [], age: 23, date: '', date1: '', date2: '', color1: '', date7: '', rate: 3, flag: true, address: 'Shenzhen' },
-        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', sex1: ['1', '0'], region: [], age: 30, date: '', date1: '', date2: '', color1: '', date7: '', rate: 0, flag: true, address: 'Shanghai' },
-        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '0', sex1: [], region: [], age: 21, date: '', date1: '', date2: '', date7: '', color1: '', rate: 3, flag: false, address: 'Shenzhen' },
-        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: '1', sex1: ['1'], region: [], age: 29, date: '', date1: '', date2: '', date7: '', color1: '', rate: 0, flag: true, address: 'Guangzhou' },
-        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: '1', sex1: [], region: [], age: 35, date: '', date1: '', date2: '', date7: '', color1: '', rate: 2, flag: false, address: 'Shenzhen' },
-        { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: '1', sex1: ['0'], region: [], age: 24, date: '', date1: '', date2: '', date7: '', color1: '', rate: 3, flag: false, address: 'Shenzhen' },
-        { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: '1', sex1: [], region: [], age: 20, date: '', date1: '', date2: '', date7: '', color1: '', rate: 4, flag: false, address: 'Guangzhou' }
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex1: [], region: [], age: 28, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 5, rate1: 59, flag: false, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '1', sex1: [], region: [], age: 22, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 2, rate1: 22, flag: false, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '0', sex1: [], region: [], age: 32, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 12, flag: false, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', sex1: ['1', '0'], region: [], age: 23, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', color1: '', tree1: '', tree2: [], date7: '', rate: 33, rate1: 4, flag: true, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', sex1: ['1', '0'], region: [], age: 30, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', color1: '', tree1: '', tree2: [], date7: '', rate: 0, rate1: 15, flag: true, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '0', sex1: [], region: [], age: 21, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 73, flag: false, address: 'Shenzhen' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: '1', sex1: ['1'], region: [], age: 29, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 0, rate1: 0, flag: true, address: 'Guangzhou' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: '1', sex1: [], region: [], age: 35, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 2, rate1: 14, flag: false, address: 'Shenzhen' },
+        { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: '1', sex1: ['0'], region: [], age: 24, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 52, flag: false, address: 'Shenzhen' },
+        { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: '1', sex1: [], region: [], age: 20, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 4, rate1: 83, flag: false, address: 'Guangzhou' }
       ]
       demo1.loading = false
     }, 500)
@@ -275,7 +270,7 @@ export default defineComponent({
               <a-icon type="warning" />
             </template>
             <template #edit="{ row }">
-              <a-input-number v-model="row.age" :max="35" :min="18"></a-input-number>
+              <a-input-number v-model="row.age" :max="99" :min="18"></a-input-number>
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{}">
@@ -326,10 +321,6 @@ export default defineComponent({
               dataSource: [],
               sexList: [],
               regionList: [],
-              restaurants: [
-                { value: '前端', name: '前端' },
-                { value: '后端', name: '后端' }
-              ],
               tableData: []
             }
           },

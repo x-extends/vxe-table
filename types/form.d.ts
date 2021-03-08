@@ -1,11 +1,11 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeFormItemOptions } from './form-item'
 
 /**
  * 组件 - 表单
  */
-export interface Form extends VXETableComponent { }
+export const Form: VXEComponentInstall<DefineComponent>;
 
 export type VxeFormInstance = ComponentPublicInstance<VxeFormProps, VxeFormConstructor>;
 

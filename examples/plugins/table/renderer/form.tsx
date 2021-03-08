@@ -1,4 +1,4 @@
-import VXETable from '../../../../packages/v-x-e-table'
+import { VXETable } from '../../../../packages/vxe-table'
 
 // 创建一个简单的表单-输入框渲染
 VXETable.renderer.add('FormItemInput', {

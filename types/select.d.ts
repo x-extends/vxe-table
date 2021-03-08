@@ -1,11 +1,11 @@
-import { SetupContext, RenderFunction, ComponentPublicInstance, Ref } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
+import { SetupContext, RenderFunction, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
  * 组件 - 下拉框
  */
-export interface Select extends VXETableComponent { }
+export const Select: VXEComponentInstall<DefineComponent>;
 
 export type VxeSelectInstance = ComponentPublicInstance<VxeSelectProps, VxeSelectConstructor>;
 

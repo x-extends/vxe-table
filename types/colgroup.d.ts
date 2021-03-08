@@ -1,10 +1,11 @@
-import { VXETableComponent } from './component'
+import { DefineComponent } from 'vue'
+import { VXEComponentInstall } from './component'
 import { VxeColumnPropTypes } from './column'
 
 /**
  * 组件 - 表格分组列
  */
-export interface Colgroup extends VXETableComponent {}
+export const Colgroup: VXEComponentInstall<DefineComponent>;
 
 export interface VxeColgroupOptions extends VxeColgroupProps {}
 

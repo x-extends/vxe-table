@@ -1,11 +1,11 @@
 import { Ref, ComputedRef } from 'vue'
-import { VxeTableConstructor, VxeTablePrivateMethods } from '../table'
+import { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../table'
 import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
 
 export namespace VxeGlobalHooksHandles {
   export type Name = 'VxeGrid' | 'VxeTable'
   export interface HookOptions {
-    setupTable?($table: VxeTableConstructor & VxeTablePrivateMethods): void | { [key: string]: any };
+    setupTable?($table: VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods): void | { [key: string]: any };
     setupGrid?($grid: VxeGridConstructor & VxeGridPrivateMethods): void | { [key: string]: any };
   }
 }
@@ -13,7 +13,7 @@ export namespace VxeGlobalHooksHandles {
 /**
  * 全局格式化
  */
-export class VxeGlobalHooks {
+export interface VxeGlobalHooks {
   mixin(options: {
     [type: string]: VxeGlobalHooksHandles.HookOptions;
   }): VxeGlobalHooks;

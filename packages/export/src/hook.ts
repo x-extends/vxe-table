@@ -1,7 +1,7 @@
 import { inject, nextTick } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
-import VXETable from '../../v-x-e-table'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
+import { VXETable } from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 import { isColumnInfo, mergeBodyMethod } from '../../table/src/util'
 import { readLocalFile, handlePrint, saveLocalFile, createHtmlPage, getExportBlobByContent } from './util'
@@ -127,7 +127,7 @@ function toTxtCellLabel (val: any) {
   return val
 }
 
-function getElementsByTagName (elem: any, qualifiedName: any) {
+function getElementsByTagName (elem: any, qualifiedName: any): any[] {
   return elem.getElementsByTagName(qualifiedName)
 }
 
@@ -822,7 +822,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       const { type, filename } = UtilTools.parseFile(file)
 
       // 检查类型
-      if (!XEUtils.includes(VXETable.importTypes, type)) {
+      if (!XEUtils.includes(VXETable.config.importTypes, type)) {
         if (opts.message !== false) {
           VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
         }
@@ -900,7 +900,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       const hasFooter = !!footerData.length
       const hasMerge = !hasTree && mergeList.length
       const defOpts = Object.assign({ message: true, isHeader: showHeader, isFooter: showFooter }, options)
-      const types: string[] = defOpts.types || VXETable.exportTypes
+      const types: string[] = defOpts.types || VXETable.config.exportTypes
       const modes: string[] = defOpts.modes
       const checkMethod = customOpts.checkMethod
       const exportColumns = collectColumn.slice(0)
@@ -1077,7 +1077,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         }
 
         // 检查类型
-        if (!XEUtils.includes(VXETable.exportTypes, type)) {
+        if (!XEUtils.includes(VXETable.config.exportTypes, type)) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             UtilTools.error('vxe.error.notType', [type])
           }
@@ -1143,7 +1143,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       importData (options) {
         const importOpts = computeImportOpts.value
         const opts = Object.assign({
-          types: VXETable.importTypes
+          types: VXETable.config.importTypes
           // beforeImportMethod: null,
           // afterImportMethod: null
         }, importOpts, options)
@@ -1197,7 +1197,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         const { treeConfig, importConfig } = props
         const { initStore, importStore, importParams } = reactData
         const importOpts = computeImportOpts.value
-        const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.importTypes }, options, importOpts)
+        const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.config.importTypes }, options, importOpts)
         const { types } = defOpts
         const isTree = !!treeConfig
         if (isTree) {

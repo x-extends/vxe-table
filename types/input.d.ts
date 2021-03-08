@@ -1,10 +1,10 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, VNodeStyle, ValueOf } from './component'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, VNodeStyle, ValueOf } from './component'
 
 /**
  * 组件 - 输入框
  */
-export interface Input extends VXETableComponent { }
+export const Input: VXEComponentInstall<DefineComponent>;
 
 export type VxeInputInstance = ComponentPublicInstance<VxeInputProps, VxeInputConstructor>;
 
@@ -199,16 +199,18 @@ export namespace VxeInputDefines {
     $event: KeyboardEvent
   }
 
-  export type InputParams = {}
+  export interface InputParams {
+    value: string;
+  }
   export interface InputEventParams extends InputKeyboardEventParams, InputParams { }
 
-  export type ChangeParams = {}
+  export interface ChangeParams extends InputParams {}
   export interface ChangeEventParams extends InputKeyboardEventParams, ChangeParams { }
 
-  export type KeyupParams = {}
+  export interface KeyupParams extends InputParams {}
   export interface KeyupEventParams extends InputKeyboardEventParams, KeyupParams { }
 
-  export type KeydownParams = {}
+  export interface KeydownParams extends InputParams {}
   export interface KeydownEventParams extends InputKeyboardEventParams, KeydownParams { }
 }
 

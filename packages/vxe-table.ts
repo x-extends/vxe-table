@@ -1,33 +1,33 @@
 import { App } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import VXETable from './v-x-e-table'
+import XEUtils from 'xe-utils'
+import { VXETable, setup } from './v-x-e-table'
 
-import Table from './table'
-import Column from './column'
-import Header from './header'
-import Footer from './footer'
-import Grid from './grid'
-import Toolbar from './toolbar'
-import Pager from './pager'
-import Checkbox from './checkbox'
-import Radio from './radio'
-import Input from './input'
-import Textarea from './textarea'
-import Button from './button'
-import Modal from './modal'
-import Tooltip from './tooltip'
-import Form from './form'
-import Select from './select'
-import Switch from './switch'
-import List from './list'
-import Pulldown from './pulldown'
+import { Table } from './table'
+import { Column } from './column'
+import { Header } from './header'
+import { Footer } from './footer'
+import { Grid } from './grid'
+import { Toolbar } from './toolbar'
+import { Pager } from './pager'
+import { Checkbox } from './checkbox'
+import { Radio } from './radio'
+import { Input } from './input'
+import { Textarea } from './textarea'
+import { Button } from './button'
+import { Modal } from './modal'
+import { Tooltip } from './tooltip'
+import { Form } from './form'
+import { Select } from './select'
+import { Switch } from './switch'
+import { List } from './list'
+import { Pulldown } from './pulldown'
 
-import Filter from './filter'
-import Menu from './menu'
-import Edit from './edit'
-import Export from './export'
-import Keyboard from './keyboard'
-import Validator from './validator'
+import { Filter } from './filter'
+import { Menu } from './menu'
+import { Edit } from './edit'
+import { Export } from './export'
+import { Keyboard } from './keyboard'
+import { Validator } from './validator'
 
 import zhCN from './locale/lang/zh-CN'
 
@@ -60,28 +60,23 @@ const components = [
   Export,
   Keyboard,
   Validator,
+
   // 核心
   Table
 ]
 
+// 默认中文
+setup({
+  i18n: (key: string, args: any) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
+})
+
 // 默认安装
-function install (app: App, options: any) {
+export function install (app: App, options: any) {
   if (XEUtils.isPlainObject(options)) {
-    VXETable.setup(options)
+    setup(options)
   }
   components.forEach(component => component.install(app))
 }
-
-declare module './v-x-e-table' {
-  interface VXETableInstance {
-    install: typeof install;
-  }
-}
-
-// 默认中文
-VXETable.setup({
-  i18n: (key: string, args: any) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
-})
 
 VXETable.install = install
 
@@ -90,6 +85,7 @@ export * from './column'
 export * from './header'
 export * from './footer'
 export * from './grid'
+export * from './menu'
 export * from './toolbar'
 export * from './pager'
 export * from './checkbox'
@@ -106,7 +102,6 @@ export * from './list'
 export * from './pulldown'
 
 export * from './filter'
-export * from './menu'
 export * from './edit'
 export * from './export'
 export * from './keyboard'

@@ -1,12 +1,12 @@
-import { VNode, RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VNode, RenderFunction, SetupContext, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from './table'
 
 /**
  * 组件 - 工具栏
  */
-export interface Toolbar extends VXETableComponent { }
+export const Toolbar: VXEComponentInstall<DefineComponent>;
 
 export type VxeToolbarInstance = ComponentPublicInstance<VxeToolbarProps, VxeToolbarConstructor>;
 

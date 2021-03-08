@@ -1,10 +1,10 @@
-import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 单选框
  */
-export interface Radio extends VXETableComponent { }
+export const Radio: VXEComponentInstall<DefineComponent>;
 
 export type VxeRadioInstance = ComponentPublicInstance<VxeRadioProps, VxeRadioConstructor>;
 

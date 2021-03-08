@@ -1,6 +1,6 @@
 import { defineComponent, h, Teleport, inject, ref, Ref } from 'vue'
 import { UtilTools } from '../../tools'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeMenuPanelConstructor, VxeMenuPanelPrivateRef } from '../../../types/vxe-table'
 

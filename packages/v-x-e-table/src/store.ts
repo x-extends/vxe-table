@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 /**
  * 创建数据仓库
  */
-class Store {
+export class Store {
   private store: any = {}
 
   mixin (options: any) {

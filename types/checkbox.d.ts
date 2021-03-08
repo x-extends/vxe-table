@@ -1,10 +1,10 @@
-import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 复选框
  */
-export interface Checkbox extends VXETableComponent { }
+export const Checkbox: VXEComponentInstall<DefineComponent>;
 
 export type VxeCheckboxInstance = ComponentPublicInstance<VxeCheckboxProps, VxeCheckboxConstructor>;
 

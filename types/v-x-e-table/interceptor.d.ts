@@ -2,6 +2,10 @@ import { VxeTableConstructor, VxeTableDefines, VxeTablePropTypes, VxeTablePrivat
 import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
 
 export namespace VxeGlobalInterceptorHandles {
+  export type HookType = 'created' | 'mounted' | 'activated' | 'beforeUnmount' | 'unmounted';
+  export type EventType = 'event.clearActived' | 'event.clearFilter' | 'event.clearAreas' | 'event.showMenu' | 'event.keydown' | 'event.export' | 'event.import';
+  export type Type = HookType | EventType
+
   export type InterceptorCallback = (params: any) => any;
 
   interface InterceptorParams {
@@ -47,7 +51,7 @@ export interface VxeGlobalInterceptor {
   mixin(options: {
     [type: string]: VxeGlobalInterceptorHandles.InterceptorCallback;
   }): VxeGlobalInterceptor;
-  get(type: string): VxeGlobalInterceptorHandles.InterceptorCallback[];
-  add(type: string, callback: VxeGlobalInterceptorHandles.InterceptorCallback): VxeGlobalInterceptor;
-  delete(type: string, callback?: VxeGlobalInterceptorHandles.InterceptorCallback): void;
+  get(type: VxeGlobalInterceptorHandles.Type): VxeGlobalInterceptorHandles.InterceptorCallback[];
+  add(type: VxeGlobalInterceptorHandles.Type, callback: VxeGlobalInterceptorHandles.InterceptorCallback): VxeGlobalInterceptor;
+  delete(type: VxeGlobalInterceptorHandles.Type, callback?: VxeGlobalInterceptorHandles.InterceptorCallback): void;
 }

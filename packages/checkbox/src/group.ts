@@ -1,6 +1,6 @@
 import { defineComponent, h, provide, PropType } from 'vue'
-import GlobalConfig from '../../conf'
-import XEUtils from 'xe-utils/ctor'
+import GlobalConfig from '../../v-x-e-table/src/conf'
+import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 
 import { SizeType, VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxGroupMethods } from '../../../types/vxe-table'

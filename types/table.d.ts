@@ -1,5 +1,6 @@
-import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
+import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
+import { VxeTableProDefines } from './plugins/pro'
 import { VxeColumnOptions, VxeColumnPropTypes } from './column'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
@@ -10,7 +11,7 @@ import { VxeMenuPanelInstance } from './menu'
 /**
  * 组件 - 表格
  */
-export interface Table extends VXETableComponent { }
+export const Table: VXEComponentInstall<DefineComponent>;
 
 export type VxeTableInstance = ComponentPublicInstance<VxeTableProps, VxeTableConstructor>;
 
@@ -49,6 +50,7 @@ export interface TablePrivateRef {
 export interface VxeTablePrivateRef extends TablePrivateRef { }
 
 export interface TablePrivateComputed {
+  computeSize: ComputedRef<VxeTablePropTypes.Size>;
   computeValidOpts: ComputedRef<VxeTablePropTypes.ValidOpts>;
   computeSXOpts: ComputedRef<VxeTablePropTypes.SXOpts>;
   computeSYOpts: ComputedRef<VxeTablePropTypes.SYOpts>;
@@ -65,6 +67,9 @@ export interface TablePrivateComputed {
   computeKeyboardOpts: ComputedRef<VxeTablePropTypes.KeyboardOpts>;
   computeClipOpts: ComputedRef<VxeTablePropTypes.ClipOpts>;
   computeFNROpts: ComputedRef<VxeTablePropTypes.FNROpts>;
+  computeHeaderMenu: ComputedRef<VxeTableDefines.MenuFirstOption>;
+  computeBodyMenu: ComputedRef<VxeTableDefines.MenuFirstOption>;
+  computeFooterMenu: ComputedRef<VxeTableDefines.MenuFirstOption>;
   computeIsMenu: ComputedRef<boolean>;
   computeMenuOpts: ComputedRef<VxeTablePropTypes.MenuConfig>;
   computeExportOpts: ComputedRef<VxeTablePropTypes.ExportOpts>;
@@ -224,7 +229,7 @@ export interface TablePublicMethods {
    * @param columnIndex 列索引
    */
   getColumns(): VxeTableDefines.ColumnInfo[];
-  getColumns(columnIndex: number): VxeTableDefines.ColumnInfo;
+  getColumns(columnIndex?: number): VxeTableDefines.ColumnInfo;
   /**
    * 根据列的唯一主键获取列
    * @param colid 列主键
@@ -661,9 +666,10 @@ export interface TablePrivateMethods {
   triggerHeaderCellDBLClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
   triggerCellClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams): void;
   triggerCellDBLClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams): void;
-  triggerCheckRowEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams, value: boolean): void;
+  handleToggleCheckRowEvent(evnt: Event | null, params: { row: any }): void;
+  triggerCheckRowEvent(evnt: Event, params: { row: any }, value: boolean): void;
   triggerCheckAllEvent(evnt: MouseEvent | null, value: boolean): void;
-  triggerRadioRowEvent(evnt: Event, params: VxeTableDefines.CellRenderBodyParams): void;
+  triggerRadioRowEvent(evnt: Event, params: { row: any }): void;
   triggerCurrentRowEvent(evnt: Event, params: VxeTableDefines.CurrentChangeParams): void;
   triggerRowExpandEvent(evnt: Event, params: VxeTableDefines.CellRenderBodyParams): void;
   triggerTreeExpandEvent(evnt: Event, params: VxeTableDefines.CellRenderBodyParams): void;
@@ -746,7 +752,7 @@ export interface TableReactData {
   // 树节点不确定状态的列表
   treeIndeterminates: any[];
   // 合并单元格的对象集
-  mergeList: any[];
+  mergeList: VxeTableDefines.MergeItem[];
   // 合并表尾数据的对象集
   mergeFooterList: any[];
   // 初始化标识
@@ -768,15 +774,15 @@ export interface TableReactData {
   },
   // 存放列相关的信息
   columnStore: {
-    leftList: any[];
-    centerList: any[];
-    rightList: any[];
-    resizeList: any[];
-    pxList: any[];
-    pxMinList: any[];
-    scaleList: any[];
-    scaleMinList: any[];
-    autoList: any[];
+    leftList: VxeTableDefines.ColumnInfo[];
+    centerList: VxeTableDefines.ColumnInfo[];
+    rightList: VxeTableDefines.ColumnInfo[];
+    resizeList: VxeTableDefines.ColumnInfo[];
+    pxList: VxeTableDefines.ColumnInfo[];
+    pxMinList: VxeTableDefines.ColumnInfo[];
+    scaleList: VxeTableDefines.ColumnInfo[];
+    scaleMinList: VxeTableDefines.ColumnInfo[];
+    autoList: VxeTableDefines.ColumnInfo[];
   },
   // 存放快捷菜单的信息
   ctxMenuStore: {
@@ -909,11 +915,11 @@ export interface TableInternalData {
   tableSynchData: any[];
   tableSourceData: any[];
   // 收集的列配置（带分组）
-  collectColumn: any[],
+  collectColumn: VxeTableDefines.ColumnInfo[],
   // 完整所有列（不带分组）
-  tableFullColumn: any[];
+  tableFullColumn: VxeTableDefines.ColumnInfo[];
   // 渲染所有列
-  visibleColumn: any[];
+  visibleColumn: VxeTableDefines.ColumnInfo[];
   // 缓存数据集
   fullAllDataRowMap: Map<any, any>;
   fullAllDataRowIdData: { [key: string]: any };
@@ -1154,9 +1160,6 @@ export namespace VxeTablePropTypes {
       row: any;
       rowIndex: number;
       $rowIndex: number;
-      isHidden: boolean;
-      fixed: VxeColumnPropTypes.Fixed;
-      type: string;
     }): number;
   }
   export interface SeqOpts extends SeqConfig { }
@@ -1413,6 +1416,10 @@ export namespace VxeTablePropTypes {
      */
     isClip?: boolean;
     /**
+     * 如果功能被支持，用于 mouse-config.area，开启查找和替换功能
+     */
+    isFNR?: boolean;
+    /**
      * 用于 mouse-config.area & column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能
      */
     isChecked?: boolean;
@@ -1467,99 +1474,67 @@ export namespace VxeTablePropTypes {
       row: any;
       column: VxeTableDefines.ColumnInfo;
       cellValue: any;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): string;
     beforeCopyMethod?(params: {
       isCut: boolean;
-      targetAreas: any[];
+      targetAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
     afterCopyMethod?(params: {
       isCut: boolean;
-      targetAreas: any[];
+      targetAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
     cutMethod?: (params: {
       row: any,
       column: VxeTableDefines.ColumnInfo;
       cellValue: any;
-    }) => void;
-    beforeCutMethod?: (params: {
-      cutAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
-      currentAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }) => void;
+    beforeCutMethod?: (params: {
+      cutAreas: VxeTableProDefines.CellAreaParams[];
+      currentAreas: VxeTableProDefines.CellAreaParams[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }) => boolean;
     afterCutMethod?: (params: {
-      cutAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
-      currentAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
+      cutAreas: VxeTableProDefines.CellAreaParams[];
+      currentAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }) => void;
     pasteMethod?(params: {
+      isCut: boolean;
       row: any,
       column: VxeTableDefines.ColumnInfo;
       cellValue: any;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): void;
     beforePasteMethod?(params: {
-      currentAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
-      targetAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
+      currentAreas: VxeTableProDefines.CellAreaParams[];
+      targetAreas: VxeTableProDefines.CellAreaParams[];
       cellValues: string[][];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
     afterPasteMethod?(params: {
-      currentAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
-      targetAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
+      currentAreas: VxeTableProDefines.CellAreaParams[];
+      targetAreas: VxeTableProDefines.CellAreaParams[];
       cellValues: string[][];
       pasteCells: string[][];
       insertRows: any[];
-      insertColumns: VxeColumnOptions[];
+      insertColumns: VxeTableDefines.ColumnInfo[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
     createRowsMethod?(params: {
-      currentAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
-      targetAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
+      currentAreas: VxeTableProDefines.CellAreaParams[];
+      targetAreas: VxeTableProDefines.CellAreaParams[];
       cellValues: string[][];
       pasteCells: string[][];
       insertRows: any[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): any[];
     createColumnsMethod?(params: {
-      currentAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
-      targetAreas: {
-        rows: any[];
-        cols: VxeTableDefines.ColumnInfo[]
-      }[];
+      currentAreas: VxeTableProDefines.CellAreaParams[];
+      targetAreas: VxeTableProDefines.CellAreaParams[];
       cellValues: string[][];
       pasteCells: string[][];
       insertColumns: VxeColumnOptions[];
@@ -1820,6 +1795,13 @@ export namespace VxeTableDefines {
     col: number;
     rowspan: number;
     colspan: number;
+  }
+
+  export interface MergeItem extends MergeInfo {
+    _row: any;
+    _col: VxeTableDefines.ColumnInfo;
+    _rowspan: number;
+    _colspan: number;
   }
 
   /**

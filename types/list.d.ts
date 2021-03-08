@@ -1,10 +1,10 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 虚拟列表
  */
-export interface List extends VXETableComponent { }
+export const List: VXEComponentInstall<DefineComponent>;
 
 export type VxeListInstance = ComponentPublicInstance<VxeListProps, VxeListConstructor>;
 

@@ -1,10 +1,10 @@
-import { SetupContext, RenderFunction, Ref, ComponentPublicInstance } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
+import { SetupContext, RenderFunction, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 
 /**
  * 组件 - 按钮
  */
-export interface Button extends VXETableComponent { }
+export const Button: VXEComponentInstall<DefineComponent>;
 
 export type VxeButtonInstance = ComponentPublicInstance<VxeButtonProps, VxeButtonConstructor>;
 

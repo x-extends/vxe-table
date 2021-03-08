@@ -11,6 +11,7 @@ const sass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
 const merge = require('merge-stream')
+const pack = require('./package.json')
 const ts = require('gulp-typescript')
 
 const time = Date.now()
@@ -58,13 +59,11 @@ const languages = [
 
 const styleCode = `require('./style.css')`
 
-const commCode = `const VXETable = process.env.NODE_ENV === 'production' ? require('./index.common.pro.js') : require('./index.common.dev.js')
-const VXETableExport = {
-  default: VXETable,
-  VXETable: VXETable
+const commCode = `if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./index.common.pro.js')
+} else {
+  module.exports = require('./index.common.dev.js')
 }
-Object.defineProperty(VXETableExport, '__esModule', { value: true })
-module.exports = VXETableExport
 `
 
 gulp.task('build_modules', () => {
@@ -105,11 +104,17 @@ gulp.task('build_i18n', () => {
         lib: ['dom', 'esnext']
       }))
       .pipe(babel({
-        moduleId: name,
+        moduleId: `vxe-table-lang.${code}`,
         presets: ['@babel/env'],
-        plugins: ['@babel/transform-modules-umd']
+        plugins: [
+          ['@babel/transform-modules-umd', {
+            globals: {
+              [`vxe-table-language.${code}`]: `VXETableLang${name}`
+            },
+            exactGlobals: true
+          }]
+        ]
       }))
-      .pipe(replace(`global.${name} = mod.exports;`, `global.VXETableLang${name} = mod.exports.default;`))
       .pipe(rename({
         basename: code,
         suffix: '.umd',

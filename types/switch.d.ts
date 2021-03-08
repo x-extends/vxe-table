@@ -1,10 +1,10 @@
-import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 开关
  */
-export interface Switch extends VXETableComponent { }
+export const Switch: VXEComponentInstall<DefineComponent>;
 
 export type VxeSwitchInstance = ComponentPublicInstance<VxeSwitchProps, VxeSwitchConstructor>;
 

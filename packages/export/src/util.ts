@@ -1,6 +1,6 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
-import VXETable from '../../v-x-e-table'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
+import { VXETable } from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
 import { VxeTablePropTypes, SaveFileFunction, ReadFileFunction, VxeTableConstructor } from '../../../types/vxe-table'

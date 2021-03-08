@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 
 export class ItemInfo {
   constructor ($xeform: any, _vm: any) {

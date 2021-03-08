@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
-import VXETable from '../../v-x-e-table'
+import { VXETable } from '../../v-x-e-table'
 
 import { VxeGlobalHooksHandles, TableMenuMethods, TableMenuPrivateMethods } from '../../../types/vxe-table'
 

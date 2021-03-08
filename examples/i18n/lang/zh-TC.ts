@@ -187,10 +187,10 @@ export default {
         readFile: '读取文件',
 
         other: '集成協力廠商庫',
-        elementRender: 'element-ui -> 自定义渲染',
+        elementRender: 'element-plus -> 自定义渲染',
         iviewRender: 'iview -> 自定义渲染',
         antd: 'ant-design-vue -> 自定义渲染',
-        elementUpload: 'element-ui -> 附件上传',
+        elementUpload: 'element-plus -> 附件上传',
         sortablejsRow: 'sortablejs -> 行拖拽',
         sortablejsColumn: 'sortablejs -> 列拖拽',
         xlsxRender: 'xlsx -> 导入与导出',

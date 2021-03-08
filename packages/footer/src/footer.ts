@@ -1,5 +1,5 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick } from 'vue'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types/vxe-table'

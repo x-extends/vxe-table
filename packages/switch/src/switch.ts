@@ -1,7 +1,7 @@
 import { defineComponent, h, ref, Ref, computed, reactive, nextTick, createCommentVNode, PropType } from 'vue'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { UtilTools } from '../../tools'
-import GlobalConfig from '../../conf'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
 import { SizeType, VxeSwitchConstructor, VxeSwitchEmits, SwitchReactData, SwitchMethods } from '../../../types/vxe-table'

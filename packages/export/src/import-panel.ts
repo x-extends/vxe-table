@@ -1,6 +1,6 @@
 import { defineComponent, h, ref, Ref, computed, inject, reactive, nextTick } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeModalConstructor from '../../modal/src/modal'
 import VxeRadioGroupConstructor from '../../radio/src/group'
 import VxeRadioConstructor from '../../radio/src/radio'

@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import VXETable from '../../v-x-e-table'
+import XEUtils from 'xe-utils'
+import { renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 
 import { VxeGlobalHooksHandles, TableEditMethods, TableEditPrivateMethods } from '../../../types/vxe-table'
@@ -35,9 +35,11 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
 
     const removeCellSelectedClass = () => {
       const el = refElem.value
-      const cell = el.querySelector('.col--selected')
-      if (cell) {
-        DomTools.removeClass(cell, 'col--selected')
+      if (el) {
+        const cell = el.querySelector('.col--selected')
+        if (cell) {
+          DomTools.removeClass(cell, 'col--selected')
+        }
       }
     }
 
@@ -501,7 +503,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { row, column, cell } = params
         const { editRender } = column
         if (isEnableConf(editRender)) {
-          const compRender = VXETable.renderer.get(editRender.name)
+          const compRender = renderer.get(editRender.name)
           const { autofocus, autoselect } = editRender
           let inputElem
           // 如果指定了聚焦 class

@@ -1,4 +1,4 @@
-import VXETable from '../../../packages/v-x-e-table'
+import { VXETable } from '../../../packages/vxe-table'
 import XEUtils from 'xe-utils'
 
 // 自定义全局的格式化处理函数

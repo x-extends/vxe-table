@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 
 const browse = XEUtils.browse()
 const reClsMap: { [key: string]: any } = {}

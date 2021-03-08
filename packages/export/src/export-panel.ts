@@ -1,6 +1,6 @@
 import { defineComponent, h, createCommentVNode, ref, Ref, computed, reactive, inject, nextTick } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeModalConstructor from '../../modal/src/modal'
 import VxeInputConstructor from '../../input/src/input'
 import VxeCheckboxConstructor from '../../checkbox/src/checkbox'

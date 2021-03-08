@@ -1,10 +1,10 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
-import { VXETableComponent, VxeComponentInstance, SizeType, VNodeStyle, VxeEvent, ValueOf } from './component'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, SizeType, VNodeStyle, VxeEvent, ValueOf } from './component'
 
 /**
  * 组件 - 下拉容器
  */
-export interface Pulldown extends VXETableComponent { }
+export const Pulldown: VXEComponentInstall<DefineComponent>;
 
 export type VxePulldownInstance = ComponentPublicInstance<VxePulldownProps, VxePulldownConstructor>;
 

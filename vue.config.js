@@ -11,11 +11,6 @@ module.exports = {
   outputDir: 'docs',
   assetsDir: 'static',
   productionSourceMap: false,
-  configureWebpack: {
-    performance: {
-      hints: false
-    }
-  },
   pages: {
     index: {
       entry: 'examples/main.ts',
@@ -25,28 +20,47 @@ module.exports = {
     }
   },
   transpileDependencies: ['highlight.js'],
+  configureWebpack: {
+    performance: {
+      hints: false
+    },
+    resolve: {
+      alias: {
+        '@': resolve('examples')
+      }
+    },
+    output: {
+      library: 'VXETable'
+    }
+  },
   chainWebpack (config) {
     const XEUtils = {
       root: 'XEUtils',
-      commonjs: 'xe-utils/ctor',
-      commonjs2: 'xe-utils/ctor',
+      commonjs: 'xe-utils',
+      commonjs2: 'xe-utils',
       amd: 'xe-utils'
     }
-    config.resolve.alias
-      .set('@', resolve('examples'))
-    config.output
-      .set('libraryExport', 'default')
-      .set('library', 'VXETable')
+    // config.resolve.alias
+    //   .set('@', resolve('examples'))
+    // config.output
+    //   .set('libraryExport', 'default')
+    //   .set('library', 'VXETable')
+    const getExternalConf = (root) => {
+      return {
+        root: 'XEUtils',
+        commonjs: 'xe-utils',
+        commonjs2: 'xe-utils',
+        amd: 'xe-utils'
+      }
+    }
     if (process.env.npm_lifecycle_event && process.env.npm_lifecycle_event.indexOf('lib') === 0) {
       if (config.has('externals')) {
         config.externals
-          // .set('xe-utils', XEUtils)
-          .set('xe-utils/ctor', XEUtils)
+          .set('xe-utils', XEUtils)
       } else {
         config
           .set('externals', {
-            // 'xe-utils': XEUtils,
-            'xe-utils/ctor': XEUtils
+            'xe-utils': XEUtils
           })
       }
     } else {
@@ -57,7 +71,7 @@ module.exports = {
           .set('jspdf', 'jspdf')
           .set('jsbarcode', 'JsBarcode')
           .set('qrcode', 'QRCode')
-          .set('moment', 'moment')
+          .set('dayjs', 'dayjs')
           .set('sortablejs', 'Sortable')
       } else {
         config
@@ -67,7 +81,7 @@ module.exports = {
             'jspdf': 'jspdf',
             'jsbarcode': 'JsBarcode',
             'qrcode': 'QRCode',
-            'moment': 'moment',
+            'dayjs': 'dayjs',
             'sortablejs': 'Sortable'
           })
       }

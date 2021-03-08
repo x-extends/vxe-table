@@ -1,31 +1,28 @@
 import { App } from 'vue'
-import VXETable from '../v-x-e-table'
+import { VXETable } from '../v-x-e-table'
 import ExportPanelComponent from './src/export-panel'
 import ImportPanelComponent from './src/import-panel'
 import exportHook from './src/hook'
-import { saveLocalFile, readLocalFile, handlePrint } from './src/util'
+import { saveLocalFile as saveFile, readLocalFile as readFile, handlePrint } from './src/util'
+import { dynamicApp } from '../dynamics'
 
-import { SaveFileFunction, ReadFileFunction, PrintFunction } from '../../types/vxe-table'
+import { PrintFunction } from '../../types/vxe-table'
 
-const print: PrintFunction = (options) => {
+export { saveFile, readFile }
+
+export const print: PrintFunction = (options) => {
   const opts = Object.assign({}, options, {
     type: 'html'
   })
   handlePrint(null, opts, opts.content)
 }
 
-declare module '../v-x-e-table' {
-  interface VXETableInstance {
-    print: PrintFunction;
-    readFile: ReadFileFunction;
-    saveFile: SaveFileFunction;
-  }
-}
-
 export const Export = {
+  ExportPanel: ExportPanelComponent,
+  ImportPanel: ImportPanelComponent,
   install (app: App) {
-    VXETable.saveFile = saveLocalFile
-    VXETable.readFile = readLocalFile
+    VXETable.saveFile = saveFile
+    VXETable.readFile = readFile
     VXETable.print = print
     VXETable.setup({
       export: {
@@ -38,6 +35,8 @@ export const Export = {
       }
     })
     VXETable.hooks.add('$tableExport', exportHook)
+    dynamicApp.component(ExportPanelComponent.name, ExportPanelComponent)
+    dynamicApp.component(ImportPanelComponent.name, ImportPanelComponent)
     app.component(ExportPanelComponent.name, ExportPanelComponent)
     app.component(ImportPanelComponent.name, ImportPanelComponent)
   }

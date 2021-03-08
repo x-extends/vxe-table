@@ -1,6 +1,6 @@
 import { defineComponent, h, ref, Ref, computed, Teleport, VNode, onBeforeMount, onUnmounted, reactive, nextTick, PropType } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 

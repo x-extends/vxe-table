@@ -1,4 +1,4 @@
-import VXETable from './vxe-table'
+import { VXETable } from './vxe-table'
 
 export * from './vxe-table'
 

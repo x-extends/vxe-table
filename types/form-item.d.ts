@@ -1,11 +1,12 @@
-import { VXETableComponent } from './component'
+import { DefineComponent } from 'vue'
+import { VXEComponentInstall } from './component'
 import { VxeFormConstructor } from './form'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
  * 组件 - 表单项
  */
-export interface FormItem extends VXETableComponent {}
+export const FormItem: VXEComponentInstall<DefineComponent>;
 
 export interface VxeFormItemOptions {
   /**

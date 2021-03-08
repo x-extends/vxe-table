@@ -1,5 +1,5 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, watch } from 'vue'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { DomTools } from '../../tools'
 import { convertToRows } from './util'
 import { getColMinWidth } from '../../table/src/util'

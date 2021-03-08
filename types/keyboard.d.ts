@@ -1,10 +1,10 @@
-import { VXETableComponent } from './component'
+import { VXEComponentInstall } from './component'
 import { VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
  * 表格扩展 - 键盘导航
  */
-export interface Keyboard extends VXETableComponent { }
+export const Keyboard: VXEComponentInstall<{}>;
 
 export interface TableKeyboardMethods {}
 

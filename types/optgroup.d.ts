@@ -1,9 +1,10 @@
-import { VXETableComponent } from './component'
+import { DefineComponent } from 'vue'
+import { VXEComponentInstall } from './component'
 
 /**
  * 组件 - 下拉框选项分组
  */
-export interface Optgroup extends VXETableComponent {}
+export const Optgroup: VXEComponentInstall<DefineComponent>;
 
 export interface VxeOptgroupOptions {
   /**

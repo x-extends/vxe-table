@@ -9,118 +9,95 @@ import { VxeGlobalCommands } from './commands'
 import { VxeGlobalFormats } from './formats'
 import { Menus } from './menus'
 import { VxeGlobalHooks } from './hooks'
-import { VXETableSetupOptions, VxeGlobalSetup } from './setup'
+import { VxeGlobalSetup } from './setup'
 
-type translate = (key: string, args?: any) => number | string;
 
-export class VXETableInstance {
-  /**
-   * 版本号
-   */
-  public readonly v: string;
+export class VXETableConfig {
+  get zIndex(): number;
+  get nextZIndex(): number;
   /**
    * 获取导出的所有文件类型
    */
-  public readonly exportTypes: string[];
+   get exportTypes(): string[];
   /**
-   * 获取导入的所有文件类型
-   */
-  public readonly importTypes: string[];
-  /**
-   * 读取内置国际化
-   */
-  public t: translate;
+    * 获取导入的所有文件类型
+    */
+   get importTypes(): string[];
+}
+
+export const config: VXETableConfig;
+
+export interface VXETablePluginObject {
+  install(vxetable: VXETableCore, ...options: any[]): void;
+  [key: string]: any;
+}
+
+export interface VXETableCore {
+  v: string;
   /**
    * 设置全局参数/获取所有参数
    */
-  public setup: VxeGlobalSetup;
+  setup: VxeGlobalSetup;
   /**
    * Table interceptor
    */
-  public readonly interceptor: VxeGlobalInterceptor;
+  interceptor: VxeGlobalInterceptor;
   /**
    * Table renderer
    */
-  public readonly renderer: VxeGlobalRenderer;
+  renderer: VxeGlobalRenderer;
   /**
    * Table commands
    */
-  public readonly commands: VxeGlobalCommands;
+  commands: VxeGlobalCommands;
   /**
    * Table column formatter
    */
-  public readonly formats: VxeGlobalFormats;
+  formats: VxeGlobalFormats;
   /**
    * Table context menu
    */
-  public readonly menus: Menus;
+  menus: Menus;
   /**
    * Table VxeGlobalHooks API
    */
-  public readonly hooks: VxeGlobalHooks;
+  hooks: VxeGlobalHooks;
   /**
    * 模态窗口
    */
-  public readonly modal: ModalController;
+  modal: ModalController;
   /**
    * 读取本地文件
    */
-  public saveFile: SaveFileFunction;
+  saveFile: SaveFileFunction;
   /**
    * 读取本地文件
    */
-  public readFile: ReadFileFunction;
+  readFile: ReadFileFunction;
   /**
    * 打印
    */
-  public print: PrintFunction;
-
-  public use(plugin: PluginObject, ...options: any[]): VXETableInstance;
-  public install(app: App, options?: VXETableSetupOptions): void;
-}
-
-/**
- * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...
- */
-export const VXETable: VXETableInstance
-
-export interface PluginObject {
-  install(vxetable: VXETableInstance): void;
-  [key: string]: any;
-}
-
-export interface VXETableClipboard {
-  text?: string;
-  html?: string;
-  [key: string]: any;
-}
-
-export interface VXETableByVueProperty {
+  print: PrintFunction;
+  /**
+   * 读取内置配置
+   */
+  config: VXETableConfig;
+  /**
+   * 安装插件
+   * @param plugin
+   * @param options
+   */
+  use(plugin: VXETablePluginObject, ...options: any[]): VXETableCore;
   /**
    * 读取内置国际化
    */
-  t: translate;
-  /**
-   * 全局的模态窗口
-   */
-  modal: ModalController;
-  /**
-   * 剪贴板
-   */
-  clipboard?: VXETableClipboard;
+  t(key: string, args?: any): number | string;
 }
 
-declare module 'vue' {
-  export interface ComponentCustomProperties {
-    $vxe: VXETableByVueProperty;
-  }
-}
-
-declare global {
-  interface Window {
-    VXETable: VXETableInstance;
-  }
-}
+/**
+ * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...  
+ */
+export const VXETable: VXETableCore
 
 export * from './renderer'
 export * from './interceptor'

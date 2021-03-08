@@ -1,4 +1,4 @@
-import VXETable from '../../../../packages/v-x-e-table'
+import { VXETable } from '../../../../packages/vxe-table'
 
 // 创建一个简单的输入框渲染
 VXETable.renderer.add('MyInput', {

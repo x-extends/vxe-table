@@ -158,7 +158,7 @@ import kebabCase from 'xe-utils/kebabCase'
 // import startsWith from 'xe-utils/startsWith'
 // import endsWith from 'xe-utils/endsWith'
 import template from 'xe-utils/template'
-import toValString from 'xe-utils/toString'
+import toValueString from 'xe-utils/toValueString'
 
 // function
 // import property from 'xe-utils/property'
@@ -340,7 +340,7 @@ export default {
   // startsWith,
   // endsWith,
   template,
-  toString: toValString,
+  toValueString,
 
   // function
   // property,

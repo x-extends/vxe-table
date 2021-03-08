@@ -1,6 +1,6 @@
 import i18n from '@/i18n'
 
-import VXETable from '../../../packages/vxe-table'
+import { VXETable } from '../../../packages/vxe-table'
 
 // 设置默认参数
 VXETable.setup({

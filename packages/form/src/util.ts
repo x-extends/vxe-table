@@ -1,5 +1,5 @@
 import { watch } from 'vue'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { ItemInfo } from './itemInfo'
 
 import { VxeFormConstructor } from '../../../types/vxe-table'

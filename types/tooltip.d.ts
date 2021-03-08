@@ -1,10 +1,10 @@
-import { SetupContext, RenderFunction, Ref, ComponentPublicInstance } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
+import { SetupContext, RenderFunction, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 
 /**
  * 组件 - 工具提示
  */
-export interface Tooltip extends VXETableComponent { }
+export const Tooltip: VXEComponentInstall<DefineComponent>;
 
 export type VxeTooltipInstance = ComponentPublicInstance<VxeTooltipProps, VxeTooltipConstructor>;
 

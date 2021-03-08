@@ -1,6 +1,6 @@
 import { h, resolveComponent, ComponentOptions } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from './conf'
 import { VNTools, UtilTools } from '../../tools'
 
 import { VxeGlobalRendererHandles, VxeGlobalRenderer, VxeColumnPropTypes } from '../../../types/vxe-table'
@@ -659,7 +659,7 @@ const renderMap: { [name: string]: any } = {
 /**
  * 全局渲染器
  */
-const renderer: VxeGlobalRenderer = {
+export const renderer: VxeGlobalRenderer = {
   mixin (opts) {
     XEUtils.each(opts, (options, name) => renderer.add(name, options))
     return renderer
@@ -683,5 +683,3 @@ const renderer: VxeGlobalRenderer = {
     return renderer
   }
 }
-
-export default renderer

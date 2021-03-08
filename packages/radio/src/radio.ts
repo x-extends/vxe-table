@@ -1,7 +1,7 @@
 import { defineComponent, h, computed, inject, PropType } from 'vue'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { UtilTools } from '../../tools'
-import GlobalConfig from '../../conf'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
 import { SizeType, VxeRadioConstructor, VxeRadioEmits, VxeRadioGroupConstructor, VxeRadioGroupPrivateMethods, RadioMethods } from '../../../types/vxe-table'

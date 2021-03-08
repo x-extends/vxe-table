@@ -1,10 +1,10 @@
-import { SetupContext, RenderFunction, Ref, ComponentPublicInstance } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { SetupContext, RenderFunction, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 分页
  */
-export interface Pager extends VXETableComponent { }
+export const Pager: VXEComponentInstall<DefineComponent>;
 
 export type VxePagerInstance = ComponentPublicInstance<VxePagerProps, VxePagerConstructor>;
 

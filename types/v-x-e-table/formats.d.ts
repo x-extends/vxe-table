@@ -12,7 +12,7 @@ export namespace VxeGlobalFormatsHandles {
 /**
  * 全局格式化
  */
-export class VxeGlobalFormats {
+export interface VxeGlobalFormats {
   mixin(options: {
     [name: string]: VxeGlobalFormatsHandles.FormatsCallback;
   }): VxeGlobalFormats;

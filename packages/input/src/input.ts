@@ -1,6 +1,6 @@
 import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, watch, onUnmounted, PropType } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
@@ -1107,11 +1107,11 @@ export default defineComponent({
       }
     }
 
-    const updateTimePos = (liElem: HTMLElement) => {
+    const updateTimePos = (liElem: Element) => {
       if (liElem) {
-        const height = liElem.offsetHeight
+        const height = (liElem as HTMLElement).offsetHeight
         const ulElem = liElem.parentNode as HTMLElement
-        ulElem.scrollTop = liElem.offsetTop - height * 4
+        ulElem.scrollTop = (liElem as HTMLElement).offsetTop - height * 4
       }
     }
 

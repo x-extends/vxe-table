@@ -1,4 +1,19 @@
-import VXETable from './v-x-e-table'
+import { App } from 'vue'
+import { VXETable, VXETableSetupOptions, VXETableCore } from './v-x-e-table'
+
+export function install(app: App, options?: VXETableSetupOptions): void;
+
+declare module './v-x-e-table' {
+  interface VXETableCore {
+    install: typeof install;
+  }
+}
+
+declare global {
+  interface Window {
+    VXETable: VXETableCore;
+  }
+}
 
 // Constructor
 export * from './v-x-e-table'
@@ -43,5 +58,3 @@ export * from './pulldown'
 
 // Plugins
 export * from './plugins'
-
-export default VXETable

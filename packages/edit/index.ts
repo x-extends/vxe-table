@@ -1,5 +1,5 @@
 import editHook from './src/hook'
-import VXETable from '../v-x-e-table'
+import { VXETable } from '../v-x-e-table'
 
 export const Edit = {
   install () {

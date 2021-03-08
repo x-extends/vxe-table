@@ -1,10 +1,10 @@
-import { VNode, RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VNode, RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 模态窗口
  */
-export interface Modal extends VXETableComponent { }
+export const Modal: VXEComponentInstall<DefineComponent>;
 
 export type VxeModalInstance = ComponentPublicInstance<VxeModalProps, VxeModalConstructor>;
 
@@ -115,9 +115,9 @@ export namespace VxeModalPropTypes {
   export type ClassName = string;
   export type Top = number | string;
   export type Position = ModalPosition;
-  export type Title = string;
+  export type Title = string | number;
   export type Duration = number | string;
-  export type Message = number | string | ((params: { $modal: VxeModalConstructor }) => VNode[] | string[] | JSX.Element[]);
+  export type Message = number | string | ((params: { $modal: VxeModalConstructor & VxeModalMethods }) => VNode[] | string[] | JSX.Element[]);
   export type CancelButtonText = string;
   export type ConfirmButtonText = string;
   export type LockView = boolean;
@@ -258,7 +258,7 @@ export interface ModalController {
    * 获取动态的活动窗口
    * @param id 窗口唯一标识
    */
-  get(id: string): Modal;
+  get(id: string): VxeModalConstructor & VxeModalMethods;
   /**
    * 关闭动态的活动窗口，如果为空则关闭所有
    * @param id 窗口唯一标识
@@ -267,7 +267,7 @@ export interface ModalController {
 }
 
 export interface ModalDefaultSlotParams {
-  $modal: VxeModalConstructor;
+  $modal: VxeModalConstructor & VxeModalMethods;
 }
 
 export interface ModalHeaderSlotParams extends ModalDefaultSlotParams { }
@@ -280,7 +280,7 @@ interface ModalVisibleParams {
 
 export namespace VxeModalDefines {
   interface ModalEventParams extends VxeEvent {
-    $modal: VxeModalConstructor;
+    $modal: VxeModalConstructor & VxeModalMethods;
   }
 
   interface ModalBaseParams extends ModalVisibleParams { }

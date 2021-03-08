@@ -1,5 +1,4 @@
 import { VNode } from 'vue'
-import { RowInfo } from '../component'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeColumnPropTypes } from '../column'
@@ -116,7 +115,7 @@ export namespace VxeGlobalRendererHandles {
   }
 
   export interface ExportMethodParams {
-    row: RowInfo;
+    row: any;
     column: VxeTableDefines.ColumnInfo;
     options: VxeTablePropTypes.ExportHandleOptions;
   }
@@ -136,7 +135,7 @@ export namespace VxeGlobalRendererHandles {
     columnIndex: number;
     $columnIndex: number;
     rowid: string;
-    row: RowInfo;
+    row: any;
     rowIndex: number;
     $rowIndex: number;
     isHidden: boolean;
@@ -151,7 +150,7 @@ export namespace VxeGlobalRendererHandles {
     columnIndex: number;
     $columnIndex: number;
     rowid: string;
-    row: RowInfo;
+    row: any;
     rowIndex: number;
     $rowIndex: number;
     isHidden: boolean;

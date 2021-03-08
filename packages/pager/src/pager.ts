@@ -1,6 +1,6 @@
 import { defineComponent, h, PropType, computed, inject, resolveComponent, ComponentOptions, ref, Ref, nextTick } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
 import { SizeType, VxePagerConstructor, VxePagerEmits, PageSizeItemType, VxeSelectEvents, PagerPrivateRef, VxeGridConstructor, PagerMethods, PagerPrivateMethods, VxePagerPrivateMethods } from '../../../types/vxe-table'

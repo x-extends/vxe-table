@@ -1,11 +1,11 @@
 import { RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
-import { VXETableComponent, VxeComponentInstance } from './component'
+import { VXEComponentInstall, VxeComponentInstance } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
  * 表格扩展 - 快捷菜单
  */
-export interface Menu extends VXETableComponent { }
+export const Menu: VXEComponentInstall<{}>;
 
 export type VxeMenuPanelInstance = ComponentPublicInstance<VxeMenuPanelProps, VxeMenuPanelConstructor>;
 

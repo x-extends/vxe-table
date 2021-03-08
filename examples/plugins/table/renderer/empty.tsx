@@ -1,4 +1,4 @@
-import VXETable from '../../../../packages/v-x-e-table'
+import { VXETable } from '../../../../packages/vxe-table'
 
 // 创建一个简单的空内容渲染
 VXETable.renderer.add('NotData', {

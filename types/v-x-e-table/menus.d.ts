@@ -1,6 +1,6 @@
 import { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../table'
 import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
-import { VxeGlobalRendererHandles } from '../v-x-e-table';
+import { VxeGlobalRendererHandles } from './renderer';
 
 export namespace VxeGlobalMenusHandles {
   export type MenusCallback = (params: MenusCallbackParams, event: Event) => any;

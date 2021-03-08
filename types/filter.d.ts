@@ -1,11 +1,11 @@
-import { VXETableComponent } from './component'
+import { VXEComponentInstall } from './component'
 import { VxeTableDefines, VxeTableMethods, VxeTablePrivateMethods } from './table'
 import { VxeColumnPropTypes } from './column'
 
 /**
  * 表格扩展 - 筛选
  */
-export interface Filter extends VXETableComponent { }
+export const Filter: VXEComponentInstall<{}>;
 
 export interface VxeFilterPanel {
   /**

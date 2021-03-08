@@ -1,17 +1,12 @@
 import { App } from 'vue'
 import VxeTableComponent from './src/table'
-import VXETable from '../v-x-e-table'
+import { dynamicApp } from '../dynamics'
 
-export const Table = {
+export const Table = Object.assign(VxeTableComponent, {
   install: function (app: App) {
-    const { globalProperties } = app.config
-    if (!globalProperties.$vxe) {
-      globalProperties.$vxe = { t: VXETable.t }
-    } else {
-      globalProperties.$vxe.t = VXETable.t
-    }
+    dynamicApp.component(VxeTableComponent.name, VxeTableComponent)
     app.component(VxeTableComponent.name, VxeTableComponent)
   }
-}
+})
 
 export default Table

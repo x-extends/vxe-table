@@ -1,6 +1,6 @@
 import { defineComponent, h, ref, Ref, nextTick, onBeforeUnmount, reactive, watch, PropType } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { UtilTools, DomTools } from '../../tools'
 import { useSize } from '../../hooks/size'
 
@@ -221,11 +221,11 @@ export default defineComponent({
       if (parentNode) {
         reactData.message = content
         reactData.tipZindex = UtilTools.nextZIndex()
-        XEUtils.arrayEach(wrapperElem.children, (elem: HTMLElement, index) => {
+        XEUtils.arrayEach(wrapperElem.children, (elem, index) => {
           if (index > 1) {
             parentNode.insertBefore(elem, wrapperElem)
             if (!reactData.target) {
-              reactData.target = elem
+              reactData.target = elem as HTMLElement
             }
           }
         })

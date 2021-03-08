@@ -1,7 +1,7 @@
 import { defineComponent, h, PropType, ref, Ref, computed, onUnmounted, watch, reactive, nextTick } from 'vue'
 import { DomTools, GlobalEvent, createResizeEvent, XEResizeObserver, UtilTools } from '../../tools'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
 import { VxeListConstructor, VxeListPropTypes, VxeListEmits, ListReactData, ListInternalData, ListMethods, ListPrivateRef, VxeListMethods } from '../../../types/vxe-table'

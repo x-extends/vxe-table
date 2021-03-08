@@ -1,7 +1,7 @@
 import { App } from 'vue'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import VxeModalComponent, { allActivedModals } from './src/modal'
-import VXETable from '../v-x-e-table'
+import { VXETable } from '../v-x-e-table'
 import { dynamicApp, dynamicStore, checkDynamic } from '../dynamics'
 
 import { VxeModalOptions, VxeModalPropTypes, ModalEventTypes } from '../../types/vxe-table'
@@ -91,7 +91,7 @@ function openMessage (message: VxeModalPropTypes.Message | VxeModalOptions, opti
   }, message, '', options)
 }
 
-export const ModalController = {
+const ModalController = {
   get: getModal,
   close: closeModal,
   open: openModal,
@@ -100,24 +100,14 @@ export const ModalController = {
   message: openMessage
 }
 
-declare module '../v-x-e-table' {
-  interface VXETableInstance {
-    modal: typeof ModalController;
-  }
-}
+export const modal = ModalController
 
-export const Modal = {
+export const Modal = Object.assign(VxeModalComponent, {
   install: function (app: App) {
-    const { globalProperties } = app.config
     dynamicApp.component(VxeModalComponent.name, VxeModalComponent)
     app.component(VxeModalComponent.name, VxeModalComponent)
     VXETable.modal = ModalController
-    if (!globalProperties.$vxe) {
-      globalProperties.$vxe = { modal: ModalController }
-    } else {
-      globalProperties.$vxe.modal = ModalController
-    }
   }
-}
+})
 
 export default Modal

@@ -1,7 +1,7 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount } from 'vue'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
-import VXETable from '../../v-x-e-table'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
+import { VXETable } from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { mergeBodyMethod, getRowid } from './util'
 

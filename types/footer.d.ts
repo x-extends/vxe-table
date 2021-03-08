@@ -1,7 +1,8 @@
-import { VXETableComponent } from './component'
+import { DefineComponent } from 'vue'
+import { VXEComponentInstall } from './component'
 import { VxeTableDefines } from './table'
 
 /**
  * 表格扩展 - 表尾
  */
-export interface Footer extends VXETableComponent {}
+export const Footer: VXEComponentInstall<DefineComponent>;

@@ -1,7 +1,7 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
-import formats from '../../v-x-e-table/src/formats'
+import XEUtils from 'xe-utils'
 import { UtilTools } from '../../tools'
+import GlobalConfig from '../../v-x-e-table/src/conf'
+import { VXETable } from '../../v-x-e-table'
 
 import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/vxe-table'
 
@@ -43,12 +43,12 @@ export class ColumnInfo {
       }
       if (formatter) {
         if (XEUtils.isString(formatter)) {
-          const globalFunc = formats.get(formatter) || XEUtils[formatter]
+          const globalFunc = VXETable.formats.get(formatter) || XEUtils[formatter]
           if (!XEUtils.isFunction(globalFunc)) {
             UtilTools.error('vxe.error.notFunc', [formatter])
           }
         } else if (XEUtils.isArray(formatter)) {
-          const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
+          const globalFunc = VXETable.formats.get(formatter[0]) || XEUtils[formatter[0]]
           if (!XEUtils.isFunction(globalFunc)) {
             UtilTools.error('vxe.error.notFunc', [formatter[0]])
           }

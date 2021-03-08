@@ -1,12 +1,10 @@
 import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef } from 'vue'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { UtilTools, DomTools, GlobalEvent, createResizeEvent, XEResizeObserver, isEnableConf } from '../../tools'
 import { useSize } from '../../hooks/size'
-import formats from '../../v-x-e-table/src/formats'
-
+import { VXETable } from '../../v-x-e-table'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
-import GlobalConfig from '../../conf'
-import VXETable from '../../v-x-e-table'
 import TableBodyComponent from './body'
 import tableProps from './props'
 import tableEmits from './emits'
@@ -530,6 +528,7 @@ export default defineComponent({
     }
 
     const computeMaps: VxeTablePrivateComputed = {
+      computeSize,
       computeValidOpts,
       computeSXOpts,
       computeSYOpts,
@@ -546,6 +545,9 @@ export default defineComponent({
       computeKeyboardOpts,
       computeClipOpts,
       computeFNROpts,
+      computeHeaderMenu,
+      computeBodyMenu,
+      computeFooterMenu,
       computeIsMenu,
       computeMenuOpts,
       computeExportOpts,
@@ -614,9 +616,9 @@ export default defineComponent({
       return reserveList
     }
 
-    const handleFieldOrColumn = (fieldOrColumn: any) => {
+    const handleFieldOrColumn = (fieldOrColumn: string | VxeTableDefines.ColumnInfo) => {
       if (fieldOrColumn) {
-        return XEUtils.isString(fieldOrColumn) ? tableMethods.getColumnByField(fieldOrColumn) : fieldOrColumn as VxeTableDefines.ColumnInfo
+        return XEUtils.isString(fieldOrColumn) ? tableMethods.getColumnByField(fieldOrColumn) : fieldOrColumn
       }
       return null
     }
@@ -686,7 +688,7 @@ export default defineComponent({
       return { rowHeight: 0, visibleSize: 8 }
     }
 
-    const calculateMergerOffserIndex = (list: any, offsetItem: any, type: any) => {
+    const calculateMergerOffserIndex = (list: any, offsetItem: any, type: 'row' | 'col') => {
       for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
         const mergeItem = list[mcIndex]
         const { startIndex, endIndex } = offsetItem
@@ -705,7 +707,7 @@ export default defineComponent({
       }
     }
 
-    const setMerges = (merges: any, mList: any, rowList?: any[]) => {
+    const setMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any[]) => {
       if (merges) {
         const { treeConfig } = props
         const { visibleColumn } = internalData
@@ -755,7 +757,7 @@ export default defineComponent({
       }
     }
 
-    const removeMerges = (merges: any, mList: any[], rowList?: any) => {
+    const removeMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any) => {
       const rest: any[] = []
       if (merges) {
         const { treeConfig } = props
@@ -1448,19 +1450,6 @@ export default defineComponent({
       }
     }
 
-    const handleToggleCheckRowEvent = (evnt: any, params: any) => {
-      const { selection } = reactData
-      const checkboxOpts = computeCheckboxOpts.value
-      const { checkField: property } = checkboxOpts
-      const { row } = params
-      const value = property ? !XEUtils.get(row, property) : $xetable.findRowIndexOf(selection, row) === -1
-      if (evnt) {
-        tablePrivateMethods.triggerCheckRowEvent(evnt, params, value)
-      } else {
-        tablePrivateMethods.handleSelectRow(params, value)
-      }
-    }
-
     /**
      * 处理默认勾选
      */
@@ -2150,14 +2139,14 @@ export default defineComponent({
        * 根据 column 获取相对于当前表格列中的索引
        * @param {ColumnInfo} column 列配置
        */
-      getVTColumnIndex (column: any) {
+      getVTColumnIndex (column) {
         return column ? XEUtils.findIndexOf(internalData.visibleColumn, item => item.id === column.id) : -1
       },
       /**
        * 根据 column 获取渲染中的虚拟索引
        * @param {ColumnInfo} column 列配置
        */
-      getVMColumnIndex (column: any) {
+      getVMColumnIndex (column) {
         return column ? XEUtils.findIndexOf(reactData.tableColumn, item => item.id === column.id) : -1
       },
       /**
@@ -2165,7 +2154,7 @@ export default defineComponent({
        * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义
        * @param {Array} records 新数据
        */
-      createData (records: any) {
+      createData (records) {
         const { treeConfig } = props
         const treeOpts = computeTreeOpts.value
         const handleRrecord = (record: any) => tablePrivateMethods.defineField(Object.assign({}, record))
@@ -2304,7 +2293,7 @@ export default defineComponent({
        * 获取表格的可视列，也可以指定索引获取列
        * @param {Number} columnIndex 索引
        */
-      getColumns (columnIndex?: number) {
+      getColumns (columnIndex?: number): any {
         const columns = internalData.visibleColumn
         return XEUtils.isUndefined(columnIndex) ? columns.slice(0) : columns[columnIndex]
       },
@@ -2659,7 +2648,7 @@ export default defineComponent({
        * 多选，切换某一行的选中状态
        */
       toggleCheckboxRow (row: any) {
-        handleToggleCheckRowEvent(null, { row })
+        tablePrivateMethods.handleToggleCheckRowEvent(null, { row })
         return nextTick()
       },
       /**
@@ -3442,7 +3431,7 @@ export default defineComponent({
        * 设置合并单元格
        * @param {TableMergeConfig[]} merges { row: Row|number, column: ColumnInfo|number, rowspan: number, colspan: number }
        */
-      setMergeCells (merges: any) {
+      setMergeCells (merges) {
         if (props.spanMethod) {
           UtilTools.error('vxe.error.errConflicts', ['merge-cells', 'span-method'])
         }
@@ -3703,7 +3692,7 @@ export default defineComponent({
             // 空格键支持选中复选框
             evnt.preventDefault()
             if (selected.column.type === 'checkbox') {
-              handleToggleCheckRowEvent(evnt, selected.args)
+              tablePrivateMethods.handleToggleCheckRowEvent(evnt, selected.args)
             } else {
               tablePrivateMethods.triggerRadioRowEvent(evnt, selected.args)
             }
@@ -4496,7 +4485,7 @@ export default defineComponent({
             }
             // 如果是复选框
             if (!triggerCheckbox && (checkboxOpts.trigger === 'row' || (isCheckboxType && checkboxOpts.trigger === 'cell'))) {
-              handleToggleCheckRowEvent(evnt, params)
+              tablePrivateMethods.handleToggleCheckRowEvent(evnt, params)
             }
           }
           // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
@@ -4547,6 +4536,18 @@ export default defineComponent({
           }
         }
         tableMethods.dispatchEvent('cell-dblclick', params, evnt)
+      },
+      handleToggleCheckRowEvent (evnt, params) {
+        const { selection } = reactData
+        const checkboxOpts = computeCheckboxOpts.value
+        const { checkField: property } = checkboxOpts
+        const { row } = params
+        const value = property ? !XEUtils.get(row, property) : $xetable.findRowIndexOf(selection, row) === -1
+        if (evnt) {
+          tablePrivateMethods.triggerCheckRowEvent(evnt, params, value)
+        } else {
+          tablePrivateMethods.handleSelectRow(params, value)
+        }
       },
       triggerCheckRowEvent (evnt, params, value) {
         const checkboxOpts = computeCheckboxOpts.value
@@ -4864,10 +4865,10 @@ export default defineComponent({
           }
           const formatParams = { cellValue, row, rowIndex: tableMethods.getRowIndex(row), column, columnIndex: tableMethods.getColumnIndex(column) }
           if (XEUtils.isString(formatter)) {
-            const globalFunc = formats.get(formatter)
+            const globalFunc = VXETable.formats.get(formatter)
             cellLabel = globalFunc ? globalFunc(formatParams) : ''
           } else if (XEUtils.isArray(formatter)) {
-            const globalFunc = formats.get(formatter[0])
+            const globalFunc = VXETable.formats.get(formatter[0])
             cellLabel = globalFunc ? globalFunc(formatParams, ...formatter.slice(1)) : ''
           } else {
             cellLabel = formatter(formatParams)
@@ -5038,6 +5039,8 @@ export default defineComponent({
       }
     })
 
+    tablePrivateMethods.preventEvent(null, 'created', { $table: $xetable })
+
     let resizeObserver: XEResizeObserver
 
     nextTick(() => {
@@ -5070,11 +5073,11 @@ export default defineComponent({
         const { exportConfig, importConfig } = props
         const exportOpts = computeExportOpts.value
         const importOpts = computeImportOpts.value
-        if (importConfig && importOpts.types && !XEUtils.includeArrays(VXETable.importTypes, importOpts.types)) {
-          UtilTools.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(VXETable.importTypes, type)).join(',') || VXETable.importTypes.join(',')])
+        if (importConfig && importOpts.types && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {
+          UtilTools.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(VXETable.config.importTypes, type)).join(',') || VXETable.config.importTypes.join(',')])
         }
-        if (exportConfig && exportOpts.types && !XEUtils.includeArrays(VXETable.exportTypes, exportOpts.types)) {
-          UtilTools.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(VXETable.exportTypes, type)).join(',') || VXETable.exportTypes.join(',')])
+        if (exportConfig && exportOpts.types && !XEUtils.includeArrays(VXETable.config.exportTypes, exportOpts.types)) {
+          UtilTools.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(VXETable.config.exportTypes, type)).join(',') || VXETable.config.exportTypes.join(',')])
         }
       }
 
@@ -5172,12 +5175,16 @@ export default defineComponent({
 
     onActivated(() => {
       tableMethods.recalculate().then(() => tableMethods.refreshScroll())
-      tablePrivateMethods.preventEvent(null, 'activated')
+      tablePrivateMethods.preventEvent(null, 'activated', { $table: $xetable })
     })
 
     onDeactivated(() => {
       internalData.isActivated = false
-      tablePrivateMethods.preventEvent(null, 'deactivated')
+      tablePrivateMethods.preventEvent(null, 'deactivated', { $table: $xetable })
+    })
+
+    onUnmounted(() => {
+      tablePrivateMethods.preventEvent(null, 'mounted', { $table: $xetable })
     })
 
     onBeforeUnmount(() => {
@@ -5188,7 +5195,7 @@ export default defineComponent({
       if ($xetable.closeMenu) {
         $xetable.closeMenu()
       }
-      tablePrivateMethods.preventEvent(null, 'beforeUnmount')
+      tablePrivateMethods.preventEvent(null, 'beforeUnmount', { $table: $xetable })
     })
 
     onUnmounted(() => {
@@ -5201,7 +5208,7 @@ export default defineComponent({
       GlobalEvent.off($xetable, 'keydown')
       GlobalEvent.off($xetable, 'resize')
       GlobalEvent.off($xetable, 'contextmenu')
-      tablePrivateMethods.preventEvent(null, 'unmounted')
+      tablePrivateMethods.preventEvent(null, 'unmounted', { $table: $xetable })
     })
 
     const renderVN = () => {

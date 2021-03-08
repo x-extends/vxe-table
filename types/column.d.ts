@@ -1,5 +1,5 @@
-import { VNode } from 'vue'
-import { VXETableComponent } from './component'
+import { VNode, DefineComponent } from 'vue'
+import { VXEComponentInstall } from './component'
 import { VxeTableConstructor, VxeTableDefines, VxeTablePropTypes } from './table'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeFilterPanel } from './filter'
@@ -7,7 +7,7 @@ import { VxeFilterPanel } from './filter'
 /**
  * 组件 - 表格列
  */
-export interface Column extends VXETableComponent { }
+export const Column: VXEComponentInstall<DefineComponent>;
 
 export interface VxeColumnOptions extends VxeColumnProps {
   children?: VxeColumnOptions[];

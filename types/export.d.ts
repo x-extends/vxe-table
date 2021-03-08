@@ -1,11 +1,11 @@
-import { VXETableComponent } from './component'
+import { VXEComponentInstall } from './component'
 import { VxeTablePropTypes, VxeTableDefines, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from './table'
 import { VxeGridConstructor } from './grid'
 
 /**
  * 表格扩展 - 导出、导入、打印
  */
-export interface Export extends VXETableComponent { }
+export const Export: VXEComponentInstall<{}>;
 
 export interface TableExportMethods {
   /**

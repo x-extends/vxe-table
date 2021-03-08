@@ -188,10 +188,10 @@ export default {
         readFile: 'Read file',
 
         other: 'Integrated third party Library',
-        elementRender: 'element-ui -> Custom Templates',
+        elementRender: 'element-plus -> Custom Templates',
         iviewRender: 'iview -> Custom Templates',
         antd: 'ant-design-vue -> Custom Templates',
-        elementUpload: 'element-ui -> Uploader',
+        elementUpload: 'element-plus -> Uploader',
         sortablejsRow: 'sortablejs -> Row drag',
         sortablejsColumn: 'sortablejs -> column moving',
         xlsxRender: 'xlsx -> Import and export',

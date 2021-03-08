@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import DomTools from './dom'
 
 import { VxeComponentInstance } from '../../../types/vxe-table'

@@ -1,7 +1,7 @@
 import { defineComponent, h, Teleport, ref, Ref, onUnmounted, reactive, nextTick, PropType } from 'vue'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
 import { VNodeStyle, VxePulldownConstructor, VxePulldownPropTypes, VxePulldownEmits, PulldownReactData, PulldownMethods, PulldownPrivateRef, VxePulldownMethods } from '../../../types/vxe-table'

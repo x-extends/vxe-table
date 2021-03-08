@@ -1,5 +1,5 @@
 import { watch } from 'vue'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
 
 import { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeColumnProps } from '../../../types/vxe-table'

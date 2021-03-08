@@ -159,7 +159,7 @@ export * from 'xe-utils/kebabCase'
 // export * from 'xe-utils/startsWith'
 // export * from 'xe-utils/endsWith'
 export * from 'xe-utils/template'
-export * from 'xe-utils/toString'
+export * from 'xe-utils/toValueString'
 
 // function
 // export * from 'xe-utils/property'

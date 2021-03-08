@@ -1,9 +1,10 @@
-import { VXETableComponent } from './component'
+import { DefineComponent } from 'vue'
+import { VXEComponentInstall } from './component'
 
 /**
  * 组件 - 下拉框选项
  */
-export interface Option extends VXETableComponent {}
+export const Option: VXEComponentInstall<DefineComponent>;
 
 export interface VxeOptionOption {
   /**

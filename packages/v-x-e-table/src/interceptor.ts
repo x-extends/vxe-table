@@ -1,20 +1,27 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
+import { UtilTools } from '../../tools'
 
 import { VxeGlobalInterceptor, VxeGlobalInterceptorHandles } from '../../../types/v-x-e-table'
 
-const eventTypes = 'created,mounted,activated,beforeDestroy,destroyed'.split(',').concat('clearActived,clearFilter,clearAreas,showMenu,keydown,export,import'.split(',').map(name => `event.${name}`))
 const storeMap: { [type: string]: VxeGlobalInterceptorHandles.InterceptorCallback[] } = {}
 
-const interceptor: VxeGlobalInterceptor = {
+export const interceptor: VxeGlobalInterceptor = {
   mixin (options) {
-    XEUtils.each(options, (callback: VxeGlobalInterceptorHandles.InterceptorCallback, type) => interceptor.add(type, callback))
+    XEUtils.each(options, (callback: VxeGlobalInterceptorHandles.InterceptorCallback, type) => interceptor.add(type as VxeGlobalInterceptorHandles.Type, callback))
     return interceptor
   },
   get (type) {
     return storeMap[type] || []
   },
   add (type, callback) {
-    if (callback && eventTypes.indexOf(type) > -1) {
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      const eventTypes: VxeGlobalInterceptorHandles.Type[] = ['created', 'mounted', 'activated', 'beforeUnmount', 'unmounted', 'event.clearActived', 'event.clearFilter', 'event.clearAreas', 'event.showMenu', 'event.keydown', 'event.export', 'event.import']
+      if (eventTypes.indexOf(type) === -1) {
+        UtilTools.warn('vxe.error.errProp', [`${type}`, eventTypes.join('|')])
+      }
+    }
+
+    if (callback) {
       let eList = storeMap[type]
       if (!eList) {
         eList = storeMap[type] = []
@@ -34,5 +41,3 @@ const interceptor: VxeGlobalInterceptor = {
     }
   }
 }
-
-export default interceptor

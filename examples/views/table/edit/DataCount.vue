@@ -18,7 +18,7 @@
       <vxe-table-column field="amount" title="单价" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column field="number" title="数量" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
       <vxe-table-column title="总价">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <span>{{ countAmount(row) }} 元</span>
         </template>
       </vxe-table-column>
@@ -89,7 +89,7 @@ export default defineComponent({
           <vxe-table-column field="amount" title="单价" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column field="number" title="数量" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
           <vxe-table-column title="总价">
-            <template v-slot="{ row }">
+            <template #default="{ row }">
               <span>{{ countAmount(row) }} 元</span>
             </template>
           </vxe-table-column>

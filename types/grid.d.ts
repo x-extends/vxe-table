@@ -1,16 +1,16 @@
-import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance } from 'vue'
+import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, DefineComponent } from 'vue'
 import { VxeColumnOptions } from './column'
 import { VxeFormInstance, VxeFormOptions, VxeFormDefines } from './form'
 import { VxeFormItemOptions } from './form-item'
 import { VxeToolbarInstance, VxeToolbarOptions, VxeToolbarPropTypes } from './toolbar'
 import { VxePagerInstance, VxePagerOptions, VxePagerDefines } from './pager'
-import { VXETableComponent, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeTableInstance, VxeTableDefines, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
  * 组件 - 高级表格
  */
-export interface Grid extends VXETableComponent { }
+export const Grid: VXEComponentInstall<DefineComponent>;
 
 export type VxeGridInstance = ComponentPublicInstance<VxeGridProps, VxeGridConstructor>;
 
