@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 import { handleFieldOrColumn } from '../../table/src/util'
 import VXETable from '../../v-x-e-table'

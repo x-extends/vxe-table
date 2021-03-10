@@ -1,5 +1,5 @@
 import { UtilTools } from '../../tools'
-import GlobalConfig from '../../conf'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 
 export default {
   name: 'VxeRadioButton',

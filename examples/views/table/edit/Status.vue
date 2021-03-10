@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      设置 <table-api-link prop="keep-source"/> 开启保持原始值状态和 <table-api-link prop="edit-config"/>={showStatus} 开启编辑状态显示功能，还可以通过 icon 自定义编辑状态的图标，例如第三方图标库：font-awesome、inconfont<br>
+      设置 <table-api-link prop="keep-source"/> 开启保持原始值状态和 <table-api-link prop="edit-config"/>={showStatus, showUpdateStatus, showInsertStatus} 开启编辑状态显示功能，还可以通过 icon 自定义编辑状态的图标，例如第三方图标库：font-awesome、inconfont<br>
       对于某些需要局部保存的场景，可以在数据保存完成后调用 <table-api-link prop="reloadRow"/> 方法加载行数据并恢复到初始状态<br>
       <span class="red">（注：开启 showStatus 后如果使用自定义渲染需要配合 <table-api-link prop="updateStatus"/> 方法使用，在对应单元格的值发生改变时调用更新状态）</span>
     </p>
@@ -21,7 +21,6 @@
       show-overflow
       keep-source
       ref="xTable"
-      class="my_table_status"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil-square-o'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -50,7 +49,6 @@
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
-      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -86,7 +84,6 @@ export default {
           show-overflow
           keep-source
           ref="xTable"
-          class="my_table_status"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil-square-o'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -187,11 +184,6 @@ export default {
             }
           }
         }
-        `,
-        `
-        .my_table_status .vxe-body--row.is--new {
-          background-color: #f1fdf1;
-        }
         `
       ]
     }
@@ -258,9 +250,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.my_table_status .vxe-body--row.is--new {
-  background-color: #f1fdf1;
-}
-</style>

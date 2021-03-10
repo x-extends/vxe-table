@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import VXEModal, { allActivedModals } from './src/modal'
 import VXETable from '../v-x-e-table'
 
@@ -63,6 +63,8 @@ const ModalController = {
   open: openModal
 }
 
+export const modal = ModalController
+
 const shortcutTypes = ['alert', 'confirm', 'message']
 
 shortcutTypes.forEach((type, index) => {
@@ -87,21 +89,22 @@ shortcutTypes.forEach((type, index) => {
         opts = index === 2 ? { status: title } : { title }
       }
     }
-    return openModal(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
+    return openModal(Object.assign({ message: XEUtils.toValueString(message), type }, defOpts, opts, options))
   }
 })
 
-VXEModal.install = function (Vue) {
-  VXETable._modal = 1
-  Vue.component(VXEModal.name, VXEModal)
-  ModalClass = Vue.extend(VXEModal)
-  VXETable.modal = ModalController
-  if (!Vue.prototype.$vxe) {
-    Vue.prototype.$vxe = { modal: ModalController }
-  } else {
-    Vue.prototype.$vxe.modal = ModalController
+export const Modal = Object.assign(VXEModal, {
+  install (Vue) {
+    VXETable._modal = 1
+    Vue.component(VXEModal.name, VXEModal)
+    ModalClass = Vue.extend(VXEModal)
+    VXETable.modal = ModalController
+    if (!Vue.prototype.$vxe) {
+      Vue.prototype.$vxe = { modal: ModalController }
+    } else {
+      Vue.prototype.$vxe.modal = ModalController
+    }
   }
-}
+})
 
-export const Modal = VXEModal
 export default VXEModal

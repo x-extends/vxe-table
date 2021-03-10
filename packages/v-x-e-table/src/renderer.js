@@ -1,5 +1,5 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { UtilTools } from '../../tools'
 
 const defaultCompProps = { transfer: true }
@@ -633,7 +633,7 @@ const renderMap = {
 /**
  * 全局渲染器
  */
-const renderer = {
+export const renderer = {
   mixin (map) {
     XEUtils.each(map, (options, name) => renderer.add(name, options))
     return renderer
@@ -657,5 +657,3 @@ const renderer = {
     return renderer
   }
 }
-
-export default renderer

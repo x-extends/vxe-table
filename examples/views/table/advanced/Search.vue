@@ -171,15 +171,15 @@ export default {
           },
           methods: {
             searchEvent1 () {
-              const filterName = XEUtils.toString(this.filterName1).trim().toLowerCase()
+              const filterName = XEUtils.toValueString(this.filterName1).trim().toLowerCase()
               if (filterName) {
                 const filterRE = new RegExp(filterName, 'gi')
                 const searchProps = ['name', 'role', 'age', 'address']
-                const rest = this.tableData1.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
+                const rest = this.tableData1.filter(item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1))
                 this.list1 = rest.map(row => {
                   const item = Object.assign({}, row)
                   searchProps.forEach(key => {
-                    item[key] = XEUtils.toString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
+                    item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
                   })
                   return item
                 })
@@ -264,15 +264,15 @@ export default {
           },
           methods: {
             searchEvent2 () {
-              const filterName = XEUtils.toString(this.filterName2).trim().toLowerCase()
+              const filterName = XEUtils.toValueString(this.filterName2).trim().toLowerCase()
               if (filterName) {
                 const filterRE = new RegExp(filterName, 'gi')
                 const options = { children: 'children' }
                 const searchProps = ['name', 'size', 'type', 'date']
-                const rest = XEUtils.searchTree(this.tableData2, item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
+                const rest = XEUtils.searchTree(this.tableData2, item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
                 XEUtils.eachTree(rest, item => {
                   searchProps.forEach(key => {
-                    item[key] = XEUtils.toString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
+                    item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
                   })
                 }, options)
                 this.list2 = rest
@@ -302,15 +302,15 @@ export default {
   },
   methods: {
     searchEvent1 () {
-      const filterName = XEUtils.toString(this.filterName1).trim().toLowerCase()
+      const filterName = XEUtils.toValueString(this.filterName1).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const searchProps = ['name', 'role', 'age', 'address']
-        const rest = this.tableData1.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
+        const rest = this.tableData1.filter(item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1))
         this.list1 = rest.map(row => {
           const item = Object.assign({}, row)
           searchProps.forEach(key => {
-            item[key] = XEUtils.toString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+            item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
           })
           return item
         })
@@ -319,15 +319,15 @@ export default {
       }
     },
     searchEvent2 () {
-      const filterName = XEUtils.toString(this.filterName2).trim().toLowerCase()
+      const filterName = XEUtils.toValueString(this.filterName2).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const options = { children: 'children' }
         const searchProps = ['name', 'size', 'type', 'date']
-        const rest = XEUtils.searchTree(this.tableData2, item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
+        const rest = XEUtils.searchTree(this.tableData2, item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
         XEUtils.eachTree(rest, item => {
           searchProps.forEach(key => {
-            item[key] = XEUtils.toString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+            item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
           })
         }, options)
         this.list2 = rest

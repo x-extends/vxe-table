@@ -1,13 +1,13 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 
 function toType (type) {
-  return XEUtils.toString(type).replace('_', '').toLowerCase()
+  return XEUtils.toValueString(type).replace('_', '').toLowerCase()
 }
 
 const eventTypes = 'created,mounted,activated,beforeDestroy,destroyed,event.clearActived,event.clearFilter,event.clearAreas,event.showMenu,event.keydown,event.export,event.import'.split(',').map(toType)
 const storeMap = {}
 
-const interceptor = {
+export const interceptor = {
   mixin (map) {
     XEUtils.each(map, (evntFn, type) => interceptor.add(type, evntFn))
     return interceptor
@@ -34,5 +34,3 @@ const interceptor = {
     return interceptor
   }
 }
-
-export default interceptor

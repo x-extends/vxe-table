@@ -1,6 +1,6 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import VxeInput from '../../input/src/input'
-import GlobalConfig from '../../conf'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
@@ -111,7 +111,7 @@ function findOption (_vm, optionValue) {
 
 function getSelectLabel (_vm, value) {
   const item = findOption(_vm, value)
-  return XEUtils.toString(item ? item[_vm.labelField] : value)
+  return XEUtils.toValueString(item ? item[_vm.labelField] : value)
 }
 
 export function renderOption (h, _vm, list, group) {

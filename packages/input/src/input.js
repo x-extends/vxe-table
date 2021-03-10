@@ -1,5 +1,5 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
@@ -18,7 +18,7 @@ function toStringTimeDate (str) {
       m = str.getMinutes()
       s = str.getSeconds()
     } else {
-      str = XEUtils.toString(str)
+      str = XEUtils.toValueString(str)
       const parses = str.match(/^(\d{1,2})(:(\d{1,2}))?(:(\d{1,2}))?/)
       if (parses) {
         h = parses[1]
@@ -36,7 +36,7 @@ function toStringTimeDate (str) {
 
 function getNumberValue (_vm, val) {
   const { type, digitsValue } = _vm
-  return type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toString(val)
+  return type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toValueString(val)
 }
 
 function renderDateLabel (h, _vm, item, label) {
@@ -55,13 +55,13 @@ function renderDateLabel (h, _vm, item, label) {
         h('span', {
           class: ['vxe-input--date-label--extra', extraItem.important ? 'is-important' : '', extraItem.className],
           style: extraItem.style
-        }, XEUtils.toString(extraItem.label))
+        }, XEUtils.toValueString(extraItem.label))
       ] : label)
     ]
     const festivalLabel = festivalItem.label
     if (festivalLabel) {
       // 默认最多支持3个节日重叠
-      const festivalLabels = XEUtils.toString(festivalLabel).split(',')
+      const festivalLabels = XEUtils.toValueString(festivalLabel).split(',')
       labels.push(
         h('span', {
           class: ['vxe-input--date-festival', festivalItem.important ? 'is-important' : '', festivalItem.className],
@@ -1051,7 +1051,7 @@ export default {
       this.inputValue = value
       this.$emit('modelValue', value)
       this.$emit('input', { value, $event: evnt })
-      if (XEUtils.toString(this.value) !== value) {
+      if (XEUtils.toValueString(this.value) !== value) {
         this.$emit('change', { value, $event: evnt })
       }
     },

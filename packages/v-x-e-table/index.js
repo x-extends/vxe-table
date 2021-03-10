@@ -1,24 +1,24 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../conf'
-import interceptor from './src/interceptor'
-import renderer from './src/renderer'
-import commands from './src/commands'
-import menus from './src/menus'
-import formats from './src/formats'
-import setup from './src/setup'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../v-x-e-table/src/conf'
+import { interceptor } from './src/interceptor'
+import { renderer } from './src/renderer'
+import { commands } from './src/commands'
+import { menus } from './src/menus'
+import { formats } from './src/formats'
+import { setup } from './src/setup'
 import { UtilTools } from '../tools'
 
 const installedPlugins = []
 
-function use (Plugin, options) {
+export function use (Plugin, options) {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   if (Plugin && Plugin.install) {
     if (installedPlugins.indexOf(Plugin) === -1) {
-      Plugin.install(VXETableInstance, options)
+      Plugin.install(VXETable, options)
       installedPlugins.push(Plugin)
     }
   }
-  return VXETableInstance
+  return VXETable
 }
 
 /**
@@ -26,34 +26,11 @@ function use (Plugin, options) {
  */
 function reg (key) {
   /* eslint-disable @typescript-eslint/no-use-before-define */
-  if (VXETableInstance.Table) {
+  if (VXETable.Table) {
     UtilTools.error('vxe.error.useErr', [key])
   }
-  VXETableInstance[`_${key}`] = 1
+  VXETable[`_${key}`] = 1
 }
-
-export const VXETableInstance = {
-  t: (key, args) => GlobalConfig.i18n(key, args),
-  v: 'v3',
-  reg,
-  use,
-  setup,
-  interceptor,
-  renderer,
-  commands,
-  formats,
-  menus
-}
-
-/**
- * 获取当前的 zIndex
- */
-Object.defineProperty(VXETableInstance, 'zIndex', { get: UtilTools.getLastZIndex })
-
-/**
- * 获取下一个 zIndex
- */
-Object.defineProperty(VXETableInstance, 'nextZIndex', { get: UtilTools.nextZIndex })
 
 function getExportOrImpotType (types, flag) {
   const rest = []
@@ -65,24 +42,62 @@ function getExportOrImpotType (types, flag) {
   return rest
 }
 
-/**
- * 获取所有导出类型
- */
-Object.defineProperty(VXETableInstance, 'exportTypes', {
-  get () {
+class VXETableConfig {
+  /**
+   * 获取当前的 zIndex
+   */
+  get zIndex () {
+    return UtilTools.getLastZIndex()
+  }
+
+  /**
+   * 获取下一个 zIndex
+   */
+  get nextZIndex () {
+    return UtilTools.nextZIndex()
+  }
+
+  /**
+   * 获取所有导出类型
+   */
+  get exportTypes () {
     return getExportOrImpotType(GlobalConfig.export.types, 1)
   }
-})
 
-/**
- * 获取所有导入类型
- */
-Object.defineProperty(VXETableInstance, 'importTypes', {
-  get () {
+  /**
+   * 获取所有导入类型
+   */
+  get importTypes () {
     return getExportOrImpotType(GlobalConfig.export.types, 2)
   }
-})
+}
+export const config = new VXETableConfig()
 
-export const VXETable = VXETableInstance
+export function t (key, args) {
+  return GlobalConfig.i18n(key, args)
+}
+
+export const v = 'v3'
+
+export const VXETable = {
+  v,
+  reg,
+  use,
+  setup,
+  interceptor,
+  renderer,
+  commands,
+  formats,
+  menus,
+  config,
+  t
+}
+
+export * from './src/interceptor'
+export * from './src/renderer'
+export * from './src/commands'
+export * from './src/menus'
+export * from './src/formats'
+export * from './src/setup'
 
 export default VXETable

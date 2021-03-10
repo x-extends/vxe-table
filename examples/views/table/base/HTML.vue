@@ -84,7 +84,7 @@ export default {
               return row.describe
             },
             filterDescribeMethod ({ value, row, column }) {
-              return XEUtils.toString(row.html1).indexOf(value) > -1
+              return XEUtils.toValueString(row.html1).indexOf(value) > -1
             }
           }
         }
@@ -101,7 +101,7 @@ export default {
       return row.describe
     },
     filterDescribeMethod ({ value, row }) {
-      return XEUtils.toString(row.html1).indexOf(value) > -1
+      return XEUtils.toValueString(row.html1).indexOf(value) > -1
     }
   }
 }

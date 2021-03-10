@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import UtilTools from './utils'
 
 const { getRowid } = UtilTools

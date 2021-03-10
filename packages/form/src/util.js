@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 

@@ -1,5 +1,5 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from './body'
 import vSize from '../../mixins/size'
@@ -713,11 +713,11 @@ export default {
       }
       // 检查导入导出类型
       const { exportConfig, exportOpts, importConfig, importOpts } = this
-      if (importConfig && importOpts.types && !XEUtils.includeArrays(VXETable.importTypes, importOpts.types)) {
-        UtilTools.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter(type => XEUtils.includes(VXETable.importTypes, type)).join(',') || VXETable.importTypes.join(',')])
+      if (importConfig && importOpts.types && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {
+        UtilTools.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter(type => XEUtils.includes(VXETable.config.importTypes, type)).join(',') || VXETable.config.importTypes.join(',')])
       }
-      if (exportConfig && exportOpts.types && !XEUtils.includeArrays(VXETable.exportTypes, exportOpts.types)) {
-        UtilTools.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter(type => XEUtils.includes(VXETable.exportTypes, type)).join(',') || VXETable.exportTypes.join(',')])
+      if (exportConfig && exportOpts.types && !XEUtils.includeArrays(VXETable.config.exportTypes, exportOpts.types)) {
+        UtilTools.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter(type => XEUtils.includes(VXETable.config.exportTypes, type)).join(',') || VXETable.config.exportTypes.join(',')])
       }
     }
 

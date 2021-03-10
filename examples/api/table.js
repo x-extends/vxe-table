@@ -2211,8 +2211,26 @@ const apis = [
           },
           {
             name: 'showStatus',
-            desc: '只对 keep-source 开启有效，是否显示单元格值的修改状态',
+            desc: '只对 keep-source 开启有效，是否显示单元格新增与修改状态',
             version: '',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'showUpdateStatus',
+            desc: '只对 keep-source 开启有效，是否显示单元格修改状态',
+            version: '3.1.9',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'showInsertStatus',
+            desc: '只对 keep-source 开启有效，是否显示单元格新增状态',
+            version: '3.1.9',
             type: 'boolean',
             enum: '',
             defVal: 'false',

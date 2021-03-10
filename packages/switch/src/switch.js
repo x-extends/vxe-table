@@ -1,5 +1,5 @@
 import { UtilTools, DomTools } from '../../tools'
-import GlobalConfig from '../../conf'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 
 const browse = DomTools.browse

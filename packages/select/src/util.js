@@ -1,4 +1,4 @@
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 
 class OptionConfig {
   constructor ($xeselect, _vm) {

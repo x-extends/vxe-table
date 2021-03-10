@@ -1,10 +1,10 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { clearTableAllStatus, handleFieldOrColumn } from './util'
-import formats from '../../v-x-e-table/src/formats'
+import { formats } from '../../v-x-e-table/src/formats'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
 const { browse, calcHeight, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
@@ -247,7 +247,7 @@ function getOrderField (_vm, column) {
     } else if (sortType === 'number') {
       return XEUtils.toNumber(cellValue)
     } else if (sortType === 'string') {
-      return XEUtils.toString(cellValue)
+      return XEUtils.toValueString(cellValue)
     }
     return cellValue
   }

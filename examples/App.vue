@@ -107,14 +107,17 @@
       </div>
     </div>
 
-    <vxe-modal v-model="newVersionVisible" title="v4.x 预发布" width="500" min-height="200" min-width="400" :position="{left: 20, top: 20}" :mask="false" :lock-view="false" show-footer resize>
+    <vxe-modal v-model="newVersionVisible" width="500" min-height="200" min-width="400" :position="{left: 20, top: 20}" :mask="false" :lock-view="false" show-footer resize>
+      <template #title>
+        <span style="color:red">v4.x next 发布</span>
+      </template>
       <template #default>
         <ul>
-          <li>1. 支持 vue 3.0 Component API</li>
-          <li>2. 使用 Typescript 重写组件</li>
-          <li>3. 不再支持 IE，面向现代浏览器</li>
-          <li>4. 重写虚拟渲染</li>
-          <li>5. 重写渲染器：移除 h 参数</li>
+          <li>* 支持 vue 3.0 Component API</li>
+          <li>* 使用 typescript 重写组件，全面支持 typescript</li>
+          <li>* 不再支持 IE，面向现代浏览器</li>
+          <li>* 重写渲染器：移除 h 参数</li>
+          <li>* 兼容基本参数及用法</li>
         </ul>
       </template>
       <template #footer>
@@ -2264,9 +2267,9 @@ export default {
         }
       }, 3000)
     }
-    // setTimeout(() => {
-    //   this.newVersionVisible = localStorage.getItem('VXE_TABLE_NEW_VERSION') !== '4'
-    // }, 5000)
+    setTimeout(() => {
+      this.newVersionVisible = localStorage.getItem('VXE_TABLE_NEW_VERSION') !== '4.0'
+    }, 5000)
     this.init()
   },
   methods: {
@@ -2323,7 +2326,7 @@ export default {
       this.handleSearch()
     }, 500, { leading: false, trailing: true }),
     handleSearch () {
-      const filterName = XEUtils.toString(this.filterName).trim().toLowerCase()
+      const filterName = XEUtils.toValueString(this.filterName).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const rest = XEUtils.searchTree(this.tableData, item => item.label.toLowerCase().indexOf(filterName) > -1)
@@ -2358,7 +2361,7 @@ export default {
     },
     claseNewVersionEvent () {
       this.newVersionVisible = false
-      localStorage.setItem('VXE_TABLE_NEW_VERSION', '4')
+      localStorage.setItem('VXE_TABLE_NEW_VERSION', '4.0')
     },
     viewNewVersionEvent () {
       this.claseNewVersionEvent()

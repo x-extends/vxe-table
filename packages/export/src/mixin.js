@@ -1,5 +1,5 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 import { mergeBodyMethod } from '../../table/src/util'
@@ -127,7 +127,7 @@ function getLabelData ($xetable, opts, columns, datas) {
                 }
             }
           }
-          item[column.id] = XEUtils.toString(cellValue)
+          item[column.id] = XEUtils.toValueString(cellValue)
         })
         rest.push(Object.assign(item, row))
       }
@@ -182,7 +182,7 @@ function getLabelData ($xetable, opts, columns, datas) {
             }
         }
       }
-      item[column.id] = XEUtils.toString(cellValue)
+      item[column.id] = XEUtils.toValueString(cellValue)
     })
     return item
   })
@@ -215,7 +215,7 @@ function getFooterCellValue ($xetable, opts, items, column) {
     }
   }
   const _columnIndex = $xetable.getVTColumnIndex(column)
-  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toString(items[_columnIndex])
+  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toValueString(items[_columnIndex])
   return cellValue
 }
 
@@ -538,7 +538,7 @@ export function saveLocalFile (options) {
   const { filename, type, content } = options
   const name = `${filename}.${type}`
   if (window.Blob) {
-    const blob = content instanceof Blob ? content : getExportBlobByContent(XEUtils.toString(content), options)
+    const blob = content instanceof Blob ? content : getExportBlobByContent(XEUtils.toValueString(content), options)
     if (navigator.msSaveBlob) {
       navigator.msSaveBlob(blob, name)
     } else {
@@ -805,7 +805,7 @@ function handleFileImport ($xetable, file, opts) {
   const { type, filename } = UtilTools.parseFile(file)
 
   // 检查类型
-  if (!XEUtils.includes(VXETable.importTypes, type)) {
+  if (!XEUtils.includes(VXETable.config.importTypes, type)) {
     if (opts.message !== false) {
       VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
     }
@@ -960,7 +960,7 @@ function handleExportAndPrint ($xetable, options, isPrint) {
   const hasTree = treeConfig
   const hasMerge = !hasTree && mergeList.length
   const defOpts = Object.assign({ message: true, isHeader: true }, options)
-  const types = defOpts.types || VXETable.exportTypes
+  const types = defOpts.types || VXETable.config.exportTypes
   const modes = defOpts.modes
   const checkMethod = customOpts.checkMethod
   const exportColumns = collectColumn.slice(0)
@@ -1192,7 +1192,7 @@ export default {
       }
 
       // 检查类型
-      if (!XEUtils.includes(VXETable.exportTypes, type)) {
+      if (!XEUtils.includes(VXETable.config.exportTypes, type)) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           UtilTools.error('vxe.error.notType', [type])
         }
@@ -1254,7 +1254,7 @@ export default {
     },
     _importData (options) {
       const opts = Object.assign({
-        types: VXETable.importTypes
+        types: VXETable.config.importTypes
         // beforeImportMethod: null,
         // afterImportMethod: null
       }, this.importOpts, options)
@@ -1304,7 +1304,7 @@ export default {
       })
     },
     _openImport (options) {
-      const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.importTypes }, options, this.importOpts)
+      const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.config.importTypes }, options, this.importOpts)
       const { types } = defOpts
       const isTree = !!this.getTreeStatus()
       if (isTree) {

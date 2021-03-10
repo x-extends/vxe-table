@@ -1,5 +1,5 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { getOffsetSize, calcTreeLine, mergeBodyMethod } from './util'
@@ -188,7 +188,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 如果编辑列开启显示状态
-  if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && editOpts.showStatus) {
+  if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && (editOpts.showStatus || editOpts.showUpdateStatus)) {
     isDirty = $xetable.isUpdateByRow(row, column.property)
   }
   const tdVNs = []
@@ -260,9 +260,11 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     highlightHoverRow,
     rowClassName,
     rowStyle,
+    editConfig,
     showOverflow: allColumnOverflow,
     treeConfig,
     treeOpts,
+    editOpts,
     treeExpandeds,
     scrollYLoad,
     scrollYStore,
@@ -300,11 +302,16 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     }
     const rowid = UtilTools.getRowid($xetable, row)
     const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: cellType, level: rowLevel, row, rowIndex, $rowIndex }
+    let isNewRow = false
+    if (editConfig) {
+      isNewRow = editStore.insertList.indexOf(row) > -1
+    }
     rows.push(
       h('tr', {
         class: ['vxe-body--row', {
           'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
-          'is--new': editStore.insertList.indexOf(row) > -1,
+          'is--new': isNewRow,
+          'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
           'row--radio': radioOpts.highlight && $xetable.selectRow === row,
           'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
         }, rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''],

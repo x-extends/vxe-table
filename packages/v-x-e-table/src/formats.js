@@ -1,5 +1,3 @@
 import VXEStore from './store'
 
-const formats = new VXEStore()
-
-export default formats
+export const formats = new VXEStore()

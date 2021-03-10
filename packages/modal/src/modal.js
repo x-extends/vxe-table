@@ -1,6 +1,6 @@
-import GlobalConfig from '../../conf'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 export const allActivedModals = []

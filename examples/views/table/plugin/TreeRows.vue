@@ -27,6 +27,9 @@
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
       </template>
+      <template #tmplB="{ row }">
+        <span style="color:red">{{ row.b }}</span>
+      </template>
     </vxe-virtual-tree>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -46,7 +49,7 @@ export default {
       tableColumn: [
         { type: 'seq', title: '序号', width: 100 },
         { type: 'checkbox', title: 'A', treeNode: true, width: 300 },
-        { field: 'b', title: 'B', width: 100 },
+        { field: 'b', title: 'B', width: 100, slots: { default: 'tmplB' } },
         { field: 'c', title: 'C', width: 100 },
         { field: 'd', title: 'D', width: 100 },
         { field: 'e', title: 'E', width: 100 },
@@ -84,6 +87,9 @@ export default {
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
           </template>
+          <template #tmplB="{ row }">
+            <span style="color:red">{{ row.b }}</span>
+          </template>
         </vxe-virtual-tree>
         `,
         `
@@ -94,7 +100,7 @@ export default {
               tableColumn: [
                 { type: 'seq', title: '序号', width: 100 },
                 { type: 'checkbox', title: 'A', treeNode: true, width: 300 },
-                { field: 'b', title: 'B', width: 100 },
+                { field: 'b', title: 'B', width: 100, slots: { default: 'tmplB' } },
                 { field: 'c', title: 'C', width: 100 },
                 { field: 'd', title: 'D', width: 100 },
                 { field: 'e', title: 'E', width: 100 },

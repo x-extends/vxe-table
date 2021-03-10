@@ -1,6 +1,6 @@
-import XEUtils from 'xe-utils/ctor'
-import GlobalConfig from '../../conf'
-import formats from '../../v-x-e-table/src/formats'
+import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
+import { formats } from '../../v-x-e-table/src/formats'
 
 let zindexIndex = 0
 let lastZindex = 1

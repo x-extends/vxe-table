@@ -132,7 +132,7 @@ export default {
             },
             customStringFilterMethod ({ option, row, column }) {
               if (option.data) {
-                return XEUtils.toString(row[column.property]).toLowerCase().indexOf(option.data) > -1
+                return XEUtils.toValueString(row[column.property]).toLowerCase().indexOf(option.data) > -1
               }
               return true
             },
@@ -190,7 +190,7 @@ export default {
     },
     customStringFilterMethod ({ option, row, column }) {
       if (option.data) {
-        return XEUtils.toString(row[column.property]).toLowerCase().indexOf(option.data) > -1
+        return XEUtils.toValueString(row[column.property]).toLowerCase().indexOf(option.data) > -1
       }
       return true
     },

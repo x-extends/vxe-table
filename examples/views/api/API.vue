@@ -124,7 +124,7 @@ import pulldownAPI from '../../api/pulldown'
 //   props.forEach(item => {
 //     const name = XEUtils.kebabCase(item.name)
 //     attributes[`${confs[0]}/${name}`] = {
-//       type: XEUtils.toString(item.type).toLowerCase(),
+//       type: XEUtils.toValueString(item.type).toLowerCase(),
 //       description: item.descKey ? i18n.t(item.descKey) : item.desc
 //     }
 //     keys.push(name)
@@ -426,7 +426,7 @@ export default {
       return true
     },
     handleSearch () {
-      const filterName = XEUtils.toString(this.filterName).trim()
+      const filterName = XEUtils.toValueString(this.filterName).trim()
       if (filterName) {
         const options = { children: 'list' }
         if (/pro/i.test(filterName)) {

@@ -22,11 +22,30 @@ export interface VXETableTypes {
   [type: string]: number;
 }
 
-export interface VXETableStatic {
+export interface VXETablePluginObject {
+  install(xTable: typeof VXETable): void;
+  [key: string]: any;
+}
+
+export type VxeGlobalSetup = (options?: VXETableOptions) => any;
+export type VxeGlobalT = (key: string, args?: any) => number | string;
+export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore;
+
+export const setup: VxeGlobalSetup;
+export const t: VxeGlobalT;
+export const use: VxeGlobalUse;
+
+export function install(vue: typeof Vue, options?: VXETableOptions): void;
+
+export type VXETableVersion = 'v1' | 'v2' | 'v3' | 'v4'
+
+export const v: VXETableVersion
+
+export interface VXETableCore {
   /**
    * 版本号
    */
-  v: string;
+  v: VXETableVersion;
   /**
    * 获取导出的所有文件类型
    */
@@ -38,12 +57,12 @@ export interface VXETableStatic {
   /**
    * 读取内置国际化
    */
-  t(key: string, args?: any): any;
+  t: VxeGlobalT;
   /**
    * 设置全局参数/获取所有参数
    * @param options 参数
    */
-  setup(options?: VXETableOptions): any;
+  setup: VxeGlobalSetup;
   /**
    * 全局事件拦截器
    */
@@ -85,19 +104,13 @@ export interface VXETableStatic {
    * @param plugin 插件
    * @param options 参数
    */
-  use(plugin: PluginObject, ...options: any[]): VXETableStatic;
-  install(vue: typeof Vue, options?: VXETableOptions): void;
+  use: VxeGlobalUse;
 }
 
 /**
  * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、模态窗口、自定义模板、渲染器、贼灵活的配置项、扩展接口等...  
  */
-export declare const VXETable: VXETableStatic
-
-export interface PluginObject {
-  install(xTable: typeof VXETable): void;
-  [key: string]: any;
-}
+export declare const VXETable: VXETableCore
 
 export interface VXETableClipboard {
   text: string;
@@ -127,7 +140,7 @@ declare module 'vue/types/vue' {
 
 declare global {
   interface Window {
-    VXETable: VXETableStatic;
+    VXETable: VXETableCore;
   }
 }
 

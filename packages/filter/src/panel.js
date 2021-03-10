@@ -1,7 +1,7 @@
-import GlobalConfig from '../../conf'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
-import XEUtils from 'xe-utils/ctor'
+import XEUtils from 'xe-utils'
 
 export default {
   name: 'VxeTableFilter',
