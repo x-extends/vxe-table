@@ -62,7 +62,7 @@ function handleOpen (defOpts: VxeModalOptions, message: VxeModalPropTypes.Messag
   if (XEUtils.isObject(message)) {
     opts = message
   } else {
-    opts = { message: XEUtils.toString(message), title }
+    opts = { message: XEUtils.toValueString(message), title }
   }
   return openModal({ ...defOpts, ...options, ...opts })
 }

@@ -218,7 +218,7 @@ export default defineComponent({
         }
       }
       // 如果编辑列开启显示状态
-      if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && editOpts.showStatus) {
+      if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && (editOpts.showStatus || editOpts.showUpdateStatus)) {
         isDirty = $xetable.isUpdateByRow(row, column.property)
       }
       const tdVNs = []
@@ -289,6 +289,7 @@ export default defineComponent({
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
       const treeOpts = computeTreeOpts.value
+      const editOpts = computeEditOpts.value
       const rows: any[] = []
       tableData.forEach((row: any, $rowIndex: any) => {
         const trOn: any = {}
@@ -317,11 +318,16 @@ export default defineComponent({
         }
         const rowid = getRowid($xetable, row)
         const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+        let isNewRow = false
+        if (editConfig) {
+          isNewRow = $xetable.findRowIndexOf(editStore.insertList, row) > -1
+        }
         rows.push(
           h('tr', {
             class: ['vxe-body--row', {
               'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
-              'is--new': editConfig && $xetable.findRowIndexOf(editStore.insertList, row) > -1,
+              'is--new': isNewRow,
+              'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
               'row--radio': radioOpts.highlight && selectRow === row,
               'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
             }, rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''],

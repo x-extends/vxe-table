@@ -143,7 +143,7 @@ export default defineComponent({
     const getSelectLabel = (value: any) => {
       const labelField = computeLabelField.value
       const item = findOption(value)
-      return XEUtils.toString(item ? item[labelField] : value)
+      return XEUtils.toValueString(item ? item[labelField] : value)
     }
 
     const computeSelectLabel = computed(() => {

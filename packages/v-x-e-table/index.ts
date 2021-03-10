@@ -69,8 +69,10 @@ class VXETableConfig {
 }
 export const config = new VXETableConfig()
 
+export const v = 'v4'
+
 export const VXETable = {
-  v: 'v4',
+  v,
   setup,
   interceptor,
   renderer,
@@ -90,3 +92,5 @@ export * from './src/menus'
 export * from './src/formats'
 export * from './src/hooks'
 export * from './src/setup'
+
+export default VXETable

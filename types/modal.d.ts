@@ -193,10 +193,10 @@ export interface VxeModalProps {
 }
 
 export type ModalSlots = {
-  default?(params: ModalDefaultSlotParams): VNode[] | string[];
-  header?(params: ModalHeaderSlotParams): VNode[] | string[];
-  title?(params: ModalTitleSlotParams): VNode[] | string[];
-  footer?(params: ModalFooterSlotParams): VNode[] | string[];
+  default?(params: ModalDefaultSlotParams): JSX.Element[] | VNode[] | string[];
+  header?(params: ModalHeaderSlotParams): JSX.Element[] | VNode[] | string[];
+  title?(params: ModalTitleSlotParams): JSX.Element[] | VNode[] | string[];
+  footer?(params: ModalFooterSlotParams): JSX.Element[] | VNode[] | string[];
 }
 
 export type VxeModalEmits = [
@@ -217,43 +217,43 @@ export interface ModalController {
    * 创建窗口
    * @param options 参数
    */
-  open(options: VxeModalOptions): Promise<string>;
+  open(options: VxeModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建提示框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  alert(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalOptions): Promise<string>;
+  alert(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建提示框
    * @param options 参数
    */
-  alert(options: VxeModalOptions): Promise<string>;
+  alert(options: VxeModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建确认框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  confirm(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalOptions): Promise<string>;
+  confirm(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建确认框
    * @param options 参数
    */
-  confirm(options: VxeModalOptions): Promise<string>;
+  confirm(options: VxeModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建消息提示
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  message(message: VxeModalPropTypes.Message, options?: VxeModalOptions): Promise<string>;
+  message(message: VxeModalPropTypes.Message, options?: VxeModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建消息提示
    * @param options 参数
    */
-  message(options: VxeModalOptions): Promise<string>;
+  message(options: VxeModalOptions): Promise<ModalEventTypes>;
   /**
    * 获取动态的活动窗口
    * @param id 窗口唯一标识

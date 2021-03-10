@@ -94,15 +94,15 @@ export default defineComponent({
     })
 
     const searchEvent1 = () => {
-      const filterName = XEUtils.toString(demo1.filterName).trim().toLowerCase()
+      const filterName = XEUtils.toValueString(demo1.filterName).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const searchProps = ['name', 'role', 'age', 'address']
-        const rest = demo1.tableData.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
+        const rest = demo1.tableData.filter(item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1))
         demo1.list = rest.map(row => {
           const item = Object.assign({}, row)
           searchProps.forEach(key => {
-            item[key] = XEUtils.toString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+            item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
           })
           return item
         })
@@ -149,15 +149,15 @@ export default defineComponent({
     const xTree = ref({} as VxeTableInstance)
 
     const searchEvent2 = () => {
-      const filterName = XEUtils.toString(demo2.filterName).trim().toLowerCase()
+      const filterName = XEUtils.toValueString(demo2.filterName).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const options = { children: 'children' }
         const searchProps = ['name', 'size', 'type', 'date']
-        const rest = XEUtils.searchTree(demo2.tableData, item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
+        const rest = XEUtils.searchTree(demo2.tableData, item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
         XEUtils.eachTree(rest, item => {
           searchProps.forEach(key => {
-            item[key] = XEUtils.toString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
+            item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
           })
         }, options)
         demo2.list = rest
@@ -228,15 +228,15 @@ export default defineComponent({
             })
 
             const searchEvent1 = () => {
-              const filterName = XEUtils.toString(demo1.filterName).trim().toLowerCase()
+              const filterName = XEUtils.toValueString(demo1.filterName).trim().toLowerCase()
               if (filterName) {
                 const filterRE = new RegExp(filterName, 'gi')
                 const searchProps = ['name', 'role', 'age', 'address']
-                const rest = demo1.tableData.filter(item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1))
+                const rest = demo1.tableData.filter(item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1))
                 demo1.list = rest.map(row => {
                   const item = Object.assign({}, row)
                   searchProps.forEach(key => {
-                    item[key] = XEUtils.toString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
+                    item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
                   })
                   return item
                 })
@@ -328,15 +328,15 @@ export default defineComponent({
             const xTree = ref({} as VxeTableInstance)
 
             const searchEvent2 = () => {
-              const filterName = XEUtils.toString(demo2.filterName).trim().toLowerCase()
+              const filterName = XEUtils.toValueString(demo2.filterName).trim().toLowerCase()
               if (filterName) {
                 const filterRE = new RegExp(filterName, 'gi')
                 const options = { children: 'children' }
                 const searchProps = ['name', 'size', 'type', 'date']
-                const rest = XEUtils.searchTree(demo2.tableData, item => searchProps.some(key => XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
+                const rest = XEUtils.searchTree(demo2.tableData, item => searchProps.some(key => XEUtils.toValueString(item[key]).toLowerCase().indexOf(filterName) > -1), options)
                 XEUtils.eachTree(rest, item => {
                   searchProps.forEach(key => {
-                    item[key] = XEUtils.toString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
+                    item[key] = XEUtils.toValueString(item[key]).replace(filterRE, match => \`<span class="keyword-lighten">\${match}</span>\`)
                   })
                 }, options)
                 demo2.list = rest

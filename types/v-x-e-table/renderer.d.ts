@@ -49,7 +49,7 @@ interface DefineRendererOption<T> {
 export namespace VxeGlobalRendererHandles {
   export type RenderResult = VNode[] | string[]
 
-  export type RenderFilterOptions = VxeColumnPropTypes.FilterRender;
+  export interface RenderFilterOptions extends VxeColumnPropTypes.FilterRender {}
 
   export interface RenderParams {}
 
@@ -205,6 +205,10 @@ export namespace VxeGlobalRendererHandles {
      * 多目标渲染
      */
     children?: any[];
+    /**
+     * 渲染类型
+     */
+    cellType?: 'string' | 'number';
   }
 
   /**

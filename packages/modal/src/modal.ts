@@ -697,7 +697,7 @@ export default defineComponent({
       const { slots: propSlots = {}, showZoom } = props
       const isMsg = computeIsMsg.value
       const headerSlot = slots.header || propSlots.header
-      const headVNs: any[] = []
+      const headVNs: VNode[] = []
       if (props.showHeader) {
         const headerOns: any = {}
         if (showZoom && props.dblclickZoom && props.type === 'modal') {
@@ -708,7 +708,7 @@ export default defineComponent({
             class: ['vxe-modal--header', !isMsg && props.showTitleOverflow ? 'is--ellipsis' : ''],
             onMousedown: mousedownEvent,
             ...headerOns
-          }, headerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : headerSlot({ $modal: $xemodal })) : renderTitles())
+          }, headerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : headerSlot({ $modal: $xemodal })) as VNode[] : renderTitles())
         )
       }
       return headVNs
@@ -718,7 +718,7 @@ export default defineComponent({
       const { slots: propSlots = {}, status, message } = props
       const isMsg = computeIsMsg.value
       const defaultSlot = slots.default || propSlots.default
-      const contVNs: any[] = []
+      const contVNs: VNode[] = []
       if (status) {
         contVNs.push(
           h('div', {
@@ -733,7 +733,7 @@ export default defineComponent({
       contVNs.push(
         h('div', {
           class: 'vxe-modal--content'
-        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) : (XEUtils.isFunction(message) ? message({ $modal: $xemodal }) as VNode[] : UtilTools.getFuncText(message)))
+        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) as VNode[] : (XEUtils.isFunction(message) ? message({ $modal: $xemodal }) as VNode[] : UtilTools.getFuncText(message)))
       )
       if (!isMsg) {
         contVNs.push(
@@ -782,12 +782,12 @@ export default defineComponent({
       const { slots: propSlots = {} } = props
       const isMsg = computeIsMsg.value
       const footerSlot = slots.footer || propSlots.footer
-      const footVNs = []
+      const footVNs: VNode[] = []
       if (props.showFooter) {
         footVNs.push(
           h('div', {
             class: 'vxe-modal--footer'
-          }, footerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : footerSlot({ $modal: $xemodal })) : renderBtns())
+          }, footerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : footerSlot({ $modal: $xemodal })) as VNode[] : renderBtns())
         )
       }
       if (!isMsg && props.resize) {

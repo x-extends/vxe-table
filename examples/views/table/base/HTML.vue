@@ -51,7 +51,7 @@ export default defineComponent({
     }
 
     const filterDescribeMethod: VxeColumnPropTypes.FilterMethod = ({ value, row }) => {
-      return XEUtils.toString(row.html1).indexOf(value) > -1
+      return XEUtils.toValueString(row.html1).indexOf(value) > -1
     }
 
     const sortDescribeMethod: VxeColumnPropTypes.SortBy = (row) => {
@@ -104,7 +104,7 @@ export default defineComponent({
             }
 
             const filterDescribeMethod: VxeColumnPropTypes.FilterMethod = ({ value, row }) => {
-              return XEUtils.toString(row.html1).indexOf(value) > -1
+              return XEUtils.toValueString(row.html1).indexOf(value) > -1
             }
 
             const sortDescribeMethod: VxeColumnPropTypes.SortBy = (row) => {

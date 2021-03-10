@@ -133,7 +133,7 @@ export const saveLocalFile: SaveFileFunction = (options) => {
   const { filename, type, content } = options
   const name = `${filename}.${type}`
   if (window.Blob) {
-    const blob = content instanceof Blob ? content : getExportBlobByContent(XEUtils.toString(content), options)
+    const blob = content instanceof Blob ? content : getExportBlobByContent(XEUtils.toValueString(content), options)
     if (navigator.msSaveBlob) {
       navigator.msSaveBlob(blob, name)
     } else {

@@ -103,7 +103,7 @@ export default defineComponent({
     }
 
     const filterNameMethod: VxeColumnPropTypes.FilterMethod = ({ value, row }) => {
-      return XEUtils.toString(row.name).toLowerCase().indexOf(value) > -1
+      return XEUtils.toValueString(row.name).toLowerCase().indexOf(value) > -1
     }
 
     const filterRoleMethod: VxeColumnPropTypes.FilterMethod = ({ option, row }) => {
@@ -257,7 +257,7 @@ export default defineComponent({
             }
 
             const filterNameMethod: VxeColumnPropTypes.FilterMethod = ({ value, row }) => {
-              return XEUtils.toString(row.name).toLowerCase().indexOf(value) > -1
+              return XEUtils.toValueString(row.name).toLowerCase().indexOf(value) > -1
             }
 
             const filterRoleMethod: VxeColumnPropTypes.FilterMethod = ({ option, row }) => {

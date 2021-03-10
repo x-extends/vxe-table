@@ -160,7 +160,7 @@ export default defineComponent({
     const getTreeExpansionEvent = () => {
       const $table = xTree.value
       const treeExpandRecords = $table.getTreeExpandRecords()
-      VXETable.modal.alert(XEUtils.toString(treeExpandRecords.length))
+      VXETable.modal.alert(XEUtils.toValueString(treeExpandRecords.length))
     }
 
     const demo3 = reactive({
@@ -272,7 +272,7 @@ export default defineComponent({
             const getTreeExpansionEvent = () => {
               const $table = xTree.value
               const treeExpandRecords = $table.getTreeExpandRecords()
-              VXETable.modal.alert(XEUtils.toString(treeExpandRecords.length))
+              VXETable.modal.alert(XEUtils.toValueString(treeExpandRecords.length))
             }
 
             return {

@@ -128,7 +128,7 @@ export default defineComponent({
     const emitUpdate = (value: string, evnt: Event) => {
       reactData.inputValue = value
       emit('update:modelValue', value)
-      if (XEUtils.toString(props.modelValue) !== value) {
+      if (XEUtils.toValueString(props.modelValue) !== value) {
         textareaMethods.dispatchEvent('change', { value }, evnt)
       }
     }

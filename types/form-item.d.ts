@@ -85,7 +85,7 @@ export interface FormItemRenderOptions extends VxeGlobalRendererHandles.RenderOp
   /**
    * 下拉选项列表（需要渲染器支持）
    */
-  options?: { [key: string]: any }[];
+  options?: any[];
   /**
    * 下拉选项属性参数配置（需要渲染器支持）
    */
@@ -93,7 +93,7 @@ export interface FormItemRenderOptions extends VxeGlobalRendererHandles.RenderOp
   /**
    * 下拉分组选项列表（需要渲染器支持）
    */
-  optionGroups?: { [key: string]: any }[];
+  optionGroups?: any[];
   /**
    * 下拉分组选项属性参数配置（需要渲染器支持）
    */

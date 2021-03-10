@@ -192,7 +192,7 @@ export default defineComponent({
           },
           // 格式化银行卡，默认每4位空格隔开
           formatBankcard ({ cellValue }) {
-            return XEUtils.commafy(XEUtils.toString(cellValue), { spaceNumber: 4, separator: ' ' })
+            return XEUtils.commafy(XEUtils.toValueString(cellValue), { spaceNumber: 4, separator: ' ' })
           },
           // 四舍五入,默认两位数
           formatFixedNumber ({ cellValue }, digits = 2) {

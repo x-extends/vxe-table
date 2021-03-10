@@ -682,18 +682,18 @@ export default defineComponent({
             //     name: 'TableCustom'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.customStorage',
-            //   locat: {
-            //     name: 'TableCustomStorage'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.customlWidthStorage',
-            //   locat: {
-            //     name: 'TableCustomlWidthStorage'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.customStorage',
+              locat: {
+                name: 'TableCustomStorage'
+              }
+            },
+            {
+              label: 'app.aside.nav.customlWidthStorage',
+              locat: {
+                name: 'TableCustomlWidthStorage'
+              }
+            },
             {
               label: 'app.aside.nav.search',
               locat: {
@@ -1013,19 +1013,19 @@ export default defineComponent({
                 name: 'TableEditInsert'
               }
             },
-            // {
-            //   label: 'app.aside.nav.delete',
-            //   // demoUrl: 'https://jsrun.pro/6cWKp/edit',
-            //   locat: {
-            //     name: 'TableEditRemove'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.revert',
-            //   locat: {
-            //     name: 'TableEditRevert'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.delete',
+              // demoUrl: 'https://jsrun.pro/6cWKp/edit',
+              locat: {
+                name: 'TableEditRemove'
+              }
+            },
+            {
+              label: 'app.aside.nav.revert',
+              locat: {
+                name: 'TableEditRevert'
+              }
+            },
             {
               label: 'app.aside.nav.status',
               locat: {
@@ -1090,12 +1090,12 @@ export default defineComponent({
                 name: 'TableEditKeyboardEdit'
               }
             },
-            // {
-            //   label: 'app.aside.nav.footer',
-            //   locat: {
-            //     name: 'TableEditFooter'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.footer',
+              locat: {
+                name: 'TableEditFooter'
+              }
+            },
             {
               label: 'app.aside.nav.footerImmediately',
               locat: {
@@ -1255,12 +1255,12 @@ export default defineComponent({
             //     name: 'GridFormProxy'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.edit',
-            //   locat: {
-            //     name: 'GridEdit'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.edit',
+              locat: {
+                name: 'GridEdit'
+              }
+            },
             {
               label: 'app.aside.nav.cellDisable',
               locat: {
@@ -2154,7 +2154,7 @@ export default defineComponent({
         appData.stableVersionList = stableVersionList
         appData.betaVersionList = betaVersionList
         if (stableVersionList.length) {
-          appData.selectStableVersion = tags && tags.latest ? tags.latest : stableVersionList[0].value
+          appData.selectStableVersion = tags && tags.next ? tags.next : stableVersionList[0].value
         }
         if (betaVersionList.length) {
           appData.selectBetaVersion = betaVersionList[0].value
@@ -2163,7 +2163,7 @@ export default defineComponent({
     }
 
     const handleSearch = () => {
-      const filterName = XEUtils.toString(appData.filterName).trim().toLowerCase()
+      const filterName = XEUtils.toValueString(appData.filterName).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
         const rest = XEUtils.searchTree(appData.tableData, (item: any) => item.label.toLowerCase().indexOf(filterName) > -1)

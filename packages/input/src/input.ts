@@ -51,7 +51,7 @@ function toStringTimeDate (str: VxeInputPropTypes.ModelValue) {
       m = str.getMinutes()
       s = str.getSeconds()
     } else {
-      str = XEUtils.toString(str)
+      str = XEUtils.toValueString(str)
       const parses = str.match(/^(\d{1,2})(:(\d{1,2}))?(:(\d{1,2}))?/)
       if (parses) {
         h = XEUtils.toNumber(parses[1])
@@ -541,7 +541,7 @@ export default defineComponent({
     function getNumberValue (val: any) {
       const { type } = props
       const digitsValue = computeDigitsValue.value
-      return type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toString(val)
+      return type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toValueString(val)
     }
 
     const triggerEvent = (evnt: Event & { type: 'input' | 'change' | 'keydown' | 'keyup' | 'mousewheel' | 'click' | 'focus' | 'blur' }) => {
@@ -553,7 +553,7 @@ export default defineComponent({
       reactData.inputValue = value
       inputMethods.dispatchEvent('input', { value }, evnt)
       emit('update:modelValue', value)
-      if (XEUtils.toString(props.modelValue) !== value) {
+      if (XEUtils.toValueString(props.modelValue) !== value) {
         inputMethods.dispatchEvent('change', { value }, evnt)
       }
     }
@@ -1477,13 +1477,13 @@ export default defineComponent({
             h('span', {
               class: ['vxe-input--date-label--extra', extraItem.important ? 'is-important' : '', extraItem.className],
               style: extraItem.style
-            }, XEUtils.toString(extraItem.label))
+            }, XEUtils.toValueString(extraItem.label))
           ] : label)
         ]
         const festivalLabel = festivalItem.label
         if (festivalLabel) {
           // 默认最多支持3个节日重叠
-          const festivalLabels = XEUtils.toString(festivalLabel).split(',')
+          const festivalLabels = XEUtils.toValueString(festivalLabel).split(',')
           labels.push(
             h('span', {
               class: ['vxe-input--date-festival', festivalItem.important ? 'is-important' : '', festivalItem.className],

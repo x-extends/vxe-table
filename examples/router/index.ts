@@ -86,8 +86,8 @@ import TableDetails from '../views/table/advanced/Details.vue'
 // import TablePopupEdit from '../views/table/advanced/PopupEdit.vue'
 // import Toolbar from '../views/table/advanced/Toolbar.vue'
 // import TableCustom from '../views/table/advanced/Custom.vue'
-// import TableCustomStorage from '../views/table/advanced/CustomStorage.vue'
-// import TableCustomlWidthStorage from '../views/table/advanced/CustomlWidthStorage.vue'
+import TableCustomStorage from '../views/table/advanced/CustomStorage.vue'
+import TableCustomlWidthStorage from '../views/table/advanced/CustomlWidthStorage.vue'
 // import TableForm from '../views/table/advanced/Form.vue'
 // import TablePage from '../views/table/advanced/Page.vue'
 // import TablePageIcon from '../views/table/advanced/PageIcon.vue'
@@ -110,7 +110,7 @@ import GridFullQuery from '../views/grid/FullQuery.vue'
 import GridProxy from '../views/grid/Proxy.vue'
 import GridPageProxy from '../views/grid/PageProxy.vue'
 // import GridConfigProxy from '../views/grid/ConfigProxy.vue'
-// import GridEdit from '../views/grid/Edit.vue'
+import GridEdit from '../views/grid/Edit.vue'
 import GridCellDisable from '../views/grid/CellDisable.vue'
 import GridRowDisable from '../views/grid/RowDisable.vue'
 // import GridForm from '../views/grid/Form.vue'
@@ -206,8 +206,8 @@ import TableEditDBLClick from '../views/table/edit/DBLClick.vue'
 import TableEditSelect from '../views/table/edit/Select.vue'
 import TableAutoClearManual from '../views/table/edit/AutoClear.vue'
 import TableEditInsert from '../views/table/edit/Insert.vue'
-// import TableEditRemove from '../views/table/edit/Remove.vue'
-// import TableEditRevert from '../views/table/edit/Revert.vue'
+import TableEditRemove from '../views/table/edit/Remove.vue'
+import TableEditRevert from '../views/table/edit/Revert.vue'
 import TableEditStatus from '../views/table/edit/Status.vue'
 // import TableEditCellDisable from '../views/table/edit/CellDisable.vue'
 // import TableEditRowDisable from '../views/table/edit/RowDisable.vue'
@@ -218,7 +218,7 @@ import TableEditKeyboardEdit from '../views/table/edit/KeyboardEdit.vue'
 // import TableEditRowValid from '../views/table/edit/RowValid.vue'
 // import TableEditForceCellValid from '../views/table/edit/ForceCellValid.vue'
 // import TableEditForceRowValid from '../views/table/edit/ForceRowValid.vue'
-// import TableEditFooter from '../views/table/edit/Footer.vue'
+import TableEditFooter from '../views/table/edit/Footer.vue'
 import TableEditFooterImmediately from '../views/table/edit/FooterImmediately.vue'
 import TableEditExpand from '../views/table/edit/Expand.vue'
 import TableEditMenu from '../views/table/edit/Menu.vue'
@@ -707,16 +707,16 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableCustom',
   //   component: TableCustom
   // },
-  // {
-  //   path: '/table/advanced/customStorage',
-  //   name: 'TableCustomStorage',
-  //   component: TableCustomStorage
-  // },
-  // {
-  //   path: '/table/advanced/customlWidthStorage',
-  //   name: 'TableCustomlWidthStorage',
-  //   component: TableCustomlWidthStorage
-  // },
+  {
+    path: '/table/advanced/customStorage',
+    name: 'TableCustomStorage',
+    component: TableCustomStorage
+  },
+  {
+    path: '/table/advanced/customlWidthStorage',
+    name: 'TableCustomlWidthStorage',
+    component: TableCustomlWidthStorage
+  },
   // {
   //   path: '/table/advanced/form',
   //   name: 'TableForm',
@@ -1033,11 +1033,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'GridConfigProxy',
   //   component: GridConfigProxy
   // },
-  // {
-  //   path: '/table/grid/edit',
-  //   name: 'GridEdit',
-  //   component: GridEdit
-  // },
+  {
+    path: '/table/grid/edit',
+    name: 'GridEdit',
+    component: GridEdit
+  },
   {
     path: '/table/grid/cellDisable',
     name: 'GridCellDisable',
@@ -1284,16 +1284,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableEditInsert',
     component: TableEditInsert
   },
-  // {
-  //   path: '/table/edit/remove',
-  //   name: 'TableEditRemove',
-  //   component: TableEditRemove
-  // },
-  // {
-  //   path: '/table/edit/revert',
-  //   name: 'TableEditRevert',
-  //   component: TableEditRevert
-  // },
+  {
+    path: '/table/edit/remove',
+    name: 'TableEditRemove',
+    component: TableEditRemove
+  },
+  {
+    path: '/table/edit/revert',
+    name: 'TableEditRevert',
+    component: TableEditRevert
+  },
   {
     path: '/table/edit/status',
     name: 'TableEditStatus',
@@ -1344,11 +1344,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableEditForceRowValid',
   //   component: TableEditForceRowValid
   // },
-  // {
-  //   path: '/table/edit/footer',
-  //   name: 'TableEditFooter',
-  //   component: TableEditFooter
-  // },
+  {
+    path: '/table/edit/footer',
+    name: 'TableEditFooter',
+    component: TableEditFooter
+  },
   {
     path: '/table/edit/footerImmediately',
     name: 'TableEditFooterImmediately',

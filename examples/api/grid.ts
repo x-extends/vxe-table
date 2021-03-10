@@ -10,14 +10,14 @@ const toolbarSlots: any = XEUtils.clone(toolbarAPI.find(item => item.name === 'S
 toolbarSlots.name = 'slots'
 toolbarSlots.list.forEach((item: any) => {
   item.type = 'String, Function'
-  item.defVal = `${item.defVal}, h`
+  item.defVal = `${item.defVal}`
 })
 
 const pagerSlots: any = XEUtils.clone(pagerAPI.find(item => item.name === 'Slots'), true)
 pagerSlots.name = 'slots'
 pagerSlots.list.forEach((item: any) => {
   item.type = 'String, Function'
-  item.defVal = `${item.defVal}, h`
+  item.defVal = `${item.defVal}`
 })
 
 const formItemSlots: any = XEUtils.clone(formItemAPI.find(item => item.name === 'Slots'), true)
@@ -25,7 +25,7 @@ formItemSlots.name = 'slots'
 formItemSlots.version = ''
 formItemSlots.list.forEach((item: any) => {
   item.type = 'String, Function'
-  item.defVal = `${item.defVal}, h`
+  item.defVal = `${item.defVal}`
 })
 
 const formProps: any = formAPI.find(item => item.name === 'Props')
@@ -745,7 +745,7 @@ const columnSlots: any = XEUtils.clone(columnAPI.find(item => item.name === 'Slo
 columnSlots.name = 'slots'
 columnSlots.list.forEach((item: any) => {
   item.type = 'String, Function'
-  item.defVal = `${item.defVal}, h`
+  item.defVal = `${item.defVal}`
 })
 
 gridAPI.find((item: any) => item.name === 'Props').list.splice(1, 0, {

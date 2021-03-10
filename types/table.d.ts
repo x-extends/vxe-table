@@ -1583,6 +1583,8 @@ export namespace VxeTablePropTypes {
     icon?: string;
     showIcon?: boolean;
     showStatus?: boolean;
+    showUpdateStatus?: boolean;
+    showInsertStatus?: boolean;
     showAsterisk?: boolean;
     autoClear?: boolean;
     /**

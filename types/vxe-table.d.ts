@@ -3,12 +3,6 @@ import { VXETable, VXETableSetupOptions, VXETableCore } from './v-x-e-table'
 
 export function install(app: App, options?: VXETableSetupOptions): void;
 
-declare module './v-x-e-table' {
-  interface VXETableCore {
-    install: typeof install;
-  }
-}
-
 declare global {
   interface Window {
     VXETable: VXETableCore;

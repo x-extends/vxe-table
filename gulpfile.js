@@ -337,7 +337,7 @@ gulp.task('copy_docs_v3d5', () => {
     .pipe(gulp.dest('docs/v3.5'))
 })
 
-gulp.task('copy_docs_index', gulp.parallel('copy_docs_v1', 'copy_docs_v2', 'copy_docs_v3', 'copy_docs_v3d5', () => {
+gulp.task('copy_docs_index', gulp.parallel('copy_docs_v1', 'copy_docs_v2', 'copy_docs_v3', () => {
   return gulp.src('docs/index.html')
     .pipe(rename({
       basename: '404'

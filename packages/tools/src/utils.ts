@@ -25,7 +25,7 @@ export const UtilTools = {
   error: outLog('error'),
   getLog: getLog,
   getFuncText (content?: string | number | null) {
-    return content ? XEUtils.toString(GlobalConfig.translate ? GlobalConfig.translate('' + content) : content) : ''
+    return content ? XEUtils.toValueString(GlobalConfig.translate ? GlobalConfig.translate('' + content) : content) : ''
   },
   nextZIndex () {
     lastZindex = GlobalConfig.zIndex + zindexIndex++

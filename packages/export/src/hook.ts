@@ -371,7 +371,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                     }
                 }
               }
-              item[column.id] = XEUtils.toString(cellValue)
+              item[column.id] = XEUtils.toValueString(cellValue)
             })
             rest.push(Object.assign(item, row))
           }
@@ -426,7 +426,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                 }
             }
           }
-          item[column.id] = XEUtils.toString(cellValue)
+          item[column.id] = XEUtils.toValueString(cellValue)
         })
         return item
       })
@@ -451,7 +451,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         }
       }
       const _columnIndex = $xetable.getVTColumnIndex(column)
-      const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toString(items[_columnIndex])
+      const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toValueString(items[_columnIndex])
       return cellValue
     }
 

@@ -1,6 +1,6 @@
 import { App } from 'vue'
 import XEUtils from 'xe-utils'
-import { VXETable, setup } from './v-x-e-table'
+import { setup } from './v-x-e-table'
 
 import { Table } from './table'
 import { Column } from './column'
@@ -22,6 +22,7 @@ import { Switch } from './switch'
 import { List } from './list'
 import { Pulldown } from './pulldown'
 
+import { Icon } from './icon'
 import { Filter } from './filter'
 import { Menu } from './menu'
 import { Edit } from './edit'
@@ -54,6 +55,7 @@ const components = [
   Pulldown,
 
   // 扩展模块
+  Icon,
   Filter,
   Menu,
   Edit,
@@ -78,9 +80,8 @@ export function install (app: App, options: any) {
   components.forEach(component => component.install(app))
 }
 
-VXETable.install = install
-
 export * from './v-x-e-table'
+
 export * from './column'
 export * from './header'
 export * from './footer'
@@ -101,11 +102,10 @@ export * from './switch'
 export * from './list'
 export * from './pulldown'
 
+export * from './icon'
 export * from './filter'
 export * from './edit'
 export * from './export'
 export * from './keyboard'
 export * from './validator'
 export * from './table'
-
-export default VXETable

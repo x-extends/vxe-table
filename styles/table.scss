@@ -1032,8 +1032,7 @@
   /*校验不通过*/
   .vxe-body--column {
     &.col--actived,
-    &.col--selected,
-    &.col--dirty {
+    &.col--selected {
       position: relative;
     }
     &.col--valid-error {
@@ -1086,6 +1085,40 @@
     }
   }
 
+  /*单元格编辑状态*/
+  .vxe-body--row {
+    &.row--new {
+      & > .vxe-body--column {
+        position: relative;
+        &:before {
+          content: "";
+          top: -$vxe-table-cell-dirty-width;
+          left: -$vxe-table-cell-dirty-width;
+          position: absolute;
+          border-width: $vxe-table-cell-dirty-width;
+          border-style: solid;
+          border-color: transparent $vxe-table-cell-dirty-insert-color transparent transparent;
+          transform: rotate(45deg);
+        }
+      }
+    }
+  }
+  .vxe-body--column {
+    &.col--dirty {
+      position: relative;
+      &:before {
+        content: "";
+        top: -$vxe-table-cell-dirty-width;
+        left: -$vxe-table-cell-dirty-width;
+        position: absolute;
+        border-width: $vxe-table-cell-dirty-width;
+        border-style: solid;
+        border-color: transparent $vxe-table-cell-dirty-update-color transparent transparent;
+        transform: rotate(45deg);
+      }
+    }
+  }
+
   /*可编辑*/
   &.vxe-editable {
     &.cell--highlight {
@@ -1124,18 +1157,6 @@
       padding: 0;
       &.col--actived {
         padding: 0;
-      }
-      &.col--dirty {
-        &:before {
-          content: "";
-          top: -$vxe-table-cell-dirty-width;
-          left: -$vxe-table-cell-dirty-width;
-          position: absolute;
-          border-width: $vxe-table-cell-dirty-width;
-          border-style: solid;
-          border-color: transparent $vxe-table-cell-dirty-color transparent transparent;
-          transform: rotate(45deg);
-        }
       }
     }
   }

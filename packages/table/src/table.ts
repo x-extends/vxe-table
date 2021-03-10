@@ -26,12 +26,9 @@ export default defineComponent({
   props: tableProps,
   emits: tableEmits,
   setup (props, context) {
-    const TableHeaderComponent = resolveComponent('vxe-table-header') as ComponentOptions
-    const TableFooterComponent = resolveComponent('vxe-table-footer') as ComponentOptions
-    const TooltipComponent = resolveComponent('vxe-tooltip') as ComponentOptions
-    const TableFilterComponent = resolveComponent('vxe-table-filter') as ComponentOptions
-
     const { slots, emit } = context
+
+    const hasUseTooltip = VXETable.tooltip
 
     const xID = XEUtils.uniqueId()
 
@@ -1112,7 +1109,7 @@ export default defineComponent({
         } else if (sortType === 'number') {
           return XEUtils.toNumber(cellValue)
         } else if (sortType === 'string') {
-          return XEUtils.toString(cellValue)
+          return XEUtils.toValueString(cellValue)
         }
         return cellValue
       }
@@ -4910,7 +4907,7 @@ export default defineComponent({
         ref: isFixedLeft ? refLeftContainer : refRightContainer,
         class: `vxe-table--fixed-${fixedType}-wrapper`
       }, [
-        showHeader && TableHeaderComponent ? h(TableHeaderComponent, {
+        showHeader ? h(resolveComponent('vxe-table-header') as ComponentOptions, {
           ref: isFixedLeft ? refTableLeftHeader : refTableRightHeader,
           fixedType,
           tableData,
@@ -4925,7 +4922,7 @@ export default defineComponent({
           tableColumn,
           fixedColumn
         }),
-        showFooter && TableFooterComponent ? h(TableFooterComponent, {
+        showFooter ? h(resolveComponent('vxe-table-footer') as ComponentOptions, {
           ref: isFixedLeft ? refTableLeftFooter : refTableRightFooter,
           footerData,
           tableColumn,
@@ -5057,7 +5054,7 @@ export default defineComponent({
         if (!props.rowId && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
           UtilTools.warn('vxe.error.reqProp', ['row-id'])
         }
-        if (props.editConfig && editOpts.showStatus && !props.keepSource) {
+        if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
           UtilTools.warn('vxe.error.reqProp', ['keep-source'])
         }
         if (treeConfig && treeOpts.line && (!props.rowKey || !showOverflow)) {
@@ -5265,7 +5262,7 @@ export default defineComponent({
             /**
              * 表头
              */
-            showHeader ? h(TableHeaderComponent, {
+            showHeader ? h(resolveComponent('vxe-table-header') as ComponentOptions, {
               ref: refTableHeader,
               tableData,
               tableColumn,
@@ -5282,7 +5279,7 @@ export default defineComponent({
             /**
              * 表尾
              */
-            showFooter ? h(TableFooterComponent, {
+            showFooter ? h(resolveComponent('vxe-table-footer') as ComponentOptions, {
               ref: refTableFooter,
               footerData,
               tableColumn
@@ -5343,7 +5340,7 @@ export default defineComponent({
         /**
          * 筛选
          */
-        initStore.filter && TableFilterComponent ? h(TableFilterComponent, {
+        initStore.filter ? h(resolveComponent('vxe-table-filter') as ComponentOptions, {
           ref: refTableFilter,
           filterStore
         }) : createCommentVNode(),
@@ -5370,7 +5367,7 @@ export default defineComponent({
         /**
          * 通用提示
          */
-        TooltipComponent ? h(TooltipComponent, {
+        hasUseTooltip ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
           ref: refCommTooltip,
           isArrow: false,
           enterable: false
@@ -5378,7 +5375,7 @@ export default defineComponent({
         /**
          * 校验提示
          */
-        TooltipComponent && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h(TooltipComponent, {
+        hasUseTooltip && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
           ref: refValidTooltip,
           class: 'vxe-table--valid-error',
           ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {})
@@ -5386,7 +5383,7 @@ export default defineComponent({
         /**
          * 工具提示
          */
-        TooltipComponent ? h(TooltipComponent, {
+        hasUseTooltip ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
           ref: refTooltip,
           ...tooltipOpts
         }) : createCommentVNode()

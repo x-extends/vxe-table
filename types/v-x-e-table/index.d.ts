@@ -11,7 +11,6 @@ import { Menus } from './menus'
 import { VxeGlobalHooks } from './hooks'
 import { VxeGlobalSetup } from './setup'
 
-
 export class VXETableConfig {
   get zIndex(): number;
   get nextZIndex(): number;
@@ -25,15 +24,36 @@ export class VXETableConfig {
    get importTypes(): string[];
 }
 
+export type VxeGlobalT = (key: string, args?: any) => string;
+export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore;
+
+export const setup: VxeGlobalSetup;
+export const interceptor: VxeGlobalInterceptor;
+export const renderer: VxeGlobalRenderer;
+export const commands: VxeGlobalCommands;
+export const formats: VxeGlobalFormats;
+export const menus: Menus;
+export const hooks: VxeGlobalHooks;
+export const modal: ModalController;
+export const saveFile: SaveFileFunction;
+export const readFile: ReadFileFunction;
+export const print: PrintFunction;
 export const config: VXETableConfig;
+export const t: VxeGlobalT;
+export const use: VxeGlobalUse;
 
 export interface VXETablePluginObject {
   install(vxetable: VXETableCore, ...options: any[]): void;
   [key: string]: any;
 }
 
+export type VXETableVersion = 'v1' | 'v2' | 'v3' | 'v4'
+
+export const v: VXETableVersion
+
 export interface VXETableCore {
-  v: string;
+  tooltip?: boolean;
+  v: VXETableVersion;
   /**
    * 设置全局参数/获取所有参数
    */
@@ -87,11 +107,11 @@ export interface VXETableCore {
    * @param plugin
    * @param options
    */
-  use(plugin: VXETablePluginObject, ...options: any[]): VXETableCore;
+   use: VxeGlobalUse;
   /**
    * 读取内置国际化
    */
-  t(key: string, args?: any): number | string;
+   t: VxeGlobalT;
 }
 
 /**

@@ -98,7 +98,7 @@ export default defineComponent({
       const inpValue = XEUtils.toNumber(inputElem.value)
       const pageCount = computePageCount.value
       const current = inpValue <= 0 ? 1 : inpValue >= pageCount ? pageCount : inpValue
-      inputElem.value = XEUtils.toString(current)
+      inputElem.value = XEUtils.toValueString(current)
       changeCurrentPage(current, evnt)
     }
 
