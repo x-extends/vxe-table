@@ -59,10 +59,11 @@
           // Switch,
           // List
         } from 'vxe-table'
+        import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
 
-        // 按需加载的方式默认是不带国际化的，需要自行导入
-        VXETable.setup({
-          i18n: (key, args) => i18n.t(key, args)
+        // 按需加载的方式默认是不带国际化的，自定义国际化需要自行解析占位符 '{0}'，例如：
+        Vue.use(VXETable, {
+          i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
         })
 
         // 表格模块

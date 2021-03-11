@@ -6,13 +6,16 @@
       <pre-code class="shell">
         npm install vue-i18n
       </pre-code>
+      <div>src/i18n/index.js</div>
       <pre-code class="javascript">{{ demoCodes[0] }}</pre-code>
+      <div>main.js</div>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
     <h2>{{ $t('app.body.demo.start.i18n.translate') }}</h2>
     <p class="tip">{{ $t('app.body.demo.start.i18n.translateTitle') }}</p>
     <pre>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
-      <pre-code class="html">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="html">{{ demoCodes[3] }}</pre-code>
     </pre>
     <h2>{{ $t('app.body.demo.start.i18n.findError') }}</h2>
     <p class="tip">通过 <a class="link" href="https://github.com/x-extends/vxe-table/pulls">Pull requests</a> 贡献翻译 -> <a class="link" href="https://github.com/x-extends/vxe-table/tree/master/packages/locale/lang">添加或修改</a></p>
@@ -35,7 +38,6 @@ export default {
         `
         import Vue from 'vue'
         import VueI18n from 'vue-i18n'
-        import VXETable from 'vxe-table'
         import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
         import enUS from 'vxe-table/lib/locale/lang/en-US'
 
@@ -53,15 +55,19 @@ export default {
           messages,
         })
 
+        export default i18n
+        `,
+        `
+        import Vue from 'vue'
+        import i18n from './i18n'
+        import VXETable from 'vxe-table'
+        import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
+        import enUS from 'vxe-table/lib/locale/lang/en-US'
+
         Vue.use(VXETable, {
           // 对组件内置的提示语进行国际化翻译
           i18n: (key, args) => i18n.t(key, args)
         })
-
-        // 需要注意，如果没有使用 vue-i18n，需要自行解析占位符 '{0}'，例如：
-        // Vue.use(VXETable, {
-        //   i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
-        // })
 
         new Vue({ i18n }).$mount('#app')
         `,

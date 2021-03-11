@@ -662,16 +662,16 @@ const apis = [
         defVal: 'false',
         list: []
       },
-      {
-        name: 'highlight-cell',
-        abandoned: true,
-        descKey: 'app.api.table.desc.highlightCell',
-        version: '',
-        type: 'boolean',
-        enum: '',
-        defVal: 'false',
-        list: []
-      },
+      // {
+      //   name: 'highlight-cell',
+      //   abandoned: true,
+      //   descKey: 'app.api.table.desc.highlightCell',
+      //   version: '',
+      //   type: 'boolean',
+      //   enum: '',
+      //   defVal: 'false',
+      //   list: []
+      // },
       {
         name: 'row-class-name',
         descKey: 'app.api.table.desc.rowClassName',
