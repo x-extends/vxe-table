@@ -619,16 +619,16 @@ const apis = [
         defVal: 'false',
         list: []
       },
-      {
-        name: 'highlight-cell',
-        abandoned: true,
-        descKey: 'app.api.table.desc.highlightCell',
-        version: '',
-        type: 'Boolean',
-        enum: '',
-        defVal: 'false',
-        list: []
-      },
+      // {
+      //   name: 'highlight-cell',
+      //   abandoned: true,
+      //   descKey: 'app.api.table.desc.highlightCell',
+      //   version: '',
+      //   type: 'Boolean',
+      //   enum: '',
+      //   defVal: 'false',
+      //   list: []
+      // },
       {
         name: 'row-class-name',
         descKey: 'app.api.table.desc.rowClassName',
@@ -1901,6 +1901,15 @@ const apis = [
             list: []
           },
           {
+            name: 'isFillPaste',
+            desc: '是否填充粘贴，如果启用了，当被选取的粘贴单元格与粘贴单元格的行与列数量不匹配时，会将内容强制粘贴所选的单元格',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'isRowIncrement',
             desc: '是否启用行自增，当粘贴的行数超出表格时自动插入新行',
             version: 'pro',
@@ -1911,7 +1920,7 @@ const apis = [
           },
           {
             name: 'isColumnIncrement',
-            desc: '是否启用列自增，当粘贴的列数超出表格时自动插入新列',
+            desc: '是否启用列自增，当粘贴的列数超出表格时自动插入新列（需要注意自增的列自字段是否定义，否则将无法响应）',
             version: 'pro',
             type: 'boolean',
             enum: '',
@@ -2324,6 +2333,15 @@ const apis = [
             desc: '只对 keep-source 开启有效是否显示单元格值的修改状态',
             version: '2 | 2.8',
             type: 'Boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'showUpdateStatus',
+            desc: '只对 keep-source 开启有效，是否显示单元格修改状态',
+            version: '2.10.16',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []

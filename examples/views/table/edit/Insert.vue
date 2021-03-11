@@ -22,7 +22,6 @@
       show-overflow
       keep-source
       ref="xTable"
-      class="my_table_insert"
       max-height="400"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil', showStatus: true}">
@@ -38,7 +37,6 @@
     <pre>
       <code class="xml">{{ demoCodes[0] }}</code>
       <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
     </pre>
   </div>
 </template>
@@ -71,7 +69,6 @@ export default {
           show-overflow
           keep-source
           ref="xTable"
-          class="my_table_insert"
           max-height="400"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil', showStatus: true}">
@@ -119,11 +116,6 @@ export default {
             }
           }
         }
-        `,
-        `
-        .my_table_insert .vxe-body--row.is--new {
-          background-color: #f1fdf1;
-        }
         `
       ]
     }
@@ -163,9 +155,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.my_table_insert .vxe-body--row.is--new {
-  background-color: #f1fdf1;
-}
-</style>

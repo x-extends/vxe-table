@@ -410,12 +410,12 @@ export default {
       const $scopedSlots = this.$scopedSlots
       XEUtils.eachTree(columns, column => {
         if (column.slots) {
-          XEUtils.each(column.slots, (func, name, slots) => {
+          XEUtils.each(column.slots, (func, name, colSlots) => {
             if (!XEUtils.isFunction(func)) {
               if ($scopedSlots[func]) {
-                slots[name] = $scopedSlots[func]
+                colSlots[name] = $scopedSlots[func]
               } else {
-                slots[name] = null
+                colSlots[name] = null
                 UtilTools.error('vxe.error.notSlot', [func])
               }
             }

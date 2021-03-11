@@ -3,8 +3,8 @@ export default {
     aside: {
       nav: {
         start: '开发指南',
-        install: '安装',
-        use: '快速上手',
+        install: '全局安装',
+        use: '按需加载',
         global: '全局参数',
         icons: '全局图标',
         theme: '全局主题',

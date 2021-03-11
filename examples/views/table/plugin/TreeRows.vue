@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       树形虚拟滚动渲染<span class="orange">（最大可以支撑 1w 列、20w 行）</span>，具体兼容请查看 <a class="link" href="https://github.com/x-extends/vxe-table-plugin-virtual-tree" target="_blank">vxe-table-plugin-virtual-tree</a> 插件的 API<br>
-      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高）</span>
+      <span class="red">（注：启用纵向虚拟滚的后不支持动态行高，如果开启复选框，必须设置 checkField、halfField 参数）</span>
     </p>
 
     <vxe-virtual-tree
@@ -27,6 +27,9 @@
         <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
         <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
       </template>
+      <template v-slot:tmplB="{ row }">
+        <span style="color:red">{{ row.b }}</span>
+      </template>
     </vxe-virtual-tree>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -48,7 +51,7 @@ export default {
       tableColumn: [
         { type: 'seq', title: '序号', width: 100 },
         { type: 'checkbox', title: 'A', treeNode: true, width: 300 },
-        { field: 'b', title: 'B', width: 100 },
+        { field: 'b', title: 'B', width: 100, slots: { default: 'tmplB' } },
         { field: 'c', title: 'C', width: 100 },
         { field: 'd', title: 'D', width: 100 },
         { field: 'e', title: 'E', width: 100 },
@@ -86,6 +89,9 @@ export default {
             <vxe-button @click="$refs.xVTree.setAllTreeExpand(false)">收起所有</vxe-button>
             <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
           </template>
+          <template v-slot:tmplB="{ row }">
+            <span style="color:red">{{ row.b }}</span>
+          </template>
         </vxe-virtual-tree>
         `,
         `
@@ -96,7 +102,7 @@ export default {
               tableColumn: [
                 { type: 'seq', title: '序号', width: 100 },
                 { type: 'checkbox', title: 'A', treeNode: true, width: 300 },
-                { field: 'b', title: 'B', width: 100 },
+                { field: 'b', title: 'B', width: 100, slots: { default: 'tmplB' } },
                 { field: 'c', title: 'C', width: 100 },
                 { field: 'd', title: 'D', width: 100 },
                 { field: 'e', title: 'E', width: 100 },

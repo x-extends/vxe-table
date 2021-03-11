@@ -80,11 +80,11 @@ export default {
           },
           methods: {
             handleSearch () {
-              let filterName = XEUtils.toString(this.filterName).trim()
+              let filterName = XEUtils.toValueString(this.filterName).trim()
               if (filterName) {
                 let options = { children: 'children' }
                 let searchProps = ['name']
-                this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toString(item[key]).indexOf(filterName) > -1), options)
+                this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toValueString(item[key]).indexOf(filterName) > -1), options)
                 // 搜索之后默认展开所有子节点
                 this.$nextTick(() => {
                   this.$refs.xTree.setAllTreeExpand(true)
@@ -117,11 +117,11 @@ export default {
   },
   methods: {
     handleSearch () {
-      const filterName = XEUtils.toString(this.filterName).trim()
+      const filterName = XEUtils.toValueString(this.filterName).trim()
       if (filterName) {
         const options = { children: 'children' }
         const searchProps = ['name']
-        this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toString(item[key]).indexOf(filterName) > -1), options)
+        this.tableData = XEUtils.searchTree(this.originData, item => searchProps.some(key => XEUtils.toValueString(item[key]).indexOf(filterName) > -1), options)
         // 搜索之后默认展开所有子节点
         this.$nextTick(() => {
           this.$refs.xTree.setAllTreeExpand(true)

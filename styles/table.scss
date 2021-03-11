@@ -1224,7 +1224,7 @@
           position: absolute;
           border-width: $vxe-table-cell-dirty-width;
           border-style: solid;
-          border-color: transparent $vxe-table-cell-dirty-color transparent transparent;
+          border-color: transparent $vxe-table-cell-dirty-update-color transparent transparent;
           transform: rotate(45deg);
         }
       }

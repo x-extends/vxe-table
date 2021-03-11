@@ -1,15 +1,15 @@
 <template>
   <div>
     <p class="tip">
-      筛选渲染 <table-column-api-link prop="filter-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/v3/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      筛选渲染 <table-column-api-link prop="filter-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/v3/examples/plugins/table/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       className 自定义容器的 className<br>
-      isFooter 是否显示底部按钮<br>
+      showFilterFooter 是否显示底部按钮<br>
       renderFilter (h, renderOpts, <vxe-tooltip content="params: { column, columnIndex, columnIndex, $panel }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 内容<br>
       filterMethod (<vxe-tooltip content="params: { option, row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选数据函数<br>
       filterResetMethod (<vxe-tooltip content="params: { options, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选重置函数<br>
       $panel 对象:<br>
-      &nbsp;&nbsp;<span class="orange">changeOption(event?: Event, checked: boolean, option: ColumnFilterParams) 更新选项的状态</span><br>
+      &nbsp;&nbsp;<span class="orange">changeOption(event: Event | null, checked: boolean, option: ColumnFilterParams) 更新选项的状态</span><br>
       &nbsp;&nbsp;<span class="orange">confirmFilter(event?: Event) 确认筛选</span><br>
       &nbsp;&nbsp;<span class="orange">resetFilter(event?: Event) 清除筛选条件</span>
     </p>

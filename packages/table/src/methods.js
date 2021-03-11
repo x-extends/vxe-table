@@ -155,7 +155,7 @@ function getOrderField (_vm, column) {
     } else if (sortType === 'number') {
       return XEUtils.toNumber(cellValue)
     } else if (sortType === 'string') {
-      return XEUtils.toString(cellValue)
+      return XEUtils.toValueString(cellValue)
     }
     return cellValue
   }

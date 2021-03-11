@@ -255,7 +255,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 如果编辑列开启显示状态
-  if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && editOpts.showStatus) {
+  if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && (editOpts.showStatus || editOpts.showUpdateStatus)) {
     isDirty = $xetable.isUpdateByRow(row, column.property)
   }
   const type = column.type === 'seq' || column.type === 'index' ? 'seq' : column.type

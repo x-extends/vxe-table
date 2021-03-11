@@ -15,9 +15,7 @@ import './element'
 import './iview'
 import './antd'
 import './echarts'
-import './xtable'
-import './xtable/renderer'
-import './xtable/formatter'
+import './table'
 
 Vue.component(MyDiv.name, MyDiv)
 Vue.component(TableAPILink.name, TableAPILink)
