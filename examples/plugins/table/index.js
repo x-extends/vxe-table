@@ -46,6 +46,9 @@ import 'vxe-table-plugin-antd/dist/style.css'
 import 'vxe-table-plugin-virtual-tree/dist/style.css'
 import 'vxe-table-plugin-renderer/dist/style.css'
 
+import './renderer'
+import './formatter'
+
 // 设置默认参数
 VXETable.setup({
   table: {
