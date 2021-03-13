@@ -343,9 +343,9 @@ export default {
           checkColumns.push(column)
         }
       })
-      return Object.assign({
+      return Object.assign({}, defaultOptions, {
         columns: checkColumns
-      }, defaultOptions)
+      })
     },
     printEvent () {
       const $xetable = this.$parent

@@ -31,11 +31,8 @@
         import XEUtils from 'xe-utils'
         import {
           VXETable,
-          Table,
-          Column,
           Header,
           // Footer,
-
           // Icon
           // Filter,
           // Edit,
@@ -44,32 +41,36 @@
           // Keyboard,
           // Validator,
 
+          // Column,
           // Grid,
+          // Tooltip,
           // Toolbar,
           // Pager,
+          // Form,
           // Checkbox,
           // Radio,
+          // Switch,
           // Input,
+          // Select,
           // Textarea,
           // Button,
           // Modal,
-          // Tooltip,
-          // Form,
-          // Select,
-          // Switch,
-          // List
+          // List,
+          // Pulldown,
+
+          Table
         } from 'vxe-table'
         import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
 
         // 按需加载的方式默认是不带国际化的，自定义国际化需要自行解析占位符 '{0}'，例如：
-        Vue.use(VXETable, {
+        VXETable.setup({
           i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
         })
 
         // 表格模块
-        // Vue.use(Icon)
         Vue.use(Header)
         // Vue.use(Footer)
+        // Vue.use(Icon)
         // Vue.use(Filter)
         // Vue.use(Edit)
         // Vue.use(Menu)
@@ -89,9 +90,11 @@
         // Vue.use(Switch)
         // Vue.use(Input)
         // Vue.use(Select)
+        // Vue.use(Textarea)
         // Vue.use(Button)
         // Vue.use(Modal)
         // Vue.use(List)
+        // Vue.use(Pulldown)
 
         // 安装表格
         Vue.use(Table)

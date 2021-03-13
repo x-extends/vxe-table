@@ -64,15 +64,17 @@ export default {
         import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
         import enUS from 'vxe-table/lib/locale/lang/en-US'
 
-        Vue.use(VXETable, {
+        VXETable.setup({
           // 对组件内置的提示语进行国际化翻译
           i18n: (key, args) => i18n.t(key, args)
         })
 
+        Vue.use(VXETable)
+
         new Vue({ i18n }).$mount('#app')
         `,
         `
-        Vue.use(VXETable, {
+        VXETable.setup({
           // 可选，对参数中的列头、校验提示..等进行自动翻译（只对支持国际化的有效）
           translate (key, args) {
             // 例如，只翻译 "app." 开头的键值

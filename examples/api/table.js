@@ -3316,6 +3316,15 @@ const apis = [
         list: []
       },
       {
+        name: 'header-cell-area-selection',
+        desc: '只对 area-config.selectCellByHeader 配置时有效，点击列头选取当前列的所有单元格时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, targetRows, targetCols, $event}',
+        list: []
+      },
+      {
         name: 'cell-area-selection-start',
         desc: '只对 mouse-config.area 配置时有效，在单元格区域选取开始时会触发该事件',
         version: 'pro',
