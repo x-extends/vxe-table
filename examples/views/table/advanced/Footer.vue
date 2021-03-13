@@ -12,7 +12,7 @@
       highlight-hover-row
       show-footer
       max-height="400"
-      :footer-method="footerMethod"
+      :footer-method="footerMethod1"
       :data="tableData1">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -92,8 +92,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -105,9 +103,10 @@ export default {
         { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
         { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'vxe-table 从入门到放弃' },
         { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
-        { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
-        { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+        { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' }
+      ],
+      footerData1: [
+        ['合计', '2', '44', '67', '-']
       ],
       tableData2: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'vxe-table 从入门到放弃' },
@@ -134,11 +133,11 @@ export default {
         <vxe-table
           class="mytable-footer"
           border
+          highlight-hover-row
           show-footer
-          height="400"
-          :footer-method="footerMethod"
-          :footer-cell-class-name="footerCellClassName2"
-          :data="tableData2">
+          max-height="400"
+          :footer-method="footerMethod1"
+          :data="tableData1">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -147,8 +146,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -158,43 +155,17 @@ export default {
                 { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
                 { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'vxe-table 从入门到放弃' },
                 { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' }
+              ],
+              footerData1: [
+                ['合计', '2', '44', '67', '-']
               ]
             }
           },
           methods: {
-            footerMethod ({ columns, data }) {
-              const means = []
-              const sums = []
-              const others = []
-              columns.forEach((column, columnIndex) => {
-                if (columnIndex === 0) {
-                  means.push('平均')
-                  sums.push('和值')
-                  others.push('其他')
-                } else {
-                  let meanCell = null
-                  let sumCell = null
-                  let otherCell = '-'
-                  switch (column.property) {
-                    case 'age':
-                    case 'rate':
-                      meanCell = parseInt(XEUtils.mean(data, column.property))
-                      sumCell = XEUtils.sum(data, column.property)
-                      break
-                    case 'sex':
-                      otherCell = '无'
-                      break
-                  }
-                  means.push(meanCell)
-                  sums.push(sumCell)
-                  others.push(otherCell)
-                }
-              })
+            footerMethod1 () {
               // 返回一个二维数组的表尾合计
-              return [ means, sums, others ]
+              return this.footerData1
             }
           }
         }
@@ -216,8 +187,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -243,6 +212,20 @@ export default {
                 }
               }
             },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const means = []
               const sums = []
@@ -258,9 +241,9 @@ export default {
                   let otherCell = '-'
                   switch (column.property) {
                     case 'age':
-                    case 'rate':
-                      meanCell = parseInt(XEUtils.mean(data, column.property))
-                      sumCell = XEUtils.sum(data, column.property)
+                    case 'amount':
+                      meanCell = this.meanNum(data, column.property)
+                      sumCell = this.sumNum(data, column.property)
                       break
                     case 'sex':
                       otherCell = '无'
@@ -272,7 +255,7 @@ export default {
                 }
               })
               // 返回一个二维数组的表尾合计
-              return [ means, sums, others ]
+              return [means, sums, others]
             }
           }
         }
@@ -315,8 +298,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -347,6 +328,20 @@ export default {
                 }
               }
             },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const means = []
               const sums = []
@@ -363,8 +358,8 @@ export default {
                   switch (column.property) {
                     case 'age':
                     case 'amount':
-                      meanCell = parseInt(XEUtils.mean(data, column.property))
-                      sumCell = XEUtils.sum(data, column.property)
+                      meanCell = this.meanNum(data, column.property)
+                      sumCell = this.sumNum(data, column.property)
                       break
                     case 'sex':
                       otherCell = '无'
@@ -417,6 +412,24 @@ export default {
         }
       }
     },
+    footerMethod1 () {
+      // 返回一个二维数组的表尾合计
+      return this.footerData1
+    },
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       const means = []
       const sums = []
@@ -433,8 +446,8 @@ export default {
           switch (column.property) {
             case 'age':
             case 'amount':
-              meanCell = parseInt(XEUtils.mean(data, column.property))
-              sumCell = XEUtils.sum(data, column.property)
+              meanCell = this.meanNum(data, column.property)
+              sumCell = this.sumNum(data, column.property)
               break
             case 'sex':
               otherCell = '无'

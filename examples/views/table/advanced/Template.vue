@@ -396,11 +396,18 @@ export default {
               this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
               this.selectRecords = this.$refs.xTable.getCheckboxRecords()
             },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map(column => {
                   if (['sex', 'num'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.sumNum(data, column.property)
                   }
                   return null
                 })
@@ -474,11 +481,18 @@ export default {
       this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
       this.selectRecords = this.$refs.xTable.getCheckboxRecords()
     },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map(column => {
           if (['sex', 'num'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.sumNum(data, column.property)
           }
           return null
         })

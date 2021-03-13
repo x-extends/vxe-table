@@ -75,8 +75,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -110,8 +108,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -131,6 +127,20 @@ export default {
             }
           },
           methods: {
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const footerData = [
                 columns.map((column, _columnIndex) => {
@@ -138,7 +148,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, 'age')
+                    return this.meanNum(data, 'age')
                   }
                   if (['name'].includes(column.property)) {
                     return '合并了'
@@ -153,7 +163,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, 'age')
+                    return this.sumNum(data, 'age')
                   }
                   return null
                 })
@@ -179,8 +189,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -197,6 +205,20 @@ export default {
             }
           },
           methods: {
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const footerData = [
                 columns.map((column, _columnIndex) => {
@@ -204,7 +226,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, 'age')
+                    return this.meanNum(data, 'age')
                   }
                   if (['name'].includes(column.property)) {
                     return '合并了'
@@ -219,7 +241,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, 'age')
+                    return this.sumNum(data, 'age')
                   }
                   return null
                 })
@@ -260,8 +282,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -278,6 +298,20 @@ export default {
             }
           },
           methods: {
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const footerData = [
                 columns.map((column, _columnIndex) => {
@@ -285,7 +319,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, 'age')
+                    return this.meanNum(data, 'age')
                   }
                   if (['name'].includes(column.property)) {
                     return '合并了'
@@ -300,7 +334,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, 'age')
+                    return this.sumNum(data, 'age')
                   }
                   return null
                 })
@@ -325,6 +359,20 @@ export default {
     }
   },
   methods: {
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       const footerData = [
         columns.map((column, _columnIndex) => {
@@ -332,7 +380,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, 'age')
+            return this.meanNum(data, 'age')
           }
           if (['name'].includes(column.property)) {
             return '合并了'
@@ -347,7 +395,7 @@ export default {
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, 'age')
+            return this.sumNum(data, 'age')
           }
           return null
         })

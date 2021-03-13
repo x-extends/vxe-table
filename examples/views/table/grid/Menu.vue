@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
 import XEClipboard from 'xe-clipboard'
 
 export default {
@@ -102,8 +101,6 @@ export default {
           @menu-click="contextMenuClickEvent"></vxe-grid>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -194,6 +191,13 @@ export default {
                   break
               }
             },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, columnIndex) => {
@@ -201,7 +205,7 @@ export default {
                     return '和值'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.sumNum(data, column.property)
                   }
                   return null
                 })
@@ -255,6 +259,13 @@ export default {
           break
       }
     },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
@@ -262,7 +273,7 @@ export default {
             return '和值'
           }
           if (['age'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.sumNum(data, column.property)
           }
           return null
         })

@@ -198,8 +198,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -452,8 +450,6 @@ export default {
         </vxe-modal>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -553,13 +549,20 @@ export default {
               this.$refs.xGrid.setAllCheckboxRow(this.isAllChecked)
               this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
             },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, index) => {
                   if (index === 0) {
                     return '平均'
                   } else if (['num1', 'age'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.sumNum(data, column.property)
                   }
                   return null
                 })
@@ -656,13 +659,20 @@ export default {
       this.$refs.xGrid.setAllCheckboxRow(this.isAllChecked)
       this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
     },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column, index) => {
           if (index === 0) {
             return '平均'
           } else if (['num1', 'age'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.sumNum(data, column.property)
           }
           return null
         })

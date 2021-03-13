@@ -79,19 +79,19 @@ export default {
                   this.allColumn = allColumn
                   // 模拟后台获取合计数据
                   this.footerData = [
-                    allColumn.map((column, columnIndex) => {
-                      if (columnIndex === 0) {
-                        return '平均'
-                      }
-                      return columnIndex
-                    }),
-                    allColumn.map((column, columnIndex) => {
-                      if (columnIndex === 0) {
-                        return '和值'
-                      }
-                      return columnIndex
-                    })
-                  ]
+                  allColumn.map((column, columnIndex) => {
+                    if (columnIndex === 0) {
+                      return '平均'
+                    }
+                    return \`平_\${columnIndex}\`
+                  }),
+                  allColumn.map((column, columnIndex) => {
+                    if (columnIndex === 0) {
+                      return '和值'
+                    }
+                    return \`和_\${columnIndex}\`
+                  })
+                ]
                 }),
                 this.findDataList(800).then(data => {
                   this.allData = this.allData.concat(data)
@@ -175,13 +175,13 @@ export default {
               if (columnIndex === 0) {
                 return '平均'
               }
-              return columnIndex
+              return `平_${columnIndex}`
             }),
             allColumn.map((column, columnIndex) => {
               if (columnIndex === 0) {
                 return '和值'
               }
-              return columnIndex
+              return `和_${columnIndex}`
             })
           ]
         }),

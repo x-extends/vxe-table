@@ -44,8 +44,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -114,6 +112,20 @@ export default {
                 }
               }
             },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, columnIndex) => {
@@ -121,7 +133,7 @@ export default {
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return parseInt(XEUtils.mean(data, column.property))
+                    return this.meanNum(data, column.property)
                   }
                   return null
                 }),
@@ -130,7 +142,7 @@ export default {
                     return '和值'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.sumNum(data, column.property)
                   }
                   return null
                 })
@@ -166,6 +178,20 @@ export default {
         }
       }
     },
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
@@ -173,7 +199,7 @@ export default {
             return '平均'
           }
           if (['age'].includes(column.property)) {
-            return parseInt(XEUtils.mean(data, column.property))
+            return this.meanNum(data, column.property)
           }
           return null
         }),
@@ -182,7 +208,7 @@ export default {
             return '和值'
           }
           if (['age'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.sumNum(data, column.property)
           }
           return null
         })

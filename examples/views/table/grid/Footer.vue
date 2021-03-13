@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -44,7 +42,16 @@ export default {
         export: true,
         zoom: true
       },
-      tableData: [],
+      tableData: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, rate: 6, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, rate: 5, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, rate: 4, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, rate: 1, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, rate: 5, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, rate: 2, address: 'Shenzhen' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, rate: 7, address: 'Shenzhen' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, rate: 5, address: 'Shenzhen' }
+      ],
       demoCodes: [
         `
         <vxe-grid
@@ -61,8 +68,6 @@ export default {
           :data="tableData"></vxe-grid>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -77,13 +82,33 @@ export default {
                 export: true,
                 zoom: true
               },
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, rate: 6, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, rate: 5, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, rate: 4, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, rate: 1, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, rate: 5, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, rate: 2, address: 'Shenzhen' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, rate: 7, address: 'Shenzhen' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, rate: 5, address: 'Shenzhen' }
+              ]
             }
           },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
-          },
           methods: {
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, columnIndex) => {
@@ -91,7 +116,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.sumNum(data, column.property)
                   }
                   return null
                 }),
@@ -100,7 +125,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.meanNum(data, column.property)
                   }
                   return null
                 })
@@ -112,10 +137,21 @@ export default {
       ]
     }
   },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 15)
-  },
   methods: {
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
@@ -123,7 +159,7 @@ export default {
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.sumNum(data, column.property)
           }
           return null
         }),
@@ -132,7 +168,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.meanNum(data, column.property)
           }
           return null
         })
