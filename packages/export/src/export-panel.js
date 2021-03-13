@@ -424,7 +424,10 @@ export default {
       const { checkedAll, storeData, defaultOptions, supportMerge } = this
       const { hasMerge, columns } = storeData
       const expColumns = XEUtils.searchTree(columns, column => column.checked, { children: 'children', mapChildren: 'childNodes', original: true })
-      return Object.assign({ columns: expColumns }, defaultOptions, { isMerge: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false })
+      return Object.assign({}, defaultOptions, {
+        columns: expColumns,
+        isMerge: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false
+      })
     },
     cancelEvent () {
       this.storeData.visible = false

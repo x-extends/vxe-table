@@ -107,7 +107,7 @@
       </div>
     </div>
 
-    <vxe-modal v-model="newVersionVisible" width="500" min-height="200" min-width="400" :position="{left: 20, top: 20}" :mask="false" :lock-view="false" show-footer resize>
+    <!-- <vxe-modal v-model="newVersionVisible" width="500" min-height="200" min-width="400" :position="{left: 20, top: 20}" :mask="false" :lock-view="false" show-footer resize>
       <template #title>
         <span style="color:red">v4.x next 发布</span>
       </template>
@@ -124,7 +124,7 @@
         <vxe-button @click="claseNewVersionEvent">不看</vxe-button>
         <vxe-button status="primary" @click="viewNewVersionEvent">查看更多</vxe-button>
       </template>
-    </vxe-modal>
+    </vxe-modal> -->
   </div>
 </template>
 
@@ -2267,9 +2267,9 @@ export default {
         }
       }, 3000)
     }
-    setTimeout(() => {
-      this.newVersionVisible = localStorage.getItem('VXE_TABLE_NEW_VERSION') !== '4.0'
-    }, 5000)
+    // setTimeout(() => {
+    //   this.newVersionVisible = localStorage.getItem('VXE_TABLE_NEW_VERSION') !== '4.0'
+    // }, 5000)
     this.init()
   },
   methods: {

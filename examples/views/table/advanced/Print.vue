@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      通过调用 <table-api-link prop="print"/> 函数打印表格
+      通过调用 <table-api-link prop="print"/> 函数打印表格，还可以通过 <table-api-link prop="style"/> 设置打印的样式
       <span class="red">（注：打印的页数有限，如果超大数据量请关闭打印功能或者分页打印）</span>
     </p>
 
@@ -18,7 +18,7 @@
       show-footer
       ref="xTable"
       height="500"
-      :print-config="{}"
+      :print-config="tablePrint"
       :footer-method="footerMethod"
       :data="tableData">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -58,6 +58,29 @@ export default {
         { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
         { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
       ],
+      tablePrint: {
+        // 自定义打印的样式示例
+        style: `
+        table.vxe-table {
+          color: #000000; // 修改表格默认颜色
+          font-size: 12px; // 修改表格默认字体大小
+          font-family: "Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu; // 修改表格默认字体
+        }
+        table.vxe-table,
+        table.vxe-table thead th,
+        table.vxe-table tbody td,
+        table.vxe-table tfoot td  {
+          border-color: #000000; // 修改表格边框颜色
+        }
+        table.vxe-table thead th {
+          color: green; // 修改表头字体颜色
+          font-size: 14px; // 修改表头默认字体大小
+        }
+        table.vxe-table tfoot td {
+          color: red; // 修改表尾字体颜色
+        }
+        `
+      },
       demoCodes: [
         `
         <vxe-toolbar>
@@ -73,7 +96,7 @@ export default {
           show-footer
           ref="xTable"
           height="500"
-          :print-config="{}"
+          :print-config="tablePrint"
           :footer-method="footerMethod"
           :data="tableData">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -103,7 +126,30 @@ export default {
                 { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
                 { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
-              ]
+              ],
+              tablePrint: {
+                // 自定义打印的样式示例
+                style: \`
+                table.vxe-table {
+                  color: #000000; // 修改表格默认颜色
+                  font-size: 12px; // 修改表格默认字体大小
+                  font-family: "Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu; // 修改表格默认字体
+                }
+                table.vxe-table,
+                table.vxe-table thead th,
+                table.vxe-table tbody td,
+                table.vxe-table tfoot td  {
+                  border-color: #000000; // 修改表格边框颜色
+                }
+                table.vxe-table thead th {
+                  color: green; // 修改表头字体颜色
+                  font-size: 14px; // 修改表头默认字体大小
+                }
+                table.vxe-table tfoot td {
+                  color: red; // 修改表尾字体颜色
+                }
+                \`
+              }
             }
           },
           methods: {
