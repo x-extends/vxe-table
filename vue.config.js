@@ -25,7 +25,6 @@ module.exports = {
     }
   },
   transpileDependencies: ['highlight.js'],
-  transpileDependencies: ['highlight.js'],
   configureWebpack: {
     performance: {
       hints: false

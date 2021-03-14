@@ -1692,13 +1692,13 @@ export default {
               locat: {
                 name: 'TableSortableColumn'
               }
-            },
-            {
-              label: 'app.aside.nav.xlsxRender',
-              locat: {
-                name: 'TableXlsx'
-              }
             }
+            // {
+            //   label: 'app.aside.nav.xlsxRender',
+            //   locat: {
+            //     name: 'TableXlsx'
+            //   }
+            // }
           ]
         },
         {
@@ -1774,20 +1774,20 @@ export default {
             //     name: 'TablePluginShortcutKey'
             //   }
             // },
-            {
-              label: 'app.aside.nav.exportXLSXPlugin',
-              demoUrl: 'https://jsrun.pro/PIWKp/edit',
-              locat: {
-                name: 'TablePluginExportXLSX'
-              }
-            },
-            {
-              label: 'app.aside.nav.exportPDFPlugin',
-              demoUrl: 'https://jsrun.pro/I8WKp/edit',
-              locat: {
-                name: 'TablePluginExportPDF'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.exportXLSXPlugin',
+            //   demoUrl: 'https://jsrun.pro/PIWKp/edit',
+            //   locat: {
+            //     name: 'TablePluginExportXLSX'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.exportPDFPlugin',
+            //   demoUrl: 'https://jsrun.pro/I8WKp/edit',
+            //   locat: {
+            //     name: 'TablePluginExportPDF'
+            //   }
+            // },
             {
               label: 'app.aside.nav.rendererPlugin',
               locat: {
