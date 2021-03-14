@@ -1689,13 +1689,13 @@ export default {
               locat: {
                 name: 'TableSortableColumn'
               }
-            },
-            {
-              label: 'app.aside.nav.xlsxRender',
-              locat: {
-                name: 'TableXlsx'
-              }
             }
+            // {
+            //   label: 'app.aside.nav.xlsxRender',
+            //   locat: {
+            //     name: 'TableXlsx'
+            //   }
+            // }
           ]
         },
         {
@@ -1771,20 +1771,20 @@ export default {
             //     name: 'TablePluginShortcutKey'
             //   }
             // },
-            {
-              label: 'app.aside.nav.exportXLSXPlugin',
-              demoUrl: 'https://jsrun.pro/PIWKp/edit',
-              locat: {
-                name: 'TablePluginExportXLSX'
-              }
-            },
-            {
-              label: 'app.aside.nav.exportPDFPlugin',
-              demoUrl: 'https://jsrun.pro/I8WKp/edit',
-              locat: {
-                name: 'TablePluginExportPDF'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.exportXLSXPlugin',
+            //   demoUrl: 'https://jsrun.pro/PIWKp/edit',
+            //   locat: {
+            //     name: 'TablePluginExportXLSX'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.exportPDFPlugin',
+            //   demoUrl: 'https://jsrun.pro/I8WKp/edit',
+            //   locat: {
+            //     name: 'TablePluginExportPDF'
+            //   }
+            // },
             // {
             //   label: 'app.aside.nav.rendererPlugin',
             //   disabled: true,
@@ -2287,7 +2287,7 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ versions }) => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ time, versions }) => {
         const stableVersionList = []
         const betaVersionList = []
         if (versions) {
@@ -2307,7 +2307,22 @@ export default {
         if (betaVersionList.length) {
           this.selectBetaVersion = betaVersionList[0].value
         }
+
+        // 样式处理
+        const serveDate = XEUtils.toStringDate(time)
+        const yymmdd = XEUtils.toDateString(serveDate, 'yyyyMMdd')
+        if (['20210404', '20220405', '20230405', '20240404', '20250404'].includes(yymmdd)) {
+          localStorage.setItem('qingmingjie', '1')
+          document.body.className = `${document.body.className} qingmingjie`
+        } else {
+          localStorage.removeItem('qingmingjie')
+          document.body.className = document.body.className.replace('qingmingjie', '')
+        }
       })
+
+      if (localStorage.getItem('qingmingjie')) {
+        document.body.className = `${document.body.className} qingmingjie`
+      }
     },
     // 调用频率间隔 500 毫秒
     searchEvent: XEUtils.debounce(function () {

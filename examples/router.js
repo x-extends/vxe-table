@@ -254,7 +254,7 @@ import TableOtherIview from './views/table/other/Iview.vue'
 import TableOtherAntd from './views/table/other/Antd.vue'
 import TableSortableColumn from './views/table/other/SortableColumn.vue'
 import TableSortableRow from './views/table/other/SortableRow.vue'
-import TableXlsx from './views/table/other/Xlsx.vue'
+// import TableXlsx from './views/table/other/Xlsx.vue'
 
 import TablePluginElementConfig from './views/table/plugin/ElementConfig.vue'
 import TablePluginElementFilter from './views/table/plugin/ElementFilter.vue'
@@ -266,8 +266,8 @@ import TablePluginAntdConfig from './views/table/plugin/AntdConfig.vue'
 import TablePluginAntdFilter from './views/table/plugin/AntdFilter.vue'
 import TablePluginAntdPage from './views/table/plugin/AntdPage.vue'
 import TablePluginShortcutKey from './views/table/plugin/ShortcutKey.vue'
-import TablePluginExportXLSX from './views/table/plugin/ExportXLSX.vue'
-import TablePluginExportPDF from './views/table/plugin/ExportPDF.vue'
+// import TablePluginExportXLSX from './views/table/plugin/ExportXLSX.vue'
+// import TablePluginExportPDF from './views/table/plugin/ExportPDF.vue'
 import TablePluginRenderer from './views/table/plugin/Renderer.vue'
 import TablePluginMenus from './views/table/plugin/Menus.vue'
 import TablePluginTreeRows from './views/table/plugin/TreeRows'
@@ -1502,11 +1502,11 @@ export default new Router({
       name: 'TableSortableRow',
       component: TableSortableRow
     },
-    {
-      path: '/table/other/xlsx',
-      name: 'TableXlsx',
-      component: TableXlsx
-    },
+    // {
+    //   path: '/table/other/xlsx',
+    //   name: 'TableXlsx',
+    //   component: TableXlsx
+    // },
     {
       path: '/table/plugin/elementConfig',
       name: 'TablePluginElementConfig',
@@ -1557,16 +1557,16 @@ export default new Router({
       name: 'TablePluginShortcutKey',
       component: TablePluginShortcutKey
     },
-    {
-      path: '/table/plugin/exportXLSX',
-      name: 'TablePluginExportXLSX',
-      component: TablePluginExportXLSX
-    },
-    {
-      path: '/table/plugin/exportPDF',
-      name: 'TablePluginExportPDF',
-      component: TablePluginExportPDF
-    },
+    // {
+    //   path: '/table/plugin/exportXLSX',
+    //   name: 'TablePluginExportXLSX',
+    //   component: TablePluginExportXLSX
+    // },
+    // {
+    //   path: '/table/plugin/exportPDF',
+    //   name: 'TablePluginExportPDF',
+    //   component: TablePluginExportPDF
+    // },
     {
       path: '/table/plugin/renderer',
       name: 'TablePluginRenderer',
