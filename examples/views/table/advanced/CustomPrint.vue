@@ -30,8 +30,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">打印条形码：先用第三方 <a class="link" href="https://www.npmjs.com/package/jsbarcode" target="_blank">jsbarcode</a> 库生成条形码，再用打印模块输出打印</p>
@@ -45,8 +45,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[2] }}</code>
-      <code class="javascript">{{ demoCodes[3] }}</code>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">打印二维码：先用第三方 <a class="link" href="https://www.npmjs.com/package/qrcode" target="_blank">qrcode</a> 库生成二维码，再用打印模块输出打印</p>
@@ -60,8 +60,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[4] }}</code>
-      <code class="javascript">{{ demoCodes[5] }}</code>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">打印合同</p>
@@ -75,8 +75,8 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="xml">{{ demoCodes[6] }}</code>
-      <code class="javascript">{{ demoCodes[7] }}</code>
+      <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -84,7 +84,6 @@
 <script>
 import QRCode from 'qrcode'
 import jsbarcode from 'jsbarcode'
-import hljs from 'highlight.js'
 
 // 打印样式
 const printStyle = `
@@ -540,11 +539,6 @@ export default {
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     printEvent1 () {

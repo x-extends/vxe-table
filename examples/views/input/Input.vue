@@ -75,7 +75,7 @@
     </p>
 
     <pre>
-      <code>
+      <pre-code>
         | Tab | 切换到上一个 |
         | Shift Tab | 切换到下一个 |
         | Arrow Up ↑ | 展开下拉面板、如果已展开则向上移动（用于日期类型...等） |
@@ -85,22 +85,21 @@
         | Enter | 展开下拉面板、确定选中日期...等（用于日期类型...等） |
         | Page Up | 向前翻页（用于日期类型...等） |
         | Page Down | 向后翻页（用于日期类型...等） |
-      </code>
+      </pre-code>
     </pre>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <code class="html">{{ demoCodes[0] }}</code>
-      <code class="javascript">{{ demoCodes[1] }}</code>
-      <code class="css">{{ demoCodes[2] }}</code>
+      <pre-code class="html">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
 
 <script>
 import XEUtils from 'xe-utils'
-import hljs from 'highlight.js'
 
 export default {
   data  () {
@@ -440,11 +439,6 @@ export default {
         `
       ]
     }
-  },
-  mounted () {
-    Array.from(this.$el.querySelectorAll('pre code')).forEach((block) => {
-      hljs.highlightBlock(block)
-    })
   },
   methods: {
     disabledDateMethod ({ date }) {
