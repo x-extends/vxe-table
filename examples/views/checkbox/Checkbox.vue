@@ -42,7 +42,7 @@
 
     <pre>
       <pre-code class="html">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>

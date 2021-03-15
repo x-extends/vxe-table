@@ -92,7 +92,7 @@ export type ModalType = 'alert' | 'confirm' | 'message' | 'modal'
  */
 export type ModalStatus = 'info' | 'success' | 'warning' | 'question' | 'error' | 'loading'
 
-export type ModalPosition = 'center' | {
+export type ModalPosition = {
   top?: number;
   left?: number;
 };
@@ -114,7 +114,7 @@ export namespace VxeModalPropTypes {
   export type IconStatus = string;
   export type ClassName = string;
   export type Top = number | string;
-  export type Position = ModalPosition;
+  export type Position = 'center' | ModalPosition;
   export type Title = string | number;
   export type Duration = number | string;
   export type Message = number | string | ((params: { $modal: VxeModalConstructor & VxeModalMethods }) => VNode[] | string[] | JSX.Element[]);

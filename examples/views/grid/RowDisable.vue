@@ -8,7 +8,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">配合  <table-api-link prop="edit-actived"/> 事件，实现行编辑中对列的权限控制，例如：限制 age 小于 27 或者 name 为 'x' 开头的列禁止编辑</p>
@@ -19,7 +19,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
   </div>
 </template>

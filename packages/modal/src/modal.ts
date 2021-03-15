@@ -669,7 +669,7 @@ export default defineComponent({
       const { slots: propSlots = {}, showZoom, title } = props
       const { zoomLocat } = reactData
       const titleSlot = slots.title || propSlots.title
-      const titVNs: any[] = titleSlot ? titleSlot({ $modal: $xemodal }) : [
+      const titVNs: VNode[] = titleSlot ? titleSlot({ $modal: $xemodal }) as VNode[] : [
         h('span', {
           class: 'vxe-modal--title'
         }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))

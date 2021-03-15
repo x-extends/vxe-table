@@ -43,7 +43,7 @@
       当然还有最简单的用法，只需给弹出面板加上 class=vxe-table--ignore-clear 即可
     </p>
     <pre>
-      <pre-code class="javascript">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[0] }}</pre-code>
     </pre>
   </div>
 </template>

@@ -12,7 +12,7 @@
       show-footer
       class="mytable-footer"
       max-height="400"
-      :footer-method="footerMethod"
+      :footer-method="footerMethod1"
       :data="demo1.tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -25,7 +25,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">还可以配合 <table-api-link prop="footer-cell-class-name"/> 自定义不同列颜色</p>
@@ -49,7 +49,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
       <pre-code class="css">{{ demoCodes[4] }}</pre-code>
     </pre>
 
@@ -85,8 +85,8 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[5] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[6] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[7] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -94,7 +94,6 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { VxeTablePropTypes } from '../../../../types/vxe-table'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -105,11 +104,17 @@ export default defineComponent({
         { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
         { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'vxe-table 从入门到放弃' },
         { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
-        { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
-        { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+        { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' }
+      ],
+      footerData: [
+        ['合计', '2', '44', '67', '-']
       ]
     })
+
+    const footerMethod1: VxeTablePropTypes.FooterMethod = () => {
+      // 返回一个二维数组的表尾合计
+      return demo1.footerData
+    }
 
     const demo2 = reactive({
       tableData: [
@@ -163,6 +168,22 @@ export default defineComponent({
       }
     }
 
+    const meanNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    }
+
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       const means: any[] = []
       const sums: any[] = []
@@ -179,8 +200,8 @@ export default defineComponent({
           switch (column.property) {
             case 'age':
             case 'amount':
-              meanCell = XEUtils.toInteger(XEUtils.mean(data, column.property))
-              sumCell = XEUtils.sum(data, column.property)
+              meanCell = meanNum(data, column.property)
+              sumCell = sumNum(data, column.property)
               break
             case 'sex':
               otherCell = '无'
@@ -197,6 +218,7 @@ export default defineComponent({
 
     return {
       demo1,
+      footerMethod1,
       demo2,
       footerCellClassName2,
       demo3,
@@ -210,7 +232,7 @@ export default defineComponent({
           show-footer
           class="mytable-footer"
           max-height="400"
-          :footer-method="footerMethod"
+          :footer-method="footerMethod1"
           :data="demo1.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
@@ -222,7 +244,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -233,47 +254,21 @@ export default defineComponent({
                 { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
                 { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'vxe-table 从入门到放弃' },
                 { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' }
+              ],
+              footerData: [
+                ['合计', '2', '44', '67', '-']
               ]
             })
 
-            const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
-              const means: any[] = []
-              const sums: any[] = []
-              const others: any[] = []
-              columns.forEach((column, columnIndex) => {
-                if (columnIndex === 0) {
-                  means.push('平均')
-                  sums.push('和值')
-                  others.push('其他')
-                } else {
-                  let meanCell = null
-                  let sumCell = null
-                  let otherCell = '-'
-                  switch (column.property) {
-                    case 'age':
-                    case 'amount':
-                      meanCell = XEUtils.toInteger(XEUtils.mean(data, column.property))
-                      sumCell = XEUtils.sum(data, column.property)
-                      break
-                    case 'sex':
-                      otherCell = '无'
-                      break
-                  }
-                  means.push(meanCell)
-                  sums.push(sumCell)
-                  others.push(otherCell)
-                }
-              })
+            const footerMethod1: VxeTablePropTypes.FooterMethod = () => {
               // 返回一个二维数组的表尾合计
-              return [means, sums, others]
+              return demo1.footerData
             }
 
             return {
               demo1,
-              footerMethod
+              footerMethod1
             }
           }
         })
@@ -324,10 +319,26 @@ export default defineComponent({
               }
             }
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
-              const means = []
-              const sums = []
-              const others = []
+              const means: any[] = []
+              const sums: any[] = []
+              const others: any[] = []
               columns.forEach((column, columnIndex) => {
                 if (columnIndex === 0) {
                   means.push('平均')
@@ -340,8 +351,8 @@ export default defineComponent({
                   switch (column.property) {
                     case 'age':
                     case 'amount':
-                      meanCell = XEUtils.toInteger(XEUtils.mean(data, column.property))
-                      sumCell = XEUtils.sum(data, column.property)
+                      meanCell = meanNum(data, column.property)
+                      sumCell = sumNum(data, column.property)
                       break
                     case 'sex':
                       otherCell = '无'
@@ -437,10 +448,26 @@ export default defineComponent({
               }
             }
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
-              const means = []
-              const sums = []
-              const others = []
+              const means: any[] = []
+              const sums: any[] = []
+              const others: any[] = []
               columns.forEach((column, columnIndex) => {
                 if (columnIndex === 0) {
                   means.push('平均')
@@ -453,8 +480,8 @@ export default defineComponent({
                   switch (column.property) {
                     case 'age':
                     case 'amount':
-                      meanCell = XEUtils.toInteger(XEUtils.mean(data, column.property))
-                      sumCell = XEUtils.sum(data, column.property)
+                      meanCell = meanNum(data, column.property)
+                      sumCell = sumNum(data, column.property)
                       break
                     case 'sex':
                       otherCell = '无'

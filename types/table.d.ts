@@ -1,6 +1,6 @@
 import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode, DefineComponent } from 'vue'
 import { VXEComponentInstall, VxeComponentInstance, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
-import { VxeTableProDefines } from './plugins/pro'
+import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
 import { VxeColumnOptions, VxeColumnPropTypes } from './column'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
@@ -754,7 +754,7 @@ export interface TableReactData {
   // 合并单元格的对象集
   mergeList: VxeTableDefines.MergeItem[];
   // 合并表尾数据的对象集
-  mergeFooterList: any[];
+  mergeFooterList: VxeTableDefines.MergeItem[];
   // 初始化标识
   initStore: {
     filter: boolean;
@@ -1283,7 +1283,7 @@ export namespace VxeTablePropTypes {
       row: any;
       rowIndex: number;
       $rowIndex: number;
-    }): Promise<any>;
+    }): Promise<void>;
     toggleMethod?(params: {
       $table: VxeTableConstructor & VxeTablePrivateMethods;
       expanded: boolean;
@@ -1371,6 +1371,9 @@ export namespace VxeTablePropTypes {
      * 如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取
      */
     area?: boolean;
+    /**
+     * 只对 area 启用后有效，是否开启区域扩展选取功能，开启后可以通过鼠标左键按住区域内右下角扩展按钮，将区域横向或纵向扩大（支持扩大区域并复制值）
+     */
     extension?: boolean;
   }
   export interface MouseOpts extends MouseConfig { }
@@ -1379,7 +1382,14 @@ export namespace VxeTablePropTypes {
    * 区域配置项
    */
   export interface AreaConfig {
+    /**
+     * 只对 mouse-config.area 启用后有效，点击列头是否选取当前列的所有单元格
+     */
     selectCellByHeader?: boolean;
+    /**
+     * 只对 mouse-config.extension 启用后有效，将被选取区域的值复制到扩展区域中
+     */
+    extendByCopy?: boolean;
   }
   export interface AreaOpts extends AreaConfig { }
 
@@ -1464,11 +1474,33 @@ export namespace VxeTablePropTypes {
    * 复制/粘贴配置项
    */
   export interface ClipConfig {
+    /**
+     * 是否启用复制功能
+     */
     isCopy?: boolean;
+    /**
+     * 是否启用剪贴功能
+     */
     isCut?: boolean;
+    /**
+     * 是否启用粘贴功能
+     */
     isPaste?: boolean;
+    /**
+     * 是否填充粘贴，如果启用了，当被选取的粘贴单元格与粘贴单元格的行与列数量不匹配时，会将内容强制粘贴所选的单元格
+     */
+    isFillPaste?: boolean;
+    /**
+     * 是否启用行自增，当粘贴的行数超出表格时自动插入新行
+     */
     isRowIncrement?: boolean;
+    /**
+     * 是否启用列自增，当粘贴的列数超出表格时自动插入新列（需要注意自增的列自字段是否定义，否则将无法响应）
+     */
     isColumnIncrement?: boolean;
+    /**
+     * 重写单元格复制取值的方法，将单元格复制到剪贴板
+     */
     copyMethod?(params: {
       isCut: boolean;
       row: any;
@@ -1476,32 +1508,50 @@ export namespace VxeTablePropTypes {
       cellValue: any;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): string;
+    /**
+     * 自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为
+     */
     beforeCopyMethod?(params: {
       isCut: boolean;
       targetAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
+    /**
+     * 自定义单元格复制到剪贴板之后的方法
+     */
     afterCopyMethod?(params: {
       isCut: boolean;
       targetAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
+    /**
+     * 重写单元格剪贴值清除的方法，将剪贴单元格的值清除
+     */
     cutMethod?: (params: {
       row: any,
       column: VxeTableDefines.ColumnInfo;
       cellValue: any;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }) => void;
+    /**
+     * 自定义单元格剪贴值清除之前的方法，可以通过返回 false 阻止清除行为
+     */
     beforeCutMethod?: (params: {
       cutAreas: VxeTableProDefines.CellAreaParams[];
       currentAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }) => boolean;
+    /**
+     * 自定义单元格剪贴值清除之后的方法
+     */
     afterCutMethod?: (params: {
       cutAreas: VxeTableProDefines.CellAreaParams[];
       currentAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }) => void;
+    /**
+     * 重写单元格粘贴赋值的方法，从剪贴板赋值到单元格
+     */
     pasteMethod?(params: {
       isCut: boolean;
       row: any,
@@ -1509,12 +1559,18 @@ export namespace VxeTablePropTypes {
       cellValue: any;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): void;
+    /**
+     * 自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为
+     */
     beforePasteMethod?(params: {
       currentAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
       cellValues: string[][];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
+    /**
+     * 自定义单元格粘贴赋值之后的方法
+     */
     afterPasteMethod?(params: {
       currentAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
@@ -1524,6 +1580,9 @@ export namespace VxeTablePropTypes {
       insertColumns: VxeTableDefines.ColumnInfo[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
+    /**
+     * 只对 isRowIncrement 有效，自定义创建自增行数据的方法
+     */
     createRowsMethod?(params: {
       currentAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
@@ -1532,6 +1591,9 @@ export namespace VxeTablePropTypes {
       insertRows: any[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): any[];
+    /**
+     * 只对 isColumnIncrement 有效，自定义创建自增列配置的方法
+     */
     createColumnsMethod?(params: {
       currentAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
@@ -1767,16 +1829,7 @@ export type VxeTableEmits = [
   'scroll',
   'custom',
 
-  'open-fnr',
-  'change-fnr',
-  'cell-area-copy',
-  'cell-area-cut',
-  'cell-area-paste',
-  'cell-area-merge',
-  'cell-area-selection-start',
-  'cell-area-selection-end',
-  'cell-area-extension-start',
-  'cell-area-extension-end'
+  ...VxeTableProEmits
 ]
 
 export namespace VxeTableDefines {
@@ -1873,6 +1926,7 @@ export namespace VxeTableDefines {
     renderFooter(params: CellRenderFooterParams): VNode[];
 
     getTitle(): string;
+    getKey(): string;
   }
   export interface CellRenderHeaderParams {
     $table: VxeTableConstructor & VxeTablePrivateMethods;

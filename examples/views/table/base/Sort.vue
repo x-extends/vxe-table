@@ -34,7 +34,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">配置 <table-column-api-link prop="sort-by"/> 指定字段排序、或者方法返回自定义排序的值</p>
@@ -58,7 +58,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">配置 <table-api-link prop="multiple"/> 启用多字段组合排序</p>
@@ -80,7 +80,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">点击表头排序，通过 <table-api-link prop="defaultSort"/> 默认排序、<table-api-link prop="orders"/> 自定义轮转顺序、通过配置 <table-api-link prop="trigger"/> 设置触发源</p>
@@ -105,7 +105,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[7] }}</pre-code>
     </pre>
   </div>
 </template>

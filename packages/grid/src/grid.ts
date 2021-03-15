@@ -184,7 +184,7 @@ export default defineComponent({
       const { pendingRecords } = reactData
       const rowClassName = props.rowClassName
       const clss = []
-      if (pendingRecords.some((item: any) => item === params.row)) {
+      if (pendingRecords.some((item) => item === params.row)) {
         clss.push('row--pending')
       }
       clss.push(rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : '')
@@ -264,8 +264,8 @@ export default defineComponent({
       if (selectRecords.length) {
         const plus: any[] = []
         const minus: any[] = []
-        selectRecords.forEach((data: any) => {
-          if (pendingRecords.some((item: any) => data === item)) {
+        selectRecords.forEach((data) => {
+          if (pendingRecords.some((item) => data === item)) {
             minus.push(data)
           } else {
             plus.push(data)
@@ -620,7 +620,7 @@ export default defineComponent({
       if (proxyConfig) {
         if (isEnableConf(formConfig) && proxyOpts.form && formOpts.items) {
           const formData: any = {}
-          formOpts.items.forEach(({ field, itemRender }: any) => {
+          formOpts.items.forEach(({ field, itemRender }) => {
             if (field) {
               formData[field] = itemRender && !XEUtils.isUndefined(itemRender.defaultValue) ? itemRender.defaultValue : undefined
             }
@@ -667,7 +667,7 @@ export default defineComponent({
             $xetable.insert({})
             break
           case 'insert_actived':
-            $xetable.insert({}).then(({ row }: any) => $xetable.setActiveRow(row))
+            $xetable.insert({}).then(({ row }) => $xetable.setActiveRow(row))
             break
           case 'mark_cancel':
             triggerPendingEvent(code)
@@ -824,11 +824,11 @@ export default defineComponent({
               const applyArgs = [{ $grid: $xegrid, code, button, body, options: ajaxMethods }].concat(args)
               // 排除掉新增且标记为删除的数据
               if (insertRecords.length) {
-                body.pendingRecords = pendingRecords.filter((row: any) => $xetable.findRowIndexOf(insertRecords, row) === -1)
+                body.pendingRecords = pendingRecords.filter((row) => $xetable.findRowIndexOf(insertRecords, row) === -1)
               }
               // 排除已标记为删除的数据
               if (pendingRecords.length) {
-                body.insertRecords = insertRecords.filter((row: any) => $xetable.findRowIndexOf(pendingRecords, row) === -1)
+                body.insertRecords = insertRecords.filter((row) => $xetable.findRowIndexOf(pendingRecords, row) === -1)
               }
               // 只校验新增和修改的数据
               return $xetable.validate(body.insertRecords.concat(updateRecords)).then(() => {

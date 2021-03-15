@@ -29,7 +29,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">默认的筛选，通过 <table-column-api-link prop="checked"/> 属性设置默认的选中的选项</p>
@@ -59,7 +59,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
   </div>
 </template>

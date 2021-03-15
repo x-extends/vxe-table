@@ -6,7 +6,7 @@ import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumn
 
 const renderType = 'footer'
 
-function mergeFooterMethod (mergeFooterList: any[], _rowIndex: number, _columnIndex: number) {
+function mergeFooterMethod (mergeFooterList: VxeTableDefines.MergeItem[], _rowIndex: number, _columnIndex: number) {
   for (let mIndex = 0; mIndex < mergeFooterList.length; mIndex++) {
     const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeFooterList[mIndex]
     if (mergeColIndex > -1 && mergeRowIndex > -1 && mergeRowspan && mergeColspan) {
@@ -24,8 +24,8 @@ export default defineComponent({
   name: 'VxeTableFooter',
   props: {
     footerData: { type: Array as PropType<any[][]>, default: () => [] },
-    tableColumn: { type: Array as PropType<any[]>, default: () => [] },
-    fixedColumn: { type: Array as PropType<any[]>, default: () => [] },
+    tableColumn: { type: Array as PropType<VxeTableDefines.ColumnInfo[]>, default: () => [] },
+    fixedColumn: { type: Array as PropType<VxeTableDefines.ColumnInfo[]>, default: () => [] },
     fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
   setup (props) {
@@ -124,7 +124,7 @@ export default defineComponent({
            */
           h('colgroup', {
             ref: refFooterColgroup
-          }, tableColumn.map((column: any, $columnIndex: any) => {
+          }, tableColumn.map((column, $columnIndex) => {
             return h('col', {
               name: column.id,
               key: $columnIndex
@@ -139,12 +139,12 @@ export default defineComponent({
            */
           h('tfoot', {
             ref: refFooterTFoot
-          }, footerData.map((list: any, _rowIndex: any) => {
+          }, footerData.map((list, _rowIndex) => {
             const $rowIndex = _rowIndex
             return h('tr', {
               class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }) : footerRowClassName : ''],
               style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }) : footerRowStyle) : null
-            }, tableColumn.map((column: any, $columnIndex: any) => {
+            }, tableColumn.map((column, $columnIndex) => {
               const { type, showFooterOverflow, footerAlign, align, footerClassName } = column
               const showAllTip = tooltipOpts.showAll
               const isColGroup = column.children && column.children.length

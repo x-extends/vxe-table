@@ -813,25 +813,25 @@ export default defineComponent({
                 name: 'TableTreeFixed'
               }
             },
-            // {
-            //   label: 'app.aside.nav.fluidHeight',
-            //   locat: {
-            //     name: 'TableTreeMaxHeight'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.treeSearch',
-            //   // demoUrl: 'https://jsrun.pro/CDWKp/edit',
-            //   locat: {
-            //     name: 'TableTreeFilter'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.treeSort',
-            //   locat: {
-            //     name: 'TableTreeSort'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.fluidHeight',
+              locat: {
+                name: 'TableTreeMaxHeight'
+              }
+            },
+            {
+              label: 'app.aside.nav.treeSearch',
+              // demoUrl: 'https://jsrun.pro/CDWKp/edit',
+              locat: {
+                name: 'TableTreeFilter'
+              }
+            },
+            {
+              label: 'app.aside.nav.treeSort',
+              locat: {
+                name: 'TableTreeSort'
+              }
+            },
             // {
             //   label: 'app.aside.nav.groupSummary',
             //   // demoUrl: 'https://jsrun.pro/KVWKp/edit',
@@ -846,18 +846,18 @@ export default defineComponent({
             //     name: 'TableTreeGroupSummaryCount'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.expandRow',
-            //   locat: {
-            //     name: 'TableTreeExpand'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.expandTreeLazy',
-            //   locat: {
-            //     name: 'TableTreeExpandLazy'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.expandRow',
+              locat: {
+                name: 'TableTreeExpand'
+              }
+            },
+            {
+              label: 'app.aside.nav.expandTreeLazy',
+              locat: {
+                name: 'TableTreeExpandLazy'
+              }
+            },
             {
               label: 'app.aside.nav.crudToolbar',
               locat: {
@@ -1126,18 +1126,18 @@ export default defineComponent({
             //     name: 'TableEditForm'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.upload',
-            //   locat: {
-            //     name: 'TableEditUpload'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.realtimeSave',
-            //   locat: {
-            //     name: 'TableEditRealtimeSave'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.upload',
+              locat: {
+                name: 'TableEditUpload'
+              }
+            },
+            {
+              label: 'app.aside.nav.realtimeSave',
+              locat: {
+                name: 'TableEditRealtimeSave'
+              }
+            },
             {
               label: 'app.aside.nav.dataCount',
               demoUrl: 'https://jsrun.pro/JQWKp/edit',
@@ -2139,7 +2139,7 @@ export default defineComponent({
     })
 
     const getVersion = () => {
-      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ tags, versions }) => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ time, tags, versions }) => {
         const stableVersionList: any = []
         const betaVersionList: any = []
         if (versions) {
@@ -2159,7 +2159,22 @@ export default defineComponent({
         if (betaVersionList.length) {
           appData.selectBetaVersion = betaVersionList[0].value
         }
+
+        // 样式处理
+        const serveDate = XEUtils.toStringDate(time)
+        const yymmdd = XEUtils.toDateString(serveDate, 'yyyyMMdd')
+        if (['20210404', '20220405', '20230405', '20240404', '20250404'].includes(yymmdd)) {
+          localStorage.setItem('qingmingjie', '1')
+          document.body.className = `${document.body.className} qingmingjie`
+        } else {
+          localStorage.removeItem('qingmingjie')
+          document.body.className = document.body.className.replace('qingmingjie', '')
+        }
       })
+
+      if (localStorage.getItem('qingmingjie')) {
+        document.body.className = `${document.body.className} qingmingjie`
+      }
     }
 
     const handleSearch = () => {

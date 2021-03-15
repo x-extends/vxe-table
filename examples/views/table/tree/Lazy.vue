@@ -32,7 +32,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">通过设置 <table-api-link prop="expandRowKeys"/> 属性默认展开指定节点</p>
@@ -55,7 +55,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
   </div>
 </template>

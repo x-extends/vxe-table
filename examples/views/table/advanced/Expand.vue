@@ -61,7 +61,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">默认展开指定行，通过 <table-api-link prop="expandRowKeys"/> 参数设置默认展开行，指定默认值需要有 <table-api-link prop="row-id"/></p>
@@ -113,7 +113,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -156,7 +156,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
     </pre>
   </div>
 </template>

@@ -11,7 +11,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -19,10 +19,25 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { VxeGridOptions } from '../../../types/vxe-table'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
+    const meanNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    }
+
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const gridOptions = reactive({
       border: true,
       stripe: true,
@@ -58,7 +73,7 @@ export default defineComponent({
               return '和值'
             }
             if (['age', 'rate'].includes(column.property)) {
-              return XEUtils.sum(data, column.property)
+              return sumNum(data, column.property)
             }
             return ''
           }),
@@ -67,7 +82,7 @@ export default defineComponent({
               return '平均'
             }
             if (['age', 'rate'].includes(column.property)) {
-              return XEUtils.mean(data, column.property)
+              return meanNum(data, column.property)
             }
             return ''
           })
@@ -84,16 +99,31 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VxeGridOptions } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const gridOptions = reactive({
               border: true,
               stripe: true,
               resizable: true,
               showFooter: true,
-              height: 500,
+              height: 400,
               exportConfig: {},
               toolbarConfig: {
                 export: true,
@@ -123,7 +153,7 @@ export default defineComponent({
                       return '和值'
                     }
                     if (['age', 'rate'].includes(column.property)) {
-                      return XEUtils.sum(data, column.property)
+                      return sumNum(data, column.property)
                     }
                     return ''
                   }),
@@ -132,7 +162,7 @@ export default defineComponent({
                       return '平均'
                     }
                     if (['age', 'rate'].includes(column.property)) {
-                      return XEUtils.mean(data, column.property)
+                      return meanNum(data, column.property)
                     }
                     return ''
                   })

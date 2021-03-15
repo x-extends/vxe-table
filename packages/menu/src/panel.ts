@@ -41,11 +41,11 @@ export default defineComponent({
             'is--visible': ctxMenuStore.visible
           }],
           style: ctxMenuStore.style
-        }, ctxMenuStore.list.map((options: any, gIndex: any) => {
+        }, ctxMenuStore.list.map((options, gIndex) => {
           return h('ul', {
             class: 'vxe-context-menu--option-wrapper',
             key: gIndex
-          }, options.map((item: any, index: any) => {
+          }, options.map((item, index) => {
             const hasChildMenus = item.children && item.children.length
             return item.visible === false ? null : h('li', {
               class: [item.className, {

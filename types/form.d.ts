@@ -1,6 +1,6 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
 import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
-import { VxeFormItemOptions } from './form-item'
+import { VxeFormItemOptions, VxeFormItemPropTypes } from './form-item'
 
 /**
  * 组件 - 表单
@@ -25,7 +25,7 @@ export interface VxeFormPrivateRef extends FormPrivateRef { }
 export interface FormReactData {
   collapseAll: boolean;
   staticItems: any[];
-  formItems: any[];
+  formItems: VxeFormDefines.ItemInfo[];
 }
 
 export interface VxeFormOptions extends VxeFormProps, VxeFormListeners { }
@@ -103,7 +103,7 @@ export interface FormMethods {
   /**
    * 获取表单项列表
    */
-  getItems(): VxeFormItemOptions[];
+  getItems(): VxeFormDefines.ItemInfo[];
   /**
    * 手动切换折叠状态
    */
@@ -115,6 +115,30 @@ export interface FormPrivateMethods { }
 export interface VxeFormPrivateMethods extends FormPrivateMethods { }
 
 export namespace VxeFormDefines {
+  export class ItemInfo {
+    id: string;
+
+    title: VxeFormItemPropTypes.Title;
+    field: VxeFormItemPropTypes.Field;
+    span: VxeFormItemPropTypes.Span;
+    align: VxeFormItemPropTypes.Align;
+    titleAlign: VxeFormItemPropTypes.TitleAlign;
+    titleWidth: VxeFormItemPropTypes.TitleWidth;
+    titlePrefix: VxeFormItemPropTypes.TitlePrefix;
+    titleSuffix: VxeFormItemPropTypes.TitleSuffix;
+    resetValue: VxeFormItemPropTypes.ResetValue;
+    visibleMethod: VxeFormItemPropTypes.VisibleMethod;
+    visible: VxeFormItemPropTypes.Visible;
+    folding: VxeFormItemPropTypes.Folding;
+    collapseNode: VxeFormItemPropTypes.CollapseNode;
+    className: VxeFormItemPropTypes.ClassName;
+    itemRender: VxeFormItemPropTypes.ItemRender;
+    // 渲染属性
+    showError: boolean;
+    errRule: any;
+    slots: VxeFormItemPropTypes.Slots;
+  }
+
   export interface FormRule {
     /**
      * 是否必填

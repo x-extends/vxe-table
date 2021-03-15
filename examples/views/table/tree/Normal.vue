@@ -27,7 +27,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">带连接线</p>
@@ -47,7 +47,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">更多功能</p>
@@ -89,7 +89,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
       <pre-code class="css">{{ demoCodes[6] }}</pre-code>
     </pre>
   </div>

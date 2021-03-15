@@ -3,8 +3,8 @@ export default {
     aside: {
       nav: {
         start: 'Development',
-        install: 'Install',
-        use: 'Quick start',
+        install: 'Global install',
+        use: 'Import on demand',
         global: 'Global props',
         icons: 'Global icon',
         theme: 'Global theme',

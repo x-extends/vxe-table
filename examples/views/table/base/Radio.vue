@@ -32,7 +32,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -63,7 +63,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -88,7 +88,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 高亮方式</p>
@@ -109,7 +109,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[7] }}</pre-code>
     </pre>
 
     <p class="tip">两种方式混合使用</p>
@@ -131,7 +131,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[8] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[9] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[9] }}</pre-code>
     </pre>
 
     <p class="tip">当然也可以两种方式同时使用</p>
@@ -154,7 +154,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[10] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[11] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[11] }}</pre-code>
     </pre>
   </div>
 </template>

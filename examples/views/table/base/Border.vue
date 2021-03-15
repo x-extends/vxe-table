@@ -16,7 +16,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">通过设置 <table-api-link prop="border"/>=true|full 显示完整边框</p>
@@ -36,7 +36,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">通过设置 <table-api-link prop="border"/>=outer 显示外边框</p>
@@ -56,7 +56,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">通过设置 <table-api-link prop="border"/>=inner 显示内边框</p>
@@ -76,7 +76,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[7] }}</pre-code>
     </pre>
 
     <p class="tip">通过设置 <table-api-link prop="border"/>=none 去掉所有边框</p>
@@ -96,7 +96,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[8] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[9] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[9] }}</pre-code>
     </pre>
   </div>
 </template>

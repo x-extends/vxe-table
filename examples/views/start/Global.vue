@@ -2,7 +2,7 @@
   <div>
     <h2>{{ $t('app.aside.nav.global') }}</h2>
     <pre>
-      <pre-code class="javascript">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[0] }}</pre-code>
     </pre>
   </div>
 </template>

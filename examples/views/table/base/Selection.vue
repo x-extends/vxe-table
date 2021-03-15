@@ -29,7 +29,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -61,7 +61,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
     <p class="tip">还可以通过 <table-api-link prop="strict"/> 设置为严格模式，当表格中不存在有效数据时列头复选框为禁用状态</p>
@@ -80,7 +80,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">多选表格，通过配置 <table-api-link prop="trigger"/> 设置触发源，使用渲染最快的 <table-api-link prop="checkField"/> 属性绑定方式</p>
@@ -112,7 +112,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[7] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -138,7 +138,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[8] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[9] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[9] }}</pre-code>
     </pre>
 
     <p class="tip">通过 <table-api-link prop="checkStrictly"/> 设置父子节点不互相关联，启用后 <table-api-link prop="showHeader"/> 默认为 false</p>
@@ -167,7 +167,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[10] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[11] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[11] }}</pre-code>
     </pre>
 
     <p class="tip">多选可单选同时使用</p>
@@ -188,7 +188,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[12] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[13] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[13] }}</pre-code>
     </pre>
 
     <p class="tip">不仅如此，还可以多种方式混合使用，通过 <table-api-link prop="range"/> 启用范围选中</p>
@@ -212,7 +212,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[14] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[15] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[15] }}</pre-code>
     </pre>
   </div>
 </template>

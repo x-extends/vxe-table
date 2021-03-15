@@ -12,9 +12,9 @@ export default defineComponent({
   name: 'VxeTableHeader',
   props: {
     tableData: Array as PropType<any[]>,
-    tableColumn: Array as PropType<any[]>,
-    tableGroupColumn: Array as PropType<any[]>,
-    fixedColumn: Array as PropType<any[]>,
+    tableColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
+    tableGroupColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
+    fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
   setup (props) {
@@ -23,7 +23,7 @@ export default defineComponent({
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xetable
     const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar } = $xetable.getRefMaps()
 
-    const headerColumn = ref([] as any[][])
+    const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refHeaderTable = ref() as Ref<HTMLTableElement>
@@ -34,7 +34,7 @@ export default defineComponent({
 
     const uploadColumn = () => {
       const { isGroup, scrollXLoad } = tableReactData
-      headerColumn.value = isGroup ? convertToRows(props.tableGroupColumn) : [scrollXLoad && props.fixedType ? props.fixedColumn as any[] : props.tableColumn as any[]]
+      headerColumn.value = isGroup ? convertToRows(props.tableGroupColumn) : [scrollXLoad && props.fixedType ? props.fixedColumn as VxeTableDefines.ColumnInfo[] : props.tableColumn as VxeTableDefines.ColumnInfo[]]
     }
 
     const resizeMousedown = (evnt: MouseEvent, params: any) => {
@@ -175,7 +175,7 @@ export default defineComponent({
            */
           h('colgroup', {
             ref: refHeaderColgroup
-          }, (tableColumn as any[]).map((column, $columnIndex) => {
+          }, (tableColumn as VxeTableDefines.ColumnInfo[]).map((column, $columnIndex) => {
             return h('col', {
               name: column.id,
               key: $columnIndex
@@ -197,14 +197,14 @@ export default defineComponent({
             }, cols.map((column, $columnIndex) => {
               const { type, showHeaderOverflow, headerAlign, align, headerClassName } = column
               const isColGroup = column.children && column.children.length
-              const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+              const fixedHiddenColumn = fixedType ? (column.fixed !== fixedType && !isColGroup) : !!column.fixed && overflowX
               const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
               const headAlign = headerAlign || align || allHeaderAlign || allAlign
               let showEllipsis = headOverflow === 'ellipsis'
               const showTitle = headOverflow === 'title'
               const showTooltip = headOverflow === true || headOverflow === 'tooltip'
               let hasEllipsis = showTitle || showTooltip || showEllipsis
-              const hasFilter = column.filters && column.filters.some((item: any) => item.checked)
+              const hasFilter = column.filters && column.filters.some((item) => item.checked)
               const columnIndex = $xetable.getColumnIndex(column)
               const _columnIndex = $xetable.getVTColumnIndex(column)
               const params: VxeTableDefines.CellRenderHeaderParams = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }

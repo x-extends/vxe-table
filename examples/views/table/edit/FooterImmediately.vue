@@ -40,7 +40,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -49,7 +49,6 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/vxe-table'
 import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/vxe-table'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -87,6 +86,22 @@ export default defineComponent({
       $table.updateFooter()
     }
 
+    const meanNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    }
+
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       return [
         columns.map((column, columnIndex) => {
@@ -94,9 +109,9 @@ export default defineComponent({
             return '平均'
           }
           if (['age'].includes(column.property)) {
-            return XEUtils.toInteger(XEUtils.mean(data, column.property))
+            return meanNum(data, column.property)
           } else if (['rate', 'num1'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return meanNum(data, column.property)
           }
           return null
         }),
@@ -105,7 +120,7 @@ export default defineComponent({
             return '和值'
           }
           if (['rate', 'num1'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return sumNum(data, column.property)
           }
           return null
         })
@@ -176,7 +191,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -214,6 +228,22 @@ export default defineComponent({
               $table.updateFooter()
             }
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               return [
                 columns.map((column, columnIndex) => {
@@ -221,9 +251,9 @@ export default defineComponent({
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.toInteger(XEUtils.mean(data, column.property))
+                    return meanNum(data, column.property)
                   } else if (['rate', 'num1'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return meanNum(data, column.property)
                   }
                   return null
                 }),
@@ -232,7 +262,7 @@ export default defineComponent({
                     return '和值'
                   }
                   if (['rate', 'num1'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return sumNum(data, column.property)
                   }
                   return null
                 })

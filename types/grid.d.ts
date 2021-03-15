@@ -5,7 +5,7 @@ import { VxeFormItemOptions } from './form-item'
 import { VxeToolbarInstance, VxeToolbarOptions, VxeToolbarPropTypes } from './toolbar'
 import { VxePagerInstance, VxePagerOptions, VxePagerDefines } from './pager'
 import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
-import { VxeTableInstance, VxeTableDefines, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
+import { VxeTableInstance, VxeTableDefines, VxeTableEmits, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
  * 组件 - 高级表格
@@ -63,52 +63,7 @@ export interface GridReactData {
 export interface VxeGridOptions extends VxeGridProps, VxeGridListeners { }
 
 export type VxeGridEmits = [
-  'update:data',
-  'keydown',
-  'paste',
-  'copy',
-  'cut',
-  'current-change',
-  'radio-change',
-  'checkbox-change',
-  'checkbox-all',
-  'checkbox-range-start',
-  'checkbox-range-change',
-  'checkbox-range-end',
-  'cell-click',
-  'cell-dblclick',
-  'cell-menu',
-  'cell-mouseenter',
-  'cell-mouseleave',
-  'header-cell-click',
-  'header-cell-dblclick',
-  'header-cell-menu',
-  'footer-cell-click',
-  'footer-cell-dblclick',
-  'footer-cell-menu',
-  'sort-change',
-  'filter-change',
-  'resizable-change',
-  'toggle-row-expand',
-  'toggle-tree-expand',
-  'menu-click',
-  'edit-closed',
-  'edit-actived',
-  'edit-disabled',
-  'valid-error',
-  'scroll',
-  'custom',
-
-  'open-fnr',
-  'change-fnr',
-  'cell-area-copy',
-  'cell-area-cut',
-  'cell-area-paste',
-  'cell-area-merge',
-  'cell-area-selection-start',
-  'cell-area-selection-end',
-  'cell-area-extension-start',
-  'cell-area-extension-end',
+  ...VxeTableEmits,
 
   'page-change',
   'form-submit',

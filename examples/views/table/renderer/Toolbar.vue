@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      工具栏-按钮渲染 <grid-api-link prop="buttonRender"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/xtable/renderer">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      工具栏-按钮渲染 <grid-api-link prop="buttonRender"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       renderToolbarButton (renderOpts: VxeGlobalRendererHandles.RenderButtonOptions, <vxe-tooltip content="params: { button, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params: VxeGlobalRendererHandles.RenderButtonParams) 工具栏按钮<br>
     </p>
@@ -20,9 +20,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <pre-code class="javascript">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[0] }}</pre-code>
       <pre-code class="xml">{{ demoCodes[1] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>

@@ -1,6 +1,6 @@
-import { DefineComponent } from 'vue'
+import { DefineComponent, VNode } from 'vue'
 import { VXEComponentInstall } from './component'
-import { VxeFormConstructor } from './form'
+import { VxeFormConstructor, VxeFormDefines, VxeFormPropTypes } from './form'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
@@ -12,70 +12,101 @@ export interface VxeFormItemOptions {
   /**
    * 标题
    */
-  title?: string;
+  title?: VxeFormItemPropTypes.Title;
   /**
    * 字段名
    */
-  field?: string;
+  field?: VxeFormItemPropTypes.Field;
   /**
    * 栅格占据的列数（共 24 分栏）
    */
-  span?: string | number;
+  span?: VxeFormItemPropTypes.Span;
   /**
    * 内容对齐方式
    */
-  align?: 'left' | 'center' | 'right';
+  align?: VxeFormItemPropTypes.Align;
   /**
    * 标题对齐方式
    */
-  titleAlign?: 'left' | 'center' | 'right';
+  titleAlign?: VxeFormItemPropTypes.TitleAlign;
   /**
    * 标题宽度
    */
-  titleWidth?: string | number;
+  titleWidth?: VxeFormItemPropTypes.TitleWidth;
   /**
    * 给表单项附加 className
    */
-  className?: string;
+  className?: VxeFormItemPropTypes.ClassName;
   /**
    * 前缀配置项
    */
-  titlePrefix?: FormItemTitleOptions;
+  titlePrefix?: VxeFormItemPropTypes.TitlePrefix;
   /**
    * 后缀配置项
    */
-  titleSuffix?: FormItemTitleOptions;
+  titleSuffix?: VxeFormItemPropTypes.TitleSuffix;
   /**
    * 重置时的默认值
    */
-  resetValue?: any;
+  resetValue?: VxeFormItemPropTypes.ResetValue;
   /**
    * 是否显示
    */
-  visible?: boolean;
+  visible?: VxeFormItemPropTypes.Visible;
   /**
    * 该方法的返回值用来决定该项是否显示
    */
-  visibleMethod?(params: { data: any, property: string }): boolean;
+  visibleMethod?: VxeFormItemPropTypes.VisibleMethod
   /**
    * 默认收起
    */
-  folding?: boolean;
+  folding?: VxeFormItemPropTypes.Folding;
   /**
    * 折叠节点
    */
-  collapseNode?: boolean;
+  collapseNode?: VxeFormItemPropTypes.CollapseNode;
   /**
    * 项渲染配置项
    */
   itemRender?: FormItemRenderOptions;
+  slots?: VxeFormItemPropTypes.Slots;
 }
 
-export interface FormItemTitleOptions {
-  message?: string;
-  enterable?: boolean;
-  theme?: string;
-  icon?: string;
+export namespace VxeFormItemPropTypes {
+  export type Title = string;
+  export type Field = string;
+  export type Span = VxeFormPropTypes.Span;
+  export type Align = VxeFormPropTypes.Align;
+  export type TitleAlign = VxeFormPropTypes.TitleAlign;
+  export type TitleWidth = VxeFormPropTypes.TitleWidth;
+
+  interface ClassNameParams {
+    $form: VxeFormConstructor;
+    data: any;
+    item: VxeFormDefines.ItemInfo;
+    property: string;
+  }
+  export type ClassName = string | ((params: ClassNameParams) => string);
+
+  interface PrefixOption {
+    message?: string;
+    enterable?: boolean;
+    theme?: string;
+    icon?: string;
+  }
+  export type TitlePrefix = PrefixOption
+  export type TitleSuffix = PrefixOption
+
+  export type ResetValue = any;
+  export type Visible = boolean;
+  export type VisibleMethod = (params: FormItemVisibleParams) => boolean;
+  export type Folding = boolean;
+  export type CollapseNode = boolean;
+  export type ItemRender = FormItemRenderOptions;
+  export type Slots = {
+    title?: string | ((params: FormItemTitleRenderParams) => JSX.Element[] | VNode[] | string[]) | null;
+    default?: string | ((params: FormItemContentRenderParams) => JSX.Element[] | VNode[] | string[]) | null;
+  }
 }
 
 /**
@@ -102,9 +133,7 @@ export interface FormItemRenderOptions extends VxeGlobalRendererHandles.RenderOp
    * 渲染组件的内容（需要渲染器支持）
    */
   content?: string;
-  /**
-   * 默认值（需要渲染器支持）
-   */
+  autofocus?: boolean;
   defaultValue?: any;
 }
 
@@ -114,7 +143,7 @@ export interface FormItemRenderOptions extends VxeGlobalRendererHandles.RenderOp
 export interface FormItemTitleRenderParams {
   $form: VxeFormConstructor;
   data: any;
-  item: VxeFormItemOptions;
+  item: VxeFormDefines.ItemInfo;
   property: string;
 }
 
@@ -124,7 +153,7 @@ export interface FormItemTitleRenderParams {
 export interface FormItemContentRenderParams {
   $form: VxeFormConstructor;
   data: any;
-  item: VxeFormItemOptions;
+  item: VxeFormDefines.ItemInfo;
   property: string;
 }
 
@@ -134,7 +163,7 @@ export interface FormItemContentRenderParams {
 export interface FormItemVisibleParams {
   $form: VxeFormConstructor;
   data: any;
-  item: VxeFormItemOptions;
+  item: VxeFormDefines.ItemInfo;
   property: string;
 }
 
@@ -144,6 +173,6 @@ export interface FormItemVisibleParams {
 export interface FormItemResetParams {
   $form: VxeFormConstructor;
   data: any;
-  item: VxeFormItemOptions;
+  item: VxeFormDefines.ItemInfo;
   property: string;
 }

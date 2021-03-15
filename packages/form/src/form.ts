@@ -6,7 +6,7 @@ import { UtilTools, isEnableConf } from '../../tools'
 import { createItem } from './util'
 import { useSize } from '../../hooks/size'
 
-import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods } from '../../../types/vxe-table'
+import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes } from '../../../types/vxe-table'
 
 class Rule {
   constructor (rule: any) {
@@ -107,7 +107,7 @@ export default defineComponent({
       return []
     }
 
-    const loadItem = (list: any[]) => {
+    const loadItem = (list: VxeFormPropTypes.Items) => {
       if (list.length) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           list.forEach((item) => {
@@ -181,11 +181,11 @@ export default defineComponent({
       formMethods.dispatchEvent('reset', { data: props.data }, evnt)
     }
 
-    const handleFocus = (fields: any) => {
+    const handleFocus = (fields: string[]) => {
       const { formItems } = reactData
       const el = refElem.value
-      fields.some((property: any) => {
-        const item = formItems.find((item: any) => item.field === property)
+      fields.some((property) => {
+        const item = formItems.find((item) => item.field === property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
@@ -220,7 +220,7 @@ export default defineComponent({
      *  validator=Function({ itemValue, rule, rules, data, property }) 自定义校验，接收一个 Promise
      *  trigger=change 触发方式
      */
-    const validItemRules = (type: any, property: any, val?: any) => {
+    const validItemRules = (type: string, property: string, val?: any) => {
       const { data, rules: formRules } = props
       const errorRules: any[] = []
       const syncVailds: any[] = []
@@ -286,12 +286,12 @@ export default defineComponent({
       const { formItems } = reactData
       const validOpts = computeValidOpts.value
       const validRest: any = {}
-      const validFields: any[] = []
+      const validFields: string[] = []
       const itemValids: any[] = []
       clearValidate()
       clearTimeout(showErrTime)
       if (data && formRules) {
-        formItems.forEach((item: any) => {
+        formItems.forEach((item) => {
           const { field } = item
           if (field) {
             itemValids.push(
@@ -316,7 +316,7 @@ export default defineComponent({
           }
         }).catch(() => {
           showErrTime = window.setTimeout(() => {
-            formItems.forEach((item: any) => {
+            formItems.forEach((item) => {
               if (item.errRule) {
                 item.showError = true
               }
@@ -343,7 +343,7 @@ export default defineComponent({
       return beginValidate(callback)
     }
 
-    const submitEvent = (evnt: any) => {
+    const submitEvent = (evnt: Event) => {
       evnt.preventDefault()
       if (!props.preventSubmit) {
         beginValidate().then(() => {
@@ -368,7 +368,7 @@ export default defineComponent({
             clearValidate(property)
           })
           .catch(({ rule }) => {
-            const item = formItems.find((item: any) => item.field === property)
+            const item = formItems.find((item) => item.field === property)
             if (item) {
               item.showError = true
               item.errRule = rule
@@ -377,7 +377,7 @@ export default defineComponent({
       }
     }
 
-    const renderPrefixIcon = (titlePrefix: any) => {
+    const renderPrefixIcon = (titlePrefix: VxeFormItemPropTypes.TitlePrefix) => {
       return h('span', {
         class: 'vxe-form--item-title-prefix'
       }, [
@@ -387,7 +387,7 @@ export default defineComponent({
       ])
     }
 
-    const renderSuffixIcon = (titleSuffix: any) => {
+    const renderSuffixIcon = (titleSuffix: VxeFormItemPropTypes.TitleSuffix) => {
       return h('span', {
         class: 'vxe-form--item-title-suffix'
       }, [
@@ -397,7 +397,7 @@ export default defineComponent({
       ])
     }
 
-    const renderTitle = (item: any) => {
+    const renderTitle = (item: VxeFormDefines.ItemInfo) => {
       const { data } = props
       const { slots, field, itemRender, titlePrefix, titleSuffix } = item
       const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
@@ -442,8 +442,8 @@ export default defineComponent({
       const { rules, data } = props
       const { formItems, collapseAll } = reactData
       const validOpts = computeValidOpts.value
-      return formItems.map((item: any, index: any) => {
-        const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
+      return formItems.map((item, index) => {
+        const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule, className } = item
         const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
         const defaultSlot = slots ? slots.default : null
         const titleSlot = slots ? slots.title : null
@@ -463,7 +463,7 @@ export default defineComponent({
         if (rules) {
           const itemRules = rules[field]
           if (itemRules) {
-            isRequired = itemRules.some((rule: any) => rule.required)
+            isRequired = itemRules.some((rule) => rule.required)
           }
         }
         let contentVNs: any[] = []
@@ -500,7 +500,7 @@ export default defineComponent({
           )
         }
         return h('div', {
-          class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, item.className, {
+          class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
             'is--title': title,
             'is--required': isRequired,
             'is--hidden': folding && collapseAll,
@@ -515,7 +515,7 @@ export default defineComponent({
             title || titleSlot ? h('div', {
               class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null],
               style: titleWidth ? {
-                width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
+                width: isNaN(titleWidth as number) ? titleWidth : `${titleWidth}px`
               } : null
             }, renderTitle(item)) : null,
             h('div', {

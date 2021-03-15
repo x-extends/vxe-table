@@ -136,13 +136,13 @@ import TableTreeAccordion from '../views/table/tree/Accordion.vue'
 import TableTreeSelection from '../views/table/tree/Selection.vue'
 import TableTreeRadio from '../views/table/tree/Radio.vue'
 import TableTreeFixed from '../views/table/tree/Fixed.vue'
-// import TableTreeMaxHeight from '../views/table/tree/MaxHeight.vue'
-// import TableTreeFilter from '../views/table/tree/Filter.vue'
-// import TableTreeSort from '../views/table/tree/Sort.vue'
+import TableTreeMaxHeight from '../views/table/tree/MaxHeight.vue'
+import TableTreeFilter from '../views/table/tree/Filter.vue'
+import TableTreeSort from '../views/table/tree/Sort.vue'
 // import TableTreeGroupSummary from '../views/table/tree/GroupSummary.vue'
 // import TableTreeGroupSummaryCount from '../views/table/tree/GroupSummaryCount.vue'
-// import TableTreeExpand from '../views/table/tree/Expand.vue'
-// import TableTreeExpandLazy from '../views/table/tree/ExpandLazy.vue'
+import TableTreeExpand from '../views/table/tree/Expand.vue'
+import TableTreeExpandLazy from '../views/table/tree/ExpandLazy.vue'
 import TableTreeToolbar from '../views/table/tree/Toolbar.vue'
 // import TableTreeInsert from '../views/table/tree/Insert.vue'
 import TableTreeMenu from '../views/table/tree/Menu.vue'
@@ -224,8 +224,8 @@ import TableEditExpand from '../views/table/edit/Expand.vue'
 import TableEditMenu from '../views/table/edit/Menu.vue'
 // import TableEditSpan from '../views/table/edit/Span.vue'
 // import TableEditForm from '../views/table/edit/Form.vue'
-// import TableEditUpload from '../views/table/edit/Upload.vue'
-// import TableEditRealtimeSave from '../views/table/edit/RealtimeSave.vue'
+import TableEditUpload from '../views/table/edit/Upload.vue'
+import TableEditRealtimeSave from '../views/table/edit/RealtimeSave.vue'
 import TableEditDataCount from '../views/table/edit/DataCount.vue'
 import TableEditUniqueSelect from '../views/table/edit/UniqueSelect.vue'
 import TableEditCascadingSelect from '../views/table/edit/CascadingSelect.vue'
@@ -803,21 +803,21 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableTreeFixed',
     component: TableTreeFixed
   },
-  // {
-  //   path: '/table/tree/maxHeight',
-  //   name: 'TableTreeMaxHeight',
-  //   component: TableTreeMaxHeight
-  // },
-  // {
-  //   path: '/table/tree/filter',
-  //   name: 'TableTreeFilter',
-  //   component: TableTreeFilter
-  // },
-  // {
-  //   path: '/table/tree/sort',
-  //   name: 'TableTreeSort',
-  //   component: TableTreeSort
-  // },
+  {
+    path: '/table/tree/maxHeight',
+    name: 'TableTreeMaxHeight',
+    component: TableTreeMaxHeight
+  },
+  {
+    path: '/table/tree/filter',
+    name: 'TableTreeFilter',
+    component: TableTreeFilter
+  },
+  {
+    path: '/table/tree/sort',
+    name: 'TableTreeSort',
+    component: TableTreeSort
+  },
   // {
   //   path: '/table/tree/groupSummary',
   //   name: 'TableTreeGroupSummary',
@@ -828,16 +828,16 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableTreeGroupSummaryCount',
   //   component: TableTreeGroupSummaryCount
   // },
-  // {
-  //   path: '/table/tree/expand',
-  //   name: 'TableTreeExpand',
-  //   component: TableTreeExpand
-  // },
-  // {
-  //   path: '/table/tree/expandLazy',
-  //   name: 'TableTreeExpandLazy',
-  //   component: TableTreeExpandLazy
-  // },
+  {
+    path: '/table/tree/expand',
+    name: 'TableTreeExpand',
+    component: TableTreeExpand
+  },
+  {
+    path: '/table/tree/expandLazy',
+    name: 'TableTreeExpandLazy',
+    component: TableTreeExpandLazy
+  },
   {
     path: '/table/tree/toolbar',
     name: 'TableTreeToolbar',
@@ -1374,16 +1374,16 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableEditForm',
   //   component: TableEditForm
   // },
-  // {
-  //   path: '/table/edit/upload',
-  //   name: 'TableEditUpload',
-  //   component: TableEditUpload
-  // },
-  // {
-  //   path: '/table/edit/realtimeSave',
-  //   name: 'TableEditRealtimeSave',
-  //   component: TableEditRealtimeSave
-  // },
+  {
+    path: '/table/edit/upload',
+    name: 'TableEditUpload',
+    component: TableEditUpload
+  },
+  {
+    path: '/table/edit/realtimeSave',
+    name: 'TableEditRealtimeSave',
+    component: TableEditRealtimeSave
+  },
   {
     path: '/table/edit/dataCount',
     name: 'TableEditDataCount',

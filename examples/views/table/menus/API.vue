@@ -16,9 +16,9 @@
     </vxe-table>
     <h2>示例</h2>
     <pre>
-      <pre-code class="javascript">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[0] }}</pre-code>
       <pre-code class="html">{{ demoCodes[1] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>

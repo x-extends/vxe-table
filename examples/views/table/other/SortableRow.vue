@@ -35,7 +35,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
       <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
 
@@ -62,7 +62,7 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[3] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[4] }}</pre-code>
       <pre-code class="css">{{ demoCodes[5] }}</pre-code>
     </pre>
   </div>

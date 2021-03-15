@@ -138,7 +138,7 @@ export function destroyColumn ($xetable: VxeTableConstructor & VxeTablePrivateMe
   reactData.staticColumns = staticColumns.slice(0)
 }
 
-export function mergeBodyMethod (mergeList: any[], _rowIndex: number, _columnIndex: number) {
+export function mergeBodyMethod (mergeList: VxeTableDefines.MergeItem[], _rowIndex: number, _columnIndex: number) {
   for (let mIndex = 0; mIndex < mergeList.length; mIndex++) {
     const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeList[mIndex]
     if (mergeColIndex > -1 && mergeRowIndex > -1 && mergeRowspan && mergeColspan) {
@@ -216,7 +216,7 @@ export function rowToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMet
   return Promise.resolve()
 }
 
-export function colToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMethods, column: any) {
+export function colToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo) {
   const { reactData, internalData } = $xetable
   const { refTableBody } = $xetable.getRefMaps()
   const { scrollXLoad } = reactData

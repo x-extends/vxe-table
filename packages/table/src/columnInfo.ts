@@ -137,7 +137,7 @@ export class ColumnInfo {
     return this.property || (this.type ? `type=${this.type}` : null)
   }
 
-  update (name: any, value: any) {
+  update (name: string, value: any) {
     // 不支持双向的属性
     if (name !== 'filters') {
       if (name === 'field') {

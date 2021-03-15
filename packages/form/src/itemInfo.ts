@@ -1,31 +1,32 @@
 import XEUtils from 'xe-utils'
 
 export class ItemInfo {
-  constructor ($xeform: any, _vm: any) {
+  constructor ($xeform: any, item: any) {
     Object.assign(this, {
       id: XEUtils.uniqueId('item_'),
-      title: _vm.title,
-      field: _vm.field,
-      span: _vm.span,
-      align: _vm.align,
-      titleAlign: _vm.titleAlign,
-      titleWidth: _vm.titleWidth,
-      titlePrefix: _vm.titlePrefix,
-      titleSuffix: _vm.titleSuffix,
-      resetValue: _vm.resetValue,
-      visibleMethod: _vm.visibleMethod,
-      visible: _vm.visible,
-      folding: _vm.folding,
-      collapseNode: _vm.collapseNode,
-      itemRender: _vm.itemRender,
+      title: item.title,
+      field: item.field,
+      span: item.span,
+      align: item.align,
+      titleAlign: item.titleAlign,
+      titleWidth: item.titleWidth,
+      titlePrefix: item.titlePrefix,
+      titleSuffix: item.titleSuffix,
+      resetValue: item.resetValue,
+      visibleMethod: item.visibleMethod,
+      visible: item.visible,
+      folding: item.folding,
+      collapseNode: item.collapseNode,
+      className: item.className,
+      itemRender: item.itemRender,
       // 渲染属性
       showError: false,
       errRule: null,
-      slots: _vm.slots
+      slots: item.slots
     })
   }
 
-  update (name: any, value: any) {
+  update (name: string, value: any) {
     this[name] = value
   }
 

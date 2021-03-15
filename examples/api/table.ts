@@ -662,16 +662,16 @@ const apis = [
         defVal: 'false',
         list: []
       },
-      {
-        name: 'highlight-cell',
-        abandoned: true,
-        descKey: 'app.api.table.desc.highlightCell',
-        version: '',
-        type: 'boolean',
-        enum: '',
-        defVal: 'false',
-        list: []
-      },
+      // {
+      //   name: 'highlight-cell',
+      //   abandoned: true,
+      //   descKey: 'app.api.table.desc.highlightCell',
+      //   version: '',
+      //   type: 'boolean',
+      //   enum: '',
+      //   defVal: 'false',
+      //   list: []
+      // },
       {
         name: 'row-class-name',
         descKey: 'app.api.table.desc.rowClassName',
@@ -1818,6 +1818,15 @@ const apis = [
             list: []
           },
           {
+            name: 'isFillPaste',
+            desc: '是否填充粘贴，如果启用了，当被选取的粘贴单元格与粘贴单元格的行与列数量不匹配时，会将内容强制粘贴所选的单元格',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'isRowIncrement',
             desc: '是否启用行自增，当粘贴的行数超出表格时自动插入新行',
             version: 'pro',
@@ -1828,7 +1837,7 @@ const apis = [
           },
           {
             name: 'isColumnIncrement',
-            desc: '是否启用列自增，当粘贴的列数超出表格时自动插入新列',
+            desc: '是否启用列自增，当粘贴的列数超出表格时自动插入新列（需要注意自增的列自字段是否定义，否则将无法响应）',
             version: 'pro',
             type: 'boolean',
             enum: '',
@@ -2028,7 +2037,7 @@ const apis = [
           },
           {
             name: 'extension',
-            desc: '只对 area 启用后有效，是否开启区域扩展选取功能，开启后可以通过鼠标左键按住区域内右下角扩展按钮，将区域横向或纵向扩大',
+            desc: '只对 area 启用后有效，是否开启区域扩展选取功能，开启后可以通过鼠标左键按住区域内右下角扩展按钮，将区域横向或纵向扩大（支持扩大区域并复制值）',
             version: 'pro',
             type: 'boolean',
             enum: '',
@@ -2047,7 +2056,16 @@ const apis = [
         list: [
           {
             name: 'selectCellByHeader',
-            desc: '只对 area 启用后有效，点击列头是否选取当前列的所有单元格',
+            desc: '只对 mouse-config.area 启用后有效，点击列头是否选取当前列的所有单元格',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'extendByCopy',
+            desc: '只对 mouse-config.extension 启用后有效，将被选取区域的值复制到扩展区域中',
             version: 'pro',
             type: 'boolean',
             enum: '',
@@ -3080,6 +3098,15 @@ const apis = [
         type: '',
         enum: '',
         defVal: '{ status, targetAreas, $event}',
+        list: []
+      },
+      {
+        name: 'header-cell-area-selection',
+        desc: '只对 area-config.selectCellByHeader 配置时有效，点击列头选取当前列的所有单元格时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, targetRows, targetCols, $event}',
         list: []
       },
       {

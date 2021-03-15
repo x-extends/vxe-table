@@ -11,7 +11,7 @@ const itemProps = {
   align: String,
   titleAlign: String,
   titleWidth: [String, Number],
-  className: String,
+  className: [String, Function],
   titlePrefix: Object,
   titleSuffix: Object,
   resetValue: { default: null },

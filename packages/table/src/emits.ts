@@ -43,6 +43,7 @@ export default [
   'cell-area-cut',
   'cell-area-paste',
   'cell-area-merge',
+  'header-cell-area-selection',
   'cell-area-selection-start',
   'cell-area-selection-end',
   'cell-area-extension-start',

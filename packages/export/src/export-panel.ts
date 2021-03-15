@@ -112,7 +112,8 @@ export default defineComponent({
       const checkedAll = computeCheckedAll.value
       const supportMerge = computeSupportMerge.value
       const expColumns = XEUtils.searchTree(columns, (column: any) => column.checked, { children: 'children', mapChildren: 'childNodes', original: true })
-      return Object.assign({ columns: expColumns }, defaultOptions, {
+      return Object.assign({}, defaultOptions, {
+        columns: expColumns,
         isMerge: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false
       })
     }

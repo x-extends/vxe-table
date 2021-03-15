@@ -23,8 +23,8 @@ export default defineComponent({
   name: 'VxeTableBody',
   props: {
     tableData: Array as PropType<any[]>,
-    tableColumn: Array as PropType<any[]>,
-    fixedColumn: Array as PropType<any[]>,
+    tableColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
+    fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
   setup (props) {

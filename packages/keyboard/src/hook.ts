@@ -5,33 +5,33 @@ import { VxeGlobalHooksHandles, TableKeyboardPrivateMethods } from '../../../typ
 
 const browse = DomTools.browse
 
+function getTargetOffset (target: any, container: any) {
+  let offsetTop = 0
+  let offsetLeft = 0
+  const triggerCheckboxLabel = !browse.firefox && DomTools.hasClass(target, 'vxe-checkbox--label')
+  if (triggerCheckboxLabel) {
+    const checkboxLabelStyle = getComputedStyle(target)
+    offsetTop -= XEUtils.toNumber(checkboxLabelStyle.paddingTop)
+    offsetLeft -= XEUtils.toNumber(checkboxLabelStyle.paddingLeft)
+  }
+  while (target && target !== container) {
+    offsetTop += target.offsetTop
+    offsetLeft += target.offsetLeft
+    target = target.offsetParent
+    if (triggerCheckboxLabel) {
+      const checkboxStyle = getComputedStyle(target)
+      offsetTop -= XEUtils.toNumber(checkboxStyle.paddingTop)
+      offsetLeft -= XEUtils.toNumber(checkboxStyle.paddingLeft)
+    }
+  }
+  return { offsetTop, offsetLeft }
+}
+
 const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
     const { props, reactData, internalData } = $xetable
     const { refElem } = $xetable.getRefMaps()
     const { computeEditOpts, computeCheckboxOpts, computeMouseOpts, computeTreeOpts } = $xetable.getComputeMaps()
-
-    function getTargetOffset (target: any, container: any) {
-      let offsetTop = 0
-      let offsetLeft = 0
-      const triggerCheckboxLabel = !browse.firefox && DomTools.hasClass(target, 'vxe-checkbox--label')
-      if (triggerCheckboxLabel) {
-        const checkboxLabelStyle = getComputedStyle(target)
-        offsetTop -= XEUtils.toNumber(checkboxLabelStyle.paddingTop)
-        offsetLeft -= XEUtils.toNumber(checkboxLabelStyle.paddingLeft)
-      }
-      while (target && target !== container) {
-        offsetTop += target.offsetTop
-        offsetLeft += target.offsetLeft
-        target = target.offsetParent
-        if (triggerCheckboxLabel) {
-          const checkboxStyle = getComputedStyle(target)
-          offsetTop -= XEUtils.toNumber(checkboxStyle.paddingTop)
-          offsetLeft -= XEUtils.toNumber(checkboxStyle.paddingLeft)
-        }
-      }
-      return { offsetTop, offsetLeft }
-    }
 
     function getCheckboxRangeRows (params: any, targetTrElem: any, moveRange: any) {
       let countHeight = 0
@@ -84,10 +84,10 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
         let mouseScrollTimeout: any = null
         let isMouseScrollDown: any = false
         let mouseScrollSpaceSize = 1
-        const triggerEvent = (type: 'change' | 'start' | 'end', evnt: any) => {
+        const triggerEvent = (type: 'change' | 'start' | 'end', evnt: MouseEvent) => {
           $xetable.dispatchEvent(`checkbox-range-${type}` as 'checkbox-range-change' | 'checkbox-range-start' | 'checkbox-range-end', { records: $xetable.getCheckboxRecords(), reserves: $xetable.getCheckboxReserveRecords() }, evnt)
         }
-        const handleChecked = (evnt: any) => {
+        const handleChecked = (evnt: MouseEvent) => {
           const { clientX, clientY } = evnt
           const offsetLeft = clientX - disX
           const offsetTop = clientY - disY + (bodyWrapperElem.scrollTop - startScrollTop)
@@ -143,7 +143,7 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
           mouseScrollTimeout = null
         }
         // 开始鼠标滚动
-        const startMouseScroll = (evnt: any) => {
+        const startMouseScroll = (evnt: MouseEvent) => {
           stopMouseScroll()
           mouseScrollTimeout = setTimeout(() => {
             if (mouseScrollTimeout) {
@@ -226,7 +226,7 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
 
     const keyboardMethods: TableKeyboardPrivateMethods = {
       // 处理 Tab 键移动
-      moveTabSelected (args: any, isLeft: any, evnt: any) {
+      moveTabSelected (args, isLeft, evnt) {
         const { editConfig } = props
         const { afterFullData, visibleColumn } = internalData
         const editOpts = computeEditOpts.value
