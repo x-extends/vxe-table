@@ -2129,7 +2129,7 @@ const apis = [
           },
           {
             name: 'extension',
-            desc: '只对 area 启用后有效，是否开启区域扩展选取功能，开启后可以通过鼠标左键按住右下角扩展按钮，将区域横向或纵向扩大',
+            desc: '只对 area 启用后有效，是否开启区域扩展选取功能，开启后可以通过鼠标左键按住右下角扩展按钮，将区域横向或纵向扩大（支持扩大区域并复制值）',
             version: 'pro',
             type: 'boolean',
             enum: '',
@@ -2148,7 +2148,16 @@ const apis = [
         list: [
           {
             name: 'selectCellByHeader',
-            desc: '只对 area 启用后有效，点击列头是否选取当前列的所有单元格',
+            desc: '只对 mouse-config.area 启用后有效，点击列头是否选取当前列的所有单元格',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
+            name: 'extendByCopy',
+            desc: '只对 mouse-config.extension 启用后有效，将被选取区域的值复制到扩展区域中',
             version: 'pro',
             type: 'boolean',
             enum: '',

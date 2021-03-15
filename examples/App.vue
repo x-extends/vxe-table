@@ -1652,13 +1652,13 @@ export default {
               locat: {
                 name: 'TableSortableColumn'
               }
+            },
+            {
+              label: 'app.aside.nav.xlsxRender',
+              locat: {
+                name: 'TableXlsx'
+              }
             }
-            // {
-            //   label: 'app.aside.nav.xlsxRender',
-            //   locat: {
-            //     name: 'TableXlsx'
-            //   }
-            // }
           ]
         },
         {
