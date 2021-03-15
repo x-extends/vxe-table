@@ -99,7 +99,7 @@ function renderTitle (h, _vm, item) {
 function renderItems (h, _vm) {
   const { _e, rules, formItems, data, collapseAll, validOpts } = _vm
   return formItems.map((item, index) => {
-    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule } = item
+    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const span = item.span || _vm.span
     const align = item.align || _vm.align
@@ -131,7 +131,7 @@ function renderItems (h, _vm) {
       contentVNs = [`${XEUtils.get(data, field)}`]
     }
     return h('div', {
-      class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, item.className, {
+      class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
         'is--title': title,
         'is--required': isRequired,
         'is--hidden': folding && collapseAll,

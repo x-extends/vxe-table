@@ -3,30 +3,31 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
 
 class ItemConfig {
-  constructor ($xeform, _vm) {
+  constructor ($xeform, item) {
     Object.assign(this, {
       id: XEUtils.uniqueId('item_'),
-      title: _vm.title,
-      field: _vm.field,
-      span: _vm.span,
-      align: _vm.align,
-      titleAlign: _vm.titleAlign,
-      titleWidth: _vm.titleWidth,
-      titlePrefix: _vm.titlePrefix,
-      titleSuffix: _vm.titleSuffix,
-      resetValue: _vm.resetValue,
-      visible: _vm.visible,
-      visibleMethod: _vm.visibleMethod,
-      folding: _vm.folding,
-      collapseNode: _vm.collapseNode,
-      itemRender: _vm.itemRender,
+      title: item.title,
+      field: item.field,
+      span: item.span,
+      align: item.align,
+      titleAlign: item.titleAlign,
+      titleWidth: item.titleWidth,
+      titlePrefix: item.titlePrefix,
+      titleSuffix: item.titleSuffix,
+      resetValue: item.resetValue,
+      visible: item.visible,
+      visibleMethod: item.visibleMethod,
+      folding: item.folding,
+      collapseNode: item.collapseNode,
+      className: item.className,
+      itemRender: item.itemRender,
       // 渲染属性
       showError: false,
       errRule: null,
-      slots: _vm.slots
+      slots: item.slots
     })
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      const compConf = _vm.itemRender ? VXETable.renderer.get(_vm.itemRender.name) : null
+      const compConf = item.itemRender ? VXETable.renderer.get(item.itemRender.name) : null
       if (compConf && !compConf.renderItemContent && compConf.renderItem) {
         UtilTools.warn('vxe.error.delProp', ['item-render.renderItem', 'item-render.renderItemContent'])
       }
