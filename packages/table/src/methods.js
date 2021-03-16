@@ -1369,6 +1369,7 @@ const Methods = {
     }
     const visibleColumn = leftList.concat(centerList).concat(rightList)
     let scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+    this.hasFixedColumn = leftList.length > 0 || rightList.length > 0
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad && isGroup) {
       scrollXLoad = false
@@ -1624,7 +1625,14 @@ const Methods = {
       elemStore,
       editStore,
       currentRow,
-      mouseConfig
+      mouseConfig,
+      keyboardConfig,
+      keyboardOpts,
+      spanMethod,
+      mergeList,
+      mergeFooterList,
+      footerSpanMethod,
+      isAllOverflow
     } = this
     const containerList = ['main', 'left', 'right']
     const emptyPlaceholderElem = $refs.emptyPlaceholder
@@ -1650,12 +1658,21 @@ const Methods = {
           // 表头体样式处理
           // 横向滚动渲染
           let tWidth = tableWidth
-          if (scrollXLoad) {
-            if (fixedType) {
-              tableColumn = fixedColumn
+
+          // 如果是使用优化模式
+          let isOptimize = false
+          if (fixedType) {
+            if (scrollXLoad || allColumnHeaderOverflow) {
+              isOptimize = true
             }
+          }
+          if (isOptimize) {
+            tableColumn = fixedColumn
+          }
+          if (isOptimize || scrollXLoad) {
             tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
           }
+
           if (tableElem) {
             tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
             // 修复 IE 中高度无法自适应问题
@@ -1723,14 +1740,18 @@ const Methods = {
           }
 
           let tWidth = tableWidth
-          // 如果是固定列与设置了超出隐藏
-          if (fixedType && allColumnOverflow) {
-            tableColumn = fixedColumn
-            tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
-          } else if (scrollXLoad) {
-            if (fixedType) {
-              tableColumn = fixedColumn
+
+          // 如果是使用优化模式
+          let isOptimize = false
+          if (fixedType) {
+            if ((!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
+              isOptimize = true
             }
+          }
+          if (isOptimize) {
+            tableColumn = fixedColumn
+          }
+          if (isOptimize || scrollXLoad) {
             tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
           }
 
@@ -1743,17 +1764,22 @@ const Methods = {
             emptyBlockElem.style.width = tWidth ? `${tWidth}px` : ''
           }
         } else if (layout === 'footer') {
-          // 如果是使用优化模式
           let tWidth = tableWidth
-          if (fixedType && allColumnOverflow) {
-            tableColumn = fixedColumn
-            tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
-          } else if (scrollXLoad) {
-            if (fixedType) {
-              tableColumn = fixedColumn
+
+          // 如果是使用优化模式
+          let isOptimize = false
+          if (fixedType) {
+            if ((!mergeFooterList.length || !footerSpanMethod) && (scrollXLoad || allColumnFooterOverflow)) {
+              isOptimize = true
             }
+          }
+          if (isOptimize) {
+            tableColumn = fixedColumn
+          }
+          if (isOptimize || scrollXLoad) {
             tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
           }
+
           if (wrapperElem) {
             // 如果是固定列
             if (fixedWrapperElem) {

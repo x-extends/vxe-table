@@ -1,5 +1,5 @@
 import { VXETableComponent } from './component'
-import { OptionProps, OptionGroupProps } from './extends/renderer'
+import { OptionProps, OptionGroupProps } from './v-x-e-table'
 
 /**
  * 下拉框

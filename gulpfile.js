@@ -56,13 +56,6 @@ const languages = [
 
 const styleCode = `require('./style.css')`
 
-const commCode = `if (process.env.NODE_ENV === 'production') {
-  module.exports = require('./index.common.pro.js')
-} else {
-  module.exports = require('./index.common.dev.js')
-}
-`
-
 gulp.task('build_modules', () => {
   return gulp.src('packages/**/*.js')
     .pipe(replace('process.env.VUE_APP_VXE_TABLE_ENV', 'process.env.NODE_ENV'))
@@ -118,27 +111,12 @@ gulp.task('copy_ts', () => {
 })
 
 gulp.task('build_lib', () => {
-  fs.writeFileSync('lib/index.common.js', commCode)
-  return merge([
-    gulp.src('lib_pro/index.common.js')
-      .pipe(rename({
-        basename: 'index',
-        suffix: '.common.pro',
-        extname: '.js'
-      }))
+  return merge(
+    gulp.src('lib_temp/index.umd.js')
       .pipe(gulp.dest('lib')),
-    gulp.src('lib_dev/index.common.js')
-      .pipe(rename({
-        basename: 'index',
-        suffix: '.common.dev',
-        extname: '.js'
-      }))
-    .pipe(gulp.dest('lib')),
-    gulp.src('lib_dev/index.umd.js')
+    gulp.src('lib_temp/index.umd.min.js')
       .pipe(gulp.dest('lib')),
-    gulp.src('lib_pro/index.umd.min.js')
-      .pipe(gulp.dest('lib')),
-    gulp.src('lib_pro/index.css')
+    gulp.src('lib_temp/index.css')
       .pipe(rename({
         basename: 'style',
         extname: '.css'
@@ -150,7 +128,7 @@ gulp.task('build_lib', () => {
         extname: '.css'
       }))
       .pipe(gulp.dest('lib'))
-  ])
+  )
 })
 
 gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {
@@ -188,7 +166,6 @@ gulp.task('build', gulp.series('build_clean', 'build_style', 'build_lib', () => 
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
   })
   return del([
-    'lib_dev',
-    'lib_pro'
+    'lib_temp'
   ])
 }))

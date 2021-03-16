@@ -1,4 +1,4 @@
-import { VXETableComponent } from '../component'
+import { VXETableComponent } from './component'
 
 /**
  * 内置图标库

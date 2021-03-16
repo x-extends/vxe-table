@@ -45,19 +45,6 @@ module.exports = {
       commonjs2: 'xe-utils',
       amd: 'xe-utils'
     }
-    // config.resolve.alias
-    //   .set('@', resolve('examples'))
-    // config.output
-    //   .set('libraryExport', 'default')
-    //   .set('library', 'VXETable')
-    const getExternalConf = (root) => {
-      return {
-        root: 'XEUtils',
-        commonjs: 'xe-utils',
-        commonjs2: 'xe-utils',
-        amd: 'xe-utils'
-      }
-    }
     if (process.env.npm_lifecycle_event && process.env.npm_lifecycle_event.indexOf('lib') === 0) {
       if (config.has('externals')) {
         config.externals

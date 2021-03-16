@@ -1,11 +1,11 @@
 import { VXETableComponent, RowInfo, RecordInfo } from './component'
 import { ColumnOptions, ColumnInfo } from './column'
-import { ColumnCellRenderParams, TableEmptyRender } from './extends/renderer'
-import { TableExportConfig, TableImportConfig, TablePrintConfig, SaveFileOptions, ReadFileOptions, ReadFileParams } from './extends/export'
-import { ColumnFilterOption } from './extends/filter'
-import { ColumnEditRule, ColumnEditValidErrMapParams } from './extends/validator'
-import { ColumnFooterRenderParams } from './extends/footer'
-import { MenuOptions, MenuFirstOption } from './extends/menu'
+import { ColumnCellRenderParams, TableEmptyRender } from './v-x-e-table'
+import { TableExportConfig, TableImportConfig, TablePrintConfig, SaveFileOptions, ReadFileOptions, ReadFileParams } from './export'
+import { ColumnFilterOption } from './filter'
+import { ColumnEditRule, ColumnEditValidErrMapParams } from './validator'
+import { ColumnFooterRenderParams } from './footer'
+import { MenuOptions, MenuFirstOption } from './menu'
 
 /**
  * 表格

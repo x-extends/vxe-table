@@ -3,21 +3,21 @@ import { RowInfo } from '../component'
 import { Table } from '../table'
 import { Grid } from '../grid'
 import { ColumnInfo, ColumnCellRenderOptions, ColumnContentRenderOptions } from '../column'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
-import { ColumnEditRenderOptions, ColumnEditRenderParams } from './edit'
-import { ColumnFooterRenderParams } from './footer'
-import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethodParams, ColumnFilterResetParams } from './filter'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from '../export'
+import { ColumnEditRenderOptions, ColumnEditRenderParams } from '../edit'
+import { ColumnFooterRenderParams } from '../footer'
+import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethodParams, ColumnFilterResetParams } from '../filter'
 import { ToolbarButtonRenderOptions, ToolbarButtonRenderParams } from '../toolbar'
 import { FormItemRenderOptions, FormItemRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
 
 /**
  * 渲染器
  */
-export interface renderer {
-  mixin(map: { [name: string]: RendererMapOptions }): renderer;
+export interface VxeGlobalRenderer {
+  mixin(map: { [name: string]: RendererMapOptions }): VxeGlobalRenderer;
   get(name: string): RendererMapOptions;
-  add(name: string, options: RendererMapOptions): renderer;
-  delete(name: string): renderer;
+  add(name: string, options: RendererMapOptions): VxeGlobalRenderer;
+  delete(name: string): VxeGlobalRenderer;
 }
 
 export interface RendererMapOptions {

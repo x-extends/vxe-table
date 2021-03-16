@@ -58,13 +58,9 @@ export default {
       tooltipOpts
     } = $xetable
     // 如果是使用优化模式
-    if (!mergeFooterList.length || !footerSpanMethod) {
-      if (fixedType && allColumnFooterOverflow) {
+    if (fixedType) {
+      if ((!mergeFooterList.length || !footerSpanMethod) && (scrollXLoad || allColumnFooterOverflow)) {
         tableColumn = fixedColumn
-      } else if (scrollXLoad) {
-        if (fixedType) {
-          tableColumn = fixedColumn
-        }
       }
     }
     return h('div', {

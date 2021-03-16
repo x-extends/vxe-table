@@ -43,9 +43,9 @@ export default {
     const { _e, $parent: $xetable, fixedType, headerColumn, fixedColumn } = this
     const { $listeners: tableListeners, tId, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig } = $xetable
     let { tableColumn } = this
-    // 横向滚动渲染
-    if (scrollXLoad) {
-      if (fixedType) {
+    // 如果是使用优化模式
+    if (fixedType) {
+      if (scrollXLoad || allColumnHeaderOverflow) {
         tableColumn = fixedColumn
       }
     }

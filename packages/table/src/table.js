@@ -297,6 +297,7 @@ export default {
       footerData: [],
       // 展开列信息
       expandColumn: null,
+      hasFixedColumn: false,
       // 树节点列信息
       treeNodeColumn: null,
       // 已展开的行

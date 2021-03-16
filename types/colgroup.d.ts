@@ -1,11 +1,11 @@
 import { VXETableComponent } from './component'
 import { ColumnFixed, ColumnAlign, ColumnFormatterMethodParams, ColumnCellRenderOptions, ColumnContentRenderOptions } from './column'
-import { ColumnFilterOption, ColumnFilterRenderOptions, ColumnFilterMethodParams } from './extends/filter'
-import { ColumnCellRenderParams } from './extends/renderer'
-import { ColumnHeaderRenderParams } from './extends/header'
-import { ColumnFooterRenderParams } from './extends/footer'
-import { ColumnEditRenderOptions } from './extends/edit'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './extends/export'
+import { ColumnFilterOption, ColumnFilterRenderOptions, ColumnFilterMethodParams } from './filter'
+import { ColumnCellRenderParams } from './v-x-e-table/renderer'
+import { ColumnHeaderRenderParams } from './header'
+import { ColumnFooterRenderParams } from './footer'
+import { ColumnEditRenderOptions } from './edit'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
 import { TableOverflow } from './table'
 
 /**

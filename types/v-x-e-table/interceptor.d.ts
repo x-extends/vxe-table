@@ -1,6 +1,6 @@
 import { ColumnInfo } from '../column'
-import { TableExportConfig } from './export'
-import { MenuFirstOption } from './menu'
+import { TableExportConfig } from '../export'
+import { MenuFirstOption } from '../menu'
 import { GridRenderParams } from './renderer'
 
 declare function interceptorFunc(params: any, event: any): any;
@@ -8,11 +8,11 @@ declare function interceptorFunc(params: any, event: any): any;
 /**
  * 全局事件拦截器
  */
-export class interceptor {
-  mixin(map: { [type: string]: typeof interceptorFunc }): interceptor;
+export class VxeGlobalInterceptor {
+  mixin(map: { [type: string]: typeof interceptorFunc }): VxeGlobalInterceptor;
   get(type: string): typeof interceptorFunc;
-  add(type: string, callback: typeof interceptorFunc): interceptor;
-  delete(type: string): interceptor;
+  add(type: string, callback: typeof interceptorFunc): VxeGlobalInterceptor;
+  delete(type: string): VxeGlobalInterceptor;
 }
 
 export interface InterceptorParams extends GridRenderParams {

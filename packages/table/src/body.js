@@ -272,7 +272,8 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     rowExpandeds,
     radioOpts,
     checkboxOpts,
-    expandColumn
+    expandColumn,
+    hasFixedColumn
   } = $xetable
   const rows = []
   tableData.forEach((row, $rowIndex) => {
@@ -345,7 +346,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
         }, [
           h('td', {
             class: ['vxe-body--expanded-column', {
-              'fixed--hidden': fixedType,
+              'fixed--hidden': fixedType && !hasFixedColumn,
               'col--ellipsis': hasEllipsis
             }],
             attrs: {
@@ -429,9 +430,9 @@ export default {
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
     let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
-    // 如果是固定列与设置了超出隐藏
-    if (fixedType && !mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-      if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+    // 如果是使用优化模式
+    if (fixedType) {
+      if ((!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
         tableColumn = fixedColumn
       }
     }

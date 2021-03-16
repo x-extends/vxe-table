@@ -1,5 +1,5 @@
-import { VXETableComponent } from '../component'
-import { ColumnCellRenderParams, RenderOptions, OptionProps, OptionGroupProps } from './renderer'
+import { VXETableComponent } from './component'
+import { ColumnCellRenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
 
 /**
  * 编辑

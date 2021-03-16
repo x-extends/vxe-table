@@ -1,8 +1,8 @@
-import { VXETableComponent, RowInfo } from '../component'
-import { Table } from '../table'
-import { Grid } from '../grid'
-import { ColumnInfo } from '../column'
-import { GridRenderParams } from './renderer'
+import { VXETableComponent, RowInfo } from './component'
+import { Table } from './table'
+import { Grid } from './grid'
+import { ColumnInfo } from './column'
+import { GridRenderParams } from './v-x-e-table'
 
 /**
  * 导出
@@ -206,9 +206,9 @@ export interface ReadFileParams {
   };
 }
 
-export function saveFile(options?: SaveFileOptions): Promise<any>;
-export function readFile(options?: ReadFileOptions): Promise<ReadFileParams>;
-export function print(options: TablePrintConfig): any;
+export type SaveFileFunction = (options?: SaveFileOptions) => Promise<any>;
+export type ReadFileFunction =(options?: ReadFileOptions) => Promise<ReadFileParams>;
+export type PrintFunction = (options: TablePrintConfig) => any;
 
 export interface SaveFileOptions {
   filename: string;

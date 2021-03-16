@@ -1,6 +1,6 @@
-import { VXETableComponent } from '../component'
-import { ColumnInfo } from '../column'
-import { TableRenderParams, RenderOptions, OptionProps, OptionGroupProps } from './renderer'
+import { VXETableComponent } from './component'
+import { ColumnInfo } from './column'
+import { TableRenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
 
 /**
  * 筛选

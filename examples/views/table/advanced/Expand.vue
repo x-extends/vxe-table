@@ -7,6 +7,8 @@
 
     <vxe-toolbar>
       <template #buttons>
+        <vxe-button @click="toggleSeqFixed">切换第一固定列</vxe-button>
+        <vxe-button @click="toggleExpandFixed">切换第二固定列</vxe-button>
         <vxe-button @click="$refs.xTable.toggleRowExpand(tableData[1])">切换第二行展开</vxe-button>
         <vxe-button @click="$refs.xTable.setRowExpand([tableData[2], tableData[3]], true)">设置第三、四行展开</vxe-button>
         <vxe-button @click="$refs.xTable.setAllRowExpand(true)">设置所有行展开</vxe-button>
@@ -19,8 +21,8 @@
       border
       :data="tableData"
       @toggle-row-expand="toggleExpandChangeEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" width="80">
+      <vxe-table-column type="seq" width="60" :fixed="seqFixed"></vxe-table-column>
+      <vxe-table-column type="expand" width="80" :fixed="expandFixed">
         <template #content="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-table
@@ -42,19 +44,19 @@
               </li>
               <li>
                 <span>UpdateTime：</span>
-                <span>{{ row.updateTime }}</span>
+                <span>{{ row.age }}</span>
               </li>
               <li>
                 <span>CreateTime：</span>
-                <span>{{ row.createTime }}</span>
+                <span>{{ row.address }}</span>
               </li>
             </ul>
           </template>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" width="400"></vxe-table-column>
+      <vxe-table-column field="sex" title="Sex" width="400"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="400"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -94,11 +96,11 @@
               </li>
               <li>
                 <span>UpdateTime：</span>
-                <span>{{ row.updateTime }}</span>
+                <span>{{ row.age }}</span>
               </li>
               <li>
                 <span>CreateTime：</span>
-                <span>{{ row.createTime }}</span>
+                <span>{{ row.address }}</span>
               </li>
             </ul>
           </template>
@@ -139,11 +141,11 @@
             </li>
             <li>
               <span>UpdateTime：</span>
-              <span>{{ row.updateTime }}</span>
+              <span>{{ row.age }}</span>
             </li>
             <li>
               <span>CreateTime：</span>
-              <span>{{ row.createTime }}</span>
+              <span>{{ row.address }}</span>
             </li>
           </ul>
         </template>
@@ -165,11 +167,22 @@
 export default {
   data () {
     return {
-      tableData: [],
+      seqFixed: null,
+      expandFixed: null,
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' }
+      ],
       demoCodes: [
         `
         <vxe-toolbar>
           <template #buttons>
+            <vxe-button @click="toggleSeqFixed">切换第一固定列</vxe-button>
+            <vxe-button @click="toggleExpandFixed">切换第二固定列</vxe-button>
             <vxe-button @click="$refs.xTable.toggleRowExpand(tableData[1])">切换第二行展开</vxe-button>
             <vxe-button @click="$refs.xTable.setRowExpand([tableData[2], tableData[3]], true)">设置第三、四行展开</vxe-button>
             <vxe-button @click="$refs.xTable.setAllRowExpand(true)">设置所有行展开</vxe-button>
@@ -182,8 +195,8 @@ export default {
           border
           :data="tableData"
           @toggle-row-expand="toggleExpandChangeEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="expand" width="60">
+          <vxe-table-column type="seq" width="60" :fixed="seqFixed"></vxe-table-column>
+          <vxe-table-column type="expand" width="80" :fixed="expandFixed">
             <template #content="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-table
@@ -205,32 +218,50 @@ export default {
                   </li>
                   <li>
                     <span>UpdateTime：</span>
-                    <span>{{ row.updateTime }}</span>
+                    <span>{{ row.age }}</span>
                   </li>
                   <li>
                     <span>CreateTime：</span>
-                    <span>{{ row.createTime }}</span>
+                    <span>{{ row.address }}</span>
                   </li>
                 </ul>
               </template>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" width="400"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="400"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="400"></vxe-table-column>
         </vxe-table>
         `,
         `
         export default {
           data () {
             return {
-              tableData: []
+              seqFixed: null,
+              expandFixed: null,
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' }
+              ]
             }
           },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
-          },
           methods: {
+            toggleSeqFixed () {
+              this.seqFixed = this.seqFixed ? null : 'left'
+              this.$nextTick(() => {
+                this.$refs.xTable.refreshColumn()
+              })
+            },
+            toggleExpandFixed () {
+              this.expandFixed = this.expandFixed ? null : 'left'
+              this.$nextTick(() => {
+                this.$refs.xTable.refreshColumn()
+              })
+            },
             toggleExpandChangeEvent ({ row, expanded }) {
               console.log('行展开事件' + expanded)
             }
@@ -266,11 +297,11 @@ export default {
                   </li>
                   <li>
                     <span>UpdateTime：</span>
-                    <span>{{ row.updateTime }}</span>
+                    <span>{{ row.age }}</span>
                   </li>
                   <li>
                     <span>CreateTime：</span>
-                    <span>{{ row.createTime }}</span>
+                    <span>{{ row.address }}</span>
                   </li>
                 </ul>
               </template>
@@ -285,11 +316,15 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
           }
         }
         `,
@@ -312,11 +347,11 @@ export default {
                 </li>
                 <li>
                   <span>UpdateTime：</span>
-                  <span>{{ row.updateTime }}</span>
+                  <span>{{ row.age }}</span>
                 </li>
                 <li>
                   <span>CreateTime：</span>
-                  <span>{{ row.createTime }}</span>
+                  <span>{{ row.address }}</span>
                 </li>
               </ul>
             </template>
@@ -329,21 +364,34 @@ export default {
         export default {
           data () {
             return {
-              tableData: []
+              tableData: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' }
+              ]
             }
-          },
-          created () {
-            this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
           }
         }
         `
       ]
     }
   },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 3)
-  },
   methods: {
+    toggleSeqFixed () {
+      this.seqFixed = this.seqFixed ? null : 'left'
+      this.$nextTick(() => {
+        this.$refs.xTable.refreshColumn()
+      })
+    },
+    toggleExpandFixed () {
+      this.expandFixed = this.expandFixed ? null : 'left'
+      this.$nextTick(() => {
+        this.$refs.xTable.refreshColumn()
+      })
+    },
     toggleExpandChangeEvent ({ expanded }) {
       console.log('行展开事件' + expanded)
     }

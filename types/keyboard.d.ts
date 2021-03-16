@@ -1,4 +1,4 @@
-import { VXETableComponent } from '../component'
+import { VXETableComponent } from './component'
 
 /**
  * 键盘导航

@@ -29,7 +29,7 @@ import {
   Export,
   Keyboard,
   Validator
-} from '../../../packages/vxe-table'
+} from '../../../packages/all'
 
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'

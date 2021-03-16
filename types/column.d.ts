@@ -1,11 +1,11 @@
 import { CreateElement, VNode } from 'vue'
 import { VXETableComponent } from './component'
-import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './extends/filter'
-import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, ColumnContentSlotParams, RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
-import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './extends/header'
-import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './extends/footer'
-import { ColumnEditRenderOptions, ColumnEditSlotParams } from './extends/edit'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './extends/export'
+import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './filter'
+import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, ColumnContentSlotParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
+import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './header'
+import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './footer'
+import { ColumnEditRenderOptions, ColumnEditSlotParams } from './edit'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
 import { TableOverflow } from './table'
 
 /**

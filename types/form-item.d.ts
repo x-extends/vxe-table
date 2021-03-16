@@ -1,6 +1,6 @@
 import { VXETableComponent } from './component'
 import { Form } from './form'
-import { RenderParams, RenderOptions, OptionProps, OptionGroupProps } from './extends/renderer'
+import { RenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
 
 /**
  * 表单 - 项

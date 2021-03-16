@@ -5,11 +5,11 @@ declare function formatsFunc(params: FormatsParams, ...args: any[]): any;
 /**
  * 全局格式化
  */
-export class formats {
-  mixin(map: { [type: string]: typeof formatsFunc }): formats;
+export class VxeGlobalFormats {
+  mixin(map: { [type: string]: typeof formatsFunc }): VxeGlobalFormats;
   get(type: string): typeof formatsFunc;
-  add(type: string, callback: typeof formatsFunc): formats;
-  delete(type: string): formats;
+  add(type: string, callback: typeof formatsFunc): VxeGlobalFormats;
+  delete(type: string): VxeGlobalFormats;
 }
 
 export interface FormatsParams {

@@ -1,6 +1,6 @@
-import { VXETableComponent } from '../component'
-import { ColumnInfo } from '../column'
-import { TableRenderParams } from './renderer'
+import { VXETableComponent } from './component'
+import { ColumnInfo } from './column'
+import { TableRenderParams } from './v-x-e-table'
 
 /**
  * 表尾
