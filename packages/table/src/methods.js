@@ -647,14 +647,13 @@ const Methods = {
     } else {
       tableFullColumn.forEach(handleFunc)
     }
+
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      if (expandColumn && hasFixed) {
-        UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
-      }
       if (expandColumn && this.mouseOpts.area) {
         UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
       }
     }
+
     this.isGroup = isGroup
     this.treeNodeColumn = treeNodeColumn
     this.expandColumn = expandColumn
@@ -1474,7 +1473,7 @@ const Methods = {
         // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
         return this.computeScrollLoad().then(() => {
           this.autoCellWidth(headerElem, bodyElem, footerElem)
-          this.computeScrollLoad()
+          return this.computeScrollLoad()
         })
       }
     }
@@ -2231,8 +2230,8 @@ const Methods = {
   },
   handleGlobalResizeEvent () {
     this.closeMenu()
-    this.recalculate(true)
     this.updateCellAreas()
+    this.recalculate(true)
   },
   handleTooltipLeaveMethod () {
     const tooltipOpts = this.tooltipOpts

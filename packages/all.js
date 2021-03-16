@@ -77,10 +77,6 @@ VXETable.setup({
   i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 })
 
-if (typeof window !== 'undefined' && window.Vue && window.Vue.use) {
-  window.Vue.use(VXETable)
-}
-
 export * from './v-x-e-table'
 
 export * from './column'

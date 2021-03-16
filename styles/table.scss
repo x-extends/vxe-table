@@ -549,7 +549,7 @@
       background-position: right top, right bottom;
     }
     .vxe-table--fixed-left-wrapper {
-      border-right: 1px solid $vxe-table-border-color;
+      // border-right: 1px solid $vxe-table-border-color;
       .vxe-body--column{
         border-right-color: $vxe-table-border-color;
       }
@@ -903,7 +903,9 @@
     }
   }
   .vxe-body--expanded-cell {
+    position: relative;
     padding: 20px;
+    z-index: 1;
   }
 
   /*设置列高度*/
