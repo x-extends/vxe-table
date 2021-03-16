@@ -62,13 +62,13 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, reactive, watch, ref } from 'vue'
 import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
-import { VXETable } from '../../../packages/vxe-table'
+import { VXETable } from '../../../packages/all'
 import i18n from '@/i18n'
 import router from '@/router'
 import XEUtils from 'xe-utils'
 import pack from '../../../package.json'
 
-import { VxeTableInstance, VxeToolbarInstance } from '../../../types/vxe-table'
+import { VxeTableInstance, VxeToolbarInstance } from '../../../types/index'
 
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'

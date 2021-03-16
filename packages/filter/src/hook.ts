@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 import { VXETable } from '../../v-x-e-table'
 
-import { VxeGlobalHooksHandles, TableFilterMethods, TableFilterPrivateMethods } from '../../../types/vxe-table'
+import { VxeGlobalHooksHandles, TableFilterMethods, TableFilterPrivateMethods } from '../../../types/all'
 
 const { toFilters } = UtilTools
 

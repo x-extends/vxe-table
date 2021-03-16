@@ -92,7 +92,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/vxe-table'
+import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

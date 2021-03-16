@@ -2,7 +2,7 @@ import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick, PropType, 
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
-import { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, VxeColumnProps } from '../../../types/vxe-table'
+import { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, VxeColumnProps } from '../../../types/all'
 
 export const columnProps = {
   // 列唯一主键

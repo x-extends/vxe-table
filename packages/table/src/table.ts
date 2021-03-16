@@ -10,7 +10,7 @@ import tableProps from './props'
 import tableEmits from './emits'
 import { eqCellNull, getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible } from './util'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines } from '../../../types/vxe-table'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines } from '../../../types/all'
 
 const { setCellValue, hasChildrenList, getColumnList } = UtilTools
 const { browse, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
@@ -82,6 +82,7 @@ export default defineComponent({
       expandColumn: null,
       // 树节点列信息
       treeNodeColumn: null,
+      hasFixedColumn: false,
       // 已展开的行
       rowExpandeds: [],
       // 懒加载中的展开行的列表
@@ -1185,13 +1186,14 @@ export default defineComponent({
     }
 
     const updateStyle = () => {
-      const { border, showFooter, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig } = props
-      let { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, scrollbarWidth, scrollbarHeight, columnStore, editStore } = reactData
+      const { border, showFooter, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod, keyboardConfig } = props
+      let { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, scrollbarWidth, scrollbarHeight, columnStore, editStore, mergeList, mergeFooterList, isAllOverflow } = reactData
       let { fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMaxHeight } = internalData
       const containerList = ['main', 'left', 'right']
       const emptyPlaceholderElem = refEmptyPlaceholder.value
       const cellOffsetWidth = computeCellOffsetWidth.value
       const mouseOpts = computeMouseOpts.value
+      const keyboardOpts = computeKeyboardOpts.value
       const bodyWrapperElem = elemStore['main-body-wrapper']
       if (emptyPlaceholderElem) {
         emptyPlaceholderElem.style.top = `${headerHeight}px`
@@ -1219,12 +1221,21 @@ export default defineComponent({
             // 表头体样式处理
             // 横向滚动渲染
             let tWidth = tableWidth
-            if (scrollXLoad) {
-              if (fixedType) {
-                tableColumn = fixedColumn
+
+            // 如果是使用优化模式
+            let isOptimize = false
+            if (fixedType) {
+              if (scrollXLoad || allColumnHeaderOverflow) {
+                isOptimize = true
               }
-              tWidth = tableColumn.reduce((previous: any, column: any) => previous + column.renderWidth, 0)
             }
+            if (isOptimize) {
+              tableColumn = fixedColumn
+            }
+            if (isOptimize || scrollXLoad) {
+              tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+            }
+
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
               // 修复 IE 中高度无法自适应问题
@@ -1290,15 +1301,19 @@ export default defineComponent({
             }
 
             let tWidth = tableWidth
-            // 如果是固定列与设置了超出隐藏
-            if (fixedType && allColumnOverflow) {
-              tableColumn = fixedColumn
-              tWidth = tableColumn.reduce((previous: any, column: any) => previous + column.renderWidth, 0)
-            } else if (scrollXLoad) {
-              if (fixedType) {
-                tableColumn = fixedColumn
+
+            // 如果是使用优化模式
+            let isOptimize = false
+            if (fixedType) {
+              if ((!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
+                isOptimize = true
               }
-              tWidth = tableColumn.reduce((previous: any, column: any) => previous + column.renderWidth, 0)
+            }
+            if (isOptimize) {
+              tableColumn = fixedColumn
+            }
+            if (isOptimize || scrollXLoad) {
+              tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
             }
 
             if (tableElem) {
@@ -1310,17 +1325,22 @@ export default defineComponent({
               emptyBlockElem.style.width = tWidth ? `${tWidth}px` : ''
             }
           } else if (layout === 'footer') {
-            // 如果是使用优化模式
             let tWidth = tableWidth
-            if (fixedType && allColumnOverflow) {
-              tableColumn = fixedColumn
-              tWidth = tableColumn.reduce((previous: any, column: any) => previous + column.renderWidth, 0)
-            } else if (scrollXLoad) {
-              if (fixedType) {
-                tableColumn = fixedColumn
+
+            // 如果是使用优化模式
+            let isOptimize = false
+            if (fixedType) {
+              if ((!mergeFooterList.length || !footerSpanMethod) && (scrollXLoad || allColumnFooterOverflow)) {
+                isOptimize = true
               }
-              tWidth = tableColumn.reduce((previous: any, column: any) => previous + column.renderWidth, 0)
             }
+            if (isOptimize) {
+              tableColumn = fixedColumn
+            }
+            if (isOptimize || scrollXLoad) {
+              tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+            }
+
             if (wrapperElem) {
               // 如果是固定列
               if (fixedWrapperElem) {
@@ -2497,6 +2517,7 @@ export default defineComponent({
         }
         const visibleColumn = leftList.concat(centerList).concat(rightList)
         let scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+        reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
         Object.assign(columnStore, { leftList, centerList, rightList })
         if (scrollXLoad && isGroup) {
           scrollXLoad = false

@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeColumnPropTypes, VxeTableEvents } from '../../../../types/vxe-table'
+import { VxeTableInstance, VxeColumnPropTypes, VxeTableEvents } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

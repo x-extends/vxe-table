@@ -5,7 +5,7 @@ import { VXETable } from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { mergeBodyMethod, getRowid } from './util'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/vxe-table'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
 
 const renderType = 'body'
 
@@ -284,7 +284,7 @@ export default defineComponent({
 
     const renderRows = ($seq: string, rowLevel: any, fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
-      const { treeExpandeds, scrollYLoad, editStore, rowExpandeds, expandColumn, selectRow } = tableReactData
+      const { hasFixedColumn, treeExpandeds, scrollYLoad, editStore, rowExpandeds, expandColumn, selectRow } = tableReactData
       const { scrollYStore } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
@@ -359,7 +359,7 @@ export default defineComponent({
             }, [
               h('td', {
                 class: ['vxe-body--expanded-column', {
-                  'fixed--hidden': fixedType,
+                  'fixed--hidden': fixedType && !hasFixedColumn,
                   'col--ellipsis': hasEllipsis
                 }],
                 colspan: tableColumn.length
@@ -507,9 +507,9 @@ export default defineComponent({
       const emptyOpts = computeEmptyOpts.value
       const keyboardOpts = computeKeyboardOpts.value
       const mouseOpts = computeMouseOpts.value
-      // 如果是固定列与设置了超出隐藏
-      if (fixedType && !mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-        if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+      // 如果是使用优化模式
+      if (fixedType) {
+        if ((!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
           tableColumn = fixedColumn
         }
       }

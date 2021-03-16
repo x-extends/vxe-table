@@ -225,7 +225,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VXETable } from '../../../packages/vxe-table'
+import { VXETable } from '../../../packages/all'
 
 export default defineComponent({
   setup  () {

@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridOptions } from '../../../types/vxe-table'
+import { VxeGridInstance, VxeGridOptions } from '../../../types/index'
 import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 

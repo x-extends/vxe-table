@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTooltipInstance } from '../../../types/vxe-table'
+import { VxeTooltipInstance } from '../../../types/index'
 
 export default defineComponent({
   setup  () {

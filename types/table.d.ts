@@ -739,6 +739,7 @@ export interface TableReactData {
   footerData: any[];
   // 展开列信息
   expandColumn: any;
+  hasFixedColumn: boolean;
   // 树节点列信息
   treeNodeColumn: any;
   // 已展开的行

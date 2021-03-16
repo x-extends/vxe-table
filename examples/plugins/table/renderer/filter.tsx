@@ -1,4 +1,4 @@
-import { VXETable } from '../../../../packages/vxe-table'
+import { VXETable } from '../../../../packages/all'
 import XEUtils from 'xe-utils'
 
 // 创建一个简单的输入框筛选

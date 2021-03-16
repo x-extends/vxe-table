@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from './conf'
 import { VNTools, UtilTools } from '../../tools'
 
-import { VxeGlobalRendererHandles, VxeGlobalRenderer, VxeColumnPropTypes } from '../../../types/vxe-table'
+import { VxeGlobalRendererHandles, VxeGlobalRenderer, VxeColumnPropTypes } from '../../../types/all'
 
 const { getOnName } = VNTools
 

@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxePagerConstructor, VxePagerEmits, PageSizeItemType, VxeSelectEvents, PagerPrivateRef, VxeGridConstructor, PagerMethods, PagerPrivateMethods, VxePagerPrivateMethods } from '../../../types/vxe-table'
+import { SizeType, VxePagerConstructor, VxePagerEmits, PageSizeItemType, VxeSelectEvents, PagerPrivateRef, VxeGridConstructor, PagerMethods, PagerPrivateMethods, VxePagerPrivateMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxePager',

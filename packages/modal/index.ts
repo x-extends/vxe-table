@@ -4,9 +4,9 @@ import VxeModalComponent, { allActivedModals } from './src/modal'
 import { VXETable } from '../v-x-e-table'
 import { dynamicApp, dynamicStore, checkDynamic } from '../dynamics'
 
-import { VxeModalOptions, VxeModalPropTypes, ModalEventTypes } from '../../types/vxe-table'
+import { VxeModalOptions, VxeModalPropTypes, ModalEventTypes } from '../../types/all'
 
-declare module '../../types/vxe-table' {
+declare module '../../types/all' {
   interface VxeModalOptions {
     key?: string | number;
   }

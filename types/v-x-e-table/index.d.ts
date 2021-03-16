@@ -7,7 +7,7 @@ import { VxeGlobalRenderer } from './renderer'
 import { VxeGlobalInterceptor } from './interceptor'
 import { VxeGlobalCommands } from './commands'
 import { VxeGlobalFormats } from './formats'
-import { Menus } from './menus'
+import { VxeGlobalMenus } from './menus'
 import { VxeGlobalHooks } from './hooks'
 import { VxeGlobalSetup } from './setup'
 
@@ -32,7 +32,7 @@ export const interceptor: VxeGlobalInterceptor;
 export const renderer: VxeGlobalRenderer;
 export const commands: VxeGlobalCommands;
 export const formats: VxeGlobalFormats;
-export const menus: Menus;
+export const menus: VxeGlobalMenus;
 export const hooks: VxeGlobalHooks;
 export const modal: ModalController;
 export const saveFile: SaveFileFunction;
@@ -77,7 +77,7 @@ export interface VXETableCore {
   /**
    * Table context menu
    */
-  menus: Menus;
+  menus: VxeGlobalMenus;
   /**
    * Table VxeGlobalHooks API
    */
@@ -107,11 +107,11 @@ export interface VXETableCore {
    * @param plugin
    * @param options
    */
-   use: VxeGlobalUse;
+  use: VxeGlobalUse;
   /**
    * 读取内置国际化
    */
-   t: VxeGlobalT;
+  t: VxeGlobalT;
 }
 
 /**

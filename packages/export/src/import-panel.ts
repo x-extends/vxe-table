@@ -7,7 +7,7 @@ import VxeRadioConstructor from '../../radio/src/radio'
 import VxeButtonConstructor from '../../button/src/button'
 import { UtilTools } from '../../tools'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/vxe-table'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeImportPanel',

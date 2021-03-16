@@ -1,4 +1,4 @@
-import { VXETable } from '../../../packages/vxe-table'
+import { VXETable } from '../../../packages/all'
 
 import './setup'
 import './renderer'

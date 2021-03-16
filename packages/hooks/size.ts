@@ -1,6 +1,6 @@
 import { computed, inject, provide, ComputedRef } from 'vue'
 
-import { SizeType } from '../../types/vxe-table'
+import { SizeType } from '../../types/all'
 
 export function useSize (props: { size: SizeType }) {
   // 组件尺寸上下文

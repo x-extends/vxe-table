@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import DomTools from './dom'
 
-import { VxeComponentInstance } from '../../../types/vxe-table'
+import { VxeComponentInstance } from '../../../types/all'
 
 // 监听全局事件
 const browse = DomTools.browse

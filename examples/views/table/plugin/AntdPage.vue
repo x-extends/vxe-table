@@ -91,7 +91,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
 import { Modal, message } from 'ant-design-vue'
-import { VxeTableInstance, VxeToolbarInstance } from '../../../../types/vxe-table'
+import { VxeTableInstance, VxeToolbarInstance } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxeToolbarInstance } from '../../../../types/vxe-table'
+import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxeToolbarInstance } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

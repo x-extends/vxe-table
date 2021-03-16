@@ -6,7 +6,7 @@ import { UtilTools } from '../../tools'
 import { isColumnInfo, mergeBodyMethod } from '../../table/src/util'
 import { readLocalFile, handlePrint, saveLocalFile, createHtmlPage, getExportBlobByContent } from './util'
 
-import { VxeGlobalHooksHandles, VxeGridConstructor, VxeGridPrivateMethods, TableExportMethods } from '../../../types/vxe-table'
+import { VxeGlobalHooksHandles, VxeGridConstructor, VxeGridPrivateMethods, TableExportMethods } from '../../../types/all'
 
 const { formatText } = UtilTools
 

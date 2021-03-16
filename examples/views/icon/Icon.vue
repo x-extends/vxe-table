@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { VXETable } from '../../../packages/vxe-table'
+import { VXETable } from '../../../packages/all'
 import XEClipboard from 'xe-clipboard'
 
 interface ItemVO {

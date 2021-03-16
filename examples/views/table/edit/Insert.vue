@@ -45,8 +45,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VXETable } from '../../../../packages/vxe-table'
-import { VxeTableInstance } from '../../../../types/vxe-table'
+import { VXETable } from '../../../../packages/all'
+import { VxeTableInstance } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

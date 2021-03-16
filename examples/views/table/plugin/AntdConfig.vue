@@ -27,7 +27,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { Modal } from 'ant-design-vue'
-import { VxeGridInstance, VxeGridOptions, VxeGridListeners } from '../../../../types/vxe-table'
+import { VxeGridInstance, VxeGridOptions, VxeGridListeners } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

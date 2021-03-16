@@ -191,8 +191,8 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../packages/vxe-table'
-import { VxeGridInstance, VxeGridOptions, VxeTableEvents } from '../../../types/vxe-table'
+import { VXETable } from '../../../packages/all'
+import { VxeGridInstance, VxeGridOptions, VxeTableEvents } from '../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

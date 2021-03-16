@@ -1,7 +1,7 @@
 import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick } from 'vue'
 import { createItem, watchItem, destroyItem, assemItem } from './util'
 
-import { VxeFormConstructor } from '../../../types/vxe-table'
+import { VxeFormConstructor } from '../../../types/all'
 
 const itemProps = {
   title: String,

@@ -100,7 +100,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeInputPropTypes, VxeInputDefines } from '../../../types/vxe-table'
+import { VxeInputPropTypes, VxeInputDefines } from '../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

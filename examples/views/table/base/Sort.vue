@@ -112,7 +112,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeColumnPropTypes, VxeTableEvents } from '../../../../types/vxe-table'
+import { VxeColumnPropTypes, VxeTableEvents } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

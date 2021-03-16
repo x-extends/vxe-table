@@ -78,8 +78,8 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/vxe-table'
-import { VxeTableInstance } from '../../../../types/vxe-table'
+import { VXETable } from '../../../../packages/all'
+import { VxeTableInstance } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 
 const dataList: any[] = []
@@ -209,7 +209,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, nextTick, reactive, ref } from 'vue'
-        import { VXETable, VxeTableInstance } from '../../../../types/vxe-table'
+        import { VXETable, VxeTableInstance } from '../../../../types/index'
         import XEUtils from 'xe-utils'
 
         const dataList: any[] = []

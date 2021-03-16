@@ -1,5 +1,5 @@
 import VXEStore from './store'
 
-import { Menus } from '../../../types/v-x-e-table'
+import { VxeGlobalMenus } from '../../../types/v-x-e-table'
 
-export const menus = new VXEStore() as Menus
+export const menus = new VXEStore() as VxeGlobalMenus

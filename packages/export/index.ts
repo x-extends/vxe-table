@@ -6,7 +6,7 @@ import exportHook from './src/hook'
 import { saveLocalFile as saveFile, readLocalFile as readFile, handlePrint } from './src/util'
 import { dynamicApp } from '../dynamics'
 
-import { PrintFunction } from '../../types/vxe-table'
+import { PrintFunction } from '../../types/all'
 
 export { saveFile, readFile }
 

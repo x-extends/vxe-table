@@ -2,7 +2,7 @@ import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nex
 import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types/vxe-table'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types/all'
 
 const renderType = 'footer'
 
@@ -92,13 +92,9 @@ export default defineComponent({
       const { scrollXLoad, overflowX, scrollbarWidth, currentColumn, mergeFooterList } = tableReactData
       const tooltipOpts = computeTooltipOpts.value
       // 如果是使用优化模式
-      if (!mergeFooterList.length || !footerSpanMethod) {
-        if (fixedType && allColumnFooterOverflow) {
+      if (fixedType) {
+        if ((!mergeFooterList.length || !footerSpanMethod) && (scrollXLoad || allColumnFooterOverflow)) {
           tableColumn = fixedColumn
-        } else if (scrollXLoad) {
-          if (fixedType) {
-            tableColumn = fixedColumn
-          }
         }
       }
       return h('div', {

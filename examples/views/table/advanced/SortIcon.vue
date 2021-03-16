@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeColumnPropTypes } from '../../../../types/vxe-table'
+import { VxeColumnPropTypes } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

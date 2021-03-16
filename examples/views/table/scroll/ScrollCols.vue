@@ -36,8 +36,8 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/vxe-table'
-import { VxeGridInstance } from '../../../../types/vxe-table'
+import { VXETable } from '../../../../packages/all'
+import { VxeGridInstance } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 
 const columnList: any[] = []
@@ -184,7 +184,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, nextTick, reactive, ref } from 'vue'
-        import { VXETable, VxeGridInstance } from '../../../../types/vxe-table'
+        import { VXETable, VxeGridInstance } from '../../../../types/index'
         import XEUtils from 'xe-utils'
 
         const columnList: any[] = []

@@ -46,8 +46,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, onUnmounted, nextTick } from 'vue'
-import { VXETable } from '../../../../packages/vxe-table'
-import { VxeGridInstance, VxeGridOptions, VxeTableInstance } from '../../../../types/vxe-table'
+import { VXETable } from '../../../../packages/all'
+import { VxeGridInstance, VxeGridOptions, VxeTableInstance } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 import Sortable from 'sortablejs'
 

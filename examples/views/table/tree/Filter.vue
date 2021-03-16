@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VxeTableInstance } from '../../../../types/vxe-table'
+import { VxeTableInstance } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

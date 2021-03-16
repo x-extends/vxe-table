@@ -4,7 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { UtilTools, DomTools } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { VxeTooltipPropTypes, VxeTooltipConstructor, VxeTooltipEmits, TooltipReactData, TooltipMethods, TooltipPrivateRef } from '../../../types/vxe-table'
+import { VxeTooltipPropTypes, VxeTooltipConstructor, VxeTooltipEmits, TooltipReactData, TooltipMethods, TooltipPrivateRef } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeTooltip',

@@ -84,7 +84,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from 'vue'
-import { VxePulldownInstance, VxeGridEvents } from '../../../types/vxe-table'
+import { VxePulldownInstance, VxeGridEvents } from '../../../types/index'
 
 interface ItemVO1 {
   label: string;

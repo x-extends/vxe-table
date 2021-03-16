@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 
-import { VxeGlobalHooksHandles, TableValidatorMethods, TableValidatorPrivateMethods } from '../../../types/vxe-table'
+import { VxeGlobalHooksHandles, TableValidatorMethods, TableValidatorPrivateMethods } from '../../../types/all'
 
 /**
  * 校验规则

@@ -96,7 +96,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, nextTick, onMounted } from 'vue'
-import { VXETable } from '../../../packages/vxe-table'
+import { VXETable } from '../../../packages/all'
 
 interface ItemVO {
   [key: string]: any;

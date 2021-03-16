@@ -81,7 +81,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeTableInstance, VxeColumnPropTypes } from '../../../../types/vxe-table'
+import { VxeTableInstance, VxeColumnPropTypes } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({

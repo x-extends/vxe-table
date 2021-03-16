@@ -4,7 +4,7 @@ function resolve (dir) {
   return path.join(__dirname, '.', dir)
 }
 
-process.env.VUE_APP_VXE_TABLE_ENV = !process || !process.env || !process.env.npm_lifecycle_event || process.env.npm_lifecycle_event.indexOf('lib:dev_pack') === 0 ? 'development' : process.env.NODE_ENV
+process.env.VUE_APP_VXE_TABLE_ENV = 'development'
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '/vxe-table/v4/' : '/',
@@ -39,19 +39,6 @@ module.exports = {
       commonjs: 'xe-utils',
       commonjs2: 'xe-utils',
       amd: 'xe-utils'
-    }
-    // config.resolve.alias
-    //   .set('@', resolve('examples'))
-    // config.output
-    //   .set('libraryExport', 'default')
-    //   .set('library', 'VXETable')
-    const getExternalConf = (root) => {
-      return {
-        root: 'XEUtils',
-        commonjs: 'xe-utils',
-        commonjs2: 'xe-utils',
-        amd: 'xe-utils'
-      }
     }
     if (process.env.npm_lifecycle_event && process.env.npm_lifecycle_event.indexOf('lib') === 0) {
       if (config.has('externals')) {

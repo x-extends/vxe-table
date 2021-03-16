@@ -4,7 +4,7 @@ import { UtilTools } from '../../tools'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeSwitchConstructor, VxeSwitchEmits, SwitchReactData, SwitchMethods } from '../../../types/vxe-table'
+import { SizeType, VxeSwitchConstructor, VxeSwitchEmits, SwitchReactData, SwitchMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeSwitch',

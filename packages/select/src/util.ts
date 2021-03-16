@@ -2,7 +2,7 @@ import { watch } from 'vue'
 import XEUtils from 'xe-utils'
 import { OptionInfo } from './optionInfo'
 
-import { VxeSelectConstructor } from '../../../types/vxe-table'
+import { VxeSelectConstructor } from '../../../types/all'
 
 export interface XEOptionInstance {
   option: OptionInfo;

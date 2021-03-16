@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTableEvents } from '../../../../types/vxe-table'
+import { VxeTableEvents } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

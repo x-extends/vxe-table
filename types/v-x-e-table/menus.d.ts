@@ -17,13 +17,13 @@ export namespace VxeGlobalMenusHandles {
 /**
  * 全局快捷菜单
  */
-export interface Menus {
+export interface VxeGlobalMenus {
   mixin(options: {
     [code: string]: VxeGlobalMenusHandles.MenusCallback;
-  }): Menus;
+  }): VxeGlobalMenus;
   has(code: string): boolean;
   get(code: string): VxeGlobalMenusHandles.MenusCallback;
-  add(code: string, callback: VxeGlobalMenusHandles.MenusCallback): Menus;
+  add(code: string, callback: VxeGlobalMenusHandles.MenusCallback): VxeGlobalMenus;
   delete(code: string): void;
   forEach(callback: (options: VxeGlobalMenusHandles.MenusCallback, code: string) => void): void;
 }

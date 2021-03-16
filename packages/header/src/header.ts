@@ -4,7 +4,7 @@ import { DomTools } from '../../tools'
 import { convertToRows } from './util'
 import { getColMinWidth } from '../../table/src/util'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types/vxe-table'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types/all'
 
 const renderType = 'header'
 
@@ -147,9 +147,9 @@ export default defineComponent({
       let { fixedType, fixedColumn, tableColumn } = props
       const { resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
       const { currentColumn, scrollXLoad, overflowX, scrollbarWidth } = tableReactData
-      // 横向滚动渲染
-      if (scrollXLoad) {
-        if (fixedType) {
+      // 如果是使用优化模式
+      if (fixedType) {
+        if (scrollXLoad || allColumnHeaderOverflow) {
           tableColumn = fixedColumn
         }
       }

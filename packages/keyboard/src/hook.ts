@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import { DomTools } from '../../tools'
 
-import { VxeGlobalHooksHandles, TableKeyboardPrivateMethods } from '../../../types/vxe-table'
+import { VxeGlobalHooksHandles, TableKeyboardPrivateMethods } from '../../../types/all'
 
 const browse = DomTools.browse
 

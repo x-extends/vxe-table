@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 
-import { VxeTablePropTypes, SaveFileFunction, ReadFileFunction, VxeTableConstructor } from '../../../types/vxe-table'
+import { VxeTablePropTypes, SaveFileFunction, ReadFileFunction, VxeTableConstructor } from '../../../types/all'
 
 // 导入
 let fileForm: any

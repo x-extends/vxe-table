@@ -8,7 +8,7 @@ import VxeSelectConstructor from '../../select/src/select'
 import VxeButtonConstructor from '../../button/src/button'
 import { UtilTools } from '../../tools'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/vxe-table'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeExportPanel',

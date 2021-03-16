@@ -58,7 +58,7 @@ import {
   Export,
   Keyboard,
   Validator
-} from '../packages/vxe-table'
+} from '../packages/all'
 
 const app = createApp(App)
 

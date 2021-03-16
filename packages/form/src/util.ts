@@ -2,7 +2,7 @@ import { watch } from 'vue'
 import XEUtils from 'xe-utils'
 import { ItemInfo } from './itemInfo'
 
-import { VxeFormConstructor } from '../../../types/vxe-table'
+import { VxeFormConstructor } from '../../../types/all'
 
 export function isFormItem (item: any): item is ItemInfo {
   return item instanceof ItemInfo

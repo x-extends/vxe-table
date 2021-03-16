@@ -1,6 +1,6 @@
 import { defineComponent, h, createApp, resolveComponent, reactive, ComponentOptions } from 'vue'
 
-import { VxeModalOptions } from '../../types/vxe-table'
+import { VxeModalOptions } from '../../types/all'
 
 let dynamicContainerElem: HTMLElement
 

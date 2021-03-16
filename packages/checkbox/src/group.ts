@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxGroupMethods } from '../../../types/vxe-table'
+import { SizeType, VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxGroupMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeCheckboxGroup',

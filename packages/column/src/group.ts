@@ -3,7 +3,7 @@ import { columnProps } from './column'
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
-import { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnProps } from '../../../types/vxe-table'
+import { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnProps } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeTableColgroup',

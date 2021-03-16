@@ -48,8 +48,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/vxe-table'
-import { VxeGridOptions, VxeGridInstance } from '../../../../types/vxe-table'
+import { VXETable } from '../../../../packages/all'
+import { VxeGridOptions, VxeGridInstance } from '../../../../types/index'
 import XLSX from 'xlsx'
 
 export default defineComponent({

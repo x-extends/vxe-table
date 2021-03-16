@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { UtilTools, DomTools } from '../../tools'
 import { VXETable } from '../../v-x-e-table'
 
-import { VxeGlobalHooksHandles, TableMenuMethods, TableMenuPrivateMethods } from '../../../types/vxe-table'
+import { VxeGlobalHooksHandles, TableMenuMethods, TableMenuPrivateMethods } from '../../../types/all'
 
 const tableMenuMethodKeys: (keyof TableMenuMethods)[] = ['closeMenu']
 

@@ -51,7 +51,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import XEUtils from 'xe-utils'
-import { VxeTablePropTypes } from '../../../../types/vxe-table'
+import { VxeTablePropTypes } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

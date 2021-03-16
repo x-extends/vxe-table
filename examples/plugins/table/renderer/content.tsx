@@ -1,4 +1,4 @@
-import { VXETable } from '../../../../packages/vxe-table'
+import { VXETable } from '../../../../packages/all'
 
 // 创建一个简单的展开内容渲染
 VXETable.renderer.add('MyExpand', {

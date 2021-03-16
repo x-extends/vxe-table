@@ -5,7 +5,7 @@ import { VXETable } from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { createColumn } from './util'
 
-import { VxeColumnProps, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/vxe-table'
+import { VxeColumnProps, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
 
 function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   const { $table, column } = params

@@ -93,7 +93,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { VxeTableInstance, VxeTableEvents, VxeToolbarInstance } from '../../../../types/vxe-table'
+import { VxeTableInstance, VxeTableEvents, VxeToolbarInstance } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

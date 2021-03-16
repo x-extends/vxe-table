@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { VxeTableEvents } from '../../../../types/vxe-table'
+import { VxeTableEvents } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

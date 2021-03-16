@@ -1,4 +1,4 @@
-import { VxeTableEmits } from '../../../types/vxe-table'
+import { VxeTableEmits } from '../../../types/all'
 
 export default [
   'update:data',

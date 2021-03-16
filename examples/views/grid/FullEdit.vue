@@ -22,8 +22,8 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from 'vue'
-import { VXETable } from '../../../packages/vxe-table'
-import { VxeGridInstance, VxeGridOptions } from '../../../types/vxe-table'
+import { VXETable } from '../../../packages/all'
+import { VxeGridInstance, VxeGridOptions } from '../../../types/index'
 import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 

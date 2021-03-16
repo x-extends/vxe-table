@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive } from 'vue'
-import { VxeColumnPropTypes } from '../../../../types/vxe-table'
+import { VxeColumnPropTypes } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

@@ -4,7 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { UtilTools } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits, TextareaPrivateRef } from '../../../types/vxe-table'
+import { SizeType, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits, TextareaPrivateRef } from '../../../types/all'
 
 let autoTxtElem: HTMLDivElement
 

@@ -1,4 +1,4 @@
-import { VXETable } from '../../../../packages/vxe-table'
+import { VXETable } from '../../../../packages/all'
 
 // 创建一个简单的工具栏-按钮渲染
 VXETable.renderer.add('ToolbarButtonRefresh', {

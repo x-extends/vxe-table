@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeColumnOptions, VxePagerEvents, VxeGlobalRendererHandles } from '../../../../../types/vxe-table'
+import { VxeGridInstance, VxeColumnOptions, VxePagerEvents, VxeGlobalRendererHandles } from '../../../../../types/index'
 
 export default defineComponent({
   name: 'EditPopupModal',

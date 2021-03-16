@@ -9,7 +9,7 @@ import { hooks } from './src/hooks'
 import { setup } from './src/setup'
 import { UtilTools } from '../tools'
 
-import { VXETableCore } from '../../types/vxe-table'
+import { VXETableCore } from '../../types/all'
 
 function getExportOrImpotType (types: any, flag: number) {
   const rest: string[] = []

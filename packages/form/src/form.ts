@@ -6,7 +6,7 @@ import { UtilTools, isEnableConf } from '../../tools'
 import { createItem } from './util'
 import { useSize } from '../../hooks/size'
 
-import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes } from '../../../types/vxe-table'
+import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes } from '../../../types/all'
 
 class Rule {
   constructor (rule: any) {

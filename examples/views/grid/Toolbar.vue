@@ -18,8 +18,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../packages/vxe-table'
-import { VxeGridInstance, VxeGridEvents, VxeGridOptions } from '../../../types/vxe-table'
+import { VXETable } from '../../../packages/all'
+import { VxeGridInstance, VxeGridEvents, VxeGridOptions } from '../../../types/index'
 
 export default defineComponent({
   setup () {

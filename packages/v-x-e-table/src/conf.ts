@@ -1,4 +1,4 @@
-import { VXETableGlobalConfig } from '../../../types/vxe-table'
+import { VXETableGlobalConfig } from '../../../types/all'
 
 const iconPrefix = 'vxe-icon--'
 

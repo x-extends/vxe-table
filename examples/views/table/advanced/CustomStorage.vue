@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, nextTick } from 'vue'
-import { VxeTableInstance, VxeToolbarInstance } from '../../../../types/vxe-table'
+import { VxeTableInstance, VxeToolbarInstance } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

@@ -121,7 +121,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeTableInstance, VxeTableEvents, VxePulldownInstance } from '../../../../types/vxe-table'
+import { VxeTableInstance, VxeTableEvents, VxePulldownInstance } from '../../../../types/index'
 
 export default defineComponent({
   setup () {

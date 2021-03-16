@@ -3,7 +3,7 @@ import { UtilTools } from '../../tools'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 
-import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/vxe-table'
+import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/all'
 
 const { toFilters } = UtilTools
 

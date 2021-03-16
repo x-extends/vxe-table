@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { renderer } from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 
-import { VxeGlobalHooksHandles, TableEditMethods, TableEditPrivateMethods } from '../../../types/vxe-table'
+import { VxeGlobalHooksHandles, TableEditMethods, TableEditPrivateMethods } from '../../../types/all'
 
 const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getActiveRecord', 'getSelectedCell', 'clearActived', 'clearSelected', 'isActiveByRow', 'setActiveRow', 'setActiveCell', 'setSelectCell']
 

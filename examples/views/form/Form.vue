@@ -257,8 +257,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VXETable } from '../../../packages/vxe-table'
-import { VxeFormEvents } from '../../../types/vxe-table'
+import { VXETable } from '../../../packages/all'
+import { VxeFormEvents } from '../../../types/index'
 
 export default defineComponent({
   setup  () {
