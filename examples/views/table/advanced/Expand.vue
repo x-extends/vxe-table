@@ -20,6 +20,7 @@
     <vxe-table
       ref="xTable"
       border
+      auto-resize
       :data="tableData"
       @toggle-row-expand="toggleExpandChangeEvent">
       <vxe-table-column type="seq" width="60" :fixed="seqFixed"></vxe-table-column>
@@ -200,6 +201,7 @@ export default {
         <vxe-table
           ref="xTable"
           border
+          auto-resize
           :data="tableData"
           @toggle-row-expand="toggleExpandChangeEvent">
           <vxe-table-column type="seq" width="60" :fixed="seqFixed"></vxe-table-column>

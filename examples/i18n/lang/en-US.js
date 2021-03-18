@@ -322,8 +322,8 @@ export default {
         plan: {
           v1: 'v1 Based on vue2.6+, Support for all major browsers',
           v2: 'v2 Based on vue2.6+, Support for all major browsers',
-          v3: 'v3 Based on vue2.6+, Only supports modern browsers, not IE, improving rendering performance',
-          v4: 'v4 Based on vue3.0+, Only supports modern browsers, not IE, improving rendering performance'
+          v3: 'v3 Based on vue2.6+, Only supports modern browsers, improving rendering performance',
+          v4: 'v4 Based on vue3.0+, Only supports modern browsers, not IE'
         },
         compatibility: 'Compatibility',
         releases: 'Releases',
