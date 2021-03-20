@@ -69,6 +69,7 @@ export default {
     titleWidth: [String, Number],
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
     titleAsterisk: { type: Boolean, default: () => GlobalConfig.form.titleAsterisk },
+    titleOverflow: { type: [Boolean, String], default: null },
     items: Array,
     rules: Object,
     preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
@@ -77,7 +78,14 @@ export default {
   data () {
     return {
       collapseAll: true,
-      invalids: []
+      invalids: [],
+
+      tooltipTimeout: null,
+      tooltipActive: false,
+      tooltipStore: {
+        item: null,
+        visible: false
+      }
     }
   },
   provide () {
@@ -91,10 +99,18 @@ export default {
     },
     validOpts () {
       return Object.assign({}, GlobalConfig.form.validConfig, this.validConfig)
+    },
+    tooltipOpts () {
+      const opts = Object.assign({ leaveDelay: 300 }, GlobalConfig.form.tooltipConfig, this.tooltipConfig)
+      if (opts.enterable) {
+        opts.leaveMethod = this.handleTooltipLeaveMethod
+      }
+      return opts
     }
   },
   render (h) {
-    const { $slots, loading, vSize } = this
+    const { _e, $slots, loading, vSize, tooltipOpts } = this
+    const hasUseTooltip = VXETable._tooltip
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
         [`size--${vSize}`]: vSize,
@@ -115,7 +131,14 @@ export default {
         h('div', {
           class: 'vxe-loading--spinner'
         })
-      ])
+      ]),
+      /**
+       * 工具提示
+       */
+      hasUseTooltip ? h('vxe-tooltip', {
+        ref: 'tooltip',
+        ...tooltipOpts
+      }) : _e()
     ]))
   },
   methods: {
@@ -161,6 +184,63 @@ export default {
       evnt.preventDefault()
       this.reset()
       this.$emit('reset', { data: this.data, $form: this, $event: evnt }, evnt)
+    },
+    handleTooltipLeaveMethod () {
+      const { tooltipOpts } = this
+      setTimeout(() => {
+        if (!this.tooltipActive) {
+          this.closeTooltip()
+        }
+      }, tooltipOpts.leaveDelay)
+      return false
+    },
+    closeTooltip () {
+      const { tooltipStore } = this
+      const $tooltip = this.$refs.tooltip
+      if (tooltipStore.visible) {
+        Object.assign(tooltipStore, {
+          item: null,
+          visible: false
+        })
+        if ($tooltip) {
+          $tooltip.close()
+        }
+      }
+      return this.$nextTick()
+    },
+    triggerHeaderHelpEvent (evnt, params) {
+      const { item } = params
+      const { tooltipStore } = this
+      const $tooltip = this.$refs.tooltip
+      const overflowElem = evnt.currentTarget
+      const content = (overflowElem.textContent || '').trim()
+      const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
+      clearTimeout(this.tooltipTimeout)
+      this.tooltipActive = true
+      this.closeTooltip()
+      if (content && isCellOverflow) {
+        Object.assign(tooltipStore, {
+          item,
+          visible: true
+        })
+        if ($tooltip) {
+          $tooltip.open(overflowElem, content)
+        }
+      }
+    },
+    handleTargetLeaveEvent () {
+      const { tooltipOpts } = this
+      this.tooltipActive = false
+      if (tooltipOpts.enterable) {
+        this.tooltipTimeout = setTimeout(() => {
+          const $tooltip = this.$refs.tooltip
+          if ($tooltip && !$tooltip.isHover) {
+            this.closeTooltip()
+          }
+        }, tooltipOpts.leaveDelay)
+      } else {
+        this.closeTooltip()
+      }
     },
     clearValidate (field) {
       if (field) {

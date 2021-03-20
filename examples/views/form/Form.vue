@@ -122,7 +122,7 @@
         <vxe-form-item title="昵称" span="24">
           <template v-slot>自定义 {{ formData2.nickname }}</template>
         </vxe-form-item>
-        <vxe-form-item title="性别" field="sex" span="24" :item-render="{}">
+        <vxe-form-item title="标题貌似有点长呢" field="sex" span="24" :item-render="{}" title-overflow>
           <template v-slot="scope">
             <vxe-select v-model="formData2.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(scope)">
               <vxe-option value="1" label="女"></vxe-option>
@@ -130,17 +130,17 @@
             </vxe-select>
           </template>
         </vxe-form-item>
-        <vxe-form-item title="年龄" field="age" span="24" :item-render="{}">
+        <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{}" title-overflow="title">
           <template v-slot="scope">
             <vxe-input v-model="formData2.age" type="integer" placeholder="请输入年龄" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
           </template>
         </vxe-form-item>
-        <vxe-form-item title="日期" field="date" span="24" :item-render="{}">
+        <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
           <template v-slot="scope">
             <vxe-input v-model="formData2.date" type="date" placeholder="请选择日期" clearable @change="$refs.xForm.updateStatus(scope)"></vxe-input>
           </template>
         </vxe-form-item>
-        <vxe-form-item title="地址" field="address" span="24" :item-render="{}">
+        <vxe-form-item title="标题貌似有点长呢" field="address" span="24" :item-render="{}">
           <template v-slot="scope">
             <vxe-textarea v-model="formData2.address" placeholder="请输入地址" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-textarea>
           </template>
@@ -437,7 +437,7 @@ export default {
             <vxe-form-item title="昵称" span="24">
               <template v-slot>自定义 {{ formData2.nickname }}</template>
             </vxe-form-item>
-            <vxe-form-item title="性别" field="sex" span="24" :item-render="{}">
+            <vxe-form-item title="标题貌似有点长呢" field="sex" span="24" :item-render="{}" title-overflow>
               <template v-slot="scope">
                 <vxe-select v-model="formData2.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(scope)">
                   <vxe-option value="1" label="女"></vxe-option>
@@ -445,17 +445,17 @@ export default {
                 </vxe-select>
               </template>
             </vxe-form-item>
-            <vxe-form-item title="年龄" field="age" span="24" :item-render="{}">
+            <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{}" title-overflow="title">
               <template v-slot="scope">
                 <vxe-input v-model="formData2.age" type="integer" placeholder="请输入年龄" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-input>
               </template>
             </vxe-form-item>
-            <vxe-form-item title="日期" field="date" span="24" :item-render="{}">
+            <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
               <template v-slot="scope">
                 <vxe-input v-model="formData2.date" type="date" placeholder="请选择日期" clearable @change="$refs.xForm.updateStatus(scope)"></vxe-input>
               </template>
             </vxe-form-item>
-            <vxe-form-item title="地址" field="address" span="24" :item-render="{}">
+            <vxe-form-item title="标题貌似有点长呢" field="address" span="24" :item-render="{}">
               <template v-slot="scope">
                 <vxe-textarea v-model="formData2.address" placeholder="请输入地址" clearable @input="$refs.xForm.updateStatus(scope)"></vxe-textarea>
               </template>

@@ -177,7 +177,7 @@ export default {
         input: '输入框',
         textarea: '文本域',
         select: '下拉框',
-        modal: '模态窗口',
+        modal: '弹窗',
         tooltip: '工具提示',
         form: '表单',
         switch: '开关',
@@ -321,8 +321,8 @@ export default {
         plan: {
           v1: 'v1 基於 vue2.6+，支持所有主流的瀏覽器，實現表格的一切實用的功能',
           v2: 'v2 基於 vue2.6+，支持所有主流的瀏覽器，同時兼具功能與效能',
-          v3: 'v3 基於 vue2.6+，只支持現代瀏覽器，不支持IE，提升渲染效能',
-          v4: 'v4 基於 vue3.0+，只支持現代瀏覽器，不支持IE，提升渲染效能'
+          v3: 'v3 基於 vue2.6+，只支持現代瀏覽器，提升渲染效能',
+          v4: 'v4 基於 vue3.0+，只支持現代瀏覽器，不支持IE'
         },
         compatibility: '相容性變動',
         releases: '更新日誌',
@@ -692,6 +692,7 @@ export default {
           size: '尺寸',
           titleAlign: '所有项的标题对齐方式',
           titleWidth: '所有项的标题宽度',
+          titleOverflow: '所有设置标题内容过长时显示为省略号',
           titleColon: '是否显示标题冒号',
           titleAsterisk: '是否显示必填字段的红色星号',
           rules: '校验规则配置项'
@@ -705,6 +706,7 @@ export default {
           align: '内容对齐方式',
           titleAlign: '标题对齐方式',
           titleWidth: '标题宽度',
+          titleOverflow: '标题内容过长时显示为省略号',
           folding: '默认收起',
           visible: '默认是否显示',
           visibleMethod: '该方法的返回值用来决定该项是否显示',

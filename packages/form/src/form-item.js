@@ -75,6 +75,7 @@ export default {
     titleAlign: String,
     titleWidth: [String, Number],
     className: [String, Function],
+    titleOverflow: { type: [Boolean, String], default: null },
     titlePrefix: Object,
     titleSuffix: Object,
     resetValue: { default: null },
@@ -134,7 +135,7 @@ export default {
     }
   },
   render (h) {
-    const { _e, $scopedSlots, $vxeform, title, folding, visible, visibleMethod, field, className, collapseNode, itemRender, isRequired, showError, showRule } = this
+    const { _e, $scopedSlots, $vxeform, title, folding, visible, visibleMethod, field, className, collapseNode, itemRender, isRequired, showError, showRule, titleOverflow } = this
     const compConf = itemRender ? VXETable.renderer.get(itemRender.name) : null
     const span = this.span || $vxeform.span
     const align = this.align || $vxeform.align
@@ -142,6 +143,11 @@ export default {
     const titleWidth = this.titleWidth || $vxeform.titleWidth
     const collapseAll = $vxeform.collapseAll
     let itemVisibleMethod = visibleMethod
+    const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? $vxeform.titleOverflow : titleOverflow
+    const showEllipsis = itemOverflow === 'ellipsis'
+    const showTitle = itemOverflow === 'title'
+    const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
+    const hasEllipsis = showTitle || showTooltip || showEllipsis
     const params = { data: $vxeform.data, property: field, item: this, $form: $vxeform }
     if (visible === false) {
       return _e()
@@ -159,6 +165,12 @@ export default {
     } else if (field) {
       contentVNs = [`${XEUtils.get($vxeform.data, field)}`]
     }
+    const ons = showTooltip && $vxeform ? {
+      mouseenter (evnt) {
+        $vxeform.triggerHeaderHelpEvent(evnt, params)
+      },
+      mouseleave: $vxeform.handleTargetLeaveEvent
+    } : {}
     return h('div', {
       class: ['vxe-form--item', span ? `vxe-col--${span} is--span` : null, className, {
         'is--title': title,
@@ -172,10 +184,16 @@ export default {
         class: 'vxe-form--item-inner'
       }, [
         title ? h('div', {
-          class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null],
+          class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null, {
+            'is--ellipsis': hasEllipsis
+          }],
           style: titleWidth ? {
             width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
-          } : null
+          } : null,
+          attrs: {
+            title: showTitle ? UtilTools.getFuncText(title) : null
+          },
+          on: ons
         }, renderTitle(h, this)) : null,
         h('div', {
           class: ['vxe-form--item-content', align ? `align--${align}` : null]

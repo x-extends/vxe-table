@@ -145,11 +145,16 @@ function removeMerges (_vm, merges, mList, rowList) {
 
 function getOrderField (_vm, column) {
   const { sortBy, sortType } = column
-  if (sortBy) {
+  if (sortBy && XEUtils.isArray(sortBy)) {
     return sortBy
   }
   return (row) => {
-    const cellValue = _vm.getCellLabel(row, column)
+    let cellValue
+    if (sortBy) {
+      cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
+    } else {
+      cellValue = _vm.getCellLabel(row, column)
+    }
     if (!sortType || sortType === 'auto') {
       return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
     } else if (sortType === 'number') {

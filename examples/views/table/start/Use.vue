@@ -67,7 +67,7 @@
           i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
         })
 
-        // 表格模块
+        // 表格功能
         Vue.use(Header)
         // Vue.use(Footer)
         // Vue.use(Icon)

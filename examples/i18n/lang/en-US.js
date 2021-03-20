@@ -322,8 +322,8 @@ export default {
         plan: {
           v1: 'v1 Based on vue2.6+, Support for all major browsers',
           v2: 'v2 Based on vue2.6+, Support for all major browsers',
-          v3: 'v3 Based on vue2.6+, Only supports modern browsers, not IE, improving rendering performance',
-          v4: 'v4 Based on vue3.0+, Only supports modern browsers, not IE, improving rendering performance'
+          v3: 'v3 Based on vue2.6+, Only supports modern browsers, improving rendering performance',
+          v4: 'v4 Based on vue3.0+, Only supports modern browsers, not IE'
         },
         compatibility: 'Compatibility',
         releases: 'Releases',
@@ -693,6 +693,7 @@ export default {
           size: 'Size',
           titleAlign: 'All title align',
           titleWidth: 'All title width',
+          titleOverflow: '所有设置标题内容过长时显示为省略号',
           titleColon: 'Whether to display the title colon',
           titleAsterisk: 'Show red asterisk for required fields',
           rules: 'Checksum rule configuration entries'
@@ -706,6 +707,7 @@ export default {
           align: 'Content align',
           titleAlign: 'Title align',
           titleWidth: 'Title width',
+          titleOverflow: '标题内容过长时显示为省略号',
           folding: 'Default folding',
           visible: '默认是否显示',
           visibleMethod: 'The return value of this method Function({data, property}) determines whether the item is displayed',
